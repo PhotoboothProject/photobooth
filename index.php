@@ -1,12 +1,5 @@
 <?php
-/*
-if(!file_exists('config.php')){
-	// first install
-	include('install.php');
-} else {
-	include('config.php');
-}
-*/
+
 $images = array();
 require('db.php');
 $images = $data;
