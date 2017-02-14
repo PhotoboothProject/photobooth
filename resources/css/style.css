@@ -524,11 +524,31 @@ hr.small {
   font-size: 30px;
   font: normal normal normal 30px/1 FontAwesome; }
 
-.galQr {
+.pswp__qr {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  left: 50%;
+  margin-left: -250px;
+  top: 50%;
+  margin-top: -250px;
+  z-index: 10000; }
+  .pswp__qr img {
+    width: 100%; }
+
+.gal-qr-code {
+  color: #fff;
+  background: transparent;
+  font-size: 26px;
+  text-align: center;
   width: 50px;
   height: 50px;
-  line-height: 50px;
-  text-align: center;
-  background: transparent;
-  color: #fff;
-  font-size: 30px; }
+  cursor: pointer;
+  overflow: visible;
+  -webkit-appearance: none;
+  display: block;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  float: right;
+  opacity: 0.75; }

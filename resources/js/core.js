@@ -1,5 +1,5 @@
 var L10N = {};
-var photoBooth = (function(){	
+var photoBooth = (function(){
 	config = {};
 	// vars
 	var public = {},
@@ -14,14 +14,14 @@ var photoBooth = (function(){
 		processing = false,
 		pswp = {},
 		resultPage =  $('#result');
-	
+
 	// timeOut function
 	public.resetTimeOut = function(){
 		timeOut = setTimeout(function(){
 			window.location = window.location.origin;
 		}, timeToLive);
 	}
-	
+
 	// reset whole thing
 	public.reset = function(){
 		loader.hide();
@@ -34,7 +34,7 @@ var photoBooth = (function(){
 		$('.resultInner').css({'bottom' : '-100px'});
 		$('.spinner').hide();
 	}
-	
+
 	// init
 	public.init = function(options){
 		public.l10n();
@@ -49,12 +49,10 @@ var photoBooth = (function(){
 		loader.width(w).height(h);
 		$('.stages').hide();
 		public.initPhotoSwipeFromDOM('#galimages');
-		if($('.pswp__top-bar .galQr').length == 0) {
-			//$('<button>').addClass('pswp__button galQr').html('<i class="fa fa-qrcode"></i>').insertAfter($('.pswp__button--close'));
-		}
+
 		startPage.show();
 	}
-	
+
 	// check for resizing
 	public.handleResize = function(){
 		var w = window.innerWidth;
@@ -62,7 +60,7 @@ var photoBooth = (function(){
 		$('#wrapper').width(w).height(h);
 		$('#loader').width(w).height(h);
 	}
-	
+
 	public.l10n = function(elem){
 		elem = $(elem || 'body');
 		elem.find('[data-l10n]').each(function(i,item){
@@ -70,47 +68,47 @@ var photoBooth = (function(){
 			item.html(L10N[item.data('l10n')]);
 		});
 	}
-	
+
 	// Cheese
 	public.cheese = function() {
 		$('#counter').text('');
 	  	$('.loading').text(L10N.cheese);
 	  	public.takePic();
 	}
-	
+
 	// take Picture
 	public.takePic = function(){
 		processing = true;
 		setTimeout(function () {
 			$('#counter').text('');
-			$('.spinner').show(); 
+			$('.spinner').show();
 		    $('.loading').text(L10N.busy);
-		}, 1000); 
+		}, 1000);
 		$.ajax({
             url: 'takePic.php',
             dataType : "json",
-            cache: false,      
+            cache: false,
             success:function(result){
             	if(result.error){
             		public.errorPic(result);
             	} else {
             		public.renderPic(result);
-            	}         	
-            }, 
-            error : function(xhr, status, error){            	
+            	}
+            },
+            error : function(xhr, status, error){
             	public.errorPic(result);
             }
         });
 	}
-	
+
 	// Show error Msg and reset
 	public.errorPic = function(result){
 		setTimeout(function () {
-			$('.spinner').hide(); 
+			$('.spinner').hide();
 			$('.loading').html(L10N.error + '<a class="btn" href="/">'+L10N.reload+'</a>');
-		}, 1100); 
+		}, 1100);
 	}
-	
+
 	// Render Picture after taking
 	public.renderPic = function(result){
 		// Add QR Code Image
@@ -119,10 +117,10 @@ var photoBooth = (function(){
 			$(this).appendTo($('.qr'));
 			$('<p>').html(L10N.qrHelp).appendTo($('.qr'));
 		});
-		
+
 		// Add Image to gallery and slider
 		public.addImage(result.img);
-		
+
 		// Add Image
 		$('<img src="/images/'+ result.img +'" class="original">').load(function() {
 			$('#result').css({'background-image' : 'url(/images/'+ result.img +')'});
@@ -143,12 +141,12 @@ var photoBooth = (function(){
 			});
 		});
 	}
-	
+
 	// add image to Gallery
 	public.addImage = function(image){
 		$('<a>').html('<img src="/thumbs/'+image+'" />').data('size','1920x1280').attr('href','/images/'+image+'?new=1').appendTo($('#galimages'));
 	}
-	
+
 	// Open Gallery Overview
 	public.openGallery = function(elem) {
 	  var pos = elem.offset();
@@ -169,9 +167,11 @@ var photoBooth = (function(){
         gallery.css({'overflow-y': 'scroll'});
       });
 	}
-	
+
 	$(window).resize(public.handleResize);
-	
+
+	// Open QR Code in Gallery
+
 	// Take Picture Button
 	$('.takePic, .newpic').click(function(e){
 		e.preventDefault();
@@ -187,13 +187,13 @@ var photoBooth = (function(){
   		}
     }
 	});
-	
+
 	// Open Gallery Button
 	$('#result .gallery, #start .gallery').click(function(e){
 		e.preventDefault();
 		public.openGallery($(this));
 	});
-	
+
 	// Close Gallery Overview
 	$('.close_gal').click(function(e){
 		e.preventDefault();
@@ -208,7 +208,7 @@ var photoBooth = (function(){
         $('#gallery').removeClass('open');
       });
 	});
-	
+
 	$('.tabbox ul li').click(function(){
 		var elem = $(this),
 			target = $('.'+elem.data('target'));
@@ -219,10 +219,26 @@ var photoBooth = (function(){
 				target.addClass('active');
 			}
 	});
-	
+	// QR in gallery
+	$(document).on('click', '.gal-qr-code', function(e){
+		e.preventDefault();
+
+		var pswpQR = $('.pswp__qr');
+		if(pswpQR.hasClass('qr-active')){
+			pswpQR.removeClass('qr-active').fadeOut('fast');
+		} else {
+			pswpQR.empty();
+			var img = pswp.currItem.src;
+			img = img.replace('/images/','');
+			$('<img>').attr('src','qrcode.php?filename='+img).appendTo(pswpQR);
+
+			pswpQR.addClass('qr-active').fadeIn('fast');
+		}
+	});
+
 	$('#result').click(function(e){
 		var target = $(e.target);
-		
+
 		// Menü in and out
 		if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn')){
 			if($('.resultInner').hasClass('hidden')) {
@@ -235,7 +251,7 @@ var photoBooth = (function(){
 				}, 400).addClass('hidden');
 			}
 		}
-		
+
 		if(qr && !target.hasClass('qrbtn')) {
 			$('.qrbtn').removeClass('active');
 			$('.qr').hide();
@@ -248,12 +264,12 @@ var photoBooth = (function(){
 			}, 250 );
 			qr = false;
 		}
-		
+
 		// Go to Home
 		if(target.hasClass('homebtn')){
 			window.location = window.location.origin;
 		}
-		
+
 		// Qr in and out
 		if(target.hasClass('qrbtn') || target.closest('.qrbtn').length > 0){
 			if(qr) {
@@ -269,7 +285,7 @@ var photoBooth = (function(){
 			} else{
 				qr = true;
 				$('.qrbtn').addClass('active');
-				
+
 				$('.qrbtn').animate({
 					'width' : 500,
 					'height' : 600,
@@ -282,16 +298,16 @@ var photoBooth = (function(){
 			}
 		}
 	});
-	
+
 	// Show QR Code
 	$('.qrbtn').click(function(e){
 		e.preventDefault();
 	});
-	
+
 	$('.homebtn').click(function(e){
 		e.preventDefault();
 	});
-	
+
 	// Countdown Function
 	public.countdown = function(calls, element){
 		count = 0;
@@ -307,7 +323,7 @@ var photoBooth = (function(){
 			scale : 1,
 			opacity: 1
 		});
-	    
+
 	    if (count < calls) {
 	      window.setTimeout(timerFunction, 1000);
 	    } else {
@@ -317,12 +333,12 @@ var photoBooth = (function(){
 	  };
 	  timerFunction();
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	////// PHOTOSWIPE FUNCTIONS /////////////////////////////////////////////////////////////
-	
+
 	public.initPhotoSwipeFromDOM = function(gallerySelector){
-		
+
 		// select all gallery elements
 		var galleryElements = document.querySelectorAll( gallerySelector );
 		for(var i = 0, l = galleryElements.length; i < l; i++) {
@@ -336,7 +352,7 @@ var photoBooth = (function(){
 			public.openPhotoSwipe( hashData.pid - 1 ,  galleryElements[ hashData.gid - 1 ], true );
 		}
 	}
-	
+
 	var onThumbnailsClick = function(e) {
 	    e = e || window.event;
 	    e.preventDefault ? e.preventDefault() : e.returnValue = false;
@@ -359,8 +375,8 @@ var photoBooth = (function(){
 	        index;
 
 	    for (var i = 0; i < numChildNodes; i++) {
-	        if(childNodes[i].nodeType !== 1) { 
-	            continue; 
+	        if(childNodes[i].nodeType !== 1) {
+	            continue;
 	        }
 
 	        if(childNodes[i] === clickedListItem) {
@@ -375,7 +391,7 @@ var photoBooth = (function(){
 	    }
 	    return false;
 	};
-	
+
 	public.photoswipeParseHash = function() {
 		var hash = window.location.hash.substring(1),
 	    params = {};
@@ -389,10 +405,10 @@ var photoBooth = (function(){
 	        if(!vars[i]) {
 	            continue;
 	        }
-	        var pair = vars[i].split('=');  
+	        var pair = vars[i].split('=');
 	        if(pair.length < 2) {
 	            continue;
-	        }           
+	        }
 	        params[pair[0]] = pair[1];
 	    }
 
@@ -406,7 +422,7 @@ var photoBooth = (function(){
 	    params.pid = parseInt(params.pid, 10);
 	    return params;
 	};
-	
+
 	// Get Items for Photoswipe Gallery
 	public.parseThumbnailElements = function(el) {
 	    var thumbElements = el.childNodes,
@@ -421,7 +437,7 @@ var photoBooth = (function(){
 	    for(var i = 0; i < numNodes; i++) {
 	        el = thumbElements[i];
 
-	        // include only element nodes 
+	        // include only element nodes
 	        if(el.nodeType !== 1) {
 	          continue;
 	        }
@@ -469,7 +485,7 @@ var photoBooth = (function(){
 
 	    return items;
 	};
-	
+
 	public.openPhotoSwipe = function(index, galleryElement, disableAnimation) {
 	    var pswpElement = document.querySelectorAll('.pswp')[0],
 	        gallery,
@@ -488,7 +504,7 @@ var photoBooth = (function(){
 	            // See Options->getThumbBoundsFn section of docs for more info
 	            var thumbnail = items[index].el.children[0],
 	                pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-	                rect = thumbnail.getBoundingClientRect(); 
+	                rect = thumbnail.getBoundingClientRect();
 
 	            return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
 	        },
@@ -503,7 +519,7 @@ var photoBooth = (function(){
 				captionEl.children[0].innerHTML = item.title +  '<br/><small>Photo: ' + item.author + '</small>';
 				return true;
 	        }
-			
+
 	    };
 
 		var radios = document.getElementsByName('gallery-style');
@@ -550,7 +566,7 @@ var photoBooth = (function(){
 		    		useLargeImages = true;
 		        	imageSrcWillChange = true;
 		    	}
-		        
+
 		    } else {
 		    	if(useLargeImages) {
 		    		useLargeImages = false;
@@ -582,22 +598,30 @@ var photoBooth = (function(){
 		    }
 		});
 
+		pswp.listen('beforeChange', function() {
+			$('.pswp__qr').removeClass('qr-active').fadeOut('fast');
+		});
+
+		pswp.listen('close', function() {
+			$('.pswp__qr').removeClass('qr-active').fadeOut('fast');
+		});
+
 	    pswp.init();
-	    
-	   
+
+
 	};
-	
+
 	// find nearest parent element
 	var closest = function closest(el, fn) {
 	    return el && ( fn(el) ? el : closest(el.parentNode, fn) );
 	};
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
-	
+
+
 	// clear Timeout to not reset the gallery, if you clicked anywhere
 	$(document).click(function(event) {
 		if(startPage.is(':visible')){
-			
+
 		}else {
 			clearTimeout(timeOut);
 			public.resetTimeOut();

@@ -13,15 +13,17 @@ I've build this for my own wedding photobooth. There are some things I will migh
 
 ### installation
 - Download
+- Put all files to your destination folder, e.g. /var/www/html/
 - Change the styling to your needs
 
 ### Change Labels
-There are two label files in the lang folder, one for de and one for en. The de-file is included at the bottom of the index.php. 
-If you want the english labels, just change it to en.js. 
+There are two label files in the lang folder, one for de and one for en. The de lang-file is included at the bottom of the index.php.
+If you want the english labels, just change it to en.js.
 If you want to change the labels just change the de.js or en.js
 
 ### Changelog
-1.0.0 - Initial Release
+1.1.0 - Added QR Code to Gallery   
+1.0.0 - Initial Release  
 
 ### Thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
