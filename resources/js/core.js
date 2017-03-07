@@ -220,7 +220,7 @@ var photoBooth = (function(){
 			}
 	});
 	// QR in gallery
-	$(document).on('click', '.gal-qr-code', function(e){
+	$(document).on('click touchstart', '.gal-qr-code', function(e){
 		e.preventDefault();
 
 		var pswpQR = $('.pswp__qr');
