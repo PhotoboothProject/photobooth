@@ -1,5 +1,6 @@
 <?php
-require('db.php');
+
+require_once('db.php');
 $folder = 'images/';
 $file = md5(time()).'.jpg';
 $filename = $folder.$file;
@@ -13,8 +14,8 @@ if(strpos($shootimage, 'New file is in location') === false) {
 	$scaleimage = shell_exec('avconv -i '.$filename.' -vf scale=500:-1 thumbs/'.$file);
 	
 	// Insert into DB file
-	$data[] = $file;
-	file_put_contents('data.txt', json_encode($data));
+	$images[] = $file;
+	file_put_contents('data.txt', json_encode($images));
 	
 	// Echo Imagename for Result Page
 	echo json_encode(array('success' => true, 'img' => $file));

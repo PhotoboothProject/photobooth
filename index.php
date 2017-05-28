@@ -1,21 +1,7 @@
 <?php
 
-$arrDirectories = Array(
-    'images',
-    'thumbs',
-    'qrcodes',
-    'print'
-);
-
-foreach($arrDirectories as $strDirectory) {
-    if(!is_dir($strDirectory)){
-        mkdir($strDirectory, 0777);
-    }
-}
-
-$images = array();
-require('db.php');
-$images = $data;
+require_once('config.inc.php');
+require_once('db.php');
 
 ?>
 <html>
