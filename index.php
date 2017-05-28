@@ -1,10 +1,16 @@
 <?php
 
-if(!is_dir('images')){
-	mkdir('images');
-}
-if(!is_dir('thumbs')){
-	mkdir('thumbs');
+$arrDirectories = Array(
+    'images',
+    'thumbs',
+    'qrcodes',
+    'print'
+);
+
+foreach($arrDirectories as $strDirectory) {
+    if(!is_dir($strDirectory)){
+        mkdir($strDirectory, 0777);
+    }
 }
 
 $images = array();
