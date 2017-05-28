@@ -14,7 +14,7 @@ if(strpos($shootimage, 'New file is in location') === false) {
 	
 	// Insert into DB file
 	$data[] = $file;
-	file_put_contents('data.txt', implode(PHP_EOL,$data));
+	file_put_contents('data.txt', json_encode($data));
 	
 	// Echo Imagename for Result Page
 	echo json_encode(array('success' => true, 'img' => $file));
