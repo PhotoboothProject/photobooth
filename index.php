@@ -16,6 +16,7 @@ require_once('db.php');
 	<link rel="stylesheet" href="/resources/css/style.css" />
 	<script type="text/javascript">
 		var isdev = true;
+        var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
 	</script>
 </head>
 <body class="deselect">
@@ -63,7 +64,8 @@ require_once('db.php');
 				</div>
 				<div class="images" id="galimages">
 					<?php
-					foreach($images as $image) {
+					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
+                    foreach($imagelist as $image) {
 						echo '<a href="/images/'.$image.'" data-size="1920x1280">
 								<img src="/thumbs/'.$image.'" />
 								<figure>Caption</figure>
