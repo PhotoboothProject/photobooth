@@ -7,7 +7,8 @@ L10N = {
 	"newPhoto": "New Picture",
 	"busy": "Processing",
 	"cheese": "Cheeeeeeeese!",
-	"qrHelp": "Um das Bild auf dein Handy zu laden, verbinde dich mit dem WLAN <strong>photobooth<\/strong>",
+	"qrHelp": "Connect to the wifi <strong>photobooth<\/strong>, to download the picture to your smartphone.",
 	"error": "Something went wrong. Please try it again",
-	"reload": "Reload Page"
+	"reload": "Reload Page",
+    "print": "Print"
 }

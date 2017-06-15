@@ -122,6 +122,17 @@ var photoBooth = (function () {
             $('<p>').html(L10N.qrHelp).appendTo($('.qr'));
         });
 
+        // Add Print Link
+        $(document).off('click touchstart', '.printbtn');
+        $(document).on('click touchstart', '.printbtn', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'print.php?filename=' + encodeURI(result.img),
+            }).done(function (data) {
+                console.log(data)
+            })
+        });
+
         // Add Image to gallery and slider
         public.addImage(result.img);
 
@@ -152,7 +163,7 @@ var photoBooth = (function () {
     public.addImage = function (image) {
         // fixme: set to appendTo, if new images should appear at the end, or to prependTo, if new images should appear at the beginning
         var $node = $('<a>').html('<img src="/thumbs/' + image + '" />').data('size', '1920x1280').attr('href', '/images/' + image + '?new=1')
-        if(gallery_newest_first) {
+        if (gallery_newest_first) {
             $node.prependTo($('#galimages'));
         } else {
             $node.appendTo($('#galimages'));
@@ -251,12 +262,23 @@ var photoBooth = (function () {
             pswpQR.addClass('qr-active').fadeIn('fast');
         }
     });
+    // print in gallery
+    $(document).on('click touchstart', '.gal-print', function (e) {
+        e.preventDefault();
+        var img = pswp.currItem.src;
+        img = img.replace('images/', '');
+        $.ajax({
+            url: 'print.php?filename=' + encodeURI(img),
+        }).done(function (data) {
+            console.log(data)
+        })
+    });
 
     $('#result').click(function (e) {
         var target = $(e.target);
 
         // Menü in and out
-        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn')) {
+        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn')) {
             if ($('.resultInner').hasClass('hidden')) {
                 $('.resultInner').stop().animate({
                     'bottom': '50px'
@@ -317,6 +339,10 @@ var photoBooth = (function () {
 
     // Show QR Code
     $('.qrbtn').click(function (e) {
+        e.preventDefault();
+    });
+
+    $('.printbtn').click(function (e) {
         e.preventDefault();
     });
 

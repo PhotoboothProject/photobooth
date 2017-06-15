@@ -49,8 +49,9 @@ require_once('db.php');
 		<div class="stages" id="result">
 			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-l10n="home"></span></a>
 			<div class="resultInner hidden">
-			<a class="gallery btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a>
+			<a href="#" class="btn gallery"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a>
 			<a href="#" class="btn qrbtn"><span class="qrbtnlabel"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></span> <div class="qr"></div></a>
+			<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
 			<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
 			</div>
 		</div>
@@ -108,7 +109,8 @@ require_once('db.php');
 	                <button class="pswp__button pswp__button--share" title="Share"></button>
 	                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 	                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-									<button class="gal-qr-code" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>
+                    <button class="gal-print" title="Drucken"><i class="fa fa-print"></i></button>
+                    <button class="gal-qr-code" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>
 	                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
 	                <!-- element will get class pswp__preloader--active when preloader is running -->
 	                <div class="pswp__preloader">
@@ -150,6 +152,6 @@ require_once('db.php');
 	<script type="text/javascript" src="/resources/js/photoswipe-ui-default.min.js"></script>
 	<script type="text/javascript" src="/resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="/resources/js/core.js"></script>
-	<script type="text/javascript" src="/lang/en.js"></script>
+	<script type="text/javascript" src="/lang/<?php echo $config['language']; ?>.js"></script>
 </body>
 </html>
