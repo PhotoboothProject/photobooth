@@ -15,13 +15,16 @@ Modifications and new features:
 - The gallery can now be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config.inc.php```)
 
 ### Prerequisites
-- gphoto2 installed if used on a Raspberry for DSLR control
+- gphoto2 installed, if used on a Raspberry for DSLR control
+- digiCamControl, if used unter Windows for DSLR control
 - Apache
 
 ### Installation
 - Download
 - Put all files to your destination folder, e.g. /var/www/html/
 - Change the styling to your needs
+- Windows
+    - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root
 
 ### Change Labels
 There are two label files in the lang folder, one for de and one for en. The de lang-file is included at the bottom of the index.php.
