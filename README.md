@@ -21,10 +21,10 @@ Modifications and new features:
 
 ### Installation
 - Download
-- Put all files to your destination folder, e.g. /var/www/html/
+- Put all files to your destination folder, e.g. ```/var/www/html/```
 - Change the styling to your needs
 - Windows
-    - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root
+    - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
 ### Change Labels
 There are two label files in the lang folder, one for de and one for en. The de lang-file is included at the bottom of the index.php.
