@@ -31,7 +31,7 @@ If you want to change the labels just change the de.js or en.js
 ### Changelog
 1.2.0 - Printing feature, code rework, bugfixes
 1.1.1 - Bugix - QR not working on touch devices
-1.1.0 - Added QR Code to Gallery   
+1.1.0 - Added QR Code to Gallery
 1.0.0 - Initial Release  
 
 ### Thanks to
