@@ -32,10 +32,10 @@ If you want the english labels, just change it to en.js.
 If you want to change the labels just change the de.js or en.js
 
 ### Changelog
-1.2.0 - Printing feature, code rework, bugfixes
-1.1.1 - Bugix - QR not working on touch devices
-1.1.0 - Added QR Code to Gallery
-1.0.0 - Initial Release  
+- 1.2.0: Printing feature, code rework, bugfixes
+- 1.1.1: Bugix - QR not working on touch devices
+- 1.1.0: Added QR Code to Gallery
+- 1.0.0: Initial Release
 
 ### Thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
