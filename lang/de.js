@@ -1,7 +1,7 @@
 L10N = {
 	"gallery": "Galerie",
 	"startScreen": "<h1>Photobooth<\/h1><h2>Webinterface<\/h2> by Andr\u00e9 Rinas",
-	"takePhoto": "Foto machen!",
+	"takePhoto": "Foto erstellen!",
 	"home": "Home",
 	"qr": "QR Code",
 	"newPhoto": "Neues Bild",
@@ -9,5 +9,6 @@ L10N = {
 	"cheese": "Cheeeeeeeese!",
 	"qrHelp": "Um das Bild auf dein Handy zu laden, verbinde dich mit dem WLAN <strong>photobooth<\/strong>",
 	"error": "Es ist ein Fehler aufgetreten, bitte versuche es erneut",
-	"reload": "Seite neuladen"
+	"reload": "Seite neu laden",
+    "print": "Drucken"
 }
