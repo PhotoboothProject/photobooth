@@ -20,10 +20,20 @@ Modifications and new features:
 - Apache
 
 ### Installation
-- Download
-- Put all files to your destination folder, e.g. ```/var/www/html/```
+On Raspbian:
+```
+sudo apt-get update
+sudo apt-get dist-upgrade
+sudo apt-get install git apache2 php5 gphoto2
+cd /var/www/
+sudo rm -r html/
+sudo git clone https://github.com/andreknieriem/photobooth
+sudo mv photobooth html
+```
+Open the IP address of your raspberry pi in a browser
+
 - Change the styling to your needs
-- Windows
+On Windows
     - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
 ### Change Labels
