@@ -30,6 +30,12 @@ sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth
 sudo mv photobooth html
 ```
+Give sudo rights to the webserver user (www-data)
+
+```sudo nano /etc/sudoers```
+and add the following line to the file:
+```www-data ALL=(ALL) NOPASSWD: ALL```
+
 Open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
@@ -46,6 +52,9 @@ If you want to change the labels just change the de.js or en.js
 - 1.1.1: Bugix - QR not working on touch devices
 - 1.1.0: Added QR Code to Gallery
 - 1.0.0: Initial Release
+
+### Tutorial
+[Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
 
 ### Thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
