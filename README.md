@@ -59,4 +59,3 @@ If you want to change the labels just change the de.js or en.js
 ### Thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
 - [t0k4rt](https://github.com/t0k4rt/phpqrcode) for phpqrcode
-- [andrerinas](https://github.com/andreknieriem/) for the original photobooth
