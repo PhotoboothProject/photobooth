@@ -20,10 +20,26 @@ Modifications and new features:
 - Apache
 
 ### Installation
-- Download
-- Put all files to your destination folder, e.g. ```/var/www/html/```
+On Raspbian:
+```
+sudo apt-get update
+sudo apt-get dist-upgrade
+sudo apt-get install git apache2 php5 php5-gd gphoto2 libav-tools
+cd /var/www/
+sudo rm -r html/
+sudo git clone https://github.com/andreknieriem/photobooth
+sudo mv photobooth html
+```
+Give sudo rights to the webserver user (www-data)
+
+```sudo nano /etc/sudoers```
+and add the following line to the file:
+```www-data ALL=(ALL) NOPASSWD: ALL```
+
+Open the IP address of your raspberry pi in a browser
+
 - Change the styling to your needs
-- Windows
+On Windows
     - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
 ### Change Labels
@@ -36,6 +52,9 @@ If you want to change the labels just change the de.js or en.js
 - 1.1.1: Bugix - QR not working on touch devices
 - 1.1.0: Added QR Code to Gallery
 - 1.0.0: Initial Release
+
+### Tutorial
+[Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
 
 ### Thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
