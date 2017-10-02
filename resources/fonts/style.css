@@ -1,0 +1,271 @@
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Dosis ExtraLight'), local('Dosis-ExtraLight'), url(../fonts/dosis/ExtraLight.woff) format('woff');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Dosis Light'), local('Dosis-Light'), url(../fonts/dosis/Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Dosis Regular'), local('Dosis-Regular'), url(../fonts/dosis/Regular.woff) format('woff');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Dosis Medium'), local('Dosis-Medium'), url(../fonts/dosis/Medium.woff) format('woff');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Dosis SemiBold'), local('Dosis-SemiBold'), url(../fonts/dosis/SemiBold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Dosis Bold'), local('Dosis-Bold'), url(../fonts/dosis/Bold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Dosis ExtraBold'), local('Dosis-ExtraBold'), url(../fonts/dosis/ExtraBold.woff) format('woff');
+}
+
+h1,h2 {
+	font-weight: 300;
+}
+
+.deselect ::selection {
+    background: transparent;
+    color: inherit;
+}
+.deselect ::-moz-selection {
+    background: transparent;
+    color: inherit;
+}
+.deselect {
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+body {
+  background-color: #fff;
+  padding:0;
+  margin:0;
+  font-family: 'Dosis', sans-serif;
+  font-weight: 300;
+  color: #2b2127;
+  font-size: 1em;
+  line-height: 1.5;
+  -webkit-perspective: 1000;
+-moz-perspective: 1000;
+-ms-perspective: 1000;
+perspective: 1000;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	overflow: hidden;
+}
+
+h1 {
+	font-size: 50px;
+}
+
+#wrapper {
+	position: relative;
+	overflow: hidden;
+}
+
+#start {
+	width: 100%;
+	background: url(../img/bg.jpg) center center no-repeat;
+	background-size: cover;
+}
+
+#result {
+	width: 100%;
+	background: center center no-repeat;
+	background-size: cover;
+	z-index: 2;
+}
+
+.resultInner {
+	position: absolute;
+	bottom: 50px;
+	width: 500px;
+	left: 50%;
+	margin-left: -250px;
+}
+
+.resultInner .btn {
+	display: block;
+	float: left;
+}
+
+.resultInner .btn.newpic {
+	float: right;
+}
+
+.spinner {
+	font-size: 80px;
+	color: #33bdea;
+}
+
+.btn {
+	padding: 20px 40px;
+	border: 0 none;
+	background: #33bdea;
+	display: inline-block;
+	color: #fff;
+	text-decoration: none;
+	margin: auto;
+	width: 200px;
+	text-align: center;
+	font-size: 20px;
+}
+
+.btn:active,
+.btn:focus,
+.btn:hover {
+	background: #2da0c5;
+}
+
+#loader {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background: rgba(255,255,255,0.9);
+	display: none;
+	z-index: 100;
+	font-size: 50px;
+	text-align: center;
+}
+
+.loaderInner {
+	position: absolute;
+	left: 50%;
+	margin-left: -250px;
+	height: 200px;
+	width: 500px;
+	top: 50%;
+	margin-top: -100px;
+	
+}
+
+.qr {
+	display: none;
+	width: 530px;
+	margin: 50px auto 0;
+}
+
+.qrbtn.active{
+	background: #2da0c5;
+}
+
+.qr img {
+	width: 100%;
+	height: auto;
+}
+
+.spacer {
+	clear: both;
+	height: 50px;
+	width: 100%;
+}
+
+.loading {
+	font-size: 50px;
+	text-align: center;
+	width: 100%;
+}
+
+.stages {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+.takePic {
+	text-align: center;
+	display: block;
+	width: 250px;
+	margin-top: 20px;
+}
+
+.linebetween {
+	width: 100%;
+	border: 0 none;
+	
+}
+
+.borderline {
+}
+
+.middeline {
+	color: #fff;
+	text-align: center;
+	font-size: 20px;
+	font-weight: 300;
+}
+
+hr.small {
+	width: 50%;
+	display: block;
+	margin: auto;
+}
+
+.blurred {
+	display: none;
+	color: #fff;
+	width: 100%;
+	height: 250px;
+	background: url(../img/bg.jpg) center center no-repeat;
+	background-size: cover;
+	-webkit-filter: blur(6px); 
+	-moz-filter: blur(6px); 
+	-o-filter: blur(6px); 
+	-ms-filter: blur(6px); 
+	filter: blur(6px);
+	position: absolute;
+	top: 50%;
+	margin-top: -125px;
+}
+
+.inner {
+	background: rgba(0,0,0,0.5);
+	width: 450px;
+	height: 700px;
+	position: absolute;
+	top: 50%;
+	margin-top: -350px;
+	color: #fff;
+	text-align: center;
+	padding: 20px 50px;
+	text-transform: uppercase;
+	left: 50%;
+	margin-left: -225px;
+}
