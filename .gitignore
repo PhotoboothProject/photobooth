@@ -1,7 +1,10 @@
-node_modules
+digicamcontrol
 bower_components
-qrcodes
-images
+node_modules
+stats
 thumbs
+images
 print
+qrcodes
+trash
 data.txt
