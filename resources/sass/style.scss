@@ -650,3 +650,9 @@ hr.small {
   float: right;
   opacity: 0.75;
 }
+
+@media (max-width: 767px){
+	.takePic {
+		bottom: auto;
+	}
+}

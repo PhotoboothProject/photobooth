@@ -2,9 +2,11 @@
 
 $config = array();
 $config['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
-$config['dev'] = false;
+$config['dev'] = true;
 $config['use_print'] = true;
 $config['use_qr'] = true;
+$config['show_fork'] = true;
+#$config['file_format'] = 'date'; // comment in to get dateformat images
 
 // FOLDERS
 // change the folders to whatever you like

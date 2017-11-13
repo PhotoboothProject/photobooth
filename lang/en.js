@@ -10,5 +10,5 @@ L10N = {
 	"qrHelp": "Connect to the wifi <strong>photobooth<\/strong>, to download the picture to your smartphone.",
 	"error": "Something went wrong. Please try it again",
 	"reload": "Reload Page",
-    "print": "Print"
+	"print": "Print"
 }

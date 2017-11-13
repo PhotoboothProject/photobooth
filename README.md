@@ -29,6 +29,8 @@ cd /var/www/
 sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth
 sudo mv photobooth html
+sudo chown -R pi: /var/www/
+sudo chmod -R 777 /var/www
 ```
 Give sudo rights to the webserver user (www-data)
 
@@ -48,6 +50,7 @@ If you want the english labels, just change it to en.js.
 If you want to change the labels just change the de.js or en.js
 
 ### Changelog
+- 1.3.1: Merged pull-request #6,#15 and #16
 - 1.3.0: Option for QR and Print Butons, code rework, gulp-sass feature enabled
 - 1.2.0: Printing feature, code rework, bugfixes
 - 1.1.1: Bugix - QR not working on touch devices

@@ -1,0 +1,16 @@
+{
+  "name": "photobooth",
+  "version": "1.0.0",
+  "description": "photobooth sass setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "GPL",
+  "dependencies": {
+    "bower": "1.7.9",
+    "gulp": "3.9.1",
+    "gulp-sass": "2.3.2"
+  }
+}
