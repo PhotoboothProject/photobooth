@@ -267,6 +267,12 @@ h3 {
   padding: 0 15px;
   font-size: 25px; }
 
+.qr > * {
+  display: none; }
+
+.qr.active > * {
+  display: block; }
+
 .qrbtn {
   background: #fff;
   color: #000; }

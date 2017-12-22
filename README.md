@@ -50,6 +50,7 @@ If you want the english labels, just change it to en.js.
 If you want to change the labels just change the de.js or en.js
 
 ### Changelog
+- 1.3.2: Bugfix for QR Code on result page
 - 1.3.1: Merged pull-request #6,#15 and #16
 - 1.3.0: Option for QR and Print Butons, code rework, gulp-sass feature enabled
 - 1.2.0: Printing feature, code rework, bugfixes

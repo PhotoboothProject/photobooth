@@ -334,6 +334,15 @@ h3 {
   font-size: 25px;
 }
 
+.qr {
+	> * {
+		display: none;
+	}
+	&.active > *{
+		display: block;
+	}
+}
+
 .qrbtn {
 	background: #fff;
 	color: #000;

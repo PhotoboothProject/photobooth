@@ -291,16 +291,20 @@ var photoBooth = (function () {
         }
 
         if (qr && !target.hasClass('qrbtn')) {
-            $('.qrbtn').removeClass('active');
-            $('.qr').hide();
-            $('.qrbtn').animate({
-                'width': 200,
-                'height': 70,
-                'left': 205,
-                'margin-left': 0,
-                'top': 0
-            }, 250);
-            qr = false;
+					var qrpos = $('.qrbtn').offset(),
+						qrbtnwidth = $('.qrbtn').outerWidth(),
+						qrbtnheight = $('.qrbtn').outerHeight()
+						$('.qr').removeClass('active');
+            $('.qr').animate({
+							'width': qrbtnwidth,
+							'height': qrbtnheight,
+							'left': qrpos.left,
+							'top': qrpos.top,
+							'margin-left': 0,
+            }, 250, function(){
+							$('.qr').hide();
+						});
+						qr = false;
         }
 
         // Go to Home
@@ -310,29 +314,41 @@ var photoBooth = (function () {
 
         // Qr in and out
         if (target.hasClass('qrbtn') || target.closest('.qrbtn').length > 0) {
+
+						var qrpos = $('.qrbtn').offset(),
+							qrbtnwidth = $('.qrbtn').outerWidth(),
+							qrbtnheight = $('.qrbtn').outerHeight()
+
             if (qr) {
-                $('.qrbtn').removeClass('active');
-                $('.qrbtn').animate({
-                    'width': 200,
-                    'height': 70,
-                    'left': 205,
-                    'margin-left': 0,
-                    'top': 0
-                }, 250);
+								$('.qr').removeClass('active');
+                $('.qr').animate({
+                    'width': qrbtnwidth,
+                    'height': qrbtnheight,
+                    'left': qrpos.left,
+										'top': qrpos.top,
+										'margin-left': 0,
+                }, 250, function(){
+									$('.qr').hide();
+								});
                 qr = false;
             } else {
                 qr = true;
-                $('.qrbtn').addClass('active');
-
-                $('.qrbtn').animate({
+								$('.qr').css({
+									'width': qrbtnwidth,
+									'height': qrbtnheight,
+									'left': qrpos.left,
+									'top': qrpos.top
+								});
+								$('.qr').show();
+                $('.qr').animate({
                     'width': 500,
                     'height': 600,
                     'left': '50%',
                     'margin-left': -265,
-                    'top': -625
-                }, 250, function () {
-                    $('.qr').fadeIn('fast');
-                });
+                    'top': 50
+                }, 250, function(){
+									$('.qr').addClass('active');
+								});
             }
         }
     });
