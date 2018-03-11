@@ -173,13 +173,34 @@ var photoBooth = (function () {
     }
 
     // add image to Gallery
-    public.addImage = function (image) {
-        // fixme: set to appendTo, if new images should appear at the end, or to prependTo, if new images should appear at the beginning
-        var $node = $('<a>').html('<img src="/'+thumbFolder+'/' + image + '" />').data('size', '1920x1280').attr('href', '/'+imgFolder+'/' + image + '?new=1')
-        if (gallery_newest_first) {
-            $node.prependTo($('#galimages'));
-        } else {
-            $node.appendTo($('#galimages'));
+    public.addImage = function (imageName) {
+        var thumbImg = new Image();
+        var bigImg = new Image();
+        var thumbSize = '';
+        var bigSize = '';
+
+        var imgtoLoad = 2;
+
+        thumbImg.onload = function() {
+            thumbSize = this.width + 'x' + this.height;
+            if (--imgtoLoad == 0) {allLoaded();}
+        }
+
+        bigImg.onload = function() {
+            bigSize = this.width + 'x' + this.height;
+            if (--imgtoLoad == 0) {allLoaded();}
+        }
+
+        bigImg.src = '/'+imgFolder+'/' + imageName;
+        thumbImg.src = '/'+thumbFolder+'/' + imageName;
+
+        function allLoaded() {
+            var $node = $('<a>').html(thumbImg).data('size', bigSize).attr('href', '/'+imgFolder+'/' + imageName + '?new=1').attr('data-med', '/'+thumbFolder+'/' + imageName).attr('data-med-size', thumbSize);
+            if (gallery_newest_first) {
+                $node.prependTo($('#galimages'));
+            } else {
+                $node.appendTo($('#galimages'));
+            }
         }
     }
 
