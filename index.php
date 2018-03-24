@@ -88,6 +88,11 @@ require_once('db.php');
 					<?php
 					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 					foreach($imagelist as $image) {
+						$date;
+						if (isset($config['file_format']) && $config['file_format'] == 'date' && $config['show_date'] == true) {
+							$date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
+						}
+
 						$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
 						$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 
@@ -96,7 +101,7 @@ require_once('db.php');
 
 						echo '<a href="'.DIRECTORY_SEPARATOR.$filename_photo.'" data-size="'.$imageinfo[0].'x'.$imageinfo[1].'" data-med="'.DIRECTORY_SEPARATOR.$filename_thumb.'" data-med-size="'.$imageinfoThumb[0].'x'.$imageinfoThumb[1].'">
 								<img src="'.DIRECTORY_SEPARATOR.$filename_thumb .'" />
-								<figure>Caption</figure>
+								<figure>' . ($date == false ? '' : '<i class="fa fa-clock-o"></i> ' . $date->format($config['date_format'])) . '</figure>
 							</a>';
 					}
 					?>

@@ -13,6 +13,8 @@ $config['use_qr'] = true;
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
 #$config['file_format'] = 'date'; // comment in to get dateformat images
+$config['show_date'] = false; // only works if file_format = date
+$config['date_format'] = 'd.m.Y - G:i';
 
 // FOLDERS
 // change the folders to whatever you like
