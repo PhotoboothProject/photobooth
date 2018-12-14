@@ -101,6 +101,35 @@ Current: Internal RAM
 Choice: 0 Internal RAM
 Choice: 1 Memory card
 ```
+#### Kiosk Mode
+##### Automatically start Photobooth in full screen
+Edit the LXDE Autostart Script:
+```
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
+and add the following lines:
+```
+@xset s off
+@xset -dpms
+@xset s noblank
+@chromium-browser --incognito --kiosk http://localhost/
+```
+**NOTE:** If you're using QR-Code replace ```http://localhost/``` with your local IP-Adress (e.g. ```http://192.168.4.1```), else QR-Code does not work.
+
+
+##### Hide the Mouse Cursor
+To hide the Mouse Cursor we'll use "unclutter":
+```
+sudo apt-get install unclutter
+```
+Edit the LXDE Autostart Script again:
+```
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
+and add the following line:
+```
+@unclutter -idle 0
+```
 
 ### Changelog
 - 1.5.2: Bugfixing QR-Code from gallery and live-preview position. Merged pull #45
