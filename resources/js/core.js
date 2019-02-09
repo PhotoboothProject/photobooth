@@ -5,7 +5,7 @@ var photoBooth = (function () {
     var public = {},
         loader = $('#loader'),
         startPage = $('#start'),
-        countDown = 5,
+        countDown = cntdwn_time,       // Countdown from config
         timeToLive = 90000,
         qr = false,
         timeOut,

@@ -32,6 +32,7 @@ require_once('db.php');
 		var imgFolder = <?php echo '"'.$config['folders']['images'].'"'; ?>;
 		var thumbFolder = <?php echo '"'.$config['folders']['thumbs'].'"'; ?>;
 		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
+ 		var cntdwn_time = <?php echo ($config['cntdwn_time']); ?>;
 	</script>
 </head>
 <body class="deselect">
