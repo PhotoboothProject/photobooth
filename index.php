@@ -1,6 +1,7 @@
 <?php
 
 require_once('config.inc.php');
+require_once('folders.php');
 require_once('db.php');
 
 ?>

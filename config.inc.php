@@ -1,7 +1,7 @@
 <?php
 
 $config = array();
-$config['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
+$sys['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
 $config['dev'] = true;
 $config['use_print'] = true;
 $config['use_qr'] = true;
@@ -24,7 +24,7 @@ $config['gallery']['newest_first'] = true;
 $config['language'] = 'de';
 
 // COMMANDS and MESSAGES
-switch($config['os']) {
+switch($sys['os']) {
 	case 'windows':
 	$config['take_picture']['cmd'] = 'digicamcontrol\CameraControlCmd.exe /capture /filename %s';
 	$config['take_picture']['msg'] = 'Photo transfer done.';
@@ -40,10 +40,28 @@ switch($config['os']) {
 	break;
 }
 
-// DON'T MODIFY
-// preparation
-foreach($config['folders'] as $directory) {
-	if(!is_dir($directory)){
-		mkdir($directory, 0777);
-	}
+// MERGE WITH admin/config.json if exists
+$filename = false;
+if(file_exists('admin/config.json')) {
+	$filename = 'admin/config.json';
+} elseif(file_exists('config.json')) {
+	$filename = 'config.json';
+}
+
+if($filename){
+	$file = json_decode(file_get_contents($filename),true);
+	$config = $file;
+	// foreach($config as $k=>$conf){
+	// 	if(is_array($conf)) {
+	// 		foreach($conf as $sk => $sc) {
+	// 			if(isset($file[$k][$sk]) && !empty($file[$k][$sk])) {
+	// 				$config[$k][$sk] = $file[$k][$sk];
+	// 			}
+	// 		}
+	// 	} else {
+	// 		if(isset($file[$k]) && !empty($file[$k])) {
+	// 			$config[$k] = $file[$k];
+	// 		}
+	// 	}
+	// }
 }

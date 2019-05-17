@@ -1,0 +1,171 @@
+$mainColor: #e67e22;
+$hoverColor: #d35400;
+$error: #e74c3c;
+$success: #2ecc71;
+
+#start {
+  display: block;
+}
+
+body {
+  overflow: auto;
+  background: url(../img/bg.jpg) center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+button {
+  border: 0 none;
+  color: #fff;
+}
+
+
+
+input[type="text"],
+select {
+  background: #f8f9fc;
+  border: 1px solid #eff2f7;
+  border-radius: 4px;
+  height: 31px;
+  line-height: 31px;
+  width: 100%;
+  padding: 0 10px;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.admin-panel {
+  width: 500px;
+  padding: 30px 30px 90px;
+  height: auto;
+  margin: 50px auto;
+  background: #fff;
+  position: relative;
+}
+
+.panel {
+  .panel-heading {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid #eee;
+    .plus {
+      display: inline-block;
+    }
+    .minus {
+      display: none;
+    }
+
+    &:hover {
+      background: #fafafa;
+    }
+
+  }
+  .panel-body {
+    display: none;
+    padding: 20px;
+    border: 1px solid #eee;
+  }
+
+  &.open {
+    .panel-heading {
+      .minus {
+        display: inline-block;
+      }
+      .plus {
+        display: none;
+      }
+    }
+  }
+
+  &.init {
+    .panel-body{
+      display: block;
+    }
+  }
+}
+
+.form-row {
+  margin-bottom: 15px;
+}
+
+.save-btn,
+.reset-btn {
+  background: $mainColor;
+  width: 100%;
+  position: absolute;
+  padding: 20px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: background 0.7s ease;
+
+  &:hover {
+    background: $hoverColor;
+  }
+
+  .saving,
+  .success,
+  .error {
+    display: none;
+  }
+
+  &.saving {
+    .saving {
+      display: inline-block;
+    }
+
+    .save,
+    .success,
+    .error {
+      display: none;
+    }
+  }
+
+  &.success {
+    background: $success;
+    .success {
+      display: inline-block;
+    }
+
+    .save,
+    .saving,
+    .error {
+      display: none;
+    }
+  }
+
+  &.error {
+    background: $error;
+    .error {
+      display: inline-block;
+    }
+
+    .save,
+    .saving,
+    .success {
+      display: none;
+    }
+  }
+}
+
+.reset-btn{
+  background: $error;
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  left: auto;
+  width: auto;
+  bottom: auto;
+  padding: 5px 10px;
+
+  &:hover {
+    background: #c0392b;
+  }
+}
+
+.back-to-pb {
+  color: #2b2127;
+  text-decoration: none;
+}

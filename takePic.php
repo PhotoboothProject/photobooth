@@ -1,6 +1,7 @@
 <?php
 
 require_once('db.php');
+require_once('folders.php');
 require_once('config.inc.php');
 
 $file = md5(time()).'.jpg';
