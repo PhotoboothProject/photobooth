@@ -28,6 +28,7 @@ require_once('db.php');
 	<link rel="stylesheet" href="/resources/css/style.css" />
 	<script type="text/javascript">
 		var isdev = true;
+		var useVideo = <?php echo ($config['previewFromCam']) ? 'true' : 'false'; ?>;
 		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
 	</script>
 </head>
@@ -47,6 +48,11 @@ require_once('db.php');
 
 		<!-- Loader -->
 		<div class="stages" id="loader">
+			<?php
+				if($config['previewFromCam']) {
+					echo '<video id="video" autoplay></video>';
+				}
+			?>
 			<div class="loaderInner">
 			<div class="spinner">
 				<i class="fa fa-cog fa-spin"></i>

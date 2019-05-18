@@ -25,6 +25,7 @@ L10N = {
 	"use_print": "Use Print",
 	"use_qr": "Use QR Codes",
 	"show_fork": "Show Fork Badge",
+	"previewFromCam": "See preview by device cam",
 	"newest_first": "Show latest images first",
 	"folders_images": "Image Folder",
 	"folders_thumbs": "Thumbnail Folder",
@@ -35,5 +36,5 @@ L10N = {
 	"commands_take_picture_msg": "Success message for take picture",
 	"commands_print_cmd": "Print command",
 	"commands_print_msg": "Success message for print",
-	"really_delete": "Wollen Sie wirklich alle Bilder löschen?"
+	"really_delete": "Really delete all picture? This cannot be undone!"
 }

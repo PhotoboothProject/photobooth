@@ -723,8 +723,16 @@ hr.small {
   opacity: 0.75;
 }
 
+/* line 663, ../sass/style.scss */
+#video {
+  position: absolute;
+  top: 50%;
+  margin-top: -240px;
+  margin-left: -360px;
+}
+
 @media (max-width: 767px) {
-  /* line 664, ../sass/style.scss */
+  /* line 671, ../sass/style.scss */
   .takePic {
     bottom: auto;
   }

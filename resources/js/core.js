@@ -13,7 +13,16 @@ var photoBooth = (function () {
         gallery = $('#gallery'),
         processing = false,
         pswp = {},
-        resultPage = $('#result');
+        resultPage = $('#result'),
+				stream,
+        webcamConstraints = {
+            audio: false,
+            video: {
+                width: 720,
+                height: 480,
+                facingMode: "user",
+            }
+        };
 
     // timeOut function
     public.resetTimeOut = function () {
@@ -84,6 +93,11 @@ var photoBooth = (function () {
     public.takePic = function () {
         processing = true;
         setTimeout(function () {
+						if(useVideo){
+							var track = public.stream.getTracks()[0];
+							track.stop();
+							$('video').hide();
+						}
             $('#counter').text('');
             $('.spinner').show();
             $('.loading').text(L10N.busy);
@@ -206,6 +220,21 @@ var photoBooth = (function () {
         } else {
             if (!processing) {
                 public.reset();
+								if(useVideo){
+									navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+									if(navigator.getMedia) {
+										navigator.mediaDevices.getUserMedia(webcamConstraints)
+										.then(function(stream) {
+											$('video').show();
+											var video = document.getElementById('video');
+											video.srcObject = stream;
+											public.stream = stream;
+										})
+										.catch(function (error) {
+											console.log(error);
+										});
+									}
+								}
                 loader.slideDown('slow', 'easeOutBounce', function () {
                     public.countdown(countDown, $('#counter'));
                 });
@@ -278,7 +307,7 @@ var photoBooth = (function () {
         var target = $(e.target);
 
         // Menü in and out
-        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn')) {
+        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn') && target.closest('.homebtn').length == 0) {
             if ($('.resultInner').hasClass('hidden')) {
                 $('.resultInner').stop().animate({
                     'bottom': '50px'
@@ -308,7 +337,7 @@ var photoBooth = (function () {
         }
 
         // Go to Home
-        if (target.hasClass('homebtn')) {
+        if (target.hasClass('homebtn') || target.closest('.homebtn').length > 0) {
             window.location = window.location.origin;
         }
 

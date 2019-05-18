@@ -10,3 +10,4 @@ trash
 data.txt
 .sass-cache
 package-lock.json
+.htaccess

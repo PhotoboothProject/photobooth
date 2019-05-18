@@ -36,6 +36,11 @@ require_once('../config.inc.php');
 				'type' => 'checkbox',
 				'name' => 'show_fork',
 				'value' => $config['show_fork']
+			],
+			'previewFromCam' => [
+				'type' => 'checkbox',
+				'name' => 'previewFromCam',
+				'value' => $config['previewFromCam']
 			]
 		],
 		'folders' => [

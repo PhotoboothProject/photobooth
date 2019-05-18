@@ -25,6 +25,7 @@ L10N = {
 	"use_print": "Drucken aktivieren",
 	"use_qr": "QR-Code aktivieren",
 	"show_fork": "Fork Logo anzeigen",
+	"previewFromCam": "Vorschau aus der Tablet-Kamera anzeigen",
 	"newest_first": "Neueste Bilder zuerst anzeigen",
 	"folders_images": "Bild Ordner",
 	"folders_thumbs": "Thumbnail Ordner",
@@ -35,5 +36,5 @@ L10N = {
 	"commands_take_picture_msg": "Erfolgsnachricht fürs Foto",
 	"commands_print_cmd": "Befehl zum Drucken",
 	"commands_print_msg": "Erfolgsnachricht fürs Drucken",
-	"really_delete": "Wollen Sie wirklich alle Bilder löschen?"
+	"really_delete": "Wollen Sie wirklich alle Bilder löschen? Das kann nicht rückgängig gemacht werden!"
 }
