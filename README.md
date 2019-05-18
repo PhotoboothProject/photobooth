@@ -50,7 +50,8 @@ If you want the english labels, just change it to en.js.
 If you want to change the labels just change the de.js or en.js
 
 ### Changelog
-- 1.4.0: Added Options page
+- 1.5.0: Added Options page under /admin. Bugfix for homebtn. Added option for device webcam preview on countdown
+- 1.4.0: Merged several pull requests
 - 1.3.2: Bugfix for QR Code on result page
 - 1.3.1: Merged pull-request #6,#15 and #16
 - 1.3.0: Option for QR and Print Butons, code rework, gulp-sass feature enabled
