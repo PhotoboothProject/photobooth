@@ -1,5 +1,10 @@
 <?php
 
+//  WARNING!
+// This config gets overwritten by the admin panel if you use it.
+// If you want to use only this file, delete the admin/config.json file and do not use the admin panel
+// as it writes new config.json files.
+
 $config = array();
 $sys['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
 $config['dev'] = true;
@@ -52,17 +57,4 @@ if(file_exists('admin/config.json')) {
 if($filename){
 	$file = json_decode(file_get_contents($filename),true);
 	$config = $file;
-	// foreach($config as $k=>$conf){
-	// 	if(is_array($conf)) {
-	// 		foreach($conf as $sk => $sc) {
-	// 			if(isset($file[$k][$sk]) && !empty($file[$k][$sk])) {
-	// 				$config[$k][$sk] = $file[$k][$sk];
-	// 			}
-	// 		}
-	// 	} else {
-	// 		if(isset($file[$k]) && !empty($file[$k])) {
-	// 			$config[$k] = $file[$k];
-	// 		}
-	// 	}
-	// }
 }

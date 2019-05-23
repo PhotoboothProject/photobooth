@@ -11,3 +11,5 @@ data.txt
 .sass-cache
 package-lock.json
 .htaccess
+.htpasswd
+config.json

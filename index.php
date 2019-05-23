@@ -29,6 +29,8 @@ require_once('db.php');
 	<script type="text/javascript">
 		var isdev = true;
 		var useVideo = <?php echo ($config['previewFromCam']) ? 'true' : 'false'; ?>;
+		var imgFolder = <?php echo '"'.$config['folders']['images'].'"'; ?>;
+		var thumbFolder = <?php echo '"'.$config['folders']['thumbs'].'"'; ?>;
 		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
 	</script>
 </head>
@@ -86,8 +88,12 @@ require_once('db.php');
 					<?php
 					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 					foreach($imagelist as $image) {
-						echo '<a href="/images/'.$image.'" data-size="1920x1280">
-								<img src="/thumbs/'.$image.'" />
+
+						$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+						$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+
+						echo '<a href="'.$filename_photo.'" data-size="1920x1280">
+								<img src="'.$filename_thumb.'" />
 								<figure>Caption</figure>
 							</a>';
 					}
