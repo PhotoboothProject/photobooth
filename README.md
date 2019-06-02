@@ -24,7 +24,7 @@ On Raspbian:
 ```
 sudo apt-get update
 sudo apt-get dist-upgrade
-sudo apt-get install git apache2 php5 php5-gd gphoto2 libav-tools
+sudo apt-get install git apache2 php php-gd gphoto2 libav-tools
 cd /var/www/
 sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth
