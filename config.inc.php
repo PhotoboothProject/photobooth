@@ -7,8 +7,8 @@
 
 $config = array();
 $sys['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
-$config['dev'] = true;
-$config['use_print'] = true;
+$config['dev'] = false;
+$config['use_print'] = false;
 $config['use_qr'] = true;
 $config['show_fork'] = true;
 $config['previewFromCam'] = true; // experimental see https://github.com/andreknieriem/photobooth/pull/30
