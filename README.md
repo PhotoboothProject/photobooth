@@ -28,6 +28,10 @@ sudo apt-get install git apache2 php php-gd gphoto2 libav-tools
 cd /var/www/
 sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth html
+mkdir -p /var/www/html/thumbs
+mkdir -p /var/www/html/images
+mkdir -p /var/www/html/print
+mkdir -p /var/www/html/qrcodes
 sudo chown -R pi: /var/www/
 sudo chmod -R 777 /var/www
 ```
@@ -47,6 +51,7 @@ sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 Open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
+
 On Windows
     - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
