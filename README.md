@@ -24,11 +24,14 @@ On Raspbian:
 ```
 sudo apt-get update
 sudo apt-get dist-upgrade
-sudo apt-get install git apache2 php5 php5-gd gphoto2 libav-tools
+sudo apt-get install git apache2 php php-gd gphoto2 libav-tools
 cd /var/www/
 sudo rm -r html/
-sudo git clone https://github.com/andreknieriem/photobooth
-sudo mv photobooth html
+sudo git clone https://github.com/andreknieriem/photobooth html
+mkdir -p /var/www/html/thumbs
+mkdir -p /var/www/html/images
+mkdir -p /var/www/html/print
+mkdir -p /var/www/html/qrcodes
 sudo chown -R pi: /var/www/
 sudo chmod -R 777 /var/www
 ```
@@ -38,9 +41,17 @@ Give sudo rights to the webserver user (www-data)
 and add the following line to the file:
 ```www-data ALL=(ALL) NOPASSWD: ALL```
 
+Ensure that the camera trigger works:
+```
+sudo rm /usr/share/dbus-1/services/org.gtk.vfs.GPhoto2VolumeMonitor.service 
+sudo rm /usr/share/gvfs/mounts/gphoto2.mount 
+sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor 
+sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor 
+```
 Open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
+
 On Windows
     - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
