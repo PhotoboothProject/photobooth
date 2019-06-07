@@ -729,10 +729,11 @@ hr.small {
   top: 50%;
   margin-top: -240px;
   margin-left: -360px;
+  left: 50%;
 }
 
 @media (max-width: 767px) {
-  /* line 671, ../sass/style.scss */
+  /* line 672, ../sass/style.scss */
   .takePic {
     bottom: auto;
   }

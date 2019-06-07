@@ -43,10 +43,10 @@ and add the following line to the file:
 
 Ensure that the camera trigger works:
 ```
-sudo rm /usr/share/dbus-1/services/org.gtk.vfs.GPhoto2VolumeMonitor.service 
-sudo rm /usr/share/gvfs/mounts/gphoto2.mount 
-sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor 
-sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor 
+sudo rm /usr/share/dbus-1/services/org.gtk.vfs.GPhoto2VolumeMonitor.service
+sudo rm /usr/share/gvfs/mounts/gphoto2.mount
+sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor
+sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 ```
 Open the IP address of your raspberry pi in a browser
 
@@ -61,6 +61,8 @@ If you want the english labels, just change it to en.js.
 If you want to change the labels just change the de.js or en.js
 
 ### Changelog
+- 1.5.2: Bugfixing QR-Code from gallery and live-preview position. Merged pull #45
+- 1.5.1: Bugfixing
 - 1.5.0: Added Options page under /admin. Bugfix for homebtn. Added option for device webcam preview on countdown
 - 1.4.0: Merged several pull requests
 - 1.3.2: Bugfix for QR Code on result page

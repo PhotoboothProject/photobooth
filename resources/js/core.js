@@ -143,7 +143,6 @@ var photoBooth = (function () {
             $.ajax({
                 url: 'print.php?filename=' + encodeURI(result.img),
             }).done(function (data) {
-                console.log(data)
             })
         });
 
@@ -231,7 +230,6 @@ var photoBooth = (function () {
 											public.stream = stream;
 										})
 										.catch(function (error) {
-											console.log(error);
 										});
 									}
 								}
@@ -285,7 +283,8 @@ var photoBooth = (function () {
         } else {
             pswpQR.empty();
             var img = pswp.currItem.src;
-            img = img.replace('/'+imgFolder+'/', '');
+            img = img.split('/').pop();
+
             $('<img>').attr('src', 'qrcode.php?filename=' + img).appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');
@@ -299,7 +298,6 @@ var photoBooth = (function () {
         $.ajax({
             url: 'print.php?filename=' + encodeURI(img),
         }).done(function (data) {
-            console.log(data)
         })
     });
 
