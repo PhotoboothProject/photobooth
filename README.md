@@ -61,10 +61,35 @@ Open the IP address of your raspberry pi in a browser
 On Windows
     - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
-### Change Labels
+### Troubleshooting
+#### Change Labels
 There are two label files in the lang folder, one for de and one for en. The de lang-file is included at the bottom of the index.php.
 If you want the english labels, just change it to en.js.
 If you want to change the labels just change the de.js or en.js
+
+#### Keep pictures on Camera
+Add ```--keep``` option for gphoto2 in ```config.inc.php```:
+```
+	$config['take_picture']['cmd'] = 'sudo gphoto2 --capture-image-and-download --keep --filename=%s images';
+```
+On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use ```--set-config capturetarget=X``` option for gphoto2 in ```config.inc.php``` (replace "X" with the target of your choice):
+```
+	$config['take_picture']['cmd'] = 'sudo gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s images';
+```
+To know which capturetarget needs to be defined you need to run:
+```
+gphoto2 --get-config capturetarget
+```
+Example:
+```
+pi@raspberrypi:~ $ gphoto2 --get-config capturetarget
+Label: Capture Target
+Readonly: 0
+Type: RADIO
+Current: Internal RAM
+Choice: 0 Internal RAM
+Choice: 1 Memory card
+```
 
 ### Changelog
 - 1.5.2: Bugfixing QR-Code from gallery and live-preview position. Merged pull #45
