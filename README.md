@@ -24,7 +24,7 @@ On Raspbian:
 ```
 sudo apt-get update
 sudo apt-get dist-upgrade
-sudo apt-get install git apache2 php php-gd gphoto2 libav-tools
+sudo apt-get install git apache2 php php-gd libav-tools
 cd /var/www/
 sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth html
@@ -34,7 +34,13 @@ mkdir -p /var/www/html/print
 mkdir -p /var/www/html/qrcodes
 sudo chown -R pi: /var/www/
 sudo chmod -R 777 /var/www
+
 ```
+Install latest version of libgphoto2, choose last stable release
+```
+wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && sudo bash gphoto2-updater.sh
+```
+
 Give sudo rights to the webserver user (www-data)
 
 ```sudo nano /etc/sudoers```
