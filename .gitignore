@@ -13,3 +13,4 @@ package-lock.json
 .htaccess
 .htpasswd
 config.json
+mail-addresses.txt

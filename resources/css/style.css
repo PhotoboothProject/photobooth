@@ -413,6 +413,32 @@ h3 {
   height: auto;
 }
 
+.send-mail {
+  z-index: 1600;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 25px 15px 15px;
+  min-width: 250px;
+  display: none;
+}
+
+#send-mail-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.mail-form-input {
+  padding: 15px;
+  margin: 12px 0;
+  width: 100%;
+}
+
 /* line 371, ../sass/style.scss */
 .spacer {
   clear: both;
@@ -723,7 +749,7 @@ hr.small {
 }
 
 /* line 645, ../sass/style.scss */
-.gal-qr-code, .gal-print {
+.gal-qr-code, .gal-print, .gal-mail {
   color: #fff;
   background: transparent;
   font-size: 26px;

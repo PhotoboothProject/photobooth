@@ -10,6 +10,7 @@ $sys['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) 
 $config['dev'] = false;
 $config['use_print'] = false;
 $config['use_qr'] = true;
+$config['use_mail'] = false; // mail data needs to be configured
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
 $config['file_format_date'] = false;
@@ -38,6 +39,20 @@ $config['gallery']['newest_first'] = true;
 $config['gallery']['scrollbar'] = false;
 $config['gallery']['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
+
+// EMAIL
+// If connection fails some help can be found here: https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+// Especially gmail needs some special config
+$config['send_all_later'] = false; // if true enables checkbox to save the current mail address for later in mail-addresses.txt
+$config['mail_host'] = 'smtp.example.com';
+$config['mail_username'] = 'photobooth@example.com';
+$config['mail_password'] = 'yourpassword';
+$config['mail_secure'] = 'tls';
+$config['mail_port'] = '587';
+$config['mail_fromAddress'] = 'photobooth@example.com';
+$config['mail_fromName'] = 'Photobooth';
+$config['mail_subject'] = 'Here is your picture';
+$config['mail_text'] = 'Hey, your picture is attached.';
 
 // COMMANDS and MESSAGES
 switch($sys['os']) {

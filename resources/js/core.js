@@ -47,6 +47,8 @@ var photoBooth = (function () {
             'bottom': '-100px'
         });
         $('.spinner').hide();
+        $('.send-mail').hide();
+        public.resetMailForm();
     }
 
     // init
@@ -331,11 +333,85 @@ var photoBooth = (function () {
         })
     });
 
+    // Send Mail gallery
+    $('.gal-mail').on('click touchstart', function (e) {
+        //e.preventDefault();
+
+        var mail = $('.send-mail');
+        if (mail.hasClass('mail-active')) {
+            public.resetMailForm();
+            mail.removeClass('mail-active').fadeOut('fast');
+        } else {
+            mail.addClass('mail-active').fadeIn('fast');
+        }
+    });
+
+    $('.mailbtn').click(function (e) {
+        var mail = $('.send-mail');
+        if (mail.hasClass('mail-active')) {
+            public.resetMailForm();
+            mail.removeClass('mail-active').fadeOut('fast');
+        } else {
+            mail.addClass('mail-active').fadeIn('fast');
+        }
+    });
+
+    $('#send-mail-form').on('submit', function (e) {
+        e.preventDefault();
+        var img = '';
+        if($('.pswp.pswp--open.pswp--visible').length) {
+            img = pswp.currItem.src;
+        } else {
+            img = resultPage.css("background-image").replace('url(','').replace(')','').replace(/\"/gi, "").split('/'+imgFolder+'/')[1];
+        }
+
+        img = img.replace('/'+imgFolder+'/', '');
+        img = img.replace('/'+thumbFolder+'/', '');
+
+        $('#mail-form-image').val(img);
+        var message = $('#mail-form-message');
+        message.empty();
+
+        var form = $(this);
+        var oldValue = form.find('.btn').html();
+        form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
+        $.ajax({
+            url: 'sendPic.php',
+            method: 'POST',
+            data: form.serialize(),
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                if (result.success === true) {
+                    message.fadeIn().html('<span style="color:green">E-Mail gesendet</span>');
+                } else {
+                    message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
+                }
+            },
+            error: function (xhr, status, error) {
+                message.fadeIn('fast').html('<span style="color: red;">Fehler beim Senden der Mail</span>');
+            },
+            complete: function () {
+                form.find('.btn').html(oldValue);
+            }
+        });
+    });
+
+    $('#send-mail-close').click(function (e) {
+        public.resetMailForm();
+        $('.send-mail').removeClass('mail-active').fadeOut('fast');
+    });
+
+    public.resetMailForm = function() {
+        $('#send-mail-form').trigger('reset');
+        $('#mail-form-message').html('');
+    };
+
     $('#result').click(function (e) {
         var target = $(e.target);
 
         // Menü in and out
-        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn') && target.closest('.homebtn').length == 0) {
+        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn') && target.closest('.homebtn').length == 0  && !target.hasClass('mailbtn')) {
             if ($('.resultInner').hasClass('hidden')) {
                 $('.resultInner').stop().animate({
                     'bottom': '50px'
@@ -722,10 +798,14 @@ var photoBooth = (function () {
 
         pswp.listen('beforeChange', function () {
             $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
+            public.resetMailForm();
+            $('.send-mail').removeClass('mail-active').fadeOut('fast');
         });
 
         pswp.listen('close', function () {
             $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
+            public.resetMailForm();
+            $('.send-mail').removeClass('mail-active').fadeOut('fast');
         });
 
         pswp.init();

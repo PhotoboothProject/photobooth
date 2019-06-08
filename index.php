@@ -78,6 +78,7 @@ require_once('db.php');
 			<div class="resultInner hidden">
 			<?php if($config['gallery']['show_gallery']){ ?><a href="#" class="btn gallery"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<?php if($config['use_qr']){ echo '<a href="#" class="btn qrbtn"><span class="qrbtnlabel"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></span></a>'; } ?>
+			<?php if($config['use_mail']){ echo '<a href="#" class="btn mailbtn"><span class="mailbtnlabel"><i class="fa fa-cloud-download"></i> <span data-l10n="mail"></span></span></a>'; } ?>
 			<?php if($config['use_print']){ echo '<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>'; } ?>
 			<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
 			</div>
@@ -157,6 +158,7 @@ require_once('db.php');
 					<button class="pswp__button pswp__button--share" title="Share"></button>
 					<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 					<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+					<?php if($config['use_mail']){ echo '<button class="gal-mail" title="Per Mail senden"><i class="fa fa-cloud-download"></i></button>'; } ?>
 					<?php if($config['use_print']){ echo '<button class="gal-print" title="Drucken"><i class="fa fa-print"></i></button>'; } ?>
 					<?php if($config['use_qr']){ echo '<button class="gal-qr-code" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>'; } ?>
 					<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
@@ -188,6 +190,21 @@ require_once('db.php');
 			<div class="pswp__qr">
 
 			</div>
+	</div>
+
+	<div class="send-mail">
+		<i class="fa fa-times" id="send-mail-close"></i>
+		<p data-l10n="insertMail"></p>
+		<form id="send-mail-form" style="margin: 0;">
+			<input class="mail-form-input" size="35" type="email" name="sendTo">
+			<input id="mail-form-image" type="hidden" name="image" value="">
+			<?php if($config['send_all_later']): ?>
+				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
+				<label data-l10n="sendAllMail" for="mail-form-send-link"></label>
+			<?php endif; ?>
+			<button class="mail-form-input btn" name="submit" type="submit" value="Senden">Senden</button>
+		</form>
+		<div id="mail-form-message" style="max-width: 75%"></div>
 	</div>
 
 	<script type="text/javascript" src="/resources/js/jquery.js"></script>
