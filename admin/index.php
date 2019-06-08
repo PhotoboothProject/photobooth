@@ -47,6 +47,11 @@ require_once('../config.inc.php');
 				'name' => 'use_qr',
 				'value' => $config['use_qr']
 			],
+			'use_mail' => [
+				'type' => 'checkbox',
+				'name' => 'use_mail',
+				'value' => $config['use_mail']
+			],
 			'show_fork' => [
 				'type' => 'checkbox',
 				'name' => 'show_fork',
@@ -123,6 +128,67 @@ require_once('../config.inc.php');
 				'name' => 'gallery[date_format]',
 				'value' => $config['gallery']['date_format']
 			]
+		],
+		'mail' => [
+			'send_all_later' => [
+				'type' => 'checkbox',
+				'name' => 'send_all_later',
+				'value' => $config['send_all_later']
+			],
+			'host' => [
+				'type' => 'input',
+				'placeholder' => 'smtp.example.com',
+				'name' => 'mail_host',
+				'value' => $config['mail_host']
+			],
+			'username' => [
+				'type' => 'input',
+				'placeholder' => 'photobooth@example.com',
+				'name' => 'mail_username',
+				'value' => $config['mail_username']
+			],
+			'password' => [
+				'type' => 'input',
+				'placeholder' => 'yourpassword',
+				'name' => 'mail_password',
+				'value' => $config['mail_password']
+			],
+			'secure' => [
+				'type' => 'input',
+				'placeholder' => 'tls',
+				'name' => 'mail_secure',
+				'value' => $config['mail_secure']
+			],
+			'port' => [
+				'type' => 'input',
+				'placeholder' => '587',
+				'name' => 'mail_port',
+				'value' => $config['mail_port']
+			],
+			'fromAddress' => [
+				'type' => 'input',
+				'placeholder' => 'photobooth@example.com',
+				'name' => 'mail_fromAddress',
+				'value' => $config['mail_fromAddress']
+			],
+			'fromName' => [
+				'type' => 'input',
+				'placeholder' => 'Photobooth',
+				'name' => 'mail_fromName',
+				'value' => $config['mail_fromName']
+			],
+			'subject' => [
+				'type' => 'input',
+				'placeholder' => 'Here is your picture',
+				'name' => 'mail_subject',
+				'value' => $config['mail_subject']
+			],
+			'text' => [
+				'type' => 'input',
+				'placeholder' => 'Hey, your picture is attached.',
+				'name' => 'mail_text',
+				'value' => $config['mail_text']
+			],
 		],
 		'commands' => [
 			'take_picture_cmd' => [
