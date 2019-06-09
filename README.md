@@ -7,10 +7,10 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - Under Linux [gPhoto2](http://gphoto.org/) is used to control the camera and to take pictures.
 - Images are processed with GD/ImageMagick.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
-- Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```config.inc.php```.
-- Settings can be changed in ```config.inc.php``` or via Admin Page (under /admin):
+- Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```my.config.inc.php```.
+- Settings can be changed in ```my.config.inc.php``` or via Admin Page (under /admin):
   - You can hide the gallery.
-  - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config.inc.php```).
+  - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```my.config.inc.php```).
   - Choose between md5format and dateformat images.
   - You can switch between german, english and french language lables.
   - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
@@ -43,7 +43,8 @@ sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth html
 cd /var/www/html/resources/lib
 sudo git clone https://github.com/PHPMailer/PHPMailer
-cd /var/www/
+cd /var/www/html
+sudo cp config.inc.php my.config.inc.php
 sudo mkdir -p /var/www/html/thumbs
 sudo mkdir -p /var/www/html/images
 sudo mkdir -p /var/www/html/print
@@ -78,15 +79,18 @@ Open the IP address of your raspberry pi in a browser
 - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
 ### Troubleshooting
+#### Change configuration
+Use the copy named ```my.config.inc.php``` to make config changes for personal use to prevent sharing personal data on Github by accident.
+
 #### Change Labels
-There are three label files in the lang folder, one for de (german), one for en (english) and one for fr (french). You can change the language inside ```config.inc.php``` or via Admin Page.
+There are three label files in the lang folder, one for de (german), one for en (english) and one for fr (french). You can change the language inside ```my.config.inc.php``` or via Admin Page.
 
 #### Keep pictures on Camera
-Add ```--keep``` option for gphoto2 in ```config.inc.php```:
+Add ```--keep``` option for gphoto2 in ```my.config.inc.php```:
 ```
 	$config['take_picture']['cmd'] = 'sudo gphoto2 --capture-image-and-download --keep --filename=%s images';
 ```
-On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use ```--set-config capturetarget=X``` option for gphoto2 in ```config.inc.php``` (replace "X" with the target of your choice):
+On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use ```--set-config capturetarget=X``` option for gphoto2 in ```my.config.inc.php``` (replace "X" with the target of your choice):
 ```
 	$config['take_picture']['cmd'] = 'sudo gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s images';
 ```

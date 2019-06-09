@@ -2,7 +2,12 @@
 
 $data = $_POST;
 if(isset($data['type'])){
-  require_once('../config.inc.php');
+  $my_config = '../my.config.inc.php';
+  if (file_exists($my_config)) {
+    require_once('../my.config.inc.php');
+  } else {
+    require_once('../config.inc.php');
+  }
 
   if($data['type'] == 'reset') {
 
