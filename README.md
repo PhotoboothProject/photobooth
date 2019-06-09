@@ -1,18 +1,21 @@
-# photobooth+
-A Photobooth webinterface for Raspberry Pi and Windows, based on [photobooth](https://github.com/andreknieriem/photobooth) by Andre Rinas.
+# photobooth by Andre Rinas
+A Photobooth webinterface for Raspberry Pi and Windows.
 
-I've extended the original [photobooth](https://github.com/andreknieriem/photobooth) with a print feature, so you can print newly taken pictures or any picture in the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```config.inc.php```.
-
-Modifications and new features:
-- Pictures can be printed directly after they were taken or later from the gallery
-- Moved a lot of parameters and settings into the ```config.inc.php```
-- Changed the ```data.txt``` from a line seperated database into a JSON structure
-- The images are now processed with GD/ImageMagick rather than avconv
-- Now works on Windows and Linux
-- Added [digiCamControl](http://digicamcontrol.com/) by Duka Istvan to control the camera and to take pictures under Windows
-- Photobooth caches all generated QR-Codes, Thumbnails and Prints
-- All directories are not automatically created if they doesn't exist
-- The gallery can now be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config.inc.php```)
+### Features
+- Works on Windows and Linux.
+  - Under Windows [digiCamControl](http://digicamcontrol.com/) by Duka Istvan can be used to control the camera and to take pictures.
+  - Under Linux [gPhoto2](http://gphoto.org/) is used to control the camera and to take pictures.
+- Images are processed with GD/ImageMagick.
+- Photobooth caches all generated QR-Codes, Thumbnails and Prints.
+- Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```config.inc.php```.
+- Most settings can be changed in ```config.inc.php``` or (most options) via Admin Page (under /admin):
+  - You can hide the gallery.
+  - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config.inc.php```).
+  - Choose between md5format and dateformat images.
+  - You can switch between german, english and french language lables.
+  - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
+  - Print feature can be enabled/disabled.
+  - LivePreview can be enabled/disabled (uses device cam).
 
 ### Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
@@ -20,7 +23,7 @@ Modifications and new features:
 - Apache
 
 ### Installation
-On Raspbian:
+#### On Raspbian:
 ```
 sudo apt-get update
 sudo apt-get dist-upgrade
@@ -58,14 +61,12 @@ Open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
 
-On Windows
-    - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
+#### On Windows
+- Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
 ### Troubleshooting
 #### Change Labels
-There are two label files in the lang folder, one for de and one for en. The de lang-file is included at the bottom of the index.php.
-If you want the english labels, just change it to en.js.
-If you want to change the labels just change the de.js or en.js
+There are three label files in the lang folder, one for de (german), one for en (english) and one for fr (french). You can change the language inside ```config.inc.php``` or via Admin Page.
 
 #### Keep pictures on Camera
 Add ```--keep``` option for gphoto2 in ```config.inc.php```:
@@ -107,6 +108,12 @@ Choice: 1 Memory card
 ### Tutorial
 [Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
 
-### Thanks to
+### Contributors and thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
 - [t0k4rt](https://github.com/t0k4rt/phpqrcode) for phpqrcode
+- [nihilor](https://github.com/nihilor/photobooth) for Printing feature, code rework and bugfixes
+- [vrs01](https://github.com/vrs01)
+- [F4bsi](https://github.com/F4bsi)
+- [got-x](https://github.com/got-x)
+- [RaphaelKunis](https://github.com/RaphaelKunis)
+- [andi34](https://github.com/andi34)
