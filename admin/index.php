@@ -68,6 +68,11 @@ require_once('../config.inc.php');
 			]
 		],
 		'gallery' => [
+			'show_gallery' => [
+				'type' => 'checkbox',
+				'name' => 'show_gallery',
+				'value' => $config['gallery']['show_gallery']
+			],
 			'newest_first' => [
 				'type' => 'checkbox',
 				'name' => 'newest_first',

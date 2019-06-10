@@ -26,7 +26,7 @@ $config['folders']['print'] = 'print';
 
 // GALLERY
 // should the gallery list the newest pictures first?
-$config['gallery']['show'] = true;
+$config['gallery']['show_gallery'] = true;
 $config['gallery']['newest_first'] = true;
 
 // LANGUAGE

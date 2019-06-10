@@ -24,6 +24,7 @@ L10N = {
 	"dev": "Entwicklungs-Modus",
 	"use_print": "Drucken aktivieren",
 	"use_qr": "QR-Code aktivieren",
+	"show_gallery": "Galerie aktivieren",
 	"show_fork": "Fork Logo anzeigen",
 	"previewFromCam": "Vorschau aus der Tablet-Kamera anzeigen",
 	"newest_first": "Neueste Bilder zuerst anzeigen",

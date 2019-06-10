@@ -24,6 +24,7 @@ L10N = {
 	"dev": "Dev-Mode",
 	"use_print": "Use Print",
 	"use_qr": "Use QR Codes",
+	"show_gallery": "Montrer la galerie",
 	"show_fork": "Show Fork Badge",
 	"previewFromCam": "See preview by device cam",
 	"newest_first": "Show latest images first",
