@@ -13,12 +13,10 @@ require_once('../config.inc.php');
 					'fr' => 'FR',
 					'en' => 'EN'
 				],
-				'name' => 'language',
 				'value' => $config['language']
 			],
 			'dev' => [
 				'type' => 'checkbox',
-				'name' => 'dev',
 				'name' => 'dev',
 				'value' => $config['dev']
 			],
