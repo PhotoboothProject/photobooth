@@ -16,6 +16,7 @@ $config['previewFromCam'] = false; // experimental see https://github.com/andrek
 $config['show_date'] = false; // only works if file_format = date
 $config['date_format'] = 'd.m.Y - G:i';
 $config['cntdwn_time'] = '5'; // control countdown timer
+$config['cheese_time'] = '1000'; // control time for cheeeeese!
 
 // FOLDERS
 // change the folders to whatever you like

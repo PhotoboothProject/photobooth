@@ -34,6 +34,7 @@ require_once('db.php');
 		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
 		var gallery_scrollbar = <?php echo ($config['gallery']['scrollbar']) ? 'true' : 'false'; ?>;
  		var cntdwn_time = <?php echo ($config['cntdwn_time']); ?>;
+		var cheese_time = <?php echo ($config['cheese_time']); ?>;
 	</script>
 </head>
 <body class="deselect">

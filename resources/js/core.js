@@ -6,6 +6,7 @@ var photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         countDown = cntdwn_time,       // Countdown from config
+	cheeseTime = cheese_time,
         timeToLive = 90000,
         qr = false,
         timeOut,
@@ -103,7 +104,7 @@ var photoBooth = (function () {
             $('#counter').text('');
             $('.spinner').show();
             $('.loading').text(L10N.busy);
-        }, 1000);
+        }, cheeseTime);
         $.ajax({
             url: 'takePic.php',
             dataType: "json",

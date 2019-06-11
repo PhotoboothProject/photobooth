@@ -117,3 +117,4 @@ Choice: 1 Memory card
 - [got-x](https://github.com/got-x)
 - [RaphaelKunis](https://github.com/RaphaelKunis)
 - [andi34](https://github.com/andi34)
+- [Norman-Sch](https://github.com/Norman-Sch)
