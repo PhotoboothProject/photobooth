@@ -11,6 +11,7 @@ var photoBooth = (function () {
         timeOut,
         saving = false,
         gallery = $('#gallery'),
+        galleryScrollbar = gallery_scrollbar,
         processing = false,
         pswp = {},
         resultPage = $('#result'),
@@ -23,7 +24,7 @@ var photoBooth = (function () {
                 facingMode: "user",
             }
         };
-        showScrollbarsInGallery = false;
+        showScrollbarsInGallery = galleryScrollbar;
 
     // timeOut function
     public.resetTimeOut = function () {

@@ -83,6 +83,11 @@ require_once('../config.inc.php');
 				'type' => 'checkbox',
 				'name' => 'newest_first',
 				'value' => 1
+			],
+			'scrollbar' => [
+				'type' => 'checkbox',
+				'name' => 'scrollbar',
+				'value' => $config['gallery']['scrollbar']
 			]
 		],
 		'commands' => [

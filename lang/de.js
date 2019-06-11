@@ -25,6 +25,7 @@ L10N = {
 	"use_print": "Drucken aktivieren",
 	"use_qr": "QR-Code aktivieren",
 	"show_gallery": "Galerie aktivieren",
+	"scrollbar": "Scrollbar in Galerie aktivieren",
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
 	"general_cntdwn_time": "Countdown Timer in Sekunden",

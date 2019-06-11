@@ -25,6 +25,7 @@ L10N = {
 	"use_print": "Use Print",
 	"use_qr": "Use QR Codes",
 	"show_gallery": "Show Gallery",
+	"scrollbar": "Show scrollbar in Gallery",
 	"show_fork": "Show Fork Badge",
 	"cntdwn_time": "Set countdown timer",
 	"general_cntdwn_time": "Countdown timer in seconds",
