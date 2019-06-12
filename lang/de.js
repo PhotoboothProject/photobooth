@@ -29,6 +29,8 @@ L10N = {
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
 	"general_cntdwn_time": "Countdown Timer in Sekunden",
+	"cheese_time": "Cheeeeeeeese!-Timer",
+	"general_cheese_time": "Cheeeeeeeese!-Timer in Millisekunden",
 	"previewFromCam": "Vorschau aus der Tablet-Kamera anzeigen",
 	"newest_first": "Neueste Bilder zuerst anzeigen",
 	"folders_images": "Bild Ordner",

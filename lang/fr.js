@@ -29,6 +29,8 @@ L10N = {
 	"show_fork": "Afficher badge de fourche",
 	"cntdwn_time": "Régler le compte à rebours",
 	"general_cntdwn_time": "Compte à rebours en secondes",
+	"cheese_time": "Temps de control pour cheese",
+	"general_cheese_time": "Définir le temps pour le Cheeeeeeeese! en millisecondes",
 	"previewFromCam": "Voir l'aperçu par caméra",
 	"newest_first": "Afficher les dernières images en premier",
 	"folders_images": "Dossier d'images",

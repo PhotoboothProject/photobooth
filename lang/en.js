@@ -29,6 +29,8 @@ L10N = {
 	"show_fork": "Show Fork Badge",
 	"cntdwn_time": "Set countdown timer",
 	"general_cntdwn_time": "Countdown timer in seconds",
+	"cheese_time": "Cheeeeeeeese!-Timer",
+	"general_cheese_time": "Cheeeeeeeese!-Timer in milliseconds",
 	"previewFromCam": "See preview by device cam",
 	"newest_first": "Show latest images first",
 	"folders_images": "Image Folder",
