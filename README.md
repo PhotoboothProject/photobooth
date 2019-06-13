@@ -8,6 +8,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
 - Images are processed with GD/ImageMagick.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
 - Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```my.config.inc.php```.
+- Pictures can be send via E-Mail.
 - Settings can be changed in ```my.config.inc.php``` or via Admin Page (under /admin):
   - You can hide the gallery.
   - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```my.config.inc.php```).
@@ -137,6 +138,9 @@ and add the following line:
 ```
 @unclutter -idle 0
 ```
+
+#### E-Mail
+If connection fails some help can be found [here](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
 
 ### Changelog
 - 1.5.3: Several new options (disable gallery via config, set countdown timer via config, set cheeeese! Timer via config, ability to show the date/time in the caption of the images in the gallery), all config changes now available in admin page, complete french translation, add empty Gallery message, Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen, StartScreen message is an option in config/admin page now, add instructions for Kiosk Mode, should fix #11, and #2, improve instructions in README, some more small Bugfixes and improvements. Merged pull-request #53 which includes updated pull-requests #52 & #54
