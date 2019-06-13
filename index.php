@@ -27,7 +27,7 @@ require_once('db.php');
 	<link rel="stylesheet" href="/resources/css/default-skin/default-skin.css">
 	<link rel="stylesheet" href="/resources/css/style.css" />
 	<script type="text/javascript">
-		var isdev = true;
+		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
 		var useVideo = <?php echo ($config['previewFromCam']) ? 'true' : 'false'; ?>;
 		var imgFolder = <?php echo '"'.$config['folders']['images'].'"'; ?>;
 		var thumbFolder = <?php echo '"'.$config['folders']['thumbs'].'"'; ?>;
