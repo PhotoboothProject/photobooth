@@ -27,6 +27,8 @@ L10N = {
 	"use_qr": "Utiliser les codes QR",
 	"show_gallery": "Montrer la galerie",
 	"scrollbar": "Afficher la barre de défilement dans la galerie",
+	"show_date": "Montrez la date sous les images (fonctionne uniquement avec images au format de date)",
+	"gallery_date_format": "Format de date",
 	"show_fork": "Afficher badge de fourche",
 	"cntdwn_time": "Régler le compte à rebours",
 	"general_cntdwn_time": "Compte à rebours en secondes",

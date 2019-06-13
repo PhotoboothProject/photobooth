@@ -27,6 +27,8 @@ L10N = {
 	"use_qr": "QR-Code aktivieren",
 	"show_gallery": "Galerie aktivieren",
 	"scrollbar": "Scrollbar in Galerie aktivieren",
+	"show_date": "Datum in Galerie unter dem Foto anzeigen (funktioniert nur wenn Bilder mit Datum benannt werden)",
+	"gallery_date_format": "Datumsstil",
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
 	"general_cntdwn_time": "Countdown Timer in Sekunden",

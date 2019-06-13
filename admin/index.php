@@ -99,6 +99,17 @@ require_once('../config.inc.php');
 				'type' => 'checkbox',
 				'name' => 'scrollbar',
 				'value' => $config['gallery']['scrollbar']
+			],
+			'show_date' => [
+				'type' => 'checkbox',
+				'name' => 'show_date',
+				'value' => $config['gallery']['show_date']
+			],
+			'date_format' => [
+				'type' => 'input',
+				'placeholder' => 'd.m.Y - G:i',
+				'name' => 'gallery[date_format]',
+				'value' => $config['gallery']['date_format']
 			]
 		],
 		'commands' => [

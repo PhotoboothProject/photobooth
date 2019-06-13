@@ -27,6 +27,8 @@ L10N = {
 	"use_qr": "Use QR Codes",
 	"show_gallery": "Show Gallery",
 	"scrollbar": "Show scrollbar in Gallery",
+	"show_date": "Show date below images in Gallery (only works if dateformat images is used)",
+	"gallery_date_format": "Date style",
 	"show_fork": "Show Fork Badge",
 	"cntdwn_time": "Set countdown timer",
 	"general_cntdwn_time": "Countdown timer in seconds",
