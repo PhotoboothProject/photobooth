@@ -93,7 +93,7 @@ require_once('db.php');
 					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 					foreach($imagelist as $image) {
 						$date;
-						if (isset($config['file_format']) && $config['file_format'] == 'date' && $config['show_date'] == true) {
+						if ($config['file_format_date'] == true && $config['show_date'] == true) {
 							$date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
 						}
 

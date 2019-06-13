@@ -20,6 +20,11 @@ require_once('../config.inc.php');
 				'name' => 'dev',
 				'value' => $config['dev']
 			],
+			'file_format_date' => [
+				'type' => 'checkbox',
+				'name' => 'file_format_date',
+				'value' => $config['file_format_date']
+			],
 			'use_print' => [
 				'type' => 'checkbox',
 				'name' => 'use_print',

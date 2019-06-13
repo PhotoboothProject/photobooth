@@ -4,16 +4,11 @@ require_once('db.php');
 require_once('folders.php');
 require_once('config.inc.php');
 
-$file = md5(time()).'.jpg';
-
-switch($config['file_format']){
-	case 'date':
-		$file = date('Ymd_His').'.jpg';
-		break;
-	default:
-		$file = md5(time()).'.jpg';
-		break;
- }
+if($config['file_format_date'] == true) {
+	$file = date('Ymd_His').'.jpg';
+} else {
+	$file = md5(time()).'.jpg';
+}
 
 $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;

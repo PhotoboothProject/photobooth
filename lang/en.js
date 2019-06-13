@@ -22,6 +22,7 @@ L10N = {
 	"reset": "Reset",
 	"language": "Choose Language",
 	"dev": "Dev-Mode",
+	"file_format_date": "Use dateformat images",
 	"use_print": "Use Print",
 	"use_qr": "Use QR Codes",
 	"show_gallery": "Show Gallery",

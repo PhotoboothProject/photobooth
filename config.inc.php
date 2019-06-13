@@ -12,8 +12,8 @@ $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
-#$config['file_format'] = 'date'; // comment in to get dateformat images
-$config['show_date'] = false; // only works if file_format = date
+$config['file_format_date'] = false;
+$config['show_date'] = false; // only works if file_format_date = true
 $config['date_format'] = 'd.m.Y - G:i';
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
