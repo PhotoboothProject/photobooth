@@ -93,7 +93,7 @@ require_once('../config.inc.php');
 			'newest_first' => [
 				'type' => 'checkbox',
 				'name' => 'newest_first',
-				'value' => 1
+				'value' => $config['gallery']['newest_first']
 			],
 			'scrollbar' => [
 				'type' => 'checkbox',
