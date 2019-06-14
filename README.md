@@ -8,7 +8,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
 - Images are processed with GD/ImageMagick.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
 - Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```config.inc.php```.
-- Most settings can be changed in ```config.inc.php``` or (most options) via Admin Page (under /admin):
+- Settings can be changed in ```config.inc.php``` or via Admin Page (under /admin):
   - You can hide the gallery.
   - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config.inc.php```).
   - Choose between md5format and dateformat images.
@@ -132,6 +132,7 @@ and add the following line:
 ```
 
 ### Changelog
+- 1.5.3: Several new options (disable gallery via config, set countdown timer via config, set cheeeese! Timer via config, ability to show the date/time in the caption of the images in the gallery), all config changes now available in admin page, complete french translation, add empty Gallery message, Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen, StartScreen message is an option in config/admin page now, add instructions for Kiosk Mode, should fix #11, and #2, improve instructions in README, some more small Bugfixes and improvements. Merged pull-request #53 which includes updated pull-requests #52 & #54
 - 1.5.2: Bugfixing QR-Code from gallery and live-preview position. Merged pull #45
 - 1.5.1: Bugfixing
 - 1.5.0: Added Options page under /admin. Bugfix for homebtn. Added option for device webcam preview on countdown
@@ -157,3 +158,6 @@ and add the following line:
 - [RaphaelKunis](https://github.com/RaphaelKunis)
 - [andi34](https://github.com/andi34)
 - [Norman-Sch](https://github.com/Norman-Sch)
+- [marcogracklauer](https://github.com/marcogracklauer)
+- [dnks23](https://github.com/dnks23)
+- [tobiashaas](https://github.com/tobiashaas)
