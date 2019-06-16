@@ -31,10 +31,10 @@ sudo apt-get install git apache2 php php-gd libav-tools
 cd /var/www/
 sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth html
-mkdir -p /var/www/html/thumbs
-mkdir -p /var/www/html/images
-mkdir -p /var/www/html/print
-mkdir -p /var/www/html/qrcodes
+sudo mkdir -p /var/www/html/thumbs
+sudo mkdir -p /var/www/html/images
+sudo mkdir -p /var/www/html/print
+sudo mkdir -p /var/www/html/qrcodes
 sudo chown -R pi: /var/www/
 sudo chmod -R 777 /var/www
 
