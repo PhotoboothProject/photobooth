@@ -67,6 +67,10 @@ before opening a new issue.
 
 Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andreknieriem/photobooth/wiki/changelog).
 
+### :tada: Donation
+If you like my work and like to keep me motivated you can buy me a coconut water
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/andreasblaesius)
+
 ### :mortar_board: Tutorial
 
 [Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
