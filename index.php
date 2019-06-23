@@ -21,6 +21,10 @@ require_once('db.php');
 	<meta name="msapplication-TileColor" content="#da532c">
 	<meta name="theme-color" content="#ffffff">
 
+	<!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
 	<link rel="stylesheet" href="/resources/css/normalize.css" />
 	<link rel="stylesheet" href="/resources/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="/resources/css/photoswipe.css">
