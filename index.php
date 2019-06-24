@@ -95,22 +95,27 @@ require_once('db.php');
 				<div class="images" id="galimages">
 					<?php
 					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
-					foreach($imagelist as $image) {
-						$date;
-						if ($config['file_format_date'] == true && $config['gallery']['show_date'] == true) {
-							$date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
+					if (empty($imagelist)) {
+						// no images in gallery.
+						echo '<h1> Die Galerie ist noch leer. Mache doch ein paar Bilder! </h1>';
+					} else {
+						foreach($imagelist as $image) {
+							$date;
+							if ($config['file_format_date'] == true && $config['gallery']['show_date'] == true) {
+								$date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
+							}
+
+							$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+							$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+
+							$imageinfo = getimagesize($filename_photo);
+							$imageinfoThumb = getimagesize($filename_thumb);
+
+							echo '<a href="'.DIRECTORY_SEPARATOR.$filename_photo.'" data-size="'.$imageinfo[0].'x'.$imageinfo[1].'" data-med="'.DIRECTORY_SEPARATOR.$filename_thumb.'" data-med-size="'.$imageinfoThumb[0].'x'.$imageinfoThumb[1].'">
+									<img src="'.DIRECTORY_SEPARATOR.$filename_thumb .'" />
+									<figure>' . ($date == false ? '' : '<i class="fa fa-clock-o"></i> ' . $date->format($config['gallery']['date_format'])) . '</figure>
+								</a>';
 						}
-
-						$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
-						$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
-
-						$imageinfo = getimagesize($filename_photo);
-						$imageinfoThumb = getimagesize($filename_thumb);
-
-						echo '<a href="'.DIRECTORY_SEPARATOR.$filename_photo.'" data-size="'.$imageinfo[0].'x'.$imageinfo[1].'" data-med="'.DIRECTORY_SEPARATOR.$filename_thumb.'" data-med-size="'.$imageinfoThumb[0].'x'.$imageinfoThumb[1].'">
-								<img src="'.DIRECTORY_SEPARATOR.$filename_thumb .'" />
-								<figure>' . ($date == false ? '' : '<i class="fa fa-clock-o"></i> ' . $date->format($config['gallery']['date_format'])) . '</figure>
-							</a>';
 					}
 					?>
 				</div>
