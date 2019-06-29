@@ -51,8 +51,22 @@ $config['mail_secure'] = 'tls';
 $config['mail_port'] = '587';
 $config['mail_fromAddress'] = 'photobooth@example.com';
 $config['mail_fromName'] = 'Photobooth';
-$config['mail_subject'] = 'Here is your picture';
-$config['mail_text'] = 'Hey, your picture is attached.';
+
+switch($config['language']) {
+	case 'de':
+	$config['mail_subject'] = 'Hier ist dein Bild';
+	$config['mail_text'] = 'Hey, dein Bild ist angehangen.';
+	break;
+	case 'fr':
+	$config['mail_subject'] = 'Voici votre photo';
+	$config['mail_text'] = 'Hé, ta photo est attachée.';
+	break;
+	case 'en':
+	default:
+	$config['mail_subject'] = 'Here is your picture';
+	$config['mail_text'] = 'Hey, your picture is attached.';
+	break;
+}
 
 // COMMANDS and MESSAGES
 switch($sys['os']) {
