@@ -16,6 +16,14 @@ $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
 
+// LANGUAGE
+// possible values: en, de, fr
+$config['language'] = 'de';
+
+// StartScreen
+$config['start_screen_title'] = 'Photobooth';
+$config['start_screen_subtitle'] = 'Webinterface by André Rinas';
+
 // FOLDERS
 // change the folders to whatever you like
 $config['folders']['images'] = 'images';
@@ -30,10 +38,6 @@ $config['gallery']['newest_first'] = true;
 $config['gallery']['scrollbar'] = false;
 $config['gallery']['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
-
-// LANGUAGE
-// possible values: en, de, fr
-$config['language'] = 'de';
 
 // COMMANDS and MESSAGES
 switch($sys['os']) {

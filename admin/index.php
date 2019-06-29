@@ -15,6 +15,18 @@ require_once('../config.inc.php');
 				],
 				'value' => $config['language']
 			],
+			'start_screen_title' => [
+				'type' => 'input',
+				'placeholder' => 'Photobooth',
+				'name' => 'start_screen_title',
+				'value' => $config['start_screen_title']
+			],
+			'start_screen_subtitle' => [
+				'type' => 'input',
+				'placeholder' => 'Webinterface by André Rinas',
+				'name' => 'start_screen_subtitle',
+				'value' => $config['start_screen_subtitle']
+			],
 			'dev' => [
 				'type' => 'checkbox',
 				'name' => 'dev',
