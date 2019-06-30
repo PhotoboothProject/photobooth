@@ -27,7 +27,17 @@ A Photobooth webinterface for Raspberry Pi and Windows.
 ```
 sudo apt-get update
 sudo apt-get dist-upgrade
+```
+On Raspbian Stretch:
+```
 sudo apt-get install git apache2 php php-gd libav-tools
+```
+On Raspbian Buster
+```
+sudo apt-get install git apache2 php php-gd ffmpeg
+```
+Get the Photobooth source and set perms
+```
 cd /var/www/
 sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth html
