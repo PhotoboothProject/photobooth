@@ -29,6 +29,7 @@ L10N = {
 	"scrollbar": "Afficher la barre de défilement dans la galerie",
 	"show_date": "Montrez la date sous les images (fonctionne uniquement avec images au format de date)",
 	"gallery_date_format": "Format de date",
+	"gallery_no_image": "La galerie est encore vide. Faire des photos!",
 	"show_fork": "Afficher badge de fourche",
 	"cntdwn_time": "Régler le compte à rebours",
 	"general_cntdwn_time": "Compte à rebours en secondes",

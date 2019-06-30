@@ -29,6 +29,7 @@ L10N = {
 	"scrollbar": "Scrollbar in Galerie aktivieren",
 	"show_date": "Datum in Galerie unter dem Foto anzeigen (funktioniert nur wenn Bilder mit Datum benannt werden)",
 	"gallery_date_format": "Datumsstil",
+	"gallery_no_image": "Die Galerie ist noch leer. Mache doch ein paar Bilder!",
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
 	"general_cntdwn_time": "Countdown Timer in Sekunden",

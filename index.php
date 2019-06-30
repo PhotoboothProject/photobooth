@@ -97,7 +97,7 @@ require_once('db.php');
 					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 					if (empty($imagelist)) {
 						// no images in gallery.
-						echo '<h1> Die Galerie ist noch leer. Mache doch ein paar Bilder! </h1>';
+						echo '<h1 style="text-align:center" data-l10n="gallery_no_image"></h1>';
 					} else {
 						foreach($imagelist as $image) {
 							$date;
