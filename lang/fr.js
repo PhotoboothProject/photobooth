@@ -49,6 +49,7 @@ L10N = {
 	"folders_thumbs": "Dossier de vignettes",
 	"folders_qrcodes": "Dossier code QR",
 	"folders_print": "Dossier d'impression",
+	"folders_tmp": "Dossier tmp",
 	"general_language": "La langue",
 	"send_all_later": "Activez la case à cocher pour ajouter l'adresse saisie à un fichier (par exemple, pour envoyer un courrier avec toutes les images ultérieurement)",
 	"mail_host": "Adresse mail de l'hôte",

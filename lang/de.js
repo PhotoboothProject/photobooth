@@ -49,6 +49,7 @@ L10N = {
 	"folders_thumbs": "Thumbnail Ordner",
 	"folders_qrcodes": "QR-Code Ordner",
 	"folders_print": "Druck Ordner",
+	"folders_tmp": "tmp Ordner",
 	"general_language": "Sprache",
 	"send_all_later": "Checkbox aktivieren um die eingegebene Adresse einer Datei hinzuzufügen (z.B. um später eine Mail mit allen Bildern zu versenden)",
 	"mail_host": "E-Mail Host Adresse",

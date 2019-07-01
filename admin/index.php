@@ -97,11 +97,11 @@ if (file_exists($my_config)) {
 				'name' => 'folders[images]',
 				'value' => $config['folders']['images']
 			],
-			'thumbs' => [
+			'print' => [
 				'type' => 'input',
-				'placeholder' => 'thumbs',
-				'name' => 'folders[thumbs]',
-				'value' => $config['folders']['thumbs']
+				'placeholder' => 'print',
+				'name' => 'folders[print]',
+				'value' => $config['folders']['print']
 			],
 			'qrcodes' => [
 				'type' => 'input',
@@ -109,11 +109,17 @@ if (file_exists($my_config)) {
 				'name' => 'folders[qrcodes]',
 				'value' => $config['folders']['qrcodes']
 			],
-			'print' => [
+			'thumbs' => [
 				'type' => 'input',
-				'placeholder' => 'print',
-				'name' => 'folders[print]',
-				'value' => $config['folders']['print']
+				'placeholder' => 'thumbs',
+				'name' => 'folders[thumbs]',
+				'value' => $config['folders']['thumbs']
+			],
+			'tmp' => [
+				'type' => 'input',
+				'placeholder' => 'tmp',
+				'name' => 'folders[tmp]',
+				'value' => $config['folders']['tmp']
 			]
 		],
 		'wedding' => [

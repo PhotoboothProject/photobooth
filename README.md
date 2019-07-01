@@ -47,10 +47,11 @@ cd /var/www/html/resources/lib
 sudo git clone https://github.com/PHPMailer/PHPMailer
 cd /var/www/html
 sudo cp config.inc.php my.config.inc.php
-sudo mkdir -p /var/www/html/thumbs
 sudo mkdir -p /var/www/html/images
 sudo mkdir -p /var/www/html/print
 sudo mkdir -p /var/www/html/qrcodes
+sudo mkdir -p /var/www/html/thumbs
+sudo mkdir -p /var/www/html/tmp
 sudo chown -R pi: /var/www/
 sudo chmod -R 777 /var/www
 

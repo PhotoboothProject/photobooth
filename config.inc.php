@@ -30,9 +30,10 @@ $config['start_screen_subtitle'] = 'Webinterface by André Rinas';
 // FOLDERS
 // change the folders to whatever you like
 $config['folders']['images'] = 'images';
-$config['folders']['thumbs'] = 'thumbs';
-$config['folders']['qrcodes'] = 'qrcodes';
 $config['folders']['print'] = 'print';
+$config['folders']['qrcodes'] = 'qrcodes';
+$config['folders']['thumbs'] = 'thumbs';
+$config['folders']['tmp'] = 'tmp';
 
 // WEDDING SETTINGS
 $config['is_wedding'] = false;
@@ -47,6 +48,11 @@ $config['newest_first'] = true;
 $config['scrollbar'] = false;
 $config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
+
+// IMAGE FILTER
+$config['use_filter'] = false;
+// possible filter modes: grayscale, negate, sepia_dark, sepia_light
+$config['imgfilter_filter_mode'] = 'grayscale';
 
 // EMAIL
 // If connection fails some help can be found here: https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting

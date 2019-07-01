@@ -17,3 +17,4 @@ mail-addresses.txt
 resources/lib/PHPMailer
 my.config.inc.php
 *.patch
+tmp
