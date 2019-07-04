@@ -39,6 +39,8 @@ $source = imagecreatefromjpeg($filename_photo);
 $thumb = imagecreatetruecolor($newwidth, $newheight);
 imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 imagejpeg($thumb, $filename_thumb);
+imagedestroy($source);
+imagedestroy($thumb);
 
 // insert into database
 $images[] = $file;
