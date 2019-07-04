@@ -12,7 +12,17 @@ $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
-#$config['file_format'] = 'date'; // comment in to get dateformat images
+$config['file_format_date'] = false;
+$config['cntdwn_time'] = '5'; // control countdown timer
+$config['cheese_time'] = '1000'; // control time for cheeeeese!
+
+// LANGUAGE
+// possible values: en, de, fr
+$config['language'] = 'de';
+
+// StartScreen
+$config['start_screen_title'] = 'Photobooth';
+$config['start_screen_subtitle'] = 'Webinterface by André Rinas';
 
 // FOLDERS
 // change the folders to whatever you like
@@ -23,11 +33,11 @@ $config['folders']['print'] = 'print';
 
 // GALLERY
 // should the gallery list the newest pictures first?
+$config['gallery']['show_gallery'] = true;
 $config['gallery']['newest_first'] = true;
-
-// LANGUAGE
-// possible values: en, de, fr
-$config['language'] = 'de';
+$config['gallery']['scrollbar'] = false;
+$config['gallery']['show_date'] = false; // only works if file_format_date = true
+$config['gallery']['date_format'] = 'd.m.Y - G:i';
 
 // COMMANDS and MESSAGES
 switch($sys['os']) {

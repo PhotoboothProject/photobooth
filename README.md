@@ -1,18 +1,21 @@
-# photobooth+
-A Photobooth webinterface for Raspberry Pi and Windows, based on [photobooth](https://github.com/andreknieriem/photobooth) by Andre Rinas.
+# photobooth by Andre Rinas
+A Photobooth webinterface for Raspberry Pi and Windows.
 
-I've extended the original [photobooth](https://github.com/andreknieriem/photobooth) with a print feature, so you can print newly taken pictures or any picture in the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```config.inc.php```.
-
-Modifications and new features:
-- Pictures can be printed directly after they were taken or later from the gallery
-- Moved a lot of parameters and settings into the ```config.inc.php```
-- Changed the ```data.txt``` from a line seperated database into a JSON structure
-- The images are now processed with GD/ImageMagick rather than avconv
-- Now works on Windows and Linux
-- Added [digiCamControl](http://digicamcontrol.com/) by Duka Istvan to control the camera and to take pictures under Windows
-- Photobooth caches all generated QR-Codes, Thumbnails and Prints
-- All directories are not automatically created if they doesn't exist
-- The gallery can now be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config.inc.php```)
+### Features
+- Works on Windows and Linux.
+  - Under Windows [digiCamControl](http://digicamcontrol.com/) by Duka Istvan can be used to control the camera and to take pictures.
+  - Under Linux [gPhoto2](http://gphoto.org/) is used to control the camera and to take pictures.
+- Images are processed with GD/ImageMagick.
+- Photobooth caches all generated QR-Codes, Thumbnails and Prints.
+- Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```config.inc.php```.
+- Settings can be changed in ```config.inc.php``` or via Admin Page (under /admin):
+  - You can hide the gallery.
+  - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config.inc.php```).
+  - Choose between md5format and dateformat images.
+  - You can switch between german, english and french language lables.
+  - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
+  - Print feature can be enabled/disabled.
+  - LivePreview can be enabled/disabled (uses device cam).
 
 ### Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
@@ -20,21 +23,37 @@ Modifications and new features:
 - Apache
 
 ### Installation
-On Raspbian:
+#### On Raspbian:
 ```
 sudo apt-get update
 sudo apt-get dist-upgrade
-sudo apt-get install git apache2 php php-gd gphoto2 libav-tools
+```
+On Raspbian Stretch:
+```
+sudo apt-get install git apache2 php php-gd libav-tools
+```
+On Raspbian Buster
+```
+sudo apt-get install git apache2 php php-gd ffmpeg
+```
+Get the Photobooth source and set perms
+```
 cd /var/www/
 sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth html
-mkdir -p /var/www/html/thumbs
-mkdir -p /var/www/html/images
-mkdir -p /var/www/html/print
-mkdir -p /var/www/html/qrcodes
+sudo mkdir -p /var/www/html/thumbs
+sudo mkdir -p /var/www/html/images
+sudo mkdir -p /var/www/html/print
+sudo mkdir -p /var/www/html/qrcodes
 sudo chown -R pi: /var/www/
 sudo chmod -R 777 /var/www
+
 ```
+Install latest version of libgphoto2, choose last stable release
+```
+wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && sudo bash gphoto2-updater.sh
+```
+
 Give sudo rights to the webserver user (www-data)
 
 ```sudo nano /etc/sudoers```
@@ -52,15 +71,68 @@ Open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
 
-On Windows
-    - Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
+#### On Windows
+- Download [digiCamControl](http://digicamcontrol.com/) and extract the archive into ```digicamcontrol``` in the photobooth root, e.g. ```D:\xampp\htdocs\photobooth\digicamcontrol```
 
-### Change Labels
-There are two label files in the lang folder, one for de and one for en. The de lang-file is included at the bottom of the index.php.
-If you want the english labels, just change it to en.js.
-If you want to change the labels just change the de.js or en.js
+### Troubleshooting
+#### Change Labels
+There are three label files in the lang folder, one for de (german), one for en (english) and one for fr (french). You can change the language inside ```config.inc.php``` or via Admin Page.
+
+#### Keep pictures on Camera
+Add ```--keep``` option for gphoto2 in ```config.inc.php```:
+```
+	$config['take_picture']['cmd'] = 'sudo gphoto2 --capture-image-and-download --keep --filename=%s images';
+```
+On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use ```--set-config capturetarget=X``` option for gphoto2 in ```config.inc.php``` (replace "X" with the target of your choice):
+```
+	$config['take_picture']['cmd'] = 'sudo gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s images';
+```
+To know which capturetarget needs to be defined you need to run:
+```
+gphoto2 --get-config capturetarget
+```
+Example:
+```
+pi@raspberrypi:~ $ gphoto2 --get-config capturetarget
+Label: Capture Target
+Readonly: 0
+Type: RADIO
+Current: Internal RAM
+Choice: 0 Internal RAM
+Choice: 1 Memory card
+```
+#### Kiosk Mode
+##### Automatically start Photobooth in full screen
+Edit the LXDE Autostart Script:
+```
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
+and add the following lines:
+```
+@xset s off
+@xset -dpms
+@xset s noblank
+@chromium-browser --incognito --kiosk http://localhost/
+```
+**NOTE:** If you're using QR-Code replace ```http://localhost/``` with your local IP-Adress (e.g. ```http://192.168.4.1```), else QR-Code does not work.
+
+
+##### Hide the Mouse Cursor
+To hide the Mouse Cursor we'll use "unclutter":
+```
+sudo apt-get install unclutter
+```
+Edit the LXDE Autostart Script again:
+```
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
+and add the following line:
+```
+@unclutter -idle 0
+```
 
 ### Changelog
+- 1.5.3: Several new options (disable gallery via config, set countdown timer via config, set cheeeese! Timer via config, ability to show the date/time in the caption of the images in the gallery), all config changes now available in admin page, complete french translation, add empty Gallery message, Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen, StartScreen message is an option in config/admin page now, add instructions for Kiosk Mode, should fix #11, and #2, improve instructions in README, some more small Bugfixes and improvements. Merged pull-request #53 which includes updated pull-requests #52 & #54
 - 1.5.2: Bugfixing QR-Code from gallery and live-preview position. Merged pull #45
 - 1.5.1: Bugfixing
 - 1.5.0: Added Options page under /admin. Bugfix for homebtn. Added option for device webcam preview on countdown
@@ -76,6 +148,16 @@ If you want to change the labels just change the de.js or en.js
 ### Tutorial
 [Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
 
-### Thanks to
+### Contributors and thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
 - [t0k4rt](https://github.com/t0k4rt/phpqrcode) for phpqrcode
+- [nihilor](https://github.com/nihilor/photobooth) for Printing feature, code rework and bugfixes
+- [vrs01](https://github.com/vrs01)
+- [F4bsi](https://github.com/F4bsi)
+- [got-x](https://github.com/got-x)
+- [RaphaelKunis](https://github.com/RaphaelKunis)
+- [andi34](https://github.com/andi34)
+- [Norman-Sch](https://github.com/Norman-Sch)
+- [marcogracklauer](https://github.com/marcogracklauer)
+- [dnks23](https://github.com/dnks23)
+- [tobiashaas](https://github.com/tobiashaas)

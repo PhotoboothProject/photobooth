@@ -13,14 +13,29 @@ require_once('../config.inc.php');
 					'fr' => 'FR',
 					'en' => 'EN'
 				],
-				'name' => 'language',
 				'value' => $config['language']
+			],
+			'start_screen_title' => [
+				'type' => 'input',
+				'placeholder' => 'Photobooth',
+				'name' => 'start_screen_title',
+				'value' => $config['start_screen_title']
+			],
+			'start_screen_subtitle' => [
+				'type' => 'input',
+				'placeholder' => 'Webinterface by André Rinas',
+				'name' => 'start_screen_subtitle',
+				'value' => $config['start_screen_subtitle']
 			],
 			'dev' => [
 				'type' => 'checkbox',
 				'name' => 'dev',
-				'name' => 'dev',
 				'value' => $config['dev']
+			],
+			'file_format_date' => [
+				'type' => 'checkbox',
+				'name' => 'file_format_date',
+				'value' => $config['file_format_date']
 			],
 			'use_print' => [
 				'type' => 'checkbox',
@@ -36,6 +51,18 @@ require_once('../config.inc.php');
 				'type' => 'checkbox',
 				'name' => 'show_fork',
 				'value' => $config['show_fork']
+			],
+			'cntdwn_time' => [
+				'type' => 'input',
+				'name' => 'cntdwn_time',
+				'placeholder' => '5',
+				'value' => $config['cntdwn_time']
+			],
+			'cheese_time' => [
+				'type' => 'input',
+				'placeholder' => '1000',
+				'name' => 'cheese_time',
+				'value' => $config['cheese_time']
 			],
 			'previewFromCam' => [
 				'type' => 'checkbox',
@@ -70,10 +97,31 @@ require_once('../config.inc.php');
 			]
 		],
 		'gallery' => [
+			'show_gallery' => [
+				'type' => 'checkbox',
+				'name' => 'show_gallery',
+				'value' => $config['gallery']['show_gallery']
+			],
 			'newest_first' => [
 				'type' => 'checkbox',
 				'name' => 'newest_first',
-				'value' => 1
+				'value' => $config['gallery']['newest_first']
+			],
+			'scrollbar' => [
+				'type' => 'checkbox',
+				'name' => 'scrollbar',
+				'value' => $config['gallery']['scrollbar']
+			],
+			'show_date' => [
+				'type' => 'checkbox',
+				'name' => 'show_date',
+				'value' => $config['gallery']['show_date']
+			],
+			'date_format' => [
+				'type' => 'input',
+				'placeholder' => 'd.m.Y - G:i',
+				'name' => 'gallery[date_format]',
+				'value' => $config['gallery']['date_format']
 			]
 		],
 		'commands' => [
