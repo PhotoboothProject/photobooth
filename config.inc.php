@@ -51,7 +51,7 @@ $config['gallery']['date_format'] = 'd.m.Y - G:i';
 
 // IMAGE FILTER
 $config['use_filter'] = false;
-// possible filter modes: grayscale, negate, sepia_dark, sepia_light
+// possible filter modes: antique, aqua, cool, everglow, grayscale, negate, retro, sepia_dark, sepia_light, summer, vintage, washed
 $config['imgfilter_filter_mode'] = 'grayscale';
 
 // EMAIL

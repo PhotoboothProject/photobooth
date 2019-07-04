@@ -49,11 +49,32 @@ if($config['use_filter'] === true) {
 	$tmp = imagecreatefromjpeg($filename_orig);
 
 	switch($config['imgfilter_filter_mode']) {
+		case 'antique':
+			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 0);
+			imagefilter($tmp, IMG_FILTER_CONTRAST, -30);
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 75, 50, 25);
+			break;
+		case 'aqua':
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 70, 0, 30);
+			break;
+		case 'cool':
+			imagefilter($tmp, IMG_FILTER_MEAN_REMOVAL);
+			imagefilter($tmp, IMG_FILTER_CONTRAST, -50);
+			break;
+		case 'everglow':
+			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, -30);
+			imagefilter($tmp, IMG_FILTER_CONTRAST, -5);
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 30, 30, 0);
+			break;
 		case 'grayscale':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			break;
 		case 'negate':
 			imagefilter($tmp, IMG_FILTER_NEGATE);
+			break;
+		case 'retro':
+			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 100, 25, 25, 50);
 			break;
 		case 'sepia_dark':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
@@ -63,6 +84,24 @@ if($config['use_filter'] === true) {
 		case 'sepia_light':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 90, 60, 40);
+			break;
+		case 'summer':
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 150, 0, 50);
+			imagefilter($tmp, IMG_FILTER_NEGATE);
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 25, 50, 0, 50);
+			imagefilter($tmp, IMG_FILTER_NEGATE);
+			break;
+		case 'vintage':
+			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 10);
+			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 40, 10, -15);
+			break;
+		case 'washed':
+			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 30);
+			imagefilter($tmp, IMG_FILTER_NEGATE);
+			imagefilter($tmp, IMG_FILTER_COLORIZE, -50, 0, 20, 50);
+			imagefilter($tmp, IMG_FILTER_NEGATE );
+			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 10);
 			break;
 		default:
 			break;
