@@ -73,5 +73,8 @@ L10N = {
 	"wedding_groom": "Nom 1",
 	"wedding_bride": "Nom 2",
 	"wedding_symbol": "Icône",
-	"symbol": "Sélectionnez le symbole"
+	"symbol": "Sélectionnez le symbole",
+	"imgfilter": "Filtre d'image",
+	"use_filter": "Utiliser le filtre d'image",
+	"imgfilter_filter_mode": "Mode de filtrage"
 }
