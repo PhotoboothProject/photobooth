@@ -6,7 +6,7 @@ var photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         countDown = cntdwn_time,       // Countdown from config
-	cheeseTime = cheese_time,
+        cheeseTime = cheese_time,
         timeToLive = 90000,
         qr = false,
         timeOut,
@@ -16,7 +16,7 @@ var photoBooth = (function () {
         processing = false,
         pswp = {},
         resultPage = $('#result'),
-				stream,
+        stream,
         webcamConstraints = {
             audio: false,
             video: {
@@ -96,11 +96,11 @@ var photoBooth = (function () {
     public.takePic = function () {
         processing = true;
         setTimeout(function () {
-						if(useVideo){
-							var track = public.stream.getTracks()[0];
-							track.stop();
-							$('video').hide();
-						}
+            if(useVideo){
+                var track = public.stream.getTracks()[0];
+                track.stop();
+                $('video').hide();
+            }
             $('#counter').text('');
             $('.spinner').show();
             $('.loading').text(L10N.busy);
@@ -249,20 +249,20 @@ var photoBooth = (function () {
         } else {
             if (!processing) {
                 public.reset();
-								if(useVideo && navigator.mediaDevices){
-									navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
-									if(navigator.getMedia) {
-										navigator.mediaDevices.getUserMedia(webcamConstraints)
-										.then(function(stream) {
-											$('video').show();
-											var video = document.getElementById('video');
-											video.srcObject = stream;
-											public.stream = stream;
-										})
-										.catch(function (error) {
-										});
-									}
-								}
+                if(useVideo && navigator.mediaDevices){
+                    navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+                    if(navigator.getMedia) {
+                        navigator.mediaDevices.getUserMedia(webcamConstraints)
+                        .then(function(stream) {
+                            $('video').show();
+                            var video = document.getElementById('video');
+                            video.srcObject = stream;
+                            public.stream = stream;
+                        })
+                        .catch(function (error) {
+                        });
+                    }
+                }
                 loader.slideDown('slow', 'easeOutBounce', function () {
                     public.countdown(countDown, $('#counter'));
                 });
@@ -348,20 +348,20 @@ var photoBooth = (function () {
         }
 
         if (qr && !target.hasClass('qrbtn')) {
-					var qrpos = $('.qrbtn').offset(),
-						qrbtnwidth = $('.qrbtn').outerWidth(),
-						qrbtnheight = $('.qrbtn').outerHeight()
-						$('.qr').removeClass('active');
+            var qrpos = $('.qrbtn').offset(),
+            qrbtnwidth = $('.qrbtn').outerWidth(),
+            qrbtnheight = $('.qrbtn').outerHeight()
+            $('.qr').removeClass('active');
             $('.qr').animate({
-							'width': qrbtnwidth,
-							'height': qrbtnheight,
-							'left': qrpos.left,
-							'top': qrpos.top,
-							'margin-left': 0,
+                'width': qrbtnwidth,
+                'height': qrbtnheight,
+                'left': qrpos.left,
+                'top': qrpos.top,
+                'margin-left': 0,
             }, 250, function(){
-							$('.qr').hide();
-						});
-						qr = false;
+                $('.qr').hide();
+            });
+            qr = false;
         }
 
         // Go to Home
@@ -372,31 +372,31 @@ var photoBooth = (function () {
         // Qr in and out
         if (target.hasClass('qrbtn') || target.closest('.qrbtn').length > 0) {
 
-						var qrpos = $('.qrbtn').offset(),
-							qrbtnwidth = $('.qrbtn').outerWidth(),
-							qrbtnheight = $('.qrbtn').outerHeight()
+            var qrpos = $('.qrbtn').offset(),
+            qrbtnwidth = $('.qrbtn').outerWidth(),
+            qrbtnheight = $('.qrbtn').outerHeight()
 
             if (qr) {
-								$('.qr').removeClass('active');
+                $('.qr').removeClass('active');
                 $('.qr').animate({
                     'width': qrbtnwidth,
                     'height': qrbtnheight,
                     'left': qrpos.left,
-										'top': qrpos.top,
-										'margin-left': 0,
+                    'top': qrpos.top,
+                    'margin-left': 0,
                 }, 250, function(){
-									$('.qr').hide();
-								});
+                $('.qr').hide();
+            });
                 qr = false;
             } else {
                 qr = true;
-								$('.qr').css({
-									'width': qrbtnwidth,
-									'height': qrbtnheight,
-									'left': qrpos.left,
-									'top': qrpos.top
-								});
-								$('.qr').show();
+                $('.qr').css({
+                'width': qrbtnwidth,
+                'height': qrbtnheight,
+                'left': qrpos.left,
+                'top': qrpos.top
+                });
+                $('.qr').show();
                 $('.qr').animate({
                     'width': 500,
                     'height': 600,
@@ -404,8 +404,8 @@ var photoBooth = (function () {
                     'margin-left': -265,
                     'top': 50
                 }, 250, function(){
-									$('.qr').addClass('active');
-								});
+                    $('.qr').addClass('active');
+                });
             }
         }
     });
