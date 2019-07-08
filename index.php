@@ -62,9 +62,28 @@ require_once('db.php');
 					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
 				};
 				?>
+				<a href="#" class="btn imageFilter"><i class="fa fa-picture-o"></i> <span data-l10n="selectFilter"></span></a>
 				<!-- accesskey to take a photo using alt+p (or use an external button)? -->
 				<a href="#" <?php if($config['use_gpio_button']){ ?>accesskey="p"<?php } ?> class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
 			</div>
+		</div>
+
+		<!-- image Filter Pane -->
+		<div id="mySidenav" class="dragscroll sidenav">
+			<!--a href="javascript:void(0)" class="closebtn">&times;</a-->
+			<div class="activeSidenavBtn" id="imgPlain"><a id="imgFilter" href="#" >original</a></div>
+			<div id="imgAntique"> <a id="imgFilter" href="#">antique</a></div>
+			<div id="imgAqua"> <a id="imgFilter" href="#" >aqua</a></div>
+			<div id="imgCool"> <a id="imgFilter" href="#" >cool</a></div>
+			<div id="imgEverglow"> <a id="imgFilter" href="#" >everglow</a></div>
+			<div id="imgGrayscale"> <a id="imgFilter" href="#" >grayscale</a></div>
+			<div id="imgNegate"> <a id="imgFilter" href="#" >negate</a></div>
+			<div id="imgRetro"> <a id="imgFilter" href="#" >retro</a></div>
+			<div id="imgSepiaLight"> <a id="imgFilter" href="#" >sepia light</a></div>
+			<div id="imgSepiaDark"> <a id="imgFilter" href="#" >sepia dark</a></div>
+			<div id="imgSummer"> <a id="imgFilter" href="#" >summer</a></div>
+			<div id="imgVintage"> <a id="imgFilter" href="#" >vintage</a></div>
+			<div id="imgWashed"> <a id="imgFilter" href="#" >washed</a></div>
 		</div>
 
 		<!-- Loader -->

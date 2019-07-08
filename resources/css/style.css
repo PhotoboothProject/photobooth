@@ -470,7 +470,7 @@ h3 {
   display: block;
   width: 250px;
   position: absolute;
-  bottom: 50px;
+  bottom: 90px;
   left: 50%;
   margin-left: -125px;
 }
@@ -775,6 +775,67 @@ hr.small {
   margin-top: -240px;
   margin-left: -360px;
   left: 50%;
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1005; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: scroll;
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  border-style: solid;
+  border-width:0.1;
+  background-color: rgba(230, 126, 34, 0.2);
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+  background-color: rgba(224, 112, 48, 0.8);
+}
+
+
+.activeSidenavBtn {
+  background-color: rgba(230, 126, 34, 1);
+}
+
+.activeSidenavBtn a{
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: -10;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  border: none;
+  background: none;
+}
+
+.imageFilter {
+  text-align: center;
+  display: block;
+  width: 250px;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  margin-left: -125px;
 }
 
 @media (max-width: 767px) {

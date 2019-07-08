@@ -49,11 +49,6 @@ $config['scrollbar'] = false;
 $config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 
-// IMAGE FILTER
-$config['use_filter'] = false;
-// possible filter modes: antique, aqua, cool, everglow, grayscale, negate, retro, sepia_dark, sepia_light, summer, vintage, washed
-$config['imgfilter_filter_mode'] = 'grayscale';
-
 // EMAIL
 // If connection fails some help can be found here: https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
 // Especially gmail needs some special config

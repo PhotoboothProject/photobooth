@@ -16,6 +16,7 @@ var photoBooth = (function () {
         processing = false,
         pswp = {},
         resultPage = $('#result'),
+        imgFilter = 'imgPlain',
         stream,
         webcamConstraints = {
             audio: false,
@@ -87,6 +88,16 @@ var photoBooth = (function () {
         });
     }
 
+    // Set the width of the side navigation to 250px and the left margin of the page content to 250px
+    public.openNav = function () {
+	document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    // Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+    public.closeNav = function () {
+	document.getElementById("mySidenav").style.width = "0";
+    }
+
     // Cheese
     public.cheese = function () {
         $('#counter').text('');
@@ -107,20 +118,16 @@ var photoBooth = (function () {
             $('.spinner').show();
             $('.loading').text(L10N.busy);
         }, cheeseTime);
-        $.ajax({
-            url: 'takePic.php',
-            dataType: "json",
-            cache: false,
-            success: function (result) {
-                if (result.error) {
-                    public.errorPic(result);
-                } else {
-                    public.renderPic(result);
-                }
-            },
-            error: function (xhr, status, error) {
+        jQuery.post("takePic.php", { filter: imgFilter }).success(function( result ){
+            result = jQuery.parseJSON(result);
+            if (result.error) {
                 public.errorPic(result);
+            } else {
+                public.renderPic(result);
             }
+
+        }).error(function(xhr, status, result){
+            public.errorPic(result);
         });
     }
 
@@ -239,6 +246,25 @@ var photoBooth = (function () {
     }
 
     $(window).resize(public.handleResize);
+
+    //Filter
+    $('.imageFilter').click(function (e) {
+        //e.preventDefault();
+        if($('#mySidenav').width() > 0){
+            public.closeNav();
+        } else {
+            public.openNav();
+        }
+    });
+
+    $('.sidenav').children().click(function (e) {
+        $('.sidenav').children().removeAttr("class");
+        $(this).addClass("activeSidenavBtn");
+        imgFilter = $(this).attr("id");
+        if (isdev) {
+            console.log(imgFilter);
+        }
+    });
 
     // Open QR Code in Gallery
 

@@ -9,6 +9,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
 - Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```my.config.inc.php```.
 - Pictures can be send via E-Mail.
+- You can choose an image filter before taking a picture.
 - Settings can be changed in ```my.config.inc.php``` or via Admin Page (under /admin):
   - You can hide the gallery.
   - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```my.config.inc.php```).
@@ -198,3 +199,4 @@ sudo crontab -e
 - [tobiashaas](https://github.com/tobiashaas)
 - Martin Kaiser-Kaplaner
 - [MoJou90](https://github.com/MoJou90)
+- [Reinhard Reberning](https://www.reinhard-rebernig.at/website/websites/fotokasterl)

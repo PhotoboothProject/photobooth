@@ -154,33 +154,6 @@ if (file_exists($my_config)) {
 				'value' => $config['wedding']['symbol']
 			]
 		],
-		'imgfilter' => [
-			'use_filter' => [
-				'type' => 'checkbox',
-				'name' => 'use_filter',
-				'value' => $config['use_filter']
-			],
-			'filter_mode' => [
-				'type' => 'select',
-				'name' => 'imgfilter_filter_mode',
-				'placeholder' => 'grayscale',
-				'options' => [
-					'antique'=> 'antique',
-					'aqua' => 'aqua',
-					'cool' => 'cool',
-					'everglow' => 'everglow',
-					'grayscale' => 'grayscale',
-					'negate' => 'negate',
-					'retro' => 'retro',
-					'sepia_dark' => 'sepia dark',
-					'sepia_light' => 'sepia light',
-					'summer' => 'summer',
-					'vintage' => 'vintage',
-					'washed' => 'washed'
-				],
-				'value' => $config['imgfilter_filter_mode']
-			]
-		],
 		'gallery' => [
 			'show_gallery' => [
 				'type' => 'checkbox',

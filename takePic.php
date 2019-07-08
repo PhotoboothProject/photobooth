@@ -20,10 +20,13 @@ $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['folders']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
-if($config['use_filter'] === false) {
-	$filename_orig = $filename_photo;
-} else {
+if(!empty($_POST) && !($_POST['imgFilter'] == 'imgPlain')) {
 	$filename_orig = $filename_tmp;
+	$use_filter = true;
+	$imgfilter = $_POST['filter'];
+} else {
+	$filename_orig = $filename_photo;
+	$use_filter = false;
 }
 
 if($config['dev'] === false) {
@@ -45,58 +48,58 @@ if($config['dev'] === false) {
 }
 
 // apply filter
-if($config['use_filter'] === true) {
+if($use_filter == true) {
 	$tmp = imagecreatefromjpeg($filename_orig);
 
-	switch($config['imgfilter_filter_mode']) {
-		case 'antique':
+	switch($imgfilter) {
+		case 'imgAntique':
 			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 0);
 			imagefilter($tmp, IMG_FILTER_CONTRAST, -30);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 75, 50, 25);
 			break;
-		case 'aqua':
+		case 'imgAqua':
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 70, 0, 30);
 			break;
-		case 'cool':
+		case 'imgCool':
 			imagefilter($tmp, IMG_FILTER_MEAN_REMOVAL);
 			imagefilter($tmp, IMG_FILTER_CONTRAST, -50);
 			break;
-		case 'everglow':
+		case 'imgEverglow':
 			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, -30);
 			imagefilter($tmp, IMG_FILTER_CONTRAST, -5);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 30, 30, 0);
 			break;
-		case 'grayscale':
+		case 'imgGrayscale':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			break;
-		case 'negate':
+		case 'imgNegate':
 			imagefilter($tmp, IMG_FILTER_NEGATE);
 			break;
-		case 'retro':
+		case 'imgRetro':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 100, 25, 25, 50);
 			break;
-		case 'sepia_dark':
+		case 'imgSepiaDark':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			imagefilter($tmp, IMG_FILTER_BRIGHTNESS,-30);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 90, 55, 30);
 			break;
-		case 'sepia_light':
+		case 'imgSepiaLight':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 90, 60, 40);
 			break;
-		case 'summer':
+		case 'imgSummer':
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 150, 0, 50);
 			imagefilter($tmp, IMG_FILTER_NEGATE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 25, 50, 0, 50);
 			imagefilter($tmp, IMG_FILTER_NEGATE);
 			break;
-		case 'vintage':
+		case 'imgVintage':
 			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 10);
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 40, 10, -15);
 			break;
-		case 'washed':
+		case 'imgWashed':
 			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 30);
 			imagefilter($tmp, IMG_FILTER_NEGATE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, -50, 0, 20, 50);
