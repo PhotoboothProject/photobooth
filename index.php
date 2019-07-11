@@ -74,16 +74,29 @@ require_once('db.php');
 			<div class="activeSidenavBtn" id="imgPlain"><a id="imgFilter" href="#" >original</a></div>
 			<div id="imgAntique"> <a id="imgFilter" href="#">antique</a></div>
 			<div id="imgAqua"> <a id="imgFilter" href="#" >aqua</a></div>
+			<div id="imgBlue"> <a id="imgFilter" href="#" >blue</a></div>
+			<div id="imgBlur"> <a id="imgFilter" href="#" >blur</a></div>
+			<div id="imgColor"> <a id="imgFilter" href="#" >colorful</a></div>
 			<div id="imgCool"> <a id="imgFilter" href="#" >cool</a></div>
+			<div id="imgEdge"> <a id="imgFilter" href="#" >edge</a></div>
+			<div id="imgEmboss"> <a id="imgFilter" href="#" >emboss</a></div>
 			<div id="imgEverglow"> <a id="imgFilter" href="#" >everglow</a></div>
 			<div id="imgGrayscale"> <a id="imgFilter" href="#" >grayscale</a></div>
+			<div id="imgGreen"> <a id="imgFilter" href="#" >green</a></div>
+			<div id="imgMean"> <a id="imgFilter" href="#" >mean</a></div>
 			<div id="imgNegate"> <a id="imgFilter" href="#" >negate</a></div>
+			<div id="imgPink"> <a id="imgFilter" href="#" >pink</a></div>
+			<div id="imgPixelate"> <a id="imgFilter" href="#" >pixelate</a></div>
+			<div id="imgRed"> <a id="imgFilter" href="#" >red</a></div>
 			<div id="imgRetro"> <a id="imgFilter" href="#" >retro</a></div>
+			<div id="imgSelectiveBlur"> <a id="imgFilter" href="#" >selective blur</a></div>
 			<div id="imgSepiaLight"> <a id="imgFilter" href="#" >sepia light</a></div>
 			<div id="imgSepiaDark"> <a id="imgFilter" href="#" >sepia dark</a></div>
+			<div id="imgSmooth"> <a id="imgFilter" href="#" >smooth</a></div>
 			<div id="imgSummer"> <a id="imgFilter" href="#" >summer</a></div>
 			<div id="imgVintage"> <a id="imgFilter" href="#" >vintage</a></div>
 			<div id="imgWashed"> <a id="imgFilter" href="#" >washed</a></div>
+			<div id="imgYellow"> <a id="imgFilter" href="#" >yellow</a></div>
 		</div>
 
 		<!-- Loader -->

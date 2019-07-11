@@ -60,9 +60,26 @@ if($use_filter == true) {
 		case 'imgAqua':
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 70, 0, 30);
 			break;
+		case 'imgBlue':
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 0, 100);
+			break;
+		case 'imgBlur':
+			imagefilter($tmp, IMG_FILTER_GAUSSIAN_BLUR);
+			break;
+		case 'imgColor':
+			imagefilter($tmp, IMG_FILTER_CONTRAST, -40);
+			break;
 		case 'imgCool':
 			imagefilter($tmp, IMG_FILTER_MEAN_REMOVAL);
 			imagefilter($tmp, IMG_FILTER_CONTRAST, -50);
+			break;
+		case 'imgEdge':
+			$emboss = array(array(1, 1, 1), array(1, -7, 1), array(1, 1, 1));
+			imageconvolution($tmp, $emboss, 1, 0);
+			break;
+		case 'imgEmboss':
+			$emboss = array(array(-2, -1, 0), array(-1, 1, 1), array(0, 1, 2));
+			imageconvolution($tmp, $emboss, 1, 0);
 			break;
 		case 'imgEverglow':
 			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, -30);
@@ -72,12 +89,30 @@ if($use_filter == true) {
 		case 'imgGrayscale':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			break;
+		case 'imgGreen':
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 100, 0);
+			break;
+		case 'imgMean':
+			imagefilter($tmp, IMG_FILTER_MEAN_REMOVAL);
+			break;
 		case 'imgNegate':
 			imagefilter($tmp, IMG_FILTER_NEGATE);
+			break;
+		case 'imgPink':
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 50, -50, 50);
+			break;
+		case 'imgPixelate':
+			imagefilter($tmp, IMG_FILTER_PIXELATE, 20);
+			break;
+		case 'imgRed':
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 100, 0, 0);
 			break;
 		case 'imgRetro':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 100, 25, 25, 50);
+			break;
+		case 'imgSelectiveBlur':
+			imagefilter($tmp, IMG_FILTER_SELECTIVE_BLUR);
 			break;
 		case 'imgSepiaDark':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
@@ -87,6 +122,9 @@ if($use_filter == true) {
 		case 'imgSepiaLight':
 			imagefilter($tmp, IMG_FILTER_GRAYSCALE);
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 90, 60, 40);
+			break;
+		case 'imgSmooth':
+			imagefilter($tmp, IMG_FILTER_SMOOTH, 2);
 			break;
 		case 'imgSummer':
 			imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 150, 0, 50);
@@ -105,6 +143,9 @@ if($use_filter == true) {
 			imagefilter($tmp, IMG_FILTER_COLORIZE, -50, 0, 20, 50);
 			imagefilter($tmp, IMG_FILTER_NEGATE );
 			imagefilter($tmp, IMG_FILTER_BRIGHTNESS, 10);
+			break;
+		case 'imgYellow':
+			imagefilter($tmp, IMG_FILTER_COLORIZE, 100, 100, -100);
 			break;
 		default:
 			break;
