@@ -62,7 +62,7 @@ require_once('db.php');
 					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
 				};
 				?>
-				<a href="#" class="btn imageFilter"><i class="fa fa-picture-o"></i> <span data-l10n="selectFilter"></span></a>
+				<a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a>
 				<!-- accesskey to take a photo using alt+p (or use an external button)? -->
 				<a href="#" <?php if($config['use_gpio_button']){ ?>accesskey="p"<?php } ?> class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
 			</div>
