@@ -17,6 +17,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
   - Print feature can be enabled/disabled.
   - LivePreview can be enabled/disabled (uses device cam).
+  - Wedding specifig config to show a heart betweeen two names on the startpage.
 
 ### Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
@@ -152,6 +153,7 @@ and add the following line:
 If connection fails some help can be found [here](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
 
 ### Changelog
+- 1.6.2: Add wedding specific config, fix gallery settings not being saved from admin panel
 - 1.6.1: Add possibillity to disable mobile view, update Kiosk Mode instruction
 - 1.6.0: Button to send image via mail (uses [PHPMailer](https://github.com/PHPMailer/PHPMailer) ), add use of "my.config.inc.php" for personal use to prevent sharing personal data (e.g. E-Mail password and username) on Github by accident
 - 1.5.3: Several new options (disable gallery via config, set countdown timer via config, set cheeeese! Timer via config, ability to show the date/time in the caption of the images in the gallery), all config changes now available in admin page, complete french translation, add empty Gallery message, Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen, StartScreen message is an option in config/admin page now, add instructions for Kiosk Mode, should fix #11, and #2, improve instructions in README, some more small Bugfixes and improvements. Merged pull-request #53 which includes updated pull-requests #52 & #54
