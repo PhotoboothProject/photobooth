@@ -124,6 +124,15 @@ and add the following lines:
 ```
 **NOTE:** If you're using QR-Code replace ```http://localhost/``` with your local IP-Adress (e.g. ```http://192.168.4.1```), else QR-Code does not work.
 
+##### Enable touch events
+If touch is not working on your Raspberry Pi edit the LXDE Autostart Script again
+```
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
+and add ```--touch-events=enabled``` for Chromium:
+```
+@chromium-browser --incognito --kiosk http://localhost/ --touch-events=enabled
+```
 
 ##### Hide the Mouse Cursor
 To hide the Mouse Cursor we'll use "unclutter":
