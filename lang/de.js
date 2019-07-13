@@ -63,5 +63,9 @@ L10N = {
 	"commands_take_picture_msg": "Erfolgsnachricht fürs Foto",
 	"commands_print_cmd": "Befehl zum Drucken",
 	"commands_print_msg": "Erfolgsnachricht fürs Drucken",
-	"really_delete": "Wollen Sie wirklich alle Bilder löschen? Das kann nicht rückgängig gemacht werden!"
+	"really_delete": "Wollen Sie wirklich alle Bilder löschen? Das kann nicht rückgängig gemacht werden!",
+	"wedding": "Hochzeit",
+	"is_wedding": "Hochzeitsveranstaltung",
+	"wedding_groom": "Bräutigam",
+	"wedding_bride": "Braut"
 }

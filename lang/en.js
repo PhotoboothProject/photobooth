@@ -63,5 +63,9 @@ L10N = {
 	"commands_take_picture_msg": "Success message for take picture",
 	"commands_print_cmd": "Print command",
 	"commands_print_msg": "Success message for print",
-	"really_delete": "Really delete all picture? This cannot be undone!"
+	"really_delete": "Really delete all picture? This cannot be undone!",
+	"wedding": "Wedding",
+	"is_wedding": "Wedding event",
+	"wedding_groom": "Groom",
+	"wedding_bride": "Bride"
 }

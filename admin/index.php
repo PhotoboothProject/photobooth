@@ -111,6 +111,25 @@ if (file_exists($my_config)) {
 				'value' => $config['folders']['print']
 			]
 		],
+		'wedding' => [
+			'is_wedding' => [
+				'type' => 'checkbox',
+				'name' => 'is_wedding',
+				'value' => $config['is_wedding']
+			],
+			'groom' => [
+				'type' => 'input',
+				'placeholder' => 'Groom',
+				'name' => 'wedding[groom]',
+				'value' => $config['wedding']['groom']
+			],
+			'bride' => [
+				'type' => 'input',
+				'placeholder' => 'Bride',
+				'name' => 'wedding[bride]',
+				'value' => $config['wedding']['bride']
+			]
+		],
 		'gallery' => [
 			'show_gallery' => [
 				'type' => 'checkbox',

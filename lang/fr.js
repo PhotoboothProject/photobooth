@@ -63,5 +63,9 @@ L10N = {
 	"commands_take_picture_msg": "Message de réussite pour prendre une photo",
 	"commands_print_cmd": "Commande d'impression",
 	"commands_print_msg": "Message de réussite pour impression",
-	"really_delete": "Vraiment supprimer toutes les images? Ça ne peut pas être annulé!"
+	"really_delete": "Vraiment supprimer toutes les images? Ça ne peut pas être annulé!",
+	"wedding": "Mariage",
+	"is_wedding": "Événement de mariage",
+	"wedding_groom": "Jeune marié",
+	"wedding_bride": "Jeune mariée"
 }

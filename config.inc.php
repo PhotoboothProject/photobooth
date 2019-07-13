@@ -33,6 +33,11 @@ $config['folders']['thumbs'] = 'thumbs';
 $config['folders']['qrcodes'] = 'qrcodes';
 $config['folders']['print'] = 'print';
 
+// WEDDING SETTINGS
+$config['is_wedding'] = false;
+$config['wedding']['groom'] = 'Groom';
+$config['wedding']['bride'] = 'Bride';
+
 // GALLERY
 // should the gallery list the newest pictures first?
 $config['gallery']['show_gallery'] = true;
