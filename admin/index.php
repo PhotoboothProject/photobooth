@@ -57,6 +57,11 @@ if (file_exists($my_config)) {
 				'name' => 'use_mail',
 				'value' => $config['use_mail']
 			],
+			'use_mobile_view' => [
+				'type' => 'checkbox',
+				'name' => 'use_mobile_view',
+				'value' => $config['use_mobile_view']
+			],
 			'show_fork' => [
 				'type' => 'checkbox',
 				'name' => 'show_fork',
@@ -226,7 +231,7 @@ if (file_exists($my_config)) {
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+	<?php if($config['use_mobile_view']){ ?><meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"><?php } ?>
 	<title>Photobooth</title>
 
 	<!-- Favicon + Android/iPhone Icons -->

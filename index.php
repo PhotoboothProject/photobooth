@@ -13,7 +13,7 @@ require_once('db.php');
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+	<?php if($config['use_mobile_view']){ ?><meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"><?php } ?>
 	<title>Photobooth</title>
 
 

@@ -36,6 +36,7 @@ L10N = {
 	"gallery_date_format": "Datumsstil",
 	"gallery_no_image": "Die Galerie ist noch leer. Mache doch ein paar Bilder!",
 	"use_mail": "E-Mail aktivieren",
+	"use_mobile_view": "Mobile Ansicht aktivieren",
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
 	"general_cntdwn_time": "Countdown Timer in Sekunden",

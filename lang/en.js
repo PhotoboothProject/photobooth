@@ -36,6 +36,7 @@ L10N = {
 	"gallery_date_format": "Date style",
 	"gallery_no_image": "The gallery is still empty. Take some pictures!",
 	"use_mail": "Use E-Mail",
+	"use_mobile_view": "Enable mobile view",
 	"show_fork": "Show Fork Badge",
 	"cntdwn_time": "Set countdown timer",
 	"general_cntdwn_time": "Countdown timer in seconds",

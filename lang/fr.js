@@ -36,6 +36,7 @@ L10N = {
 	"gallery_date_format": "Format de date",
 	"gallery_no_image": "La galerie est encore vide. Faire des photos!",
 	"use_mail": "Utiliser le courrier électronique",
+	"use_mobile_view": "Activer la vue mobile",
 	"show_fork": "Afficher badge de fourche",
 	"cntdwn_time": "Régler le compte à rebours",
 	"general_cntdwn_time": "Compte à rebours en secondes",
