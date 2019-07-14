@@ -35,8 +35,8 @@ $config['folders']['print'] = 'print';
 
 // WEDDING SETTINGS
 $config['is_wedding'] = false;
-$config['wedding']['groom'] = 'Groom';
-$config['wedding']['bride'] = 'Bride';
+$config['wedding']['groom'] = 'Name 1';
+$config['wedding']['bride'] = 'Name 2';
 
 // GALLERY
 // should the gallery list the newest pictures first?

@@ -66,6 +66,6 @@ L10N = {
 	"really_delete": "Vraiment supprimer toutes les images? Ça ne peut pas être annulé!",
 	"wedding": "Mariage",
 	"is_wedding": "Événement de mariage",
-	"wedding_groom": "Jeune marié",
-	"wedding_bride": "Jeune mariée"
+	"wedding_groom": "Nom 1",
+	"wedding_bride": "Nom 2"
 }

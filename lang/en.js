@@ -66,6 +66,6 @@ L10N = {
 	"really_delete": "Really delete all picture? This cannot be undone!",
 	"wedding": "Wedding",
 	"is_wedding": "Wedding event",
-	"wedding_groom": "Groom",
-	"wedding_bride": "Bride"
+	"wedding_groom": "Name 1",
+	"wedding_bride": "Name 2"
 }

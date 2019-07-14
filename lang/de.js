@@ -66,6 +66,6 @@ L10N = {
 	"really_delete": "Wollen Sie wirklich alle Bilder löschen? Das kann nicht rückgängig gemacht werden!",
 	"wedding": "Hochzeit",
 	"is_wedding": "Hochzeitsveranstaltung",
-	"wedding_groom": "Bräutigam",
-	"wedding_bride": "Braut"
+	"wedding_groom": "Name 1",
+	"wedding_bride": "Name 2"
 }

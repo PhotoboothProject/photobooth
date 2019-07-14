@@ -119,13 +119,13 @@ if (file_exists($my_config)) {
 			],
 			'groom' => [
 				'type' => 'input',
-				'placeholder' => 'Groom',
+				'placeholder' => 'Name 1',
 				'name' => 'wedding[groom]',
 				'value' => $config['wedding']['groom']
 			],
 			'bride' => [
 				'type' => 'input',
-				'placeholder' => 'Bride',
+				'placeholder' => 'Name 2',
 				'name' => 'wedding[bride]',
 				'value' => $config['wedding']['bride']
 			]
