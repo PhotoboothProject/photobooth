@@ -18,6 +18,7 @@ $config['previewFromCam'] = false; // experimental see https://github.com/andrek
 $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
+$config['use_filter'] = true;
 
 // LANGUAGE
 // possible values: en, de, fr

@@ -74,5 +74,6 @@ L10N = {
 	"wedding_bride": "Name 2",
 	"wedding_symbol": "Symbol",
 	"symbol": "Choose a symbol",
-	"selectFilter": "Image filter"
+	"selectFilter": "Image filter",
+	"use_filter": "Allow image filter"
 }

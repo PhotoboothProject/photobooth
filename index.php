@@ -62,13 +62,14 @@ require_once('db.php');
 					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
 				};
 				?>
-				<a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a>
+				<?php if($config['use_filter']){ ?><a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a><?php } ?>
 				<!-- accesskey to take a photo using alt+p (or use an external button)? -->
 				<a href="#" <?php if($config['use_gpio_button']){ ?>accesskey="p"<?php } ?> class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
 			</div>
 		</div>
 
 		<!-- image Filter Pane -->
+		<?php if($config['use_filter']){ ?>
 		<div id="mySidenav" class="dragscroll sidenav">
 			<!--a href="javascript:void(0)" class="closebtn">&times;</a-->
 			<div class="activeSidenavBtn" id="imgPlain"><a id="imgFilter" href="#" >original</a></div>
@@ -98,6 +99,7 @@ require_once('db.php');
 			<div id="imgWashed"> <a id="imgFilter" href="#" >washed</a></div>
 			<div id="imgYellow"> <a id="imgFilter" href="#" >yellow</a></div>
 		</div>
+		<?php } ?>
 
 		<!-- Loader -->
 		<div class="stages" id="loader">
