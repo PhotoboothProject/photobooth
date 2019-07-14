@@ -37,6 +37,7 @@ $config['folders']['print'] = 'print';
 $config['is_wedding'] = false;
 $config['wedding']['groom'] = 'Name 1';
 $config['wedding']['bride'] = 'Name 2';
+$config['wedding']['symbol'] = 'fa-heart-o';
 
 // GALLERY
 // should the gallery list the newest pictures first?

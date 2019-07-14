@@ -67,5 +67,7 @@ L10N = {
 	"wedding": "Mariage",
 	"is_wedding": "Événement de mariage",
 	"wedding_groom": "Nom 1",
-	"wedding_bride": "Nom 2"
+	"wedding_bride": "Nom 2",
+	"wedding_symbol": "Icône",
+	"symbol": "Sélectionnez le symbole"
 }

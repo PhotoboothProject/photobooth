@@ -57,7 +57,7 @@ require_once('db.php');
 			<div class="inner">
 				<?php
 				if($config['is_wedding']) {
-					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['wedding']['groom'] . ' <i class="fa fa-heart-o"aria-hidden="true"></i> ' . $config['wedding']['bride'] . '<br>' . $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
+					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['wedding']['groom'] . ' <i class="fa '. $config['wedding']['symbol'] .' "aria-hidden="true"></i> ' . $config['wedding']['bride'] . '<br>' . $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
 				} else {
 					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
 				};

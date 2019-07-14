@@ -128,6 +128,19 @@ if (file_exists($my_config)) {
 				'placeholder' => 'Name 2',
 				'name' => 'wedding[bride]',
 				'value' => $config['wedding']['bride']
+			],
+			'symbol' => [
+				'type' => 'select',
+				'name' => 'wedding[symbol]',
+				'placeholder' => 'wedding[symbol]',
+				'options' => [
+					'fa-heart-o' => 'Heart',
+					'fa-heart' => 'Heart filled',
+					'fa-heartbeat' => 'Heartbeat',
+					'fa-anchor' => 'Anchor',
+					'fa-glass' => 'Glass'
+				],
+				'value' => $config['wedding']['symbol']
 			]
 		],
 		'gallery' => [
