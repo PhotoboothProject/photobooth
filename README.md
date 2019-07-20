@@ -164,6 +164,7 @@ sudo crontab -e
 ```
 
 ### Changelog
+- 1.7.0: Add possibillity to choose an image filter before taking a picture
 - 1.6.3: Add config and instructions to use a GPIO Button to take a picture (address https://github.com/andreknieriem/photobooth/issues/10), translate sucess and error messages while sending images via mail
 - 1.6.2: Add wedding specific config, fix gallery settings not being saved from admin panel
 - 1.6.1: Add possibillity to disable mobile view, update Kiosk Mode instruction
