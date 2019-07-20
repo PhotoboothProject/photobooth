@@ -40,8 +40,8 @@ require_once('db.php');
 		var useVideo = <?php echo ($config['previewFromCam']) ? 'true' : 'false'; ?>;
 		var imgFolder = <?php echo '"'.$config['folders']['images'].'"'; ?>;
 		var thumbFolder = <?php echo '"'.$config['folders']['thumbs'].'"'; ?>;
-		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
-		var gallery_scrollbar = <?php echo ($config['gallery']['scrollbar']) ? 'true' : 'false'; ?>;
+		var gallery_newest_first = <?php echo ($config['newest_first']) ? 'true' : 'false'; ?>;
+		var gallery_scrollbar = <?php echo ($config['scrollbar']) ? 'true' : 'false'; ?>;
  		var cntdwn_time = <?php echo ($config['cntdwn_time']); ?>;
 		var cheese_time = <?php echo ($config['cheese_time']); ?>;
 	</script>
@@ -51,7 +51,7 @@ require_once('db.php');
 
 		<!-- Start Page -->
 		<div class="stages" id="start">
-			<?php if($config['gallery']['show_gallery']){ ?><a class="gallery btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
+			<?php if($config['show_gallery']){ ?><a class="gallery btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<div class="blurred">
 			</div>
 			<div class="inner">
@@ -87,7 +87,7 @@ require_once('db.php');
 		<div class="stages" id="result">
 			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-l10n="home"></span></a>
 			<div class="resultInner hidden">
-			<?php if($config['gallery']['show_gallery']){ ?><a href="#" class="btn gallery"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
+			<?php if($config['show_gallery']){ ?><a href="#" class="btn gallery"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<?php if($config['use_qr']){ echo '<a href="#" class="btn qrbtn"><span class="qrbtnlabel"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></span></a>'; } ?>
 			<?php if($config['use_mail']){ echo '<a href="#" class="btn mailbtn"><span class="mailbtnlabel"><i class="fa fa-cloud-download"></i> <span data-l10n="mail"></span></span></a>'; } ?>
 			<?php if($config['use_print']){ echo '<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>'; } ?>
@@ -96,7 +96,7 @@ require_once('db.php');
 			<?php if($config['use_qr']){ echo '<div class="qr"></div>';} ?>
 		</div>
 
-		<?php if($config['gallery']['show_gallery']){ ?>
+		<?php if($config['show_gallery']){ ?>
 		<!-- Gallery -->
 		<div id="gallery">
 			<div class="galInner">
@@ -106,14 +106,14 @@ require_once('db.php');
 				</div>
 				<div class="images" id="galimages">
 					<?php
-					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
+					$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
 					if (empty($imagelist)) {
 						// no images in gallery.
 						echo '<h1 style="text-align:center" data-l10n="gallery_no_image"></h1>';
 					} else {
 						foreach($imagelist as $image) {
 							$date;
-							if ($config['file_format_date'] == true && $config['gallery']['show_date'] == true) {
+							if ($config['file_format_date'] == true && $config['show_date'] == true) {
 								$date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
 							}
 

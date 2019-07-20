@@ -147,22 +147,22 @@ if (file_exists($my_config)) {
 			'show_gallery' => [
 				'type' => 'checkbox',
 				'name' => 'show_gallery',
-				'value' => $config['gallery']['show_gallery']
+				'value' => $config['show_gallery']
 			],
 			'newest_first' => [
 				'type' => 'checkbox',
 				'name' => 'newest_first',
-				'value' => $config['gallery']['newest_first']
+				'value' => $config['newest_first']
 			],
 			'scrollbar' => [
 				'type' => 'checkbox',
 				'name' => 'scrollbar',
-				'value' => $config['gallery']['scrollbar']
+				'value' => $config['scrollbar']
 			],
 			'show_date' => [
 				'type' => 'checkbox',
 				'name' => 'show_date',
-				'value' => $config['gallery']['show_date']
+				'value' => $config['show_date']
 			],
 			'date_format' => [
 				'type' => 'input',
@@ -282,7 +282,7 @@ if (file_exists($my_config)) {
 	<link rel="stylesheet" href="/resources/css/admin.css" />
 	<script type="text/javascript">
 		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
-		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
+		var gallery_newest_first = <?php echo ($config['newest_first']) ? 'true' : 'false'; ?>;
 	</script>
 </head>
 <body class="deselect">

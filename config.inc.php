@@ -41,10 +41,10 @@ $config['wedding']['symbol'] = 'fa-heart-o';
 
 // GALLERY
 // should the gallery list the newest pictures first?
-$config['gallery']['show_gallery'] = true;
-$config['gallery']['newest_first'] = true;
-$config['gallery']['scrollbar'] = false;
-$config['gallery']['show_date'] = false; // only works if file_format_date = true
+$config['show_gallery'] = true;
+$config['newest_first'] = true;
+$config['scrollbar'] = false;
+$config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 
 // EMAIL
