@@ -249,7 +249,7 @@ if (file_exists($my_config)) {
 	<link rel="stylesheet" type="text/css" href="/resources/css/style.css" />
 	<link rel="stylesheet" href="/resources/css/admin.css" />
 	<script type="text/javascript">
-		var isdev = true;
+		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
 		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
 	</script>
 </head>
