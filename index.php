@@ -62,7 +62,8 @@ require_once('db.php');
 					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
 				};
 				?>
-				<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
+				<!-- accesskey added to take a photo using alt+s (or use an external button) -->
+				<a href="#" accesskey="s" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
 			</div>
 		</div>
 
