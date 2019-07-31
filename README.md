@@ -162,6 +162,7 @@ sudo crontab -e
 ```
 
 ### Changelog
+- 1.6.3: Add config and instructions to use a GPIO Button to take a picture (address https://github.com/andreknieriem/photobooth/issues/10), translate sucess and error messages while sending images via mail
 - 1.6.2: Add wedding specific config, fix gallery settings not being saved from admin panel
 - 1.6.1: Add possibillity to disable mobile view, update Kiosk Mode instruction
 - 1.6.0: Button to send image via mail (uses [PHPMailer](https://github.com/PHPMailer/PHPMailer) ), add use of "my.config.inc.php" for personal use to prevent sharing personal data (e.g. E-Mail password and username) on Github by accident
@@ -194,3 +195,5 @@ sudo crontab -e
 - [marcogracklauer](https://github.com/marcogracklauer)
 - [dnks23](https://github.com/dnks23)
 - [tobiashaas](https://github.com/tobiashaas)
+- Martin Kaiser-Kaplaner
+- [MoJou90](https://github.com/MoJou90)
