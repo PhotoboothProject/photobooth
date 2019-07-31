@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Sends alt+s via GPIO24 to take a new picture
+# Sends alt+p via GPIO24 to take a new picture
 import RPi.GPIO as GPIO
 import time
 import os
@@ -14,7 +14,7 @@ while True:
     input_state = GPIO.input(24)
     if input_state == False:
         #print('Button Pressed') #<- for debugging only
-        with uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_S]) as device:
+        with uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_P]) as device:
          time.sleep(1)
-         device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_S])
+         device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_P])
          time.sleep(10)

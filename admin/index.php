@@ -62,6 +62,11 @@ if (file_exists($my_config)) {
 				'name' => 'use_mobile_view',
 				'value' => $config['use_mobile_view']
 			],
+			'use_gpio_button' => [
+				'type' => 'checkbox',
+				'name' => 'use_gpio_button',
+				'value' => $config['use_gpio_button']
+			],
 			'show_fork' => [
 				'type' => 'checkbox',
 				'name' => 'show_fork',

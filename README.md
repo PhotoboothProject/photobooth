@@ -152,6 +152,15 @@ and add the following line:
 #### E-Mail
 If connection fails some help can be found [here](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
 
+#### Use Hardware Button to take a Picture
+You can use a hardware button connected on GPIO24 to trigger a photo. Set ```$config['use_gpio_button']``` to ```true``` or use the Admin panel to enable this function.
+You also need to run a python script in background to read the state of GPIO24 and send a key-combination (alt+p) if hardware button is pressed to trigger the website to take a photo.
+To run the python script in background add a cronjob:
+```
+sudo crontab -e
+@reboot python /var/www/html/button.py &
+```
+
 ### Changelog
 - 1.6.2: Add wedding specific config, fix gallery settings not being saved from admin panel
 - 1.6.1: Add possibillity to disable mobile view, update Kiosk Mode instruction
