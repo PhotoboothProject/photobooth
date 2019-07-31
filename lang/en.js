@@ -60,6 +60,8 @@ L10N = {
 	"mail_fromName": "Sender name",
 	"mail_subject": "Subject",
 	"mail_text": "Text",
+	"mailSent": "E-mail sent",
+	"mailError": "Error sending e-mail",
 	"commands_take_picture_cmd": "Take picture command",
 	"commands_take_picture_msg": "Success message for take picture",
 	"commands_print_cmd": "Print command",

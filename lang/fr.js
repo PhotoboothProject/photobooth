@@ -60,6 +60,8 @@ L10N = {
 	"mail_fromName": "Nom de l'expéditeur",
 	"mail_subject": "objet du mail",
 	"mail_text": "Texte",
+	"mailSent": "E-mail envoyé",
+	"mailError": "Erreur d'envoi d'email",
 	"commands_take_picture_cmd": "Prendre une photo",
 	"commands_take_picture_msg": "Message de réussite pour prendre une photo",
 	"commands_print_cmd": "Commande d'impression",

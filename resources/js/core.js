@@ -383,13 +383,13 @@ var photoBooth = (function () {
             cache: false,
             success: function (result) {
                 if (result.success === true) {
-                    message.fadeIn().html('<span style="color:green">E-Mail gesendet</span>');
+                    message.fadeIn().html('<span style="color:green">' + L10N.mailSent + '</span>');
                 } else {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
             error: function (xhr, status, error) {
-                message.fadeIn('fast').html('<span style="color: red;">Fehler beim Senden der Mail</span>');
+                message.fadeIn('fast').html('<span style="color: red;">' + L10N.mailError + '</span>');
             },
             complete: function () {
                 form.find('.btn').html(oldValue);
