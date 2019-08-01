@@ -365,6 +365,21 @@ var photoBooth = (function () {
         })
     });
 
+    // chroma keying print
+    $(document).on('click touchstart', '.gal-print-chroma_keying', function (e) {
+        e.preventDefault();
+        var img = pswp.currItem.src;
+        img = img.replace(imgFolder+'/', '');
+        $.post( "chroma_keying/lib_php/info.php", function( info ) {
+            if (info.chroma_keying == true) {
+                var currentHref = $(location).attr('href').split('#')[0];;
+                var encodedString = btoa(currentHref);
+                //var decodedString = atob(encodedString);
+                $(location).attr('href','chroma_keying/index.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString));
+            }
+        }, "json");
+    });
+
     // Send Mail gallery
     $('.gal-mail').on('click touchstart', function (e) {
         //e.preventDefault();

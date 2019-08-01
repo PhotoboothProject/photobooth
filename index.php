@@ -46,6 +46,24 @@ require_once('db.php');
  		var cntdwn_time = <?php echo ($config['cntdwn_time']); ?>;
 		var cheese_time = <?php echo ($config['cheese_time']); ?>;
 	</script>
+	<style>
+		.gal-print-chroma_keying {
+		  color: #fff;
+		  background: transparent;
+		  font-size: 26px;
+		  text-align: center;
+		  width: 50px;
+		  height: 50px;
+		  cursor: pointer;
+		  overflow: visible;
+		  -webkit-appearance: none;
+		  display: block;
+		  border: 0;
+		  padding: 0;
+		  margin: 0;
+		  float: right;
+		  opacity: 0.75; }
+	</style>
 </head>
 <body class="deselect">
 	<div id="wrapper">
@@ -208,6 +226,7 @@ require_once('db.php');
 					<?php if($config['use_mail']){ echo '<button class="gal-mail" title="Per Mail senden"><i class="fa fa-cloud-download"></i></button>'; } ?>
 					<?php if($config['use_print']){ echo '<button class="gal-print" title="Drucken"><i class="fa fa-print"></i></button>'; } ?>
 					<?php if($config['use_qr']){ echo '<button class="gal-qr-code" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>'; } ?>
+					<?php if($config['chroma_keying']){ echo '<button class="gal-print-chroma_keying" title="Print extra"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>'; } ?>
 					<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
 					<!-- element will get class pswp__preloader--active when preloader is running -->
 					<div class="pswp__preloader">
