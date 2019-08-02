@@ -6,7 +6,11 @@ if (file_exists($my_config)) {
 	require_once('../../config.inc.php');
 }
 
-$file = md5(time()).'.jpg';
+if($config['file_format_date'] == true) {
+	$file = date('Ymd_His').'.jpg';
+} else {
+	$file = md5(time()).'.jpg';
+}
 
 $uniqid = uniqid();
 $filename_photo = '../../'.$config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
