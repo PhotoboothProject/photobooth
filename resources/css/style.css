@@ -750,7 +750,7 @@ hr.small {
 }
 
 /* line 645, ../sass/style.scss */
-.gal-qr-code, .gal-print, .gal-mail {
+.gal-qr-code, .gal-print, .gal-print-chroma_keying, .gal-mail {
   color: #fff;
   background: transparent;
   font-size: 26px;

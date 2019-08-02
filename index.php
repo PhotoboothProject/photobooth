@@ -46,24 +46,6 @@ require_once('db.php');
  		var cntdwn_time = <?php echo ($config['cntdwn_time']); ?>;
 		var cheese_time = <?php echo ($config['cheese_time']); ?>;
 	</script>
-	<style>
-		.gal-print-chroma_keying {
-		  color: #fff;
-		  background: transparent;
-		  font-size: 26px;
-		  text-align: center;
-		  width: 50px;
-		  height: 50px;
-		  cursor: pointer;
-		  overflow: visible;
-		  -webkit-appearance: none;
-		  display: block;
-		  border: 0;
-		  padding: 0;
-		  margin: 0;
-		  float: right;
-		  opacity: 0.75; }
-	</style>
 </head>
 <body class="deselect">
 	<div id="wrapper">
