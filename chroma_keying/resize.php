@@ -1,6 +1,13 @@
 <?php
-$sourcePath = "../images".$_POST['filename'];
-$targetPath = "images".$_POST['filename'];
+$my_config = '../my.config.inc.php';
+if (file_exists($my_config)) {
+	require_once('../my.config.inc.php');
+} else {
+	require_once('../config.inc.php');
+}
+
+$sourcePath = '../'.$config['folders']['images'] . DIRECTORY_SEPARATOR .$_POST['filename'];
+$targetPath = '../'.$config['folders']['tmp'] . DIRECTORY_SEPARATOR .$_POST['filename'];
 
 $source = imagecreatefromjpeg($sourcePath);
 $source = ResizeJpgImage($source, 1500, 1000);

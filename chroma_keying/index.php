@@ -8,6 +8,7 @@ if (file_exists($my_config)) {
 
 $location = base64_decode($_GET['location']);
 $filename = $_GET['filename'];
+$mainimage = '../'.$config['folders']['images'] . DIRECTORY_SEPARATOR . $filename;
 ?>
 <!doctype html>
 <html>
@@ -21,7 +22,7 @@ $filename = $_GET['filename'];
 <script>
 $( document ).ready(function() {
 	setTimeout(function(){
-		setMainImage('../images<?php echo $filename?>');
+		setMainImage('<?php echo $mainimage ?>');
 	}, 100);
 });
 
