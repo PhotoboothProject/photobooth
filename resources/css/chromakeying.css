@@ -1,0 +1,25 @@
+body {
+  overflow: auto;
+  background: url(../img/bg.jpg) center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.btn {
+  padding: 20px 40px;
+  border: 0 none;
+  background: #e67e22;
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  margin: auto;
+  width: 200px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.btn:active,
+.btn:focus,
+.btn:hover {
+  background: #d35400;
+}

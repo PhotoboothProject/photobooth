@@ -20,6 +20,7 @@ L10N = {
 	"saving":"Saving",
 	"success":"Saved successful",
 	"saveerror":"Error",
+	"close": "Close",
 	"general": "General",
 	"folders": "Folders",
 	"gallery": "Gallery",

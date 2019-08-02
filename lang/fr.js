@@ -20,6 +20,7 @@ L10N = {
 	"saving":"Économie",
 	"success":"Enregistré avec succès",
 	"saveerror":"Erreur",
+	"close": "Près",
 	"general": "Général",
 	"folders": "Dossiers",
 	"gallery": "Galerie",

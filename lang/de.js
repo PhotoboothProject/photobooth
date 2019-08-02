@@ -20,6 +20,7 @@ L10N = {
 	"saving":"Speichert ...",
 	"success":"Erfolgreich gespeichert!",
 	"saveerror":"Fehler!",
+	"close": "Schließen",
 	"general": "Allgemein",
 	"folders": "Ordner",
 	"gallery": "Galerie",
