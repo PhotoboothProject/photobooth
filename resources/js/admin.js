@@ -1,5 +1,5 @@
 $(function(){
-  $('.panel-heading').click(function(){
+  $('.panel-heading').on('click', function(){
     var panel = $(this).parents('.panel');
     var others = $(this).parents('.accordion').find('.open').not(panel);
 
@@ -11,7 +11,7 @@ $(function(){
     others.find('.panel-body').slideUp('fast');
   });
 
-  $('.reset-btn').click(function(e){
+  $('.reset-btn').on('click', function(e){
     var msg = L10N['really_delete'];
     var really = confirm(msg);
     var data = {'type':'reset'};
@@ -22,7 +22,7 @@ $(function(){
         'url': 'admin.php',
         'data': data,
         'dataType' : 'json',
-        'method': 'post',
+        'type': 'post',
         'success': function(resp) {
           elem.removeClass('saving');
           elem.addClass(resp);
@@ -35,7 +35,7 @@ $(function(){
     }
   });
 
-  $('.save-btn').click(function(e){
+  $('.save-btn').on('click', function(e){
     e.preventDefault();
     var elem = $(this);
     elem.addClass('saving');
@@ -44,7 +44,7 @@ $(function(){
       'url': 'admin.php',
       'data': data,
       'dataType' : 'json',
-      'method': 'post',
+      'type': 'post',
       'success': function(resp) {
         elem.removeClass('saving');
         elem.addClass(resp);
