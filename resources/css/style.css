@@ -800,7 +800,7 @@ hr.small {
   display: block;
   transition: 0.3s;
   border-style: solid;
-  border-width:0.1;
+  border-width:0.1px;
   background-color: rgba(230, 126, 34, 0.2);
 }
 
