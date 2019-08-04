@@ -89,6 +89,11 @@ if (file_exists($my_config)) {
 				'name' => 'use_filter',
 				'value' => $config['use_filter']
 			],
+			'chroma_keying' => [
+				'type' => 'checkbox',
+				'name' => 'chroma_keying',
+				'value' => $config['chroma_keying']
+			],
 			'previewFromCam' => [
 				'type' => 'checkbox',
 				'name' => 'previewFromCam',
@@ -101,6 +106,12 @@ if (file_exists($my_config)) {
 				'placeholder' => 'images',
 				'name' => 'folders[images]',
 				'value' => $config['folders']['images']
+			],
+			'keying' => [
+				'type' => 'input',
+				'placeholder' => 'keying',
+				'name' => 'folders[keying]',
+				'value' => $config['folders']['keying']
 			],
 			'print' => [
 				'type' => 'input',

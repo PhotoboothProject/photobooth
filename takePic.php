@@ -17,6 +17,7 @@ if($config['file_format_date'] == true) {
 }
 
 $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
+$filename_keying = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['folders']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
@@ -154,6 +155,13 @@ if($use_filter == true) {
 	imagedestroy($tmp);
 }
 
+if($config['chroma_keying'] == true) {
+	$source = imagecreatefromjpeg($filename_photo);
+	$source = ResizeJpgImage($source, 1500, 1000);
+	imagejpeg($source, $filename_keying, 100);
+	imagedestroy($source);
+}
+
 // image scale, create thumbnail
 list($width, $height) = getimagesize($filename_photo);
 $newwidth = 500;
@@ -171,3 +179,16 @@ file_put_contents('data.txt', json_encode($images));
 
 // send imagename to frontend
 echo json_encode(array('success' => true, 'img' => $file));
+
+function ResizeJpgImage($image, $max_width, $max_height)
+{
+	$old_width  = imagesx($image);
+	$old_height = imagesy($image);
+	$scale      = min($max_width/$old_width, $max_height/$old_height);
+	$new_width  = ceil($scale*$old_width);
+	$new_height = ceil($scale*$old_height);
+	$new = imagecreatetruecolor($new_width, $new_height);
+	imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
+	return $new;
+}
+?>

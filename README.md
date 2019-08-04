@@ -19,6 +19,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - Print feature can be enabled/disabled.
   - LivePreview can be enabled/disabled (uses device cam).
   - Wedding specifig config to show a heart betweeen two names on the startpage.
+  - Green screen keying can be enabled/disabled (chroma keying).
 
 ### Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
@@ -49,6 +50,7 @@ sudo git clone https://github.com/PHPMailer/PHPMailer
 cd /var/www/html
 sudo cp config.inc.php my.config.inc.php
 sudo mkdir -p /var/www/html/images
+sudo mkdir -p /var/www/html/keying
 sudo mkdir -p /var/www/html/print
 sudo mkdir -p /var/www/html/qrcodes
 sudo mkdir -p /var/www/html/thumbs

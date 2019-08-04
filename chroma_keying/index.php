@@ -8,7 +8,7 @@ if (file_exists($my_config)) {
 
 $location = base64_decode($_GET['location']);
 $filename = $_GET['filename'];
-$mainimage = '../'.$config['folders']['images'] . DIRECTORY_SEPARATOR . $filename;
+$mainimage = '../'.$config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
 ?>
 <!doctype html>
 <html>

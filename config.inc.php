@@ -32,6 +32,7 @@ $config['start_screen_subtitle'] = 'Webinterface by André Rinas';
 // FOLDERS
 // change the folders to whatever you like
 $config['folders']['images'] = 'images';
+$config['folders']['keying'] = 'keying';
 $config['folders']['print'] = 'print';
 $config['folders']['qrcodes'] = 'qrcodes';
 $config['folders']['thumbs'] = 'thumbs';
