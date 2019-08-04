@@ -30,6 +30,7 @@ L10N = {
 	"dev": "Dev-Mode",
 	"file_format_date": "Use dateformat images",
 	"chroma_keying": "Allow chroma keying",
+	"keyingerror" : "Chroma keying not possible!",
 	"use_print": "Use Print",
 	"use_qr": "Use QR Codes",
 	"show_gallery": "Show Gallery",

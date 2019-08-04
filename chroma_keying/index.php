@@ -8,7 +8,14 @@ if (file_exists($my_config)) {
 
 $location = base64_decode($_GET['location']);
 $filename = $_GET['filename'];
-$mainimage = '../'.$config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$keyingimage = '../'.$config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
+if (file_exists($keyingimage)) {
+	$mainimage = $keyingimage;
+	$keying_possible = true;
+} else {
+	$keying_possible = false;
+	$mainimage = '../resources/img/bg.jpg';
+}
 ?>
 <!doctype html>
 <html>
@@ -34,6 +41,7 @@ function navigateToMain() {
 <body>
 <br>
 <div style="width:90%; margin:0 auto;">
+<?php if($keying_possible){ ?>
 	<div style="width:600px;height:400px; margin:0 auto;background-color:#000000;border:4px solid black;">
 		<canvas id="mainCanvas" width="1500" height="1000" style="width:600px;height:400px;"></canvas>
 	</div>
@@ -54,6 +62,12 @@ function navigateToMain() {
 		<button class="btn" style="width:150px;height:50px;font-size:20px;cursor:pointer;" onclick="printImage()"><span data-l10n="print"></span></button>
 		<button class="btn" style="width:150px;height:50px;font-size:20px;cursor:pointer;" onclick="navigateToMain()"><span data-l10n="close"></span></button>
 	</div>
+<?php } else { ?>
+	<div style="text-align:center;padding-top:250px">
+		<h1 style="color: red;" data-l10n="keyingerror"></h1>
+		<button class="btn" onclick="navigateToMain()"><span data-l10n="close"></span></button>
+	</div>
+<?php } ?>
 </div>
 	<script type="text/javascript" src="/resources/js/l10n.js"></script>
 	<script type="text/javascript" src="/lang/<?php echo $config['language']; ?>.js"></script>
