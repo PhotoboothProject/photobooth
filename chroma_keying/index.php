@@ -16,9 +16,9 @@ $mainimage = '../'.$config['folders']['images'] . DIRECTORY_SEPARATOR . $filenam
 <link rel="stylesheet" href="/resources/css/normalize.css" />
 <link rel="stylesheet" href="/resources/css/default-skin/default-skin.css">
 <link rel="stylesheet" href="/resources/css/chromakeying.css" />
-<script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="lib/marvinj-0.8.js"></script>
-<script type="text/javascript" src="lib/custom.js"></script>
+<script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/resources/js/marvinj-0.8.js"></script>
+<script type="text/javascript" src="/resources/js/chromakeying.js"></script>
 <script>
 $( document ).ready(function() {
 	setTimeout(function(){
