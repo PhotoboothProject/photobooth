@@ -166,6 +166,7 @@ sudo crontab -e
 ```
 
 ### Changelog
+- 1.8.0: Update jQuery, GSAP and PhotoSwipe to latest versions, add chroma keying feature (green screen keying)
 - 1.7.0: Add possibillity to choose an image filter before taking a picture
 - 1.6.3: Add config and instructions to use a GPIO Button to take a picture (address https://github.com/andreknieriem/photobooth/issues/10), translate sucess and error messages while sending images via mail
 - 1.6.2: Add wedding specific config, fix gallery settings not being saved from admin panel
@@ -203,3 +204,4 @@ sudo crontab -e
 - Martin Kaiser-Kaplaner
 - [MoJou90](https://github.com/MoJou90)
 - [Reinhard Reberning](https://www.reinhard-rebernig.at/website/websites/fotokasterl)
+- Steffen Musch
