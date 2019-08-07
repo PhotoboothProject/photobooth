@@ -139,5 +139,11 @@ const L10N = {
     'jpeg_quality_jpeg_quality_thumb': 'Ποιότητα JPEG για μικρογραφίες (-1 ... 100)',
     'abort': 'Αποβάλλω',
     'dark_loader': 'Dark display while countdown',
-    'rounded_corners': 'Rounded corners'
+    'rounded_corners': 'Rounded corners',
+    'login': 'Login',
+    'login_enabled': 'Login enabled',
+    'login_username': 'Username',
+    'login_password': 'Password',
+    'login_random1': 'Random',
+    'login_invalid': 'Username or password is invalid!'
 }

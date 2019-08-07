@@ -140,5 +140,11 @@ const L10N = {
     'jpeg_quality_jpeg_quality_thumb': 'JPEG Qualität für Thumbnails (-1 ... 100)',
     'abort': 'Abbrechen',
     'dark_loader': 'Dunkle Anzeige beim Countdown',
-    'rounded_corners': 'Abgerundete Ecken'
+    'rounded_corners': 'Abgerundete Ecken',
+    'login': 'Login',
+    'login_enabled': 'Login aktivieren',
+    'login_username': 'Benutzername',
+    'login_password': 'Passwort',
+    'login_random1': 'Zufallsbedingt',
+    'login_invalid': 'Benutzername oder Passwort ungültig!'
 }

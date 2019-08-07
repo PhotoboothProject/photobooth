@@ -240,6 +240,31 @@ $configsetup = [
 			'value' => $config['rounded_corners']
 		]
 	],
+	'login' => [
+		'login_enabled' => [
+			'type' => 'checkbox',
+			'name' => 'login_enabled',
+			'value' => $config['login_enabled']
+		],
+		'username' => [
+			'type' => 'input',
+			'placeholder' => 'Photo',
+			'name' => 'login_username',
+			'value' => $config['login_username']
+		],
+		'password' => [
+			'type' => 'input',
+			'placeholder' => 'booth',
+			'name' => 'login_password',
+			'value' => $config['login_password']
+		],
+		'random1' => [
+			'type' => 'input',
+			'placeholder' => 'Q4KbXus?G',
+			'name' => 'login_random1',
+			'value' => $config['login_random1']
+		]
+	],
 	'folders' => [
 		'images' => [
 			'type' => 'input',

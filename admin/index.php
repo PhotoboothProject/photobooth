@@ -1,7 +1,28 @@
 <?php
+session_start();
 
 require_once('../lib/config.php');
 require_once('../lib/configsetup.inc.php');
+
+// LOGIN
+$username = $config['login_username'];
+$password = $config['login_password'];
+$random1 = $config['login_random1'];
+$hash = md5($random1.$username);
+$error = false;
+if (isset($_POST['submit'])) {
+    if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && $_POST['password'] == $password) {
+        //IF USERNAME AND PASSWORD ARE CORRECT SET THE LOG-IN SESSION
+        $_SESSION["login"] = $hash;
+        header("Location: $_SERVER[PHP_SELF]");
+        exit;
+    } else {
+        // DISPLAY FORM WITH ERROR
+        $error = true;
+    }
+}
+// END LOGIN
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -32,6 +53,7 @@ require_once('../lib/configsetup.inc.php');
 <div id="wrapper" class="adminbg" style="overflow-y: auto;">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
+		<?php if( !$config['login_enabled'] || (isset($_SESSION['login']) && $_SESSION['login'] == $hash)): ?>
 		<button class="reset-btn">
 			<span class="save">
 				<span data-l10n="reset"></span>
@@ -120,6 +142,18 @@ require_once('../lib/configsetup.inc.php');
 					<span data-l10n="saveerror"></span>
 				</span>
 			</button>
+		<?php else: ?>
+		<form method='post' class="login">
+			<label for="username"><span data-l10n="login_username"></span></label>
+			<input type="text" name="username" id="username">
+			<label for="password"><span data-l10n="login_password"></span></label>
+			<input type="password" name="password" id="password">
+			<input type="submit" name="submit" value="submit">
+			<?php if ($error !== false) {
+				echo '<p style="color: red;"><span data-l10n="login_invalid"></span></p>';
+			} ?>
+		</form>
+		<?php endif; ?>
 		</div>
 	</div>
 
