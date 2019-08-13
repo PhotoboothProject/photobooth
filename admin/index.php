@@ -276,13 +276,13 @@ if (file_exists($my_config)) {
 				'type' => 'input',
 				'placeholder' => 'print_cmd',
 				'name' => 'print[cmd]',
-				'value' => $config['take_picture']['cmd']
+				'value' => $config['print']['cmd']
 			],
 			'print_msg' => [
 				'type' => 'input',
 				'placeholder' => 'print_msg',
 				'name' => 'print[msg]',
-				'value' => $config['take_picture']['msg']
+				'value' => $config['print']['msg']
 			]
 		]
 	];
