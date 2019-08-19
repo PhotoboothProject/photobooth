@@ -21,7 +21,7 @@ $filename_keying = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['folders']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
-if(!empty($_POST) && !($_POST['imgFilter'] == 'imgPlain')) {
+if(!empty($_POST) && !($_POST['filter'] == 'imgPlain')) {
 	$filename_orig = $filename_tmp;
 	$use_filter = true;
 	$imgfilter = $_POST['filter'];
