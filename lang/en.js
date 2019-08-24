@@ -4,14 +4,18 @@ L10N = {
 	"general_start_screen_title": "Start screen (title)",
 	"general_start_screen_subtitle": "Start screen (subtitle)",
 	"takePhoto": "Take Pic!",
+	"takeCollage": "Take Collage!",
 	"home": "Home",
 	"qr": "QR Code",
 	"newPhoto": "New Picture",
+	"newCollage": "New Collage",
 	"mail": "E-Mail",
 	"insertMail" : "Enter your e-mail address to receive the photo.",
 	"sendAllMail": "Send me a link to all pictures in the next few days",
 	"busy": "Processing",
+	"busyCollage": "Processing Collage",
 	"cheese": "Cheeeeeeeese!",
+	"cheeseCollage": "Cheeeeeeeese Collageeeeeeeeeee!",
 	"qrHelp": "Connect to the wifi <strong>photobooth<\/strong>, to download the picture to your smartphone.",
 	"error": "Something went wrong. Please try it again",
 	"reload": "Reload Page",
@@ -80,5 +84,6 @@ L10N = {
 	"wedding_symbol": "Symbol",
 	"symbol": "Choose a symbol",
 	"selectFilter": "Image filter",
-	"use_filter": "Allow image filter"
+	"use_filter": "Allow image filter",
+	"use_collage": "Allow photo collage"
 }

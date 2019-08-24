@@ -4,14 +4,18 @@ L10N = {
 	"general_start_screen_title": "Startbildschirm (Titel)",
 	"general_start_screen_subtitle": "Startbildschirm (Untertitel)",
 	"takePhoto": "Foto erstellen!",
+	"takeCollage": "Collage erstellen!",
 	"home": "Home",
 	"qr": "QR Code",
 	"mail": "E-Mail",
 	"insertMail" : "Gebe deine E-Mail-Adresse ein, um das Foto zugesendet zu bekommen.",
 	"sendAllMail": "Sende mir in den nächsten Tagen ein Link zu allen Bildern",
 	"newPhoto": "Neues Bild",
+	"newCollage": "Neue Collage",
 	"busy": "Bild wird verarbeitet ...",
+	"busyCollage": "Collage wird verarbeitet ...",
 	"cheese": "Cheeeeeeeese!",
+	"cheeseCollage": "Cheeeeeeeese Collageeeeeeeeee!",
 	"qrHelp": "Um das Bild auf dein Handy zu laden, verbinde dich mit dem WLAN <strong>photobooth<\/strong>",
 	"error": "Es ist ein Fehler aufgetreten, bitte versuche es erneut!",
 	"reload": "Seite neu laden",
@@ -80,5 +84,6 @@ L10N = {
 	"wedding_symbol": "Symbol",
 	"symbol": "Symbol auswählen",
 	"selectFilter": "Bildfilter",
-	"use_filter": "Bildfilter erlauben"
+	"use_filter": "Bildfilter erlauben",
+	"use_collage": "Foto-Collage erlauben"
 }

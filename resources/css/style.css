@@ -311,7 +311,7 @@ h3 {
   margin: auto;
   width: 200px;
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 /* line 283, ../sass/style.scss */
@@ -607,6 +607,7 @@ hr.small {
   display: none;
   position: fixed;
   top: 0;
+  float: left;
   z-index: 1000000;
   background: #000;
 }
@@ -836,6 +837,16 @@ hr.small {
   bottom: 10px;
   left: 50%;
   margin-left: -125px;
+}
+
+.takeCollage {
+  text-align: center;
+  padding: 20px 40px;
+  width: 250px;
+  display: block;
+  left: 22%;
+  bottom: 170px;
+  position: absolute;
 }
 
 @media (max-width: 767px) {

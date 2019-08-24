@@ -99,26 +99,51 @@ var photoBooth = (function () {
     }
 
     // Cheese
-    public.cheese = function () {
-        $('#counter').text('');
-        $('.loading').text(L10N.cheese);
-        public.takePic();
+    public.cheese = function (photoStyle) {
+        if (isdev) {
+            console.log(photoStyle);
+        }
+        if ((photoStyle=='photo')){
+            $('#counter').text('');
+            $('.loading').text(L10N.cheese);
+        } else {
+            $('#counter').text('');
+            $('.loading').text(L10N.cheeseCollage);
+        }
+        public.takePic(photoStyle);
     }
 
     // take Picture
-    public.takePic = function () {
+    public.takePic = function (photoStyle) {
         processing = true;
+        if (isdev) {
+            console.log('Take Picture:' + photoStyle);
+        }
         setTimeout(function () {
             if(useVideo){
                 var track = public.stream.getTracks()[0];
                 track.stop();
                 $('video').hide();
             }
+	    if ((photoStyle=='photo')){
+                $('#counter').text('');
+                $('.spinner').show();
+                $('.loading').text(L10N.busy);
+            } else {
+                $('#counter').text('');
+                if (!isdev) {
+                    setTimeout(function () {
+                        $('.spinner').show();
+                        $('.loading').text(L10N.busyCollage);
+                }, 7500);
+                } else {
+                    $('.spinner').show();
+                    $('.loading').text(L10N.busyCollage);
+                }
+	    }
             $('#counter').text('');
-            $('.spinner').show();
-            $('.loading').text(L10N.busy);
         }, cheeseTime);
-        jQuery.post("takePic.php", { filter: imgFilter }).done(function( result ){
+        jQuery.post("takePic.php",{filter: imgFilter,style: photoStyle}).done(function( result ){
             result = JSON.parse(result);
             if (result.error) {
                 public.errorPic(result);
@@ -272,6 +297,7 @@ var photoBooth = (function () {
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
         var target = $(e.target);
+        var photoStyle = 'photo';
         if (target.hasClass('gallery')) {
             public.openGallery(target);
         } else {
@@ -295,7 +321,47 @@ var photoBooth = (function () {
                     }
                 }
                 loader.slideDown('slow', 'easeOutBounce', function () {
-                    public.countdown(countDown, $('#counter'));
+                    public.countdown(countDown, $('#counter'),photoStyle);
+                });
+            }
+        }
+    });
+
+    // Take Collage Button
+    $('.takeCollage, .newcollage').on('click', function (e) {
+        e.preventDefault();
+        var target = $(e.target);
+        var photoStyle = 'collage';
+        if (isdev) {
+            console.log("collage");
+        }
+        if (target.hasClass('gallery')) {
+            public.openGallery(target);
+        } else {
+            if (!processing) {
+                if($('#mySidenav').width() > 0){
+                    public.closeNav();
+                }
+                public.reset();
+                if(useVideo && navigator.mediaDevices){
+                    navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+                    if(navigator.getMedia) {
+                        navigator.mediaDevices.getUserMedia(webcamConstraints)
+                        .then(function(stream) {
+                            $('video').show();
+                            var video = document.getElementById('video');
+                            video.srcObject = stream;
+                            public.stream = stream;
+                        })
+                        .catch(function (error) {
+                        });
+                    }
+                }
+                loader.slideDown('slow', 'easeOutBounce', function () {
+                    if (isdev) {
+                        console.log(photoStyle);
+                    }
+                    public.countdown(countDown, $('#counter'),photoStyle);
                 });
             }
         }
@@ -547,9 +613,12 @@ var photoBooth = (function () {
     });
 
     // Countdown Function
-    public.countdown = function (calls, element) {
+    public.countdown = function (calls, element, photoStyle) {
         count = 0;
         current = calls;
+        if (isdev) {
+            console.log(photoStyle);
+        }
         var timerFunction = function () {
             element.text(current);
             current--;
@@ -565,7 +634,10 @@ var photoBooth = (function () {
             if (count < calls) {
                 window.setTimeout(timerFunction, 1000);
             } else {
-                public.cheese();
+                if (isdev) {
+                    console.log(photoStyle);
+                }
+                public.cheese(photoStyle);
             }
             count++;
         };

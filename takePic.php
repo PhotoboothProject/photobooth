@@ -21,31 +21,141 @@ $filename_keying = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['folders']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
-if(!empty($_POST) && !($_POST['filter'] == 'imgPlain')) {
+
+if($_POST['style'] === 'photo') {
+	$filename_orig = $filename_photo;
+	$use_filter = false;
+} else {
+	$filename_orig = $filename_tmp;
+	$use_filter = false;
+}
+if(!empty($_POST) && !($_POST['filter'] === 'imgPlain')) {
 	$filename_orig = $filename_tmp;
 	$use_filter = true;
 	$imgfilter = $_POST['filter'];
-} else {
-	$filename_orig = $filename_photo;
-	$use_filter = false;
 }
 
-if($config['dev'] === false) {
-	$shootimage = shell_exec(
-		sprintf(
-			$config['take_picture']['cmd'],
+
+if($_POST['style'] === 'photo') {
+
+	if($config['dev'] === false) {
+		$shootimage = shell_exec(
+			sprintf(
+				$config['take_picture']['cmd'],
+				$filename_orig
+				)
+			);
+		if(strpos($shootimage, $config['take_picture']['msg']) === false) {
+				die(json_encode(array('error' => true)));
+		}
+	} else {
+		$devImg = array('resources/img/bg.jpg');
+		copy(
+			$devImg[array_rand($devImg)],
 			$filename_orig
-			)
 		);
+	}
+
+} else {
+	if($config['dev'] === false) {
+		$collagePhoto = array();
+		$i = 0;
+
+		//PIC 1
+		$shootimage = shell_exec(
+			sprintf(
+				$config['take_picture']['cmd'],
+				"$filename_orig-$i"
+				)
+			);
+		$collagePhoto[$i] = "$filename_orig-$i";
 		if(strpos($shootimage, $config['take_picture']['msg']) === false) {
 			die(json_encode(array('error' => true)));
 		}
-} else {
-	$devImg = array('resources/img/bg.jpg');
-	copy(
-		$devImg[array_rand($devImg)],
-		$filename_orig
-	);
+		$i++;
+
+		// PIC 2
+		$shootimage = shell_exec(
+			sprintf(
+				$config['take_picture']['cmd'],
+				"$filename_orig-$i"
+				)
+			);
+
+		$collagePhoto[$i] = "$filename_orig-$i";
+		if(strpos($shootimage, $config['take_picture']['msg']) === false) {
+			die(json_encode(array('error' => true)));
+		}
+		$i++;
+
+		// PIC 3
+		$shootimage = shell_exec(
+			sprintf(
+				$config['take_picture']['cmd'],
+				"$filename_orig-$i"
+				)
+			);
+
+		$collagePhoto[$i] = "$filename_orig-$i";
+		if(strpos($shootimage, $config['take_picture']['msg']) === false) {
+			die(json_encode(array('error' => true)));
+		}
+		$i++;
+
+		// PIC 4
+		$shootimage = shell_exec(
+			sprintf(
+				$config['take_picture']['cmd'],
+				"$filename_orig-$i"
+				)
+			);
+
+		$collagePhoto[$i] = "$filename_orig-$i";
+		if(strpos($shootimage, $config['take_picture']['msg']) === false) {
+			die(json_encode(array('error' => true)));
+		}
+		$i++;
+
+	} else {
+		$collagePhoto = array();
+                for( $i = 0; $i < 4; $i++ ) {
+			$devImg = array('resources/img/bg.jpg');
+			copy(
+				$devImg[array_rand($devImg)],
+				"$filename_orig-$i"
+			);
+		$collagePhoto[$i] = "$filename_orig-$i";
+		sleep(1);
+		}
+
+	}
+	// make collage
+	list($width, $height) = getimagesize($collagePhoto[0]);
+	$my_collage_height = $height * 2;
+	$my_collage_width = $width * 2;
+	$my_collage = imagecreatetruecolor($my_collage_width,$my_collage_height)
+			or die("Kann keinen neuen GD-Bild-Stream erzeugen");
+	$background = imagecolorallocate( $my_collage, 0, 0, 0);
+	imagecolortransparent($my_collage, $background);
+	$collage_pic1 = imagecreatefromjpeg($collagePhoto[0]) or die("no imagcreate");
+	imagecopy($my_collage, $collage_pic1,0,0,0,0,$width,$height);
+	$collage_pic2 = imagecreatefromjpeg($collagePhoto[1]) or die("no imagcreate");
+	imagecopy ($my_collage, $collage_pic2,$width,0,0,0,$width,$height);
+	$collage_pic3 = imagecreatefromjpeg($collagePhoto[2]) or die("no imagcreate");
+	imagecopy ($my_collage, $collage_pic3,0,$height,0,0,$width,$height);
+	$collage_pic4 = imagecreatefromjpeg($collagePhoto[3]) or die("no imagcreate");
+	imagecopy ($my_collage, $collage_pic4,$width,$height,0,0,$width,$height);
+
+	if($use_filter == true) {
+		imagejpeg($my_collage, $filename_orig);
+	} else {
+		imagejpeg($my_collage, $filename_photo);
+	}
+	imagedestroy($my_collage);
+	imagedestroy($collage_pic1);
+	imagedestroy($collage_pic2);
+	imagedestroy($collage_pic3);
+	imagedestroy($collage_pic4);
 }
 
 // apply filter
