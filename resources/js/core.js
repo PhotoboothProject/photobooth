@@ -150,7 +150,7 @@ var photoBooth = (function () {
 
         // Add Print Link
         $(document).off('click touchstart', '.printbtn');
-        $(document).on('click touchstart', '.printbtn', function (e) {
+        $(document).on('click', '.printbtn', function (e) {
             e.preventDefault();
             $.ajax({
                 url: 'print.php?filename=' + encodeURI(result.img),
