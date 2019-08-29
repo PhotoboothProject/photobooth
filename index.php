@@ -1,14 +1,20 @@
 <?php
 
-require_once('config.inc.php');
+$my_config = 'my.config.inc.php';
+if (file_exists($my_config)) {
+	require_once('my.config.inc.php');
+} else {
+        require_once('config.inc.php');
+}
 require_once('folders.php');
 require_once('db.php');
 
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+	<?php if($config['use_mobile_view']){ ?><meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"><?php } ?>
 	<title>Photobooth</title>
 
 
@@ -35,8 +41,8 @@ require_once('db.php');
 		var useVideo = <?php echo ($config['previewFromCam']) ? 'true' : 'false'; ?>;
 		var imgFolder = <?php echo '"'.$config['folders']['images'].'"'; ?>;
 		var thumbFolder = <?php echo '"'.$config['folders']['thumbs'].'"'; ?>;
-		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
-		var gallery_scrollbar = <?php echo ($config['gallery']['scrollbar']) ? 'true' : 'false'; ?>;
+		var gallery_newest_first = <?php echo ($config['newest_first']) ? 'true' : 'false'; ?>;
+		var gallery_scrollbar = <?php echo ($config['scrollbar']) ? 'true' : 'false'; ?>;
  		var cntdwn_time = <?php echo ($config['cntdwn_time']); ?>;
 		var cheese_time = <?php echo ($config['cheese_time']); ?>;
 	</script>
@@ -46,14 +52,55 @@ require_once('db.php');
 
 		<!-- Start Page -->
 		<div class="stages" id="start">
-			<?php if($config['gallery']['show_gallery']){ ?><a class="gallery btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
+			<?php if($config['show_gallery']){ ?><a class="gallery btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<div class="blurred">
 			</div>
 			<div class="inner">
-				<?php echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>' ?>
-				<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
+				<?php
+				if($config['is_wedding']) {
+					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['wedding']['groom'] . ' <i class="fa '. $config['wedding']['symbol'] .' "aria-hidden="true"></i> ' . $config['wedding']['bride'] . '<br>' . $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
+				} else {
+					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';
+				};
+				?>
+				<?php if($config['use_filter']){ ?><a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a><?php } ?>
+				<!-- accesskey to take a photo using alt+p (or use an external button)? -->
+				<a href="#" <?php if($config['use_gpio_button']){ ?>accesskey="p"<?php } ?> class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
 			</div>
 		</div>
+
+		<!-- image Filter Pane -->
+		<?php if($config['use_filter']){ ?>
+		<div id="mySidenav" class="dragscroll sidenav">
+			<!--a href="javascript:void(0)" class="closebtn">&times;</a-->
+			<div class="activeSidenavBtn" id="imgPlain"><a id="imgFilter" href="#" >original</a></div>
+			<div id="imgAntique"> <a id="imgFilter" href="#">antique</a></div>
+			<div id="imgAqua"> <a id="imgFilter" href="#" >aqua</a></div>
+			<div id="imgBlue"> <a id="imgFilter" href="#" >blue</a></div>
+			<div id="imgBlur"> <a id="imgFilter" href="#" >blur</a></div>
+			<div id="imgColor"> <a id="imgFilter" href="#" >colorful</a></div>
+			<div id="imgCool"> <a id="imgFilter" href="#" >cool</a></div>
+			<div id="imgEdge"> <a id="imgFilter" href="#" >edge</a></div>
+			<div id="imgEmboss"> <a id="imgFilter" href="#" >emboss</a></div>
+			<div id="imgEverglow"> <a id="imgFilter" href="#" >everglow</a></div>
+			<div id="imgGrayscale"> <a id="imgFilter" href="#" >grayscale</a></div>
+			<div id="imgGreen"> <a id="imgFilter" href="#" >green</a></div>
+			<div id="imgMean"> <a id="imgFilter" href="#" >mean</a></div>
+			<div id="imgNegate"> <a id="imgFilter" href="#" >negate</a></div>
+			<div id="imgPink"> <a id="imgFilter" href="#" >pink</a></div>
+			<div id="imgPixelate"> <a id="imgFilter" href="#" >pixelate</a></div>
+			<div id="imgRed"> <a id="imgFilter" href="#" >red</a></div>
+			<div id="imgRetro"> <a id="imgFilter" href="#" >retro</a></div>
+			<div id="imgSelectiveBlur"> <a id="imgFilter" href="#" >selective blur</a></div>
+			<div id="imgSepiaLight"> <a id="imgFilter" href="#" >sepia light</a></div>
+			<div id="imgSepiaDark"> <a id="imgFilter" href="#" >sepia dark</a></div>
+			<div id="imgSmooth"> <a id="imgFilter" href="#" >smooth</a></div>
+			<div id="imgSummer"> <a id="imgFilter" href="#" >summer</a></div>
+			<div id="imgVintage"> <a id="imgFilter" href="#" >vintage</a></div>
+			<div id="imgWashed"> <a id="imgFilter" href="#" >washed</a></div>
+			<div id="imgYellow"> <a id="imgFilter" href="#" >yellow</a></div>
+		</div>
+		<?php } ?>
 
 		<!-- Loader -->
 		<div class="stages" id="loader">
@@ -76,15 +123,16 @@ require_once('db.php');
 		<div class="stages" id="result">
 			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-l10n="home"></span></a>
 			<div class="resultInner hidden">
-			<?php if($config['gallery']['show_gallery']){ ?><a href="#" class="btn gallery"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
+			<?php if($config['show_gallery']){ ?><a href="#" class="btn gallery"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<?php if($config['use_qr']){ echo '<a href="#" class="btn qrbtn"><span class="qrbtnlabel"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></span></a>'; } ?>
+			<?php if($config['use_mail']){ echo '<a href="#" class="btn mailbtn"><span class="mailbtnlabel"><i class="fa fa-cloud-download"></i> <span data-l10n="mail"></span></span></a>'; } ?>
 			<?php if($config['use_print']){ echo '<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>'; } ?>
 			<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
 			</div>
 			<?php if($config['use_qr']){ echo '<div class="qr"></div>';} ?>
 		</div>
 
-		<?php if($config['gallery']['show_gallery']){ ?>
+		<?php if($config['show_gallery']){ ?>
 		<!-- Gallery -->
 		<div id="gallery">
 			<div class="galInner">
@@ -94,14 +142,14 @@ require_once('db.php');
 				</div>
 				<div class="images" id="galimages">
 					<?php
-					$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
+					$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
 					if (empty($imagelist)) {
 						// no images in gallery.
 						echo '<h1 style="text-align:center" data-l10n="gallery_no_image"></h1>';
 					} else {
 						foreach($imagelist as $image) {
 							$date;
-							if ($config['file_format_date'] == true && $config['gallery']['show_date'] == true) {
+							if ($config['file_format_date'] == true && $config['show_date'] == true) {
 								$date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
 							}
 
@@ -157,8 +205,10 @@ require_once('db.php');
 					<button class="pswp__button pswp__button--share" title="Share"></button>
 					<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 					<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+					<?php if($config['use_mail']){ echo '<button class="gal-mail" title="Per Mail senden"><i class="fa fa-cloud-download"></i></button>'; } ?>
 					<?php if($config['use_print']){ echo '<button class="gal-print" title="Drucken"><i class="fa fa-print"></i></button>'; } ?>
 					<?php if($config['use_qr']){ echo '<button class="gal-qr-code" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>'; } ?>
+					<?php if($config['chroma_keying']){ echo '<button class="gal-print-chroma_keying" title="Print extra"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>'; } ?>
 					<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
 					<!-- element will get class pswp__preloader--active when preloader is running -->
 					<div class="pswp__preloader">
@@ -190,7 +240,22 @@ require_once('db.php');
 			</div>
 	</div>
 
-	<script type="text/javascript" src="/resources/js/jquery.js"></script>
+	<div class="send-mail">
+		<i class="fa fa-times" id="send-mail-close"></i>
+		<p data-l10n="insertMail"></p>
+		<form id="send-mail-form" style="margin: 0;">
+			<input class="mail-form-input" size="35" type="email" name="sendTo">
+			<input id="mail-form-image" type="hidden" name="image" value="">
+			<?php if($config['send_all_later']): ?>
+				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
+				<label data-l10n="sendAllMail" for="mail-form-send-link"></label>
+			<?php endif; ?>
+			<button class="mail-form-input btn" name="submit" type="submit" value="Senden">Senden</button>
+		</form>
+		<div id="mail-form-message" style="max-width: 75%"></div>
+	</div>
+
+	<script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="/resources/js/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="/resources/js/TweenLite.min.js"></script>
 	<script type="text/javascript" src="/resources/js/EasePack.min.js"></script>

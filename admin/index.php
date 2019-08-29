@@ -1,6 +1,11 @@
 <?php
 
-require_once('../config.inc.php');
+$my_config = '../my.config.inc.php';
+if (file_exists($my_config)) {
+	require_once('../my.config.inc.php');
+} else {
+	require_once('../config.inc.php');
+}
 
 	$configsetup = [
 		'general' => [
@@ -47,6 +52,21 @@ require_once('../config.inc.php');
 				'name' => 'use_qr',
 				'value' => $config['use_qr']
 			],
+			'use_mail' => [
+				'type' => 'checkbox',
+				'name' => 'use_mail',
+				'value' => $config['use_mail']
+			],
+			'use_mobile_view' => [
+				'type' => 'checkbox',
+				'name' => 'use_mobile_view',
+				'value' => $config['use_mobile_view']
+			],
+			'use_gpio_button' => [
+				'type' => 'checkbox',
+				'name' => 'use_gpio_button',
+				'value' => $config['use_gpio_button']
+			],
 			'show_fork' => [
 				'type' => 'checkbox',
 				'name' => 'show_fork',
@@ -64,6 +84,16 @@ require_once('../config.inc.php');
 				'name' => 'cheese_time',
 				'value' => $config['cheese_time']
 			],
+			'use_filter' => [
+				'type' => 'checkbox',
+				'name' => 'use_filter',
+				'value' => $config['use_filter']
+			],
+			'chroma_keying' => [
+				'type' => 'checkbox',
+				'name' => 'chroma_keying',
+				'value' => $config['chroma_keying']
+			],
 			'previewFromCam' => [
 				'type' => 'checkbox',
 				'name' => 'previewFromCam',
@@ -77,11 +107,17 @@ require_once('../config.inc.php');
 				'name' => 'folders[images]',
 				'value' => $config['folders']['images']
 			],
-			'thumbs' => [
+			'keying' => [
 				'type' => 'input',
-				'placeholder' => 'thumbs',
-				'name' => 'folders[thumbs]',
-				'value' => $config['folders']['thumbs']
+				'placeholder' => 'keying',
+				'name' => 'folders[keying]',
+				'value' => $config['folders']['keying']
+			],
+			'print' => [
+				'type' => 'input',
+				'placeholder' => 'print',
+				'name' => 'folders[print]',
+				'value' => $config['folders']['print']
 			],
 			'qrcodes' => [
 				'type' => 'input',
@@ -89,33 +125,71 @@ require_once('../config.inc.php');
 				'name' => 'folders[qrcodes]',
 				'value' => $config['folders']['qrcodes']
 			],
-			'print' => [
+			'thumbs' => [
 				'type' => 'input',
-				'placeholder' => 'print',
-				'name' => 'folders[print]',
-				'value' => $config['folders']['print']
+				'placeholder' => 'thumbs',
+				'name' => 'folders[thumbs]',
+				'value' => $config['folders']['thumbs']
+			],
+			'tmp' => [
+				'type' => 'input',
+				'placeholder' => 'tmp',
+				'name' => 'folders[tmp]',
+				'value' => $config['folders']['tmp']
+			]
+		],
+		'wedding' => [
+			'is_wedding' => [
+				'type' => 'checkbox',
+				'name' => 'is_wedding',
+				'value' => $config['is_wedding']
+			],
+			'groom' => [
+				'type' => 'input',
+				'placeholder' => 'Name 1',
+				'name' => 'wedding[groom]',
+				'value' => $config['wedding']['groom']
+			],
+			'bride' => [
+				'type' => 'input',
+				'placeholder' => 'Name 2',
+				'name' => 'wedding[bride]',
+				'value' => $config['wedding']['bride']
+			],
+			'symbol' => [
+				'type' => 'select',
+				'name' => 'wedding[symbol]',
+				'placeholder' => 'wedding[symbol]',
+				'options' => [
+					'fa-heart-o' => 'Heart',
+					'fa-heart' => 'Heart filled',
+					'fa-heartbeat' => 'Heartbeat',
+					'fa-anchor' => 'Anchor',
+					'fa-glass' => 'Glass'
+				],
+				'value' => $config['wedding']['symbol']
 			]
 		],
 		'gallery' => [
 			'show_gallery' => [
 				'type' => 'checkbox',
 				'name' => 'show_gallery',
-				'value' => $config['gallery']['show_gallery']
+				'value' => $config['show_gallery']
 			],
 			'newest_first' => [
 				'type' => 'checkbox',
 				'name' => 'newest_first',
-				'value' => $config['gallery']['newest_first']
+				'value' => $config['newest_first']
 			],
 			'scrollbar' => [
 				'type' => 'checkbox',
 				'name' => 'scrollbar',
-				'value' => $config['gallery']['scrollbar']
+				'value' => $config['scrollbar']
 			],
 			'show_date' => [
 				'type' => 'checkbox',
 				'name' => 'show_date',
-				'value' => $config['gallery']['show_date']
+				'value' => $config['show_date']
 			],
 			'date_format' => [
 				'type' => 'input',
@@ -123,6 +197,67 @@ require_once('../config.inc.php');
 				'name' => 'gallery[date_format]',
 				'value' => $config['gallery']['date_format']
 			]
+		],
+		'mail' => [
+			'send_all_later' => [
+				'type' => 'checkbox',
+				'name' => 'send_all_later',
+				'value' => $config['send_all_later']
+			],
+			'host' => [
+				'type' => 'input',
+				'placeholder' => 'smtp.example.com',
+				'name' => 'mail_host',
+				'value' => $config['mail_host']
+			],
+			'username' => [
+				'type' => 'input',
+				'placeholder' => 'photobooth@example.com',
+				'name' => 'mail_username',
+				'value' => $config['mail_username']
+			],
+			'password' => [
+				'type' => 'input',
+				'placeholder' => 'yourpassword',
+				'name' => 'mail_password',
+				'value' => $config['mail_password']
+			],
+			'secure' => [
+				'type' => 'input',
+				'placeholder' => 'tls',
+				'name' => 'mail_secure',
+				'value' => $config['mail_secure']
+			],
+			'port' => [
+				'type' => 'input',
+				'placeholder' => '587',
+				'name' => 'mail_port',
+				'value' => $config['mail_port']
+			],
+			'fromAddress' => [
+				'type' => 'input',
+				'placeholder' => 'photobooth@example.com',
+				'name' => 'mail_fromAddress',
+				'value' => $config['mail_fromAddress']
+			],
+			'fromName' => [
+				'type' => 'input',
+				'placeholder' => 'Photobooth',
+				'name' => 'mail_fromName',
+				'value' => $config['mail_fromName']
+			],
+			'subject' => [
+				'type' => 'input',
+				'placeholder' => 'Here is your picture',
+				'name' => 'mail_subject',
+				'value' => $config['mail_subject']
+			],
+			'text' => [
+				'type' => 'input',
+				'placeholder' => 'Hey, your picture is attached.',
+				'name' => 'mail_text',
+				'value' => $config['mail_text']
+			],
 		],
 		'commands' => [
 			'take_picture_cmd' => [
@@ -141,21 +276,22 @@ require_once('../config.inc.php');
 				'type' => 'input',
 				'placeholder' => 'print_cmd',
 				'name' => 'print[cmd]',
-				'value' => $config['take_picture']['cmd']
+				'value' => $config['print']['cmd']
 			],
 			'print_msg' => [
 				'type' => 'input',
 				'placeholder' => 'print_msg',
 				'name' => 'print[msg]',
-				'value' => $config['take_picture']['msg']
+				'value' => $config['print']['msg']
 			]
 		]
 	];
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+	<?php if($config['use_mobile_view']){ ?><meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"><?php } ?>
 	<title>Photobooth</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
@@ -173,8 +309,8 @@ require_once('../config.inc.php');
 	<link rel="stylesheet" type="text/css" href="/resources/css/style.css" />
 	<link rel="stylesheet" href="/resources/css/admin.css" />
 	<script type="text/javascript">
-		var isdev = true;
-		var gallery_newest_first = <?php echo ($config['gallery']['newest_first']) ? 'true' : 'false'; ?>;
+		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
+		var gallery_newest_first = <?php echo ($config['newest_first']) ? 'true' : 'false'; ?>;
 	</script>
 </head>
 <body class="deselect">
@@ -267,7 +403,7 @@ require_once('../config.inc.php');
 	</div>
 
 </div>
-<script type="text/javascript" src="/resources/js/jquery.js"></script>
+<script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="/resources/js/l10n.js"></script>
 <script type="text/javascript" src="/resources/js/admin.js"></script>
 <script type="text/javascript" src="/lang/<?php echo $config['language']; ?>.js"></script>

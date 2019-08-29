@@ -6,7 +6,7 @@ var photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         countDown = cntdwn_time,       // Countdown from config
-	cheeseTime = cheese_time,
+        cheeseTime = cheese_time,
         timeToLive = 90000,
         qr = false,
         timeOut,
@@ -16,7 +16,8 @@ var photoBooth = (function () {
         processing = false,
         pswp = {},
         resultPage = $('#result'),
-				stream,
+        imgFilter = 'imgPlain',
+        stream,
         webcamConstraints = {
             audio: false,
             video: {
@@ -47,6 +48,8 @@ var photoBooth = (function () {
             'bottom': '-100px'
         });
         $('.spinner').hide();
+        $('.send-mail').hide();
+        public.resetMailForm();
     }
 
     // init
@@ -85,6 +88,16 @@ var photoBooth = (function () {
         });
     }
 
+    // Set the width of the side navigation to 250px and the left margin of the page content to 250px
+    public.openNav = function () {
+	document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    // Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+    public.closeNav = function () {
+	document.getElementById("mySidenav").style.width = "0";
+    }
+
     // Cheese
     public.cheese = function () {
         $('#counter').text('');
@@ -96,29 +109,25 @@ var photoBooth = (function () {
     public.takePic = function () {
         processing = true;
         setTimeout(function () {
-						if(useVideo){
-							var track = public.stream.getTracks()[0];
-							track.stop();
-							$('video').hide();
-						}
+            if(useVideo){
+                var track = public.stream.getTracks()[0];
+                track.stop();
+                $('video').hide();
+            }
             $('#counter').text('');
             $('.spinner').show();
             $('.loading').text(L10N.busy);
         }, cheeseTime);
-        $.ajax({
-            url: 'takePic.php',
-            dataType: "json",
-            cache: false,
-            success: function (result) {
-                if (result.error) {
-                    public.errorPic(result);
-                } else {
-                    public.renderPic(result);
-                }
-            },
-            error: function (xhr, status, error) {
+        jQuery.post("takePic.php", { filter: imgFilter }).done(function( result ){
+            result = JSON.parse(result);
+            if (result.error) {
                 public.errorPic(result);
+            } else {
+                public.renderPic(result);
             }
+
+        }).fail(function(xhr, status, result){
+            public.errorPic(result);
         });
     }
 
@@ -134,7 +143,7 @@ var photoBooth = (function () {
     public.renderPic = function (result) {
         // Add QR Code Image
         $('.qr').html('');
-        $('<img src="qrcode.php?filename=' + result.img + '"/>').load(function () {
+        $('<img src="qrcode.php?filename=' + result.img + '"/>').on('load', function () {
             $(this).appendTo($('.qr'));
             $('<p>').html(L10N.qrHelp).appendTo($('.qr'));
         });
@@ -153,7 +162,7 @@ var photoBooth = (function () {
         public.addImage(result.img);
 
         // Add Image
-        $('<img src="/'+imgFolder+'/' + result.img + '" class="original">').load(function () {
+        $('<img src="/'+imgFolder+'/' + result.img + '" class="original">').on('load', function () {
             $('#result').css({
                 'background-image': 'url(/'+imgFolder+'/' + result.img + ')'
             });
@@ -236,33 +245,55 @@ var photoBooth = (function () {
             });
     }
 
-    $(window).resize(public.handleResize);
+    $(window).on('resize', public.handleResize);
+
+    //Filter
+    $('.imageFilter').on('click', function (e) {
+        //e.preventDefault();
+        if($('#mySidenav').width() > 0){
+            public.closeNav();
+        } else {
+            public.openNav();
+        }
+    });
+
+    $('.sidenav').children().on('click', function (e) {
+        $('.sidenav').children().removeAttr("class");
+        $(this).addClass("activeSidenavBtn");
+        imgFilter = $(this).attr("id");
+        if (isdev) {
+            console.log(imgFilter);
+        }
+    });
 
     // Open QR Code in Gallery
 
     // Take Picture Button
-    $('.takePic, .newpic').click(function (e) {
+    $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
         var target = $(e.target);
         if (target.hasClass('gallery')) {
             public.openGallery(target);
         } else {
             if (!processing) {
+                if($('#mySidenav').width() > 0){
+                    public.closeNav();
+                }
                 public.reset();
-								if(useVideo && navigator.mediaDevices){
-									navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
-									if(navigator.getMedia) {
-										navigator.mediaDevices.getUserMedia(webcamConstraints)
-										.then(function(stream) {
-											$('video').show();
-											var video = document.getElementById('video');
-											video.srcObject = stream;
-											public.stream = stream;
-										})
-										.catch(function (error) {
-										});
-									}
-								}
+                if(useVideo && navigator.mediaDevices){
+                    navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+                    if(navigator.getMedia) {
+                        navigator.mediaDevices.getUserMedia(webcamConstraints)
+                        .then(function(stream) {
+                            $('video').show();
+                            var video = document.getElementById('video');
+                            video.srcObject = stream;
+                            public.stream = stream;
+                        })
+                        .catch(function (error) {
+                        });
+                    }
+                }
                 loader.slideDown('slow', 'easeOutBounce', function () {
                     public.countdown(countDown, $('#counter'));
                 });
@@ -271,13 +302,16 @@ var photoBooth = (function () {
     });
 
     // Open Gallery Button
-    $('#result .gallery, #start .gallery').click(function (e) {
+    $('#result .gallery, #start .gallery').on('click', function (e) {
         e.preventDefault();
+        if($('#mySidenav').width() > 0){
+          public.closeNav();
+        }
         public.openGallery($(this));
     });
 
     // Close Gallery Overview
-    $('.close_gal').click(function (e) {
+    $('.close_gal').on('click', function (e) {
         e.preventDefault();
         $('.galInner').hide();
         gallery.css({
@@ -293,7 +327,7 @@ var photoBooth = (function () {
         });
     });
 
-    $('.tabbox ul li').click(function () {
+    $('.tabbox ul li').on('click', function () {
         var elem = $(this),
             target = $('.' + elem.data('target'));
         if (!elem.hasClass('active')) {
@@ -331,11 +365,100 @@ var photoBooth = (function () {
         })
     });
 
-    $('#result').click(function (e) {
+    // chroma keying print
+    $(document).on('click touchstart', '.gal-print-chroma_keying', function (e) {
+        e.preventDefault();
+        var img = pswp.currItem.src;
+        img = img.replace(imgFolder+'/', '');
+        $.post( "chroma_keying/lib_php/info.php", function( info ) {
+            if (info.chroma_keying == true) {
+                var currentHref = $(location).attr('href').split('#')[0];;
+                var encodedString = btoa(currentHref);
+                //var decodedString = atob(encodedString);
+                $(location).attr('href','chroma_keying/index.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString));
+            }
+        }, "json");
+    });
+
+    // Send Mail gallery
+    $('.gal-mail').on('click touchstart', function (e) {
+        //e.preventDefault();
+
+        var mail = $('.send-mail');
+        if (mail.hasClass('mail-active')) {
+            public.resetMailForm();
+            mail.removeClass('mail-active').fadeOut('fast');
+        } else {
+            mail.addClass('mail-active').fadeIn('fast');
+        }
+    });
+
+    $('.mailbtn').on('click', function (e) {
+        var mail = $('.send-mail');
+        if (mail.hasClass('mail-active')) {
+            public.resetMailForm();
+            mail.removeClass('mail-active').fadeOut('fast');
+        } else {
+            mail.addClass('mail-active').fadeIn('fast');
+        }
+    });
+
+    $('#send-mail-form').on('submit', function (e) {
+        e.preventDefault();
+        var img = '';
+        if($('.pswp.pswp--open.pswp--visible').length) {
+            img = pswp.currItem.src;
+        } else {
+            img = resultPage.css("background-image").replace('url(','').replace(')','').replace(/\"/gi, "").split('/'+imgFolder+'/')[1];
+        }
+
+        img = img.replace('/'+imgFolder+'/', '');
+        img = img.replace('/'+thumbFolder+'/', '');
+
+        $('#mail-form-image').val(img);
+        var message = $('#mail-form-message');
+        message.empty();
+
+        var form = $(this);
+        var oldValue = form.find('.btn').html();
+        form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
+        $.ajax({
+            url: 'sendPic.php',
+            type: 'POST',
+            data: form.serialize(),
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                if (result.success === true) {
+                    message.fadeIn().html('<span style="color:green">' + L10N.mailSent + '</span>');
+                } else {
+                    message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
+                }
+            },
+            error: function (xhr, status, error) {
+                message.fadeIn('fast').html('<span style="color: red;">' + L10N.mailError + '</span>');
+            },
+            complete: function () {
+                form.find('.btn').html(oldValue);
+            }
+        });
+    });
+
+    $('#send-mail-close').on('click', function (e) {
+        public.resetMailForm();
+        $('.send-mail').removeClass('mail-active').fadeOut('fast');
+    });
+
+    public.resetMailForm = function() {
+        $('#send-mail-form').trigger('reset');
+        $('#mail-form-message').html('');
+    };
+
+    $('#result').on('click', function (e) {
         var target = $(e.target);
 
         // Menü in and out
-        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn') && target.closest('.homebtn').length == 0) {
+        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn') && target.closest('.homebtn').length == 0  && !target.hasClass('mailbtn')) {
             if ($('.resultInner').hasClass('hidden')) {
                 $('.resultInner').stop().animate({
                     'bottom': '50px'
@@ -348,20 +471,20 @@ var photoBooth = (function () {
         }
 
         if (qr && !target.hasClass('qrbtn')) {
-					var qrpos = $('.qrbtn').offset(),
-						qrbtnwidth = $('.qrbtn').outerWidth(),
-						qrbtnheight = $('.qrbtn').outerHeight()
-						$('.qr').removeClass('active');
+            var qrpos = $('.qrbtn').offset(),
+            qrbtnwidth = $('.qrbtn').outerWidth(),
+            qrbtnheight = $('.qrbtn').outerHeight()
+            $('.qr').removeClass('active');
             $('.qr').animate({
-							'width': qrbtnwidth,
-							'height': qrbtnheight,
-							'left': qrpos.left,
-							'top': qrpos.top,
-							'margin-left': 0,
+                'width': qrbtnwidth,
+                'height': qrbtnheight,
+                'left': qrpos.left,
+                'top': qrpos.top,
+                'margin-left': 0,
             }, 250, function(){
-							$('.qr').hide();
-						});
-						qr = false;
+                $('.qr').hide();
+            });
+            qr = false;
         }
 
         // Go to Home
@@ -372,31 +495,31 @@ var photoBooth = (function () {
         // Qr in and out
         if (target.hasClass('qrbtn') || target.closest('.qrbtn').length > 0) {
 
-						var qrpos = $('.qrbtn').offset(),
-							qrbtnwidth = $('.qrbtn').outerWidth(),
-							qrbtnheight = $('.qrbtn').outerHeight()
+            var qrpos = $('.qrbtn').offset(),
+            qrbtnwidth = $('.qrbtn').outerWidth(),
+            qrbtnheight = $('.qrbtn').outerHeight()
 
             if (qr) {
-								$('.qr').removeClass('active');
+                $('.qr').removeClass('active');
                 $('.qr').animate({
                     'width': qrbtnwidth,
                     'height': qrbtnheight,
                     'left': qrpos.left,
-										'top': qrpos.top,
-										'margin-left': 0,
+                    'top': qrpos.top,
+                    'margin-left': 0,
                 }, 250, function(){
-									$('.qr').hide();
-								});
+                $('.qr').hide();
+            });
                 qr = false;
             } else {
                 qr = true;
-								$('.qr').css({
-									'width': qrbtnwidth,
-									'height': qrbtnheight,
-									'left': qrpos.left,
-									'top': qrpos.top
-								});
-								$('.qr').show();
+                $('.qr').css({
+                'width': qrbtnwidth,
+                'height': qrbtnheight,
+                'left': qrpos.left,
+                'top': qrpos.top
+                });
+                $('.qr').show();
                 $('.qr').animate({
                     'width': 500,
                     'height': 600,
@@ -404,22 +527,22 @@ var photoBooth = (function () {
                     'margin-left': -265,
                     'top': 50
                 }, 250, function(){
-									$('.qr').addClass('active');
-								});
+                    $('.qr').addClass('active');
+                });
             }
         }
     });
 
     // Show QR Code
-    $('.qrbtn').click(function (e) {
+    $('.qrbtn').on('click', function (e) {
         e.preventDefault();
     });
 
-    $('.printbtn').click(function (e) {
+    $('.printbtn').on('click', function (e) {
         e.preventDefault();
     });
 
-    $('.homebtn').click(function (e) {
+    $('.homebtn').on('click', function (e) {
         e.preventDefault();
     });
 
@@ -722,10 +845,14 @@ var photoBooth = (function () {
 
         pswp.listen('beforeChange', function () {
             $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
+            public.resetMailForm();
+            $('.send-mail').removeClass('mail-active').fadeOut('fast');
         });
 
         pswp.listen('close', function () {
             $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
+            public.resetMailForm();
+            $('.send-mail').removeClass('mail-active').fadeOut('fast');
         });
 
         pswp.init();
@@ -741,7 +868,7 @@ var photoBooth = (function () {
 
 
     // clear Timeout to not reset the gallery, if you clicked anywhere
-    $(document).click(function (event) {
+    $(document).on('click', function (event) {
         if (startPage.is(':visible')) {
 
         } else {
@@ -751,7 +878,7 @@ var photoBooth = (function () {
     });
     // Disable Right-Click
     if (!isdev) {
-        $(this).bind("contextmenu", function (e) {
+        $(this).on("contextmenu", function (e) {
             e.preventDefault();
         });
     }

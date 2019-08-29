@@ -413,6 +413,32 @@ h3 {
   height: auto;
 }
 
+.send-mail {
+  z-index: 1600;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 25px 15px 15px;
+  min-width: 250px;
+  display: none;
+}
+
+#send-mail-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.mail-form-input {
+  padding: 15px;
+  margin: 12px 0;
+  width: 100%;
+}
+
 /* line 371, ../sass/style.scss */
 .spacer {
   clear: both;
@@ -444,7 +470,7 @@ h3 {
   display: block;
   width: 250px;
   position: absolute;
-  bottom: 50px;
+  bottom: 90px;
   left: 50%;
   margin-left: -125px;
 }
@@ -491,7 +517,8 @@ hr.small {
 /* line 439, ../sass/style.scss */
 .inner {
   background: rgba(0, 0, 0, 0.5);
-  width: 450px;
+  max-width: 720px;
+  min-width: 450px;
   height: 700px;
   position: absolute;
   top: 50%;
@@ -723,7 +750,7 @@ hr.small {
 }
 
 /* line 645, ../sass/style.scss */
-.gal-qr-code, .gal-print {
+.gal-qr-code, .gal-print, .gal-print-chroma_keying, .gal-mail {
   color: #fff;
   background: transparent;
   font-size: 26px;
@@ -748,6 +775,67 @@ hr.small {
   margin-top: -240px;
   margin-left: -360px;
   left: 50%;
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1005; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: scroll;
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  border-style: solid;
+  border-width:0.1px;
+  background-color: rgba(230, 126, 34, 0.2);
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+  background-color: rgba(224, 112, 48, 0.8);
+}
+
+
+.activeSidenavBtn {
+  background-color: rgba(230, 126, 34, 1);
+}
+
+.activeSidenavBtn a{
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: -10;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  border: none;
+  background: none;
+}
+
+.imageFilter {
+  text-align: center;
+  display: block;
+  width: 250px;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  margin-left: -125px;
 }
 
 @media (max-width: 767px) {
