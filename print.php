@@ -24,10 +24,8 @@ $status = false;
 // exit with error
 if(!file_exists($filename_source)) {
     echo json_encode(array('status' => sprintf('file "%s" not found', $filename_source)));
-}
-
-// print
-if(file_exists($filename_source)) {
+} else {
+    // print
     // copy and merge
     if(!file_exists($filename_print)) {
         // create qr code
