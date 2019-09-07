@@ -33,6 +33,7 @@ L10N = {
 	"keyingerror" : "Chroma-Keying nicht möglich!",
 	"use_print": "Drucken aktivieren",
 	"use_qr": "QR-Code aktivieren",
+	"print_qrcode" : "QR-Code auf dem Bild beim Drucken",
 	"show_gallery": "Galerie aktivieren",
 	"scrollbar": "Scrollbar in Galerie aktivieren",
 	"show_date": "Datum in Galerie unter dem Foto anzeigen (funktioniert nur wenn Bilder mit Datum benannt werden)",

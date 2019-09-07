@@ -33,6 +33,7 @@ L10N = {
 	"keyingerror" : "L'incrustation chroma n'est pas possible!",
 	"use_print": "Utiliser l'impression",
 	"use_qr": "Utiliser les codes QR",
+	"print_qrcode" : "QR-Code sur l'image en cours d'impression",
 	"show_gallery": "Montrer la galerie",
 	"scrollbar": "Afficher la barre de défilement dans la galerie",
 	"show_date": "Montrez la date sous les images (fonctionne uniquement avec images au format de date)",

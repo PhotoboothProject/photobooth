@@ -10,6 +10,7 @@ $sys['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) 
 $config['dev'] = false;
 $config['use_print'] = false;
 $config['use_qr'] = true;
+$config['print_qrcode'] = true;
 $config['use_mail'] = false; // mail data needs to be configured
 $config['use_mobile_view'] = false;
 $config['use_gpio_button'] = false; // Use alt+p to take a new picture, can be triggered via GPIO24

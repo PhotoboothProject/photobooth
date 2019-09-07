@@ -33,6 +33,7 @@ L10N = {
 	"keyingerror" : "Chroma keying not possible!",
 	"use_print": "Use Print",
 	"use_qr": "Use QR Codes",
+	"print_qrcode" : "QR-Code on the picture while printing",
 	"show_gallery": "Show Gallery",
 	"scrollbar": "Show scrollbar in Gallery",
 	"show_date": "Show date below images in Gallery (only works if dateformat images is used)",
