@@ -85,5 +85,6 @@ L10N = {
 	"symbol": "Sélectionnez le symbole",
 	"selectFilter": "Filtre d'image",
 	"use_filter": "Autoriser le filtre d'image",
-	"use_collage": "Autoriser la fonction du montage photo"
+	"use_collage": "Autoriser la fonction du montage photo",
+	"print_frame": "Imprimer le cadre sur la photo"
 }

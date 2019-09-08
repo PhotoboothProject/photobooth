@@ -54,6 +54,13 @@ if(!file_exists($filename_source)) {
             imagedestroy($source);
         } else {
             $print = imagecreatefromjpeg($filename_source);
+            if($config['print_frame'] == true) {
+                $rahmen = @imagecreatefrompng('resources/img/frames/frame.png');
+                $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
+                $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
+                $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
+                imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+            }
             imagejpeg($print, $filename_print);
         }
         imagedestroy($print);
@@ -68,4 +75,19 @@ if(!file_exists($filename_source)) {
         )
     );
     echo json_encode(array('status' => 'ok', 'msg' => $printimage || ''));
+}
+
+function ResizePngImage($image, $max_width, $max_height)
+{
+	$old_width  = imagesx($image);
+	$old_height = imagesy($image);
+	$scale      = min($max_width/$old_width, $max_height/$old_height);
+	$new_width  = ceil($scale*$old_width);
+	$new_height = ceil($scale*$old_height);
+	$new = imagecreatetruecolor($new_width, $new_height);
+	imagealphablending( $new, false );
+	imagesavealpha( $new, true );
+	imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
+
+	return $new;
 }

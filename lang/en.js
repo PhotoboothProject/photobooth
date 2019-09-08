@@ -85,5 +85,7 @@ L10N = {
 	"symbol": "Choose a symbol",
 	"selectFilter": "Image filter",
 	"use_filter": "Allow image filter",
-	"use_collage": "Allow photo collage"
+	"use_collage": "Allow photo collage",
+	"use_collage": "Allow collage photo",
+	"print_frame": "Print frame on picture"
 }

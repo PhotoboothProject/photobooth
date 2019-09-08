@@ -57,6 +57,11 @@ if (file_exists($my_config)) {
 				'name' => 'print_qrcode',
 				'value' => $config['print_qrcode']
 			],
+			'print_frame' => [
+				'type' => 'checkbox',
+				'name' => 'print_frame',
+				'value' => $config['print_frame']
+			],
 			'use_mail' => [
 				'type' => 'checkbox',
 				'name' => 'use_mail',

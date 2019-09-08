@@ -85,5 +85,6 @@ L10N = {
 	"symbol": "Symbol auswählen",
 	"selectFilter": "Bildfilter",
 	"use_filter": "Bildfilter erlauben",
-	"use_collage": "Foto-Collage erlauben"
+	"use_collage": "Foto-Collage erlauben",
+	"print_frame": "Rahmen auf Bild drucken"
 }
