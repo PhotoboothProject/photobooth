@@ -20,6 +20,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - LivePreview can be enabled/disabled (uses device cam).
   - Wedding specifig config to show a heart betweeen two names on the startpage.
   - Green screen keying can be enabled/disabled (chroma keying).
+  - Photo collage function: take 4 pictures in a row and let it generate a collage out of it.
 
 ### Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
@@ -204,4 +205,5 @@ sudo crontab -e
 - Martin Kaiser-Kaplaner
 - [MoJou90](https://github.com/MoJou90)
 - [Reinhard Reberning](https://www.reinhard-rebernig.at/website/websites/fotokasterl)
-- Steffen Musch
+- [Steffen Musch](https://github.com/Nie-Oh)
+- [flighter18](https://github.com/flighter18)
