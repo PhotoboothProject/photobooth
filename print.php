@@ -43,6 +43,21 @@ if(!file_exists($filename_source)) {
 
             $source = imagecreatefromjpeg($filename_source);
             $code = imagecreatefrompng($filename_codes);
+
+            if($config['print_frame'] == true) {
+                $print = imagecreatefromjpeg($filename_source);
+                $rahmen = @imagecreatefrompng('resources/img/frames/frame.png');
+                $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
+                $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
+                $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
+                imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+                imagejpeg($print, $filename_print);
+                imagedestroy($print);
+                // $source needs to be redefined, picture with frame now exists inside $filename_print
+                imagedestroy($source);
+                $source = imagecreatefromjpeg($filename_print);
+            }
+
             $print = imagecreatetruecolor($newwidth, $newheight);
 
             imagefill($print, 0, 0, imagecolorallocate($print, 255, 255, 255));

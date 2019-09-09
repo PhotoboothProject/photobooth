@@ -11,7 +11,7 @@ $config['dev'] = false;
 $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['print_qrcode'] = true;
-$config['print_frame'] = false; // only works if $config['print_qrcode'] = false;
+$config['print_frame'] = false;
 $config['use_mail'] = false; // mail data needs to be configured
 $config['use_mobile_view'] = false;
 $config['use_gpio_button'] = false; // Use alt+p to take a new picture, can be triggered via GPIO24
