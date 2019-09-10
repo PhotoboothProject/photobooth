@@ -16,7 +16,8 @@ if (file_exists($my_config)) {
 				'options' => [
 					'de' => 'DE',
 					'fr' => 'FR',
-					'en' => 'EN'
+					'en' => 'EN',
+					'es' => 'ES'
 				],
 				'value' => $config['language']
 			],

@@ -14,7 +14,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - You can hide the gallery.
   - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```my.config.inc.php```).
   - Choose between md5format and dateformat images.
-  - You can switch between german, english and french language lables.
+  - You can switch between german, english, spanish and french language lables.
   - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
   - Print feature can be enabled/disabled.
     - Optional: Print a frame on your picture (replace resources/img/frames/frame.png with a proper frame).
@@ -91,7 +91,7 @@ Open the IP address of your raspberry pi in a browser
 Use the copy named ```my.config.inc.php``` to make config changes for personal use to prevent sharing personal data on Github by accident.
 
 #### Change Labels
-There are three label files in the lang folder, one for de (german), one for en (english) and one for fr (french). You can change the language inside ```my.config.inc.php``` or via Admin Page.
+There are three label files in the lang folder, one for de (german), one for es (spanish), one for en (english) and one for fr (french). You can change the language inside ```my.config.inc.php``` or via Admin Page.
 
 #### Keep pictures on Camera
 Add ```--keep``` option for gphoto2 in ```my.config.inc.php```:
@@ -209,3 +209,4 @@ sudo crontab -e
 - [Reinhard Reberning](https://www.reinhard-rebernig.at/website/websites/fotokasterl)
 - [Steffen Musch](https://github.com/Nie-Oh)
 - [flighter18](https://github.com/flighter18)
+- [thymon13](https://github.com/thymon13)
