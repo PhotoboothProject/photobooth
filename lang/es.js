@@ -86,5 +86,15 @@ L10N = {
 	"selectFilter": "Tratamiento de imagen",
 	"use_filter": "Autorice el tratamiento de imagen",
 	"use_collage": "Autorice la función collage",
-	"print_frame": "Imprimir el borde en la foto"
+	"print_frame": "Imprimir el borde en la foto",
+	"textonprint": "Texto que imprimir",
+	"is_textonprint": "Imprimir un texto en una foto",
+	"textonprint_line1": "Texto para la línea 1",
+	"textonprint_line2": "Texto para la línea 2",
+	"textonprint_line3": "Texto para la línea 3",
+	"textonprint_locationx": "Coordenadas X",
+	"textonprint_locationy": "Coordenadas Y",
+	"textonprint_rotation": "Rotación del texto",
+	"textonprint_linespace": "Interlineado",
+	"textonprint_fontsize": "Tamaño de la fuente"
 }

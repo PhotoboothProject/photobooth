@@ -86,5 +86,15 @@ L10N = {
 	"selectFilter": "Filtre d'image",
 	"use_filter": "Autorisez le filtre d'image",
 	"use_collage": "Autorisez la fonction du montage photo",
-	"print_frame": "Imprimez le contour sur la photo"
+	"print_frame": "Imprimez le contour sur la photo",
+	"textonprint": "Texte à imprimer",
+	"is_textonprint": "Imprimez un texte sur la photo",
+	"textonprint_line1": "Texte sur la première ligne",
+	"textonprint_line2": "Texte sur la seconde ligne",
+	"textonprint_line3": "Texte sur la troisième ligne",
+	"textonprint_locationx": "Coordonnée X",
+	"textonprint_locationy": "Coordonnée Y",
+	"textonprint_rotation": "Rotation du texte",
+	"textonprint_linespace": "Interligne",
+	"textonprint_fontsize":  "Taille de la police"
 }

@@ -87,5 +87,15 @@ L10N = {
 	"use_filter": "Allow image filter",
 	"use_collage": "Allow photo collage",
 	"use_collage": "Allow collage photo",
-	"print_frame": "Print frame on picture"
+	"print_frame": "Print frame on picture",
+	"textonprint": "Text for printouts",
+	"is_textonprint": "Print text on image",
+	"textonprint_line1": "Text for line 1",
+	"textonprint_line2": "Text for line 2",
+	"textonprint_line3": "Text for line 3",
+	"textonprint_locationx": "X Coordinate",
+	"textonprint_locationy": "Y Coordinate",
+	"textonprint_rotation": "Text rotation",
+	"textonprint_linespace": "Line spacing",
+	"textonprint_fontsize": "Font size"
 }

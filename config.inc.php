@@ -55,6 +55,17 @@ $config['scrollbar'] = false;
 $config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 
+// TEXT ON PRINT
+$config['is_textonprint'] = false;
+$config['textonprint']['line1'] = 'line 1';
+$config['textonprint']['line2'] = 'line 2';
+$config['textonprint']['line3'] = 'line 3';
+$config['locationx'] = '2250';
+$config['locationy'] = '1050';
+$config['rotation'] = '40';
+$config['fontsize'] = '100';
+$config['linespace'] = '100';
+
 // EMAIL
 // If connection fails some help can be found here: https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
 // Especially gmail needs some special config

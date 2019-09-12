@@ -86,5 +86,15 @@ L10N = {
 	"selectFilter": "Bildfilter",
 	"use_filter": "Bildfilter erlauben",
 	"use_collage": "Foto-Collage erlauben",
-	"print_frame": "Rahmen auf Bild drucken"
+	"print_frame": "Rahmen auf Bild drucken",
+	"textonprint": "Text für Ausdrucke",
+	"is_textonprint": "Text auf das Bild drucken",
+	"textonprint_line1": "Text für Zeile 1",
+	"textonprint_line2": "Text für Zeile 2",
+	"textonprint_line3": "Text für Zeile 3",
+	"textonprint_locationx": "X-Koordinaten",
+	"textonprint_locationy": "Y-Koordinaten",
+	"textonprint_rotation": "Text-Rotation",
+	"textonprint_linespace": "Zeilenabstand",
+	"textonprint_fontsize": "Schriftgröße"
 }

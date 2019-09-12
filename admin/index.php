@@ -186,6 +186,63 @@ if (file_exists($my_config)) {
 				'value' => $config['wedding']['symbol']
 			]
 		],
+		// text print start
+		'textonprint' => [
+			'is_textonprint' => [
+				'type' => 'checkbox',
+				'name' => 'is_textonprint',
+				'value' => $config['is_textonprint']
+			],
+			'line1' => [
+				'type' => 'input',
+				'placeholder' => 'line 1',
+				'name' => 'textonprint[line1]',
+				'value' => $config['textonprint']['line1']
+			],
+			'line2' => [
+				'type' => 'input',
+				'placeholder' => 'line 2',
+				'name' => 'textonprint[line2]',
+				'value' => $config['textonprint']['line2']
+			],
+			'line3' => [
+				'type' => 'input',
+				'placeholder' => 'line 3',
+				'name' => 'textonprint[line3]',
+				'value' => $config['textonprint']['line3']
+			],
+			'locationx' => [
+				'type' => 'input',
+				'placeholder' => '2250',
+				'name' => 'locationx',
+				'value' => $config['locationx']
+			],
+			'locationy' => [
+				'type' => 'input',
+				'placeholder' => '1050',
+				'name' => 'locationy',
+				'value' => $config['locationy']
+			],
+			'rotation' => [
+				'type' => 'input',
+				'placeholder' => '40',
+				'name' => 'rotation',
+				'value' => $config['rotation']
+			],
+			'fontsize' => [
+				'type' => 'input',
+				'placeholder' => '100',
+				'name' => 'fontsize',
+				'value' => $config['fontsize']
+			],
+			'linespace' => [
+				'type' => 'input',
+				'placeholder' => '100',
+				'name' => 'linespace',
+				'value' => $config['linespace']
+			],
+		],
+		// text print end
 		'gallery' => [
 			'show_gallery' => [
 				'type' => 'checkbox',
