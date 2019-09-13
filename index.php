@@ -24,8 +24,13 @@ require_once('db.php');
 	<link rel="icon" type="image/png" sizes="16x16" href="/resources/img/favicon-16x16.png">
 	<link rel="manifest" href="/resources/img/site.webmanifest">
 	<link rel="mask-icon" href="/resources/img/safari-pinned-tab.svg" color="#5bbad5">
-	<meta name="msapplication-TileColor" content="#da532c">
-	<meta name="theme-color" content="#ffffff">
+	<?php if($config['bluegray_theme']) { ?>
+		<meta name="msapplication-TileColor" content="ff4f58">
+		<meta name="theme-color" content="#669db3">
+	<?php } else { ?>
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">
+	<?php }; ?>
 
 	<!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -36,6 +41,7 @@ require_once('db.php');
 	<link rel="stylesheet" href="/resources/css/photoswipe.css">
 	<link rel="stylesheet" href="/resources/css/default-skin/default-skin.css">
 	<link rel="stylesheet" href="/resources/css/style.css" />
+	<?php if($config['bluegray_theme']){ ?><link rel="stylesheet" href="/resources/css/bluegray.css" /><?php } ?>
 	<script type="text/javascript">
 		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
 		var useVideo = <?php echo ($config['previewFromCam']) ? 'true' : 'false'; ?>;

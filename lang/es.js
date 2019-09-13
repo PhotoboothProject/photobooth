@@ -96,5 +96,7 @@ L10N = {
 	"textonprint_locationy": "Coordenadas Y",
 	"textonprint_rotation": "Rotación del texto",
 	"textonprint_linespace": "Interlineado",
-	"textonprint_fontsize": "Tamaño de la fuente"
+	"textonprint_fontsize": "Tamaño de la fuente",
+	"user_interface": "Interfaz de usuario",
+	"bluegray_theme": "Tema azul-gris"
 }

@@ -116,6 +116,13 @@ if (file_exists($my_config)) {
 				'value' => $config['previewFromCam']
 			]
 		],
+		'user_interface' => [
+			'bluegray_theme' => [
+				'type' => 'checkbox',
+				'name' => 'bluegray_theme',
+				'value' => $config['bluegray_theme']
+			]
+		],
 		'folders' => [
 			'images' => [
 				'type' => 'input',
@@ -373,14 +380,20 @@ if (file_exists($my_config)) {
 	<link rel="icon" type="image/png" sizes="16x16" href="/resources/img/favicon-16x16.png">
 	<link rel="manifest" href="/resources/img/site.webmanifest">
 	<link rel="mask-icon" href="/resources/img/safari-pinned-tab.svg" color="#5bbad5">
-	<meta name="msapplication-TileColor" content="#da532c">
-	<meta name="theme-color" content="#ffffff">
+	<?php if($config['bluegray_theme']) { ?>
+		<meta name="msapplication-TileColor" content="ff4f58">
+		<meta name="theme-color" content="#669db3">
+	<?php } else { ?>
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">
+	<?php }; ?>
 
 	<link rel="stylesheet" type="text/css" href="/resources/css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="/resources/css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="/resources/css/default-skin/default-skin.css">
 	<link rel="stylesheet" type="text/css" href="/resources/css/style.css" />
 	<link rel="stylesheet" href="/resources/css/admin.css" />
+	<?php if($config['bluegray_theme']){ ?><link rel="stylesheet" href="/resources/css/bluegray_admin.css" /><?php } ?>
 	<script type="text/javascript">
 		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
 		var gallery_newest_first = <?php echo ($config['newest_first']) ? 'true' : 'false'; ?>;

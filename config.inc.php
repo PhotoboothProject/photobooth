@@ -23,6 +23,7 @@ $config['cheese_time'] = '1000'; // control time for cheeeeese!
 $config['use_filter'] = true;
 $config['chroma_keying'] = true;
 $config['use_collage'] = false;
+$config['bluegray_theme'] = false;
 
 // LANGUAGE
 // possible values: en, de, es, fr

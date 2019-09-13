@@ -1,0 +1,42 @@
+body {
+  background: url(../img/bg_bluegray.jpg) center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.admin-panel {
+  background: #f0f6f7;
+}
+
+.panel .panel-heading:hover {
+  background: #669db3;
+}
+
+.save-btn,
+.reset-btn {
+  background: #669db3;
+}
+.save-btn:hover {
+  background: #2e535e;
+}
+
+.reset-btn {
+  background: #669db3;
+}
+
+.back-to-pb {
+  color: #f0f6f7;
+  background-color: #669db3;
+}
+
+.reset-btn:hover {
+  background: #2e535e;
+}
+
+.back-to-pb:hover {
+  background: #2e535e;
+}
+
+.reset-btn:hover {
+  background: #ff4f58;
+}
