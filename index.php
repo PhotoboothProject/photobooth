@@ -150,7 +150,7 @@ require_once('db.php');
 						echo '<h1 style="text-align:center" data-l10n="gallery_no_image"></h1>';
 					} else {
 						foreach($imagelist as $image) {
-							$date;
+							$date = false;
 							if ($config['file_format_date'] == true && $config['show_date'] == true) {
 								$date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
 							}
