@@ -68,20 +68,10 @@ if (file_exists($my_config)) {
 				'name' => 'use_mail',
 				'value' => $config['use_mail']
 			],
-			'use_mobile_view' => [
-				'type' => 'checkbox',
-				'name' => 'use_mobile_view',
-				'value' => $config['use_mobile_view']
-			],
 			'use_gpio_button' => [
 				'type' => 'checkbox',
 				'name' => 'use_gpio_button',
 				'value' => $config['use_gpio_button']
-			],
-			'show_fork' => [
-				'type' => 'checkbox',
-				'name' => 'show_fork',
-				'value' => $config['show_fork']
 			],
 			'cntdwn_time' => [
 				'type' => 'input',
@@ -117,10 +107,20 @@ if (file_exists($my_config)) {
 			]
 		],
 		'user_interface' => [
+			'show_fork' => [
+				'type' => 'checkbox',
+				'name' => 'show_fork',
+				'value' => $config['show_fork']
+			],
 			'bluegray_theme' => [
 				'type' => 'checkbox',
 				'name' => 'bluegray_theme',
 				'value' => $config['bluegray_theme']
+			],
+			'use_mobile_view' => [
+				'type' => 'checkbox',
+				'name' => 'use_mobile_view',
+				'value' => $config['use_mobile_view']
 			]
 		],
 		'folders' => [
