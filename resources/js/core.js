@@ -444,7 +444,7 @@ var photoBooth = (function () {
                 }
                 setTimeout(function () {
                     document.getElementById("print_mesg").style.display = "none";
-                    window.location = window.location.origin;
+                    pswp.close();
                 },5000);
             });
         },1000);
