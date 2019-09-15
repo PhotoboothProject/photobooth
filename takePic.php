@@ -133,18 +133,18 @@ if($_POST['style'] === 'photo') {
 	list($width, $height) = getimagesize($collagePhoto[0]);
 	$my_collage_height = $height * 2;
 	$my_collage_width = $width * 2;
-	$my_collage = imagecreatetruecolor($my_collage_width,$my_collage_height)
+	$my_collage = imagecreatetruecolor($my_collage_width, $my_collage_height)
 			or die("Kann keinen neuen GD-Bild-Stream erzeugen");
-	$background = imagecolorallocate( $my_collage, 0, 0, 0);
+	$background = imagecolorallocate($my_collage, 0, 0, 0);
 	imagecolortransparent($my_collage, $background);
 	$collage_pic1 = imagecreatefromjpeg($collagePhoto[0]) or die("no imagcreate");
-	imagecopy($my_collage, $collage_pic1,0,0,0,0,$width,$height);
+	imagecopy($my_collage, $collage_pic1, 0, 0, 0, 0, $width, $height);
 	$collage_pic2 = imagecreatefromjpeg($collagePhoto[1]) or die("no imagcreate");
-	imagecopy ($my_collage, $collage_pic2,$width,0,0,0,$width,$height);
+	imagecopy($my_collage, $collage_pic2, $width, 0, 0, 0, $width, $height);
 	$collage_pic3 = imagecreatefromjpeg($collagePhoto[2]) or die("no imagcreate");
-	imagecopy ($my_collage, $collage_pic3,0,$height,0,0,$width,$height);
+	imagecopy($my_collage, $collage_pic3, 0, $height, 0, 0, $width, $height);
 	$collage_pic4 = imagecreatefromjpeg($collagePhoto[3]) or die("no imagcreate");
-	imagecopy ($my_collage, $collage_pic4,$width,$height,0,0,$width,$height);
+	imagecopy($my_collage, $collage_pic4, $width, $height, 0, 0, $width, $height);
 
 	if($use_filter == true) {
 		imagejpeg($my_collage, $filename_orig);
