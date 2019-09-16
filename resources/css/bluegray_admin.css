@@ -16,12 +16,13 @@ body {
 .reset-btn {
   background: #669db3;
 }
+
 .save-btn:hover {
   background: #2e535e;
 }
 
-.reset-btn {
-  background: #669db3;
+.reset-btn:hover {
+  background: #ff4f58;
 }
 
 .back-to-pb {
@@ -29,14 +30,6 @@ body {
   background-color: #669db3;
 }
 
-.reset-btn:hover {
-  background: #2e535e;
-}
-
 .back-to-pb:hover {
   background: #2e535e;
-}
-
-.reset-btn:hover {
-  background: #ff4f58;
 }
