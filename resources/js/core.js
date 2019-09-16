@@ -176,10 +176,20 @@ var photoBooth = (function () {
         $(document).off('click touchstart', '.printbtn');
         $(document).on('click', '.printbtn', function (e) {
             e.preventDefault();
-            $.ajax({
-                url: 'print.php?filename=' + encodeURI(result.img),
-            }).done(function (data) {
-            })
+            document.getElementById("print_mesg").style.display = "block";
+            setTimeout(function () {
+                $.ajax({
+                    url: 'print.php?filename=' + encodeURI(result.img),
+                }).done(function (data) {
+                    if (isdev) {
+                        console.log(data)
+                    }
+                    setTimeout(function () {
+                        document.getElementById("print_mesg").style.display = "none";
+                        window.location = window.location.origin;
+                    },5000);
+                })
+            },1000);
         });
 
         // Add Image to gallery and slider
@@ -424,10 +434,20 @@ var photoBooth = (function () {
         e.preventDefault();
         var img = pswp.currItem.src;
         img = img.replace(imgFolder+'/', '');
-        $.ajax({
-            url: 'print.php?filename=' + encodeURI(img),
-        }).done(function (data) {
-        })
+        document.getElementById("print_mesg").style.display = "block";
+        setTimeout(function () {
+            $.ajax({
+                url: 'print.php?filename=' + encodeURI(img),
+            }).done(function (data) {
+                if (isdev) {
+                    console.log(data)
+                }
+                setTimeout(function () {
+                    document.getElementById("print_mesg").style.display = "none";
+                    window.location = window.location.origin;
+                },5000);
+            });
+        },1000);
     });
 
     // chroma keying print

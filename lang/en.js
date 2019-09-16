@@ -20,6 +20,7 @@ L10N = {
 	"error": "Something went wrong. Please try it again",
 	"reload": "Reload Page",
 	"print": "Print",
+	"printing": "Started printing! Please wait...",
 	"save":"Save",
 	"saving":"Saving",
 	"success":"Saved successful",

@@ -20,6 +20,7 @@ L10N = {
 	"error": "Es ist ein Fehler aufgetreten, bitte versuche es erneut!",
 	"reload": "Seite neu laden",
 	"print": "Drucken",
+	"printing": "Druckauftrag gestartet! Bitte warten...",
 	"save":"Speichern",
 	"saving":"Speichert ...",
 	"success":"Erfolgreich gespeichert!",
