@@ -18,10 +18,12 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
   - Print feature can be enabled/disabled.
     - Optional: Print a frame on your picture (replace resources/img/frames/frame.png with a proper frame).
+    - Optional: Print text on your picture.
   - LivePreview can be enabled/disabled (uses device cam).
   - Wedding specifig config to show a heart betweeen two names on the startpage.
   - Green screen keying can be enabled/disabled (chroma keying).
   - Photo collage function: take 4 pictures in a row and let it generate a collage out of it.
+  - Blue-gray theme can be enabled.
 
 ### Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
@@ -168,6 +170,7 @@ sudo crontab -e
 ```
 
 ### Changelog
+- 1.8.2: Added spanish as supported language, print text on picture feature, optional blue-gray theme, adjust admin panel. Small bugfixes and improvements as always.
 - 1.8.1: Small bugfixes and improvements. New Features: enable/disable printing QR-Code, enable/disable photo collage function, enable/disable printing a frame on your picture
 - 1.8.0: Update jQuery, GSAP and PhotoSwipe to latest versions, add chroma keying feature (green screen keying)
 - 1.7.0: Add possibillity to choose an image filter before taking a picture
@@ -210,3 +213,4 @@ sudo crontab -e
 - [Steffen Musch](https://github.com/Nie-Oh)
 - [flighter18](https://github.com/flighter18)
 - [thymon13](https://github.com/thymon13)
+- [vdubuk](https://github.com/vdubuk)
