@@ -86,6 +86,8 @@ L10N = {
 	"symbol": "Sélectionnez le symbole",
 	"selectFilter": "Filtre d'image",
 	"use_filter": "Autorisez le filtre d'image",
+	"polaroid_effect": "Effet Polaroid",
+	"general_polaroid_rotation" : "Rotation de la photo polaroid",
 	"use_collage": "Autorisez la fonction du montage photo",
 	"print_frame": "Imprimez le contour sur la photo",
 	"textonprint": "Texte à imprimer",

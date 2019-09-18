@@ -22,13 +22,14 @@ $filename_tmp = $config['folders']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
 
-if($_POST['style'] === 'photo') {
+if(($_POST['style'] === 'photo') && ($config['polaroid_effect'] === false)) {
 	$filename_orig = $filename_photo;
 	$use_filter = false;
 } else {
 	$filename_orig = $filename_tmp;
 	$use_filter = false;
 }
+
 if(!empty($_POST) && !($_POST['filter'] === 'imgPlain')) {
 	$filename_orig = $filename_tmp;
 	$use_filter = true;
@@ -265,6 +266,17 @@ if($use_filter == true) {
 	imagedestroy($tmp);
 }
 
+if($config['polaroid_effect'] == true) {
+	if($_POST['style'] === 'photo') {
+		$tmp = imagecreatefromjpeg($filename_orig);
+		imagejpeg($tmp, $filename_photo);
+	}
+	$polaroidrotation = $config['polaroid_rotation'];
+	$polaroid = effectPolaroid($filename_photo, $polaroidrotation, 200, 200, 200);
+	imagejpeg($polaroid, $filename_photo);
+	imagedestroy($polaroid);
+}
+
 if($config['chroma_keying'] == true) {
 	$source = imagecreatefromjpeg($filename_photo);
 	$source = ResizeJpgImage($source, 1500, 1000);
@@ -300,5 +312,62 @@ function ResizeJpgImage($image, $max_width, $max_height)
 	$new = imagecreatetruecolor($new_width, $new_height);
 	imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
 	return $new;
+}
+
+/**
+ * Function to apply the polaroid effect to an image.
+ *
+ * @param string $path Image path
+ * @param float $rotation Image rotation angle
+ * @param int $rbcc red background color component
+ * @param int $gbcc green background color component
+ * @param int $bbcc blue background color component
+ * @return resource image with the polaroid effect applied
+ */
+function effectPolaroid($path, $rotation, $rbcc, $gbcc, $bbcc)
+{
+	// We load the image to which we want to apply the polaroid effect
+	$imgBase = imagecreatefromjpeg($path);
+
+	// We create a new image
+	$img = imagecreatetruecolor(imagesx($imgBase) + 25, imagesy($imgBase) + 80);
+	$white = imagecolorallocate($img, 255, 255, 255);
+
+	// We fill in the new white image
+	imagefill($img, 0,0, $white);
+
+	// We copy the image to which we want to apply the polariod effect in our new image.
+	imagecopy($img, $imgBase, 11, 11, 0, 0, imagesx($imgBase), imagesy($imgBase));
+
+	// Clear cach
+	imagedestroy($imgBase);
+
+	// Border color
+	$color = imagecolorallocate($img, 192, 192, 192);
+	// We put a gray border to our image.
+	imagerectangle($img, 0,0, imagesx($img)-4, imagesy($img)-4, $color);
+
+	// Shade Colors
+	$gris1 = imagecolorallocate($img, 208, 208, 208);
+	$gris2 = imagecolorallocate($img, 224, 224, 224);
+	$gris3 = imagecolorallocate($img, 240, 240, 240);
+
+	// We add a small shadow
+	imageline($img, 2, imagesy($img)-3, imagesx($img)-1, imagesy($img)-3, $gris1);
+	imageline($img, 4, imagesy($img)-2, imagesx($img)-1, imagesy($img)-2, $gris2);
+	imageline($img, 6, imagesy($img)-1, imagesx($img)-1, imagesy($img)-1, $gris3);
+	imageline($img, imagesx($img)-3, 2, imagesx($img)-3, imagesy($img)-4, $gris1);
+	imageline($img, imagesx($img)-2, 4, imagesx($img)-2, imagesy($img)-4, $gris2);
+	imageline($img, imagesx($img)-1, 6, imagesx($img)-1, imagesy($img)-4, $gris3);
+
+	// We rotate the image
+	$background = imagecolorallocate($img, $rbcc, $gbcc, $bbcc);
+	$rotatedImg = imagerotate($img, $rotation, $background);
+
+	// We destroy the image we have been working with
+	imagedestroy($img);
+
+	// We return the rotated image
+	return $rotatedImg;
 }
 ?>

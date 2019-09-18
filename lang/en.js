@@ -86,6 +86,8 @@ L10N = {
 	"symbol": "Choose a symbol",
 	"selectFilter": "Image filter",
 	"use_filter": "Allow image filter",
+	"polaroid_effect": "Polaroid effect",
+	"general_polaroid_rotation" : "Polaroid picture rotation",
 	"use_collage": "Allow photo collage",
 	"print_frame": "Print frame on picture",
 	"textonprint": "Text for printouts",

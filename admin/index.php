@@ -90,6 +90,17 @@ if (file_exists($my_config)) {
 				'name' => 'use_filter',
 				'value' => $config['use_filter']
 			],
+			'polaroid_effect' => [
+				'type' => 'checkbox',
+				'name' => 'polaroid_effect',
+				'value' => $config['polaroid_effect']
+			],
+			'polaroid_rotation' => [
+				'type' => 'input',
+				'placeholder' => '0',
+				'name' => 'polaroid_rotation',
+				'value' => $config['polaroid_rotation']
+			],
 			'chroma_keying' => [
 				'type' => 'checkbox',
 				'name' => 'chroma_keying',

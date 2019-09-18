@@ -86,6 +86,8 @@ L10N = {
 	"symbol": "Seleccione el símbolo",
 	"selectFilter": "Tratamiento de imagen",
 	"use_filter": "Autorice el tratamiento de imagen",
+	"polaroid_effect": "Efecto polaroid",
+	"general_polaroid_rotation" : "Rotación de imagen polaroid",
 	"use_collage": "Autorice la función collage",
 	"print_frame": "Imprimir el borde en la foto",
 	"textonprint": "Texto que imprimir",
