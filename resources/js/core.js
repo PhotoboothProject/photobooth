@@ -12,7 +12,7 @@ var photoBooth = (function () {
         timeOut,
         saving = false,
         gallery = $('#gallery'),
-        galleryScrollbar = gallery_scrollbar,
+        showScrollbarsInGallery = gallery_scrollbar,
         processing = false,
         pswp = {},
         resultPage = $('#result'),
@@ -26,7 +26,6 @@ var photoBooth = (function () {
                 facingMode: "user",
             }
         };
-        showScrollbarsInGallery = galleryScrollbar;
 
     // timeOut function
     public.resetTimeOut = function () {
@@ -246,7 +245,7 @@ var photoBooth = (function () {
         var pos = elem.offset();
         if(showScrollbarsInGallery) {
             $('.galHeader').css({
-                'right': '40px',
+                'right': '20px',
                 'width': 'auto'
             });
         }
