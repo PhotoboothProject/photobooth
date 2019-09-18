@@ -87,7 +87,6 @@ L10N = {
 	"selectFilter": "Image filter",
 	"use_filter": "Allow image filter",
 	"use_collage": "Allow photo collage",
-	"use_collage": "Allow collage photo",
 	"print_frame": "Print frame on picture",
 	"textonprint": "Text for printouts",
 	"is_textonprint": "Print text on image",
