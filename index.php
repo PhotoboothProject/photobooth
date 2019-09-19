@@ -272,6 +272,11 @@ require_once('db.php');
 		<div id="print_mesg_text"><span data-l10n="printing"></span></div>
 	</div>
 
+	<div id="adminsettings" >
+		<div style="position:absolute; bottom:0; right:0;"><img src="/resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()"></div>
+	</div>
+
+	<script type="text/javascript" src="/resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="/resources/js/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="/resources/js/TweenLite.min.js"></script>
