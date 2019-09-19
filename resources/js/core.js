@@ -118,12 +118,12 @@ var photoBooth = (function () {
         if (isdev) {
             console.log('Take Picture:' + photoStyle);
         }
+        if(useVideo){
+            var track = public.stream.getTracks()[0];
+            track.stop();
+            $('video').hide();
+        }
         setTimeout(function () {
-            if(useVideo){
-                var track = public.stream.getTracks()[0];
-                track.stop();
-                $('video').hide();
-            }
 	    if ((photoStyle=='photo')){
                 $('#counter').text('');
                 $('.spinner').show();
