@@ -1,0 +1,17 @@
+body {
+  overflow: auto;
+  background: url(../img/bg_bluegray.jpg) center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.btn {
+  background: #669db3;
+  color: #f0f6f7;
+}
+
+.btn:active,
+.btn:focus,
+.btn:hover {
+  background: #2e535e;
+}

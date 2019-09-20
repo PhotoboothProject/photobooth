@@ -21,8 +21,9 @@ if (file_exists($keyingimage)) {
 <html>
 <head>
 <link rel="stylesheet" href="/resources/css/normalize.css" />
-<link rel="stylesheet" href="/resources/css/default-skin/default-skin.css">
+<link rel="stylesheet" href="/resources/css/default-skin/default-skin.css" />
 <link rel="stylesheet" href="/resources/css/chromakeying.css" />
+<?php if($config['bluegray_theme']){ ?><link rel="stylesheet" href="/resources/css/bluegray_chromakeying.css" /><?php } ?>
 <script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="/resources/js/marvinj-0.8.js"></script>
 <script type="text/javascript" src="/resources/js/chromakeying.js"></script>
