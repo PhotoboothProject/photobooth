@@ -59,7 +59,7 @@ function navigateToMain() {
 
 	<div style="padding-top:10px;text-align:center;">
 		<button class="btn" style="width:150px;height:50px;font-size:20px;cursor:pointer;" onclick="saveImage()"><span data-l10n="save"></span></button>
-		<button class="btn" style="width:150px;height:50px;font-size:20px;cursor:pointer;" onclick="printImage()"><span data-l10n="print"></span></button>
+		<?php if($config['use_print']){ echo '<button class="btn" style="width:150px;height:50px;font-size:20px;cursor:pointer;" onclick="printImage()"><span data-l10n="print"></span></button>'; } ?>
 		<button class="btn" style="width:150px;height:50px;font-size:20px;cursor:pointer;" onclick="navigateToMain()"><span data-l10n="close"></span></button>
 	</div>
 <?php } else { ?>
