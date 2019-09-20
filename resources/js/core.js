@@ -455,12 +455,12 @@ var photoBooth = (function () {
         e.preventDefault();
         var img = pswp.currItem.src;
         img = img.replace(imgFolder+'/', '');
-        $.post( "chroma_keying/lib_php/info.php", function( info ) {
+        $.post( "chromakeying_info.php", function( info ) {
             if (info.chroma_keying == true) {
                 var currentHref = $(location).attr('href').split('#')[0];;
                 var encodedString = btoa(currentHref);
                 //var decodedString = atob(encodedString);
-                $(location).attr('href','chroma_keying/index.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString));
+                $(location).attr('href','chromakeying.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString));
             }
         }, "json");
     });

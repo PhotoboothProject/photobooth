@@ -1,20 +1,20 @@
 <?php
-$my_config = '../my.config.inc.php';
+$my_config = 'my.config.inc.php';
 if (file_exists($my_config)) {
-	require_once('../my.config.inc.php');
+	require_once('my.config.inc.php');
 } else {
-	require_once('../config.inc.php');
+	require_once('config.inc.php');
 }
 
 $location = base64_decode($_GET['location']);
 $filename = $_GET['filename'];
-$keyingimage = '../'.$config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
 if (file_exists($keyingimage)) {
 	$mainimage = $keyingimage;
 	$keying_possible = true;
 } else {
 	$keying_possible = false;
-	$mainimage = '../resources/img/bg.jpg';
+	$mainimage = 'resources/img/bg.jpg';
 }
 ?>
 <!doctype html>
@@ -48,10 +48,10 @@ function navigateToMain() {
 
 	<div style="padding-top:10px;text-align:center;">
 		<?php
-			$cdir = scandir("background");
+			$cdir = scandir("chroma_keying/background");
 			foreach ($cdir as $key => $value) {
 				if (!in_array($value, array(".","..")) && !is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
-					echo '<img src="background/'.$value.'" style="cursor:pointer;max-width:120px;border:2px solid black;margin:3px;" onclick="setBackgroundImage(this.src)">';
+					echo '<img src="chroma_keying/background/'.$value.'" style="cursor:pointer;max-width:120px;border:2px solid black;margin:3px;" onclick="setBackgroundImage(this.src)">';
 				}
 			}
 		?>

@@ -134,7 +134,7 @@ function printImage() {
 	var dataURL = canvas.toDataURL("image/png");
 	document.getElementById("print_mesg").style.display = "block";
 	setTimeout(function () {
-		$.post( "lib_php/print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( status ) {
+		$.post( "chromakeying_print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( status ) {
 			setTimeout(function () {
 				document.getElementById("print_mesg").style.display = "none";
 				window.location = window.location.origin;
@@ -151,7 +151,7 @@ function saveImage() {
 	var dataURL = canvas.toDataURL("image/png");
 	document.getElementById("save_mesg").style.display = "block";
 	setTimeout(function () {
-		$.post( "lib_php/save.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( url ) {
+		$.post( "chromakeying_save.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( url ) {
 			setTimeout(function () {
 				document.getElementById("save_mesg").style.display = "none";
 			},2000);

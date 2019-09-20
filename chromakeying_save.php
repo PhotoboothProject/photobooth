@@ -1,9 +1,9 @@
 <?php
-$my_config = '../../my.config.inc.php';
+$my_config = 'my.config.inc.php';
 if (file_exists($my_config)) {
-	require_once('../../my.config.inc.php');
+	require_once('my.config.inc.php');
 } else {
-	require_once('../../config.inc.php');
+	require_once('config.inc.php');
 }
 
 if($config['file_format_date'] == true) {
@@ -13,14 +13,14 @@ if($config['file_format_date'] == true) {
 }
 
 $uniqid = uniqid();
-$filename_photo = '../../'.$config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
-$filename_thumb = '../../'.$config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
+$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
 // get data from data.txt
-if(!file_exists('../../data.txt')){
-	file_put_contents('../../data.txt', json_encode(array()));
+if(!file_exists('data.txt')){
+	file_put_contents('data.txt', json_encode(array()));
 }
-$images = json_decode(file_get_contents('../../data.txt'));
+$images = json_decode(file_get_contents('data.txt'));
 
 
 $img = $_POST['imgData'];
@@ -49,7 +49,7 @@ function ResizeJpgImage($image, $max_width, $max_height)
 
 // insert into database
 $images[] = $file;
-file_put_contents('../../data.txt', json_encode($images));
+file_put_contents('data.txt', json_encode($images));
 
 // send imagename to frontend
 echo json_encode(array('success' => true, 'img' => $file));
