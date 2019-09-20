@@ -68,6 +68,12 @@ function navigateToMain() {
 		<button class="btn" onclick="navigateToMain()"><span data-l10n="close"></span></button>
 	</div>
 <?php } ?>
+	<div id="print_mesg">
+		<div id="print_mesg_text"><span data-l10n="printing"></span></div>
+	</div>
+	<div id="save_mesg">
+		<div id="save_mesg_text"><span data-l10n="saving"></span></div>
+	</div>
 </div>
 	<script type="text/javascript" src="/resources/js/l10n.js"></script>
 	<script type="text/javascript" src="/lang/<?php echo $config['language']; ?>.js"></script>

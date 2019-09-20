@@ -132,8 +132,15 @@ function printImage() {
 	}
 	var canvas = document.getElementById("mainCanvas");
 	var dataURL = canvas.toDataURL("image/png");
-	$.post( "lib_php/print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( status ) {
-	}, "json");
+	document.getElementById("print_mesg").style.display = "block";
+	setTimeout(function () {
+		$.post( "lib_php/print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( status ) {
+			setTimeout(function () {
+				document.getElementById("print_mesg").style.display = "none";
+				window.location = window.location.origin;
+			},5000);
+		}, "json");
+	},1000);
 }
 
 function saveImage() {
@@ -142,7 +149,12 @@ function saveImage() {
 	}
 	var canvas = document.getElementById("mainCanvas");
 	var dataURL = canvas.toDataURL("image/png");
-	$.post( "lib_php/save.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( url ) {
-
-	});
+	document.getElementById("save_mesg").style.display = "block";
+	setTimeout(function () {
+		$.post( "lib_php/save.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( url ) {
+			setTimeout(function () {
+				document.getElementById("save_mesg").style.display = "none";
+			},2000);
+		});
+	},1000);
 }
