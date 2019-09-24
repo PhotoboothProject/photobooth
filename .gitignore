@@ -14,7 +14,6 @@ package-lock.json
 .htpasswd
 config.json
 mail-addresses.txt
-resources/lib/PHPMailer
 my.config.inc.php
 *.patch
 tmp
