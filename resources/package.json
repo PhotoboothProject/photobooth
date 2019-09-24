@@ -4,12 +4,13 @@
   "description": "photobooth sass setup",
   "main": "index.js",
   "scripts": {
+    "build": "gulp sass",
+    "watch": "gulp sass:watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "GPL",
   "dependencies": {
-    "bower": "1.7.9",
     "gulp": "4.0.2",
     "gulp-sass": "4.0.2"
   }
