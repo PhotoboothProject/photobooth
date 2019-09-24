@@ -27,10 +27,14 @@ var photoBooth = (function () {
             }
         };
 
+    public.reloadPage = function () {
+        window.location.reload();
+    }
+
     // timeOut function
     public.resetTimeOut = function () {
         timeOut = setTimeout(function () {
-            window.location = window.location.origin;
+            public.reloadPage();
         }, timeToLive);
     }
 
@@ -159,7 +163,7 @@ var photoBooth = (function () {
     public.errorPic = function (result) {
         setTimeout(function () {
             $('.spinner').hide();
-            $('.loading').html(L10N.error + '<a class="btn" href="/">' + L10N.reload + '</a>');
+            $('.loading').html(L10N.error + '<a class="btn" href="./">' + L10N.reload + '</a>');
         }, 1100);
     }
 
@@ -186,7 +190,7 @@ var photoBooth = (function () {
                     }
                     setTimeout(function () {
                         document.getElementById("print_mesg").style.display = "none";
-                        window.location = window.location.origin;
+                        public.reloadPage();
                     },5000);
                 })
             },1000);
@@ -196,9 +200,9 @@ var photoBooth = (function () {
         public.addImage(result.img);
 
         // Add Image
-        $('<img src="/'+imgFolder+'/' + result.img + '" class="original">').on('load', function () {
+        $('<img src="'+imgFolder+'/' + result.img + '" class="original">').on('load', function () {
             $('#result').css({
-                'background-image': 'url(/'+imgFolder+'/' + result.img + ')'
+                'background-image': 'url('+imgFolder+'/' + result.img + ')'
             });
             startPage.fadeOut(400, function () {
                 resultPage.fadeIn(400, function () {
@@ -237,11 +241,11 @@ var photoBooth = (function () {
             if (--imgtoLoad == 0) {allLoaded();}
         }
 
-        bigImg.src = '/'+imgFolder+'/' + imageName;
-        thumbImg.src = '/'+thumbFolder+'/' + imageName;
+        bigImg.src = imgFolder+'/' + imageName;
+        thumbImg.src = thumbFolder+'/' + imageName;
 
         function allLoaded() {
-            var $node = $('<a>').html(thumbImg).data('size', bigSize).attr('href', '/'+imgFolder+'/' + imageName + '?new=1').attr('data-med', '/'+thumbFolder+'/' + imageName).attr('data-med-size', thumbSize);
+            var $node = $('<a>').html(thumbImg).data('size', bigSize).attr('href', imgFolder+'/' + imageName + '?new=1').attr('data-med', thumbFolder+'/' + imageName).attr('data-med-size', thumbSize);
             if (gallery_newest_first) {
                 $node.prependTo($('#galimages'));
             } else {
@@ -497,8 +501,8 @@ var photoBooth = (function () {
             img = resultPage.css("background-image").replace('url(','').replace(')','').replace(/\"/gi, "").split('/'+imgFolder+'/')[1];
         }
 
-        img = img.replace('/'+imgFolder+'/', '');
-        img = img.replace('/'+thumbFolder+'/', '');
+        img = img.replace(imgFolder+'/', '');
+        img = img.replace(thumbFolder+'/', '');
 
         $('#mail-form-image').val(img);
         var message = $('#mail-form-message');
@@ -574,7 +578,7 @@ var photoBooth = (function () {
 
         // Go to Home
         if (target.hasClass('homebtn') || target.closest('.homebtn').length > 0) {
-            window.location = window.location.origin;
+            public.reloadPage();
         }
 
         // Qr in and out

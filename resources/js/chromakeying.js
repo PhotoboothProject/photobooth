@@ -137,7 +137,7 @@ function printImage() {
 		$.post( "chromakeying_print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( status ) {
 			setTimeout(function () {
 				document.getElementById("print_mesg").style.display = "none";
-				window.location = window.location.origin;
+				window.location.reload();
 			},5000);
 		}, "json");
 	},1000);

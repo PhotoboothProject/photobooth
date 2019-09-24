@@ -19,11 +19,11 @@ require_once('db.php');
 
 
 	<!-- Favicon + Android/iPhone Icons -->
-	<link rel="apple-touch-icon" sizes="180x180" href="/resources/img/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/resources/img/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/resources/img/favicon-16x16.png">
-	<link rel="manifest" href="/resources/img/site.webmanifest">
-	<link rel="mask-icon" href="/resources/img/safari-pinned-tab.svg" color="#5bbad5">
+	<link rel="apple-touch-icon" sizes="180x180" href="resources/img/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="resources/img/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="resources/img/favicon-16x16.png">
+	<link rel="manifest" href="resources/img/site.webmanifest">
+	<link rel="mask-icon" href="resources/img/safari-pinned-tab.svg" color="#5bbad5">
 	<?php if($config['bluegray_theme']) { ?>
 		<meta name="msapplication-TileColor" content="ff4f58">
 		<meta name="theme-color" content="#669db3">
@@ -36,16 +36,16 @@ require_once('db.php');
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-	<link rel="stylesheet" href="/resources/css/normalize.css" />
-	<link rel="stylesheet" href="/resources/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="/resources/css/photoswipe.css">
-	<link rel="stylesheet" href="/resources/css/default-skin/default-skin.css">
-	<link rel="stylesheet" href="/resources/css/style.css" />
-	<?php if($config['bluegray_theme']){ ?><link rel="stylesheet" href="/resources/css/bluegray.css" /><?php } ?>
+	<link rel="stylesheet" href="resources/css/normalize.css" />
+	<link rel="stylesheet" href="resources/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="resources/css/photoswipe.css">
+	<link rel="stylesheet" href="resources/css/default-skin/default-skin.css">
+	<link rel="stylesheet" href="resources/css/style.css" />
+	<?php if($config['bluegray_theme']){ ?><link rel="stylesheet" href="resources/css/bluegray.css" /><?php } ?>
 	<?php if(($config['scrollbar']) && !($config['bluegray_theme'])) { ?>
-		<link rel="stylesheet" href="/resources/css/scrollbar.css" />
+		<link rel="stylesheet" href="resources/css/scrollbar.css" />
 	<?php } else { ?>
-		<link rel="stylesheet" href="/resources/css/bluegray_scrollbar.css" />
+		<link rel="stylesheet" href="resources/css/bluegray_scrollbar.css" />
 	<?php } ?>
 	<script type="text/javascript">
 		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
@@ -172,8 +172,8 @@ require_once('db.php');
 							$imageinfo = getimagesize($filename_photo);
 							$imageinfoThumb = getimagesize($filename_thumb);
 
-							echo '<a href="'.DIRECTORY_SEPARATOR.$filename_photo.'" data-size="'.$imageinfo[0].'x'.$imageinfo[1].'" data-med="'.DIRECTORY_SEPARATOR.$filename_thumb.'" data-med-size="'.$imageinfoThumb[0].'x'.$imageinfoThumb[1].'">
-									<img src="'.DIRECTORY_SEPARATOR.$filename_thumb .'" />
+							echo '<a href="' . $filename_photo.'" data-size="'.$imageinfo[0].'x'.$imageinfo[1].'" data-med="' . $filename_thumb.'" data-med-size="'.$imageinfoThumb[0].'x'.$imageinfoThumb[1].'">
+									<img src="' . $filename_thumb .'" />
 									<figure>' . ($date == false ? '' : '<i class="fa fa-clock-o"></i> ' . $date->format($config['gallery']['date_format'])) . '</figure>
 								</a>';
 						}
@@ -273,20 +273,20 @@ require_once('db.php');
 	</div>
 
 	<div id="adminsettings" >
-		<div style="position:absolute; bottom:0; right:0;"><img src="/resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()"></div>
+		<div style="position:absolute; bottom:0; right:0;"><img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()"></div>
 	</div>
 
-	<script type="text/javascript" src="/resources/js/adminshortcut.js"></script>
-	<script type="text/javascript" src="/resources/js/jquery-3.4.1.min.js"></script>
-	<script type="text/javascript" src="/resources/js/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="/resources/js/TweenLite.min.js"></script>
-	<script type="text/javascript" src="/resources/js/EasePack.min.js"></script>
-	<script type="text/javascript" src="/resources/js/jquery.gsap.min.js"></script>
-	<script type="text/javascript" src="/resources/js/CSSPlugin.min.js"></script>
-	<script type="text/javascript" src="/resources/js/photoswipe.min.js"></script>
-	<script type="text/javascript" src="/resources/js/photoswipe-ui-default.min.js"></script>
-	<script type="text/javascript" src="/resources/js/photoinit.js"></script>
-	<script type="text/javascript" src="/resources/js/core.js"></script>
-	<script type="text/javascript" src="/lang/<?php echo $config['language']; ?>.js"></script>
+	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
+	<script type="text/javascript" src="resources/js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="resources/js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="resources/js/TweenLite.min.js"></script>
+	<script type="text/javascript" src="resources/js/EasePack.min.js"></script>
+	<script type="text/javascript" src="resources/js/jquery.gsap.min.js"></script>
+	<script type="text/javascript" src="resources/js/CSSPlugin.min.js"></script>
+	<script type="text/javascript" src="resources/js/photoswipe.min.js"></script>
+	<script type="text/javascript" src="resources/js/photoswipe-ui-default.min.js"></script>
+	<script type="text/javascript" src="resources/js/photoinit.js"></script>
+	<script type="text/javascript" src="resources/js/core.js"></script>
+	<script type="text/javascript" src="lang/<?php echo $config['language']; ?>.js"></script>
 </body>
 </html>
