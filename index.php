@@ -63,7 +63,7 @@ require_once('db.php');
 
 		<!-- Start Page -->
 		<div class="stages" id="start">
-			<?php if($config['show_gallery']){ ?><a class="gallery btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
+			<?php if($config['show_gallery']){ ?><a class="gallery-button btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<div class="blurred">
 			</div>
 			<div class="inner">
@@ -135,7 +135,7 @@ require_once('db.php');
 		<div class="stages" id="result">
 			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-l10n="home"></span></a>
 			<div class="resultInner hidden">
-			<?php if($config['show_gallery']){ ?><a href="#" class="btn gallery"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
+			<?php if($config['show_gallery']){ ?><a href="#" class="btn gallery-button"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<?php if($config['use_qr']){ echo '<a href="#" class="btn qrbtn"><span class="qrbtnlabel"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></span></a>'; } ?>
 			<?php if($config['use_mail']){ echo '<a href="#" class="btn mailbtn"><span class="mailbtnlabel"><i class="fa fa-cloud-download"></i> <span data-l10n="mail"></span></span></a>'; } ?>
 			<?php if($config['use_print']){ echo '<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>'; } ?>
@@ -147,13 +147,13 @@ require_once('db.php');
 
 		<?php if($config['show_gallery']){ ?>
 		<!-- Gallery -->
-		<div id="gallery">
-			<div class="galInner">
-				<div class="galHeader">
+		<div id="gallery" class="gallery">
+			<div class="gallery__inner">
+				<div class="gallery__header">
 					<h1><span data-l10n="gallery"></span></h1>
-					<a href="#" class="close_gal"><i class="fa fa-times"></i></a>
+					<a href="#" class="gallery__close close_gal"><i class="fa fa-times"></i></a>
 				</div>
-				<div class="images" id="galimages">
+				<div class="gallery__body" id="galimages">
 					<?php
 					$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
 					if (empty($imagelist)) {
