@@ -127,11 +127,6 @@ if (file_exists($my_config)) {
 				'type' => 'checkbox',
 				'name' => 'bluegray_theme',
 				'value' => $config['bluegray_theme']
-			],
-			'use_mobile_view' => [
-				'type' => 'checkbox',
-				'name' => 'use_mobile_view',
-				'value' => $config['use_mobile_view']
 			]
 		],
 		'folders' => [
