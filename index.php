@@ -75,7 +75,7 @@ require_once('db.php');
 				};
 				?>
 				<?php if($config['use_filter']){ ?><a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a><?php } ?>
-				<?php if($config['use_collage']){ ?><a href="#" <?php if($config['use_gpio_button']){ ?>accesskey="m"<?php } ?> class="btn takeCollage"><i class="fa fa-camera"></i> <span data-l10n="takeCollage"></span></a><?php } ?>
+				<?php if($config['use_collage']){ ?><a href="#" <?php if($config['use_gpio_button']){ ?>accesskey="m"<?php } ?> class="btn takeCollage"><i class="fa fa-th-large"></i> <span data-l10n="takeCollage"></span></a><?php } ?>
 				<!-- accesskey to take a photo using alt+p (or use an external button)? -->
 				<a href="#" <?php if($config['use_gpio_button']){ ?>accesskey="p"<?php } ?> class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
 			</div>
@@ -136,12 +136,22 @@ require_once('db.php');
 		<div class="stages" id="result">
 			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-l10n="home"></span></a>
 			<div class="resultInner hidden">
-			<?php if($config['show_gallery']){ ?><a href="#" class="btn gallery-button"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
-			<?php if($config['use_qr']){ echo '<a href="#" class="btn qrbtn"><span class="qrbtnlabel"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></span></a>'; } ?>
-			<?php if($config['use_mail']){ echo '<a href="#" class="btn mailbtn"><span class="mailbtnlabel"><i class="fa fa-cloud-download"></i> <span data-l10n="mail"></span></span></a>'; } ?>
-			<?php if($config['use_print']){ echo '<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>'; } ?>
-			<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
-			<?php if($config['use_collage']){ echo '<a href="#" class="btn newcollage"><i class="fa fa-camera"></i> <span data-l10n="newCollage"></span></a>'; } ?>
+				<?php if($config['show_gallery']): ?>
+					<a href="#" class="btn gallery-button"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a>
+				<?php endif; ?>
+				<?php if($config['use_qr']): ?>
+					<a href="#" class="btn qrbtn"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></a>
+				<?php endif; ?>
+				<?php if($config['use_mail']): ?>
+					<a href="#" class="btn mailbtn"><i class="fa fa-envelope"></i> <span data-l10n="mail"></span></a>
+				<?php endif; ?>
+				<?php if($config['use_print']): ?>
+					<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
+				<?php endif; ?>
+				<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
+				<?php if($config['use_collage']): ?>
+					<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span data-l10n="newCollage"></span></a>
+				<?php endif; ?>
 			</div>
 			<?php if($config['use_qr']){ echo '<div class="qr"></div>';} ?>
 		</div>

@@ -47,9 +47,6 @@ var photoBooth = (function () {
         $('.loading').text('');
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
-        $('.resultInner').css({
-            'bottom': '-100px'
-        });
         $('.spinner').hide();
         $('.send-mail').hide();
         public.resetMailForm();
@@ -190,9 +187,7 @@ var photoBooth = (function () {
                         loader.removeClass('open');
                     }, 400);
                     setTimeout(function () {
-                        $('.resultInner').stop().animate({
-                            'bottom': '50px'
-                        }, 400).removeClass('hidden');
+                        $('.resultInner').addClass('show');
                     }, 400);
                     clearTimeout(timeOut);
                     public.resetTimeOut();
@@ -442,17 +437,13 @@ var photoBooth = (function () {
     $('#result').on('click', function (e) {
         var target = $(e.target);
 
+        if (target.hasClass('gallery-button')) {
+            return;
+        }
+
         // Menü in and out
         if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn') && target.closest('.homebtn').length == 0  && !target.hasClass('mailbtn')) {
-            if ($('.resultInner').hasClass('hidden')) {
-                $('.resultInner').stop().animate({
-                    'bottom': '50px'
-                }, 400).removeClass('hidden');
-            } else {
-                $('.resultInner').stop().animate({
-                    'bottom': '-100px'
-                }, 400).addClass('hidden');
-            }
+            $('.resultInner').toggleClass('show');
         }
 
         if (qr && !target.hasClass('qrbtn')) {
