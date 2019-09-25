@@ -115,11 +115,6 @@ var photoBooth = (function () {
         if (isdev) {
             console.log('Take Picture:' + photoStyle);
         }
-        if(useVideo){
-            var track = public.stream.getTracks()[0];
-            track.stop();
-            $('video').hide();
-        }
         setTimeout(function () {
 	    if ((photoStyle=='photo')){
                 $('#counter').text('');
@@ -294,20 +289,6 @@ var photoBooth = (function () {
                     public.closeNav();
                 }
                 public.reset();
-                if(useVideo && navigator.mediaDevices){
-                    navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
-                    if(navigator.getMedia) {
-                        navigator.mediaDevices.getUserMedia(webcamConstraints)
-                        .then(function(stream) {
-                            $('video').show();
-                            var video = document.getElementById('video');
-                            video.srcObject = stream;
-                            public.stream = stream;
-                        })
-                        .catch(function (error) {
-                        });
-                    }
-                }
                 loader.slideDown('slow', 'easeOutBounce', function () {
                     public.countdown(countDown, $('#counter'),photoStyle);
                 });
@@ -331,20 +312,6 @@ var photoBooth = (function () {
                     public.closeNav();
                 }
                 public.reset();
-                if(useVideo && navigator.mediaDevices){
-                    navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
-                    if(navigator.getMedia) {
-                        navigator.mediaDevices.getUserMedia(webcamConstraints)
-                        .then(function(stream) {
-                            $('video').show();
-                            var video = document.getElementById('video');
-                            video.srcObject = stream;
-                            public.stream = stream;
-                        })
-                        .catch(function (error) {
-                        });
-                    }
-                }
                 loader.slideDown('slow', 'easeOutBounce', function () {
                     if (isdev) {
                         console.log(photoStyle);
