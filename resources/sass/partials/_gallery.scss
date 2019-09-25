@@ -51,10 +51,13 @@
         display: flex;
         flex-wrap: wrap;
         overflow-y: auto;
+        justify-content: center;
 
         a {
             display: block;
             width: 33.333333333333%;
+            padding: 3px;
+            max-width: 500px;
         }
 
         img {
