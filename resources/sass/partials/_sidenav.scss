@@ -1,0 +1,60 @@
+.sidenav {
+    width: 100%;
+    position: fixed;
+    z-index: 1005;
+    top: 0;
+    bottom: 0;
+    right: -100%;
+    background: rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 60px 30px;
+    transition: right 0.5s;
+
+    @media (min-width: 576px) {
+        width: 250px;
+        right: -250px;
+    }
+
+    &--open {
+        right: 0;
+    }
+
+    a {
+        text-transform: uppercase;
+        margin-bottom: 3px;
+        background-color: $mainColor;
+
+        &:hover {
+            background-color: $hoverColor;
+        }
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .closebtn {
+        position: absolute;
+        right: 30px;
+        top: 0;
+        color: $fontColor;
+        font-size: 30px;
+        width: 50px;
+        height: 50px;
+        background: $mainColor;
+        text-align: center;
+        line-height: 50px;
+
+        &:hover {
+            background: $hoverColor;
+        }
+    }
+
+    .activeSidenavBtn {
+        a {
+            background-color: $hoverColor;
+        }
+    }
+
+}

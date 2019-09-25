@@ -1,3 +1,13 @@
+if (theme === 'bluegray') {
+    var style = document.documentElement.style;
+
+    style.setProperty('--primary-color', '#669db3');
+    style.setProperty('--secondary-color', '#2e535e');
+    style.setProperty('--font-color', '#f0f6f7');
+
+    $('#wrapper').css('background-image', 'url(resources/img/bg_bluegray.jpg)');
+}
+
 var L10N = {};
 var photoBooth = (function () {
     config = {};
@@ -54,6 +64,8 @@ var photoBooth = (function () {
 
     // init
     public.init = function (options) {
+        $('#wrapper').show();
+
         public.l10n();
         public.reset();
 
@@ -332,16 +344,6 @@ var photoBooth = (function () {
         gallery.removeClass('gallery--open');
     });
 
-    $('.tabbox ul li').on('click', function () {
-        var elem = $(this),
-            target = $('.' + elem.data('target'));
-        if (!elem.hasClass('active')) {
-            $('.tabbox ul li').removeClass('active');
-            $('.tab').removeClass('active');
-            elem.addClass('active');
-            target.addClass('active');
-        }
-    });
     // QR in gallery
     $(document).on('click touchstart', '.gal-qr-code', function (e) {
         e.preventDefault();

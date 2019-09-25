@@ -41,12 +41,7 @@ require_once('db.php');
 	<link rel="stylesheet" href="resources/css/photoswipe.css">
 	<link rel="stylesheet" href="resources/css/default-skin/default-skin.css">
 	<link rel="stylesheet" href="resources/css/style.css" />
-	<?php if($config['bluegray_theme']){ ?><link rel="stylesheet" href="resources/css/bluegray.css" /><?php } ?>
-	<?php if(($config['scrollbar']) && !($config['bluegray_theme'])) { ?>
-		<link rel="stylesheet" href="resources/css/scrollbar.css" />
-	<?php } else { ?>
-		<link rel="stylesheet" href="resources/css/bluegray_scrollbar.css" />
-	<?php } ?>
+
 	<script type="text/javascript">
 		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
 		var useVideo = <?php echo ($config['previewFromCam']) ? 'true' : 'false'; ?>;
@@ -56,6 +51,7 @@ require_once('db.php');
 		var gallery_scrollbar = <?php echo ($config['scrollbar']) ? 'true' : 'false'; ?>;
  		var cntdwn_time = <?php echo ($config['cntdwn_time']); ?>;
 		var cheese_time = <?php echo ($config['cheese_time']); ?>;
+		var theme = <?php echo $config['bluegray_theme'] ? "'bluegray'" : "'default'"; ?>;
 	</script>
 </head>
 <body class="deselect">

@@ -1,0 +1,9 @@
+:root {
+    --primary-color: #e67e22;
+    --secondary-color: #d35400;
+    --font-color: #ffffff;
+}
+
+$mainColor: var(--primary-color);
+$hoverColor: var(--secondary-color);
+$fontColor: var(--font-color);

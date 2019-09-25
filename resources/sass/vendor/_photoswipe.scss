@@ -1,0 +1,34 @@
+.pswp__caption {
+    display: none;
+}
+
+.pswp__button--close {
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    line-height: 50px;
+    text-align: center;
+    margin-right: 30px;
+}
+
+.pswp__button--close:before {
+    content: "\f00d";
+    color: #fff;
+    font-size: 30px;
+    font: normal normal normal 30px/1 FontAwesome;
+}
+
+.pswp__qr {
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    margin-left: -250px;
+    top: 50%;
+    margin-top: -250px;
+    z-index: 10000;
+
+    img {
+        width: 100%;
+    }
+}
