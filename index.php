@@ -84,33 +84,34 @@ require_once('db.php');
 		<!-- image Filter Pane -->
 		<?php if($config['use_filter']){ ?>
 		<div id="mySidenav" class="dragscroll sidenav">
-			<!--a href="javascript:void(0)" class="closebtn">&times;</a-->
-			<div class="activeSidenavBtn" id="imgPlain"><a id="imgFilter" href="#" >original</a></div>
-			<div id="imgAntique"> <a id="imgFilter" href="#">antique</a></div>
-			<div id="imgAqua"> <a id="imgFilter" href="#" >aqua</a></div>
-			<div id="imgBlue"> <a id="imgFilter" href="#" >blue</a></div>
-			<div id="imgBlur"> <a id="imgFilter" href="#" >blur</a></div>
-			<div id="imgColor"> <a id="imgFilter" href="#" >colorful</a></div>
-			<div id="imgCool"> <a id="imgFilter" href="#" >cool</a></div>
-			<div id="imgEdge"> <a id="imgFilter" href="#" >edge</a></div>
-			<div id="imgEmboss"> <a id="imgFilter" href="#" >emboss</a></div>
-			<div id="imgEverglow"> <a id="imgFilter" href="#" >everglow</a></div>
-			<div id="imgGrayscale"> <a id="imgFilter" href="#" >grayscale</a></div>
-			<div id="imgGreen"> <a id="imgFilter" href="#" >green</a></div>
-			<div id="imgMean"> <a id="imgFilter" href="#" >mean</a></div>
-			<div id="imgNegate"> <a id="imgFilter" href="#" >negate</a></div>
-			<div id="imgPink"> <a id="imgFilter" href="#" >pink</a></div>
-			<div id="imgPixelate"> <a id="imgFilter" href="#" >pixelate</a></div>
-			<div id="imgRed"> <a id="imgFilter" href="#" >red</a></div>
-			<div id="imgRetro"> <a id="imgFilter" href="#" >retro</a></div>
-			<div id="imgSelectiveBlur"> <a id="imgFilter" href="#" >selective blur</a></div>
-			<div id="imgSepiaLight"> <a id="imgFilter" href="#" >sepia light</a></div>
-			<div id="imgSepiaDark"> <a id="imgFilter" href="#" >sepia dark</a></div>
-			<div id="imgSmooth"> <a id="imgFilter" href="#" >smooth</a></div>
-			<div id="imgSummer"> <a id="imgFilter" href="#" >summer</a></div>
-			<div id="imgVintage"> <a id="imgFilter" href="#" >vintage</a></div>
-			<div id="imgWashed"> <a id="imgFilter" href="#" >washed</a></div>
-			<div id="imgYellow"> <a id="imgFilter" href="#" >yellow</a></div>
+			<a href="#" class="closebtn"><i class="fa fa-times"></i></a>
+
+			<div class="activeSidenavBtn" id="imgPlain"><a class="btn btn--small" href="#" >original</a></div>
+			<div id="imgAntique"> <a class="btn btn--small" href="#">antique</a></div>
+			<div id="imgAqua"> <a class="btn btn--small" href="#" >aqua</a></div>
+			<div id="imgBlue"> <a class="btn btn--small" href="#" >blue</a></div>
+			<div id="imgBlur"> <a class="btn btn--small" href="#" >blur</a></div>
+			<div id="imgColor"> <a class="btn btn--small" href="#" >colorful</a></div>
+			<div id="imgCool"> <a class="btn btn--small" href="#" >cool</a></div>
+			<div id="imgEdge"> <a class="btn btn--small" href="#" >edge</a></div>
+			<div id="imgEmboss"> <a class="btn btn--small" href="#" >emboss</a></div>
+			<div id="imgEverglow"> <a class="btn btn--small" href="#" >everglow</a></div>
+			<div id="imgGrayscale"> <a class="btn btn--small" href="#" >grayscale</a></div>
+			<div id="imgGreen"> <a class="btn btn--small" href="#" >green</a></div>
+			<div id="imgMean"> <a class="btn btn--small" href="#" >mean</a></div>
+			<div id="imgNegate"> <a class="btn btn--small" href="#" >negate</a></div>
+			<div id="imgPink"> <a class="btn btn--small" href="#" >pink</a></div>
+			<div id="imgPixelate"> <a class="btn btn--small" href="#" >pixelate</a></div>
+			<div id="imgRed"> <a class="btn btn--small" href="#" >red</a></div>
+			<div id="imgRetro"> <a class="btn btn--small" href="#" >retro</a></div>
+			<div id="imgSelectiveBlur"> <a class="btn btn--small" href="#" >selective blur</a></div>
+			<div id="imgSepiaLight"> <a class="btn btn--small" href="#" >sepia light</a></div>
+			<div id="imgSepiaDark"> <a class="btn btn--small" href="#" >sepia dark</a></div>
+			<div id="imgSmooth"> <a class="btn btn--small" href="#" >smooth</a></div>
+			<div id="imgSummer"> <a class="btn btn--small" href="#" >summer</a></div>
+			<div id="imgVintage"> <a class="btn btn--small" href="#" >vintage</a></div>
+			<div id="imgWashed"> <a class="btn btn--small" href="#" >washed</a></div>
+			<div id="imgYellow"> <a class="btn btn--small" href="#" >yellow</a></div>
 		</div>
 		<?php } ?>
 
@@ -279,7 +280,6 @@ require_once('db.php');
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="resources/js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="resources/js/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="resources/js/TweenLite.min.js"></script>
 	<script type="text/javascript" src="resources/js/EasePack.min.js"></script>
 	<script type="text/javascript" src="resources/js/jquery.gsap.min.js"></script>
 	<script type="text/javascript" src="resources/js/CSSPlugin.min.js"></script>

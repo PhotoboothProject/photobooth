@@ -40,7 +40,7 @@ var photoBooth = (function () {
 
     // reset whole thing
     public.reset = function () {
-        loader.hide();
+        loader.removeClass('open');
         qr = false;
         $('.qr').html('').hide();
         $('.qrbtn').removeClass('active').attr('style', '');
@@ -59,21 +59,10 @@ var photoBooth = (function () {
     public.init = function (options) {
         public.l10n();
         public.reset();
-        var w = window.innerWidth;
-        var h = window.innerHeight;
 
-        loader.width(w).height(h);
-        $('.stages').hide();
         public.initPhotoSwipeFromDOM('#galimages');
 
         startPage.show();
-    }
-
-    // check for resizing
-    public.handleResize = function () {
-        var w = window.innerWidth;
-        var h = window.innerHeight;
-        $('#loader').width(w).height(h);
     }
 
     public.l10n = function (elem) {
@@ -84,14 +73,16 @@ var photoBooth = (function () {
         });
     }
 
-    // Set the width of the side navigation to 250px and the left margin of the page content to 250px
     public.openNav = function () {
-	document.getElementById("mySidenav").style.width = "250px";
+        $('#mySidenav').addClass('sidenav--open');
     }
 
-    // Set the width of the side navigation to 0 and the left margin of the page content to 0 */
     public.closeNav = function () {
-	document.getElementById("mySidenav").style.width = "0";
+        $('#mySidenav').removeClass('sidenav--open');
+    }
+
+    public.toggleNav = function () {
+        $('#mySidenav').toggleClass('sidenav--open');
     }
 
     // Cheese
@@ -196,7 +187,7 @@ var photoBooth = (function () {
                 resultPage.fadeIn(400, function () {
                     setTimeout(function () {
                         processing = false;
-                        loader.slideUp('fast');
+                        loader.removeClass('open');
                     }, 400);
                     setTimeout(function () {
                         $('.resultInner').stop().animate({
@@ -253,20 +244,13 @@ var photoBooth = (function () {
         setTimeout(() => gallery.find('.gallery__inner').show(), 300);
     }
 
-    $(window).on('resize', public.handleResize);
-
     //Filter
     $('.imageFilter').on('click', function (e) {
-        //e.preventDefault();
-        if($('#mySidenav').width() > 0){
-            public.closeNav();
-        } else {
-            public.openNav();
-        }
+        public.toggleNav();
     });
 
-    $('.sidenav').children().on('click', function (e) {
-        $('.sidenav').children().removeAttr("class");
+    $('.sidenav > div').on('click', function (e) {
+        $('.sidenav > div').removeAttr("class");
         $(this).addClass("activeSidenavBtn");
         imgFilter = $(this).attr("id");
         if (isdev) {
@@ -274,60 +258,40 @@ var photoBooth = (function () {
         }
     });
 
-    // Open QR Code in Gallery
+    function takePictureHandler(photoStyle) {
+        if (!processing) {
+            public.closeNav();
+            public.reset();
+            loader.addClass('open');
+            public.countdown(countDown, $('#counter'),photoStyle);
+        }
+    }
 
     // Take Picture Button
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
-        var target = $(e.target);
-        var photoStyle = 'photo';
-        if (target.hasClass('gallery')) {
-            public.openGallery(target);
-        } else {
-            if (!processing) {
-                if($('#mySidenav').width() > 0){
-                    public.closeNav();
-                }
-                public.reset();
-                loader.slideDown('slow', 'easeOutBounce', function () {
-                    public.countdown(countDown, $('#counter'),photoStyle);
-                });
-            }
-        }
+
+        takePictureHandler('photo');
     });
 
     // Take Collage Button
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
-        var target = $(e.target);
-        var photoStyle = 'collage';
-        if (isdev) {
-            console.log("collage");
-        }
-        if (target.hasClass('gallery')) {
-            public.openGallery(target);
-        } else {
-            if (!processing) {
-                if($('#mySidenav').width() > 0){
-                    public.closeNav();
-                }
-                public.reset();
-                loader.slideDown('slow', 'easeOutBounce', function () {
-                    if (isdev) {
-                        console.log(photoStyle);
-                    }
-                    public.countdown(countDown, $('#counter'),photoStyle);
-                });
-            }
-        }
+
+        takePictureHandler('collage');
+    });
+
+    $('#mySidenav .closebtn').on('click', function (e) {
+        e.preventDefault();
+
+        public.closeNav();
     });
 
     // Open Gallery Button
     $('.gallery-button').on('click', function (e) {
         e.preventDefault();
-        if($('#mySidenav').width() > 0){
-          public.closeNav();
-        }
+
+        public.closeNav();
         public.openGallery($(this));
     });
 
@@ -577,16 +541,11 @@ var photoBooth = (function () {
         var timerFunction = function () {
             element.text(current);
             current--;
-            TweenLite.to(element, 0.0, {
-                scale: 8,
-                opacity: 0.2
-            });
-            TweenLite.to(element, 0.75, {
-                scale: 1,
-                opacity: 1
-            });
+
+            element.removeClass('tick');
 
             if (count < calls) {
+                window.setTimeout(() => element.addClass('tick'), 50);
                 window.setTimeout(timerFunction, 1000);
             } else {
                 if (isdev) {
