@@ -82,6 +82,35 @@ var photoBooth = (function () {
         $('#mySidenav').toggleClass('sidenav--open');
     }
 
+    public.startVideo = function () {
+        if(!navigator.mediaDevices) {
+            return;
+        }
+
+        navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+
+        if(!navigator.getMedia) {
+            return;
+        }
+
+        navigator.getMedia(webcamConstraints)
+            .then(function(stream) {
+                $('#video').show();
+                var video = $('#video').get(0);
+                video.srcObject = stream;
+                public.stream = stream;
+            })
+            .catch(function (error) { });
+    }
+
+    public.stopVideo = function () {
+        if(public.stream) {
+            var track = public.stream.getTracks()[0];
+            track.stop();
+            $('#video').hide();
+        }
+    }
+
     // Cheese
     public.cheese = function (photoStyle) {
         if (isdev) {
@@ -102,6 +131,9 @@ var photoBooth = (function () {
         processing = true;
         if (isdev) {
             console.log('Take Picture:' + photoStyle);
+        }
+        if (useVideo) {
+            public.stopVideo();
         }
         setTimeout(function () {
 	    if ((photoStyle=='photo')){
@@ -257,6 +289,9 @@ var photoBooth = (function () {
         if (!processing) {
             public.closeNav();
             public.reset();
+            if (useVideo) {
+                public.startVideo();
+            }
             loader.addClass('open');
             public.countdown(countDown, $('#counter'),photoStyle);
         }
