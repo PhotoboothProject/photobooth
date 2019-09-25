@@ -45,7 +45,6 @@ L10N = {
 	"gallery_date_format": "Format de date",
 	"gallery_no_image": "La galerie est vide. Faites des photos!",
 	"use_mail": "Utiliser le courrier électronique",
-	"use_mobile_view": "Activez la vue mobile",
 	"use_gpio_button": "Utilisez le bouton matériel pour prendre une photo",
 	"show_fork": "Affichez badge de la page Github",
 	"cntdwn_time": "Réglez le compte à rebours",

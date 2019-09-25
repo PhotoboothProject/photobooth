@@ -45,7 +45,6 @@ L10N = {
 	"gallery_date_format": "Datumsstil",
 	"gallery_no_image": "Die Galerie ist noch leer. Mache doch ein paar Bilder!",
 	"use_mail": "E-Mail aktivieren",
-	"use_mobile_view": "Mobile Ansicht aktivieren",
 	"use_gpio_button": "Hardware-Taster verwenden, um ein Bild aufzunehmen",
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
