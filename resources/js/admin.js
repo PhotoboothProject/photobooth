@@ -30,6 +30,8 @@ $(function() {
 
                     setTimeout(function() {
                         elem.removeClass('error success');
+
+                        window.location.reload();
                     }, 3000);
                 }
             });
@@ -51,6 +53,8 @@ $(function() {
                 elem.addClass(resp);
                 setTimeout(function() {
                     elem.removeClass('error success');
+
+                    window.location.reload();
                 }, 2000);
             }
         });
