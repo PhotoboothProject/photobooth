@@ -20,13 +20,12 @@
 
 .pswp__qr {
     width: 500px;
-    height: 500px;
     position: absolute;
     left: 50%;
-    margin-left: -250px;
     top: 50%;
-    margin-top: -250px;
     z-index: 10000;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
 
     img {
         width: 100%;

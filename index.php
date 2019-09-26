@@ -153,7 +153,7 @@ require_once('db.php');
 					<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span data-l10n="newCollage"></span></a>
 				<?php endif; ?>
 			</div>
-			<?php if($config['use_qr']){ echo '<div class="qr"></div>';} ?>
+			<?php if($config['use_qr']){ echo '<div id="qrCode" class="modal"><div class="modal__body"></div></div>';} ?>
 		</div>
 
 		<?php if($config['show_gallery']){ ?>

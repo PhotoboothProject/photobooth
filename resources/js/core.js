@@ -37,6 +37,29 @@ var photoBooth = (function () {
             }
         };
 
+    var modal = {
+        open: function(selector) {
+            $(selector).addClass('modal--show');
+        },
+        close: function(selector) {
+            if ($(selector).hasClass('modal--show')) {
+                $(selector).removeClass('modal--show');
+
+                return true;
+            }
+
+            return false;
+        },
+        toggle: function(selector) {
+            $(selector).toggleClass('modal--show');
+        },
+        empty: function(selector) {
+            modal.close(selector);
+
+            $(selector).find('.modal__body').empty();
+        }
+    };
+
     public.reloadPage = function () {
         window.location.reload();
     }
@@ -52,7 +75,7 @@ var photoBooth = (function () {
     public.reset = function () {
         loader.removeClass('open');
         qr = false;
-        $('.qr').html('').hide();
+        modal.empty('#qrCode');
         $('.qrbtn').removeClass('active').attr('style', '');
         $('.loading').text('');
         gallery.removeClass('gallery--open');
@@ -190,16 +213,20 @@ var photoBooth = (function () {
     // Render Picture after taking
     public.renderPic = function (result) {
         // Add QR Code Image
-        $('.qr').html('');
+        var qrCodeModal = $('#qrCode');
+        modal.empty(qrCodeModal);
         $('<img src="qrcode.php?filename=' + result.img + '"/>').on('load', function () {
-            $(this).appendTo($('.qr'));
-            $('<p>').html(L10N.qrHelp).appendTo($('.qr'));
+            var body = qrCodeModal.find('.modal__body');
+
+            $(this).appendTo(body);
+            $('<p>').html(L10N.qrHelp).appendTo(body);
         });
 
         // Add Print Link
         $(document).off('click touchstart', '.printbtn');
         $(document).on('click', '.printbtn', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             $('#print_mesg').addClass('modal--show');
             setTimeout(function () {
                 $.ajax({
@@ -345,7 +372,7 @@ var photoBooth = (function () {
     });
 
     // QR in gallery
-    $(document).on('click touchstart', '.gal-qr-code', function (e) {
+    $('.gal-qr-code').on('click', function (e) {
         e.preventDefault();
 
         var pswpQR = $('.pswp__qr');
@@ -361,12 +388,13 @@ var photoBooth = (function () {
             pswpQR.addClass('qr-active').fadeIn('fast');
         }
     });
+
     // print in gallery
-    $(document).on('click touchstart', '.gal-print', function (e) {
+    $('.gal-print').on('click', function (e) {
         e.preventDefault();
         var img = pswp.currItem.src;
         img = img.replace(imgFolder+'/', '');
-        document.getElementById("print_mesg").style.display = "block";
+        modal.open('#print_mesg');
         setTimeout(function () {
             $.ajax({
                 url: 'print.php?filename=' + encodeURI(img),
@@ -375,7 +403,7 @@ var photoBooth = (function () {
                     console.log(data)
                 }
                 setTimeout(function () {
-                    document.getElementById("print_mesg").style.display = "none";
+                    modal.close('#print_mesg');
                     pswp.close();
                 },5000);
             });
@@ -397,20 +425,10 @@ var photoBooth = (function () {
         }, "json");
     });
 
-    // Send Mail gallery
-    $('.gal-mail').on('click touchstart', function (e) {
-        //e.preventDefault();
+    $('.gal-mail, .mailbtn').on('click touchstart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-        var mail = $('.send-mail');
-        if (mail.hasClass('mail-active')) {
-            public.resetMailForm();
-            mail.removeClass('mail-active').fadeOut('fast');
-        } else {
-            mail.addClass('mail-active').fadeIn('fast');
-        }
-    });
-
-    $('.mailbtn').on('click', function (e) {
         var mail = $('.send-mail');
         if (mail.hasClass('mail-active')) {
             public.resetMailForm();
@@ -472,91 +490,24 @@ var photoBooth = (function () {
     };
 
     $('#result').on('click', function (e) {
-        var target = $(e.target);
-
-        if (target.hasClass('gallery-button')) {
-            return;
-        }
-
-        // Menü in and out
-        if (!target.hasClass('qrbtn') && target.closest('.qrbtn').length == 0 && !target.hasClass('newpic') && !target.hasClass('printbtn') && target.closest('.printbtn').length == 0 && !target.hasClass('resetBtn') && !target.hasClass('gallery') && qr != true && !target.hasClass('homebtn') && target.closest('.homebtn').length == 0  && !target.hasClass('mailbtn')) {
+        if (!modal.close('#qrCode')) {
             $('.resultInner').toggleClass('show');
-        }
-
-        if (qr && !target.hasClass('qrbtn')) {
-            var qrpos = $('.qrbtn').offset(),
-            qrbtnwidth = $('.qrbtn').outerWidth(),
-            qrbtnheight = $('.qrbtn').outerHeight()
-            $('.qr').removeClass('active');
-            $('.qr').animate({
-                'width': qrbtnwidth,
-                'height': qrbtnheight,
-                'left': qrpos.left,
-                'top': qrpos.top,
-                'margin-left': 0,
-            }, 250, function(){
-                $('.qr').hide();
-            });
-            qr = false;
-        }
-
-        // Go to Home
-        if (target.hasClass('homebtn') || target.closest('.homebtn').length > 0) {
-            public.reloadPage();
-        }
-
-        // Qr in and out
-        if (target.hasClass('qrbtn') || target.closest('.qrbtn').length > 0) {
-
-            var qrpos = $('.qrbtn').offset(),
-            qrbtnwidth = $('.qrbtn').outerWidth(),
-            qrbtnheight = $('.qrbtn').outerHeight()
-
-            if (qr) {
-                $('.qr').removeClass('active');
-                $('.qr').animate({
-                    'width': qrbtnwidth,
-                    'height': qrbtnheight,
-                    'left': qrpos.left,
-                    'top': qrpos.top,
-                    'margin-left': 0,
-                }, 250, function(){
-                $('.qr').hide();
-            });
-                qr = false;
-            } else {
-                qr = true;
-                $('.qr').css({
-                'width': qrbtnwidth,
-                'height': qrbtnheight,
-                'left': qrpos.left,
-                'top': qrpos.top
-                });
-                $('.qr').show();
-                $('.qr').animate({
-                    'width': 500,
-                    'height': 600,
-                    'left': '50%',
-                    'margin-left': -265,
-                    'top': 50
-                }, 250, function(){
-                    $('.qr').addClass('active');
-                });
-            }
         }
     });
 
     // Show QR Code
     $('.qrbtn').on('click', function (e) {
         e.preventDefault();
-    });
+        e.stopPropagation();
 
-    $('.printbtn').on('click', function (e) {
-        e.preventDefault();
+        modal.toggle('#qrCode');
     });
 
     $('.homebtn').on('click', function (e) {
         e.preventDefault();
+        e.stopPropagation();
+
+        public.reloadPage();
     });
 
     // Countdown Function

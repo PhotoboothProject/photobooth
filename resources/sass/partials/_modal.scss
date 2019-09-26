@@ -18,5 +18,20 @@
         color: #ffffff;
         font-size: 2em;
         text-align: center;
+        max-width: 100%;
+        padding: 6px;
+
+        * {
+            max-width: 100%;
+        }
+
+        #qrCode & {
+            background-color: #ffffff;
+            color: #252525;
+
+            p {
+                margin: 0;
+            }
+        }
     }
 }
