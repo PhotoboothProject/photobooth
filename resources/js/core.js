@@ -1,13 +1,3 @@
-if (theme === 'bluegray') {
-    var style = document.documentElement.style;
-
-    style.setProperty('--primary-color', '#669db3');
-    style.setProperty('--secondary-color', '#2e535e');
-    style.setProperty('--font-color', '#f0f6f7');
-
-    $('#wrapper').css('background-image', 'url(resources/img/bg_bluegray.jpg)');
-}
-
 var L10N = {};
 var photoBooth = (function () {
     config = {};
@@ -87,8 +77,6 @@ var photoBooth = (function () {
 
     // init
     public.init = function (options) {
-        $('#wrapper').show();
-
         public.l10n();
         public.reset();
 

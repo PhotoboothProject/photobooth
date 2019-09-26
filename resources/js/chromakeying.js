@@ -132,11 +132,11 @@ function printImage() {
 	}
 	var canvas = document.getElementById("mainCanvas");
 	var dataURL = canvas.toDataURL("image/png");
-	document.getElementById("print_mesg").style.display = "block";
+	$('#print_mesg').addClass('modal--show');
 	setTimeout(function () {
 		$.post( "chromakeying_print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( status ) {
 			setTimeout(function () {
-				document.getElementById("print_mesg").style.display = "none";
+				$('#print_mesg').removeClass('modal--show');
 				window.location.reload();
 			},5000);
 		}, "json");
@@ -149,11 +149,11 @@ function saveImage() {
 	}
 	var canvas = document.getElementById("mainCanvas");
 	var dataURL = canvas.toDataURL("image/png");
-	document.getElementById("save_mesg").style.display = "block";
+	$('#save_mesg').addClass('modal--show');
 	setTimeout(function () {
 		$.post( "chromakeying_save.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( url ) {
 			setTimeout(function () {
-				document.getElementById("save_mesg").style.display = "none";
+				$('#save_mesg').removeClass('modal--show');
 			},2000);
 		});
 	},1000);
