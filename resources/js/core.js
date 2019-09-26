@@ -200,7 +200,7 @@ var photoBooth = (function () {
         $(document).off('click touchstart', '.printbtn');
         $(document).on('click', '.printbtn', function (e) {
             e.preventDefault();
-            document.getElementById("print_mesg").style.display = "block";
+            $('#print_mesg').addClass('modal--show');
             setTimeout(function () {
                 $.ajax({
                     url: 'print.php?filename=' + encodeURI(result.img),
@@ -209,7 +209,7 @@ var photoBooth = (function () {
                         console.log(data)
                     }
                     setTimeout(function () {
-                        document.getElementById("print_mesg").style.display = "none";
+                        $('#print_mesg').removeClass('modal--show');
                         public.reloadPage();
                     },5000);
                 })

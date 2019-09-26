@@ -276,8 +276,8 @@ require_once('db.php');
 		<div id="mail-form-message" style="max-width: 75%"></div>
 	</div>
 
-	<div id="print_mesg">
-		<div id="print_mesg_text"><span data-l10n="printing"></span></div>
+	<div class="modal" id="print_mesg">
+		<div class="modal__body"><span data-l10n="printing"></span></div>
 	</div>
 
 	<div id="adminsettings" >
