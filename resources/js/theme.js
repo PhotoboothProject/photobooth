@@ -5,7 +5,7 @@ if (theme === 'bluegray') {
     style.setProperty('--secondary-color', '#2e535e');
     style.setProperty('--font-color', '#f0f6f7');
 
-    $('#wrapper').css('background-image', 'url(resources/img/bg_bluegray.jpg)');
+    $('#wrapper').addClass('bluegray-bg');
 }
 
 $(function() {

@@ -377,7 +377,7 @@ if (file_exists($my_config)) {
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<?php if($config['use_mobile_view']){ ?><meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"><?php } ?>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 	<title>Photobooth</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
@@ -399,14 +399,14 @@ if (file_exists($my_config)) {
 	<link rel="stylesheet" type="text/css" href="../resources/css/default-skin/default-skin.css">
 	<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
 	<link rel="stylesheet" href="../resources/css/admin.css" />
-	<?php if($config['bluegray_theme']){ ?><link rel="stylesheet" href="../resources/css/bluegray_admin.css" /><?php } ?>
 	<script type="text/javascript">
 		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
 		var gallery_newest_first = <?php echo ($config['newest_first']) ? 'true' : 'false'; ?>;
+		var theme = <?php echo $config['bluegray_theme'] ? "'bluegray'" : "'default'"; ?>;
 	</script>
 </head>
 <body class="deselect">
-<div id="admin-settings">
+<div id="wrapper" style="overflow-y: auto;">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
 		<button class="reset-btn">
@@ -497,6 +497,7 @@ if (file_exists($my_config)) {
 </div>
 <script type="text/javascript" src="../resources/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="../resources/js/l10n.js"></script>
+<script type="text/javascript" src="../resources/js/theme.js"></script>
 <script type="text/javascript" src="../resources/js/admin.js"></script>
 <script type="text/javascript" src="../lang/<?php echo $config['language']; ?>.js"></script>
 

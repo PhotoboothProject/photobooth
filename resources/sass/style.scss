@@ -18,6 +18,10 @@
   background-image: url(../img/bg.jpg);
   background-position: center center;
   background-size: cover;
+
+  &.bluegray-bg {
+    background-image: url(../img/bg_bluegray.jpg);
+  }
 }
 
 .adminpanel {
