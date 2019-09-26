@@ -381,7 +381,7 @@ var photoBooth = (function () {
     $('.gal-print').on('click', function (e) {
         e.preventDefault();
         var img = pswp.currItem.src;
-        img = img.replace(imgFolder+'/', '');
+        img = img.split('/').pop();
         modal.open('#print_mesg');
         setTimeout(function () {
             $.ajax({
@@ -402,7 +402,7 @@ var photoBooth = (function () {
     $(document).on('click touchstart', '.gal-print-chroma_keying', function (e) {
         e.preventDefault();
         var img = pswp.currItem.src;
-        img = img.replace(imgFolder+'/', '');
+        img = img.split('/').pop();
         $.post( "chromakeying_info.php", function( info ) {
             if (info.chroma_keying == true) {
                 var currentHref = $(location).attr('href').split('#')[0];;
@@ -435,8 +435,7 @@ var photoBooth = (function () {
             img = resultPage.css("background-image").replace('url(','').replace(')','').replace(/\"/gi, "").split('/'+imgFolder+'/')[1];
         }
 
-        img = img.replace(imgFolder+'/', '');
-        img = img.replace(thumbFolder+'/', '');
+        img = img.split('/').pop();
 
         $('#mail-form-image').val(img);
         var message = $('#mail-form-message');
