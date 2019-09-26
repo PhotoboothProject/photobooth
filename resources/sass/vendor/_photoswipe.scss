@@ -3,19 +3,17 @@
 }
 
 .pswp__button--close {
+    color: #ffffff;
     width: 50px;
     height: 50px;
-    background: transparent;
-    line-height: 50px;
-    text-align: center;
-    margin-right: 30px;
-}
+    font-size: 26px;
+    opacity: 0.75;
+    background-image: none;
 
-.pswp__button--close:before {
-    content: "\f00d";
-    color: #fff;
-    font-size: 30px;
-    font: normal normal normal 30px/1 FontAwesome;
+    > i {
+        position: relative;
+        z-index: -1;
+    }
 }
 
 .pswp__qr {

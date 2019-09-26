@@ -222,11 +222,11 @@ require_once('db.php');
 					<!--  Controls are self-explanatory. Order can be changed. -->
 
 					<div class="pswp__counter"></div>
-					<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+					<button class="pswp__button pswp__button--close" title="Close (Esc)"><i class="fa fa-times"></i></button>
 					<button class="pswp__button pswp__button--share" title="Share"></button>
 					<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 					<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-					<?php if($config['use_mail']){ echo '<button class="gal-mail" title="Per Mail senden"><i class="fa fa-cloud-download"></i></button>'; } ?>
+					<?php if($config['use_mail']){ echo '<button class="gal-mail" title="Per Mail senden"><i class="fa fa-envelope"></i></button>'; } ?>
 					<?php if($config['use_print']){ echo '<button class="gal-print" title="Drucken"><i class="fa fa-print"></i></button>'; } ?>
 					<?php if($config['use_qr']){ echo '<button class="gal-qr-code" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>'; } ?>
 					<?php if($config['chroma_keying']){ echo '<button class="gal-print-chroma_keying" title="Print extra"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>'; } ?>

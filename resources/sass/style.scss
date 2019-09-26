@@ -283,6 +283,10 @@ hr.small {
   margin: 0;
   float: right;
   opacity: 0.75;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 #video {
