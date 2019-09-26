@@ -297,6 +297,17 @@ hr.small {
   left: 50%;
 }
 
+.chroma-control-bar {
+  margin-top: 12px;
+  text-align: center;
+
+  @media (max-width: 576px) {
+    span {
+      display: none;
+    }
+  }
+}
+
 @media (max-width: 767px){
 	.takePic {
 		bottom: auto;

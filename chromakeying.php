@@ -20,8 +20,10 @@ if (file_exists($keyingimage)) {
 <!doctype html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 <link rel="stylesheet" href="resources/css/normalize.css" />
 <link rel="stylesheet" href="resources/css/default-skin/default-skin.css" />
+<link rel="stylesheet" href="resources/css/font-awesome.min.css" />
 <link rel="stylesheet" href="resources/css/style.css" />
 	<script type="text/javascript">
 		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
@@ -29,10 +31,10 @@ if (file_exists($keyingimage)) {
 	</script>
 </head>
 <body>
-<div id="wrapper" style="padding: 1em 2em 2em;">
+<div id="wrapper" style="padding: 1em 2em 2em; overflow-y: auto;">
 <?php if($keying_possible){ ?>
-	<div style="width:600px;height:400px; margin:0 auto;background-color:#000000;border:4px solid black;">
-		<canvas id="mainCanvas" width="1500" height="1000" style="width:600px;height:400px;"></canvas>
+	<div style="width:600px; max-width: 100%; margin:0 auto;background-color:#000000;border:4px solid black;">
+		<canvas id="mainCanvas" width="1500" height="1000" style="width:600px; max-width: 100%;"></canvas>
 	</div>
 
 	<div style="padding-top:10px;text-align:center;">
@@ -46,12 +48,12 @@ if (file_exists($keyingimage)) {
 		?>
 	</div>
 
-	<div style="padding-top:10px;text-align:center;">
-		<button class="btn btn--flex" onclick="saveImage()"><span data-l10n="save"></span></button>
+	<div class="chroma-control-bar">
+		<button class="btn btn--flex" onclick="saveImage()"><i class="fa fa-floppy-o"></i> <span data-l10n="save"></span></button>
 		<?php if($config['use_print']): ?>
-			<button class="btn btn--flex" onclick="printImage()"><span data-l10n="print"></span></button>
+			<button class="btn btn--flex" onclick="printImage()"><i class="fa fa-print"></i> <span data-l10n="print"></span></button>
 		<?php endif; ?>
-		<button class="btn btn--flex" onclick="navigateToMain()"><span data-l10n="close"></span></button>
+		<button class="btn btn--flex" onclick="navigateToMain()"><i class="fa fa-times"></i> <span data-l10n="close"></span></button>
 	</div>
 <?php } else { ?>
 	<div style="text-align:center;padding-top:250px">
