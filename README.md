@@ -170,6 +170,7 @@ sudo crontab -e
 ```
 
 ### Changelog
+- 1.9.0: Responsive Layout. Use relative paths to allow running Photobooth in a subfolder. Fix config.json being ignored on chromakeying. Adjustments on blue-gray theme. Some more small adjustments and bugfixes.
 - 1.8.3: Adjust scrollbar config and add blue-gray scrollbar theme, allow using Pi Cam for preview and to take pictures, add hidden shortcut for admin settings, add polaroid effect, add print confirmation dialogue
 - 1.8.2: Added spanish as supported language, print text on picture feature, optional blue-gray theme, adjust admin panel. Small bugfixes and improvements as always.
 - 1.8.1: Small bugfixes and improvements. New Features: enable/disable printing QR-Code, enable/disable photo collage function, enable/disable printing a frame on your picture
@@ -216,3 +217,4 @@ sudo crontab -e
 - [thymon13](https://github.com/thymon13)
 - [vdubuk](https://github.com/vdubuk)
 - [msmedien](https://github.com/msmedien)
+- [sualko](https://github.com/sualko)
