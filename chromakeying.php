@@ -62,7 +62,7 @@ if (file_exists($keyingimage)) {
 		<div class="modal__body" id="save_mesg_text"><span data-l10n="saving"></span></div>
 	</div>
 </div>
-	<script type="text/javascript" src="resources/js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="resources/js/marvinj-0.8.js"></script>
 	<script type="text/javascript" src="resources/js/l10n.js"></script>
 	<script type="text/javascript" src="resources/lang/<?php echo $config['language']; ?>.js"></script>

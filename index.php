@@ -280,7 +280,7 @@ require_once('lib/db.php');
 	</div>
 
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
-	<script type="text/javascript" src="resources/js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="resources/js/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="resources/js/TweenLite.min.js"></script>
 	<script type="text/javascript" src="resources/js/EasePack.min.js"></script>
