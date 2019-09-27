@@ -2,9 +2,9 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'resources/lib/PHPMailer/src/Exception.php';
-require 'resources/lib/PHPMailer/src/PHPMailer.php';
-require 'resources/lib/PHPMailer/src/SMTP.php';
+require 'vendor/PHPMailer/src/Exception.php';
+require 'vendor/PHPMailer/src/PHPMailer.php';
+require 'vendor/PHPMailer/src/SMTP.php';
 
 $my_config = 'my.config.inc.php';
 if (file_exists($my_config)) {
@@ -24,7 +24,7 @@ if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sen
 
     //try {
         $mail = new PHPMailer;
-        $mail->setLanguage($config['language'], 'resources/lib/PHPMailer/language/');
+        $mail->setLanguage($config['language'], 'vendor/PHPMailer/language/');
 
         $mail->isSMTP();
         $mail->Host = $config['mail_host'];

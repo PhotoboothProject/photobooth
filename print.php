@@ -41,7 +41,7 @@ if(!file_exists($filename_source)) {
         if($config['print_qrcode'] == true) {
             // create qr code
             if(!file_exists($filename_codes)) {
-                include('resources/lib/phpqrcode/qrlib.php');
+                include('vendor/phpqrcode/qrlib.php');
                 $url = 'http://'.$_SERVER['HTTP_HOST'].'/download.php?image=';
                 QRcode::png($url.$filename, $filename_codes, QR_ECLEVEL_H, 10);
             }
