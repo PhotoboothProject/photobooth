@@ -36,12 +36,12 @@ $config['start_screen_subtitle'] = 'Webinterface by André Rinas';
 
 // FOLDERS
 // change the folders to whatever you like
-$config['folders']['images'] = 'images';
-$config['folders']['keying'] = 'keying';
-$config['folders']['print'] = 'print';
-$config['folders']['qrcodes'] = 'qrcodes';
-$config['folders']['thumbs'] = 'thumbs';
-$config['folders']['tmp'] = 'tmp';
+$config['folders']['images'] = 'data/images';
+$config['folders']['keying'] = 'data/keying';
+$config['folders']['print'] = 'data/print';
+$config['folders']['qrcodes'] = 'data/qrcodes';
+$config['folders']['thumbs'] = 'data/thumbs';
+$config['folders']['tmp'] = 'data/tmp';
 
 // WEDDING SETTINGS
 $config['is_wedding'] = false;
@@ -71,7 +71,7 @@ $config['linespace'] = '100';
 // EMAIL
 // If connection fails some help can be found here: https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
 // Especially gmail needs some special config
-$config['send_all_later'] = false; // if true enables checkbox to save the current mail address for later in mail-addresses.txt
+$config['send_all_later'] = false; // if true enables checkbox to save the current mail address for later in data/mail-addresses.txt
 $config['mail_host'] = 'smtp.example.com';
 $config['mail_username'] = 'photobooth@example.com';
 $config['mail_password'] = 'yourpassword';
@@ -113,12 +113,10 @@ switch($sys['os']) {
 	break;
 }
 
-// MERGE WITH admin/config.json if exists
+// MERGE WITH data/config.json if exists
 $filename = false;
-if(file_exists('admin/config.json')) {
-	$filename = 'admin/config.json';
-} elseif(file_exists('config.json')) {
-	$filename = 'config.json';
+if(file_exists(__DIR__ . '/data/config.json')) {
+	$filename = __DIR__ . '/data/config.json';
 }
 
 if($filename){

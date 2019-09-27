@@ -23,9 +23,9 @@ if(isset($data['type'])){
       }
     }
 
-    // delete data.txt
-    if(is_file('../data.txt')){
-      unlink('../data.txt'); // delete file
+    // delete db.txt
+    if(is_file('../data/db.txt')){
+      unlink('../data/db.txt'); // delete file
     }
 
     echo json_encode('success');
@@ -33,7 +33,7 @@ if(isset($data['type'])){
   }
 
   if($data['type'] == 'config') {
-    $file = 'config.json';
+    $file = __DIR__ . '/../data/config.json';
 
     if(!file_exists($file)) {
       fopen($file, 'w');

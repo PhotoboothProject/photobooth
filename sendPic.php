@@ -71,14 +71,14 @@ if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sen
             echo json_encode(array('success' => false, 'error' => $mail->ErrorInfo));
         } else {
             if ($_POST['send-link'] == 'yes') {
-                if (!file_exists('mail-addresses.txt')) {
-                    file_put_contents('mail-addresses.txt', json_encode(array()));
+                if (!file_exists('data/mail-addresses.txt')) {
+                    file_put_contents('data/mail-addresses.txt', json_encode(array()));
                 }
-                $addresses = json_decode(file_get_contents('mail-addresses.txt'));
+                $addresses = json_decode(file_get_contents('data/mail-addresses.txt'));
                 if (!in_array($_POST['sendTo'], $addresses)) {
                     $addresses[] = $_POST['sendTo'];
                 }
-                file_put_contents('mail-addresses.txt', json_encode($addresses));
+                file_put_contents('data/mail-addresses.txt', json_encode($addresses));
             }
             echo json_encode(array('success' => true));
         }

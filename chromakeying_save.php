@@ -16,11 +16,11 @@ $uniqid = uniqid();
 $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
-// get data from data.txt
-if(!file_exists('data.txt')){
-	file_put_contents('data.txt', json_encode(array()));
+// get data from db.txt
+if(!file_exists('data/db.txt')){
+	file_put_contents('data/db.txt', json_encode(array()));
 }
-$images = json_decode(file_get_contents('data.txt'));
+$images = json_decode(file_get_contents('data/db.txt'));
 
 
 $img = $_POST['imgData'];
@@ -49,7 +49,7 @@ function ResizeJpgImage($image, $max_width, $max_height)
 
 // insert into database
 $images[] = $file;
-file_put_contents('data.txt', json_encode($images));
+file_put_contents('data/db.txt', json_encode($images));
 
 // send imagename to frontend
 echo json_encode(array('success' => true, 'img' => $file));
