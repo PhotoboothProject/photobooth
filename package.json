@@ -12,6 +12,7 @@
   "dependencies": {
     "font-awesome": "^4.7.0",
     "gulp": "4.0.2",
-    "gulp-sass": "4.0.2"
+    "gulp-sass": "4.0.2",
+    "photoswipe": "^4.1.3"
   }
 }
