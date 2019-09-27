@@ -71,7 +71,7 @@ if (file_exists($keyingimage)) {
 	<script type="text/javascript" src="resources/js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="resources/js/marvinj-0.8.js"></script>
 	<script type="text/javascript" src="resources/js/l10n.js"></script>
-	<script type="text/javascript" src="lang/<?php echo $config['language']; ?>.js"></script>
+	<script type="text/javascript" src="resources/lang/<?php echo $config['language']; ?>.js"></script>
 	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script>

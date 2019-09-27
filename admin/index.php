@@ -499,7 +499,7 @@ if (file_exists($my_config)) {
 <script type="text/javascript" src="../resources/js/l10n.js"></script>
 <script type="text/javascript" src="../resources/js/theme.js"></script>
 <script type="text/javascript" src="../resources/js/admin.js"></script>
-<script type="text/javascript" src="../lang/<?php echo $config['language']; ?>.js"></script>
+<script type="text/javascript" src="../resources/lang/<?php echo $config['language']; ?>.js"></script>
 
 </body>
 </html>
