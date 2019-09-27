@@ -3,7 +3,7 @@ require_once('lib/config.php');
 
 $location = base64_decode($_GET['location']);
 $filename = $_GET['filename'];
-$keyingimage = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
 if (file_exists($keyingimage)) {
     $mainimage = $keyingimage;
     $keying_possible = true;
@@ -24,7 +24,7 @@ if (file_exists($keyingimage)) {
 
 		<script type="text/javascript">
 			var isdev = <?=$config['dev']?'true':'false'?>;
-			var theme = <?=$config['bluegray_theme'] ? 'bluegray' : 'default'?>;
+			var theme = "<?=$config['bluegray_theme'] ? 'bluegray' : 'default'?>";
 		</script>
 	</head>
 <body data-main-image="<?=$mainimage?>">
@@ -36,20 +36,20 @@ if (file_exists($keyingimage)) {
 
 		<div style="padding-top:10px;text-align:center;">
 			<?php
-				$cdir = scandir("chroma_keying/background");
+				$cdir = scandir("resources/img/background");
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
-						echo '<img src="chroma_keying/background/'.$value.'" style="cursor:pointer;max-width:120px;border:2px solid black;margin:3px;" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="resources/img/background/'.$value.'" style="cursor:pointer;max-width:120px;border:2px solid black;margin:3px;" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
 		</div>
 
 		<div class="chroma-control-bar">
-			<button class="btn btn--flex" onclick="saveImage()"><i class="fa fa-floppy-o"></i> <span data-l10n="save"></span></button>
+			<a class="btn btn--flex" href="javascript:saveImage()"><i class="fa fa-floppy-o"></i> <span data-l10n="save"></span></a>
 
 			<?php if ($config['use_print']): ?>
-				<button class="btn btn--flex" onclick="printImage()"><i class="fa fa-print"></i> <span data-l10n="print"></span></button>
+				<a class="btn btn--flex" href="javascript:printImage()"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
 			<?php endif; ?>
 
 			<a class="btn btn--flex" href="./"><i class="fa fa-times"></i> <span data-l10n="close"></span></a>
