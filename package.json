@@ -1,17 +1,16 @@
 {
   "name": "photobooth",
-  "version": "1.0.0",
-  "description": "photobooth sass setup",
-  "main": "index.js",
+  "version": "1.8.3",
+  "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "scripts": {
+    "build": "gulp sass",
+    "watch": "gulp sass:watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "GPL",
+  "license": "MIT",
   "dependencies": {
-    "bower": "1.7.9",
     "gulp": "4.0.2",
     "gulp-sass": "4.0.2"
   }
 }
- 
