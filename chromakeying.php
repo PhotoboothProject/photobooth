@@ -16,7 +16,7 @@ if (file_exists($keyingimage)) {
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
-<link rel="stylesheet" href="resources/css/normalize.css" />
+<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 <link rel="stylesheet" href="resources/css/style.css" />
 	<script type="text/javascript">
