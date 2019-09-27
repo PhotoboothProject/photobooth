@@ -10,3 +10,5 @@ package-lock.json
 .htpasswd
 config/my.config.inc.php
 *.patch
+resources/css/admin.css
+resources/css/style.css
