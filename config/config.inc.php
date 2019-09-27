@@ -115,8 +115,8 @@ switch($sys['os']) {
 
 // MERGE WITH data/config.json if exists
 $filename = false;
-if(file_exists(__DIR__ . '/data/config.json')) {
-	$filename = __DIR__ . '/data/config.json';
+if(file_exists(__DIR__ . '/../data/config.json')) {
+	$filename = __DIR__ . '/../data/config.json';
 }
 
 if($filename){

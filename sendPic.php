@@ -6,12 +6,7 @@ require 'vendor/PHPMailer/src/Exception.php';
 require 'vendor/PHPMailer/src/PHPMailer.php';
 require 'vendor/PHPMailer/src/SMTP.php';
 
-$my_config = 'my.config.inc.php';
-if (file_exists($my_config)) {
-	require_once('my.config.inc.php');
-} else {
-	require_once('config.inc.php');
-}
+require_once ('lib/config.php');
 require_once ('db.php');
 
 if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sendTo']) && array_key_exists('image', $_POST) ) {

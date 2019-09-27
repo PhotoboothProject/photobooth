@@ -1,14 +1,9 @@
 <?php
 
+require_once('../lib/config.php');
+
 $data = $_POST;
 if(isset($data['type'])){
-  $my_config = '../my.config.inc.php';
-  if (file_exists($my_config)) {
-    require_once('../my.config.inc.php');
-  } else {
-    require_once('../config.inc.php');
-  }
-
   if($data['type'] == 'reset') {
 
     // empty folders

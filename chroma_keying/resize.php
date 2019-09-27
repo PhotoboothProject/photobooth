@@ -1,10 +1,5 @@
 <?php
-$my_config = '../my.config.inc.php';
-if (file_exists($my_config)) {
-	require_once('../my.config.inc.php');
-} else {
-	require_once('../config.inc.php');
-}
+require_once('../lib/config.php');
 
 $sourcePath = '../'.$config['folders']['images'] . DIRECTORY_SEPARATOR .$_POST['filename'];
 $targetPath = '../'.$config['folders']['tmp'] . DIRECTORY_SEPARATOR .$_POST['filename'];

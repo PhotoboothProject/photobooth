@@ -8,5 +8,5 @@ trash
 package-lock.json
 .htaccess
 .htpasswd
-my.config.inc.php
+config/my.config.inc.php
 *.patch
