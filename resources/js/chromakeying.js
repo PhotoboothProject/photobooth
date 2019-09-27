@@ -158,3 +158,9 @@ function saveImage() {
 		});
 	},1000);
 }
+
+$( document ).ready(function() {
+	setTimeout(function(){
+		setMainImage($('body').attr('data-main-image'));
+	}, 100);
+});

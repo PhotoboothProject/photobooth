@@ -291,7 +291,7 @@ imagedestroy($thumb);
 
 // insert into database
 $images[] = $file;
-file_put_contents('../data/db.txt', json_encode($images));
+file_put_contents(__DIR__ . '/../data/db.txt', json_encode($images));
 
 // send imagename to frontend
 echo json_encode(array('success' => true, 'img' => $file));
