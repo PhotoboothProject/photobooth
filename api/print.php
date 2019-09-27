@@ -1,8 +1,8 @@
 <?php
 
-require_once('lib/config.php');
-require_once('db.php');
-require_once('folders.php');
+require_once('../lib/config.php');
+require_once('../lib/db.php');
+require_once('../lib/folders.php');
 
 $filename = trim(basename($_GET['filename']));
 if($pos = strpos($filename, '?')) {
@@ -10,10 +10,10 @@ if($pos = strpos($filename, '?')) {
     $filename = array_shift($parts);
 }
 
-$filename_source = $config['folders']['images'] . DIRECTORY_SEPARATOR . $filename;
-$filename_print = $config['folders']['print'] . DIRECTORY_SEPARATOR . $filename;
-$filename_codes = $config['folders']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
-$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $filename;
+$filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
+$filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
+$filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
+$filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $filename;
 $status = false;
 
 // text on print variables
@@ -36,8 +36,8 @@ if(!file_exists($filename_source)) {
         if($config['print_qrcode'] == true) {
             // create qr code
             if(!file_exists($filename_codes)) {
-                include('vendor/phpqrcode/qrlib.php');
-                $url = 'http://'.$_SERVER['HTTP_HOST'].'/download.php?image=';
+                include('../vendor/phpqrcode/qrlib.php');
+                $url = 'http://'.$_SERVER['HTTP_HOST'].'/api/download.php?image=';
                 QRcode::png($url.$filename, $filename_codes, QR_ECLEVEL_H, 10);
             }
 

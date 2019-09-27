@@ -7,9 +7,9 @@ if(isset($data['type'])){
   if($data['type'] == 'reset') {
 
     // empty folders
-    foreach($config['folders'] as $folder){
-      if(is_dir('../'.$folder)) {
-        $files = glob('../'.$folder.'/*.jpg');
+    foreach($config['foldersAbs'] as $folder){
+      if(is_dir($folder)) {
+        $files = glob($folder.'/*.jpg');
         foreach($files as $file){ // iterate files
           if(is_file($file)){
             unlink($file); // delete file

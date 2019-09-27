@@ -1,8 +1,8 @@
 <?php
 
-require_once('db.php');
-require_once('folders.php');
-require_once('lib/config.php');
+require_once('../lib/db.php');
+require_once('../lib/folders.php');
+require_once('../lib/config.php');
 
 if($config['file_format_date'] == true) {
 	$file = date('Ymd_His').'.jpg';
@@ -10,10 +10,10 @@ if($config['file_format_date'] == true) {
 	$file = md5(time()).'.jpg';
 }
 
-$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
-$filename_keying = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $file;
-$filename_tmp = $config['folders']['tmp'] . DIRECTORY_SEPARATOR . $file;
-$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
+$filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
+$filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+$filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
 
 if(($_POST['style'] === 'photo') && ($config['polaroid_effect'] === false)) {
@@ -44,7 +44,7 @@ if($_POST['style'] === 'photo') {
 				die(json_encode(array('error' => true)));
 		}
 	} else {
-		$devImg = array('resources/img/bg.jpg');
+		$devImg = array('../resources/img/bg.jpg');
 		copy(
 			$devImg[array_rand($devImg)],
 			$filename_orig
@@ -291,7 +291,7 @@ imagedestroy($thumb);
 
 // insert into database
 $images[] = $file;
-file_put_contents('data/db.txt', json_encode($images));
+file_put_contents('../data/db.txt', json_encode($images));
 
 // send imagename to frontend
 echo json_encode(array('success' => true, 'img' => $file));

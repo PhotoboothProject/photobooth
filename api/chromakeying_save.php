@@ -1,5 +1,5 @@
 <?php
-require_once('lib/config.php');
+require_once('../lib/config.php');
 
 if($config['file_format_date'] == true) {
 	$file = date('Ymd_His').'.jpg';
@@ -8,14 +8,14 @@ if($config['file_format_date'] == true) {
 }
 
 $uniqid = uniqid();
-$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $file;
-$filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
+$filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
 // get data from db.txt
-if(!file_exists('data/db.txt')){
-	file_put_contents('data/db.txt', json_encode(array()));
+if(!file_exists('../data/db.txt')){
+	file_put_contents('../data/db.txt', json_encode(array()));
 }
-$images = json_decode(file_get_contents('data/db.txt'));
+$images = json_decode(file_get_contents('../data/db.txt'));
 
 
 $img = $_POST['imgData'];
@@ -44,7 +44,7 @@ function ResizeJpgImage($image, $max_width, $max_height)
 
 // insert into database
 $images[] = $file;
-file_put_contents('data/db.txt', json_encode($images));
+file_put_contents('../data/db.txt', json_encode($images));
 
 // send imagename to frontend
 echo json_encode(array('success' => true, 'img' => $file));

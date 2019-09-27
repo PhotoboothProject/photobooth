@@ -1,8 +1,8 @@
 <?php
 
 require_once('lib/config.php');
-require_once('folders.php');
-require_once('db.php');
+require_once('lib/folders.php');
+require_once('lib/db.php');
 
 ?>
 <!DOCTYPE html>

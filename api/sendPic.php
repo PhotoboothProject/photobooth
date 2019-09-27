@@ -2,16 +2,16 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/PHPMailer/src/Exception.php';
-require 'vendor/PHPMailer/src/PHPMailer.php';
-require 'vendor/PHPMailer/src/SMTP.php';
+require '../vendor/PHPMailer/src/Exception.php';
+require '../vendor/PHPMailer/src/PHPMailer.php';
+require '../vendor/PHPMailer/src/SMTP.php';
 
-require_once ('lib/config.php');
-require_once ('db.php');
+require_once ('../lib/config.php');
+require_once ('../lib/db.php');
 
 if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sendTo']) && array_key_exists('image', $_POST) ) {
 
-    $postImage = str_replace( 'images' . DIRECTORY_SEPARATOR, '', $_POST['image']);
+    $postImage = basename($_POST['image']);
     if ( !in_array($postImage, $images) ) {
         echo json_encode(array('success' => false, 'error' => 'Image not found in database'));
         exit;
@@ -19,7 +19,7 @@ if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sen
 
     //try {
         $mail = new PHPMailer;
-        $mail->setLanguage($config['language'], 'vendor/PHPMailer/language/');
+        $mail->setLanguage($config['language'], '../vendor/PHPMailer/language/');
 
         $mail->isSMTP();
         $mail->Host = $config['mail_host'];
@@ -44,7 +44,7 @@ if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sen
         $mailContent = $config['mail_text'];
 
         // for send an attatchment
-        $path = $config['folders']['images'] . DIRECTORY_SEPARATOR;
+        $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
 
         //$file_name = $_POST['image'];
 
@@ -66,14 +66,14 @@ if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sen
             echo json_encode(array('success' => false, 'error' => $mail->ErrorInfo));
         } else {
             if ($_POST['send-link'] == 'yes') {
-                if (!file_exists('data/mail-addresses.txt')) {
-                    file_put_contents('data/mail-addresses.txt', json_encode(array()));
+                if (!file_exists('../data/mail-addresses.txt')) {
+                    file_put_contents('../data/mail-addresses.txt', json_encode(array()));
                 }
-                $addresses = json_decode(file_get_contents('data/mail-addresses.txt'));
+                $addresses = json_decode(file_get_contents('../data/mail-addresses.txt'));
                 if (!in_array($_POST['sendTo'], $addresses)) {
                     $addresses[] = $_POST['sendTo'];
                 }
-                file_put_contents('data/mail-addresses.txt', json_encode($addresses));
+                file_put_contents('../data/mail-addresses.txt', json_encode($addresses));
             }
             echo json_encode(array('success' => true));
         }

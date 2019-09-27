@@ -8,3 +8,7 @@ if (file_exists($my_config)) {
 } else {
     require_once($default_config);
 }
+
+foreach($config['folders'] as $key => $folder) {
+	$config['foldersAbs'][$key] = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $folder);
+}

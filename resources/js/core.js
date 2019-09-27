@@ -177,7 +177,7 @@ var photoBooth = (function () {
 	    }
             $('#counter').text('');
         }, cheeseTime);
-        jQuery.post("takePic.php",{filter: imgFilter,style: photoStyle}).done(function( result ){
+        jQuery.post("api/takePic.php",{filter: imgFilter,style: photoStyle}).done(function( result ){
             result = JSON.parse(result);
             if (result.error) {
                 public.errorPic(result);
@@ -203,7 +203,7 @@ var photoBooth = (function () {
         // Add QR Code Image
         var qrCodeModal = $('#qrCode');
         modal.empty(qrCodeModal);
-        $('<img src="qrcode.php?filename=' + result.img + '"/>').on('load', function () {
+        $('<img src="api/qrcode.php?filename=' + result.img + '"/>').on('load', function () {
             var body = qrCodeModal.find('.modal__body');
 
             $(this).appendTo(body);
@@ -218,7 +218,7 @@ var photoBooth = (function () {
             $('#print_mesg').addClass('modal--show');
             setTimeout(function () {
                 $.ajax({
-                    url: 'print.php?filename=' + encodeURI(result.img),
+                    url: 'api/print.php?filename=' + encodeURI(result.img),
                 }).done(function (data) {
                     if (isdev) {
                         console.log(data)
@@ -371,7 +371,7 @@ var photoBooth = (function () {
             var img = pswp.currItem.src;
             img = img.split('/').pop();
 
-            $('<img>').attr('src', 'qrcode.php?filename=' + img).appendTo(pswpQR);
+            $('<img>').attr('src', 'api/qrcode.php?filename=' + img).appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');
         }
@@ -385,7 +385,7 @@ var photoBooth = (function () {
         modal.open('#print_mesg');
         setTimeout(function () {
             $.ajax({
-                url: 'print.php?filename=' + encodeURI(img),
+                url: 'api/print.php?filename=' + encodeURI(img),
             }).done(function (data) {
                 if (isdev) {
                     console.log(data)
@@ -403,7 +403,7 @@ var photoBooth = (function () {
         e.preventDefault();
         var img = pswp.currItem.src;
         img = img.split('/').pop();
-        $.post( "chromakeying_info.php", function( info ) {
+        $.post( "api/chromakeying_info.php", function( info ) {
             if (info.chroma_keying == true) {
                 var currentHref = $(location).attr('href').split('#')[0];;
                 var encodedString = btoa(currentHref);
@@ -445,7 +445,7 @@ var photoBooth = (function () {
         var oldValue = form.find('.btn').html();
         form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
         $.ajax({
-            url: 'sendPic.php',
+            url: 'api/sendPic.php',
             type: 'POST',
             data: form.serialize(),
             dataType: "json",

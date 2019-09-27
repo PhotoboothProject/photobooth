@@ -3,7 +3,7 @@ require_once('lib/config.php');
 
 $location = base64_decode($_GET['location']);
 $filename = $_GET['filename'];
-$keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$keyingimage = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $filename;
 if (file_exists($keyingimage)) {
 	$mainimage = $keyingimage;
 	$keying_possible = true;

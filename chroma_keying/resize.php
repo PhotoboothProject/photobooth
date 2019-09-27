@@ -1,8 +1,8 @@
 <?php
 require_once('../lib/config.php');
 
-$sourcePath = '../'.$config['folders']['images'] . DIRECTORY_SEPARATOR .$_POST['filename'];
-$targetPath = '../'.$config['folders']['tmp'] . DIRECTORY_SEPARATOR .$_POST['filename'];
+$sourcePath = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR .$_POST['filename'];
+$targetPath = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR .$_POST['filename'];
 
 $source = imagecreatefromjpeg($sourcePath);
 $source = ResizeJpgImage($source, 1500, 1000);
