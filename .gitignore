@@ -6,7 +6,7 @@ trash
 /data/
 .sass-cache
 package-lock.json
-.htaccess
+/.htaccess
 .htpasswd
 config/my.config.inc.php
 *.patch
