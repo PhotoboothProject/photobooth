@@ -102,5 +102,8 @@ L10N = {
 	"textonprint_fontsize": "Schriftgröße",
 	"user_interface": "Benutzeroberfläche",
 	"user_interface_color_theme": "Theme",
-	"color_theme": "Theme auswählen"
+	"color_theme": "Theme auswählen",
+	"crop_onprint": "Bild bei Ausdruck zurechtschneiden",
+	"general_crop_width": "Neue Bildbreite bei Ausdruck",
+	"general_crop_height": "Neue Bildhöhe bei Ausdruck"
 }

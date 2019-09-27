@@ -102,5 +102,8 @@ L10N = {
 	"textonprint_fontsize": "Font size",
 	"user_interface": "User interface",
 	"user_interface_color_theme": "Theme",
-	"color_theme": "Choose a theme"
+	"color_theme": "Choose a theme",
+	"crop_onprint": "Crop picture at print",
+	"general_crop_width": "New width at print",
+	"general_crop_height": "New height at print"
 }

@@ -40,6 +40,23 @@ $configsetup = [
 			'name' => 'use_print',
 			'value' => $config['use_print']
 		],
+		'crop_onprint' => [
+			'type' => 'checkbox',
+			'name' => 'crop_onprint',
+			'value' => $config['crop_onprint']
+		],
+		'crop_width' => [
+			'type' => 'input',
+			'name' => 'crop_width',
+			'placeholder' => '1000',
+			'value' => $config['crop_width']
+		],
+		'crop_height' => [
+			'type' => 'input',
+			'name' => 'crop_height',
+			'placeholder' => '500',
+			'value' => $config['crop_height']
+		],
 		'use_qr' => [
 			'type' => 'checkbox',
 			'name' => 'use_qr',

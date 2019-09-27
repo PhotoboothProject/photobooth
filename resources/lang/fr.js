@@ -102,5 +102,8 @@ L10N = {
 	"textonprint_fontsize":  "Taille de la police",
 	"user_interface": "Interface utilisateur",
 	"user_interface_color_theme": "Thème",
-	"color_theme": "Choisissez un thème"
+	"color_theme": "Choisissez un thème",
+	"crop_onprint": "Recadrer la photo à imprimer",
+	"general_crop_width": "Nouvelle largeur à l'impression",
+	"general_crop_height": "Nouvelle hauteur à l'impression"
 }
