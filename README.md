@@ -59,8 +59,13 @@ sudo mkdir -p /var/www/html/print
 sudo mkdir -p /var/www/html/qrcodes
 sudo mkdir -p /var/www/html/thumbs
 sudo mkdir -p /var/www/html/tmp
-sudo chown -R pi: /var/www/
-sudo chmod -R 777 /var/www
+sudo chown -R www-data:www-data /var/www/
+sudo chmod -R u+w /var/www/html/images
+sudo chmod -R u+w /var/www/html/keying
+sudo chmod -R u+w /var/www/html/print
+sudo chmod -R u+w /var/www/html/qrcodes
+sudo chmod -R u+w /var/www/html/thumbs
+sudo chmod -R u+w /var/www/html/tmp
 
 ```
 Install latest version of libgphoto2, choose last stable release
@@ -68,20 +73,51 @@ Install latest version of libgphoto2, choose last stable release
 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && sudo bash gphoto2-updater.sh
 ```
 
-Give sudo rights to the webserver user (www-data)
+Next we have to give our webserver user access to the usb device. First we need
+to get the vendor and product id of our camera. The easiest way is to type
+`lsusb` while your camera is connected and to look for the line with your
+camera. For a Canon 70d this would look like the following:
 
-```sudo nano /etc/sudoers```
-and add the following line to the file:
-```www-data ALL=(ALL) NOPASSWD: ALL```
+```
+Bus 001 Device 066: ID 04a9:3253 Canon, Inc. EOS 70D
+```
 
-Ensure that the camera trigger works:
+`04a9` is the vendor id and `3253` the product id. Next execute the following
+line and replace both ids with your values.
+
+```
+echo SUBSYSTEM=="usb", ATTRS{idVendor}=="04a9", ATTRS{idProduct}=="3253", OWNER="www-data" | sudo tee /etc/udev/rules.d/50-usb-camera.rules
+```
+
+Restart your Raspberry or reload all rules with the following:
+
+```
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+Ensure that the camera trigger works. Unmount your camera, or remove these services:
 ```
 sudo rm /usr/share/dbus-1/services/org.gtk.vfs.GPhoto2VolumeMonitor.service
 sudo rm /usr/share/gvfs/mounts/gphoto2.mount
 sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor
 sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 ```
-Open the IP address of your raspberry pi in a browser
+
+Please use the following to test if your Webserver is able to take pictures:
+
+```
+sudo -u www-data gphoto2 --capture-image
+```
+
+If you like to use the printer you also have to add your webserver user to the `ld` group.
+
+```
+sudo gpasswd -a www-data lp
+```
+
+Now you should restart your Raspberry Pi to apply those settings.
+
+If everything is working, open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
 
