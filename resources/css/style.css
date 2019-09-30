@@ -57,7 +57,7 @@ h1, h2 {
   font-weight: 300; }
 
 h1 {
-  font-size: 50px;
+  font-size: 3rem;
   margin: 33px 0; }
 
 h3 {
@@ -345,10 +345,6 @@ body {
   .adminpanel h2 {
     text-align: center; }
 
-.names {
-  margin: 120px auto 0;
-  height: 281px; }
-
 #result {
   width: 100%;
   background: center center no-repeat;
@@ -488,22 +484,34 @@ hr.small {
   top: 50%;
   margin-top: -125px; }
 
-.inner {
+#start.open {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+#start .gallery-button {
+  position: fixed;
+  top: 0;
+  left: 0; }
+
+#start .startInner {
   background: rgba(0, 0, 0, 0.5);
-  width: 450px;
-  height: 700px;
-  position: absolute;
-  top: 50%;
-  margin-top: -350px;
   color: #fff;
   text-align: center;
-  padding: 20px 50px;
-  text-transform: uppercase;
-  left: 50%;
-  margin-left: -225px; }
-  .inner .btn {
+  padding: 1rem;
+  text-transform: uppercase; }
+  #start .startInner .names {
+    margin-top: 1rem;
+    margin-bottom: 2rem; }
+  #start .startInner .btn {
     margin-top: 3px;
     width: 80%; }
+  @media (min-width: 576px) {
+    #start .startInner {
+      padding: 3rem; }
+      #start .startInner .names {
+        margin-top: 2rem;
+        margin-bottom: 5rem; } }
 
 .sliderImages {
   display: none;
