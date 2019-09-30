@@ -78,5 +78,14 @@ if (empty($config['print']['msg'])) {
 }
 
 foreach ($config['folders'] as $key => $folder) {
-    $config['foldersAbs'][$key] = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $folder);
+    $path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $folder;
+
+    if (!file_exists($path)) {
+        if (!mkdir($path, 0755, true)) {
+            die("Abort. Could not create $folder");
+        }
+    }
+
+    $path = realpath($path);
+    $config['foldersAbs'][$key] = $path;
 }

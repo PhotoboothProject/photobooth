@@ -53,14 +53,7 @@ sudo git clone https://github.com/andreknieriem/photobooth html
 cd /var/www/html
 sudo git submodule update --init
 sudo cp config/config.inc.php config/my.config.inc.php
-sudo mkdir -p /var/www/html/data/images
-sudo mkdir -p /var/www/html/data/keying
-sudo mkdir -p /var/www/html/data/print
-sudo mkdir -p /var/www/html/data/qrcodes
-sudo mkdir -p /var/www/html/data/thumbs
-sudo mkdir -p /var/www/html/data/tmp
 sudo chown -R www-data:www-data /var/www/
-sudo chmod -R 775 /var/www/data
 
 ```
 Install latest version of libgphoto2, choose last stable release
