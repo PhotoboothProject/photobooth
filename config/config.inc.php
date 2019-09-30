@@ -1,12 +1,9 @@
 <?php
 
 //  WARNING!
-// This config gets overwritten by the admin panel if you use it.
-// If you want to use only this file, delete the admin/config.json file and do not use the admin panel
-// as it writes new config.json files.
+// Do not modify this file directly. Copy it to my.config.inc.php to apply local changes.
 
 $config = array();
-$sys['os'] = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
 $config['dev'] = false;
 $config['use_print'] = false;
 $config['use_qr'] = true;
@@ -79,47 +76,10 @@ $config['mail_secure'] = 'tls';
 $config['mail_port'] = '587';
 $config['mail_fromAddress'] = 'photobooth@example.com';
 $config['mail_fromName'] = 'Photobooth';
+$config['mail_subject'] = null; 	// if empty, default translation is used
+$config['mail_text'] = null;		// if empty, default translation is used
 
-switch($config['language']) {
-	case 'de':
-	$config['mail_subject'] = 'Hier ist dein Bild';
-	$config['mail_text'] = 'Hey, dein Bild ist angehangen.';
-	break;
-	case 'fr':
-	$config['mail_subject'] = 'Voici votre photo';
-	$config['mail_text'] = 'Hé, ta photo est attachée.';
-	break;
-	case 'en':
-	default:
-	$config['mail_subject'] = 'Here is your picture';
-	$config['mail_text'] = 'Hey, your picture is attached.';
-	break;
-}
-
-// COMMANDS and MESSAGES
-switch($sys['os']) {
-	case 'windows':
-	$config['take_picture']['cmd'] = 'digicamcontrol\CameraControlCmd.exe /capture /filename %s';
-	$config['take_picture']['msg'] = 'Photo transfer done.';
-	$config['print']['cmd'] = 'mspaint /pt "%s"';
-	$config['print']['msg'] = '';
-	break;
-	case 'linux':
-	default:
-	$config['take_picture']['cmd'] = 'sudo gphoto2 --capture-image-and-download --filename=%s images';
-	$config['take_picture']['msg'] = 'New file is in location';
-	$config['print']['cmd'] = 'sudo lp -o landscape -o fit-to-page %s';
-	$config['print']['msg'] = '';
-	break;
-}
-
-// MERGE WITH data/config.json if exists
-$filename = false;
-if(file_exists(__DIR__ . '/../data/config.json')) {
-	$filename = __DIR__ . '/../data/config.json';
-}
-
-if($filename){
-	$file = json_decode(file_get_contents($filename),true);
-	$config = $file;
-}
+$config['take_picture']['cmd'] = null;
+$config['take_picture']['msg'] = null;
+$config['print']['cmd'] = null;
+$config['print']['msg'] = null;

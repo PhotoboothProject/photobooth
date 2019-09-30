@@ -389,9 +389,8 @@ require_once('../lib/config.php');
 		<meta name="theme-color" content="#ffffff">
 	<?php }; ?>
 
-	<link rel="stylesheet" type="text/css" href="../resources/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" href="../resources/css/font-awesome.min.css" />
-	<link rel="stylesheet" type="text/css" href="../resources/css/default-skin/default-skin.css">
+	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
+	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
 	<link rel="stylesheet" href="../resources/css/admin.css" />
 	<script type="text/javascript">
@@ -490,7 +489,7 @@ require_once('../lib/config.php');
 	</div>
 
 </div>
-<script type="text/javascript" src="../resources/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="../resources/js/l10n.js"></script>
 <script type="text/javascript" src="../resources/js/theme.js"></script>
 <script type="text/javascript" src="../resources/js/admin.js"></script>
