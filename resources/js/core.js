@@ -178,7 +178,6 @@ var photoBooth = (function () {
             $('#counter').text('');
         }, cheeseTime);
         jQuery.post("api/takePic.php",{filter: imgFilter,style: photoStyle}).done(function( result ){
-            result = JSON.parse(result);
             if (result.error) {
                 public.errorPic(result);
             } else {
