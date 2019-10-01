@@ -19,14 +19,14 @@ $(function(){
     elem.addClass('saving');
     if(really) {
       $.ajax({
-        'url': 'admin.php',
+        'url': '../api/admin.php',
         'data': data,
         'dataType' : 'json',
         'type': 'post',
         'success': function(resp) {
           elem.removeClass('saving');
           elem.addClass(resp);
-          
+
           setTimeout(function(){
             elem.removeClass('error success');
           },3000);
@@ -41,7 +41,7 @@ $(function(){
     elem.addClass('saving');
     var data = 'type=config&'+$('form').serialize();
     $.ajax({
-      'url': 'admin.php',
+      'url': '../api/admin.php',
       'data': data,
       'dataType' : 'json',
       'type': 'post',

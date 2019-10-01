@@ -1,7 +1,7 @@
 <?php
 
 require_once('../lib/config.php');
-require_once('configsetup.inc.php');
+require_once('../lib/configsetup.inc.php');
 ?>
 <!DOCTYPE html>
 <html>
