@@ -36,10 +36,11 @@ if (file_exists($keyingimage)) {
 
 		<div style="padding-top:10px;text-align:center;">
 			<?php
-				$cdir = scandir("resources/img/background");
+				$dir = join(DIRECTORY_SEPARATOR, ['resources', 'img', 'background']) . DIRECTORY_SEPARATOR;
+				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
-					if (!in_array($value, array(".","..")) && !is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
-						echo '<img src="resources/img/background/'.$value.'" style="cursor:pointer;max-width:120px;border:2px solid black;margin:3px;" onclick="setBackgroundImage(this.src)">';
+					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
+						echo '<img src="'.$dir.$value.'" style="cursor:pointer;max-width:120px;border:2px solid black;margin:3px;" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
