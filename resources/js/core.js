@@ -278,7 +278,7 @@ var photoBooth = (function () {
         thumbImg.src = thumbFolder+'/' + imageName;
 
         function allLoaded() {
-            var $node = $('<a>').html(thumbImg).data('size', bigSize).attr('href', imgFolder+'/' + imageName + '?new=1').attr('data-med', thumbFolder+'/' + imageName).attr('data-med-size', thumbSize);
+            var $node = $('<a>').html(thumbImg).data('size', bigSize).attr('href', imgFolder+'/' + imageName).attr('data-med', thumbFolder+'/' + imageName).attr('data-med-size', thumbSize);
             if (gallery_newest_first) {
                 $node.prependTo($('#galimages'));
             } else {
