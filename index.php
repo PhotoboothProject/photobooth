@@ -39,18 +39,6 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="node_modules/photoswipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/style.css" />
-
-	<script type="text/javascript">
-		var isdev = <?=$config['dev']?'true':'false'?>;
-		var useVideo = <?=$config['previewFromCam']?'true':'false'?>;
-		var imgFolder = "<?=$config['folders']['images']?>";
-		var thumbFolder = "<?=$config['folders']['thumbs']?>";
-		var gallery_newest_first = <?=$config['newest_first']?>;
-		var gallery_scrollbar = <?=$config['scrollbar']?'true':'false'?>;
-		var cntdwn_time = <?=$config['cntdwn_time']?>;
-		var cheese_time = <?=$config['cheese_time']?>;
-		var theme = "<?=$config['bluegray_theme'] ? 'bluegray' : 'default'?>";
-	</script>
 </head>
 
 <body class="deselect">
@@ -350,6 +338,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		</div>
 	</div>
 
+	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="resources/js/jquery.easing.1.3.js"></script>

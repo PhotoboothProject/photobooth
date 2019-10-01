@@ -24,15 +24,10 @@ require_once('../lib/configsetup.inc.php');
 		<meta name="theme-color" content="#ffffff">
 	<?php }; ?>
 
-	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
-	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
+	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
-	<link rel="stylesheet" href="../resources/css/admin.css" />
-	<script type="text/javascript">
-		var isdev = <?php echo ($config['dev']) ? 'true' : 'false'; ?>;
-		var gallery_newest_first = <?php echo ($config['newest_first']) ? 'true' : 'false'; ?>;
-		var theme = <?php echo $config['bluegray_theme'] ? "'bluegray'" : "'default'"; ?>;
-	</script>
+	<link rel="stylesheet" type="text/css" href="../resources/css/admin.css" />
 </head>
 <body class="deselect">
 <div id="wrapper" style="overflow-y: auto;">
@@ -124,6 +119,7 @@ require_once('../lib/configsetup.inc.php');
 	</div>
 
 </div>
+<script type="text/javascript" src="../api/config.php"></script>
 <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="../resources/js/l10n.js"></script>
 <script type="text/javascript" src="../resources/js/theme.js"></script>

@@ -1,23 +1,16 @@
 var L10N = {};
 var photoBooth = (function () {
-    config = {};
     // vars
     var public = {},
         loader = $('#loader'),
         startPage = $('#start'),
-        countDown = cntdwn_time,       // Countdown from config
-        cheeseTime = cheese_time,
         timeToLive = 90000,
-        qr = false,
         timeOut,
-        saving = false,
         gallery = $('#gallery'),
-        showScrollbarsInGallery = gallery_scrollbar,
         processing = false,
         pswp = {},
         resultPage = $('#result'),
         imgFilter = 'imgPlain',
-        stream,
         webcamConstraints = {
             audio: false,
             video: {
@@ -64,7 +57,6 @@ var photoBooth = (function () {
     // reset whole thing
     public.reset = function () {
         loader.removeClass('open');
-        qr = false;
         modal.empty('#qrCode');
         $('.qrbtn').removeClass('active').attr('style', '');
         $('.loading').text('');
@@ -136,7 +128,7 @@ var photoBooth = (function () {
 
     // Cheese
     public.cheese = function (photoStyle) {
-        if (isdev) {
+        if (config.dev) {
             console.log(photoStyle);
         }
         if ((photoStyle=='photo')){
@@ -152,10 +144,10 @@ var photoBooth = (function () {
     // take Picture
     public.takePic = function (photoStyle) {
         processing = true;
-        if (isdev) {
+        if (config.dev) {
             console.log('Take Picture:' + photoStyle);
         }
-        if (useVideo) {
+        if (config.previewFromCam) {
             public.stopVideo();
         }
         setTimeout(function () {
@@ -165,7 +157,7 @@ var photoBooth = (function () {
                 $('.loading').text(L10N.busy);
             } else {
                 $('#counter').text('');
-                if (!isdev) {
+                if (!config.dev) {
                     setTimeout(function () {
                         $('.spinner').show();
                         $('.loading').text(L10N.busyCollage);
@@ -176,7 +168,7 @@ var photoBooth = (function () {
                 }
 	    }
             $('#counter').text('');
-        }, cheeseTime);
+        }, config.cheese_time);
         jQuery.post("api/takePic.php",{filter: imgFilter,style: photoStyle}).done(function( result ){
             if (result.error) {
                 public.errorPic(result);
@@ -219,7 +211,7 @@ var photoBooth = (function () {
                 $.ajax({
                     url: 'api/print.php?filename=' + encodeURI(result.img),
                 }).done(function (data) {
-                    if (isdev) {
+                    if (config.dev) {
                         console.log(data)
                     }
                     setTimeout(function () {
@@ -234,9 +226,9 @@ var photoBooth = (function () {
         public.addImage(result.img);
 
         // Add Image
-        $('<img src="'+imgFolder+'/' + result.img + '" class="original">').on('load', function () {
+        $('<img src="'+config.folders.images+'/' + result.img + '" class="original">').on('load', function () {
             $('#result').css({
-                'background-image': 'url('+imgFolder+'/' + result.img + ')'
+                'background-image': 'url('+config.folders.images+'/' + result.img + ')'
             });
             startPage.fadeOut(400, function () {
                 resultPage.fadeIn(400, function () {
@@ -273,12 +265,12 @@ var photoBooth = (function () {
             if (--imgtoLoad == 0) {allLoaded();}
         }
 
-        bigImg.src = imgFolder+'/' + imageName;
-        thumbImg.src = thumbFolder+'/' + imageName;
+        bigImg.src = config.folders.images+'/' + imageName;
+        thumbImg.src = config.folders.thumbs+'/' + imageName;
 
         function allLoaded() {
-            var $node = $('<a>').html(thumbImg).data('size', bigSize).attr('href', imgFolder+'/' + imageName + '?new=1').attr('data-med', thumbFolder+'/' + imageName).attr('data-med-size', thumbSize);
-            if (gallery_newest_first) {
+            var $node = $('<a>').html(thumbImg).data('size', bigSize).attr('href', config.folders.images+'/' + imageName + '?new=1').attr('data-med', config.folders.thumbs+'/' + imageName).attr('data-med-size', thumbSize);
+            if (config.newest_first) {
                 $node.prependTo($('#galimages'));
             } else {
                 $node.appendTo($('#galimages'));
@@ -288,7 +280,7 @@ var photoBooth = (function () {
 
     // Open Gallery Overview
     public.openGallery = function (elem) {
-        if(showScrollbarsInGallery) {
+        if(config.scrollbar) {
             gallery.addClass('scrollbar');
         }
 
@@ -306,7 +298,7 @@ var photoBooth = (function () {
         $('.sidenav > div').removeAttr("class");
         $(this).addClass("activeSidenavBtn");
         imgFilter = $(this).attr("id");
-        if (isdev) {
+        if (config.dev) {
             console.log(imgFilter);
         }
     });
@@ -315,11 +307,11 @@ var photoBooth = (function () {
         if (!processing) {
             public.closeNav();
             public.reset();
-            if (useVideo) {
+            if (config.previewFromCam) {
                 public.startVideo();
             }
             loader.addClass('open');
-            public.countdown(countDown, $('#counter'),photoStyle);
+            public.countdown(config.cntdwn_time, $('#counter'),photoStyle);
         }
     }
 
@@ -386,7 +378,7 @@ var photoBooth = (function () {
             $.ajax({
                 url: 'api/print.php?filename=' + encodeURI(img),
             }).done(function (data) {
-                if (isdev) {
+                if (config.dev) {
                     console.log(data)
                 }
                 setTimeout(function () {
@@ -431,7 +423,7 @@ var photoBooth = (function () {
         if($('.pswp.pswp--open.pswp--visible').length) {
             img = pswp.currItem.src;
         } else {
-            img = resultPage.css("background-image").replace('url(','').replace(')','').replace(/\"/gi, "").split('/'+imgFolder+'/')[1];
+            img = resultPage.css("background-image").replace('url(','').replace(')','').replace(/\"/gi, "").split('/'+config.folders.images+'/')[1];
         }
 
         img = img.split('/').pop();
@@ -500,7 +492,7 @@ var photoBooth = (function () {
     public.countdown = function (calls, element, photoStyle) {
         count = 0;
         current = calls;
-        if (isdev) {
+        if (config.dev) {
             console.log(photoStyle);
         }
         var timerFunction = function () {
@@ -513,7 +505,7 @@ var photoBooth = (function () {
                 window.setTimeout(() => element.addClass('tick'), 50);
                 window.setTimeout(timerFunction, 1000);
             } else {
-                if (isdev) {
+                if (config.dev) {
                     console.log(photoStyle);
                 }
                 public.cheese(photoStyle);
@@ -828,7 +820,7 @@ var photoBooth = (function () {
         }
     });
     // Disable Right-Click
-    if (!isdev) {
+    if (!config.dev) {
         $(this).on("contextmenu", function (e) {
             e.preventDefault();
         });

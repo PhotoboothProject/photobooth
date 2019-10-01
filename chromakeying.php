@@ -21,11 +21,6 @@ if (file_exists($keyingimage)) {
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" href="resources/css/style.css" />
-
-		<script type="text/javascript">
-			var isdev = <?=$config['dev']?'true':'false'?>;
-			var theme = "<?=$config['bluegray_theme'] ? 'bluegray' : 'default'?>";
-		</script>
 	</head>
 <body data-main-image="<?=$mainimage?>">
 	<div id="wrapper" style="padding: 1em 2em 2em; overflow-y: auto;">
@@ -69,6 +64,7 @@ if (file_exists($keyingimage)) {
 			<div class="modal__body" id="save_mesg_text"><span data-l10n="saving"></span></div>
 		</div>
 	</div>
+	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-0.8.js"></script>
 	<script type="text/javascript" src="resources/js/l10n.js"></script>
