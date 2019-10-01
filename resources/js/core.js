@@ -284,6 +284,8 @@ var photoBooth = (function () {
             } else {
                 $node.appendTo($('#galimages'));
             }
+
+            $('#galimages').children().not('a').remove();
         }
     }
 
