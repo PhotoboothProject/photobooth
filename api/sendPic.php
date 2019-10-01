@@ -1,85 +1,92 @@
 <?php
+header('Content-Type: application/json');
+
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 require '../vendor/PHPMailer/src/Exception.php';
 require '../vendor/PHPMailer/src/PHPMailer.php';
 require '../vendor/PHPMailer/src/SMTP.php';
 
-require_once ('../lib/config.php');
-require_once ('../lib/db.php');
+require_once('../lib/config.php');
+require_once('../lib/db.php');
 
-if (array_key_exists('sendTo', $_POST) && PHPMailer::validateAddress($_POST['sendTo']) && array_key_exists('image', $_POST) ) {
+if (empty($_POST['sendTo']) || empty($_POST['image']) || !PHPMailer::validateAddress($_POST['sendTo'])) {
+    die(json_encode([
+        'success' => false,
+        'error' => 'E-Mail address invalid'
+    ]));
+}
 
-    $postImage = basename($_POST['image']);
-    if ( !in_array($postImage, $images) ) {
-        echo json_encode(array('success' => false, 'error' => 'Image not found in database'));
-        exit;
+$postImage = basename($_POST['image']);
+if (!in_array($postImage, $images)) {
+    die(json_encode([
+        'success' => false,
+        'error' => 'Image not found in database'
+    ]));
+}
+
+$mail = new PHPMailer;
+$mail->setLanguage($config['language'], '../vendor/PHPMailer/language/');
+
+$mail->isSMTP();
+$mail->Host = $config['mail_host'];
+$mail->SMTPAuth = true;
+$mail->SMTPDebug = 0;
+$mail->Username = $config['mail_username'];
+$mail->Password = $config['mail_password'];
+$mail->SMTPSecure = $config['mail_secure'];
+$mail->Port = $config['mail_port'];
+$mail->setFrom($config['mail_fromAddress'], $config['mail_fromName']);
+
+if (!$mail->addAddress($_POST['sendTo'])) {
+    die(json_encode([
+        'success' => false,
+        'error' => 'E-Mail address not valid / error'
+    ]));
+}
+
+// Email subject
+$mail->Subject = $config['mail_subject'];
+
+// Email body content
+$mailContent = $config['mail_text'];
+
+// for send an attachment
+$path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
+
+$mail->Body = $mailContent;
+if (!$mail->addAttachment($path . $postImage)) {
+    die(json_encode([
+        'success' => false,
+        'error' => 'file error:' . $path . $postImage
+    ]));
+}
+
+if (isset($_POST['send-link']) && $_POST['send-link'] === 'yes') {
+    if (!file_exists('../data/mail-addresses.txt')) {
+        $addresses = [];
+    } else {
+        $addresses = json_decode(file_get_contents('../data/mail-addresses.txt'));
     }
 
-    //try {
-        $mail = new PHPMailer;
-        $mail->setLanguage($config['language'], '../vendor/PHPMailer/language/');
+    if (!in_array($_POST['sendTo'], $addresses)) {
+        $addresses[] = $_POST['sendTo'];
+    }
 
-        $mail->isSMTP();
-        $mail->Host = $config['mail_host'];
-        $mail->SMTPAuth = true;
-        $mail->SMTPDebug = 0;
-        $mail->Username = $config['mail_username'];
-        $mail->Password = $config['mail_password'];
-        $mail->SMTPSecure = $config['mail_secure'];
-        $mail->Port = $config['mail_port'];
-        $mail->setFrom($config['mail_fromAddress'], $config['mail_fromName']);
+    file_put_contents('../data/mail-addresses.txt', json_encode($addresses));
 
-        if (!$mail->addAddress($_POST['sendTo'])) {
-            echo json_encode(array('success' => false, 'error' => 'E-Mail address not valid / error'));
-            exit;
-        }
-
-        // Email subject
-        $mail->Subject = $config['mail_subject'];
-        // Set email format to HTML
-        //$mail->isHTML(true);
-        // Email body content
-        $mailContent = $config['mail_text'];
-
-        // for send an attatchment
-        $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
-
-        //$file_name = $_POST['image'];
-
-        $mail->Body = $mailContent;
-        if (!$mail->addAttachment($path . $postImage)) {
-            echo 'file error:' . $path . $postImage;
-            exit;
-        }
-
-        /*$mail->SMTPOptions = array(
-            'ssl' => array(
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
-            )
-        );*/
-        // Send email
-        if ($mail->send() === false) {
-            echo json_encode(array('success' => false, 'error' => $mail->ErrorInfo));
-        } else {
-            if ($_POST['send-link'] == 'yes') {
-                if (!file_exists('../data/mail-addresses.txt')) {
-                    file_put_contents('../data/mail-addresses.txt', json_encode(array()));
-                }
-                $addresses = json_decode(file_get_contents('../data/mail-addresses.txt'));
-                if (!in_array($_POST['sendTo'], $addresses)) {
-                    $addresses[] = $_POST['sendTo'];
-                }
-                file_put_contents('../data/mail-addresses.txt', json_encode($addresses));
-            }
-            echo json_encode(array('success' => true));
-        }
-    /*} catch (Exception $e) {
-        echo json_encode(array('success' => false, 'error' => $e.getMessage()));
-    }*/
-} else {
-    echo json_encode(array('success' => false, 'error' => 'E-Mail address invalid'));
+    die(json_encode([
+        'success' => true,
+    ]));
 }
+
+if ($mail->send()) {
+    die(json_encode([
+        'success' => true,
+    ]));
+}
+
+die(json_encode([
+    'success' => false,
+    'error' => $mail->ErrorInfo
+]));
