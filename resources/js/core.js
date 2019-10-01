@@ -402,8 +402,8 @@ var photoBooth = (function () {
         e.preventDefault();
         var img = pswp.currItem.src;
         img = img.split('/').pop();
-        $.post( "api/chromakeying_info.php", function( info ) {
-            if (info.chroma_keying == true) {
+        $.post( "api/chromakeying/info.php", function( info ) {
+            if (info.chroma_keying) {
                 var currentHref = $(location).attr('href').split('#')[0];;
                 var encodedString = btoa(currentHref);
                 //var decodedString = atob(encodedString);

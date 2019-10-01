@@ -134,7 +134,7 @@ function printImage() {
 	var dataURL = canvas.toDataURL("image/png");
 	$('#print_mesg').addClass('modal--show');
 	setTimeout(function () {
-		$.post( "api/chromakeying_print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( status ) {
+		$.post( "api/chromakeying/print.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function() {
 			setTimeout(function () {
 				$('#print_mesg').removeClass('modal--show');
 				window.location.reload();
@@ -151,7 +151,7 @@ function saveImage() {
 	var dataURL = canvas.toDataURL("image/png");
 	$('#save_mesg').addClass('modal--show');
 	setTimeout(function () {
-		$.post( "api/chromakeying_save.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function( url ) {
+		$.post( "api/chromakeying/save.php", { imgData: dataURL, mainImageSrc: mainImageSrc }, function() {
 			setTimeout(function () {
 				$('#save_mesg').removeClass('modal--show');
 			},2000);

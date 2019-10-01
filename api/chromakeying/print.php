@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: application/json');
+
 require_once('../lib/config.php');
 
 $img = $_POST['imgData'];
@@ -14,5 +16,6 @@ $printimage = shell_exec(
 		$filename_print
 	)
 );
+
 echo json_encode(array('status' => 'ok', 'msg' => $printimage || ''));
 ?>
