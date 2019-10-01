@@ -23,6 +23,11 @@ if(isset($data['type'])){
       }
     }
 
+    // delete mail-addresses.txt
+    if(is_file('../mail-addresses.txt')){
+      unlink('../mail-addresses.txt');
+    }
+    
     // delete data.txt
     if(is_file('../data.txt')){
       unlink('../data.txt'); // delete file
