@@ -87,6 +87,11 @@ $configsetup = [
 			'name' => 'collage_key',
 			'value' => $config['collage_key']
 		],
+		'force_buzzer' => [
+			'type' => 'checkbox',
+			'name' => 'force_buzzer',
+			'value' => $config['force_buzzer']
+		],
 		'cntdwn_time' => [
 			'type' => 'input',
 			'name' => 'cntdwn_time',

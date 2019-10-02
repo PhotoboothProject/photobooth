@@ -1,5 +1,7 @@
 /* exported L10N */
 const L10N = {
+	"force_buzzer": "hide trigger button",
+	"use_button": "Use Buzzer to take a Picture",
 	"general_photo_key": "Key code which triggers a photo",
 	"general_collage_key": "Key code which triggers a collage",
 	"cups_button": "Show CUPS button",

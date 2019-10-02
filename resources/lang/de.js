@@ -1,5 +1,7 @@
 /* exported L10N */
 const L10N = {
+	"force_buzzer": "Verstecke Auslöse-Taste",
+	"use_button": "Buzzer verwenden, um ein Bild aufzunehmen",
 	"general_photo_key": "Tastencode welcher ein Foto auslöst",
 	"general_collage_key": "Tastencode welcher eine Collage auslöst",
 	"cups_button": "CUPS Taste anzeigen",

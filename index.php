@@ -81,12 +81,18 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 						data-l10n="selectFilter"></span></a>
 				<?php endif; ?>
 
-				<?php if ($config['use_collage']): ?>
-				<a href="#" class="btn takeCollage"><i class="fa fa-th-large"></i> <span
-						data-l10n="takeCollage"></span></a>
-				<?php endif; ?>
+				<?php if ($config['force_buzzer']): ?>
+				<div id="useBuzzer">
+						<span data-l10n="use_button"></span>
+				</div>
+				<?php else: ?>
+					<?php if ($config['use_collage']): ?>
+					<a href="#" class="btn takeCollage"><i class="fa fa-th-large"></i> <span
+							data-l10n="takeCollage"></span></a>
+					<?php endif; ?>
 
-				<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
+					<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
+				<?php endif; ?>
 			</div>
 
 			<?php if ($config['show_fork']): ?>
@@ -168,11 +174,13 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
 				<?php endif; ?>
 
-				<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
+				<?php if (!$config['force_buzzer']): ?>
+					<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
 
-				<?php if ($config['use_collage']): ?>
-				<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span
-						data-l10n="newCollage"></span></a>
+					<?php if ($config['use_collage']): ?>
+					<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span
+							data-l10n="newCollage"></span></a>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 

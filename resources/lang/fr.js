@@ -1,5 +1,7 @@
 /* exported L10N */
 const L10N = {
+	"force_buzzer": "masquer le déclencheur",
+	"use_button": "Utilisez le bouton matériel pour prendre une photo",
 	"general_photo_key": "Code clé qui déclenche une photo",
 	"general_collage_key": "Code clé qui déclenche une collage",
 	"cups_button": "Afficher le bouton CUPS",
