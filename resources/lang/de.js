@@ -1,4 +1,7 @@
-L10N = {
+/* exported L10N */
+const L10N = {
+	"general_photo_key": "Tastencode welcher ein Foto auslöst",
+	"general_collage_key": "Tastencode welcher eine Collage auslöst",
 	"cups_button": "CUPS Taste anzeigen",
 	"gallery": "Galerie",
 	"startScreen": "<h1>Photobooth<\/h1><h2>Webinterface<\/h2> by Andr\u00e9 Rinas",
@@ -46,7 +49,6 @@ L10N = {
 	"gallery_date_format": "Datumsstil",
 	"gallery_no_image": "Die Galerie ist noch leer. Mache doch ein paar Bilder!",
 	"use_mail": "E-Mail aktivieren",
-	"use_gpio_button": "Hardware-Taster verwenden, um ein Bild aufzunehmen",
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
 	"general_cntdwn_time": "Countdown Timer in Sekunden",

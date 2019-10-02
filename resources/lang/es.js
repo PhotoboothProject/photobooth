@@ -1,4 +1,7 @@
-L10N = {
+/* exported L10N */
+const L10N = {
+	"general_photo_key": "Código clave que desencadena una foto",
+	"general_collage_key": "Código clave que desencadena una collage",
 	"cups_button": "Mostrar el botón CUPS",
 	"gallery": "Galería",
 	"startScreen": "<h1>Photobooth<\/h1><h2>Interfaz Web<\/h2> por Andr\u00e9 Rinas",
@@ -46,7 +49,6 @@ L10N = {
 	"gallery_date_format": "Formato de fecha",
 	"gallery_no_image": "La galeri es vacía. ¡Saque fotos!",
 	"use_mail": "Utilizar el correo electrónico",
-	"use_gpio_button": "Utilice el botón GPIO para sacar una foto",
 	"show_fork": "Muestre el banner de la página",
 	"cntdwn_time": "Ajuste la cuenta regresiva.",
 	"general_cntdwn_time": "Cuenta regresiva en segundos",

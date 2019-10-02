@@ -77,10 +77,15 @@ $configsetup = [
 			'name' => 'use_mail',
 			'value' => $config['use_mail']
 		],
-		'use_gpio_button' => [
-			'type' => 'checkbox',
-			'name' => 'use_gpio_button',
-			'value' => $config['use_gpio_button']
+		'photo_key' => [
+			'type' => 'input',
+			'name' => 'photo_key',
+			'value' => $config['photo_key']
+		],
+		'collage_key' => [
+			'type' => 'input',
+			'name' => 'collage_key',
+			'value' => $config['collage_key']
 		],
 		'cntdwn_time' => [
 			'type' => 'input',

@@ -498,6 +498,16 @@ const photoBooth = (function () {
         window.open(url, 'newwin', features);
     });
 
+    $(document).on('keypress', function(ev) {
+        if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
+            public.thrill('photo');
+        }
+
+        if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+            public.thrill('collage');
+        }
+    });
+
     // clear Timeout to not reset the gallery, if you clicked anywhere
     $(document).on('click', function () {
         if (!startPage.is(':visible')) {

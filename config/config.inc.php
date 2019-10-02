@@ -13,7 +13,6 @@ $config['crop_onprint'] = false;
 $config['crop_width'] = '1000';
 $config['crop_height'] = '500';
 $config['use_mail'] = false; // mail data needs to be configured
-$config['use_gpio_button'] = false; // Use alt+p to take a new picture, can be triggered via GPIO24
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
 $config['cups_button'] = false;
@@ -26,6 +25,11 @@ $config['polaroid_rotation'] = '0';
 $config['chroma_keying'] = true;
 $config['use_collage'] = false;
 $config['color_theme'] = 'default'; // possible values are default, blue-gray, or an array with the corresponding colors (e.g. ['primary' => '#fff', 'secondary'=>'#a1a1a1', 'font'=>'#000'])
+
+// specify key id to use that key to take a picture or collage (e.g. 13 is the enter key)
+// use for example https://keycode.info to get the key code
+$config['photo_key'] = null;
+$config['collage_key'] = null;
 
 // LANGUAGE
 // possible values: en, de, es, fr

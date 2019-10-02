@@ -154,8 +154,8 @@ and add the following line:
 If connection fails some help can be found [here](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
 
 #### Use Hardware Button to take a Picture
-You can use a hardware button connected on GPIO24 to trigger a photo. Set ```$config['use_gpio_button']``` to ```true``` or use the Admin panel to enable this function.
-You also need to run a python script in background to read the state of GPIO24 and send a key-combination (alt+p) if hardware button is pressed to trigger the website to take a photo.
+You can use a hardware button connected on GPIO24 to trigger a photo. Set `$config['photo_key']` to e.g. `13` (enter key) or use the Admin panel to specify the key.
+You also need to run a python script in background to read the state of GPIO24 and send the key if hardware button is pressed to trigger the website to take a photo.
 To run the python script in background add a cronjob:
 ```
 sudo crontab -e
