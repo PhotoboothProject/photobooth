@@ -1,5 +1,5 @@
 if (config.bluegray_theme) {
-    var style = document.documentElement.style;
+    const style = document.documentElement.style;
 
     style.setProperty('--primary-color', '#669db3');
     style.setProperty('--secondary-color', '#2e535e');

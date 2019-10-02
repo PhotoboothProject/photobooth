@@ -1,8 +1,10 @@
-var initPhotoSwipeFromDOM = function (gallerySelector) {
+/* exported initPhotoSwipeFromDOM */
+/* global photoBooth */
+function initPhotoSwipeFromDOM (gallerySelector) {
 
-    var gallery;
+    let gallery;
 
-    var parseThumbnailElements = function (container) {
+    const parseThumbnailElements = function (container) {
         return $(container).find('>a').map(function () {
             const element = $(this);
 
@@ -10,7 +12,7 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
             const medSize = element.attr('data-med-size').split('x');
 
             // create slide object
-            item = {
+            const item = {
                 element: element.get(0),
                 src: element.attr('href'),
                 w: parseInt(size[0], 10),
@@ -33,7 +35,7 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
         }).get();
     };
 
-    var onThumbnailClick = function (ev) {
+    const onThumbnailClick = function (ev) {
         ev.preventDefault();
 
         const element = $(ev.target).closest('a');
@@ -42,16 +44,16 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
         openPhotoSwipe(index);
     };
 
-    var openPhotoSwipe = function (index) {
+    const openPhotoSwipe = function (index) {
         const pswpElement = $('.pswp').get(0);
         const items = parseThumbnailElements(gallerySelector);
 
         const options = {
             index: index,
 
-            getThumbBoundsFn: function (index) {
+            getThumbBoundsFn: function (thumbIndex) {
                 // See Options->getThumbBoundsFn section of docs for more info
-                var thumbnail = items[index].element.children[0],
+                const thumbnail = items[thumbIndex].element.children[0],
                     pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
                     rect = thumbnail.getBoundingClientRect();
 
@@ -71,14 +73,14 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
         gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 
         // see: http://photoswipe.com/documentation/responsive-images.html
-        var realViewportWidth,
+        let realViewportWidth,
             useLargeImages = false,
             firstResize = true,
             imageSrcWillChange;
 
         gallery.listen('beforeResize', function () {
 
-            var dpiRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+            let dpiRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
             dpiRatio = Math.min(dpiRatio, 2.5);
             realViewportWidth = gallery.viewportSize.x * dpiRatio;
 
@@ -106,7 +108,7 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
 
         });
 
-        gallery.listen('gettingData', function (index, item) {
+        gallery.listen('gettingData', function (_index, item) {
             if (useLargeImages) {
                 item.src = item.originalImage.src;
                 item.w = item.originalImage.w;
@@ -118,7 +120,7 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
             }
         });
 
-        var resetMailForm = function () {
+        const resetMailForm = function () {
             $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
 
             photoBooth.resetMailForm();
@@ -136,13 +138,13 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
     $('.pswp__button--qrcode').on('click', function (e) {
         e.preventDefault();
 
-        var pswpQR = $('.pswp__qr');
+        const pswpQR = $('.pswp__qr');
 
         if (pswpQR.hasClass('qr-active')) {
             pswpQR.removeClass('qr-active').fadeOut('fast');
         } else {
             pswpQR.empty();
-            var img = gallery.currItem.src;
+            let img = gallery.currItem.src;
             img = img.split('/').pop();
 
             $('<img>').attr('src', 'api/qrcode.php?filename=' + img).appendTo(pswpQR);
@@ -155,7 +157,7 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
     $('.pswp__button--print').on('click', function (e) {
         e.preventDefault();
 
-        var img = gallery.currItem.src.split('/').pop();
+        const img = gallery.currItem.src.split('/').pop();
 
         photoBooth.printImage(img, () => {
             gallery.close();
@@ -166,11 +168,11 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
     $('.pswp__button--print-chroma-keying').on('click', function (e) {
         e.preventDefault();
 
-        var img = gallery.currItem.src.split('/').pop();
+        const img = gallery.currItem.src.split('/').pop();
 
         if (config.chroma_keying) {
-            var currentHref = location.href.split('#')[0];
-            var encodedString = btoa(currentHref);
+            const currentHref = location.href.split('#')[0];
+            const encodedString = btoa(currentHref);
 
             location = 'chromakeying.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString);
         }
@@ -180,11 +182,11 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        var img = gallery.currItem.src.split('/').pop();
+        const img = gallery.currItem.src.split('/').pop();
 
         photoBooth.toggleMailDialog(img);
     });
 
     $(gallerySelector).on('click', onThumbnailClick);
-};
+}
 

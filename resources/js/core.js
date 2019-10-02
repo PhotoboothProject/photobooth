@@ -1,15 +1,13 @@
-var L10N = {};
-var photoBooth = (function () {
+/* globals initPhotoSwipeFromDOM L10N */
+
+const photoBooth = (function () {
     // vars
-    var public = {},
+    const public = {},
         loader = $('#loader'),
         startPage = $('#start'),
         timeToLive = 90000,
-        timeOut,
         gallery = $('#gallery'),
-        processing = false,
         resultPage = $('#result'),
-        imgFilter = 'imgPlain',
         webcamConstraints = {
             audio: false,
             video: {
@@ -19,7 +17,11 @@ var photoBooth = (function () {
             }
         };
 
-    var modal = {
+    let timeOut,
+        processing = false,
+        imgFilter = 'imgPlain';
+
+    const modal = {
         open: function (selector) {
             $(selector).addClass('modal--show');
         },
@@ -67,7 +69,7 @@ var photoBooth = (function () {
     }
 
     // init
-    public.init = function (options) {
+    public.init = function () {
         public.l10n();
         public.reset();
 
@@ -110,16 +112,16 @@ var photoBooth = (function () {
         navigator.getMedia(webcamConstraints)
             .then(function (stream) {
                 $('#video').show();
-                var video = $('#video').get(0);
+                const video = $('#video').get(0);
                 video.srcObject = stream;
                 public.stream = stream;
             })
-            .catch(function (error) { });
+            .catch(function () { });
     }
 
     public.stopVideo = function () {
         if (public.stream) {
-            var track = public.stream.getTracks()[0];
+            const track = public.stream.getTracks()[0];
             track.stop();
             $('#video').hide();
         }
@@ -184,7 +186,7 @@ var photoBooth = (function () {
             }
         }, config.cheese_time);
 
-        var data = {
+        const data = {
             filter: imgFilter,
             style: photoStyle,
         };
@@ -202,7 +204,7 @@ var photoBooth = (function () {
     }
 
     // Show error Msg and reset
-    public.errorPic = function (result) {
+    public.errorPic = function () {
         setTimeout(function () {
             $('.spinner').hide();
             $('.loading').html(L10N.error + '<a class="btn" href="./">' + L10N.reload + '</a>');
@@ -212,10 +214,10 @@ var photoBooth = (function () {
     // Render Picture after taking
     public.renderPic = function (result) {
         // Add QR Code Image
-        var qrCodeModal = $('#qrCode');
+        const qrCodeModal = $('#qrCode');
         modal.empty(qrCodeModal);
         $('<img src="api/qrcode.php?filename=' + result.img + '"/>').on('load', function () {
-            var body = qrCodeModal.find('.modal__body');
+            const body = qrCodeModal.find('.modal__body');
 
             $(this).appendTo(body);
             $('<p>').html(L10N.qrHelp).appendTo(body);
@@ -260,12 +262,12 @@ var photoBooth = (function () {
 
     // add image to Gallery
     public.addImage = function (imageName) {
-        var thumbImg = new Image();
-        var bigImg = new Image();
-        var thumbSize = '';
-        var bigSize = '';
+        const thumbImg = new Image();
+        const bigImg = new Image();
+        let thumbSize = '';
+        let bigSize = '';
 
-        var imgtoLoad = 2;
+        let imgtoLoad = 2;
 
         thumbImg.onload = function () {
             thumbSize = this.width + 'x' + this.height;
@@ -281,7 +283,7 @@ var photoBooth = (function () {
         thumbImg.src = config.folders.thumbs + '/' + imageName;
 
         function allLoaded() {
-            var linkElement = $('<a>').html(thumbImg);
+            const linkElement = $('<a>').html(thumbImg);
 
             linkElement.attr('data-size', bigSize);
             linkElement.attr('href', config.folders.images + '/' + imageName + '?new=1');
@@ -297,7 +299,7 @@ var photoBooth = (function () {
     }
 
     // Open Gallery Overview
-    public.openGallery = function (elem) {
+    public.openGallery = function () {
         if (config.scrollbar) {
             gallery.addClass('scrollbar');
         }
@@ -314,10 +316,10 @@ var photoBooth = (function () {
 
     // Countdown Function
     public.startCountdown = function (start, element, cb) {
-        count = 0;
-        current = start;
+        let count = 0;
+        let current = start;
 
-        var timerFunction = function () {
+        function timerFunction () {
             element.text(current);
             current--;
 
@@ -330,7 +332,7 @@ var photoBooth = (function () {
                 cb();
             }
             count++;
-        };
+        }
         timerFunction();
     }
 
@@ -354,7 +356,7 @@ var photoBooth = (function () {
     }
 
     public.toggleMailDialog = function(img) {
-        var mail = $('.send-mail');
+        const mail = $('.send-mail');
 
         if (mail.hasClass('mail-active')) {
             public.resetMailForm();
@@ -367,11 +369,11 @@ var photoBooth = (function () {
     }
 
     //Filter
-    $('.imageFilter').on('click', function (e) {
+    $('.imageFilter').on('click', function () {
         public.toggleNav();
     });
 
-    $('.sidenav > div').on('click', function (e) {
+    $('.sidenav > div').on('click', function () {
         $('.sidenav > div').removeAttr('class');
 
         $(this).addClass('activeSidenavBtn');
@@ -423,7 +425,7 @@ var photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
 
-        var img = resultPage.attr('data-img');
+        const img = resultPage.attr('data-img');
 
         public.toggleMailDialog(img);
     });
@@ -431,11 +433,11 @@ var photoBooth = (function () {
     $('#send-mail-form').on('submit', function (e) {
         e.preventDefault();
 
-        var message = $('#mail-form-message');
+        const message = $('#mail-form-message');
         message.empty();
 
-        var form = $(this);
-        var oldValue = form.find('.btn').html();
+        const form = $(this);
+        const oldValue = form.find('.btn').html();
 
         form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
 
@@ -452,7 +454,7 @@ var photoBooth = (function () {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
-            error: function (xhr, status, error) {
+            error: function () {
                 message.fadeIn('fast').html('<span style="color: red;">' + L10N.mailError + '</span>');
             },
             complete: function () {
@@ -461,12 +463,12 @@ var photoBooth = (function () {
         });
     });
 
-    $('#send-mail-close').on('click', function (e) {
+    $('#send-mail-close').on('click', function () {
         public.resetMailForm();
         $('.send-mail').removeClass('mail-active').fadeOut('fast');
     });
 
-    $('#result').on('click', function (e) {
+    $('#result').on('click', function () {
         if (!modal.close('#qrCode')) {
             $('.resultInner').toggleClass('show');
         }
@@ -488,10 +490,8 @@ var photoBooth = (function () {
     });
 
     // clear Timeout to not reset the gallery, if you clicked anywhere
-    $(document).on('click', function (event) {
-        if (startPage.is(':visible')) {
-
-        } else {
+    $(document).on('click', function () {
+        if (!startPage.is(':visible')) {
             clearTimeout(timeOut);
             public.resetTimeOut();
         }

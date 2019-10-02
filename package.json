@@ -5,7 +5,9 @@
   "scripts": {
     "build": "gulp sass",
     "watch": "gulp sass:watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint resources/js/*.js",
+    "eslint:fix": "eslint resources/js/*.js --fix"
   },
   "author": "",
   "license": "MIT",
@@ -34,5 +36,8 @@
     "marvinj": "https://github.com/gabrielarchanjo/marvinj",
     "normalize.css": "^8.0.1",
     "photoswipe": "^4.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.1"
   }
 }

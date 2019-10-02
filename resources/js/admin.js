@@ -1,7 +1,8 @@
+/* globals L10N */
 $(function() {
     $('.panel-heading').on('click', function() {
-        var panel = $(this).parents('.panel');
-        var others = $(this).parents('.accordion').find('.open').not(panel);
+        const panel = $(this).parents('.panel');
+        const others = $(this).parents('.accordion').find('.open').not(panel);
 
         others.removeClass('open init');
 
@@ -11,11 +12,11 @@ $(function() {
         others.find('.panel-body').slideUp('fast');
     });
 
-    $('.reset-btn').on('click', function(e) {
-        var msg = L10N.really_delete;
-        var really = confirm(msg);
-        var data = {'type': 'reset'};
-        var elem = $(this);
+    $('.reset-btn').on('click', function() {
+        const msg = L10N.really_delete;
+        const really = confirm(msg);
+        const data = {'type': 'reset'};
+        const elem = $(this);
         elem.addClass('saving');
         if (really) {
             $.ajax({
@@ -37,9 +38,9 @@ $(function() {
 
     $('.save-btn').on('click', function(e) {
         e.preventDefault();
-        var elem = $(this);
+        const elem = $(this);
         elem.addClass('saving');
-        var data = 'type=config&' + $('form').serialize();
+        const data = 'type=config&' + $('form').serialize();
         $.ajax({
             'url': '../api/admin.php',
             'data': data,
