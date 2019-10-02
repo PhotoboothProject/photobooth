@@ -15,7 +15,7 @@ var photoBooth = (function () {
             video: {
                 width: 720,
                 height: 480,
-                facingMode: "user",
+                facingMode: 'user',
             }
         };
 
@@ -189,7 +189,7 @@ var photoBooth = (function () {
             style: photoStyle,
         };
 
-        jQuery.post("api/takePic.php", data).done(function (result) {
+        jQuery.post('api/takePic.php', data).done(function (result) {
             if (result.error) {
                 public.errorPic(result);
             } else {
@@ -372,11 +372,11 @@ var photoBooth = (function () {
     });
 
     $('.sidenav > div').on('click', function (e) {
-        $('.sidenav > div').removeAttr("class");
+        $('.sidenav > div').removeAttr('class');
 
-        $(this).addClass("activeSidenavBtn");
+        $(this).addClass('activeSidenavBtn');
 
-        imgFilter = $(this).attr("id");
+        imgFilter = $(this).attr('id');
 
         if (config.dev) {
             console.log('Active filter', imgFilter);
@@ -443,7 +443,7 @@ var photoBooth = (function () {
             url: 'api/sendPic.php',
             type: 'POST',
             data: form.serialize(),
-            dataType: "json",
+            dataType: 'json',
             cache: false,
             success: function (result) {
                 if (result.success) {
@@ -499,7 +499,7 @@ var photoBooth = (function () {
 
     // Disable Right-Click
     if (!config.dev) {
-        $(this).on("contextmenu", function (e) {
+        $(this).on('contextmenu', function (e) {
             e.preventDefault();
         });
     }

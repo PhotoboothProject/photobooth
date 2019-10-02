@@ -4,10 +4,10 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
 
     var parseThumbnailElements = function (container) {
         return $(container).find('>a').map(function () {
-            let element = $(this);
+            const element = $(this);
 
-            let size = element.attr('data-size').split('x');
-            let medSize = element.attr('data-med-size').split('x');
+            const size = element.attr('data-size').split('x');
+            const medSize = element.attr('data-med-size').split('x');
 
             // create slide object
             item = {
@@ -36,17 +36,17 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
     var onThumbnailClick = function (ev) {
         ev.preventDefault();
 
-        let element = $(ev.target).closest('a');
-        let index = $(gallerySelector).find('>a').index(element);
+        const element = $(ev.target).closest('a');
+        const index = $(gallerySelector).find('>a').index(element);
 
         openPhotoSwipe(index);
     };
 
     var openPhotoSwipe = function (index) {
-        let pswpElement = $('.pswp').get(0);
-        let items = parseThumbnailElements(gallerySelector);
+        const pswpElement = $('.pswp').get(0);
+        const items = parseThumbnailElements(gallerySelector);
 
-        let options = {
+        const options = {
             index: index,
 
             getThumbBoundsFn: function (index) {
@@ -89,11 +89,9 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
                     imageSrcWillChange = true;
                 }
 
-            } else {
-                if (useLargeImages) {
-                    useLargeImages = false;
-                    imageSrcWillChange = true;
-                }
+            } else if (useLargeImages) {
+                useLargeImages = false;
+                imageSrcWillChange = true;
             }
 
             if (imageSrcWillChange && !firstResize) {
@@ -171,7 +169,7 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
         var img = gallery.currItem.src.split('/').pop();
 
         if (config.chroma_keying) {
-            var currentHref = location.href.split('#')[0];;
+            var currentHref = location.href.split('#')[0];
             var encodedString = btoa(currentHref);
 
             location = 'chromakeying.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString);
