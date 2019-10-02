@@ -286,7 +286,7 @@ const photoBooth = (function () {
             const linkElement = $('<a>').html(thumbImg);
 
             linkElement.attr('data-size', bigSize);
-            linkElement.attr('href', config.folders.images + '/' + imageName + '?new=1');
+            linkElement.attr('href', config.folders.images + '/' + imageName);
             linkElement.attr('data-med', config.folders.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);
 
@@ -295,6 +295,8 @@ const photoBooth = (function () {
             } else {
                 linkElement.appendTo($('#galimages'));
             }
+
+            $('#galimages').children().not('a').remove();
         }
     }
 
