@@ -319,7 +319,7 @@ const photoBooth = (function () {
         let count = 0;
         let current = start;
 
-        function timerFunction () {
+        function timerFunction() {
             element.text(current);
             current--;
 
@@ -336,7 +336,7 @@ const photoBooth = (function () {
         timerFunction();
     }
 
-    public.printImage = function(imageSrc, cb) {
+    public.printImage = function (imageSrc, cb) {
         modal.open('#print_mesg');
 
         setTimeout(function () {
@@ -355,7 +355,7 @@ const photoBooth = (function () {
         }, 1000);
     }
 
-    public.toggleMailDialog = function(img) {
+    public.toggleMailDialog = function (img) {
         const mail = $('.send-mail');
 
         if (mail.hasClass('mail-active')) {
@@ -487,6 +487,15 @@ const photoBooth = (function () {
         e.stopPropagation();
 
         public.reloadPage();
+    });
+
+    $('#cups-button').on('click', function (ev) {
+        ev.preventDefault();
+
+        const url = `http://${location.hostname}:631/jobs/`;
+        const features = 'width=1024,height=600,left=0,top=0,screenX=0,screenY=0,resizable=NO,scrollbars=NO';
+
+        window.open(url, 'newwin', features);
     });
 
     // clear Timeout to not reset the gallery, if you clicked anywhere

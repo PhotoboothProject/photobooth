@@ -92,6 +92,10 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<?php if ($config['show_fork']): ?>
 			<a href="https://github.com/andreknieriem/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
 			<?php endif; ?>
+
+			<?php if($config['cups_button']): ?>
+				<a id="cups-button" class="btn" style="position:absolute;left:0;bottom:0;" href="#" target="newwin"><span>CUPS</span></a>
+			<?php endif; ?>
 		</div>
 
 		<!-- image Filter Pane -->

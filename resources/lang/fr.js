@@ -1,4 +1,5 @@
 L10N = {
+	"cups_button": "Afficher le bouton CUPS",
 	"gallery": "Galerie",
 	"startScreen": "<h1>Photobooth<\/h1><h2>Interface Web<\/h2> by Andr\u00e9 Rinas",
 	"general_start_screen_title": "Page d’accueil (Titre)",

@@ -13,6 +13,7 @@ $config['use_mail'] = false; // mail data needs to be configured
 $config['use_gpio_button'] = false; // Use alt+p to take a new picture, can be triggered via GPIO24
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
+$config['cups_button'] = false;
 $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
