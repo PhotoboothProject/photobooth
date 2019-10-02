@@ -41,6 +41,19 @@ $mailTemplates = [
     ],
 ];
 
+$colors = [
+    'default' => [
+        'primary' => '#e67e22',
+        'secondary' => '#d35400',
+        'font' => '#ffffff',
+    ],
+    'blue-gray' => [
+        'primary' => '#669db3',
+        'secondary' => '#2e535e',
+        'font' => '#f0f6f7',
+    ]
+];
+
 if (file_exists($my_config)) {
     require_once($my_config);
 } else {
@@ -75,6 +88,14 @@ if (empty($config['print']['cmd'])) {
 
 if (empty($config['print']['msg'])) {
     $config['print']['msg'] = $cmds[$os]['print']['msg'];
+}
+
+if (is_array($config['color_theme'])) {
+    $config['colors'] = $config['color_theme'];
+} elseif (array_key_exists($config['color_theme'], $colors)) {
+    $config['colors'] = $colors[$config['color_theme']];
+} else {
+    $config['colors'] = $colors['default'];
 }
 
 foreach ($config['folders'] as $key => $folder) {

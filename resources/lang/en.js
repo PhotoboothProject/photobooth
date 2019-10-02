@@ -100,5 +100,6 @@ L10N = {
 	"textonprint_linespace": "Line spacing",
 	"textonprint_fontsize": "Font size",
 	"user_interface": "User interface",
-	"bluegray_theme": "Blue-gray theme"
+	"user_interface_color_theme": "Theme",
+	"color_theme": "Choose a theme"
 }

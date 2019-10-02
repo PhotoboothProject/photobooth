@@ -100,5 +100,6 @@ L10N = {
 	"textonprint_linespace": "Interligne",
 	"textonprint_fontsize":  "Taille de la police",
 	"user_interface": "Interface utilisateur",
-	"bluegray_theme": "Thème bleu-gris"
+	"user_interface_color_theme": "Thème",
+	"color_theme": "Choisissez un thème"
 }

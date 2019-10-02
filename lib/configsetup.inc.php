@@ -115,10 +115,15 @@ $configsetup = [
 			'name' => 'show_fork',
 			'value' => $config['show_fork']
 		],
-		'bluegray_theme' => [
-			'type' => 'checkbox',
-			'name' => 'bluegray_theme',
-			'value' => $config['bluegray_theme']
+		'color_theme' => [
+			'type' => 'select',
+			'name' => 'color_theme',
+			'placeholder' => 'default',
+			'options' => [
+				'default' => 'default',
+				'blue-gray' => 'blue-gray'
+			],
+			'value' => $config['color_theme']
 		]
 	],
 	'folders' => [
