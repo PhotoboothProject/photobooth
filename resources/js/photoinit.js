@@ -1,268 +1,192 @@
-		var initPhotoSwipeFromDOM = function(gallerySelector) {
+var initPhotoSwipeFromDOM = function (gallerySelector) {
 
-			var parseThumbnailElements = function(el) {
-			    var thumbElements = el.childNodes,
-			        numNodes = thumbElements.length,
-			        items = [],
-			        el,
-			        childElements,
-			        thumbnailEl,
-			        size,
-			        item;
+    var gallery;
 
-			    for(var i = 0; i < numNodes; i++) {
-			        el = thumbElements[i];
+    var parseThumbnailElements = function (container) {
+        return $(container).find('>a').map(function () {
+            let element = $(this);
 
-			        // include only element nodes 
-			        if(el.nodeType !== 1) {
-			          continue;
-			        }
+            let size = element.attr('data-size').split('x');
+            let medSize = element.attr('data-med-size').split('x');
 
-			        childElements = el.children;
+            // create slide object
+            item = {
+                element: element.get(0),
+                src: element.attr('href'),
+                w: parseInt(size[0], 10),
+                h: parseInt(size[1], 10),
+                msrc: element.find('>img').attr('src'),
+                mediumImage: {
+                    src: element.attr('data-med'),
+                    w: parseInt(medSize[0], 10),
+                    h: parseInt(medSize[1], 10)
+                }
+            };
 
-			        size = el.getAttribute('data-size').split('x');
+            item.originalImage = {
+                src: item.src,
+                w: item.w,
+                h: item.h
+            };
 
-			        // create slide object
-			        item = {
-						src: el.getAttribute('href'),
-						w: parseInt(size[0], 10),
-						h: parseInt(size[1], 10),
-						author: el.getAttribute('data-author')
-			        };
+            return item;
+        }).get();
+    };
 
-			        item.el = el; // save link to element for getThumbBoundsFn
+    var onThumbnailClick = function (ev) {
+        ev.preventDefault();
 
-			        if(childElements.length > 0) {
-			          item.msrc = childElements[0].getAttribute('src'); // thumbnail url
-			          if(childElements.length > 1) {
-			              item.title = childElements[1].innerHTML; // caption (contents of figure)
-			          }
-			        }
+        let element = $(ev.target).closest('a');
+        let index = $(gallerySelector).find('>a').index(element);
 
+        openPhotoSwipe(index);
+    };
 
-					var mediumSrc = el.getAttribute('data-med');
-		          	if(mediumSrc) {
-		            	size = el.getAttribute('data-med-size').split('x');
-		            	// "medium-sized" image
-		            	item.m = {
-		              		src: mediumSrc,
-		              		w: parseInt(size[0], 10),
-		              		h: parseInt(size[1], 10)
-		            	};
-		          	}
-		          	// original image
-		          	item.o = {
-		          		src: item.src,
-		          		w: item.w,
-		          		h: item.h
-		          	};
+    var openPhotoSwipe = function (index) {
+        let pswpElement = $('.pswp').get(0);
+        let items = parseThumbnailElements(gallerySelector);
 
-			        items.push(item);
-			    }
+        let options = {
+            index: index,
 
-			    return items;
-			};
+            getThumbBoundsFn: function (index) {
+                // See Options->getThumbBoundsFn section of docs for more info
+                var thumbnail = items[index].element.children[0],
+                    pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+                    rect = thumbnail.getBoundingClientRect();
 
-			// find nearest parent element
-			var closest = function closest(el, fn) {
-			    return el && ( fn(el) ? el : closest(el.parentNode, fn) );
-			};
+                return {
+                    x: rect.left,
+                    y: rect.top + pageYScroll,
+                    w: rect.width
+                };
+            },
 
-			var onThumbnailsClick = function(e) {
-			    e = e || window.event;
-			    e.preventDefault ? e.preventDefault() : e.returnValue = false;
+            shareEl: false,
+            zoomEl: false,
+            fullscreenEl: false,
+        };
 
-			    var eTarget = e.target || e.srcElement;
+        // Pass data to PhotoSwipe and initialize it
+        gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 
-			    var clickedListItem = closest(eTarget, function(el) {
-			        return el.tagName === 'A';
-			    });
+        // see: http://photoswipe.com/documentation/responsive-images.html
+        var realViewportWidth,
+            useLargeImages = false,
+            firstResize = true,
+            imageSrcWillChange;
 
-			    if(!clickedListItem) {
-			        return;
-			    }
+        gallery.listen('beforeResize', function () {
 
-			    var clickedGallery = clickedListItem.parentNode;
-
-			    var childNodes = clickedListItem.parentNode.childNodes,
-			        numChildNodes = childNodes.length,
-			        nodeIndex = 0,
-			        index;
-
-			    for (var i = 0; i < numChildNodes; i++) {
-			        if(childNodes[i].nodeType !== 1) { 
-			            continue; 
-			        }
-
-			        if(childNodes[i] === clickedListItem) {
-			            index = nodeIndex;
-			            break;
-			        }
-			        nodeIndex++;
-			    }
-
-			    if(index >= 0) {
-			        openPhotoSwipe( index, clickedGallery );
-			    }
-			    return false;
-			};
-
-			var photoswipeParseHash = function() {
-				var hash = window.location.hash.substring(1),
-			    params = {};
-
-			    if(hash.length < 5) { // pid=1
-			        return params;
-			    }
-
-			    var vars = hash.split('&');
-			    for (var i = 0; i < vars.length; i++) {
-			        if(!vars[i]) {
-			            continue;
-			        }
-			        var pair = vars[i].split('=');  
-			        if(pair.length < 2) {
-			            continue;
-			        }           
-			        params[pair[0]] = pair[1];
-			    }
-
-			    if(params.gid) {
-			    	params.gid = parseInt(params.gid, 10);
-			    }
-
-			    if(!params.hasOwnProperty('pid')) {
-			        return params;
-			    }
-			    params.pid = parseInt(params.pid, 10);
-			    return params;
-			};
-
-			var openPhotoSwipe = function(index, galleryElement, disableAnimation) {
-			    var pswpElement = document.querySelectorAll('.pswp')[0],
-			        gallery,
-			        options,
-			        items;
-
-				items = parseThumbnailElements(galleryElement);
-
-			    // define options (if needed)
-			    options = {
-			        index: index,
-
-			        galleryUID: galleryElement.getAttribute('data-pswp-uid'),
-
-			        getThumbBoundsFn: function(index) {
-			            // See Options->getThumbBoundsFn section of docs for more info
-			            var thumbnail = items[index].el.children[0],
-			                pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-			                rect = thumbnail.getBoundingClientRect(); 
-
-			            return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
-			        },
-
-			        addCaptionHTMLFn: function(item, captionEl, isFake) {
-						if(!item.title) {
-							captionEl.children[0].innerText = '';
-							return false;
-						}
-						captionEl.children[0].innerHTML = item.title +  '<br/><small>Photo: ' + item.author + '</small>';
-						return true;
-			        }
-					
-			    };
-
-				var radios = document.getElementsByName('gallery-style');
-				for (var i = 0, length = radios.length; i < length; i++) {
-				    if (radios[i].checked) {
-				        if(radios[i].id == 'radio-all-controls') {
-
-				        } else if(radios[i].id == 'radio-minimal-black') {
-				        	options.mainClass = 'pswp--minimal--dark';
-					        options.barsSize = {top:0,bottom:0};
-							options.captionEl = false;
-							options.fullscreenEl = false;
-							options.shareEl = false;
-							options.bgOpacity = 0.85;
-							options.tapToClose = true;
-							options.tapToToggleControls = false;
-				        }
-				        break;
-				    }
-				}
-
-			    if(disableAnimation) {
-			        options.showAnimationDuration = 0;
-			    }
-
-			    // Pass data to PhotoSwipe and initialize it
-			    gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-
-			    // see: http://photoswipe.com/documentation/responsive-images.html
-				var realViewportWidth,
-				    useLargeImages = false,
-				    firstResize = true,
-				    imageSrcWillChange;
-
-				gallery.listen('beforeResize', function() {
-
-					var dpiRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
-					dpiRatio = Math.min(dpiRatio, 2.5);
-				    realViewportWidth = gallery.viewportSize.x * dpiRatio;
+            var dpiRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+            dpiRatio = Math.min(dpiRatio, 2.5);
+            realViewportWidth = gallery.viewportSize.x * dpiRatio;
 
 
-				    if(realViewportWidth >= 1200 || (!gallery.likelyTouchDevice && realViewportWidth > 800) || screen.width > 1200 ) {
-				    	if(!useLargeImages) {
-				    		useLargeImages = true;
-				        	imageSrcWillChange = true;
-				    	}
-				        
-				    } else {
-				    	if(useLargeImages) {
-				    		useLargeImages = false;
-				        	imageSrcWillChange = true;
-				    	}
-				    }
+            if (realViewportWidth >= 1200 || (!gallery.likelyTouchDevice && realViewportWidth > 800) || screen.width > 1200) {
+                if (!useLargeImages) {
+                    useLargeImages = true;
+                    imageSrcWillChange = true;
+                }
 
-				    if(imageSrcWillChange && !firstResize) {
-				        gallery.invalidateCurrItems();
-				    }
+            } else {
+                if (useLargeImages) {
+                    useLargeImages = false;
+                    imageSrcWillChange = true;
+                }
+            }
 
-				    if(firstResize) {
-				        firstResize = false;
-				    }
+            if (imageSrcWillChange && !firstResize) {
+                gallery.invalidateCurrItems();
+            }
 
-				    imageSrcWillChange = false;
+            if (firstResize) {
+                firstResize = false;
+            }
 
-				});
+            imageSrcWillChange = false;
 
-				gallery.listen('gettingData', function(index, item) {
-				    if( useLargeImages ) {
-				        item.src = item.o.src;
-				        item.w = item.o.w;
-				        item.h = item.o.h;
-				    } else {
-				        item.src = item.m.src;
-				        item.w = item.m.w;
-				        item.h = item.m.h;
-				    }
-				});
+        });
 
-			    gallery.init();
-			};
+        gallery.listen('gettingData', function (index, item) {
+            if (useLargeImages) {
+                item.src = item.originalImage.src;
+                item.w = item.originalImage.w;
+                item.h = item.originalImage.h;
+            } else {
+                item.src = item.mediumImage.src;
+                item.w = item.mediumImage.w;
+                item.h = item.mediumImage.h;
+            }
+        });
 
-			// select all gallery elements
-			var galleryElements = document.querySelectorAll( gallerySelector );
-			for(var i = 0, l = galleryElements.length; i < l; i++) {
-				galleryElements[i].setAttribute('data-pswp-uid', i+1);
-				galleryElements[i].onclick = onThumbnailsClick;
-			}
+        var resetMailForm = function () {
+            $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
 
-			// Parse URL and open gallery if it contains #&pid=3&gid=1
-			var hashData = photoswipeParseHash();
-			if(hashData.pid > 0 && hashData.gid > 0) {
-				openPhotoSwipe( hashData.pid - 1 ,  galleryElements[ hashData.gid - 1 ], true );
-			}
-		};
+            photoBooth.resetMailForm();
 
-	
+            $('.send-mail').removeClass('mail-active').fadeOut('fast');
+        };
+
+        gallery.listen('beforeChange', resetMailForm);
+        gallery.listen('close', resetMailForm);
+
+        gallery.init();
+    };
+
+    // QR in gallery
+    $('.pswp__button--qrcode').on('click', function (e) {
+        e.preventDefault();
+
+        var pswpQR = $('.pswp__qr');
+
+        if (pswpQR.hasClass('qr-active')) {
+            pswpQR.removeClass('qr-active').fadeOut('fast');
+        } else {
+            pswpQR.empty();
+            var img = gallery.currItem.src;
+            img = img.split('/').pop();
+
+            $('<img>').attr('src', 'api/qrcode.php?filename=' + img).appendTo(pswpQR);
+
+            pswpQR.addClass('qr-active').fadeIn('fast');
+        }
+    });
+
+    // print in gallery
+    $('.pswp__button--print').on('click', function (e) {
+        e.preventDefault();
+
+        var img = gallery.currItem.src.split('/').pop();
+
+        photoBooth.printImage(img, () => {
+            gallery.close();
+        });
+    });
+
+    // chroma keying print
+    $('.pswp__button--print-chroma-keying').on('click', function (e) {
+        e.preventDefault();
+
+        var img = gallery.currItem.src.split('/').pop();
+
+        if (config.chroma_keying) {
+            var currentHref = location.href.split('#')[0];;
+            var encodedString = btoa(currentHref);
+
+            location = 'chromakeying.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString);
+        }
+    });
+
+    $('.pswp__button--mail').on('click touchstart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var img = gallery.currItem.src.split('/').pop();
+
+        photoBooth.toggleMailDialog(img);
+    });
+
+    $(gallerySelector).on('click', onThumbnailClick);
+};
+

@@ -271,23 +271,16 @@ hr.small {
   color: #fff;
 }
 
-
-.gal-qr-code,.gal-print, .gal-print-chroma_keying, .gal-mail {
+.pswp__button--qrcode,
+.pswp__button--print,
+.pswp__button--print-chroma-keying,
+.pswp__button--mail {
   color: #fff;
   background: transparent;
   font-size: 26px;
   text-align: center;
   width: 50px;
   height: 50px;
-  cursor: pointer;
-  overflow: visible;
-  -webkit-appearance: none;
-  display: block;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  float: right;
-  opacity: 0.75;
 
   &:hover {
     opacity: 1;

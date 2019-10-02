@@ -260,19 +260,19 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 					<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
 
 					<?php if ($config['use_mail']): ?>
-					<button class="gal-mail" title="Per Mail senden"><i class="fa fa-envelope"></i></button>
+					<button class="pswp__button pswp__button--mail" title="Per Mail senden"><i class="fa fa-envelope"></i></button>
 					<?php endif; ?>
 
 					<?php if ($config['use_print']): ?>
-					<button class="gal-print" title="Drucken"><i class="fa fa-print"></i></button>
+					<button class="pswp__button pswp__button--print" title="Drucken"><i class="fa fa-print"></i></button>
 					<?php endif; ?>
 
 					<?php if ($config['use_qr']): ?>
-					<button class="gal-qr-code" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>
+					<button class="pswp__button pswp__button--qrcode" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>
 					<?php endif; ?>
 
 					<?php if ($config['chroma_keying']): ?>
-					<button class="gal-print-chroma_keying" title="Print extra"><i class="fa fa-paint-brush"></i></button>
+					<button class="pswp__button pswp__button--print-chroma-keying" title="Print extra"><i class="fa fa-paint-brush"></i></button>
 					<?php endif; ?>
 
 					<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
