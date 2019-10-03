@@ -110,20 +110,22 @@ var photoBooth = (function () {
             return;
         }
 
-        navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+        var getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
 
-        if(!navigator.getMedia) {
+        if(!getMedia) {
             return;
         }
 
-        navigator.getMedia(webcamConstraints)
+        getMedia.call(navigator.mediaDevices, webcamConstraints)
             .then(function(stream) {
                 $('#video').show();
                 var video = $('#video').get(0);
                 video.srcObject = stream;
                 public.stream = stream;
             })
-            .catch(function (error) { });
+            .catch(function (error) {
+                console.log('Could not get user media: ', error)
+            });
     }
 
     public.stopVideo = function () {
