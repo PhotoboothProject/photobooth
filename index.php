@@ -62,7 +62,7 @@ require_once('db.php');
 			<?php if($config['show_gallery']){ ?><a class="gallery-button btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a><?php } ?>
 			<div class="blurred">
 			</div>
-			<div class="inner">
+			<div class="startInner">
 				<?php
 				if($config['is_wedding']) {
 					echo '<div class="names"><hr class="small" /><hr><div><h1>'. $config['wedding']['groom'] . ' <i class="fa '. $config['wedding']['symbol'] .' "aria-hidden="true"></i> ' . $config['wedding']['bride'] . '<br>' . $config['start_screen_title'] . '</h1><h2>' . $config['start_screen_subtitle'] . '</h2></div><hr><hr class="small" /></div>';

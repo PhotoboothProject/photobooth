@@ -82,7 +82,7 @@ var photoBooth = (function () {
 
         public.initPhotoSwipeFromDOM('#galimages');
 
-        startPage.show();
+        startPage.addClass('open');
     }
 
     public.l10n = function (elem) {
