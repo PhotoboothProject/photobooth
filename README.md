@@ -45,17 +45,24 @@ On Raspbian Buster
 ```
 sudo apt-get install git apache2 php php-gd ffmpeg
 ```
-Get the Photobooth source and set perms
-```
-cd /var/www/
-sudo rm -r html/
-sudo git clone https://github.com/andreknieriem/photobooth html
-cd /var/www/html
-sudo git submodule update --init
-sudo cp config/config.inc.php config/my.config.inc.php
-sudo chown -R www-data:www-data /var/www/
+
+To install all dependencies you first have to [install
+yarn](https://yarnpkg.com/lang/en/docs/install/#debian-stable) on your Raspberry
+Pi. If finished, get the Photobooth source and execute the following line by line.
 
 ```
+cd /var/www/
+sudo -u www-data -s
+rm -r html/
+git clone https://github.com/andreknieriem/photobooth html
+cd /var/www/html
+git submodule update --init
+cp config/config.inc.php config/my.config.inc.php
+yarn install
+yarn build
+exit
+```
+
 Install latest version of libgphoto2, choose last stable release
 ```
 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && sudo bash gphoto2-updater.sh
