@@ -52,7 +52,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 			<div class="blurred"></div>
 
-			<div class="inner">
+			<div class="startInner">
 				<?php if ($config['is_wedding']): ?>
 				<div class="names">
 					<hr class="small" />
