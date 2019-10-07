@@ -18,7 +18,8 @@ const photoBooth = (function () {
         };
 
     let timeOut,
-        processing = false,
+        nextCollageNumber = 0,
+        currentCollageFile = '',
         imgFilter = 'imgPlain';
 
     const modal = {
@@ -128,19 +129,21 @@ const photoBooth = (function () {
     }
 
     public.thrill = function (photoStyle) {
-        if (!processing) {
-            public.closeNav();
-            public.reset();
+        public.closeNav();
+        public.reset();
 
-            if (config.previewFromCam) {
-                public.startVideo();
-            }
-
-            loader.addClass('open');
-            public.startCountdown(config.cntdwn_time, $('#counter'), () => {
-                public.cheese(photoStyle);
-            });
+        if (currentCollageFile && nextCollageNumber) {
+            photoStyle = 'collage';
         }
+
+        if (config.previewFromCam) {
+            public.startVideo();
+        }
+
+        loader.addClass('open');
+        public.startCountdown(config.cntdwn_time, $('#counter'), () => {
+            public.cheese(photoStyle);
+        });
     }
 
     // Cheese
@@ -157,13 +160,13 @@ const photoBooth = (function () {
             $('.loading').text(L10N.cheeseCollage);
         }
 
-        public.takePic(photoStyle);
+        setTimeout(() => {
+            public.takePic(photoStyle);
+        }, config.cheese_time);
     }
 
     // take Picture
     public.takePic = function (photoStyle) {
-        processing = true;
-
         if (config.dev) {
             console.log('Take Picture:' + photoStyle);
         }
@@ -172,29 +175,42 @@ const photoBooth = (function () {
             public.stopVideo();
         }
 
-        setTimeout(function () {
-            $('#counter').text('');
-
-            if ((photoStyle == 'photo')) {
-                $('.spinner').show();
-                $('.loading').text(L10N.busy);
-            } else {
-                setTimeout(function () {
-                    $('.spinner').show();
-                    $('.loading').text(L10N.busyCollage);
-                }, config.dev ? 0 : 7500);
-            }
-        }, config.cheese_time);
+        const processingDelay = setTimeout(() => {
+            $('.spinner').show();
+            $('.loading').text(photoStyle === 'photo' ? L10N.busy : L10N.busyCollage);
+        }, 500);
 
         const data = {
             filter: imgFilter,
             style: photoStyle,
         };
 
+        if (photoStyle === 'collage') {
+            data.file = currentCollageFile;
+            data.collageNumber = nextCollageNumber;
+        }
+
         jQuery.post('api/takePic.php', data).done(function (result) {
+            clearTimeout(processingDelay);
+
             if (result.error) {
                 public.errorPic(result);
+            } else if (result.success === 'collage') {
+                currentCollageFile = result.file;
+                nextCollageNumber = result.current + 1;
+
+                $('.spinner').hide();
+                $('.loading').empty();
+                $('<p>').text(`${result.current + 1} / ${result.limit}`).appendTo('.loading');
+                $('<a class="btn" href="#">' + L10N.newPhoto + '</a>').appendTo('.loading').click((ev) => {
+                    ev.preventDefault();
+
+                    public.thrill('collage');
+                });
             } else {
+                currentCollageFile = '';
+                nextCollageNumber = 0;
+
                 public.renderPic(result);
             }
 
@@ -247,7 +263,6 @@ const photoBooth = (function () {
             startPage.fadeOut(400, function () {
                 resultPage.fadeIn(400, function () {
                     setTimeout(function () {
-                        processing = false;
                         loader.removeClass('open');
                     }, 400);
                     setTimeout(function () {
@@ -498,7 +513,7 @@ const photoBooth = (function () {
         window.open(url, 'newwin', features);
     });
 
-    $(document).on('keypress', function(ev) {
+    $(document).on('keypress', function (ev) {
         if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
             public.thrill('photo');
         }
