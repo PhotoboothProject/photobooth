@@ -71,27 +71,11 @@ const photoBooth = (function () {
 
     // init
     public.init = function () {
-        public.l10n();
         public.reset();
 
         initPhotoSwipeFromDOM('#galimages');
 
         startPage.show();
-    }
-
-    public.l10n = function (elem) {
-        elem = $(elem || 'body');
-        elem.find('[data-l10n]').each(function () {
-            const item = $(this);
-            const key = item.data('l10n');
-            const translation = L10N[key];
-
-            if (!translation) {
-                console.warn('No translation for: ', key);
-            }
-
-            item.html(translation || key);
-        });
     }
 
     public.openNav = function () {

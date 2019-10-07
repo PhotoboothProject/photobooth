@@ -21,19 +21,6 @@
         padding: 0;
     }
 
-    &__close {
-        position: absolute;
-        right: 30px;
-        top: 24px;
-        color: #fff;
-        font-size: 30px;
-        width: 50px;
-        height: 50px;
-        background: $hoverColor;
-        text-align: center;
-        line-height: 50px;
-    }
-
     &__inner {
         position: relative;
         display: flex;
@@ -45,6 +32,19 @@
         height: 100px;
         width: 100%;
         background: $mainColor;
+
+        > a {
+            position: absolute;
+            right: 30px;
+            top: 24px;
+            color: #fff;
+            font-size: 30px;
+            width: 50px;
+            height: 50px;
+            background: $hoverColor;
+            text-align: center;
+            line-height: 50px;
+        }
     }
 
     &__body {
