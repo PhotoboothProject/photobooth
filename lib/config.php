@@ -98,13 +98,21 @@ if (is_array($config['color_theme'])) {
     $config['colors'] = $colors['default'];
 }
 
+if (file_exists($my_config) && !is_writable($my_config)) {
+    die('Abort. Can not write config/my.config.inc.php.');
+} elseif (!file_exists($my_config) && !is_writable(__DIR__ . '/../config/')) {
+    die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
+}
+
 foreach ($config['folders'] as $key => $folder) {
     $path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $folder;
 
     if (!file_exists($path)) {
         if (!mkdir($path, 0755, true)) {
-            die("Abort. Could not create $folder");
+            die("Abort. Could not create $folder.");
         }
+    } elseif (!is_writable($path)) {
+        die("Abort. The folder $folder is not writable.");
     }
 
     $path = realpath($path);

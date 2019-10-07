@@ -2,7 +2,6 @@
 
 require_once('../lib/config.php');
 require_once('../lib/db.php');
-require_once('../lib/folders.php');
 
 $filename = trim(basename($_GET['filename']));
 if($pos = strpos($filename, '?')) {

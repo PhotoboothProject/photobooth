@@ -1,7 +1,6 @@
 <?php
 
 require_once('lib/config.php');
-require_once('lib/folders.php');
 require_once('lib/db.php');
 
 $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
