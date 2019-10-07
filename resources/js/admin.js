@@ -51,10 +51,13 @@ $(function() {
             'success': function(resp) {
                 elem.removeClass('saving');
                 elem.addClass(resp);
+
                 setTimeout(function() {
                     elem.removeClass('error success');
 
-                    window.location.reload();
+                    if (resp === 'success') {
+                        window.location.reload();
+                    }
                 }, 2000);
             }
         });
