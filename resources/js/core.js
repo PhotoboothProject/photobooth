@@ -81,9 +81,16 @@ const photoBooth = (function () {
 
     public.l10n = function (elem) {
         elem = $(elem || 'body');
-        elem.find('[data-l10n]').each(function (i, item) {
-            item = $(item);
-            item.html(L10N[item.data('l10n')]);
+        elem.find('[data-l10n]').each(function () {
+            const item = $(this);
+            const key = item.data('l10n');
+            const translation = L10N[key];
+
+            if (!translation) {
+                console.warn('No translation for: ', key);
+            }
+
+            item.html(translation || key);
         });
     }
 
@@ -250,6 +257,18 @@ const photoBooth = (function () {
             });
         });
 
+        resultPage.find('.deletebtn').off('click').on('click', (ev) => {
+            ev.preventDefault();
+
+            public.deleteImage(result.img, (data) => {
+                if (data.success) {
+                    public.reloadPage();
+                } else {
+                    console.log('Error while deleting image');
+                }
+            })
+        });
+
         // Add Image to gallery and slider
         public.addImage(result.img);
 
@@ -368,6 +387,19 @@ const photoBooth = (function () {
                 }, 5000);
             });
         }, 1000);
+    }
+
+    public.deleteImage = function (imageName, cb) {
+        $.ajax({
+            url: 'api/deletePhoto.php',
+            method: 'POST',
+            data: {
+                file: imageName,
+            },
+            success: (data) => {
+                cb(data);
+            }
+        });
     }
 
     public.toggleMailDialog = function (img) {

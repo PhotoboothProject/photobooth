@@ -182,6 +182,8 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 							data-l10n="newCollage"></span></a>
 					<?php endif; ?>
 				<?php endif; ?>
+
+				<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-l10n="delete"></span></a>
 			</div>
 
 			<?php if ($config['use_qr']): ?>

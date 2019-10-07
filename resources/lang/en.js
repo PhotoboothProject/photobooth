@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+	"delete": "Delete",
 	"using_latest_version": "You are using the latest version of photobooth.",
 	"update_available": "There is an update available.",
 	"test_update_available": "There is a test update available.",
