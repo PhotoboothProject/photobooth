@@ -1,5 +1,11 @@
 /* exported L10N */
 const L10N = {
+	"using_latest_version": "You are using the latest version of photobooth.",
+	"update_available": "There is an update available.",
+	"test_update_available": "There is a test update available.",
+	"check_version": "Check version",
+	"current_version": "Current version",
+	"available_version": "Available version",
 	"force_buzzer": "hide trigger button",
 	"use_button": "Use Buzzer to take a Picture",
 	"general_photo_key": "Key code which triggers a photo",

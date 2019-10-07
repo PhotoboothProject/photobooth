@@ -46,6 +46,9 @@ require_once('../lib/configsetup.inc.php');
 				<span data-l10n="saveerror"></span>
 			</span>
 		</button>
+		<div id="checkVersion">
+			<p><a href="#" class="btn btn--tiny btn--flex"><span data-l10n="check_version"></span></a></p>
+		</div>
 		<div class="accordion">
 			<form>
 				<?php

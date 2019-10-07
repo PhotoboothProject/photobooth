@@ -1,5 +1,11 @@
 /* exported L10N */
 const L10N = {
+	"using_latest_version": "Photobooth ist auf dem aktuellen Stand.",
+	"update_available": "Es ist ein Update verfügbar.",
+	"test_update_available": "Es ist ein Test-Update verfügbar.",
+	"check_version": "Version überprüfen",
+	"current_version": "Aktuelle Version",
+	"available_version": "Verfügbare Version",
 	"force_buzzer": "Verstecke Auslöse-Taste",
 	"use_button": "Buzzer verwenden, um ein Bild aufzunehmen",
 	"general_photo_key": "Tastencode welcher ein Foto auslöst",

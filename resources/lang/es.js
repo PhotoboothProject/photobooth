@@ -1,5 +1,11 @@
 /* exported L10N */
 const L10N = {
+	"using_latest_version": "Estás utilizando la última versión de photobooth",
+	"update_available": "Hay una actualización disponible",
+	"test_update_available": "Hay una actualización de prueba disponible",
+	"check_version": "Verificar versión",
+	"current_version": "Versión actual",
+	"available_version": "Versión disponible",
 	"force_buzzer": "ocultar botón disparador",
 	"use_button": "Utilice el botón para sacar una foto",
 	"general_photo_key": "Código clave que desencadena una foto",
