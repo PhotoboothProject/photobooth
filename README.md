@@ -45,36 +45,30 @@ On Raspbian Buster
 ```
 sudo apt-get install git apache2 php php-gd ffmpeg
 ```
-Get the Photobooth source and set perms
-```
-cd /var/www/
-sudo rm -r html/
-sudo git clone https://github.com/andreknieriem/photobooth html
-cd /var/www/html
-sudo git submodule update --init
-sudo cp config.inc.php my.config.inc.php
-sudo mkdir -p /var/www/html/images
-sudo mkdir -p /var/www/html/keying
-sudo mkdir -p /var/www/html/print
-sudo mkdir -p /var/www/html/qrcodes
-sudo mkdir -p /var/www/html/thumbs
-sudo mkdir -p /var/www/html/tmp
-sudo chown -R www-data:www-data /var/www/
-sudo chmod -R u+w /var/www/html/images
-sudo chmod -R u+w /var/www/html/keying
-sudo chmod -R u+w /var/www/html/print
-sudo chmod -R u+w /var/www/html/qrcodes
-sudo chmod -R u+w /var/www/html/thumbs
-sudo chmod -R u+w /var/www/html/tmp
 
-```
-Install latest version of libgphoto2, choose last stable release
+Install latest version of libgphoto2, choose last stable release:
 ```
 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && sudo bash gphoto2-updater.sh
 ```
 
-Next we have to give our webserver user access to the usb device:
+Give our webserver user access to /var/www:
+```
+sudo chown -R www-data:www-data /var/www/
+```
 
+Get the Photobooth source:
+```
+cd /var/www/
+sudo -u www-data -s
+rm -r html/
+git clone https://github.com/andreknieriem/photobooth html
+cd /var/www/html
+git submodule update --init
+cp config.inc.php my.config.inc.php
+exit
+```
+
+Next we have to give our webserver user access to the usb device:
 ```
 sudo gpasswd -a www-data plugdev
 ```
