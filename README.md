@@ -74,13 +74,12 @@ Give sudo rights to the webserver user (www-data)
 and add the following line to the file:
 ```www-data ALL=(ALL) NOPASSWD: ALL```
 
-Ensure that the camera trigger works:
+Remove execution permission on gphoto2 Volume Monitor to ensure that the camera trigger works, reboot once to take effect:
 ```
-sudo rm /usr/share/dbus-1/services/org.gtk.vfs.GPhoto2VolumeMonitor.service
-sudo rm /usr/share/gvfs/mounts/gphoto2.mount
-sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor
-sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+reboot
 ```
+
 Open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
