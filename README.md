@@ -73,26 +73,10 @@ Install latest version of libgphoto2, choose last stable release
 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && sudo bash gphoto2-updater.sh
 ```
 
-Next we have to give our webserver user access to the usb device. First we need
-to get the vendor and product id of our camera. The easiest way is to type
-`lsusb` while your camera is connected and to look for the line with your
-camera. For a Canon 70d this would look like the following:
+Next we have to give our webserver user access to the usb device:
 
 ```
-Bus 001 Device 066: ID 04a9:3253 Canon, Inc. EOS 70D
-```
-
-`04a9` is the vendor id and `3253` the product id. Next execute the following
-line and replace both ids with your values.
-
-```
-echo SUBSYSTEM=="usb", ATTRS{idVendor}=="04a9", ATTRS{idProduct}=="3253", OWNER="www-data" | sudo tee /etc/udev/rules.d/50-usb-camera.rules
-```
-
-Restart your Raspberry or reload all rules with the following:
-
-```
-sudo udevadm control --reload-rules && sudo udevadm trigger
+sudo gpasswd -a www-data plugdev
 ```
 
 Ensure that the camera trigger works. Unmount your camera, or remove these services:
