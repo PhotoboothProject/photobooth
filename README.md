@@ -45,34 +45,33 @@ On Raspbian Buster
 ```
 sudo apt-get install git apache2 php php-gd ffmpeg
 ```
-Get the Photobooth source and set perms
-```
-cd /var/www/
-sudo rm -r html/
-sudo git clone https://github.com/andreknieriem/photobooth html
-cd /var/www/html
-sudo git submodule update --init
-sudo cp config.inc.php my.config.inc.php
-sudo mkdir -p /var/www/html/images
-sudo mkdir -p /var/www/html/keying
-sudo mkdir -p /var/www/html/print
-sudo mkdir -p /var/www/html/qrcodes
-sudo mkdir -p /var/www/html/thumbs
-sudo mkdir -p /var/www/html/tmp
-sudo chown -R pi: /var/www/
-sudo chmod -R 777 /var/www
 
-```
-Install latest version of libgphoto2, choose last stable release
+Install latest version of libgphoto2, choose last stable release:
 ```
 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && sudo bash gphoto2-updater.sh
 ```
 
-Give sudo rights to the webserver user (www-data)
+Give our webserver user access to /var/www:
+```
+sudo chown -R www-data:www-data /var/www/
+```
 
-```sudo nano /etc/sudoers```
-and add the following line to the file:
-```www-data ALL=(ALL) NOPASSWD: ALL```
+Get the Photobooth source:
+```
+cd /var/www/
+sudo -u www-data -s
+rm -r html/
+git clone https://github.com/andreknieriem/photobooth html
+cd /var/www/html
+git submodule update --init
+cp config.inc.php my.config.inc.php
+exit
+```
+
+Next we have to give our webserver user access to the usb device:
+```
+sudo gpasswd -a www-data plugdev
+```
 
 Remove execution permission on gphoto2 Volume Monitor to ensure that the camera trigger works, reboot once to take effect:
 ```
@@ -80,7 +79,21 @@ sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 reboot
 ```
 
-Open the IP address of your raspberry pi in a browser
+Please use the following to test if your Webserver is able to take pictures:
+
+```
+sudo -u www-data gphoto2 --capture-image
+```
+
+If you like to use the printer you also have to add your webserver user to the `ld` group.
+
+```
+sudo gpasswd -a www-data lp
+```
+
+Now you should restart your Raspberry Pi to apply those settings.
+
+If everything is working, open the IP address of your raspberry pi in a browser
 
 - Change the styling to your needs
 
