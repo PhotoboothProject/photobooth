@@ -1,6 +1,6 @@
 <?php
-$default_config = __DIR__ . '/../config/config.inc.php';
-$my_config = __DIR__ . '/../config/my.config.inc.php';
+$default_config_file = __DIR__ . '/../config/config.inc.php';
+$my_config_file = __DIR__ . '/../config/my.config.inc.php';
 $os = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
 
 $cmds = [
@@ -41,40 +41,27 @@ $mailTemplates = [
     ],
 ];
 
-if (file_exists($my_config)) {
-    require_once($my_config);
-} else {
-    require_once($default_config);
+require_once($default_config_file);
+
+$config['mail_subject'] = $mailTemplates[$config['language']]['mail_subject'];
+$config['mail_text'] = $mailTemplates[$config['language']]['mail_text'];
+$config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
+$config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
+$config['print']['cmd'] = $cmds[$os]['print']['cmd'];
+$config['print']['msg'] = $cmds[$os]['print']['msg'];
+
+$defaultConfig = $config;
+
+if (file_exists($my_config_file)) {
+    require_once($my_config_file);
+
+    $config = array_merge($defaultConfig, $config);
 }
 
 if ($config['dev']) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-}
-
-if (empty($config['mail_subject'])) {
-    $config['mail_subject'] = $mailTemplates[$config['language']]['mail_subject'];
-}
-
-if (empty($config['mail_text'])) {
-    $config['mail_text'] = $mailTemplates[$config['language']]['mail_text'];
-}
-
-if (empty($config['take_picture']['cmd'])) {
-    $config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
-}
-
-if (empty($config['take_picture']['msg'])) {
-    $config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
-}
-
-if (empty($config['print']['cmd'])) {
-    $config['print']['cmd'] = $cmds[$os]['print']['cmd'];
-}
-
-if (empty($config['print']['msg'])) {
-    $config['print']['msg'] = $cmds[$os]['print']['msg'];
 }
 
 foreach ($config['folders'] as $key => $folder) {
