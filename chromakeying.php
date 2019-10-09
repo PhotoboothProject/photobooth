@@ -52,7 +52,7 @@ if (file_exists($keyingimage)) {
 				<a class="btn btn--flex" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="btn btn--flex" href="javascript:window.history.back()"><i class="fa fa-times"></i> <span data-l10n="close"></span></a>
+			<a class="btn btn--flex" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-l10n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">

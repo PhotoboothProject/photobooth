@@ -194,9 +194,20 @@ function saveImageHandler(ev) {
     }, 1000);
 }
 
+function closeHandler(ev) {
+    ev.preventDefault();
+
+    if (document.referrer) {
+        window.location = document.referrer;
+    } else {
+        window.history.back();
+    }
+}
+
 $(document).ready(function () {
     $('#save-btn').on('click', saveImageHandler);
     $('#print-btn').on('click', printImageHandler);
+    $('#close-btn').on('click', closeHandler);
 
     setTimeout(function () {
         setMainImage($('body').attr('data-main-image'));
