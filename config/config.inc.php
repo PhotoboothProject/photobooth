@@ -33,8 +33,8 @@ $config['photo_key'] = null;
 $config['collage_key'] = null;
 
 // LANGUAGE
-// possible values: en, de, es, fr
-$config['language'] = 'de';
+// possible values: de, en, es, fr
+$config['language'] = 'en';
 
 // StartScreen
 $config['start_screen_title'] = 'Photobooth';
