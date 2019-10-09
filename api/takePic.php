@@ -220,6 +220,17 @@ $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
+if (!isset($_POST['style'])) {
+    die(json_encode([
+        'error' => 'No style provided'
+    ]));
+}
+
+if (!isset($_POST['filter'])) {
+    die(json_encode([
+        'error' => 'No filter provided'
+    ]));
+}
 
 if (($_POST['style'] === 'photo') && ($config['polaroid_effect'] === false)) {
     $filename_orig = $filename_photo;
