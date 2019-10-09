@@ -31,13 +31,17 @@ $mailTemplates = [
         'mail_subject' => 'Hier ist dein Bild',
         'mail_text' => 'Hey, dein Bild ist angehangen.',
     ],
-    'fr' => [
-        'mail_subject' => 'Voici votre photo',
-        'mail_text' => 'Hé, ta photo est attachée.',
-    ],
     'en' => [
         'mail_subject' => 'Here is your picture',
         'mail_text' => 'Hey, your picture is attached.',
+    ],
+    'es' => [
+        'mail_subject' => 'Aquí está tu foto',
+        'mail_text' => 'Hola, tu foto está adjunta.',
+    ],
+    'fr' => [
+        'mail_subject' => 'Voici votre photo',
+        'mail_text' => 'Hé, ta photo est attachée.',
     ],
 ];
 
