@@ -1,7 +1,8 @@
 :root {
-    --primary-color: #e67e22;
-    --secondary-color: #d35400;
-    --font-color: #ffffff;
+    // default values are specified in lib/config.php
+    --primary-color: transparent;
+    --secondary-color: transparent;
+    --font-color: transparent;
 }
 
 $mainColor: var(--primary-color);

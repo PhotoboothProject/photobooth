@@ -1,7 +1,6 @@
 <?php
 
 require_once('lib/config.php');
-require_once('lib/folders.php');
 require_once('lib/db.php');
 
 $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
@@ -12,6 +11,8 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
+	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
 	<title>Photobooth</title>
 
@@ -21,14 +22,6 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<link rel="icon" type="image/png" sizes="16x16" href="resources/img/favicon-16x16.png">
 	<link rel="manifest" href="resources/img/site.webmanifest">
 	<link rel="mask-icon" href="resources/img/safari-pinned-tab.svg" color="#5bbad5">
-
-	<?php if ($config['bluegray_theme']): ?>
-	<meta name="msapplication-TileColor" content="ff4f58">
-	<meta name="theme-color" content="#669db3">
-	<?php else: ?>
-	<meta name="msapplication-TileColor" content="#da532c">
-	<meta name="theme-color" content="#ffffff">
-	<?php endif; ?>
 
 	<!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -87,16 +80,26 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 						data-l10n="selectFilter"></span></a>
 				<?php endif; ?>
 
-				<?php if ($config['use_collage']): ?>
-				<a href="#" class="btn takeCollage"><i class="fa fa-th-large"></i> <span
-						data-l10n="takeCollage"></span></a>
-				<?php endif; ?>
+				<?php if ($config['force_buzzer']): ?>
+				<div id="useBuzzer">
+						<span data-l10n="use_button"></span>
+				</div>
+				<?php else: ?>
+					<?php if ($config['use_collage']): ?>
+					<a href="#" class="btn takeCollage"><i class="fa fa-th-large"></i> <span
+							data-l10n="takeCollage"></span></a>
+					<?php endif; ?>
 
-				<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
+					<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
+				<?php endif; ?>
 			</div>
 
 			<?php if ($config['show_fork']): ?>
 			<a href="https://github.com/andreknieriem/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
+			<?php endif; ?>
+
+			<?php if($config['cups_button']): ?>
+				<a id="cups-button" class="btn" style="position:absolute;left:0;bottom:0;" href="#" target="newwin"><span>CUPS</span></a>
 			<?php endif; ?>
 		</div>
 
@@ -170,12 +173,16 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
 				<?php endif; ?>
 
-				<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
+				<?php if (!$config['force_buzzer']): ?>
+					<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
 
-				<?php if ($config['use_collage']): ?>
-				<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span
-						data-l10n="newCollage"></span></a>
+					<?php if ($config['use_collage']): ?>
+					<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span
+							data-l10n="newCollage"></span></a>
+					<?php endif; ?>
 				<?php endif; ?>
+
+				<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-l10n="delete"></span></a>
 			</div>
 
 			<?php if ($config['use_qr']): ?>
@@ -186,125 +193,11 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		</div>
 
 		<?php if ($config['show_gallery']): ?>
-		<!-- Gallery -->
-		<div id="gallery" class="gallery">
-			<div class="gallery__inner">
-				<div class="gallery__header">
-					<h1><span data-l10n="gallery"></span></h1>
-					<a href="#" class="gallery__close close_gal"><i class="fa fa-times"></i></a>
-				</div>
-				<div class="gallery__body" id="galimages">
-					<?php if (empty($imagelist)): ?>
-					<h1 style="text-align:center" data-l10n="gallery_no_image"></h1>
-					<?php else: ?>
-					<?php foreach ($imagelist as $image): ?>
-					<?php
-                            $date = '';
-                            if ($config['file_format_date'] && $config['show_date']) {
-                                $date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
-                                $date = '<i class="fa fa-clock-o"></i>' . $date->format($config['gallery']['date_format']);
-                            }
-
-                            $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
-                            $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
-
-                            $imageinfo = getimagesize($filename_photo);
-                            $imageinfoThumb = getimagesize($filename_thumb);
-                            ?>
-
-					<a href="<?=$filename_photo?>" data-size="<?=$imageinfo[0]?>x<?=$imageinfo[1]?>"
-						data-med="<?=$filename_thumb?>" data-med-size="<?=$imageinfoThumb[0]?>x<?=$imageinfoThumb[1]?>">
-						<figure>
-							<img src="<?=$filename_thumb?>" alt="<?=$image?>" />
-							<figcaption><?=$date?></figcaption>
-						</figure>
-					</a>
-						<?php endforeach; ?>
-						<?php endif; ?>
-				</div>
-			</div>
-		</div>
+		<?php include('template/gallery.template.php'); ?>
 		<?php endif; ?>
 	</div>
 
-
-	<!-- Root element of PhotoSwipe. Must have class pswp. -->
-	<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-		<!-- Background of PhotoSwipe.
-	 	It's a separate element, as animating opacity is faster than rgba(). -->
-		<div class="pswp__bg"></div>
-
-		<!-- Slides wrapper with overflow:hidden. -->
-		<div class="pswp__scroll-wrap">
-
-			<!-- Container that holds slides.
-			PhotoSwipe keeps only 3 of them in DOM to save memory.
-			Don't modify these 3 pswp__item elements, data is added later on. -->
-			<div class="pswp__container">
-				<div class="pswp__item"></div>
-				<div class="pswp__item"></div>
-				<div class="pswp__item"></div>
-			</div>
-
-			<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-			<div class="pswp__ui pswp__ui--hidden">
-				<div class="pswp__top-bar">
-					<!--  Controls are self-explanatory. Order can be changed. -->
-
-					<div class="pswp__counter"></div>
-					<button class="pswp__button pswp__button--close" title="Close (Esc)"><i
-							class="fa fa-times"></i></button>
-					<button class="pswp__button pswp__button--share" title="Share"></button>
-					<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-					<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-					<?php if ($config['use_mail']): ?>
-					<button class="pswp__button pswp__button--mail" title="Per Mail senden"><i class="fa fa-envelope"></i></button>
-					<?php endif; ?>
-
-					<?php if ($config['use_print']): ?>
-					<button class="pswp__button pswp__button--print" title="Drucken"><i class="fa fa-print"></i></button>
-					<?php endif; ?>
-
-					<?php if ($config['use_qr']): ?>
-					<button class="pswp__button pswp__button--qrcode" title="Qr Code öffnen"><i class="fa fa-qrcode"></i></button>
-					<?php endif; ?>
-
-					<?php if ($config['chroma_keying']): ?>
-					<button class="pswp__button pswp__button--print-chroma-keying" title="Print extra"><i class="fa fa-paint-brush"></i></button>
-					<?php endif; ?>
-
-					<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-					<!-- element will get class pswp__preloader--active when preloader is running -->
-					<div class="pswp__preloader">
-						<div class="pswp__preloader__icn">
-							<div class="pswp__preloader__cut">
-								<div class="pswp__preloader__donut"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-					<div class="pswp__share-tooltip"></div>
-				</div>
-
-				<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-				</button>
-
-				<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-				</button>
-
-				<div class="pswp__caption">
-					<div class="pswp__caption__center"></div>
-				</div>
-			</div>
-		</div>
-		<div class="pswp__qr">
-
-		</div>
-	</div>
+	<?php include('template/pswp.template.php'); ?>
 
 	<div class="send-mail">
 		<i class="fa fa-times" id="send-mail-close"></i>
@@ -337,6 +230,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="resources/js/l10n.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/TweenLite.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/EasePack.min.js"></script>

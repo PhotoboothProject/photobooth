@@ -1,4 +1,17 @@
-L10N = {
+/* exported L10N */
+const L10N = {
+	"delete": "Löschen",
+	"using_latest_version": "Photobooth ist auf dem aktuellen Stand.",
+	"update_available": "Es ist ein Update verfügbar.",
+	"test_update_available": "Es ist ein Test-Update verfügbar.",
+	"check_version": "Version überprüfen",
+	"current_version": "Aktuelle Version",
+	"available_version": "Verfügbare Version",
+	"force_buzzer": "Verstecke Auslöse-Taste",
+	"use_button": "Buzzer verwenden, um ein Bild aufzunehmen",
+	"general_photo_key": "Tastencode welcher ein Foto auslöst",
+	"general_collage_key": "Tastencode welcher eine Collage auslöst",
+	"cups_button": "CUPS Taste anzeigen",
 	"gallery": "Galerie",
 	"startScreen": "<h1>Photobooth<\/h1><h2>Webinterface<\/h2> by Andr\u00e9 Rinas",
 	"general_start_screen_title": "Startbildschirm (Titel)",
@@ -45,7 +58,6 @@ L10N = {
 	"gallery_date_format": "Datumsstil",
 	"gallery_no_image": "Die Galerie ist noch leer. Mache doch ein paar Bilder!",
 	"use_mail": "E-Mail aktivieren",
-	"use_gpio_button": "Hardware-Taster verwenden, um ein Bild aufzunehmen",
 	"show_fork": "Fork Logo anzeigen",
 	"cntdwn_time": "Countdown Timer einstellen",
 	"general_cntdwn_time": "Countdown Timer in Sekunden",
@@ -100,5 +112,9 @@ L10N = {
 	"textonprint_linespace": "Zeilenabstand",
 	"textonprint_fontsize": "Schriftgröße",
 	"user_interface": "Benutzeroberfläche",
-	"bluegray_theme": "Blaugraues Theme"
+	"user_interface_color_theme": "Theme",
+	"color_theme": "Theme auswählen",
+	"crop_onprint": "Bild bei Ausdruck zurechtschneiden",
+	"general_crop_width": "Neue Bildbreite bei Ausdruck",
+	"general_crop_height": "Neue Bildhöhe bei Ausdruck"
 }

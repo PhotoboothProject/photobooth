@@ -1,9 +1,13 @@
 <?php
 require_once('lib/config.php');
 
-$location = base64_decode($_GET['location']);
+if (empty($_GET['filename']) || !preg_match('/^[a-z0-9_]+\.jpg$/', $_GET['filename'])) {
+    die('No or invalid file provided');
+}
+
 $filename = $_GET['filename'];
 $keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
+
 if (file_exists($keyingimage)) {
     $mainimage = $keyingimage;
     $keying_possible = true;
@@ -42,13 +46,13 @@ if (file_exists($keyingimage)) {
 		</div>
 
 		<div class="chroma-control-bar">
-			<a class="btn btn--flex" href="javascript:saveImage()"><i class="fa fa-floppy-o"></i> <span data-l10n="save"></span></a>
+			<a class="btn btn--flex" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-l10n="save"></span></a>
 
 			<?php if ($config['use_print']): ?>
-				<a class="btn btn--flex" href="javascript:printImage()"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
+				<a class="btn btn--flex" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="btn btn--flex" href="./"><i class="fa fa-times"></i> <span data-l10n="close"></span></a>
+			<a class="btn btn--flex" href="javascript:window.history.back()"><i class="fa fa-times"></i> <span data-l10n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">

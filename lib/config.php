@@ -41,6 +41,19 @@ $mailTemplates = [
     ],
 ];
 
+$colors = [
+    'default' => [
+        'primary' => '#e67e22',
+        'secondary' => '#d35400',
+        'font' => '#ffffff',
+    ],
+    'blue-gray' => [
+        'primary' => '#669db3',
+        'secondary' => '#2e535e',
+        'font' => '#f0f6f7',
+    ]
+];
+
 require_once($default_config_file);
 
 $config['mail_subject'] = $mailTemplates[$config['language']]['mail_subject'];
@@ -49,6 +62,7 @@ $config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
 $config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
 $config['print']['cmd'] = $cmds[$os]['print']['cmd'];
 $config['print']['msg'] = $cmds[$os]['print']['msg'];
+$config['colors'] = $colors['default'];
 
 $defaultConfig = $config;
 
@@ -64,13 +78,29 @@ if ($config['dev']) {
     error_reporting(E_ALL);
 }
 
+if (is_array($config['color_theme'])) {
+    $config['colors'] = $config['color_theme'];
+} elseif (array_key_exists($config['color_theme'], $colors)) {
+    $config['colors'] = $colors[$config['color_theme']];
+} else {
+    $config['colors'] = $colors['default'];
+}
+
+if (file_exists($my_config_file) && !is_writable($my_config_file)) {
+    die('Abort. Can not write config/my.config.inc.php.');
+} elseif (!file_exists($my_config_file) && !is_writable(__DIR__ . '/../config/')) {
+    die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
+}
+
 foreach ($config['folders'] as $key => $folder) {
     $path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $folder;
 
     if (!file_exists($path)) {
         if (!mkdir($path, 0755, true)) {
-            die("Abort. Could not create $folder");
+            die("Abort. Could not create $folder.");
         }
+    } elseif (!is_writable($path)) {
+        die("Abort. The folder $folder is not writable.");
     }
 
     $path = realpath($path);

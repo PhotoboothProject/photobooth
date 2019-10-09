@@ -1,7 +1,6 @@
 /* globals MarvinColorModelConverter AlphaBoundary MarvinImage */
-/* exported setBackgroundImage printImage saveImage */
+/* exported setBackgroundImage */
 let mainImage;
-let mainImageSrc;
 let mainImageWidth;
 let mainImageHeight;
 let backgroundImage;
@@ -54,7 +53,6 @@ function alphaBoundary(imageOut, radius) {
 function setMainImage(imgSrc) {
     const image = new MarvinImage();
     image.load(imgSrc, function () {
-        mainImageSrc = imgSrc;
         mainImageWidth = image.getWidth();
         mainImageHeight = image.getHeight();
 
@@ -127,61 +125,79 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
     };
 }
 
-function printImage() {
-    if (typeof mainImageSrc === 'undefined' || mainImageSrc === null) {
-        return;
-    }
+function printImage(filename, cb) {
+    console.log('print', filename);
+    $.get(
+        'api/print.php',
+        {
+            filename: filename,
+        },
+        function (data) {
+            console.log('print data', data);
+            if (cb) {
+                cb(data);
+            }
+        }
+    );
+}
 
+function saveImage(cb) {
     const canvas = document.getElementById('mainCanvas');
     const dataURL = canvas.toDataURL('image/png');
+
+    $.post(
+        'api/chromakeying/save.php',
+        {
+            imgData: dataURL,
+        },
+        function (data) {
+            if (cb) {
+                cb(data);
+            }
+        }
+    );
+}
+
+function printImageHandler(ev) {
+    ev.preventDefault();
 
     $('#print_mesg').addClass('modal--show');
 
     setTimeout(function () {
-        $.post(
-            'api/chromakeying/print.php',
-            {
-                imgData: dataURL,
-                mainImageSrc: mainImageSrc
-            },
-            function () {
+        saveImage((data) => {
+            if (!data.success) {
+                return;
+            }
+
+            printImage(data.filename, () => {
                 setTimeout(function () {
                     $('#print_mesg').removeClass('modal--show');
+
                     window.location.reload();
                 }, 5000);
-            },
-            'json'
-        );
+            })
+        });
     }, 1000);
 }
 
-function saveImage() {
-    if (typeof mainImageSrc === 'undefined' || mainImageSrc === null) {
-        return;
-    }
-
-    const canvas = document.getElementById('mainCanvas');
-    const dataURL = canvas.toDataURL('image/png');
+function saveImageHandler(ev) {
+    ev.preventDefault();
 
     $('#save_mesg').addClass('modal--show');
 
     setTimeout(function () {
-        $.post(
-            'api/chromakeying/save.php',
-            {
-                imgData: dataURL,
-                mainImageSrc: mainImageSrc
-            },
-            function () {
-                setTimeout(function () {
-                    $('#save_mesg').removeClass('modal--show');
-                }, 2000);
-            }
-        );
+        saveImage(() => {
+            setTimeout(function () {
+                $('#save_mesg').removeClass('modal--show');
+            }, 2000);
+        });
     }, 1000);
 }
 
 $(document).ready(function () {
+    $('#save-btn').on('click', saveImageHandler);
+    $('#print-btn').on('click', printImageHandler);
+
     setTimeout(function () {
         setMainImage($('body').attr('data-main-image'));
     }, 100);

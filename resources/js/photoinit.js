@@ -171,10 +171,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         const img = gallery.currItem.src.split('/').pop();
 
         if (config.chroma_keying) {
-            const currentHref = location.href.split('#')[0];
-            const encodedString = btoa(currentHref);
-
-            location = 'chromakeying.php?filename=' + encodeURI(img) + '&location=' + encodeURI(encodedString);
+            location = 'chromakeying.php?filename=' + encodeURI(img);
         }
     });
 

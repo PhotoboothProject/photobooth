@@ -9,10 +9,13 @@ $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['print_qrcode'] = true;
 $config['print_frame'] = false;
+$config['crop_onprint'] = false;
+$config['crop_width'] = '1000';
+$config['crop_height'] = '500';
 $config['use_mail'] = false; // mail data needs to be configured
-$config['use_gpio_button'] = false; // Use alt+p to take a new picture, can be triggered via GPIO24
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
+$config['cups_button'] = false;
 $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
@@ -21,7 +24,13 @@ $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['chroma_keying'] = true;
 $config['use_collage'] = false;
-$config['bluegray_theme'] = false;
+$config['color_theme'] = 'default'; // possible values are default, blue-gray, or an array with the corresponding colors (e.g. ['primary' => '#fff', 'secondary'=>'#a1a1a1', 'font'=>'#000'])
+$config['force_buzzer'] = false;
+
+// specify key id to use that key to take a picture or collage (e.g. 13 is the enter key)
+// use for example https://keycode.info to get the key code
+$config['photo_key'] = null;
+$config['collage_key'] = null;
 
 // LANGUAGE
 // possible values: en, de, es, fr

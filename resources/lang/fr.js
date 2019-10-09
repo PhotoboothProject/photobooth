@@ -1,4 +1,17 @@
-L10N = {
+/* exported L10N */
+const L10N = {
+	"delete": "Effacer",
+	"using_latest_version": "Vous utilisez la dernière version de photobooth",
+	"update_available": "Il y a une mise à jour disponible",
+	"test_update_available": "Il y a une mise à jour de test disponible",
+	"check_version": "Vérifier la version",
+	"current_version": "Version actuelle",
+	"available_version": "Version disponible",
+	"force_buzzer": "masquer le déclencheur",
+	"use_button": "Utilisez le bouton matériel pour prendre une photo",
+	"general_photo_key": "Code clé qui déclenche une photo",
+	"general_collage_key": "Code clé qui déclenche une collage",
+	"cups_button": "Afficher le bouton CUPS",
 	"gallery": "Galerie",
 	"startScreen": "<h1>Photobooth<\/h1><h2>Interface Web<\/h2> by Andr\u00e9 Rinas",
 	"general_start_screen_title": "Page d’accueil (Titre)",
@@ -45,7 +58,6 @@ L10N = {
 	"gallery_date_format": "Format de date",
 	"gallery_no_image": "La galerie est vide. Faites des photos!",
 	"use_mail": "Utiliser le courrier électronique",
-	"use_gpio_button": "Utilisez le bouton matériel pour prendre une photo",
 	"show_fork": "Affichez badge de la page Github",
 	"cntdwn_time": "Réglez le compte à rebours",
 	"general_cntdwn_time": "Compte à rebours en secondes",
@@ -100,5 +112,9 @@ L10N = {
 	"textonprint_linespace": "Interligne",
 	"textonprint_fontsize":  "Taille de la police",
 	"user_interface": "Interface utilisateur",
-	"bluegray_theme": "Thème bleu-gris"
+	"user_interface_color_theme": "Thème",
+	"color_theme": "Choisissez un thème",
+	"crop_onprint": "Recadrer la photo à imprimer",
+	"general_crop_width": "Nouvelle largeur à l'impression",
+	"general_crop_height": "Nouvelle hauteur à l'impression"
 }

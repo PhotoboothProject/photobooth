@@ -14,7 +14,7 @@ while True:
     input_state = GPIO.input(24)
     if input_state == False:
         #print('Button Pressed') #<- for debugging only
-        with uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_P]) as device:
+        with uinput.Device([uinput.KEY_ENTER]) as device:
          time.sleep(1)
-         device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_P])
+         device.emit_combo([uinput.KEY_ENTER])
          time.sleep(10)

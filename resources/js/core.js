@@ -18,7 +18,8 @@ const photoBooth = (function () {
         };
 
     let timeOut,
-        processing = false,
+        nextCollageNumber = 0,
+        currentCollageFile = '',
         imgFilter = 'imgPlain';
 
     const modal = {
@@ -70,20 +71,11 @@ const photoBooth = (function () {
 
     // init
     public.init = function () {
-        public.l10n();
         public.reset();
 
         initPhotoSwipeFromDOM('#galimages');
 
         startPage.addClass('open');
-    }
-
-    public.l10n = function (elem) {
-        elem = $(elem || 'body');
-        elem.find('[data-l10n]').each(function (i, item) {
-            item = $(item);
-            item.html(L10N[item.data('l10n')]);
-        });
     }
 
     public.openNav = function () {
@@ -130,19 +122,21 @@ const photoBooth = (function () {
     }
 
     public.thrill = function (photoStyle) {
-        if (!processing) {
-            public.closeNav();
-            public.reset();
+        public.closeNav();
+        public.reset();
 
-            if (config.previewFromCam) {
-                public.startVideo();
-            }
-
-            loader.addClass('open');
-            public.startCountdown(config.cntdwn_time, $('#counter'), () => {
-                public.cheese(photoStyle);
-            });
+        if (currentCollageFile && nextCollageNumber) {
+            photoStyle = 'collage';
         }
+
+        if (config.previewFromCam) {
+            public.startVideo();
+        }
+
+        loader.addClass('open');
+        public.startCountdown(config.cntdwn_time, $('#counter'), () => {
+            public.cheese(photoStyle);
+        });
     }
 
     // Cheese
@@ -159,13 +153,13 @@ const photoBooth = (function () {
             $('.loading').text(L10N.cheeseCollage);
         }
 
-        public.takePic(photoStyle);
+        setTimeout(() => {
+            public.takePic(photoStyle);
+        }, config.cheese_time);
     }
 
     // take Picture
     public.takePic = function (photoStyle) {
-        processing = true;
-
         if (config.dev) {
             console.log('Take Picture:' + photoStyle);
         }
@@ -174,29 +168,42 @@ const photoBooth = (function () {
             public.stopVideo();
         }
 
-        setTimeout(function () {
-            $('#counter').text('');
-
-            if ((photoStyle == 'photo')) {
-                $('.spinner').show();
-                $('.loading').text(L10N.busy);
-            } else {
-                setTimeout(function () {
-                    $('.spinner').show();
-                    $('.loading').text(L10N.busyCollage);
-                }, config.dev ? 0 : 7500);
-            }
-        }, config.cheese_time);
+        const processingDelay = setTimeout(() => {
+            $('.spinner').show();
+            $('.loading').text(photoStyle === 'photo' ? L10N.busy : L10N.busyCollage);
+        }, 500);
 
         const data = {
             filter: imgFilter,
             style: photoStyle,
         };
 
+        if (photoStyle === 'collage') {
+            data.file = currentCollageFile;
+            data.collageNumber = nextCollageNumber;
+        }
+
         jQuery.post('api/takePic.php', data).done(function (result) {
+            clearTimeout(processingDelay);
+
             if (result.error) {
                 public.errorPic(result);
+            } else if (result.success === 'collage') {
+                currentCollageFile = result.file;
+                nextCollageNumber = result.current + 1;
+
+                $('.spinner').hide();
+                $('.loading').empty();
+                $('<p>').text(`${result.current + 1} / ${result.limit}`).appendTo('.loading');
+                $('<a class="btn" href="#">' + L10N.newPhoto + '</a>').appendTo('.loading').click((ev) => {
+                    ev.preventDefault();
+
+                    public.thrill('collage');
+                });
             } else {
+                currentCollageFile = '';
+                nextCollageNumber = 0;
+
                 public.renderPic(result);
             }
 
@@ -222,7 +229,7 @@ const photoBooth = (function () {
             const body = qrCodeModal.find('.modal__body');
 
             $(this).appendTo(body);
-            $('<p>').html(L10N.qrHelp).appendTo(body);
+            $('<p>').css('max-width', this.width + 'px').html(L10N.qrHelp).appendTo(body);
         });
 
         // Add Print Link
@@ -234,6 +241,18 @@ const photoBooth = (function () {
             public.printImage(result.img, () => {
                 public.reloadPage();
             });
+        });
+
+        resultPage.find('.deletebtn').off('click').on('click', (ev) => {
+            ev.preventDefault();
+
+            public.deleteImage(result.img, (data) => {
+                if (data.success) {
+                    public.reloadPage();
+                } else {
+                    console.log('Error while deleting image');
+                }
+            })
         });
 
         // Add Image to gallery and slider
@@ -249,7 +268,6 @@ const photoBooth = (function () {
             startPage.fadeOut(400, function () {
                 resultPage.fadeIn(400, function () {
                     setTimeout(function () {
-                        processing = false;
                         loader.removeClass('open');
                     }, 400);
                     setTimeout(function () {
@@ -323,7 +341,7 @@ const photoBooth = (function () {
         let count = 0;
         let current = start;
 
-        function timerFunction () {
+        function timerFunction() {
             element.text(current);
             current--;
 
@@ -340,7 +358,7 @@ const photoBooth = (function () {
         timerFunction();
     }
 
-    public.printImage = function(imageSrc, cb) {
+    public.printImage = function (imageSrc, cb) {
         modal.open('#print_mesg');
 
         setTimeout(function () {
@@ -359,7 +377,20 @@ const photoBooth = (function () {
         }, 1000);
     }
 
-    public.toggleMailDialog = function(img) {
+    public.deleteImage = function (imageName, cb) {
+        $.ajax({
+            url: 'api/deletePhoto.php',
+            method: 'POST',
+            data: {
+                file: imageName,
+            },
+            success: (data) => {
+                cb(data);
+            }
+        });
+    }
+
+    public.toggleMailDialog = function (img) {
         const mail = $('.send-mail');
 
         if (mail.hasClass('mail-active')) {
@@ -491,6 +522,25 @@ const photoBooth = (function () {
         e.stopPropagation();
 
         public.reloadPage();
+    });
+
+    $('#cups-button').on('click', function (ev) {
+        ev.preventDefault();
+
+        const url = `http://${location.hostname}:631/jobs/`;
+        const features = 'width=1024,height=600,left=0,top=0,screenX=0,screenY=0,resizable=NO,scrollbars=NO';
+
+        window.open(url, 'newwin', features);
+    });
+
+    $(document).on('keypress', function (ev) {
+        if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
+            public.thrill('photo');
+        }
+
+        if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+            public.thrill('collage');
+        }
     });
 
     // clear Timeout to not reset the gallery, if you clicked anywhere

@@ -1,4 +1,17 @@
-L10N = {
+/* exported L10N */
+const L10N = {
+	"delete": "Delete",
+	"using_latest_version": "You are using the latest version of photobooth.",
+	"update_available": "There is an update available.",
+	"test_update_available": "There is a test update available.",
+	"check_version": "Check version",
+	"current_version": "Current version",
+	"available_version": "Available version",
+	"force_buzzer": "hide trigger button",
+	"use_button": "Use Buzzer to take a Picture",
+	"general_photo_key": "Key code which triggers a photo",
+	"general_collage_key": "Key code which triggers a collage",
+	"cups_button": "Show CUPS button",
 	"gallery": "Gallery",
 	"startScreen": "<h1>Photobooth<\/h1><h2>Webinterface<\/h2> by Andr\u00e9 Rinas",
 	"general_start_screen_title": "Start screen (title)",
@@ -45,7 +58,6 @@ L10N = {
 	"gallery_date_format": "Date style",
 	"gallery_no_image": "The gallery is still empty. Take some pictures!",
 	"use_mail": "Use E-Mail",
-	"use_gpio_button": "Use Hardware Button to take a Picture",
 	"show_fork": "Show Fork Badge",
 	"cntdwn_time": "Set countdown timer",
 	"general_cntdwn_time": "Countdown timer in seconds",
@@ -100,5 +112,9 @@ L10N = {
 	"textonprint_linespace": "Line spacing",
 	"textonprint_fontsize": "Font size",
 	"user_interface": "User interface",
-	"bluegray_theme": "Blue-gray theme"
+	"user_interface_color_theme": "Theme",
+	"color_theme": "Choose a theme",
+	"crop_onprint": "Crop picture at print",
+	"general_crop_width": "New width at print",
+	"general_crop_height": "New height at print"
 }

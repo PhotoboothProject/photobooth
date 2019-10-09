@@ -30,6 +30,8 @@ $(function() {
 
                     setTimeout(function() {
                         elem.removeClass('error success');
+
+                        window.location.reload();
                     }, 3000);
                 }
             });
@@ -49,9 +51,47 @@ $(function() {
             'success': function(resp) {
                 elem.removeClass('saving');
                 elem.addClass(resp);
+
                 setTimeout(function() {
                     elem.removeClass('error success');
+
+                    if (resp === 'success') {
+                        window.location.reload();
+                    }
                 }, 2000);
+            }
+        });
+    });
+
+    $('#checkVersion a').on('click', function (ev) {
+        ev.preventDefault();
+
+        $(this).html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>');
+
+        $.ajax({
+            url: '../api/checkVersion.php',
+            method: 'GET',
+            success: (data) => {
+                let message = 'Error';
+                $('#checkVersion').empty();
+                console.log('data', data)
+                if (!data.updateAvailable) {
+                    message = L10N.using_latest_version;
+                } else if ((/^\d+\.\d+\.\d+$/u).test(data.availableVersion)) {
+                    message = L10N.update_available;
+                } else {
+                    message = L10N.test_update_available;
+                }
+
+                const textElement = $('<p>');
+                textElement.text(message);
+                textElement.append('<br />');
+                textElement.append(L10N.current_version + ': ');
+                textElement.append(data.currentVersion);
+                textElement.append('<br />');
+                textElement.append(L10N.available_version + ': ');
+                textElement.append(data.availableVersion);
+                textElement.appendTo('#checkVersion');
             }
         });
     });

@@ -2,7 +2,6 @@
 header('Content-Type: application/json');
 
 require_once('../lib/db.php');
-require_once('../lib/folders.php');
 require_once('../lib/config.php');
 
 function takePicture($filename)
@@ -18,10 +17,17 @@ function takePicture($filename)
 
         if ($returnValue) {
             die(json_encode([
-                'error' => true,
+                'error' => 'Gphoto returned with an error code',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
-                'message' => $output,
+                'output' => $output,
+            ]));
+        } elseif (!file_exists($filename)) {
+            die(json_encode([
+                'error' => 'File was not created',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
             ]));
         }
     } else {
@@ -209,7 +215,9 @@ function applyFilter($imgfilter, $source, $destination)
     imagedestroy($tmp);
 }
 
-if ($config['file_format_date'] == true) {
+if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
+    $file = $_POST['file'];
+} elseif ($config['file_format_date']) {
     $file = date('Ymd_His').'.jpg';
 } else {
     $file = md5(time()).'.jpg';
@@ -248,41 +256,56 @@ if (empty($_POST['filter']) || $_POST['filter'] !== 'imgPlain') {
 
 if ($_POST['style'] === 'photo') {
     takePicture($filename_orig);
-} else {
-    $collagePhoto = array();
+} elseif ($_POST['style'] === 'collage') {
+    if (!is_numeric($_POST['collageNumber'])) {
+        die(json_encode([
+            'error' => 'No or invalid collage number provided',
+        ]));
+    }
 
-    for ($i = 0; $i < 4; $i++) {
-        $collagePhoto[$i] = $filename_orig . '-' . $i;
-        takePicture($collagePhoto[$i]);
+    $number = $_POST['collageNumber'] + 0;
+
+    takePicture($filename_orig . '-' . $number);
+
+    if ($number < 3) {
+        die(json_encode([
+            'success' => 'collage',
+            'file' => $file,
+            'current' => $number,
+            'limit' => 4,
+        ]));
     }
 
     // make collage
-    list($width, $height) = getimagesize($collagePhoto[0]);
+    list($width, $height) = getimagesize($filename_orig . '-' . $number);
     $my_collage_height = $height * 2;
     $my_collage_width = $width * 2;
-    $my_collage = imagecreatetruecolor($my_collage_width, $my_collage_height)
-            or die("Kann keinen neuen GD-Bild-Stream erzeugen");
+
+    $my_collage = imagecreatetruecolor($my_collage_width, $my_collage_height);
     $background = imagecolorallocate($my_collage, 0, 0, 0);
     imagecolortransparent($my_collage, $background);
-    $collage_pic1 = imagecreatefromjpeg($collagePhoto[0]) or die("no imagcreate");
-    imagecopy($my_collage, $collage_pic1, 0, 0, 0, 0, $width, $height);
-    $collage_pic2 = imagecreatefromjpeg($collagePhoto[1]) or die("no imagcreate");
-    imagecopy($my_collage, $collage_pic2, $width, 0, 0, 0, $width, $height);
-    $collage_pic3 = imagecreatefromjpeg($collagePhoto[2]) or die("no imagcreate");
-    imagecopy($my_collage, $collage_pic3, 0, $height, 0, 0, $width, $height);
-    $collage_pic4 = imagecreatefromjpeg($collagePhoto[3]) or die("no imagcreate");
-    imagecopy($my_collage, $collage_pic4, $width, $height, 0, 0, $width, $height);
+
+    $positions = [[0, 0], [$width, 0], [0, $height], [$width, $height]];
+
+    for ($i = 0; $i < 4; $i++) {
+        $position = $positions[$i];
+        $tempSubImage = imagecreatefromjpeg($filename_orig . '-' . $i);
+
+        imagecopy($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $width, $height);
+        imagedestroy($tempSubImage);
+    }
 
     if ($use_filter == true) {
         imagejpeg($my_collage, $filename_orig);
     } else {
         imagejpeg($my_collage, $filename_photo);
     }
+
     imagedestroy($my_collage);
-    imagedestroy($collage_pic1);
-    imagedestroy($collage_pic2);
-    imagedestroy($collage_pic3);
-    imagedestroy($collage_pic4);
+} else {
+    die(json_encode([
+        'error' => 'Invalid photo style provided',
+    ]));
 }
 
 // apply filter
@@ -324,4 +347,4 @@ $images[] = $file;
 file_put_contents(__DIR__ . '/../data/db.txt', json_encode($images));
 
 // send imagename to frontend
-echo json_encode(array('success' => true, 'img' => $file));
+echo json_encode(array('success' => 'image', 'img' => $file));
