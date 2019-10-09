@@ -21,6 +21,11 @@ if ($data['type'] == 'reset') {
         }
     }
 
+    // delete mail-addresses.txt
+    if(is_file('../mail-addresses.txt')){
+        unlink('../mail-addresses.txt');
+    }
+
     // delete db.txt
     if (is_file('../data/db.txt')) {
         unlink('../data/db.txt'); // delete file
@@ -31,36 +36,60 @@ if ($data['type'] == 'reset') {
 
 if ($data['type'] == 'config') {
     $file = __DIR__ . '/../config/my.config.inc.php';
+    $newConfig = [];
 
     foreach ($config as $k=>$conf) {
         if (is_array($conf)) {
             foreach ($conf as $sk => $sc) {
                 if (isset($data[$k][$sk]) && !empty($data[$k][$sk])) {
                     if ($data[$k][$sk] == 'true') {
-                        $config[$k][$sk] = true;
+                        $newConfig[$k][$sk] = true;
                     } else {
-                        $config[$k][$sk] = $data[$k][$sk];
+                        $newConfig[$k][$sk] = $data[$k][$sk];
                     }
                 }
             }
         } else {
             if (isset($data[$k]) && !empty($data[$k])) {
                 if ($data[$k] == 'true') {
-                    $config[$k] = true;
+                    $newConfig[$k] = true;
                 } else {
-                    $config[$k] = $data[$k];
+                    $newConfig[$k] = $data[$k];
                 }
             } else {
-                $config[$k] = false;
+                $newConfig[$k] = false;
             }
         }
     }
 
-    $content = "<?php\n\$config = ". var_export($config, true) . ";";
+    $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
     if (file_put_contents($file, $content)) {
         echo json_encode('success');
     } else {
         echo json_encode('error');
     }
+}
+
+function arrayRecursiveDiff($aArray1, $aArray2)
+{
+    $aReturn = array();
+
+    foreach ($aArray1 as $mKey => $mValue) {
+        if (array_key_exists($mKey, $aArray2)) {
+            if (is_array($mValue)) {
+                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey]);
+                if (count($aRecursiveDiff)) {
+                    $aReturn[$mKey] = $aRecursiveDiff;
+                }
+            } else {
+                if ($mValue != $aArray2[$mKey]) {
+                    $aReturn[$mKey] = $mValue;
+                }
+            }
+        } else {
+            $aReturn[$mKey] = $mValue;
+        }
+    }
+    return $aReturn;
 }

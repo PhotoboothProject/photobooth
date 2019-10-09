@@ -75,7 +75,7 @@ const photoBooth = (function () {
 
         initPhotoSwipeFromDOM('#galimages');
 
-        startPage.show();
+        startPage.addClass('open');
     }
 
     public.openNav = function () {
@@ -95,20 +95,22 @@ const photoBooth = (function () {
             return;
         }
 
-        navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+        const getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
 
-        if (!navigator.getMedia) {
+        if(!getMedia) {
             return;
         }
 
-        navigator.getMedia(webcamConstraints)
-            .then(function (stream) {
+        getMedia.call(navigator.mediaDevices, webcamConstraints)
+            .then(function(stream) {
                 $('#video').show();
                 const video = $('#video').get(0);
                 video.srcObject = stream;
                 public.stream = stream;
             })
-            .catch(function () { });
+            .catch(function (error) {
+                console.log('Could not get user media: ', error)
+            });
     }
 
     public.stopVideo = function () {
@@ -304,7 +306,7 @@ const photoBooth = (function () {
             const linkElement = $('<a>').html(thumbImg);
 
             linkElement.attr('data-size', bigSize);
-            linkElement.attr('href', config.folders.images + '/' + imageName + '?new=1');
+            linkElement.attr('href', config.folders.images + '/' + imageName);
             linkElement.attr('data-med', config.folders.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);
 
@@ -313,6 +315,8 @@ const photoBooth = (function () {
             } else {
                 linkElement.appendTo($('#galimages'));
             }
+
+            $('#galimages').children().not('a').remove();
         }
     }
 

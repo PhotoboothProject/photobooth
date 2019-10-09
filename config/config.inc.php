@@ -1,7 +1,7 @@
 <?php
 
-//  WARNING!
-// Do not modify this file directly. Copy it to my.config.inc.php to apply local changes.
+// WARNING!
+// Do not modify this file directly. Add your changes to my.config.inc.php
 
 $config = array();
 $config['dev'] = false;

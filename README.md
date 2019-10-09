@@ -52,8 +52,15 @@ sudo rm -r html/
 sudo git clone https://github.com/andreknieriem/photobooth html
 cd /var/www/html
 sudo git submodule update --init
-sudo cp config/config.inc.php config/my.config.inc.php
-sudo chown -R www-data:www-data /var/www/
+sudo cp config.inc.php my.config.inc.php
+sudo mkdir -p /var/www/html/images
+sudo mkdir -p /var/www/html/keying
+sudo mkdir -p /var/www/html/print
+sudo mkdir -p /var/www/html/qrcodes
+sudo mkdir -p /var/www/html/thumbs
+sudo mkdir -p /var/www/html/tmp
+sudo chown -R pi: /var/www/
+sudo chmod -R 777 /var/www
 
 ```
 Install latest version of libgphoto2, choose last stable release
@@ -83,17 +90,17 @@ Open the IP address of your raspberry pi in a browser
 
 ### Troubleshooting
 #### Change configuration
-Use the copy named ```config/my.config.inc.php``` to make config changes for personal use to prevent sharing personal data on Github by accident.
+Use the copy named ```my.config.inc.php``` to make config changes for personal use to prevent sharing personal data on Github by accident.
 
 #### Change Labels
-There are three label files in the lang folder, one for de (german), one for es (spanish), one for en (english) and one for fr (french). You can change the language inside ```config/my.config.inc.php``` or via Admin Page.
+There are three label files in the lang folder, one for de (german), one for es (spanish), one for en (english) and one for fr (french). You can change the language inside ```my.config.inc.php``` or via Admin Page.
 
 #### Keep pictures on Camera
-Add ```--keep``` option for gphoto2 in ```config/my.config.inc.php```:
+Add ```--keep``` option for gphoto2 in ```my.config.inc.php```:
 ```
 	$config['take_picture']['cmd'] = 'sudo gphoto2 --capture-image-and-download --keep --filename=%s images';
 ```
-On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use ```--set-config capturetarget=X``` option for gphoto2 in ```config/my.config.inc.php``` (replace "X" with the target of your choice):
+On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use ```--set-config capturetarget=X``` option for gphoto2 in ```my.config.inc.php``` (replace "X" with the target of your choice):
 ```
 	$config['take_picture']['cmd'] = 'sudo gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s images';
 ```
