@@ -16,7 +16,7 @@ $cmds = [
     ],
     'linux' => [
         'take_picture' => [
-            'cmd' => 'gphoto2 --capture-image-and-download --filename=%s images',
+            'cmd' => 'gphoto2 --capture-image-and-download --filename=%s',
             'msg' => 'New file is in location'
         ],
         'print' => [
