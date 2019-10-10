@@ -39,31 +39,8 @@ Please follow the installation instructions in our [Photobooth-Wiki](https://git
 
 If you're having trouble or questions please take a look at our [FAQ](https://github.com/andreknieriem/photobooth/wiki#faq---frequently-asked-questions) before opening a new issue.
 
-
 ### :mag: Changelog
-- [2.0.0 alpha](https://github.com/andreknieriem/photobooth/wiki/Changelog#200-alpha)
-- [1.9.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#190)
-- [1.8.3](https://github.com/andreknieriem/photobooth/wiki/Changelog#183)
-- [1.8.2](https://github.com/andreknieriem/photobooth/wiki/Changelog#182)
-- [1.8.1](https://github.com/andreknieriem/photobooth/wiki/Changelog#181)
-- [1.8.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#180)
-- [1.7.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#170)
-- [1.6.3](https://github.com/andreknieriem/photobooth/wiki/Changelog#163)
-- [1.6.2](https://github.com/andreknieriem/photobooth/wiki/Changelog#162)
-- [1.6.1](https://github.com/andreknieriem/photobooth/wiki/Changelog#161)
-- [1.6.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#160)
-- [1.5.3](https://github.com/andreknieriem/photobooth/wiki/Changelog#153)
-- [1.5.2](https://github.com/andreknieriem/photobooth/wiki/Changelog#152)
-- [1.5.1](https://github.com/andreknieriem/photobooth/wiki/Changelog#151)
-- [1.5.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#150)
-- [1.4.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#140)
-- [1.3.2](https://github.com/andreknieriem/photobooth/wiki/Changelog#132)
-- [1.3.1](https://github.com/andreknieriem/photobooth/wiki/Changelog#131)
-- [1.3.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#130)
-- [1.2.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#120)
-- [1.1.1](https://github.com/andreknieriem/photobooth/wiki/Changelog#111)
-- [1.1.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#110)
-- [1.0.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#100)
+Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andreknieriem/photobooth/wiki/changelog).
 
 ### :mortar_board: Tutorial
 [Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
