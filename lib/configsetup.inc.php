@@ -130,6 +130,11 @@ $configsetup = [
 			'name' => 'use_collage',
 			'value' => $config['use_collage']
 		],
+		'continuous_collage' => [
+			'type' => 'checkbox',
+			'name' => 'continuous_collage',
+			'value' => $config['continuous_collage']
+		],
 		'cups_button' => [
 			'type' => 'checkbox',
 			'name' => 'cups_button',

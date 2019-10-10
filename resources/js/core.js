@@ -195,11 +195,18 @@ const photoBooth = (function () {
                 $('.spinner').hide();
                 $('.loading').empty();
                 $('<p>').text(`${result.current + 1} / ${result.limit}`).appendTo('.loading');
-                $('<a class="btn" href="#">' + L10N.newPhoto + '</a>').appendTo('.loading').click((ev) => {
-                    ev.preventDefault();
 
-                    public.thrill('collage');
-                });
+                if (config.continuous_collage) {
+                    setTimeout(() => {
+                        public.thrill('collage');
+                    }, 1000);
+                } else {
+                    $('<a class="btn" href="#">' + L10N.newPhoto + '</a>').appendTo('.loading').click((ev) => {
+                        ev.preventDefault();
+
+                        public.thrill('collage');
+                    });
+                }
             } else {
                 currentCollageFile = '';
                 nextCollageNumber = 0;

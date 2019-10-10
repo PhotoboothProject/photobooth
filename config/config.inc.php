@@ -24,6 +24,7 @@ $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['chroma_keying'] = true;
 $config['use_collage'] = false;
+$config['continuous_collage'] = false;
 $config['color_theme'] = 'default'; // possible values are default, blue-gray, or an array with the corresponding colors (e.g. ['primary' => '#fff', 'secondary'=>'#a1a1a1', 'font'=>'#000'])
 $config['force_buzzer'] = false;
 

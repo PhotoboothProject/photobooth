@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+	"continuous_collage": "Toma collage sin interrupción",
 	"delete": "Eliminar",
 	"using_latest_version": "Estás utilizando la última versión de photobooth",
 	"update_available": "Hay una actualización disponible",
