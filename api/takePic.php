@@ -125,7 +125,13 @@ function applyFilter($imgfilter, $source, $destination)
             imagefilter($tmp, IMG_FILTER_COLORIZE, 0, 0, 100);
             break;
         case 'imgBlur':
-            imagefilter($tmp, IMG_FILTER_GAUSSIAN_BLUR);
+            for ($i = 0; $i < 25; $i++) {
+                // each 10th time apply 'IMG_FILTER_SMOOTH' with 'level of smoothness' set to -7
+                if ($i % 10 == 0) {
+                    imagefilter($tmp, IMG_FILTER_SMOOTH, -7);
+                }
+                imagefilter($tmp, IMG_FILTER_GAUSSIAN_BLUR);
+            }
             break;
         case 'imgColor':
             imagefilter($tmp, IMG_FILTER_CONTRAST, -40);
@@ -173,7 +179,9 @@ function applyFilter($imgfilter, $source, $destination)
             imagefilter($tmp, IMG_FILTER_COLORIZE, 100, 25, 25, 50);
             break;
         case 'imgSelectiveBlur':
-            imagefilter($tmp, IMG_FILTER_SELECTIVE_BLUR);
+            for ($i = 0; $i <= 10; $i++) {
+                imagefilter($tmp, IMG_FILTER_SELECTIVE_BLUR);
+            }
             break;
         case 'imgSepiaDark':
             imagefilter($tmp, IMG_FILTER_GRAYSCALE);
