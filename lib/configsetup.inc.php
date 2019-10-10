@@ -201,6 +201,12 @@ $configsetup = [
 			'placeholder' => 'tmp',
 			'name' => 'folders[tmp]',
 			'value' => $config['folders']['tmp']
+		],
+		'data' => [
+			'type' => 'input',
+			'placeholder' => 'data',
+			'name' => 'folders[data]',
+			'value' => $config['folders']['data']
 		]
 	],
 	'wedding' => [

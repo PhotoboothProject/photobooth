@@ -27,8 +27,8 @@ if ($data['type'] == 'reset') {
     }
 
     // delete db.txt
-    if (is_file('../data/db.txt')) {
-        unlink('../data/db.txt'); // delete file
+    if (is_file(DB_FILE)) {
+        unlink(DB_FILE); // delete file
     }
 
     die(json_encode('success'));

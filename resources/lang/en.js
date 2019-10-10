@@ -71,6 +71,7 @@ const L10N = {
     'folders_print': 'Print Folder',
     'folders_tmp': 'tmp Folder',
     'folders_keying': 'Keying Folder',
+    'folders_data': 'Data Folder',
     'general_language': 'Language',
     'send_all_later': 'Activate checkbox to add the entered address to a file (for example, to send a mail with all pictures later)',
     'mail_host': 'E-mail host adress',

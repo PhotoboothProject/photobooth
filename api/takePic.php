@@ -353,8 +353,7 @@ imagedestroy($source);
 imagedestroy($thumb);
 
 // insert into database
-$images[] = $file;
-file_put_contents(__DIR__ . '/../data/db.txt', json_encode($images));
+appendImageToDB($file);
 
 // send imagename to frontend
 echo json_encode(array('success' => 'image', 'img' => $file));

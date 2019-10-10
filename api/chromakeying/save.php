@@ -12,14 +12,6 @@ if($config['file_format_date'] == true) {
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 
-// get data from db.txt
-if(!file_exists('../../data/db.txt')){
-	$images = [];
-} else {
-	$images = json_decode(file_get_contents('../../data/db.txt'));
-}
-
-
 $img = $_POST['imgData'];
 $img = str_replace('data:image/png;base64,', '', $img);
 $img = str_replace(' ', '+', $img);
@@ -45,8 +37,7 @@ function ResizeJpgImage($image, $max_width, $max_height)
 }
 
 // insert into database
-$images[] = $file;
-file_put_contents('../../data/db.txt', json_encode($images));
+appendImageToDB($file);
 
 // send imagename to frontend
 echo json_encode(array('success' => true, 'filename' => $file));

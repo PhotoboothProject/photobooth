@@ -20,8 +20,7 @@ if (!unlink($filePath) || !unlink($filePathThumb)) {
     ]));
 }
 
-unset($images[array_search($file, $images)]);
-file_put_contents(__DIR__ . '/../data/db.txt', json_encode($images));
+deleteImageFromDB($file);
 
 echo json_encode([
     'success' => true,

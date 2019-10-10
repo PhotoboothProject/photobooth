@@ -3,6 +3,7 @@
 require_once('lib/config.php');
 require_once('lib/db.php');
 
+$images = getImagesFromDB();
 $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
 ?>
 <!DOCTYPE html>
