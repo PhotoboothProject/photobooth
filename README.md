@@ -1,7 +1,7 @@
 # photobooth by Andre Rinas
 A Photobooth webinterface for Raspberry Pi and Windows.
 
-### Features
+## :heart_eyes: Features
 - Works on Windows and Linux.
   - Under Windows [digiCamControl](http://digicamcontrol.com/) by Duka Istvan can be used to control the camera and to take pictures.
   - Under Linux [gPhoto2](http://gphoto.org/) is used to control the camera and to take pictures.
@@ -25,19 +25,22 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - Photo collage function: take 4 pictures in a row and let it generate a collage out of it.
   - Blue-gray theme can be enabled.
   - Save pictures with a polaroid effect.
+  
+## :camera: Screenshots
+![](https://raw.githubusercontent.com/wiki/andreknieriem/photobooth/images/start.png)
 
-### Prerequisites
+## :gear: Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
 - digiCamControl, if used unter Windows for DSLR control
 - Apache
 
-### Installation & Troubleshooting
+## :wrench: Installation & Troubleshooting
 Please follow the installation instructions in our [Photobooth-Wiki](https://github.com/andreknieriem/photobooth/wiki) to setup Photobooth.
 
 If you're having trouble or questions please take a look at our [FAQ](https://github.com/andreknieriem/photobooth/wiki#faq---frequently-asked-questions) before opening a new issue.
 
 
-### Changelog
+### :mag: Changelog
 - [2.0.0 alpha](https://github.com/andreknieriem/photobooth/wiki/Changelog#200-alpha)
 - [1.9.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#190)
 - [1.8.3](https://github.com/andreknieriem/photobooth/wiki/Changelog#183)
@@ -62,10 +65,10 @@ If you're having trouble or questions please take a look at our [FAQ](https://gi
 - [1.1.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#110)
 - [1.0.0](https://github.com/andreknieriem/photobooth/wiki/Changelog#100)
 
-### Tutorial
+### :mortar_board: Tutorial
 [Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
 
-### Contributors and thanks to
+### :clap: Contributors and thanks to
 - [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
 - [t0k4rt](https://github.com/t0k4rt/phpqrcode) for phpqrcode
 - [nihilor](https://github.com/nihilor/photobooth) for Printing feature, code rework and bugfixes
