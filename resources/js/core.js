@@ -97,7 +97,7 @@ const photoBooth = (function () {
 
         const getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
 
-        if(!getMedia) {
+        if (!getMedia) {
             return;
         }
 
