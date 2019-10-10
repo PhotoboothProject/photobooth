@@ -85,6 +85,7 @@ input[type="checkbox"] {
 
 .save-btn,
 .reset-btn {
+  cursor: pointer;
   background: $mainColor;
   width: 100%;
   position: absolute;
@@ -161,4 +162,9 @@ input[type="checkbox"] {
 .back-to-pb {
   color: #2b2127;
   text-decoration: none;
+  padding: 0 3px;
+
+  &:hover {
+    background-color: #e1e1e1;
+  }
 }
