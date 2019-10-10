@@ -80,11 +80,13 @@ $configsetup = [
 		'photo_key' => [
 			'type' => 'input',
 			'name' => 'photo_key',
+			'placeholder' => '',
 			'value' => $config['photo_key']
 		],
 		'collage_key' => [
 			'type' => 'input',
 			'name' => 'collage_key',
+			'placeholder' => '',
 			'value' => $config['collage_key']
 		],
 		'force_buzzer' => [
