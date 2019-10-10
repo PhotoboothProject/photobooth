@@ -540,7 +540,7 @@ const photoBooth = (function () {
         window.open(url, 'newwin', features);
     });
 
-    $(document).on('keypress', function (ev) {
+    $(document).on('keyup', function (ev) {
         if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
             public.thrill('photo');
         }
