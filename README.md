@@ -25,6 +25,9 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - Photo collage function: take 4 pictures in a row and let it generate a collage out of it.
   - Blue-gray theme can be enabled.
   - Save pictures with a polaroid effect.
+  
+## :camera: Screenshots
+![](https://raw.githubusercontent.com/wiki/andreknieriem/photobooth/images/start.png)
 
 ## :gear: Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
