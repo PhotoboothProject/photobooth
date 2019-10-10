@@ -546,7 +546,14 @@ const photoBooth = (function () {
         }
 
         if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
-            public.thrill('collage');
+            if (config.use_collage) {
+                public.thrill('collage');
+            } else {
+                if (config.dev) {
+                    console.log('Collage key pressed. Please enable collage in your config. Triggering photo now.');
+                }
+                public.thrill('photo');
+            }
         }
     });
 
