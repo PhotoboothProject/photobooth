@@ -287,22 +287,6 @@ hr.small {
   color: #fff;
 }
 
-.pswp__button--qrcode,
-.pswp__button--print,
-.pswp__button--print-chroma-keying,
-.pswp__button--mail {
-  color: #fff;
-  background: transparent;
-  font-size: 26px;
-  text-align: center;
-  width: 50px;
-  height: 50px;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
 #video {
   position: absolute;
   top: 50%;
