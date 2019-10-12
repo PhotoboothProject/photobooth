@@ -363,7 +363,6 @@ $thumb = resizeImage($imageResource, 500, 500);
 
 imagejpeg($thumb, $filename_thumb, 60);
 
-imagedestroy($source);
 imagedestroy($imageResource);
 
 // insert into database
