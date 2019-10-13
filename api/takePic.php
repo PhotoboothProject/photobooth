@@ -267,7 +267,7 @@ if (($_POST['style'] === 'photo') && ($config['polaroid_effect'] === false)) {
     $use_filter = false;
 }
 
-if (empty($_POST['filter']) || $_POST['filter'] !== 'imgPlain') {
+if (!empty($_POST['filter']) && $_POST['filter'] !== 'imgPlain') {
     $filename_orig = $filename_tmp;
     $use_filter = true;
     $imgfilter = $_POST['filter'];
