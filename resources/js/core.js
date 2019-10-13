@@ -220,11 +220,14 @@ const photoBooth = (function () {
     }
 
     // Show error Msg and reset
-    public.errorPic = function () {
+    public.errorPic = function (data) {
         setTimeout(function () {
             $('.spinner').hide();
-            $('.loading').html(L10N.error + '<a class="btn" href="./">' + L10N.reload + '</a>');
-        }, 1100);
+            $('.loading').empty()
+            $('.loading').append($('<p>').text(L10N.error));
+            $('.loading').append($('<p class="text-muted">').text(data.error));
+            $('.loading').append($('<a class="btn" href="./">').text(L10N.reload));
+        }, 500);
     }
 
     // Render Picture after taking

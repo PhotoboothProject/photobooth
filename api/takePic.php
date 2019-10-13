@@ -39,15 +39,24 @@ function takePicture($filename)
     }
 }
 
-function ResizeJpgImage($image, $max_width, $max_height)
+function resizeImage($image, $max_width, $max_height)
 {
+    if (!$image) {
+        return false;
+    }
+
     $old_width  = imagesx($image);
     $old_height = imagesy($image);
+
     $scale      = min($max_width/$old_width, $max_height/$old_height);
+
     $new_width  = ceil($scale*$old_width);
     $new_height = ceil($scale*$old_height);
+
     $new = imagecreatetruecolor($new_width, $new_height);
+
     imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
+
     return $new;
 }
 
@@ -258,7 +267,7 @@ if (($_POST['style'] === 'photo') && ($config['polaroid_effect'] === false)) {
     $use_filter = false;
 }
 
-if (empty($_POST['filter']) || $_POST['filter'] !== 'imgPlain') {
+if (!empty($_POST['filter']) && $_POST['filter'] !== 'imgPlain') {
     $filename_orig = $filename_tmp;
     $use_filter = true;
     $imgfilter = $_POST['filter'];
@@ -319,11 +328,11 @@ if ($_POST['style'] === 'photo') {
 }
 
 // apply filter
-if ($use_filter == true) {
+if ($use_filter) {
     applyFilter($imgfilter, $filename_orig, $filename_photo);
 }
 
-if ($config['polaroid_effect'] == true) {
+if ($config['polaroid_effect']) {
     if ($_POST['style'] === 'photo') {
         $tmp = imagecreatefromjpeg($filename_orig);
         imagejpeg($tmp, $filename_photo);
@@ -334,27 +343,34 @@ if ($config['polaroid_effect'] == true) {
     imagedestroy($polaroid);
 }
 
+$imageResource = imagecreatefromjpeg($filename_photo);
+
+if (!$imageResource) {
+    die(json_encode([
+        'error' => 'Could not read jpeg file. Are you taking raws?',
+    ]));
+}
+
 if ($config['chroma_keying'] == true) {
-    $source = imagecreatefromjpeg($filename_photo);
-    $source = ResizeJpgImage($source, 1500, 1000);
-    imagejpeg($source, $filename_keying, 100);
+    $source = resizeImage($imageResource, 1500, 1000);
+
+    imagejpeg($source, $filename_keying, 70);
     imagedestroy($source);
 }
 
 // image scale, create thumbnail
-list($width, $height) = getimagesize($filename_photo);
-$newwidth = 500;
-$newheight = $height * (1 / $width * 500);
-$source = imagecreatefromjpeg($filename_photo);
-$thumb = imagecreatetruecolor($newwidth, $newheight);
-imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-imagejpeg($thumb, $filename_thumb);
-imagedestroy($source);
-imagedestroy($thumb);
+$thumb = resizeImage($imageResource, 500, 500);
+
+imagejpeg($thumb, $filename_thumb, 60);
+
+imagedestroy($imageResource);
 
 // insert into database
 $images[] = $file;
 file_put_contents(__DIR__ . '/../data/db.txt', json_encode($images));
 
 // send imagename to frontend
-echo json_encode(array('success' => 'image', 'img' => $file));
+echo json_encode([
+    'success' => 'image',
+    'img' => $file,
+]);
