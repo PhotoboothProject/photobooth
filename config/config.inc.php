@@ -49,6 +49,7 @@ $config['folders']['print'] = 'data/print';
 $config['folders']['qrcodes'] = 'data/qrcodes';
 $config['folders']['thumbs'] = 'data/thumbs';
 $config['folders']['tmp'] = 'data/tmp';
+$config['folders']['data'] = 'data';
 
 // WEDDING SETTINGS
 $config['is_wedding'] = false;

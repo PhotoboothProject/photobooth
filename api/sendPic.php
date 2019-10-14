@@ -18,7 +18,7 @@ if (empty($_POST['sendTo']) || empty($_POST['image']) || !PHPMailer::validateAdd
 }
 
 $postImage = basename($_POST['image']);
-if (!in_array($postImage, $images)) {
+if (!isImageInDB($postImage)) {
     die(json_encode([
         'success' => false,
         'error' => 'Image not found in database'
@@ -63,17 +63,19 @@ if (!$mail->addAttachment($path . $postImage)) {
 }
 
 if (isset($_POST['send-link']) && $_POST['send-link'] === 'yes') {
-    if (!file_exists('../data/mail-addresses.txt')) {
+    $mailAddressesFile = $config['foldersAbs']['data'] . '/mail-addresses.txt';
+
+    if (!file_exists($mailAddressesFile)) {
         $addresses = [];
     } else {
-        $addresses = json_decode(file_get_contents('../data/mail-addresses.txt'));
+        $addresses = json_decode(file_get_contents($mailAddressesFile));
     }
 
     if (!in_array($_POST['sendTo'], $addresses)) {
         $addresses[] = $_POST['sendTo'];
     }
 
-    file_put_contents('../data/mail-addresses.txt', json_encode($addresses));
+    file_put_contents($mailAddressesFile, json_encode($addresses));
 
     die(json_encode([
         'success' => true,
