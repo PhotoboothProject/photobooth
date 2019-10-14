@@ -31,7 +31,7 @@ const L10N = {
     'cheese': 'Cheeeeeeeese!',
     'cheeseCollage': 'Cheeeeeeeese Collageeeeeeeeeee!',
     'qrHelp': 'Connect to the wifi <strong>photobooth</strong>, to download the picture to your smartphone.',
-    'error': 'Something went wrong. Please try it again',
+    'error': 'Something went wrong. Please try it again.',
     'reload': 'Reload Page',
     'print': 'Print',
     'printing': 'Started printing! Please wait...',

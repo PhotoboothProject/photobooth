@@ -7,9 +7,10 @@ $configsetup = [
 			'placeholder' => 'language',
 			'options' => [
 				'de' => 'DE',
-				'fr' => 'FR',
 				'en' => 'EN',
-				'es' => 'ES'
+				'es' => 'ES',
+				'fr' => 'FR',
+				'gr' => 'GR'
 			],
 			'value' => $config['language']
 		],
