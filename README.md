@@ -14,7 +14,12 @@ A Photobooth webinterface for Raspberry Pi and Windows.
   - You can hide the gallery.
   - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config/my.config.inc.php```).
   - Choose between md5format and dateformat images.
-  - You can switch between german, english, spanish and french language lables.
+  - Multi-language support:
+      - german
+      - english
+      - spanish
+      - french
+      - greek
   - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
   - Print feature can be enabled/disabled.
     - Optional: Print a frame on your picture (replace resources/img/frames/frame.png with a proper frame).
