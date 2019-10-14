@@ -65,6 +65,8 @@ if ($data['type'] == 'config') {
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
     if (file_put_contents($file, $content)) {
+        clearCache($file);
+
         echo json_encode('success');
     } else {
         echo json_encode('error');
@@ -92,4 +94,12 @@ function arrayRecursiveDiff($aArray1, $aArray2)
         }
     }
     return $aReturn;
+}
+
+function clearCache($file) {
+    if (function_exists('opcache_invalidate') && strlen(ini_get("opcache.restrict_api")) < 1) {
+        opcache_invalidate($file, true);
+    } elseif (function_exists('apc_compile_file')) {
+        apc_compile_file($file);
+    }
 }
