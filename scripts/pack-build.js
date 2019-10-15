@@ -59,6 +59,8 @@ function createArchive(fileName, archive) {
     archive.file('index.php');
     archive.file('phpinfo.php');
     archive.file('LICENSE');
+    archive.file('package.json');
+    archive.file('gallery.php');
     archive.file('node_modules/normalize.css/normalize.css');
     archive.directory('node_modules/font-awesome/');
     archive.directory('node_modules/photoswipe/dist/');
