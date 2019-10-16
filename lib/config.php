@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__ . '/arrayDeepMerge.php');
+
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
 $os = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
@@ -73,7 +75,7 @@ $defaultConfig = $config;
 if (file_exists($my_config_file)) {
     require_once($my_config_file);
 
-    $config = array_merge($defaultConfig, $config);
+    $config = array_deep_merge($defaultConfig, $config);
 }
 
 if ($config['dev']) {
