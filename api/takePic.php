@@ -31,9 +31,10 @@ function takePicture($filename)
             ]));
         }
     } else {
-        $devImg = array('../resources/img/bg.jpg');
+        $demoFolder = __DIR__ . '/../resources/img/demo/';
+        $devImg = array_diff(scandir($demoFolder), array('.', '..'));
         copy(
-            $devImg[array_rand($devImg)],
+            $demoFolder . $devImg[array_rand($devImg)],
             $filename
         );
     }
