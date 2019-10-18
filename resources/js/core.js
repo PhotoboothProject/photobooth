@@ -319,7 +319,9 @@ const photoBooth = (function () {
             $('#loader').css('background-image', 'url()');
             $('#loader').removeClass('showBackgroundImage');
 
-            public.resetTimeOut();
+            if (!config.dev) {
+                public.resetTimeOut();
+            }
         };
         preloadImage.src = imageUrl;
     }
