@@ -6,14 +6,12 @@ function createCollage($srcImagePaths, $destImagePath) {
     }
 
     list($width, $height) = getimagesize($srcImagePaths[0]);
-    $my_collage_height = $height * 2;
-    $my_collage_width = $width * 2;
 
-    $my_collage = imagecreatetruecolor($my_collage_width, $my_collage_height);
+    $my_collage = imagecreatetruecolor($width, $height);
     $background = imagecolorallocate($my_collage, 0, 0, 0);
     imagecolortransparent($my_collage, $background);
 
-    $positions = [[0, 0], [$width, 0], [0, $height], [$width, $height]];
+    $positions = [[0, 0], [$width / 2, 0], [0, $height / 2], [$width / 2, $height / 2]];
 
     for ($i = 0; $i < 4; $i++) {
         $position = $positions[$i];
@@ -24,7 +22,7 @@ function createCollage($srcImagePaths, $destImagePath) {
 
         $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
 
-        imagecopy($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $width, $height);
+        imagecopyresized($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $width / 2, $height / 2, $width, $height);
         imagedestroy($tempSubImage);
     }
 
