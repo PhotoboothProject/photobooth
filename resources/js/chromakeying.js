@@ -212,4 +212,15 @@ $(document).ready(function () {
     setTimeout(function () {
         setMainImage($('body').attr('data-main-image'));
     }, 100);
+
+    // we don't want to scroll on small or horizontal devices
+    const windowHeight = $(window).innerHeight();
+    const bottomLine = $('.chroma-control-bar').position().top + $('.chroma-control-bar').outerHeight(true);
+    const diff = bottomLine - windowHeight;
+
+    if (diff > 0) {
+        const canvasHeight = $('#mainCanvas').height();
+
+        $('#mainCanvas').css('height', (canvasHeight - diff) + 'px');
+    }
 });

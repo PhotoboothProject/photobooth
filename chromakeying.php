@@ -25,12 +25,38 @@ if (file_exists($keyingimage)) {
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" href="resources/css/style.css" />
+
+		<style>
+			#wrapper {
+				padding: 1em 2em 2em;
+				overflow-y: auto;
+				text-align: center;
+			}
+			.canvasWrapper {
+				width: 1000px;
+				display: inline-block;
+				max-width: 100%;
+				background-color: green;
+				border:4px solid black;
+			}
+			#mainCanvas {
+				display: block;
+				max-width: 100%;
+			}
+			.backgroundPreview {
+				cursor:pointer;
+				max-width:120px;
+				max-height: 80px;
+				border:2px solid black;
+				margin:3px;
+			}
+		</style>
 	</head>
 <body data-main-image="<?=$mainimage?>">
-	<div id="wrapper" style="padding: 1em 2em 2em; overflow-y: auto;">
+	<div id="wrapper">
 	<?php if ($keying_possible): ?>
-		<div style="width:600px; max-width: 100%; margin:0 auto;background-color:#000000;border:4px solid black;">
-			<canvas id="mainCanvas" width="1500" height="1000" style="width:600px; max-width: 100%;"></canvas>
+		<div class="canvasWrapper">
+			<canvas id="mainCanvas" width="1500" height="1000"></canvas>
 		</div>
 
 		<div style="padding-top:10px;text-align:center;">
@@ -39,7 +65,7 @@ if (file_exists($keyingimage)) {
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" style="cursor:pointer;max-width:120px;border:2px solid black;margin:3px;" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="'.$dir.$value.'" class="backgroundPreview" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
