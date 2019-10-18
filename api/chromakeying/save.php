@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 
 require_once('../../lib/config.php');
+require_once('../../lib/db.php');
 
 if($config['file_format_date'] == true) {
 	$file = date('Ymd_His').'.jpg';
