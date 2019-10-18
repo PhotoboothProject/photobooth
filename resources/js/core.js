@@ -51,6 +51,8 @@ const photoBooth = (function () {
 
     // timeOut function
     public.resetTimeOut = function () {
+        clearTimeout(timeOut);
+
         timeOut = setTimeout(function () {
             public.reloadPage();
         }, timeToLive);
@@ -75,6 +77,7 @@ const photoBooth = (function () {
 
         initPhotoSwipeFromDOM('#galimages');
 
+        resultPage.hide();
         startPage.addClass('open');
     }
 
@@ -102,7 +105,7 @@ const photoBooth = (function () {
         }
 
         getMedia.call(navigator.mediaDevices, webcamConstraints)
-            .then(function(stream) {
+            .then(function (stream) {
                 $('#video').show();
                 const video = $('#video').get(0);
                 video.srcObject = stream;
@@ -168,11 +171,6 @@ const photoBooth = (function () {
             public.stopVideo();
         }
 
-        const processingDelay = setTimeout(() => {
-            $('.spinner').show();
-            $('.loading').text(photoStyle === 'photo' ? L10N.busy : L10N.busyCollage);
-        }, 500);
-
         const data = {
             filter: imgFilter,
             style: photoStyle,
@@ -184,11 +182,11 @@ const photoBooth = (function () {
         }
 
         jQuery.post('api/takePic.php', data).done(function (result) {
-            clearTimeout(processingDelay);
+            console.log('took picture', result);
 
             if (result.error) {
                 public.errorPic(result);
-            } else if (result.success === 'collage') {
+            } else if (result.success === 'collage' && (result.current + 1) < result.limit) {
                 currentCollageFile = result.file;
                 nextCollageNumber = result.current + 1;
 
@@ -211,7 +209,7 @@ const photoBooth = (function () {
                 currentCollageFile = '';
                 nextCollageNumber = 0;
 
-                public.renderPic(result);
+                public.processPic(photoStyle, result);
             }
 
         }).fail(function (xhr, status, result) {
@@ -230,12 +228,47 @@ const photoBooth = (function () {
         }, 500);
     }
 
+    public.processPic = function (photoStyle, result) {
+        const tempImageUrl = config.folders.tmp + '/' + result.file;
+
+        $('.spinner').show();
+        $('.loading').text(photoStyle === 'photo' ? L10N.busy : L10N.busyCollage);
+
+        if (photoStyle === 'photo') {
+            const preloadImage = new Image();
+            preloadImage.onload = () => {
+                $('#loader').css('background-image', `url(${tempImageUrl})`);
+                $('#loader').addClass('showBackgroundImage');
+            }
+            preloadImage.src = tempImageUrl;
+        }
+
+        $.ajax({
+            method: 'POST',
+            url: 'api/applyEffects.php',
+            data: {
+                file: result.file,
+                filter: imgFilter,
+                isCollage: photoStyle === 'collage',
+            },
+            success: (data) => {
+                console.log('picture processed', data);
+
+                if (data.error) {
+                    public.errorPic(data);
+                } else {
+                    public.renderPic(data.file);
+                }
+            },
+        });
+    }
+
     // Render Picture after taking
-    public.renderPic = function (result) {
+    public.renderPic = function (filename) {
         // Add QR Code Image
         const qrCodeModal = $('#qrCode');
         modal.empty(qrCodeModal);
-        $('<img src="api/qrcode.php?filename=' + result.img + '"/>').on('load', function () {
+        $('<img src="api/qrcode.php?filename=' + filename + '"/>').on('load', function () {
             const body = qrCodeModal.find('.modal__body');
 
             $(this).appendTo(body);
@@ -248,7 +281,7 @@ const photoBooth = (function () {
             e.preventDefault();
             e.stopPropagation();
 
-            public.printImage(result.img, () => {
+            public.printImage(filename, () => {
                 public.reloadPage();
             });
         });
@@ -256,7 +289,7 @@ const photoBooth = (function () {
         resultPage.find('.deletebtn').off('click').on('click', (ev) => {
             ev.preventDefault();
 
-            public.deleteImage(result.img, (data) => {
+            public.deleteImage(filename, (data) => {
                 if (data.success) {
                     public.reloadPage();
                 } else {
@@ -266,28 +299,29 @@ const photoBooth = (function () {
         });
 
         // Add Image to gallery and slider
-        public.addImage(result.img);
+        public.addImage(filename);
 
-        // Add Image
-        $('<img src="' + config.folders.images + '/' + result.img + '" class="original">').on('load', function () {
+        const imageUrl = config.folders.images + '/' + filename;
+
+        const preloadImage = new Image();
+        preloadImage.onload = () => {
             resultPage.css({
-                'background-image': 'url(' + config.folders.images + '/' + result.img + ')'
+                'background-image': `url(${imageUrl})`,
             });
-            resultPage.attr('data-img', result.img);
+            resultPage.attr('data-img', filename);
 
-            startPage.fadeOut(400, function () {
-                resultPage.fadeIn(400, function () {
-                    setTimeout(function () {
-                        loader.removeClass('open');
-                    }, 400);
-                    setTimeout(function () {
-                        $('.resultInner').addClass('show');
-                    }, 400);
-                    clearTimeout(timeOut);
-                    public.resetTimeOut();
-                });
-            });
-        });
+            startPage.hide();
+            resultPage.show();
+
+            $('.resultInner').addClass('show');
+            loader.removeClass('open');
+
+            $('#loader').css('background-image', 'url()');
+            $('#loader').removeClass('showBackgroundImage');
+
+            public.resetTimeOut();
+        };
+        preloadImage.src = imageUrl;
     }
 
     // add image to Gallery
@@ -563,7 +597,6 @@ const photoBooth = (function () {
     // clear Timeout to not reset the gallery, if you clicked anywhere
     $(document).on('click', function () {
         if (!startPage.is(':visible')) {
-            clearTimeout(timeOut);
             public.resetTimeOut();
         }
     });
@@ -574,6 +607,8 @@ const photoBooth = (function () {
             e.preventDefault();
         });
     }
+
+    $('#plain').addClass('activeSidenavBtn');
 
     return public;
 })();
