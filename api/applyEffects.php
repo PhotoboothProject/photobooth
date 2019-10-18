@@ -105,8 +105,6 @@ $time_start = microtime(true);
 // insert into database
 appendImageToDB($file);
 
-sleep(5);
-
 echo json_encode([
     'file' => $file,
     'time' => $time,
