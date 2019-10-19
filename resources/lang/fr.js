@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_collage_cntdwn_time': 'Montage photo compte à rebours en secondes',
     'continuous_collage': 'Prendre un photo montage sans interruption',
     'delete': 'Effacer',
     'using_latest_version': 'Vous utilisez la dernière version de photobooth',

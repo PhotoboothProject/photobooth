@@ -18,6 +18,7 @@ $config['previewFromCam'] = false; // experimental see https://github.com/andrek
 $config['cups_button'] = false;
 $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
+$config['collage_cntdwn_time'] = '3'; // control countdown timer between collage pictures
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
 $config['use_filter'] = true;
 $config['polaroid_effect'] = false;

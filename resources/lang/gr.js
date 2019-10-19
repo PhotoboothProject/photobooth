@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_collage_cntdwn_time': 'Χρονοδιακόπτης αντίστροφης μέτρησης φωτογραφιών σε δευτερόλεπτα',
     'continuous_collage': 'Εγγραφή κολάζ χωρίς διακοπή',
     'delete': 'διαγραφή',
     'using_latest_version': 'Το Photobooth είναι ενημερωμένο.',
