@@ -111,11 +111,6 @@ $configsetup = [
 			'name' => 'continuous_collage',
 			'value' => $config['continuous_collage']
 		],
-		'cups_button' => [
-			'type' => 'checkbox',
-			'name' => 'cups_button',
-			'value' => $config['cups_button']
-		],
 		'previewFromCam' => [
 			'type' => 'checkbox',
 			'name' => 'previewFromCam',
@@ -123,11 +118,6 @@ $configsetup = [
 		]
 	],
 	'user_interface' => [
-		'show_fork' => [
-			'type' => 'checkbox',
-			'name' => 'show_fork',
-			'value' => $config['show_fork']
-		],
 		'color_theme' => [
 			'type' => 'select',
 			'name' => 'color_theme',
@@ -137,6 +127,16 @@ $configsetup = [
 				'blue-gray' => 'blue-gray'
 			],
 			'value' => $config['color_theme']
+		],
+		'show_fork' => [
+			'type' => 'checkbox',
+			'name' => 'show_fork',
+			'value' => $config['show_fork']
+		],
+		'cups_button' => [
+			'type' => 'checkbox',
+			'name' => 'cups_button',
+			'value' => $config['cups_button']
 		]
 	],
 	'folders' => [
