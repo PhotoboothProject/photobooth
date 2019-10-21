@@ -13,7 +13,7 @@
             $date = '';
             if ($config['file_format_date'] && $config['show_date']) {
                 $date = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
-                $date = '<i class="fa fa-clock-o"></i>' . $date->format($config['gallery']['date_format']);
+                $date = '<i class="fa fa-clock-o"></i> ' . $date->format($config['gallery']['date_format']);
             }
 
             $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;

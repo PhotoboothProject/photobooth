@@ -58,6 +58,7 @@
             width: 33.333333333333%;
             padding: 3px;
             max-width: 500px;
+            text-decoration: none;
         }
 
         img {
@@ -70,6 +71,12 @@
         figure {
             margin: 0;
         }
+    }
+
+    figcaption {
+        background-color: #fff;
+        text-align: center;
+        color: #545454;
     }
 }
 
