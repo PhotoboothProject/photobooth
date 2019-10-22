@@ -8,8 +8,6 @@ require_once('../lib/polaroid.php');
 require_once('../lib/resize.php');
 require_once('../lib/collage.php');
 
-$time = [];
-
 if (empty($_POST['file']) || !preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     die(json_encode([
         'error' => 'Invalid file provided',
@@ -64,21 +62,16 @@ if (!empty($_POST['filter']) && $_POST['filter'] !== 'imgPlain') {
     $image_filter = $_POST['filter'];
 }
 
-$time_start = microtime(true);
 // apply filter
 if ($image_filter) {
     applyFilter($image_filter, $imageResource);
 }
-$time['filter'] = microtime(true) - $time_start;
-$time_start = microtime(true);
 
 if ($config['polaroid_effect']) {
     $polaroid_rotation = $config['polaroid_rotation'];
 
     $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
 }
-$time['polaroid'] = microtime(true) - $time_start;
-$time_start = microtime(true);
 
 if ($config['chroma_keying']) {
     $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
@@ -86,26 +79,19 @@ if ($config['chroma_keying']) {
     imagejpeg($chromaCopyResource, $filename_keying, 70);
     imagedestroy($chromaCopyResource);
 }
-$time['chroma'] = microtime(true) - $time_start;
-$time_start = microtime(true);
 
 // image scale, create thumbnail
 $thumbResource = resizeImage($imageResource, 500, 500);
 
 imagejpeg($thumbResource, $filename_thumb, 60);
 imagedestroy($thumbResource);
-$time['thumb'] = microtime(true) - $time_start;
-$time_start = microtime(true);
 
 imagejpeg($imageResource, $filename_photo, 80);
 imagedestroy($imageResource);
-$time['image'] = microtime(true) - $time_start;
-$time_start = microtime(true);
 
 // insert into database
 appendImageToDB($file);
 
 echo json_encode([
     'file' => $file,
-    'time' => $time,
 ]);
