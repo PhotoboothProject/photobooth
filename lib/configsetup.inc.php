@@ -41,37 +41,10 @@ $configsetup = [
 			'name' => 'use_print',
 			'value' => $config['use_print']
 		],
-		'crop_onprint' => [
-			'type' => 'checkbox',
-			'name' => 'crop_onprint',
-			'value' => $config['crop_onprint']
-		],
-		'crop_width' => [
-			'type' => 'input',
-			'name' => 'crop_width',
-			'placeholder' => '1000',
-			'value' => $config['crop_width']
-		],
-		'crop_height' => [
-			'type' => 'input',
-			'name' => 'crop_height',
-			'placeholder' => '500',
-			'value' => $config['crop_height']
-		],
 		'use_qr' => [
 			'type' => 'checkbox',
 			'name' => 'use_qr',
 			'value' => $config['use_qr']
-		],
-		'print_qrcode' => [
-			'type' => 'checkbox',
-			'name' => 'print_qrcode',
-			'value' => $config['print_qrcode']
-		],
-		'print_frame' => [
-			'type' => 'checkbox',
-			'name' => 'print_frame',
-			'value' => $config['print_frame']
 		],
 		'use_mail' => [
 			'type' => 'checkbox',
@@ -144,11 +117,6 @@ $configsetup = [
 			'name' => 'continuous_collage',
 			'value' => $config['continuous_collage']
 		],
-		'cups_button' => [
-			'type' => 'checkbox',
-			'name' => 'cups_button',
-			'value' => $config['cups_button']
-		],
 		'previewFromCam' => [
 			'type' => 'checkbox',
 			'name' => 'previewFromCam',
@@ -156,11 +124,6 @@ $configsetup = [
 		]
 	],
 	'user_interface' => [
-		'show_fork' => [
-			'type' => 'checkbox',
-			'name' => 'show_fork',
-			'value' => $config['show_fork']
-		],
 		'color_theme' => [
 			'type' => 'select',
 			'name' => 'color_theme',
@@ -170,6 +133,16 @@ $configsetup = [
 				'blue-gray' => 'blue-gray'
 			],
 			'value' => $config['color_theme']
+		],
+		'show_fork' => [
+			'type' => 'checkbox',
+			'name' => 'show_fork',
+			'value' => $config['show_fork']
+		],
+		'cups_button' => [
+			'type' => 'checkbox',
+			'name' => 'cups_button',
+			'value' => $config['cups_button']
 		]
 	],
 	'folders' => [
@@ -248,8 +221,34 @@ $configsetup = [
 			'value' => $config['wedding']['symbol']
 		]
 	],
-	// text print start
-	'textonprint' => [
+	'print' => [
+		'print_qrcode' => [
+			'type' => 'checkbox',
+			'name' => 'print_qrcode',
+			'value' => $config['print_qrcode']
+		],
+		'print_frame' => [
+			'type' => 'checkbox',
+			'name' => 'print_frame',
+			'value' => $config['print_frame']
+		],
+		'crop_onprint' => [
+			'type' => 'checkbox',
+			'name' => 'crop_onprint',
+			'value' => $config['crop_onprint']
+		],
+		'crop_width' => [
+			'type' => 'input',
+			'name' => 'crop_width',
+			'placeholder' => '1000',
+			'value' => $config['crop_width']
+		],
+		'crop_height' => [
+			'type' => 'input',
+			'name' => 'crop_height',
+			'placeholder' => '500',
+			'value' => $config['crop_height']
+		],
 		'is_textonprint' => [
 			'type' => 'checkbox',
 			'name' => 'is_textonprint',
@@ -304,7 +303,6 @@ $configsetup = [
 			'value' => $config['linespace']
 		],
 	],
-	// text print end
 	'gallery' => [
 		'show_gallery' => [
 			'type' => 'checkbox',
