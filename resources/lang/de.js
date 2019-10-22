@@ -1,5 +1,7 @@
 /* exported L10N */
 const L10N = {
+    'general_default_imagefilter': 'Standardbildfilter',
+    'default_imagefilter': 'Bildfilter auswählen',
     'general_collage_cntdwn_time': 'Collage-Countdown Timer in Sekunden',
     'continuous_collage': 'Collage ohne Unterbrechung aufnehmen',
     'delete': 'Löschen',

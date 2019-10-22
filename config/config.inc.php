@@ -21,6 +21,7 @@ $config['cntdwn_time'] = '5'; // control countdown timer
 $config['collage_cntdwn_time'] = '3'; // control countdown timer between collage pictures
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
 $config['use_filter'] = true;
+$config['default_imagefilter'] = 'plain';
 $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['chroma_keying'] = true;

@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__ . '/filter.php');
+
 $configsetup = [
 	'general' => [
 		'language' => [
@@ -84,6 +86,13 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'use_filter',
 			'value' => $config['use_filter']
+		],
+		'default_imagefilter' => [
+			'type' => 'select',
+			'name' => 'default_imagefilter',
+			'placeholder' => 'default_imagefilter',
+			'options' => AVAILABLE_FILTERS,
+			'value' => $config['default_imagefilter']
 		],
 		'polaroid_effect' => [
 			'type' => 'checkbox',
