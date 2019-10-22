@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_collage_cntdwn_time': 'Χρονοδιακόπτης αντίστροφης μέτρησης φωτογραφιών σε δευτερόλεπτα',
     'continuous_collage': 'Εγγραφή κολάζ χωρίς διακοπή',
     'delete': 'διαγραφή',
     'using_latest_version': 'Το Photobooth είναι ενημερωμένο.',
@@ -59,9 +60,7 @@ const L10N = {
     'gallery_no_image': 'Η γκαλερί είναι ακόμα κενή. Κάντε μερικές φωτογραφίες!',
     'use_mail': 'E-Mail Ενεργοποίηση',
     'show_fork': 'Εμφανίστε το λογότυπο Fork',
-    'cntdwn_time': 'Ορίστε χρονομέτρηση αντίστροφης μέτρησης',
     'general_cntdwn_time': 'Μετρητής αντίστροφης μέτρησης σε δευτερόλεπτα',
-    'cheese_time': 'Cheeeeeeeese!-Μετρητής αντίστροφης',
     'general_cheese_time': 'Cheeeeeeeese!-Μετρητής αντίστροφης σε χιλιοστά του δευτερολέπτου',
     'previewFromCam': 'Προβολή προεπισκόπησης από τη φωτογραφική μηχανή tablet',
     'newest_first': 'Προβολή των τελευταίων φωτογραφιών πρώτα',

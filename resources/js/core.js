@@ -134,7 +134,7 @@ const photoBooth = (function () {
         }
 
         loader.addClass('open');
-        public.startCountdown(config.cntdwn_time, $('#counter'), () => {
+        public.startCountdown(nextCollageNumber ? config.collage_cntdwn_time : config.cntdwn_time, $('#counter'), () => {
             public.cheese(photoStyle);
         });
     }

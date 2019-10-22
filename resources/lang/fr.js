@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_collage_cntdwn_time': 'Montage photo compte à rebours en secondes',
     'continuous_collage': 'Prendre un photo montage sans interruption',
     'delete': 'Effacer',
     'using_latest_version': 'Vous utilisez la dernière version de photobooth',
@@ -59,9 +60,7 @@ const L10N = {
     'gallery_no_image': 'La galerie est vide. Faites des photos!',
     'use_mail': 'Utiliser le courrier électronique',
     'show_fork': 'Affichez le badge de la page Github',
-    'cntdwn_time': 'Réglez le compte à rebours',
     'general_cntdwn_time': 'Compte à rebours en secondes',
-    'cheese_time': 'Temps de control pour cheese',
     'general_cheese_time': 'Définir le temps pour le Cheeeeeeeese! en millisecondes',
     'previewFromCam': 'Voir l\'aperçu par caméra',
     'newest_first': 'Affichez les dernières images en premier',

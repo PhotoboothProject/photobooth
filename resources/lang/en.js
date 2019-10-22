@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_collage_cntdwn_time': 'Collage-countdown timer in seconds',
     'continuous_collage': 'Take collage without interruption',
     'delete': 'Delete',
     'using_latest_version': 'You are using the latest version of photobooth.',
@@ -8,7 +9,7 @@ const L10N = {
     'check_version': 'Check version',
     'current_version': 'Current version',
     'available_version': 'Available version',
-    'force_buzzer': 'hide trigger button',
+    'force_buzzer': 'Hide trigger button',
     'use_button': 'Use Buzzer to take a Picture',
     'general_photo_key': 'Key code which triggers a photo',
     'general_collage_key': 'Key code which triggers a collage',
@@ -59,9 +60,7 @@ const L10N = {
     'gallery_no_image': 'The gallery is still empty. Take some pictures!',
     'use_mail': 'Use E-Mail',
     'show_fork': 'Show Fork Badge',
-    'cntdwn_time': 'Set countdown timer',
     'general_cntdwn_time': 'Countdown timer in seconds',
-    'cheese_time': 'Cheeeeeeeese!-Timer',
     'general_cheese_time': 'Cheeeeeeeese!-Timer in milliseconds',
     'previewFromCam': 'See preview by device cam',
     'newest_first': 'Show latest images first',

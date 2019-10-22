@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_collage_cntdwn_time': 'Collage-Countdown Timer in Sekunden',
     'continuous_collage': 'Collage ohne Unterbrechung aufnehmen',
     'delete': 'Löschen',
     'using_latest_version': 'Photobooth ist auf dem aktuellen Stand.',
@@ -59,9 +60,7 @@ const L10N = {
     'gallery_no_image': 'Die Galerie ist noch leer. Mache doch ein paar Bilder!',
     'use_mail': 'E-Mail aktivieren',
     'show_fork': 'Fork Logo anzeigen',
-    'cntdwn_time': 'Countdown Timer einstellen',
     'general_cntdwn_time': 'Countdown Timer in Sekunden',
-    'cheese_time': 'Cheeeeeeeese!-Timer',
     'general_cheese_time': 'Cheeeeeeeese!-Timer in Millisekunden',
     'previewFromCam': 'Vorschau aus der Tablet-Kamera anzeigen',
     'newest_first': 'Neueste Bilder zuerst anzeigen',

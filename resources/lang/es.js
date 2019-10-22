@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_collage_cntdwn_time': 'Cuenta regresiva del collage en segundos',
     'continuous_collage': 'Toma collage sin interrupción',
     'delete': 'Eliminar',
     'using_latest_version': 'Estás utilizando la última versión de photobooth',
@@ -59,9 +60,7 @@ const L10N = {
     'gallery_no_image': 'La galeri es vacía. ¡Saque fotos!',
     'use_mail': 'Utilizar el correo electrónico',
     'show_fork': 'Muestre el banner de la página',
-    'cntdwn_time': 'Ajuste la cuenta regresiva.',
     'general_cntdwn_time': 'Cuenta regresiva en segundos',
-    'cheese_time': 'Tiempo de control para patataaaaas',
     'general_cheese_time': '¡Definir el tiempo para el patataaaaas!en milisegundos.',
     'previewFromCam': 'Ver el vistazo por cámara',
     'newest_first': 'Primero muestre las últimas páginas',

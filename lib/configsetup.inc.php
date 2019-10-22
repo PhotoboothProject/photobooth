@@ -133,6 +133,12 @@ $configsetup = [
 			'name' => 'use_collage',
 			'value' => $config['use_collage']
 		],
+		'collage_cntdwn_time' => [
+			'type' => 'input',
+			'name' => 'collage_cntdwn_time',
+			'placeholder' => '3',
+			'value' => $config['collage_cntdwn_time']
+		],
 		'continuous_collage' => [
 			'type' => 'checkbox',
 			'name' => 'continuous_collage',
