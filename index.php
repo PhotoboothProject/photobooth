@@ -2,6 +2,7 @@
 
 require_once('lib/config.php');
 require_once('lib/db.php');
+require_once('lib/filter.php');
 
 $images = getImagesFromDB();
 $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
@@ -109,32 +110,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		<div id="mySidenav" class="dragscroll sidenav">
 			<a href="#" class="closebtn"><i class="fa fa-times"></i></a>
 
-			<div class="activeSidenavBtn" id="imgPlain"><a class="btn btn--small" href="#">original</a></div>
-			<div id="imgAntique"> <a class="btn btn--small" href="#">antique</a></div>
-			<div id="imgAqua"> <a class="btn btn--small" href="#">aqua</a></div>
-			<div id="imgBlue"> <a class="btn btn--small" href="#">blue</a></div>
-			<div id="imgBlur"> <a class="btn btn--small" href="#">blur</a></div>
-			<div id="imgColor"> <a class="btn btn--small" href="#">colorful</a></div>
-			<div id="imgCool"> <a class="btn btn--small" href="#">cool</a></div>
-			<div id="imgEdge"> <a class="btn btn--small" href="#">edge</a></div>
-			<div id="imgEmboss"> <a class="btn btn--small" href="#">emboss</a></div>
-			<div id="imgEverglow"> <a class="btn btn--small" href="#">everglow</a></div>
-			<div id="imgGrayscale"> <a class="btn btn--small" href="#">grayscale</a></div>
-			<div id="imgGreen"> <a class="btn btn--small" href="#">green</a></div>
-			<div id="imgMean"> <a class="btn btn--small" href="#">mean</a></div>
-			<div id="imgNegate"> <a class="btn btn--small" href="#">negate</a></div>
-			<div id="imgPink"> <a class="btn btn--small" href="#">pink</a></div>
-			<div id="imgPixelate"> <a class="btn btn--small" href="#">pixelate</a></div>
-			<div id="imgRed"> <a class="btn btn--small" href="#">red</a></div>
-			<div id="imgRetro"> <a class="btn btn--small" href="#">retro</a></div>
-			<div id="imgSelectiveBlur"> <a class="btn btn--small" href="#">selective blur</a></div>
-			<div id="imgSepiaLight"> <a class="btn btn--small" href="#">sepia light</a></div>
-			<div id="imgSepiaDark"> <a class="btn btn--small" href="#">sepia dark</a></div>
-			<div id="imgSmooth"> <a class="btn btn--small" href="#">smooth</a></div>
-			<div id="imgSummer"> <a class="btn btn--small" href="#">summer</a></div>
-			<div id="imgVintage"> <a class="btn btn--small" href="#">vintage</a></div>
-			<div id="imgWashed"> <a class="btn btn--small" href="#">washed</a></div>
-			<div id="imgYellow"> <a class="btn btn--small" href="#">yellow</a></div>
+			<?php foreach(AVAILABLE_FILTERS as $filter): ?>
+				<div id="<?=$filter?>" class="filter"><a class="btn btn--small" href="#"><?=$filter?></a></div>
+			<?php endforeach; ?>
 		</div>
 		<?php endif; ?>
 
