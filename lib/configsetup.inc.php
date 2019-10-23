@@ -203,36 +203,45 @@ $configsetup = [
 			'value' => $config['folders']['data']
 		]
 	],
-	'wedding' => [
-		'is_wedding' => [
+	'event' => [
+		'is_event' => [
 			'type' => 'checkbox',
-			'name' => 'is_wedding',
-			'value' => $config['is_wedding']
+			'name' => 'is_event',
+			'value' => $config['is_event']
 		],
-		'groom' => [
+		'textLeft' => [
 			'type' => 'input',
 			'placeholder' => 'Name 1',
-			'name' => 'wedding[groom]',
-			'value' => $config['wedding']['groom']
+			'name' => 'event[textLeft]',
+			'value' => $config['event']['textLeft']
 		],
-		'bride' => [
+		'textRight' => [
 			'type' => 'input',
 			'placeholder' => 'Name 2',
-			'name' => 'wedding[bride]',
-			'value' => $config['wedding']['bride']
+			'name' => 'event[textRight]',
+			'value' => $config['event']['textRight']
 		],
 		'symbol' => [
 			'type' => 'select',
-			'name' => 'wedding[symbol]',
-			'placeholder' => 'wedding[symbol]',
+			'name' => 'event[symbol]',
+			'placeholder' => 'event[symbol]',
 			'options' => [
+				'fa-camera' => 'Camera',
+				'fa-camera-retro' => 'Camera Retro',
+				'fa-birthday-cake' => 'Birthday Cake',
+				'fa-gift' => 'Gift',
+				'fa-tree' => 'Tree',
+				'fa-snowflake-o' => 'Snowflake',
 				'fa-heart-o' => 'Heart',
 				'fa-heart' => 'Heart filled',
 				'fa-heartbeat' => 'Heartbeat',
+				'fa-apple' => 'Apple',
 				'fa-anchor' => 'Anchor',
-				'fa-glass' => 'Glass'
+				'fa-glass' => 'Glass',
+				'fa-gears' => 'Gears',
+				'fa-users' => 'People'
 			],
-			'value' => $config['wedding']['symbol']
+			'value' => $config['event']['symbol']
 		]
 	],
 	'print' => [

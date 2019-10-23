@@ -54,11 +54,11 @@ $config['folders']['thumbs'] = 'data/thumbs';
 $config['folders']['tmp'] = 'data/tmp';
 $config['folders']['data'] = 'data';
 
-// WEDDING SETTINGS
-$config['is_wedding'] = false;
-$config['wedding']['groom'] = 'Name 1';
-$config['wedding']['bride'] = 'Name 2';
-$config['wedding']['symbol'] = 'fa-heart-o';
+// Event SETTINGS
+$config['is_event'] = false;
+$config['event']['textLeft'] = 'Name 1';
+$config['event']['textRight'] = 'Name 2';
+$config['event']['symbol'] = 'fa-heart-o';
 
 // GALLERY
 // should the gallery list the newest pictures first?
