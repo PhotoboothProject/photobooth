@@ -110,8 +110,10 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		<div id="mySidenav" class="dragscroll sidenav">
 			<a href="#" class="closebtn"><i class="fa fa-times"></i></a>
 
-			<?php foreach(AVAILABLE_FILTERS as $filter): ?>
-				<div id="<?=$filter?>" class="filter"><a class="btn btn--small" href="#"><?=$filter?></a></div>
+			<?php foreach(AVAILABLE_FILTERS as $filter => $name): ?>
+				<div id="<?=$filter?>" class="filter <?php if($config['default_imagefilter'] === $filter)echo 'activeSidenavBtn'; ?>">
+					<a class="btn btn--small" href="#"><?=$name?></a>
+				</div>
 			<?php endforeach; ?>
 		</div>
 		<?php endif; ?>

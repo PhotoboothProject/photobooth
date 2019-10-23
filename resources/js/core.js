@@ -20,7 +20,7 @@ const photoBooth = (function () {
     let timeOut,
         nextCollageNumber = 0,
         currentCollageFile = '',
-        imgFilter = 'imgPlain';
+        imgFilter = config.default_imagefilter;
 
     const modal = {
         open: function (selector) {
@@ -609,8 +609,6 @@ const photoBooth = (function () {
             e.preventDefault();
         });
     }
-
-    $('#plain').addClass('activeSidenavBtn');
 
     return public;
 })();
