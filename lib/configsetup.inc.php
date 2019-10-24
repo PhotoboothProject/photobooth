@@ -33,6 +33,11 @@ $configsetup = [
 			'name' => 'dev',
 			'value' => $config['dev']
 		],
+		'show_error_messages' => [
+			'type' => 'checkbox',
+			'name' => 'show_error_messages',
+			'value' => $config['show_error_messages']
+		],
 		'file_format_date' => [
 			'type' => 'checkbox',
 			'name' => 'file_format_date',

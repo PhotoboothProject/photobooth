@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'show_error_messages': 'Fehlermeldungen anzeigen',
     'general_default_imagefilter': 'Standardbildfilter',
     'default_imagefilter': 'Bildfilter auswählen',
     'general_collage_cntdwn_time': 'Collage-Countdown Timer in Sekunden',

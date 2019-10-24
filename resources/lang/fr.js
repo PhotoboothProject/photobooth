@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'show_error_messages': 'Afficher les messages d\'erreur',
     'general_default_imagefilter': 'Filtre d\'image par défaut',
     'default_imagefilter': 'Choisissez le filtre d\'image',
     'general_collage_cntdwn_time': 'Montage photo compte à rebours en secondes',

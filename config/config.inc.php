@@ -5,6 +5,7 @@
 
 $config = array();
 $config['dev'] = false;
+$config['show_error_messages'] = false;
 $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['print_qrcode'] = true;
