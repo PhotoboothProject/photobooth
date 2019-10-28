@@ -147,9 +147,22 @@ fi
 info "### Installing common software..."
 apt install -y php-gd gphoto2
 
-cd /var/www/
-rm -rf html
-mkdir html
+echo -e "\033[0;33m### Is Photobooth the only website on this system?"
+read -p "### Warning: If typing y, the whole /var/www/html folder will be removed! [y/N] " -n 1 -r deleteHtmlFolder
+echo -e "\033[0m"
+
+if [ "$deleteHtmlFolder" != "${deleteHtmlFolder#[Yy]}" ] ;then
+    info "### Ok, we will replace the html folder with the Photobooth."
+    cd /var/www/
+    rm -rf html
+    INSTALLFOLDER="html"
+    INSTALLFOLDERPATH="/var/www/html/"
+else
+    info "### Ok, we will install Photobooth into /var/www/html/photobooth."
+    cd /var/www/html/
+    INSTALLFOLDER="photobooth"
+    INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER/"
+fi
 
 echo -e "\033[0;33m### Do you like to install from git? This will take more"
 read -p "### time and is recommended only for brave users. [y/N] " -n 1 -r
@@ -168,8 +181,8 @@ then
     apt install -y yarn
 
     info "### Now we are going to install Photobooth."
-    git clone https://github.com/andreknieriem/photobooth html
-    cd /var/www/html
+    git clone https://github.com/andreknieriem/photobooth $INSTALLFOLDER
+    cd $INSTALLFOLDERPATH
     LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
     info "### We ar installing version $LATEST_VERSION".
     git checkout $LATEST_VERSION
@@ -189,11 +202,13 @@ else
         jq '.assets[].browser_download_url | select(endswith(".tar.gz"))' |
         xargs curl -L --output /tmp/photobooth-latest.tar.gz
 
-    tar -xzvf /tmp/photobooth-latest.tar.gz -C /var/www/html/
+    mkdir -p $INSTALLFOLDERPATH
+    tar -xzvf /tmp/photobooth-latest.tar.gz -C $INSTALLFOLDERPATH
+    cd $INSTALLFOLDERPATH
 fi
 
 info "### Setting permissions."
-chown -R www-data:www-data /var/www/
+chown -R www-data:www-data $INSTALLFOLDERPATH
 gpasswd -a www-data plugdev
 
 info "### Installing CUPS and setting printer permissions."
