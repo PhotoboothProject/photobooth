@@ -54,6 +54,7 @@ function createArchive(fileName, archive) {
     archive.file('config/config.inc.php');
     archive.directory('lib');
     archive.directory('resources');
+    archive.directory('template');
     archive.directory('vendor');
     archive.file('chromakeying.php');
     archive.file('index.php');
