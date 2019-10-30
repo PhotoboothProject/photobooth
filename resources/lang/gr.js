@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'show_error_messages': 'Εμφάνιση μηνυμάτων σφάλματος',
     'general_default_imagefilter': 'Προεπιλεγμένο φίλτρο εικόνας',
     'default_imagefilter': 'Επιλέξτε φίλτρο εικόνας',
     'general_collage_cntdwn_time': 'Χρονοδιακόπτης αντίστροφης μέτρησης φωτογραφιών σε δευτερόλεπτα',

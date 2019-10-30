@@ -223,7 +223,9 @@ const photoBooth = (function () {
             $('.spinner').hide();
             $('.loading').empty()
             $('.loading').append($('<p>').text(L10N.error));
-            $('.loading').append($('<p class="text-muted">').text(data.error));
+            if (config.show_error_messages || config.dev) {
+                $('.loading').append($('<p class="text-muted">').text(data.error));
+            }
             $('.loading').append($('<a class="btn" href="./">').text(L10N.reload));
         }, 500);
     }
