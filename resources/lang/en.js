@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'send': 'Send',
     'show_error_messages': 'Show error messages',
     'general_default_imagefilter': 'Default image filter',
     'default_imagefilter': 'Choose image filter',
