@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'send': 'Send',
     'show_error_messages': 'Show error messages',
     'general_default_imagefilter': 'Default image filter',
     'default_imagefilter': 'Choose image filter',
@@ -92,11 +93,11 @@ const L10N = {
     'commands_print_cmd': 'Print command',
     'commands_print_msg': 'Success message for print',
     'really_delete': 'Really delete all picture? This cannot be undone!',
-    'wedding': 'Wedding',
-    'is_wedding': 'Wedding event',
-    'wedding_groom': 'Name 1',
-    'wedding_bride': 'Name 2',
-    'wedding_symbol': 'Symbol',
+    'event': 'Event',
+    'is_event': 'Event',
+    'event_textLeft': 'Text left',
+    'event_textRight': 'Text right',
+    'event_symbol': 'Symbol',
     'symbol': 'Choose a symbol',
     'selectFilter': 'Image filter',
     'use_filter': 'Allow image filter',

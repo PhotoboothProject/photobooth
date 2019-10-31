@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'send': 'στείλετε',
     'show_error_messages': 'Εμφάνιση μηνυμάτων σφάλματος',
     'general_default_imagefilter': 'Προεπιλεγμένο φίλτρο εικόνας',
     'default_imagefilter': 'Επιλέξτε φίλτρο εικόνας',
@@ -91,11 +92,11 @@ const L10N = {
     'commands_print_cmd': 'Εντολή εκτύπωσης',
     'commands_print_msg': 'Μήνυμα επιτυχίας για εκτύπωση',
     'really_delete': 'Θέλετε πραγματικά να διαγράψετε όλες τις εικόνες; Αυτό δεν μπορεί να ανατραπεί!',
-    'wedding': 'γάμος',
-    'is_wedding': 'Περίπτωση γάμου',
-    'wedding_groom': 'Ονομα 1',
-    'wedding_bride': 'Ονομα 2',
-    'wedding_symbol': 'εικονίδιο',
+    'event': 'Εκδήλωση',
+    'is_event': 'Εκδήλωση',
+    'event_textLeft': 'Κείμενο αριστερά',
+    'event_textRight': 'Κείμενο δεξιά',
+    'event_symbol': 'εικονίδιο',
     'symbol': 'Επιλέξτε σύμβολο',
     'selectFilter': 'Φίλτρα φωτογραφιών',
     'use_filter': 'Αφήστε φίλτρα εικόνας',

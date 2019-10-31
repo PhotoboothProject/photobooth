@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'send': 'Enviar',
     'show_error_messages': 'Mostrar mensajes de error',
     'general_default_imagefilter': 'Filtro de imagen predeterminado',
     'default_imagefilter': 'Elegir filtro de imagen',
@@ -92,11 +93,11 @@ const L10N = {
     'commands_print_cmd': 'Mando de impresión',
     'commands_print_msg': 'Mensaje de éxito por impresión',
     'really_delete': '¿Suprimir realmente todas las imágenes? ¡No puede ser anulado!',
-    'wedding': 'Boda',
-    'is_wedding': 'Acontecimiento de boda',
-    'wedding_groom': 'Nombre 1',
-    'wedding_bride': 'Nombre 2',
-    'wedding_symbol': 'Icono',
+    'event': 'Evento',
+    'is_event': 'Evento',
+    'event_textLeft': 'Texto a la izquierda',
+    'event_textRight': 'Texto a la derecha',
+    'event_symbol': 'Icono',
     'symbol': 'Seleccione el símbolo',
     'selectFilter': 'Tratamiento de imagen',
     'use_filter': 'Autorice el tratamiento de imagen',

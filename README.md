@@ -5,31 +5,35 @@ A Photobooth webinterface for Raspberry Pi and Windows.
 - Works on Windows and Linux.
   - Under Windows [digiCamControl](http://digicamcontrol.com/) by Duka Istvan can be used to control the camera and to take pictures.
   - Under Linux [gPhoto2](http://gphoto.org/) is used to control the camera and to take pictures.
-- Images are processed with GD/ImageMagick.
+- Images are processed with GD.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
-- Pictures can be printed directly after they were taken or later from the gallery. Photobooth uses the command line to print the picture. The command can be modified in ```config/my.config.inc.php```.
-- Pictures can be send via E-Mail.
-- You can choose an image filter before taking a picture.
-- Settings can be changed in ```config/my.config.inc.php``` or via Admin Page (under /admin):
-  - You can hide the gallery.
-  - The gallery can be ordered ascending oder descending by picture age (see ```$config['gallery']['newest_first']``` in ```config/my.config.inc.php```).
-  - Choose between md5format and dateformat images.
+- Standalone Gallery (`localhost/gallery.php`).
+- Settings can be changed via Admin Panel (under `localhost/admin`):
   - Multi-language support:
       - german
       - english
       - spanish
       - french
       - greek
-  - QR-Code to allow downloading pictures from your Photobooth can be enabled/disabled.
-  - Print feature can be enabled/disabled.
+  - Gallery:
+      - Order pictures in gallery ascending oder descending by picture age.
+      - Hide the gallery.
+  - Choose between md5format and dateformat image names.
+  - Choose an image filter before taking a picture.
+  - QR-Code to allow downloading pictures from your Photobooth.
+  - Print feature.
     - Optional: Print a frame on your picture (replace resources/img/frames/frame.png with a proper frame).
     - Optional: Print text on your picture.
-  - LivePreview can be enabled/disabled (uses device cam).
-  - Wedding specifig config to show a symbol (e.g. heart) betweeen two names on the startpage.
-  - Green screen keying can be enabled/disabled (chroma keying).
-  - Photo collage function: take 4 pictures in a row and let it generate a collage out of it.
-  - Blue-gray theme can be enabled.
+    - Optional: Print QR-Code on the right side of your picture.
+  - Pictures can be send via E-Mail.
+  - LivePreview (uses device cam).
+  - Event (e.g. wedding, birthday) specifig config to show a symbol (e.g. heart) betweeen some text on the startpage.
+  - Green screen keying (chroma keying).
+  - Photo collage function: take 4 pictures in a row with or without interruption and let it generate a collage out of it.
   - Save pictures with a polaroid effect.
+  - Adjust take picture and print commands.
+  - Optional Blue-gray theme.
+  - And many more options to adjust Photobooth for your personal needs.
   
 ## :camera: Screenshots
 ![](https://raw.githubusercontent.com/wiki/andreknieriem/photobooth/images/start.png)

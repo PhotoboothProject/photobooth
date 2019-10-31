@@ -27,7 +27,8 @@
     "digicamcontrol",
     "photography",
     "raspberry pi",
-    "wedding"
+    "wedding",
+    "events"
   ],
   "dependencies": {
     "font-awesome": "^4.7.0",

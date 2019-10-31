@@ -54,7 +54,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<label data-l10n="sendAllMail" for="mail-form-send-link"></label>
 			<?php endif; ?>
 
-			<button class="mail-form-input btn" name="submit" type="submit" value="Senden">Senden</button>
+			<button class="mail-form-input btn" name="submit" type="submit" value="Send"><span data-l10n="send"></span></button>
 		</form>
 
 		<div id="mail-form-message" style="max-width: 75%"></div>

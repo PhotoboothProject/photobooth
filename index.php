@@ -48,14 +48,14 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<div class="blurred"></div>
 
 			<div class="startInner">
-				<?php if ($config['is_wedding']): ?>
+				<?php if ($config['is_event']): ?>
 				<div class="names">
 					<hr class="small" />
 					<hr>
 					<div>
-						<h1><?=$config['wedding']['groom']?>
-							<i class="fa <?=$config['wedding']['symbol']?>" aria-hidden="true"></i>
-							<?=$config['wedding']['bride']?>
+						<h1><?=$config['event']['textLeft']?>
+							<i class="fa <?=$config['event']['symbol']?>" aria-hidden="true"></i>
+							<?=$config['event']['textRight']?>
 							<br>
 							<?=$config['start_screen_title']?>
 						</h1>
@@ -192,7 +192,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<label data-l10n="sendAllMail" for="mail-form-send-link"></label>
 			<?php endif; ?>
 
-			<button class="mail-form-input btn" name="submit" type="submit" value="Senden">Senden</button>
+			<button class="mail-form-input btn" name="submit" type="submit" value="Send"><span data-l10n="send"></span></button>
 		</form>
 
 		<div id="mail-form-message" style="max-width: 75%"></div>
