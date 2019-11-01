@@ -97,3 +97,8 @@ $config['take_picture']['cmd'] = null;
 $config['take_picture']['msg'] = null;
 $config['print']['cmd'] = null;
 $config['print']['msg'] = null;
+
+$config['jpeg_quality_thumb'] = 60;
+$config['jpeg_quality_chroma'] = 70;
+$config['jpeg_quality_image'] = 80;
+

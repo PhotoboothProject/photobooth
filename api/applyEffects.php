@@ -76,17 +76,17 @@ if ($config['polaroid_effect']) {
 if ($config['chroma_keying']) {
     $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
 
-    imagejpeg($chromaCopyResource, $filename_keying, 70);
+    imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
     imagedestroy($chromaCopyResource);
 }
 
 // image scale, create thumbnail
 $thumbResource = resizeImage($imageResource, 500, 500);
 
-imagejpeg($thumbResource, $filename_thumb, 60);
+imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
 imagedestroy($thumbResource);
 
-imagejpeg($imageResource, $filename_photo, 80);
+imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
 imagedestroy($imageResource);
 
 // insert into database
