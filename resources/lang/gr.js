@@ -118,5 +118,9 @@ const L10N = {
     'color_theme': 'Επιλέξτε θέμα',
     'crop_onprint': 'Τραβήξτε την εικόνα όταν εκτυπώνετε',
     'print_crop_width': 'Νέο πλάτος εικόνας στην εκτύπωση',
-    'print_crop_height': 'Νέο ύψος εικόνας στην εκτύπωση'
+    'print_crop_height': 'Νέο ύψος εικόνας στην εκτύπωση',
+    'jpeg_quality': 'Ποιότητα JPEG',
+    'jpeg_quality_jpeg_quality_image': 'Ποιότητα JPEG για φωτογραφίες (-1 ... 100)',
+    'jpeg_quality_jpeg_quality_chroma': 'Ποιότητα JPEG για chroma-keying (-1 ... 100)',
+    'jpeg_quality_jpeg_quality_thumb': 'Ποιότητα JPEG για μικρογραφίες (-1 ... 100)'
 }
