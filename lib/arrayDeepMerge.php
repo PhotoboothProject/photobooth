@@ -32,7 +32,7 @@ function array_deep_merge()
         $args[2] = array();
         if (is_array($args[0]) and is_array($args[1])) {
             foreach (array_unique(array_merge(array_keys($args[0]), array_keys($args[1]))) as $key) {
-                if (is_string($key) and is_array($args[0][$key]) and is_array($args[1][$key])) {
+                if (is_string($key) and array_key_exists($key, $args[0]) and is_array($args[0][$key]) and array_key_exists($key, $args[1]) and is_array($args[1][$key])) {
                     $args[2][$key] = array_deep_merge($args[0][$key], $args[1][$key]);
                 } elseif (is_string($key) and isset($args[0][$key]) and isset($args[1][$key])) {
                     $args[2][$key] = $args[1][$key];
