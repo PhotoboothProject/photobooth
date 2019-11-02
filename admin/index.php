@@ -76,13 +76,13 @@ require_once('../lib/configsetup.inc.php');
 									}
 									echo '<label><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span data-l10n="'.$key.'">'.$key.'</span></label>';
 								break;
+								case 'multi-select':
 								case 'select':
-									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><select name="'.$field['name'].'">
-										<option data-l10n="'.$key.'"></option>
-									';
+									$selectTag = '<select name="'.$field['name'] . ($field['type'] === 'multi-select' ? '[]' : '') . '"' . ($field['type'] === 'multi-select' ? ' multiple="multiple" size="10"' : '') . '>';
+									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label>' . $selectTag;
 										foreach($field['options'] as $val => $option) {
 											$selected = '';
-											if ($val == $field['value']) {
+											if ((is_array($field['value']) && in_array($val, $field['value'])) || ($val === $field['value'])) {
 												$selected = ' selected="selected"';
 											}
 											echo '<option '.$selected.' value="'.$val.'">'.$option.'</option>';

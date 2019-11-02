@@ -4,6 +4,7 @@ const L10N = {
     'show_error_messages': 'Afficher les messages d\'erreur',
     'general_default_imagefilter': 'Filtre d\'image par défaut',
     'default_imagefilter': 'Choisissez le filtre d\'image',
+    'general_disabled_filters': 'Filtres désactivés',
     'general_collage_cntdwn_time': 'Montage photo compte à rebours en secondes',
     'continuous_collage': 'Prendre un photo montage sans interruption',
     'delete': 'Effacer',

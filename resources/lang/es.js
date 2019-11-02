@@ -4,6 +4,7 @@ const L10N = {
     'show_error_messages': 'Mostrar mensajes de error',
     'general_default_imagefilter': 'Filtro de imagen predeterminado',
     'default_imagefilter': 'Elegir filtro de imagen',
+    'general_disabled_filters': 'Filtros deshabilitados',
     'general_collage_cntdwn_time': 'Cuenta regresiva del collage en segundos',
     'continuous_collage': 'Toma collage sin interrupción',
     'delete': 'Eliminar',

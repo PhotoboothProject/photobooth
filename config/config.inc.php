@@ -23,6 +23,7 @@ $config['collage_cntdwn_time'] = '3'; // control countdown timer between collage
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
 $config['use_filter'] = true;
 $config['default_imagefilter'] = 'plain';
+$config['disabled_filters'] = array();
 $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['chroma_keying'] = true;
