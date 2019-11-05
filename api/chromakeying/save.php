@@ -18,10 +18,10 @@ $img = str_replace('data:image/png;base64,', '', $img);
 $img = str_replace(' ', '+', $img);
 $data = base64_decode($img);
 $image = imagecreatefromstring($data);
-imagejpeg($image, $filename_photo, 100);
+imagejpeg($image, $filename_photo, $config['jpeg_quality_image']);
 
 $image = ResizeJpgImage($image, 500, 500);
-imagejpeg($image, $filename_thumb, 100);
+imagejpeg($image, $filename_thumb, $config['jpeg_quality_thumb']);
 
 imagedestroy($image);
 

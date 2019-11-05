@@ -137,6 +137,23 @@ $configsetup = [
 			'value' => $config['previewFromCam']
 		]
 	],
+	'jpeg_quality' => [
+		'jpeg_quality_image' => [
+			'type' => 'input',
+			'name' => 'jpeg_quality_image',
+			'value' => $config['jpeg_quality_image']
+		],
+		'jpeg_quality_chroma' => [
+			'type' => 'input',
+			'name' => 'jpeg_quality_chroma',
+			'value' => $config['jpeg_quality_chroma']
+		],
+		'jpeg_quality_thumb' => [
+			'type' => 'input',
+			'name' => 'jpeg_quality_thumb',
+			'value' => $config['jpeg_quality_thumb']
+		]
+	],
 	'user_interface' => [
 		'color_theme' => [
 			'type' => 'select',

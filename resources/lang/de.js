@@ -119,5 +119,9 @@ const L10N = {
     'color_theme': 'Theme auswählen',
     'crop_onprint': 'Bild bei Ausdruck zurechtschneiden',
     'print_crop_width': 'Neue Bildbreite bei Ausdruck',
-    'print_crop_height': 'Neue Bildhöhe bei Ausdruck'
+    'print_crop_height': 'Neue Bildhöhe bei Ausdruck',
+    'jpeg_quality': 'JPEG Qualität',
+    'jpeg_quality_jpeg_quality_image': 'JPEG Qualität für Bilder (-1 ... 100)',
+    'jpeg_quality_jpeg_quality_chroma': 'JPEG Qualität für Chroma-Keying (-1 ... 100)',
+    'jpeg_quality_jpeg_quality_thumb': 'JPEG Qualität für Thumbnails (-1 ... 100)'
 }
