@@ -57,6 +57,7 @@ const L10N = {
     'keyingerror': 'L\'incrustation sur fond vert n\'est pas possible!',
     'use_print': 'Utiliser l\'impression',
     'use_qr': 'Utiliser le QR code',
+    'use_download': 'Autoriser les téléchargements',
     'print_qrcode': 'QR-Code sur l\'image en cours d\'impression',
     'show_gallery': 'Montrez la galerie',
     'scrollbar': 'Affichez la barre de défilement dans la galerie',

@@ -53,6 +53,11 @@ $configsetup = [
 			'name' => 'use_qr',
 			'value' => $config['use_qr']
 		],
+		'use_download' => [
+			'type' => 'checkbox',
+			'name' => 'use_download',
+			'value' => $config['use_download']
+		],
 		'use_mail' => [
 			'type' => 'checkbox',
 			'name' => 'use_mail',

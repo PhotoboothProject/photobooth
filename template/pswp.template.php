@@ -41,6 +41,10 @@
                 <button class="pswp__button pswp__button--qrcode" title="QR Code"><i class="fa fa-qrcode"></i></button>
                 <?php endif; ?>
 
+                <?php if ($config['use_download'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev'])): ?>
+                <a href="" download="" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></a>
+                <?php endif; ?>
+
                 <?php if ($config['chroma_keying']): ?>
                 <button class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>

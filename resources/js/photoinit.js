@@ -120,6 +120,15 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             }
         });
 
+        gallery.listen('afterChange', function() {
+            const img = gallery.currItem.src.split('/').pop();
+
+            $('.pswp__button--download').attr({
+              href: 'api/download.php?image=' + img,
+              download: img,
+            });
+        });
+
         const resetMailForm = function () {
             $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
 
