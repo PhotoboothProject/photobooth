@@ -164,48 +164,25 @@ else
     INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER/"
 fi
 
-echo -e "\033[0;33m### Do you like to install from git? This will take more"
-read -p "### time and is recommended only for brave users. [y/N] " -n 1 -r
-echo -e "\033[0m"
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    info "### Your wish is my command!"
+info "### Installing my fork from git!"
 
-    info "### We have to make sure that git is installed."
-    apt install -y git
+info "### We have to make sure that git is installed."
+apt install -y git
 
-    info "### Also a packet manager is needed."
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-    apt update
-    apt install -y yarn
+info "### Also a packet manager is needed."
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+apt update
+apt install -y yarn
 
-    info "### Now we are going to install Photobooth."
-    git clone https://github.com/andreknieriem/photobooth $INSTALLFOLDER
-    cd $INSTALLFOLDERPATH
-    LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
-    info "### We ar installing version $LATEST_VERSION".
-    git checkout $LATEST_VERSION
-    git submodule update --init
+info "### Now we are going to install Photobooth."
+git clone https://github.com/andi34/photobooth $INSTALLFOLDER
+cd $INSTALLFOLDERPATH
+git submodule update --init
 
-    info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
-    yarn install
-    yarn build
-else
-    info "### Downloading the latest build."
-
-    info "### Installing a little helper tool to determine the correct url."
-    apt install -y jq
-
-    info "### Downloading the latest release and extracting it."
-    curl -s https://api.github.com/repos/andreknieriem/photobooth/releases/latest |
-        jq '.assets[].browser_download_url | select(endswith(".tar.gz"))' |
-        xargs curl -L --output /tmp/photobooth-latest.tar.gz
-
-    mkdir -p $INSTALLFOLDERPATH
-    tar -xzvf /tmp/photobooth-latest.tar.gz -C $INSTALLFOLDERPATH
-    cd $INSTALLFOLDERPATH
-fi
+info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
+yarn install
+yarn build
 
 info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
