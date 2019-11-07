@@ -61,6 +61,38 @@ nginx_webserver() {
     fi
 }
 
+lighttpd_webserver() {
+    info "### Installing Lighttpd Webserver..."
+    apt install -y lighttpd php-fpm
+    lighttpd-enable-mod fastcgi
+    lighttpd-enable-mod fastcgi-php
+
+    php_conf="/etc/lighttpd/conf-available/15-fastcgi-php.conf"
+
+    if [ -f "${php_conf}" ]; then
+        info "### Enable PHP for Lighttpd"
+        cp ${php_conf} ${php_conf}.bak
+
+        cat > ${php_conf} <<EOF
+# -*- depends: fastcgi -*-
+# /usr/share/doc/lighttpd/fastcgi.txt.gz
+# http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
+
+## Start an FastCGI server for php (needs the php5-cgi package)
+fastcgi.server += ( ".php" => 
+	((
+		"socket" => "/var/run/php/php7.3-fpm.sock",
+		"broken-scriptfilename" => "enable"
+	))
+)
+EOF
+
+        service lighttpd force-reload
+    else
+        error "Can not find ${php_conf} !"
+    fi
+}
+
 echo "
 
 
@@ -99,6 +131,8 @@ apt dist-upgrade -y
 info "### Photobooth needs some software to run."
 if [ "$1" == "apache" ]; then
     apache_webserver
+elif [ "$1" == "lighttpd" ]; then
+    lighttpd_webserver
 else
     nginx_webserver
 fi
