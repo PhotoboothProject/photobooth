@@ -31,6 +31,36 @@ if [[ $PI_MODEL != Raspberry* ]]; then
     exit 3
 fi
 
+apache_webserver() {
+    info "### Installing Apache Webserver..."
+    apt install -y libapache2-mod-php
+}
+
+nginx_webserver() {
+    info "### Installing NGINX Webserver..."
+    apt install -y nginx php-fpm
+
+    nginx_conf="/etc/nginx/sites-enabled/default"
+
+    if [ -f "${nginx_conf}" ]; then
+        info "### Enable PHP in NGINX"
+        cp "${nginx_conf}" ~/nginx-default.bak
+        sed -i 's/^\(\s*\)index index\.html\(.*\)/\1index index\.php index\.html\2/g' "${nginx_conf}"
+        sed -i '/location ~ \\.php$ {/s/^\(\s*\)#/\1/g' "${nginx_conf}"
+        sed -i '/include snippets\/fastcgi-php.conf/s/^\(\s*\)#/\1/g' "${nginx_conf}"
+        sed -i '/fastcgi_pass unix:\/run\/php\//s/^\(\s*\)#/\1/g' "${nginx_conf}"
+        sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_conf}"
+
+        info "### Testing NGINX config"
+        /usr/sbin/nginx -t -c /etc/nginx/nginx.conf
+
+        info "### Restarting NGINX"
+        systemctl reload nginx
+    else
+        error "Can not find ${nginx_conf} !"
+    fi
+}
+
 echo "
 
 
@@ -67,7 +97,14 @@ apt update
 apt dist-upgrade -y
 
 info "### Photobooth needs some software to run."
-apt install -y nginx php-fpm php-gd gphoto2 unclutter
+if [ "$1" == "apache" ]; then
+    apache_webserver
+else
+    nginx_webserver
+fi
+
+info "### Installing common software..."
+apt install -y php-gd gphoto2 unclutter
 
 cd /var/www/
 rm -rf html
@@ -112,26 +149,6 @@ else
         xargs curl -L --output /tmp/photobooth-latest.tar.gz
 
     tar -xzvf /tmp/photobooth-latest.tar.gz -C /var/www/html/
-fi
-
-nginx_conf="/etc/nginx/sites-enabled/default"
-
-if [ -f "${nginx_conf}" ]; then
-    info "### Enable PHP in NGINX"
-    cp "${nginx_conf}" ~/nginx-default.bak
-    sed -i 's/^\(\s*\)index index\.html\(.*\)/\1index index\.php index\.html\2/g' "${nginx_conf}"
-    sed -i '/location ~ \\.php$ {/s/^\(\s*\)#/\1/g' "${nginx_conf}"
-    sed -i '/include snippets\/fastcgi-php.conf/s/^\(\s*\)#/\1/g' "${nginx_conf}"
-    sed -i '/fastcgi_pass unix:\/run\/php\//s/^\(\s*\)#/\1/g' "${nginx_conf}"
-    sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_conf}"
-
-    info "### Testing NGINX config"
-    /usr/sbin/nginx -t -c /etc/nginx/nginx.conf
-
-    info "### Restarting NGINX"
-    systemctl reload nginx
-else
-    error "Can not find ${nginx_conf} !"
 fi
 
 info "### Setting permissions."
