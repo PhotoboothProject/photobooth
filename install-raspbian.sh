@@ -58,6 +58,10 @@ nginx_webserver() {
         systemctl reload nginx
     else
         error "Can not find ${nginx_conf} !"
+        info "Using Apache Webserver !"
+        apt remove -y nginx php-fpm
+        apache_webserver
+
     fi
 }
 
@@ -90,6 +94,9 @@ EOF
         service lighttpd force-reload
     else
         error "Can not find ${php_conf} !"
+        info "Using Apache Webserver !"
+        apt remove -y lighttpd php-fpm
+        apache_webserver
     fi
 }
 
