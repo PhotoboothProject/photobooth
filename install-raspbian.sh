@@ -145,7 +145,7 @@ else
 fi
 
 info "### Installing common software..."
-apt install -y php-gd gphoto2 unclutter
+apt install -y php-gd gphoto2
 
 cd /var/www/
 rm -rf html
@@ -204,8 +204,14 @@ gpasswd -a www-data lpadmin
 info "### Disable camera automount"
 chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 
-info "### You probably like to start the browser on every start."
-cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+echo -e "\033[0;33m### You probably like to start the browser on every start."
+read -p "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " -n 1 -r
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    apt install -y unclutter
+
+    cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 
 @xset s off
 @xset -dpms
@@ -215,6 +221,8 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 @unclutter -idle 3
 
 EOF
+
+fi
 
 info "### Congratulations you finished the install process."
 info "### Have fun with your booth, but first restart your Pi."
