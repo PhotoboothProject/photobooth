@@ -116,8 +116,10 @@ fi
 
 info "### Setting permissions."
 chown -R www-data:www-data /var/www/
-
 gpasswd -a www-data plugdev
+
+info "### Installing CUPS and setting printer permissions."
+apt install -y cups
 gpasswd -a www-data lp
 gpasswd -a www-data lpadmin
 
