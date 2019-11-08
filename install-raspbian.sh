@@ -119,6 +119,7 @@ chown -R www-data:www-data /var/www/
 
 gpasswd -a www-data plugdev
 gpasswd -a www-data lp
+gpasswd -a www-data lpadmin
 
 info "### Disable camera automount"
 chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
