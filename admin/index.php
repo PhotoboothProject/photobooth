@@ -26,7 +26,7 @@ require_once('../lib/configsetup.inc.php');
 	<link rel="stylesheet" type="text/css" href="../resources/css/admin.css" />
 </head>
 <body class="deselect">
-<div id="wrapper" style="overflow-y: auto;">
+<div id="wrapper" class="adminbg" style="overflow-y: auto;">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
 		<button class="reset-btn">

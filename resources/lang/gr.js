@@ -1,5 +1,7 @@
 /* exported L10N */
 const L10N = {
+    'user_interface_background_admin': 'Διαδρομή εικόνας φόντου διαχειριστή',
+    'user_interface_background_image': 'διαδρομή εικόνας φόντου',
     'send': 'στείλετε',
     'show_error_messages': 'Εμφάνιση μηνυμάτων σφάλματος',
     'general_default_imagefilter': 'Προεπιλεγμένο φίλτρο εικόνας',

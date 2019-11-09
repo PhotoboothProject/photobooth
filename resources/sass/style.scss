@@ -1,4 +1,4 @@
-@import "modules/colors";
+@import "modules/theme";
 @import "partials/fonts";
 @import "partials/basic";
 @import "partials/button";
@@ -16,12 +16,12 @@
   width: 100%;
   height: 100%;
   background-color: $mainColor;
-  background-image: url(../img/bg.jpg);
+  background-image: $backgroundImage;
   background-position: center center;
   background-size: cover;
 
-  &.bluegray-bg {
-    background-image: url(../img/bg_bluegray.jpg);
+  &.adminbg {
+    background-image: $adminBackground;
   }
 }
 
@@ -222,7 +222,7 @@ hr.small {
   color: #fff;
   width: 100%;
   height: 250px;
-  background: url(../img/bg.jpg) center center no-repeat;
+  background: $backgroundImage center center no-repeat;
   background-size: cover;
   -webkit-filter: blur(6px);
   -moz-filter: blur(6px);

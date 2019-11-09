@@ -176,6 +176,18 @@ $configsetup = [
 			],
 			'value' => $config['color_theme']
 		],
+		'background_image' => [
+			'type' => 'input',
+			'name' => 'background_image',
+			'placeholder' => 'url(../img/bg.jpg)',
+			'value' => $config['background_image']
+		],
+		'background_admin' => [
+			'type' => 'input',
+			'name' => 'background_admin',
+			'placeholder' => 'url(../img/bg.jpg)',
+			'value' => $config['background_admin']
+		],
 		'show_fork' => [
 			'type' => 'checkbox',
 			'name' => 'show_fork',

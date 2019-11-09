@@ -3,8 +3,13 @@
     --primary-color: transparent;
     --secondary-color: transparent;
     --font-color: transparent;
+    --background-default: none;
+    --background-admin: none;
 }
 
 $mainColor: var(--primary-color);
 $hoverColor: var(--secondary-color);
 $fontColor: var(--font-color);
+
+$backgroundImage: var(--background-default);
+$adminBackground: var(--background-admin);

@@ -1,5 +1,7 @@
 /* exported L10N */
 const L10N = {
+    'user_interface_background_admin': 'Chemin de l\'image d\'arrière-plan du panneau d\'administration',
+    'user_interface_background_image': 'Chemin de l\'image de fond',
     'send': 'Envoyer',
     'show_error_messages': 'Afficher les messages d\'erreur',
     'general_default_imagefilter': 'Filtre d\'image par défaut',
