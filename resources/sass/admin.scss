@@ -43,8 +43,11 @@ input[type="checkbox"] {
 .panel {
   .panel-heading {
     padding: 10px;
+    margin-top: 2px;
     cursor: pointer;
     border: 1px solid #eee;
+    border-radius: 5px;
+
     .plus {
       display: inline-block;
     }
@@ -60,7 +63,9 @@ input[type="checkbox"] {
   .panel-body {
     display: none;
     padding: 20px;
+    margin-top: 1px;
     border: 1px solid #eee;
+    border-radius: 5px;
   }
 
   &.open {
