@@ -23,7 +23,7 @@ A Photobooth web interface for Raspberry Pi and Windows.
     - Order pictures in gallery ascending oder descending by picture age.
     - Hide the gallery.
   - Choose between md5- or date-formatted image names.
-  - Choose an image filter before taking a picture.
+  - Choose an image filter after taking a picture.
   - QR-Code to allow downloading pictures from your Photobooth.
   - Pictures can be directly downloaded from the gallery.
   - Print feature.
