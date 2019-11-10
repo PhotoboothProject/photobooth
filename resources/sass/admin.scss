@@ -9,6 +9,8 @@ $success: #2ecc71;
 button {
   border: 0 none;
   color: #fff;
+  border: 2px solid #eee;
+  border-radius: 10px;
 }
 
 
@@ -32,6 +34,8 @@ input[type="checkbox"] {
   height: auto;
   margin: 50px auto;
   background: #fff;
+  border: 0 none;
+  border-radius: 10px;
   position: relative;
   max-width: 100%;
 }
