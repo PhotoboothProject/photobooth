@@ -21,6 +21,14 @@
         padding: 0;
     }
 
+    &__close {
+        border-radius: 5px;
+    }
+
+    &__reload {
+        border-radius: 5px;
+    }
+
     &__inner {
         position: relative;
         display: flex;
