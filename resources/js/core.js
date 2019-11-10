@@ -204,6 +204,7 @@ const photoBooth = (function () {
 
                         public.thrill('collage');
                     });
+                    $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(L10N.abort));
                 }
             } else {
                 currentCollageFile = '';

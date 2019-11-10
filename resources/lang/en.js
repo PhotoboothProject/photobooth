@@ -125,5 +125,6 @@ const L10N = {
     'jpeg_quality': 'JPEG quality',
     'jpeg_quality_jpeg_quality_image': 'JPEG quality for images (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'JPEG quality for chroma-keying (-1 ... 100)',
-    'jpeg_quality_jpeg_quality_thumb': 'JPEG quality for thumbnails (-1 ... 100)'
+    'jpeg_quality_jpeg_quality_thumb': 'JPEG quality for thumbnails (-1 ... 100)',
+    'abort': 'Abort'
 }
