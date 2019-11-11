@@ -31,6 +31,75 @@ if [[ $PI_MODEL != Raspberry* ]]; then
     exit 3
 fi
 
+apache_webserver() {
+    info "### Installing Apache Webserver..."
+    apt install -y libapache2-mod-php
+}
+
+nginx_webserver() {
+    info "### Installing NGINX Webserver..."
+    apt install -y nginx php-fpm
+
+    nginx_conf="/etc/nginx/sites-enabled/default"
+
+    if [ -f "${nginx_conf}" ]; then
+        info "### Enable PHP in NGINX"
+        cp "${nginx_conf}" ~/nginx-default.bak
+        sed -i 's/^\(\s*\)index index\.html\(.*\)/\1index index\.php index\.html\2/g' "${nginx_conf}"
+        sed -i '/location ~ \\.php$ {/s/^\(\s*\)#/\1/g' "${nginx_conf}"
+        sed -i '/include snippets\/fastcgi-php.conf/s/^\(\s*\)#/\1/g' "${nginx_conf}"
+        sed -i '/fastcgi_pass unix:\/run\/php\//s/^\(\s*\)#/\1/g' "${nginx_conf}"
+        sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_conf}"
+
+        info "### Testing NGINX config"
+        /usr/sbin/nginx -t -c /etc/nginx/nginx.conf
+
+        info "### Restarting NGINX"
+        systemctl reload nginx
+    else
+        error "Can not find ${nginx_conf} !"
+        info "Using Apache Webserver !"
+        apt remove -y nginx php-fpm
+        apache_webserver
+
+    fi
+}
+
+lighttpd_webserver() {
+    info "### Installing Lighttpd Webserver..."
+    apt install -y lighttpd php-fpm
+    lighttpd-enable-mod fastcgi
+    lighttpd-enable-mod fastcgi-php
+
+    php_conf="/etc/lighttpd/conf-available/15-fastcgi-php.conf"
+
+    if [ -f "${php_conf}" ]; then
+        info "### Enable PHP for Lighttpd"
+        cp ${php_conf} ${php_conf}.bak
+
+        cat > ${php_conf} <<EOF
+# -*- depends: fastcgi -*-
+# /usr/share/doc/lighttpd/fastcgi.txt.gz
+# http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
+
+## Start an FastCGI server for php (needs the php5-cgi package)
+fastcgi.server += ( ".php" => 
+	((
+		"socket" => "/var/run/php/php7.3-fpm.sock",
+		"broken-scriptfilename" => "enable"
+	))
+)
+EOF
+
+        service lighttpd force-reload
+    else
+        error "Can not find ${php_conf} !"
+        info "Using Apache Webserver !"
+        apt remove -y lighttpd php-fpm
+        apache_webserver
+    fi
+}
+
 echo "
 
 
@@ -67,7 +136,16 @@ apt update
 apt dist-upgrade -y
 
 info "### Photobooth needs some software to run."
-apt install -y libapache2-mod-php php-gd gphoto2 unclutter
+if [ "$1" == "apache" ]; then
+    apache_webserver
+elif [ "$1" == "lighttpd" ]; then
+    lighttpd_webserver
+else
+    nginx_webserver
+fi
+
+info "### Installing common software..."
+apt install -y php-gd gphoto2 unclutter
 
 cd /var/www/
 rm -rf html

@@ -41,7 +41,7 @@ A Photobooth webinterface for Raspberry Pi and Windows.
 ## :gear: Prerequisites
 - gphoto2 installed, if used on a Raspberry for DSLR control
 - digiCamControl, if used unter Windows for DSLR control
-- Apache
+- NGINX, Lighttpd or Apache
 
 ## :wrench: Installation & Troubleshooting
 Please follow the installation instructions in our [Photobooth-Wiki](https://github.com/andreknieriem/photobooth/wiki) to setup Photobooth.
@@ -76,3 +76,4 @@ Please take a look at the changelog in our [Photobooth Wiki](https://github.com/
 - [vdubuk](https://github.com/vdubuk)
 - [msmedien](https://github.com/msmedien)
 - [sualko](https://github.com/sualko)
+- [rawbertp](https://github.com/rawbertp)
