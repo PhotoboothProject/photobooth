@@ -32,6 +32,7 @@ const L10N = {
     'sendAllMail': 'Sende mir in den nächsten Tagen ein Link zu allen Bildern',
     'newPhoto': 'Neues Bild',
     'newCollage': 'Neue Collage',
+    'nextPhoto': 'Nächstes Bild',
     'busy': 'Bild wird verarbeitet ...',
     'busyCollage': 'Collage wird verarbeitet ...',
     'cheese': 'Cheeeeeeeese!',
