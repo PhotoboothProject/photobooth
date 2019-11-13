@@ -1,6 +1,10 @@
 #slideshow {
   margin: 0px auto;
   position: relative;
+
+  img {
+    border:2px solid black;
+  }
 }
 
 #slideshow > div {
