@@ -40,10 +40,12 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 </head>
 
 <body class="deselect">
-	<div id="wrapper" >
-
+	<div id="wrapper">
 
 		<div class="images" id="slideshow">
+			<?php if (empty($imagelist)): ?>
+			<h1 style="text-align:center; color:#ffffff" data-l10n="gallery_no_image"></h1>
+			<?php else: ?>
 			<?php foreach ($imagelist as $image): ?>
 			<?php
 
@@ -51,10 +53,11 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 			?>
 			<div>
-				<img src="<?=$filename_photo?>" alt="<?=$image?>" />
+				<img src="<?=$filename_photo?>" alt="<?=$image?>" class="center" />
 			</div>
 
 			<?php endforeach; ?>
+			<?php endif; ?>
 		</div>
 	</div>
 
@@ -64,6 +67,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/js/vendor/TweenLite.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/EasePack.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/jquery.gsap.min.js"></script>
+	<script type="text/javascript" src="resources/js/vendor/CSSPlugin.min.js"></script>
+	<script type="text/javascript" src="resources/js/l10n.js"></script>
+	<script type="text/javascript" src="resources/lang/<?php echo $config['language']; ?>.js"></script>
 	<script type="text/javascript" src="resources/js/slideshow.js"></script>
 </body>
 </html>
