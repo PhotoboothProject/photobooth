@@ -33,9 +33,6 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
-	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css" />
-	<link rel="stylesheet" href="node_modules/photoswipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/style.css" />
 </head>
 
