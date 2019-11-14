@@ -99,6 +99,12 @@ $configsetup = [
 			'options' => AVAILABLE_FILTERS,
 			'value' => $config['default_imagefilter']
 		],
+		'disabled_filters' => [
+			'type' => 'multi-select',
+			'name' => 'disabled_filters',
+			'options' => AVAILABLE_FILTERS,
+			'value' => $config['disabled_filters']
+		],
 		'polaroid_effect' => [
 			'type' => 'checkbox',
 			'name' => 'polaroid_effect',

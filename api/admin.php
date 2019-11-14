@@ -36,11 +36,16 @@ if ($data['type'] == 'reset') {
 }
 
 if ($data['type'] == 'config') {
-    $file = __DIR__ . '/../config/my.config.inc.php';
     $newConfig = [];
 
     foreach ($config as $k=>$conf) {
         if (is_array($conf)) {
+
+            if (!empty($data[$k]) && is_array($data[$k])) {
+                $newConfig[$k] = $data[$k];
+                continue;
+            }
+
             foreach ($conf as $sk => $sc) {
                 if (isset($data[$k][$sk]) && !empty($data[$k][$sk])) {
                     if ($data[$k][$sk] == 'true') {
@@ -65,8 +70,8 @@ if ($data['type'] == 'config') {
 
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
-    if (file_put_contents($file, $content)) {
-        clearCache($file);
+    if (file_put_contents($my_config_file, $content)) {
+        clearCache($my_config_file);
 
         echo json_encode('success');
     } else {

@@ -111,9 +111,11 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<a href="#" class="closebtn"><i class="fa fa-times"></i></a>
 
 			<?php foreach(AVAILABLE_FILTERS as $filter => $name): ?>
-				<div id="<?=$filter?>" class="filter <?php if($config['default_imagefilter'] === $filter)echo 'activeSidenavBtn'; ?>">
-					<a class="btn btn--small" href="#"><?=$name?></a>
-				</div>
+				<?php if (!in_array($filter, $config['disabled_filters'])): ?>
+					<div id="<?=$filter?>" class="filter <?php if($config['default_imagefilter'] === $filter)echo 'activeSidenavBtn'; ?>">
+						<a class="btn btn--small" href="#"><?=$name?></a>
+					</div>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
 		<?php endif; ?>
