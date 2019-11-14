@@ -8,6 +8,7 @@ $config['dev'] = false;
 $config['show_error_messages'] = true;
 $config['use_print'] = false;
 $config['use_qr'] = true;
+$config['use_download'] = true;
 $config['print_qrcode'] = true;
 $config['print_frame'] = false;
 $config['crop_onprint'] = false;

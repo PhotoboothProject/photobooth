@@ -57,6 +57,7 @@ const L10N = {
     'keyingerror': 'Chroma-Keying nicht möglich!',
     'use_print': 'Drucken aktivieren',
     'use_qr': 'QR-Code aktivieren',
+    'use_download': 'Download aktivieren',
     'print_qrcode': 'QR-Code auf dem Bild beim Drucken',
     'show_gallery': 'Galerie aktivieren',
     'scrollbar': 'Scrollbar in Galerie aktivieren',

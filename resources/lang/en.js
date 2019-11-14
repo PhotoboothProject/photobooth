@@ -57,6 +57,7 @@ const L10N = {
     'keyingerror': 'Chroma keying not possible!',
     'use_print': 'Use Print',
     'use_qr': 'Use QR Codes',
+    'use_download': 'Allow downloads',
     'print_qrcode': 'QR-Code on the picture while printing',
     'show_gallery': 'Show Gallery',
     'scrollbar': 'Show scrollbar in Gallery',
