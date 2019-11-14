@@ -135,8 +135,9 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     };
 
     // QR in gallery
-    $('.pswp__button--qrcode').on('click', function (e) {
+    $('.pswp__button--qrcode').on('click touchstart', function (e) {
         e.preventDefault();
+        e.stopPropagation();
 
         const pswpQR = $('.pswp__qr');
 
@@ -154,8 +155,9 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     });
 
     // print in gallery
-    $('.pswp__button--print').on('click', function (e) {
+    $('.pswp__button--print').on('click touchstart', function (e) {
         e.preventDefault();
+        e.stopPropagation();
 
         const img = gallery.currItem.src.split('/').pop();
 
@@ -165,8 +167,9 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     });
 
     // chroma keying print
-    $('.pswp__button--print-chroma-keying').on('click', function (e) {
+    $('.pswp__button--print-chroma-keying').on('click touchstart', function (e) {
         e.preventDefault();
+        e.stopPropagation();
 
         const img = gallery.currItem.src.split('/').pop();
 
