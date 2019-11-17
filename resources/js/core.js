@@ -154,6 +154,7 @@ const photoBooth = (function () {
             $('.loading').text(L10N.cheese);
         } else {
             $('.loading').text(L10N.cheeseCollage);
+            $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.loading');
         }
 
         setTimeout(() => {
@@ -192,7 +193,6 @@ const photoBooth = (function () {
 
                 $('.spinner').hide();
                 $('.loading').empty();
-                $('<p>').text(`${result.current + 1} / ${result.limit}`).appendTo('.loading');
 
                 if (config.continuous_collage) {
                     setTimeout(() => {

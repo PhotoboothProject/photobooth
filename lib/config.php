@@ -70,6 +70,8 @@ $config['print']['cmd'] = $cmds[$os]['print']['cmd'];
 $config['print']['msg'] = $cmds[$os]['print']['msg'];
 $config['colors'] = $colors['default'];
 
+$config['collage_limit'] = 4;
+
 $defaultConfig = $config;
 
 if (file_exists($my_config_file)) {
