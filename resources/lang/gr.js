@@ -32,6 +32,7 @@ const L10N = {
     'sendAllMail': 'Στείλτε μου μια σύνδεση σε όλες τις φωτογραφίες τις επόμενες ημέρες',
     'newPhoto': 'Νέα εικόνα',
     'newCollage': 'Νέο κολάζ',
+    'nextPhoto': 'Επόμενη εικόνα',
     'busy': 'Η εικόνα βρίσκεται υπό επεξεργασία ...',
     'busyCollage': 'Το κολάζ υποβάλλεται σε επεξεργασία ...',
     'cheese': 'Cheeeeeeeese!',
@@ -124,5 +125,6 @@ const L10N = {
     'jpeg_quality': 'Ποιότητα JPEG',
     'jpeg_quality_jpeg_quality_image': 'Ποιότητα JPEG για φωτογραφίες (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'Ποιότητα JPEG για chroma-keying (-1 ... 100)',
-    'jpeg_quality_jpeg_quality_thumb': 'Ποιότητα JPEG για μικρογραφίες (-1 ... 100)'
+    'jpeg_quality_jpeg_quality_thumb': 'Ποιότητα JPEG για μικρογραφίες (-1 ... 100)',
+    'abort': 'Αποβάλλω'
 }

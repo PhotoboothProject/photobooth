@@ -29,6 +29,7 @@ const L10N = {
     'qr': 'QR Code',
     'newPhoto': 'New Picture',
     'newCollage': 'New Collage',
+    'nextPhoto': 'Next Picture',
     'mail': 'E-Mail',
     'insertMail': 'Enter your e-mail address to receive the photo.',
     'sendAllMail': 'Send me a link to all pictures in the next few days',
@@ -125,5 +126,6 @@ const L10N = {
     'jpeg_quality': 'JPEG quality',
     'jpeg_quality_jpeg_quality_image': 'JPEG quality for images (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'JPEG quality for chroma-keying (-1 ... 100)',
-    'jpeg_quality_jpeg_quality_thumb': 'JPEG quality for thumbnails (-1 ... 100)'
+    'jpeg_quality_jpeg_quality_thumb': 'JPEG quality for thumbnails (-1 ... 100)',
+    'abort': 'Abort'
 }

@@ -124,8 +124,8 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             const img = gallery.currItem.src.split('/').pop();
 
             $('.pswp__button--download').attr({
-              href: 'api/download.php?image=' + img,
-              download: img,
+                href: 'api/download.php?image=' + img,
+                download: img,
             });
         });
 

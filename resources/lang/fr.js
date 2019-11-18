@@ -32,6 +32,7 @@ const L10N = {
     'sendAllMail': 'Envoyez moi le lien de toutes les photos, dans les prochains jours',
     'newPhoto': 'Une autre',
     'newCollage': 'Une autre photo montage',
+    'nextPhoto': 'Photo suivante',
     'busy': 'En cours de traitement',
     'busyCollage': 'En cours de traitement',
     'cheese': 'Cheeeeeeeese!',
@@ -125,5 +126,6 @@ const L10N = {
     'jpeg_quality': 'JPEG qualité',
     'jpeg_quality_jpeg_quality_image': 'JPEG qualité des images (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'JPEG qualité pour chroma-keying (-1 ... 100)',
-    'jpeg_quality_jpeg_quality_thumb': 'JPEG qualité des thumbnails (-1 ... 100)'
+    'jpeg_quality_jpeg_quality_thumb': 'JPEG qualité des thumbnails (-1 ... 100)',
+    'abort': 'Avorter'
 }
