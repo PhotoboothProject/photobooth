@@ -5,7 +5,7 @@ require_once('lib/db.php');
 require_once('lib/filter.php');
 
 $images = getImagesFromDB();
-$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
+$imagelist = array_reverse($images);
 
 ?>
 <!DOCTYPE html>
