@@ -66,6 +66,7 @@ $imagelist = array_reverse($images);
 	<script type="text/javascript" src="resources/js/vendor/jquery.gsap.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/CSSPlugin.min.js"></script>
 	<script type="text/javascript" src="resources/js/l10n.js"></script>
+	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/lang/<?php echo $config['language']; ?>.js"></script>
 	<script type="text/javascript" src="resources/js/slideshow.js"></script>
 </body>
