@@ -7,7 +7,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     let ssRunning = false,
         ssOnce = false;
 
-    const ssDelay = 2500,
+    const ssDelay = config.slideshow_pictureTime,
         ssButtonClass = '.pswp__button--playpause';
 
     const parseThumbnailElements = function (container) {

@@ -76,6 +76,7 @@ const L10N = {
     'show_date': 'Montrez la date sous les images (fonctionne uniquement avec images au format de date)',
     'gallery_date_format': 'Format de date',
     'gallery_no_image': 'La galerie est vide. Faites des photos!',
+    'gallery_pictureTime': 'Milliseconds an image is displayed at slideshow',
     'use_mail': 'Utiliser le courrier électronique',
     'show_fork': 'Affichez le badge de la page Github',
     'general_cntdwn_time': 'Compte à rebours en secondes',

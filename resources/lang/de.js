@@ -76,6 +76,7 @@ const L10N = {
     'show_date': 'Datum in Galerie unter dem Foto anzeigen (funktioniert nur wenn Bilder mit Datum benannt werden)',
     'gallery_date_format': 'Datumsstil',
     'gallery_no_image': 'Die Galerie ist noch leer. Mache doch ein paar Bilder!',
+    'gallery_pictureTime': 'Millisekunden die ein Bild in der Diashow angezeigt wird',
     'use_mail': 'E-Mail aktivieren',
     'show_fork': 'Fork Logo anzeigen',
     'general_cntdwn_time': 'Countdown Timer in Sekunden',

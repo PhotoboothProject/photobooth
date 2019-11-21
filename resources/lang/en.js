@@ -76,6 +76,7 @@ const L10N = {
     'show_date': 'Show date below images in Gallery (only works if dateformat images is used)',
     'gallery_date_format': 'Date style',
     'gallery_no_image': 'The gallery is still empty. Take some pictures!',
+    'gallery_pictureTime': 'Milliseconds an image is displayed at slideshow',
     'use_mail': 'Use E-Mail',
     'show_fork': 'Show Fork Badge',
     'general_cntdwn_time': 'Countdown timer in seconds',
