@@ -16,7 +16,7 @@ $imagelist = array_reverse($images);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
-	<meta http-equiv="refresh" content= "60">
+	<meta http-equiv="refresh" content= "<?=$config['slideshow_refresh_time']?>">
 
 
 	<title>Photobooth</title>

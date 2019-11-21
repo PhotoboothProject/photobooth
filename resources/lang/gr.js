@@ -165,5 +165,7 @@ const L10N = {
     'logout': 'Logout',
     'admin_panel': 'Admin panel',
     'protect_admin': 'Protect admin panel',
-    'protect_index': 'Protect start screen'
+    'protect_index': 'Protect start screen',
+    'slideshow': 'Slideshow',
+    'slideshow_refreshTime': 'Ανανεώστε τη σελίδα ανά X δευτερόλεπτα'
 }

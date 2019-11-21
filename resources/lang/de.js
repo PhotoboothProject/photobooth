@@ -166,5 +166,7 @@ const L10N = {
     'logout': 'Ausloggen',
     'admin_panel': 'Admin Panel',
     'protect_admin': 'Admin Panel schützen',
-    'protect_index': 'Startseite schützen'
+    'protect_index': 'Startseite schützen',
+    'slideshow': 'Diashow',
+    'slideshow_refreshTime': 'Seite neuladen nach X Sekunden'
 }

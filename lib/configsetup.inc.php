@@ -638,6 +638,14 @@ $configsetup = [
 			'value' => $config['mail_text']
 		],
 	],
+	'slideshow' => [
+		'refreshTime' => [
+			'type' => 'input',
+			'placeholder' => '60',
+			'name' => 'slideshow_refreshTime',
+			'value' => $config['slideshow_refreshTime']
+		]
+	],
 	'commands' => [
 		'take_picture_cmd' => [
 			'type' => 'input',
