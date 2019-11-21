@@ -76,7 +76,6 @@ const L10N = {
     'show_date': 'Muestre la fecha debajo de las imágenes (sólo funciona con imágenes al formato fecha)',
     'gallery_date_format': 'Formato de fecha',
     'gallery_no_image': 'La galeri es vacía. ¡Saque fotos!',
-    'gallery_pictureTime': 'Milliseconds an image is displayed at slideshow',
     'use_mail': 'Utilizar el correo electrónico',
     'show_fork': 'Muestre el banner de la página',
     'general_cntdwn_time': 'Cuenta regresiva en segundos',
@@ -168,5 +167,6 @@ const L10N = {
     'protect_admin': 'Protect admin panel',
     'protect_index': 'Protect start screen',
     'slideshow': 'Diapositivas',
-    'slideshow_refreshTime': 'Actualizar página después de X segundos'
+    'slideshow_refreshTime': 'Actualizar página después de X segundos',
+    'slideshow_pictureTime': 'Milisegundos se muestra una imagen'
 }

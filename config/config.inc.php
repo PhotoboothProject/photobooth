@@ -105,10 +105,10 @@ $config['newest_first'] = true;
 $config['scrollbar'] = false;
 $config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
-$config['slideshow_pictureTime'] = '3000';
 
 // SLIDESHOW
 $config['slideshow_refreshTime'] = '60';
+$config['slideshow_pictureTime'] = '3000';
 
 // TEXT ON PRINT
 $config['is_textonprint'] = false;

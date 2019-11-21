@@ -76,7 +76,6 @@ const L10N = {
     'show_date': 'Εμφάνιση ημερομηνίας στην γκαλερί κάτω από τη φωτογραφία (λειτουργεί μόνο εάν οι φωτογραφίες ονομάζονται με ημερομηνία)',
     'gallery_date_format': 'ημερομηνία στυλ',
     'gallery_no_image': 'Η γκαλερί είναι ακόμα κενή. Κάντε μερικές φωτογραφίες!',
-    'gallery_pictureTime': 'Milliseconds an image is displayed at slideshow',
     'use_mail': 'E-Mail Ενεργοποίηση',
     'show_fork': 'Εμφανίστε το λογότυπο Fork',
     'general_cntdwn_time': 'Μετρητής αντίστροφης μέτρησης σε δευτερόλεπτα',
@@ -167,5 +166,6 @@ const L10N = {
     'protect_admin': 'Protect admin panel',
     'protect_index': 'Protect start screen',
     'slideshow': 'Slideshow',
-    'slideshow_refreshTime': 'Ανανεώστε τη σελίδα ανά X δευτερόλεπτα'
+    'slideshow_refreshTime': 'Ανανεώστε τη σελίδα ανά X δευτερόλεπτα',
+    'slideshow_pictureTime': 'Σε χιλιοστά του δευτερολέπτου εμφανίζεται μια εικόνα'
 }

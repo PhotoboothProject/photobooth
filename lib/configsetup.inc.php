@@ -569,12 +569,6 @@ $configsetup = [
 			'placeholder' => $defaultConfig['gallery']['date_format'],
 			'name' => 'gallery[date_format]',
 			'value' => $config['gallery']['date_format']
-		],
-		'pictureTime' => [
-			'type' => 'input',
-			'placeholder' => '3000',
-			'name' => 'slideshow_pictureTime',
-			'value' => $config['slideshow_pictureTime']
 		]
 	],
 	'mail' => [
@@ -641,9 +635,15 @@ $configsetup = [
 	'slideshow' => [
 		'refreshTime' => [
 			'type' => 'input',
-			'placeholder' => '60',
+			'placeholder' => $defaultConfig['slideshow_refreshTime'],
 			'name' => 'slideshow_refreshTime',
 			'value' => $config['slideshow_refreshTime']
+		],
+		'pictureTime' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['slideshow_pictureTime'],
+			'name' => 'slideshow_pictureTime',
+			'value' => $config['slideshow_pictureTime']
 		]
 	],
 	'commands' => [
