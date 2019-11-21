@@ -43,6 +43,7 @@ $imagelist = array_reverse($images);
 			<?php if (empty($imagelist)): ?>
 			<h1 style="text-align:center; color:#ffffff" data-l10n="gallery_no_image"></h1>
 			<?php else: ?>
+			<?php shuffle($imagelist); ?>
 			<?php foreach ($imagelist as $image): ?>
 			<?php
 
