@@ -168,5 +168,6 @@ const L10N = {
     'protect_index': 'Startseite schützen',
     'slideshow': 'Diashow',
     'slideshow_refreshTime': 'Seite neuladen nach X Sekunden',
-    'slideshow_pictureTime': 'Millisekunden die ein Bild angezeigt wird'
+    'slideshow_pictureTime': 'Millisekunden die ein Bild angezeigt wird',
+    'randomPicture': 'Zufällige Bilder anzeigen'
 }

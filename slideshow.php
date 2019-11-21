@@ -43,11 +43,15 @@ $imagelist = array_reverse($images);
 			<?php if (empty($imagelist)): ?>
 			<h1 style="text-align:center; color:#ffffff" data-l10n="gallery_no_image"></h1>
 			<?php else: ?>
-			<?php shuffle($imagelist); ?>
+			<?php
+			if ($config['slideshow_randomPicture']):
+				shuffle($imagelist);
+			endif;
+			?>
 			<?php foreach ($imagelist as $image): ?>
 			<?php
 
-		        $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+			$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
 
 			?>
 			<div>

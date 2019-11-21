@@ -167,5 +167,6 @@ const L10N = {
     'protect_index': 'Protect start screen',
     'slideshow': 'Slideshow',
     'slideshow_refreshTime': 'Ανανεώστε τη σελίδα ανά X δευτερόλεπτα',
-    'slideshow_pictureTime': 'Σε χιλιοστά του δευτερολέπτου εμφανίζεται μια εικόνα'
+    'slideshow_pictureTime': 'Σε χιλιοστά του δευτερολέπτου εμφανίζεται μια εικόνα',
+    'randomPicture': 'Εμφάνιση τυχαίων εικόνων'
 }

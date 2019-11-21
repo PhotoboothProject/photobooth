@@ -169,5 +169,6 @@ const L10N = {
     'protect_index': 'Protect start screen',
     'slideshow': 'Slideshow',
     'slideshow_refreshTime': 'Refresh page afert X seconds',
-    'slideshow_pictureTime': 'Milliseconds an image is displayed'
+    'slideshow_pictureTime': 'Milliseconds an image is displayed',
+    'randomPicture': 'Show random pictures'
 }
