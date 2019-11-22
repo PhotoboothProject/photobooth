@@ -101,7 +101,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<?php endif; ?>
 
 			<?php if($config['cups_button']): ?>
-				<a id="cups-button" class="btn" style="position:absolute;left:0;bottom:0;" href="#" target="newwin"><span>CUPS</span></a>
+				<a id="cups-button" class="btn" style="position:absolute;left:5px;bottom:5px;" href="#" target="newwin"><span>CUPS</span></a>
 			<?php endif; ?>
 		</div>
 
