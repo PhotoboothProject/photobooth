@@ -6,6 +6,14 @@
   img {
     border:2px solid black;
   }
+  figure {
+    margin: 0;
+  }
+
+  figcaption {
+    color: #fff;
+    text-align: center;
+  }
 }
 
 #slideshow > div {

@@ -33,6 +33,7 @@ $imagelist = array_reverse($images);
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
+	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="resources/css/style.css" />
 </head>
 
@@ -51,11 +52,21 @@ $imagelist = array_reverse($images);
 			<?php foreach ($imagelist as $image): ?>
 			<?php
 
+			$date = '';
+			if ($config['file_format_date']) {
+				$dateObject = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
+				if ($dateObject) {
+					$date = '<i class="fa fa-clock-o"></i> ' . $dateObject->format($config['gallery']['date_format']);
+				}
+			}
 			$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
 
 			?>
 			<div>
-				<img src="<?=$filename_photo?>" alt="<?=$image?>" class="center" />
+				<figure>
+					<figcaption><?=$date?></figcaption>
+					<img src="<?=$filename_photo?>" alt="<?=$image?>" class="center" />
+				</figure>
 			</div>
 
 			<?php endforeach; ?>
