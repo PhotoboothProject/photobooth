@@ -216,7 +216,9 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     });
 
     /* slideshow management */
-    $(ssButtonClass).on('click', function() {
+    $(ssButtonClass).on('click touchstart', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         // toggle slideshow on/off
         setSlideshowState(this, !ssRunning);
     });
