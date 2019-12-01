@@ -4,9 +4,10 @@ function initPhotoSwipeFromDOM (gallerySelector) {
 
     let gallery;
 
-    var ssRunning = false,
-        ssOnce = false,
-        ssDelay = 2500 /*ms*/,
+    let ssRunning = false,
+        ssOnce = false;
+
+    const ssDelay = 2500,
         ssButtonClass = '.pswp__button--playpause';
 
     const parseThumbnailElements = function (container) {
@@ -145,7 +146,8 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         gallery.listen('beforeChange', resetMailForm);
         gallery.listen('close', resetMailForm);
 
-        setSlideshowState(ssButtonClass, false /* not running from the start */);
+        // Slideshow not running from the start
+        setSlideshowState(ssButtonClass, false);
 
         // start timer for the next slide in slideshow after prior image has loaded
         gallery.listen('afterChange', function() {
@@ -214,27 +216,26 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     });
 
     /* slideshow management */
-    $(ssButtonClass).on('click', function(e) {
+    $(ssButtonClass).on('click', function() {
         // toggle slideshow on/off
         setSlideshowState(this, !ssRunning);
     });
 
     function setSlideshowState(el, running) {
         if (running) {
-            setTimeout(gotoNextSlide, ssDelay / 2.0 /* first time wait less */);
+            setTimeout(gotoNextSlide, ssDelay / 2.0);
         }
-        var title = running ? "Pause Slideshow" : "Play Slideshow";
-        $(el).removeClass(running ? "play" : "pause") // change icons defined in css
-            .addClass(running ? "pause" : "play")
+        const title = running ? 'Pause Slideshow' : 'Play Slideshow';
+        $(el).removeClass(running ? 'play' : 'pause')
+            .addClass(running ? 'pause' : 'play')
             .prop('title', title);
         ssRunning = running;
     }
 
     function gotoNextSlide() {
-        if (ssRunning && !!gallery) {
+        if (ssRunning && Boolean(gallery)) {
             ssOnce = true;
             gallery.next();
-            // start counter for next slide in 'afterChange' listener
         }
     }
 
