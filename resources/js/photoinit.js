@@ -4,6 +4,11 @@ function initPhotoSwipeFromDOM (gallerySelector) {
 
     let gallery;
 
+    var ssRunning = false,
+        ssOnce = false,
+        ssDelay = 2500 /*ms*/,
+        ssButtonClass = '.pswp__button--playpause';
+
     const parseThumbnailElements = function (container) {
         return $(container).find('>a').map(function () {
             const element = $(this);
@@ -140,6 +145,18 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         gallery.listen('beforeChange', resetMailForm);
         gallery.listen('close', resetMailForm);
 
+        setSlideshowState(ssButtonClass, false /* not running from the start */);
+
+        // start timer for the next slide in slideshow after prior image has loaded
+        gallery.listen('afterChange', function() {
+            if (ssRunning && ssOnce) {
+                ssOnce = false;
+                setTimeout(gotoNextSlide, ssDelay);
+            }
+        });
+        gallery.listen('destroy', function() { gallery = null; });
+
+
         gallery.init();
     };
 
@@ -195,6 +212,31 @@ function initPhotoSwipeFromDOM (gallerySelector) {
 
         photoBooth.toggleMailDialog(img);
     });
+
+    /* slideshow management */
+    $(ssButtonClass).on('click', function(e) {
+        // toggle slideshow on/off
+        setSlideshowState(this, !ssRunning);
+    });
+
+    function setSlideshowState(el, running) {
+        if (running) {
+            setTimeout(gotoNextSlide, ssDelay / 2.0 /* first time wait less */);
+        }
+        var title = running ? "Pause Slideshow" : "Play Slideshow";
+        $(el).removeClass(running ? "play" : "pause") // change icons defined in css
+            .addClass(running ? "pause" : "play")
+            .prop('title', title);
+        ssRunning = running;
+    }
+
+    function gotoNextSlide() {
+        if (ssRunning && !!gallery) {
+            ssOnce = true;
+            gallery.next();
+            // start counter for next slide in 'afterChange' listener
+        }
+    }
 
     $(gallerySelector).on('click', onThumbnailClick);
 }

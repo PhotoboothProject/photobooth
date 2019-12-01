@@ -49,6 +49,9 @@
                 <button class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 
+                <!-- custom slideshow button: -->
+                <button class="pswp__button pswp__button--playpause" title="Play Slideshow"></button>
+
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
                 <!-- element will get class pswp__preloader--active when preloader is running -->
                 <div class="pswp__preloader">
