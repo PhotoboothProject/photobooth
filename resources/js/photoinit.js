@@ -2,9 +2,8 @@
 /* global photoBooth */
 function initPhotoSwipeFromDOM (gallerySelector) {
 
-    let gallery;
-
-    let ssRunning = false,
+    let gallery,
+        ssRunning = false,
         ssOnce = false;
 
     const ssDelay = config.slideshow_pictureTime,
@@ -78,6 +77,9 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         // Pass data to PhotoSwipe and initialize it
         gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 
+        // Slideshow not running from the start
+        setSlideshowState(ssButtonClass, false);
+
         // see: http://photoswipe.com/documentation/responsive-images.html
         let realViewportWidth,
             useLargeImages = false,
@@ -133,6 +135,11 @@ function initPhotoSwipeFromDOM (gallerySelector) {
                 href: 'api/download.php?image=' + img,
                 download: img,
             });
+
+            if (ssRunning && ssOnce) {
+                ssOnce = false;
+                setTimeout(gotoNextSlide, ssDelay);
+            }
         });
 
         const resetMailForm = function () {
@@ -145,19 +152,6 @@ function initPhotoSwipeFromDOM (gallerySelector) {
 
         gallery.listen('beforeChange', resetMailForm);
         gallery.listen('close', resetMailForm);
-
-        // Slideshow not running from the start
-        setSlideshowState(ssButtonClass, false);
-
-        // start timer for the next slide in slideshow after prior image has loaded
-        gallery.listen('afterChange', function() {
-            if (ssRunning && ssOnce) {
-                ssOnce = false;
-                setTimeout(gotoNextSlide, ssDelay);
-            }
-        });
-        gallery.listen('destroy', function() { gallery = null; });
-
 
         gallery.init();
     };
