@@ -127,6 +127,11 @@ $configsetup = [
 			'name' => 'polaroid_rotation',
 			'value' => $config['polaroid_rotation']
 		],
+		'take_frame' => [
+			'type' => 'checkbox',
+			'name' => 'take_frame',
+			'value' => $config['take_frame']
+		],
 		'chroma_keying' => [
 			'type' => 'checkbox',
 			'name' => 'chroma_keying',

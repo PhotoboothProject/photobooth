@@ -113,6 +113,7 @@ const L10N = {
     'polaroid_effect': 'Επιρροή Polaroid',
     'general_polaroid_rotation': 'Περιστροφή εικόνας Polaroid',
     'use_collage': 'Αφήστε το κολάζ φωτογραφιών',
+    'take_frame': 'Βγάλτε φωτογραφία με το πλαίσιο',
     'print_frame': 'Εκτύπωση πλαισίου στην εικόνα',
     'is_textonprint': 'Εκτυπώστε κείμενο στην εικόνα',
     'print_line1': 'Κείμενο ανά γραμμή 1',

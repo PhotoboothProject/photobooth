@@ -58,7 +58,7 @@ if (!file_exists($filename_print)) {
         $source = imagecreatefromjpeg($filename_source);
         $code = imagecreatefrompng($filename_codes);
 
-        if ($config['print_frame'] == true) {
+        if ($config['print_frame'] && !($config['take_frame'])) {
             $print = imagecreatefromjpeg($filename_source);
             $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
             $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
@@ -92,7 +92,7 @@ if (!file_exists($filename_print)) {
         imagedestroy($source);
     } else {
         $print = imagecreatefromjpeg($filename_source);
-        if ($config['print_frame'] == true) {
+        if ($config['print_frame'] == true && !($config['take_frame'])) {
             $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
             $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
             $x = (imagesx($print)/2) - (imagesx($rahmen)/2);

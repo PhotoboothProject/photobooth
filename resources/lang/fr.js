@@ -114,6 +114,7 @@ const L10N = {
     'polaroid_effect': 'Effet Polaroid',
     'general_polaroid_rotation': 'Rotation de la photo polaroid',
     'use_collage': 'Autorisez la fonction du montage photo',
+    'take_frame': 'Prendre une photo avec cadre',
     'print_frame': 'Imprimez le contour sur la photo',
     'is_textonprint': 'Imprimez un texte sur la photo',
     'print_line1': 'Texte sur la première ligne',
