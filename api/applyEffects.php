@@ -29,7 +29,7 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_frame'])) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_frame'], $config['take_frame_path'])) {
         die(json_encode([
             'error' => 'Could not create collage'
         ]));
@@ -81,7 +81,7 @@ if ($config['chroma_keying']) {
 }
 
 if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
-    $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
+    $rahmen = @imagecreatefrompng($config['take_frame_path']);
     $rahmen = ResizePngImage($rahmen, imagesx($imageResource), imagesy($imageResource));
     $x = (imagesx($imageResource)/2) - (imagesx($rahmen)/2);
     $y = (imagesy($imageResource)/2) - (imagesy($rahmen)/2);

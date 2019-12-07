@@ -1,6 +1,6 @@
 <?php
 
-function createCollage($srcImagePaths, $destImagePath, $takeFrame) {
+function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== 4) {
         return false;
     }
@@ -23,7 +23,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame) {
         $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
 
         if ($takeFrame) {
-            $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
+            $rahmen = @imagecreatefrompng($framePath);
             $rahmen = ResizePngImage($rahmen, imagesx($tempSubImage), imagesy($tempSubImage));
             $x = (imagesx($tempSubImage)/2) - (imagesx($rahmen)/2);
             $y = (imagesy($tempSubImage)/2) - (imagesy($rahmen)/2);

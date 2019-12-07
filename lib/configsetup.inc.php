@@ -132,6 +132,12 @@ $configsetup = [
 			'name' => 'take_frame',
 			'value' => $config['take_frame']
 		],
+		'take_frame_path' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['take_frame_path'],
+			'name' => 'take_frame_path',
+			'value' => $config['take_frame_path']
+		],
 		'chroma_keying' => [
 			'type' => 'checkbox',
 			'name' => 'chroma_keying',
