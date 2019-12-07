@@ -25,6 +25,7 @@ if (!isset($config['webserver_ip'])) {
 }
 
 // text on print variables
+$fontpath = $config['font_path'];
 $fontsize = $config['fontsize'];
 $fontlocx = $config['locationx'];
 $fontlocy = $config['locationy'];
@@ -33,6 +34,9 @@ $fontrot = $config['rotation'];
 $line1text = $config['textonprint']['line1'];
 $line2text = $config['textonprint']['line2'];
 $line3text = $config['textonprint']['line3'];
+
+// print frame
+$print_frame = $config['print_frame_path'];
 
 // exit with error
 if (!file_exists($filename_source)) {
@@ -60,7 +64,7 @@ if (!file_exists($filename_print)) {
 
         if ($config['print_frame'] && !($config['take_frame'])) {
             $print = imagecreatefromjpeg($filename_source);
-            $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
+            $rahmen = @imagecreatefrompng($print_frame);
             $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
             $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
             $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
@@ -81,9 +85,9 @@ if (!file_exists($filename_print)) {
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['is_textonprint'] == true) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0);  // colour of font
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line1text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line3text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, $fontpath, $line3text);
         }
         // text on image - end
 
@@ -93,7 +97,7 @@ if (!file_exists($filename_print)) {
     } else {
         $print = imagecreatefromjpeg($filename_source);
         if ($config['print_frame'] == true && !($config['take_frame'])) {
-            $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
+            $rahmen = @imagecreatefrompng($print_frame);
             $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
             $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
             $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
@@ -102,9 +106,9 @@ if (!file_exists($filename_print)) {
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['is_textonprint'] == true) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0);  // colour of font
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line1text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line3text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, $fontpath, $line3text);
         }
         //text on image - end
         imagejpeg($print, $filename_print);

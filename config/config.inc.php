@@ -11,6 +11,7 @@ $config['use_qr'] = true;
 $config['use_download'] = true;
 $config['print_qrcode'] = true;
 $config['print_frame'] = false;
+$config['print_frame_path'] = '../resources/img/frames/frame.png';
 $config['crop_onprint'] = false;
 $config['crop_width'] = '1000';
 $config['crop_height'] = '500';
@@ -84,6 +85,7 @@ $config['textonprint']['line3'] = 'line 3';
 $config['locationx'] = '2250';
 $config['locationy'] = '1050';
 $config['rotation'] = '40';
+$config['font_path'] = '../resources/fonts/GreatVibes-Regular.ttf';
 $config['fontsize'] = '100';
 $config['linespace'] = '100';
 
