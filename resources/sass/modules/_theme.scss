@@ -5,6 +5,7 @@
     --font-color: transparent;
     --background-default: none;
     --background-admin: none;
+    --background-chroma: none;
 }
 
 $mainColor: var(--primary-color);
@@ -13,3 +14,4 @@ $fontColor: var(--font-color);
 
 $backgroundImage: var(--background-default);
 $adminBackground: var(--background-admin);
+$chromaBackground: var(--background-chroma);

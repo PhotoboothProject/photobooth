@@ -6,6 +6,7 @@ style.setProperty('--font-color', config.colors.font);
 
 style.setProperty('--background-default', config.background_image);
 style.setProperty('--background-admin', config.background_admin);
+style.setProperty('--background-chroma', config.background_chroma);
 
 $(function () {
     $('#wrapper').show();

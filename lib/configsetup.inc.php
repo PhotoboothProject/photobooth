@@ -188,6 +188,12 @@ $configsetup = [
 			'placeholder' => 'url(../img/bg.jpg)',
 			'value' => $config['background_admin']
 		],
+		'background_chroma' => [
+			'type' => 'input',
+			'name' => 'background_chroma',
+			'placeholder' => 'url(../img/bg.jpg)',
+			'value' => $config['background_chroma']
+		],
 		'show_fork' => [
 			'type' => 'checkbox',
 			'name' => 'show_fork',

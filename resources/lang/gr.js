@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'user_interface_background_chroma': 'Chroma keying panel background image path',
     'user_interface_background_admin': 'Διαδρομή εικόνας φόντου διαχειριστή',
     'user_interface_background_image': 'διαδρομή εικόνας φόντου',
     'send': 'στείλετε',
