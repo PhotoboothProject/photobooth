@@ -73,19 +73,19 @@ if ($config['polaroid_effect']) {
     $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
 }
 
-if ($config['chroma_keying']) {
-    $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
-
-    imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
-    imagedestroy($chromaCopyResource);
-}
-
 if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
     $rahmen = @imagecreatefrompng($config['take_frame_path']);
     $rahmen = ResizePngImage($rahmen, imagesx($imageResource), imagesy($imageResource));
     $x = (imagesx($imageResource)/2) - (imagesx($rahmen)/2);
     $y = (imagesy($imageResource)/2) - (imagesy($rahmen)/2);
     imagecopy($imageResource, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+}
+
+if ($config['chroma_keying']) {
+    $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
+
+    imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
+    imagedestroy($chromaCopyResource);
 }
 
 // image scale, create thumbnail
