@@ -152,16 +152,19 @@ $configsetup = [
 		'jpeg_quality_image' => [
 			'type' => 'input',
 			'name' => 'jpeg_quality_image',
+			'placeholder' => '80',
 			'value' => $config['jpeg_quality_image']
 		],
 		'jpeg_quality_chroma' => [
 			'type' => 'input',
 			'name' => 'jpeg_quality_chroma',
+			'placeholder' => '70',
 			'value' => $config['jpeg_quality_chroma']
 		],
 		'jpeg_quality_thumb' => [
 			'type' => 'input',
 			'name' => 'jpeg_quality_thumb',
+			'placeholder' => '60',
 			'value' => $config['jpeg_quality_thumb']
 		]
 	],
