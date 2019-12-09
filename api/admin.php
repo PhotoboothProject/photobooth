@@ -27,6 +27,11 @@ if ($data['type'] == 'reset') {
         unlink('../mail-addresses.txt');
     }
 
+    // delete personal config
+    if(is_file('../config/my.config.inc.php')){
+        unlink('../config/my.config.inc.php');
+    }
+
     // delete db.txt
     if (is_file(DB_FILE)) {
         unlink(DB_FILE); // delete file
