@@ -197,6 +197,11 @@ $configsetup = [
 			'placeholder' => 'url(../img/bg.jpg)',
 			'value' => $config['background_chroma']
 		],
+		'dark_loader' => [
+			'type' => 'checkbox',
+			'name' => 'dark_loader',
+			'value' => $config['dark_loader']
+		],
 		'show_fork' => [
 			'type' => 'checkbox',
 			'name' => 'show_fork',
