@@ -107,3 +107,7 @@ $config['jpeg_quality_thumb'] = 60;
 $config['jpeg_quality_chroma'] = 70;
 $config['jpeg_quality_image'] = 80;
 
+// RESET
+$config['reset_remove_images'] = true;
+$config['reset_remove_mailtxt'] = true;
+$config['reset_remove_config'] = true;

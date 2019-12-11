@@ -489,5 +489,22 @@ $configsetup = [
 			'name' => 'print[msg]',
 			'value' => $config['print']['msg']
 		]
+	],
+	'reset' => [
+		'remove_images' => [
+			'type' => 'checkbox',
+			'name' => 'reset_remove_images',
+			'value' => $config['reset_remove_images']
+		],
+		'remove_mailtxt' => [
+			'type' => 'checkbox',
+			'name' => 'reset_remove_mailtxt',
+			'value' => $config['reset_remove_mailtxt']
+		],
+		'remove_config' => [
+			'type' => 'checkbox',
+			'name' => 'reset_remove_config',
+			'value' => $config['reset_remove_config']
+		]
 	]
 ];
