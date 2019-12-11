@@ -73,10 +73,9 @@ Please take a look at the changelog in our [Photobooth Wiki](https://github.com/
 
 ### :clap: Contributors and thanks to
 
-- [dimsemenov](https://github.com/dimsemenov/photoswipe) for photoswipe
-- [t0k4rt](https://github.com/t0k4rt/phpqrcode) for phpqrcode
-- [nihilor](https://github.com/nihilor/photobooth) for Printing feature,
-  code rework and bugfixes
+- [dimsemenov](https://github.com/dimsemenov/photoswipe)
+- [t0k4rt](https://github.com/t0k4rt/phpqrcode)
+- [nihilor](https://github.com/nihilor/photobooth)
 - [vrs01](https://github.com/vrs01)
 - [F4bsi](https://github.com/F4bsi)
 - [got-x](https://github.com/got-x)
