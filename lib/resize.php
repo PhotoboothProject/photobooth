@@ -17,7 +17,7 @@ function resizeImage($image, $max_width, $max_height)
     return imagescale($image, $new_width, $new_height, IMG_TRIANGLE);
 }
 
-function ResizePngImage($image, $max_width, $max_height)
+function resizePngImage($image, $max_width, $max_height)
 {
     if (!$image) {
         return false;

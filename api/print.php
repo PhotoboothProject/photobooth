@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 
 require_once('../lib/config.php');
 require_once('../lib/db.php');
+require_once('../lib/resize.php');
 
 if (empty($_GET['filename']) || !preg_match('/^[a-z0-9_]+\.jpg$/', $_GET['filename'])) {
     die(json_encode([
@@ -65,7 +66,7 @@ if (!file_exists($filename_print)) {
         if ($config['print_frame'] && !($config['take_frame'])) {
             $print = imagecreatefromjpeg($filename_source);
             $rahmen = imagecreatefrompng($print_frame);
-            $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
+            $rahmen = resizePngImage($rahmen, imagesx($print), imagesy($print));
             $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
             $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
             imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
@@ -98,7 +99,7 @@ if (!file_exists($filename_print)) {
         $print = imagecreatefromjpeg($filename_source);
         if ($config['print_frame'] == true && !($config['take_frame'])) {
             $rahmen = imagecreatefrompng($print_frame);
-            $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
+            $rahmen = resizePngImage($rahmen, imagesx($print), imagesy($print));
             $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
             $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
             imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
@@ -135,21 +136,6 @@ die(json_encode([
     'status' => 'ok',
     'msg' => $printimage || '',
 ]));
-
-function ResizePngImage($image, $max_width, $max_height)
-{
-    $old_width  = imagesx($image);
-    $old_height = imagesy($image);
-    $scale      = min($max_width/$old_width, $max_height/$old_height);
-    $new_width  = ceil($scale*$old_width);
-    $new_height = ceil($scale*$old_height);
-    $new = imagecreatetruecolor($new_width, $new_height);
-    imagealphablending($new, false);
-    imagesavealpha($new, true);
-    imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
-
-    return $new;
-}
 
 // Resize and crop image by center
 function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 80)
