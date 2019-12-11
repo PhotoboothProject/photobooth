@@ -64,7 +64,7 @@ if (!file_exists($filename_print)) {
 
         if ($config['print_frame'] && !($config['take_frame'])) {
             $print = imagecreatefromjpeg($filename_source);
-            $rahmen = @imagecreatefrompng($print_frame);
+            $rahmen = imagecreatefrompng($print_frame);
             $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
             $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
             $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
@@ -97,7 +97,7 @@ if (!file_exists($filename_print)) {
     } else {
         $print = imagecreatefromjpeg($filename_source);
         if ($config['print_frame'] == true && !($config['take_frame'])) {
-            $rahmen = @imagecreatefrompng($print_frame);
+            $rahmen = imagecreatefrompng($print_frame);
             $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
             $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
             $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
