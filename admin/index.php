@@ -68,14 +68,17 @@ require_once('../lib/configsetup.inc.php');
 								case 'input':
 									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field[
 										'value'].'" placeholder="'.$field['placeholder'].'"/>';
-								break;
+									break;
+								case 'hidden':
+									echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
+									break;
 								case 'checkbox':
 									$checked = '';
 									if ($field['value'] == 'true') {
 										$checked = ' checked="checked"';
 									}
 									echo '<label><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span data-l10n="'.$key.'">'.$key.'</span></label>';
-								break;
+									break;
 								case 'multi-select':
 								case 'select':
 									$selectTag = '<select name="'.$field['name'] . ($field['type'] === 'multi-select' ? '[]' : '') . '"' . ($field['type'] === 'multi-select' ? ' multiple="multiple" size="10"' : '') . '>';
@@ -88,7 +91,7 @@ require_once('../lib/configsetup.inc.php');
 											echo '<option '.$selected.' value="'.$val.'">'.$option.'</option>';
 										}
 									echo '</select>';
-								break;
+									break;
 							}
 							echo '</div>';
 						}
