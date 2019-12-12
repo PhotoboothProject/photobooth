@@ -36,6 +36,7 @@ $config['background_admin'] = null;
 $config['background_chroma'] = null;
 $config['force_buzzer'] = false;
 $config['dark_loader'] = false;
+$config['webserver_ip'] = null;
 
 // specify key id to use that key to take a picture or collage (e.g. 13 is the enter key)
 // use for example https://keycode.info to get the key code

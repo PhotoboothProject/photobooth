@@ -53,6 +53,12 @@ $configsetup = [
 			'name' => 'use_qr',
 			'value' => $config['use_qr']
 		],
+		'webserver_ip' => [
+			'type' => 'input',
+			'name' => 'webserver_ip',
+			'placeholder' => '127.0.0.1',
+			'value' => $config['webserver_ip']
+		],
 		'use_download' => [
 			'type' => 'checkbox',
 			'name' => 'use_download',

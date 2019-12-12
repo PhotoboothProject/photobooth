@@ -64,6 +64,7 @@ const L10N = {
     'keyingerror': '¡La incrustación en el croma verde es imposible!',
     'use_print': 'Utilizar la impresion',
     'use_qr': 'Utilizar los códigos QR',
+    'general_webserver_ip': 'IP address of the Photobooth web server',
     'use_download': 'Permitir descargas',
     'print_qrcode': 'Código QR en la imagen en proceso de impresión',
     'show_gallery': 'Muestre la galería',

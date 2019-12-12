@@ -64,6 +64,7 @@ const L10N = {
     'keyingerror': 'Chroma-Keying nicht möglich!',
     'use_print': 'Drucken aktivieren',
     'use_qr': 'QR-Code aktivieren',
+    'general_webserver_ip': 'IP-Adresse des Photobooth Webservers',
     'use_download': 'Download aktivieren',
     'print_qrcode': 'QR-Code auf dem Bild beim Drucken',
     'show_gallery': 'Galerie aktivieren',

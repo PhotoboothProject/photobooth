@@ -64,6 +64,7 @@ const L10N = {
     'keyingerror': 'Chroma-Keying nicht möglich!',
     'use_print': 'Ενεργοποίηση εκτύπωσης',
     'use_qr': 'Ενεργοποιήστε τον κωδικό QR',
+    'general_webserver_ip': 'IP address of the Photobooth web server',
     'use_download': 'Επιτρέψτε τη λήψη',
     'print_qrcode': 'QR κώδικα στην εικόνα κατά την εκτύπωση',
     'show_gallery': 'Ενεργοποιήστε τη συλλογή',
