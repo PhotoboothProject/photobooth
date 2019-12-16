@@ -4,9 +4,9 @@ style.setProperty('--primary-color', config.colors.primary);
 style.setProperty('--secondary-color', config.colors.secondary);
 style.setProperty('--font-color', config.colors.font);
 
-if (config.color_theme === 'blue-gray') {
-    $('#wrapper').addClass('bluegray-bg');
-}
+style.setProperty('--background-default', config.background_image);
+style.setProperty('--background-admin', config.background_admin);
+style.setProperty('--background-chroma', config.background_chroma);
 
 $(function () {
     $('#wrapper').show();

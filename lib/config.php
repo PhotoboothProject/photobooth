@@ -92,6 +92,18 @@ if (is_array($config['color_theme'])) {
     $config['colors'] = $colors['default'];
 }
 
+if (!isset($config['background_image'])) {
+    $config['background_image'] = 'url(../img/bg.jpg)';
+}
+
+if (!isset($config['background_admin'])) {
+    $config['background_admin'] = 'url(../img/bg.jpg)';
+}
+
+if (!isset($config['background_chroma'])) {
+    $config['background_chroma'] = 'url(../img/bg.jpg)';
+}
+
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not write config/my.config.inc.php.');
 } elseif (!file_exists($my_config_file) && !is_writable(__DIR__ . '/../config/')) {

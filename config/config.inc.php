@@ -31,6 +31,9 @@ $config['chroma_keying'] = true;
 $config['use_collage'] = false;
 $config['continuous_collage'] = false;
 $config['color_theme'] = 'default'; // possible values are default, blue-gray, or an array with the corresponding colors (e.g. ['primary' => '#fff', 'secondary'=>'#a1a1a1', 'font'=>'#000'])
+$config['background_image'] = null;
+$config['background_admin'] = null;
+$config['background_chroma'] = null;
 $config['force_buzzer'] = false;
 
 // specify key id to use that key to take a picture or collage (e.g. 13 is the enter key)

@@ -1,5 +1,8 @@
 /* exported L10N */
 const L10N = {
+    'user_interface_background_chroma': 'Chroma keying panel background image path',
+    'user_interface_background_admin': 'Admin panel background image path',
+    'user_interface_background_image': 'Background image path',
     'send': 'Send',
     'show_error_messages': 'Show error messages',
     'general_default_imagefilter': 'Default image filter',

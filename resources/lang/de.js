@@ -1,5 +1,8 @@
 /* exported L10N */
 const L10N = {
+    'user_interface_background_chroma': 'Pfad zum Hintergrundbild im Chroma-Keying Panel',
+    'user_interface_background_admin': 'Pfad zum Hintergrundbild im Admin Panel',
+    'user_interface_background_image': 'Pfad zum Hintergrundbild',
     'send': 'Senden',
     'show_error_messages': 'Fehlermeldungen anzeigen',
     'general_default_imagefilter': 'Standardbildfilter',
