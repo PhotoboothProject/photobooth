@@ -23,11 +23,11 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath) {
         $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
 
         if ($takeFrame) {
-            $rahmen = imagecreatefrompng($framePath);
-            $rahmen = resizePngImage($rahmen, imagesx($tempSubImage), imagesy($tempSubImage));
-            $x = (imagesx($tempSubImage)/2) - (imagesx($rahmen)/2);
-            $y = (imagesy($tempSubImage)/2) - (imagesy($rahmen)/2);
-            imagecopy($tempSubImage, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+            $frame = imagecreatefrompng($framePath);
+            $frame = resizePngImage($frame, imagesx($tempSubImage), imagesy($tempSubImage));
+            $x = (imagesx($tempSubImage)/2) - (imagesx($frame)/2);
+            $y = (imagesy($tempSubImage)/2) - (imagesy($frame)/2);
+            imagecopy($tempSubImage, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
         }
 
         imagecopyresized($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $width / 2, $height / 2, $width, $height);

@@ -74,11 +74,11 @@ if ($config['polaroid_effect']) {
 }
 
 if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
-    $rahmen = imagecreatefrompng($config['take_frame_path']);
-    $rahmen = resizePngImage($rahmen, imagesx($imageResource), imagesy($imageResource));
-    $x = (imagesx($imageResource)/2) - (imagesx($rahmen)/2);
-    $y = (imagesy($imageResource)/2) - (imagesy($rahmen)/2);
-    imagecopy($imageResource, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+    $frame = imagecreatefrompng($config['take_frame_path']);
+    $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
+    $x = (imagesx($imageResource)/2) - (imagesx($frame)/2);
+    $y = (imagesy($imageResource)/2) - (imagesy($frame)/2);
+    imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
 }
 
 if ($config['chroma_keying']) {

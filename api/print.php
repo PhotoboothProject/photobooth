@@ -65,11 +65,11 @@ if (!file_exists($filename_print)) {
 
         if ($config['print_frame'] && !($config['take_frame'])) {
             $print = imagecreatefromjpeg($filename_source);
-            $rahmen = imagecreatefrompng($print_frame);
-            $rahmen = resizePngImage($rahmen, imagesx($print), imagesy($print));
-            $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
-            $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
-            imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+            $frame = imagecreatefrompng($print_frame);
+            $frame = resizePngImage($frame, imagesx($print), imagesy($print));
+            $x = (imagesx($print)/2) - (imagesx($frame)/2);
+            $y = (imagesy($print)/2) - (imagesy($frame)/2);
+            imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
             imagejpeg($print, $filename_print);
             imagedestroy($print);
             // $source needs to be redefined, picture with frame now exists inside $filename_print
@@ -98,11 +98,11 @@ if (!file_exists($filename_print)) {
     } else {
         $print = imagecreatefromjpeg($filename_source);
         if ($config['print_frame'] == true && !($config['take_frame'])) {
-            $rahmen = imagecreatefrompng($print_frame);
-            $rahmen = resizePngImage($rahmen, imagesx($print), imagesy($print));
-            $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
-            $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
-            imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+            $frame = imagecreatefrompng($print_frame);
+            $frame = resizePngImage($frame, imagesx($print), imagesy($print));
+            $x = (imagesx($print)/2) - (imagesx($frame)/2);
+            $y = (imagesy($print)/2) - (imagesy($frame)/2);
+            imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
         }
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['is_textonprint'] == true) {
