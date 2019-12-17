@@ -17,6 +17,13 @@ $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $file
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $filename;
 $status = false;
 
+// QR
+if (!isset($config['webserver_ip'])) {
+    $SERVER_IP = $_SERVER['HTTP_HOST'];
+} else {
+    $SERVER_IP = $config['webserver_ip'];
+}
+
 // text on print variables
 $fontsize = $config['fontsize'];
 $fontlocx = $config['locationx'];
@@ -39,7 +46,7 @@ if (!file_exists($filename_print)) {
         // create qr code
         if (!file_exists($filename_codes)) {
             include('../vendor/phpqrcode/qrlib.php');
-            $url = 'http://'.$_SERVER['HTTP_HOST'].'/api/download.php?image=';
+            $url = 'http://'.$SERVER_IP.'/api/download.php?image=';
             QRcode::png($url.$filename, $filename_codes, QR_ECLEVEL_H, 10);
         }
 
