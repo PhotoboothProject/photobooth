@@ -35,6 +35,8 @@ $config['background_image'] = null;
 $config['background_admin'] = null;
 $config['background_chroma'] = null;
 $config['force_buzzer'] = false;
+$config['dark_loader'] = false;
+$config['webserver_ip'] = null;
 
 // specify key id to use that key to take a picture or collage (e.g. 13 is the enter key)
 // use for example https://keycode.info to get the key code
@@ -107,3 +109,7 @@ $config['jpeg_quality_thumb'] = 60;
 $config['jpeg_quality_chroma'] = 70;
 $config['jpeg_quality_image'] = 80;
 
+// RESET
+$config['reset_remove_images'] = true;
+$config['reset_remove_mailtxt'] = true;
+$config['reset_remove_config'] = true;

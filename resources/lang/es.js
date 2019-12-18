@@ -54,6 +54,9 @@ const L10N = {
     'folders': 'Carpetas',
     'commands': 'Los comandos',
     'reset': 'Reiniciar',
+    'remove_images': 'Delete images',
+    'remove_mailtxt': 'Delete "mail-addresses.txt"',
+    'remove_config': 'Delete personal configuration (my.config.inc.php)',
     'language': 'Elija el idioma',
     'dev': 'Modo desarrollador',
     'file_format_date': 'Utilice imágenes al formato fecha.',
@@ -61,6 +64,7 @@ const L10N = {
     'keyingerror': '¡La incrustación en el croma verde es imposible!',
     'use_print': 'Utilizar la impresion',
     'use_qr': 'Utilizar los códigos QR',
+    'general_webserver_ip': 'IP address of the Photobooth web server',
     'use_download': 'Permitir descargas',
     'print_qrcode': 'Código QR en la imagen en proceso de impresión',
     'show_gallery': 'Muestre la galería',
@@ -130,5 +134,6 @@ const L10N = {
     'jpeg_quality_jpeg_quality_image': 'Calidad de JPEG para fotos (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'Calidad de JPEG para chroma-keying (-1 ... 100)',
     'jpeg_quality_jpeg_quality_thumb': 'Calidad de JPEG para thumbnails (-1 ... 100)',
-    'abort': 'Abortar'
+    'abort': 'Abortar',
+    'dark_loader': 'Dark display while countdown'
 }

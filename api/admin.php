@@ -10,21 +10,32 @@ if (!isset($data['type'])) {
 }
 
 if ($data['type'] == 'reset') {
-    // empty folders
-    foreach ($config['foldersAbs'] as $folder) {
-        if (is_dir($folder)) {
-            $files = glob($folder.'/*.jpg');
-            foreach ($files as $file) { // iterate files
-                if (is_file($file)) {
-                    unlink($file); // delete file
+    if($config['reset_remove_images']) {
+        // empty folders
+        foreach ($config['foldersAbs'] as $folder) {
+            if (is_dir($folder)) {
+                $files = glob($folder.'/*.jpg');
+                foreach ($files as $file) { // iterate files
+                    if (is_file($file)) {
+                        unlink($file); // delete file
+                    }
                 }
             }
         }
     }
 
-    // delete mail-addresses.txt
-    if(is_file('../mail-addresses.txt')){
-        unlink('../mail-addresses.txt');
+    if($config['reset_remove_mailtxt']) {
+        // delete mail-addresses.txt
+        if(is_file('../mail-addresses.txt')){
+            unlink('../mail-addresses.txt');
+        }
+    }
+
+    if($config['reset_remove_config']) {
+        // delete personal config
+        if(is_file('../config/my.config.inc.php')){
+            unlink('../config/my.config.inc.php');
+        }
     }
 
     // delete db.txt

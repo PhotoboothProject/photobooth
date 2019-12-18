@@ -61,6 +61,7 @@ const photoBooth = (function () {
     // reset whole thing
     public.reset = function () {
         loader.removeClass('open');
+        loader.removeClass('error');
         modal.empty('#qrCode');
         $('.qrbtn').removeClass('active').attr('style', '');
         $('.loading').text('');
@@ -223,6 +224,7 @@ const photoBooth = (function () {
         setTimeout(function () {
             $('.spinner').hide();
             $('.loading').empty()
+            loader.addClass('error');
             $('.loading').append($('<p>').text(L10N.error));
             if (config.show_error_messages || config.dev) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));

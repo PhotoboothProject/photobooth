@@ -54,6 +54,9 @@ const L10N = {
     'folders': 'αρχείο',
     'commands': 'εντολές',
     'reset': 'απόδοση',
+    'remove_images': 'Delete images',
+    'remove_mailtxt': 'Delete "mail-addresses.txt"',
+    'remove_config': 'Delete personal configuration (my.config.inc.php)',
     'language': 'Επιλέξτε γλώσσα',
     'dev': 'Λειτουργία ανάπτυξης',
     'file_format_date': 'Ονομάστε εικόνες με ημερομηνία',
@@ -61,6 +64,7 @@ const L10N = {
     'keyingerror': 'Chroma-Keying nicht möglich!',
     'use_print': 'Ενεργοποίηση εκτύπωσης',
     'use_qr': 'Ενεργοποιήστε τον κωδικό QR',
+    'general_webserver_ip': 'IP address of the Photobooth web server',
     'use_download': 'Επιτρέψτε τη λήψη',
     'print_qrcode': 'QR κώδικα στην εικόνα κατά την εκτύπωση',
     'show_gallery': 'Ενεργοποιήστε τη συλλογή',
@@ -129,5 +133,6 @@ const L10N = {
     'jpeg_quality_jpeg_quality_image': 'Ποιότητα JPEG για φωτογραφίες (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'Ποιότητα JPEG για chroma-keying (-1 ... 100)',
     'jpeg_quality_jpeg_quality_thumb': 'Ποιότητα JPEG για μικρογραφίες (-1 ... 100)',
-    'abort': 'Αποβάλλω'
+    'abort': 'Αποβάλλω',
+    'dark_loader': 'Dark display while countdown'
 }

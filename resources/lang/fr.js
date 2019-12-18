@@ -54,6 +54,9 @@ const L10N = {
     'folders': 'Dossiers',
     'commands': 'Les commandes',
     'reset': 'Réinitialiser',
+    'remove_images': 'Delete images',
+    'remove_mailtxt': 'Delete "mail-addresses.txt"',
+    'remove_config': 'Delete personal configuration (my.config.inc.php)',
     'language': 'Choisissez la langue',
     'dev': 'Mode développeur',
     'file_format_date': 'Utilisez images au format date',
@@ -61,6 +64,7 @@ const L10N = {
     'keyingerror': 'L\'incrustation sur fond vert n\'est pas possible!',
     'use_print': 'Utiliser l\'impression',
     'use_qr': 'Utiliser le QR code',
+    'general_webserver_ip': 'IP address of the Photobooth web server',
     'use_download': 'Autoriser les téléchargements',
     'print_qrcode': 'QR-Code sur l\'image en cours d\'impression',
     'show_gallery': 'Montrez la galerie',
@@ -130,5 +134,6 @@ const L10N = {
     'jpeg_quality_jpeg_quality_image': 'JPEG qualité des images (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'JPEG qualité pour chroma-keying (-1 ... 100)',
     'jpeg_quality_jpeg_quality_thumb': 'JPEG qualité des thumbnails (-1 ... 100)',
-    'abort': 'Avorter'
+    'abort': 'Avorter',
+    'dark_loader': 'Dark display while countdown'
 }

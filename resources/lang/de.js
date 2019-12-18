@@ -54,6 +54,9 @@ const L10N = {
     'folders': 'Ordner',
     'commands': 'Befehle',
     'reset': 'Zurücksetzen',
+    'remove_images': 'Bilder löschen',
+    'remove_mailtxt': '"mail-addresses.txt" löschen',
+    'remove_config': 'Persönliche Konfiguration löschen (my.config.inc.php)',
     'language': 'Sprache wählen',
     'dev': 'Entwicklungs-Modus',
     'file_format_date': 'Bilder mit Datum benennen',
@@ -61,6 +64,7 @@ const L10N = {
     'keyingerror': 'Chroma-Keying nicht möglich!',
     'use_print': 'Drucken aktivieren',
     'use_qr': 'QR-Code aktivieren',
+    'general_webserver_ip': 'IP-Adresse des Photobooth Webservers',
     'use_download': 'Download aktivieren',
     'print_qrcode': 'QR-Code auf dem Bild beim Drucken',
     'show_gallery': 'Galerie aktivieren',
@@ -130,5 +134,6 @@ const L10N = {
     'jpeg_quality_jpeg_quality_image': 'JPEG Qualität für Bilder (-1 ... 100)',
     'jpeg_quality_jpeg_quality_chroma': 'JPEG Qualität für Chroma-Keying (-1 ... 100)',
     'jpeg_quality_jpeg_quality_thumb': 'JPEG Qualität für Thumbnails (-1 ... 100)',
-    'abort': 'Abbrechen'
+    'abort': 'Abbrechen',
+    'dark_loader': 'Dunkle Anzeige beim Countdown'
 }
