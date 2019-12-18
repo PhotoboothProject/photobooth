@@ -29,7 +29,7 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp)) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_frame'], $config['take_frame_path'])) {
         die(json_encode([
             'error' => 'Could not create collage'
         ]));
@@ -71,6 +71,14 @@ if ($config['polaroid_effect']) {
     $polaroid_rotation = $config['polaroid_rotation'];
 
     $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
+}
+
+if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
+    $frame = imagecreatefrompng($config['take_frame_path']);
+    $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
+    $x = (imagesx($imageResource)/2) - (imagesx($frame)/2);
+    $y = (imagesy($imageResource)/2) - (imagesy($frame)/2);
+    imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
 }
 
 if ($config['chroma_keying']) {

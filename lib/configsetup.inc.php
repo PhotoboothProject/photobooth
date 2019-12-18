@@ -127,6 +127,17 @@ $configsetup = [
 			'name' => 'polaroid_rotation',
 			'value' => $config['polaroid_rotation']
 		],
+		'take_frame' => [
+			'type' => 'checkbox',
+			'name' => 'take_frame',
+			'value' => $config['take_frame']
+		],
+		'take_frame_path' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['take_frame_path'],
+			'name' => 'take_frame_path',
+			'value' => $config['take_frame_path']
+		],
 		'chroma_keying' => [
 			'type' => 'checkbox',
 			'name' => 'chroma_keying',
@@ -315,6 +326,12 @@ $configsetup = [
 			'name' => 'print_frame',
 			'value' => $config['print_frame']
 		],
+		'frame_path' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['print_frame_path'],
+			'name' => 'print_frame_path',
+			'value' => $config['print_frame_path']
+		],
 		'crop_onprint' => [
 			'type' => 'checkbox',
 			'name' => 'crop_onprint',
@@ -372,6 +389,12 @@ $configsetup = [
 			'placeholder' => $defaultConfig['rotation'],
 			'name' => 'rotation',
 			'value' => $config['rotation']
+		],
+		'font_path' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['font_path'],
+			'name' => 'font_path',
+			'value' => $config['font_path']
 		],
 		'fontsize' => [
 			'type' => 'input',
