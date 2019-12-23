@@ -245,7 +245,7 @@ $configsetup = [
 		],
 		'print' => [
 			'type' => 'input',
-			'placeholder' => 'print',
+			'name' => 'folders[print]',
 			'placeholder' => $defaultConfig['folders']['print'],
 			'value' => $config['folders']['print']
 		],
