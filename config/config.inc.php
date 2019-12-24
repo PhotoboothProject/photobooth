@@ -18,6 +18,7 @@ $config['crop_height'] = '500';
 $config['use_mail'] = false; // mail data needs to be configured
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
+$config['previewCamTakesPic'] = false; // HTTPS required to use tablet- or mobile phone camera
 $config['cups_button'] = false;
 $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer

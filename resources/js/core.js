@@ -11,11 +11,11 @@ const photoBooth = (function () {
         webcamConstraints = {
             audio: false,
             video: {
-                width: 720,
-                height: 480,
                 facingMode: 'user',
             }
-        };
+        },
+        videoView = $('#video--view').get(0),
+        videoSensor = document.querySelector('#video--sensor');
 
     let timeOut,
         nextCollageNumber = 0,
@@ -107,9 +107,8 @@ const photoBooth = (function () {
 
         getMedia.call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
-                $('#video').show();
-                const video = $('#video').get(0);
-                video.srcObject = stream;
+                $('#video--view').show();
+                videoView.srcObject = stream;
                 public.stream = stream;
             })
             .catch(function (error) {
@@ -121,7 +120,7 @@ const photoBooth = (function () {
         if (public.stream) {
             const track = public.stream.getTracks()[0];
             track.stop();
-            $('#video').hide();
+            $('#video--view').hide();
         }
     }
 
@@ -170,12 +169,18 @@ const photoBooth = (function () {
         }
 
         if (config.previewFromCam) {
+            if (config.previewCamTakesPic && !config.dev) {
+                videoSensor.width = videoView.videoWidth;
+                videoSensor.height = videoView.videoHeight;
+                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
+            }
             public.stopVideo();
         }
 
         const data = {
             filter: imgFilter,
             style: photoStyle,
+            canvasimg: videoSensor.toDataURL('image/jpeg'),
         };
 
         if (photoStyle === 'collage') {
@@ -199,6 +204,7 @@ const photoBooth = (function () {
 
                 $('.spinner').hide();
                 $('.loading').empty();
+                $('#video--sensor').hide();
 
                 if (config.continuous_collage) {
                     setTimeout(() => {
@@ -229,6 +235,7 @@ const photoBooth = (function () {
         setTimeout(function () {
             $('.spinner').hide();
             $('.loading').empty()
+            $('#video--sensor').hide();
             loader.addClass('error');
             $('.loading').append($('<p>').text(L10N.error));
             if (config.show_error_messages || config.dev) {

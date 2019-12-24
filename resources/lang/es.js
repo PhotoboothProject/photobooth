@@ -77,6 +77,7 @@ const L10N = {
     'general_cntdwn_time': 'Cuenta regresiva en segundos',
     'general_cheese_time': '¡Definir el tiempo para el patataaaaas!en milisegundos.',
     'previewFromCam': 'Ver el vistazo por cámara',
+    'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Primero muestre las últimas páginas',
     'folders_images': 'Carpeta de imágenes',
     'folders_thumbs': 'Carpeta de viñetas',

@@ -77,6 +77,7 @@ const L10N = {
     'general_cntdwn_time': 'Countdown timer in seconds',
     'general_cheese_time': 'Cheeeeeeeese!-Timer in milliseconds',
     'previewFromCam': 'See preview by device cam',
+    'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Show latest images first',
     'folders_images': 'Image Folder',
     'folders_thumbs': 'Thumbnail Folder',

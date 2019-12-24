@@ -77,6 +77,7 @@ const L10N = {
     'general_cntdwn_time': 'Compte à rebours en secondes',
     'general_cheese_time': 'Définir le temps pour le Cheeeeeeeese! en millisecondes',
     'previewFromCam': 'Voir l\'aperçu par caméra',
+    'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Affichez les dernières images en premier',
     'folders_images': 'Dossier d\'images',
     'folders_thumbs': 'Dossier de vignettes',
