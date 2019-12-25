@@ -173,6 +173,18 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'previewCamTakesPic',
 			'value' => $config['previewCamTakesPic']
+		],
+		'videoWidth' => [
+			'type' => 'input',
+			'name' => 'videoWidth',
+			'placeholder' => $defaultConfig['videoWidth'],
+			'value' => $config['videoWidth']
+		],
+		'videoHeight' => [
+			'type' => 'input',
+			'name' => 'videoHeight',
+			'placeholder' => $defaultConfig['videoHeight'],
+			'value' => $config['videoHeight']
 		]
 	],
 	'jpeg_quality' => [

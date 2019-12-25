@@ -1,5 +1,7 @@
 /* exported L10N */
 const L10N = {
+    'general_videoHeight': 'Device cam picture height',
+    'general_videoWidth': 'Device cam picture width',
     'user_interface_background_chroma': 'Chroma keying panel background image path',
     'user_interface_background_admin': 'Chemin de l\'image d\'arrière-plan du panneau d\'administration',
     'user_interface_background_image': 'Chemin de l\'image de fond',
