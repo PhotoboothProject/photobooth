@@ -78,6 +78,10 @@
 }
 
 #counter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   backface-visibility: hidden;
   font-size: 12em;
   opacity: 0.2;
