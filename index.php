@@ -133,7 +133,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<div id="counter">
 					<canvas id="video--sensor"</canvas>
 				</div>
-
+				<div class="cheese"></div>
 				<div class="loading"></div>
 			</div>
 		</div>

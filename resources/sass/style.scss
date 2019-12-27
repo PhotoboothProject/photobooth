@@ -86,10 +86,20 @@
   font-size: 12em;
   opacity: 0.2;
 }
+
 #counter.tick {
   font-size: 1em;
   opacity: 1;
   transition: font-size 0.75s, opacity 0.75s;
+}
+
+.cheese {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 3em;
 }
 
 #loader {

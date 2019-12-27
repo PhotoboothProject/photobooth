@@ -148,13 +148,14 @@ const photoBooth = (function () {
             console.log(photoStyle);
         }
 
-        $('#counter').text('');
+        $('#counter').empty();
+        $('.cheese').empty();
 
         if (photoStyle === 'photo') {
-            $('.loading').text(L10N.cheese);
+            $('.cheese').text(L10N.cheese);
         } else {
-            $('.loading').text(L10N.cheeseCollage);
-            $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.loading');
+            $('.cheese').text(L10N.cheeseCollage);
+            $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.cheese');
         }
 
         setTimeout(() => {
@@ -190,6 +191,7 @@ const photoBooth = (function () {
 
         jQuery.post('api/takePic.php', data).done(function (result) {
             console.log('took picture', result);
+            $('.cheese').empty();
 
             // reset filter (selection) after picture was taken
             imgFilter = config.default_imagefilter;
