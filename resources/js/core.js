@@ -107,6 +107,10 @@ const photoBooth = (function () {
             return;
         }
 
+        if (config.previewCamFlipHorizontal) {
+            $('#video--view').addClass('flip-horizontal');
+        }
+
         getMedia.call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
                 $('#video--view').show();
@@ -194,6 +198,9 @@ const photoBooth = (function () {
         jQuery.post('api/takePic.php', data).done(function (result) {
             console.log('took picture', result);
             $('.cheese').empty();
+            if (config.previewCamFlipHorizontal) {
+                $('#video--view').removeClass('flip-horizontal');
+            }
 
             // reset filter (selection) after picture was taken
             imgFilter = config.default_imagefilter;

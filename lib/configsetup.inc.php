@@ -174,6 +174,11 @@ $configsetup = [
 			'name' => 'previewCamTakesPic',
 			'value' => $config['previewCamTakesPic']
 		],
+		'previewCamFlipHorizontal' => [
+			'type' => 'checkbox',
+			'name' => 'previewCamFlipHorizontal',
+			'value' => $config['previewCamFlipHorizontal']
+		],
 		'videoWidth' => [
 			'type' => 'input',
 			'name' => 'videoWidth',

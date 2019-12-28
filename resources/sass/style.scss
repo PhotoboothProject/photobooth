@@ -350,6 +350,11 @@ hr.small {
   color: #fff;
 }
 
+.flip-horizontal {
+  transform: scaleX(-1);
+  filter: FlipH;
+}
+
 .chroma-control-bar {
   margin-top: 12px;
   text-align: center;

@@ -19,6 +19,7 @@ $config['use_mail'] = false; // mail data needs to be configured
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
 $config['previewCamTakesPic'] = false; // HTTPS required to use tablet- or mobile phone camera
+$config['previewCamFlipHorizontal'] = true;
 $config['videoWidth'] = '1280';
 $config['videoHeight'] = '720';
 $config['cups_button'] = false;

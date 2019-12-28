@@ -21,6 +21,14 @@ function takePicture($filename)
         $data = base64_decode($data);
 
         file_put_contents($filename, $data);
+
+        if ($config['previewCamFlipHorizontal']) {
+            $im = imagecreatefromjpeg($filename);
+            imageflip($im, IMG_FLIP_HORIZONTAL);
+            imagejpeg($im, $filename);
+            imagedestroy($im);
+        }
+
     } else {
         $dir = dirname($filename);
         chdir($dir); //gphoto must be executed in a dir with write permission

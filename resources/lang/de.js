@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'previewCamFlipHorizontal': 'Bild von der Gerätekamera horizontal spiegeln',
     'general_videoHeight': 'Gerätekamera Bildhöhe',
     'general_videoWidth': 'Gerätekamera Bildbreite',
     'user_interface_background_chroma': 'Pfad zum Hintergrundbild im Chroma-Keying Panel',
