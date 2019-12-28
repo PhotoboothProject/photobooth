@@ -245,7 +245,8 @@ const photoBooth = (function () {
     public.errorPic = function (data) {
         setTimeout(function () {
             $('.spinner').hide();
-            $('.loading').empty()
+            $('.loading').empty();
+            $('.cheese').empty();
             $('#video--sensor').hide();
             loader.addClass('error');
             $('.loading').append($('<p>').text(L10N.error));
