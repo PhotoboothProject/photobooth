@@ -145,5 +145,6 @@ const L10N = {
     'login_enabled': 'Login aktivieren',
     'login_username': 'Benutzername',
     'login_password': 'Passwort',
-    'login_invalid': 'Benutzername oder Passwort ungültig!'
+    'login_invalid': 'Benutzername oder Passwort ungültig!',
+    'logout': 'Ausloggen'
 }
