@@ -81,6 +81,11 @@ if ($data['type'] == 'config') {
         }
     }
 
+    if (!($newConfig['login_password'] === $config['login_password'])) {
+        $hashing = password_hash($newConfig['login_password'], PASSWORD_DEFAULT);
+        $newConfig['login_password'] = $hashing;
+    }
+
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
     if (file_put_contents($my_config_file, $content)) {

@@ -6,9 +6,8 @@ require_once('../lib/configsetup.inc.php');
 
 // LOGIN
 $username = $config['login_username'];
-$password = $config['login_password'];
+$hashed_password = $config['login_password'];
 $error = false;
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 if (isset($_POST['submit'])) {
     if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && password_verify($_POST["password"], $hashed_password)) {
