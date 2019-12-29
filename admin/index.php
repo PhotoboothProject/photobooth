@@ -4,22 +4,6 @@ session_start();
 require_once('../lib/config.php');
 require_once('../lib/configsetup.inc.php');
 
-// LOGIN
-$username = $config['login_username'];
-$hashed_password = $config['login_password'];
-$error = false;
-
-if (isset($_POST['submit'])) {
-    if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && password_verify($_POST["password"], $hashed_password)) {
-        //IF USERNAME AND PASSWORD ARE CORRECT SET THE LOG-IN SESSION
-        $_SESSION['auth'] = true;
-    } else {
-        // DISPLAY FORM WITH ERROR
-        $error = true;
-    }
-}
-// END LOGIN
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -139,18 +123,10 @@ if (isset($_POST['submit'])) {
 					<span data-l10n="saveerror"></span>
 				</span>
 			</button>
-		<?php else: ?>
-		<form method='post' class="login">
-			<label for="username"><span data-l10n="login_username"></span></label>
-			<input type="text" name="username" id="username" autocomplete="on">
-			<label for="password"><span data-l10n="login_password"></span></label>
-			<input type="password" name="password" id="password" autocomplete="on">
-			<input type="submit" name="submit" value="submit">
-			<?php if ($error !== false) {
-				echo '<p style="color: red;"><span data-l10n="login_invalid"></span></p>';
-			} ?>
-		</form>
-		<?php endif; ?>
+		<?php else:
+		header("location: ../login.php");
+		exit;
+		endif; ?>
 		</div>
 	</div>
 
