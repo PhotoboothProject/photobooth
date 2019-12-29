@@ -7,13 +7,11 @@ require_once('../lib/configsetup.inc.php');
 // LOGIN
 $username = $config['login_username'];
 $password = $config['login_password'];
-$random1 = $config['login_random1'];
-$hash = md5($random1.$username);
 $error = false;
 if (isset($_POST['submit'])) {
     if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && $_POST['password'] == $password) {
         //IF USERNAME AND PASSWORD ARE CORRECT SET THE LOG-IN SESSION
-        $_SESSION["login"] = $hash;
+        $_SESSION['auth'] = true;
         header("Location: $_SERVER[PHP_SELF]");
         exit;
     } else {
@@ -53,7 +51,7 @@ if (isset($_POST['submit'])) {
 <div id="wrapper" class="adminbg" style="overflow-y: auto;">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
-		<?php if( !$config['login_enabled'] || (isset($_SESSION['login']) && $_SESSION['login'] == $hash)): ?>
+		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<button class="reset-btn">
 			<span class="save">
 				<span data-l10n="reset"></span>

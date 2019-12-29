@@ -257,12 +257,6 @@ $configsetup = [
 			'placeholder' => 'booth',
 			'name' => 'login_password',
 			'value' => $config['login_password']
-		],
-		'random1' => [
-			'type' => 'input',
-			'placeholder' => 'Q4KbXus?G',
-			'name' => 'login_random1',
-			'value' => $config['login_random1']
 		]
 	],
 	'folders' => [

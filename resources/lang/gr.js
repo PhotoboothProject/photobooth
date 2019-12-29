@@ -144,6 +144,5 @@ const L10N = {
     'login_enabled': 'Login enabled',
     'login_username': 'Username',
     'login_password': 'Password',
-    'login_random1': 'Random',
     'login_invalid': 'Username or password is invalid!'
 }

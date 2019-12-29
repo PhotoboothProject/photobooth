@@ -75,7 +75,6 @@ $config['event']['symbol'] = 'fa-heart-o';
 $config['login_enabled'] = false;
 $config['login_username'] = 'Photo';
 $config['login_password'] = 'booth';
-$config['login_random1'] = 'Q4KbXus?G'; // hash for login
 
 // GALLERY
 // should the gallery list the newest pictures first?
