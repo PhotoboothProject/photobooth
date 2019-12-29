@@ -75,6 +75,7 @@ if (isset($_POST['submit'])) {
 			<?php endif; ?>
 			</br>
 			<a class="btn btn--tiny btn--flex" href="login.php"><i class="fa fa-refresh"></i> <span data-l10n="reload"></span></a>
+			<a class="btn btn--tiny btn--flex" id="close-btn" href="./"><i class="fa fa-times"></i> <span data-l10n="close"></span></a>
 		</div>
 
 
