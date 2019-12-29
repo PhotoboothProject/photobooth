@@ -8,8 +8,10 @@ require_once('../lib/configsetup.inc.php');
 $username = $config['login_username'];
 $password = $config['login_password'];
 $error = false;
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
 if (isset($_POST['submit'])) {
-    if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && $_POST['password'] == $password) {
+    if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && password_verify($_POST["password"], $hashed_password)) {
         //IF USERNAME AND PASSWORD ARE CORRECT SET THE LOG-IN SESSION
         $_SESSION['auth'] = true;
         header("Location: $_SERVER[PHP_SELF]");
@@ -143,9 +145,9 @@ if (isset($_POST['submit'])) {
 		<?php else: ?>
 		<form method='post' class="login">
 			<label for="username"><span data-l10n="login_username"></span></label>
-			<input type="text" name="username" id="username">
+			<input type="text" name="username" id="username" autocomplete="on">
 			<label for="password"><span data-l10n="login_password"></span></label>
-			<input type="password" name="password" id="password">
+			<input type="password" name="password" id="password" autocomplete="on">
 			<input type="submit" name="submit" value="submit">
 			<?php if ($error !== false) {
 				echo '<p style="color: red;"><span data-l10n="login_invalid"></span></p>';

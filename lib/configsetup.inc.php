@@ -254,7 +254,7 @@ $configsetup = [
 		],
 		'password' => [
 			'type' => 'input',
-			'placeholder' => 'booth',
+			'placeholder' => NULL,
 			'name' => 'login_password',
 			'value' => $config['login_password']
 		]
