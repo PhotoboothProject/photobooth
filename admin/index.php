@@ -13,8 +13,6 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && password_verify($_POST["password"], $hashed_password)) {
         //IF USERNAME AND PASSWORD ARE CORRECT SET THE LOG-IN SESSION
         $_SESSION['auth'] = true;
-        header("Location: $_SERVER[PHP_SELF]");
-        exit;
     } else {
         // DISPLAY FORM WITH ERROR
         $error = true;
