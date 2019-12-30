@@ -56,6 +56,8 @@ if (isset($_POST['submit'])) {
 <body class="deselect">
 	<div id="wrapper">
 		<div class="login-panel">
+			<h2>Photobooth Login</h2>
+			<hr>
 			<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)):
 			header("location: ../admin/index.php");
 			exit;
