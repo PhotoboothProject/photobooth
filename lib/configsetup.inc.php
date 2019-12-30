@@ -257,6 +257,16 @@ $configsetup = [
 			'placeholder' => NULL,
 			'name' => 'login_password',
 			'value' => $config['login_password']
+		],
+		'protect_admin' => [
+			'type' => 'checkbox',
+			'name' => 'protect_admin',
+			'value' => $config['protect_admin']
+		],
+		'protect_index' => [
+			'type' => 'checkbox',
+			'name' => 'protect_index',
+			'value' => $config['protect_index']
 		]
 	],
 	'folders' => [

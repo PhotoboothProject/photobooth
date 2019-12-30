@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once('lib/config.php');
 require_once('lib/db.php');
@@ -41,7 +42,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 <body class="deselect">
 	<div id="wrapper">
-
+	<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect_index'])): ?>
 		<!-- Start Page -->
 		<div class="stages" id="start">
 			<?php if ($config['show_gallery']): ?>
@@ -210,6 +211,10 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		<div style="position:absolute; bottom:0; right:0;">
 			<img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
 		</div>
+	<?php else:
+	header("location: login.php");
+	exit;
+	endif; ?>
 	</div>
 
 	<script type="text/javascript" src="api/config.php"></script>

@@ -146,5 +146,8 @@ const L10N = {
     'login_username': 'Benutzername',
     'login_password': 'Passwort',
     'login_invalid': 'Benutzername oder Passwort ungültig!',
-    'logout': 'Ausloggen'
+    'logout': 'Ausloggen',
+    'admin_panel': 'Admin Panel',
+    'protect_admin': 'Admin Panel schützen',
+    'protect_index': 'Startseite schützen'
 }

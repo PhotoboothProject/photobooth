@@ -58,10 +58,7 @@ if (isset($_POST['submit'])) {
 		<div class="login-panel">
 			<h2>Photobooth Login</h2>
 			<hr>
-			<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)):
-			header("location: ../admin/index.php");
-			exit;
-			else: ?>
+			<?php if($config['login_enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 			<form method='post' class="login">
 				<label for="username"><span data-l10n="login_username"></span></label>
 				<input type="text" name="username" id="username" autocomplete="on" required>
@@ -75,9 +72,17 @@ if (isset($_POST['submit'])) {
 				} ?>
 			</form>
 			<?php endif; ?>
-			</br>
-			<a class="btn btn--tiny btn--flex" href="login.php"><i class="fa fa-refresh"></i> <span data-l10n="reload"></span></a>
-			<a class="btn btn--tiny btn--flex" id="close-btn" href="./"><i class="fa fa-times"></i> <span data-l10n="close"></span></a>
+			<?php if(!$config['protect_admin'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+			<p><a href="admin/index.php" class="btn btn--tiny btn--flex"><i class="fa fa-cog"></i> <span data-l10n="admin_panel"></span></a></p>
+			<?php endif; ?>
+			<p><a href="gallery.php" class="btn btn--tiny btn--flex"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a></p>
+			<p><a href="login.php" class="btn btn--tiny btn--flex"><i class="fa fa-refresh"></i> <span data-l10n="reload"></span></a></p>
+			<?php if(!$config['protect_index'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+			<p><a href="./" class="btn btn--tiny btn--flex" ><i class="fa fa-times"></i> <span data-l10n="close"></span></a></p>
+			<?php endif; ?>
+			<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
+			<p><a href="logout.php" class="btn btn--tiny btn--flex"><i class="fa fa-sign-out"></i> <span data-l10n="logout"></span></a></p>
+			<?php endif; ?>
 		</div>
 
 
