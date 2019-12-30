@@ -34,7 +34,7 @@ require_once('../lib/configsetup.inc.php');
 <div id="wrapper" class="adminbg" style="overflow-y: auto;">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
-		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true && $config['protect_admin'])): ?>
+		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin']): ?>
 		<button class="reset-btn">
 			<span class="save">
 				<span data-l10n="reset"></span>
