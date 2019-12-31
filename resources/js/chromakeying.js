@@ -172,8 +172,7 @@ function printImageHandler(ev) {
             printImage(data.filename, () => {
                 setTimeout(function () {
                     $('#print_mesg').removeClass('modal--show');
-
-                    window.location.reload();
+                    $('#print-btn').blur();
                 }, 5000);
             })
         });
@@ -189,6 +188,7 @@ function saveImageHandler(ev) {
         saveImage(() => {
             setTimeout(function () {
                 $('#save_mesg').removeClass('modal--show');
+                $('#save-btn').blur();
             }, 2000);
         });
     }, 1000);
