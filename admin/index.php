@@ -53,7 +53,7 @@ require_once('../lib/configsetup.inc.php');
 			</span>
 		</button>
 
-		<?php if($_SESSION['auth'] === true): ?>
+		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
 		<p><a href="../logout.php" class="btn btn--tiny btn--flex fa fa-sign-out"><span data-l10n="logout"></span></a></p>
 		<?php endif; ?>
 
