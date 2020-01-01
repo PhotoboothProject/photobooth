@@ -75,6 +75,7 @@
 
 .cheese {
   position: absolute;
+  color: $cheeseColor;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -86,10 +87,10 @@
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.9);
+  background: $background_countdownColor;
   background-size: cover;
   background-position: center center;
-  color: #252525;
+  color: $countdownColor;
   z-index: 100;
   text-align: center;
   position: absolute;
@@ -104,7 +105,7 @@
     bottom: 0;
     left: 0;
     z-index: -1;
-    background-color: #fff;
+    background-color: $background_countdownColor;
     opacity: 1;
     transition: opacity 0.5s;
   }
@@ -120,17 +121,9 @@
   }
 
   .spinner {
+    color: $cheeseColor;
     font-size: 80px;
   }
-
-  &.darkloader {
-    &:after {
-      background-color: #252525;
-    }
-    background: rgba(0,0,0,0.9);
-    color: #fff;
-  }
-
 }
 
 .homebtn {

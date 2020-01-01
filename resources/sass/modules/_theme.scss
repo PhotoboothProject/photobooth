@@ -3,6 +3,9 @@
     --primary-color: transparent;
     --secondary-color: transparent;
     --font-color: transparent;
+    --countdown-color: transparent;
+    --background-countdown-color: transparent;
+    --cheese-color: transparent;
     --background-default: none;
     --background-admin: none;
     --background-chroma: none;
@@ -11,7 +14,9 @@
 $mainColor: var(--primary-color);
 $hoverColor: var(--secondary-color);
 $fontColor: var(--font-color);
-
+$countdownColor: var(--countdown-color);
+$background_countdownColor: var(--background-countdown-color);
+$cheeseColor: var(--cheese-color);
 $backgroundImage: var(--background-default);
 $adminBackground: var(--background-admin);
 $chromaBackground: var(--background-chroma);

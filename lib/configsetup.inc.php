@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/filter.php');
+require_once(__DIR__ . '/colors.php');
 
 $configsetup = [
 	'general' => [
@@ -223,16 +224,6 @@ $configsetup = [
 		]
 	],
 	'user_interface' => [
-		'color_theme' => [
-			'type' => 'select',
-			'name' => 'color_theme',
-			'placeholder' => $defaultConfig['color_theme'],
-			'options' => [
-				'default' => 'default',
-				'blue-gray' => 'blue-gray'
-			],
-			'value' => $config['color_theme']
-		],
 		'background_image' => [
 			'type' => 'input',
 			'name' => 'background_image',
@@ -251,11 +242,6 @@ $configsetup = [
 			'placeholder' => 'url(../img/bg.jpg)',
 			'value' => $config['background_chroma']
 		],
-		'dark_loader' => [
-			'type' => 'checkbox',
-			'name' => 'dark_loader',
-			'value' => $config['dark_loader']
-		],
 		'show_fork' => [
 			'type' => 'checkbox',
 			'name' => 'show_fork',
@@ -270,6 +256,48 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'rounded_corners',
 			'value' => $config['rounded_corners']
+		],
+		'colors_primary' => [
+			'type' => 'select',
+			'name' => 'colors[primary]',
+			'placeholder' => $defaultConfig['colors']['primary'],
+			'options' => AVAILABLE_COLORS,
+			'value' => $config['colors']['primary']
+		],
+		'colors_secondary' => [
+			'type' => 'select',
+			'name' => 'colors[secondary]',
+			'placeholder' => $defaultConfig['colors']['secondary'],
+			'options' => AVAILABLE_COLORS,
+			'value' => $config['colors']['secondary']
+		],
+		'colors_font' => [
+			'type' => 'select',
+			'name' => 'colors[font]',
+			'placeholder' => $defaultConfig['colors']['font'],
+			'options' => AVAILABLE_COLORS,
+			'value' => $config['colors']['font']
+		],
+		'colors_countdown' => [
+			'type' => 'select',
+			'name' => 'colors[countdown]',
+			'placeholder' => $defaultConfig['colors']['countdown'],
+			'options' => AVAILABLE_COLORS,
+			'value' => $config['colors']['countdown']
+		],
+		'colors_background_countdown' => [
+			'type' => 'select',
+			'name' => 'colors[background_countdown]',
+			'placeholder' => $defaultConfig['colors']['background_countdown'],
+			'options' => AVAILABLE_COLORS,
+			'value' => $config['colors']['background_countdown']
+		],
+		'colors_cheese' => [
+			'type' => 'select',
+			'name' => 'colors[cheese]',
+			'placeholder' => $defaultConfig['colors']['cheese'],
+			'options' => AVAILABLE_COLORS,
+			'value' => $config['colors']['cheese']
 		]
 	],
 	'login' => [
