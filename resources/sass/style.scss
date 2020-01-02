@@ -69,7 +69,6 @@
     flex-grow: 1;
     max-width: 250px;
     margin: initial;
-    margin-left: 2px;
   }
   @media (max-width: 576px) {
     span {
@@ -142,8 +141,8 @@
 
 .homebtn {
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 0;
+  top: 0;
   font-size: 14px;
   width: 130px;
 }
@@ -266,14 +265,18 @@ hr.small {
     left: 0;
   }
 
+  .cups-button {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
   .startInner {
     background: rgba(0,0,0,0.5);
     color: #fff;
     text-align: center;
     padding: 1rem;
     text-transform: uppercase;
-    border: 0 none;
-    border-radius: 10px;
 
     .names {
       margin-top: 1rem;

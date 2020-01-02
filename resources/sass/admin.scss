@@ -9,8 +9,6 @@ $success: #2ecc71;
 button {
   border: 0 none;
   color: #fff;
-  border: 2px solid #eee;
-  border-radius: 10px;
 }
 
 
@@ -34,8 +32,6 @@ input[type="checkbox"] {
   height: auto;
   margin: 50px auto;
   background: #fff;
-  border: 0 none;
-  border-radius: 10px;
   position: relative;
   max-width: 100%;
 }
@@ -43,11 +39,8 @@ input[type="checkbox"] {
 .panel {
   .panel-heading {
     padding: 10px;
-    margin-top: 2px;
     cursor: pointer;
     border: 1px solid #eee;
-    border-radius: 5px;
-
     .plus {
       display: inline-block;
     }
@@ -63,9 +56,7 @@ input[type="checkbox"] {
   .panel-body {
     display: none;
     padding: 20px;
-    margin-top: 1px;
     border: 1px solid #eee;
-    border-radius: 5px;
   }
 
   &.open {

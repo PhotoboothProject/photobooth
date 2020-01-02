@@ -21,14 +21,6 @@
         padding: 0;
     }
 
-    &__close {
-        border-radius: 5px;
-    }
-
-    &__reload {
-        border-radius: 5px;
-    }
-
     &__inner {
         position: relative;
         display: flex;
@@ -90,7 +82,5 @@
 
 .gallery-button {
     position: relative;
-    margin-top: 5px;
-    margin-left: 5px;
     z-index: 100;
 }

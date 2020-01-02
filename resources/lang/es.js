@@ -139,5 +139,6 @@ const L10N = {
     'jpeg_quality_jpeg_quality_chroma': 'Calidad de JPEG para chroma-keying (-1 ... 100)',
     'jpeg_quality_jpeg_quality_thumb': 'Calidad de JPEG para thumbnails (-1 ... 100)',
     'abort': 'Abortar',
-    'dark_loader': 'Dark display while countdown'
+    'dark_loader': 'Dark display while countdown',
+    'rounded_corners': 'Rounded corners'
 }

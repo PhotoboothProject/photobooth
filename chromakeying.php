@@ -25,6 +25,9 @@ if (file_exists($keyingimage)) {
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" href="resources/css/style.css" />
+		<?php if ($config['rounded_corners']): ?>
+		<link rel="stylesheet" href="resources/css/rounded.css" />
+		<?php endif; ?>
 
 		<style>
 			#wrapper {
