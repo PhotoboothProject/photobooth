@@ -5,15 +5,12 @@ function showPassword() {
 
     if (x.type === 'password') {
         x.type = 'text';
-        $('.icon').removeClass('fa-eye-slash');
-        $('.icon').addClass('fa-eye');
     } else {
         x.type = 'password';
-        $('.icon').removeClass('fa-eye');
-        $('.icon').addClass('fa-eye-slash');
     }
 }
 
-$('.password-visible').on('click', function () {
+$('.password-toggle').on('click', function () {
     showPassword();
+    $('.password-toggle').toggleClass('fa-eye fa-eye-slash');
 });

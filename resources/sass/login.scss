@@ -32,3 +32,11 @@ input[type="password"] {
   position: relative;
   max-width: 100%;
 }
+
+.password-toggle {
+  float: right;
+  margin-left: -25px;
+  margin-top: 5px;
+  position: relative;
+  z-index: 2;
+}

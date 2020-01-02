@@ -65,8 +65,8 @@ if (isset($_POST['submit'])) {
 				<label for="password"><span data-l10n="login_password"></span></label>
 				</br>
 				<input type="password" name="password" id="password" autocomplete="on" required>
-				<p><input type="checkbox" class="password-visible"> <i class="icon fa fa-eye-slash"> </i> <span data-l10n="show_password"></span></p>
-				<input type="submit" name="submit" value="Login" class="btn btn--tiny btn--flex">
+				<span toggle="#password" class="password-toggle fa fa-eye"></span>
+				<p><input type="submit" name="submit" value="Login" class="btn btn--tiny btn--flex"></p>
 				<?php if ($error !== false) {
 					echo '<p style="color: red;"><span data-l10n="login_invalid"></span></p>';
 				} ?>

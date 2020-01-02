@@ -149,6 +149,5 @@ const L10N = {
     'logout': 'Ausloggen',
     'admin_panel': 'Admin Panel',
     'protect_admin': 'Admin Panel schützen',
-    'protect_index': 'Startseite schützen',
-    'show_password': 'Passwort einblenden'
+    'protect_index': 'Startseite schützen'
 }
