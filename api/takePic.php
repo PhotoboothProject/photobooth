@@ -68,7 +68,7 @@ if ($_POST['style'] === 'photo') {
 
     if ($number > 3) {
         die(json_encode([
-            'error' => 'Collage consists only of 4 pictures',
+            'error' => 'Collage consists only of ' . $config['collage_limit'] . ' pictures',
         ]));
     }
 
@@ -81,7 +81,7 @@ if ($_POST['style'] === 'photo') {
         'success' => 'collage',
         'file' => $file,
         'current' => $number,
-        'limit' => 4,
+        'limit' => $config['collage_limit'],
     ]));
 } else {
     die(json_encode([

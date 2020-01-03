@@ -81,6 +81,11 @@ $configsetup = [
 			'placeholder' => '',
 			'value' => $config['collage_key']
 		],
+		'collage_limit' => [
+			'type' => 'hidden',
+			'name' => 'collage_limit',
+			'value' => $config['collage_limit']
+		],
 		'force_buzzer' => [
 			'type' => 'checkbox',
 			'name' => 'force_buzzer',
