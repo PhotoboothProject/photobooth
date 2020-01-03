@@ -33,6 +33,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="node_modules/photoswipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/style.css" />
+	<?php if ($config['rounded_corners']): ?>
+	<link rel="stylesheet" href="resources/css/rounded.css" />
+	<?php endif; ?>
 </head>
 
 <body class="deselect">
@@ -87,7 +90,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/lang/<?php echo $config['language']; ?>.js"></script>
 	<script>
 		$(function() {
-			let reloadElement = $('<a>');
+			let reloadElement = $('<a class="gallery__reload">');
 			reloadElement.append('<i class="fa fa-refresh"></i>');
 			reloadElement.attr('href', '#');
 			reloadElement.on('click', () => photoBooth.reloadPage());

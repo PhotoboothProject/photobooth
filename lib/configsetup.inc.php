@@ -233,6 +233,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'cups_button',
 			'value' => $config['cups_button']
+		],
+		'rounded_corners' => [
+			'type' => 'checkbox',
+			'name' => 'rounded_corners',
+			'value' => $config['rounded_corners']
 		]
 	],
 	'folders' => [

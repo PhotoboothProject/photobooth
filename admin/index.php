@@ -24,6 +24,9 @@ require_once('../lib/configsetup.inc.php');
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/admin.css" />
+	<?php if ($config['rounded_corners']): ?>
+	<link rel="stylesheet" type="text/css" href="../resources/css/rounded.css" />
+	<?php endif; ?>
 </head>
 <body class="deselect">
 <div id="wrapper" class="adminbg" style="overflow-y: auto;">
