@@ -19,7 +19,7 @@ $imagelist = array_reverse($images);
 	<meta http-equiv="refresh" content= "<?=$config['slideshow_refresh_time']?>">
 
 
-	<title>Photobooth</title>
+	<title>Photobooth Slideshow</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="resources/img/apple-touch-icon.png">
@@ -34,44 +34,41 @@ $imagelist = array_reverse($images);
 
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="resources/css/style.css" />
+	<link rel="stylesheet" href="resources/css/slideshow.css" />
 </head>
 
-<body class="deselect">
-	<div id="wrapper">
+<body class="sshow">
+	<div class="images" id="slideshow">
+		<?php if (empty($imagelist)): ?>
+		<h1 data-l10n="gallery_no_image"></h1>
+		<?php else: ?>
+		<?php
+		if ($config['slideshow_randomPicture']):
+		shuffle($imagelist);
+		endif;
+		?>
+		<?php foreach ($imagelist as $image): ?>
+		<?php
 
-		<div class="images" id="slideshow">
-			<?php if (empty($imagelist)): ?>
-			<h1 style="text-align:center; color:#ffffff" data-l10n="gallery_no_image"></h1>
-			<?php else: ?>
-			<?php
-			if ($config['slideshow_randomPicture']):
-				shuffle($imagelist);
-			endif;
-			?>
-			<?php foreach ($imagelist as $image): ?>
-			<?php
-
-			$date = '';
-			if ($config['file_format_date']) {
-				$dateObject = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
-				if ($dateObject) {
-					$date = '<i class="fa fa-clock-o"></i> ' . $dateObject->format($config['gallery']['date_format']);
-				}
+		$date = '';
+		if ($config['file_format_date']) {
+			$dateObject = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
+			if ($dateObject) {
+				$date = '<i class="fa fa-clock-o"></i> ' . $dateObject->format($config['gallery']['date_format']);
 			}
-			$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+		}
+		$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
 
-			?>
-			<div>
-				<figure>
-					<figcaption><?=$date?></figcaption>
-					<img src="<?=$filename_photo?>" alt="<?=$image?>" class="center" />
-				</figure>
-			</div>
-
-			<?php endforeach; ?>
-			<?php endif; ?>
+		?>
+		<div class="center">
+			<figure>
+				<img src="<?=$filename_photo?>" alt="<?=$image?>" />
+				<figcaption><?=$date?></figcaption>
+			</figure>
 		</div>
+
+		<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
 
 	<script type="text/javascript" src="api/config.php"></script>
