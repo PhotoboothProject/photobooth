@@ -15,9 +15,10 @@ function getImagesFromDB() {
 function appendImageToDB($filename) {
 	$images = getImagesFromDB();
 
-	$images[] = $filename;
-
-	file_put_contents(DB_FILE, json_encode($images));
+	if (!in_array($filename, $images)) {
+		$images[] = $filename;
+		file_put_contents(DB_FILE, json_encode($images));
+	}
 }
 
 function deleteImageFromDB($filename) {
