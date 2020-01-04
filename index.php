@@ -215,7 +215,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
 		</div>
 	<?php else:
-	header("location: login.php");
+	header("location: login");
 	exit;
 	endif; ?>
 	</div>
