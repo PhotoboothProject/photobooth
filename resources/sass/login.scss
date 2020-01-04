@@ -3,13 +3,13 @@
 @import "partials/basic";
 @import "partials/button";
 
-#wrapper {
+.loginbody {
   display: block;
   position: relative;
   overflow-y: auto;
   background-color: $mainColor;
   background-image: $adminBackground;
-  background-position: center center;
+  background-position: center center no-repeat;
   width: 100%;
   height: 100%;
 }

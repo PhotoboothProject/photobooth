@@ -53,46 +53,42 @@ if (isset($_POST['submit'])) {
 	<?php endif; ?>
 </head>
 
-<body class="deselect">
-	<div id="wrapper">
-		<div class="login-panel">
-			<h2>Photobooth Login</h2>
-			<hr>
-			<?php if($config['login_enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-			<form method='post' class="login">
-				<label for="username"><span data-l10n="login_username"></span></label>
-				<input type="text" name="username" id="username" autocomplete="on" required>
-				<label for="password"><span data-l10n="login_password"></span></label>
-				</br>
-				<input type="password" name="password" id="password" autocomplete="on" required>
-				<span toggle="#password" class="password-toggle fa fa-eye"></span>
-				<p><input type="submit" name="submit" value="Login" class="btn btn--tiny btn--flex"></p>
-				<?php if ($error !== false) {
-					echo '<p style="color: red;"><span data-l10n="login_invalid"></span></p>';
-				} ?>
-			</form>
-			<hr>
-			<?php endif; ?>
-			<?php if(!$config['protect_admin'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-			<p><a href="admin/index.php" class="btn btn--login"><i class="fa fa-cog"></i> <span data-l10n="admin_panel"></span></a></p>
-			<?php endif; ?>
-			<p><a href="gallery.php" class="btn btn--login"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a></p>
-			<p><a href="login.php" class="btn btn--login"><i class="fa fa-refresh"></i> <span data-l10n="reload"></span></a></p>
-			<?php if(!$config['protect_index'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-			<p><a href="./" class="btn btn--login" ><i class="fa fa-times"></i> <span data-l10n="close"></span></a></p>
-			<?php endif; ?>
-			<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
-			<p><a href="logout.php" class="btn btn--login"><i class="fa fa-sign-out"></i> <span data-l10n="logout"></span></a></p>
-			<?php endif; ?>
+<body class="loginbody">
+	<div class="login-panel">
+		<h2>Photobooth Login</h2>
+		<hr>
+		<?php if($config['login_enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<form method='post' class="login">
+			<label for="username"><span data-l10n="login_username"></span></label>
+			<input type="text" name="username" id="username" autocomplete="on" required>
+			<label for="password"><span data-l10n="login_password"></span></label>
+			</br>
+			<input type="password" name="password" id="password" autocomplete="on" required>
+			<span toggle="#password" class="password-toggle fa fa-eye"></span>
+			<p><input type="submit" name="submit" value="Login" class="btn btn--tiny btn--flex"></p>
+			<?php if ($error !== false) {
+				echo '<p style="color: red;"><span data-l10n="login_invalid"></span></p>';
+			} ?>
+		</form>
+		<hr>
+		<?php endif; ?>
+		<?php if(!$config['protect_admin'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<p><a href="admin/index.php" class="btn btn--login"><i class="fa fa-cog"></i> <span data-l10n="admin_panel"></span></a></p>
+		<?php endif; ?>
+		<p><a href="gallery.php" class="btn btn--login"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a></p>
+		<p><a href="login.php" class="btn btn--login"><i class="fa fa-refresh"></i> <span data-l10n="reload"></span></a></p>
+		<?php if(!$config['protect_index'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<p><a href="./" class="btn btn--login" ><i class="fa fa-times"></i> <span data-l10n="close"></span></a></p>
+		<?php endif; ?>
+		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
+		<p><a href="logout.php" class="btn btn--login"><i class="fa fa-sign-out"></i> <span data-l10n="logout"></span></a></p>
+		<?php endif; ?>
+	</div>
+
+	<div id="adminsettings">
+		<div style="position:absolute; bottom:0; right:0;">
+			<img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
 		</div>
-
-
-		<div id="adminsettings">
-			<div style="position:absolute; bottom:0; right:0;">
-				<img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
-			</div>
-		</div>
-
 	</div>
 
 	<script type="text/javascript" src="api/config.php"></script>
