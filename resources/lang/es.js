@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'mail_file': 'File name e-mail addresses database',
     'general_db_file': 'Database file name',
     'general_camera_mode': 'Camera facing mode',
     'previewCamFlipHorizontal': 'Flip image from device cam horizontally',
@@ -60,7 +61,7 @@ const L10N = {
     'commands': 'Los comandos',
     'reset': 'Reiniciar',
     'remove_images': 'Delete images',
-    'remove_mailtxt': 'Delete "mail-addresses.txt"',
+    'remove_mailtxt': 'Delete e-mail addresses database',
     'remove_config': 'Delete personal configuration (my.config.inc.php)',
     'language': 'Elija el idioma',
     'dev': 'Modo desarrollador',

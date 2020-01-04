@@ -25,11 +25,8 @@ if ($data['type'] == 'reset') {
     }
 
     if($config['reset_remove_mailtxt']) {
-        $mailAddressesFile = $config['foldersAbs']['data'] . '/mail-addresses.txt';
-
-        // delete mail-addresses.txt
-        if(is_file($mailAddressesFile)){
-            unlink($mailAddressesFile);
+        if (is_file(MAIL_FILE)) {
+            unlink(MAIL_FILE); // delete file
         }
     }
 
