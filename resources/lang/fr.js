@@ -102,6 +102,7 @@ const L10N = {
     'mail_subject': 'objet du mail',
     'mail_text': 'Texte',
     'mailSent': 'E-mail envoyé',
+    'mailSaved': 'E-mail address saved successfully',
     'mailError': 'Erreur d\'envoi d\'email',
     'commands_take_picture_cmd': 'Prendre une photo',
     'commands_take_picture_msg': 'Message de réussite pour prendre une photo',

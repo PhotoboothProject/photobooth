@@ -102,6 +102,7 @@ const L10N = {
     'mail_subject': 'Betreff',
     'mail_text': 'Text',
     'mailSent': 'E-Mail gesendet',
+    'mailSaved': 'E-Mail-Adresse erfolgreich gespeichert',
     'mailError': 'Fehler beim Senden der E-Mail',
     'commands_take_picture_cmd': 'Befehl zum Kamera auslösen',
     'commands_take_picture_msg': 'Erfolgsnachricht fürs Foto',

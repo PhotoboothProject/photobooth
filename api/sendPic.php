@@ -79,6 +79,7 @@ if (isset($_POST['send-link']) && $_POST['send-link'] === 'yes') {
 
     die(json_encode([
         'success' => true,
+        'saved' => true
     ]));
 }
 

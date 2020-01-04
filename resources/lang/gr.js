@@ -101,6 +101,7 @@ const L10N = {
     'mail_subject': 'σχέση',
     'mail_text': 'κείμενο',
     'mailSent': 'E-Mail αποστέλλονται',
+    'mailSaved': 'E-mail address saved successfully',
     'mailError': 'Σφάλμα κατά την αποστολή του E-Mail',
     'commands_take_picture_cmd': 'Εντολή ενεργοποίησης στην κάμερα',
     'commands_take_picture_msg': 'Μήνυμα επιτυχίας για τη φωτογραφία',

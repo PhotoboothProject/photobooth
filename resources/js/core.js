@@ -567,7 +567,11 @@ const photoBooth = (function () {
             cache: false,
             success: function (result) {
                 if (result.success) {
-                    message.fadeIn().html('<span style="color:green">' + L10N.mailSent + '</span>');
+                    if (result.saved) {
+                        message.fadeIn().html('<span style="color:green">' + L10N.mailSaved + '</span>');
+                    } else {
+                        message.fadeIn().html('<span style="color:green">' + L10N.mailSent + '</span>');
+                    }
                 } else {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
