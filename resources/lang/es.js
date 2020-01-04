@@ -169,5 +169,6 @@ const L10N = {
     'slideshow': 'Diapositivas',
     'slideshow_refreshTime': 'Actualizar página después de X segundos',
     'slideshow_pictureTime': 'Milisegundos se muestra una imagen',
-    'randomPicture': 'Mostrar imágenes al azar'
+    'randomPicture': 'Mostrar imágenes al azar',
+    'use_thumbs': 'Use thumbnails for slideshow'
 }

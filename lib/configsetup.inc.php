@@ -649,6 +649,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'slideshow_randomPicture',
 			'value' => $config['slideshow_randomPicture']
+		],
+		'use_thumbs' => [
+			'type' => 'checkbox',
+			'name' => 'slideshow_use_thumbs',
+			'value' => $config['slideshow_use_thumbs']
 		]
 	],
 	'commands' => [

@@ -57,7 +57,12 @@ $imagelist = array_reverse($images);
 				$date = '<i class="fa fa-clock-o"></i> ' . $dateObject->format($config['gallery']['date_format']);
 			}
 		}
-		$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+
+		if ($config['slideshow_use_thumbs']) {
+			$filename_photo = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+		} else {
+			$filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+		}
 
 		?>
 		<div class="center">

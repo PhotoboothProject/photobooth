@@ -110,6 +110,7 @@ $config['gallery']['date_format'] = 'd.m.Y - G:i';
 $config['slideshow_refreshTime'] = '60';
 $config['slideshow_pictureTime'] = '3000';
 $config['slideshow_randomPicture'] = true;
+$config['slideshow_use_thumbs'] = false;
 
 // TEXT ON PRINT
 $config['is_textonprint'] = false;

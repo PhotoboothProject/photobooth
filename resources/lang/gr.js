@@ -168,5 +168,6 @@ const L10N = {
     'slideshow': 'Slideshow',
     'slideshow_refreshTime': 'Ανανεώστε τη σελίδα ανά X δευτερόλεπτα',
     'slideshow_pictureTime': 'Σε χιλιοστά του δευτερολέπτου εμφανίζεται μια εικόνα',
-    'randomPicture': 'Εμφάνιση τυχαίων εικόνων'
+    'randomPicture': 'Εμφάνιση τυχαίων εικόνων',
+    'use_thumbs': 'Use thumbnails for slideshow'
 }
