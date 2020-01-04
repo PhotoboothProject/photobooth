@@ -48,6 +48,7 @@
   "general_cntdwn_time": "Countdown Timer:",
   "general_collage_cntdwn_time": "Collage-Countdown Timer:",
   "general_collage_key": "Tastencode welcher eine Collage auslöst",
+  "general_db_file": "Name der Datenbankdatei",
   "general_default_imagefilter": "Standardbildfilter",
   "general_disabled_filters": "Deaktivierte Bildfilter",
   "general_ipCamPreviewRotation": "Vorschau von URL drehen",

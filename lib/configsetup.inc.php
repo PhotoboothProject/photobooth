@@ -49,6 +49,12 @@ $configsetup = [
 			'name' => 'show_error_messages',
 			'value' => $config['show_error_messages']
 		],
+		'db_file' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['db_file'],
+			'name' => 'db_file',
+			'value' => $config['db_file']
+		],
 		'file_format_date' => [
 			'type' => 'checkbox',
 			'name' => 'file_format_date',
