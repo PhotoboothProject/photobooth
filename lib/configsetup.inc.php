@@ -688,6 +688,12 @@ $configsetup = [
 			'name' => 'send_all_later',
 			'value' => $config['send_all_later']
 		],
+		'file' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['mail_file'],
+			'name' => 'mail_file',
+			'value' => $config['mail_file']
+		],
 		'host' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['mail_host'],
