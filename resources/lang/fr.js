@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_camera_mode': 'Camera facing mode',
     'previewCamFlipHorizontal': 'Flip image from device cam horizontally',
     'general_videoHeight': 'Device cam picture height',
     'general_videoWidth': 'Device cam picture width',

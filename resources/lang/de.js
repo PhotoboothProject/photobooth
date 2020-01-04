@@ -1,5 +1,6 @@
 /* exported L10N */
 const L10N = {
+    'general_camera_mode': 'Kamerabildmodus',
     'previewCamFlipHorizontal': 'Bild von der Gerätekamera horizontal spiegeln',
     'general_videoHeight': 'Gerätekamera Bildhöhe',
     'general_videoWidth': 'Gerätekamera Bildbreite',

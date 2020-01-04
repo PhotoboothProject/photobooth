@@ -190,6 +190,16 @@ $configsetup = [
 			'name' => 'videoHeight',
 			'placeholder' => $defaultConfig['videoHeight'],
 			'value' => $config['videoHeight']
+		],
+		'camera_mode' => [
+			'type' => 'select',
+			'name' => 'camera_mode',
+			'placeholder' => $defaultConfig['camera_mode'],
+			'options' => [
+				'user' => 'Front facing camera',
+				'environment' => 'Back facing camera'
+			],
+			'value' => $config['camera_mode']
 		]
 	],
 	'jpeg_quality' => [

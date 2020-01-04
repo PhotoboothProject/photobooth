@@ -13,7 +13,7 @@ const photoBooth = (function () {
             video: {
                 width: config.videoWidth,
                 height: config.videoHeight,
-                facingMode: 'user',
+                facingMode: config.camera_mode,
             }
         },
         videoView = $('#video--view').get(0),

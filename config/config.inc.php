@@ -22,6 +22,7 @@ $config['previewCamTakesPic'] = false; // HTTPS required to use tablet- or mobil
 $config['previewCamFlipHorizontal'] = true;
 $config['videoWidth'] = '1280';
 $config['videoHeight'] = '720';
+$config['camera_mode'] = 'user'; // possible values are "user" or "environment"
 $config['cups_button'] = false;
 $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
