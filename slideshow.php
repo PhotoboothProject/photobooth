@@ -50,7 +50,7 @@ $imagelist = array_reverse($images);
 		<?php foreach ($imagelist as $image): ?>
 		<?php
 
-		$date = '';
+		$date = 'Photobooth Slideshow';
 		if ($config['file_format_date']) {
 			$dateObject = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
 			if ($dateObject) {

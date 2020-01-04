@@ -36,6 +36,8 @@
   figcaption {
     color: $fontColor;
     text-align: center;
+    background-color: $mainColor;
+    border:2px solid black;
   }
 }
 
