@@ -350,6 +350,15 @@ hr.small {
   color: #fff;
 }
 
+#video--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
 .flip-horizontal {
   transform: scaleX(-1);
   filter: FlipH;
