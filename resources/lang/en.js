@@ -135,8 +135,6 @@ const L10N = {
     'print_font_path': 'Font',
     'print_fontsize': 'Font size',
     'user_interface': 'User interface',
-    'user_interface_color_theme': 'Theme',
-    'color_theme': 'Choose a theme',
     'crop_onprint': 'Crop picture at print',
     'print_crop_width': 'New width at print',
     'print_crop_height': 'New height at print',

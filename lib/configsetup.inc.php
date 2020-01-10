@@ -1,6 +1,5 @@
 <?php
 require_once(__DIR__ . '/filter.php');
-require_once(__DIR__ . '/colors.php');
 
 $configsetup = [
 	'general' => [
@@ -258,45 +257,39 @@ $configsetup = [
 			'value' => $config['rounded_corners']
 		],
 		'colors_primary' => [
-			'type' => 'select',
+			'type' => 'color',
 			'name' => 'colors[primary]',
 			'placeholder' => $defaultConfig['colors']['primary'],
-			'options' => AVAILABLE_COLORS,
 			'value' => $config['colors']['primary']
 		],
 		'colors_secondary' => [
-			'type' => 'select',
+			'type' => 'color',
 			'name' => 'colors[secondary]',
 			'placeholder' => $defaultConfig['colors']['secondary'],
-			'options' => AVAILABLE_COLORS,
 			'value' => $config['colors']['secondary']
 		],
 		'colors_font' => [
-			'type' => 'select',
+			'type' => 'color',
 			'name' => 'colors[font]',
 			'placeholder' => $defaultConfig['colors']['font'],
-			'options' => AVAILABLE_COLORS,
 			'value' => $config['colors']['font']
 		],
 		'colors_countdown' => [
-			'type' => 'select',
+			'type' => 'color',
 			'name' => 'colors[countdown]',
 			'placeholder' => $defaultConfig['colors']['countdown'],
-			'options' => AVAILABLE_COLORS,
 			'value' => $config['colors']['countdown']
 		],
 		'colors_background_countdown' => [
-			'type' => 'select',
+			'type' => 'color',
 			'name' => 'colors[background_countdown]',
 			'placeholder' => $defaultConfig['colors']['background_countdown'],
-			'options' => AVAILABLE_COLORS,
 			'value' => $config['colors']['background_countdown']
 		],
 		'colors_cheese' => [
-			'type' => 'select',
+			'type' => 'color',
 			'name' => 'colors[cheese]',
 			'placeholder' => $defaultConfig['colors']['cheese'],
-			'options' => AVAILABLE_COLORS,
 			'value' => $config['colors']['cheese']
 		]
 	],

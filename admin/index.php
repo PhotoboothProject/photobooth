@@ -79,6 +79,10 @@ require_once('../lib/configsetup.inc.php');
 									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field[
 										'value'].'" placeholder="'.$field['placeholder'].'"/>';
 									break;
+								case 'color':
+									echo '<input type="color" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/>
+										<label data-l10n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';
+									break;
 								case 'hidden':
 									echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
 									break;

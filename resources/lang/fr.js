@@ -135,8 +135,6 @@ const L10N = {
     'print_font_path': 'Font',
     'print_fontsize': 'Taille de la police',
     'user_interface': 'Interface utilisateur',
-    'user_interface_color_theme': 'Thème',
-    'color_theme': 'Choisissez un thème',
     'crop_onprint': 'Recadrer la photo à imprimer',
     'print_crop_width': 'Nouvelle largeur à l\'impression',
     'print_crop_height': 'Nouvelle hauteur à l\'impression',

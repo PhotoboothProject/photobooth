@@ -134,8 +134,6 @@ const L10N = {
     'print_font_path': 'Font',
     'print_fontsize': 'το μέγεθος της γραμματοσειράς',
     'user_interface': 'διεπαφή χρήστη',
-    'user_interface_color_theme': 'Θέμα',
-    'color_theme': 'Επιλέξτε θέμα',
     'crop_onprint': 'Τραβήξτε την εικόνα όταν εκτυπώνετε',
     'print_crop_width': 'Νέο πλάτος εικόνας στην εκτύπωση',
     'print_crop_height': 'Νέο ύψος εικόνας στην εκτύπωση',
