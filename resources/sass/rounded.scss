@@ -75,3 +75,20 @@ button {
   border: 2px solid $borderColor;
   border-radius: 10px;
 }
+
+.slider {
+  height: 15px;
+  border-radius: 5px;
+}
+
+.slider::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
