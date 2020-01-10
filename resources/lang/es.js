@@ -1,5 +1,9 @@
 /* exported L10N */
 const L10N = {
+    'seconds': 'second(s)',
+    'milliseconds': 'milliseconds',
+    'percent': '%',
+    'degrees': '°',
     'mail_file': 'File name e-mail addresses database',
     'general_db_file': 'Database file name',
     'general_camera_mode': 'Camera facing mode',

@@ -1,5 +1,9 @@
 /* exported L10N */
 const L10N = {
+    'seconds': 'Sekunde(n)',
+    'milliseconds': 'Millisekunden',
+    'percent': '%',
+    'degrees': '°',
     'mail_file': 'Name der E-Mail-Adressen-Datenbankdatei',
     'general_db_file': 'Name der Datenbankdatei',
     'general_camera_mode': 'Kamerabildmodus',

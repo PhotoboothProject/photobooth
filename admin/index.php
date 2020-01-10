@@ -79,6 +79,19 @@ require_once('../lib/configsetup.inc.php');
 									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field[
 										'value'].'" placeholder="'.$field['placeholder'].'"/>';
 									break;
+								case 'range':
+									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label></br>
+										<div class="'.$field['name'].'"><span>'.$field['value'].'</span> <span data-l10n="'.$field['unit'].'"</span></div>
+										<input type="range" name="'.$field['name'].'" class="slider" value="'.$field['value'].'" min="'.$field['range_min'].'" max="'.$field['range_max'].'" step="'.$field['range_step'].'" placeholder="'.$field['placeholder'].'"/>
+										<script>
+										window.addEventListener("load", function() {
+											var slider = document.querySelector("input[name='.$field['name'].']");
+											slider.addEventListener("change", function() {
+												document.querySelector(".'.$field['name'].' span").innerHTML = this.value;
+											});
+										});
+										</script>';
+									break;
 								case 'color':
 									echo '<input type="color" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/>
 										<label data-l10n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';

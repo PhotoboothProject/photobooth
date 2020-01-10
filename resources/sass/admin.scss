@@ -20,8 +20,6 @@ $success: #2ecc71;
   background-attachment: fixed;
 }
 
-
-
 input[type="text"],
 select {
   background: $boxColor;
@@ -34,6 +32,30 @@ select {
 
 input[type="checkbox"] {
   margin-right: 5px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 100%;
+  background: $boxColor;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 20px;
+  background: $mainColor;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 20px;
+  background: $mainColor;
+  cursor: pointer;
 }
 
 .admin-panel {
