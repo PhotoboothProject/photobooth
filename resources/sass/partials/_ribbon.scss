@@ -37,7 +37,7 @@
 
     &:after {
         content: attr(data-ribbon);
-        color: $fontColor;
+        color: $buttonFontColor;
         font: 700 1em "Helvetica Neue", Helvetica, Arial, sans-serif;
         line-height: 1.54em;
         text-decoration: none;

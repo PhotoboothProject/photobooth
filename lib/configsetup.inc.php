@@ -274,6 +274,12 @@ $configsetup = [
 			'placeholder' => $defaultConfig['colors']['font'],
 			'value' => $config['colors']['font']
 		],
+		'colors_button_font' => [
+			'type' => 'color',
+			'name' => 'colors[button_font]',
+			'placeholder' => $defaultConfig['colors']['button_font'],
+			'value' => $config['colors']['button_font']
+		],
 		'colors_countdown' => [
 			'type' => 'color',
 			'name' => 'colors[countdown]',

@@ -145,6 +145,7 @@ const L10N = {
     'user_interface_colors_primary': 'Primary color',
     'user_interface_colors_secondary': 'Secondary color',
     'user_interface_colors_font': 'Font color',
+    'user_interface_colors_button_font': 'Buttons font color',
     'user_interface_colors_countdown': 'Countdown color',
     'user_interface_colors_background_countdown': 'Countdown background color',
     'user_interface_colors_cheese': 'Cheeeeeeeese! color',

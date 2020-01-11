@@ -4,6 +4,7 @@
 @import "partials/button";
 
 .loginbody {
+  color: $fontColor;
   display: block;
   position: relative;
   overflow-y: auto;
@@ -16,6 +17,7 @@
 
 input[type="text"],
 input[type="password"] {
+  color: $fontColor;
   background: #f8f9fc;
   border: 1px solid #eff2f7;
   border-radius: 4px;

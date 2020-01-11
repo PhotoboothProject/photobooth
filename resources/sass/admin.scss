@@ -29,6 +29,7 @@ select {
   border-radius: 4px;
   width: 100%;
   padding: 0 10px;
+  color: $fontColor;
 }
 
 input[type="checkbox"] {
@@ -43,6 +44,7 @@ input[type="checkbox"] {
   background: #fff;
   position: relative;
   max-width: 100%;
+  color: $fontColor;
 }
 
 .panel {
@@ -94,6 +96,7 @@ input[type="checkbox"] {
 .reset-btn {
   cursor: pointer;
   background: $mainColor;
+  color: $buttonFontColor;
   width: 100%;
   position: absolute;
   padding: 20px;

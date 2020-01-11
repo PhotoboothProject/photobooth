@@ -3,6 +3,7 @@
     --primary-color: transparent;
     --secondary-color: transparent;
     --font-color: transparent;
+    --button-font-color: transparent;
     --countdown-color: transparent;
     --background-countdown-color: transparent;
     --cheese-color: transparent;
@@ -14,6 +15,7 @@
 $mainColor: var(--primary-color);
 $hoverColor: var(--secondary-color);
 $fontColor: var(--font-color);
+$buttonFontColor: var(--button-font-color);
 $countdownColor: var(--countdown-color);
 $background_countdownColor: var(--background-countdown-color);
 $cheeseColor: var(--cheese-color);

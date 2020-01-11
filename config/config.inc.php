@@ -84,7 +84,8 @@ $config['protect_index'] = false;
 // COLORS
 $config['colors']['primary'] = '#e67e22';
 $config['colors']['secondary'] = '#d35400';
-$config['colors']['font'] = '#ffffff';
+$config['colors']['font'] = '#000000';
+$config['colors']['button_font'] = '#ffffff';
 $config['colors']['countdown'] = '#000000';
 $config['colors']['background_countdown'] = '#ffffff';
 $config['colors']['cheese'] = '#000000';

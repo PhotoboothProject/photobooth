@@ -3,6 +3,7 @@ const style = document.documentElement.style;
 style.setProperty('--primary-color', config.colors.primary);
 style.setProperty('--secondary-color', config.colors.secondary);
 style.setProperty('--font-color', config.colors.font);
+style.setProperty('--button-font-color', config.colors.button_font);
 style.setProperty('--countdown-color', config.colors.countdown);
 style.setProperty('--background-countdown-color', config.colors.background_countdown);
 style.setProperty('--cheese-color', config.colors.cheese);
