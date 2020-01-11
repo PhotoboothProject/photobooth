@@ -1,5 +1,9 @@
 /* exported L10N */
 const L10N = {
+    'general_camera_mode': 'Camera facing mode',
+    'previewCamFlipHorizontal': 'Flip image from device cam horizontally',
+    'general_videoHeight': 'Device cam picture height',
+    'general_videoWidth': 'Device cam picture width',
     'user_interface_background_chroma': 'Chroma keying panel background image path',
     'user_interface_background_admin': 'Διαδρομή εικόνας φόντου διαχειριστή',
     'user_interface_background_image': 'διαδρομή εικόνας φόντου',
@@ -77,6 +81,7 @@ const L10N = {
     'general_cntdwn_time': 'Μετρητής αντίστροφης μέτρησης σε δευτερόλεπτα',
     'general_cheese_time': 'Cheeeeeeeese!-Μετρητής αντίστροφης σε χιλιοστά του δευτερολέπτου',
     'previewFromCam': 'Προβολή προεπισκόπησης από τη φωτογραφική μηχανή tablet',
+    'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Προβολή των τελευταίων φωτογραφιών πρώτα',
     'folders_images': 'Φάκελος εικόνων',
     'folders_thumbs': 'Φάκελος μικρογραφιών',

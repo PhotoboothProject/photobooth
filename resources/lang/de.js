@@ -1,5 +1,9 @@
 /* exported L10N */
 const L10N = {
+    'general_camera_mode': 'Kamerabildmodus',
+    'previewCamFlipHorizontal': 'Bild von der Gerätekamera horizontal spiegeln',
+    'general_videoHeight': 'Gerätekamera Bildhöhe',
+    'general_videoWidth': 'Gerätekamera Bildbreite',
     'user_interface_background_chroma': 'Pfad zum Hintergrundbild im Chroma-Keying Panel',
     'user_interface_background_admin': 'Pfad zum Hintergrundbild im Admin Panel',
     'user_interface_background_image': 'Pfad zum Hintergrundbild',
@@ -76,7 +80,8 @@ const L10N = {
     'show_fork': 'Fork Logo anzeigen',
     'general_cntdwn_time': 'Countdown Timer in Sekunden',
     'general_cheese_time': 'Cheeeeeeeese!-Timer in Millisekunden',
-    'previewFromCam': 'Vorschau aus der Tablet-Kamera anzeigen',
+    'previewFromCam': 'Vorschau aus der Gerätekamera anzeigen',
+    'previewCamTakesPic': 'Gerätekamera zur Bildaufnahme verwenden',
     'newest_first': 'Neueste Bilder zuerst anzeigen',
     'folders_images': 'Bild Ordner',
     'folders_thumbs': 'Thumbnail Ordner',

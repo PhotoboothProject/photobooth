@@ -1,5 +1,9 @@
 /* exported L10N */
 const L10N = {
+    'general_camera_mode': 'Camera facing mode',
+    'previewCamFlipHorizontal': 'Flip image from device cam horizontally',
+    'general_videoHeight': 'Device cam picture height',
+    'general_videoWidth': 'Device cam picture width',
     'user_interface_background_chroma': 'Chroma keying panel background image path',
     'user_interface_background_admin': 'Ruta de la imagen de fondo del panel de administración',
     'user_interface_background_image': 'Ruta de la imagen de fondo',
@@ -77,6 +81,7 @@ const L10N = {
     'general_cntdwn_time': 'Cuenta regresiva en segundos',
     'general_cheese_time': '¡Definir el tiempo para el patataaaaas!en milisegundos.',
     'previewFromCam': 'Ver el vistazo por cámara',
+    'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Primero muestre las últimas páginas',
     'folders_images': 'Carpeta de imágenes',
     'folders_thumbs': 'Carpeta de viñetas',

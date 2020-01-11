@@ -121,16 +121,19 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 		<!-- Loader -->
 		<div class="stages" id="loader">
-			<?php if ($config['previewFromCam']): ?>
-			<video id="video" autoplay></video>
-			<?php endif; ?>
-
 			<div class="loaderInner">
 				<div class="spinner">
 					<i class="fa fa-cog fa-spin"></i>
 				</div>
 
-				<div id="counter"></div>
+				<?php if ($config['previewFromCam']): ?>
+				<video id="video--view" autoplay playsinline></video>
+				<?php endif; ?>
+
+				<div id="counter">
+					<canvas id="video--sensor"</canvas>
+				</div>
+				<div class="cheese"></div>
 				<div class="loading"></div>
 			</div>
 		</div>

@@ -1,5 +1,9 @@
 /* exported L10N */
 const L10N = {
+    'general_camera_mode': 'Camera facing mode',
+    'previewCamFlipHorizontal': 'Flip image from device cam horizontally',
+    'general_videoHeight': 'Device cam picture height',
+    'general_videoWidth': 'Device cam picture width',
     'user_interface_background_chroma': 'Chroma keying panel background image path',
     'user_interface_background_admin': 'Admin panel background image path',
     'user_interface_background_image': 'Background image path',
@@ -77,6 +81,7 @@ const L10N = {
     'general_cntdwn_time': 'Countdown timer in seconds',
     'general_cheese_time': 'Cheeeeeeeese!-Timer in milliseconds',
     'previewFromCam': 'See preview by device cam',
+    'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Show latest images first',
     'folders_images': 'Image Folder',
     'folders_thumbs': 'Thumbnail Folder',

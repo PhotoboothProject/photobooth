@@ -7,7 +7,29 @@ function takePicture($filename)
 {
     global $config;
 
-    if ($config['dev'] === false) {
+    if ($config['dev']) {
+        $demoFolder = __DIR__ . '/../resources/img/demo/';
+        $devImg = array_diff(scandir($demoFolder), array('.', '..'));
+        copy(
+            $demoFolder . $devImg[array_rand($devImg)],
+            $filename
+        );
+    } elseif ($config['previewCamTakesPic']) {
+        $data = $_POST['canvasimg'];
+        list($type, $data) = explode(';', $data);
+        list(, $data)      = explode(',', $data);
+        $data = base64_decode($data);
+
+        file_put_contents($filename, $data);
+
+        if ($config['previewCamFlipHorizontal']) {
+            $im = imagecreatefromjpeg($filename);
+            imageflip($im, IMG_FLIP_HORIZONTAL);
+            imagejpeg($im, $filename);
+            imagedestroy($im);
+        }
+
+    } else {
         $dir = dirname($filename);
         chdir($dir); //gphoto must be executed in a dir with write permission
         $cmd = sprintf($config['take_picture']['cmd'], $filename);
@@ -29,13 +51,6 @@ function takePicture($filename)
                 'output' => $output,
             ]));
         }
-    } else {
-        $demoFolder = __DIR__ . '/../resources/img/demo/';
-        $devImg = array_diff(scandir($demoFolder), array('.', '..'));
-        copy(
-            $demoFolder . $devImg[array_rand($devImg)],
-            $filename
-        );
     }
 }
 

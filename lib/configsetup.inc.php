@@ -168,6 +168,38 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'previewFromCam',
 			'value' => $config['previewFromCam']
+		],
+		'previewCamTakesPic' => [
+			'type' => 'checkbox',
+			'name' => 'previewCamTakesPic',
+			'value' => $config['previewCamTakesPic']
+		],
+		'previewCamFlipHorizontal' => [
+			'type' => 'checkbox',
+			'name' => 'previewCamFlipHorizontal',
+			'value' => $config['previewCamFlipHorizontal']
+		],
+		'videoWidth' => [
+			'type' => 'input',
+			'name' => 'videoWidth',
+			'placeholder' => $defaultConfig['videoWidth'],
+			'value' => $config['videoWidth']
+		],
+		'videoHeight' => [
+			'type' => 'input',
+			'name' => 'videoHeight',
+			'placeholder' => $defaultConfig['videoHeight'],
+			'value' => $config['videoHeight']
+		],
+		'camera_mode' => [
+			'type' => 'select',
+			'name' => 'camera_mode',
+			'placeholder' => $defaultConfig['camera_mode'],
+			'options' => [
+				'user' => 'Front facing camera',
+				'environment' => 'Back facing camera'
+			],
+			'value' => $config['camera_mode']
 		]
 	],
 	'jpeg_quality' => [

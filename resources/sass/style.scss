@@ -78,14 +78,28 @@
 }
 
 #counter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   backface-visibility: hidden;
   font-size: 12em;
   opacity: 0.2;
 }
+
 #counter.tick {
   font-size: 1em;
   opacity: 1;
   transition: font-size 0.75s, opacity 0.75s;
+}
+
+.cheese {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 3em;
 }
 
 #loader {
@@ -336,12 +350,18 @@ hr.small {
   color: #fff;
 }
 
-#video {
-  position: absolute;
-  top: 50%;
-  margin-top: -240px;
-  margin-left: -360px;
-  left: 50%;
+#video--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.flip-horizontal {
+  transform: scaleX(-1);
+  filter: FlipH;
 }
 
 .chroma-control-bar {
