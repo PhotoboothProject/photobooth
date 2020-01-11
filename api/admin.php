@@ -81,6 +81,19 @@ if ($data['type'] == 'config') {
         }
     }
 
+    if ($newConfig['login_enabled']) {
+        if (isset($newConfig['login_password']) && !empty($newConfig['login_password'])) {
+            if (!($newConfig['login_password'] === $config['login_password'])) {
+                $hashing = password_hash($newConfig['login_password'], PASSWORD_DEFAULT);
+                $newConfig['login_password'] = $hashing;
+            }
+        } else {
+            $newConfig['login_enabled'] = false;
+        }
+    } else {
+        $newConfig['login_password'] = NULL;
+    }
+
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
     if (file_put_contents($my_config_file, $content)) {

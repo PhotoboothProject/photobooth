@@ -140,5 +140,14 @@ const L10N = {
     'jpeg_quality_jpeg_quality_thumb': 'JPEG quality for thumbnails (-1 ... 100)',
     'abort': 'Abort',
     'dark_loader': 'Dark display while countdown',
-    'rounded_corners': 'Rounded corners'
+    'rounded_corners': 'Rounded corners',
+    'login': 'Login',
+    'login_enabled': 'Login enabled',
+    'login_username': 'Username',
+    'login_password': 'Password',
+    'login_invalid': 'Username or password is invalid!',
+    'logout': 'Logout',
+    'admin_panel': 'Admin panel',
+    'protect_admin': 'Protect admin panel',
+    'protect_index': 'Protect start screen'
 }

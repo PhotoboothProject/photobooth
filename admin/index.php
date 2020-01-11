@@ -1,7 +1,9 @@
 <?php
+session_start();
 
 require_once('../lib/config.php');
 require_once('../lib/configsetup.inc.php');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -32,6 +34,7 @@ require_once('../lib/configsetup.inc.php');
 <div id="wrapper" class="adminbg" style="overflow-y: auto;">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
+		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin']): ?>
 		<button class="reset-btn">
 			<span class="save">
 				<span data-l10n="reset"></span>
@@ -49,9 +52,15 @@ require_once('../lib/configsetup.inc.php');
 				<span data-l10n="saveerror"></span>
 			</span>
 		</button>
+
+		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
+		<p><a href="../logout.php" class="btn btn--tiny btn--flex fa fa-sign-out"><span data-l10n="logout"></span></a></p>
+		<?php endif; ?>
+
 		<div id="checkVersion">
 			<p><a href="#" class="btn btn--tiny btn--flex"><span data-l10n="check_version"></span></a></p>
 		</div>
+
 		<div class="accordion">
 			<form>
 				<?php
@@ -120,6 +129,10 @@ require_once('../lib/configsetup.inc.php');
 					<span data-l10n="saveerror"></span>
 				</span>
 			</button>
+		<?php else:
+		header("location: ../login.php");
+		exit;
+		endif; ?>
 		</div>
 	</div>
 

@@ -71,6 +71,13 @@ $config['event']['textLeft'] = 'Name 1';
 $config['event']['textRight'] = 'Name 2';
 $config['event']['symbol'] = 'fa-heart-o';
 
+// LOGIN
+$config['login_enabled'] = false;
+$config['login_username'] = 'Photo';
+$config['login_password'] = NULL;
+$config['protect_admin'] = true;
+$config['protect_index'] = false;
+
 // GALLERY
 // should the gallery list the newest pictures first?
 $config['show_gallery'] = true;

@@ -57,6 +57,8 @@ function createArchive(fileName, archive) {
     archive.directory('resources');
     archive.directory('template');
     archive.directory('vendor');
+    archive.file('login.php');
+    archive.file('logout.php');
     archive.file('chromakeying.php');
     archive.file('index.php');
     archive.file('phpinfo.php');
