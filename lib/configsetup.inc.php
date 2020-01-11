@@ -280,6 +280,18 @@ $configsetup = [
 			'placeholder' => $defaultConfig['colors']['button_font'],
 			'value' => $config['colors']['button_font']
 		],
+		'colors_panel' => [
+			'type' => 'color',
+			'name' => 'colors[panel]',
+			'placeholder' => $defaultConfig['colors']['panel'],
+			'value' => $config['colors']['panel']
+		],
+		'colors_hover_panel' => [
+			'type' => 'color',
+			'name' => 'colors[hover_panel]',
+			'placeholder' => $defaultConfig['colors']['hover_panel'],
+			'value' => $config['colors']['hover_panel']
+		],
 		'colors_countdown' => [
 			'type' => 'color',
 			'name' => 'colors[countdown]',

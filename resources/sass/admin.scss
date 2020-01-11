@@ -41,7 +41,7 @@ input[type="checkbox"] {
   padding: 30px 30px 90px;
   height: auto;
   margin: 50px auto;
-  background: #fff;
+  background: $panelColor;
   position: relative;
   max-width: 100%;
   color: $fontColor;
@@ -60,7 +60,7 @@ input[type="checkbox"] {
     }
 
     &:hover {
-      background: #fafafa;
+      background: $hoverPanelColor;
     }
 
   }
@@ -170,11 +170,11 @@ input[type="checkbox"] {
 }
 
 .back-to-pb {
-  color: #2b2127;
+  color: $fontColor;
   text-decoration: none;
   padding: 0 3px;
 
   &:hover {
-    background-color: #e1e1e1;
+    background-color: $hoverPanelColor;
   }
 }

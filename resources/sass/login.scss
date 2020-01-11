@@ -4,7 +4,6 @@
 @import "partials/button";
 
 .loginbody {
-  color: $fontColor;
   display: block;
   position: relative;
   overflow-y: auto;
@@ -26,11 +25,12 @@ input[type="password"] {
 }
 
 .login-panel {
+  color: $fontColor;
   width: 500px;
   padding: 30px 30px 90px;
   height: auto;
   margin: 50px auto;
-  background: #fff;
+  background: $panelColor;
   position: relative;
   max-width: 100%;
 }

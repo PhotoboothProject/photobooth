@@ -7,6 +7,8 @@
     --countdown-color: transparent;
     --background-countdown-color: transparent;
     --cheese-color: transparent;
+    --panel-color: transparent;
+    --hover-panel-color: transparent;
     --background-default: none;
     --background-admin: none;
     --background-chroma: none;
@@ -19,6 +21,8 @@ $buttonFontColor: var(--button-font-color);
 $countdownColor: var(--countdown-color);
 $background_countdownColor: var(--background-countdown-color);
 $cheeseColor: var(--cheese-color);
+$panelColor: var(--panel-color);
+$hoverPanelColor: var(--hover-panel-color);
 $backgroundImage: var(--background-default);
 $adminBackground: var(--background-admin);
 $chromaBackground: var(--background-chroma);
