@@ -92,3 +92,11 @@ button {
   height: 20px;
   border-radius: 50%;
 }
+
+.toggle {
+  border-radius: 0.5em;
+}
+
+.toggle:before {
+  border-radius: 50%;
+}

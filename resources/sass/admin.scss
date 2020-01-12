@@ -2,6 +2,7 @@
 @import "partials/basic";
 @import "partials/button";
 @import "partials/fonts";
+@import "partials/toggle";
 
 $error: #e74c3c;
 $success: #2ecc71;
@@ -28,10 +29,6 @@ select {
   width: 100%;
   padding: 0 10px;
   color: $fontColor;
-}
-
-input[type="checkbox"] {
-  margin-right: 5px;
 }
 
 .slider {
