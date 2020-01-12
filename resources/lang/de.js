@@ -149,6 +149,8 @@ const L10N = {
     'user_interface_colors_button_font': 'Schriftfarbe der Schaltflächen',
     'user_interface_colors_panel': 'Farbe Admin- und Login-Panel',
     'user_interface_colors_hover_panel': 'Farbe Admin- und Login-Panel (hover)',
+    'user_interface_colors_border': 'Umrandungsfarbe',
+    'user_interface_colors_box': 'Feldfarbe',
     'user_interface_colors_countdown': 'Countdown-Farbe',
     'user_interface_colors_background_countdown': 'Countdown Hintergrundfarbe',
     'user_interface_colors_cheese': 'Cheeeeeeeese!-Farbe',

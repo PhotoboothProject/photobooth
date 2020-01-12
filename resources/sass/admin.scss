@@ -24,8 +24,8 @@ $success: #2ecc71;
 
 input[type="text"],
 select {
-  background: #f8f9fc;
-  border: 1px solid #eff2f7;
+  background: $boxColor;
+  border: 1px solid $borderColor;
   border-radius: 4px;
   width: 100%;
   padding: 0 10px;
@@ -51,7 +51,7 @@ input[type="checkbox"] {
   .panel-heading {
     padding: 10px;
     cursor: pointer;
-    border: 1px solid #eee;
+    border: 1px solid $borderColor;
     .plus {
       display: inline-block;
     }
@@ -67,7 +67,7 @@ input[type="checkbox"] {
   .panel-body {
     display: none;
     padding: 20px;
-    border: 1px solid #eee;
+    border: 1px solid $borderColor;
   }
 
   &.open {

@@ -17,8 +17,8 @@
 input[type="text"],
 input[type="password"] {
   color: $fontColor;
-  background: #f8f9fc;
-  border: 1px solid #eff2f7;
+  background: $boxColor;
+  border: 1px solid $borderColor;
   border-radius: 4px;
   width: 100%;
   padding: 0 10px;

@@ -292,6 +292,18 @@ $configsetup = [
 			'placeholder' => $defaultConfig['colors']['hover_panel'],
 			'value' => $config['colors']['hover_panel']
 		],
+		'colors_border' => [
+			'type' => 'color',
+			'name' => 'colors[border]',
+			'placeholder' => $defaultConfig['colors']['border'],
+			'value' => $config['colors']['border']
+		],
+		'colors_box' => [
+			'type' => 'color',
+			'name' => 'colors[box]',
+			'placeholder' => $defaultConfig['colors']['box'],
+			'value' => $config['colors']['box']
+		],
 		'colors_countdown' => [
 			'type' => 'color',
 			'name' => 'colors[countdown]',

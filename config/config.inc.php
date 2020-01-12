@@ -91,6 +91,8 @@ $config['colors']['background_countdown'] = '#ffffff';
 $config['colors']['cheese'] = '#000000';
 $config['colors']['panel'] = '#ffffff';
 $config['colors']['hover_panel'] = '#fafafa';
+$config['colors']['border'] = '#eeeeee';
+$config['colors']['box'] = '#f8f9fc';
 
 // GALLERY
 // should the gallery list the newest pictures first?
