@@ -104,7 +104,8 @@ require_once('../lib/configsetup.inc.php');
 									if ($field['value'] == 'true') {
 										$checked = ' checked="checked"';
 									}
-									echo '<label><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span data-l10n="'.$key.'">'.$key.'</span></label>';
+									echo '<span data-l10n="'.$key.'">'.$key.'</span></br>
+										<label class="switch"><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span class="toggle"></span></label>';
 									break;
 								case 'multi-select':
 								case 'select':
