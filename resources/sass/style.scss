@@ -20,24 +20,8 @@
   background-position: center center;
   background-size: cover;
 
-  &.adminbg {
-    background-image: $adminBackground;
-  }
   &.chromabg {
     background-image: $chromaBackground;
-  }
-}
-
-.adminpanel {
-  width: 400px;
-  background: #fff;
-  min-height: 400px;
-  margin: 100px auto 0;
-  padding: 15px 15px 70px;
-  position: relative;
-
-  h2 {
-    text-align: center;
   }
 }
 
