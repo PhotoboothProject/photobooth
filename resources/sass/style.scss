@@ -19,10 +19,6 @@
   background-image: $backgroundImage;
   background-position: center center;
   background-size: cover;
-
-  &.chromabg {
-    background-image: $chromaBackground;
-  }
 }
 
 #result {
