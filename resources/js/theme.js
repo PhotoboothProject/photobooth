@@ -11,6 +11,7 @@ style.setProperty('--panel-color', config.colors.panel);
 style.setProperty('--hover-panel-color', config.colors.hover_panel);
 style.setProperty('--border-color', config.colors.border);
 style.setProperty('--box-color', config.colors.box);
+style.setProperty('--gallery-button-color', config.colors.gallery_button);
 style.setProperty('--background-default', config.background_image);
 style.setProperty('--background-admin', config.background_admin);
 style.setProperty('--background-chroma', config.background_chroma);

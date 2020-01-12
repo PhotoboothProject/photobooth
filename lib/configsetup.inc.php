@@ -304,6 +304,12 @@ $configsetup = [
 			'placeholder' => $defaultConfig['colors']['box'],
 			'value' => $config['colors']['box']
 		],
+		'colors_gallery_button' => [
+			'type' => 'color',
+			'name' => 'colors[gallery_button]',
+			'placeholder' => $defaultConfig['colors']['gallery_button'],
+			'value' => $config['colors']['gallery_button']
+		],
 		'colors_countdown' => [
 			'type' => 'color',
 			'name' => 'colors[countdown]',

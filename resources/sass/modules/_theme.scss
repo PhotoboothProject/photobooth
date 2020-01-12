@@ -11,6 +11,7 @@
     --hover-panel-color: transparent;
     --border-color: transparent;
     --box-color: transparent;
+    --gallery-button-color: transparent;
     --background-default: none;
     --background-admin: none;
     --background-chroma: none;
@@ -27,6 +28,7 @@ $panelColor: var(--panel-color);
 $hoverPanelColor: var(--hover-panel-color);
 $borderColor: var(--border-color);
 $boxColor: var(--box-color);
+$galleryButtonColor: var(--gallery-button-color);
 $backgroundImage: var(--background-default);
 $adminBackground: var(--background-admin);
 $chromaBackground: var(--background-chroma);

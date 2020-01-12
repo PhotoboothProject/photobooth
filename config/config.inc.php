@@ -93,6 +93,7 @@ $config['colors']['panel'] = '#ffffff';
 $config['colors']['hover_panel'] = '#fafafa';
 $config['colors']['border'] = '#eeeeee';
 $config['colors']['box'] = '#f8f9fc';
+$config['colors']['gallery_button'] = '#ffffff';
 
 // GALLERY
 // should the gallery list the newest pictures first?

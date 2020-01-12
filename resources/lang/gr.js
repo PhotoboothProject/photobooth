@@ -150,6 +150,7 @@ const L10N = {
     'user_interface_colors_hover_panel': 'Admin- and login panel hover color',
     'user_interface_colors_border': 'Border color',
     'user_interface_colors_box': 'Field color',
+    'user_interface_colors_gallery_button': 'Gallery button color',
     'user_interface_colors_countdown': 'Countdown color',
     'user_interface_colors_background_countdown': 'Countdown background color',
     'user_interface_colors_cheese': 'Cheeeeeeeese! color',
