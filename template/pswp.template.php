@@ -50,7 +50,7 @@
                 <?php endif; ?>
 
                 <!-- custom slideshow button: -->
-                <button class="pswp__button pswp__button--playpause" title="Play Slideshow"></button>
+                <button class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
                 <!-- element will get class pswp__preloader--active when preloader is running -->

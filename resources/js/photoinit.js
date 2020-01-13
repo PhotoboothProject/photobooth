@@ -214,6 +214,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
         // toggle slideshow on/off
+        $('.pswp__button--playpause').toggleClass('fa-play fa-pause');
         setSlideshowState(this, !ssRunning);
     });
 
@@ -222,9 +223,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             setTimeout(gotoNextSlide, ssDelay / 2.0);
         }
         const title = running ? 'Pause Slideshow' : 'Play Slideshow';
-        $(el).removeClass(running ? 'play' : 'pause')
-            .addClass(running ? 'pause' : 'play')
-            .prop('title', title);
+        $(el).prop('title', title);
         ssRunning = running;
     }
 

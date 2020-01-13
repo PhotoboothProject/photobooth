@@ -3,7 +3,8 @@
 .pswp__button--print,
 .pswp__button--print-chroma-keying,
 .pswp__button--download,
-.pswp__button--mail {
+.pswp__button--mail,
+.pswp__button--playpause {
     color: $galleryButtonColor;
     background: transparent !important;
     font-size: 1.625em;
@@ -34,23 +35,4 @@
     img {
         width: 100%;
     }
-}
-
-/* set play/pause button */
-@media (-webkit-min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.09375), (min-resolution: 105dpi), (min-resolution: 1.1dppx) { /*serve if resolution high enough & browser supports */
-    .pswp--svg .pswp__button--playpause.play, .pswp--svg .pswp__button--playpause.play:before {
-        background-image: url('../img/play-wh.svg');
-    }
-    .pswp--svg .pswp__button--playpause.pause, .pswp--svg .pswp__button--playpause.pause:before {
-        background-image: url('../img/pause-wh.svg');
-    }
-}
-.pswp__button--playpause.play, .pswp__button--playpause.play:before {
-    background: url('../img/play-wh.png') 12px 12px/20px 20px no-repeat;
-}
-.pswp__button--playpause.pause, .pswp__button--playpause.pause:before {
-    background: url('../img/pause-wh.png') 12px 12px/20px 20px no-repeat;
-}
-.pswp__button {
-    outline: none;
 }
