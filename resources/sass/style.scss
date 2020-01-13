@@ -216,6 +216,15 @@
   width: 100%;
 }
 
+hr {
+  display: block;
+  height: 0.1em;
+  border: 0;
+  border-top: 0.1em solid $fontColor;
+  margin: 1em 0;
+  padding: 0;
+}
+
 hr.small {
   width: 50%;
   display: block;
@@ -260,7 +269,7 @@ hr.small {
 
   .startInner {
     background: rgba(0,0,0,0.5);
-    color: #fff;
+    color: $fontColor;
     text-align: center;
     padding: 1rem;
 
