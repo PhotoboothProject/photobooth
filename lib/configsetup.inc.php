@@ -223,6 +223,12 @@ $configsetup = [
 		]
 	],
 	'user_interface' => [
+		'font_size' => [
+			'type' => 'input',
+			'name' => 'font_size',
+			'placeholder' => $defaultConfig['font_size'],
+			'value' => $config['font_size']
+		],
 		'background_image' => [
 			'type' => 'input',
 			'name' => 'background_image',

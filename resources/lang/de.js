@@ -155,6 +155,7 @@ const L10N = {
     'user_interface_colors_countdown': 'Countdown-Farbe',
     'user_interface_colors_background_countdown': 'Countdown Hintergrundfarbe',
     'user_interface_colors_cheese': 'Cheeeeeeeese!-Farbe',
+    'user_interface_font_size': 'Standardschriftgröße',
     'rounded_corners': 'Abgerundete Ecken',
     'login': 'Login',
     'login_enabled': 'Login aktivieren',

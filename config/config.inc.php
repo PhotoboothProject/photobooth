@@ -81,6 +81,9 @@ $config['login_password'] = NULL;
 $config['protect_admin'] = true;
 $config['protect_index'] = false;
 
+// User Interface
+$config['font_size'] = '16px';
+
 // COLORS
 $config['colors']['primary'] = '#e67e22';
 $config['colors']['secondary'] = '#d35400';

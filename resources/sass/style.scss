@@ -122,7 +122,7 @@
 
   .spinner {
     color: $cheeseColor;
-    font-size: 80px;
+    font-size: 5em;
   }
 }
 
@@ -130,7 +130,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  font-size: 14px;
+  font-size: 0.875em;
   width: 130px;
 }
 
@@ -153,7 +153,7 @@
   p {
     margin: 0;
     padding: 0 15px;
-    font-size: 25px;
+    font-size: 1.6em;
   }
 
   img {
@@ -179,7 +179,7 @@
   position: absolute;
   right: 14px;
   top: 14px;
-  font-size: 28px;
+  font-size: 1.75em;
   cursor: pointer;
 }
 
@@ -205,7 +205,7 @@ input[type="email"] {
 }
 
 .loading {
-  font-size: 50px;
+  font-size: 3.125em;
   text-align: center;
   width: 100%;
 
@@ -336,7 +336,7 @@ hr.small {
   top: 30px;
   position: fixed;
   z-index: 10000000;
-  font-size: 50px;
+  font-size: 3.125em;
   text-shadow: 0 2px 0 #000;
   color: #fff;
 }

@@ -15,6 +15,7 @@ style.setProperty('--gallery-button-color', config.colors.gallery_button);
 style.setProperty('--background-default', config.background_image);
 style.setProperty('--background-admin', config.background_admin);
 style.setProperty('--background-chroma', config.background_chroma);
+style.setProperty('--fontSize', config.font_size);
 
 $(function () {
     $('#wrapper').show();

@@ -155,6 +155,7 @@ const L10N = {
     'user_interface_colors_countdown': 'Countdown color',
     'user_interface_colors_background_countdown': 'Countdown background color',
     'user_interface_colors_cheese': 'Cheeeeeeeese! color',
+    'user_interface_font_size': 'Default font size',
     'gallery_pictureTime': 'Milliseconds an image is displayed at slideshow',
     'rounded_corners': 'Rounded corners',
     'login': 'Login',

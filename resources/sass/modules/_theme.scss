@@ -15,6 +15,7 @@
     --background-default: none;
     --background-admin: none;
     --background-chroma: none;
+    --fontSize: 16px;
 }
 
 $mainColor: var(--primary-color);
@@ -32,3 +33,4 @@ $galleryButtonColor: var(--gallery-button-color);
 $backgroundImage: var(--background-default);
 $adminBackground: var(--background-admin);
 $chromaBackground: var(--background-chroma);
+$fontSize: var(--fontSize);
