@@ -24,7 +24,7 @@
 
 #slideshow {
   img {
-    border:2px solid black;
+    border:2px solid $borderColor;
     max-width: 80vw;
     max-height: 80%;
     width: auto;
@@ -36,8 +36,8 @@
   figcaption {
     color: $fontColor;
     text-align: center;
-    background-color: $mainColor;
-    border:2px solid black;
+    background-color: $hoverColor;
+    border:2px solid $borderColor;
   }
 }
 
