@@ -4,9 +4,9 @@
 .pswp__button--print-chroma-keying,
 .pswp__button--download,
 .pswp__button--mail {
-    color: #fff;
+    color: $galleryButtonColor;
     background: transparent !important;
-    font-size: 26px;
+    font-size: 1.625em;
     text-align: center;
     width: 50px;
     height: 50px;

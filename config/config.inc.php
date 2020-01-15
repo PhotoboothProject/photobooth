@@ -38,12 +38,10 @@ $config['take_frame_path'] = '../resources/img/frames/frame.png';
 $config['chroma_keying'] = true;
 $config['use_collage'] = false;
 $config['continuous_collage'] = false;
-$config['color_theme'] = 'default'; // possible values are default, blue-gray, or an array with the corresponding colors (e.g. ['primary' => '#fff', 'secondary'=>'#a1a1a1', 'font'=>'#000'])
 $config['background_image'] = null;
 $config['background_admin'] = null;
 $config['background_chroma'] = null;
 $config['force_buzzer'] = false;
-$config['dark_loader'] = false;
 $config['webserver_ip'] = null;
 $config['rounded_corners'] = false;
 
@@ -82,6 +80,23 @@ $config['login_username'] = 'Photo';
 $config['login_password'] = NULL;
 $config['protect_admin'] = true;
 $config['protect_index'] = false;
+
+// User Interface
+$config['font_size'] = '16px';
+
+// COLORS
+$config['colors']['primary'] = '#e67e22';
+$config['colors']['secondary'] = '#d35400';
+$config['colors']['font'] = '#000000';
+$config['colors']['button_font'] = '#ffffff';
+$config['colors']['countdown'] = '#000000';
+$config['colors']['background_countdown'] = '#ffffff';
+$config['colors']['cheese'] = '#000000';
+$config['colors']['panel'] = '#ffffff';
+$config['colors']['hover_panel'] = '#fafafa';
+$config['colors']['border'] = '#eeeeee';
+$config['colors']['box'] = '#f8f9fc';
+$config['colors']['gallery_button'] = '#ffffff';
 
 // GALLERY
 // should the gallery list the newest pictures first?

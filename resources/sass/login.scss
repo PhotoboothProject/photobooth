@@ -16,19 +16,21 @@
 
 input[type="text"],
 input[type="password"] {
-  background: #f8f9fc;
-  border: 1px solid #eff2f7;
+  color: $fontColor;
+  background: $boxColor;
+  border: 1px solid $borderColor;
   border-radius: 4px;
   width: 100%;
   padding: 0 10px;
 }
 
 .login-panel {
+  color: $fontColor;
   width: 500px;
   padding: 30px 30px 90px;
   height: auto;
   margin: 50px auto;
-  background: #fff;
+  background: $panelColor;
   position: relative;
   max-width: 100%;
 }

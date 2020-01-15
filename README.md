@@ -40,8 +40,7 @@ A Photobooth web interface for Raspberry Pi and Windows.
     interruption and let it generate a collage out of it.
   - Save pictures with a Polaroid effect.
   - Adjust take picture and print commands.
-  - Optional Blue-gray theme.
-  - And many more options to adjust Photobooth for your personal needs.
+  - And many more options to adjust and style Photobooth for your personal needs.
   
 ## :camera: Screenshots
 

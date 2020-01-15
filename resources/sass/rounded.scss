@@ -1,3 +1,5 @@
+@import "modules/theme";
+
 #start {
   .startInner {
     border: 0 none;
@@ -69,6 +71,6 @@
 }
 
 button {
-  border: 2px solid #eee;
+  border: 2px solid $borderColor;
   border-radius: 10px;
 }

@@ -7,7 +7,7 @@
     right: 0;
     z-index: 100;
     pointer-events: none;
-    font-size: 13px;
+    font-size: 0.8em;
     text-decoration: none;
     text-indent: -999999px;
 
@@ -37,7 +37,7 @@
 
     &:after {
         content: attr(data-ribbon);
-        color: $fontColor;
+        color: $buttonFontColor;
         font: 700 1em "Helvetica Neue", Helvetica, Arial, sans-serif;
         line-height: 1.54em;
         text-decoration: none;

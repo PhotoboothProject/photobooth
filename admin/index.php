@@ -24,14 +24,12 @@ require_once('../lib/configsetup.inc.php');
 
 	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/admin.css" />
 	<?php if ($config['rounded_corners']): ?>
 	<link rel="stylesheet" type="text/css" href="../resources/css/rounded.css" />
 	<?php endif; ?>
 </head>
-<body class="deselect">
-<div id="wrapper" class="adminbg" style="overflow-y: auto;">
+<body class="adminwrapper">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
 		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin']): ?>
@@ -80,6 +78,10 @@ require_once('../lib/configsetup.inc.php');
 								case 'input':
 									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field[
 										'value'].'" placeholder="'.$field['placeholder'].'"/>';
+									break;
+								case 'color':
+									echo '<input type="color" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/>
+										<label data-l10n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';
 									break;
 								case 'hidden':
 									echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
@@ -136,13 +138,12 @@ require_once('../lib/configsetup.inc.php');
 		</div>
 	</div>
 
-</div>
-<script type="text/javascript" src="../api/config.php"></script>
-<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="../resources/js/l10n.js"></script>
-<script type="text/javascript" src="../resources/js/theme.js"></script>
-<script type="text/javascript" src="../resources/js/admin.js"></script>
-<script type="text/javascript" src="../resources/lang/<?php echo $config['language']; ?>.js"></script>
+	<script type="text/javascript" src="../api/config.php"></script>
+	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="../resources/js/l10n.js"></script>
+	<script type="text/javascript" src="../resources/js/theme.js"></script>
+	<script type="text/javascript" src="../resources/js/admin.js"></script>
+	<script type="text/javascript" src="../resources/lang/<?php echo $config['language']; ?>.js"></script>
 
 </body>
 </html>

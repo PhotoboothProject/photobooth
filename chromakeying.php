@@ -24,42 +24,16 @@ if (file_exists($keyingimage)) {
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-		<link rel="stylesheet" href="resources/css/style.css" />
+		<link rel="stylesheet" href="resources/css/chromakeying.css" />
 		<?php if ($config['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>
-
-		<style>
-			#wrapper {
-				padding: 1em 2em 2em;
-				overflow-y: auto;
-				text-align: center;
-			}
-			.canvasWrapper {
-				width: 1000px;
-				display: inline-block;
-				max-width: 100%;
-				background-color: green;
-				border:4px solid black;
-			}
-			#mainCanvas {
-				display: block;
-				max-width: 100%;
-			}
-			.backgroundPreview {
-				cursor:pointer;
-				max-width:120px;
-				max-height: 80px;
-				border:2px solid black;
-				margin:3px;
-			}
-		</style>
 	</head>
 <body data-main-image="<?=$mainimage?>">
-	<div id="wrapper" class="chromabg">
+	<div class="chromawrapper">
 	<?php if ($keying_possible): ?>
 		<div class="canvasWrapper">
-			<canvas id="mainCanvas" width="1500" height="1000"></canvas>
+			<canvas id="mainCanvas"></canvas>
 		</div>
 
 		<div style="padding-top:10px;text-align:center;">
