@@ -286,6 +286,12 @@ $configsetup = [
 			'placeholder' => $defaultConfig['colors']['button_font'],
 			'value' => $config['colors']['button_font']
 		],
+		'colors_start_font' => [
+			'type' => 'color',
+			'name' => 'colors[start_font]',
+			'placeholder' => $defaultConfig['colors']['start_font'],
+			'value' => $config['colors']['start_font']
+		],
 		'colors_panel' => [
 			'type' => 'color',
 			'name' => 'colors[panel]',

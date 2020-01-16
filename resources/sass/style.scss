@@ -230,7 +230,7 @@ hr {
   display: block;
   height: 0.1em;
   border: 0;
-  border-top: 0.1em solid $fontColor;
+  border-top: 0.1em solid $startFontColor;
   margin: 1em 0;
   padding: 0;
 }
@@ -279,7 +279,7 @@ hr.small {
 
   .startInner {
     background: rgba(0,0,0,0.5);
-    color: $fontColor;
+    color: $startFontColor;
     text-align: center;
     padding: 1rem;
 

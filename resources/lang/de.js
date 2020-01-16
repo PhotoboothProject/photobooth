@@ -147,6 +147,7 @@ const L10N = {
     'user_interface_colors_secondary': 'Sekundärfarbe',
     'user_interface_colors_font': 'Schriftfarbe',
     'user_interface_colors_button_font': 'Schriftfarbe der Schaltflächen',
+    'user_interface_colors_start_font': 'Schriftfarbe der Startseite',
     'user_interface_colors_panel': 'Farbe Admin- und Login-Panel',
     'user_interface_colors_hover_panel': 'Farbe Admin- und Login-Panel (hover)',
     'user_interface_colors_border': 'Umrandungsfarbe',
