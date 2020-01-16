@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 
 require_once('../lib/config.php');
 require_once('../lib/db.php');
+require_once('../lib/resize.php');
 
 if (empty($_GET['filename']) || !preg_match('/^[a-z0-9_]+\.jpg$/', $_GET['filename'])) {
     die(json_encode([
@@ -17,7 +18,15 @@ $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $file
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $filename;
 $status = false;
 
+// QR
+if (!isset($config['webserver_ip'])) {
+    $SERVER_IP = $_SERVER['HTTP_HOST'];
+} else {
+    $SERVER_IP = $config['webserver_ip'];
+}
+
 // text on print variables
+$fontpath = $config['font_path'];
 $fontsize = $config['fontsize'];
 $fontlocx = $config['locationx'];
 $fontlocy = $config['locationy'];
@@ -26,6 +35,9 @@ $fontrot = $config['rotation'];
 $line1text = $config['textonprint']['line1'];
 $line2text = $config['textonprint']['line2'];
 $line3text = $config['textonprint']['line3'];
+
+// print frame
+$print_frame = $config['print_frame_path'];
 
 // exit with error
 if (!file_exists($filename_source)) {
@@ -39,7 +51,7 @@ if (!file_exists($filename_print)) {
         // create qr code
         if (!file_exists($filename_codes)) {
             include('../vendor/phpqrcode/qrlib.php');
-            $url = 'http://'.$_SERVER['HTTP_HOST'].'/api/download.php?image=';
+            $url = 'http://'.$SERVER_IP.'/api/download.php?image=';
             QRcode::png($url.$filename, $filename_codes, QR_ECLEVEL_H, 10);
         }
 
@@ -51,13 +63,13 @@ if (!file_exists($filename_print)) {
         $source = imagecreatefromjpeg($filename_source);
         $code = imagecreatefrompng($filename_codes);
 
-        if ($config['print_frame'] == true) {
+        if ($config['print_frame'] && !($config['take_frame'])) {
             $print = imagecreatefromjpeg($filename_source);
-            $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
-            $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
-            $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
-            $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
-            imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+            $frame = imagecreatefrompng($print_frame);
+            $frame = resizePngImage($frame, imagesx($print), imagesy($print));
+            $x = (imagesx($print)/2) - (imagesx($frame)/2);
+            $y = (imagesy($print)/2) - (imagesy($frame)/2);
+            imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
             imagejpeg($print, $filename_print);
             imagedestroy($print);
             // $source needs to be redefined, picture with frame now exists inside $filename_print
@@ -74,9 +86,9 @@ if (!file_exists($filename_print)) {
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['is_textonprint'] == true) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0);  // colour of font
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line1text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line3text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, $fontpath, $line3text);
         }
         // text on image - end
 
@@ -85,19 +97,19 @@ if (!file_exists($filename_print)) {
         imagedestroy($source);
     } else {
         $print = imagecreatefromjpeg($filename_source);
-        if ($config['print_frame'] == true) {
-            $rahmen = @imagecreatefrompng('../resources/img/frames/frame.png');
-            $rahmen = ResizePngImage($rahmen, imagesx($print), imagesy($print));
-            $x = (imagesx($print)/2) - (imagesx($rahmen)/2);
-            $y = (imagesy($print)/2) - (imagesy($rahmen)/2);
-            imagecopy($print, $rahmen, $x, $y, 0, 0, imagesx($rahmen), imagesy($rahmen));
+        if ($config['print_frame'] == true && !($config['take_frame'])) {
+            $frame = imagecreatefrompng($print_frame);
+            $frame = resizePngImage($frame, imagesx($print), imagesy($print));
+            $x = (imagesx($print)/2) - (imagesx($frame)/2);
+            $y = (imagesy($print)/2) - (imagesy($frame)/2);
+            imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
         }
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['is_textonprint'] == true) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0);  // colour of font
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line1text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, '../resources/fonts/GreatVibes-Regular.ttf', $line3text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, $fontpath, $line3text);
         }
         //text on image - end
         imagejpeg($print, $filename_print);
@@ -124,21 +136,6 @@ die(json_encode([
     'status' => 'ok',
     'msg' => $printimage || '',
 ]));
-
-function ResizePngImage($image, $max_width, $max_height)
-{
-    $old_width  = imagesx($image);
-    $old_height = imagesy($image);
-    $scale      = min($max_width/$old_width, $max_height/$old_height);
-    $new_width  = ceil($scale*$old_width);
-    $new_height = ceil($scale*$old_height);
-    $new = imagecreatetruecolor($new_width, $new_height);
-    imagealphablending($new, false);
-    imagesavealpha($new, true);
-    imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
-
-    return $new;
-}
 
 // Resize and crop image by center
 function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 80)

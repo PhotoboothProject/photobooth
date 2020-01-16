@@ -47,19 +47,6 @@ $mailTemplates = [
     ],
 ];
 
-$colors = [
-    'default' => [
-        'primary' => '#e67e22',
-        'secondary' => '#d35400',
-        'font' => '#ffffff',
-    ],
-    'blue-gray' => [
-        'primary' => '#669db3',
-        'secondary' => '#2e535e',
-        'font' => '#f0f6f7',
-    ]
-];
-
 require_once($default_config_file);
 
 $config['mail_subject'] = $mailTemplates[$config['language']]['mail_subject'];
@@ -68,7 +55,8 @@ $config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
 $config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
 $config['print']['cmd'] = $cmds[$os]['print']['cmd'];
 $config['print']['msg'] = $cmds[$os]['print']['msg'];
-$config['colors'] = $colors['default'];
+
+$config['collage_limit'] = 4;
 
 $defaultConfig = $config;
 
@@ -84,12 +72,16 @@ if ($config['dev']) {
     error_reporting(E_ALL);
 }
 
-if (is_array($config['color_theme'])) {
-    $config['colors'] = $config['color_theme'];
-} elseif (array_key_exists($config['color_theme'], $colors)) {
-    $config['colors'] = $colors[$config['color_theme']];
-} else {
-    $config['colors'] = $colors['default'];
+if (!isset($config['background_image'])) {
+    $config['background_image'] = 'url(../img/bg.jpg)';
+}
+
+if (!isset($config['background_admin'])) {
+    $config['background_admin'] = 'url(../img/bg.jpg)';
+}
+
+if (!isset($config['background_chroma'])) {
+    $config['background_chroma'] = 'url(../img/bg.jpg)';
 }
 
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {

@@ -10,21 +10,34 @@ if (!isset($data['type'])) {
 }
 
 if ($data['type'] == 'reset') {
-    // empty folders
-    foreach ($config['foldersAbs'] as $folder) {
-        if (is_dir($folder)) {
-            $files = glob($folder.'/*.jpg');
-            foreach ($files as $file) { // iterate files
-                if (is_file($file)) {
-                    unlink($file); // delete file
+    if($config['reset_remove_images']) {
+        // empty folders
+        foreach ($config['foldersAbs'] as $folder) {
+            if (is_dir($folder)) {
+                $files = glob($folder.'/*.jpg');
+                foreach ($files as $file) { // iterate files
+                    if (is_file($file)) {
+                        unlink($file); // delete file
+                    }
                 }
             }
         }
     }
 
-    // delete mail-addresses.txt
-    if(is_file('../mail-addresses.txt')){
-        unlink('../mail-addresses.txt');
+    if($config['reset_remove_mailtxt']) {
+        $mailAddressesFile = $config['foldersAbs']['data'] . '/mail-addresses.txt';
+
+        // delete mail-addresses.txt
+        if(is_file($mailAddressesFile)){
+            unlink($mailAddressesFile);
+        }
+    }
+
+    if($config['reset_remove_config']) {
+        // delete personal config
+        if(is_file('../config/my.config.inc.php')){
+            unlink('../config/my.config.inc.php');
+        }
     }
 
     // delete db.txt
@@ -36,11 +49,16 @@ if ($data['type'] == 'reset') {
 }
 
 if ($data['type'] == 'config') {
-    $file = __DIR__ . '/../config/my.config.inc.php';
     $newConfig = [];
 
     foreach ($config as $k=>$conf) {
         if (is_array($conf)) {
+
+            if (!empty($data[$k]) && is_array($data[$k])) {
+                $newConfig[$k] = $data[$k];
+                continue;
+            }
+
             foreach ($conf as $sk => $sc) {
                 if (isset($data[$k][$sk]) && !empty($data[$k][$sk])) {
                     if ($data[$k][$sk] == 'true') {
@@ -63,10 +81,23 @@ if ($data['type'] == 'config') {
         }
     }
 
+    if ($newConfig['login_enabled']) {
+        if (isset($newConfig['login_password']) && !empty($newConfig['login_password'])) {
+            if (!($newConfig['login_password'] === $config['login_password'])) {
+                $hashing = password_hash($newConfig['login_password'], PASSWORD_DEFAULT);
+                $newConfig['login_password'] = $hashing;
+            }
+        } else {
+            $newConfig['login_enabled'] = false;
+        }
+    } else {
+        $newConfig['login_password'] = NULL;
+    }
+
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
-    if (file_put_contents($file, $content)) {
-        clearCache($file);
+    if (file_put_contents($my_config_file, $content)) {
+        clearCache($my_config_file);
 
         echo json_encode('success');
     } else {

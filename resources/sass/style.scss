@@ -1,4 +1,4 @@
-@import "modules/colors";
+@import "modules/theme";
 @import "partials/fonts";
 @import "partials/basic";
 @import "partials/button";
@@ -16,26 +16,9 @@
   width: 100%;
   height: 100%;
   background-color: $mainColor;
-  background-image: url(../img/bg.jpg);
+  background-image: $backgroundImage;
   background-position: center center;
   background-size: cover;
-
-  &.bluegray-bg {
-    background-image: url(../img/bg_bluegray.jpg);
-  }
-}
-
-.adminpanel {
-  width: 400px;
-  background: #fff;
-  min-height: 400px;
-  margin: 100px auto 0;
-  padding: 15px 15px 70px;
-  position: relative;
-
-  h2 {
-    text-align: center;
-  }
 }
 
 #result {
@@ -75,34 +58,71 @@
 }
 
 #counter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   backface-visibility: hidden;
   font-size: 12em;
   opacity: 0.2;
 }
+
 #counter.tick {
   font-size: 1em;
   opacity: 1;
   transition: font-size 0.75s, opacity 0.75s;
 }
 
+.cheese {
+  position: absolute;
+  color: $cheeseColor;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 3em;
+}
+
 #loader {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.9);
-  color: #252525;
+  background: $background_countdownColor;
+  background-size: cover;
+  background-position: center center;
+  color: $countdownColor;
   z-index: 100;
   text-align: center;
   position: absolute;
   top: 0;
   left: 0;
 
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background-color: $background_countdownColor;
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+
+  &.showBackgroundImage {
+    &:after {
+      opacity: 0.5;
+    }
+  }
+
   &.open {
     display: flex;
   }
 
   .spinner {
-    font-size: 80px;
+    color: $cheeseColor;
+    font-size: 5em;
   }
 }
 
@@ -110,7 +130,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  font-size: 14px;
+  font-size: 0.875em;
   width: 130px;
 }
 
@@ -133,7 +153,7 @@
   p {
     margin: 0;
     padding: 0 15px;
-    font-size: 25px;
+    font-size: 1.6em;
   }
 
   img {
@@ -148,7 +168,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: $panelColor;
+  color: $fontColor;
   padding: 25px 15px 15px;
   min-width: 250px;
   display: none;
@@ -158,7 +179,7 @@
   position: absolute;
   right: 14px;
   top: 14px;
-  font-size: 28px;
+  font-size: 1.75em;
   cursor: pointer;
 }
 
@@ -168,6 +189,15 @@
   width: 100%;
 }
 
+input[type="email"] {
+  color: $fontColor;
+  background: $boxColor;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  width: 100%;
+  padding: 0 10px;
+}
+
 .spacer {
   clear: both;
   height: 50px;
@@ -175,7 +205,7 @@
 }
 
 .loading {
-  font-size: 50px;
+  font-size: 3.125em;
   text-align: center;
   width: 100%;
 
@@ -184,10 +214,25 @@
   }
 }
 
+.error {
+  p {
+    color: red;
+  }
+}
+
 .stages {
   display: none;
   height: 100%;
   width: 100%;
+}
+
+hr {
+  display: block;
+  height: 0.1em;
+  border: 0;
+  border-top: 0.1em solid $startFontColor;
+  margin: 1em 0;
+  padding: 0;
 }
 
 hr.small {
@@ -198,10 +243,10 @@ hr.small {
 
 .blurred {
   display: none;
-  color: #fff;
+  color: $borderColor;
   width: 100%;
   height: 250px;
-  background: url(../img/bg.jpg) center center no-repeat;
+  background: $backgroundImage center center no-repeat;
   background-size: cover;
   -webkit-filter: blur(6px);
   -moz-filter: blur(6px);
@@ -226,12 +271,17 @@ hr.small {
     left: 0;
   }
 
+  .cups-button {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
   .startInner {
     background: rgba(0,0,0,0.5);
-    color: #fff;
+    color: $startFontColor;
     text-align: center;
     padding: 1rem;
-    text-transform: uppercase;
 
     .names {
       margin-top: 1rem;
@@ -286,17 +336,23 @@ hr.small {
   top: 30px;
   position: fixed;
   z-index: 10000000;
-  font-size: 50px;
+  font-size: 3.125em;
   text-shadow: 0 2px 0 #000;
   color: #fff;
 }
 
-#video {
-  position: absolute;
-  top: 50%;
-  margin-top: -240px;
-  margin-left: -360px;
-  left: 50%;
+#video--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.flip-horizontal {
+  transform: scaleX(-1);
+  filter: FlipH;
 }
 
 .chroma-control-bar {

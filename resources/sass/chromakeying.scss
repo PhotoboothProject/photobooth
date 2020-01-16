@@ -1,0 +1,42 @@
+@import "modules/theme";
+@import "partials/basic";
+@import "partials/button";
+@import "partials/fonts";
+@import "partials/modal";
+
+.chromawrapper {
+  display: block;
+  padding: 1em 2em 2em;
+  position: relative;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: $mainColor;
+  background-image: $chromaBackground;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.canvasWrapper {
+  width: 1000px;
+  display: inline-block;
+  max-width: 100%;
+  background-color: green;
+  border:4px solid $borderColor;
+}
+
+#mainCanvas {
+  display: block;
+  max-width: 100%;
+}
+
+.backgroundPreview {
+  cursor:pointer;
+  max-width:120px;
+  max-height: 80px;
+  border:2px solid $borderColor;
+  margin:3px;
+}

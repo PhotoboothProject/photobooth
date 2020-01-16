@@ -13,3 +13,6 @@ config/my.config.inc.php
 resources/css/admin.css
 resources/css/style.css
 /archives/
+resources/css/rounded.css
+resources/css/login.css
+resources/css/chromakeying.css

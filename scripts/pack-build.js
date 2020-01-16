@@ -50,15 +50,20 @@ function createArchive(fileName, archive) {
 
     archive.directory('admin');
     archive.directory('api');
+    archive.file('button.py');
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
     archive.directory('lib');
     archive.directory('resources');
+    archive.directory('template');
     archive.directory('vendor');
+    archive.file('login.php');
+    archive.file('logout.php');
     archive.file('chromakeying.php');
     archive.file('index.php');
     archive.file('phpinfo.php');
     archive.file('LICENSE');
+    archive.file('README.md');
     archive.file('package.json');
     archive.file('gallery.php');
     archive.file('node_modules/normalize.css/normalize.css');

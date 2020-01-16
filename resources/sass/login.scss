@@ -1,0 +1,44 @@
+@import "modules/theme";
+@import "partials/fonts";
+@import "partials/basic";
+@import "partials/button";
+
+.loginbody {
+  display: block;
+  position: relative;
+  overflow-y: auto;
+  background-color: $mainColor;
+  background-image: $adminBackground;
+  background-position: center center no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+input[type="text"],
+input[type="password"] {
+  color: $fontColor;
+  background: $boxColor;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.login-panel {
+  color: $fontColor;
+  width: 500px;
+  padding: 30px 30px 90px;
+  height: auto;
+  margin: 50px auto;
+  background: $panelColor;
+  position: relative;
+  max-width: 100%;
+}
+
+.password-toggle {
+  float: right;
+  margin-left: -25px;
+  margin-top: 5px;
+  position: relative;
+  z-index: 2;
+}

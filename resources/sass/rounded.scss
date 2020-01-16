@@ -1,0 +1,76 @@
+@import "modules/theme";
+
+#start {
+  .startInner {
+    border: 0 none;
+    border-radius: 10px;
+  }
+  .cups-button {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+  }
+}
+
+.homebtn {
+  right: 5px;
+  top: 5px;
+}
+
+.resultInner {
+  .btn {
+    margin-left: 2px;
+  }
+}
+
+.sidenav {
+  .closebtn {
+    border-radius: 5px;
+  }
+}
+
+.btn {
+  border-radius: 10px;
+}
+
+.gallery {
+  &__close {
+    border-radius: 5px;
+  }
+
+  &__reload {
+    border-radius: 5px;
+  }
+}
+
+.gallery-button {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.admin-panel {
+  border: 0 none;
+  border-radius: 10px;
+}
+
+.panel {
+  .panel-heading {
+    margin-top: 2px;
+    border-radius: 5px;
+  }
+
+  .panel-body {
+    margin-top: 1px;
+    border-radius: 5px;
+  }
+}
+
+.login-panel {
+  border: 0 none;
+  border-radius: 10px;
+}
+
+button {
+  border: 2px solid $borderColor;
+  border-radius: 10px;
+}

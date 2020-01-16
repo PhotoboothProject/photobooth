@@ -1,0 +1,38 @@
+:root {
+    // default values are specified in lib/config.php
+    --primary-color: transparent;
+    --secondary-color: transparent;
+    --font-color: transparent;
+    --button-font-color: transparent;
+    --start-font-color: transparent;
+    --countdown-color: transparent;
+    --background-countdown-color: transparent;
+    --cheese-color: transparent;
+    --panel-color: transparent;
+    --hover-panel-color: transparent;
+    --border-color: transparent;
+    --box-color: transparent;
+    --gallery-button-color: transparent;
+    --background-default: none;
+    --background-admin: none;
+    --background-chroma: none;
+    --fontSize: 16px;
+}
+
+$mainColor: var(--primary-color);
+$hoverColor: var(--secondary-color);
+$fontColor: var(--font-color);
+$buttonFontColor: var(--button-font-color);
+$startFontColor: var(--start-font-color);
+$countdownColor: var(--countdown-color);
+$background_countdownColor: var(--background-countdown-color);
+$cheeseColor: var(--cheese-color);
+$panelColor: var(--panel-color);
+$hoverPanelColor: var(--hover-panel-color);
+$borderColor: var(--border-color);
+$boxColor: var(--box-color);
+$galleryButtonColor: var(--gallery-button-color);
+$backgroundImage: var(--background-default);
+$adminBackground: var(--background-admin);
+$chromaBackground: var(--background-chroma);
+$fontSize: var(--fontSize);

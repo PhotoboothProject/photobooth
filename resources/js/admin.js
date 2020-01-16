@@ -95,4 +95,16 @@ $(function() {
             }
         });
     });
+    $('option').mousedown(function(e) {
+        e.preventDefault();
+        const originalScrollTop = $(this).parent().scrollTop();
+        $(this).prop('selected', !$(this).prop('selected'));
+        const that = this;
+        $(this).parent().focus();
+        setTimeout(function() {
+            $(that).parent().scrollTop(originalScrollTop);
+        }, 0);
+
+        return false;
+    });
 });

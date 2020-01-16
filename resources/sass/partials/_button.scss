@@ -3,12 +3,12 @@
     border: 0 none;
     background: $mainColor;
     display: inline-block;
-    color: $fontColor;
+    color: $buttonFontColor;
     text-decoration: none;
     margin: auto;
     width: 200px;
     text-align: center;
-    font-size: 16px;
+    font-size: 1em;
 
     &--small {
         padding: 12px 40px;
@@ -20,6 +20,11 @@
 
     &--flex {
         width: auto;
+    }
+
+    &--login {
+        padding: 12px 18px;
+        width: 50%;
     }
 
     &:active,

@@ -1,7 +1,9 @@
 <?php
+session_start();
 
 require_once('../lib/config.php');
 require_once('../lib/configsetup.inc.php');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,13 +24,15 @@ require_once('../lib/configsetup.inc.php');
 
 	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" type="text/css" href="../resources/css/style.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/admin.css" />
+	<?php if ($config['rounded_corners']): ?>
+	<link rel="stylesheet" type="text/css" href="../resources/css/rounded.css" />
+	<?php endif; ?>
 </head>
-<body class="deselect">
-<div id="wrapper" style="overflow-y: auto;">
+<body class="adminwrapper">
 	<div class="admin-panel">
 		<h2><a class="back-to-pb" href="../">Photobooth</a></h2>
+		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin']): ?>
 		<button class="reset-btn">
 			<span class="save">
 				<span data-l10n="reset"></span>
@@ -46,9 +50,15 @@ require_once('../lib/configsetup.inc.php');
 				<span data-l10n="saveerror"></span>
 			</span>
 		</button>
+
+		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
+		<p><a href="../logout.php" class="btn btn--tiny btn--flex fa fa-sign-out"><span data-l10n="logout"></span></a></p>
+		<?php endif; ?>
+
 		<div id="checkVersion">
 			<p><a href="#" class="btn btn--tiny btn--flex"><span data-l10n="check_version"></span></a></p>
 		</div>
+
 		<div class="accordion">
 			<form>
 				<?php
@@ -68,27 +78,34 @@ require_once('../lib/configsetup.inc.php');
 								case 'input':
 									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field[
 										'value'].'" placeholder="'.$field['placeholder'].'"/>';
-								break;
+									break;
+								case 'color':
+									echo '<input type="color" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/>
+										<label data-l10n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';
+									break;
+								case 'hidden':
+									echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
+									break;
 								case 'checkbox':
 									$checked = '';
 									if ($field['value'] == 'true') {
 										$checked = ' checked="checked"';
 									}
 									echo '<label><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span data-l10n="'.$key.'">'.$key.'</span></label>';
-								break;
+									break;
+								case 'multi-select':
 								case 'select':
-									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><select name="'.$field['name'].'">
-										<option data-l10n="'.$key.'"></option>
-									';
+									$selectTag = '<select name="'.$field['name'] . ($field['type'] === 'multi-select' ? '[]' : '') . '"' . ($field['type'] === 'multi-select' ? ' multiple="multiple" size="10"' : '') . '>';
+									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label>' . $selectTag;
 										foreach($field['options'] as $val => $option) {
 											$selected = '';
-											if ($val == $field['value']) {
+											if ((is_array($field['value']) && in_array($val, $field['value'])) || ($val === $field['value'])) {
 												$selected = ' selected="selected"';
 											}
 											echo '<option '.$selected.' value="'.$val.'">'.$option.'</option>';
 										}
 									echo '</select>';
-								break;
+									break;
 							}
 							echo '</div>';
 						}
@@ -114,16 +131,19 @@ require_once('../lib/configsetup.inc.php');
 					<span data-l10n="saveerror"></span>
 				</span>
 			</button>
+		<?php else:
+		header("location: ../login.php");
+		exit;
+		endif; ?>
 		</div>
 	</div>
 
-</div>
-<script type="text/javascript" src="../api/config.php"></script>
-<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="../resources/js/l10n.js"></script>
-<script type="text/javascript" src="../resources/js/theme.js"></script>
-<script type="text/javascript" src="../resources/js/admin.js"></script>
-<script type="text/javascript" src="../resources/lang/<?php echo $config['language']; ?>.js"></script>
+	<script type="text/javascript" src="../api/config.php"></script>
+	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="../resources/js/l10n.js"></script>
+	<script type="text/javascript" src="../resources/js/theme.js"></script>
+	<script type="text/javascript" src="../resources/js/admin.js"></script>
+	<script type="text/javascript" src="../resources/lang/<?php echo $config['language']; ?>.js"></script>
 
 </body>
 </html>
