@@ -1,6 +1,6 @@
 {
   "name": "photobooth",
-  "version": "2.1.0-alpha",
+  "version": "2.1.1-alpha",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "scripts": {
     "build": "gulp sass",
