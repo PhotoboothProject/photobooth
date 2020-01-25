@@ -207,6 +207,17 @@ $configsetup = [
 			'name' => 'previewCamFlipHorizontal',
 			'value' => $config['previewCamFlipHorizontal']
 		],
+		'previewFromIPCam' => [
+			'type' => 'checkbox',
+			'name' => 'previewFromIPCam',
+			'value' => $config['previewFromIPCam']
+		],
+		'ipCamURL' => [
+			'type' => 'input',
+			'name' => 'ipCamURL',
+			'placeholder' => '',
+			'value' => $config['ipCamURL']
+		],
 		'videoWidth' => [
 			'type' => 'input',
 			'name' => 'videoWidth',

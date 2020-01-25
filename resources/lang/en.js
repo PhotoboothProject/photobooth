@@ -8,6 +8,8 @@ const L10N = {
     'general_db_file': 'Database file name',
     'general_camera_mode': 'Camera facing mode',
     'previewCamFlipHorizontal': 'Flip image from device cam horizontally',
+    'previewFromIPCam': 'Preview from URL',
+    'general_ipCamURL': 'Preview-URL',
     'general_videoHeight': 'Device cam picture height',
     'general_videoWidth': 'Device cam picture width',
     'user_interface_background_chroma': 'Chroma keying panel background image path',

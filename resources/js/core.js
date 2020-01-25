@@ -138,7 +138,7 @@ const photoBooth = (function () {
             photoStyle = 'collage';
         }
 
-        if (config.previewFromCam) {
+        if (config.previewFromCam && !config.previewFromIPCam) {
             public.startVideo();
         }
 
@@ -175,7 +175,7 @@ const photoBooth = (function () {
             console.log('Take Picture:' + photoStyle);
         }
 
-        if (config.previewFromCam) {
+        if (config.previewFromCam && !config.previewFromIPCam) {
             if (config.previewCamTakesPic && !config.dev) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
