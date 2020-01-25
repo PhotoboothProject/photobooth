@@ -80,6 +80,7 @@ const L10N = {
     'show_fork': 'Muestre el banner de la página',
     'general_cntdwn_time': 'Cuenta regresiva en segundos',
     'general_cheese_time': '¡Definir el tiempo para el patataaaaas!en milisegundos.',
+    'general_time_to_live': 'Show image after capture in milliseconds',
     'previewFromCam': 'Ver el vistazo por cámara',
     'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Primero muestre las últimas páginas',

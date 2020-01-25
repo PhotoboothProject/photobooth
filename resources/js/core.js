@@ -5,7 +5,7 @@ const photoBooth = (function () {
     const public = {},
         loader = $('#loader'),
         startPage = $('#start'),
-        timeToLive = 90000,
+        timeToLive = config.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
         webcamConstraints = {
@@ -355,9 +355,7 @@ const photoBooth = (function () {
             $('#loader').css('background-image', 'url()');
             $('#loader').removeClass('showBackgroundImage');
 
-            if (!config.dev) {
-                public.resetTimeOut();
-            }
+            public.resetTimeOut();
         };
 
         preloadImage.src = imageUrl;

@@ -80,6 +80,7 @@ const L10N = {
     'show_fork': 'Εμφανίστε το λογότυπο Fork',
     'general_cntdwn_time': 'Μετρητής αντίστροφης μέτρησης σε δευτερόλεπτα',
     'general_cheese_time': 'Cheeeeeeeese!-Μετρητής αντίστροφης σε χιλιοστά του δευτερολέπτου',
+    'general_time_to_live': 'Show image after capture in milliseconds',
     'previewFromCam': 'Προβολή προεπισκόπησης από τη φωτογραφική μηχανή tablet',
     'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Προβολή των τελευταίων φωτογραφιών πρώτα',
