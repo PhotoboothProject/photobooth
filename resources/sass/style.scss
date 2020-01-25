@@ -18,7 +18,9 @@
   background-color: $mainColor;
   background-image: $backgroundImage;
   background-position: center center;
+  background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 #result {
@@ -97,6 +99,9 @@
   top: 0;
   left: 0;
 
+  &.streaming {
+    background: $ipcamBackground;
+  }
   &:after {
     content: '';
     position: absolute;
@@ -341,14 +346,30 @@ hr.small {
   color: #fff;
 }
 
-#video--view,
-#ipcam--view {
+#video--view {
   top: 0;
   left: 0;
   position: fixed;
   height: 100%;
   width: 100%;
   object-fit: cover;
+}
+
+#ipcam--view {
+  background-image: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+
+  &.streaming {
+    background-image: $ipcamBackground;
+  }
 }
 
 .flip-horizontal {

@@ -127,12 +127,13 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				</div>
 
 				<?php if ($config['previewFromIPCam']): ?>
-				<iframe id="ipcam--view" src='<?=$config['ipCamURL']?>'"></iframe>
+				<div id="ipcam--view"></div>
 				<?php elseif ($config['previewFromCam']): ?>
 				<video id="video--view" autoplay playsinline></video>
 				<?php endif; ?>
 
 				<div id="counter">
+					<div id="ipcam--view"></div>
 					<canvas id="video--sensor"</canvas>
 				</div>
 				<div class="cheese"></div>

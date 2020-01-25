@@ -140,6 +140,8 @@ const photoBooth = (function () {
 
         if (config.previewFromCam && !config.previewFromIPCam) {
             public.startVideo();
+        } else if (config.previewFromIPCam) {
+            $('#ipcam--view').addClass('streaming');
         }
 
         loader.addClass('open');
@@ -182,6 +184,8 @@ const photoBooth = (function () {
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
             public.stopVideo();
+        } else if (config.previewFromIPCam) {
+            $('#ipcam--view').removeClass('streaming');
         }
 
         const data = {
