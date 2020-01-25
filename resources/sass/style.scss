@@ -345,14 +345,30 @@ hr.small {
   color: #fff;
 }
 
-#video--view,
-#ipcam--view {
+#video--view {
   top: 0;
   left: 0;
   position: fixed;
   height: 100%;
   width: 100%;
   object-fit: cover;
+}
+
+#ipcam--view {
+  background-image: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+
+  &.streaming {
+    background-image: $ipcamBackground;
+  }
 }
 
 .flip-horizontal {

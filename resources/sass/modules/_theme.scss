@@ -16,6 +16,7 @@
     --background-default: none;
     --background-admin: none;
     --background-chroma: none;
+    --background-ipcam: none;
     --fontSize: 16px;
 }
 
@@ -35,4 +36,5 @@ $galleryButtonColor: var(--gallery-button-color);
 $backgroundImage: var(--background-default);
 $adminBackground: var(--background-admin);
 $chromaBackground: var(--background-chroma);
+$ipcamBackground: var(--background-ipcam);
 $fontSize: var(--fontSize);

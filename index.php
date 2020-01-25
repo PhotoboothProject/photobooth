@@ -126,9 +126,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 					<i class="fa fa-cog fa-spin"></i>
 				</div>
 
-				<?php if ($config['previewFromIPCam']): ?>
-				<iframe id="ipcam--view" src='<?=$config['ipCamURL']?>'"></iframe>
-				<?php endif; ?>
+				<div id="ipcam--view"></div>
 
 				<video id="video--view" autoplay playsinline></video>
 
