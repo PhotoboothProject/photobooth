@@ -247,6 +247,7 @@ const photoBooth = (function () {
             $('.spinner').hide();
             $('.loading').empty();
             $('.cheese').empty();
+            $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
             $('.loading').append($('<p>').text(L10N.error));
