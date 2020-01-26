@@ -94,6 +94,10 @@ if ($data['type'] == 'config') {
         $newConfig['login_password'] = NULL;
     }
 
+    if (!$newConfig['previewFromCam']) {
+        $newConfig['previewCamTakesPic'] = false;
+    }
+
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
     if (file_put_contents($my_config_file, $content)) {
