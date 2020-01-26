@@ -71,6 +71,8 @@ const photoBooth = (function () {
         gallery.find('.gallery__inner').hide();
         $('.spinner').hide();
         $('.send-mail').hide();
+        $('#video--view').hide();
+        $('#video--sensor').hide();
         public.resetMailForm();
     }
 
