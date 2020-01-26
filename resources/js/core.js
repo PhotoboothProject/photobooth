@@ -164,9 +164,18 @@ const photoBooth = (function () {
             $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.cheese');
         }
 
-        setTimeout(() => {
-            public.takePic(photoStyle);
-        }, config.cheese_time);
+        if (config.previewFromCam && config.previewCamTakesPic && !public.stream && !config.dev) {
+            console.log('No preview by device cam available!');
+
+            public.errorPic({
+                error: 'No preview by device cam available!'
+            });
+
+        } else {
+            setTimeout(() => {
+                public.takePic(photoStyle);
+            }, config.cheese_time);
+        }
     }
 
     // take Picture
