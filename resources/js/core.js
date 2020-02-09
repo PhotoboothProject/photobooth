@@ -275,7 +275,7 @@ const photoBooth = (function () {
         $('.spinner').show();
         $('.loading').text(photoStyle === 'photo' ? L10N.busy : L10N.busyCollage);
 
-        if (photoStyle === 'photo') {
+        if (photoStyle === 'photo' && config.image_preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
                 $('#loader').css('background-image', `url(${tempImageUrl})`);

@@ -114,6 +114,11 @@ $configsetup = [
 			'name' => 'time_to_live',
 			'value' => $config['time_to_live']
 		],
+		'image_preview_before_processing' => [
+			'type' => 'checkbox',
+			'name' => 'image_preview_before_processing',
+			'value' => $config['image_preview_before_processing']
+		],
 		'use_filter' => [
 			'type' => 'checkbox',
 			'name' => 'use_filter',

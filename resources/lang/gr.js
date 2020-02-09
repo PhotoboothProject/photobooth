@@ -85,6 +85,7 @@ const L10N = {
     'previewFromCam': 'Προβολή προεπισκόπησης από τη φωτογραφική μηχανή tablet',
     'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Προβολή των τελευταίων φωτογραφιών πρώτα',
+    'image_preview_before_processing': 'Preload image before processing',
     'folders_images': 'Φάκελος εικόνων',
     'folders_thumbs': 'Φάκελος μικρογραφιών',
     'folders_qrcodes': 'Φάκελο κώδικα QR',

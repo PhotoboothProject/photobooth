@@ -85,6 +85,7 @@ const L10N = {
     'previewFromCam': 'Voir l\'aperçu par caméra',
     'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Affichez les dernières images en premier',
+    'image_preview_before_processing': 'Preload image before processing',
     'folders_images': 'Dossier d\'images',
     'folders_thumbs': 'Dossier de vignettes',
     'folders_qrcodes': 'Dossier QR code',

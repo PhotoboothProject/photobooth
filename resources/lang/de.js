@@ -85,6 +85,7 @@ const L10N = {
     'previewFromCam': 'Vorschau aus der Gerätekamera anzeigen',
     'previewCamTakesPic': 'Gerätekamera zur Bildaufnahme verwenden',
     'newest_first': 'Neueste Bilder zuerst anzeigen',
+    'image_preview_before_processing': 'Bild laden bevor Filter berechnet werden',
     'folders_images': 'Bild Ordner',
     'folders_thumbs': 'Thumbnail Ordner',
     'folders_qrcodes': 'QR-Code Ordner',

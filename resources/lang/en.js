@@ -85,6 +85,7 @@ const L10N = {
     'previewFromCam': 'See preview by device cam',
     'previewCamTakesPic': 'Device cam takes picture',
     'newest_first': 'Show latest images first',
+    'image_preview_before_processing': 'Preload and show image during filter processing',
     'folders_images': 'Image Folder',
     'folders_thumbs': 'Thumbnail Folder',
     'folders_qrcodes': 'QR-Code Folder',
