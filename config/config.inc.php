@@ -156,3 +156,7 @@ $config['jpeg_quality_image'] = 80;
 $config['reset_remove_images'] = true;
 $config['reset_remove_mailtxt'] = true;
 $config['reset_remove_config'] = true;
+
+// PRESERVE EXIF
+$config['exiftool']['cmd'] = null;
+$config['exiftool']['msg'] = null;

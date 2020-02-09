@@ -104,6 +104,19 @@ imagedestroy($thumbResource);
 
 if ($imageModified || $config['jpeg_quality_image'] >= 0) {
     imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
+    // preserve jpeg meta data
+    if ($config['exiftool']['cmd']) {
+        $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+	exec($cmd, $output, $returnValue);
+        if ($returnValue) {
+            die(json_encode([
+                'error' => 'exiftool returned with an error code',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ]));
+        }
+    }
 } else {
     copy($filename_tmp, $filename_photo);
 }

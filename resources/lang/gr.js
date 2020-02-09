@@ -111,6 +111,8 @@ const L10N = {
     'commands_take_picture_msg': 'Μήνυμα επιτυχίας για τη φωτογραφία',
     'commands_print_cmd': 'Εντολή εκτύπωσης',
     'commands_print_msg': 'Μήνυμα επιτυχίας για εκτύπωση',
+    'commands_exiftool_cmd': 'EXIFtool command',
+    'commands_exiftool_msg': 'Success message for EXIF preservation',
     'really_delete': 'Θέλετε πραγματικά να διαγράψετε όλες τις εικόνες; Αυτό δεν μπορεί να ανατραπεί!',
     'event': 'Εκδήλωση',
     'is_event': 'Εκδήλωση',

@@ -24,6 +24,10 @@ $cmds = [
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',
             'msg' => '',
+        ],
+        'exiftool' => [
+            'cmd' => 'exiftool -overwrite_original -TagsFromFile %s %s',
+            'msg' => '',
         ]
     ],
 ];
@@ -55,6 +59,8 @@ $config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
 $config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
 $config['print']['cmd'] = $cmds[$os]['print']['cmd'];
 $config['print']['msg'] = $cmds[$os]['print']['msg'];
+$config['exiftool']['cmd'] = $cmds[$os]['exiftool']['cmd'];
+$config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
 
 $config['collage_limit'] = 4;
 

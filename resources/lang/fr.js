@@ -112,6 +112,8 @@ const L10N = {
     'commands_take_picture_msg': 'Message de réussite pour prendre une photo',
     'commands_print_cmd': 'Commande d\'impression',
     'commands_print_msg': 'Message de réussite pour impression',
+    'commands_exiftool_cmd': 'EXIFtool command',
+    'commands_exiftool_msg': 'Success message for EXIF preservation',
     'really_delete': 'Vraiment supprimer toutes les images? Ça ne peut pas être annulé!',
     'event': 'Événement',
     'is_event': 'Événement',

@@ -145,7 +145,7 @@ else
 fi
 
 info "### Installing common software..."
-apt install -y php-gd gphoto2
+apt install -y php-gd gphoto2 libimage-exiftool-perl
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 read -p "### Warning: If typing y, the whole /var/www/html folder will be removed! [y/N] " -n 1 -r deleteHtmlFolder

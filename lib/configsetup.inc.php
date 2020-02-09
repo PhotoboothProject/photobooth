@@ -707,6 +707,18 @@ $configsetup = [
 			'placeholder' => 'print_msg',
 			'name' => 'print[msg]',
 			'value' => $config['print']['msg']
+		],
+		'exiftool_cmd' => [
+			'type' => 'input',
+			'placeholder' => 'exiftool_cmd',
+			'name' => 'exiftool[cmd]',
+			'value' => $config['exiftool']['cmd']
+		],
+		'exiftool_msg' => [
+			'type' => 'input',
+			'placeholder' => 'exiftool_msg',
+			'name' => 'exiftool[msg]',
+			'value' => $config['exiftool']['msg']
 		]
 	],
 	'reset' => [
