@@ -65,7 +65,7 @@ if (!isset($_POST['filter'])) {
 
 $image_filter = false;
 
-if (!empty($_POST['filter']) && $_POST['filter'] !== 'imgPlain') {
+if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
     $image_filter = $_POST['filter'];
 }
 
