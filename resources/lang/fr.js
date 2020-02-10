@@ -91,6 +91,7 @@ const L10N = {
     'folders_data': 'Dossier data',
     'folders_keying': 'Dossier font vert',
     'general_language': 'La langue',
+    'keep_images': 'Keep original images in tmp folder',
     'send_all_later': 'Activez la case à cocher pour ajouter l\'adresse saisie à un fichier (par exemple, pour envoyer un courrier avec toutes les images ultérieurement)',
     'mail_host': 'Adresse mail de l\'hôte',
     'mail_username': 'Nom d\'utilisateur du compte de messagerie',
