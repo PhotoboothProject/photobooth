@@ -88,7 +88,6 @@ if ($config['chroma_keying']) {
     $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
     imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
     imagedestroy($chromaCopyResource);
-    $imageModified = true;
 }
 
 // image scale, create thumbnail
@@ -97,12 +96,11 @@ $thumbResource = resizeImage($imageResource, 500, 500);
 imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
 imagedestroy($thumbResource);
 
-if ($imageModified || $config['jpeg_quality_image'] != -1) {
+if ($imageModified || $config['jpeg_quality_image'] >= 0) {
     imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
 } else {
-    copy ( $filename_tmp, $filename_photo);
+    copy($filename_tmp, $filename_photo);
 }
-unlink ($filename_tmp);
 imagedestroy($imageResource);
 
 // insert into database
