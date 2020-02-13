@@ -177,5 +177,6 @@ const L10N = {
     'slideshow_refreshTime': 'Seite neuladen nach X Sekunden',
     'slideshow_pictureTime': 'Millisekunden die ein Bild angezeigt wird',
     'randomPicture': 'Zufällige Bilder anzeigen',
-    'use_thumbs': 'Thumbnails für die Diashow verwenden'
+    'use_thumbs': 'Thumbnails für die Diashow verwenden',
+    'preserve_exif_data': 'Exif-Daten erhalten'
 }

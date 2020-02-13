@@ -119,6 +119,11 @@ $configsetup = [
 			'name' => 'image_preview_before_processing',
 			'value' => $config['image_preview_before_processing']
 		],
+		'preserve_exif_data' => [
+			'type' => 'checkbox',
+			'name' => 'preserve_exif_data',
+			'value' => $config['preserve_exif_data']
+		],
 		'use_filter' => [
 			'type' => 'checkbox',
 			'name' => 'use_filter',
