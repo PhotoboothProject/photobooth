@@ -34,6 +34,12 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
             'error' => 'Could not create collage'
         ]));
     }
+
+    if (!$config['keep_images']) {
+        foreach ($collageSrcImagePaths as $tmp) {
+             unlink($tmp);
+        }
+    }
 }
 
 if (!file_exists($filename_tmp)) {
