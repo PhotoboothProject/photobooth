@@ -136,12 +136,12 @@ apt update
 apt dist-upgrade -y
 
 info "### Photobooth needs some software to run."
-if [ "$1" == "apache" ]; then
-    apache_webserver
+if [ "$1" == "nginx" ]; then
+    nginx_webserver
 elif [ "$1" == "lighttpd" ]; then
     lighttpd_webserver
 else
-    nginx_webserver
+    apache_webserver
 fi
 
 info "### Installing common software..."
