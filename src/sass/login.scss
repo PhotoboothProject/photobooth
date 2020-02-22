@@ -45,3 +45,13 @@ input[type='password'] {
   position: relative;
   z-index: 2;
 }
+
+.back-to-admin {
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  left: auto;
+  width: auto;
+  bottom: auto;
+  padding: 5px 10px;
+}
