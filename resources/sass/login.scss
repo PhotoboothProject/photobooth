@@ -7,11 +7,14 @@
   display: block;
   position: relative;
   overflow-y: auto;
-  background-color: $mainColor;
-  background-image: $adminBackground;
-  background-position: center center no-repeat;
   width: 100%;
   height: 100%;
+  background-color: $mainColor;
+  background-image: $adminBackground;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 input[type="text"],
