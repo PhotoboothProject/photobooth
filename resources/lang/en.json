@@ -32,6 +32,7 @@
   "disk_usage": "Disk Usage",
   "dot": ".",
   "download_thumbs": "Use thumbnails for download",
+  "download_zip": "Download data folder as zip",
   "error": "Something went wrong. Please try it again.",
   "event": "Event",
   "event_symbol": "Symbol",

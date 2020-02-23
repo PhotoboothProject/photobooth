@@ -40,6 +40,9 @@ require_once('../lib/diskusage.php');
 		<h2>Photobooth <span data-i18n="disk_usage"></span></h2>
 		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin']): ?>
 		<a class="btn btn--tiny btn--flex back-to-admin" href="./"><i class="fa fa-arrow-left"></i></a>
+		<button class="download-zip-btn btn btn--tiny btn--flex">
+			<span data-i18n="download_zip"></span>
+		</button>
 		<hr>
 <?php
     foreach ($config['foldersAbs'] as $key => $folder) {
@@ -64,9 +67,14 @@ require_once('../lib/diskusage.php');
 		</div>
 	</div>
 
+	<div class="modal" id="save_mesg">
+		<div class="modal__body" id="save_mesg_text"><span data-i18n="saving"></span></div>
+	</div>
+
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../resources/js/adminshortcut.js"></script>
+	<script type="text/javascript" src="../resources/js/diskusage.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="module" src="../resources/js/i18n-sub.js"></script>
