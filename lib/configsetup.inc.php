@@ -624,6 +624,12 @@ $configsetup = [
 			'placeholder' => $defaultConfig['folders']['tmp'],
 			'name' => 'folders[tmp]',
 			'value' => $config['folders']['tmp']
+		],
+		'archives' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['folders']['archives'],
+			'name' => 'folders[archives]',
+			'value' => $config['folders']['archives']
 		]
 	],
 	'event' => [

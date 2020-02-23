@@ -13,13 +13,13 @@ $(function () {
                 setTimeout(function () {
                     if (response.success === 'zip') {
                         $.ajax({
-                            url: '../data/' + response.file,
+                            url: '../' + config.folders.archives + '/' + response.file,
                             type: 'HEAD',
                             error: function () {
-                                //file not exists
+                                console.log('ZIP does not exist!');
                             },
                             success: function () {
-                                location.href = '../data/' + response.file;
+                                location.href = '../' + config.folders.archives + '/' + response.file;
                             }
                         });
                     }

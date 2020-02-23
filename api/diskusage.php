@@ -12,7 +12,7 @@ if (!isset($data['type'])) {
 }
 
 if ($data['type'] == 'zip') {
-    $zipOut = $config['foldersAbs']['data'] . '/' . $file;
+    $zipOut = $config['foldersAbs']['archives'] . '/' . $file;
 
     HZip::zipDir($config['foldersAbs']['data'], $zipOut);
 
