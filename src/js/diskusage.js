@@ -11,15 +11,15 @@ $(function () {
             success: function (response) {
                 console.log('data', response);
                 setTimeout(function () {
-                    if (response === 'success') {
+                    if (response.success === 'zip') {
                         $.ajax({
-                            url: '../data/out.zip',
+                            url: '../data/' + response.file,
                             type: 'HEAD',
                             error: function () {
                                 //file not exists
                             },
                             success: function () {
-                                location.href = '../data/out.zip';
+                                location.href = '../data/' + response.file;
                             }
                         });
                     }
