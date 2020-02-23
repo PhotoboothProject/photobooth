@@ -38,11 +38,14 @@ function format_size($size) {
 }
 
 function get_filecount($path) {
-    $filecount = 0;
-    $files = glob($path . "/*.{jpg,jpeg,png,gif,txt}",GLOB_BRACE);
-    if ($files) {
-        $filecount = count($files);
+    $fileCount = 0;
+    $fi = new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS);
+
+    foreach ($fi as $f) {
+        if ($f->isFile()) {
+            $fileCount++;
+        }
     }
-    return $filecount;
+    return $fileCount;
 }
 ?>
