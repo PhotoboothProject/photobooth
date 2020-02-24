@@ -14,6 +14,10 @@ $cmds = [
         'print' => [
             'cmd' => 'mspaint /pt "%s"',
             'msg' => '',
+        ],
+        'exiftool' => [
+            'cmd' => '',
+            'msg' => '',
         ]
     ],
     'linux' => [
