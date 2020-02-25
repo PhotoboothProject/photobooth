@@ -12,7 +12,7 @@ $cmds = [
             'msg' => 'Photo transfer done.'
         ],
         'print' => [
-            'cmd' => 'mspaint /pt "%s"',
+            'cmd' => 'mspaint /pt %s',
             'msg' => '',
         ],
         'exiftool' => [
