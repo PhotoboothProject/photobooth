@@ -20,6 +20,7 @@ $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_frame_path'];
 
 if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
     $collageBasename = substr($filename_tmp, 0, -4);
@@ -29,7 +30,7 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_frame'], $config['take_frame_path'])) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_frame'], $frame_path)) {
         die(json_encode([
             'error' => 'Could not create collage'
         ]));
@@ -82,7 +83,7 @@ if ($config['polaroid_effect']) {
 }
 
 if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
-    $frame = imagecreatefrompng($config['take_frame_path']);
+    $frame = imagecreatefrompng($frame_path);
     $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
     $x = (imagesx($imageResource)/2) - (imagesx($frame)/2);
     $y = (imagesy($imageResource)/2) - (imagesy($frame)/2);
