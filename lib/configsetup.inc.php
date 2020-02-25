@@ -399,7 +399,7 @@ $configsetup = [
 	'folders' => [
 		'images' => [
 			'type' => 'input',
-			'placeholder' => 'images',
+			'placeholder' => $defaultConfig['folders']['images'],
 			'name' => 'folders[images]',
 			'value' => $config['folders']['images']
 		],
