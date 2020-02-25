@@ -129,7 +129,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         });
 
         gallery.listen('afterChange', function() {
-            const img = gallery.currItem.src.split('/').pop();
+            const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
             $('.pswp__button--download').attr({
                 href: 'api/download.php?image=' + img,
@@ -168,7 +168,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         } else {
             pswpQR.empty();
             let img = gallery.currItem.src;
-            img = img.split('/').pop();
+            img = img.split('\\').pop().split('/').pop();
 
             $('<img>').attr('src', 'api/qrcode.php?filename=' + img).appendTo(pswpQR);
 
@@ -181,7 +181,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        const img = gallery.currItem.src.split('/').pop();
+        const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
         photoBooth.printImage(img, () => {
             gallery.close();
@@ -193,7 +193,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        const img = gallery.currItem.src.split('/').pop();
+        const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
         if (config.chroma_keying) {
             location = 'chromakeying.php?filename=' + encodeURI(img);
@@ -204,7 +204,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        const img = gallery.currItem.src.split('/').pop();
+        const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
         photoBooth.toggleMailDialog(img);
     });
