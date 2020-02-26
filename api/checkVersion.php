@@ -1,12 +1,12 @@
 <?php
 header('Content-Type: application/json');
 
-$url = 'https://api.github.com/repos/andreknieriem/photobooth/releases/latest';
+$url = 'https://api.github.com/repos/andi34/photobooth/releases/latest';
 
 $options = [
     'http'=> [
         'method' => 'GET',
-        'header' => "User-Agent: andreknieriem/photobooth\r\n"
+        'header' => "User-Agent: andi34/photobooth\r\n"
     ]
 ];
 
