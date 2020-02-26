@@ -169,7 +169,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a>
 				<?php endif; ?>
 
+				<?php if ($config['allow_delete']): ?>
 				<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-l10n="delete"></span></a>
+				<?php endif; ?>
 			</div>
 
 			<?php if ($config['use_qr']): ?>
