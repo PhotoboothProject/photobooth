@@ -57,8 +57,8 @@ function createArchive(fileName, archive) {
     archive.directory('resources');
     archive.directory('template');
     archive.directory('vendor');
-    archive.file('login.php');
-    archive.file('logout.php');
+    archive.directory('login');
+    archive.directory('slideshow');
     archive.file('chromakeying.php');
     archive.file('index.php');
     archive.file('phpinfo.php');
@@ -66,6 +66,7 @@ function createArchive(fileName, archive) {
     archive.file('README.md');
     archive.file('package.json');
     archive.file('gallery.php');
+    archive.file('update-booth.sh');
     archive.file('node_modules/normalize.css/normalize.css');
     archive.directory('node_modules/font-awesome/');
     archive.directory('node_modules/photoswipe/dist/');

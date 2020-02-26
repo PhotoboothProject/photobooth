@@ -26,7 +26,7 @@ if (!isset($config['webserver_ip'])) {
 }
 
 // text on print variables
-$fontpath = $config['font_path'];
+$fontpath = __DIR__ . DIRECTORY_SEPARATOR . $config['font_path'];
 $fontsize = $config['fontsize'];
 $fontlocx = $config['locationx'];
 $fontlocy = $config['locationy'];
@@ -37,7 +37,7 @@ $line2text = $config['textonprint']['line2'];
 $line3text = $config['textonprint']['line3'];
 
 // print frame
-$print_frame = $config['print_frame_path'];
+$print_frame = __DIR__ . DIRECTORY_SEPARATOR . $config['print_frame_path'];
 
 // exit with error
 if (!file_exists($filename_source)) {

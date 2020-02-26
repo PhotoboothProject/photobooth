@@ -96,7 +96,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			</div>
 
 			<?php if ($config['show_fork']): ?>
-			<a href="https://github.com/andreknieriem/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
+			<a href="https://github.com/andi34/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
 			<?php endif; ?>
 
 			<?php if($config['cups_button']): ?>
@@ -126,9 +126,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 					<i class="fa fa-cog fa-spin"></i>
 				</div>
 
-				<?php if ($config['previewFromCam']): ?>
 				<video id="video--view" autoplay playsinline></video>
-				<?php endif; ?>
 
 				<div id="counter">
 					<canvas id="video--sensor"</canvas>
@@ -171,7 +169,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a>
 				<?php endif; ?>
 
+				<?php if ($config['allow_delete']): ?>
 				<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-l10n="delete"></span></a>
+				<?php endif; ?>
 			</div>
 
 			<?php if ($config['use_qr']): ?>
@@ -215,7 +215,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
 		</div>
 	<?php else:
-	header("location: login.php");
+	header("location: login");
 	exit;
 	endif; ?>
 	</div>

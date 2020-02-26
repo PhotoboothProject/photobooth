@@ -5,7 +5,7 @@ const photoBooth = (function () {
     const public = {},
         loader = $('#loader'),
         startPage = $('#start'),
-        timeToLive = 90000,
+        timeToLive = config.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
         webcamConstraints = {
@@ -71,6 +71,8 @@ const photoBooth = (function () {
         gallery.find('.gallery__inner').hide();
         $('.spinner').hide();
         $('.send-mail').hide();
+        $('#video--view').hide();
+        $('#video--sensor').hide();
         public.resetMailForm();
     }
 
@@ -164,9 +166,18 @@ const photoBooth = (function () {
             $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.cheese');
         }
 
-        setTimeout(() => {
-            public.takePic(photoStyle);
-        }, config.cheese_time);
+        if (config.previewFromCam && config.previewCamTakesPic && !public.stream && !config.dev) {
+            console.log('No preview by device cam available!');
+
+            public.errorPic({
+                error: 'No preview by device cam available!'
+            });
+
+        } else {
+            setTimeout(() => {
+                public.takePic(photoStyle);
+            }, config.cheese_time);
+        }
     }
 
     // take Picture
@@ -247,6 +258,7 @@ const photoBooth = (function () {
             $('.spinner').hide();
             $('.loading').empty();
             $('.cheese').empty();
+            $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
             $('.loading').append($('<p>').text(L10N.error));
@@ -263,7 +275,7 @@ const photoBooth = (function () {
         $('.spinner').show();
         $('.loading').text(photoStyle === 'photo' ? L10N.busy : L10N.busyCollage);
 
-        if (photoStyle === 'photo') {
+        if (photoStyle === 'photo' && config.image_preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
                 $('#loader').css('background-image', `url(${tempImageUrl})`);
@@ -355,9 +367,7 @@ const photoBooth = (function () {
             $('#loader').css('background-image', 'url()');
             $('#loader').removeClass('showBackgroundImage');
 
-            if (!config.dev) {
-                public.resetTimeOut();
-            }
+            public.resetTimeOut();
         };
 
         preloadImage.src = imageUrl;

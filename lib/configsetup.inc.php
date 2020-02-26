@@ -33,6 +33,11 @@ $configsetup = [
 			'name' => 'dev',
 			'value' => $config['dev']
 		],
+		'keep_images' => [
+			'type' => 'checkbox',
+			'name' => 'keep_images',
+			'value' => $config['keep_images']
+		],
 		'show_error_messages' => [
 			'type' => 'checkbox',
 			'name' => 'show_error_messages',
@@ -102,6 +107,22 @@ $configsetup = [
 			'placeholder' => $defaultConfig['cheese_time'],
 			'name' => 'cheese_time',
 			'value' => $config['cheese_time']
+		],
+		'time_to_live' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['time_to_live'],
+			'name' => 'time_to_live',
+			'value' => $config['time_to_live']
+		],
+		'image_preview_before_processing' => [
+			'type' => 'checkbox',
+			'name' => 'image_preview_before_processing',
+			'value' => $config['image_preview_before_processing']
+		],
+		'preserve_exif_data' => [
+			'type' => 'checkbox',
+			'name' => 'preserve_exif_data',
+			'value' => $config['preserve_exif_data']
 		],
 		'use_filter' => [
 			'type' => 'checkbox',
@@ -200,6 +221,11 @@ $configsetup = [
 				'environment' => 'Back facing camera'
 			],
 			'value' => $config['camera_mode']
+		],
+		'allow_delete' => [
+			'type' => 'checkbox',
+			'name' => 'allow_delete',
+			'value' => $config['allow_delete']
 		]
 	],
 	'jpeg_quality' => [
@@ -373,7 +399,7 @@ $configsetup = [
 	'folders' => [
 		'images' => [
 			'type' => 'input',
-			'placeholder' => 'images',
+			'placeholder' => $defaultConfig['folders']['images'],
 			'name' => 'folders[images]',
 			'value' => $config['folders']['images']
 		],
@@ -638,6 +664,30 @@ $configsetup = [
 			'value' => $config['mail_text']
 		],
 	],
+	'slideshow' => [
+		'refreshTime' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['slideshow_refreshTime'],
+			'name' => 'slideshow_refreshTime',
+			'value' => $config['slideshow_refreshTime']
+		],
+		'pictureTime' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['slideshow_pictureTime'],
+			'name' => 'slideshow_pictureTime',
+			'value' => $config['slideshow_pictureTime']
+		],
+		'randomPicture' => [
+			'type' => 'checkbox',
+			'name' => 'slideshow_randomPicture',
+			'value' => $config['slideshow_randomPicture']
+		],
+		'use_thumbs' => [
+			'type' => 'checkbox',
+			'name' => 'slideshow_use_thumbs',
+			'value' => $config['slideshow_use_thumbs']
+		]
+	],
 	'commands' => [
 		'take_picture_cmd' => [
 			'type' => 'input',
@@ -662,6 +712,18 @@ $configsetup = [
 			'placeholder' => 'print_msg',
 			'name' => 'print[msg]',
 			'value' => $config['print']['msg']
+		],
+		'exiftool_cmd' => [
+			'type' => 'input',
+			'placeholder' => 'exiftool_cmd',
+			'name' => 'exiftool[cmd]',
+			'value' => $config['exiftool']['cmd']
+		],
+		'exiftool_msg' => [
+			'type' => 'input',
+			'placeholder' => 'exiftool_msg',
+			'name' => 'exiftool[msg]',
+			'value' => $config['exiftool']['msg']
 		]
 	],
 	'reset' => [

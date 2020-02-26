@@ -28,9 +28,13 @@ $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['collage_cntdwn_time'] = '3'; // control countdown timer between collage pictures
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
+$config['keep_images'] = true;
+$config['image_preview_before_processing'] = true;
+$config['preserve_exif_data'] = false;
 $config['use_filter'] = true;
 $config['default_imagefilter'] = 'plain';
 $config['disabled_filters'] = array();
+$config['allow_delete'] = true;
 $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['take_frame'] = false;
@@ -44,6 +48,7 @@ $config['background_chroma'] = null;
 $config['force_buzzer'] = false;
 $config['webserver_ip'] = null;
 $config['rounded_corners'] = false;
+$config['time_to_live'] = '90000';
 
 // specify key id to use that key to take a picture or collage (e.g. 13 is the enter key)
 // use for example https://keycode.info to get the key code
@@ -107,6 +112,12 @@ $config['scrollbar'] = false;
 $config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 
+// SLIDESHOW
+$config['slideshow_refreshTime'] = '60';
+$config['slideshow_pictureTime'] = '3000';
+$config['slideshow_randomPicture'] = true;
+$config['slideshow_use_thumbs'] = false;
+
 // TEXT ON PRINT
 $config['is_textonprint'] = false;
 $config['textonprint']['line1'] = 'line 1';
@@ -146,3 +157,7 @@ $config['jpeg_quality_image'] = 80;
 $config['reset_remove_images'] = true;
 $config['reset_remove_mailtxt'] = true;
 $config['reset_remove_config'] = true;
+
+// PRESERVE EXIF
+$config['exiftool']['cmd'] = null;
+$config['exiftool']['msg'] = null;

@@ -20,6 +20,7 @@ $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_frame_path'];
 
 if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
     $collageBasename = substr($filename_tmp, 0, -4);
@@ -29,10 +30,16 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_frame'], $config['take_frame_path'])) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_frame'], $frame_path)) {
         die(json_encode([
             'error' => 'Could not create collage'
         ]));
+    }
+
+    if (!$config['keep_images']) {
+        foreach ($collageSrcImagePaths as $tmp) {
+             unlink($tmp);
+        }
     }
 }
 
@@ -43,6 +50,7 @@ if (!file_exists($filename_tmp)) {
 }
 
 $imageResource = imagecreatefromjpeg($filename_tmp);
+$imageModified = false;
 
 if (!$imageResource) {
     die(json_encode([
@@ -58,32 +66,33 @@ if (!isset($_POST['filter'])) {
 
 $image_filter = false;
 
-if (!empty($_POST['filter']) && $_POST['filter'] !== 'imgPlain') {
+if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
     $image_filter = $_POST['filter'];
 }
 
 // apply filter
 if ($image_filter) {
     applyFilter($image_filter, $imageResource);
+    $imageModified = true;
 }
 
 if ($config['polaroid_effect']) {
     $polaroid_rotation = $config['polaroid_rotation'];
-
     $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
+    $imageModified = true;
 }
 
 if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
-    $frame = imagecreatefrompng($config['take_frame_path']);
+    $frame = imagecreatefrompng($frame_path);
     $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
     $x = (imagesx($imageResource)/2) - (imagesx($frame)/2);
     $y = (imagesy($imageResource)/2) - (imagesy($frame)/2);
     imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+    $imageModified = true;
 }
 
 if ($config['chroma_keying']) {
     $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
-
     imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
     imagedestroy($chromaCopyResource);
 }
@@ -94,7 +103,29 @@ $thumbResource = resizeImage($imageResource, 500, 500);
 imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
 imagedestroy($thumbResource);
 
-imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
+if ($imageModified || $config['jpeg_quality_image'] >= 0) {
+    imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
+    // preserve jpeg meta data
+    if ($config['preserve_exif_data'] && $config['exiftool']['cmd']) {
+        $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+	exec($cmd, $output, $returnValue);
+        if ($returnValue) {
+            die(json_encode([
+                'error' => 'exiftool returned with an error code',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ]));
+        }
+    }
+} else {
+    copy($filename_tmp, $filename_photo);
+}
+
+if (!$config['keep_images']) {
+    unlink($filename_tmp);
+}
+
 imagedestroy($imageResource);
 
 // insert into database
