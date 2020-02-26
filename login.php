@@ -76,6 +76,7 @@ if (isset($_POST['submit'])) {
 		<p><a href="admin/index.php" class="btn btn--login"><i class="fa fa-cog"></i> <span data-l10n="admin_panel"></span></a></p>
 		<?php endif; ?>
 		<p><a href="gallery.php" class="btn btn--login"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a></p>
+		<p><a href="slideshow.php" class="btn btn--login"><i class="fa fa-play"></i> <span data-l10n="slideshow"></span></a></p>
 		<p><a href="login.php" class="btn btn--login"><i class="fa fa-refresh"></i> <span data-l10n="reload"></span></a></p>
 		<?php if(!$config['protect_index'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="./" class="btn btn--login" ><i class="fa fa-times"></i> <span data-l10n="close"></span></a></p>

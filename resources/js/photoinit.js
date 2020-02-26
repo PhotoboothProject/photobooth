@@ -2,7 +2,12 @@
 /* global photoBooth */
 function initPhotoSwipeFromDOM (gallerySelector) {
 
-    let gallery;
+    let gallery,
+        ssRunning = false,
+        ssOnce = false;
+
+    const ssDelay = config.slideshow_pictureTime,
+        ssButtonClass = '.pswp__button--playpause';
 
     const parseThumbnailElements = function (container) {
         return $(container).find('>a').map(function () {
@@ -72,6 +77,9 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         // Pass data to PhotoSwipe and initialize it
         gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 
+        // Slideshow not running from the start
+        setSlideshowState(ssButtonClass, false);
+
         // see: http://photoswipe.com/documentation/responsive-images.html
         let realViewportWidth,
             useLargeImages = false,
@@ -127,6 +135,11 @@ function initPhotoSwipeFromDOM (gallerySelector) {
                 href: 'api/download.php?image=' + img,
                 download: img,
             });
+
+            if (ssRunning && ssOnce) {
+                ssOnce = false;
+                setTimeout(gotoNextSlide, ssDelay);
+            }
         });
 
         const resetMailForm = function () {
@@ -195,6 +208,31 @@ function initPhotoSwipeFromDOM (gallerySelector) {
 
         photoBooth.toggleMailDialog(img);
     });
+
+    /* slideshow management */
+    $(ssButtonClass).on('click touchstart', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        // toggle slideshow on/off
+        $('.pswp__button--playpause').toggleClass('fa-play fa-pause');
+        setSlideshowState(this, !ssRunning);
+    });
+
+    function setSlideshowState(el, running) {
+        if (running) {
+            setTimeout(gotoNextSlide, ssDelay / 2.0);
+        }
+        const title = running ? 'Pause Slideshow' : 'Play Slideshow';
+        $(el).prop('title', title);
+        ssRunning = running;
+    }
+
+    function gotoNextSlide() {
+        if (ssRunning && Boolean(gallery)) {
+            ssOnce = true;
+            gallery.next();
+        }
+    }
 
     $(gallerySelector).on('click', onThumbnailClick);
 }

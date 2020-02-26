@@ -167,5 +167,10 @@ const L10N = {
     'logout': 'Logout',
     'admin_panel': 'Admin panel',
     'protect_admin': 'Protect admin panel',
-    'protect_index': 'Protect start screen'
+    'protect_index': 'Protect start screen',
+    'slideshow': 'Slideshow',
+    'slideshow_refreshTime': 'Refresh page afert X seconds',
+    'slideshow_pictureTime': 'Milliseconds an image is displayed',
+    'randomPicture': 'Show random pictures',
+    'use_thumbs': 'Use thumbnails for slideshow'
 }

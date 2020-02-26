@@ -66,6 +66,7 @@ function createArchive(fileName, archive) {
     archive.file('README.md');
     archive.file('package.json');
     archive.file('gallery.php');
+    archive.file('slideshow.php');
     archive.file('update-booth.sh');
     archive.file('node_modules/normalize.css/normalize.css');
     archive.directory('node_modules/font-awesome/');
