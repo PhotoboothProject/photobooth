@@ -33,6 +33,11 @@ $configsetup = [
 			'name' => 'dev',
 			'value' => $config['dev']
 		],
+		'keep_images' => [
+			'type' => 'checkbox',
+			'name' => 'keep_images',
+			'value' => $config['keep_images']
+		],
 		'show_error_messages' => [
 			'type' => 'checkbox',
 			'name' => 'show_error_messages',

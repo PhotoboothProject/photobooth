@@ -34,6 +34,12 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
             'error' => 'Could not create collage'
         ]));
     }
+
+    if (!$config['keep_images']) {
+        foreach ($collageSrcImagePaths as $tmp) {
+             unlink($tmp);
+        }
+    }
 }
 
 if (!file_exists($filename_tmp)) {
@@ -43,6 +49,7 @@ if (!file_exists($filename_tmp)) {
 }
 
 $imageResource = imagecreatefromjpeg($filename_tmp);
+$imageModified = false;
 
 if (!$imageResource) {
     die(json_encode([
@@ -65,12 +72,13 @@ if (!empty($_POST['filter']) && $_POST['filter'] !== 'imgPlain') {
 // apply filter
 if ($image_filter) {
     applyFilter($image_filter, $imageResource);
+    $imageModified = true;
 }
 
 if ($config['polaroid_effect']) {
     $polaroid_rotation = $config['polaroid_rotation'];
-
     $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
+    $imageModified = true;
 }
 
 if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
@@ -79,11 +87,11 @@ if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
     $x = (imagesx($imageResource)/2) - (imagesx($frame)/2);
     $y = (imagesy($imageResource)/2) - (imagesy($frame)/2);
     imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+    $imageModified = true;
 }
 
 if ($config['chroma_keying']) {
     $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
-
     imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
     imagedestroy($chromaCopyResource);
 }
@@ -94,7 +102,16 @@ $thumbResource = resizeImage($imageResource, 500, 500);
 imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
 imagedestroy($thumbResource);
 
-imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
+if ($imageModified || $config['jpeg_quality_image'] >= 0) {
+    imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
+} else {
+    copy($filename_tmp, $filename_photo);
+}
+
+if (!$config['keep_images']) {
+    unlink($filename_tmp);
+}
+
 imagedestroy($imageResource);
 
 // insert into database
