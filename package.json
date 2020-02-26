@@ -14,11 +14,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andreknieriem/photobooth.git"
+    "url": "https://github.com/andi34/photobooth.git"
   },
-  "homepage": "https://github.com/andreknieriem/photobooth",
+  "homepage": "https://github.com/andi34/photobooth",
   "bugs": {
-    "url": "https://github.com/andreknieriem/photobooth/issues"
+    "url": "https://github.com/andi34/photobooth/issues"
   },
   "keywords": [
     "photobooth",
