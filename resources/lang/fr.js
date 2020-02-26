@@ -12,6 +12,7 @@ const L10N = {
     'general_default_imagefilter': 'Filtre d\'image par défaut',
     'default_imagefilter': 'Choisissez le filtre d\'image',
     'general_disabled_filters': 'Filtres désactivés',
+    'allow_delete': 'Autoriser la suppression de l\'image',
     'general_collage_cntdwn_time': 'Montage photo compte à rebours en secondes',
     'continuous_collage': 'Prendre un photo montage sans interruption',
     'delete': 'Effacer',

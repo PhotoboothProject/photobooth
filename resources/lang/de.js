@@ -12,6 +12,7 @@ const L10N = {
     'general_default_imagefilter': 'Standardbildfilter',
     'default_imagefilter': 'Bildfilter auswählen',
     'general_disabled_filters': 'Deaktivierte Bildfilter',
+    'allow_delete': 'Löschen des Bildes erlauben',
     'general_collage_cntdwn_time': 'Collage-Countdown Timer in Sekunden',
     'continuous_collage': 'Collage ohne Unterbrechung aufnehmen',
     'delete': 'Löschen',

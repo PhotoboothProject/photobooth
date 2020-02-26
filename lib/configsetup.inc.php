@@ -200,6 +200,11 @@ $configsetup = [
 				'environment' => 'Back facing camera'
 			],
 			'value' => $config['camera_mode']
+		],
+		'allow_delete' => [
+			'type' => 'checkbox',
+			'name' => 'allow_delete',
+			'value' => $config['allow_delete']
 		]
 	],
 	'jpeg_quality' => [
