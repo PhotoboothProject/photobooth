@@ -71,6 +71,8 @@ const photoBooth = (function () {
         gallery.find('.gallery__inner').hide();
         $('.spinner').hide();
         $('.send-mail').hide();
+        $('#video--view').hide();
+        $('#video--sensor').hide();
         public.resetMailForm();
     }
 
@@ -164,9 +166,18 @@ const photoBooth = (function () {
             $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.cheese');
         }
 
-        setTimeout(() => {
-            public.takePic(photoStyle);
-        }, config.cheese_time);
+        if (config.previewFromCam && config.previewCamTakesPic && !public.stream && !config.dev) {
+            console.log('No preview by device cam available!');
+
+            public.errorPic({
+                error: 'No preview by device cam available!'
+            });
+
+        } else {
+            setTimeout(() => {
+                public.takePic(photoStyle);
+            }, config.cheese_time);
+        }
     }
 
     // take Picture
@@ -247,6 +258,7 @@ const photoBooth = (function () {
             $('.spinner').hide();
             $('.loading').empty();
             $('.cheese').empty();
+            $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
             $('.loading').append($('<p>').text(L10N.error));

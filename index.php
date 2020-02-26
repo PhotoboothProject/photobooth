@@ -126,9 +126,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 					<i class="fa fa-cog fa-spin"></i>
 				</div>
 
-				<?php if ($config['previewFromCam']): ?>
 				<video id="video--view" autoplay playsinline></video>
-				<?php endif; ?>
 
 				<div id="counter">
 					<canvas id="video--sensor"</canvas>
