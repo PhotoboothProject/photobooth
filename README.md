@@ -1,6 +1,8 @@
-# Photobooth by Andre Rinas
+# Photobooth
 
 A Photobooth web interface for Raspberry Pi and Windows.
+
+Photobooth was initially developped by Andre Rinas, you can find his source [here](https://github.com/andreknieriem/photobooth).
 
 ## :heart_eyes: Features
 
@@ -12,6 +14,7 @@ A Photobooth web interface for Raspberry Pi and Windows.
 - Images are processed with GD.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
 - Standalone Gallery (`localhost/gallery.php`).
+- Slideshow via Gallery oder standalone Gallery (under `localhost/slideshow`).
 - Settings can be changed via Admin Panel (under `localhost/admin`):
   - Multi-language support:
     - German
@@ -19,6 +22,7 @@ A Photobooth web interface for Raspberry Pi and Windows.
     - Spanish
     - French
     - Greek
+  - Login to protect Admin Panel and/or Start page can be enabled.
   - Gallery:
     - Order pictures in gallery ascending oder descending by picture age.
     - Hide the gallery.
@@ -44,7 +48,7 @@ A Photobooth web interface for Raspberry Pi and Windows.
   
 ## :camera: Screenshots
 
-![](https://raw.githubusercontent.com/wiki/andreknieriem/photobooth/images/start.png)
+![](https://raw.githubusercontent.com/wiki/andi34/photobooth/images/start.png)
 
 ## :gear: Prerequisites
 
@@ -55,16 +59,16 @@ A Photobooth web interface for Raspberry Pi and Windows.
 ## :wrench: Installation & Troubleshooting
 
 Please follow the installation instructions in our
-[Photobooth-Wiki](https://github.com/andreknieriem/photobooth/wiki) to setup
+[Photobooth-Wiki](https://github.com/andi34/photobooth/wiki) to setup
 Photobooth.
 
 If you're having trouble or questions please take a look at our
-[FAQ](https://github.com/andreknieriem/photobooth/wiki#faq---frequently-asked-questions)
+[FAQ](https://github.com/andi34/photobooth/wiki#faq---frequently-asked-questions)
 before opening a new issue.
 
 ### :mag: Changelog
 
-Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andreknieriem/photobooth/wiki/changelog).
+Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).
 
 ### :tada: Donation
 
