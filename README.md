@@ -103,3 +103,6 @@ Donators who donated 5€ or more get early access to new features/options i am 
 - [msmedien](https://github.com/msmedien)
 - [sualko](https://github.com/sualko)
 - [rawbertp](https://github.com/rawbertp)
+- [jacques42](https://github.com/jacques42)
+- [poldixd](https://github.com/poldixd)
+- [TheVaan](https://github.com/TheVaan)
