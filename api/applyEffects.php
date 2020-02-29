@@ -76,6 +76,12 @@ if ($image_filter) {
     $imageModified = true;
 }
 
+if ($config['pictureRotation'] !== '0') {
+    $rotatedImg = imagerotate($imageResource, $config['pictureRotation'], 0);
+    $imageResource = $rotatedImg;
+    $imageModified = true;
+}
+
 if ($config['polaroid_effect']) {
     $polaroid_rotation = $config['polaroid_rotation'];
     $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);

@@ -33,6 +33,7 @@ const L10N = {
     'general_start_screen_subtitle': 'Page d’accueil (Sous-titre)',
     'takePhoto': 'Prendre une photo!',
     'takeCollage': 'Prendre un photo montage!',
+    'general_pictureRotation': 'Rotate photo after taking (in degrees)',
     'home': 'Accueil',
     'qr': 'QR Code',
     'mail': 'e-mail',

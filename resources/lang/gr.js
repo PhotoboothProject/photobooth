@@ -33,6 +33,7 @@ const L10N = {
     'general_start_screen_subtitle': 'Αρχική οθόνη (υπότιτλος)',
     'takePhoto': 'Δημιουργία φωτογραφίας!',
     'takeCollage': 'Δημιουργήστε ένα κολάζ!',
+    'general_pictureRotation': 'Rotate photo after taking (in degrees)',
     'home': 'Σπίτι',
     'qr': 'QR Κώδικας',
     'mail': 'E-Mail',

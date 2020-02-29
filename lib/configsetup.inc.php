@@ -33,6 +33,12 @@ $configsetup = [
 			'name' => 'dev',
 			'value' => $config['dev']
 		],
+		'pictureRotation' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['pictureRotation'],
+			'name' => 'pictureRotation',
+			'value' => $config['pictureRotation']
+		],
 		'keep_images' => [
 			'type' => 'checkbox',
 			'name' => 'keep_images',

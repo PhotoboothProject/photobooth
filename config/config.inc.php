@@ -6,6 +6,7 @@
 $config = array();
 $config['dev'] = false;
 $config['show_error_messages'] = true;
+$config['pictureRotation'] = '0';
 $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['use_download'] = true;

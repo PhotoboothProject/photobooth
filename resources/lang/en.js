@@ -33,6 +33,7 @@ const L10N = {
     'general_start_screen_subtitle': 'Start screen (subtitle)',
     'takePhoto': 'Take Pic!',
     'takeCollage': 'Take Collage!',
+    'general_pictureRotation': 'Rotate photo after taking (in degrees)',
     'home': 'Home',
     'qr': 'QR Code',
     'newPhoto': 'New Picture',
