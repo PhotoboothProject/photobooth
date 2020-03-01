@@ -9,10 +9,10 @@ $configsetup = [
 			'placeholder' => $defaultConfig['language'],
 			'options' => [
 				'de' => 'DE',
+				'el' => 'EL'
 				'en' => 'EN',
 				'es' => 'ES',
-				'fr' => 'FR',
-				'gr' => 'GR'
+				'fr' => 'FR'
 			],
 			'value' => $config['language']
 		],

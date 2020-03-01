@@ -57,7 +57,7 @@ $config['photo_key'] = null;
 $config['collage_key'] = null;
 
 // LANGUAGE
-// possible values: de, en, es, fr, gr
+// possible values: de, el, en, es, fr
 $config['language'] = 'en';
 
 // StartScreen
