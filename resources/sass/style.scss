@@ -24,7 +24,7 @@
 #result {
   width: 100%;
   background: center center no-repeat;
-  background-size: cover;
+  background-size: contain;
   z-index: 2;
 }
 
@@ -352,6 +352,23 @@ hr.small {
   height: 100%;
   width: 100%;
   object-fit: cover;
+}
+
+#ipcam--view {
+  background-image: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+
+  &.streaming {
+    background-image: $ipcamBackground;
+  }
 }
 
 .flip-horizontal {

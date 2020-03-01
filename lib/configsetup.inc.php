@@ -9,10 +9,10 @@ $configsetup = [
 			'placeholder' => $defaultConfig['language'],
 			'options' => [
 				'de' => 'DE',
+				'el' => 'EL'
 				'en' => 'EN',
 				'es' => 'ES',
-				'fr' => 'FR',
-				'gr' => 'GR'
+				'fr' => 'FR'
 			],
 			'value' => $config['language']
 		],
@@ -32,6 +32,12 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'dev',
 			'value' => $config['dev']
+		],
+		'pictureRotation' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['pictureRotation'],
+			'name' => 'pictureRotation',
+			'value' => $config['pictureRotation']
 		],
 		'keep_images' => [
 			'type' => 'checkbox',
@@ -199,6 +205,17 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'previewCamFlipHorizontal',
 			'value' => $config['previewCamFlipHorizontal']
+		],
+		'previewFromIPCam' => [
+			'type' => 'checkbox',
+			'name' => 'previewFromIPCam',
+			'value' => $config['previewFromIPCam']
+		],
+		'ipCamURL' => [
+			'type' => 'input',
+			'name' => 'ipCamURL',
+			'placeholder' => 'url(localhost:8081)',
+			'value' => $config['ipCamURL']
 		],
 		'videoWidth' => [
 			'type' => 'input',

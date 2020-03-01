@@ -2,6 +2,8 @@
 const L10N = {
     'general_camera_mode': 'Camera facing mode',
     'previewCamFlipHorizontal': 'Flip image from device cam horizontally',
+    'previewFromIPCam': 'Preview from URL',
+    'general_ipCamURL': 'Preview-URL',
     'general_videoHeight': 'Device cam picture height',
     'general_videoWidth': 'Device cam picture width',
     'user_interface_background_chroma': 'Chroma keying panel background image path',
@@ -33,6 +35,7 @@ const L10N = {
     'general_start_screen_subtitle': 'Page d’accueil (Sous-titre)',
     'takePhoto': 'Prendre une photo!',
     'takeCollage': 'Prendre un photo montage!',
+    'general_pictureRotation': 'Rotate photo after taking (in degrees)',
     'home': 'Accueil',
     'qr': 'QR Code',
     'mail': 'e-mail',

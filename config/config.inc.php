@@ -6,6 +6,7 @@
 $config = array();
 $config['dev'] = false;
 $config['show_error_messages'] = true;
+$config['pictureRotation'] = '0';
 $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['use_download'] = true;
@@ -20,6 +21,8 @@ $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
 $config['previewCamTakesPic'] = false; // HTTPS required to use tablet- or mobile phone camera
 $config['previewCamFlipHorizontal'] = true;
+$config['previewFromIPCam'] = false;
+$config['ipCamURL'] = null;
 $config['videoWidth'] = '1280';
 $config['videoHeight'] = '720';
 $config['camera_mode'] = 'user'; // possible values are "user" or "environment"
@@ -56,7 +59,7 @@ $config['photo_key'] = null;
 $config['collage_key'] = null;
 
 // LANGUAGE
-// possible values: de, en, es, fr, gr
+// possible values: de, el, en, es, fr
 $config['language'] = 'en';
 
 // StartScreen

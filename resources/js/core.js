@@ -73,6 +73,7 @@ const photoBooth = (function () {
         $('.send-mail').hide();
         $('#video--view').hide();
         $('#video--sensor').hide();
+        $('#ipcam--view').hide();
         public.resetMailForm();
     }
 
@@ -144,6 +145,11 @@ const photoBooth = (function () {
             public.startVideo();
         }
 
+        if (config.previewFromIPCam) {
+            $('#ipcam--view').show();
+            $('#ipcam--view').addClass('streaming');
+        }
+
         loader.addClass('open');
         public.startCountdown(nextCollageNumber ? config.collage_cntdwn_time : config.cntdwn_time, $('#counter'), () => {
             public.cheese(photoStyle);
@@ -169,10 +175,14 @@ const photoBooth = (function () {
         if (config.previewFromCam && config.previewCamTakesPic && !public.stream && !config.dev) {
             console.log('No preview by device cam available!');
 
+            if (config.previewFromIPCam) {
+                $('#ipcam--view').removeClass('streaming');
+                $('#ipcam--view').hide();
+            }
+
             public.errorPic({
                 error: 'No preview by device cam available!'
             });
-
         } else {
             setTimeout(() => {
                 public.takePic(photoStyle);
@@ -193,6 +203,11 @@ const photoBooth = (function () {
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
             public.stopVideo();
+        }
+
+        if (config.previewFromIPCam) {
+            $('#ipcam--view').removeClass('streaming');
+            $('#ipcam--view').hide();
         }
 
         const data = {

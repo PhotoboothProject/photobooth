@@ -126,6 +126,8 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 					<i class="fa fa-cog fa-spin"></i>
 				</div>
 
+				<div id="ipcam--view"></div>
+
 				<video id="video--view" autoplay playsinline></video>
 
 				<div id="counter">

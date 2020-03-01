@@ -2,6 +2,8 @@
 const L10N = {
     'general_camera_mode': 'Kamerabildmodus',
     'previewCamFlipHorizontal': 'Bild von der Gerätekamera horizontal spiegeln',
+    'previewFromIPCam': 'Vorschau von URL',
+    'general_ipCamURL': 'Vorschau-URL',
     'general_videoHeight': 'Gerätekamera Bildhöhe',
     'general_videoWidth': 'Gerätekamera Bildbreite',
     'user_interface_background_chroma': 'Pfad zum Hintergrundbild im Chroma-Keying Panel',
@@ -33,6 +35,7 @@ const L10N = {
     'general_start_screen_subtitle': 'Startbildschirm (Untertitel)',
     'takePhoto': 'Foto erstellen!',
     'takeCollage': 'Collage erstellen!',
+    'general_pictureRotation': 'Foto nach der Aufnahme drehen (in Grad)',
     'home': 'Home',
     'qr': 'QR Code',
     'mail': 'E-Mail',
