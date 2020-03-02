@@ -1,3 +1,7 @@
 [submodule "vendor/PHPMailer"]
 	path = vendor/PHPMailer
 	url = https://github.com/PHPMailer/PHPMailer
+[submodule "vendor/simple-translator"]
+	path = vendor/simple-translator
+	url = https://github.com/andreasremdt/simple-translator
+	branch = master
