@@ -35,28 +35,28 @@ require_once('../lib/configsetup.inc.php');
 		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin']): ?>
 		<button class="reset-btn">
 			<span class="save">
-				<span data-l10n="reset"></span>
+				<span data-i18n="reset"></span>
 			</span>
 			<span class="saving">
 				<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
-				<span data-l10n="saving"></span>
+				<span data-i18n="saving"></span>
 			</span>
 			<span class="success">
 				<i class="fa fa-check"></i>
-				<span data-l10n="success"></span>
+				<span data-i18n="success"></span>
 			</span>
 			<span class="error">
 				<i class="fa fa-times"></i>
-				<span data-l10n="saveerror"></span>
+				<span data-i18n="saveerror"></span>
 			</span>
 		</button>
 
 		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
-		<p><a href="../login/logout.php" class="btn btn--tiny btn--flex fa fa-sign-out"><span data-l10n="logout"></span></a></p>
+		<p><a href="../login/logout.php" class="btn btn--tiny btn--flex fa fa-sign-out"><span data-i18n="logout"></span></a></p>
 		<?php endif; ?>
 
 		<div id="checkVersion">
-			<p><a href="#" class="btn btn--tiny btn--flex"><span data-l10n="check_version"></span></a></p>
+			<p><a href="#" class="btn btn--tiny btn--flex"><span data-i18n="check_version"></span></a></p>
 		</div>
 
 		<div class="accordion">
@@ -68,7 +68,7 @@ require_once('../lib/configsetup.inc.php');
 						if($i == 0){
 							$open = ' open init';
 						}
-						echo '<div class="panel'.$open.'"><div class="panel-heading"><h3><span class="minus">-</span><span class="plus">+</span><span data-l10n="'.$panel.'">'.$panel.'</span></h3></div>
+						echo '<div class="panel'.$open.'"><div class="panel-heading"><h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span></h3></div>
 									<div class="panel-body">
 						';
 
@@ -76,12 +76,12 @@ require_once('../lib/configsetup.inc.php');
 							echo '<div class="form-row">';
 							switch($field['type']) {
 								case 'input':
-									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field[
+									echo '<label data-i18n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field[
 										'value'].'" placeholder="'.$field['placeholder'].'"/>';
 									break;
 								case 'color':
 									echo '<input type="color" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/>
-										<label data-l10n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';
+										<label data-i18n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';
 									break;
 								case 'hidden':
 									echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
@@ -91,12 +91,12 @@ require_once('../lib/configsetup.inc.php');
 									if ($field['value'] == 'true') {
 										$checked = ' checked="checked"';
 									}
-									echo '<label><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span data-l10n="'.$key.'">'.$key.'</span></label>';
+									echo '<label><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span data-i18n="'.$key.'">'.$key.'</span></label>';
 									break;
 								case 'multi-select':
 								case 'select':
 									$selectTag = '<select name="'.$field['name'] . ($field['type'] === 'multi-select' ? '[]' : '') . '"' . ($field['type'] === 'multi-select' ? ' multiple="multiple" size="10"' : '') . '>';
-									echo '<label data-l10n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label>' . $selectTag;
+									echo '<label data-i18n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label>' . $selectTag;
 										foreach($field['options'] as $val => $option) {
 											$selected = '';
 											if ((is_array($field['value']) && in_array($val, $field['value'])) || ($val === $field['value'])) {
@@ -116,19 +116,19 @@ require_once('../lib/configsetup.inc.php');
 			</form>
 			<button class="save-btn">
 				<span class="save">
-					<span data-l10n="save"></span>
+					<span data-i18n="save"></span>
 				</span>
 				<span class="saving">
 					<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
-					<span data-l10n="saving"></span>
+					<span data-i18n="saving"></span>
 				</span>
 				<span class="success">
 					<i class="fa fa-check"></i>
-					<span data-l10n="success"></span>
+					<span data-i18n="success"></span>
 				</span>
 				<span class="error">
 					<i class="fa fa-times"></i>
-					<span data-l10n="saveerror"></span>
+					<span data-i18n="saveerror"></span>
 				</span>
 			</button>
 		<?php else:
@@ -140,9 +140,12 @@ require_once('../lib/configsetup.inc.php');
 
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="../resources/js/l10n.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script type="text/javascript" src="../resources/js/admin.js"></script>
+	<script type="module" src="../resources/js/i18n.js"></script>
+
+	<!-- NEEDS TO BE REMOVED -->
+	<script type="text/javascript" src="../resources/js/l10n.js"></script>
 	<script type="text/javascript" src="../resources/lang/<?php echo $config['language']; ?>.js"></script>
 
 </body>
