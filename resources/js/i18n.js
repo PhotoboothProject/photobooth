@@ -15,4 +15,9 @@ const translator = new Translator({
 });
 
 translator.load();
-translator.load(config.language);
+if (config.language !== 'en') {
+    translator.load(config.language);
+    if (config.dev) {
+        console.log('Using translations for language:' + config.language);
+    }
+}
