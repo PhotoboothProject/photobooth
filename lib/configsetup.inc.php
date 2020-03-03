@@ -214,7 +214,7 @@ $configsetup = [
 		'ipCamURL' => [
 			'type' => 'input',
 			'name' => 'ipCamURL',
-			'placeholder' => 'url(localhost:8081)',
+			'placeholder' => 'url(http://localhost:8081)',
 			'value' => $config['ipCamURL']
 		],
 		'videoWidth' => [
