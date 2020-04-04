@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM L10N */
+/* globals initPhotoSwipeFromDOM i18n */
 
 const photoBooth = (function () {
     // vars
@@ -157,7 +157,7 @@ const photoBooth = (function () {
     }
 
     // Cheese
-    public.cheese = function (photoStyle) {
+    public.cheese = async function (photoStyle) {
         if (config.dev) {
             console.log(photoStyle);
         }
@@ -166,9 +166,9 @@ const photoBooth = (function () {
         $('.cheese').empty();
 
         if (photoStyle === 'photo') {
-            $('.cheese').text(L10N.cheese);
+            $('.cheese').text(await i18n('cheese'));
         } else {
-            $('.cheese').text(L10N.cheeseCollage);
+            $('.cheese').text(await i18n('cheeseCollage'));
             $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.cheese');
         }
 
@@ -221,7 +221,7 @@ const photoBooth = (function () {
             data.collageNumber = nextCollageNumber;
         }
 
-        jQuery.post('api/takePic.php', data).done(function (result) {
+        jQuery.post('api/takePic.php', data).done(async function (result) {
             console.log('took picture', result);
             $('.cheese').empty();
             if (config.previewCamFlipHorizontal) {
@@ -248,12 +248,13 @@ const photoBooth = (function () {
                         public.thrill('collage');
                     }, 1000);
                 } else {
-                    $('<a class="btn" href="#">' + L10N.nextPhoto + '</a>').appendTo('.loading').click((ev) => {
+                    $('<a class="btn" href="#">' + await i18n('nextPhoto') + '</a>').appendTo('.loading').click((ev) => {
                         ev.preventDefault();
 
                         public.thrill('collage');
                     });
-                    $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(L10N.abort));
+                    const abortmsg = await i18n('abort');
+                    $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
                 }
             } else {
                 currentCollageFile = '';
@@ -269,26 +270,28 @@ const photoBooth = (function () {
 
     // Show error Msg and reset
     public.errorPic = function (data) {
-        setTimeout(function () {
+        setTimeout(async function () {
             $('.spinner').hide();
             $('.loading').empty();
             $('.cheese').empty();
             $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
-            $('.loading').append($('<p>').text(L10N.error));
+            const errormsg = await i18n('error');
+            $('.loading').append($('<p>').text(errormsg));
             if (config.show_error_messages || config.dev) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
-            $('.loading').append($('<a class="btn" href="./">').text(L10N.reload));
+            const reloadmsg = await i18n('reload');
+            $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
         }, 500);
     }
 
-    public.processPic = function (photoStyle, result) {
+    public.processPic = async function (photoStyle, result) {
         const tempImageUrl = config.folders.tmp + '/' + result.file;
 
         $('.spinner').show();
-        $('.loading').text(photoStyle === 'photo' ? L10N.busy : L10N.busyCollage);
+        $('.loading').text(photoStyle === 'photo' ? await i18n('busy') : await i18n('busyCollage'));
 
         if (photoStyle === 'photo' && config.image_preview_before_processing) {
             const preloadImage = new Image();
@@ -331,11 +334,11 @@ const photoBooth = (function () {
         // Add QR Code Image
         const qrCodeModal = $('#qrCode');
         modal.empty(qrCodeModal);
-        $('<img src="api/qrcode.php?filename=' + filename + '"/>').on('load', function () {
+        $('<img src="api/qrcode.php?filename=' + filename + '"/>').on('load', async function () {
             const body = qrCodeModal.find('.modal__body');
 
             $(this).appendTo(body);
-            $('<p>').css('max-width', this.width + 'px').html(L10N.qrHelp).appendTo(body);
+            $('<p>').css('max-width', this.width + 'px').html(await i18n('qrHelp')).appendTo(body);
         });
 
         // Add Print Link
@@ -590,19 +593,19 @@ const photoBooth = (function () {
             data: form.serialize(),
             dataType: 'json',
             cache: false,
-            success: function (result) {
+            success: async function (result) {
                 if (result.success) {
                     if (result.saved) {
-                        message.fadeIn().html('<span style="color:green">' + L10N.mailSaved + '</span>');
+                        message.fadeIn().html('<span style="color:green">' + await i18n('mailSaved') + '</span>');
                     } else {
-                        message.fadeIn().html('<span style="color:green">' + L10N.mailSent + '</span>');
+                        message.fadeIn().html('<span style="color:green">' + await i18n('mailSent') + '</span>');
                     }
                 } else {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
-            error: function () {
-                message.fadeIn('fast').html('<span style="color: red;">' + L10N.mailError + '</span>');
+            error: async function () {
+                message.fadeIn('fast').html('<span style="color: red;">' + await i18n('mailError') + '</span>');
             },
             complete: function () {
                 form.find('.btn').html(oldValue);

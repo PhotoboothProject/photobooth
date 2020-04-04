@@ -1,4 +1,4 @@
-/* globals L10N */
+/* globals i18n */
 $(function() {
     $('.panel-heading').on('click', function() {
         const panel = $(this).parents('.panel');
@@ -12,8 +12,8 @@ $(function() {
         others.find('.panel-body').slideUp('fast');
     });
 
-    $('.reset-btn').on('click', function() {
-        const msg = L10N.really_delete;
+    $('.reset-btn').on('click', async function() {
+        const msg = await i18n('really_delete');
         const really = confirm(msg);
         const data = {'type': 'reset'};
         const elem = $(this);
@@ -71,25 +71,25 @@ $(function() {
         $.ajax({
             url: '../api/checkVersion.php',
             method: 'GET',
-            success: (data) => {
+            success: async (data) => {
                 let message = 'Error';
                 $('#checkVersion').empty();
                 console.log('data', data)
                 if (!data.updateAvailable) {
-                    message = L10N.using_latest_version;
+                    message = await i18n('using_latest_version');
                 } else if ((/^\d+\.\d+\.\d+$/u).test(data.availableVersion)) {
-                    message = L10N.update_available;
+                    message = await i18n('update_available');
                 } else {
-                    message = L10N.test_update_available;
+                    message = await i18n('test_update_available');
                 }
 
                 const textElement = $('<p>');
                 textElement.text(message);
                 textElement.append('<br />');
-                textElement.append(L10N.current_version + ': ');
+                textElement.append(await i18n('current_version') + ': ');
                 textElement.append(data.currentVersion);
                 textElement.append('<br />');
-                textElement.append(L10N.available_version + ': ');
+                textElement.append(await i18n('available_version') + ': ');
                 textElement.append(data.availableVersion);
                 textElement.appendTo('#checkVersion');
             }
