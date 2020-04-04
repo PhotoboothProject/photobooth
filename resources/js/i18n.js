@@ -14,10 +14,6 @@ const translator = new Translator({
     filesLocation: '/resources/lang'
 });
 
-translator.load();
-if (config.language !== 'en') {
+$(function () {
     translator.load(config.language);
-    if (config.dev) {
-        console.log('Using translations for language:' + config.language);
-    }
-}
+});
