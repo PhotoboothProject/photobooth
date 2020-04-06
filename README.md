@@ -66,6 +66,10 @@ If you're having trouble or questions please take a look at our
 [FAQ](https://github.com/andi34/photobooth/wiki#faq---frequently-asked-questions)
 before opening a new issue.
 
+## :globe_with_meridians: Browser support
+
+[Click here](https://github.com/andi34/photobooth/wiki#browser-support) to find out if your Browser is supported.
+
 ### :mag: Changelog
 
 Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).
