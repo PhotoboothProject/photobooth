@@ -152,6 +152,8 @@
   "takePhoto": "Foto erstellen!",
   "take_frame": "Bild mit Rahmen aufnehmen",
   "test_update_available": "Es ist ein Test-Update verfügbar.",
+  "toggleFullscreen": "Vollbildmodus umschalten",
+  "toggle_fs_button": "Taste zum Umschalten auf Vollbildmodus anzeigen",
   "update_available": "Es ist ein Update verfügbar.",
   "use_button": "Buzzer verwenden, um ein Bild aufzunehmen",
   "use_collage": "Foto-Collage erlauben",

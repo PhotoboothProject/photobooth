@@ -153,6 +153,8 @@
   "takePhoto": "Take Pic!",
   "take_frame": "Take picture with frame",
   "test_update_available": "There is a test update available.",
+  "toggleFullscreen": "Toggle Fullscreen",
+  "toggle_fs_button": "Show button to toggle fullscreen",
   "update_available": "There is an update available.",
   "use_button": "Use Buzzer to take a Picture",
   "use_collage": "Allow photo collage",
