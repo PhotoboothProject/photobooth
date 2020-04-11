@@ -1,12 +1,12 @@
 <div id="gallery" class="gallery">
 	<div class="gallery__inner">
 		<div class="gallery__header">
-			<h1><span data-l10n="gallery"></span></h1>
+			<h1><span data-i18n="gallery"></span></h1>
 			<a href="#" class="gallery__close close_gal"><i class="fa fa-times"></i></a>
 		</div>
 		<div class="gallery__body" id="galimages">
 			<?php if (empty($imagelist)): ?>
-			<h1 style="text-align:center" data-l10n="gallery_no_image"></h1>
+			<h1 style="text-align:center" data-i18n="gallery_no_image"></h1>
 			<?php else: ?>
 			<?php foreach ($imagelist as $image): ?>
 			<?php

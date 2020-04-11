@@ -32,11 +32,10 @@ Photobooth was initially developped by Andre Rinas, you can find his source [her
   - Pictures can be directly downloaded from the gallery.
   - Print feature.
     - Optional: Print a frame on your picture
-      (replace `resources/img/frames/frame.png` with a frame of your choice).
     - Optional: Print text on your picture.
     - Optional: Print QR-Code on the right side of your picture.
   - Pictures can be sent via e-mail.
-  - LivePreview (uses device cam).
+  - LivePreview (via device cam or from stream URL).
   - Event specific (e.g. wedding, birthday) config to show a symbol (e.g. heart)
     between some text on the start page.
   - Green screen keying (chroma keying).
@@ -66,14 +65,19 @@ If you're having trouble or questions please take a look at our
 [FAQ](https://github.com/andi34/photobooth/wiki#faq---frequently-asked-questions)
 before opening a new issue.
 
+## :globe_with_meridians: Browser support
+
+[Click here](https://github.com/andi34/photobooth/wiki#browser-support) to find out if your Browser is supported.
+
 ### :mag: Changelog
 
 Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).
 
 ### :tada: Donation
 
-If you like my work and like to keep me motivated you can buy me a coconut water
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/andreasblaesius)
+If you like my work and like to keep me motivated you can buy me a coconut water:
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/andreasblaesius)
 
 ### :information_source: Donators Early Access
 
@@ -110,3 +114,4 @@ Donators who donated 5€ or more get early access to new features/options i am 
 - [jacques42](https://github.com/jacques42)
 - [poldixd](https://github.com/poldixd)
 - [TheVaan](https://github.com/TheVaan)
+- [Andreas Remdt](https://andreasremdt.com)

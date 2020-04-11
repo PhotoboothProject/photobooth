@@ -83,15 +83,15 @@ if ($config['dev']) {
 }
 
 if (!isset($config['background_image'])) {
-    $config['background_image'] = 'url(../img/bg.jpg)';
+    $config['background_image'] = 'url(../img/bg_bluegray.jpg)';
 }
 
 if (!isset($config['background_admin'])) {
-    $config['background_admin'] = 'url(../img/bg.jpg)';
+    $config['background_admin'] = 'url(../img/bg_bluegray.jpg)';
 }
 
 if (!isset($config['background_chroma'])) {
-    $config['background_chroma'] = 'url(../img/bg.jpg)';
+    $config['background_chroma'] = 'url(../img/bg_bluegray.jpg)';
 }
 
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {

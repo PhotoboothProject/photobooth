@@ -1,0 +1,5 @@
+flatten_json=0
+minify_resources=0
+resource_definition={LOCALE}
+resource_directories=0
+resource_type=JSON
