@@ -94,16 +94,16 @@ $config['protect_index'] = false;
 $config['font_size'] = '16px';
 
 // COLORS
-$config['colors']['primary'] = '#e67e22';
-$config['colors']['secondary'] = '#d35400';
-$config['colors']['font'] = '#000000';
+$config['colors']['primary'] = '#0a6071';
+$config['colors']['secondary'] = '#214852';
+$config['colors']['font'] = '#79bad9';
 $config['colors']['button_font'] = '#ffffff';
 $config['colors']['start_font'] = '#ffffff';
 $config['colors']['countdown'] = '#000000';
 $config['colors']['background_countdown'] = '#ffffff';
 $config['colors']['cheese'] = '#000000';
-$config['colors']['panel'] = '#ffffff';
-$config['colors']['hover_panel'] = '#fafafa';
+$config['colors']['panel'] = '#2d4157';
+$config['colors']['hover_panel'] = '#446781';
 $config['colors']['border'] = '#eeeeee';
 $config['colors']['box'] = '#f8f9fc';
 $config['colors']['gallery_button'] = '#ffffff';
