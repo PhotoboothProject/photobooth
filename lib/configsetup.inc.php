@@ -103,22 +103,34 @@ $configsetup = [
 			'value' => $config['force_buzzer']
 		],
 		'cntdwn_time' => [
-			'type' => 'input',
+			'type' => 'range',
 			'name' => 'cntdwn_time',
 			'placeholder' => $defaultConfig['cntdwn_time'],
-			'value' => $config['cntdwn_time']
+			'value' => $config['cntdwn_time'],
+			'range_min' => 1,
+			'range_max' => 10,
+			'range_step' => 1,
+			'unit' => 'seconds'
 		],
 		'cheese_time' => [
-			'type' => 'input',
+			'type' => 'range',
 			'placeholder' => $defaultConfig['cheese_time'],
 			'name' => 'cheese_time',
-			'value' => $config['cheese_time']
+			'value' => $config['cheese_time'],
+			'range_min' => 250,
+			'range_max' => 10000,
+			'range_step' => 250,
+			'unit' => 'milliseconds'
 		],
 		'time_to_live' => [
-			'type' => 'input',
+			'type' => 'range',
 			'placeholder' => $defaultConfig['time_to_live'],
 			'name' => 'time_to_live',
-			'value' => $config['time_to_live']
+			'value' => $config['time_to_live'],
+			'range_min' => 1000,
+			'range_max' => 90000,
+			'range_step' => 1000,
+			'unit' => 'milliseconds'
 		],
 		'image_preview_before_processing' => [
 			'type' => 'checkbox',
@@ -181,10 +193,14 @@ $configsetup = [
 			'value' => $config['use_collage']
 		],
 		'collage_cntdwn_time' => [
-			'type' => 'input',
+			'type' => 'range',
 			'name' => 'collage_cntdwn_time',
 			'placeholder' => $defaultConfig['collage_cntdwn_time'],
-			'value' => $config['collage_cntdwn_time']
+			'value' => $config['collage_cntdwn_time'],
+			'range_min' => 1,
+			'range_max' => 10,
+			'range_step' => 1,
+			'unit' => 'seconds'
 		],
 		'continuous_collage' => [
 			'type' => 'checkbox',
@@ -247,22 +263,34 @@ $configsetup = [
 	],
 	'jpeg_quality' => [
 		'jpeg_quality_image' => [
-			'type' => 'input',
+			'type' => 'range',
 			'name' => 'jpeg_quality_image',
 			'placeholder' => $defaultConfig['jpeg_quality_image'],
-			'value' => $config['jpeg_quality_image']
+			'value' => $config['jpeg_quality_image'],
+			'range_min' => -1,
+			'range_max' => 100,
+			'range_step' => 1,
+			'unit' => 'percent'
 		],
 		'jpeg_quality_chroma' => [
-			'type' => 'input',
+			'type' => 'range',
 			'name' => 'jpeg_quality_chroma',
 			'placeholder' => $defaultConfig['jpeg_quality_chroma'],
-			'value' => $config['jpeg_quality_chroma']
+			'value' => $config['jpeg_quality_chroma'],
+			'range_min' => -1,
+			'range_max' => 100,
+			'range_step' => 1,
+			'unit' => 'percent'
 		],
 		'jpeg_quality_thumb' => [
-			'type' => 'input',
+			'type' => 'range',
 			'name' => 'jpeg_quality_thumb',
 			'placeholder' => $defaultConfig['jpeg_quality_thumb'],
-			'value' => $config['jpeg_quality_thumb']
+			'value' => $config['jpeg_quality_thumb'],
+			'range_min' => -1,
+			'range_max' => 100,
+			'range_step' => 1,
+			'unit' => 'percent'
 		]
 	],
 	'user_interface' => [
@@ -573,10 +601,14 @@ $configsetup = [
 			'value' => $config['locationy']
 		],
 		'rotation' => [
-			'type' => 'input',
+			'type' => 'range',
 			'placeholder' => $defaultConfig['rotation'],
 			'name' => 'rotation',
-			'value' => $config['rotation']
+			'value' => $config['rotation'],
+			'range_min' => -180,
+			'range_max' => 180,
+			'range_step' => 5,
+			'unit' => 'degrees'
 		],
 		'font_path' => [
 			'type' => 'input',

@@ -2,6 +2,7 @@
 @import "partials/basic";
 @import "partials/button";
 @import "partials/fonts";
+@import "partials/toggle";
 
 $error: #e74c3c;
 $success: #2ecc71;
@@ -20,8 +21,6 @@ $success: #2ecc71;
   background-attachment: fixed;
 }
 
-
-
 input[type="text"],
 select {
   background: $boxColor;
@@ -32,8 +31,28 @@ select {
   color: $fontColor;
 }
 
-input[type="checkbox"] {
-  margin-right: 5px;
+.slider {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 100%;
+  background: $boxColor;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 20px;
+  background: $mainColor;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 20px;
+  background: $mainColor;
+  cursor: pointer;
 }
 
 .admin-panel {
