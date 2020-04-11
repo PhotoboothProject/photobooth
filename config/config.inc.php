@@ -27,6 +27,7 @@ $config['videoWidth'] = '1280';
 $config['videoHeight'] = '720';
 $config['camera_mode'] = 'user'; // possible values are "user" or "environment"
 $config['cups_button'] = false;
+$config['toggle_fs_button'] = false;
 $config['file_format_date'] = false;
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['collage_cntdwn_time'] = '3'; // control countdown timer between collage pictures

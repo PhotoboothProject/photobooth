@@ -648,6 +648,17 @@ const photoBooth = (function () {
         window.open(url, 'newwin', features);
     });
 
+    // Go Fullscreen
+    $('#fs-button').on('click', function (e) {
+        e.preventDefault();
+        if (!document.fullscreenElement) {
+            document.body.requestFullscreen();
+        } else if (document.fullscreenElement) {
+            document.exitFullscreen();
+        }
+        $('#fs-button').blur();
+    });
+
     $(document).on('keyup', function (ev) {
         if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
             public.thrill('photo');

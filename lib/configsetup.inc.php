@@ -300,6 +300,11 @@ $configsetup = [
 			'name' => 'cups_button',
 			'value' => $config['cups_button']
 		],
+		'toggle_fs_button' => [
+			'type' => 'checkbox',
+			'name' => 'toggle_fs_button',
+			'value' => $config['toggle_fs_button']
+		],
 		'rounded_corners' => [
 			'type' => 'checkbox',
 			'name' => 'rounded_corners',

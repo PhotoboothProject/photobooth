@@ -102,6 +102,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<?php if($config['cups_button']): ?>
 				<a id="cups-button" class="btn cups-button" href="#" target="newwin"><span>CUPS</span></a>
 			<?php endif; ?>
+			<?php if($config['toggle_fs_button']): ?>
+				<a href="#" id="fs-button" class="btn btn--small fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
+			<?php endif; ?>
 		</div>
 
 		<!-- image Filter Pane -->
