@@ -46,7 +46,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		<!-- Start Page -->
 		<div class="stages" id="start">
 			<?php if ($config['show_gallery']): ?>
-			<a class="gallery-button btn" href="#"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a>
+			<a class="gallery-button btn" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
 			<div class="blurred"></div>
@@ -83,15 +83,15 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 				<?php if ($config['force_buzzer']): ?>
 				<div id="useBuzzer">
-						<span data-l10n="use_button"></span>
+						<span data-i18n="use_button"></span>
 				</div>
 				<?php else: ?>
 					<?php if ($config['use_collage']): ?>
 					<a href="#" class="btn takeCollage"><i class="fa fa-th-large"></i> <span
-							data-l10n="takeCollage"></span></a>
+							data-i18n="takeCollage"></span></a>
 					<?php endif; ?>
 
-					<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-l10n="takePhoto"></span></a>
+					<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 				<?php endif; ?>
 			</div>
 
@@ -140,39 +140,39 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 		<!-- Result Page -->
 		<div class="stages" id="result">
-			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-l10n="home"></span></a>
+			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
 			<div class="resultInner hidden">
 				<?php if ($config['show_gallery']): ?>
-				<a href="#" class="btn gallery-button"><i class="fa fa-th"></i> <span data-l10n="gallery"></span></a>
+				<a href="#" class="btn gallery-button"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['use_qr']): ?>
-				<a href="#" class="btn qrbtn"><i class="fa fa-qrcode"></i> <span data-l10n="qr"></span></a>
+				<a href="#" class="btn qrbtn"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['use_mail']): ?>
-				<a href="#" class="btn mailbtn"><i class="fa fa-envelope"></i> <span data-l10n="mail"></span></a>
+				<a href="#" class="btn mailbtn"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['use_print']): ?>
-				<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-l10n="print"></span></a>
+				<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 				<?php endif; ?>
 
 				<?php if (!$config['force_buzzer']): ?>
-					<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-l10n="newPhoto"></span></a>
+					<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
 
 					<?php if ($config['use_collage']): ?>
 					<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span
-							data-l10n="newCollage"></span></a>
+							data-i18n="newCollage"></span></a>
 					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ($config['use_filter']): ?>
-				<a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-l10n="selectFilter"></span></a>
+				<a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['allow_delete']): ?>
-				<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-l10n="delete"></span></a>
+				<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 				<?php endif; ?>
 			</div>
 
@@ -192,24 +192,24 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 	<div class="send-mail">
 		<i class="fa fa-times" id="send-mail-close"></i>
-		<p data-l10n="insertMail"></p>
+		<p data-i18n="insertMail"></p>
 		<form id="send-mail-form" style="margin: 0;">
 			<input class="mail-form-input" size="35" type="email" name="sendTo">
 			<input id="mail-form-image" type="hidden" name="image" value="">
 
 			<?php if ($config['send_all_later']): ?>
 				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
-				<label data-l10n="sendAllMail" for="mail-form-send-link"></label>
+				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
 			<?php endif; ?>
 
-			<button class="mail-form-input btn" name="submit" type="submit" value="Send"><span data-l10n="send"></span></button>
+			<button class="mail-form-input btn" name="submit" type="submit" value="Send"><span data-i18n="send"></span></button>
 		</form>
 
 		<div id="mail-form-message" style="max-width: 75%"></div>
 	</div>
 
 	<div class="modal" id="print_mesg">
-		<div class="modal__body"><span data-l10n="printing"></span></div>
+		<div class="modal__body"><span data-i18n="printing"></span></div>
 	</div>
 
 	<div id="adminsettings">
@@ -225,7 +225,6 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="resources/js/l10n.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/TweenLite.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/EasePack.min.js"></script>
@@ -236,6 +235,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
-	<script type="text/javascript" src="resources/lang/<?php echo $config['language']; ?>.js"></script>
+	<script type="module" src="resources/js/i18n.js"></script>
+
 </body>
 </html>

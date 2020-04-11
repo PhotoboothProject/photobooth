@@ -40,7 +40,7 @@ $imagelist = array_reverse($images);
 <body class="sshow">
 	<div class="images" id="slideshow">
 		<?php if (empty($imagelist)): ?>
-		<h1 data-l10n="gallery_no_image"></h1>
+		<h1 data-i18n="gallery_no_image"></h1>
 		<?php else: ?>
 		<?php
 		if ($config['slideshow_randomPicture']):
@@ -83,9 +83,8 @@ $imagelist = array_reverse($images);
 	<script type="text/javascript" src="../resources/js/vendor/EasePack.min.js"></script>
 	<script type="text/javascript" src="../resources/js/vendor/jquery.gsap.min.js"></script>
 	<script type="text/javascript" src="../resources/js/vendor/CSSPlugin.min.js"></script>
-	<script type="text/javascript" src="../resources/js/l10n.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
-	<script type="text/javascript" src="../resources/lang/<?php echo $config['language']; ?>.js"></script>
 	<script type="text/javascript" src="../resources/js/slideshow.js"></script>
+	<script type="module" src="../resources/js/i18n.js"></script>
 </body>
 </html>

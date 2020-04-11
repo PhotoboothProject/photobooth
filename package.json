@@ -6,8 +6,8 @@
     "build": "gulp sass",
     "watch": "gulp sass:watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint resources/js/*.js resources/lang/*.js",
-    "eslint:fix": "eslint resources/js/*.js resources/lang/*.js --fix",
+    "eslint": "eslint resources/js/*.js",
+    "eslint:fix": "eslint resources/js/*.js --fix",
     "pack:build": "node scripts/pack-build.js"
   },
   "author": "",
