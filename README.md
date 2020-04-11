@@ -32,11 +32,10 @@ Photobooth was initially developped by Andre Rinas, you can find his source [her
   - Pictures can be directly downloaded from the gallery.
   - Print feature.
     - Optional: Print a frame on your picture
-      (replace `resources/img/frames/frame.png` with a frame of your choice).
     - Optional: Print text on your picture.
     - Optional: Print QR-Code on the right side of your picture.
   - Pictures can be sent via e-mail.
-  - LivePreview (uses device cam).
+  - LivePreview (via device cam or from stream URL).
   - Event specific (e.g. wedding, birthday) config to show a symbol (e.g. heart)
     between some text on the start page.
   - Green screen keying (chroma keying).
@@ -115,3 +114,4 @@ Donators who donated 5€ or more get early access to new features/options i am 
 - [jacques42](https://github.com/jacques42)
 - [poldixd](https://github.com/poldixd)
 - [TheVaan](https://github.com/TheVaan)
+- [Andreas Remdt](https://andreasremdt.com)
