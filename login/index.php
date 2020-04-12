@@ -97,6 +97,6 @@ if (isset($_POST['submit'])) {
 	<script type="text/javascript" src="../resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="../resources/js/login.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
-	<script type="module" src="../resources/js/i18n.js"></script>
+	<script type="module" src="../resources/js/i18n-sub.js"></script>
 </body>
 </html>
