@@ -67,10 +67,14 @@ function createArchive(fileName, archive) {
     archive.file('package.json');
     archive.file('gallery.php');
     archive.file('update-booth.sh');
+    archive.file('node_modules/normalize.css/LICENSE.md');
     archive.file('node_modules/normalize.css/normalize.css');
     archive.directory('node_modules/font-awesome/');
+    archive.file('node_modules/photoswipe/LICENSE');
     archive.directory('node_modules/photoswipe/dist/');
+    archive.file('node_modules/jquery/LICENSE.txt');
     archive.directory('node_modules/jquery/dist/');
+    archive.file('node_modules/marvinj/LICENSE');
     archive.directory('node_modules/marvinj/marvinj/release/');
 
     output.on('close', function () {

@@ -12,7 +12,7 @@ const translator = new Translator({
     ],
     defaultLanguage: 'en',
     detectLanguage: false,
-    filesLocation: 'resources/lang'
+    filesLocation: '../resources/lang'
 });
 
 window.i18n = function (key) {

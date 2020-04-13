@@ -156,7 +156,7 @@ require_once('../lib/configsetup.inc.php');
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script type="text/javascript" src="../resources/js/admin.js"></script>
-	<script type="module" src="../resources/js/i18n.js"></script>
+	<script type="module" src="../resources/js/i18n-sub.js"></script>
 
 </body>
 </html>

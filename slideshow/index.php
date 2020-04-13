@@ -85,6 +85,6 @@ $imagelist = array_reverse($images);
 	<script type="text/javascript" src="../resources/js/vendor/CSSPlugin.min.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script type="text/javascript" src="../resources/js/slideshow.js"></script>
-	<script type="module" src="../resources/js/i18n.js"></script>
+	<script type="module" src="../resources/js/i18n-sub.js"></script>
 </body>
 </html>
