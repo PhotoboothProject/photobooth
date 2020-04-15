@@ -51,6 +51,7 @@
   "general_collage_key": "Key code which triggers a collage",
   "general_default_imagefilter": "Default image filter",
   "general_disabled_filters": "Disabled image filters",
+  "general_ipCamPreviewRotation": "Rotate preview from URL (e.g. 0deg, 90deg, 180deg, -90deg)",
   "general_ipCamURL": "Preview-URL",
   "general_language": "Language",
   "general_photo_key": "Key code which triggers a photo",

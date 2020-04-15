@@ -18,6 +18,7 @@ style.setProperty('--background-admin', config.background_admin);
 style.setProperty('--background-chroma', config.background_chroma);
 style.setProperty('--background-ipcam', config.ipCamURL);
 style.setProperty('--fontSize', config.font_size);
+style.setProperty('--preview-rotation', config.ipCamPreviewRotation);
 
 $(function () {
     $('#wrapper').show();

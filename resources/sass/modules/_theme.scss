@@ -18,6 +18,7 @@
     --background-chroma: none;
     --background-ipcam: none;
     --fontSize: 16px;
+    --preview-rotation: 0deg;
 }
 
 $mainColor: var(--primary-color);
@@ -38,3 +39,4 @@ $adminBackground: var(--background-admin);
 $chromaBackground: var(--background-chroma);
 $ipcamBackground: var(--background-ipcam);
 $fontSize: var(--fontSize);
+$ipCamPreviewRotation: var(--preview-rotation);

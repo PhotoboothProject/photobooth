@@ -227,6 +227,12 @@ $configsetup = [
 			'name' => 'previewFromIPCam',
 			'value' => $config['previewFromIPCam']
 		],
+		'ipCamPreviewRotation' => [
+			'type' => 'input',
+			'name' => 'ipCamPreviewRotation',
+			'placeholder' => '0deg',
+			'value' => $config['ipCamPreviewRotation']
+		],
 		'ipCamURL' => [
 			'type' => 'input',
 			'name' => 'ipCamURL',

@@ -50,6 +50,7 @@
   "general_collage_key": "Tastencode welcher eine Collage auslöst",
   "general_default_imagefilter": "Standardbildfilter",
   "general_disabled_filters": "Deaktivierte Bildfilter",
+  "general_ipCamPreviewRotation": "Vorschau von URL drehen (z.B. 0deg, 90deg, 180deg, -90deg)",
   "general_ipCamURL": "Vorschau-URL",
   "general_language": "Sprache",
   "general_photo_key": "Tastencode welcher ein Foto auslöst",

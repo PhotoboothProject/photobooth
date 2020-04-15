@@ -371,6 +371,7 @@ hr.small {
   height: 100%;
   width: 100%;
   object-fit: cover;
+  transform: rotate($ipCamPreviewRotation);
 
   &.streaming {
     background-image: $ipcamBackground;

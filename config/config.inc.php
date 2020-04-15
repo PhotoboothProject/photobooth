@@ -22,6 +22,7 @@ $config['previewFromCam'] = false; // experimental see https://github.com/andrek
 $config['previewCamTakesPic'] = false; // HTTPS required to use tablet- or mobile phone camera
 $config['previewCamFlipHorizontal'] = true;
 $config['previewFromIPCam'] = false;
+$config['ipCamPreviewRotation'] = '0deg';
 $config['ipCamURL'] = null;
 $config['videoWidth'] = '1280';
 $config['videoHeight'] = '720';
