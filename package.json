@@ -34,7 +34,7 @@
     "font-awesome": "^4.7.0",
     "gulp": "4.0.2",
     "gulp-sass": "4.0.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "marvinj": "https://github.com/gabrielarchanjo/marvinj",
     "normalize.css": "^8.0.1",
     "photoswipe": "https://github.com/andi34/PhotoSwipe"
