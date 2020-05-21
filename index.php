@@ -40,6 +40,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<?php endif; ?>
 </head>
 
+<video id="video--preview" autoplay playsinline></video>
 <body class="deselect">
 	<div id="wrapper">
 	<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect_index'])): ?>

@@ -100,6 +100,7 @@
   "nextPhoto": "Nächstes Bild",
   "polaroid_effect": "Polaroid Effekt",
   "preserve_exif_data": "Exif-Daten erhalten",
+  "previewCamBackground": "Stream der Gerätekamera als Hintergrund nutzen",
   "previewCamFlipHorizontal": "Bild von der Gerätekamera horizontal spiegeln",
   "previewCamTakesPic": "Gerätekamera zur Bildaufnahme verwenden",
   "previewFromCam": "Vorschau aus der Gerätekamera anzeigen",

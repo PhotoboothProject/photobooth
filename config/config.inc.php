@@ -21,6 +21,7 @@ $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
 $config['previewCamTakesPic'] = false; // HTTPS required to use tablet- or mobile phone camera
 $config['previewCamFlipHorizontal'] = true;
+$config['previewCamBackground'] = false;
 $config['previewFromIPCam'] = false;
 $config['ipCamPreviewRotation'] = '0deg';
 $config['ipCamURL'] = null;

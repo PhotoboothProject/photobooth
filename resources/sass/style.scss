@@ -343,6 +343,15 @@ hr.small {
   object-fit: cover;
 }
 
+#video--preview {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
 #ipcam--view {
   background-image: none;
   background-size: cover;

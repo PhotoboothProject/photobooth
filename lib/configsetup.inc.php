@@ -222,6 +222,11 @@ $configsetup = [
 			'name' => 'previewCamFlipHorizontal',
 			'value' => $config['previewCamFlipHorizontal']
 		],
+		'previewCamBackground' => [
+			'type' => 'checkbox',
+			'name' => 'previewCamBackground',
+			'value' => $config['previewCamBackground']
+		],
 		'previewFromIPCam' => [
 			'type' => 'checkbox',
 			'name' => 'previewFromIPCam',

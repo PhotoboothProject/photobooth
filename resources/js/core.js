@@ -5,6 +5,7 @@ const photoBooth = (function () {
     const public = {},
         loader = $('#loader'),
         startPage = $('#start'),
+        wrapper = $('#wrapper'),
         timeToLive = config.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
@@ -17,6 +18,7 @@ const photoBooth = (function () {
             }
         },
         videoView = $('#video--view').get(0),
+        videoPreview = $('#video--preview').get(0),
         videoSensor = document.querySelector('#video--sensor');
 
     let timeOut,
@@ -72,6 +74,7 @@ const photoBooth = (function () {
         $('.spinner').hide();
         $('.send-mail').hide();
         $('#video--view').hide();
+        $('#video--preview').hide();
         $('#video--sensor').hide();
         $('#ipcam--view').hide();
         public.resetMailForm();
@@ -85,6 +88,9 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
+        if (config.previewCamBackground) {
+            public.startPreview();
+        }
     }
 
     public.openNav = function () {
@@ -99,7 +105,40 @@ const photoBooth = (function () {
         $('#mySidenav').toggleClass('sidenav--open');
     }
 
+    public.startPreview = function () {
+        if (!navigator.mediaDevices) {
+            return;
+        }
+
+        const getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+
+        if (!getMedia) {
+            return;
+        }
+
+        if (config.previewCamFlipHorizontal) {
+            $('#video--preview').addClass('flip-horizontal');
+        }
+
+        getMedia.call(navigator.mediaDevices, webcamConstraints)
+            .then(function (stream) {
+                $('#video--preview').show();
+                videoPreview.srcObject = stream;
+                public.stream = stream;
+                wrapper.css('background-image', 'none');
+                wrapper.css('background-color', 'transparent');
+            })
+            .catch(function (error) {
+                console.log('Could not get user media: ', error)
+            });
+    }
+
     public.startVideo = function () {
+
+        if (config.previewCamBackground) {
+            public.stopPreview();
+        }
+
         if (!navigator.mediaDevices) {
             return;
         }
@@ -133,9 +172,21 @@ const photoBooth = (function () {
         }
     }
 
+    public.stopPreview = function () {
+        if (public.stream) {
+            const track = public.stream.getTracks()[0];
+            track.stop();
+            $('#video--preview').hide();
+        }
+    }
+
     public.thrill = function (photoStyle) {
         public.closeNav();
         public.reset();
+
+        if (config.previewCamBackground) {
+            wrapper.css('background-color', config.colors.panel);
+        }
 
         if (currentCollageFile && nextCollageNumber) {
             photoStyle = 'collage';
@@ -226,6 +277,7 @@ const photoBooth = (function () {
             $('.cheese').empty();
             if (config.previewCamFlipHorizontal) {
                 $('#video--view').removeClass('flip-horizontal');
+                $('#video--preview').removeClass('flip-horizontal');
             }
 
             // reset filter (selection) after picture was taken
