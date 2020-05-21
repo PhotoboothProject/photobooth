@@ -91,6 +91,7 @@ COMMON_PACKAGES=(
     'libimage-exiftool-perl'
     'nodejs'
     'php-gd'
+    'php-zip'
     'yarn'
 )
 

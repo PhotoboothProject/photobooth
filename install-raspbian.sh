@@ -51,6 +51,7 @@ COMMON_PACKAGES=(
     'nodejs'
     'npm'
     'php-gd'
+    'php-zip'
     'yarn'
 )
 
