@@ -49,8 +49,6 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<a class="gallery-button btn" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
-			<div class="blurred"></div>
-
 			<div class="startInner">
 				<?php if ($config['is_event']): ?>
 				<div class="names">
