@@ -89,7 +89,7 @@ const photoBooth = (function () {
         resultPage.hide();
         startPage.addClass('open');
         if (config.previewCamBackground) {
-            public.startPreview();
+            public.startVideo('preview');
         }
     }
 
@@ -105,38 +105,10 @@ const photoBooth = (function () {
         $('#mySidenav').toggleClass('sidenav--open');
     }
 
-    public.startPreview = function () {
-        if (!navigator.mediaDevices) {
-            return;
-        }
-
-        const getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
-
-        if (!getMedia) {
-            return;
-        }
-
-        if (config.previewCamFlipHorizontal) {
-            $('#video--preview').addClass('flip-horizontal');
-        }
-
-        getMedia.call(navigator.mediaDevices, webcamConstraints)
-            .then(function (stream) {
-                $('#video--preview').show();
-                videoPreview.srcObject = stream;
-                public.stream = stream;
-                wrapper.css('background-image', 'none');
-                wrapper.css('background-color', 'transparent');
-            })
-            .catch(function (error) {
-                console.log('Could not get user media: ', error)
-            });
-    }
-
-    public.startVideo = function () {
+    public.startVideo = function (mode) {
 
         if (config.previewCamBackground) {
-            public.stopPreview();
+            public.stopVideo('preview');
         }
 
         if (!navigator.mediaDevices) {
@@ -151,12 +123,21 @@ const photoBooth = (function () {
 
         if (config.previewCamFlipHorizontal) {
             $('#video--view').addClass('flip-horizontal');
+            $('#video--preview').addClass('flip-horizontal');
         }
 
         getMedia.call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
-                $('#video--view').show();
-                videoView.srcObject = stream;
+                if (mode === 'preview') {
+                    $('#video--preview').show();
+                    videoPreview.srcObject = stream;
+                    public.stream = stream;
+                    wrapper.css('background-image', 'none');
+                    wrapper.css('background-color', 'transparent');
+                } else {
+                    $('#video--view').show();
+                    videoView.srcObject = stream;
+                }
                 public.stream = stream;
             })
             .catch(function (error) {
@@ -164,19 +145,15 @@ const photoBooth = (function () {
             });
     }
 
-    public.stopVideo = function () {
+    public.stopVideo = function (mode) {
         if (public.stream) {
             const track = public.stream.getTracks()[0];
             track.stop();
-            $('#video--view').hide();
-        }
-    }
-
-    public.stopPreview = function () {
-        if (public.stream) {
-            const track = public.stream.getTracks()[0];
-            track.stop();
-            $('#video--preview').hide();
+            if (mode === 'preview') {
+                $('#video--preview').hide();
+            } else {
+                $('#video--view').hide();
+            }
         }
     }
 
@@ -193,7 +170,7 @@ const photoBooth = (function () {
         }
 
         if (config.previewFromCam) {
-            public.startVideo();
+            public.startVideo('view');
         }
 
         if (config.previewFromIPCam) {
@@ -253,7 +230,7 @@ const photoBooth = (function () {
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
-            public.stopVideo();
+            public.stopVideo('view');
         }
 
         if (config.previewFromIPCam) {
