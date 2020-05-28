@@ -87,7 +87,6 @@
   display: none;
   align-items: center;
   justify-content: center;
-  background: $background_countdownColor;
   background-size: cover;
   background-position: center center;
   color: $countdownColor;
@@ -105,7 +104,6 @@
     bottom: 0;
     left: 0;
     z-index: -1;
-    background-color: $background_countdownColor;
     opacity: 1;
     transition: opacity 0.5s;
   }

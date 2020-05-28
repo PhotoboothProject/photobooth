@@ -78,6 +78,8 @@ const photoBooth = (function () {
         $('#video--sensor').hide();
         $('#ipcam--view').hide();
         public.resetMailForm();
+        $('#loader').css('background', config.colors.background_countdown);
+        $('#loader').css('background-color', config.colors.background_countdown);
     }
 
     // init
@@ -248,6 +250,9 @@ const photoBooth = (function () {
             data.file = currentCollageFile;
             data.collageNumber = nextCollageNumber;
         }
+
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
 
         jQuery.post('api/takePic.php', data).done(async function (result) {
             console.log('took picture', result);
