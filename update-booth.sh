@@ -24,6 +24,19 @@ else
     exit 2
 fi
 
+OLDFILES=(
+    'login.php'
+    'logout.php'
+    'admin/config.json'
+    'resources/fonts/style.css'
+    'resources/js/l10n.js'
+    'resources/lang/de.js'
+    'resources/lang/en.js'
+    'resources/lang/es.js'
+    'resources/lang/fr.js'
+    'resources/lang/gr.js'
+)
+
 if [[ ! -d "${booth_source}" ]]; then
     mkdir -p "${booth_source}"
 fi
@@ -31,8 +44,11 @@ fi
 cp -rf ./* "${booth_source}/"
 chown -R www-data:www-data ${booth_source}
 
-if [ -f "${booth_source}/admin/config.json" ]; then
-	rm ${booth_source}/admin/config.json
-fi
+for file in "${OLDFILES[@]}"; do
+    if [ -f "${booth_source}/${file}" ]; then
+        info "Deleting unused file: ${booth_source}/${file}"
+        rm "${booth_source}/${file}"
+    fi
+done
 
 info "Updated Photobooth"
