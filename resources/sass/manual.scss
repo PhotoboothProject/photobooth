@@ -1,0 +1,112 @@
+@import "modules/theme";
+@import "partials/basic";
+@import "partials/button";
+@import "partials/fonts";
+@import "partials/toggle";
+
+$error: #e74c3c;
+$success: #2ecc71;
+
+.manualwrapper {
+  display: block;
+  position: relative;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  background-color: $mainColor;
+  background-image: $adminBackground;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.manual-panel {
+  width: calc(40 * 1em);
+  padding: 30px 30px 90px;
+  height: auto;
+  margin: 50px auto;
+  background: $panelColor;
+  position: relative;
+  max-width: 100%;
+  color: $fontColor;
+}
+
+.panel {
+  .panel-heading {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid $borderColor;
+    .plus {
+      display: inline-block;
+    }
+    .minus {
+      display: none;
+    }
+
+    &:hover {
+      background: $hoverPanelColor;
+    }
+
+  }
+  .panel-body {
+    display: none;
+    padding: 20px;
+    border: 1px solid $borderColor;
+  }
+
+  &.open {
+    .panel-heading {
+      .minus {
+        display: inline-block;
+      }
+      .plus {
+        display: none;
+      }
+    }
+  }
+
+  &.init {
+    .panel-body{
+      display: block;
+    }
+  }
+}
+
+.form-row {
+  margin-bottom: 15px;
+}
+
+.back-to-pb {
+  color: $fontColor;
+  text-decoration: none;
+  padding: 0 3px;
+
+  &:hover {
+    background-color: $hoverPanelColor;
+  }
+}
+
+.wiki-btn {
+  cursor: pointer;
+  background: $mainColor;
+  color: $buttonFontColor;
+  width: 100%;
+  position: absolute;
+  padding: 20px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: background 0.7s ease;
+
+  &:hover {
+    background: $hoverColor;
+  }
+}
+
+code {
+  background-color: #f1f1f1;
+  color: #606060;
+  padding: 2px;
+  font-size: 0.8em;
+}
