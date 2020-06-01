@@ -348,7 +348,7 @@ const photoBooth = (function () {
             e.stopPropagation();
 
             public.printImage(filename, () => {
-                public.reloadPage();
+                $('.printbtn').blur();
             });
         });
 
@@ -536,6 +536,7 @@ const photoBooth = (function () {
         e.preventDefault();
 
         public.thrill('photo');
+        $('.newpic').blur();
     });
 
     // Take Collage Button
@@ -543,6 +544,7 @@ const photoBooth = (function () {
         e.preventDefault();
 
         public.thrill('collage');
+        $('.newcollage').blur();
     });
 
     $('#mySidenav .closebtn').on('click', function (e) {
