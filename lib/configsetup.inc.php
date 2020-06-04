@@ -198,6 +198,17 @@ $configsetup = [
 			'name' => 'use_collage',
 			'value' => $config['use_collage']
 		],
+		'take_collage_frame' => [
+			'type' => 'checkbox',
+			'name' => 'take_collage_frame',
+			'value' => $config['take_collage_frame']
+		],
+		'take_collage_frame_path' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['take_collage_frame_path'],
+			'name' => 'take_collage_frame_path',
+			'value' => $config['take_collage_frame_path']
+		],
 		'collage_cntdwn_time' => [
 			'type' => 'range',
 			'name' => 'collage_cntdwn_time',
