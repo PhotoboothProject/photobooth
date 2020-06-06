@@ -115,4 +115,4 @@ Donators who donated 5€ or more get early access to new features/options i am 
 - [poldixd](https://github.com/poldixd)
 - [TheVaan](https://github.com/TheVaan)
 - [Andreas Remdt](https://andreasremdt.com)
-- [philippselle](philippselle)
+- [philippselle](https://github.com/philippselle)
