@@ -21,6 +21,7 @@ $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 $frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_frame_path'];
+$collage_frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_collage_frame_path'];
 
 if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
     $collageBasename = substr($filename_tmp, 0, -4);
@@ -30,7 +31,7 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_collage_frame'], $config['take_collage_frame_path'])) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_collage_frame'], $collage_frame_path)) {
         die(json_encode([
             'error' => 'Could not create collage'
         ]));
