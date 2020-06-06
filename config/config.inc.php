@@ -21,6 +21,7 @@ $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
 $config['previewCamTakesPic'] = false; // HTTPS required to use tablet- or mobile phone camera
 $config['previewCamFlipHorizontal'] = true;
+$config['previewCamBackground'] = false;
 $config['previewFromIPCam'] = false;
 $config['ipCamPreviewRotation'] = '0deg';
 $config['ipCamURL'] = null;
@@ -44,6 +45,8 @@ $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['take_frame'] = false;
 $config['take_frame_path'] = '../resources/img/frames/frame.png';
+$config['take_collage_frame'] = false;
+$config['take_collage_frame_path'] = '../resources/img/frames/frame.png';
 $config['chroma_keying'] = true;
 $config['use_collage'] = false;
 $config['continuous_collage'] = false;
@@ -54,6 +57,8 @@ $config['force_buzzer'] = false;
 $config['webserver_ip'] = null;
 $config['rounded_corners'] = false;
 $config['time_to_live'] = '90000';
+$config['db_file'] = 'db';
+$config['mail_file'] = 'mail-adresses';
 
 // specify key id to use that key to take a picture or collage (e.g. 13 is the enter key)
 // use for example https://keycode.info to get the key code

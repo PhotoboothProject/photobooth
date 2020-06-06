@@ -5,6 +5,7 @@ const photoBooth = (function () {
     const public = {},
         loader = $('#loader'),
         startPage = $('#start'),
+        wrapper = $('#wrapper'),
         timeToLive = config.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
@@ -17,6 +18,7 @@ const photoBooth = (function () {
             }
         },
         videoView = $('#video--view').get(0),
+        videoPreview = $('#video--preview').get(0),
         videoSensor = document.querySelector('#video--sensor');
 
     let timeOut,
@@ -72,9 +74,12 @@ const photoBooth = (function () {
         $('.spinner').hide();
         $('.send-mail').hide();
         $('#video--view').hide();
+        $('#video--preview').hide();
         $('#video--sensor').hide();
         $('#ipcam--view').hide();
         public.resetMailForm();
+        $('#loader').css('background', config.colors.background_countdown);
+        $('#loader').css('background-color', config.colors.background_countdown);
     }
 
     // init
@@ -85,6 +90,9 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
+        if (config.previewCamBackground) {
+            public.startVideo('preview');
+        }
     }
 
     public.openNav = function () {
@@ -99,7 +107,12 @@ const photoBooth = (function () {
         $('#mySidenav').toggleClass('sidenav--open');
     }
 
-    public.startVideo = function () {
+    public.startVideo = function (mode) {
+
+        if (config.previewCamBackground) {
+            public.stopVideo('preview');
+        }
+
         if (!navigator.mediaDevices) {
             return;
         }
@@ -112,12 +125,21 @@ const photoBooth = (function () {
 
         if (config.previewCamFlipHorizontal) {
             $('#video--view').addClass('flip-horizontal');
+            $('#video--preview').addClass('flip-horizontal');
         }
 
         getMedia.call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
-                $('#video--view').show();
-                videoView.srcObject = stream;
+                if (mode === 'preview') {
+                    $('#video--preview').show();
+                    videoPreview.srcObject = stream;
+                    public.stream = stream;
+                    wrapper.css('background-image', 'none');
+                    wrapper.css('background-color', 'transparent');
+                } else {
+                    $('#video--view').show();
+                    videoView.srcObject = stream;
+                }
                 public.stream = stream;
             })
             .catch(function (error) {
@@ -125,11 +147,15 @@ const photoBooth = (function () {
             });
     }
 
-    public.stopVideo = function () {
+    public.stopVideo = function (mode) {
         if (public.stream) {
             const track = public.stream.getTracks()[0];
             track.stop();
-            $('#video--view').hide();
+            if (mode === 'preview') {
+                $('#video--preview').hide();
+            } else {
+                $('#video--view').hide();
+            }
         }
     }
 
@@ -137,12 +163,16 @@ const photoBooth = (function () {
         public.closeNav();
         public.reset();
 
+        if (config.previewCamBackground) {
+            wrapper.css('background-color', config.colors.panel);
+        }
+
         if (currentCollageFile && nextCollageNumber) {
             photoStyle = 'collage';
         }
 
         if (config.previewFromCam) {
-            public.startVideo();
+            public.startVideo('view');
         }
 
         if (config.previewFromIPCam) {
@@ -202,7 +232,7 @@ const photoBooth = (function () {
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
-            public.stopVideo();
+            public.stopVideo('view');
         }
 
         if (config.previewFromIPCam) {
@@ -221,11 +251,15 @@ const photoBooth = (function () {
             data.collageNumber = nextCollageNumber;
         }
 
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
+
         jQuery.post('api/takePic.php', data).done(async function (result) {
             console.log('took picture', result);
             $('.cheese').empty();
             if (config.previewCamFlipHorizontal) {
                 $('#video--view').removeClass('flip-horizontal');
+                $('#video--preview').removeClass('flip-horizontal');
             }
 
             // reset filter (selection) after picture was taken

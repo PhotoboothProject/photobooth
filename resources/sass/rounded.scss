@@ -49,7 +49,8 @@
     margin-left: 5px;
 }
 
-.admin-panel {
+.admin-panel,
+.manual-panel {
   border: 0 none;
   border-radius: 10px;
 }
@@ -72,6 +73,11 @@
 }
 
 button {
+  border: 2px solid $borderColor;
+  border-radius: 10px;
+}
+
+.wiki-btn {
   border: 2px solid $borderColor;
   border-radius: 10px;
 }

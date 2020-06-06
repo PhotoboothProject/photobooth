@@ -63,19 +63,17 @@ if (!$mail->addAttachment($path . $postImage)) {
 }
 
 if (isset($_POST['send-link']) && $_POST['send-link'] === 'yes') {
-    $mailAddressesFile = $config['foldersAbs']['data'] . '/mail-addresses.txt';
-
-    if (!file_exists($mailAddressesFile)) {
+    if (!file_exists(MAIL_FILE)) {
         $addresses = [];
     } else {
-        $addresses = json_decode(file_get_contents($mailAddressesFile));
+        $addresses = json_decode(file_get_contents(MAIL_FILE));
     }
 
     if (!in_array($_POST['sendTo'], $addresses)) {
         $addresses[] = $_POST['sendTo'];
     }
 
-    file_put_contents($mailAddressesFile, json_encode($addresses));
+    file_put_contents(MAIL_FILE, json_encode($addresses));
 
     die(json_encode([
         'success' => true,

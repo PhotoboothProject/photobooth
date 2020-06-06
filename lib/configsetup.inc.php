@@ -49,6 +49,12 @@ $configsetup = [
 			'name' => 'show_error_messages',
 			'value' => $config['show_error_messages']
 		],
+		'db_file' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['db_file'],
+			'name' => 'db_file',
+			'value' => $config['db_file']
+		],
 		'file_format_date' => [
 			'type' => 'checkbox',
 			'name' => 'file_format_date',
@@ -192,6 +198,17 @@ $configsetup = [
 			'name' => 'use_collage',
 			'value' => $config['use_collage']
 		],
+		'take_collage_frame' => [
+			'type' => 'checkbox',
+			'name' => 'take_collage_frame',
+			'value' => $config['take_collage_frame']
+		],
+		'take_collage_frame_path' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['take_collage_frame_path'],
+			'name' => 'take_collage_frame_path',
+			'value' => $config['take_collage_frame_path']
+		],
 		'collage_cntdwn_time' => [
 			'type' => 'range',
 			'name' => 'collage_cntdwn_time',
@@ -221,6 +238,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'previewCamFlipHorizontal',
 			'value' => $config['previewCamFlipHorizontal']
+		],
+		'previewCamBackground' => [
+			'type' => 'checkbox',
+			'name' => 'previewCamBackground',
+			'value' => $config['previewCamBackground']
 		],
 		'previewFromIPCam' => [
 			'type' => 'checkbox',
@@ -676,6 +698,12 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'send_all_later',
 			'value' => $config['send_all_later']
+		],
+		'file' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['mail_file'],
+			'name' => 'mail_file',
+			'value' => $config['mail_file']
 		],
 		'host' => [
 			'type' => 'input',
