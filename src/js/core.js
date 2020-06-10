@@ -26,9 +26,9 @@ const photoBooth = (function () {
         takingPic = false,
         nextCollageNumber = 0,
         currentCollageFile = '',
-        imgFilter = config.default_imagefilter;
-
-    let ioClient;
+        imgFilter = config.default_imagefilter,
+        ioClient,
+        pid;
 
     const modal = {
         open: function (selector) {
@@ -154,42 +154,55 @@ const photoBooth = (function () {
             api.stopVideo('preview');
         }
 
+        const dataVideo = {
+            play: 'true'
+        };
+
         if (!navigator.mediaDevices) {
             return;
         }
 
-        const getMedia =
-            navigator.mediaDevices.getUserMedia ||
-            navigator.mediaDevices.webkitGetUserMedia ||
-            navigator.mediaDevices.mozGetUserMedia ||
-            false;
+        jQuery
+            .post('api/takeVideo.php', dataVideo)
+            .done(function (result) {
+                console.log('Start webcam', result);
+                pid = result.pid;
+                const getMedia =
+                    navigator.mediaDevices.getUserMedia ||
+                    navigator.mediaDevices.webkitGetUserMedia ||
+                    navigator.mediaDevices.mozGetUserMedia ||
+                    false;
 
-        if (!getMedia) {
-            return;
-        }
-
-        if (config.previewCamFlipHorizontal) {
-            $('#video--view').addClass('flip-horizontal');
-            $('#video--preview').addClass('flip-horizontal');
-        }
-
-        getMedia
-            .call(navigator.mediaDevices, webcamConstraints)
-            .then(function (stream) {
-                if (mode === 'preview') {
-                    $('#video--preview').show();
-                    videoPreview.srcObject = stream;
-                    api.stream = stream;
-                    wrapper.css('background-image', 'none');
-                    wrapper.css('background-color', 'transparent');
-                } else {
-                    $('#video--view').show();
-                    videoView.srcObject = stream;
+                if (!getMedia) {
+                    return;
                 }
-                api.stream = stream;
+
+                if (config.previewCamFlipHorizontal) {
+                    $('#video--view').addClass('flip-horizontal');
+                    $('#video--preview').addClass('flip-horizontal');
+                }
+
+                getMedia
+                    .call(navigator.mediaDevices, webcamConstraints)
+                    .then(function (stream) {
+                        if (mode === 'preview') {
+                            $('#video--preview').show();
+                            videoPreview.srcObject = stream;
+                            api.stream = stream;
+                            wrapper.css('background-image', 'none');
+                            wrapper.css('background-color', 'transparent');
+                        } else {
+                            $('#video--view').show();
+                            videoView.srcObject = stream;
+                        }
+                        api.stream = stream;
+                    })
+                    .catch(function (error) {
+                        console.log('Could not get user media: ', error);
+                    });
             })
-            .catch(function (error) {
-                console.log('Could not get user media: ', error);
+            .fail(function (xhr, status, result) {
+                console.log('Could not start webcam', result);
             });
     };
 
@@ -202,6 +215,28 @@ const photoBooth = (function () {
             } else {
                 $('#video--view').hide();
             }
+        }
+    };
+
+    api.stopVideoAndTakePic = function (data) {
+        if (api.stream) {
+            const dataVideo = {
+                play: 'false',
+                pid: pid
+            };
+
+            jQuery
+                .post('api/takeVideo.php', dataVideo)
+                .done(function (result) {
+                    console.log('Stop webcam', result);
+                    const track = api.stream.getTracks()[0];
+                    track.stop();
+                    $('#video--view').hide();
+                    api.callTakePicApi(data);
+                })
+                .fail(function (xhr, status, result) {
+                    console.log('Could not stop webcam', result);
+                });
         }
     };
 
@@ -261,13 +296,7 @@ const photoBooth = (function () {
                 .appendTo('.cheese');
         }
 
-        if (config.preview_mode === 'device_cam' && config.previewCamTakesPic && !api.stream && !config.dev) {
-            console.log('No preview by device cam available!');
-
-            api.errorPic({
-                error: 'No preview by device cam available!'
-            });
-        } else if (config.no_cheese) {
+        if (config.no_cheese) {
             api.takePic(photoStyle);
         } else {
             setTimeout(() => {
@@ -286,14 +315,7 @@ const photoBooth = (function () {
             ioClient.emit('photobooth-socket', 'in progress');
         }
 
-        if (config.preview_mode === 'device_cam') {
-            if (config.previewCamTakesPic && !config.dev) {
-                videoSensor.width = videoView.videoWidth;
-                videoSensor.height = videoView.videoHeight;
-                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
-            }
-            api.stopVideo('view');
-        } else if (config.preview_mode === 'url') {
+        if (config.preview_mode === 'url') {
             $('#ipcam--view').removeClass('streaming');
             $('#ipcam--view').hide();
         }
@@ -312,6 +334,19 @@ const photoBooth = (function () {
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
 
+        if (config.preview_mode === 'device_cam') {
+            if (config.previewCamTakesPic && !config.dev) {
+                videoSensor.width = videoView.videoWidth;
+                videoSensor.height = videoView.videoHeight;
+                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
+            }
+            api.stopVideoAndTakePic(data);
+        } else {
+            api.callTakePicApi(data);
+        }
+    };
+
+    api.callTakePicApi = function (data) {
         jQuery
             .post('api/takePic.php', data)
             .done(function (result) {
@@ -360,7 +395,7 @@ const photoBooth = (function () {
                     currentCollageFile = '';
                     nextCollageNumber = 0;
 
-                    api.processPic(photoStyle, result);
+                    api.processPic(data.style, result);
                 }
             })
             .fail(function (xhr, status, result) {
