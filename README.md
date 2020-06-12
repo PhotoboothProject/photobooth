@@ -4,7 +4,7 @@ A Photobooth web interface for Raspberry Pi and Windows.
 
 Photobooth was initially developped by Andre Rinas, you can find his source [here](https://github.com/andreknieriem/photobooth).
 
-This is my personal Photobooth fork with some extras on top (more information can be found below).
+This is my personal Photobooth fork with some extras on top (more information can be found [below](https://github.com/andi34/photobooth#extras-on-my-personal-fork)).
 
 **Please note:**
 
@@ -59,7 +59,7 @@ If I find enough time I'll post some updates from time to time
 
   - install-raspbian: use Apache2 webserver by default again
   - added Slideshow option to Gallery
-  - standalone slideshow via localhost/slideshow
+  - standalone slideshow via `localhost/slideshow`
   - access login via `localhost/login` instead `localhost/login.php`
   - offline manual with settings explained under `localhost/manual` ([andi34/photobooth#59](https://github.com/andi34/photobooth/pull/59))
   - fix windows compatibility
