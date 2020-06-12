@@ -4,6 +4,14 @@ A Photobooth web interface for Raspberry Pi and Windows.
 
 Photobooth was initially developped by Andre Rinas, you can find his source [here](https://github.com/andreknieriem/photobooth).
 
+This is my personal Photobooth fork with some extras on top (more information can be found below).
+
+**Please note:**
+
+Safari Browser on iOS 9 in not compatible with es6, which means Photobooth won't work. Supported browser can be found inside the [Wiki](https://github.com/andi34/photobooth/wiki#browser-support).
+If you like to use an old iPad anyway, please take a look [here (andi34/photobooth#47)](https://github.com/andi34/photobooth/issues/47).
+If I find enough time I'll post some updates from time to time
+
 ## :heart_eyes: Features
 
 - Works on Windows and Linux.
@@ -43,7 +51,45 @@ Photobooth was initially developped by Andre Rinas, you can find his source [her
     interruption and let it generate a collage out of it.
   - Save pictures with a Polaroid effect.
   - Adjust take picture and print commands.
+  - Adjust the style of Photobooth via admin panel.
   - And many more options to adjust and style Photobooth for your personal needs.
+
+## Extras on my personal fork
+### General changes:
+
+  - install-raspbian: use Apache2 webserver by default again
+  - added Slideshow option to Gallery
+  - standalone slideshow via localhost/slideshow
+  - access login via `localhost/login` instead `localhost/login.php`
+  - offline manual with settings explained under `localhost/manual` ([andi34/photobooth#59](https://github.com/andi34/photobooth/pull/59))
+  - fix windows compatibility
+  - fix check for image filter
+  - performance improvement ([andreknieriem/photobooth#226](https://github.com/andreknieriem/photobooth/pull/226))
+  - Improved width of admin- and login-panel (partially [andreknieriem/photobooth#221](https://github.com/andreknieriem/photobooth/pull/221))
+  - general bug-fixes if device cam is used to take pictures ([andreknieriem/photobooth#220](https://github.com/andreknieriem/photobooth/pull/220))
+  - Remove unused resources/fonts/style.css
+  - language: use correkt ISO 639-1 Language Code for Greek
+  - Optimize picture size on result screen
+  - Switch to blue-gray color theme by default
+  - Admin panel: switch to range config and use toggles instead checkboxes
+  - Switch to simple-translator for translations, use english as fallback langauage if a translation is missing. This also gives the possibility to easily translate Photobooth. [How to update or add translations?](https://github.com/andi34/photobooth/wiki/FAQ#how-to-update-or-add-translations)
+
+
+### New Options:
+
+  - Option to disable the delete button ([andreknieriem/photobooth#228](https://github.com/andreknieriem/photobooth/pull/228))
+  - Show/Hide button to toggle fullscreen mode
+  - Option to keep original images in tmp folder
+  - Configurable image preview while post-processing
+  - Adjustable time a image is shown after capture
+  - Allow to rotate photo after taking
+  - Optional EXIF data preservation (disabled by default)
+  - define collage frame seperately ([andi34/photobooth#63](https://github.com/andi34/photobooth/pull/63))
+  - event specific database: You can now rename the picture and email database via Adminpanel. Only pictures inside the defined database are visible via gallery. ([andi34/photobooth#61](https://github.com/andi34/photobooth/pull/61))
+  - Preview/Stream from device cam as background on start page ([andi34/photobooth#](58https://github.com/andi34/photobooth/pull/58))
+  - Allow using a stream from URL at countdown for preview
+  - Allow to rotate preview from URL
+
   
 ## :camera: Screenshots
 
