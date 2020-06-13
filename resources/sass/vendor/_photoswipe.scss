@@ -9,9 +9,9 @@
     background: transparent !important;
     font-size: 1.625em;
     text-align: center;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
 
     &:hover {
         opacity: 1;
@@ -35,4 +35,8 @@
     img {
         width: 100%;
     }
+}
+
+.pswp__top-bar {
+  height: 80px;
 }
