@@ -9,9 +9,9 @@
     background: transparent !important;
     font-size: 1.625em;
     text-align: center;
-    width: 70px;
-    height: 70px;
-    line-height: 70px;
+    width: calc(4.375 * 1em);
+    height: calc(4.375 * 1em);
+    line-height: calc(4.375 * 1em);
     left: 40%;
 
     &:hover {
@@ -39,7 +39,7 @@
 }
 
 .pswp__top-bar {
-  height: 80px;
+  height: calc(5 * 1em);
   top: 85%;
 }
 
@@ -49,8 +49,8 @@
 
 .pswp__counter {
   left: 20%;
-  height: 70px;
+  height: calc(4.375 * 1em);
   font-size: 1.5em;
-  line-height: 80px;
+  line-height: calc(5 * 1em);
   padding: 0 0;
 }
