@@ -121,6 +121,7 @@ $config['newest_first'] = true;
 $config['scrollbar'] = false;
 $config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
+$config['gallery_bottom_bar'] = true;
 
 // SLIDESHOW
 $config['slideshow_refreshTime'] = '60';

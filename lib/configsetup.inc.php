@@ -691,6 +691,11 @@ $configsetup = [
 			'placeholder' => $defaultConfig['gallery']['date_format'],
 			'name' => 'gallery[date_format]',
 			'value' => $config['gallery']['date_format']
+		],
+		'gallery_bottom_bar' => [
+			'type' => 'checkbox',
+			'name' => 'gallery_bottom_bar',
+			'value' => $config['gallery_bottom_bar']
 		]
 	],
 	'mail' => [
