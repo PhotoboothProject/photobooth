@@ -272,11 +272,11 @@ hr.small {
     background: rgba(0,0,0,0.5);
     color: $startFontColor;
     text-align: center;
-    padding: 1rem;
+    padding: 3rem;
 
     .names {
-      margin-top: 1rem;
-      margin-bottom: 2rem;
+      margin-top: 2rem;
+      margin-bottom: 5rem;
     }
 
     .btn {
@@ -284,12 +284,42 @@ hr.small {
       width: 80%;
     }
 
-    @media (min-width: 576px) {
-      padding: 3rem;
+    @media (max-width: 1024px) {
+      padding: 1rem;
 
       .names {
-        margin-top: 2rem;
-        margin-bottom: 5rem;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .btn {
+        font-size: 0.8em;
+        margin-top: 1px;
+        width: 60%;
+      }
+
+      p,
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        padding: 0 0.9em;
+      }
+
+      p {
+        font-size: 0.8em;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      h2 {
+        font-size: 1.2em;
+      }
+
+      h3 {
+        font-size: 0.9em;
       }
     }
   }
