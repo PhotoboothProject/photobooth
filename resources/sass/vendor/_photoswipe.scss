@@ -24,6 +24,17 @@
     }
 }
 
+.pswp__button--close {
+  top: 5%;
+  right: 5%;
+  left: auto;
+  position: fixed;
+  width: calc(2 * 1em);
+  height: calc(2 * 1em);
+  line-height: calc(2 * 1em);
+  border: 2px solid $galleryButtonColor;
+}
+
 .pswp__qr {
     width: 300px;
     position: absolute;
@@ -39,8 +50,9 @@
 }
 
 .pswp__top-bar {
-  height: calc(5 * 1em);
-  top: 85%;
+  height: calc(7 * 1em);
+  top: auto;
+  bottom: 0;
 }
 
 .pswp__button {
@@ -52,5 +64,40 @@
   height: calc(4.375 * 1em);
   font-size: 1.5em;
   line-height: calc(5 * 1em);
-  padding: 0 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .pswp__counter {
+    left: 5%;
+    height: calc(2 * 1em);
+    font-size: 1.2em;
+    line-height: calc(3 * 1em);
+    padding: 0 5px;
+  }
+
+  .pswp__button {
+    left: 15%;
+    margin: auto;
+  }
+
+  .pswp__button--close,
+  .pswp__button--qrcode,
+  .pswp__button--print,
+  .pswp__button--print-chroma-keying,
+  .pswp__button--download,
+  .pswp__button--mail,
+  .pswp__button--playpause {
+    width: calc(2 * 1em);
+    height: calc(2 * 1em);
+    line-height: calc(2 * 1em);
+  }
+
+  .pswp__button--close {
+    left: auto;
+  }
+
+  .pswp__top-bar {
+    height: calc(3 * 1em);
+  }
 }
