@@ -71,7 +71,7 @@ $config['language'] = 'en';
 
 // StartScreen
 $config['start_screen_title'] = 'Photobooth';
-$config['start_screen_subtitle'] = 'Webinterface by André Rinas';
+$config['start_screen_subtitle'] = NULL;
 
 // FOLDERS
 // change the folders to whatever you like
@@ -84,9 +84,9 @@ $config['folders']['tmp'] = 'data/tmp';
 $config['folders']['data'] = 'data';
 
 // Event SETTINGS
-$config['is_event'] = false;
-$config['event']['textLeft'] = 'Name 1';
-$config['event']['textRight'] = 'Name 2';
+$config['is_event'] = true;
+$config['event']['textLeft'] = 'We';
+$config['event']['textRight'] = 'OpenSource';
 $config['event']['symbol'] = 'fa-heart-o';
 
 // LOGIN
