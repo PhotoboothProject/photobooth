@@ -1,6 +1,5 @@
 @import "modules/theme";
 
-.pswp__button--close,
 .pswp__button--qrcode,
 .pswp__button--print,
 .pswp__button--print-chroma-keying,
@@ -11,8 +10,8 @@
 }
 
 .pswp__button--close {
-  top: 5%;
-  right: 5%;
+  top: 24px;
+  right: 30px;
   left: auto;
   position: fixed;
   width: calc(2 * 1em);
