@@ -55,6 +55,7 @@ $config['background_admin'] = null;
 $config['background_chroma'] = null;
 $config['force_buzzer'] = false;
 $config['webserver_ip'] = null;
+$config['wifi_ssid'] = 'Photobooth';
 $config['rounded_corners'] = false;
 $config['time_to_live'] = '90000';
 $config['db_file'] = 'db';
