@@ -16,12 +16,12 @@
   position: fixed;
   width: calc(2 * 1em);
   height: calc(2 * 1em);
-  line-height: calc(2 * 1em);
+  line-height: calc(1 * 1em);
   border: 2px solid $galleryButtonColor;
 }
 
 .pswp__top-bar {
-  height: calc(7 * 1em);
+  height: calc(8 * 1em);
   top: auto;
   bottom: 0;
 }
