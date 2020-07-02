@@ -55,6 +55,7 @@ $config['background_admin'] = null;
 $config['background_chroma'] = null;
 $config['force_buzzer'] = false;
 $config['webserver_ip'] = null;
+$config['wifi_ssid'] = 'Photobooth';
 $config['rounded_corners'] = false;
 $config['time_to_live'] = '90000';
 $config['db_file'] = 'db';
@@ -71,7 +72,7 @@ $config['language'] = 'en';
 
 // StartScreen
 $config['start_screen_title'] = 'Photobooth';
-$config['start_screen_subtitle'] = 'Webinterface by André Rinas';
+$config['start_screen_subtitle'] = NULL;
 
 // FOLDERS
 // change the folders to whatever you like
@@ -84,9 +85,9 @@ $config['folders']['tmp'] = 'data/tmp';
 $config['folders']['data'] = 'data';
 
 // Event SETTINGS
-$config['is_event'] = false;
-$config['event']['textLeft'] = 'Name 1';
-$config['event']['textRight'] = 'Name 2';
+$config['is_event'] = true;
+$config['event']['textLeft'] = 'We';
+$config['event']['textRight'] = 'OpenSource';
 $config['event']['symbol'] = 'fa-heart-o';
 
 // LOGIN
@@ -121,6 +122,7 @@ $config['newest_first'] = true;
 $config['scrollbar'] = false;
 $config['show_date'] = false; // only works if file_format_date = true
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
+$config['gallery_bottom_bar'] = true;
 
 // SLIDESHOW
 $config['slideshow_refreshTime'] = '60';

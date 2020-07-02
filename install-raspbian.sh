@@ -165,7 +165,7 @@ else
 fi
 
 echo -e "\033[0;33m### Do you like to install from git? This will take more"
-read -p "### time and is recommended only for brave users. [y/N] " -n 1 -r
+read -p "### time but it is recommended and makes updating Photobooth easier. [y/N] " -n 1 -r
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then

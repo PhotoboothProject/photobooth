@@ -76,6 +76,12 @@ $configsetup = [
 			'placeholder' => '127.0.0.1',
 			'value' => $config['webserver_ip']
 		],
+		'wifi_ssid' => [
+			'type' => 'input',
+			'name' => 'wifi_ssid',
+			'placeholder' => 'Photobooth',
+			'value' => $config['wifi_ssid']
+		],
 		'use_download' => [
 			'type' => 'checkbox',
 			'name' => 'use_download',
@@ -691,6 +697,11 @@ $configsetup = [
 			'placeholder' => $defaultConfig['gallery']['date_format'],
 			'name' => 'gallery[date_format]',
 			'value' => $config['gallery']['date_format']
+		],
+		'gallery_bottom_bar' => [
+			'type' => 'checkbox',
+			'name' => 'gallery_bottom_bar',
+			'value' => $config['gallery_bottom_bar']
 		]
 	],
 	'mail' => [
