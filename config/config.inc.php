@@ -32,6 +32,7 @@ $config['camera_mode'] = 'user'; // possible values are "user" or "environment"
 $config['cups_button'] = false;
 $config['toggle_fs_button'] = false;
 $config['file_naming'] = 'dateformatted'; // possible values are "dateformatted" or "numbered" or "random"
+$config['picture_permissions'] = '0644'; // possible values for example: '0644', '0666', '0600'
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['collage_cntdwn_time'] = '3'; // control countdown timer between collage pictures
 $config['cheese_time'] = '1000'; // control time for cheeeeese!

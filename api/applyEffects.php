@@ -22,6 +22,7 @@ $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 $frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_frame_path'];
 $collage_frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_collage_frame_path'];
+$picture_permissions = $config['picture_permissions'];
 
 if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
     $collageBasename = substr($filename_tmp, 0, -4);
@@ -137,6 +138,9 @@ imagedestroy($imageResource);
 
 // insert into database
 appendImageToDB($file);
+
+// Change permissions
+chmod($filename_photo, octdec($picture_permissions));
 
 echo json_encode([
     'file' => $file,

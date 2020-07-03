@@ -71,6 +71,12 @@ $configsetup = [
 			],
 			'value' => $config['file_naming']
 		],
+		'picture_permissions' => [
+			'type' => 'input',
+			'name' => 'picture_permissions',
+			'placeholder' => '0644',
+			'value' => $config['picture_permissions']
+		],
 		'use_print' => [
 			'type' => 'checkbox',
 			'name' => 'use_print',

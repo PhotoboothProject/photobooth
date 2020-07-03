@@ -51,6 +51,9 @@ function ResizeJpgImage($image, $max_width, $max_height)
 // insert into database
 appendImageToDB($file);
 
+// Change permissions
+chmod($filename_photo, octdec($picture_permissions));
+
 // send imagename to frontend
 echo json_encode(array('success' => true, 'filename' => $file));
 ?>
