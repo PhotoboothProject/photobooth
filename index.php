@@ -95,6 +95,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 					<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 				<?php endif; ?>
+				<button hidden class="closeGallery"></button>
 			</div>
 
 			<?php if ($config['show_fork']): ?>

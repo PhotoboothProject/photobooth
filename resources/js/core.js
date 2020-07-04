@@ -697,10 +697,12 @@ const photoBooth = (function () {
 
     $(document).on('keyup', function (ev) {
         if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
+            $('.closeGallery').trigger('click');
             public.thrill('photo');
         }
 
         if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+            $('.closeGallery').trigger('click');
             if (config.use_collage) {
                 public.thrill('collage');
             } else {
