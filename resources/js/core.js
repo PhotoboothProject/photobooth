@@ -695,21 +695,34 @@ const photoBooth = (function () {
         $('#fs-button').blur();
     });
 
+    // Fake buttons
+    $('.triggerPic').on('click', function (e) {
+        e.preventDefault();
+
+        public.thrill('photo');
+    });
+
+    $('.triggerCollage').on('click', function (e) {
+        e.preventDefault();
+
+        public.thrill('collage');
+    });
+
     $(document).on('keyup', function (ev) {
         if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
             $('.closeGallery').trigger('click');
-            public.thrill('photo');
+            $('.triggerPic').trigger('click');
         }
 
         if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
             $('.closeGallery').trigger('click');
             if (config.use_collage) {
-                public.thrill('collage');
+                $('.triggerCollage').trigger('click');
             } else {
                 if (config.dev) {
                     console.log('Collage key pressed. Please enable collage in your config. Triggering photo now.');
                 }
-                public.thrill('photo');
+                $('.triggerPic').trigger('click');
             }
         }
     });
