@@ -316,8 +316,16 @@ const photoBooth = (function () {
             if (config.show_error_messages || config.dev) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
-            const reloadmsg = await i18n('reload');
-            $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
+            if (config.auto_reload_on_error) {
+                const reloadmsg = await i18n('auto_reload');
+                $('.loading').append($('<p>').text(reloadmsg));
+                setTimeout(function () {
+                    public.reloadPage();
+                }, 5000);
+            } else {
+                const reloadmsg = await i18n('reload');
+                $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
+            }
         }, 500);
     }
 

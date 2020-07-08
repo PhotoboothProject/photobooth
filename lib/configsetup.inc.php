@@ -49,6 +49,11 @@ $configsetup = [
 			'name' => 'show_error_messages',
 			'value' => $config['show_error_messages']
 		],
+		'auto_reload_on_error' => [
+			'type' => 'checkbox',
+			'name' => 'auto_reload_on_error',
+			'value' => $config['auto_reload_on_error']
+		],
 		'db_file' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['db_file'],
