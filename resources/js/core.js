@@ -316,8 +316,16 @@ const photoBooth = (function () {
             if (config.show_error_messages || config.dev) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
-            const reloadmsg = await i18n('reload');
-            $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
+            if (config.auto_reload_on_error) {
+                const reloadmsg = await i18n('auto_reload');
+                $('.loading').append($('<p>').text(reloadmsg));
+                setTimeout(function () {
+                    public.reloadPage();
+                }, 5000);
+            } else {
+                const reloadmsg = await i18n('reload');
+                $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
+            }
         }, 500);
     }
 
@@ -695,19 +703,34 @@ const photoBooth = (function () {
         $('#fs-button').blur();
     });
 
+    // Fake buttons
+    $('.triggerPic').on('click', function (e) {
+        e.preventDefault();
+
+        public.thrill('photo');
+    });
+
+    $('.triggerCollage').on('click', function (e) {
+        e.preventDefault();
+
+        public.thrill('collage');
+    });
+
     $(document).on('keyup', function (ev) {
         if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
-            public.thrill('photo');
+            $('.closeGallery').trigger('click');
+            $('.triggerPic').trigger('click');
         }
 
         if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+            $('.closeGallery').trigger('click');
             if (config.use_collage) {
-                public.thrill('collage');
+                $('.triggerCollage').trigger('click');
             } else {
                 if (config.dev) {
                     console.log('Collage key pressed. Please enable collage in your config. Triggering photo now.');
                 }
-                public.thrill('photo');
+                $('.triggerPic').trigger('click');
             }
         }
     });
