@@ -295,7 +295,7 @@ hr.small {
       .btn {
         font-size: 0.8em;
         margin-top: 1px;
-        width: 60%;
+        width: 80%;
       }
 
       p,
@@ -320,6 +320,13 @@ hr.small {
 
       h3 {
         font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .names {
+        margin-left: 2.5rem;
+        margin-right: 2.5rem;
       }
     }
   }

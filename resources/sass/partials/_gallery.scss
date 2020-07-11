@@ -80,6 +80,20 @@
     }
 }
 
+@media (max-width: 800px){
+    .pswp__button--arrow--left:before,
+    .pswp__button--arrow--right:before {
+        top: 50%;
+        position: fixed;
+    }
+    .pswp__button--arrow--left:before {
+        left: 5%;
+    }
+    .pswp__button--arrow--right:before {
+        right: 5%;
+    }
+}
+
 .gallery-button {
     position: relative;
     z-index: 100;
