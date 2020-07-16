@@ -675,6 +675,11 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
+"commander@>= 0.4.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
+  integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
+
 component-emitter@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
@@ -1407,10 +1412,30 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+gh-markdown-cli@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/gh-markdown-cli/-/gh-markdown-cli-0.2.0.tgz#b61c021712f54e6433b7bd8531961728023c2f33"
+  integrity sha1-thwCFxL1TmQzt72FMZYXKAI8LzM=
+  dependencies:
+    commander ">= 0.4.0"
+    github-flavored-markdown ">= 1.0.0"
+    glob ">= 3.0.0"
+    minimatch ">= 0.1.0"
+    wrench ">= 1.3.2"
+
 git-tag-version@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/git-tag-version/-/git-tag-version-1.3.1.tgz#39458c3f891b8e6fd31cf3dbfa20675b437adcec"
   integrity sha512-bhMl/aTCduq+Ll+Cw0sBz7zp8eIIZ6zv2mmYP2SiMdQoPtKSaVLGYDE9vcsDbbQt53zNnyi9CUbWOYJIzHrrFg==
+
+"github-flavored-markdown@>= 1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/github-flavored-markdown/-/github-flavored-markdown-1.0.1.tgz#93361b87a31c25790d9c81a1b798214a737eab38"
+  integrity sha1-kzYbh6McJXkNnIGht5ghSnN+qzg=
+
+"github-markdown-css@https://github.com/andi34/github-markdown-css":
+  version "4.0.0"
+  resolved "https://github.com/andi34/github-markdown-css#1485dd78f5e744ef36e946e5ae44838e3906f9d8"
 
 glob-parent@^3.1.0:
   version "3.1.0"
@@ -1455,7 +1480,7 @@ glob-watcher@^5.0.3:
     just-debounce "^1.0.0"
     object.defaults "^1.1.0"
 
-glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@~7.1.1:
+"glob@>= 3.0.0", glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@~7.1.1:
   version "7.1.6"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
   integrity sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
@@ -2255,7 +2280,7 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-minimatch@^3.0.4, minimatch@~3.0.2:
+"minimatch@>= 0.1.0", minimatch@^3.0.4, minimatch@~3.0.2:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
@@ -3747,6 +3772,11 @@ wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
+
+"wrench@>= 1.3.2":
+  version "1.5.9"
+  resolved "https://registry.yarnpkg.com/wrench/-/wrench-1.5.9.tgz#411691c63a9b2531b1700267279bdeca23b2142a"
+  integrity sha1-QRaRxjqbJTGxcAJnJ5veyiOyFCo=
 
 write@1.0.3:
   version "1.0.3"

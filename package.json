@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint resources/js/*.js",
     "eslint:fix": "eslint resources/js/*.js --fix",
-    "pack:build": "node scripts/pack-build.js"
+    "pack:build": "node scripts/pack-build.js",
+    "build:faq": "node_modules/gh-markdown-cli/bin/mdown --input 'faq/*.md' --output manual --header faq/header.html --footer faq/footer.html"
   },
   "author": "",
   "license": "MIT",
@@ -32,6 +33,8 @@
   ],
   "dependencies": {
     "font-awesome": "^4.7.0",
+    "gh-markdown-cli": "^0.2.0",
+    "github-markdown-css": "https://github.com/andi34/github-markdown-css",
     "gulp": "4.0.2",
     "gulp-sass": "4.0.2",
     "jquery": "^3.5.1",

@@ -1,0 +1,336 @@
+<html>
+  <head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+
+	<title>Photobooth FAQ</title>
+
+	<!-- Favicon + Android/iPhone Icons -->
+	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../resources/img/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../resources/img/favicon-16x16.png">
+	<link rel="manifest" href="../resources/img/site.webmanifest">
+	<link rel="mask-icon" href="../resources/img/safari-pinned-tab.svg" color="#5bbad5">
+
+	<!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" type="text/css" href="../node_modules/github-markdown-css/github-markdown.css">
+  </head>
+  <body class="markdown-body" style="padding: 5rem;">
+<h1>FAQ - Frequently asked questions</h1>
+
+<h3>Is my Camera supported?</h3>
+
+<p>Some DSLR and Compact Cameras are not supported by this project. Please check for your specific model <a href="http://gphoto.org/proj/libgphoto2/support.php">here</a>.</p>
+
+<hr>
+
+<h3>Is Pi Camera supported?</h3>
+
+<p>Yes it is.</p>
+
+<p>Enable camera support using the <code>raspi-config</code> program you will have used when you first set up your Raspberry Pi.</p>
+
+<p><code>sudo raspi-config</code></p>
+
+<p>Use the cursor keys to select and open Interfacing Options, and then select Camera and follow the prompt to enable the camera.</p>
+
+<p>Now you need to allow the webserver to use <code>raspistill</code>. You need add the webserver user to video group and reboot once:  </p>
+
+<div class="highlight"><pre lang="">sudo gpasswd -a www-data video
+reboot
+</pre></div>
+
+<p>Once done you need to adjust the configuration. Open the admin panel in your browser <a href="http://localhost/admin">localhost/admin</a> and make the following changes:</p>
+
+<p><strong>"Take picture command":</strong> <br /><br /><code>raspistill -n -o %s -q 100 -t 1 | echo Done</code></p>
+
+<p><strong>"Success message for take picture":</strong> <br /><br /><code>Done</code></p>
+
+<p>Pi Camera works with these config changes (also works together with preview at countdown if enabled).<br />Raspistill does not give any feedback after the picture was taken, workaround for that with "echo".<br />(Thanks to Andreas Maier for that information)</p>
+
+<p>You've the possibility to add more parameters if needed (define ISO, exposure, white balance etc.). Type <code>raspistill -?</code> in your terminal to get information about possible parameters / settings.</p>
+
+<hr>
+
+<h3>I've found a bug, how can I report?</h3>
+
+<p>Please take a look at the issue page <a href="https://github.com/andi34/photobooth/issues">here</a> , if your bug isn't mentioned already you can create a new issue. Please give informations detailed as possible to reproduce and analyse the problem.</p>
+
+<hr>
+
+<h3>I've a white page after updating to latest Source, how can I solve this?</h3>
+
+<p>On v1.9.0 and older:<br />It could be your local <code>config.json</code> file doesn't match latest source. This file is generated if you've used the admin panel to change your config.<br />Remove the file and try again!<br /><code>sudo rm /var/www/html/admin/config.json</code></p>
+
+<hr>
+
+<h3>How do I change the configuration?</h3>
+
+<p>Open <code><a href='http://localhost/admin'>http://localhost/admin</a></code> in your Webbrowser and change the configuration for your personal needs.<br />Changed options are stored inside <code>config/my.config.inc.php</code> to prevent sharing personal data on Github by accident and to make an update of Photobooth easier.</p>
+
+<hr>
+
+<h3>How to change the language?</h3>
+
+<p>Open <code><a href='http://localhost/admin'>http://localhost/admin</a></code> in your Webbrowser and change the configuration for your personal needs.</p>
+
+<hr>
+
+<h3>How to keep pictures on my Camera using gphoto2?</h3>
+
+<p>Add <code>--keep</code> (or <code>--keep-raw</code> to keep only the raw version on camera) option for gphoto2 via admin panel:</p>
+
+<div class="highlight"><pre lang="">gphoto2 --capture-image-and-download --keep --filename=%s
+</pre></div>
+
+<p>On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use <code>--set-config capturetarget=X</code> option for gphoto2 (replace "X" with the target of your choice):</p>
+
+<div class="highlight"><pre lang="">gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s
+</pre></div>
+
+<p>To know which capturetarget needs to be defined you need to run:</p>
+
+<div class="highlight"><pre lang="">gphoto2 --get-config capturetarget
+</pre></div>
+
+<p>Example:</p>
+
+<div class="highlight"><pre lang="">pi@raspberrypi:~ $ gphoto2 --get-config capturetarget
+Label: Capture Target
+Readonly: 0
+Type: RADIO
+Current: Internal RAM
+Choice: 0 Internal RAM
+Choice: 1 Memory card
+</pre></div>
+
+<hr>
+
+<h3>Cromakeying is saving without finishing saving</h3>
+
+<p>Checking the browser console you'll see a <code>413 Request Entity Too Large</code> error. To fix that you'll have to update your nginx.conf</p>
+
+<p>Follow the steps mentioned here: <a href="https://datanextsolutions.com/blog/how-to-fix-nginx-413-request-entity-too-large-error/">How to Fix NGINX 413 Request Entity Too Large Error</a></p>
+
+<hr>
+
+<h3>Can I use Hardware Button to take a Picture on my Raspberry Pi?</h3>
+
+<p>You can use a hardware button connected on GPIO24 to trigger a photo. Set the Take Pictures key to e.g. <code>13</code> (enter key) via Admin panel to specify the key. Next you have to install some dependencies:</p>
+
+<div class="highlight"><pre lang="">sudo apt install libudev-dev
+sudo pip install python-uinput
+echo "uinput" | sudo tee -a /etc/modules
+</pre></div>
+
+<p>After a reboot (<code>sudo shutdown -r now</code>), you should check if the uinput kernel module is loaded by executing <code>lsmod | grep uinput</code>. If you get some output, everything is fine.</p>
+
+<p>You also need to run a python script in background to read the state of GPIO24 and send the key if hardware button is pressed to trigger the website to take a photo.</p>
+
+<div class="highlight"><pre lang="">sudo crontab -e
+@reboot python /var/www/html/button.py &
+</pre></div>
+
+<hr>
+
+<h3>How do I enable Kiosk Mode to automatically start Photobooth in full screen?</h3>
+
+<p>Edit the LXDE Autostart Script:</p>
+
+<div class="highlight"><pre lang="">sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+</pre></div>
+
+<p>and add the following lines:</p>
+
+<div class="highlight"><pre lang="">@xset s off
+@xset -dpms
+@xset s noblank
+@chromium-browser --incognito --kiosk <a href='http://localhost/'>http://localhost/</a>
+</pre></div>
+
+<p><strong>NOTE:</strong> If you're using QR-Code replace <code><a href='http://localhost/'>http://localhost/</a></code> with your local IP-Adress (e.g. <code><a href='http://192.168.4.1'>http://192.168.4.1</a></code>), else QR-Code does not work.</p>
+
+<hr>
+
+<h4>Enable touch events</h4>
+
+<p>If touch is not working on your Raspberry Pi edit the LXDE Autostart Script again</p>
+
+<div class="highlight"><pre lang="">sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+</pre></div>
+
+<p>and add <code>--touch-events=enabled</code> for Chromium:</p>
+
+<div class="highlight"><pre lang="">@chromium-browser --incognito --kiosk <a href='http://localhost/'>http://localhost/</a> --touch-events=enabled
+</pre></div>
+
+<hr>
+
+<h4>How to hide the Mouse Cursor?</h4>
+
+<p>There are two options to hide the cursor. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.</p>
+
+<p><strong>Solution A</strong><br />To hide the Mouse Cursor we'll use "unclutter":</p>
+
+<div class="highlight"><pre lang="">sudo apt-get install unclutter
+</pre></div>
+
+<p>Edit the LXDE Autostart Script again:</p>
+
+<div class="highlight"><pre lang="">sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+</pre></div>
+
+<p>and add the following line (0 describes the time after which the cursor should be hidden):</p>
+
+<div class="highlight"><pre lang="">@unclutter -idle 0
+</pre></div>
+
+<p><strong>Solution B</strong><br />If you are using LightDM as display manager, you can edit <code>/etc/lightdm/lightdm.conf</code> to hide the cursor permanently. Just add <code>xserver-command=X -nocursor</code> to the end of the file.</p>
+
+<hr>
+
+<h3>How to disable the blank screen on Raspberry Pi (Raspbian)?</h3>
+
+<p>You can follow the instructions <a href="https://www.geeks3d.com/hacklab/20160108/how-to-disable-the-blank-screen-on-raspberry-pi-raspbian/">here</a> to disable the blank screen.</p>
+
+<hr>
+
+<h3>How to use a live stream as background at countdown?</h3>
+
+<p>There's different ways depending on your needs and personal setup:</p>
+
+<ol>
+<li><p>If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".</p>
+
+<ul><li>Admin panel config "See preview by device cam": <code>true</code></li></ul>
+
+<p><strong>Note:</strong></p>
+
+<ul><li>Preview by "device cam" will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!</li>
+<li>Secure origin or exception required!
+<ul><li><a href="https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339">Prefer Secure Origins For Powerful New Features</a></li>
+<li><a href="https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features">Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins</a></li></ul></li>
+<li>Admin panel config <em>"Device cam takes picture"</em> can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill.</li></ul></li>
+<li><p>If you like to have the same preview independent of the device you access Photobooth from:</p>
+
+<ul><li>Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)</li>
+<li>Admin panel config <em>"Preview from URL"</em>: <code>true</code></li>
+<li>Admin panel config <em>"Preview-URL"</em> example (add needed IP address instead): <code>url(<a href='http://127.0.0.1:8081'>http://127.0.0.1:8081</a>)</code></li></ul>
+
+<p><strong>Note</strong></p>
+
+<ul><li>Do NOT enable <em>"Device cam takes picture"</em> in admin panel config!</li>
+<li>Capture pictures via <code>raspistill</code> won't work if motion is installed!</li>
+<li>Requires Photobooth v2.2.1 or later!</li></ul></li>
+</ol>
+
+<hr>
+
+<h3>Can I use a live stream as background?</h3>
+
+<p>Yes you can. There's different ways depending on your needs and personal setup:</p>
+
+<ol>
+<li><p>On Photobooth v2.4.0 and newer you can use the option "Use stream from device cam as background" inside admin panel.</p>
+
+<ul><li>If enabled, a stream from your device cam is used as background on start screen. It's still possible to use preview from your device cam as background on countdown and also still possible to take pictures via device cam or using <code>raspistill</code> for Pi Camera.</li></ul></li>
+<li><p>You need to change the background URL path via config or admin panel. Replace <code>url(../img/bg.jpg)</code> with your IP-Adress and port (if needed) as URL.<br />Example:</p>
+
+<div class="highlight"><pre lang=""><ul><li>url(../img/bg.jpg)</li>
+<li>url(<a href='http://127.0.0.1:8081'>http://127.0.0.1:8081</a>)
+</pre></div></li></ul>
+To use a Raspberry Pi Camera module Motion is required, but you won't be able to use the Raspberry Pi Camera 
+for preview at countdown!
+<div class="highlight"><pre lang="">sudo apt-get install -y motion
+</pre></div>
+
+<p>/etc/motion/motion.conf needs to be changed to your needs (e.g. starting on boot, using videoX, resolution <br />etc.).<br />If you're accessing Photobooth from an external device (e.g. Tablet or Mobile Phone) replace <code>127.0.0.1</code> <br />with your IP-Adress.</p>
+
+<p>For reference:<br /><a href='https://github.com/andreknieriem/photobooth/pull/20'>https://github.com/andreknieriem/photobooth/pull/20</a></p></li>
+</ol>
+
+<hr>
+
+<h3>I've trouble setting up E-Mail config. How do I solve my problem?</h3>
+
+<p>If connection fails some help can be found <a href="https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting">here</a>, especially gmail needs some special config.</p>
+
+<ul>
+<li><p>Should be obvious but the photobooth must be connected to WIFI/internet to send photos live.</p>
+
+<p>Otherwise, tell them to check the box to send them the photo later and it will add everyone's email to a list for you.</p></li>
+<li><p>For gmail you need to generate an app password if you have 2-factor authentication on.</p></li>
+</ul>
+
+<p>Tested working setup:</p>
+
+<ul>
+<li><p>gmail.com</p>
+
+<ul><li>Email host adress: <code>smtp.gmail.com</code></li>
+<li>Username: <code>*****@gmail.com</code></li>
+<li>Port: <code>587</code></li>
+<li>Security: <code>TLS</code></li></ul></li>
+<li><p>gmx.de</p>
+
+<ul><li>Email host adress: <code>mail.gmx.net</code></li>
+<li>Username: <code>*****@gmx.de</code></li>
+<li>Port: <code>587</code></li>
+<li>Security: <code>TLS</code></li></ul></li>
+<li><p>web.de</p>
+
+<ul><li>Email host adress: <code>smtp.web.de</code></li>
+<li>Username: <code>*****</code> (@web.de is not needed in your username)</li>
+<li>Port: <code>587</code></li>
+<li>Security: <code>TLS</code></li></ul></li>
+</ul>
+
+<hr>
+
+<h3>How to only open the gallery to avoid people taking pictures?</h3>
+
+<p>Open <a href="http://localhost/gallery.php"><a href='http://localhost/gallery.php'>http://localhost/gallery.php</a></a> in your browser (you can replace <code>localhost</code> with your IP adress).</p>
+
+<hr>
+
+<h3>Chromakeying isn't working if I access the Photobooth page on my Raspberry Pi, but it works if I access Photobooth from an external device (e.g. mobile phone or tablet). How can I solve the problem?</h3>
+
+<p>Open <code>chrome://flags</code> in your browser.<br />Look for <em>"Accelerated 2D canvas"</em> and change it to <code>"disabled"</code>.<br />Now restart your Chromium browser.</p>
+
+<hr>
+
+<h3>How to update or add translations?</h3>
+
+<p>On v2.2.0 and older:<br />Edit the language file inside <code>resources/lang/</code> with your favorite text editor.<br />Once you're done upload your changes and create a <a href="https://github.com/andi34/photobooth/pulls">pull request</a>.</p>
+
+<p>On v2.3.0 and newer:<br />Get i18n-editor v2.0.0-beta.1 <a href="https://github.com/jcbvm/i18n-editor/releases/tag/2.0.0-beta.1">from here</a>. The application requires java 8 to be installed on your system. You can get java 8 from <a href="https://www.oracle.com/java/technologies/javase-jre8-downloads.html"><a href='https://www.oracle.com'>https://www.oracle.com</a></a>.</p>
+
+<ul>
+<li>If you're on Windows you can install the application by running the <code>.exe</code> file. If you're on Mac you can use the application by running the <code>.app</code> file. If you're on Linux you can use the application by running the <code>.jar</code> file (<code>java -jar i18n-editor.jar</code>).</li>
+</ul>
+
+<p>If you are running i18n-editor the first time, you simply need to drag-and-drop the <code>lang</code> folder (inside your photobooth source inside the <code>resources</code> folder) into i18n-editor:</p>
+
+<p><details><summary>CLICK ME</summary><br /><img src="../resources/img/faq/i18n.png"><br /></details></p>
+
+<p>You could also click on <code>File</code> -> <code>New Project</code> -> <code>JSON Format ...</code> -> navigate into the <code>lang</code> folder -> click on <code>open</code><br />Now you get asked if you like to import found existing translations -> confirm clicking on <code>yes</code>:</p>
+
+<p><details><summary>CLICK ME</summary><br /><img src="../resources/img/faq/i18n-import.png"><br /></details></p>
+
+<p>Make your translations:</p>
+
+<p><details><summary>CLICK ME</summary><br /><img src="../resources/img/faq/i18n-imported.png"><br /></details></p>
+
+<p>Press <code>CTRL + S</code> to save your changes (or click on <code>File</code> -> <code>Save</code>).</p>
+
+<p>Now upload your changes and create a <a href="https://github.com/andi34/photobooth/pulls">pull request</a>.</p>
+
+<hr>
+
+<h3>How to ajust the <code>php.ini</code> file?</h3>
+
+<p>Open <a href="http://localhost/phpinfo.php"><a href='http://localhost/phpinfo.php'>http://localhost/phpinfo.php</a></a> in your browser.<br />Take a look for "Loaded Configuration File", you need  sudo rights to edit the file.<br />Page will look like this:<br /><details><summary>CLICK ME</summary><br /><img src="../resources/img/faq/php-ini.png"><br /></details></p>
+  </body>
+</html>
