@@ -52,7 +52,16 @@
     overflow: hidden;
   }
 
-p.text-muted {
-  font-size: 0.8em;
-  opacity: 0.7;
-}
+  p.text-muted {
+    font-size: 0.8em;
+    opacity: 0.7;
+  }
+
+  .accordion {
+    a,
+    a:active,
+    a:focus {
+      color:$fontColor;
+      text-shadow: 0 0 5px black;
+    }
+  }
