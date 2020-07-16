@@ -69,6 +69,8 @@ function createArchive(fileName, archive) {
     archive.file('phpinfo.php');
     archive.file('README.md');
     archive.file('update-booth.sh');
+    archive.file('node_modules/github-markdown-css/github-markdown.css');
+    archive.file('node_modules/github-markdown-css/license');
     archive.file('node_modules/normalize.css/LICENSE.md');
     archive.file('node_modules/normalize.css/normalize.css');
     archive.directory('node_modules/font-awesome/');

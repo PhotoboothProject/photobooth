@@ -192,7 +192,12 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     $('.closeGallery').on('click', function (e) {
         e.preventDefault();
 
-        gallery.close();
+        if (gallery) {
+            if (config.dev) {
+                console.log('Closing Gallery');
+            }
+            gallery.close();
+        }
     });
 
     // chroma keying print
