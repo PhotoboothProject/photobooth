@@ -31,7 +31,7 @@ $config['videoHeight'] = '720';
 $config['camera_mode'] = 'user'; // possible values are "user" or "environment"
 $config['cups_button'] = false;
 $config['toggle_fs_button'] = false;
-$config['file_format_date'] = false;
+$config['file_naming'] = 'dateformatted'; // possible values are "dateformatted" or "numbered" or "random"
 $config['cntdwn_time'] = '5'; // control countdown timer
 $config['collage_cntdwn_time'] = '3'; // control countdown timer between collage pictures
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
@@ -121,7 +121,7 @@ $config['colors']['gallery_button'] = '#ffffff';
 $config['show_gallery'] = true;
 $config['newest_first'] = true;
 $config['scrollbar'] = false;
-$config['show_date'] = false; // only works if file_format_date = true
+$config['show_date'] = false; // only works if file_naming = 'dateformatted'
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 $config['gallery_bottom_bar'] = true;
 

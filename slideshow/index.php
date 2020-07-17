@@ -51,7 +51,7 @@ $imagelist = array_reverse($images);
 		<?php
 
 		$date = 'Photobooth Slideshow';
-		if ($config['file_format_date']) {
+		if ($config['file_naming'] === 'dateformatted') {
 			$dateObject = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
 			if ($dateObject) {
 				$date = '<i class="fa fa-clock-o"></i> ' . $dateObject->format($config['gallery']['date_format']);

@@ -4,10 +4,15 @@ header('Content-Type: application/json');
 require_once('../../lib/config.php');
 require_once('../../lib/db.php');
 
-if($config['file_format_date'] == true) {
-	$file = date('Ymd_His').'.jpg';
+if ($config['file_naming'] === 'numbered') {
+    $images = getImagesFromDB();
+    $img_number = count($images);
+    $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
+    $file = $files.'.jpg';
+} elseif ($config['file_naming'] === 'dateformatted') {
+    $file = date('Ymd_His').'.jpg';
 } else {
-	$file = md5(time()).'.jpg';
+    $file = md5(time()).'.jpg';
 }
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;

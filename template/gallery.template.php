@@ -11,7 +11,7 @@
 			<?php foreach ($imagelist as $image): ?>
 			<?php
             $date = '';
-            if ($config['file_format_date'] && $config['show_date']) {
+            if ($config['file_naming'] === 'dateformatted' && $config['show_date']) {
                 $dateObject = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
 
                 if ($dateObject) {

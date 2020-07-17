@@ -60,10 +60,16 @@ $configsetup = [
 			'name' => 'db_file',
 			'value' => $config['db_file']
 		],
-		'file_format_date' => [
-			'type' => 'checkbox',
-			'name' => 'file_format_date',
-			'value' => $config['file_format_date']
+		'file_naming' => [
+			'type' => 'select',
+			'name' => 'file_naming',
+			'placeholder' => $defaultConfig['file_naming'],
+			'options' => [
+				'dateformatted' => 'Date formatted',
+				'numbered' => 'Numbered',
+				'random' => 'Random'
+			],
+			'value' => $config['file_naming']
 		],
 		'use_print' => [
 			'type' => 'checkbox',
