@@ -8,11 +8,17 @@ if ($config['file_naming'] === 'numbered') {
     $images = getImagesFromDB();
     $img_number = count($images);
     $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
-    $file = $files.'.jpg';
+    $name = $files.'.jpg';
 } elseif ($config['file_naming'] === 'dateformatted') {
-    $file = date('Ymd_His').'.jpg';
+    $name = date('Ymd_His').'.jpg';
 } else {
-    $file = md5(time()).'.jpg';
+    $name = md5(time()).'.jpg';
+}
+
+if ($config['db_file'] === 'db') {
+    $file = $name;
+} else {
+    $file = $config['db_file'].'_'.$name;
 }
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
