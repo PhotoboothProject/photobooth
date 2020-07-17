@@ -11,9 +11,14 @@
 			<?php foreach ($imagelist as $image): ?>
 			<?php
             $date = '';
-            if ($config['file_naming'] === 'dateformatted' && $config['show_date']) {
-                $dateObject = DateTime::createFromFormat('Ymd_His', substr($image, 0, strlen($image) - 4));
-
+            if ($config['file_naming'] === 'dateformatted') {
+                if ($config['db_file'] != 'db') {
+                    $db = strlen($config['db_file']);
+                    $name = substr($image, ++$db);
+                } else {
+                    $name = $image;
+                }
+                $dateObject = DateTime::createFromFormat('Ymd_His', substr($name, 0, strlen($name) - 4));
                 if ($dateObject) {
                     $date = '<i class="fa fa-clock-o"></i> ' . $dateObject->format($config['gallery']['date_format']);
                 }
