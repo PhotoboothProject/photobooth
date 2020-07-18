@@ -5,3 +5,6 @@
 	path = vendor/simple-translator
 	url = https://github.com/andreasremdt/simple-translator
 	branch = master
+[submodule "vendor/rpihotspot"]
+	path = vendor/rpihotspot
+	url = https://github.com/andi34/rpihotspot
