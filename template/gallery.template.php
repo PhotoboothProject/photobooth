@@ -10,7 +10,7 @@
 			<?php else: ?>
 			<?php foreach ($imagelist as $image): ?>
 			<?php
-            $date = '';
+            $date = 'Photobooth Gallery';
             if ($config['file_naming'] === 'dateformatted') {
                 if ($config['db_file'] != 'db') {
                     $db = strlen($config['db_file']);
