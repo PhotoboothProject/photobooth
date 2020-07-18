@@ -286,3 +286,27 @@ Page will look like this:
 <img src="../resources/img/faq/php-ini.png">
 </details>
 
+<hr>
+### Turn Photobooth into a WIFI hotspot
+If you would like to allow your guests to download their images without connecting to your private WIFI or when there is no other WIFI around, you can turn your Raspberry Pi into setup an access point and WiFi client/station network on the single WiFi chip of the Raspberry Pi.
+
+The default setting is to call your wifi hotspot *Photobooth* as this is built into the Photobooth prompt for guests to download images via QR code.
+
+First head over to the hotspot directory to run the installer:
+```
+cd /var/www/html/vendor/rpihotspot
+```
+There are a couple of flags you need to change from the example command below:
+ - change `password` to your desired password, make it easy enough for guests to remember.
+ - change `country code` from `CA` to your own localization.
+ - keep or change the ip address `10.10.10.10`. Remember what you change it to.
+
+```
+sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
+--ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
+```
+If you run into any errors setting up your hotspot we can remove all the settings and try it again. The first time I ran this I ran into an error, I reset it using the command below, then reinstalled it. It went smoothly the second time:
+
+```
+sudo ./setup-network.sh --clean
+```

@@ -332,5 +332,29 @@ for preview at countdown!
 <h3>How to ajust the <code>php.ini</code> file?</h3>
 
 <p>Open <a href="http://localhost/phpinfo.php"><a href='http://localhost/phpinfo.php'>http://localhost/phpinfo.php</a></a> in your browser.<br />Take a look for "Loaded Configuration File", you need  sudo rights to edit the file.<br />Page will look like this:<br /><details><summary>CLICK ME</summary><br /><img src="../resources/img/faq/php-ini.png"><br /></details></p>
+
+<hr>
+
+<h3>Turn Photobooth into a WIFI hotspot</h3>
+
+<p>If you would like to allow your guests to download their images without connecting to your private WIFI or when there is no other WIFI around, you can turn your Raspberry Pi into setup an access point and WiFi client/station network on the single WiFi chip of the Raspberry Pi.</p>
+
+<p>The default setting is to call your wifi hotspot <em>Photobooth</em> as this is built into the Photobooth prompt for guests to download images via QR code.</p>
+
+<p>First head over to the hotspot directory to run the installer:</p>
+
+<div class="highlight"><pre lang="">cd /var/www/html/vendor/rpihotspot
+</pre></div>
+
+<p>There are a couple of flags you need to change from the example command below:<br /> - change <code>password</code> to your desired password, make it easy enough for guests to remember.<br /> - change <code>country code</code> from <code>CA</code> to your own localization.<br /> - keep or change the ip address <code>10.10.10.10</code>. Remember what you change it to.</p>
+
+<div class="highlight"><pre lang="">sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
+--ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
+</pre></div>
+
+<p>If you run into any errors setting up your hotspot we can remove all the settings and try it again. The first time I ran this I ran into an error, I reset it using the command below, then reinstalled it. It went smoothly the second time:</p>
+
+<div class="highlight"><pre lang="">sudo ./setup-network.sh --clean
+</pre></div>
   </body>
 </html>
