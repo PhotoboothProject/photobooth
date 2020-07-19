@@ -22,6 +22,7 @@ const photoBooth = (function () {
         videoSensor = document.querySelector('#video--sensor');
 
     let timeOut,
+        takingPic = false,
         nextCollageNumber = 0,
         currentCollageFile = '',
         imgFilter = config.default_imagefilter;
@@ -162,6 +163,11 @@ const photoBooth = (function () {
     public.thrill = function (photoStyle) {
         public.closeNav();
         public.reset();
+
+        takingPic = true;
+        if (config.dev) {
+            console.log('Taking photo:', takingPic);
+        }
 
         if (config.previewCamBackground) {
             wrapper.css('background-color', config.colors.panel);
@@ -312,6 +318,10 @@ const photoBooth = (function () {
             $('#video--sensor').hide();
             loader.addClass('error');
             const errormsg = await i18n('error');
+            takingPic = false;
+            if (config.dev) {
+                console.log('Taking photo:', takingPic);
+            }
             $('.loading').append($('<p>').text(errormsg));
             if (config.show_error_messages || config.dev) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
@@ -334,6 +344,11 @@ const photoBooth = (function () {
 
         $('.spinner').show();
         $('.loading').text(photoStyle === 'photo' ? await i18n('busy') : await i18n('busyCollage'));
+
+        takingPic = false;
+        if (config.dev) {
+            console.log('Taking photo:', takingPic);
+        }
 
         if (photoStyle === 'photo' && config.image_preview_before_processing) {
             const preloadImage = new Image();
@@ -718,19 +733,27 @@ const photoBooth = (function () {
 
     $(document).on('keyup', function (ev) {
         if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
-            $('.closeGallery').trigger('click');
-            $('.triggerPic').trigger('click');
+            if (!takingPic) {
+                $('.closeGallery').trigger('click');
+                $('.triggerPic').trigger('click');
+            } else if (config.dev && takingPic) {
+                console.log('Taking photo already in progress!');
+            }
         }
 
         if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
-            $('.closeGallery').trigger('click');
-            if (config.use_collage) {
-                $('.triggerCollage').trigger('click');
-            } else {
-                if (config.dev) {
-                    console.log('Collage key pressed. Please enable collage in your config. Triggering photo now.');
+            if(!takingPic) {
+                $('.closeGallery').trigger('click');
+                if (config.use_collage) {
+                    $('.triggerCollage').trigger('click');
+                } else {
+                    if (config.dev) {
+                        console.log('Collage key pressed. Please enable collage in your config. Triggering photo now.');
+                    }
+                    $('.triggerPic').trigger('click');
                 }
-                $('.triggerPic').trigger('click');
+            } else if (config.dev && takingPic) {
+                console.log('Taking photo already in progress!');
             }
         }
     });
