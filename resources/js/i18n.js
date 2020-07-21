@@ -1,5 +1,6 @@
 /* exported i18n */
 import Translator from '../../vendor/simple-translator/src/translator.js';
+import { LANGUAGE } from '../../api/language.php';
 
 const translator = new Translator({
     persist: false,
@@ -16,9 +17,9 @@ const translator = new Translator({
 });
 
 window.i18n = function (key) {
-    return translator.getTranslationByKey(config.language, key);
+    return translator.getTranslationByKey(LANGUAGE, key);
 }
 
 $(function () {
-    translator.load(config.language);
+    translator.load(LANGUAGE);
 });
