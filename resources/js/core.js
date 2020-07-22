@@ -202,9 +202,11 @@ const photoBooth = (function () {
         $('.cheese').empty();
 
         if (photoStyle === 'photo') {
-            $('.cheese').text(await i18n('cheese'));
+            const cheesemsg = await i18n('cheese');
+            $('.cheese').text(cheesemsg);
         } else {
-            $('.cheese').text(await i18n('cheeseCollage'));
+            const cheesemsg = await i18n('cheeseCollage');
+            $('.cheese').text(cheesemsg);
             $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.cheese');
         }
 
