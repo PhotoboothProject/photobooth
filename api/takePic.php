@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 
 require_once('../lib/config.php');
+require_once('../lib/db.php');
 
 function takePicture($filename)
 {
@@ -56,10 +57,21 @@ function takePicture($filename)
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $file = $_POST['file'];
-} elseif ($config['file_format_date']) {
-    $file = date('Ymd_His').'.jpg';
+} elseif ($config['file_naming'] === 'numbered') {
+    $images = getImagesFromDB();
+    $img_number = count($images);
+    $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
+    $name = $files.'.jpg';
+} elseif ($config['file_naming'] === 'dateformatted') {
+    $name = date('Ymd_His').'.jpg';
 } else {
-    $file = md5(time()).'.jpg';
+    $name = md5(time()).'.jpg';
+}
+
+if ($config['db_file'] === 'db') {
+    $file = $name;
+} else {
+    $file = $config['db_file'].'_'.$name;
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
