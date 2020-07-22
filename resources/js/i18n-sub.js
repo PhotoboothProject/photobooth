@@ -1,6 +1,6 @@
 /* exported i18n */
+import {LANGUAGE} from '../../api/language.php';
 import Translator from '../../vendor/simple-translator/src/translator.js';
-import { LANGUAGE } from '../../api/language.php';
 
 const translator = new Translator({
     persist: false,

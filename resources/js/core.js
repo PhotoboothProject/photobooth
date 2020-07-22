@@ -744,7 +744,7 @@ const photoBooth = (function () {
         }
 
         if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
-            if(!takingPic) {
+            if (!takingPic) {
                 $('.closeGallery').trigger('click');
                 if (config.use_collage) {
                     $('.triggerCollage').trigger('click');
