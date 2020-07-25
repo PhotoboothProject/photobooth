@@ -20,13 +20,13 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['start_screen_title'],
 			'name' => 'start_screen_title',
-			'value' => $config['start_screen_title']
+			'value' => htmlentities($config['start_screen_title'])
 		],
 		'start_screen_subtitle' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['start_screen_subtitle'],
 			'name' => 'start_screen_subtitle',
-			'value' => $config['start_screen_subtitle']
+			'value' => htmlentities($config['start_screen_subtitle'])
 		],
 		'dev' => [
 			'type' => 'checkbox',
@@ -97,7 +97,7 @@ $configsetup = [
 			'type' => 'input',
 			'name' => 'wifi_ssid',
 			'placeholder' => 'Photobooth',
-			'value' => $config['wifi_ssid']
+			'value' => htmlentities($config['wifi_ssid'])
 		],
 		'use_download' => [
 			'type' => 'checkbox',
@@ -209,7 +209,7 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['take_frame_path'],
 			'name' => 'take_frame_path',
-			'value' => $config['take_frame_path']
+			'value' => htmlentities($config['take_frame_path'])
 		],
 		'chroma_keying' => [
 			'type' => 'checkbox',
@@ -230,7 +230,7 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['take_collage_frame_path'],
 			'name' => 'take_collage_frame_path',
-			'value' => $config['take_collage_frame_path']
+			'value' => htmlentities($config['take_collage_frame_path'])
 		],
 		'collage_cntdwn_time' => [
 			'type' => 'range',
@@ -290,7 +290,7 @@ $configsetup = [
 			'type' => 'input',
 			'name' => 'ipCamURL',
 			'placeholder' => 'url(http://localhost:8081)',
-			'value' => $config['ipCamURL']
+			'value' => htmlentities($config['ipCamURL'])
 		],
 		'videoWidth' => [
 			'type' => 'input',
@@ -363,19 +363,19 @@ $configsetup = [
 			'type' => 'input',
 			'name' => 'background_image',
 			'placeholder' => 'url(../img/bg.jpg)',
-			'value' => $config['background_image']
+			'value' => htmlentities($config['background_image'])
 		],
 		'background_admin' => [
 			'type' => 'input',
 			'name' => 'background_admin',
 			'placeholder' => 'url(../img/bg.jpg)',
-			'value' => $config['background_admin']
+			'value' => htmlentities($config['background_admin'])
 		],
 		'background_chroma' => [
 			'type' => 'input',
 			'name' => 'background_chroma',
 			'placeholder' => 'url(../img/bg.jpg)',
-			'value' => $config['background_chroma']
+			'value' => htmlentities($config['background_chroma'])
 		],
 		'show_fork' => [
 			'type' => 'checkbox',
@@ -559,13 +559,13 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => 'Name 1',
 			'name' => 'event[textLeft]',
-			'value' => $config['event']['textLeft']
+			'value' => htmlentities($config['event']['textLeft'])
 		],
 		'textRight' => [
 			'type' => 'input',
 			'placeholder' => 'Name 2',
 			'name' => 'event[textRight]',
-			'value' => $config['event']['textRight']
+			'value' => htmlentities($config['event']['textRight'])
 		],
 		'symbol' => [
 			'type' => 'select',
@@ -605,7 +605,7 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['print_frame_path'],
 			'name' => 'print_frame_path',
-			'value' => $config['print_frame_path']
+			'value' => htmlentities($config['print_frame_path'])
 		],
 		'crop_onprint' => [
 			'type' => 'checkbox',
@@ -627,25 +627,25 @@ $configsetup = [
 		'is_textonprint' => [
 			'type' => 'checkbox',
 			'name' => 'is_textonprint',
-			'value' => $config['is_textonprint']
+			'value' => htmlentities($config['is_textonprint'])
 		],
 		'line1' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['textonprint']['line1'],
 			'name' => 'textonprint[line1]',
-			'value' => $config['textonprint']['line1']
+			'value' => htmlentities($config['textonprint']['line1'])
 		],
 		'line2' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['textonprint']['line2'],
 			'name' => 'textonprint[line2]',
-			'value' => $config['textonprint']['line2']
+			'value' => htmlentities($config['textonprint']['line2'])
 		],
 		'line3' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['textonprint']['line3'],
 			'name' => 'textonprint[line3]',
-			'value' => $config['textonprint']['line3']
+			'value' => htmlentities($config['textonprint']['line3'])
 		],
 		'locationx' => [
 			'type' => 'input',
@@ -673,7 +673,7 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['font_path'],
 			'name' => 'font_path',
-			'value' => $config['font_path']
+			'value' => htmlentities($config['font_path'])
 		],
 		'fontsize' => [
 			'type' => 'input',
@@ -749,7 +749,7 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['mail_password'],
 			'name' => 'mail_password',
-			'value' => $config['mail_password']
+			'value' => htmlentities($config['mail_password'])
 		],
 		'secure' => [
 			'type' => 'input',
@@ -779,13 +779,13 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['mail_subject'],
 			'name' => 'mail_subject',
-			'value' => $config['mail_subject']
+			'value' => htmlentities($config['mail_subject'])
 		],
 		'text' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['mail_text'],
 			'name' => 'mail_text',
-			'value' => $config['mail_text']
+			'value' => htmlentities($config['mail_text'])
 		],
 	],
 	'slideshow' => [
@@ -817,37 +817,37 @@ $configsetup = [
 			'type' => 'input',
 			'placeholder' => 'take_picture_cmd',
 			'name' => 'take_picture[cmd]',
-			'value' => $config['take_picture']['cmd']
+			'value' => htmlentities($config['take_picture']['cmd']),
 		],
 		'take_picture_msg' => [
 			'type' => 'input',
 			'placeholder' => 'take_picture_msg',
 			'name' => 'take_picture[msg]',
-			'value' => $config['take_picture']['msg']
+			'value' => htmlentities($config['take_picture']['msg'])
 		],
 		'print_cmd' => [
 			'type' => 'input',
 			'placeholder' => 'print_cmd',
 			'name' => 'print[cmd]',
-			'value' => $config['print']['cmd']
+			'value' => htmlentities($config['print']['cmd'])
 		],
 		'print_msg' => [
 			'type' => 'input',
 			'placeholder' => 'print_msg',
 			'name' => 'print[msg]',
-			'value' => $config['print']['msg']
+			'value' => htmlentities($config['print']['msg'])
 		],
 		'exiftool_cmd' => [
 			'type' => 'input',
 			'placeholder' => 'exiftool_cmd',
 			'name' => 'exiftool[cmd]',
-			'value' => $config['exiftool']['cmd']
+			'value' => htmlentities($config['exiftool']['cmd'])
 		],
 		'exiftool_msg' => [
 			'type' => 'input',
 			'placeholder' => 'exiftool_msg',
 			'name' => 'exiftool[msg]',
-			'value' => $config['exiftool']['msg']
+			'value' => htmlentities($config['exiftool']['msg'])
 		]
 	],
 	'reset' => [
