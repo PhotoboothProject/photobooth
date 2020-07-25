@@ -165,7 +165,7 @@ $config['print']['msg'] = null;
 
 $config['jpeg_quality_thumb'] = 60;
 $config['jpeg_quality_chroma'] = 70;
-$config['jpeg_quality_image'] = 80;
+$config['jpeg_quality_image'] = 100;
 
 // RESET
 $config['reset_remove_images'] = true;
