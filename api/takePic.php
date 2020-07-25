@@ -56,7 +56,7 @@ function takePicture($filename)
 }
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
-    $file = $_POST['file'];
+    $name = $_POST['file'];
 } elseif ($config['file_naming'] === 'numbered') {
     $images = getImagesFromDB();
     $img_number = count($images);
@@ -68,7 +68,7 @@ if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))
     $name = md5(time()).'.jpg';
 }
 
-if ($config['db_file'] === 'db') {
+if ($config['db_file'] === 'db' || !empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $file = $name;
 } else {
     $file = $config['db_file'].'_'.$name;
