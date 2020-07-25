@@ -11,7 +11,7 @@ $config['pictureRotation'] = '0';
 $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['use_download'] = true;
-$config['print_qrcode'] = true;
+$config['print_qrcode'] = false;
 $config['print_frame'] = false;
 $config['print_frame_path'] = '../resources/img/frames/frame.png';
 $config['crop_onprint'] = false;
@@ -49,9 +49,9 @@ $config['take_frame'] = false;
 $config['take_frame_path'] = '../resources/img/frames/frame.png';
 $config['take_collage_frame'] = false;
 $config['take_collage_frame_path'] = '../resources/img/frames/frame.png';
-$config['chroma_keying'] = true;
-$config['use_collage'] = false;
-$config['continuous_collage'] = false;
+$config['chroma_keying'] = false;
+$config['use_collage'] = true;
+$config['continuous_collage'] = true;
 $config['background_image'] = null;
 $config['background_admin'] = null;
 $config['background_chroma'] = null;
@@ -122,7 +122,7 @@ $config['colors']['gallery_button'] = '#ffffff';
 $config['show_gallery'] = true;
 $config['newest_first'] = true;
 $config['scrollbar'] = false;
-$config['show_date'] = false; // only works if file_naming = 'dateformatted'
+$config['show_date'] = true; // only works if file_naming = 'dateformatted'
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 $config['gallery_bottom_bar'] = true;
 
@@ -164,7 +164,7 @@ $config['print']['cmd'] = null;
 $config['print']['msg'] = null;
 
 $config['jpeg_quality_thumb'] = 60;
-$config['jpeg_quality_chroma'] = 70;
+$config['jpeg_quality_chroma'] = 100;
 $config['jpeg_quality_image'] = 100;
 
 // RESET
