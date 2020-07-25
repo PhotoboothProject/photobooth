@@ -34,7 +34,7 @@ If I find enough time I'll post some updates from time to time
   - Gallery:
     - Order pictures in gallery ascending oder descending by picture age.
     - Hide the gallery.
-  - Choose between md5- or date-formatted image names.
+  - Choose between date-formatted, numbered or random image names.
   - Choose an image filter after taking a picture.
   - QR-Code to allow downloading pictures from your Photobooth.
   - Pictures can be directly downloaded from the gallery.
@@ -62,6 +62,7 @@ If I find enough time I'll post some updates from time to time
   - standalone slideshow via `localhost/slideshow`
   - access login via `localhost/login` instead `localhost/login.php`
   - offline manual with settings explained under `localhost/manual` ([andi34/photobooth#59](https://github.com/andi34/photobooth/pull/59))
+  - offline FAQ under `localhost/manual/faq.html`
   - fix windows compatibility
   - fix check for image filter
   - performance improvement ([andreknieriem/photobooth#226](https://github.com/andreknieriem/photobooth/pull/226))
@@ -73,7 +74,9 @@ If I find enough time I'll post some updates from time to time
   - Switch to blue-gray color theme by default
   - Admin panel: switch to range config and use toggles instead checkboxes
   - Switch to simple-translator for translations, use english as fallback langauage if a translation is missing. This also gives the possibility to easily translate Photobooth. [How to update or add translations?](https://github.com/andi34/photobooth/wiki/FAQ#how-to-update-or-add-translations)
-
+  - Add database name to picture name if database changed from default name
+  - Close opened picture if photo/collage is triggered
+  - Only take Photos via defined key if we aren't already
 
 ### New Options:
 
@@ -85,12 +88,15 @@ If I find enough time I'll post some updates from time to time
   - Allow to rotate photo after taking
   - Optional EXIF data preservation (disabled by default)
   - define collage frame seperately ([andi34/photobooth#63](https://github.com/andi34/photobooth/pull/63))
-  - event specific database: You can now rename the picture and email database via Adminpanel. Only pictures inside the defined database are visible via gallery. ([andi34/photobooth#61](https://github.com/andi34/photobooth/pull/61))
+  - event specific database: You can now rename the picture and email database via Admin panel. Only pictures inside the defined database are visible via gallery. ([andi34/photobooth#61](https://github.com/andi34/photobooth/pull/61))
   - Preview/Stream from device cam as background on start page ([andi34/photobooth#](58https://github.com/andi34/photobooth/pull/58))
   - Allow using a stream from URL at countdown for preview
   - Allow to rotate preview from URL
+  - Show button bar inside gallery on bottom or on top of the image
+  - Auto reload Photobooth on error while taking a photo
+  - Allow to change permissons on picture
+  - qrHelp: define WiFi SSID used on QR via admin panel
 
-  
 ## :camera: Screenshots
 
 ![](https://raw.githubusercontent.com/wiki/andi34/photobooth/images/start.png)
