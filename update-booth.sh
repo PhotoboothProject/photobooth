@@ -12,15 +12,40 @@ function error {
 }
 
 if [ $UID != 0 ]; then
-    error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
+    error "[ERROR] Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
 fi
 
-if [[ ! -z $1 ]]; then
-    booth_source=$1
-    info "Updating Photobooth located at: ${booth_source}"
+options=("$@")
+
+for i in ${!options[@]}; do
+
+    option="${options[$i]}"
+    path=''
+    if [[ "$option" == --path=* ]]; then
+	path="$(echo $option | awk -F '=' '{print $2}')"
+    fi
+done
+
+if [[ ! -z $path ]]; then
+    booth_source=$path
+    info "[Info]      Updating Photobooth located at: ${booth_source}"
 else
-    error "ERROR: Usage: update-booth.sh 'Photobooth path'"
+    error '[ERROR]
+    No Options specified for script execution!
+    Usage command is "sudo update-booth.sh [OPTION]".
+    See [OPTION] below:
+    =======================================================================
+    --path	Mandatory field for installation: Set Photobooth path.
+    -----------------------------------------------------------------------
+    
+    '
+    info '[INFO]
+    Example update
+    -----------------------------------------------------------------------
+    sudo ./update-booth.sh --path="/var/www/html"
+    
+    '
     exit 2
 fi
 
@@ -55,32 +80,33 @@ if [[ ! -d "${booth_source}" ]]; then
     mkdir -p "${booth_source}"
 fi
 
-info "[Info] Updating system"
+info "[Info]      Updating system"
 apt update
 apt dist-upgrade -y
 
-info "[Info] Checking for webserver..."
+info "[Info]      Checking for webserver..."
 for server in "${WEBSERVER[@]}"; do
     if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
         info "[Webserver] ${server} installed"
         if [[ ${server} == "nginx" || ${server} == "lighttpd" ]]; then
-            info "[NOTE] You're using ${server} as your Webserver. For a no-hassle-setup Apache2 Webserver is recommend!"
+            info "[NOTE]      You're using ${server} as your Webserver."
+            info "[NOTE]      For a no-hassle-setup Apache2 Webserver is recommend!"
             if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-                info "[Package] php-fpm installed already"
+                info "[Package]   php-fpm installed already"
             else
-                info "[Package Install] Installing missing common package: ${server}"
+                info "[Package Install]  Installing missing common package: ${server}"
                 apt install -y php-fpm
             fi
         fi
     fi
 done
 
-info "[Info] Checking common software..."
+info "[Info]      Checking common software..."
 for package in "${COMMON_PACKAGES[@]}"; do
     if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        info "[Package] ${package} installed already"
+        info "[Package]   ${package} installed already"
     else
-        info "[Package Install] Installing missing common package: ${package}"
+        info "[Package]   Installing missing common package: ${package}"
         if [[ ${package} == "yarn" ]]; then
                 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
                 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -100,4 +126,4 @@ for file in "${OLDFILES[@]}"; do
     fi
 done
 
-info "[Info] Updated Photobooth"
+info "[Info]      Updated Photobooth"
