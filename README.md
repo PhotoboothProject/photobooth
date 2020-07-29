@@ -21,9 +21,9 @@ If I find enough time I'll post some updates from time to time
     to take pictures.
 - Images are processed with GD.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
-- Standalone Gallery (`localhost/gallery.php`).
-- Slideshow via Gallery oder standalone Gallery (under `localhost/slideshow`).
-- Settings can be changed via Admin Panel (under `localhost/admin`):
+- Standalone Gallery ([localhost/gallery.php](http://localhost/gallery.php)).
+- Slideshow via Gallery or standalone Gallery (under [localhost/slideshow](http://localhost/slideshow)).
+- Settings can be changed via Admin Panel (under [localhost/admin](http://localhost/admin)):
   - Multi-language support:
     - German
     - English
@@ -59,10 +59,10 @@ If I find enough time I'll post some updates from time to time
 
   - install-raspbian: use Apache2 webserver by default again
   - added Slideshow option to Gallery
-  - standalone slideshow via `localhost/slideshow`
-  - access login via `localhost/login` instead `localhost/login.php`
-  - offline manual with settings explained under `localhost/manual` ([andi34/photobooth#59](https://github.com/andi34/photobooth/pull/59))
-  - offline FAQ under `localhost/manual/faq.html`
+  - standalone slideshow via [localhost/slideshow](http://localhost/slideshow)
+  - access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php)
+  - offline manual with settings explained under [localhost/manual](http://localhost/manual) ([andi34/photobooth#59](https://github.com/andi34/photobooth/pull/59))
+  - offline FAQ under [localhost/manual/faq.html](http://localhost/manual/faq.html)
   - fix windows compatibility
   - fix check for image filter
   - performance improvement ([andreknieriem/photobooth#226](https://github.com/andreknieriem/photobooth/pull/226))
@@ -89,7 +89,7 @@ If I find enough time I'll post some updates from time to time
   - Optional EXIF data preservation (disabled by default)
   - define collage frame seperately ([andi34/photobooth#63](https://github.com/andi34/photobooth/pull/63))
   - event specific database: You can now rename the picture and email database via Admin panel. Only pictures inside the defined database are visible via gallery. ([andi34/photobooth#61](https://github.com/andi34/photobooth/pull/61))
-  - Preview/Stream from device cam as background on start page ([andi34/photobooth#](58https://github.com/andi34/photobooth/pull/58))
+  - Preview/Stream from device cam as background on start page ([andi34/photobooth#58](https://github.com/andi34/photobooth/pull/58))
   - Allow using a stream from URL at countdown for preview
   - Allow to rotate preview from URL
   - Show button bar inside gallery on bottom or on top of the image

@@ -111,7 +111,7 @@ $thumbResource = resizeImage($imageResource, 500, 500);
 imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
 imagedestroy($thumbResource);
 
-if ($imageModified || $config['jpeg_quality_image'] >= 0) {
+if ($imageModified || $config['jpeg_quality_image'] >= 0 && $config['jpeg_quality_image'] < 100) {
     imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
     // preserve jpeg meta data
     if ($config['preserve_exif_data'] && $config['exiftool']['cmd']) {

@@ -6,6 +6,8 @@ set -e
 # Show all commands
 # set -x
 
+webserver=$1
+
 function info {
     echo -e "\033[0;36m${1}\033[0m"
 }
@@ -30,6 +32,23 @@ if [[ $PI_MODEL != Raspberry* ]]; then
     error "ERROR: This installer is only intended to run on a Raspberry Pi."
     exit 3
 fi
+
+if [[ ! -z $1 && ("$1" = "nginx" || "$1" = "lighttpd") ]]; then
+    info "### Used webserver: $webserver"
+else
+    info "### Used webserver: Apache Webserver"
+fi
+
+exit
+
+COMMON_PACKAGES=(
+    'git'
+    'gphoto2'
+    'jq'
+    'libimage-exiftool-perl'
+    'php-gd'
+    'yarn'
+)
 
 apache_webserver() {
     info "### Installing Apache Webserver..."
@@ -136,21 +155,32 @@ apt update
 apt dist-upgrade -y
 
 info "### Photobooth needs some software to run."
-if [ "$1" == "nginx" ]; then
+if [ $webserver == "nginx" ]; then
     nginx_webserver
-elif [ "$1" == "lighttpd" ]; then
+elif [ $webserver == "lighttpd" ]; then
     lighttpd_webserver
 else
     apache_webserver
 fi
 
 info "### Installing common software..."
-apt install -y php-gd gphoto2 libimage-exiftool-perl
+for package in "${COMMON_PACKAGES[@]}"; do
+    if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        info "[Package]   ${package} installed already"
+    else
+        info "[Package]   Installing missing common package: ${package}"
+        if [[ ${package} == "yarn" ]]; then
+                curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+                echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+                apt update
+        fi
+        apt install -y ${package}
+    fi
+done
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 read -p "### Warning: If typing y, the whole /var/www/html folder will be removed! [y/N] " -n 1 -r deleteHtmlFolder
 echo -e "\033[0m"
-
 if [ "$deleteHtmlFolder" != "${deleteHtmlFolder#[Yy]}" ] ;then
     info "### Ok, we will replace the html folder with the Photobooth."
     cd /var/www/
@@ -171,15 +201,6 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     info "### Your wish is my command!"
 
-    info "### We have to make sure that git is installed."
-    apt install -y git
-
-    info "### Also a packet manager is needed."
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-    apt update
-    apt install -y yarn
-
     info "### Now we are going to install Photobooth."
     git clone https://github.com/andi34/photobooth $INSTALLFOLDER
     cd $INSTALLFOLDERPATH
@@ -192,10 +213,7 @@ then
     yarn install
     yarn build
 else
-    info "### Downloading the latest build."
-
-    info "### Installing a little helper tool to determine the correct url."
-    apt install -y jq
+    info "### Your wish is my command!"
 
     info "### Downloading the latest release and extracting it."
     curl -s https://api.github.com/repos/andi34/photobooth/releases/latest |
@@ -211,13 +229,20 @@ info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
 gpasswd -a www-data plugdev
 
-info "### Installing CUPS and setting printer permissions."
-apt install -y cups
-gpasswd -a www-data lp
-gpasswd -a www-data lpadmin
-
-info "### Disable camera automount"
+info "### Disabling camera automount."
 chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+
+echo -e "\033[0;33m### You probably like to use a printer."
+read -p "### You like to install CUPS and set needing printer permissions? [y/N] " -n 1 -r
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    info "### Installing CUPS and setting printer permissions."
+
+    apt install -y cups
+    gpasswd -a www-data lp
+    gpasswd -a www-data lpadmin
+fi
 
 echo -e "\033[0;33m### You probably like to start the browser on every start."
 read -p "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " -n 1 -r
@@ -240,7 +265,7 @@ EOF
 fi
 
 info "### Congratulations you finished the install process."
-info "### Have fun with your booth, but first restart your Pi."
+info "### Have fun with your Photobooth, but first restart your Pi."
 
 echo -e "\033[0;33m"
 read -p "### Do you like to reboot now? [y/N] " -n 1 -r
