@@ -421,6 +421,15 @@ hr.small {
   }
 }
 
+.triggerPic,
+.triggerCollage,
+.closeGallery {
+  padding: 0;
+  margin: 0;
+  width: 1px;
+  height: 1px;
+}
+
 #useBuzzer {
   font-size: 2em;
   margin-top: 1em;
