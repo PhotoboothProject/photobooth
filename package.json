@@ -32,6 +32,7 @@
     "events"
   ],
   "dependencies": {
+    "@andreasremdt/simple-translator": "^2.0.1",
     "font-awesome": "^4.7.0",
     "gh-markdown-cli": "^0.2.0",
     "github-markdown-css": "https://github.com/andi34/github-markdown-css",
