@@ -1,15 +1,18 @@
+"use strict";
+
 /* exported adminsettings */
-let admincount = 0;
+var admincount = 0;
 
 function countreset() {
-    admincount = 0;
+  admincount = 0;
 }
 
 function adminsettings() {
-    if (admincount == 3) {
-        window.location.href = 'admin/index.php';
-    }
-    console.log(admincount);
-    admincount++;
-    setTimeout(countreset, 10000);
+  if (admincount == 3) {
+    window.location.href = 'admin/index.php';
+  }
+
+  console.log(admincount);
+  admincount++;
+  setTimeout(countreset, 10000);
 }

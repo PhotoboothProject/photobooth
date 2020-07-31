@@ -1,6 +1,5 @@
-"use strict";
+const style = document.documentElement.style;
 
-var style = document.documentElement.style;
 style.setProperty('--primary-color', config.colors.primary);
 style.setProperty('--secondary-color', config.colors.secondary);
 style.setProperty('--font-color', config.colors.font);
@@ -20,6 +19,7 @@ style.setProperty('--background-chroma', config.background_chroma);
 style.setProperty('--background-ipcam', config.ipCamURL);
 style.setProperty('--fontSize', config.font_size);
 style.setProperty('--preview-rotation', config.ipCamPreviewRotation);
+
 $(function () {
-  $('#wrapper').show();
+    $('#wrapper').show();
 });

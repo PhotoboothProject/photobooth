@@ -1,0 +1,199 @@
+@import "modules/theme";
+@import "partials/basic";
+@import "partials/button";
+@import "partials/fonts";
+@import "partials/toggle";
+
+$error: #e74c3c;
+$success: #2ecc71;
+
+.adminwrapper {
+  display: block;
+  position: relative;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  background-color: $mainColor;
+  background-image: $adminBackground;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+input[type="text"],
+select {
+  background: $boxColor;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  width: 100%;
+  padding: 0 10px;
+  color: $fontColor;
+}
+
+.slider {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 100%;
+  background: $boxColor;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 20px;
+  background: $mainColor;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 20px;
+  background: $mainColor;
+  cursor: pointer;
+}
+
+.admin-panel {
+  width: calc(31.25 * 1em);
+  padding: 30px 30px 90px;
+  height: auto;
+  margin: 50px auto;
+  background: $panelColor;
+  position: relative;
+  max-width: 100%;
+  color: $fontColor;
+}
+
+.panel {
+  .panel-heading {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid $borderColor;
+    .plus {
+      display: inline-block;
+    }
+    .minus {
+      display: none;
+    }
+
+    &:hover {
+      background: $hoverPanelColor;
+    }
+
+  }
+  .panel-body {
+    display: none;
+    padding: 20px;
+    border: 1px solid $borderColor;
+  }
+
+  &.open {
+    .panel-heading {
+      .minus {
+        display: inline-block;
+      }
+      .plus {
+        display: none;
+      }
+    }
+  }
+
+  &.init {
+    .panel-body{
+      display: block;
+    }
+  }
+}
+
+.form-row {
+  margin-bottom: 15px;
+}
+
+.save-btn,
+.reset-btn {
+  cursor: pointer;
+  background: $mainColor;
+  color: $buttonFontColor;
+  width: 100%;
+  position: absolute;
+  padding: 20px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: background 0.7s ease;
+
+  &:hover {
+    background: $hoverColor;
+  }
+
+  .saving,
+  .success,
+  .error {
+    display: none;
+  }
+
+  &.saving {
+    .saving {
+      display: inline-block;
+    }
+
+    .save,
+    .success,
+    .error {
+      display: none;
+    }
+  }
+
+  &.success {
+    background: $success;
+    .success {
+      display: inline-block;
+    }
+
+    .save,
+    .saving,
+    .error {
+      display: none;
+    }
+  }
+
+  &.error {
+    background: $error;
+    .error {
+      display: inline-block;
+    }
+
+    .save,
+    .saving,
+    .success {
+      display: none;
+    }
+  }
+}
+
+.reset-btn{
+  background: $error;
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  left: auto;
+  width: auto;
+  bottom: auto;
+  padding: 5px 10px;
+
+  &:hover {
+    background: #c0392b;
+  }
+}
+
+.back-to-pb {
+  color: $fontColor;
+  text-decoration: none;
+  padding: 0 3px;
+
+  &:hover {
+    background-color: $hoverPanelColor;
+  }
+}

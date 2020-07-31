@@ -1,25 +1,13 @@
-/* exported i18n */
-import {LANGUAGE} from '../../api/language.php';
-import Translator from '../../vendor/simple-translator/src/translator.js';
+"use strict";
 
-const translator = new Translator({
-    persist: false,
-    languages: [
-        'de',
-        'el',
-        'en',
-        'es',
-        'fr'
-    ],
-    defaultLanguage: 'en',
-    detectLanguage: false,
-    filesLocation: 'resources/lang'
+var translator = new Translator({
+  persist: false,
+  defaultLanguage: 'en',
+  detectLanguage: false,
+  registerGlobally: 'i18n',
+  filesLocation: '/photobooth/resources/lang',
+  debug: true
 });
-
-window.i18n = function (key) {
-    return translator.getTranslationByKey(LANGUAGE, key);
-}
-
-$(function () {
-    translator.load(LANGUAGE);
+translator.fetch(['de', 'en', 'es', 'el', 'fr']).then(function () {
+  translator.translatePageTo();
 });
