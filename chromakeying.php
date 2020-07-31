@@ -89,6 +89,7 @@ if (file_exists($keyingimage)) {
 	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-0.8.js"></script>
 	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
+	<script src="https://unpkg.com/@andreasremdt/simple-translator@2.0.1/dist/umd/translator.min.js"></script>
 	<script type="module" src="resources/js/i18n.js"></script>
 </body>
 </html>
