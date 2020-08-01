@@ -10,6 +10,7 @@ resources/css/
 resources/js/
 stats
 trash
+vendor/simple-translator/
 .sass-cache
 /.htaccess
 .htpasswd
