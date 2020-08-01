@@ -69,6 +69,8 @@ function createArchive(fileName, archive) {
     archive.file('phpinfo.php');
     archive.file('README.md');
     archive.file('update-booth.sh');
+    archive.file('node_modules/@andreasremdt/simple-translator/LICENSE');
+    archive.file('node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js');
     archive.file('node_modules/github-markdown-css/github-markdown.css');
     archive.file('node_modules/github-markdown-css/license');
     archive.file('node_modules/normalize.css/LICENSE.md');
