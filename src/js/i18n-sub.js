@@ -5,7 +5,7 @@ const translator = new Translator({
     detectLanguage: false,
     registerGlobally: 'i18n',
     filesLocation: '../resources/lang',
-    debug: true
+    debug: config.dev
 });
 
 translator.fetch([
@@ -15,5 +15,5 @@ translator.fetch([
     'el',
     'fr'
 ]).then(() => {
-    translator.translatePageTo();
+    translator.translatePageTo(config.language);
 });
