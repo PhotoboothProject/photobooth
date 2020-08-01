@@ -1,3 +1,4 @@
+/* globals Translator */
 const translator = new Translator({
     persist: false,
     defaultLanguage: 'en',
@@ -7,6 +8,12 @@ const translator = new Translator({
     debug: true
 });
 
-translator.fetch(['de', 'en', 'es', 'el', 'fr']).then(() => {
+translator.fetch([
+    'de',
+    'en',
+    'es',
+    'el',
+    'fr'
+]).then(() => {
     translator.translatePageTo();
 });

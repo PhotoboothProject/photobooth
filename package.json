@@ -6,8 +6,8 @@
     "build": "gulp",
     "watch": "gulp watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint resources/js/*.js",
-    "eslint:fix": "eslint resources/js/*.js --fix",
+    "eslint": "eslint src/js/*.js",
+    "eslint:fix": "eslint src/js/*.js --fix",
     "pack:build": "node scripts/pack-build.js",
     "build:faq": "node_modules/gh-markdown-cli/bin/mdown --input 'faq/*.md' --output manual --header faq/header.html --footer faq/footer.html"
   },
