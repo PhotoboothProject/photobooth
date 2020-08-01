@@ -295,13 +295,5 @@
             "error",
             "never"
         ]
-    },
-    "overrides": [
-        {
-            "files": ["i18n.js"],
-            "parserOptions": {
-                "sourceType": "module"
-            }
-        }
-    ]
+    }
 }

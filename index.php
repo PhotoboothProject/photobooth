@@ -244,7 +244,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="module" src="resources/js/i18n.js"></script>
+	<script type="text/javascript" src="resources/js/i18n.js"></script>
 
 </body>
 </html>
