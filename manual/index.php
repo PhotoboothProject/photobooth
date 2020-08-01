@@ -85,25 +85,10 @@ require_once('../lib/configsetup.inc.php');
 
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="../resources/js/manual.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="module" src="../resources/js/i18n.js"></script>
-
-	<script>
-		$(function() {
-			$('.panel-heading').on('click', function() {
-				const panel = $(this).parents('.panel');
-				const others = $(this).parents('.accordion').find('.open').not(panel);
-
-				others.removeClass('open init');
-
-				panel.toggleClass('open');
-				panel.find('.panel-body').slideToggle();
-
-				others.find('.panel-body').slideUp('fast');
-			});
-		});
-	</script>
 
 </body>
 </html>
