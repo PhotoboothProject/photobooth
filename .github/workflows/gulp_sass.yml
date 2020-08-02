@@ -1,0 +1,25 @@
+name: gulp-sass
+
+on:
+  push:
+    branches:
+      - dev
+      - stable2
+    paths:
+      - '**.scss'
+  pull_request:
+    branches:
+      - dev
+      - stable2
+    paths:
+      - '**.scss'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn install
+    - name: Running gulp-sass
+      run: yarn build
