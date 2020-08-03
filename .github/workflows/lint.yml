@@ -1,0 +1,26 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - dev
+      - stable2
+    paths:
+      - '**.js'
+  pull_request:
+    branches:
+      - dev
+      - stable2
+    paths:
+      - '**.js'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn install
+    - name: Lint
+      run: yarn eslint

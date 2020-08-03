@@ -6,6 +6,10 @@ Photobooth was initially developped by Andre Rinas, you can find his source [her
 
 This is my personal Photobooth fork with some extras on top (more information can be found [below](https://github.com/andi34/photobooth#extras-on-my-personal-fork)).
 
+
+![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable2)
+![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable2)
+
 **Please note:**
 
 Safari Browser on iOS 9 in not compatible with es6, which means Photobooth won't work. Supported browser can be found inside the [Wiki](https://github.com/andi34/photobooth/wiki#browser-support).
