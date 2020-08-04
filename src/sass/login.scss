@@ -1,7 +1,7 @@
-@import "modules/theme";
-@import "partials/fonts";
-@import "partials/basic";
-@import "partials/button";
+@import 'modules/theme';
+@import 'partials/fonts';
+@import 'partials/basic';
+@import 'partials/button';
 
 .loginbody {
   display: block;
@@ -17,8 +17,8 @@
   background-attachment: fixed;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type='text'],
+input[type='password'] {
   color: $fontColor;
   background: $boxColor;
   border: 1px solid $borderColor;

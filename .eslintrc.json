@@ -20,7 +20,7 @@
         "array-bracket-newline": "error",
         "array-bracket-spacing": "error",
         "array-callback-return": "error",
-        "array-element-newline": "error",
+        "array-element-newline": "off",
         "arrow-body-style": "error",
         "arrow-parens": "error",
         "arrow-spacing": [
@@ -88,7 +88,7 @@
             "error",
             "consistent"
         ],
-        "function-paren-newline": "error",
+        "function-paren-newline": "off",
         "generator-star-spacing": "error",
         "global-require": "error",
         "guard-for-in": "error",
@@ -289,7 +289,7 @@
         ],
         "valid-jsdoc": "error",
         "vars-on-top": "off",
-        "wrap-regex": "error",
+        "wrap-regex": "off",
         "yield-star-spacing": "error",
         "yoda": [
             "error",

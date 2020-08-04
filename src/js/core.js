@@ -14,7 +14,7 @@ const photoBooth = (function () {
             video: {
                 width: config.videoWidth,
                 height: config.videoHeight,
-                facingMode: config.camera_mode,
+                facingMode: config.camera_mode
             }
         },
         videoView = $('#video--view').get(0),
@@ -52,7 +52,7 @@ const photoBooth = (function () {
 
     api.reloadPage = function () {
         window.location.reload();
-    }
+    };
 
     // timeOut function
     api.resetTimeOut = function () {
@@ -61,7 +61,7 @@ const photoBooth = (function () {
         timeOut = setTimeout(function () {
             api.reloadPage();
         }, timeToLive);
-    }
+    };
 
     // reset whole thing
     api.reset = function () {
@@ -81,7 +81,7 @@ const photoBooth = (function () {
         api.resetMailForm();
         $('#loader').css('background', config.colors.background_countdown);
         $('#loader').css('background-color', config.colors.background_countdown);
-    }
+    };
 
     // init
     api.init = function () {
@@ -94,22 +94,21 @@ const photoBooth = (function () {
         if (config.previewCamBackground) {
             api.startVideo('preview');
         }
-    }
+    };
 
     api.openNav = function () {
         $('#mySidenav').addClass('sidenav--open');
-    }
+    };
 
     api.closeNav = function () {
         $('#mySidenav').removeClass('sidenav--open');
-    }
+    };
 
     api.toggleNav = function () {
         $('#mySidenav').toggleClass('sidenav--open');
-    }
+    };
 
     api.startVideo = function (mode) {
-
         if (config.previewCamBackground) {
             api.stopVideo('preview');
         }
@@ -118,7 +117,11 @@ const photoBooth = (function () {
             return;
         }
 
-        const getMedia = (navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || false);
+        const getMedia =
+            navigator.mediaDevices.getUserMedia ||
+            navigator.mediaDevices.webkitGetUserMedia ||
+            navigator.mediaDevices.mozGetUserMedia ||
+            false;
 
         if (!getMedia) {
             return;
@@ -129,7 +132,8 @@ const photoBooth = (function () {
             $('#video--preview').addClass('flip-horizontal');
         }
 
-        getMedia.call(navigator.mediaDevices, webcamConstraints)
+        getMedia
+            .call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
                 if (mode === 'preview') {
                     $('#video--preview').show();
@@ -144,9 +148,9 @@ const photoBooth = (function () {
                 api.stream = stream;
             })
             .catch(function (error) {
-                console.log('Could not get user media: ', error)
+                console.log('Could not get user media: ', error);
             });
-    }
+    };
 
     api.stopVideo = function (mode) {
         if (api.stream) {
@@ -158,7 +162,7 @@ const photoBooth = (function () {
                 $('#video--view').hide();
             }
         }
-    }
+    };
 
     api.thrill = function (photoStyle) {
         api.closeNav();
@@ -190,7 +194,7 @@ const photoBooth = (function () {
         api.startCountdown(nextCollageNumber ? config.collage_cntdwn_time : config.cntdwn_time, $('#counter'), () => {
             api.cheese(photoStyle);
         });
-    }
+    };
 
     // Cheese
     api.cheese = function (photoStyle) {
@@ -207,7 +211,9 @@ const photoBooth = (function () {
         } else {
             const cheesemsg = i18n('cheeseCollage');
             $('.cheese').text(cheesemsg);
-            $('<p>').text(`${nextCollageNumber + 1} / ${config.collage_limit}`).appendTo('.cheese');
+            $('<p>')
+                .text(`${nextCollageNumber + 1} / ${config.collage_limit}`)
+                .appendTo('.cheese');
         }
 
         if (config.previewFromCam && config.previewCamTakesPic && !api.stream && !config.dev) {
@@ -226,7 +232,7 @@ const photoBooth = (function () {
                 api.takePic(photoStyle);
             }, config.cheese_time);
         }
-    }
+    };
 
     // take Picture
     api.takePic = function (photoStyle) {
@@ -251,7 +257,7 @@ const photoBooth = (function () {
         const data = {
             filter: imgFilter,
             style: photoStyle,
-            canvasimg: videoSensor.toDataURL('image/jpeg'),
+            canvasimg: videoSensor.toDataURL('image/jpeg')
         };
 
         if (photoStyle === 'collage') {
@@ -262,53 +268,57 @@ const photoBooth = (function () {
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
 
-        jQuery.post('api/takePic.php', data).done(function (result) {
-            console.log('took picture', result);
-            $('.cheese').empty();
-            if (config.previewCamFlipHorizontal) {
-                $('#video--view').removeClass('flip-horizontal');
-                $('#video--preview').removeClass('flip-horizontal');
-            }
-
-            // reset filter (selection) after picture was taken
-            imgFilter = config.default_imagefilter;
-            $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
-            $('#' + imgFilter).addClass('activeSidenavBtn');
-
-            if (result.error) {
-                api.errorPic(result);
-            } else if (result.success === 'collage' && (result.current + 1) < result.limit) {
-                currentCollageFile = result.file;
-                nextCollageNumber = result.current + 1;
-
-                $('.spinner').hide();
-                $('.loading').empty();
-                $('#video--sensor').hide();
-
-                if (config.continuous_collage) {
-                    setTimeout(() => {
-                        api.thrill('collage');
-                    }, 1000);
-                } else {
-                    $('<a class="btn" href="#">' + i18n('nextPhoto') + '</a>').appendTo('.loading').click((ev) => {
-                        ev.preventDefault();
-
-                        api.thrill('collage');
-                    });
-                    const abortmsg = i18n('abort');
-                    $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
+        jQuery
+            .post('api/takePic.php', data)
+            .done(function (result) {
+                console.log('took picture', result);
+                $('.cheese').empty();
+                if (config.previewCamFlipHorizontal) {
+                    $('#video--view').removeClass('flip-horizontal');
+                    $('#video--preview').removeClass('flip-horizontal');
                 }
-            } else {
-                currentCollageFile = '';
-                nextCollageNumber = 0;
 
-                api.processPic(photoStyle, result);
-            }
+                // reset filter (selection) after picture was taken
+                imgFilter = config.default_imagefilter;
+                $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
+                $('#' + imgFilter).addClass('activeSidenavBtn');
 
-        }).fail(function (xhr, status, result) {
-            api.errorPic(result);
-        });
-    }
+                if (result.error) {
+                    api.errorPic(result);
+                } else if (result.success === 'collage' && result.current + 1 < result.limit) {
+                    currentCollageFile = result.file;
+                    nextCollageNumber = result.current + 1;
+
+                    $('.spinner').hide();
+                    $('.loading').empty();
+                    $('#video--sensor').hide();
+
+                    if (config.continuous_collage) {
+                        setTimeout(() => {
+                            api.thrill('collage');
+                        }, 1000);
+                    } else {
+                        $('<a class="btn" href="#">' + i18n('nextPhoto') + '</a>')
+                            .appendTo('.loading')
+                            .click((ev) => {
+                                ev.preventDefault();
+
+                                api.thrill('collage');
+                            });
+                        const abortmsg = i18n('abort');
+                        $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
+                    }
+                } else {
+                    currentCollageFile = '';
+                    nextCollageNumber = 0;
+
+                    api.processPic(photoStyle, result);
+                }
+            })
+            .fail(function (xhr, status, result) {
+                api.errorPic(result);
+            });
+    };
 
     // Show error Msg and reset
     api.errorPic = function (data) {
@@ -339,7 +349,7 @@ const photoBooth = (function () {
                 $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
             }
         }, 500);
-    }
+    };
 
     api.processPic = function (photoStyle, result) {
         const tempImageUrl = config.folders.tmp + '/' + result.file;
@@ -357,7 +367,7 @@ const photoBooth = (function () {
             preloadImage.onload = () => {
                 $('#loader').css('background-image', `url(${tempImageUrl})`);
                 $('#loader').addClass('showBackgroundImage');
-            }
+            };
             preloadImage.src = tempImageUrl;
         }
 
@@ -367,7 +377,7 @@ const photoBooth = (function () {
             data: {
                 file: result.file,
                 filter: imgFilter,
-                isCollage: photoStyle === 'collage',
+                isCollage: photoStyle === 'collage'
             },
             success: (data) => {
                 console.log('picture processed', data);
@@ -382,11 +392,11 @@ const photoBooth = (function () {
                 console.log('An error occurred', textStatus);
 
                 api.errorPic({
-                    error: 'Request failed: ' + textStatus,
+                    error: 'Request failed: ' + textStatus
                 });
-            },
+            }
         });
-    }
+    };
 
     // Render Picture after taking
     api.renderPic = function (filename) {
@@ -397,7 +407,10 @@ const photoBooth = (function () {
             const body = qrCodeModal.find('.modal__body');
 
             $(this).appendTo(body);
-            $('<p>').css('max-width', this.width + 'px').html(i18n('qrHelp') + '</br><b>' + config.wifi_ssid + '</b>').appendTo(body);
+            $('<p>')
+                .css('max-width', this.width + 'px')
+                .html(i18n('qrHelp') + '</br><b>' + config.wifi_ssid + '</b>')
+                .appendTo(body);
         });
 
         // Add Print Link
@@ -411,17 +424,20 @@ const photoBooth = (function () {
             });
         });
 
-        resultPage.find('.deletebtn').off('click').on('click', (ev) => {
-            ev.preventDefault();
+        resultPage
+            .find('.deletebtn')
+            .off('click')
+            .on('click', (ev) => {
+                ev.preventDefault();
 
-            api.deleteImage(filename, (data) => {
-                if (data.success) {
-                    api.reloadPage();
-                } else {
-                    console.log('Error while deleting image');
-                }
-            })
-        });
+                api.deleteImage(filename, (data) => {
+                    if (data.success) {
+                        api.reloadPage();
+                    } else {
+                        console.log('Error while deleting image');
+                    }
+                });
+            });
 
         // Add Image to gallery and slider
         api.addImage(filename);
@@ -431,7 +447,7 @@ const photoBooth = (function () {
         const preloadImage = new Image();
         preloadImage.onload = () => {
             resultPage.css({
-                'background-image': `url(${imageUrl}?filter=${imgFilter})`,
+                'background-image': `url(${imageUrl}?filter=${imgFilter})`
             });
             resultPage.attr('data-img', filename);
 
@@ -448,7 +464,7 @@ const photoBooth = (function () {
         };
 
         preloadImage.src = imageUrl;
-    }
+    };
 
     // add image to Gallery
     api.addImage = function (imageName) {
@@ -461,13 +477,17 @@ const photoBooth = (function () {
 
         thumbImg.onload = function () {
             thumbSize = this.width + 'x' + this.height;
-            if (--imgtoLoad == 0) { allLoaded(); }
-        }
+            if (--imgtoLoad == 0) {
+                allLoaded();
+            }
+        };
 
         bigImg.onload = function () {
             bigSize = this.width + 'x' + this.height;
-            if (--imgtoLoad == 0) { allLoaded(); }
-        }
+            if (--imgtoLoad == 0) {
+                allLoaded();
+            }
+        };
 
         bigImg.src = config.folders.images + '/' + imageName;
         thumbImg.src = config.folders.thumbs + '/' + imageName;
@@ -488,7 +508,7 @@ const photoBooth = (function () {
 
             $('#galimages').children().not('a').remove();
         }
-    }
+    };
 
     // Open Gallery Overview
     api.openGallery = function () {
@@ -499,7 +519,7 @@ const photoBooth = (function () {
         gallery.addClass('gallery--open');
 
         setTimeout(() => gallery.find('.gallery__inner').show(), 300);
-    }
+    };
 
     api.resetMailForm = function () {
         $('#send-mail-form').trigger('reset');
@@ -526,17 +546,17 @@ const photoBooth = (function () {
             count++;
         }
         timerFunction();
-    }
+    };
 
     api.printImage = function (imageSrc, cb) {
         modal.open('#print_mesg');
 
         setTimeout(function () {
             $.ajax({
-                url: 'api/print.php?filename=' + encodeURI(imageSrc),
+                url: 'api/print.php?filename=' + encodeURI(imageSrc)
             }).done(function (data) {
                 if (config.dev) {
-                    console.log(data)
+                    console.log(data);
                 }
 
                 setTimeout(function () {
@@ -545,20 +565,20 @@ const photoBooth = (function () {
                 }, 5000);
             });
         }, 1000);
-    }
+    };
 
     api.deleteImage = function (imageName, cb) {
         $.ajax({
             url: 'api/deletePhoto.php',
             method: 'POST',
             data: {
-                file: imageName,
+                file: imageName
             },
             success: (data) => {
                 cb(data);
             }
         });
-    }
+    };
 
     api.toggleMailDialog = function (img) {
         const mail = $('.send-mail');
@@ -571,7 +591,7 @@ const photoBooth = (function () {
 
             mail.addClass('mail-active').fadeIn('fast');
         }
-    }
+    };
 
     //Filter
     $('.imageFilter').on('click', function () {

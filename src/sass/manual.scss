@@ -1,8 +1,8 @@
-@import "modules/theme";
-@import "partials/basic";
-@import "partials/button";
-@import "partials/fonts";
-@import "partials/toggle";
+@import 'modules/theme';
+@import 'partials/basic';
+@import 'partials/button';
+@import 'partials/fonts';
+@import 'partials/toggle';
 
 $error: #e74c3c;
 $success: #2ecc71;
@@ -47,7 +47,6 @@ $success: #2ecc71;
     &:hover {
       background: $hoverPanelColor;
     }
-
   }
   .panel-body {
     display: none;
@@ -67,7 +66,7 @@ $success: #2ecc71;
   }
 
   &.init {
-    .panel-body{
+    .panel-body {
       display: block;
     }
   }

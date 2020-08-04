@@ -8,7 +8,6 @@ let backgroundImage;
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
         for (let x = 0; x < imageIn.getWidth(); x++) {
-
             const color = imageIn.getIntColor(x, y);
             const hsv = MarvinColorModelConverter.rgbToHsv([color]);
 
@@ -31,10 +30,10 @@ function reduceGreen(image) {
             const hsv = MarvinColorModelConverter.rgbToHsv([color]);
 
             if (hsv[0] >= 60 && hsv[0] <= 130 && hsv[1] >= 0.15 && hsv[2] >= 0.15) {
-                if ((r * b) != 0 && (g * g) / (r * b) > 1.5) {
-                    image.setIntColor(x, y, 255, (r * 1.4), g, (b * 1.4));
+                if (r * b != 0 && (g * g) / (r * b) > 1.5) {
+                    image.setIntColor(x, y, 255, r * 1.4, g, b * 1.4);
                 } else {
-                    image.setIntColor(x, y, 255, (r * 1.2), g, (b * 1.2));
+                    image.setIntColor(x, y, 255, r * 1.2, g, b * 1.2);
                 }
             }
         }
@@ -76,17 +75,16 @@ function setMainImage(imgSrc) {
         mainImage.src = tmpCanvas.toDataURL('image/png');
         mainImage.onload = function () {
             drawCanvas();
-        }
+        };
     });
 }
-
 
 function setBackgroundImage(url) {
     backgroundImage = new Image();
     backgroundImage.src = url;
     backgroundImage.onload = function () {
         drawCanvas();
-    }
+    };
 }
 
 function drawCanvas() {
@@ -104,7 +102,12 @@ function drawCanvas() {
 
     if (typeof backgroundImage !== 'undefined' && backgroundImage !== null) {
         if (typeof mainImage !== 'undefined' && mainImage !== null) {
-            const size = calculateAspectRatioFit(backgroundImage.width, backgroundImage.height, mainImage.width, mainImage.height);
+            const size = calculateAspectRatioFit(
+                backgroundImage.width,
+                backgroundImage.height,
+                mainImage.width,
+                mainImage.height
+            );
             ctx.drawImage(backgroundImage, 0, 0, size.width, size.height);
         } else {
             ctx.drawImage(backgroundImage, 0, 0, backgroundImage.width, backgroundImage.height);
@@ -130,7 +133,7 @@ function printImage(filename, cb) {
     $.get(
         'api/print.php',
         {
-            filename: filename,
+            filename: filename
         },
         function (data) {
             console.log('print data', data);
@@ -148,7 +151,7 @@ function saveImage(cb) {
     $.post(
         'api/chromakeying/save.php',
         {
-            imgData: dataURL,
+            imgData: dataURL
         },
         function (data) {
             if (cb) {
@@ -174,7 +177,7 @@ function printImageHandler(ev) {
                     $('#print_mesg').removeClass('modal--show');
                     $('#print-btn').blur();
                 }, 5000);
-            })
+            });
         });
     }, 1000);
 }
@@ -221,6 +224,6 @@ $(document).ready(function () {
     if (diff > 0) {
         const canvasHeight = $('#mainCanvas').height();
 
-        $('#mainCanvas').css('height', (canvasHeight - diff) + 'px');
+        $('#mainCanvas').css('height', canvasHeight - diff + 'px');
     }
 });

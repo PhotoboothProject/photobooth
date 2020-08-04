@@ -1,5 +1,5 @@
 /* globals photoBooth */
-$(function() {
+$(function () {
     const reloadElement = $('<a class="gallery__reload">');
     reloadElement.append('<i class="fa fa-refresh"></i>');
     reloadElement.attr('href', '#');

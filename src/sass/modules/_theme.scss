@@ -1,24 +1,24 @@
 :root {
-    // default values are specified in lib/config.php
-    --primary-color: transparent;
-    --secondary-color: transparent;
-    --font-color: transparent;
-    --button-font-color: transparent;
-    --start-font-color: transparent;
-    --countdown-color: transparent;
-    --background-countdown-color: transparent;
-    --cheese-color: transparent;
-    --panel-color: transparent;
-    --hover-panel-color: transparent;
-    --border-color: transparent;
-    --box-color: transparent;
-    --gallery-button-color: transparent;
-    --background-default: none;
-    --background-admin: none;
-    --background-chroma: none;
-    --background-ipcam: none;
-    --fontSize: 16px;
-    --preview-rotation: 0deg;
+  // default values are specified in lib/config.php
+  --primary-color: transparent;
+  --secondary-color: transparent;
+  --font-color: transparent;
+  --button-font-color: transparent;
+  --start-font-color: transparent;
+  --countdown-color: transparent;
+  --background-countdown-color: transparent;
+  --cheese-color: transparent;
+  --panel-color: transparent;
+  --hover-panel-color: transparent;
+  --border-color: transparent;
+  --box-color: transparent;
+  --gallery-button-color: transparent;
+  --background-default: none;
+  --background-admin: none;
+  --background-chroma: none;
+  --background-ipcam: none;
+  --fontSize: 16px;
+  --preview-rotation: 0deg;
 }
 
 $mainColor: var(--primary-color);

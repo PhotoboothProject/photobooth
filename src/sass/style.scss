@@ -1,13 +1,13 @@
-@import "modules/theme";
-@import "partials/fonts";
-@import "partials/basic";
-@import "partials/button";
-@import "partials/gallery";
-@import "partials/sidenav";
-@import "partials/scrollbar";
-@import "partials/modal";
-@import "partials/ribbon";
-@import "vendor/photoswipe";
+@import 'modules/theme';
+@import 'partials/fonts';
+@import 'partials/basic';
+@import 'partials/button';
+@import 'partials/gallery';
+@import 'partials/sidenav';
+@import 'partials/scrollbar';
+@import 'partials/modal';
+@import 'partials/ribbon';
+@import 'vendor/photoswipe';
 
 #wrapper {
   display: none;
@@ -33,7 +33,7 @@
   position: absolute;
   bottom: -64px;
   left: 0;
-	right: 0;
+  right: 0;
   justify-content: center;
   transition: bottom 0.5s;
   z-index: 100;
@@ -42,7 +42,7 @@
     bottom: 0;
   }
 
-	.btn {
+  .btn {
     width: auto;
     padding: 20px 0;
     text-align: center;
@@ -141,12 +141,12 @@
   background: #fff;
 
   > * {
-		display: none;
+    display: none;
   }
 
-	&.active > *{
-		display: block;
-	}
+  &.active > * {
+    display: block;
+  }
 
   p {
     margin: 0;
@@ -187,7 +187,7 @@
   width: 100%;
 }
 
-input[type="email"] {
+input[type='email'] {
   color: $fontColor;
   background: $boxColor;
   border: 1px solid $borderColor;
@@ -269,7 +269,7 @@ hr.small {
   }
 
   .startInner {
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     color: $startFontColor;
     text-align: center;
     padding: 3rem;
@@ -357,7 +357,6 @@ hr.small {
   bottom: 0;
 }
 
-
 #gallery .controls a.close_opengal {
   display: none;
   right: 30px;
@@ -435,8 +434,8 @@ hr.small {
   margin-top: 1em;
 }
 
-@media (max-width: 767px){
-	.takePic {
-		bottom: auto;
-	}
+@media (max-width: 767px) {
+  .takePic {
+    bottom: auto;
+  }
 }

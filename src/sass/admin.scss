@@ -1,8 +1,8 @@
-@import "modules/theme";
-@import "partials/basic";
-@import "partials/button";
-@import "partials/fonts";
-@import "partials/toggle";
+@import 'modules/theme';
+@import 'partials/basic';
+@import 'partials/button';
+@import 'partials/fonts';
+@import 'partials/toggle';
 
 $error: #e74c3c;
 $success: #2ecc71;
@@ -21,7 +21,7 @@ $success: #2ecc71;
   background-attachment: fixed;
 }
 
-input[type="text"],
+input[type='text'],
 select {
   background: $boxColor;
   border: 1px solid $borderColor;
@@ -81,7 +81,6 @@ select {
     &:hover {
       background: $hoverPanelColor;
     }
-
   }
   .panel-body {
     display: none;
@@ -101,7 +100,7 @@ select {
   }
 
   &.init {
-    .panel-body{
+    .panel-body {
       display: block;
     }
   }
@@ -173,7 +172,7 @@ select {
   }
 }
 
-.reset-btn{
+.reset-btn {
   background: $error;
   position: absolute;
   top: 50px;

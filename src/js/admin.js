@@ -1,6 +1,6 @@
 /* globals i18n */
-$(function() {
-    $('.panel-heading').on('click', function() {
+$(function () {
+    $('.panel-heading').on('click', function () {
         const panel = $(this).parents('.panel');
         const others = $(this).parents('.accordion').find('.open').not(panel);
 
@@ -12,23 +12,23 @@ $(function() {
         others.find('.panel-body').slideUp('fast');
     });
 
-    $('.reset-btn').on('click', function() {
+    $('.reset-btn').on('click', function () {
         const msg = i18n('really_delete');
         const really = confirm(msg);
-        const data = {'type': 'reset'};
+        const data = {type: 'reset'};
         const elem = $(this);
         elem.addClass('saving');
         if (really) {
             $.ajax({
-                'url': '../api/admin.php',
-                'data': data,
-                'dataType': 'json',
-                'type': 'post',
-                'success': function(resp) {
+                url: '../api/admin.php',
+                data: data,
+                dataType: 'json',
+                type: 'post',
+                success: function (resp) {
                     elem.removeClass('saving');
                     elem.addClass(resp);
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         elem.removeClass('error success');
 
                         window.location.reload();
@@ -38,21 +38,21 @@ $(function() {
         }
     });
 
-    $('.save-btn').on('click', function(e) {
+    $('.save-btn').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
         elem.addClass('saving');
         const data = 'type=config&' + $('form').serialize();
         $.ajax({
-            'url': '../api/admin.php',
-            'data': data,
-            'dataType': 'json',
-            'type': 'post',
-            'success': function(resp) {
+            url: '../api/admin.php',
+            data: data,
+            dataType: 'json',
+            type: 'post',
+            success: function (resp) {
                 elem.removeClass('saving');
                 elem.addClass(resp);
 
-                setTimeout(function() {
+                setTimeout(function () {
                     elem.removeClass('error success');
 
                     if (resp === 'success') {
@@ -74,10 +74,10 @@ $(function() {
             success: (data) => {
                 let message = 'Error';
                 $('#checkVersion').empty();
-                console.log('data', data)
+                console.log('data', data);
                 if (!data.updateAvailable) {
                     message = i18n('using_latest_version');
-                } else if ((/^\d+\.\d+\.\d+$/u).test(data.availableVersion)) {
+                } else if (/^\d+\.\d+\.\d+$/u.test(data.availableVersion)) {
                     message = i18n('update_available');
                 } else {
                     message = i18n('test_update_available');
@@ -95,13 +95,13 @@ $(function() {
             }
         });
     });
-    $('option').mousedown(function(e) {
+    $('option').mousedown(function (e) {
         e.preventDefault();
         const originalScrollTop = $(this).parent().scrollTop();
         $(this).prop('selected', !$(this).prop('selected'));
         const that = this;
         $(this).parent().focus();
-        setTimeout(function() {
+        setTimeout(function () {
             $(that).parent().scrollTop(originalScrollTop);
         }, 0);
 

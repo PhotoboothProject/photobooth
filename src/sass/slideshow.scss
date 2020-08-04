@@ -1,7 +1,7 @@
-@import "modules/theme";
-@import "partials/fonts";
-@import "partials/basic";
-@import "partials/button";
+@import 'modules/theme';
+@import 'partials/fonts';
+@import 'partials/basic';
+@import 'partials/button';
 
 .images {
   h1 {
@@ -24,7 +24,7 @@
 
 #slideshow {
   img {
-    border:2px solid $borderColor;
+    border: 2px solid $borderColor;
     max-width: 80vw;
     max-height: 80%;
     width: auto;
@@ -37,7 +37,7 @@
     color: $fontColor;
     text-align: center;
     background-color: $hoverColor;
-    border:2px solid $borderColor;
+    border: 2px solid $borderColor;
   }
 }
 

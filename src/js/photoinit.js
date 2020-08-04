@@ -1,7 +1,6 @@
 /* exported initPhotoSwipeFromDOM */
 /* global photoBooth */
-function initPhotoSwipeFromDOM (gallerySelector) {
-
+function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
         ssRunning = false,
         ssOnce = false;
@@ -10,34 +9,37 @@ function initPhotoSwipeFromDOM (gallerySelector) {
         ssButtonClass = '.pswp__button--playpause';
 
     const parseThumbnailElements = function (container) {
-        return $(container).find('>a').map(function () {
-            const element = $(this);
+        return $(container)
+            .find('>a')
+            .map(function () {
+                const element = $(this);
 
-            const size = element.attr('data-size').split('x');
-            const medSize = element.attr('data-med-size').split('x');
+                const size = element.attr('data-size').split('x');
+                const medSize = element.attr('data-med-size').split('x');
 
-            // create slide object
-            const item = {
-                element: element.get(0),
-                src: element.attr('href'),
-                w: parseInt(size[0], 10),
-                h: parseInt(size[1], 10),
-                msrc: element.find('>img').attr('src'),
-                mediumImage: {
-                    src: element.attr('data-med'),
-                    w: parseInt(medSize[0], 10),
-                    h: parseInt(medSize[1], 10)
-                }
-            };
+                // create slide object
+                const item = {
+                    element: element.get(0),
+                    src: element.attr('href'),
+                    w: parseInt(size[0], 10),
+                    h: parseInt(size[1], 10),
+                    msrc: element.find('>img').attr('src'),
+                    mediumImage: {
+                        src: element.attr('data-med'),
+                        w: parseInt(medSize[0], 10),
+                        h: parseInt(medSize[1], 10)
+                    }
+                };
 
-            item.originalImage = {
-                src: item.src,
-                w: item.w,
-                h: item.h
-            };
+                item.originalImage = {
+                    src: item.src,
+                    w: item.w,
+                    h: item.h
+                };
 
-            return item;
-        }).get();
+                return item;
+            })
+            .get();
     };
 
     const onThumbnailClick = function (ev) {
@@ -71,7 +73,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
 
             shareEl: false,
             zoomEl: false,
-            fullscreenEl: false,
+            fullscreenEl: false
         };
 
         // Pass data to PhotoSwipe and initialize it
@@ -87,18 +89,19 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             imageSrcWillChange;
 
         gallery.listen('beforeResize', function () {
-
             let dpiRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
             dpiRatio = Math.min(dpiRatio, 2.5);
             realViewportWidth = gallery.viewportSize.x * dpiRatio;
 
-
-            if (realViewportWidth >= 1200 || (!gallery.likelyTouchDevice && realViewportWidth > 800) || screen.width > 1200) {
+            if (
+                realViewportWidth >= 1200 ||
+                (!gallery.likelyTouchDevice && realViewportWidth > 800) ||
+                screen.width > 1200
+            ) {
                 if (!useLargeImages) {
                     useLargeImages = true;
                     imageSrcWillChange = true;
                 }
-
             } else if (useLargeImages) {
                 useLargeImages = false;
                 imageSrcWillChange = true;
@@ -113,7 +116,6 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             }
 
             imageSrcWillChange = false;
-
         });
 
         gallery.listen('gettingData', function (_index, item) {
@@ -128,12 +130,12 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             }
         });
 
-        gallery.listen('afterChange', function() {
+        gallery.listen('afterChange', function () {
             const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
             $('.pswp__button--download').attr({
                 href: 'api/download.php?image=' + img,
-                download: img,
+                download: img
             });
 
             if (ssRunning && ssOnce) {
@@ -170,7 +172,9 @@ function initPhotoSwipeFromDOM (gallerySelector) {
             let img = gallery.currItem.src;
             img = img.split('\\').pop().split('/').pop();
 
-            $('<img>').attr('src', 'api/qrcode.php?filename=' + img).appendTo(pswpQR);
+            $('<img>')
+                .attr('src', 'api/qrcode.php?filename=' + img)
+                .appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');
         }
@@ -222,7 +226,7 @@ function initPhotoSwipeFromDOM (gallerySelector) {
     });
 
     /* slideshow management */
-    $(ssButtonClass).on('click touchstart', function(e) {
+    $(ssButtonClass).on('click touchstart', function (e) {
         e.preventDefault();
         e.stopPropagation();
         // toggle slideshow on/off
@@ -248,4 +252,3 @@ function initPhotoSwipeFromDOM (gallerySelector) {
 
     $(gallerySelector).on('click', onThumbnailClick);
 }
-

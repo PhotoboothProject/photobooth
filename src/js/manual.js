@@ -1,5 +1,5 @@
-$(function() {
-    $('.panel-heading').on('click', function() {
+$(function () {
+    $('.panel-heading').on('click', function () {
         const panel = $(this).parents('.panel');
         const others = $(this).parents('.accordion').find('.open').not(panel);
 
