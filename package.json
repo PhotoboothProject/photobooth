@@ -17,13 +17,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "gulp watch"
   },
-  "author": "",
+  "author": "Andreas Blaesius <andi@unlegacy-android.org>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andi34/photobooth.git"
+    "url": "git+https://github.com/andi34/photobooth.git"
   },
-  "homepage": "https://github.com/andi34/photobooth",
+  "homepage": "http://andi34.github.io/photobooth",
   "bugs": {
     "url": "https://github.com/andi34/photobooth/issues"
   },
