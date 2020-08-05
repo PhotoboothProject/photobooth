@@ -62,6 +62,11 @@ OLDFILES=(
     'resources/lang/gr.js'
 )
 
+OLDPATH=(
+    'node_modules/photoswipe'
+    'vendor/simple-translator'
+)
+
 WEBSERVER=(
     'libapache2-mod-php'
     'nginx'
@@ -126,9 +131,11 @@ for file in "${OLDFILES[@]}"; do
     fi
 done
 
-if [ -d "${booth_source}/node_modules/photoswipe" ]; then
-    info "[Info]      Deleting unused module: ${booth_source}/node_modules/photoswipe"
-    rm -rf ${booth_source}/node_modules/photoswipe
-fi
+for path in "${OLDPATH[@]}"; do
+    if [ -d "${booth_source}/${path}" ]; then
+        info "[Info]      Deleting deprecated directory: ${booth_source}/${path}"
+        rm -rf "${booth_source}/${path}"
+    fi
+done
 
 info "[Info]      Updated Photobooth"
