@@ -80,8 +80,6 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/marvinj/marvinj/release/');
     archive.file('node_modules/normalize.css/LICENSE.md');
     archive.file('node_modules/normalize.css/normalize.css');
-    archive.file('node_modules/photoswipe/LICENSE');
-    archive.directory('node_modules/photoswipe/dist/');
     archive.file('node_modules/whatwg-fetch/LICENSE');
     archive.file('node_modules/whatwg-fetch/dist/fetch.umd.js');
 

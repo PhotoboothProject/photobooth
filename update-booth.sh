@@ -87,7 +87,7 @@ apt dist-upgrade -y
 info "[Info]      Checking for webserver..."
 for server in "${WEBSERVER[@]}"; do
     if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        info "[Webserver] ${server} installed"
+        info "[Webserver] ${server} used."
         if [[ ${server} == "nginx" || ${server} == "lighttpd" ]]; then
             info "[NOTE]      You're using ${server} as your Webserver."
             info "[NOTE]      For a no-hassle-setup Apache2 Webserver is recommend!"
@@ -121,9 +121,14 @@ chown -R www-data:www-data ${booth_source}
 
 for file in "${OLDFILES[@]}"; do
     if [ -f "${booth_source}/${file}" ]; then
-        info "[Info] Deleting unused file: ${booth_source}/${file}"
+        info "[Info]      Deleting unused file: ${booth_source}/${file}"
         rm "${booth_source}/${file}"
     fi
 done
+
+if [ -d "${booth_source}/node_modules/photoswipe" ]; then
+    info "[Info]      Deleting unused module: ${booth_source}/node_modules/photoswipe"
+    rm -rf ${booth_source}/node_modules/photoswipe
+fi
 
 info "[Info]      Updated Photobooth"

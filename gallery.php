@@ -30,8 +30,8 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css" />
-	<link rel="stylesheet" href="node_modules/photoswipe/dist/default-skin/default-skin.css" />
+	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
+	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/style.css" />
 	<?php if ($config['gallery_bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
@@ -85,8 +85,8 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/js/vendor/EasePack.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/jquery.gsap.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/CSSPlugin.min.js"></script>
-	<script type="text/javascript" src="node_modules/photoswipe/dist/photoswipe.min.js"></script>
-	<script type="text/javascript" src="node_modules/photoswipe/dist/photoswipe-ui-default.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
