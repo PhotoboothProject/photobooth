@@ -23,4 +23,4 @@ jobs:
     - name: Install modules
       run: yarn install
     - name: Running gulp-sass
-      run: yarn build
+      run: yarn build:sass

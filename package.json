@@ -6,6 +6,7 @@
     "build": "npm run format && npm run build:faq && npm run build:gulp",
     "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.html --footer faq/footer.html",
     "build:gulp": "gulp",
+    "build:sass": "gulp sass",
     "eslint": "eslint src/js/*.js",
     "eslint:fix": "eslint src/js/*.js --fix",
     "format": "npm-run-all --parallel format:*",
