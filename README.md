@@ -169,3 +169,4 @@ Donators who donated 5€ or more get early access to new features/options i am 
 - [philippselle](https://github.com/philippselle)
 - [Natalie Stroud](https://github.com/stroudn1)
 - [jarettrude](https://github.com/jarettrude)
+- [Andreas Remdt](https://github.com/andreasremdt)
