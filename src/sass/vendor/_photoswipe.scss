@@ -1,0 +1,38 @@
+.pswp__button--close,
+.pswp__button--qrcode,
+.pswp__button--print,
+.pswp__button--print-chroma-keying,
+.pswp__button--download,
+.pswp__button--mail,
+.pswp__button--playpause {
+  color: $galleryButtonColor;
+  background: transparent !important;
+  font-size: 1.625em;
+  text-align: center;
+  width: calc(4.375 * 1em);
+  height: calc(4.375 * 1em);
+  line-height: calc(4.375 * 1em);
+
+  &:hover {
+    opacity: 1;
+  }
+
+  > i {
+    position: relative;
+    z-index: -1;
+  }
+}
+
+.pswp__qr {
+  width: calc(18.75 * 1em);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+
+  img {
+    width: 100%;
+  }
+}

@@ -1,0 +1,53 @@
+.github-fork-ribbon {
+  width: 12.1em;
+  height: 12.1em;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  pointer-events: none;
+  font-size: 0.8em;
+  text-decoration: none;
+  text-indent: -999999px;
+
+  &:before,
+  &:after {
+    position: absolute;
+    display: block;
+    width: 15.38em;
+    height: 1.54em;
+    top: 3.23em;
+    right: -3.23em;
+    transform: rotate(45deg);
+  }
+
+  &:hover:before {
+    background-color: $hoverColor;
+  }
+
+  &:before {
+    content: '';
+    padding: 0.38em 0;
+    background-color: $mainColor;
+    box-shadow: 0 0.15em 0.23em 0 rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+  }
+
+  &:after {
+    content: attr(data-ribbon);
+    color: $buttonFontColor;
+    font: 700 1em 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.54em;
+    text-decoration: none;
+    text-shadow: 0 -0.08em rgba(0, 0, 0, 0.5);
+    text-align: center;
+    text-indent: 0;
+    padding: 0.15em 0;
+    margin: 0.15em 0;
+    border-width: 0.08em 0;
+    border-style: dotted;
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+}

@@ -7,8 +7,10 @@ digicamcontrol/
 node_modules/
 package-lock.json
 resources/css/
+resources/js/
 stats
 trash
+vendor/simple-translator/
 .sass-cache
 /.htaccess
 .htpasswd

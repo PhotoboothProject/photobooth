@@ -69,17 +69,19 @@ function createArchive(fileName, archive) {
     archive.file('phpinfo.php');
     archive.file('README.md');
     archive.file('update-booth.sh');
+    archive.file('node_modules/@andreasremdt/simple-translator/LICENSE');
+    archive.file('node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js');
+    archive.directory('node_modules/font-awesome/');
     archive.file('node_modules/github-markdown-css/github-markdown.css');
     archive.file('node_modules/github-markdown-css/license');
-    archive.file('node_modules/normalize.css/LICENSE.md');
-    archive.file('node_modules/normalize.css/normalize.css');
-    archive.directory('node_modules/font-awesome/');
-    archive.file('node_modules/photoswipe/LICENSE');
-    archive.directory('node_modules/photoswipe/dist/');
     archive.file('node_modules/jquery/LICENSE.txt');
     archive.directory('node_modules/jquery/dist/');
     archive.file('node_modules/marvinj/LICENSE');
     archive.directory('node_modules/marvinj/marvinj/release/');
+    archive.file('node_modules/normalize.css/LICENSE.md');
+    archive.file('node_modules/normalize.css/normalize.css');
+    archive.file('node_modules/whatwg-fetch/LICENSE');
+    archive.file('node_modules/whatwg-fetch/dist/fetch.umd.js');
 
     output.on('close', function () {
         console.log(`Wrote ${archive.pointer()} bytes to ${fileName}`.verbose);

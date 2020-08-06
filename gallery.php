@@ -30,8 +30,8 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css" />
-	<link rel="stylesheet" href="node_modules/photoswipe/dist/default-skin/default-skin.css" />
+	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
+	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/style.css" />
 	<?php if ($config['gallery_bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
@@ -76,6 +76,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		</div>
 	</div>
 
+	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -84,24 +85,13 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/js/vendor/EasePack.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/jquery.gsap.min.js"></script>
 	<script type="text/javascript" src="resources/js/vendor/CSSPlugin.min.js"></script>
-	<script type="text/javascript" src="node_modules/photoswipe/dist/photoswipe.min.js"></script>
-	<script type="text/javascript" src="node_modules/photoswipe/dist/photoswipe-ui-default.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
-	<script type="module" src="resources/js/i18n.js"></script>
-	<script>
-		$(function() {
-			let reloadElement = $('<a class="gallery__reload">');
-			reloadElement.append('<i class="fa fa-refresh"></i>');
-			reloadElement.attr('href', '#');
-			reloadElement.on('click', () => photoBooth.reloadPage());
-			reloadElement.appendTo('.gallery__header');
-
-			$('.gallery__close').hide();
-
-			photoBooth.openGallery();
-		});
-	</script>
+	<script type="text/javascript" src="resources/js/gallery.js"></script>
+	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
+	<script type="text/javascript" src="resources/js/i18n.js"></script>
 </body>
 </html>

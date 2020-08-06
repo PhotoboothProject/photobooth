@@ -10,12 +10,6 @@ This is my personal Photobooth fork with some extras on top (more information ca
 ![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable2)
 ![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable2)
 
-**Please note:**
-
-Safari Browser on iOS 9 in not compatible with es6, which means Photobooth won't work. Supported browser can be found inside the [Wiki](https://github.com/andi34/photobooth/wiki#browser-support).
-If you like to use an old iPad anyway, please take a look [here (andi34/photobooth#47)](https://github.com/andi34/photobooth/issues/47).
-If I find enough time I'll post some updates from time to time
-
 ## :heart_eyes: Features
 
 - Works on Windows and Linux.
@@ -61,6 +55,7 @@ If I find enough time I'll post some updates from time to time
 ## Extras on my personal fork
 ### General changes:
 
+  - javascript transpiled to es5 to support older browsers (e.g. Safari 9)
   - install-raspbian: use Apache2 webserver by default again
   - added Slideshow option to Gallery
   - standalone slideshow via [localhost/slideshow](http://localhost/slideshow)

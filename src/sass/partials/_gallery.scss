@@ -1,0 +1,100 @@
+.gallery {
+  position: fixed;
+  width: 0px;
+  height: 0px;
+  left: 0;
+  top: 0;
+  background: $mainColor;
+  overflow: hidden;
+  color: $fontColor;
+  transition: width 0.3s, height 0.3s;
+  z-index: 1000;
+
+  h1 {
+    margin-top: 10px;
+    margin-left: 30px;
+  }
+
+  &--open {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
+  &__inner {
+    position: relative;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  &__header {
+    height: 100px;
+    width: 100%;
+    background: $mainColor;
+
+    > a {
+      position: absolute;
+      right: 30px;
+      top: 24px;
+      color: $galleryButtonColor;
+      font-size: 1.875em;
+      width: 50px;
+      height: 50px;
+      background: $hoverColor;
+      text-align: center;
+      line-height: 50px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    justify-content: center;
+
+    a {
+      display: block;
+      width: 33.333333333333%;
+      padding: 3px;
+      max-width: 500px;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      list-style: none;
+      border: 1px solid $borderColor;
+      display: block;
+    }
+
+    figure {
+      margin: 0;
+    }
+  }
+
+  figcaption {
+    background-color: $hoverColor;
+    text-align: center;
+    color: $fontColor;
+  }
+}
+
+@media (max-width: 800px) {
+  .pswp__button--arrow--left:before,
+  .pswp__button--arrow--right:before {
+    top: 50%;
+    position: fixed;
+  }
+  .pswp__button--arrow--left:before {
+    left: 5%;
+  }
+  .pswp__button--arrow--right:before {
+    right: 5%;
+  }
+}
+
+.gallery-button {
+  position: relative;
+  z-index: 100;
+}

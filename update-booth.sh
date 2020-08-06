@@ -62,6 +62,11 @@ OLDFILES=(
     'resources/lang/gr.js'
 )
 
+OLDPATH=(
+    'node_modules/photoswipe'
+    'vendor/simple-translator'
+)
+
 WEBSERVER=(
     'libapache2-mod-php'
     'nginx'
@@ -87,7 +92,7 @@ apt dist-upgrade -y
 info "[Info]      Checking for webserver..."
 for server in "${WEBSERVER[@]}"; do
     if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        info "[Webserver] ${server} installed"
+        info "[Webserver] ${server} used."
         if [[ ${server} == "nginx" || ${server} == "lighttpd" ]]; then
             info "[NOTE]      You're using ${server} as your Webserver."
             info "[NOTE]      For a no-hassle-setup Apache2 Webserver is recommend!"
@@ -121,8 +126,15 @@ chown -R www-data:www-data ${booth_source}
 
 for file in "${OLDFILES[@]}"; do
     if [ -f "${booth_source}/${file}" ]; then
-        info "[Info] Deleting unused file: ${booth_source}/${file}"
+        info "[Info]      Deleting unused file: ${booth_source}/${file}"
         rm "${booth_source}/${file}"
+    fi
+done
+
+for path in "${OLDPATH[@]}"; do
+    if [ -d "${booth_source}/${path}" ]; then
+        info "[Info]      Deleting deprecated directory: ${booth_source}/${path}"
+        rm -rf "${booth_source}/${path}"
     fi
 done
 
