@@ -6,6 +6,7 @@ Photobooth was initially developped by Andre Rinas, you can find his source [her
 
 This is my personal Photobooth fork with some extras on top (more information can be found [below](https://github.com/andi34/photobooth#extras-on-my-personal-fork)).
 
+[![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-blue.svg)](https://t.me/PhotoboothGroup)  
 
 ![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable2)
 ![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable2)
