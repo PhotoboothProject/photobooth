@@ -57,7 +57,7 @@ This is my personal Photobooth fork with some extras on top (more information ca
 ### General changes:
 
   - javascript transpiled to es5 to support older browsers (e.g. Safari 9)
-  - install-raspbian: use Apache2 webserver by default again
+  - install-raspbian: use Apache2 webserver by default for a no-hassle setup
   - added Slideshow option to Gallery
   - standalone slideshow via [localhost/slideshow](http://localhost/slideshow)
   - access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php)
@@ -71,9 +71,9 @@ This is my personal Photobooth fork with some extras on top (more information ca
   - Remove unused resources/fonts/style.css
   - language: use correkt ISO 639-1 Language Code for Greek
   - Optimize picture size on result screen
-  - Switch to blue-gray color theme by default
-  - Admin panel: switch to range config and use toggles instead checkboxes
-  - Switch to simple-translator for translations, use english as fallback langauage if a translation is missing. This also gives the possibility to easily translate Photobooth. [How to update or add translations?](https://github.com/andi34/photobooth/wiki/FAQ#how-to-update-or-add-translations)
+  - blue-gray color theme by default
+  - Admin panel: range slider and toggles
+  - Switch to simple-translator for translations, use english as fallback language if a translation is missing. This also gives the possibility to easily translate Photobooth. [How to update or add translations?](https://github.com/andi34/photobooth/wiki/FAQ#how-to-update-or-add-translations)
   - Add database name to picture name if database changed from default name
   - Close opened picture if photo/collage is triggered
   - Only take Photos via defined key if we aren't already
