@@ -71,6 +71,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 };
             },
 
+            focus: true,
+            clickToCloseNonZoomable: false,
+            closeOnScroll: false,
+            closeOnOutsideClick: false,
             shareEl: false,
             zoomEl: false,
             fullscreenEl: false
