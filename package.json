@@ -48,7 +48,10 @@
     "marvinj": "^1.0.0",
     "normalize.css": "^8.0.1",
     "npm-run-all": "^4.1.5",
-    "whatwg-fetch": "^3.4.0"
+    "whatwg-fetch": "^3.4.0",
+    "rpio": "^2.1.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

@@ -27,6 +27,8 @@ const photoBooth = (function () {
         currentCollageFile = '',
         imgFilter = config.default_imagefilter;
 
+    var io_client;
+
     const modal = {
         open: function (selector) {
             $(selector).addClass('modal--show');
@@ -93,6 +95,35 @@ const photoBooth = (function () {
         startPage.addClass('open');
         if (config.previewCamBackground) {
             api.startVideo('preview');
+        }
+
+        if (config.remotebuzzer_enabled) {
+            if (config.webserver_ip) {
+                io_client = io('http://' + config.webserver_ip + ':' + config.remotebuzzer_port);
+
+                console.log(
+                    ' Remote buzzer connecting to http://' + config.webserver_ip + ':' + config.remotebuzzer_port
+                );
+
+                io_client.on('photobooth-socket', function (data) {
+                    switch (data) {
+                        case 'start-picture':
+                            $('.resultInner').removeClass('show');
+                            api.thrill('photo');
+                            break;
+                        case 'start-collage':
+                            $('.resultInner').removeClass('show');
+                            api.thrill('collage');
+                            break;
+                    }
+                });
+
+                io_client.on('connect_failed', function () {
+                    console.log(' Remote buzzer unable to connect');
+                });
+            } else {
+                console.log(' Remote buzzer unable to connect - webserver_ip not defined in config');
+            }
         }
     };
 
@@ -173,6 +204,10 @@ const photoBooth = (function () {
             console.log('Taking photo:', takingPic);
         }
 
+        if (config.remotebuzzer_enabled) {
+            io_client.emit('photobooth-socket', 'in progress');
+        }
+
         if (config.previewCamBackground) {
             wrapper.css('background-color', config.colors.panel);
         }
@@ -240,6 +275,10 @@ const photoBooth = (function () {
             console.log('Take Picture:' + photoStyle);
         }
 
+        if (config.remotebuzzer_enabled) {
+            io_client.emit('photobooth-socket', 'in progress');
+        }
+
         if (config.previewFromCam) {
             if (config.previewCamTakesPic && !config.dev) {
                 videoSensor.width = videoView.videoWidth;
@@ -298,6 +337,10 @@ const photoBooth = (function () {
                             api.thrill('collage');
                         }, 1000);
                     } else {
+                        if (config.remotebuzzer_enabled) {
+                            io_client.emit('photobooth-socket', 'collage-wait-for-next');
+                        }
+
                         $('<a class="btn" href="#">' + i18n('nextPhoto') + '</a>')
                             .appendTo('.loading')
                             .click((ev) => {
@@ -384,6 +427,9 @@ const photoBooth = (function () {
 
                 if (data.error) {
                     api.errorPic(data);
+                    if (config.remotebuzzer_enabled) {
+                        io_client.emit('photobooth-socket', 'completed');
+                    }
                 } else {
                     api.renderPic(data.file);
                 }
@@ -394,6 +440,10 @@ const photoBooth = (function () {
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
+
+                if (config.remotebuzzer_enabled) {
+                    io_client.emit('photobooth-socket', 'completed');
+                }
             }
         });
     };
@@ -467,6 +517,10 @@ const photoBooth = (function () {
         };
 
         preloadImage.src = imageUrl;
+
+        if (config.remotebuzzer_enabled) {
+            io_client.emit('photobooth-socket', 'completed');
+        }
     };
 
     // add image to Gallery
@@ -789,12 +843,14 @@ const photoBooth = (function () {
         e.preventDefault();
 
         api.thrill('photo');
+        $('.newpic').blur();
     });
 
     $('.triggerCollage').on('click', function (e) {
         e.preventDefault();
 
         api.thrill('collage');
+        $('.newcollage').blur();
     });
 
     $(document).on('keyup', function (ev) {

@@ -190,6 +190,12 @@ $config['reset_remove_images'] = true;
 $config['reset_remove_mailtxt'] = true;
 $config['reset_remove_config'] = true;
 
+// WEBSOCKET REMOTE BUTTON PRESS
+$config['remotebuzzer_enabled'] = false;
+$config['remotebuzzer_port'] = 14711;
+$config['remotebuzzer_pin'] = 0;
+$config['remotebuzzer_nodebin'] = "/usr/bin/node";
+
 // PRESERVE EXIF
 $config['exiftool']['cmd'] = null;
 $config['exiftool']['msg'] = null;

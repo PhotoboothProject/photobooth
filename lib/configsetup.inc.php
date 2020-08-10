@@ -941,6 +941,31 @@ $configsetup = [
 			'value' => htmlentities($config['exiftool']['msg'])
 		]
 	],
+	'remotebuzzer' => [
+		'remotebuzzer_enabled' => [
+			'type' => 'checkbox',
+			'name' => 'remotebuzzer_enabled',
+			'value' => $config['remotebuzzer_enabled']
+		],
+		'port' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['remotebuzzer_port'],
+			'name' => 'remotebuzzer_port',
+			'value' => $config['remotebuzzer_port']
+		],
+		'pin' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['remotebuzzer_pin'],
+			'name' => 'remotebuzzer_pin',
+			'value' => $config['remotebuzzer_pin']
+		],
+		'nodebin' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['remotebuzzer_nodebin'],
+			'name' => 'remotebuzzer_nodebin',
+			'value' => $config['remotebuzzer_nodebin']
+ 		]
+ 	],
 	'reset' => [
 		'remove_images' => [
 			'type' => 'checkbox',

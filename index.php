@@ -247,5 +247,6 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
 
+	<?php require_once('lib/remotebuzzer_server.php'); ?>
 </body>
 </html>
