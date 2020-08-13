@@ -156,8 +156,16 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             $('.send-mail').removeClass('mail-active').fadeOut('fast');
         };
 
+        const stopSlideshow = function () {
+            if (ssRunning) {
+                setSlideshowState(ssButtonClass, false);
+                $('.pswp__button--playpause').toggleClass('fa-play fa-pause');
+            }
+        };
+
         gallery.listen('beforeChange', resetMailForm);
         gallery.listen('close', resetMailForm);
+        gallery.listen('close', stopSlideshow);
 
         gallery.init();
     };
