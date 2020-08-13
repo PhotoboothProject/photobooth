@@ -82,6 +82,7 @@ $imagelist = array_reverse($images);
 		<?php endif; ?>
 	</div>
 
+	<script src="../node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../resources/js/vendor/jquery.easing.1.3.js"></script>
@@ -91,6 +92,7 @@ $imagelist = array_reverse($images);
 	<script type="text/javascript" src="../resources/js/vendor/CSSPlugin.min.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script type="text/javascript" src="../resources/js/slideshow.js"></script>
-	<script type="module" src="../resources/js/i18n-sub.js"></script>
+	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
+	<script type="text/javascript" src="../resources/js/i18n-sub.js"></script>
 </body>
 </html>

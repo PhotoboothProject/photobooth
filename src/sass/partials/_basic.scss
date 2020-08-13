@@ -1,0 +1,69 @@
+* {
+  -ms-content-zooming: none;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-size: $fontSize;
+  width: 100%;
+  height: 100%;
+}
+
+h1,
+h2 {
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 33px 0;
+}
+
+h3 {
+  font-weight: normal;
+}
+
+.deselect ::selection {
+  background: transparent;
+  color: inherit;
+}
+.deselect ::-moz-selection {
+  background: transparent;
+  color: inherit;
+}
+.deselect {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Dosis', sans-serif;
+  font-weight: 300;
+  color: #2b2127;
+  font-size: 1em;
+  line-height: 1.5;
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
+  overflow: hidden;
+}
+
+p.text-muted {
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+.accordion {
+  a,
+  a:active,
+  a:focus {
+    color: $fontColor;
+    text-shadow: 0 0 5px black;
+  }
+}

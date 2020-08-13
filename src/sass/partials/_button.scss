@@ -1,0 +1,99 @@
+.btn {
+  padding: 20px 40px;
+  border: 0 none;
+  background: $mainColor;
+  display: inline-block;
+  color: $buttonFontColor;
+  text-decoration: none;
+  margin: auto;
+  width: 200px;
+  text-align: center;
+  font-size: 1em;
+
+  &--small {
+    padding: 12px 40px;
+  }
+
+  &--tiny {
+    padding: 3px 6px;
+  }
+
+  &--flex {
+    width: auto;
+  }
+
+  &--login {
+    padding: 12px 18px;
+    width: 50%;
+  }
+
+  &:active,
+  &:focus,
+  &:hover {
+    background: $hoverColor;
+  }
+}
+
+.btn.save-btn,
+.btn.install-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  -webkit-transition: background-color 0.2s linear;
+  -moz-transition: background-color 0.2s linear;
+  -o-transition: background-color 0.2s linear;
+  -ms-transition: background-color 0.2s linear;
+  transition: background-color 0.2s linear;
+
+  i {
+    display: none;
+  }
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+
+  span {
+    display: none;
+
+    &.sv {
+      display: inline;
+    }
+  }
+
+  &.error span.sv,
+  &.success span.sv,
+  &.saving span.sv {
+    display: none;
+  }
+
+  &.saving i {
+    display: inline-block;
+  }
+
+  &.error {
+    background-color: #d93939 !important;
+
+    span.er {
+      display: inline;
+    }
+  }
+
+  &.success {
+    background-color: #81d939 !important;
+
+    span.su {
+      display: inline;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .takePic,
+  .takeCollage {
+    padding: 10px 10px;
+  }
+}

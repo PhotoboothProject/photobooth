@@ -3,7 +3,7 @@
 # top-most EditorConfig file
 root = true
 
-[resources/js/**.js]
+[src/js/**.js]
 charset = utf-8
 indent_style = space
 indent_size = 4

@@ -6,15 +6,10 @@ Photobooth was initially developped by Andre Rinas, you can find his source [her
 
 This is my personal Photobooth fork with some extras on top (more information can be found [below](https://github.com/andi34/photobooth#extras-on-my-personal-fork)).
 
+[![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-blue.svg)](https://t.me/PhotoboothGroup)  
 
-![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable2)
-![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable2)
-
-**Please note:**
-
-Safari Browser on iOS 9 in not compatible with es6, which means Photobooth won't work. Supported browser can be found inside the [Wiki](https://github.com/andi34/photobooth/wiki#browser-support).
-If you like to use an old iPad anyway, please take a look [here (andi34/photobooth#47)](https://github.com/andi34/photobooth/issues/47).
-If I find enough time I'll post some updates from time to time
+[![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable2)](https://github.com/andi34/photobooth/actions?query=branch%3Astable2+workflow%3ALint)
+[![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable2)](https://github.com/andi34/photobooth/actions?query=branch%3Astable2+workflow%3Agulp-sass)
 
 ## :heart_eyes: Features
 
@@ -61,7 +56,8 @@ If I find enough time I'll post some updates from time to time
 ## Extras on my personal fork
 ### General changes:
 
-  - install-raspbian: use Apache2 webserver by default again
+  - javascript transpiled to es5 to support older browsers (e.g. Safari 9)
+  - install-raspbian: use Apache2 webserver by default for a no-hassle setup
   - added Slideshow option to Gallery
   - standalone slideshow via [localhost/slideshow](http://localhost/slideshow)
   - access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php)
@@ -75,9 +71,9 @@ If I find enough time I'll post some updates from time to time
   - Remove unused resources/fonts/style.css
   - language: use correkt ISO 639-1 Language Code for Greek
   - Optimize picture size on result screen
-  - Switch to blue-gray color theme by default
-  - Admin panel: switch to range config and use toggles instead checkboxes
-  - Switch to simple-translator for translations, use english as fallback langauage if a translation is missing. This also gives the possibility to easily translate Photobooth. [How to update or add translations?](https://github.com/andi34/photobooth/wiki/FAQ#how-to-update-or-add-translations)
+  - blue-gray color theme by default
+  - Admin panel: range slider and toggles
+  - Switch to simple-translator for translations, use english as fallback language if a translation is missing. This also gives the possibility to easily translate Photobooth. [How to update or add translations?](https://github.com/andi34/photobooth/wiki/FAQ#how-to-update-or-add-translations)
   - Add database name to picture name if database changed from default name
   - Close opened picture if photo/collage is triggered
   - Only take Photos via defined key if we aren't already
@@ -174,3 +170,4 @@ Donators who donated 5€ or more get early access to new features/options i am 
 - [philippselle](https://github.com/philippselle)
 - [Natalie Stroud](https://github.com/stroudn1)
 - [jarettrude](https://github.com/jarettrude)
+- [Andreas Remdt](https://github.com/andreasremdt)

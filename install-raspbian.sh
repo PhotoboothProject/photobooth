@@ -39,8 +39,6 @@ else
     info "### Used webserver: Apache Webserver"
 fi
 
-exit
-
 COMMON_PACKAGES=(
     'git'
     'gphoto2'

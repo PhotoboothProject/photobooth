@@ -1,0 +1,441 @@
+@import 'modules/theme';
+@import 'partials/fonts';
+@import 'partials/basic';
+@import 'partials/button';
+@import 'partials/gallery';
+@import 'partials/sidenav';
+@import 'partials/scrollbar';
+@import 'partials/modal';
+@import 'partials/ribbon';
+@import 'vendor/photoswipe';
+
+#wrapper {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: $mainColor;
+  background-image: $backgroundImage;
+  background-position: center center;
+  background-size: cover;
+}
+
+#result {
+  width: 100%;
+  background: center center no-repeat;
+  background-size: contain;
+  z-index: 2;
+}
+
+.resultInner {
+  display: flex;
+  position: absolute;
+  bottom: -64px;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  transition: bottom 0.5s;
+  z-index: 100;
+
+  &.show {
+    bottom: 0;
+  }
+
+  .btn {
+    width: auto;
+    padding: 20px 0;
+    text-align: center;
+    flex-grow: 1;
+    max-width: 250px;
+    margin: initial;
+  }
+  @media (max-width: 576px) {
+    span {
+      display: none;
+    }
+  }
+}
+
+#counter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 12em;
+  opacity: 0.2;
+}
+
+#counter.tick {
+  font-size: 1em;
+  opacity: 1;
+  transition: font-size 0.75s, opacity 0.75s;
+}
+
+.cheese {
+  position: absolute;
+  color: $cheeseColor;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 3em;
+}
+
+#loader {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center center;
+  color: $countdownColor;
+  z-index: 100;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+
+  &.showBackgroundImage {
+    &:after {
+      opacity: 0.5;
+    }
+  }
+
+  &.open {
+    display: flex;
+  }
+
+  .spinner {
+    color: $cheeseColor;
+    font-size: 5em;
+  }
+}
+
+.homebtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 0.875em;
+  width: 130px;
+}
+
+.qr {
+  display: none;
+  width: 300px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #fff;
+
+  > * {
+    display: none;
+  }
+
+  &.active > * {
+    display: block;
+  }
+
+  p {
+    margin: 0;
+    padding: 0 15px;
+    font-size: 1.6em;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.send-mail {
+  z-index: 1600;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $panelColor;
+  color: $fontColor;
+  padding: 25px 15px 15px;
+  min-width: 250px;
+  display: none;
+}
+
+#send-mail-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 1.75em;
+  cursor: pointer;
+}
+
+.mail-form-input {
+  padding: 15px;
+  margin: 12px 0;
+  width: 100%;
+}
+
+input[type='email'] {
+  color: $fontColor;
+  background: $boxColor;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.spacer {
+  clear: both;
+  height: 50px;
+  width: 100%;
+}
+
+.loading {
+  font-size: 3.125em;
+  text-align: center;
+  width: 100%;
+
+  p {
+    margin: 0 0 0.2em;
+  }
+
+  .btn {
+    font-size: 0.4em;
+  }
+}
+
+.error {
+  p {
+    color: red;
+  }
+}
+
+.stages {
+  display: none;
+  height: 100%;
+  width: 100%;
+}
+
+hr {
+  display: block;
+  height: 0.1em;
+  border: 0;
+  border-top: 0.1em solid $startFontColor;
+  margin: 1em 0;
+  padding: 0;
+}
+
+hr.small {
+  width: 50%;
+  display: block;
+  margin: auto;
+}
+
+#start {
+  &.open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fs-button {
+    position: fixed;
+    top: 5rem;
+    left: 0;
+  }
+
+  .gallery-button {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  .cups-button {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  .startInner {
+    background: rgba(0, 0, 0, 0.5);
+    color: $startFontColor;
+    text-align: center;
+    padding: 3rem;
+
+    .names {
+      margin-top: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .btn {
+      margin-top: 3px;
+      width: 80%;
+    }
+
+    @media (max-width: 1024px) {
+      padding: 1rem;
+
+      .names {
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .btn {
+        font-size: 0.8em;
+        margin-top: 1px;
+        width: 80%;
+      }
+
+      p,
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        padding: 0 0.9em;
+      }
+
+      p {
+        font-size: 0.8em;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      h2 {
+        font-size: 1.2em;
+      }
+
+      h3 {
+        font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .names {
+        margin-left: 2.5rem;
+        margin-right: 2.5rem;
+      }
+    }
+  }
+}
+
+.sliderImages {
+  display: none;
+  position: fixed;
+  top: 0;
+  z-index: 1000000;
+  background: #000;
+}
+
+.owl-carousel.owl-loaded {
+  display: none;
+}
+
+.overlay {
+  display: none;
+  background-color: #000;
+  width: 400px;
+  height: 200px;
+  position: fixed;
+  z-index: 1010;
+  left: 50%;
+  top: 50%;
+  right: 0;
+  bottom: 0;
+}
+
+#gallery .controls a.close_opengal {
+  display: none;
+  right: 30px;
+  top: 30px;
+  position: fixed;
+  z-index: 10000000;
+  font-size: 3.125em;
+  text-shadow: 0 2px 0 #000;
+  color: #fff;
+}
+
+#video--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#video--preview {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#ipcam--view {
+  background-image: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transform: rotate($ipCamPreviewRotation);
+
+  &.streaming {
+    background-image: $ipcamBackground;
+  }
+}
+
+.flip-horizontal {
+  transform: scaleX(-1);
+  filter: FlipH;
+}
+
+.chroma-control-bar {
+  margin-top: 12px;
+  text-align: center;
+
+  @media (max-width: 576px) {
+    span {
+      display: none;
+    }
+  }
+}
+
+.triggerPic,
+.triggerCollage,
+.closeGallery {
+  padding: 0;
+  margin: 0;
+  width: 1px;
+  height: 1px;
+}
+
+#useBuzzer {
+  font-size: 2em;
+  margin-top: 1em;
+}
+
+@media (max-width: 767px) {
+  .takePic {
+    bottom: auto;
+  }
+}
