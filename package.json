@@ -48,10 +48,10 @@
     "marvinj": "^1.0.0",
     "normalize.css": "^8.0.1",
     "npm-run-all": "^4.1.5",
-    "whatwg-fetch": "^3.4.0",
     "rpio": "^2.1.1",
     "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "whatwg-fetch": "^3.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -59,6 +59,7 @@
     "archiver": "^5.0.0",
     "colors": "^1.4.0",
     "eslint": "^7.8.1",
+    "eslint-plugin-node": "^11.1.0",
     "git-tag-version": "^1.3.1",
     "gulp-babel": "^8.0.0",
     "prettier": "^2.1.1"

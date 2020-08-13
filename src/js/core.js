@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM i18n */
+/* globals initPhotoSwipeFromDOM i18n io */
 
 const photoBooth = (function () {
     // vars
@@ -27,7 +27,7 @@ const photoBooth = (function () {
         currentCollageFile = '',
         imgFilter = config.default_imagefilter;
 
-    var io_client;
+    let ioClient;
 
     const modal = {
         open: function (selector) {
@@ -99,26 +99,30 @@ const photoBooth = (function () {
 
         if (config.remotebuzzer_enabled) {
             if (config.webserver_ip) {
-                io_client = io('http://' + config.webserver_ip + ':' + config.remotebuzzer_port);
+                ioClient = io('http://' + config.webserver_ip + ':' + config.remotebuzzer_port);
 
                 console.log(
                     ' Remote buzzer connecting to http://' + config.webserver_ip + ':' + config.remotebuzzer_port
                 );
 
-                io_client.on('photobooth-socket', function (data) {
+                ioClient.on('photobooth-socket', function (data) {
                     switch (data) {
                         case 'start-picture':
                             $('.resultInner').removeClass('show');
                             api.thrill('photo');
                             break;
                         case 'start-collage':
-                            $('.resultInner').removeClass('show');
-                            api.thrill('collage');
+                            if (config.use_collage) {
+                                $('.resultInner').removeClass('show');
+                                api.thrill('collage');
+                            }
+                            break;
+                        default:
                             break;
                     }
                 });
 
-                io_client.on('connect_failed', function () {
+                ioClient.on('connect_failed', function () {
                     console.log(' Remote buzzer unable to connect');
                 });
             } else {
@@ -205,7 +209,7 @@ const photoBooth = (function () {
         }
 
         if (config.remotebuzzer_enabled) {
-            io_client.emit('photobooth-socket', 'in progress');
+            ioClient.emit('photobooth-socket', 'in progress');
         }
 
         if (config.previewCamBackground) {
@@ -276,7 +280,7 @@ const photoBooth = (function () {
         }
 
         if (config.remotebuzzer_enabled) {
-            io_client.emit('photobooth-socket', 'in progress');
+            ioClient.emit('photobooth-socket', 'in progress');
         }
 
         if (config.previewFromCam) {
@@ -338,7 +342,7 @@ const photoBooth = (function () {
                         }, 1000);
                     } else {
                         if (config.remotebuzzer_enabled) {
-                            io_client.emit('photobooth-socket', 'collage-wait-for-next');
+                            ioClient.emit('photobooth-socket', 'collage-wait-for-next');
                         }
 
                         $('<a class="btn" href="#">' + i18n('nextPhoto') + '</a>')
@@ -428,7 +432,7 @@ const photoBooth = (function () {
                 if (data.error) {
                     api.errorPic(data);
                     if (config.remotebuzzer_enabled) {
-                        io_client.emit('photobooth-socket', 'completed');
+                        ioClient.emit('photobooth-socket', 'completed');
                     }
                 } else {
                     api.renderPic(data.file);
@@ -442,7 +446,7 @@ const photoBooth = (function () {
                 });
 
                 if (config.remotebuzzer_enabled) {
-                    io_client.emit('photobooth-socket', 'completed');
+                    ioClient.emit('photobooth-socket', 'completed');
                 }
             }
         });
@@ -519,7 +523,7 @@ const photoBooth = (function () {
         preloadImage.src = imageUrl;
 
         if (config.remotebuzzer_enabled) {
-            io_client.emit('photobooth-socket', 'completed');
+            ioClient.emit('photobooth-socket', 'completed');
         }
     };
 

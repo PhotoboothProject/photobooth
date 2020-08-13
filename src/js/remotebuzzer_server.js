@@ -1,54 +1,108 @@
-'use strict';
+/* VARIABLES */
+const myPid = process.pid;
+let mTimeTrigger = 0,
+    collageInProgress = false;
 
-/* PARSE COMMAND LINE */
-var myArgs = process.argv.slice(2);
+let triggerArmed = true,
+    buttonIsPressed = false;
 
-var socketPort = myArgs[0],
-    pinNum = myArgs[1],
-    $myPIDFileFolder = myArgs[2];
+const rpio = require('rpio');
 
-var myPid = process.pid,
-    mTimeTrigger = 0,
-    collageInProgress = false,
-    ListOfClientIDs = [];
+/* HANDLE EXCEPTIONS */
 
-var trigger_armed = true,
-    buttonDown = false;
+process.on('uncaughtException', function (err) {
+    console.log('socket.io server [', myPid, ']: Error: ', err.message);
+    fs.unlink(pidFilename, function (error) {
+        if (error) {
+            console.log('socket.io server [', myPid, ']: Error deleting PID file ', error.message);
+        }
+    });
+    console.log('socket.io server [', myPid, ']: Exiting');
 
-console.log('socket.io server [', myPid, ']: Requested to start on port ', socketPort, ', Pin ', pinNum);
+    /* got to exit now and here - can not recover from error */
+
+    process.exit();
+});
+
+/* SOURCE PHOTOBOOTH CONFIG */
+
+const {execSync} = require('child_process');
+const stdout = execSync('cd api && php ./config.php').toString();
+const config = JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
 
 /* WRITE PROCESS PID FILE */
 
-var fs = require('fs');
+const pidFilename = config.folders.tmp + '/remotebuzzer_server.pid';
 
-var $filename = $myPIDFileFolder + '/remotebuzzer_server.pid';
-fs.writeFile($filename, myPid, function (err) {
+const fs = require('fs');
+
+fs.writeFile(pidFilename, myPid, function (err) {
     if (err) {
-        console.log('socket.io server [', myPid, ']: Unable to write PID file ', $filename, ' Error:', err.message);
-        process.exit();
-    } else {
-        console.log('socket.io server [', myPid, ']: PID file created ', $filename);
+        throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
     }
-});
-/* HANDLE EXCEPTIONS */
 
-process.on('uncaughtException', function (err, origin) {
-    console.log('socket.io server [', myPid, ']: uncaught error: ', err.message);
-    fs.unlink($filename, function (error) {
-        if (error) {
-            console.log('socket.io server [', myPid, ']: Error while trying to delete PID file ', error.message);
-        } else {
-            console.log('socket.io server [', myPid, ']: Removed PID file ', $filename);
-        }
-    });
-    console.log('socket.io server [', myPid, ']: Exiting process');
-    process.exit();
+    console.log('socket.io server [', myPid, ']: PID file created [', pidFilename, ']');
 });
+
 /* START WEBSOCKET SERVER */
 
-var io_server = require('socket.io')(socketPort);
+console.log(
+    'socket.io server [',
+    myPid,
+    ']: Requested to start on port ',
+    config.remotebuzzer_port,
+    ', Pin ',
+    config.remotebuzzer_pin
+);
 
-io_server.on('connection', function (client) {
+function photoboothAction(type) {
+    switch (type) {
+        case 'picture':
+            triggerArmed = false;
+            collageInProgress = false;
+            console.log(
+                'socket.io server [',
+                myPid,
+                ']: Photobooth trigger picture : [ photobooth-socket ] => [ All Clients ]: command [ picture ]'
+            );
+            ioServer.emit('photobooth-socket', 'start-picture');
+            break;
+
+        case 'collage':
+            triggerArmed = false;
+            collageInProgress = true;
+            console.log(
+                'socket.io server [',
+                myPid,
+                ']: Photobooth trigger collage : [ photobooth-socket ]  => [ All Clients ]: command [ collage ]'
+            );
+            ioServer.emit('photobooth-socket', 'start-collage');
+            break;
+
+        case 'completed':
+            triggerArmed = true;
+            collageInProgress = false;
+            console.log(
+                'socket.io server [',
+                myPid,
+                ']: Photobooth activity completed : [ photobooth-socket ] => [ All Clients ]: command [ completed ]'
+            );
+            ioServer.emit('photobooth-socket', 'completed');
+            break;
+
+        case 'reset':
+            photoboothAction('completed');
+            break;
+
+        default:
+            console.log('socket.io server [', myPid, ']: Photobooth action [', type, '] not implemented - ignoring');
+            break;
+    }
+}
+
+const ioServer = require('socket.io')(config.remotebuzzer_port);
+
+ioServer.on('connection', function (client) {
     console.log('socket.io server [', myPid, ']: New client connected - ID', client.id);
     client.on('photobooth-socket', function (data) {
         console.log(
@@ -60,134 +114,113 @@ io_server.on('connection', function (client) {
             data,
             ']'
         );
+
         /* COMMANDS RECEIVED */
 
         switch (data) {
             case 'completed':
-                trigger_armed = true;
-                collageInProgress = false;
-                ListOfClientIDs.splice(ListOfClientIDs.indexOf(client.id), 1);
-                if (!ListOfClientIDs.length) io_server.emit('photobooth-socket', 'completed');
+                photoboothAction('completed');
                 break;
 
             case 'in progress':
-                trigger_armed = false;
-                if (ListOfClientIDs.indexOf(client.id) < 0) ListOfClientIDs.push(client.id);
+                triggerArmed = false;
                 break;
 
             case 'start-picture':
-                trigger_armed = false;
-                io_server.emit('photobooth-socket', 'start-picture');
+                photoboothAction('picture');
                 break;
 
             case 'start-collage':
-                trigger_armed = false;
-                io_server.emit('photobooth-socket', 'start-collage');
+                photoboothAction('collage');
                 break;
 
             case 'collage-wait-for-next':
-                console.log('socket.io server [', myPid, ']: COLLAGE - received event "collage-wait-for-next"');
-                trigger_armed = true;
+                triggerArmed = true;
+                break;
+
+            default:
+                console.log('socket.io server [', myPid, ']: Received unknown command [', data, '] - ignoring');
                 break;
         }
     });
     client.on('disconnect', function () {
-        var pos = ListOfClientIDs.indexOf(client.id);
+        console.log('socket.io server [', myPid, ']: Client disconnected - ID ', client.id);
 
-        if (pos != -1) {
-            ListOfClientIDs.splice(pos, 1);
-            console.log(
-                'socket.io server [',
-                myPid,
-                ']: Active client disconnected - ',
-                client.id,
-                ' - removed from array pos ',
-                pos,
-                ' - remaining ',
-                ListOfClientIDs
-            );
-
-            if (!ListOfClientIDs.length) {
-                console.log(
-                    'socket.io server [',
-                    myPid,
-                    ']: No more active clients connected - removing lock and arming trigger'
-                );
-                trigger_armed = true;
-                collageInProgress = false;
-            }
-        } else {
-            console.log('socket.io server [', myPid, ']: Inactive client disconnected - ID ', client.id);
+        if (ioServer.engine.clientsCount == 0) {
+            console.log('socket.io server [', myPid, ']: No more clients connected - removing lock and arming trigger');
+            triggerArmed = true;
+            collageInProgress = false;
         }
     });
 });
 console.log('socket.io server [', myPid, ']: socket.io server started');
+
 /* LISTEN TO GPIO STATUS https://www.npmjs.com/package/rpio */
 
-if (pinNum >= 1 && pinNum <= 40) {
-    var pollcb = function pollcb(pin) {
-        /* Hysteresis to filter false positives */
-        rpio.msleep(20);
-        if (!trigger_armed) return;
+if (config.remotebuzzer_pin >= 1 && config.remotebuzzer_pin <= 40) {
+    const pollcb = function pollcb(pin) {
+        /* if there is some activity in progress ignore GPIO pin for now */
+        if (!triggerArmed) {
+            return;
+        }
 
         if (rpio.read(pin)) {
-            /* Button released */
-            var dTimeTrigger = Date.now('millis') - mTimeTrigger;
-            if (!buttonDown) return;
+            if (!buttonIsPressed) {
+                return;
+            }
+            buttonIsPressed = false;
+
+            /* Button released - action following upwards flank transition of GPIO pin 1 -> 0 */
+            const dTimeTrigger = Date.now('millis') - mTimeTrigger;
 
             if (dTimeTrigger > 10000) {
-                /* reset server state machine */
+                /* Too long button press - timeout - reset server state machine */
                 console.log(
                     'socket.io server [',
                     myPid,
                     ']: Reset server state machine - Time since button press [ms] ',
                     dTimeTrigger
                 );
-                trigger_armed = true;
-                collageInProgress = false;
-                return;
-            } else if (dTimeTrigger <= 2000 && !collageInProgress) {
+                photoboothAction('reset');
+            } else if (
+                !config.use_collage ||
+                (dTimeTrigger <= config.remotebuzzer_collagetime * 1000 && !collageInProgress)
+            ) {
                 /* Picture */
                 console.log(
                     'socket.io server [',
                     myPid,
-                    ']: Button released - Normal  Press - Time since button press [ms] ',
+                    ']: GPIO button released - normal press - time since button press [ms] ',
                     dTimeTrigger
                 );
-                console.log('socket.io server [', myPid, ']: THRILL PICTURE - Notify all clients');
-                io_server.emit('photobooth-socket', 'start-picture');
-                trigger_armed = false;
+                photoboothAction('picture');
             } else {
                 /* Collage */
                 console.log(
                     'socket.io server [',
                     myPid,
-                    ']: Button released - Long Press - Time since button press [ms] ',
+                    ']: GPIO button released - long press - time since button press [ms] ',
                     dTimeTrigger
                 );
-                console.log('socket.io server [', myPid, ']: THRILL COLLAGE - Notify all clients');
-                io_server.emit('photobooth-socket', 'start-collage');
-                collageInProgress = true;
-                trigger_armed = false;
+                photoboothAction('collage');
             }
-
-            buttonDown = false;
-            return;
         } else {
-            /* Button pressed - notify clients */
-            if (trigger_armed) {
-                console.log('socket.io server [', myPid, ']: Button pressed on pin P', pin);
-                mTimeTrigger = Date.now('millis');
-                buttonDown = true;
+            /* Button pressed - prepare state machine */
+
+            if (buttonIsPressed) {
+                return;
             }
+            buttonIsPressed = true;
+
+            console.log('socket.io server [', myPid, ']: GPIO button pressed on pin P', pin);
+            mTimeTrigger = Date.now('millis');
         }
+
+        /* Hysteresis to filter false positives */
+        rpio.msleep(200);
     };
 
-    console.log('socket.io server [', myPid, ']: Connecting to Raspberry pin P', pinNum);
-
-    var rpio = require('rpio');
-
-    buttonDown = false;
-    rpio.open(pinNum, rpio.INPUT, rpio.PULL_UP);
-    rpio.poll(pinNum, pollcb, rpio.POLL_BOTH);
+    console.log('socket.io server [', myPid, ']: Connecting to Raspberry pin P', config.remotebuzzer_pin);
+    rpio.open(config.remotebuzzer_pin, rpio.INPUT, rpio.PULL_UP);
+    rpio.poll(config.remotebuzzer_pin, pollcb, rpio.POLL_BOTH);
 }

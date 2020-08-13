@@ -947,6 +947,16 @@ $configsetup = [
 			'name' => 'remotebuzzer_enabled',
 			'value' => $config['remotebuzzer_enabled']
 		],
+		'collagetime' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['remotebuzzer_collagetime'],
+			'name' => 'remotebuzzer_collagetime',
+			'value' => $config['remotebuzzer_collagetime'],
+			'range_min' => 1,
+			'range_max' => 6,
+			'range_step' => 1,
+			'unit' => 'seconds'
+		],
 		'port' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['remotebuzzer_port'],
@@ -964,7 +974,12 @@ $configsetup = [
 			'placeholder' => $defaultConfig['remotebuzzer_nodebin'],
 			'name' => 'remotebuzzer_nodebin',
 			'value' => $config['remotebuzzer_nodebin']
- 		]
+ 		],
+		'logfile' => [
+			'type' => 'hidden',
+			'name' => 'remotebuzzer_logfile',
+			'value' => $config['remotebuzzer_logfile']
+		]
  	],
 	'reset' => [
 		'remove_images' => [

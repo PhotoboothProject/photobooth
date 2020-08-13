@@ -106,6 +106,8 @@ if ($data['type'] == 'config') {
     }
 }
 
+require_once('../lib/remotebuzzer_config.php');
+
 function arrayRecursiveDiff($aArray1, $aArray2)
 {
     $aReturn = array();

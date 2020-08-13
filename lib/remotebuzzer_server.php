@@ -5,15 +5,14 @@
 	{
 		if ($config['dev'])
 		{
-			$logfile = $config['folders']['tmp']."/io_server.log";
+			$logfile = $config['folders']['tmp']."/".$config['remotebuzzer_logfile'];
 		}
 		else
 		{ $logfile = "/dev/null"; }
 
 		print ("\t<!-- Remote Buzzer Enabled --- starting server -->\n");
 
-   		proc_close(proc_open ($config['remotebuzzer_nodebin']." resources/js/remotebuzzer_server.js ".$config['remotebuzzer_port']." ".$config['remotebuzzer_pin']." ".$config['folders']['tmp']." 1>>".$logfile." 2>&1 &", array(), $foo));
-			
+		proc_close(proc_open ($config['remotebuzzer_nodebin']." resources/js/remotebuzzer_server.js 1>>".$logfile." 2>&1 &", array(), $foo));
 
 	} else {
 	       print ("\t<!-- Remote Buzzer Enabled --- server already started (port in use) -->\n");

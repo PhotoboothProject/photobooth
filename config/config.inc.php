@@ -190,11 +190,12 @@ $config['reset_remove_images'] = true;
 $config['reset_remove_mailtxt'] = true;
 $config['reset_remove_config'] = true;
 
-// WEBSOCKET REMOTE BUTTON PRESS
+// REMOTE BUZZER
 $config['remotebuzzer_enabled'] = false;
 $config['remotebuzzer_port'] = 14711;
-$config['remotebuzzer_pin'] = 0;
-$config['remotebuzzer_nodebin'] = "/usr/bin/node";
+$config['remotebuzzer_pin'] = 40;
+$config['remotebuzzer_nodebin'] = '/usr/bin/node';
+$config['remotebuzzer_collagetime'] = '2'; // control time to distinguish picture from collage
 
 // PRESERVE EXIF
 $config['exiftool']['cmd'] = null;

@@ -12,5 +12,14 @@ if (file_exists($filename))
 	posix_kill($procPID, 9);
 
 	unlink ($filename);
+
+	if ($config['dev'])
+	{
+		$logfile = $config['folders']['tmp']."/".$config['remotebuzzer_logfile'];
+		$fp = fopen("../".$logfile, 'a');//opens file in append mode.
+		fwrite($fp, "socket.io server [ config ]: Config has changed, kill existing remotebuzzer_server (PID ".$procPID.") and removed PID file\n");
+		fclose($fp);
+	}		
+
 }
 ?>

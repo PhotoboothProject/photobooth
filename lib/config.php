@@ -68,6 +68,8 @@ $config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
 
 $config['collage_limit'] = 4;
 
+$config['remotebuzzer_logfile'] = 'io_server.log';
+
 $defaultConfig = $config;
 
 if (file_exists($my_config_file)) {

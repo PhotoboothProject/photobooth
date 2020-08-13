@@ -2,9 +2,13 @@
     "env": {
         "browser": true,
         "es6": true,
-        "jquery": true
+        "jquery": true,
+        "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+	"eslint:recommended",
+	"plugin:node/recommended"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
@@ -190,7 +194,7 @@
         "no-path-concat": "error",
         "no-plusplus": "off",
         "no-process-env": "error",
-        "no-process-exit": "error",
+        "no-process-exit": "off",
         "no-proto": "error",
         "no-restricted-globals": "error",
         "no-restricted-imports": "error",
@@ -204,7 +208,7 @@
         "no-sequences": "error",
         "no-shadow": "error",
         "no-spaced-func": "error",
-        "no-sync": "error",
+        "no-sync": "off",
         "no-tabs": "error",
         "no-template-curly-in-string": "error",
         "no-ternary": "off",
