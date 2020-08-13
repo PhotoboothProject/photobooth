@@ -1,6 +1,6 @@
 {
   "name": "photobooth",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "scripts": {
     "build": "npm run format && npm run build:faq && npm run build:gulp",
