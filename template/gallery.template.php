@@ -25,12 +25,14 @@
             }
 
             $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
-            $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
-            if (!is_readable($filename_thumb)) {
-                $filename_thumb = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
-            }
-            $imageinfo = getimagesize($filename_photo);
-            $imageinfoThumb = getimagesize($filename_thumb);
+            if (is_readable($filename_photo)) {
+                $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+
+                if (!is_readable($filename_thumb)) {
+                    $filename_thumb = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+                }
+                $imageinfo = getimagesize($filename_photo);
+                $imageinfoThumb = getimagesize($filename_thumb);
             ?>
 
 			<a href="<?=$filename_photo?>" data-size="<?=$imageinfo[0]?>x<?=$imageinfo[1]?>"
@@ -40,6 +42,7 @@
 					<figcaption><?=$date?></figcaption>
 				</figure>
 			</a>
+	<?php } ?>
 				<?php endforeach; ?>
 				<?php endif; ?>
 		</div>
