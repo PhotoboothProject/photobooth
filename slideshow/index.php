@@ -70,6 +70,7 @@ $imagelist = array_reverse($images);
 			$filename_photo = '../' . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
 		}
 
+		if (is_readable($filename_photo)) {
 		?>
 		<div class="center">
 			<figure>
@@ -77,7 +78,7 @@ $imagelist = array_reverse($images);
 				<figcaption><?=$date?></figcaption>
 			</figure>
 		</div>
-
+		<?php } ?>
 		<?php endforeach; ?>
 		<?php endif; ?>
 	</div>
