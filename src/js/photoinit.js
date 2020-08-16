@@ -72,12 +72,13 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             },
 
             focus: true,
-            clickToCloseNonZoomable: false,
-            closeOnScroll: false,
-            closeOnOutsideClick: false,
+            clickToCloseNonZoomable: config.clickToCloseNonZoomablefalse,
+            closeOnScroll: config.closeOnScroll,
+            closeOnOutsideClick: config.closeOnOutsideClick,
             shareEl: false,
-            zoomEl: false,
-            fullscreenEl: false
+            zoomEl: config.zoomEl,
+            fullscreenEl: config.fullscreenEl,
+            bgOpacity: config.bgOpacity
         };
 
         // Pass data to PhotoSwipe and initialize it

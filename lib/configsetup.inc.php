@@ -719,6 +719,41 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'gallery_bottom_bar',
 			'value' => $config['gallery_bottom_bar']
+		],
+		'clickToCloseNonZoomable' => [
+			'type' => 'checkbox',
+			'name' => 'clickToCloseNonZoomable',
+			'value' => $config['clickToCloseNonZoomable']
+		],
+		'closeOnScroll' => [
+			'type' => 'checkbox',
+			'name' => 'closeOnScroll',
+			'value' => $config['closeOnScroll']
+		],
+		'closeOnOutsideClick' => [
+			'type' => 'checkbox',
+			'name' => 'closeOnOutsideClick',
+			'value' => $config['closeOnOutsideClick']
+		],
+		'zoomEl' => [
+			'type' => 'checkbox',
+			'name' => 'zoomEl',
+			'value' => $config['zoomEl']
+		],
+		'fullscreenEl' => [
+			'type' => 'checkbox',
+			'name' => 'fullscreenEl',
+			'value' => $config['fullscreenEl']
+		],
+		'bgOpacity' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['bgOpacity'],
+			'name' => 'bgOpacity',
+			'value' => $config['bgOpacity'],
+			'range_min' => 0,
+			'range_max' => 1,
+			'range_step' => 0.05,
+			'unit' => 'dot'
 		]
 	],
 	'mail' => [
