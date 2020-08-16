@@ -4,7 +4,10 @@
 .pswp__button--print-chroma-keying,
 .pswp__button--download,
 .pswp__button--mail,
-.pswp__button--playpause {
+.pswp__button--playpause,
+.pswp__button--share,
+.pswp__button--zoom,
+.pswp__button--fs {
   color: $galleryButtonColor;
   background: transparent !important;
   font-size: 1.625em;

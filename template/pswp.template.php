@@ -23,12 +23,12 @@
                 <!--  Controls are self-explanatory. Order can be changed. -->
 
                 <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"><i
-                        class="fa fa-times"></i></button>
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"><i class="fa fa-times"></i></button>
+                <button class="pswp__button pswp__button--share" title="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
 
+                <!-- custom buttons: -->
                 <?php if ($config['use_mail']): ?>
                 <button class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
                 <?php endif; ?>
@@ -49,7 +49,6 @@
                 <button class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 
-                <!-- custom slideshow button: -->
                 <button class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
