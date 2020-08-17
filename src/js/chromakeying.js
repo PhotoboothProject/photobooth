@@ -1,4 +1,4 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n */
 /* exported setBackgroundImage */
 let mainImage;
 let mainImageWidth;
@@ -129,19 +129,49 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 }
 
 function printImage(filename, cb) {
-    console.log('print', filename);
-    $.get(
-        'api/print.php',
-        {
-            filename: filename
-        },
-        function (data) {
-            console.log('print data', data);
-            if (cb) {
-                cb(data);
+    const errormsg = i18n('error');
+
+    setTimeout(function () {
+        $.ajax({
+            method: 'GET',
+            url: 'api/print.php',
+            data: {
+                filename: filename
+            },
+            success: (data) => {
+                console.log('Picture processed: ', data);
+
+                if (data.error) {
+                    console.log('An error occurred: ', data.error);
+                    $('#print_mesg').empty();
+                    $('#print_mesg').html(
+                        '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
+                    );
+                }
+
+                setTimeout(function () {
+                    $('#print_mesg').removeClass('modal--show');
+                    if (data.error) {
+                        $('#print_mesg').empty();
+                        $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
+                    }
+                    cb();
+                }, 5000);
+            },
+            error: (jqXHR, textStatus) => {
+                console.log('An error occurred: ', textStatus);
+                $('#print_mesg').empty();
+                $('#print_mesg').html('<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>');
+
+                setTimeout(function () {
+                    $('#print_mesg').removeClass('modal--show');
+                    $('#print_mesg').empty();
+                    $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
+                    cb();
+                }, 5000);
             }
-        }
-    );
+        });
+    }, 1000);
 }
 
 function saveImage(cb) {
@@ -163,7 +193,6 @@ function saveImage(cb) {
 
 function printImageHandler(ev) {
     ev.preventDefault();
-
     $('#print_mesg').addClass('modal--show');
 
     setTimeout(function () {
@@ -173,10 +202,7 @@ function printImageHandler(ev) {
             }
 
             printImage(data.filename, () => {
-                setTimeout(function () {
-                    $('#print_mesg').removeClass('modal--show');
-                    $('#print-btn').blur();
-                }, 5000);
+                $('#print-btn').blur();
             });
         });
     }, 1000);

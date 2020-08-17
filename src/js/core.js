@@ -550,19 +550,51 @@ const photoBooth = (function () {
 
     api.printImage = function (imageSrc, cb) {
         modal.open('#print_mesg');
+        const errormsg = i18n('error');
 
         setTimeout(function () {
             $.ajax({
-                url: 'api/print.php?filename=' + encodeURI(imageSrc)
-            }).done(function (data) {
-                if (config.dev) {
-                    console.log(data);
-                }
+                method: 'GET',
+                url: 'api/print.php',
+                data: {
+                    filename: imageSrc
+                },
+                success: (data) => {
+                    console.log('Picture processed: ', data);
 
-                setTimeout(function () {
-                    modal.close('#print_mesg');
-                    cb();
-                }, 5000);
+                    if (data.error) {
+                        console.log('An error occurred: ', data.error);
+                        $('#print_mesg').empty();
+                        $('#print_mesg').html(
+                            '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
+                        );
+                    }
+
+                    setTimeout(function () {
+                        modal.close('#print_mesg');
+                        if (data.error) {
+                            $('#print_mesg').empty();
+                            $('#print_mesg').html(
+                                '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                            );
+                        }
+                        cb();
+                    }, 5000);
+                },
+                error: (jqXHR, textStatus) => {
+                    console.log('An error occurred: ', textStatus);
+                    $('#print_mesg').empty();
+                    $('#print_mesg').html(
+                        '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
+                    );
+
+                    setTimeout(function () {
+                        modal.close('#print_mesg');
+                        $('#print_mesg').empty();
+                        $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
+                        cb();
+                    }, 5000);
+                }
             });
         }, 1000);
     };
