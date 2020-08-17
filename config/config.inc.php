@@ -126,12 +126,12 @@ $config['show_date'] = true; // only works if file_naming = 'dateformatted'
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 $config['gallery_bottom_bar'] = true;
 // PhotoSwipe
-$config['clickToCloseNonZoomable'] = false;
-$config['closeOnScroll'] = false;
-$config['closeOnOutsideClick'] = false;
-$config['zoomEl'] = false;
-$config['fullscreenEl'] = false;
-$config['bgOpacity'] = 1;
+$config['pswp_clickToCloseNonZoomable'] = false;
+$config['pswp_closeOnScroll'] = false;
+$config['pswp_closeOnOutsideClick'] = false;
+$config['pswp_zoomEl'] = false;
+$config['pswp_fullscreenEl'] = false;
+$config['pswp_bgOpacity'] = 1;
 
 // SLIDESHOW
 $config['slideshow_refreshTime'] = '60';

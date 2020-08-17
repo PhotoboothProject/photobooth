@@ -72,13 +72,13 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             },
 
             focus: true,
-            clickToCloseNonZoomable: config.clickToCloseNonZoomablefalse,
-            closeOnScroll: config.closeOnScroll,
-            closeOnOutsideClick: config.closeOnOutsideClick,
+            clickToCloseNonZoomable: config.pswp_clickToCloseNonZoomablefalse,
+            closeOnScroll: config.pswp_closeOnScroll,
+            closeOnOutsideClick: config.pswp_closeOnOutsideClick,
             shareEl: false,
-            zoomEl: config.zoomEl,
-            fullscreenEl: config.fullscreenEl,
-            bgOpacity: config.bgOpacity
+            zoomEl: config.pswp_zoomEl,
+            fullscreenEl: config.pswp_fullscreenEl,
+            bgOpacity: config.pswp_bgOpacity
         };
 
         // Pass data to PhotoSwipe and initialize it

@@ -720,36 +720,36 @@ $configsetup = [
 			'name' => 'gallery_bottom_bar',
 			'value' => $config['gallery_bottom_bar']
 		],
-		'clickToCloseNonZoomable' => [
+		'pswp_clickToCloseNonZoomable' => [
 			'type' => 'checkbox',
-			'name' => 'clickToCloseNonZoomable',
-			'value' => $config['clickToCloseNonZoomable']
+			'name' => 'pswp_clickToCloseNonZoomable',
+			'value' => $config['pswp_clickToCloseNonZoomable']
 		],
-		'closeOnScroll' => [
+		'pswp_closeOnScroll' => [
 			'type' => 'checkbox',
-			'name' => 'closeOnScroll',
-			'value' => $config['closeOnScroll']
+			'name' => 'pswp_closeOnScroll',
+			'value' => $config['pswp_closeOnScroll']
 		],
-		'closeOnOutsideClick' => [
+		'pswp_closeOnOutsideClick' => [
 			'type' => 'checkbox',
-			'name' => 'closeOnOutsideClick',
-			'value' => $config['closeOnOutsideClick']
+			'name' => 'pswp_closeOnOutsideClick',
+			'value' => $config['pswp_closeOnOutsideClick']
 		],
-		'zoomEl' => [
+		'pswp_zoomEl' => [
 			'type' => 'checkbox',
-			'name' => 'zoomEl',
-			'value' => $config['zoomEl']
+			'name' => 'pswp_zoomEl',
+			'value' => $config['pswp_zoomEl']
 		],
-		'fullscreenEl' => [
+		'pswp_fullscreenEl' => [
 			'type' => 'checkbox',
-			'name' => 'fullscreenEl',
-			'value' => $config['fullscreenEl']
+			'name' => 'pswp_fullscreenEl',
+			'value' => $config['pswp_fullscreenEl']
 		],
-		'bgOpacity' => [
+		'pswp_bgOpacity' => [
 			'type' => 'range',
-			'placeholder' => $defaultConfig['bgOpacity'],
-			'name' => 'bgOpacity',
-			'value' => $config['bgOpacity'],
+			'placeholder' => $defaultConfig['pswp_bgOpacity'],
+			'name' => 'pswp_bgOpacity',
+			'value' => $config['pswp_bgOpacity'],
 			'range_min' => 0,
 			'range_max' => 1,
 			'range_step' => 0.05,
