@@ -5,9 +5,9 @@ require_once('../lib/config.php');
 require_once('../lib/db.php');
 require_once('../lib/resize.php');
 
-if (empty($_GET['filename']) || !preg_match('/^[a-z0-9_]+\.jpg$/', $_GET['filename'])) {
+if (empty($_GET['filename'])) {
     die(json_encode([
-        'error' => 'No or invalid file provided',
+        'error' => 'No file provided',
     ]));
 }
 
@@ -15,8 +15,16 @@ $filename = $_GET['filename'];
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
 $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
-$filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $filename;
 $status = false;
+
+// Only jpg/jpeg are supported
+$imginfo = getimagesize($filename_source);
+$mimetype = $imginfo['mime'];
+if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
+    die(json_encode([
+        'error' => 'The source file type ' . $mimetype . ' is not supported'
+    ]));
+}
 
 // QR
 if (!isset($config['webserver_ip'])) {
