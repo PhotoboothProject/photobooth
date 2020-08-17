@@ -1,12 +1,19 @@
 <?php
 require_once('lib/config.php');
 
-if (empty($_GET['filename']) || !preg_match('/^[a-z0-9_]+\.jpg$/', $_GET['filename'])) {
+if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
 $filename = $_GET['filename'];
 $keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
+
+// Only jpg/jpeg are supported
+$imginfo = getimagesize($keyingimage);
+$mimetype = $imginfo['mime'];
+if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
+    die('The source file type ' . $mimetype . ' is not supported');
+}
 
 if (file_exists($keyingimage)) {
     $mainimage = $keyingimage;
