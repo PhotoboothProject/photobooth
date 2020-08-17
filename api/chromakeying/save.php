@@ -23,6 +23,7 @@ if ($config['db_file'] === 'db') {
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$picture_permissions = $config['picture_permissions'];
 
 $img = $_POST['imgData'];
 $img = str_replace('data:image/png;base64,', '', $img);
