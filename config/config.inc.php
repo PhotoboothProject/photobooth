@@ -129,8 +129,13 @@ $config['gallery_bottom_bar'] = true;
 $config['pswp_clickToCloseNonZoomable'] = false;
 $config['pswp_closeOnScroll'] = false;
 $config['pswp_closeOnOutsideClick'] = false;
+$config['pswp_pinchToClose'] = true;
+$config['pswp_closeOnVerticalDrag'] = true;
+$config['pswp_tapToToggleControls'] = true;
+$config['pswp_history'] = true;
 $config['pswp_zoomEl'] = false;
 $config['pswp_fullscreenEl'] = false;
+$config['pswp_counterEl'] = true;
 $config['pswp_bgOpacity'] = 1;
 
 // SLIDESHOW

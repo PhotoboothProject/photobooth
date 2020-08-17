@@ -735,6 +735,21 @@ $configsetup = [
 			'name' => 'pswp_closeOnOutsideClick',
 			'value' => $config['pswp_closeOnOutsideClick']
 		],
+		'pswp_pinchToClose' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_pinchToClose',
+			'value' => $config['pswp_pinchToClose']
+		],
+		'pswp_closeOnVerticalDrag' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_closeOnVerticalDrag',
+			'value' => $config['pswp_closeOnVerticalDrag']
+		],
+		'pswp_tapToToggleControls' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_tapToToggleControls',
+			'value' => $config['pswp_tapToToggleControls']
+		],
 		'pswp_zoomEl' => [
 			'type' => 'checkbox',
 			'name' => 'pswp_zoomEl',
@@ -744,6 +759,16 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'pswp_fullscreenEl',
 			'value' => $config['pswp_fullscreenEl']
+		],
+		'pswp_counterEl' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_counterEl',
+			'value' => $config['pswp_counterEl']
+		],
+		'pswp_history' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_history',
+			'value' => $config['pswp_history']
 		],
 		'pswp_bgOpacity' => [
 			'type' => 'range',

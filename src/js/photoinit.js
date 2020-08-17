@@ -75,9 +75,14 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             clickToCloseNonZoomable: config.pswp_clickToCloseNonZoomablefalse,
             closeOnScroll: config.pswp_closeOnScroll,
             closeOnOutsideClick: config.pswp_closeOnOutsideClick,
+            pinchToClose: config.pswp_pinchToClose,
+            closeOnVerticalDrag: config.pswp_closeOnVerticalDrag,
+            tapToToggleControls: config.pswp_tapToToggleControls,
             shareEl: false,
             zoomEl: config.pswp_zoomEl,
             fullscreenEl: config.pswp_fullscreenEl,
+            counterEl: config.pswp_counterEl,
+            history: config.pswp_history,
             bgOpacity: config.pswp_bgOpacity
         };
 
