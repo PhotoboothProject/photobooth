@@ -435,6 +435,9 @@ const photoBooth = (function () {
                         api.reloadPage();
                     } else {
                         console.log('Error while deleting image');
+                        setTimeout(function () {
+                            api.reloadPage();
+                        }, 5000);
                     }
                 });
             });
@@ -607,7 +610,16 @@ const photoBooth = (function () {
                 file: imageName
             },
             success: (data) => {
+                if (data.error) {
+                    console.log('Error while deleting image');
+                }
                 cb(data);
+            },
+            error: (jqXHR, textStatus) => {
+                console.log('Error while deleting image: ', textStatus);
+                setTimeout(function () {
+                    api.reloadPage();
+                }, 5000);
             }
         });
     };
