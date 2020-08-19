@@ -59,7 +59,9 @@ if (!$config['picture']['keep_original']) {
     }
 }
 
-deleteImageFromDB($file);
+if ($config['database']['enabled']) {
+    deleteImageFromDB($file);
+}
 
 echo json_encode([
     'success' => true,

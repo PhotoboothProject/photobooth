@@ -57,7 +57,18 @@ function takePicture($filename) {
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $name = $_POST['file'];
 } elseif ($config['picture']['naming'] === 'numbered') {
-    $images = getImagesFromDB();
+    if ($config['database']['enabled']) {
+        $images = getImagesFromDB();
+    } else {
+        $directory = $config['foldersAbs']['images'];
+        $dh = opendir($directory);
+
+        while (false !== ($filename = readdir($dh))) {
+            $files[] = $filename;
+        }
+        closedir($dh);
+        $images = preg_grep('/\.(jpg|jpeg|JPG|JPEG)$/i', $files);
+    }
     $img_number = count($images);
     $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
     $name = $files . '.jpg';

@@ -27,6 +27,7 @@ $config['download']['thumbs'] = false;
 // control time in milliseconds until Photobooth reloads automatically
 $config['picture']['time_to_live'] = '90000';
 $config['picture']['preview_before_processing'] = true;
+$config['database']['enabled'] = true;
 $config['database']['file'] = 'db';
 
 

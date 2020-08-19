@@ -208,6 +208,12 @@ $configsetup = [
             'name' => 'picture[preview_before_processing]',
             'value' => $config['picture']['preview_before_processing'],
         ],
+        'database_enabled' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'database[enabled]',
+            'value' => $config['database']['enabled'],
+        ],
         'database_file' => [
             'view' => 'expert',
             'type' => 'input',

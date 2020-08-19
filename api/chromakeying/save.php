@@ -6,7 +6,18 @@ require_once '../../lib/db.php';
 require_once '../../lib/resize.php';
 
 if ($config['picture']['naming'] === 'numbered') {
-    $images = getImagesFromDB();
+    if ($config['database']['enabled']) {
+        $images = getImagesFromDB();
+    } else {
+        $directory = $config['foldersAbs']['images'];
+        $dh = opendir($directory);
+
+        while (false !== ($filename = readdir($dh))) {
+            $files[] = $filename;
+        }
+        closedir($dh);
+        $images = preg_grep('/\.(jpg|jpeg|JPG|JPEG)$/i', $files);
+    }
     $img_number = count($images);
     $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
     $name = $files . '.jpg';
@@ -44,7 +55,9 @@ imagedestroy($thumbResource);
 imagedestroy($imageResource);
 
 // insert into database
-appendImageToDB($file);
+if ($config['database']['enabled']) {
+    appendImageToDB($file);
+}
 
 // Change permissions
 chmod($filename_photo, octdec($picture_permissions));

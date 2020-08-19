@@ -213,8 +213,10 @@ if (!$config['picture']['keep_original']) {
 imagedestroy($imageResource);
 
 // insert into database
-if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === true)) {
-    appendImageToDB($file);
+if ($config['database']['enabled']) {
+    if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === true)) {
+        appendImageToDB($file);
+    }
 }
 
 // Change permissions

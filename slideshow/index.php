@@ -4,7 +4,18 @@ require_once('../lib/config.php');
 require_once('../lib/db.php');
 require_once('../lib/filter.php');
 
-$images = getImagesFromDB();
+if ($config['database']['enabled']) {
+	$images = getImagesFromDB();
+} else {
+	$directory = $config['foldersAbs']['images'];
+	$dh = opendir($directory);
+
+	while (false !== ($filename = readdir($dh))) {
+		$files[] = $filename;
+	}
+	closedir($dh);
+	$images = preg_grep('/\.(jpg|jpeg|JPG|JPEG)$/i', $files);
+}
 $imagelist = array_reverse($images);
 
 ?>
