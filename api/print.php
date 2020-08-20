@@ -17,6 +17,13 @@ $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filena
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
 $status = false;
 
+// exit with error if file does not exist
+if (!file_exists($filename_source)) {
+    die(json_encode([
+        'error' => "File $filename not found",
+    ]));
+}
+
 // Only jpg/jpeg are supported
 $imginfo = getimagesize($filename_source);
 $mimetype = $imginfo['mime'];
@@ -46,13 +53,6 @@ $line3text = $config['textonprint']['line3'];
 
 // print frame
 $print_frame = __DIR__ . DIRECTORY_SEPARATOR . $config['print_frame_path'];
-
-// exit with error
-if (!file_exists($filename_source)) {
-    die(json_encode([
-        'error' => "File $filename not found",
-    ]));
-}
 
 if (!file_exists($filename_print)) {
     if ($config['print_qrcode']) {
