@@ -83,6 +83,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             fullscreenEl: config.pswp_fullscreenEl,
             counterEl: config.pswp_counterEl,
             history: config.pswp_history,
+            loop: config.pswp_loop,
             bgOpacity: config.pswp_bgOpacity
         };
 

@@ -781,6 +781,11 @@ $configsetup = [
 			'name' => 'pswp_history',
 			'value' => $config['pswp_history']
 		],
+		'pswp_loop' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_loop',
+			'value' => $config['pswp_loop']
+		],
 		'pswp_bgOpacity' => [
 			'type' => 'range',
 			'placeholder' => $defaultConfig['pswp_bgOpacity'],

@@ -135,6 +135,7 @@ $config['pswp_pinchToClose'] = true;
 $config['pswp_closeOnVerticalDrag'] = true;
 $config['pswp_tapToToggleControls'] = true;
 $config['pswp_history'] = true;
+$config['pswp_loop'] = true;
 $config['pswp_zoomEl'] = false;
 $config['pswp_fullscreenEl'] = false;
 $config['pswp_counterEl'] = true;
