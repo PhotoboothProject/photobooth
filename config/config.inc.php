@@ -11,6 +11,7 @@ $config['pictureRotation'] = '0';
 $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['use_download'] = true;
+$config['use_slideshow'] = true;
 $config['print_qrcode'] = false;
 $config['print_frame'] = false;
 $config['print_frame_path'] = '../resources/img/frames/frame.png';

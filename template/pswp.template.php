@@ -49,7 +49,9 @@
                 <button class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 
+                <?php if ($config['use_slideshow']): ?>
                 <button class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
+                <?php endif; ?>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
                 <!-- element will get class pswp__preloader--active when preloader is running -->

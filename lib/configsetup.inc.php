@@ -104,6 +104,11 @@ $configsetup = [
 			'name' => 'use_download',
 			'value' => $config['use_download']
 		],
+		'use_slideshow' => [
+			'type' => 'checkbox',
+			'name' => 'use_slideshow',
+			'value' => $config['use_slideshow']
+		],
 		'use_mail' => [
 			'type' => 'checkbox',
 			'name' => 'use_mail',
