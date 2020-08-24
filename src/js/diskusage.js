@@ -26,6 +26,10 @@ $(function () {
                     $('#save_mesg').removeClass('modal--show');
                     $('.download-zip-btn').blur();
                 }, 10000);
+            },
+            error: function (jqXHR, textStatus) {
+                console.log('Error while downloading: ', textStatus);
+                $('#save_mesg').removeClass('modal--show');
             }
         });
     });
