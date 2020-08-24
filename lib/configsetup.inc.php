@@ -725,6 +725,12 @@ $configsetup = [
 			'name' => 'gallery_bottom_bar',
 			'value' => $config['gallery_bottom_bar']
 		],
+		'pictureTime' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['gallery_pictureTime'],
+			'name' => 'gallery_pictureTime',
+			'value' => $config['gallery_pictureTime']
+		],
 		'pswp_clickToCloseNonZoomable' => [
 			'type' => 'checkbox',
 			'name' => 'pswp_clickToCloseNonZoomable',
