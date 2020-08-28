@@ -146,11 +146,6 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gallery.listen('afterChange', function () {
             const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-            $('.pswp__button--download').attr({
-                href: 'api/download.php?image=' + img,
-                download: img
-            });
-
             if (ssRunning && ssOnce) {
                 ssOnce = false;
                 setTimeout(gotoNextSlide, ssDelay);

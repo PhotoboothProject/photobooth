@@ -30,27 +30,27 @@
 
                 <!-- custom buttons: -->
                 <?php if ($config['use_mail']): ?>
-                <button class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
+                <button type="button" class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
                 <?php endif; ?>
 
                 <?php if ($config['use_print']): ?>
-                <button class="pswp__button pswp__button--print" title="Print"><i class="fa fa-print"></i></button>
+                <button type="button" class="pswp__button pswp__button--print" title="Print"><i class="fa fa-print"></i></button>
                 <?php endif; ?>
 
                 <?php if ($config['use_qr']): ?>
-                <button class="pswp__button pswp__button--qrcode" title="QR Code"><i class="fa fa-qrcode"></i></button>
+                <button type="button" class="pswp__button pswp__button--qrcode" title="QR Code"><i class="fa fa-qrcode"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['use_download'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev'])): ?>
-                <a href="" download="" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></a>
+                <?php if ($config['use_download']): ?>
+		<button type="button" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></button>
                 <?php endif; ?>
 
                 <?php if ($config['chroma_keying']): ?>
-                <button class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
+                <button type="button" class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 
                 <?php if ($config['use_slideshow']): ?>
-                <button class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
+                <button type="button" class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
                 <?php endif; ?>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
