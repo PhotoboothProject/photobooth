@@ -144,7 +144,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         });
 
         gallery.listen('afterChange', function () {
-            const img = gallery.currItem.src.split('\\').pop().split('/').pop();
+            if (config.dev) {
+                const img = gallery.currItem.src.split('\\').pop().split('/').pop();
+                console.log('Current image: ' + img);
+            }
 
             if (ssRunning && ssOnce) {
                 ssOnce = false;
