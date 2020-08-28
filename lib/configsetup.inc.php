@@ -746,6 +746,11 @@ $configsetup = [
 			'name' => 'pswp_closeOnOutsideClick',
 			'value' => $config['pswp_closeOnOutsideClick']
 		],
+		'pswp_preventSwiping' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_preventSwiping',
+			'value' => $config['pswp_preventSwiping']
+		],
 		'pswp_pinchToClose' => [
 			'type' => 'checkbox',
 			'name' => 'pswp_pinchToClose',
@@ -760,6 +765,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'pswp_tapToToggleControls',
 			'value' => $config['pswp_tapToToggleControls']
+		],
+		'pswp_animateTransitions' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_animateTransitions',
+			'value' => $config['pswp_animateTransitions']
 		],
 		'pswp_zoomEl' => [
 			'type' => 'checkbox',
