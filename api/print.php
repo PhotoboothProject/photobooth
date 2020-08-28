@@ -146,7 +146,7 @@ die(json_encode([
 ]));
 
 // Resize and crop image by center
-function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = $config['jpeg_quality_image'])
+function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 100)
 {
     $imgsize = getimagesize($source_file);
     $width = $imgsize[0];
@@ -168,7 +168,7 @@ function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quali
         case 'image/jpeg':
             $image_create = "imagecreatefromjpeg";
             $image = "imagejpeg";
-            $quality = $config['jpeg_quality_image'];
+            $quality = 100;
             break;
 
         default:
