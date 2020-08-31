@@ -79,6 +79,7 @@ function setMainImage(imgSrc) {
     });
 }
 
+// eslint-disable-next-line no-unused-vars
 function setBackgroundImage(url) {
     backgroundImage = new Image();
     backgroundImage.src = url;

@@ -1,5 +1,6 @@
 /* exported initPhotoSwipeFromDOM */
 /* global photoBooth i18n */
+// eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
         ssRunning = false,
