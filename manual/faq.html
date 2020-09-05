@@ -118,7 +118,7 @@ Choice: 1 Memory card
 
 <h3>Can I use Hardware Button to take a Picture on my Raspberry Pi?</h3>
 
-<p>You can use a hardware button connected on GPIO24 to trigger a photo. Set the Take Pictures key to e.g. <code>13</code> (enter key) via Admin panel to specify the key. Next you have to install some dependencies:</p>
+<p>When the photobooth display / screen is directly connected to the Raspberry Pi, this is a simple way to use a hardware button connected on GPIO24 to trigger a photo. Set the "Take Pictures key" to <code>13</code> (enter key) via Admin panel to specify the key. Next you have to install some dependencies:</p>
 
 <div class="highlight"><pre lang="">sudo apt install libudev-dev
 sudo pip install python-uinput
@@ -132,6 +132,51 @@ echo "uinput" | sudo tee -a /etc/modules
 <div class="highlight"><pre lang="">sudo crontab -e
 @reboot python /var/www/html/button.py &
 </pre></div>
+
+<hr>
+
+<h3>Hardware Button for WLAN connected screen (i.e. iPad) - Remote Buzzer Server</h3>
+
+<p>This feature enables a GPIO pin connected hardware button / buzzer for a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad). Configuration takes place in the admin settings - Remote Buzzer Server area.</p>
+
+<p><strong>Important: You must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"</strong>. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. </p>
+
+<p>Debugging: switch on dev settings for server logs to be written to the "tmp" directory of the photobooth installation (i.e. <code>data/tmp/io_server.log</code>). Clients will log server communication information to the browser console.</p>
+
+<p>If you experience crashes or access permission problems to GPIO pins, check <a href="https://www.npmjs.com/package/rpio"><a href='https://www.npmjs.com/package/rpio'>https://www.npmjs.com/package/rpio</a></a> for additional settings required on the Pi</p>
+
+<hr />
+
+<p>Hardware Buzzer / Button</p>
+
+<hr />
+
+<p>The hardware buzzer connects to a GPIO pin, the server will watch for a PIN_DOWN event (pull to ground). This will initiate a message to the photobooth screen over network / WLAN, to trigger the action (thrill).</p>
+
+<ul>
+<li>Short button press (default &lt;= 2 sec) will trigger a single picture</li>
+<li>Long button press (default > 2 sec) will trigger a collage
+<ul><li>If collage is configured with interruption, next button presses will trigger the next collage pictures. </li>
+<li>If collage is disabled in the admin settings, long button press also triggers a single picture</li></ul></li>
+</ul>
+
+<p>After triggered, the hardware button remains disabled until an action (picture / collage) has fully completed. Then the hardware button re-arms / is active again.</p>
+
+<hr />
+
+<p>Other Remote Trigger (experimental)</p>
+
+<hr />
+
+<p>The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.</p>
+
+<ul>
+<li>Channel: <code>photobooth-socket</code></li>
+<li>Commands: <code>start-picture</code>, <code>start-collage</code></li>
+<li>Response: <code>completed</code>  will be emitted to the client, once photobooth finished the task</li>
+</ul>
+
+<p>This functionality is experimental and largely untested. </p>
 
 <hr>
 
