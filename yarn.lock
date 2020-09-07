@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@andreasremdt/simple-translator@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@andreasremdt/simple-translator/-/simple-translator-2.0.2.tgz#8e9a181faec783df0caa0ddcb15fb74c924dd3a6"
-  integrity sha512-Qz498YQVyuFZgtj5ATfKu+TPenjKjRd6gHhasJlHwzwD47wdWbiMCa/QXSYf+/A05gTATXoehozV+Gg9MsFiXQ==
+"@andreasremdt/simple-translator@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@andreasremdt/simple-translator/-/simple-translator-2.0.3.tgz#ff45ff16eaf1d8af2cba1c133d44bfd6d2cae59e"
+  integrity sha512-/KtXJPV5Q3iaflitmIn2KDS5vr0Gnw05QeGhl2eRUN1tBW6nba4YLay4Y0LI5J3WouvrycFZRTllf5Ay3FSWUQ==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4":
   version "7.10.4"
