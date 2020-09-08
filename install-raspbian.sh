@@ -6,7 +6,11 @@ set -e
 # Show all commands
 # set -x
 
-webserver=$1
+if [ ! -z $1 ]; then
+    webserver=$1
+else
+    webserver=apache
+fi
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
