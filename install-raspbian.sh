@@ -48,6 +48,7 @@ COMMON_PACKAGES=(
     'gphoto2'
     'jq'
     'libimage-exiftool-perl'
+    'nodejs'
     'php-gd'
     'yarn'
 )
