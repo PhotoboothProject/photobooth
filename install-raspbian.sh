@@ -227,8 +227,10 @@ info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
 gpasswd -a www-data plugdev
 
-info "### Disabling camera automount."
-chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
+    info "### Disabling camera automount."
+    chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+fi
 
 echo -e "\033[0;33m### You probably like to use a printer."
 read -p "### You like to install CUPS and set needing printer permissions? [y/N] " -n 1 -r
