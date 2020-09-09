@@ -1,11 +1,13 @@
 ---
-name: Bug report
+name: "\U0001F41E Bug report"
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: 'bug'
 assignees: ''
 
 ---
+
+<!-- Note that leaving sections blank will make it difficult for us to troubleshoot and we may have to close the issue. -->
 
 **Describe the bug**
 <!-- A clear and concise description of what the bug is. -->
