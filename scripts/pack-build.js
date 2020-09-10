@@ -83,6 +83,48 @@ function createArchive(fileName, archive) {
     archive.file('node_modules/whatwg-fetch/LICENSE');
     archive.file('node_modules/whatwg-fetch/dist/fetch.umd.js');
 
+    archive.directory('node_modules/accepts');
+    archive.directory('node_modules/after');
+    archive.directory('node_modules/arraybuffer.slice');
+    archive.directory('node_modules/async-limiter');
+    archive.directory('node_modules/backo2');
+    archive.directory('node_modules/base64-arraybuffer');
+    archive.directory('node_modules/base64-arraybuffer');
+    archive.directory('node_modules/base64id');
+    archive.directory('node_modules/better-assert');
+    archive.directory('node_modules/bindings');
+    archive.directory('node_modules/blob');
+    archive.directory('node_modules/callsite');
+    archive.directory('node_modules/component-bind');
+    archive.directory('node_modules/component-emitter');
+    archive.directory('node_modules/component-inherit');
+    archive.directory('node_modules/cookie');
+    archive.directory('node_modules/debug');
+    archive.directory('node_modules/engine.io');
+    archive.directory('node_modules/engine.io-client');
+    archive.directory('node_modules/engine.io-parser');
+    archive.directory('node_modules/has-binary2');
+    archive.directory('node_modules/has-cors');
+    archive.directory('node_modules/indexof');
+    archive.directory('node_modules/isarray');
+    archive.directory('node_modules/mime-db');
+    archive.directory('node_modules/mime-types');
+    archive.directory('node_modules/ms');
+    archive.directory('node_modules/nan');
+    archive.directory('node_modules/negotiator');
+    archive.directory('node_modules/object-component');
+    archive.directory('node_modules/parseqs');
+    archive.directory('node_modules/parseuri');
+    archive.directory('node_modules/rpio');
+    archive.directory('node_modules/socket.io');
+    archive.directory('node_modules/socket.io-adapter');
+    archive.directory('node_modules/socket.io-client');
+    archive.directory('node_modules/socket.io-parser');
+    archive.directory('node_modules/to-array');
+    archive.directory('node_modules/ws');
+    archive.directory('node_modules/xmlhttprequest-ssl');
+    archive.directory('node_modules/yeast');
+    
     output.on('close', function () {
         console.log(`Wrote ${archive.pointer()} bytes to ${fileName}`.verbose);
     });

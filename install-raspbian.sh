@@ -158,9 +158,9 @@ apt update
 apt dist-upgrade -y
 
 info "### Photobooth needs some software to run."
-if [ $webserver == "nginx" ]; then
+if [ "$webserver" == "nginx" ]; then
     nginx_webserver
-elif [ $webserver == "lighttpd" ]; then
+elif [ "$webserver" == "lighttpd" ]; then
     lighttpd_webserver
 else
     apache_webserver
@@ -286,6 +286,16 @@ then
 EOF
 
 fi
+
+info "### Enable Nodejs GPIO access - please reboot"
+usermod -a -G gpio www-data
+cat > /etc/udev/rules.d/20-photobooth-gpiomem.rules <<EOF
+SUBSYSTEM=="bcm2835-gpiomem", KERNEL=="gpiomem", GROUP="gpio", MODE="0660"
+EOF
+sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+cat >> /boot/config.txt  << EOF
+dtoverlay=gpio-no-irq
+EOF
 
 info "### Congratulations you finished the install process."
 info "### Have fun with your Photobooth, but first restart your Pi."
