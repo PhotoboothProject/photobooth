@@ -207,9 +207,27 @@ then
     info "### Now we are going to install Photobooth."
     git clone https://github.com/andi34/photobooth $INSTALLFOLDER
     cd $INSTALLFOLDERPATH
-    LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
-    info "### We ar installing version $LATEST_VERSION".
-    git checkout $LATEST_VERSION
+
+    echo -e "\033[0;33m### Please select a version to install:"
+    echo -e "    1 Install last development version"
+    echo -e "    2 Install last stable Release"
+    read -p "Please enter your choice: " -n 1 -r
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[1]$ ]]
+    then
+      info "### We are installing last development version"
+      git fetch origin dev
+      git checkout origin/dev
+    else
+      if [[ ! $REPLY =~ ^[2]$ ]]
+        then
+        info "### Invalid choice!"
+      fi
+      LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
+      info "### We are installing last stable Release: Version $LATEST_VERSION"
+      git checkout $LATEST_VERSION
+    fi
+
     git submodule update --init
 
     info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
