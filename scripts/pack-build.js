@@ -121,6 +121,7 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/socket.io-client');
     archive.directory('node_modules/socket.io-parser');
     archive.directory('node_modules/to-array');
+    archive.directory('node_modules/file-uri-to-path');
     archive.directory('node_modules/ws');
     archive.directory('node_modules/xmlhttprequest-ssl');
     archive.directory('node_modules/yeast');
