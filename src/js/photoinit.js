@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth */
+/* global photoBooth i18n */
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
         ssRunning = false,
@@ -176,6 +176,31 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
         gallery.init();
     };
+
+    // Delete from DB in gallery
+    $('.pswp__button--delete').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let img = gallery.currItem.src;
+        img = img.split('\\').pop().split('/').pop();
+
+        const msg = i18n('really_delete_image');
+        const really = confirm(img + ' ' + msg);
+        if (really) {
+            photoBooth.deleteImage(img, (data) => {
+                if (data.success) {
+                    console.log('Deleted ' + img);
+                    photoBooth.reloadPage();
+                } else {
+                    console.log('Error while deleting ' + img);
+                    setTimeout(function () {
+                        photoBooth.reloadPage();
+                    }, 5000);
+                }
+            });
+        }
+    });
 
     // QR in gallery
     $('.pswp__button--qrcode').on('click touchstart', function (e) {

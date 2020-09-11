@@ -44,6 +44,7 @@ $config['use_filter'] = true;
 $config['default_imagefilter'] = 'plain';
 $config['disabled_filters'] = array();
 $config['allow_delete'] = true;
+$config['allow_delete_from_gallery'] = true;
 $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['take_frame'] = false;

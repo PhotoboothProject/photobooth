@@ -95,6 +95,7 @@
   "qr": "QR Code",
   "randomPicture": "Afficher des images aléatoires",
   "really_delete": "Vraiment supprimer toutes les images? Ça ne peut pas être annulé!",
+  "really_delete_image": "wird gelöscht! Das kann nicht rückgängig gemacht werden! Wollen Sie das Bild wirklich löschen?",
   "reload": "Recharger la page",
   "reset": "Réinitialiser",
   "save": "Sauvegarder",

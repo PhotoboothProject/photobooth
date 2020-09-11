@@ -323,6 +323,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'allow_delete',
 			'value' => $config['allow_delete']
+		],
+		'allow_delete_from_gallery' => [
+			'type' => 'checkbox',
+			'name' => 'allow_delete_from_gallery',
+			'value' => $config['allow_delete_from_gallery']
 		]
 	],
 	'jpeg_quality' => [

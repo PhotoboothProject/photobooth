@@ -8,7 +8,8 @@
 .pswp__button--playpause,
 .pswp__button--share,
 .pswp__button--zoom,
-.pswp__button--fs {
+.pswp__button--fs,
+.pswp__button--delete {
   left: 40%;
 }
 
@@ -63,7 +64,8 @@
   .pswp__button--playpause,
   .pswp__button--share,
   .pswp__button--zoom,
-  .pswp__button--fs {
+  .pswp__button--fs,
+  .pswp__button--delete {
     width: calc(2 * 1em);
     height: calc(2 * 1em);
     line-height: calc(2 * 1em);
