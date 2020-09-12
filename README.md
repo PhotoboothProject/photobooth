@@ -8,6 +8,8 @@ This is my personal Photobooth fork with some extras on top (more information ca
 
 [![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-blue.svg)](https://t.me/PhotoboothGroup)  
 
+[![Translate on Crowdin](https://img.shields.io/badge/Traslate%20on-Crowdin-green.svg)](https://crowdin.com/project/photobooth)  
+
 [![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable2)](https://github.com/andi34/photobooth/actions?query=branch%3Astable2+workflow%3ALint)
 [![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable2)](https://github.com/andi34/photobooth/actions?query=branch%3Astable2+workflow%3Agulp-sass)
 
