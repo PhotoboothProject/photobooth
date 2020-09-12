@@ -49,6 +49,7 @@ COMMON_PACKAGES=(
     'jq'
     'libimage-exiftool-perl'
     'nodejs'
+    'npm'
     'php-gd'
     'yarn'
 )
@@ -287,7 +288,7 @@ EOF
 
 fi
 
-info "### Enable Nodejs GPIO access - please reboot"
+info "### Enable Nodejs GPIO access - please reboot in order to use the Remote Buzzer Feature"
 usermod -a -G gpio www-data
 cat > /etc/udev/rules.d/20-photobooth-gpiomem.rules <<EOF
 SUBSYSTEM=="bcm2835-gpiomem", KERNEL=="gpiomem", GROUP="gpio", MODE="0660"
