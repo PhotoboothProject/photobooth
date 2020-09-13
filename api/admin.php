@@ -4,6 +4,8 @@ header('Content-Type: application/json');
 require_once('../lib/config.php');
 require_once('../lib/db.php');
 
+$os = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
+
 $data = $_POST;
 if (!isset($data['type'])) {
     echo json_encode('error');
@@ -93,6 +95,10 @@ if ($data['type'] == 'config') {
 
     if (!$newConfig['previewFromCam']) {
         $newConfig['previewCamTakesPic'] = false;
+    }
+
+    if ($os === 'windows') {
+        $newConfig['remotebuzzer_enabled'] = false;
     }
 
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
