@@ -3,7 +3,7 @@
   "version": "2.4.0-alpha",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "scripts": {
-    "build": "npm run format && npm run build:faq && npm run build:gulp",
+    "build": "npm-run-all --serial format build:faq build:gulp",
     "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.html --footer faq/footer.html",
     "build:gulp": "gulp",
     "build:sass": "gulp sass",
