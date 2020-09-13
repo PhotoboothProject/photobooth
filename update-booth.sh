@@ -17,13 +17,17 @@ if [ $UID != 0 ]; then
 fi
 
 options=("$@")
+path=''
+skip=false
 
 for i in ${!options[@]}; do
 
     option="${options[$i]}"
-    path=''
     if [[ "$option" == --path=* ]]; then
 	path="$(echo $option | awk -F '=' '{print $2}')"
+    fi
+    if [[ "$option" == --skip ]]; then
+	skip=true
     fi
 done
 
@@ -37,6 +41,8 @@ else
     See [OPTION] below:
     =======================================================================
     --path	Mandatory field for installation: Set Photobooth path.
+    --skip	Optional field for installation: Skips updating system
+                and skips checking for common package installations
     -----------------------------------------------------------------------
     
     '
@@ -44,6 +50,12 @@ else
     Example update
     -----------------------------------------------------------------------
     sudo ./update-booth.sh --path="/var/www/html"
+
+    '
+    info '[INFO]
+    Example update skipping system updates and check for common packages
+    -----------------------------------------------------------------------
+    sudo ./update-booth.sh --path="/var/www/html" --skip
     
     '
     exit 2
@@ -86,41 +98,46 @@ if [[ ! -d "${booth_source}" ]]; then
     mkdir -p "${booth_source}"
 fi
 
-info "[Info]      Updating system"
-apt update
-apt dist-upgrade -y
+if [[ ! $skip == true ]]; then
+	info "[Info]      Updating system"
+	apt update
+	apt dist-upgrade -y
 
-info "[Info]      Checking for webserver..."
-for server in "${WEBSERVER[@]}"; do
-    if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        info "[Webserver] ${server} used."
-        if [[ ${server} == "nginx" || ${server} == "lighttpd" ]]; then
-            info "[NOTE]      You're using ${server} as your Webserver."
-            info "[NOTE]      For a no-hassle-setup Apache2 Webserver is recommend!"
-            if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-                info "[Package]   php-fpm installed already"
-            else
-                info "[Package Install]  Installing missing common package: ${server}"
-                apt install -y php-fpm
-            fi
-        fi
-    fi
-done
+	info "[Info]      Checking for webserver..."
+	for server in "${WEBSERVER[@]}"; do
+	    if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		info "[Webserver] ${server} used."
+		if [[ ${server} == "nginx" || ${server} == "lighttpd" ]]; then
+		    info "[NOTE]      You're using ${server} as your Webserver."
+		    info "[NOTE]      For a no-hassle-setup Apache2 Webserver is recommend!"
+		    if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		        info "[Package]   php-fpm installed already"
+		    else
+		        info "[Package Install]  Installing missing common package: ${server}"
+		        apt install -y php-fpm
+		    fi
+		fi
+	    fi
+	done
 
-info "[Info]      Checking common software..."
-for package in "${COMMON_PACKAGES[@]}"; do
-    if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        info "[Package]   ${package} installed already"
-    else
-        info "[Package]   Installing missing common package: ${package}"
-        if [[ ${package} == "yarn" ]]; then
-                curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-                echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-                apt update
-        fi
-        apt install -y ${package}
-    fi
-done
+	info "[Info]      Checking common software..."
+	for package in "${COMMON_PACKAGES[@]}"; do
+	    if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		info "[Package]   ${package} installed already"
+	    else
+		info "[Package]   Installing missing common package: ${package}"
+		if [[ ${package} == "yarn" ]]; then
+		        curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+		        echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+		        apt update
+		fi
+		apt install -y ${package}
+	    fi
+	done
+
+else
+	info "[Info]      Skipping common software checks..."
+fi
 
 cp -rf ./* "${booth_source}/"
 chown -R www-data:www-data ${booth_source}
