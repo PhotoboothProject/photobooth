@@ -6,15 +6,15 @@
 
 - [ ] I have read the [contributing guidelines](https://github.com/andi34/photobooth/blob/dev/CONTRIBUTING.md).
 
-#### What is the purpose of this pull request? (put an "X" next to an item)
+#### What is the purpose of this pull request? (put an "x" next to an item)
 <!-- Example:
-[X] Bug fix
+- [x] Bug fix
 -->
 
-[ ] Documentation update
-[ ] Bug fix
-[ ] New feature
-[ ] Other, please explain:
+- [ ] Documentation update
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Other, please explain:
 
 <!--
     Please ensure your pull request is ready:
