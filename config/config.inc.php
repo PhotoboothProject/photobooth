@@ -9,6 +9,7 @@ $config['show_error_messages'] = true;
 $config['auto_reload_on_error'] = true;
 $config['pictureRotation'] = '0';
 $config['use_print'] = false;
+$config['auto_print'] = false;
 $config['use_qr'] = true;
 $config['use_download'] = true;
 $config['use_slideshow'] = true;

@@ -478,6 +478,11 @@ const photoBooth = (function () {
             });
         });
 
+        // If autoprint is activated the picture will immediately printed after taken.
+        if (config.auto_print) {
+            api.printImage(filename);
+        }
+
         resultPage
             .find('.deletebtn')
             .off('click')

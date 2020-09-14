@@ -82,6 +82,11 @@ $configsetup = [
 			'name' => 'use_print',
 			'value' => $config['use_print']
 		],
+		'auto_print' => [
+			'type' => 'checkbox',
+			'name' => 'auto_print',
+			'value' => $config['auto_print']
+		],
 		'use_qr' => [
 			'type' => 'checkbox',
 			'name' => 'use_qr',
