@@ -250,6 +250,22 @@ $configsetup = [
 			'name' => 'take_collage_frame_path',
 			'value' => htmlentities($config['take_collage_frame_path'])
 		],
+		'collage_layout' => [
+			'type' => 'select',
+			'name' => 'collage_layout',
+			'placeholder' => $defaultConfig['collage_layout'],
+			'options' => [
+				'2x2' => '2x2',
+				'2x4' => '2x4'
+			],
+			'value' => $config['collage_layout']
+		],
+		'collage_background' => [
+			'type' => 'input',
+			'name' => 'collage_background',
+			'placeholder' => $defaultConfig['collage_background'],
+			'value' => $config['collage_background']
+		],
 		'collage_cntdwn_time' => [
 			'type' => 'range',
 			'name' => 'collage_cntdwn_time',
