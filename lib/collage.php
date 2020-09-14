@@ -1,6 +1,6 @@
 <?php
 
-function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath, $Layout, $background2x4) {
+function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath, $Layout, $background_image) {
 
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== 4) {
         return false;
@@ -41,7 +41,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath, $
             $heightNew=482;
             $PositionsX = [63, 423, 785, 1146]; //X offset in Pixel
             $PositionsY =[57, 642];             //Y offset in Pixel
-            $my_collage= imagecreatefrompng($background2x4);
+            $my_collage= imagecreatefrompng($background_image);
 
             for ($j = 0; $j < 2; $j++) { //delta Y
                 $dY =$PositionsY[$j];
