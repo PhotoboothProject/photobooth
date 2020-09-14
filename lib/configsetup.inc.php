@@ -104,6 +104,11 @@ $configsetup = [
 			'name' => 'use_download',
 			'value' => $config['use_download']
 		],
+		'use_slideshow' => [
+			'type' => 'checkbox',
+			'name' => 'use_slideshow',
+			'value' => $config['use_slideshow']
+		],
 		'use_mail' => [
 			'type' => 'checkbox',
 			'name' => 'use_mail',
@@ -318,6 +323,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'allow_delete',
 			'value' => $config['allow_delete']
+		],
+		'allow_delete_from_gallery' => [
+			'type' => 'checkbox',
+			'name' => 'allow_delete_from_gallery',
+			'value' => $config['allow_delete_from_gallery']
 		]
 	],
 	'jpeg_quality' => [
@@ -719,6 +729,87 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'gallery_bottom_bar',
 			'value' => $config['gallery_bottom_bar']
+		],
+		'pictureTime' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['gallery_pictureTime'],
+			'name' => 'gallery_pictureTime',
+			'value' => $config['gallery_pictureTime']
+		],
+		'pswp_clickToCloseNonZoomable' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_clickToCloseNonZoomable',
+			'value' => $config['pswp_clickToCloseNonZoomable']
+		],
+		'pswp_closeOnScroll' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_closeOnScroll',
+			'value' => $config['pswp_closeOnScroll']
+		],
+		'pswp_closeOnOutsideClick' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_closeOnOutsideClick',
+			'value' => $config['pswp_closeOnOutsideClick']
+		],
+		'pswp_preventSwiping' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_preventSwiping',
+			'value' => $config['pswp_preventSwiping']
+		],
+		'pswp_pinchToClose' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_pinchToClose',
+			'value' => $config['pswp_pinchToClose']
+		],
+		'pswp_closeOnVerticalDrag' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_closeOnVerticalDrag',
+			'value' => $config['pswp_closeOnVerticalDrag']
+		],
+		'pswp_tapToToggleControls' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_tapToToggleControls',
+			'value' => $config['pswp_tapToToggleControls']
+		],
+		'pswp_animateTransitions' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_animateTransitions',
+			'value' => $config['pswp_animateTransitions']
+		],
+		'pswp_zoomEl' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_zoomEl',
+			'value' => $config['pswp_zoomEl']
+		],
+		'pswp_fullscreenEl' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_fullscreenEl',
+			'value' => $config['pswp_fullscreenEl']
+		],
+		'pswp_counterEl' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_counterEl',
+			'value' => $config['pswp_counterEl']
+		],
+		'pswp_history' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_history',
+			'value' => $config['pswp_history']
+		],
+		'pswp_loop' => [
+			'type' => 'checkbox',
+			'name' => 'pswp_loop',
+			'value' => $config['pswp_loop']
+		],
+		'pswp_bgOpacity' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['pswp_bgOpacity'],
+			'name' => 'pswp_bgOpacity',
+			'value' => $config['pswp_bgOpacity'],
+			'range_min' => 0,
+			'range_max' => 1,
+			'range_step' => 0.05,
+			'unit' => 'dot'
 		]
 	],
 	'mail' => [
@@ -850,6 +941,46 @@ $configsetup = [
 			'value' => htmlentities($config['exiftool']['msg'])
 		]
 	],
+	'remotebuzzer' => [
+		'remotebuzzer_enabled' => [
+			'type' => 'checkbox',
+			'name' => 'remotebuzzer_enabled',
+			'value' => $config['remotebuzzer_enabled']
+		],
+		'collagetime' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['remotebuzzer_collagetime'],
+			'name' => 'remotebuzzer_collagetime',
+			'value' => $config['remotebuzzer_collagetime'],
+			'range_min' => 1,
+			'range_max' => 6,
+			'range_step' => 1,
+			'unit' => 'seconds'
+		],
+		'port' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['remotebuzzer_port'],
+			'name' => 'remotebuzzer_port',
+			'value' => $config['remotebuzzer_port']
+		],
+		'pin' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['remotebuzzer_pin'],
+			'name' => 'remotebuzzer_pin',
+			'value' => $config['remotebuzzer_pin']
+		],
+		'nodebin' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['remotebuzzer_nodebin'],
+			'name' => 'remotebuzzer_nodebin',
+			'value' => $config['remotebuzzer_nodebin']
+ 		],
+		'logfile' => [
+			'type' => 'hidden',
+			'name' => 'remotebuzzer_logfile',
+			'value' => $config['remotebuzzer_logfile']
+		]
+ 	],
 	'reset' => [
 		'remove_images' => [
 			'type' => 'checkbox',

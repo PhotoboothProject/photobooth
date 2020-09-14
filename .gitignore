@@ -6,6 +6,7 @@ data/
 digicamcontrol/
 node_modules/
 package-lock.json
+private/
 resources/css/
 resources/js/
 stats

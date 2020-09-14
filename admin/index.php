@@ -58,6 +58,9 @@ require_once('../lib/configsetup.inc.php');
 		<div id="checkVersion">
 			<p><a href="#" class="btn btn--tiny btn--flex"><span data-i18n="check_version"></span></a></p>
 		</div>
+		<div id="diskUsage">
+			<a href="diskusage.php" class="btn btn--tiny btn--flex"><span data-i18n="disk_usage"></span></a>
+		</div>
 
 		<div class="accordion">
 			<form>
@@ -68,8 +71,7 @@ require_once('../lib/configsetup.inc.php');
 						if($i == 0){
 							$open = ' open init';
 						}
-						echo '<div class="panel'.$open.'"><div class="panel-heading"><h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span> <a href="../manual" title="Need help?" target="newwin"><i class="fa fa-info-circle" aria-hidden="true"></i></a></h3>
-</div>
+						echo '<div class="panel'.$open.'"><div class="panel-heading"><h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span> <a href="../manual" title="Need help?" target="newwin"><i class="fa fa-info-circle" aria-hidden="true"></i></a></h3></div>
 									<div class="panel-body">
 						';
 

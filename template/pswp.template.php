@@ -23,34 +23,39 @@
                 <!--  Controls are self-explanatory. Order can be changed. -->
 
                 <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"><i
-                        class="fa fa-times"></i></button>
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"><i class="fa fa-times"></i></button>
+                <button class="pswp__button pswp__button--share" title="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
 
+                <!-- custom buttons: -->
                 <?php if ($config['use_mail']): ?>
-                <button class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
+                <button type="button" class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
                 <?php endif; ?>
 
                 <?php if ($config['use_print']): ?>
-                <button class="pswp__button pswp__button--print" title="Print"><i class="fa fa-print"></i></button>
+                <button type="button" class="pswp__button pswp__button--print" title="Print"><i class="fa fa-print"></i></button>
                 <?php endif; ?>
 
                 <?php if ($config['use_qr']): ?>
-                <button class="pswp__button pswp__button--qrcode" title="QR Code"><i class="fa fa-qrcode"></i></button>
+                <button type="button" class="pswp__button pswp__button--qrcode" title="QR Code"><i class="fa fa-qrcode"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['use_download'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev'])): ?>
-                <a href="" download="" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></a>
+                <?php if ($config['use_download']): ?>
+		<button type="button" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></button>
                 <?php endif; ?>
 
                 <?php if ($config['chroma_keying']): ?>
-                <button class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
+                <button type="button" class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 
-                <!-- custom slideshow button: -->
-                <button class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
+                <?php if ($config['use_slideshow']): ?>
+                <button type="button" class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
+                <?php endif; ?>
+
+                <?php if ($config['allow_delete_from_gallery']): ?>
+                <button type="button" class="pswp__button pswp__button--delete" title="Delete"><i class="fa fa-trash"></i></button>
+                <?php endif; ?>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
                 <!-- element will get class pswp__preloader--active when preloader is running -->

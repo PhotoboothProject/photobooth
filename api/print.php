@@ -5,9 +5,9 @@ require_once('../lib/config.php');
 require_once('../lib/db.php');
 require_once('../lib/resize.php');
 
-if (empty($_GET['filename']) || !preg_match('/^[a-z0-9_]+\.jpg$/', $_GET['filename'])) {
+if (empty($_GET['filename'])) {
     die(json_encode([
-        'error' => 'No or invalid file provided',
+        'error' => 'No file provided',
     ]));
 }
 
@@ -15,8 +15,23 @@ $filename = $_GET['filename'];
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
 $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
-$filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $filename;
 $status = false;
+
+// exit with error if file does not exist
+if (!file_exists($filename_source)) {
+    die(json_encode([
+        'error' => "File $filename not found",
+    ]));
+}
+
+// Only jpg/jpeg are supported
+$imginfo = getimagesize($filename_source);
+$mimetype = $imginfo['mime'];
+if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
+    die(json_encode([
+        'error' => 'The source file type ' . $mimetype . ' is not supported'
+    ]));
+}
 
 // QR
 if (!isset($config['webserver_ip'])) {
@@ -38,13 +53,6 @@ $line3text = $config['textonprint']['line3'];
 
 // print frame
 $print_frame = __DIR__ . DIRECTORY_SEPARATOR . $config['print_frame_path'];
-
-// exit with error
-if (!file_exists($filename_source)) {
-    die(json_encode([
-        'error' => "File $filename not found",
-    ]));
-}
 
 if (!file_exists($filename_print)) {
     if ($config['print_qrcode']) {
@@ -138,7 +146,7 @@ die(json_encode([
 ]));
 
 // Resize and crop image by center
-function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 80)
+function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 100)
 {
     $imgsize = getimagesize($source_file);
     $width = $imgsize[0];
@@ -160,7 +168,7 @@ function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quali
         case 'image/jpeg':
             $image_create = "imagecreatefromjpeg";
             $image = "imagejpeg";
-            $quality = 80;
+            $quality = 100;
             break;
 
         default:

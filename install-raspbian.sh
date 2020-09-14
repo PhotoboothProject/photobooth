@@ -6,7 +6,11 @@ set -e
 # Show all commands
 # set -x
 
-webserver=$1
+if [ ! -z $1 ]; then
+    webserver=$1
+else
+    webserver=apache
+fi
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
@@ -44,6 +48,8 @@ COMMON_PACKAGES=(
     'gphoto2'
     'jq'
     'libimage-exiftool-perl'
+    'nodejs'
+    'npm'
     'php-gd'
     'yarn'
 )
@@ -153,9 +159,9 @@ apt update
 apt dist-upgrade -y
 
 info "### Photobooth needs some software to run."
-if [ $webserver == "nginx" ]; then
+if [ "$webserver" == "nginx" ]; then
     nginx_webserver
-elif [ $webserver == "lighttpd" ]; then
+elif [ "$webserver" == "lighttpd" ]; then
     lighttpd_webserver
 else
     apache_webserver
@@ -169,7 +175,7 @@ for package in "${COMMON_PACKAGES[@]}"; do
         info "[Package]   Installing missing common package: ${package}"
         if [[ ${package} == "yarn" ]]; then
                 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-                echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+                echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
                 apt update
         fi
         apt install -y ${package}
@@ -202,9 +208,27 @@ then
     info "### Now we are going to install Photobooth."
     git clone https://github.com/andi34/photobooth $INSTALLFOLDER
     cd $INSTALLFOLDERPATH
-    LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
-    info "### We ar installing version $LATEST_VERSION".
-    git checkout $LATEST_VERSION
+
+    echo -e "\033[0;33m### Please select a version to install:"
+    echo -e "    1 Install last development version"
+    echo -e "    2 Install last stable Release"
+    read -p "Please enter your choice: " -n 1 -r
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[1]$ ]]
+    then
+      info "### We are installing last development version"
+      git fetch origin dev
+      git checkout origin/dev
+    else
+      if [[ ! $REPLY =~ ^[2]$ ]]
+        then
+        info "### Invalid choice!"
+      fi
+      LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
+      info "### We are installing last stable Release: Version $LATEST_VERSION"
+      git checkout $LATEST_VERSION
+    fi
+
     git submodule update --init
 
     info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
@@ -227,8 +251,10 @@ info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
 gpasswd -a www-data plugdev
 
-info "### Disabling camera automount."
-chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
+    info "### Disabling camera automount."
+    chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+fi
 
 echo -e "\033[0;33m### You probably like to use a printer."
 read -p "### You like to install CUPS and set needing printer permissions? [y/N] " -n 1 -r
@@ -261,6 +287,16 @@ then
 EOF
 
 fi
+
+info "### Enable Nodejs GPIO access - please reboot in order to use the Remote Buzzer Feature"
+usermod -a -G gpio www-data
+cat > /etc/udev/rules.d/20-photobooth-gpiomem.rules <<EOF
+SUBSYSTEM=="bcm2835-gpiomem", KERNEL=="gpiomem", GROUP="gpio", MODE="0660"
+EOF
+sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+cat >> /boot/config.txt  << EOF
+dtoverlay=gpio-no-irq
+EOF
 
 info "### Congratulations you finished the install process."
 info "### Have fun with your Photobooth, but first restart your Pi."

@@ -1,11 +1,12 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth */
+/* global photoBooth i18n */
+// eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
         ssRunning = false,
         ssOnce = false;
 
-    const ssDelay = config.slideshow_pictureTime,
+    const ssDelay = config.gallery_pictureTime,
         ssButtonClass = '.pswp__button--playpause';
 
     const parseThumbnailElements = function (container) {
@@ -72,12 +73,21 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             },
 
             focus: true,
-            clickToCloseNonZoomable: false,
-            closeOnScroll: false,
-            closeOnOutsideClick: false,
+            clickToCloseNonZoomable: config.pswp_clickToCloseNonZoomablefalse,
+            closeOnScroll: config.pswp_closeOnScroll,
+            closeOnOutsideClick: config.pswp_closeOnOutsideClick,
+            preventSwiping: config.pswp_preventSwiping,
+            pinchToClose: config.pswp_pinchToClose,
+            closeOnVerticalDrag: config.pswp_closeOnVerticalDrag,
+            tapToToggleControls: config.pswp_tapToToggleControls,
+            animateTransitions: config.pswp_animateTransitions,
             shareEl: false,
-            zoomEl: false,
-            fullscreenEl: false
+            zoomEl: config.pswp_zoomEl,
+            fullscreenEl: config.pswp_fullscreenEl,
+            counterEl: config.pswp_counterEl,
+            history: config.pswp_history,
+            loop: config.pswp_loop,
+            bgOpacity: config.pswp_bgOpacity
         };
 
         // Pass data to PhotoSwipe and initialize it
@@ -135,12 +145,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         });
 
         gallery.listen('afterChange', function () {
-            const img = gallery.currItem.src.split('\\').pop().split('/').pop();
-
-            $('.pswp__button--download').attr({
-                href: 'api/download.php?image=' + img,
-                download: img
-            });
+            if (config.dev) {
+                const img = gallery.currItem.src.split('\\').pop().split('/').pop();
+                console.log('Current image: ' + img);
+            }
 
             if (ssRunning && ssOnce) {
                 ssOnce = false;
@@ -169,6 +177,31 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
         gallery.init();
     };
+
+    // Delete from DB in gallery
+    $('.pswp__button--delete').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let img = gallery.currItem.src;
+        img = img.split('\\').pop().split('/').pop();
+
+        const msg = i18n('really_delete_image');
+        const really = confirm(img + ' ' + msg);
+        if (really) {
+            photoBooth.deleteImage(img, (data) => {
+                if (data.success) {
+                    console.log('Deleted ' + img);
+                    photoBooth.reloadPage();
+                } else {
+                    console.log('Error while deleting ' + img);
+                    setTimeout(function () {
+                        photoBooth.reloadPage();
+                    }, 5000);
+                }
+            });
+        }
+    });
 
     // QR in gallery
     $('.pswp__button--qrcode').on('click touchstart', function (e) {

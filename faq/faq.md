@@ -93,7 +93,7 @@ Follow the steps mentioned here: [How to Fix NGINX 413 Request Entity Too Large 
 <hr>
 
 ### Can I use Hardware Button to take a Picture on my Raspberry Pi?
-You can use a hardware button connected on GPIO24 to trigger a photo. Set the Take Pictures key to e.g. `13` (enter key) via Admin panel to specify the key. Next you have to install some dependencies:
+When the photobooth display / screen is directly connected to the Raspberry Pi, this is a simple way to use a hardware button connected on GPIO24 to trigger a photo. Set the "Take Pictures key" to `13` (enter key) via Admin panel to specify the key. Next you have to install some dependencies:
 
 ```
 sudo apt install libudev-dev
@@ -108,6 +108,40 @@ You also need to run a python script in background to read the state of GPIO24 a
 sudo crontab -e
 @reboot python /var/www/html/button.py &
 ```
+
+<hr>
+
+### Hardware Button for WLAN connected screen (i.e. iPad) - Remote Buzzer Server
+This feature enables a GPIO pin connected hardware button / buzzer for a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad). Configuration takes place in the admin settings - Remote Buzzer Server area.
+
+**Important: You must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
+
+Debugging: switch on dev settings for server logs to be written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/io_server.log`). Clients will log server communication information to the browser console.
+
+If you experience crashes or access permission problems to GPIO pins, check [https://www.npmjs.com/package/rpio](https://www.npmjs.com/package/rpio) for additional settings required on the Pi
+
+***************
+Hardware Buzzer / Button
+***************
+The hardware buzzer connects to a GPIO pin, the server will watch for a PIN_DOWN event (pull to ground). This will initiate a message to the photobooth screen over network / WLAN, to trigger the action (thrill).
+
+- Short button press (default <= 2 sec) will trigger a single picture
+- Long button press (default > 2 sec) will trigger a collage
+ - If collage is configured with interruption, next button presses will trigger the next collage pictures. 
+ - If collage is disabled in the admin settings, long button press also triggers a single picture
+
+After triggered, the hardware button remains disabled until an action (picture / collage) has fully completed. Then the hardware button re-arms / is active again.
+
+**************
+Other Remote Trigger (experimental)
+**************
+The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
+
+- Channel: `photobooth-socket`
+- Commands: `start-picture`, `start-collage`
+- Response: `completed`  will be emitted to the client, once photobooth finished the task
+
+This functionality is experimental and largely untested. 
 
 <hr>
 
@@ -126,6 +160,7 @@ and add the following lines:
 **NOTE:** If you're using QR-Code replace `http://localhost/` with your local IP-Adress (e.g. `http://192.168.4.1`), else QR-Code does not work.
 
 <hr>
+
 #### Enable touch events
 If touch is not working on your Raspberry Pi edit the LXDE Autostart Script again
 ```
@@ -137,6 +172,7 @@ and add `--touch-events=enabled` for Chromium:
 ```
 
 <hr>
+
 #### How to hide the Mouse Cursor?
 There are two options to hide the cursor. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
 
@@ -261,37 +297,15 @@ Now restart your Chromium browser.
 <hr>
 
 ### How to update or add translations?
-On v2.2.0 and older:
-Edit the language file inside `resources/lang/` with your favorite text editor.
+**On v2.3.0 and newer:**  
+Photobooth joined Crowdin as localization manager, [join here](https://crowdin.com/project/photobooth) to translate Photobooth.  
+Crowdin gives a nice webinterface to make translating easy as possible. If there's different translations for a string, translator can use the vote function on suggested translations.  
+With Crowdin and your help translating we're able to get high-quality translations for all supported languages. Also it's easy to support a wider range of languages!  
+Your language is missing? Don't worry, create a [localization request here](https://github.com/andi34/photobooth/issues/new/choose) and we'll add it to the project.  
+
+**On v2.2.0 and older:**  
+Edit the language file inside `resources/lang/` with your favorite text editor.  
 Once you're done upload your changes and create a [pull request](https://github.com/andi34/photobooth/pulls).
-
-On v2.3.0 and newer:
-Get i18n-editor v2.0.0-beta.1 [from here](https://github.com/jcbvm/i18n-editor/releases/tag/2.0.0-beta.1). The application requires java 8 to be installed on your system. You can get java 8 from [https://www.oracle.com](https://www.oracle.com/java/technologies/javase-jre8-downloads.html).
-
-- If you're on Windows you can install the application by running the `.exe` file. If you're on Mac you can use the application by running the `.app` file. If you're on Linux you can use the application by running the `.jar` file (`java -jar i18n-editor.jar`).
-
-If you are running i18n-editor the first time, you simply need to drag-and-drop the `lang` folder (inside your photobooth source inside the `resources` folder) into i18n-editor:
-
-<details><summary>CLICK ME</summary>
-<img src="../resources/img/faq/i18n.png">
-</details>
-
-You could also click on `File` -> `New Project` -> `JSON Format ...` -> navigate into the `lang` folder -> click on `open`
-Now you get asked if you like to import found existing translations -> confirm clicking on `yes`:
-
-<details><summary>CLICK ME</summary>
-<img src="../resources/img/faq/i18n-import.png">
-</details>
-
-Make your translations:
-
-<details><summary>CLICK ME</summary>
-<img src="../resources/img/faq/i18n-imported.png">
-</details>
-
-Press `CTRL + S` to save your changes (or click on `File` -> `Save`).
-
-Now upload your changes and create a [pull request](https://github.com/andi34/photobooth/pulls).
 
 <hr>
 
@@ -328,3 +342,4 @@ If you run into any errors setting up your hotspot we can remove all the setting
 ```
 sudo ./setup-network.sh --clean
 ```
+

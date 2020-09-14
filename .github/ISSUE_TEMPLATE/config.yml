@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "⛔ Question"
+    url: https://t.me/PhotoboothGroup
+    about: "Please do not use GitHub for asking questions. Instead, please visit our Community at Telegram. Thanks in advance for helping us keep the issue tracker clean!"
+  - name: "⛔ Translations"
+    url: https://crowdin.com/project/photobooth
+    about: "Please do not use GitHub for submitting translations. Instead, please join our Crowding project. Thanks in advance for helping us keep the issue tracker clean!"

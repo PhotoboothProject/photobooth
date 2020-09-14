@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM i18n */
+/* globals initPhotoSwipeFromDOM i18n io */
 
 const photoBooth = (function () {
     // vars
@@ -26,6 +26,8 @@ const photoBooth = (function () {
         nextCollageNumber = 0,
         currentCollageFile = '',
         imgFilter = config.default_imagefilter;
+
+    let ioClient;
 
     const modal = {
         open: function (selector) {
@@ -93,6 +95,39 @@ const photoBooth = (function () {
         startPage.addClass('open');
         if (config.previewCamBackground) {
             api.startVideo('preview');
+        }
+
+        if (config.remotebuzzer_enabled) {
+            if (config.webserver_ip) {
+                ioClient = io('http://' + config.webserver_ip + ':' + config.remotebuzzer_port);
+
+                console.log(
+                    ' Remote buzzer connecting to http://' + config.webserver_ip + ':' + config.remotebuzzer_port
+                );
+
+                ioClient.on('photobooth-socket', function (data) {
+                    switch (data) {
+                        case 'start-picture':
+                            $('.resultInner').removeClass('show');
+                            api.thrill('photo');
+                            break;
+                        case 'start-collage':
+                            if (config.use_collage) {
+                                $('.resultInner').removeClass('show');
+                                api.thrill('collage');
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                ioClient.on('connect_failed', function () {
+                    console.log(' Remote buzzer unable to connect');
+                });
+            } else {
+                console.log(' Remote buzzer unable to connect - webserver_ip not defined in config');
+            }
         }
     };
 
@@ -173,6 +208,10 @@ const photoBooth = (function () {
             console.log('Taking photo:', takingPic);
         }
 
+        if (config.remotebuzzer_enabled) {
+            ioClient.emit('photobooth-socket', 'in progress');
+        }
+
         if (config.previewCamBackground) {
             wrapper.css('background-color', config.colors.panel);
         }
@@ -240,6 +279,10 @@ const photoBooth = (function () {
             console.log('Take Picture:' + photoStyle);
         }
 
+        if (config.remotebuzzer_enabled) {
+            ioClient.emit('photobooth-socket', 'in progress');
+        }
+
         if (config.previewFromCam) {
             if (config.previewCamTakesPic && !config.dev) {
                 videoSensor.width = videoView.videoWidth;
@@ -298,6 +341,10 @@ const photoBooth = (function () {
                             api.thrill('collage');
                         }, 1000);
                     } else {
+                        if (config.remotebuzzer_enabled) {
+                            ioClient.emit('photobooth-socket', 'collage-wait-for-next');
+                        }
+
                         $('<a class="btn" href="#">' + i18n('nextPhoto') + '</a>')
                             .appendTo('.loading')
                             .click((ev) => {
@@ -384,6 +431,9 @@ const photoBooth = (function () {
 
                 if (data.error) {
                     api.errorPic(data);
+                    if (config.remotebuzzer_enabled) {
+                        ioClient.emit('photobooth-socket', 'completed');
+                    }
                 } else {
                     api.renderPic(data.file);
                 }
@@ -394,6 +444,10 @@ const photoBooth = (function () {
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
+
+                if (config.remotebuzzer_enabled) {
+                    ioClient.emit('photobooth-socket', 'completed');
+                }
             }
         });
     };
@@ -435,6 +489,9 @@ const photoBooth = (function () {
                         api.reloadPage();
                     } else {
                         console.log('Error while deleting image');
+                        setTimeout(function () {
+                            api.reloadPage();
+                        }, 5000);
                     }
                 });
             });
@@ -464,6 +521,10 @@ const photoBooth = (function () {
         };
 
         preloadImage.src = imageUrl;
+
+        if (config.remotebuzzer_enabled) {
+            ioClient.emit('photobooth-socket', 'completed');
+        }
     };
 
     // add image to Gallery
@@ -550,19 +611,51 @@ const photoBooth = (function () {
 
     api.printImage = function (imageSrc, cb) {
         modal.open('#print_mesg');
+        const errormsg = i18n('error');
 
         setTimeout(function () {
             $.ajax({
-                url: 'api/print.php?filename=' + encodeURI(imageSrc)
-            }).done(function (data) {
-                if (config.dev) {
-                    console.log(data);
-                }
+                method: 'GET',
+                url: 'api/print.php',
+                data: {
+                    filename: imageSrc
+                },
+                success: (data) => {
+                    console.log('Picture processed: ', data);
 
-                setTimeout(function () {
-                    modal.close('#print_mesg');
-                    cb();
-                }, 5000);
+                    if (data.error) {
+                        console.log('An error occurred: ', data.error);
+                        $('#print_mesg').empty();
+                        $('#print_mesg').html(
+                            '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
+                        );
+                    }
+
+                    setTimeout(function () {
+                        modal.close('#print_mesg');
+                        if (data.error) {
+                            $('#print_mesg').empty();
+                            $('#print_mesg').html(
+                                '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                            );
+                        }
+                        cb();
+                    }, 5000);
+                },
+                error: (jqXHR, textStatus) => {
+                    console.log('An error occurred: ', textStatus);
+                    $('#print_mesg').empty();
+                    $('#print_mesg').html(
+                        '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
+                    );
+
+                    setTimeout(function () {
+                        modal.close('#print_mesg');
+                        $('#print_mesg').empty();
+                        $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
+                        cb();
+                    }, 5000);
+                }
             });
         }, 1000);
     };
@@ -575,7 +668,16 @@ const photoBooth = (function () {
                 file: imageName
             },
             success: (data) => {
+                if (data.error) {
+                    console.log('Error while deleting image');
+                }
                 cb(data);
+            },
+            error: (jqXHR, textStatus) => {
+                console.log('Error while deleting image: ', textStatus);
+                setTimeout(function () {
+                    api.reloadPage();
+                }, 5000);
             }
         });
     };
@@ -745,12 +847,14 @@ const photoBooth = (function () {
         e.preventDefault();
 
         api.thrill('photo');
+        $('.newpic').blur();
     });
 
     $('.triggerCollage').on('click', function (e) {
         e.preventDefault();
 
         api.thrill('collage');
+        $('.newcollage').blur();
     });
 
     $(document).on('keyup', function (ev) {

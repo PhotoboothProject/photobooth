@@ -4,6 +4,8 @@ header('Content-Type: application/json');
 require_once('../lib/config.php');
 require_once('../lib/db.php');
 
+$os = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
+
 $data = $_POST;
 if (!isset($data['type'])) {
     echo json_encode('error');
@@ -95,6 +97,10 @@ if ($data['type'] == 'config') {
         $newConfig['previewCamTakesPic'] = false;
     }
 
+    if ($os === 'windows') {
+        $newConfig['remotebuzzer_enabled'] = false;
+    }
+
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
     if (file_put_contents($my_config_file, $content)) {
@@ -105,6 +111,8 @@ if ($data['type'] == 'config') {
         echo json_encode('error');
     }
 }
+
+require_once('../lib/remotebuzzer_config.php');
 
 function arrayRecursiveDiff($aArray1, $aArray2)
 {

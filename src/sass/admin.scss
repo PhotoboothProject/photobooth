@@ -196,3 +196,11 @@ select {
     background-color: $hoverPanelColor;
   }
 }
+
+#diskUsage {
+  position: absolute;
+  top: 100px;
+  right: 30px;
+  left: auto;
+  bottom: auto;
+}

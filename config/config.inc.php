@@ -11,6 +11,7 @@ $config['pictureRotation'] = '0';
 $config['use_print'] = false;
 $config['use_qr'] = true;
 $config['use_download'] = true;
+$config['use_slideshow'] = true;
 $config['print_qrcode'] = false;
 $config['print_frame'] = false;
 $config['print_frame_path'] = '../resources/img/frames/frame.png';
@@ -43,6 +44,7 @@ $config['use_filter'] = true;
 $config['default_imagefilter'] = 'plain';
 $config['disabled_filters'] = array();
 $config['allow_delete'] = true;
+$config['allow_delete_from_gallery'] = true;
 $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['take_frame'] = false;
@@ -124,9 +126,25 @@ $config['newest_first'] = true;
 $config['scrollbar'] = false;
 $config['show_date'] = true; // only works if file_naming = 'dateformatted'
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
+$config['gallery_pictureTime'] = '3000';
 $config['gallery_bottom_bar'] = true;
+// PhotoSwipe
+$config['pswp_clickToCloseNonZoomable'] = false;
+$config['pswp_closeOnScroll'] = false;
+$config['pswp_closeOnOutsideClick'] = false;
+$config['pswp_preventSwiping'] = false;
+$config['pswp_pinchToClose'] = true;
+$config['pswp_closeOnVerticalDrag'] = true;
+$config['pswp_tapToToggleControls'] = true;
+$config['pswp_animateTransitions'] = false;
+$config['pswp_history'] = true;
+$config['pswp_loop'] = true;
+$config['pswp_zoomEl'] = false;
+$config['pswp_fullscreenEl'] = false;
+$config['pswp_counterEl'] = true;
+$config['pswp_bgOpacity'] = 1;
 
-// SLIDESHOW
+// STANDALONE SLIDESHOW
 $config['slideshow_refreshTime'] = '60';
 $config['slideshow_pictureTime'] = '3000';
 $config['slideshow_randomPicture'] = true;
@@ -171,6 +189,13 @@ $config['jpeg_quality_image'] = 100;
 $config['reset_remove_images'] = true;
 $config['reset_remove_mailtxt'] = true;
 $config['reset_remove_config'] = true;
+
+// REMOTE BUZZER
+$config['remotebuzzer_enabled'] = false;
+$config['remotebuzzer_port'] = 14711;
+$config['remotebuzzer_pin'] = 40;
+$config['remotebuzzer_nodebin'] = '/usr/bin/node';
+$config['remotebuzzer_collagetime'] = '2'; // control time to distinguish picture from collage
 
 // PRESERVE EXIF
 $config['exiftool']['cmd'] = null;
