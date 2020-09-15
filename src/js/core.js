@@ -22,6 +22,7 @@ const photoBooth = (function () {
         videoSensor = document.querySelector('#video--sensor');
 
     let timeOut,
+        isPrinting = false,
         takingPic = false,
         nextCollageNumber = 0,
         currentCollageFile = '',
@@ -617,54 +618,63 @@ const photoBooth = (function () {
     };
 
     api.printImage = function (imageSrc, cb) {
-        modal.open('#print_mesg');
         const errormsg = i18n('error');
 
-        setTimeout(function () {
-            $.ajax({
-                method: 'GET',
-                url: 'api/print.php',
-                data: {
-                    filename: imageSrc
-                },
-                success: (data) => {
-                    console.log('Picture processed: ', data);
+        if (isPrinting) {
+            console.log('Printing already: ' + isPrinting);
+        } else {
+            modal.open('#print_mesg');
+            isPrinting = true;
+            setTimeout(function () {
+                $.ajax({
+                    method: 'GET',
+                    url: 'api/print.php',
+                    data: {
+                        filename: imageSrc
+                    },
+                    success: (data) => {
+                        console.log('Picture processed: ', data);
 
-                    if (data.error) {
-                        console.log('An error occurred: ', data.error);
+                        if (data.error) {
+                            console.log('An error occurred: ', data.error);
+                            $('#print_mesg').empty();
+                            $('#print_mesg').html(
+                                '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
+                            );
+                        }
+
+                        setTimeout(function () {
+                            modal.close('#print_mesg');
+                            if (data.error) {
+                                $('#print_mesg').empty();
+                                $('#print_mesg').html(
+                                    '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                                );
+                            }
+                            cb();
+                            isPrinting = false;
+                        }, config.printing_time);
+                    },
+                    error: (jqXHR, textStatus) => {
+                        console.log('An error occurred: ', textStatus);
                         $('#print_mesg').empty();
                         $('#print_mesg').html(
-                            '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
+                            '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
                         );
-                    }
 
-                    setTimeout(function () {
-                        modal.close('#print_mesg');
-                        if (data.error) {
+                        setTimeout(function () {
+                            modal.close('#print_mesg');
                             $('#print_mesg').empty();
                             $('#print_mesg').html(
                                 '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
                             );
-                        }
-                        cb();
-                    }, config.printing_time);
-                },
-                error: (jqXHR, textStatus) => {
-                    console.log('An error occurred: ', textStatus);
-                    $('#print_mesg').empty();
-                    $('#print_mesg').html(
-                        '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
-                    );
-
-                    setTimeout(function () {
-                        modal.close('#print_mesg');
-                        $('#print_mesg').empty();
-                        $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
-                        cb();
-                    }, 5000);
-                }
-            });
-        }, 1000);
+                            cb();
+                            isPrinting = false;
+                        }, 5000);
+                    }
+                });
+            }, 1000);
+        }
     };
 
     api.deleteImage = function (imageName, cb) {

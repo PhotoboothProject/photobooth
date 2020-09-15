@@ -4,7 +4,8 @@
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
         ssRunning = false,
-        ssOnce = false;
+        ssOnce = false,
+        isPrinting = false;
 
     const ssDelay = config.gallery_pictureTime,
         ssButtonClass = '.pswp__button--playpause';
@@ -230,11 +231,17 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        const img = gallery.currItem.src.split('\\').pop().split('/').pop();
+        if (isPrinting) {
+            console.log('Printing already in progress!');
+        } else {
+            isPrinting = true;
+            const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-        photoBooth.printImage(img, () => {
-            gallery.close();
-        });
+            photoBooth.printImage(img, () => {
+                gallery.close();
+                isPrinting = false;
+            });
+        }
     });
 
     // Close Gallery while Taking a Picture or Collage
