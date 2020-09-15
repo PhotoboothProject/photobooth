@@ -647,7 +647,7 @@ const photoBooth = (function () {
                             );
                         }
                         cb();
-                    }, 5000);
+                    }, config.printing_time);
                 },
                 error: (jqXHR, textStatus) => {
                     console.log('An error occurred: ', textStatus);

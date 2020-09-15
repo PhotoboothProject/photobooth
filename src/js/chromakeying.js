@@ -157,7 +157,7 @@ function printImage(filename, cb) {
                         $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
                     }
                     cb();
-                }, 5000);
+                }, config.printing_time);
             },
             error: (jqXHR, textStatus) => {
                 console.log('An error occurred: ', textStatus);

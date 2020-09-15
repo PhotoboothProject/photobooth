@@ -11,6 +11,7 @@ $config['pictureRotation'] = '0';
 $config['use_print'] = false;
 $config['auto_print'] = false;
 $config['auto_print_delay'] = '1000';
+$config['printing_time'] = '5000';
 $config['use_qr'] = true;
 $config['use_download'] = true;
 $config['use_slideshow'] = true;

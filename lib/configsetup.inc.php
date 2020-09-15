@@ -616,6 +616,16 @@ $configsetup = [
 			'range_step' => 250,
 			'unit' => 'milliseconds'
 		],
+		'printing_time' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['printing_time'],
+			'name' => 'printing_time',
+			'value' => $config['printing_time'],
+			'range_min' => 250,
+			'range_max' => 20000,
+			'range_step' => 250,
+			'unit' => 'milliseconds'
+		],
 		'print_qrcode' => [
 			'type' => 'checkbox',
 			'name' => 'print_qrcode',
