@@ -87,6 +87,16 @@ $configsetup = [
 			'name' => 'auto_print',
 			'value' => $config['auto_print']
 		],
+		'auto_print_delay' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['auto_print_delay'],
+			'name' => 'auto_print_delay',
+			'value' => $config['auto_print_delay'],
+			'range_min' => 250,
+			'range_max' => 10000,
+			'range_step' => 250,
+			'unit' => 'milliseconds'
+		],
 		'use_qr' => [
 			'type' => 'checkbox',
 			'name' => 'use_qr',

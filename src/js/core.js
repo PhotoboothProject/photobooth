@@ -480,7 +480,9 @@ const photoBooth = (function () {
 
         // If autoprint is activated the picture will immediately printed after taken.
         if (config.auto_print) {
-            api.printImage(filename);
+            setTimeout(function () {
+                api.printImage(filename);
+            }, config.auto_print_delay);
         }
 
         resultPage
