@@ -899,6 +899,15 @@ const photoBooth = (function () {
                 console.log('Taking photo already in progress!');
             }
         }
+
+        if (config.use_print && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+            if (isPrinting) {
+                console.log('Printing already in progress!');
+            } else {
+                $('.printbtn').trigger('click');
+                $('.printbtn').blur();
+            }
+        }
     });
 
     // clear Timeout to not reset the gallery, if you clicked anywhere

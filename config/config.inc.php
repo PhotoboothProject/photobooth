@@ -72,6 +72,7 @@ $config['mail_file'] = 'mail-adresses';
 // use for example https://keycode.info to get the key code
 $config['photo_key'] = null;
 $config['collage_key'] = null;
+$config['print_key'] = null;
 
 // LANGUAGE
 // possible values: de, el, en, es, fr

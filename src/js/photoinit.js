@@ -303,4 +303,14 @@ function initPhotoSwipeFromDOM(gallerySelector) {
     }
 
     $(gallerySelector).on('click', onThumbnailClick);
+
+    $(document).on('keyup', function (ev) {
+        if (config.use_print && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+            if (isPrinting) {
+                console.log('Printing already in progress!');
+            } else {
+                $('.pswp__button--print').trigger('click');
+            }
+        }
+    });
 }

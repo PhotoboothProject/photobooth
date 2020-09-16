@@ -626,6 +626,12 @@ $configsetup = [
 			'range_step' => 250,
 			'unit' => 'milliseconds'
 		],
+		'print_key' => [
+			'type' => 'input',
+			'name' => 'print_key',
+			'placeholder' => '',
+			'value' => $config['print_key']
+		],
 		'print_qrcode' => [
 			'type' => 'checkbox',
 			'name' => 'print_qrcode',
