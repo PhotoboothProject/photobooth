@@ -70,7 +70,7 @@ $config['collage_key'] = null;
 $config['print_key'] = null;
 
 // LANGUAGE
-// possible values: de, el, en, es, fr
+// possible values: de, el, en, es, fr, pl
 $config['language'] = 'en';
 
 // StartScreen
