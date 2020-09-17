@@ -162,7 +162,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 				<a href="#" class="btn mailbtn"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
 				<?php endif; ?>
 
-				<?php if ($config['use_print']): ?>
+				<?php if ($config['use_print_result']): ?>
 				<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 				<?php endif; ?>
 

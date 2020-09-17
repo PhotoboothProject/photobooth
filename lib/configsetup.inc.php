@@ -77,11 +77,6 @@ $configsetup = [
 			'placeholder' => '0644',
 			'value' => $config['picture_permissions']
 		],
-		'use_print' => [
-			'type' => 'checkbox',
-			'name' => 'use_print',
-			'value' => $config['use_print']
-		],
 		'use_qr' => [
 			'type' => 'checkbox',
 			'name' => 'use_qr',
@@ -601,6 +596,21 @@ $configsetup = [
 		]
 	],
 	'print' => [
+		'use_print_result' => [
+			'type' => 'checkbox',
+			'name' => 'use_print_result',
+			'value' => $config['use_print_result']
+		],
+		'use_print_gallery' => [
+			'type' => 'checkbox',
+			'name' => 'use_print_gallery',
+			'value' => $config['use_print_gallery']
+		],
+		'use_print_chromakeying' => [
+			'type' => 'checkbox',
+			'name' => 'use_print_chromakeying',
+			'value' => $config['use_print_chromakeying']
+		],
 		'auto_print' => [
 			'type' => 'checkbox',
 			'name' => 'auto_print',
