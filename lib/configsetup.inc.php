@@ -511,6 +511,12 @@ $configsetup = [
 		]
 	],
 	'folders' => [
+		'data' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['folders']['data'],
+			'name' => 'folders[data]',
+			'value' => $config['folders']['data']
+		],
 		'images' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['folders']['images'],
@@ -546,12 +552,6 @@ $configsetup = [
 			'placeholder' => $defaultConfig['folders']['tmp'],
 			'name' => 'folders[tmp]',
 			'value' => $config['folders']['tmp']
-		],
-		'data' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['data'],
-			'name' => 'folders[data]',
-			'value' => $config['folders']['data']
 		]
 	],
 	'event' => [
