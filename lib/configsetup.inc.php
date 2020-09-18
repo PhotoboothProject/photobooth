@@ -44,6 +44,19 @@ $configsetup = [
 			'name' => 'keep_images',
 			'value' => $config['keep_images']
 		],
+		'thumb_size' => [
+			'type' => 'select',
+			'name' => 'thumb_size',
+			'placeholder' => $defaultConfig['thumb_size'],
+			'options' => [
+				'360px' => 'XS',
+				'540px' => 'S',
+				'900px' => 'M',
+				'1080px' => 'L',
+				'1260px' => 'XL'
+			],
+			'value' => $config['thumb_size']
+		],
 		'show_error_messages' => [
 			'type' => 'checkbox',
 			'name' => 'show_error_messages',
