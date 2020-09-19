@@ -146,10 +146,16 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         });
 
         gallery.listen('afterChange', function () {
+            const img = gallery.currItem.src.split('\\').pop().split('/').pop();
+
             if (config.dev) {
-                const img = gallery.currItem.src.split('\\').pop().split('/').pop();
                 console.log('Current image: ' + img);
             }
+
+            $('.pswp__button--custom-download').attr({
+                href: 'api/download.php?image=' + img,
+                download: img
+            });
 
             if (ssRunning && ssOnce) {
                 ssOnce = false;
