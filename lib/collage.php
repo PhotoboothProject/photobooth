@@ -128,6 +128,15 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                         return false;
                     }
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
+
+                    if ($takeFrame && $takeFrameAlways) {
+                        $frame = imagecreatefrompng($framePath);
+                        $frame = resizePngImage($frame, imagesx($tempSubImage), imagesy($tempSubImage));
+                        $x = (imagesx($tempSubImage)/2) - (imagesx($frame)/2);
+                        $y = (imagesy($tempSubImage)/2) - (imagesy($frame)/2);
+                        imagecopy($tempSubImage, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+                    }
+
                     $tempSubRotated = imagerotate($tempSubImage, 90, 0);// Rotate image
                     list($width, $height) = getimagesize($srcImagePaths[0]);
                     imagecopyresized($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew, $height, $width); // copy image to background
