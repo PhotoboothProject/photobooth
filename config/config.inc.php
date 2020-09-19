@@ -45,6 +45,7 @@ $config['polaroid_rotation'] = '0';
 $config['take_frame'] = false;
 $config['take_frame_path'] = '../resources/img/frames/frame.png';
 $config['take_collage_frame'] = false;
+$config['take_collage_frame_always'] = false;
 $config['take_collage_frame_path'] = '../resources/img/frames/frame.png';
 $config['collage_layout'] = '2x2'; // possible values are '2x2' or '2x4'
 $config['collage_background'] = '../resources/img/frames/DefaultCollageBackground.png';

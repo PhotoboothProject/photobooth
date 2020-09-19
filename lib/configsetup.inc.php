@@ -244,6 +244,11 @@ $configsetup = [
 			'name' => 'take_collage_frame',
 			'value' => $config['take_collage_frame']
 		],
+		'take_collage_frame_always' => [
+			'type' => 'checkbox',
+			'name' => 'take_collage_frame_always',
+			'value' => $config['take_collage_frame_always']
+		],
 		'take_collage_frame_path' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['take_collage_frame_path'],
