@@ -118,6 +118,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
             $PositionsX = [63, 423, 785, 1146]; //X offset in Pixel
             $PositionsY =[57, 642];             //Y offset in Pixel
             $my_collage= imagecreatefrompng($background_image);
+            list($bg_width, $bg_height) = getimagesize($background_image);
 
             for ($j = 0; $j < 2; $j++) { //delta Y
                 $dY =$PositionsY[$j];
@@ -133,6 +134,13 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     imagedestroy($tempSubImage);  // Destroy temporary images
                     imagedestroy($tempSubRotated); // Destroy temporary images
                 }
+            }
+            if ($takeFrame && !$takeFrameAlways) {
+                $frame = imagecreatefrompng($framePath);
+                $frame = resizePngImage($frame, $bg_width, $bg_height);
+                $x = (imagesx($my_collage)/2) - (imagesx($frame)/2);
+                $y = (imagesy($my_collage)/2) - (imagesy($frame)/2);
+                imagecopy($my_collage, $frame, $x, $y, 0, 0, $bg_width, $bg_height);
             }
             imagejpeg($my_collage, $destImagePath); // Transfer immage to destImagePath with returns the image to core
             imagedestroy($my_collage); // Destroy the created collage in memory
