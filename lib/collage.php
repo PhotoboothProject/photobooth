@@ -47,25 +47,29 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath, $
             $my_collage_width = $width_before;
             $my_collage_height = $height_before;
 
-            $my_collage = imagecreatetruecolor($my_collage_width,$my_collage_height);
+            $my_collage = imagecreatetruecolor($my_collage_width, $my_collage_height);
             $background = imagecolorallocate($my_collage, 240, 240, 240);
-            imagefill($my_collage,0,0,$background);
+            imagefill($my_collage, 0, 0, $background);
 
             $images_rotated = array();
 
             for ($i = 0; $i < 4; $i++) {
                 $img_tmp = imagecreatefromjpeg($srcImagePaths[$i]);
 
-                if ($takeFrame) {
-                    $frame = imagecreatefrompng($framePath);
-                    $frame = resizePngImage($frame, imagesx($img_tmp), imagesy($img_tmp));
-                    $x = (imagesx($img_tmp)/2) - (imagesx($frame)/2);
-                    $y = (imagesy($img_tmp)/2) - (imagesy($frame)/2);
-                    imagecopy($img_tmp, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+                if (!file_exists($srcImagePaths[$i])) {
+                    return false;
                 }
 
                 $img_rotate_tmp = imagerotate($img_tmp, $degrees, 0);
                 $images_rotated[] = resizeImage($img_rotate_tmp, $height_before/3.3, $width_before/3.5);
+            }
+
+            if ($takeFrame) {
+                $frame = imagecreatefrompng($framePath);
+                $frame = resizePngImage($frame, $my_collage_width, $my_collage_height);
+                $x = (imagesx($my_collage)/2) - (imagesx($frame)/2);
+                $y = (imagesy($my_collage)/2) - (imagesy($frame)/2);
+                imagecopy($my_collage, $frame, $x, $y, 0, 0, $my_collage_width, $my_collage_height);
             }
 
             $new_width = imagesx($images_rotated[0]);
