@@ -10,6 +10,7 @@ $config['auto_reload_on_error'] = true;
 $config['pictureRotation'] = '0';
 $config['use_qr'] = true;
 $config['use_download'] = true;
+$config['download_thumbs'] = false;
 $config['use_slideshow'] = true;
 $config['use_mail'] = false; // mail data needs to be configured
 $config['show_fork'] = true;
