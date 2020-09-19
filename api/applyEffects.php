@@ -34,7 +34,7 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_collage_frame'], $collage_frame_path, $config['collage_layout'], $collage_background)) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_collage_frame'], $collage_frame_path, $collage_background)) {
         die(json_encode([
             'error' => 'Could not create collage'
         ]));

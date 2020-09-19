@@ -1,12 +1,15 @@
 <?php
+require_once(__DIR__ . '/config.php');
 
-function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath, $Layout, $background_image) {
+define('LAYOUT', $config['collage_layout']);
+
+function createCollage($srcImagePaths, $destImagePath, $takeFrame, $framePath, $background_image) {
 
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== 4) {
         return false;
     }
 
-    switch($Layout) {
+    switch(LAYOUT) {
         case '2x2':
             list($width, $height) = getimagesize($srcImagePaths[0]);
 
