@@ -133,10 +133,6 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/andreasblaesius)
 
-### :information_source: Donators Early Access
-
-Donators who donated 5€ or more get early access to new features/options i am adding (please leave a message at donation telling your email address).
-
 ### :mortar_board: Tutorial
 
 [Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
