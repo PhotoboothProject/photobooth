@@ -8,6 +8,6 @@ const translator = new Translator({
     debug: config.dev
 });
 
-translator.fetch(['de', 'en', 'es', 'el', 'fr']).then(() => {
+translator.fetch(config.language).then(() => {
     translator.translatePageTo(config.language);
 });
