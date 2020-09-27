@@ -22,7 +22,9 @@ $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 $frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_frame_path'];
 $collage_frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_collage_frame_path'];
+$collage_background = __DIR__ . DIRECTORY_SEPARATOR .$config['collage_background'];
 $picture_permissions = $config['picture_permissions'];
+$thumb_size = substr($config['thumb_size'], 0, -2);
 
 if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
     $collageBasename = substr($filename_tmp, 0, -4);
@@ -32,7 +34,7 @@ if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_collage_frame'], $collage_frame_path)) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $config['take_collage_frame'], $config['take_collage_frame_always'], $collage_frame_path, $collage_background)) {
         die(json_encode([
             'error' => 'Could not create collage'
         ]));
@@ -115,7 +117,7 @@ if ($config['chroma_keying']) {
 }
 
 // image scale, create thumbnail
-$thumbResource = resizeImage($imageResource, 500, 500);
+$thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
 
 imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
 imagedestroy($thumbResource);

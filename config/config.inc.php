@@ -8,16 +8,10 @@ $config['dev'] = false;
 $config['show_error_messages'] = true;
 $config['auto_reload_on_error'] = true;
 $config['pictureRotation'] = '0';
-$config['use_print'] = false;
 $config['use_qr'] = true;
 $config['use_download'] = true;
+$config['download_thumbs'] = false;
 $config['use_slideshow'] = true;
-$config['print_qrcode'] = false;
-$config['print_frame'] = false;
-$config['print_frame_path'] = '../resources/img/frames/frame.png';
-$config['crop_onprint'] = false;
-$config['crop_width'] = '1000';
-$config['crop_height'] = '500';
 $config['use_mail'] = false; // mail data needs to be configured
 $config['show_fork'] = true;
 $config['previewFromCam'] = false; // experimental see https://github.com/andreknieriem/photobooth/pull/30
@@ -38,6 +32,7 @@ $config['cntdwn_time'] = '5'; // control countdown timer
 $config['collage_cntdwn_time'] = '3'; // control countdown timer between collage pictures
 $config['cheese_time'] = '1000'; // control time for cheeeeese!
 $config['keep_images'] = true;
+$config['thumb_size'] = '540px';
 $config['image_preview_before_processing'] = true;
 $config['preserve_exif_data'] = false;
 $config['use_filter'] = true;
@@ -50,7 +45,10 @@ $config['polaroid_rotation'] = '0';
 $config['take_frame'] = false;
 $config['take_frame_path'] = '../resources/img/frames/frame.png';
 $config['take_collage_frame'] = false;
+$config['take_collage_frame_always'] = false;
 $config['take_collage_frame_path'] = '../resources/img/frames/frame.png';
+$config['collage_layout'] = '2x2'; // possible values are '2x2' or '2x4'
+$config['collage_background'] = '../resources/img/frames/DefaultCollageBackground.png';
 $config['chroma_keying'] = false;
 $config['use_collage'] = true;
 $config['continuous_collage'] = true;
@@ -69,9 +67,10 @@ $config['mail_file'] = 'mail-adresses';
 // use for example https://keycode.info to get the key code
 $config['photo_key'] = null;
 $config['collage_key'] = null;
+$config['print_key'] = null;
 
 // LANGUAGE
-// possible values: de, el, en, es, fr
+// possible values: de, el, en, es, fr, pl
 $config['language'] = 'en';
 
 // StartScreen
@@ -150,6 +149,19 @@ $config['slideshow_pictureTime'] = '3000';
 $config['slideshow_randomPicture'] = true;
 $config['slideshow_use_thumbs'] = false;
 
+// PRINT
+$config['use_print_result'] = false;
+$config['use_print_gallery'] = false;
+$config['use_print_chromakeying'] = false;
+$config['auto_print'] = false;
+$config['auto_print_delay'] = '1000';
+$config['printing_time'] = '5000';
+$config['print_qrcode'] = false;
+$config['print_frame'] = false;
+$config['print_frame_path'] = '../resources/img/frames/frame.png';
+$config['crop_onprint'] = false;
+$config['crop_width'] = '1000';
+$config['crop_height'] = '500';
 // TEXT ON PRINT
 $config['is_textonprint'] = false;
 $config['textonprint']['line1'] = 'line 1';

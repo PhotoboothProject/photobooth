@@ -25,12 +25,8 @@ This is my personal Photobooth fork with some extras on top (more information ca
 - Standalone Gallery ([localhost/gallery.php](http://localhost/gallery.php)).
 - Slideshow via Gallery or standalone Gallery (under [localhost/slideshow](http://localhost/slideshow)).
 - Settings can be changed via Admin Panel (under [localhost/admin](http://localhost/admin)):
-  - Multi-language support:
-    - German
-    - English
-    - Spanish
-    - French
-    - Greek
+  - Multi-language support
+    - [Translate on Crowdin](https://crowdin.com/project/photobooth)
   - Login to protect Admin Panel and/or Start page can be enabled.
   - Gallery:
     - Order pictures in gallery ascending oder descending by picture age.
@@ -65,6 +61,7 @@ This is my personal Photobooth fork with some extras on top (more information ca
   - access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php)
   - offline manual with settings explained under [localhost/manual](http://localhost/manual) ([andi34/photobooth#59](https://github.com/andi34/photobooth/pull/59))
   - offline FAQ under [localhost/manual/faq.html](http://localhost/manual/faq.html)
+  - disk usage page, access via admin panel or at [localhost/admin/diskusage.php](http://localhost/admin/diskusage.php)
   - fix windows compatibility
   - fix check for image filter
   - performance improvement ([andreknieriem/photobooth#226](https://github.com/andreknieriem/photobooth/pull/226))
@@ -94,10 +91,47 @@ This is my personal Photobooth fork with some extras on top (more information ca
   - Preview/Stream from device cam as background on start page ([andi34/photobooth#58](https://github.com/andi34/photobooth/pull/58))
   - Allow using a stream from URL at countdown for preview
   - Allow to rotate preview from URL
-  - Show button bar inside gallery on bottom or on top of the image
   - Auto reload Photobooth on error while taking a photo
   - Allow to change permissons on picture
   - qrHelp: define WiFi SSID used on QR via admin panel
+  - Updated [PhotoSwipe Gallery](https://github.com/andi34/PhotoSwipe)
+  - Show button bar inside gallery on bottom or on top of the image
+  - allow to adjust PhotoSwipe Gallery config via Adminpanel, also allow to use some PhotoSwipe functions and make more PhotoSwipe settings available (settings explained inside the manual):
+    - Mouse click on image should close the gallery (enable/disable)
+    - Close gallery if clicked outside of the image (enable/disable)
+    - Close picture on page scroll (enable/disable)
+    - Close gallery when dragging vertically and when image is not zoomed (enable/disable)
+    - Show image counter (enable/disable)
+    - Show PhotoSwipe fullscreen button (enable/disable)
+    - Show PhotoSwipe zoom button (enable/disable)
+    - PhotoSwipe history module (enable/disable)
+    - Pinch to close gallery (enable/disable)
+    - Toggle visibility of controls/buttons by tap (enable/disable)
+    - allow to adjust PhotoSwipe background opacity (0-1)
+    - Loop images (enable/disable)
+    - Slide transition effect (enable/disable)
+    - Swiping to change slides (enable/disable)
+  - gallery: button to delete an image, enable by default
+  - Remote Buzzer Server based on io sockets
+    - Enables a GPIO pin connected hardware button / buzzer for a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad)
+  - Choose thumbnail size:
+    - XS = max 360px
+    - S = max 540px
+    - M = max 900px
+    - L = max 1080px
+    - XL = max 1260px"
+  - Advanced printing functions [#109](https://github.com/andi34/photobooth/pull/109):
+    - Auto print function
+    - allow to delay auto print
+    - allow to adjust time "Started printing! Please wait..." is visible
+    - allow to trigger print via defined key
+    - options to show the print button independent (e.g. can be only visible on gallery)
+  - Advanced collage options [#108](https://github.com/andi34/photobooth/pull/108):
+    - Choose collage layout:
+      - 2x2
+      - 2x4
+      - 2x4 + background image
+    - Collage: apply frame once after taking or to every picture of the collage
 
 ## :camera: Screenshots
 
@@ -132,10 +166,6 @@ Please take a look at the changelog in our [Photobooth Wiki](https://github.com/
 If you like my work and like to keep me motivated you can buy me a coconut water:
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/andreasblaesius)
-
-### :information_source: Donators Early Access
-
-Donators who donated 5€ or more get early access to new features/options i am adding (please leave a message at donation telling your email address).
 
 ### :mortar_board: Tutorial
 

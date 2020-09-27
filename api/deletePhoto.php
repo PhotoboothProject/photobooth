@@ -13,6 +13,8 @@ if (empty($_POST['file'])) {
 $file = $_POST['file'];
 $filePath = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filePathThumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$filePathKeying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
+$filePathTmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 
 // Only jpg/jpeg are supported
 $imginfo = getimagesize($filePath);
@@ -27,6 +29,26 @@ if (!unlink($filePath) || !unlink($filePathThumb)) {
     die(json_encode([
         'error' => 'Could not delete file',
     ]));
+}
+
+if ($config['chroma_keying']) {
+    if (is_readable($filePathKeying)) {
+        if (!unlink ($filePathKeying)) {
+            die(json_encode([
+                'error' => 'Could not delete keying file',
+            ]));
+        }
+    }
+}
+
+if ($config['keep_images']) {
+    if (is_readable($filePathTmp)) {
+        if (!unlink ($filePathTmp)) {
+            die(json_encode([
+                'error' => 'Could not delete tmp file',
+            ]));
+        }
+    }
 }
 
 deleteImageFromDB($file);

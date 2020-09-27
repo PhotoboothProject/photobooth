@@ -12,7 +12,8 @@ $configsetup = [
 				'el' => 'EL',
 				'en' => 'EN',
 				'es' => 'ES',
-				'fr' => 'FR'
+				'fr' => 'FR',
+				'pl' => 'PL'
 			],
 			'value' => $config['language']
 		],
@@ -43,6 +44,19 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'keep_images',
 			'value' => $config['keep_images']
+		],
+		'thumb_size' => [
+			'type' => 'select',
+			'name' => 'thumb_size',
+			'placeholder' => $defaultConfig['thumb_size'],
+			'options' => [
+				'360px' => 'XS',
+				'540px' => 'S',
+				'900px' => 'M',
+				'1080px' => 'L',
+				'1260px' => 'XL'
+			],
+			'value' => $config['thumb_size']
 		],
 		'show_error_messages' => [
 			'type' => 'checkbox',
@@ -77,11 +91,6 @@ $configsetup = [
 			'placeholder' => '0644',
 			'value' => $config['picture_permissions']
 		],
-		'use_print' => [
-			'type' => 'checkbox',
-			'name' => 'use_print',
-			'value' => $config['use_print']
-		],
 		'use_qr' => [
 			'type' => 'checkbox',
 			'name' => 'use_qr',
@@ -103,6 +112,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'use_download',
 			'value' => $config['use_download']
+		],
+		'download_thumbs' => [
+			'type' => 'checkbox',
+			'name' => 'download_thumbs',
+			'value' => $config['download_thumbs']
 		],
 		'use_slideshow' => [
 			'type' => 'checkbox',
@@ -231,11 +245,33 @@ $configsetup = [
 			'name' => 'take_collage_frame',
 			'value' => $config['take_collage_frame']
 		],
+		'take_collage_frame_always' => [
+			'type' => 'checkbox',
+			'name' => 'take_collage_frame_always',
+			'value' => $config['take_collage_frame_always']
+		],
 		'take_collage_frame_path' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['take_collage_frame_path'],
 			'name' => 'take_collage_frame_path',
 			'value' => htmlentities($config['take_collage_frame_path'])
+		],
+		'collage_layout' => [
+			'type' => 'select',
+			'name' => 'collage_layout',
+			'placeholder' => $defaultConfig['collage_layout'],
+			'options' => [
+				'2x2' => '2x2',
+				'2x4' => '2x4',
+				'2x4BI' => '2x4 + background image'
+			],
+			'value' => $config['collage_layout']
+		],
+		'collage_background' => [
+			'type' => 'input',
+			'name' => 'collage_background',
+			'placeholder' => $defaultConfig['collage_background'],
+			'value' => $config['collage_background']
 		],
 		'collage_cntdwn_time' => [
 			'type' => 'range',
@@ -516,6 +552,12 @@ $configsetup = [
 		]
 	],
 	'folders' => [
+		'data' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['folders']['data'],
+			'name' => 'folders[data]',
+			'value' => $config['folders']['data']
+		],
 		'images' => [
 			'type' => 'input',
 			'placeholder' => $defaultConfig['folders']['images'],
@@ -551,12 +593,6 @@ $configsetup = [
 			'placeholder' => $defaultConfig['folders']['tmp'],
 			'name' => 'folders[tmp]',
 			'value' => $config['folders']['tmp']
-		],
-		'data' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['data'],
-			'name' => 'folders[data]',
-			'value' => $config['folders']['data']
 		]
 	],
 	'event' => [
@@ -601,6 +637,52 @@ $configsetup = [
 		]
 	],
 	'print' => [
+		'use_print_result' => [
+			'type' => 'checkbox',
+			'name' => 'use_print_result',
+			'value' => $config['use_print_result']
+		],
+		'use_print_gallery' => [
+			'type' => 'checkbox',
+			'name' => 'use_print_gallery',
+			'value' => $config['use_print_gallery']
+		],
+		'use_print_chromakeying' => [
+			'type' => 'checkbox',
+			'name' => 'use_print_chromakeying',
+			'value' => $config['use_print_chromakeying']
+		],
+		'auto_print' => [
+			'type' => 'checkbox',
+			'name' => 'auto_print',
+			'value' => $config['auto_print']
+		],
+		'auto_print_delay' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['auto_print_delay'],
+			'name' => 'auto_print_delay',
+			'value' => $config['auto_print_delay'],
+			'range_min' => 250,
+			'range_max' => 10000,
+			'range_step' => 250,
+			'unit' => 'milliseconds'
+		],
+		'printing_time' => [
+			'type' => 'range',
+			'placeholder' => $defaultConfig['printing_time'],
+			'name' => 'printing_time',
+			'value' => $config['printing_time'],
+			'range_min' => 250,
+			'range_max' => 20000,
+			'range_step' => 250,
+			'unit' => 'milliseconds'
+		],
+		'print_key' => [
+			'type' => 'input',
+			'name' => 'print_key',
+			'placeholder' => '',
+			'value' => $config['print_key']
+		],
 		'print_qrcode' => [
 			'type' => 'checkbox',
 			'name' => 'print_qrcode',

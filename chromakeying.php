@@ -71,7 +71,7 @@ if (file_exists($keyingimage)) {
 		<div class="chroma-control-bar">
 			<a class="btn btn--flex" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
 
-			<?php if ($config['use_print']): ?>
+			<?php if ($config['use_print_chromakeying']): ?>
 				<a class="btn btn--flex" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 			<?php endif; ?>
 

@@ -4,7 +4,8 @@
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
         ssRunning = false,
-        ssOnce = false;
+        ssOnce = false,
+        isPrinting = false;
 
     const ssDelay = config.gallery_pictureTime,
         ssButtonClass = '.pswp__button--playpause';
@@ -145,10 +146,16 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         });
 
         gallery.listen('afterChange', function () {
+            const img = gallery.currItem.src.split('\\').pop().split('/').pop();
+
             if (config.dev) {
-                const img = gallery.currItem.src.split('\\').pop().split('/').pop();
                 console.log('Current image: ' + img);
             }
+
+            $('.pswp__button--custom-download').attr({
+                href: 'api/download.php?image=' + img,
+                download: img
+            });
 
             if (ssRunning && ssOnce) {
                 ssOnce = false;
@@ -230,11 +237,17 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        const img = gallery.currItem.src.split('\\').pop().split('/').pop();
+        if (isPrinting) {
+            console.log('Printing already in progress!');
+        } else {
+            isPrinting = true;
+            const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-        photoBooth.printImage(img, () => {
-            gallery.close();
-        });
+            photoBooth.printImage(img, () => {
+                gallery.close();
+                isPrinting = false;
+            });
+        }
     });
 
     // Close Gallery while Taking a Picture or Collage
@@ -296,4 +309,14 @@ function initPhotoSwipeFromDOM(gallerySelector) {
     }
 
     $(gallerySelector).on('click', onThumbnailClick);
+
+    $(document).on('keyup', function (ev) {
+        if (config.use_print_gallery && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+            if (isPrinting) {
+                console.log('Printing already in progress!');
+            } else if ($('#gallery').hasClass('gallery--open') && typeof gallery !== 'undefined') {
+                $('.pswp__button--print').trigger('click');
+            }
+        }
+    });
 }

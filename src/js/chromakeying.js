@@ -4,6 +4,7 @@ let mainImage;
 let mainImageWidth;
 let mainImageHeight;
 let backgroundImage;
+let isPrinting = false;
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -132,47 +133,58 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 function printImage(filename, cb) {
     const errormsg = i18n('error');
 
-    setTimeout(function () {
-        $.ajax({
-            method: 'GET',
-            url: 'api/print.php',
-            data: {
-                filename: filename
-            },
-            success: (data) => {
-                console.log('Picture processed: ', data);
+    if (isPrinting) {
+        console.log('Printing already: ' + isPrinting);
+    } else {
+        isPrinting = true;
+        setTimeout(function () {
+            $.ajax({
+                method: 'GET',
+                url: 'api/print.php',
+                data: {
+                    filename: filename
+                },
+                success: (data) => {
+                    console.log('Picture processed: ', data);
 
-                if (data.error) {
-                    console.log('An error occurred: ', data.error);
+                    if (data.error) {
+                        console.log('An error occurred: ', data.error);
+                        $('#print_mesg').empty();
+                        $('#print_mesg').html(
+                            '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
+                        );
+                    }
+
+                    setTimeout(function () {
+                        $('#print_mesg').removeClass('modal--show');
+                        if (data.error) {
+                            $('#print_mesg').empty();
+                            $('#print_mesg').html(
+                                '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                            );
+                        }
+                        cb();
+                        isPrinting = false;
+                    }, config.printing_time);
+                },
+                error: (jqXHR, textStatus) => {
+                    console.log('An error occurred: ', textStatus);
                     $('#print_mesg').empty();
                     $('#print_mesg').html(
-                        '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
+                        '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
                     );
-                }
 
-                setTimeout(function () {
-                    $('#print_mesg').removeClass('modal--show');
-                    if (data.error) {
+                    setTimeout(function () {
+                        $('#print_mesg').removeClass('modal--show');
                         $('#print_mesg').empty();
                         $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
-                    }
-                    cb();
-                }, 5000);
-            },
-            error: (jqXHR, textStatus) => {
-                console.log('An error occurred: ', textStatus);
-                $('#print_mesg').empty();
-                $('#print_mesg').html('<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>');
-
-                setTimeout(function () {
-                    $('#print_mesg').removeClass('modal--show');
-                    $('#print_mesg').empty();
-                    $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
-                    cb();
-                }, 5000);
-            }
-        });
-    }, 1000);
+                        cb();
+                        isPrinting = false;
+                    }, 5000);
+                }
+            });
+        }, 1000);
+    }
 }
 
 function saveImage(cb) {
@@ -233,6 +245,16 @@ function closeHandler(ev) {
         window.history.back();
     }
 }
+
+$(document).on('keyup', function (ev) {
+    if (config.use_print_chromakeying && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+        if (isPrinting) {
+            console.log('Printing already in progress!');
+        } else {
+            $('#print-btn').trigger('click');
+        }
+    }
+});
 
 $(document).ready(function () {
     $('#save-btn').on('click', saveImageHandler);
