@@ -314,7 +314,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         if (config.use_print_gallery && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
             if (isPrinting) {
                 console.log('Printing already in progress!');
-            } else {
+            } else if ($('#gallery').hasClass('gallery--open') && typeof gallery !== 'undefined') {
                 $('.pswp__button--print').trigger('click');
             }
         }
