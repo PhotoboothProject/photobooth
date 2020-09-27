@@ -135,7 +135,7 @@ This is my personal Photobooth fork with some extras on top (more information ca
 
 ## :camera: Screenshots
 
-![](https://raw.githubusercontent.com/wiki/andi34/photobooth/images/start.png)
+![](https://raw.githubusercontent.com/wiki/andi34/photobooth/resources/img/start.png)
 
 ## :gear: Prerequisites
 
@@ -203,3 +203,4 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [Natalie Stroud](https://github.com/stroudn1)
 - [jarettrude](https://github.com/jarettrude)
 - [Andreas Remdt](https://github.com/andreasremdt)
+- [alzo425](https://github.com/alzo425)
