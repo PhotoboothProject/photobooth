@@ -45,10 +45,10 @@ const parseConfig = () => {
 };
 
 const getDriveInfos = (drives) => {
-  //Assuming that the lsblk version supports JSON output!
   let json = null;
 
   try {
+    //Assuming that the lsblk version supports JSON output!
     const output = execSync('export LC_ALL=C; lsblk -ablJO 2>/dev/null; unset LC_ALL').toString();
     json = JSON.parse(output);
   } catch (err) {
@@ -189,6 +189,11 @@ if (isProcessRunning('rsync')) {
 }
 
 const parsedConfig = parseConfig();
+
+if (!parsedConfig) {
+  return;
+}
+
 const driveInfos = getDriveInfos(parsedConfig);
 const mountedDrives = mountDrives(driveInfos);
 startSync(mountedDrives);
