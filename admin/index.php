@@ -64,6 +64,10 @@ require_once('../lib/configsetup.inc.php');
 				<?php
 					$i = 0;
 					foreach($configsetup as $panel => $fields) {
+						if ($fields['platform'] != 'all' && ! empty($fields['platform']) && $fields['platform'] != $os) {
+							continue;
+						};
+
 						$open = '';
 						if($i == 0){
 							$open = ' open init';
