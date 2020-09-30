@@ -93,7 +93,10 @@ const mountDrives = (drives) => {
         console.log(`ERROR: Count mount ${drive.path}`);
       }
     }
-    result.push(drive);
+
+    if (drive.mountpoint) {
+      result.push(drive);
+    }
   }
 
   return result;
