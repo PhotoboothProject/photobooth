@@ -64,7 +64,7 @@ require_once('../lib/configsetup.inc.php');
 				<?php
 					$i = 0;
 					foreach($configsetup as $panel => $fields) {
-						if ($fields['platform'] != 'all' && ! empty($fields['platform']) && $fields['platform'] != $os) {
+						if (! empty($fields['platform']) && $fields['platform'] != 'all' && $fields['platform'] != $os) {
 							continue;
 						};
 
@@ -77,6 +77,9 @@ require_once('../lib/configsetup.inc.php');
 						';
 
 						foreach($fields as $key => $field){
+							if ($key == 'platform') {
+								continue;
+							};
 							echo '<div class="form-row">';
 							switch($field['type']) {
 								case 'input':
