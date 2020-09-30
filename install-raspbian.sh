@@ -53,6 +53,7 @@ COMMON_PACKAGES=(
     'php-gd'
     'php-zip'
     'yarn'
+    'rsync'
 )
 
 apache_webserver() {
@@ -316,6 +317,9 @@ sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
 cat >> /boot/config.txt  << EOF
 dtoverlay=gpio-no-irq
 EOF
+
+info "### Adding rsync cronjob for file backup"
+crontab -l | { cat; echo "*/5 * * * * cd ${INSTALLFOLDERPATH} && ./sync-to-drive.js"; } | crontab - 
 
 info "### Congratulations you finished the install process."
 info "### Have fun with your Photobooth, but first restart your Pi."
