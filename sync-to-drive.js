@@ -128,6 +128,12 @@ const startSync = (drives) => {
       }
     })();
 
+    if (!cmd) {
+      console.log('ERROR: No command for syncing!');
+
+      return;
+    }
+
     console.log('Executing:', cmd);
 
     try {
