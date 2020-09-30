@@ -9,6 +9,10 @@ const path = require('path');
 const BASE_DIR = __dirname;
 const CONFIG_DIR_NAME = 'config';
 const CONFIG_FILE_NAME = 'drivename.conf';
+/*
+ * This is the folder within the (photobooth) folder structure where data (photos, db, etc.) resides.
+ * It needs to be changed when the photobooth data storage location changes.
+ */
 const DATA_DIR_NAME = 'data';
 const PLATFORM = process.platform;
 
