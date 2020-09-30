@@ -120,7 +120,7 @@ const startSync = (drives) => {
           return [
             'rsync',
             '-a',
-            '--delete',
+            '--delete-before',
             '-b',
             `--backup-dir=${path.join(drive.mountpoint, 'backup')}`,
             dataPath,
