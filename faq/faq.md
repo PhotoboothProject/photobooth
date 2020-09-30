@@ -380,7 +380,7 @@ sudo ./setup-network.sh --clean
 ### Turn on file backup
 If you want to enable the automatic file backup/syncing script you need to add a
 cronjob that changes the working directoy to the photobooth folder and calls the
-script. Per default the script will run every [5 minutes](https://crowdin.com/project/photobooth).
+script. Per default the script will run every [5 minutes](https://crontab.guru/#*/5_*_*_*_*).
 
 **Important: You must make sure change to the photobooth directory because the script expects to be run from within the photobooth folder!**.
 
