@@ -318,8 +318,15 @@ cat >> /boot/config.txt  << EOF
 dtoverlay=gpio-no-irq
 EOF
 
-info "### Adding rsync cronjob for file backup"
-crontab -l | { cat; echo "*/5 * * * * cd ${INSTALLFOLDERPATH} && ./sync-to-drive.js"; } | crontab - 
+echo -e "\033[0;33m### You'd probably like to use the file backup feature."
+read -p "### Would you like to add a cronjob for file backup? [y/N] " -n 1 -r
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    info "### Adding rsync cronjob for file backup"
+    
+    crontab -l | { cat; echo "*/5 * * * * cd ${INSTALLFOLDERPATH} && ./sync-to-drive.js"; } | crontab - 
+fi
 
 info "### Congratulations you finished the install process."
 info "### Have fun with your Photobooth, but first restart your Pi."

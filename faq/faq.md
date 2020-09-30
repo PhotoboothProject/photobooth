@@ -377,3 +377,24 @@ If you run into any errors setting up your hotspot we can remove all the setting
 sudo ./setup-network.sh --clean
 ```
 
+### Turn on file backup
+If you want to enable the automatic file backup/syncing script you need to add a
+cronjob that changes the working directoy to the photobooth folder and calls the
+script. Per default the script will run every [5 minutes](https://crowdin.com/project/photobooth).
+
+**Important: You must make sure change to the photobooth directory because the script expects to be run from within the photobooth folder!**.
+
+```
+*/5 * * * * cd /var/www/html/ && ./sync-to-drive.js
+```
+
+Example to add it on the fly:
+
+```
+crontab -l | { cat; echo "*/5 * * * * cd /var/www/html/ && ./sync-to-drive.js"; } | crontab - 
+```
+
+The default config will look for a drive with the label photobooth.
+If you want to add other drives to sync to just add them to the `drivename.conf`.
+Either with their name (sdX), path (/dev/sdX) or with the label (photobooth)
+
