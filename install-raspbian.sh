@@ -319,13 +319,39 @@ dtoverlay=gpio-no-irq
 EOF
 
 echo -e "\033[0;33m### You'd probably like to use the file backup feature."
-read -p "### Would you like to add a cronjob for file backup? [y/N] " -n 1 -r
+read -p "### Would you like to enable the file backup? [y/N] " -n 1 -r
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+    info "### Disabling automount for pi user"
+
+    mkdir -p /home/pi/.config/pcmanfm/LXDE/
+    cat >> /home/pi/.config/pcmanfm/LXDE/pcmanfm.conf <<EOF
+[volume]
+mount_on_startup=0
+mount_removable=0
+EOF
+
+    info "### Adding polkit rule so www-data can (un)mount drives"
+
+    cat >> /etc/polkit-1/localauthority/50-local.d/udisks2.pkla <<EOF
+[Allow www-data to mount drives with udisks2]
+Identity=unix-user:www-data
+Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+
+
+    info "### Creating and chowning log folder for cronjob log"
+    mkdir /var/log/photoboothsync/
+    chown www-data:www-data /var/log/photoboothsync/
+
     info "### Adding rsync cronjob for file backup"
     
-    crontab -l | { cat; echo "*/5 * * * * cd ${INSTALLFOLDERPATH} && ./sync-to-drive.js"; } | crontab - 
+    sudo -u www-data crontab -l | { cat; echo 'MAILTO=""'; } | sudo -u www-data crontab - 
+    sudo -u www-data crontab -l | { cat; echo "*/5 * * * * (cd ${INSTALLFOLDERPATH} && ./sync-to-drive.js) >> /var/log/photoboothsync/synclog.txt 2>&1"; } | sudo -u www-data crontab - 
 fi
 
 info "### Congratulations you finished the install process."
