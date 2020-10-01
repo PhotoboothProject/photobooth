@@ -6,49 +6,42 @@ const fs = require('fs');
 const path = require('path');
 
 //This script needs to be run from within the photobooth directory
-const BASE_DIR = __dirname;
-const CONFIG_DIR_NAME = 'config';
-const CONFIG_FILE_NAME = 'drivename.conf';
-/*
- * This is the folder within the (photobooth) folder structure where data (photos, db, etc.) resides.
- * It needs to be changed when the photobooth data storage location changes.
- */
-const DATA_DIR_NAME = 'data';
+const API_DIR_NAME = 'api';
+const API_FILE_NAME = 'config.php';
 const PLATFORM = process.platform;
 
-const parseConfig = () => {
-  const confPath = path.join(BASE_DIR, CONFIG_DIR_NAME, CONFIG_FILE_NAME);
+const getConfigFromPHP = () => {
+  const cmd = `cd ${API_DIR_NAME} && php ./${API_FILE_NAME}`;
 
-  if (!fs.existsSync(confPath)) {
-    console.log(`ERROR: Couldn't find the config file: ${confPath}`);
+  try {
+    const stdout = execSync(cmd).toString();
 
-    return null;
-  }
-  //Should be checked, becuase the behavior of fs.readFileSync() is platform-specific https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback
-  if (fs.lstatSync(confPath).isDirectory()) {
-    console.log(`ERROR: ${confPath} is a directory!`);
-
-    return null;
+    return JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
+  } catch (err) {
+    console.log('ERROR: Couldnt get config from PHP', err);
   }
 
-  const fileContent = fs.readFileSync(confPath, {encoding: 'utf8'});
-  const split = fileContent.split('\n').map((line) => line.replace('\r', ''));
-
-  return split.reduce((arr, line) => {
-    if (line && !line.startsWith('#')) {
-      const trimmed = line.trim();
-      if (trimmed.includes('#')) {
-        arr.push(trimmed.substr(0, trimmed.indexOf('#')));
-      } else {
-        arr.push(trimmed);
-      }
-    }
-
-    return arr;
-  }, []);
+  return null;
 };
 
-const getDriveInfos = (drives) => {
+const parseConfig = (config) => {
+  if (!config) {
+    return null;
+  }
+
+  try {
+    return {
+      dataAbsPath: config.foldersAbs.data,
+      drives: [...config.sync_script_targets]
+    };
+  } catch (err) {
+    console.log('ERROR: Couldt parse config!', err);
+  }
+
+  return null;
+};
+
+const getDriveInfos = ({drives}) => {
   let json = null;
 
   try {
@@ -106,11 +99,9 @@ const mountDrives = (drives) => {
   return result;
 };
 
-const startSync = (drives) => {
-  const dataPath = path.join(BASE_DIR, DATA_DIR_NAME);
-
-  if (!fs.existsSync(dataPath)) {
-    console.log(`ERROR: Folder ${dataPath} doesn't exist!`);
+const startSync = ({dataAbsPath, drives}) => {
+  if (!fs.existsSync(dataAbsPath)) {
+    console.log(`ERROR: Folder ${dataAbsPath} doesn't exist!`);
 
     return;
   }
@@ -126,9 +117,9 @@ const startSync = (drives) => {
             '-a',
             '--delete-before',
             '-b',
-            `--backup-dir=${path.join(drive.mountpoint, 'backup')}`,
-            dataPath,
-            path.join(drive.mountpoint)
+            `--backup-dir=${path.join(drive.mountpoint, 'deleted')}`,
+            dataAbsPath,
+            path.join(drive.mountpoint, 'sync')
           ].join(' ');
         default:
           return null;
@@ -151,7 +142,7 @@ const startSync = (drives) => {
       });
       spwndCmd.unref();
     } catch (err) {
-      console.log('ERROR! Count start sync!');
+      console.log('ERROR! Couldnt start sync!');
     }
   }
 };
@@ -192,12 +183,20 @@ if (isProcessRunning('rsync')) {
   return;
 }
 
-const parsedConfig = parseConfig();
+const phpConfig = getConfigFromPHP();
 
-if (!parsedConfig) {
+if (!phpConfig) {
+  return;
+} else if (!phpConfig.sync_script_enabled) {
+  console.log('WARN: Sync script was disabled by config! Aborting!');
+
   return;
 }
 
+const parsedConfig = parseConfig(phpConfig);
 const driveInfos = getDriveInfos(parsedConfig);
 const mountedDrives = mountDrives(driveInfos);
-startSync(mountedDrives);
+startSync({
+  dataAbsPath: parsedConfig.dataAbsPath,
+  drives: mountedDrives
+});

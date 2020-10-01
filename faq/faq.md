@@ -394,10 +394,17 @@ Example to add it on the fly:
 crontab -l | { cat; echo "*/5 * * * * cd /var/www/html/ && ./sync-to-drive.js"; } | crontab - 
 ```
 
-The default config will look for a drive with the label photobooth.
-If you want to add other drives to sync to just add them to the `drivename.conf`.
-Either with their name (`sdX`), path (`/dev/sdX`) or with the label (`photobooth`)
+If you want to add other drives to sync files to, just add them via the admin panel in your 
+browser [localhost/admin](http://localhost/admin) or add them directly to the `'sync_script_targets'` array inside `config/my.config.inc.php`.
 
-**NOTE:** Currently the data directory is hard coded! If you're using a different path for
-file storage (e.g. not `/var/www/html/`) you'd need to change it within the `sync-to-drive.js`.
+Example:
+
+```
+'sync_script_targets' => array (
+  'sdX',
+)
+```
+
+Either with their name (`sdX`), path (`/dev/sdX`) or with the label (`photobooth`).
+The default config will look for a drive with the label photobooth.
 

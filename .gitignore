@@ -2,7 +2,6 @@ archives/
 bower_components/
 config/*
 !config/config.inc.php
-!config/drivename.conf
 data/
 digicamcontrol/
 manual/faq.html

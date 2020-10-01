@@ -256,3 +256,10 @@ $config['remotebuzzer_nodebin'] = '/usr/bin/node';
 $config['reset_remove_images'] = true;
 $config['reset_remove_mailtxt'] = true;
 $config['reset_remove_config'] = true;
+
+
+// B A C K U P  /  S Y N C  S C R I P T
+// Currently supported formats are : sdX, /dev/sdX and simply the label of the drive (not the manufacturer)
+// In the default config the script will only search for drives with the label photobooth!
+$config['sync_script_enabled'] = false;
+$config['sync_script_targets'] = ['photobooth']; //Default targets for the sync sctipt
