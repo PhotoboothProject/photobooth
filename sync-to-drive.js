@@ -83,7 +83,7 @@ const mountDrives = (drives) => {
         const mountPoint = mountRes
           .substr(mountRes.indexOf('at') + 3)
           .trim()
-          .replace('\n');
+          .replace(/[\n.]/gu, '');
 
         drive.mountpoint = mountPoint;
       } catch (error) {
