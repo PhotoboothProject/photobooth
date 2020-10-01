@@ -118,6 +118,7 @@ const startSync = ({dataAbsPath, drives}) => {
             '--delete-before',
             '-b',
             `--backup-dir=${path.join(drive.mountpoint, 'deleted')}`,
+            '--ignore-existing',
             dataAbsPath,
             path.join(drive.mountpoint, 'sync')
           ].join(' ');
