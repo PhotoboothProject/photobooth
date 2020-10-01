@@ -325,12 +325,15 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     info "### Disabling automount for pi user"
 
-    mkdir -p /home/pi/.config/pcmanfm/LXDE/
-    cat >> /home/pi/.config/pcmanfm/LXDE/pcmanfm.conf <<EOF
+    mkdir -p /home/pi/.config/pcmanfm/LXDE-pi/
+    cat >> /home/pi/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
 mount_on_startup=0
 mount_removable=0
+autorun=0
 EOF
+
+    chown -R pi:pi /home/pi/.config/pcmanfm
 
     info "### Adding polkit rule so www-data can (un)mount drives"
 
