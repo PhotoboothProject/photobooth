@@ -347,14 +347,14 @@ ResultActive=yes
 EOF
 
 
-    info "### Creating and chowning log folder for cronjob log"
-    mkdir /var/log/photoboothsync/
-    chown www-data:www-data /var/log/photoboothsync/
+#    info "### Creating and chowning log folder for cronjob log"
+#    mkdir /var/log/photoboothsync/
+#    chown www-data:www-data /var/log/photoboothsync/
 
-    info "### Adding rsync cronjob for file backup"
-    
-    sudo -u www-data crontab -l | { cat; echo 'MAILTO=""'; } | sudo -u www-data crontab - 
-    sudo -u www-data crontab -l | { cat; echo "*/5 * * * * (cd ${INSTALLFOLDERPATH} && ./sync-to-drive.js) >> /var/log/photoboothsync/synclog.txt 2>&1"; } | sudo -u www-data crontab - 
+#    info "### Adding rsync cronjob for file backup"
+#    
+#    sudo -u www-data crontab -l | { cat; echo 'MAILTO=""'; } | sudo -u www-data crontab - 
+#    sudo -u www-data crontab -l | { cat; echo "*/5 * * * * (cd ${INSTALLFOLDERPATH} && ./sync-to-drive.js) >> /var/log/photoboothsync/synclog.txt 2>&1"; } | sudo -u www-data crontab - 
 fi
 
 info "### Congratulations you finished the install process."

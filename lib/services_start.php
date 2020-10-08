@@ -20,4 +20,18 @@
 
 ?>
 <script type="text/javascript" src="node_modules/socket.io-client/dist/socket.io.slim.js"></script>
-<?php endif; ?>
+
+<?php endif;
+
+      if ($config['synctodrive_enabled']) {
+      	if ($config['dev']) {
+	      $logfile = $config['folders']['tmp']."/".$config['synctodrive_logfile'];
+	}
+	else {
+	     $logfile = "/dev/null";
+	 }
+
+	 print ("\t<!-- Sync To Drive enabled --- starting server -->\n");
+	 proc_close(proc_open ($config['remotebuzzer_nodebin']." ./sync-to-drive.js 1>>".$logfile." 2>&1 &", array(), $foo));
+	}
+?>

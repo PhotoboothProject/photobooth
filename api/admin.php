@@ -118,7 +118,9 @@ if ($data['type'] == 'config') {
     }
 }
 
-require_once('../lib/remotebuzzer_config.php');
+/* Kill service daemons after config has changed */
+/* this ensures services will be restarted (or not) in adherence to latest config after the change */
+require_once('../lib/services_config.php');
 
 function arrayRecursiveDiff($aArray1, $aArray2)
 {

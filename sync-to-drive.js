@@ -66,7 +66,7 @@ const getDriveInfos = ({drives}) => {
     if (
       drives.some((drive) => drive === blk.name || drive === blk.kname || drive === blk.path || drive === blk.label)
     ) {
-      arr.push(blk);
+	arr.push(blk);
     }
 
     return arr;
@@ -133,7 +133,7 @@ const startSync = ({dataAbsPath, drives}) => {
       return;
     }
 
-    console.log('Executing:', cmd);
+    console.log('Sync-To-Drive server [', myPid, ']: Executing command:', cmd);
 
     try {
       const spwndCmd = spawn(cmd, {
@@ -188,16 +188,47 @@ const phpConfig = getConfigFromPHP();
 
 if (!phpConfig) {
   return;
-} else if (!phpConfig.sync_script_enabled) {
+} else if (!phpConfig.synctodrive_enabled) {
   console.log('WARN: Sync script was disabled by config! Aborting!');
 
   return;
 }
 
+/* PARSE PHOTOBOOTH CONFIG */
 const parsedConfig = parseConfig(phpConfig);
-const driveInfos = getDriveInfos(parsedConfig);
-const mountedDrives = mountDrives(driveInfos);
-startSync({
-  dataAbsPath: parsedConfig.dataAbsPath,
-  drives: mountedDrives
+
+/* WRITE PROCESS PID FILE */
+const myPid = process.pid;
+console.log('Sync-To-Drive server [', myPid, ']: Starting server for sync to drive');
+
+const pidFilename = phpConfig.folders.tmp + '/synctodrive_server.pid';
+
+fs.writeFile(pidFilename, myPid, function (err) {
+    if (err) {
+        throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
+    }
+
+    console.log('Sync-To-Drive server [', myPid, ']: PID file created [', pidFilename, ']');
 });
+
+
+function foreverLoop() {
+
+    console.log('Sync-To-Drive server [', myPid, ']: Starting sync process');
+
+    const driveInfos = getDriveInfos(parsedConfig);
+
+    driveInfos.forEach((element) => {console.log('Sync-To-Drive server [', myPid, ']: Processing drive ', element.name, " -> ", element.path);})
+    
+    const mountedDrives = mountDrives(driveInfos);
+
+    driveInfos.forEach((element) => {console.log('Sync-To-Drive server [', myPid, ']: Mounted drive ', element.name, " -> ", element.mountpoint);})
+
+    startSync({
+	dataAbsPath: parsedConfig.dataAbsPath,
+	drives: mountedDrives
+    });
+
+    setTimeout(foreverLoop, 30000);
+}
+foreverLoop()

@@ -1159,6 +1159,24 @@ $configsetup = [
 			'value' => $config['remotebuzzer_logfile']
 		]
  	],
+	'synctodrive' => [
+		'enabled' => [
+			'type' => 'checkbox',
+			'name' => 'synctodrive_enabled',
+			'value' => $config['synctodrive_enabled']
+		],
+		'targets' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['synctodrive_targets'],
+			'name' => 'synctodrive_targets',
+			'value' => $config['synctodrive_targets']
+		],
+		'logfile' => [
+			'type' => 'hidden',
+			'name' => 'synctodrive_logfile',
+			'value' => $config['synctodrive_logfile']
+		]
+ 	],
 	'reset' => [
 		'remove_images' => [
 			'type' => 'checkbox',

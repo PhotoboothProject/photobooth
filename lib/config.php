@@ -78,7 +78,8 @@ $config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
 
 $config['collage_limit'] = 4;
 
-$config['remotebuzzer_logfile'] = 'io_server.log';
+$config['remotebuzzer_logfile'] = 'remotebuzzer_server.log';
+$config['synctodrive_logfile'] = 'synctodrive_server.log';
 
 $defaultConfig = $config;
 

@@ -184,6 +184,6 @@ endif;
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
 
-	<?php require_once('lib/remotebuzzer_server.php'); ?>
+	<?php require_once('lib/services_start.php'); ?>
 </body>
 </html>
