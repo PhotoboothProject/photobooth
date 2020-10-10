@@ -12,7 +12,7 @@
 
 		print ("\t<!-- Remote Buzzer Enabled --- starting server -->\n");
 
-		proc_close(proc_open ($config['remotebuzzer_nodebin']." resources/js/remotebuzzer_server.js 1>>".$logfile." 2>&1 &", array(), $foo));
+		proc_close(proc_open ($config['nodebin']['cmd']." resources/js/remotebuzzer_server.js 1>>".$logfile." 2>&1 &", array(), $foo));
 
 	} else {
 	       print ("\t<!-- Remote Buzzer Enabled --- server already started (port in use) -->\n");
@@ -32,6 +32,6 @@
 	 }
 
 	 print ("\t<!-- Sync To Drive enabled --- starting server -->\n");
-	 proc_close(proc_open ($config['remotebuzzer_nodebin']." ./sync-to-drive.js 1>>".$logfile." 2>&1 &", array(), $foo));
+	 proc_close(proc_open ($config['nodebin']['cmd']." resources/js/sync-to-drive.js 1>>".$logfile." 2>&1 &", array(), $foo));
 	}
 ?>

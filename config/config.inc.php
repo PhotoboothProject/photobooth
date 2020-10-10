@@ -241,6 +241,7 @@ $config['exiftool']['cmd'] = null;
 $config['exiftool']['msg'] = null;
 $config['preview']['cmd'] = null;
 $config['preview']['killcmd'] = null;
+$config['nodebin']['cmd'] = null;
 
 
 // R E M O T E   B U Z Z E R
@@ -249,7 +250,7 @@ $config['remotebuzzer_enabled'] = false;
 $config['remotebuzzer_collagetime'] = '2';
 $config['remotebuzzer_port'] = 14711;
 $config['remotebuzzer_pin'] = 40;
-$config['remotebuzzer_nodebin'] = '/usr/bin/node';
+$config['remotebuzzer_collagetime'] = '2'; // control time to distinguish picture from collage
 
 
 // R E S E T
@@ -259,9 +260,6 @@ $config['reset_remove_config'] = true;
 
 
 // B A C K U P  /  S Y N C  S C R I P T
-// Currently supported formats are : sdX, /dev/sdX and simply the label of the drive (not the manufacturer)
-// In the default config the script will only search for drives with the label photobooth!
-//$config['sync_script_enabled'] = false;
-$config['sync_script_targets'] = ['/dev/sda1']; //Default targets for the sync sctipt
 $config['synctodrive_enabled'] = false;
-$config['synctodrive_targets'] = '/dev/sda1'; //Default targets for the sync sctipt
+$config['synctodrive_targets'] = 'photobooth'; //Default targets for the sync sctipt
+$config['synctodrive_interval'] = 300; 
