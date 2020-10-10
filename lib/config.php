@@ -23,7 +23,7 @@ $cmds = [
             'cmd' => '',
             'killcmd' => '',
         ],
-	'nodejs' => [
+	'nodebin' => [
             'cmd' => '',
         ]
     ],
@@ -44,7 +44,7 @@ $cmds = [
             'cmd' => 'gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0 > /dev/null 2>&1 & echo $!',
             'killcmd' => 'killall gphoto2 && sleep 1',
         ],
-        'nodejs' => [
+        'nodebin' => [
             'cmd' => '/usr/bin/node',
         ]
     ],
@@ -81,7 +81,7 @@ $config['exiftool']['cmd'] = $cmds[$os]['exiftool']['cmd'];
 $config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
 $config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
 $config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
-$config['nodejs']['cmd'] = $cmds[$os]['nodejs']['cmd'];
+$config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
 
 $config['collage_limit'] = 4;
 

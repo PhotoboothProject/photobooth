@@ -29,8 +29,6 @@ const parseConfig = (config) => {
     return null;
   }
 
-    console.log("conf " + config.foldersAbs.data)
-
     try {
 	return {
 	    dataAbsPath: config.foldersAbs.data,
