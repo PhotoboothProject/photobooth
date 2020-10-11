@@ -94,6 +94,7 @@ COMMON_PACKAGES=(
     'php-zip'
     'yarn'
     'rsync'
+    'udisks2'
 )
 
 if [[ ! -d "${booth_source}" ]]; then

@@ -377,34 +377,22 @@ If you run into any errors setting up your hotspot we can remove all the setting
 sudo ./setup-network.sh --clean
 ```
 
-### Turn on file backup
-If you want to enable the automatic file backup/syncing script you need to add a
-cronjob that changes the working directoy to the photobooth folder and calls the
-script. Per default the script will run every [5 minutes](https://crontab.guru/#*/5_*_*_*_*).
+### Turn on picture syncing to USB
 
-**Important: You must make sure change to the photobooth directory because the script expects to be run from within the photobooth folder!**.
+Automatic picture backup/syncing to USB via script currently works on Raspberry PI OS only. Use the `install-raspbian.sh` script to get the operating system setup in place
+
+In order to select which drives to sync files to, just add them via the admin panel. The list of drive identifier needs to be separated by semicolon. 
+
+Drive identifier can be added either with their name (e.g. `sda`), their full path (`/dev/sda1`) or with the USB stick label (`photobooth`).The default config will look for a drive with the label photobooth.
+
+The following example would check
+    > Specifically for device `/dev/sda1` being mounted
+    > For a device being mounted with the name `photobooth`
+    > Any device being mounted with the string `sdb` in it's device name
 
 ```
-*/5 * * * * cd /var/www/html/ && ./sync-to-drive.js
-```
-
-Example to add it on the fly:
-
-```
-crontab -l | { cat; echo "*/5 * * * * cd /var/www/html/ && ./sync-to-drive.js"; } | crontab - 
-```
-
-If you want to add other drives to sync files to, just add them via the admin panel in your 
-browser [localhost/admin](http://localhost/admin) or add them directly to the `'sync_script_targets'` array inside `config/my.config.inc.php`.
-
 Example:
-
+    /dev/sda1;photobooth;sdb
 ```
-'sync_script_targets' => array (
-  'sdX',
-)
-```
-
-Either with their name (`sdX`), path (`/dev/sdX`) or with the label (`photobooth`).
-The default config will look for a drive with the label photobooth.
+Pictures will be synced to all devices matched by this list, as long as they are mounted (aka USB stick is plugged in)
 

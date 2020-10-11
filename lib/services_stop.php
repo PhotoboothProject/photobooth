@@ -29,8 +29,9 @@ function killProcessIfActive($pName, $pidFile, $logfileName)
 	{
 		exec("pgrep -f ".$pName,$pids);
 
-		foreach ($pids as $procPID) {
-			if ($config['dev'])
+		if (count($pids) > 1) {
+		   foreach ($pids as $procPID) {
+		   	if ($config['dev'])
 			{	
 				$logfile = $config['folders']['tmp']."/".$logfileName;
 				$fp = fopen("../".$logfile, 'a');//opens file in append mode.
@@ -39,6 +40,7 @@ function killProcessIfActive($pName, $pidFile, $logfileName)
 			}
 
 			posix_kill($procPID, 9);
+		   }
 		}
 
 	}
