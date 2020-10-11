@@ -20,7 +20,6 @@ process.on('uncaughtException', function (err) {
     console.log('socket.io server [', myPid, ']: Exiting');
 
     /* got to exit now and here - can not recover from error */
-
     process.exit();
 });
 

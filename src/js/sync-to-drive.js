@@ -84,7 +84,9 @@ const mountDrives = (drives) => {
     for (const drive of drives) {
         if (!drive.mountpoint) {
             try {
-                const mountRes = execSync('export LC_ALL=C; udisksctl mount -b ' + drive.path + '; unset LC_ALL').toString();
+                const mountRes = execSync(
+                    'export LC_ALL=C; udisksctl mount -b ' + drive.path + '; unset LC_ALL'
+                ).toString();
                 const mountPoint = mountRes
                     .substr(mountRes.indexOf('at') + 3)
                     .trim()
@@ -108,7 +110,7 @@ const startSync = ({dataAbsPath, drives}) => {
     if (!fs.existsSync(dataAbsPath)) {
         console.log('Sync-To-Drive server [', myPid, ']: ERROR: Folder ' + dataAbsPath + ' does not exist!');
 
-return;
+        return;
     }
 
     console.log('Sync-To-Drive server [', myPid, ']: Source data folder [', dataAbsPath, ']');
@@ -191,24 +193,21 @@ const isProcessRunning = (processName) => {
 
 if (PLATFORM === 'win32') {
     console.error('Sync-To-Drive server [', myPid, ']: Windows is currently not supported!');
-
-    return;
+    process.exit();
 }
 
 if (isProcessRunning('rsync')) {
     console.log('Sync-To-Drive server [', myPid, ']: WARN: Sync in progress');
-
-    return;
+    process.exit();
 }
 
 const phpConfig = getConfigFromPHP();
 
 if (!phpConfig) {
-    return;
+    process.exit();
 } else if (!phpConfig.synctodrive_enabled) {
     console.log('Sync-To-Drive server [', myPid, ']: WARN: Sync script was disabled by config! Aborting!');
-
-    return;
+    process.exit();
 }
 
 /* PARSE PHOTOBOOTH CONFIG */
