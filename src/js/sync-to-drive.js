@@ -91,7 +91,7 @@ const mountDrives = (drives) => {
 
                 drive.mountpoint = mountPoint;
             } catch (error) {
-                customLog('ERROR: Coudnt mount', drive.path);
+                customLog('ERROR: Couldnt mount', drive.path);
             }
         }
 
