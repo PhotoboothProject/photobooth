@@ -9,7 +9,6 @@ const {pid: PID, platform: PLATFORM} = process;
 //This script needs to be run from within the photobooth directory
 const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
-//const PLATFORM = process.platform;
 
 const getConfigFromPHP = () => {
     const cmd = 'cd ' + API_DIR_NAME + ' && php ./' + API_FILE_NAME;
