@@ -4,12 +4,12 @@
 const {execSync, spawn} = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const myPid = process.pid;
+const {pid: PID, platform: PLATFORM} = process;
 
 //This script needs to be run from within the photobooth directory
 const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
-const PLATFORM = process.platform;
+//const PLATFORM = process.platform;
 
 const getConfigFromPHP = () => {
     const cmd = 'cd ' + API_DIR_NAME + ' && php ./' + API_FILE_NAME;
@@ -19,7 +19,7 @@ const getConfigFromPHP = () => {
 
         return JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
     } catch (err) {
-        console.log('Sync-To-Drive server [', myPid, ']: ERROR: Couldnt get config from PHP', err);
+        console.log('Sync-To-Drive server [', PID, ']: ERROR: Couldnt get config from PHP', err);
     }
 
     return null;
@@ -33,10 +33,10 @@ const parseConfig = (config) => {
     try {
         return {
             dataAbsPath: config.foldersAbs.data,
-            drives: [...config.synctodrive_targets.split(';')]
+            drives: [config.synctodrive_targets.split(';')]
         };
     } catch (err) {
-        console.log('Sync-To-Drive server [', myPid, ']: ERROR: Couldt parse config', err);
+        console.log('Sync-To-Drive server [', PID, ']: ERROR: Couldt parse config', err);
     }
 
     return null;
@@ -52,7 +52,7 @@ const getDriveInfos = ({drives}) => {
     } catch (err) {
         console.log(
             'Sync-To-Drive server [',
-            myPid,
+            PID,
             ']: ERROR: Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!'
         );
 
@@ -60,7 +60,7 @@ const getDriveInfos = ({drives}) => {
     }
 
     if (!json || !json.blockdevices) {
-        console.log('Sync-To-Drive server [', myPid, ']: ERROR: The output of lsblk was malformed!');
+        console.log('Sync-To-Drive server [', PID, ']: ERROR: The output of lsblk was malformed!');
 
         return null;
     }
@@ -94,7 +94,7 @@ const mountDrives = (drives) => {
 
                 drive.mountpoint = mountPoint;
             } catch (error) {
-                console.log('Sync-To-Drive server [', myPid, ']: ERROR: Count mount ' + drive.path);
+                console.log('Sync-To-Drive server [', PID, ']: ERROR: Count mount ' + drive.path);
             }
         }
 
@@ -108,17 +108,17 @@ const mountDrives = (drives) => {
 
 const startSync = ({dataAbsPath, drives}) => {
     if (!fs.existsSync(dataAbsPath)) {
-        console.log('Sync-To-Drive server [', myPid, ']: ERROR: Folder ' + dataAbsPath + ' does not exist!');
+        console.log('Sync-To-Drive server [', PID, ']: ERROR: Folder ' + dataAbsPath + ' does not exist!');
 
         return;
     }
 
-    console.log('Sync-To-Drive server [', myPid, ']: Source data folder [', dataAbsPath, ']');
+    console.log('Sync-To-Drive server [', PID, ']: Source data folder [', dataAbsPath, ']');
 
     for (const drive of drives) {
         console.log(
             'Sync-To-Drive server [',
-            myPid,
+            PID,
             ']: Synching to drive [',
             drive.path,
             '] -> [',
@@ -147,12 +147,12 @@ const startSync = ({dataAbsPath, drives}) => {
         })();
 
         if (!cmd) {
-            console.log('Sync-To-Drive server [', myPid, ']: ERROR: No command for syncing!');
+            console.log('Sync-To-Drive server [', PID, ']: ERROR: No command for syncing!');
 
             return;
         }
 
-        console.log('Sync-To-Drive server [', myPid, ']: Executing command:', cmd);
+        console.log('Sync-To-Drive server [', PID, ']: Executing command:', cmd);
 
         try {
             const spwndCmd = spawn(cmd, {
@@ -162,7 +162,7 @@ const startSync = ({dataAbsPath, drives}) => {
             });
             spwndCmd.unref();
         } catch (err) {
-            console.log('Sync-To-Drive server [', myPid, ']: ERROR! Couldnt start sync!');
+            console.log('Sync-To-Drive server [', PID, ']: ERROR! Couldnt start sync!');
         }
     }
 };
@@ -192,12 +192,12 @@ const isProcessRunning = (processName) => {
 };
 
 if (PLATFORM === 'win32') {
-    console.error('Sync-To-Drive server [', myPid, ']: Windows is currently not supported!');
+    console.error('Sync-To-Drive server [', PID, ']: Windows is currently not supported!');
     process.exit();
 }
 
 if (isProcessRunning('rsync')) {
-    console.log('Sync-To-Drive server [', myPid, ']: WARN: Sync in progress');
+    console.log('Sync-To-Drive server [', PID, ']: WARN: Sync in progress');
     process.exit();
 }
 
@@ -206,43 +206,43 @@ const phpConfig = getConfigFromPHP();
 if (!phpConfig) {
     process.exit();
 } else if (!phpConfig.synctodrive_enabled) {
-    console.log('Sync-To-Drive server [', myPid, ']: WARN: Sync script was disabled by config! Aborting!');
+    console.log('Sync-To-Drive server [', PID, ']: WARN: Sync script was disabled by config! Aborting!');
     process.exit();
 }
 
 /* PARSE PHOTOBOOTH CONFIG */
 const parsedConfig = parseConfig(phpConfig);
-console.log('Sync-To-Drive server [', myPid, ']: Drive names ', ...parsedConfig.drives);
+console.log('Sync-To-Drive server [', PID, ']: Drive names ', ...parsedConfig.drives);
 
 /* WRITE PROCESS PID FILE */
-const pidFilename = phpConfig.folders.tmp + '/synctodrive_server.pid';
+const pidFilename = path.join(phpConfig.folders.tmp, 'synctodrive_server.pid');
 
-fs.writeFile(pidFilename, myPid, function (err) {
+fs.writeFile(pidFilename, PID, (err) => {
     if (err) {
         throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
     }
 
-    console.log('Sync-To-Drive server [', myPid, ']: PID file created [', pidFilename, ']');
+    console.log('Sync-To-Drive server [', PID, ']: PID file created [', pidFilename, ']');
 });
 
 /* START LOOP */
 
-console.log('Sync-To-Drive server [', myPid, ']: Starting server for sync to drive');
-console.log('Sync-To-Drive server [', myPid, ']: Interval is [', phpConfig.synctodrive_interval, '] seconds');
+console.log('Sync-To-Drive server [', PID, ']: Starting server for sync to drive');
+console.log('Sync-To-Drive server [', PID, ']: Interval is [', phpConfig.synctodrive_interval, '] seconds');
 
-function foreverLoop() {
-    console.log('Sync-To-Drive server [', myPid, ']: Starting sync process');
+const foreverLoop = () => {
+    console.log('Sync-To-Drive server [', PID, ']: Starting sync process');
 
     const driveInfos = getDriveInfos(parsedConfig);
 
     driveInfos.forEach((element) => {
-        console.log('Sync-To-Drive server [', myPid, ']: Processing drive ', element.name, ' -> ', element.path);
+        console.log('Sync-To-Drive server [', PID, ']: Processing drive ', element.name, ' -> ', element.path);
     });
 
     const mountedDrives = mountDrives(driveInfos);
 
-    driveInfos.forEach((element) => {
-        console.log('Sync-To-Drive server [', myPid, ']: Mounted drive ', element.name, ' -> ', element.mountpoint);
+    mountedDrives.forEach((element) => {
+        console.log('Sync-To-Drive server [', PID, ']: Mounted drive ', element.name, ' -> ', element.mountpoint);
     });
 
     startSync({
@@ -251,5 +251,5 @@ function foreverLoop() {
     });
 
     setTimeout(foreverLoop, phpConfig.synctodrive_interval * 1000);
-}
+};
 foreverLoop();
