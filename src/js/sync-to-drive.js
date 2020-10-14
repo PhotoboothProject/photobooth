@@ -180,13 +180,18 @@ const isProcessRunning = (processName) => {
     }
 };
 
+const writePIDFile = (filename) => {
+    fs.writeFileSync(filename, PID, (err) => {
+        if (err) {
+            throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
+        }
+
+        log(`PID file created [${filename}]`);
+    });
+};
+
 if (PLATFORM === 'win32') {
     log('Windows is currently not supported!');
-    process.exit();
-}
-
-if (isProcessRunning('rsync')) {
-    log('WARN: Sync in progress');
     process.exit();
 }
 
@@ -204,22 +209,20 @@ const parsedConfig = parseConfig(phpConfig);
 log('Drive names', ...parsedConfig.drives);
 
 /* WRITE PROCESS PID FILE */
-const pidFilename = path.join(phpConfig.folders.tmp, 'synctodrive_server.pid');
-
-fs.writeFile(pidFilename, PID, (err) => {
-    if (err) {
-        throw new Error(`Unable to write PID file [${pidFilename}] - ${err.message}`);
-    }
-
-    log(`PID file created [${pidFilename}]`);
-});
+writePIDFile(path.join(phpConfig.folders.tmp, 'synctodrive_server.pid'));
 
 /* START LOOP */
 log('Starting server for sync to drive');
 log(`Interval is [${phpConfig.synctodrive_interval}] seconds`);
 
-const foreverLoop = () => {
+const syncLoop = () => {
     log('Starting sync process');
+
+    if (isProcessRunning('rsync')) {
+        log('WARN: Sync in progress, waiting for next sync call!');
+
+        return;
+    }
 
     const driveInfos = getDriveInfos(parsedConfig);
 
@@ -237,7 +240,6 @@ const foreverLoop = () => {
         dataAbsPath: parsedConfig.dataAbsPath,
         drives: mountedDrives
     });
-
-    setTimeout(foreverLoop, phpConfig.synctodrive_interval * 1000);
 };
-foreverLoop();
+
+setInterval(syncLoop, phpConfig.synctodrive_interval * 1000);

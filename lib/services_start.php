@@ -23,15 +23,13 @@
 
 <?php endif;
 
-      if ($config['synctodrive_enabled']) {
+    if ($config['synctodrive_enabled'] && !file_exists($config['folders']['tmp'].'/synctodrive_server.pid') {
       	if ($config['dev']) {
 	      $logfile = $config['folders']['tmp']."/".$config['synctodrive_logfile'];
-	}
-	else {
-	     $logfile = "/dev/null";
-	 }
-
-	 print ("\t<!-- Sync To Drive enabled --- starting server -->\n");
-	 proc_close(proc_open ($config['nodebin']['cmd']." resources/js/sync-to-drive.js 1>>".$logfile." 2>&1 &", array(), $foo));
+		}
+		else { $logfile = "/dev/null"; }
+		
+		print ("\t<!-- Sync To Drive enabled --- starting server -->\n");
+		proc_close(proc_open ($config['nodebin']['cmd']." resources/js/sync-to-drive.js 1>>".$logfile." 2>&1 &", array(), $foo));
 	}
 ?>
