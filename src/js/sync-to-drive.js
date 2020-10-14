@@ -208,7 +208,7 @@ const pidFilename = path.join(phpConfig.folders.tmp, 'synctodrive_server.pid');
 
 fs.writeFile(pidFilename, PID, (err) => {
     if (err) {
-        throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
+        throw new Error(`Unable to write PID file [${pidFilename}] - ${err.message}`);
     }
 
     customLog(`PID file created [${pidFilename}]`);
