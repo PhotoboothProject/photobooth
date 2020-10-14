@@ -181,13 +181,12 @@ const isProcessRunning = (processName) => {
 };
 
 const writePIDFile = (filename) => {
-    fs.writeFileSync(filename, PID, (err) => {
-        if (err) {
-            throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
-        }
-
+    try {
+        fs.writeFileSync(filename, PID, {mode: 'wx'});
         log(`PID file created [${filename}]`);
-    });
+    } catch (err) {
+        throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
+    }
 };
 
 if (PLATFORM === 'win32') {
