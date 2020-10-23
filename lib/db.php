@@ -33,3 +33,10 @@ function isImageInDB($filename) {
 
 	return in_array($filename, $images);
 }
+
+function getDBSize(){
+	if(file_exists(DB_FILE)){
+		return (int) filesize(DB_FILE);
+	}
+	return 0;
+}
