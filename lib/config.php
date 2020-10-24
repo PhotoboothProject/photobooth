@@ -23,7 +23,7 @@ $cmds = [
             'cmd' => '',
             'killcmd' => '',
         ],
-	'nodebin' => [
+        'nodebin' => [
             'cmd' => '',
         ]
     ],
