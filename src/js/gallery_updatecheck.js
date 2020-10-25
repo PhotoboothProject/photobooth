@@ -15,11 +15,11 @@
  *
  */
 
-//Size of the DB - is used to determine changes
+// Size of the DB - is used to determine changes
 let lastDBSize = -1;
-// Interval, the pages is checked (/ms)
+// Interval, the page is checked (/ms)
 const interval = 1000 * 5;
-//URL to request for changes
+// URL to request for changes
 const ajaxurl = 'gallery.php/?status';
 
 /*
@@ -33,6 +33,10 @@ function dbUpdated() {
 }
 
 const checkForUpdates = function () {
+    if (photoBooth.isTimeOutPending()) {
+        //If there is user interaction, do not check for updates
+        return;
+    }
     $.getJSON({
         url: ajaxurl,
         success: function (result) {

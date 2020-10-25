@@ -57,6 +57,11 @@ const photoBooth = (function () {
         window.location.reload();
     };
 
+    // Returns true when timeOut is pending
+    api.isTimeOutPending = function () {
+        return typeof timeOut !== 'undefined';
+    };
+
     // timeOut function
     api.resetTimeOut = function () {
         clearTimeout(timeOut);
