@@ -20,7 +20,7 @@ let lastDBSize = -1;
 // Interval, the page is checked (/ms)
 const interval = 1000 * 5;
 // URL to request for changes
-const ajaxurl = 'gallery.php/?status';
+const ajaxurl = 'gallery.php?status';
 
 /*
  * This function will be called if there are new pictures
