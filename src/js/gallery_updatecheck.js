@@ -4,8 +4,8 @@
  * If changes are detected, the page will automatically be reloaded.
  *
  * Needs:
- * jQuery
- * photoBooth Javascript
+ * - jQuery
+ * - photoBooth Javascript
  *
  * Remarks:
  * - Not made for highly demanded pages (as pages is requested regulary
@@ -18,7 +18,7 @@
 // Size of the DB - is used to determine changes
 let lastDBSize = -1;
 // Interval, the page is checked (/ms)
-const interval = 1000 * 5;
+const interval = 1000 * config.gallery_db_check_time;
 // URL to request for changes
 const ajaxurl = 'gallery.php?status';
 
@@ -34,7 +34,11 @@ function dbUpdated() {
 
 const checkForUpdates = function () {
     if (photoBooth.isTimeOutPending()) {
-        //If there is user interaction, do not check for updates
+        // If there is user interaction, do not check for updates
+        if (config.dev) {
+            console.log('Timeout pending, waiting to refresh the standalone gallery');
+        }
+
         return;
     }
     $.getJSON({

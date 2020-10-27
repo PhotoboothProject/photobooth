@@ -818,6 +818,17 @@ $configsetup = [
 			'name' => 'gallery_pictureTime',
 			'value' => $config['gallery_pictureTime']
 		],
+		'gallery_db_check_enabled' => [
+			'type' => 'checkbox',
+			'name' => 'gallery_db_check_enabled',
+			'value' => $config['gallery_db_check_enabled']
+		],
+		'db_check_time' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['gallery_db_check_time'],
+			'name' => 'gallery_db_check_time',
+			'value' => $config['gallery_db_check_time']
+		],
 		'pswp_clickToCloseNonZoomable' => [
 			'type' => 'checkbox',
 			'name' => 'pswp_clickToCloseNonZoomable',

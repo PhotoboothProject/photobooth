@@ -10,7 +10,6 @@ if (isset($_GET['status'])){
 	// to detect changes
 	$resp = array('dbsize'=>getDBSize());
 	exit(json_encode($resp));
-
 }
 
 $images = getImagesFromDB();
@@ -101,7 +100,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
 	<script type="text/javascript" src="resources/js/gallery.js"></script>
+	<?php if ($config['gallery_db_check_enabled']): ?>
 	<script type="text/javascript" src="resources/js/gallery_updatecheck.js"></script>
+	<?php endif; ?>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
 </body>

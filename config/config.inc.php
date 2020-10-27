@@ -127,6 +127,9 @@ $config['show_date'] = true; // only works if file_naming = 'dateformatted'
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 $config['gallery_pictureTime'] = '3000';
 $config['gallery_bottom_bar'] = true;
+$config['gallery_db_check_enabled'] = true;
+$config['gallery_db_check_time'] = '10';
+
 // PhotoSwipe
 $config['pswp_clickToCloseNonZoomable'] = false;
 $config['pswp_closeOnScroll'] = false;
