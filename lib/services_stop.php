@@ -19,7 +19,7 @@ function killProcessIfActive($pName, $pidFile, $logfileName)
                         fclose($fp);
                 }
 
-                posix_kill($procPID, 9);
+                posix_kill($procPID, 15);
            }
         }
 

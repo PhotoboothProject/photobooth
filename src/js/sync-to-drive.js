@@ -4,6 +4,10 @@
 const {execSync, spawn} = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const events = require('events');
+const myEmitter = new events.EventEmitter();
+var rsyncSemaphore = false;
+var rsyncStartTime = 0;
 
 //This script needs to be run from within the photobooth directory
 const API_DIR_NAME = 'api';
@@ -114,13 +118,14 @@ const startSync = ({dataAbsPath, drives}) => {
 
     for (const drive of drives) {
         log(`Synching to drive [${drive.path}] -> [${drive.mountpoint}]`);
-
+	
         const cmd = (() => {
             switch (process.platform) {
-                case 'win32':
-                    return null;
-                case 'linux':
-                    return [
+            case 'win32':
+                return null;
+            case 'linux':
+		return 'sleep 25';
+                return [
                         'rsync',
                         '-a',
                         '--delete-before',
@@ -141,44 +146,28 @@ const startSync = ({dataAbsPath, drives}) => {
             return;
         }
 
-        log('Executing command:', cmd);
+        log('Executing command: <', cmd, '>');
 
         try {
-            const spwndCmd = spawn(cmd, {
-                detached: true,
+            rsyncSemaphore = spawn(cmd, {
                 shell: true,
                 stdio: 'ignore'
             });
-            spwndCmd.unref();
         } catch (err) {
-            log('ERROR! Couldnt start sync!');
+            log('ERROR: Could not start rsync:', err.toString());
+	    return;
         }
+
+	log('Rsync child process PID: ',rsyncSemaphore.pid);
+	
+        rsyncSemaphore.on('exit', () => {
+            myEmitter.emit('rsync-completed', rsyncSemaphore.pid);
+        });
+	
+	rsyncStartTime = new Date();
     }
 };
 
-// https://stackoverflow.com/a/58844917
-const isProcessRunning = (processName) => {
-    const cmd = (() => {
-        switch (process.platform) {
-            case 'win32':
-                return 'tasklist';
-            case 'darwin':
-                return `ps -ax | grep ${processName}`;
-            case 'linux':
-                return 'ps -A';
-            default:
-                return false;
-        }
-    })();
-
-    try {
-        const result = execSync(cmd).toString();
-
-        return result.toLowerCase().indexOf(processName.toLowerCase()) > -1;
-    } catch (error) {
-        return null;
-    }
-};
 
 const writePIDFile = (filename) => {
     try {
@@ -210,18 +199,59 @@ log('Drive names', ...parsedConfig.drives);
 /* WRITE PROCESS PID FILE */
 writePIDFile(path.join(phpConfig.folders.tmp, 'synctodrive_server.pid'));
 
+/* INSTALL HANDLER TO MONITOR CHILD PROCESS EXITS */
+myEmitter.on('rsync-completed', (childPID) => {
+    log('Rsync child process PID', childPID, 'finished after',(new Date() - rsyncStartTime),'ms');
+    rsyncSemaphore = false;
+});
+
+/* INSTALL HANDLER ON PROCESS SIGHUP SIGTERM, SIGINT */
+const signalHandler = async (signal) => {
+    log('SignalHandler: received signal', signal, '- wait for possible rsync to exit, umount USB stick and gracefully terminate');
+
+    if (rsyncSemaphore)
+    {
+	log ('SignalHandler: rsync in progress - waiting for termination for max 60 seconds');
+
+	setTimeout( () => {
+	    log ('SignalHandler: rsync seems stale, terminate child process (SIGKILL)');
+	    rsyncSemaphore.kill('SIGKILL');
+	    rsyncSemaphore = false;
+	}, 60000);
+
+	const Sleep = (milliseconds) =>  {
+	    return new Promise(resolve => setTimeout(resolve, milliseconds));
+	}
+	
+	while (rsyncSemaphore)
+	{
+	    await Sleep(1000);
+	}
+    } 
+
+    /* umount drives here - eventually have to mountedDrives a global variable */
+    log ('SignalHandler: FIXME - umount USB drives');
+    
+    log ('SignalHandler: Gracefully terminating now - bye bye');
+    process.exit();
+}
+
+process.on('SIGTERM', signalHandler);
+process.on('SIGHUP', signalHandler);
+process.on('SIGINT', signalHandler);
+
 /* START LOOP */
 log('Starting server for sync to drive');
 log(`Interval is [${phpConfig.synctodrive_interval}] seconds`);
 
 const syncLoop = () => {
-    log('Starting sync process');
 
-    if (isProcessRunning('rsync')) {
-        log('WARN: Sync in progress, waiting for next sync call!');
-
+    if (rsyncSemaphore) {
+        log(`WARN: Sync in progress, waiting for [${phpConfig.synctodrive_interval}] seconds`);
         return;
     }
+
+    log('Starting sync process');
 
     const driveInfos = getDriveInfos(parsedConfig);
 
