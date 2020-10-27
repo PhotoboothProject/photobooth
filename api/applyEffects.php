@@ -8,6 +8,12 @@ require_once('../lib/polaroid.php');
 require_once('../lib/resize.php');
 require_once('../lib/collage.php');
 
+if (!extension_loaded('gd')) {
+    die(json_encode([
+        'error' => 'GD library not loaded! Please enable GD!',
+    ]));
+}
+
 if (empty($_POST['file'])) {
     die(json_encode([
         'error' => 'No file provided',
@@ -127,7 +133,7 @@ if ($imageModified || $config['jpeg_quality_image'] >= 0 && $config['jpeg_qualit
     // preserve jpeg meta data
     if ($config['preserve_exif_data'] && $config['exiftool']['cmd']) {
         $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
-	exec($cmd, $output, $returnValue);
+        exec($cmd, $output, $returnValue);
         if ($returnValue) {
             die(json_encode([
                 'error' => 'exiftool returned with an error code',
