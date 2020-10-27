@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 
 require_once('../../lib/config.php');
 require_once('../../lib/db.php');
+require_once('../../lib/resize.php');
 
 if ($config['file_naming'] === 'numbered') {
     $images = getImagesFromDB();
@@ -23,6 +24,7 @@ if ($config['db_file'] === 'db') {
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $picture_permissions = $config['picture_permissions'];
 
 $img = $_POST['imgData'];
@@ -31,23 +33,13 @@ $img = str_replace(' ', '+', $img);
 $data = base64_decode($img);
 $image = imagecreatefromstring($data);
 imagejpeg($image, $filename_photo, $config['jpeg_quality_image']);
+copy($filename_photo, $filename_keying);
 
-$image = ResizeJpgImage($image, 500, 500);
+// image scale, create thumbnail
+$image = resizeImage($image, 500, 500);
 imagejpeg($image, $filename_thumb, $config['jpeg_quality_thumb']);
 
 imagedestroy($image);
-
-function ResizeJpgImage($image, $max_width, $max_height)
-{
-	$old_width  = imagesx($image);
-	$old_height = imagesy($image);
-	$scale      = min($max_width/$old_width, $max_height/$old_height);
-	$new_width  = ceil($scale*$old_width);
-	$new_height = ceil($scale*$old_height);
-	$new = imagecreatetruecolor($new_width, $new_height);
-	imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
-	return $new;
-}
 
 // insert into database
 appendImageToDB($file);
