@@ -5,6 +5,10 @@ let mainImageWidth;
 let mainImageHeight;
 let backgroundImage;
 let isPrinting = false;
+let seriously;
+let target;
+let chroma;
+let seriouslyimage;
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -51,33 +55,63 @@ function alphaBoundary(imageOut, radius) {
 }
 
 function setMainImage(imgSrc) {
-    const image = new MarvinImage();
-    image.load(imgSrc, function () {
-        mainImageWidth = image.getWidth();
-        mainImageHeight = image.getHeight();
+    const image = new Image();
+    image.src = imgSrc;
+    mainImageWidth = image.width;
+    mainImageHeight = image.height;
 
-        const imageOut = new MarvinImage(image.getWidth(), image.getHeight());
+    //create tmpcanvas and size it to image size
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = mainImageWidth;
+    tmpCanvas.height = mainImageHeight;
+    tmpCanvas.id = 'tmpimageout';
 
-        //1. Convert green to transparency
-        greenToTransparency(image, imageOut);
+    //append Canvas for Seriously to chromakey the image
+    const body = document.getElementsByTagName('body')[0];
+    document.body.appendChild(tmpCanvas);
 
-        // 2. Reduce remaining green pixels
-        reduceGreen(imageOut);
+    seriously = new Seriously();
+    target = seriously.target('#tmpimageout');
+    seriouslyimage = seriously.source(image);
+    chroma = seriously.effect('chroma');
+    chroma.source = seriouslyimage;
+    target.source = chroma;
+    seriously.go();
+    mainImage = new Image();
+    mainImage.src = tmpCanvas.toDataURL('image/png');
 
-        // 3. Apply alpha to the boundary
-        alphaBoundary(imageOut, 6);
-
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = mainImageWidth;
-        tmpCanvas.height = mainImageHeight;
-        imageOut.draw(tmpCanvas);
-
-        mainImage = new Image();
-        mainImage.src = tmpCanvas.toDataURL('image/png');
-        mainImage.onload = function () {
-            drawCanvas();
-        };
-    });
+    mainImage.onload = function () {
+        drawCanvas();
+    };
+    /*
+     *    const image = new MarvinImage();
+     *    image.load(imgSrc, function () {
+     *     mainImageWidth = image.getWidth();
+     *     mainImageHeight = image.getHeight();
+     *
+     *     const imageOut = new MarvinImage(image.getWidth(), image.getHeight());
+     *
+     *     //1. Convert green to transparency
+     *     greenToTransparency(image, imageOut);
+     *
+     *     // 2. Reduce remaining green pixels
+     *     reduceGreen(imageOut);
+     *
+     *     // 3. Apply alpha to the boundary
+     *     alphaBoundary(imageOut, 6);
+     *
+     *     const tmpCanvas = document.createElement('canvas');
+     *     tmpCanvas.width = mainImageWidth;
+     *     tmpCanvas.height = mainImageHeight;
+     *     imageOut.draw(tmpCanvas);
+     *
+     *     mainImage = new Image();
+     *     mainImage.src = tmpCanvas.toDataURL('image/png');
+     *     mainImage.onload = function () {
+     *         drawCanvas();
+     *     };
+     *    });
+     */
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -117,7 +151,8 @@ function drawCanvas() {
     }
 
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
-        ctx.drawImage(mainImage, 0, 0);
+        //important to fetch tmpimageout
+        ctx.drawImage(document.getElementById('tmpimageout'), 0, 0);
     }
 }
 

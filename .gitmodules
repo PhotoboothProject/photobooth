@@ -7,3 +7,6 @@
 [submodule "vendor/PhotoSwipe"]
 	path = vendor/PhotoSwipe
 	url = https://github.com/andi34/PhotoSwipe
+[submodule "vendor/Seriously"]
+	path = vendor/Seriously
+	url = https://github.com/brianchirls/Seriously.js
