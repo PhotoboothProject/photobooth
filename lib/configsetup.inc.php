@@ -235,6 +235,16 @@ $configsetup = [
 			'name' => 'chroma_keying',
 			'value' => $config['chroma_keying']
 		],
+		'chroma_keying_variant' => [
+			'type' => 'select',
+			'name' => 'chroma_keying_variant',
+			'placeholder' => $defaultConfig['chroma_keying_variant'],
+			'options' => [
+				'marvinj' => 'MarvinJ',
+				'seriouslyjs' => 'Seriously.js'
+			],
+			'value' => $config['chroma_keying_variant']
+		],
 		'chroma_size' => [
 			'type' => 'select',
 			'name' => 'chroma_size',

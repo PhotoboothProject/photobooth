@@ -1,4 +1,4 @@
-/* globals Seriously i18n */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously */
 /* exported setBackgroundImage */
 let mainImage;
 let mainImageWidth;
@@ -10,36 +10,110 @@ let target;
 let chroma;
 let seriouslyimage;
 
+function greenToTransparency(imageIn, imageOut) {
+    for (let y = 0; y < imageIn.getHeight(); y++) {
+        for (let x = 0; x < imageIn.getWidth(); x++) {
+            const color = imageIn.getIntColor(x, y);
+            const hsv = MarvinColorModelConverter.rgbToHsv([color]);
+
+            if (hsv[0] >= 60 && hsv[0] <= 200 && hsv[1] >= 0.2 && hsv[2] >= 0.2) {
+                imageOut.setIntColor(x, y, 0, 127, 127, 127);
+            } else {
+                imageOut.setIntColor(x, y, color);
+            }
+        }
+    }
+}
+
+function reduceGreen(image) {
+    for (let y = 0; y < image.getHeight(); y++) {
+        for (let x = 0; x < image.getWidth(); x++) {
+            const r = image.getIntComponent0(x, y);
+            const g = image.getIntComponent1(x, y);
+            const b = image.getIntComponent2(x, y);
+            const color = image.getIntColor(x, y);
+            const hsv = MarvinColorModelConverter.rgbToHsv([color]);
+
+            if (hsv[0] >= 60 && hsv[0] <= 130 && hsv[1] >= 0.15 && hsv[2] >= 0.15) {
+                if (r * b != 0 && (g * g) / (r * b) > 1.5) {
+                    image.setIntColor(x, y, 255, r * 1.4, g, b * 1.4);
+                } else {
+                    image.setIntColor(x, y, 255, r * 1.2, g, b * 1.2);
+                }
+            }
+        }
+    }
+}
+
+function alphaBoundary(imageOut, radius) {
+    const ab = new AlphaBoundary();
+    for (let y = 0; y < imageOut.getHeight(); y++) {
+        for (let x = 0; x < imageOut.getWidth(); x++) {
+            ab.alphaRadius(imageOut, x, y, radius);
+        }
+    }
+}
+
 function setMainImage(imgSrc) {
-    const image = new Image();
-    image.src = imgSrc;
-    mainImageWidth = image.width;
-    mainImageHeight = image.height;
+    if (config.chroma_keying_variant === 'marvinj') {
+        const image = new MarvinImage();
+        image.load(imgSrc, function () {
+            mainImageWidth = image.getWidth();
+            mainImageHeight = image.getHeight();
 
-    // create tmpcanvas and size it to image size
-    const tmpCanvas = document.createElement('canvas');
-    tmpCanvas.width = mainImageWidth;
-    tmpCanvas.height = mainImageHeight;
-    tmpCanvas.id = 'tmpimageout';
+            const imageOut = new MarvinImage(image.getWidth(), image.getHeight());
 
-    // append Canvas for Seriously to chromakey the image
-    // eslint-disable-next-line no-unused-vars
-    const body = document.getElementsByTagName('body')[0];
-    document.body.appendChild(tmpCanvas);
+            //1. Convert green to transparency
+            greenToTransparency(image, imageOut);
 
-    seriously = new Seriously();
-    target = seriously.target('#tmpimageout');
-    seriouslyimage = seriously.source(image);
-    chroma = seriously.effect('chroma');
-    chroma.source = seriouslyimage;
-    target.source = chroma;
-    seriously.go();
-    mainImage = new Image();
-    mainImage.src = tmpCanvas.toDataURL('image/png');
+            // 2. Reduce remaining green pixels
+            reduceGreen(imageOut);
 
-    mainImage.onload = function () {
-        drawCanvas();
-    };
+            // 3. Apply alpha to the boundary
+            alphaBoundary(imageOut, 6);
+
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = mainImageWidth;
+            tmpCanvas.height = mainImageHeight;
+            imageOut.draw(tmpCanvas);
+
+            mainImage = new Image();
+            mainImage.src = tmpCanvas.toDataURL('image/png');
+            mainImage.onload = function () {
+                drawCanvas();
+            };
+        });
+    } else {
+        const image = new Image();
+        image.src = imgSrc;
+        mainImageWidth = image.width;
+        mainImageHeight = image.height;
+
+        // create tmpcanvas and size it to image size
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = mainImageWidth;
+        tmpCanvas.height = mainImageHeight;
+        tmpCanvas.id = 'tmpimageout';
+
+        // append Canvas for Seriously to chromakey the image
+        // eslint-disable-next-line no-unused-vars
+        const body = document.getElementsByTagName('body')[0];
+        document.body.appendChild(tmpCanvas);
+
+        seriously = new Seriously();
+        target = seriously.target('#tmpimageout');
+        seriouslyimage = seriously.source(image);
+        chroma = seriously.effect('chroma');
+        chroma.source = seriouslyimage;
+        target.source = chroma;
+        seriously.go();
+        mainImage = new Image();
+        mainImage.src = tmpCanvas.toDataURL('image/png');
+
+        mainImage.onload = function () {
+            drawCanvas();
+        };
+    }
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -79,8 +153,12 @@ function drawCanvas() {
     }
 
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
-        //important to fetch tmpimageout
-        ctx.drawImage(document.getElementById('tmpimageout'), 0, 0);
+        if (config.chroma_keying_variant === 'marvinj') {
+            ctx.drawImage(mainImage, 0, 0);
+        } else {
+            //important to fetch tmpimageout
+            ctx.drawImage(document.getElementById('tmpimageout'), 0, 0);
+        }
     }
 }
 

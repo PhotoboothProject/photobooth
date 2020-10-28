@@ -3333,6 +3333,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+marvinj@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/marvinj/-/marvinj-1.0.0.tgz#5e1e0663f4e605a5966d3537c1a41fd22589c8b5"
+  integrity sha512-+afDa86Pml2BlDt2lEn+xZUZ6r4q+aQvxSmWq37M4lQ4SraBJcKlbm+wDamzXTvW7OmeK0mkWdjRB4R3PAPFjA==
+
 matchdep@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/matchdep/-/matchdep-2.0.0.tgz#c6f34834a0d8dbc3b37c27ee8bbcb27c7775582e"
