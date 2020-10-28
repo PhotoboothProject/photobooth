@@ -1,18 +1,20 @@
-#!/usr/bin/env node
-/* eslint-disable node/shebang */
+/* This script needs to be run from within the photobooth directory */
 
+/* Imports */
 const {execSync, spawn} = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const events = require('events');
-const myEmitter = new events.EventEmitter();
-var rsyncSemaphore = false;
-var rsyncStartTime = 0;
 
-//This script needs to be run from within the photobooth directory
+/* Variables */
 const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
 const {pid: PID, platform: PLATFORM} = process;
+const myEmitter = new events.EventEmitter();
+let rsyncSemaphore = null;
+let rsyncStartTime = 0;
+
+/* Variables */
 
 const log = (...optionalParams) => console.log(`Sync-To-Drive server [${PID}]:`, ...optionalParams);
 
@@ -118,14 +120,13 @@ const startSync = ({dataAbsPath, drives}) => {
 
     for (const drive of drives) {
         log(`Synching to drive [${drive.path}] -> [${drive.mountpoint}]`);
-	
+
         const cmd = (() => {
             switch (process.platform) {
-            case 'win32':
-                return null;
-            case 'linux':
-		return 'sleep 25';
-                return [
+                case 'win32':
+                    return null;
+                case 'linux':
+                    return [
                         'rsync',
                         '-a',
                         '--delete-before',
@@ -155,19 +156,20 @@ const startSync = ({dataAbsPath, drives}) => {
             });
         } catch (err) {
             log('ERROR: Could not start rsync:', err.toString());
-	    return;
+
+            return;
         }
 
-	log('Rsync child process PID: ',rsyncSemaphore.pid);
-	
+        log('rsync child process PID: ', rsyncSemaphore.pid);
+
+        // eslint-disable-next-line no-loop-func
         rsyncSemaphore.on('exit', () => {
             myEmitter.emit('rsync-completed', rsyncSemaphore.pid);
         });
-	
-	rsyncStartTime = new Date();
+
+        rsyncStartTime = new Date();
     }
 };
-
 
 const writePIDFile = (filename) => {
     try {
@@ -177,6 +179,19 @@ const writePIDFile = (filename) => {
         throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
     }
 };
+
+const unmountDrives = (drives) => {
+    for (const drive of drives) {
+        try {
+            execSync(`export LC_ALL=C; udisksctl unmount -b ${drive.path}; unset LC_ALL`).toString();
+            log('INFO: Unmounted drive', drive.path);
+        } catch (error) {
+            log('ERROR: Couldnt unmount drive', drive.path);
+        }
+    }
+};
+
+/* Execution starts here */
 
 if (PLATFORM === 'win32') {
     log('Windows is currently not supported!');
@@ -201,53 +216,54 @@ writePIDFile(path.join(phpConfig.folders.tmp, 'synctodrive_server.pid'));
 
 /* INSTALL HANDLER TO MONITOR CHILD PROCESS EXITS */
 myEmitter.on('rsync-completed', (childPID) => {
-    log('Rsync child process PID', childPID, 'finished after',(new Date() - rsyncStartTime),'ms');
+    log('Rsync child process PID', childPID, 'finished after', new Date() - rsyncStartTime, 'ms');
     rsyncSemaphore = false;
 });
 
 /* INSTALL HANDLER ON PROCESS SIGHUP SIGTERM, SIGINT */
 const signalHandler = async (signal) => {
-    log('SignalHandler: received signal', signal, '- wait for possible rsync to exit, umount USB stick and gracefully terminate');
+    log(
+        'SignalHandler: received signal',
+        signal,
+        '- wait for possible rsync to exit, umount USB stick and gracefully terminate'
+    );
 
-    if (rsyncSemaphore)
-    {
-	log ('SignalHandler: rsync in progress - waiting for termination for max 60 seconds');
+    if (rsyncSemaphore) {
+        log('SignalHandler: rsync in progress - waiting for termination for max 60 seconds');
 
-	setTimeout( () => {
-	    log ('SignalHandler: rsync seems stale, terminate child process (SIGKILL)');
-	    rsyncSemaphore.kill('SIGKILL');
-	    rsyncSemaphore = false;
-	}, 60000);
+        setTimeout(() => {
+            log('SignalHandler: rsync seems stale, terminate child process (SIGKILL)');
+            rsyncSemaphore.kill('SIGKILL');
+            rsyncSemaphore = false;
+        }, 60000);
 
-	const Sleep = (milliseconds) =>  {
-	    return new Promise(resolve => setTimeout(resolve, milliseconds));
-	}
-	
-	while (rsyncSemaphore)
-	{
-	    await Sleep(1000);
-	}
-    } 
+        const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+        // eslint-disable-next-line no-unmodified-loop-condition
+        while (rsyncSemaphore) {
+            // eslint-disable-next-line no-await-in-loop
+            await sleep(1000);
+        }
+    }
 
     /* umount drives here - eventually have to mountedDrives a global variable */
-    log ('SignalHandler: FIXME - umount USB drives');
-    
-    log ('SignalHandler: Gracefully terminating now - bye bye');
-    process.exit();
-}
+    log('SignalHandler: FIXME - umount USB drives');
+    unmountDrives([]);
 
-process.on('SIGTERM', signalHandler);
-process.on('SIGHUP', signalHandler);
-process.on('SIGINT', signalHandler);
+    log('SignalHandler: Gracefully terminating now - bye bye');
+    process.exit();
+};
+
+['SIGTERM', 'SIGHUP', 'SIGINT'].forEach((term) => process.on(term, signalHandler.bind(null, term)));
 
 /* START LOOP */
 log('Starting server for sync to drive');
 log(`Interval is [${phpConfig.synctodrive_interval}] seconds`);
 
 const syncLoop = () => {
-
     if (rsyncSemaphore) {
         log(`WARN: Sync in progress, waiting for [${phpConfig.synctodrive_interval}] seconds`);
+
         return;
     }
 
