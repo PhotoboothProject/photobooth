@@ -14,7 +14,7 @@ const myEmitter = new events.EventEmitter();
 let rsyncSemaphore = null;
 let rsyncStartTime = 0;
 
-/* Variables */
+/* Functions */
 
 const log = (...optionalParams) => console.log(`Sync-To-Drive server [${PID}]:`, ...optionalParams);
 
