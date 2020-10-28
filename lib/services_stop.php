@@ -3,7 +3,7 @@
 
 require_once(__DIR__ . '/config.php');
 
-function killProcessIfActive($pName, $pidFile, $logfileName)
+function killProcessIfActive($pName, $pidFile, $logfileName, $killSig)
 {
         global $config;
 
@@ -19,7 +19,7 @@ function killProcessIfActive($pName, $pidFile, $logfileName)
                         fclose($fp);
                 }
 
-                posix_kill($procPID, 15);
+                posix_kill($procPID, $killSig);
            }
         }
 
@@ -27,7 +27,7 @@ function killProcessIfActive($pName, $pidFile, $logfileName)
 
 }
 
-killProcessIfActive('remotebuzzer_server.js','../'.$config['folders']['tmp'].'/remotebuzzer_server.pid',$config['remotebuzzer_logfile']);
-killProcessIfActive('sync-to-drive.js','../'.$config['folders']['tmp'].'/synctodrive_server.pid',$config['synctodrive_logfile']);
+killProcessIfActive('remotebuzzer_server.js','../'.$config['folders']['tmp'].'/remotebuzzer_server.pid',$config['remotebuzzer_logfile'], 9);
+killProcessIfActive('sync-to-drive.js','../'.$config['folders']['tmp'].'/synctodrive_server.pid',$config['synctodrive_logfile'], 15);
 
 ?>
