@@ -94,7 +94,7 @@ if (file_exists($keyingimage)) {
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-0.8.js"></script>
+	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
 	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
