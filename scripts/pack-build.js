@@ -75,8 +75,6 @@ function createArchive(fileName, archive) {
     archive.file('node_modules/github-markdown-css/license');
     archive.file('node_modules/jquery/LICENSE.txt');
     archive.directory('node_modules/jquery/dist/');
-    archive.file('node_modules/marvinj/LICENSE');
-    archive.directory('node_modules/marvinj/marvinj/release/');
     archive.file('node_modules/normalize.css/LICENSE.md');
     archive.file('node_modules/normalize.css/normalize.css');
     archive.file('node_modules/whatwg-fetch/LICENSE');
