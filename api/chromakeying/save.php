@@ -26,20 +26,22 @@ $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $picture_permissions = $config['picture_permissions'];
+$thumb_size = substr($config['thumb_size'], 0, -2);
 
 $img = $_POST['imgData'];
 $img = str_replace('data:image/png;base64,', '', $img);
 $img = str_replace(' ', '+', $img);
 $data = base64_decode($img);
-$image = imagecreatefromstring($data);
-imagejpeg($image, $filename_photo, $config['jpeg_quality_image']);
+$imageResource = imagecreatefromstring($data);
+imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
 copy($filename_photo, $filename_keying);
 
 // image scale, create thumbnail
-$image = resizeImage($image, 500, 500);
-imagejpeg($image, $filename_thumb, $config['jpeg_quality_thumb']);
+$thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
+imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
+imagedestroy($thumbResource);
 
-imagedestroy($image);
+imagedestroy($imageResource);
 
 // insert into database
 appendImageToDB($file);
@@ -48,5 +50,7 @@ appendImageToDB($file);
 chmod($filename_photo, octdec($picture_permissions));
 
 // send imagename to frontend
-echo json_encode(array('success' => true, 'filename' => $file));
-?>
+echo json_encode([
+    'success' => true,
+    'filename' => $file
+]);
