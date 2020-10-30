@@ -50,6 +50,7 @@ $config['take_collage_frame_path'] = '../resources/img/frames/frame.png';
 $config['collage_layout'] = '2x2'; // possible values are '2x2' or '2x4'
 $config['collage_background'] = '../resources/img/frames/DefaultCollageBackground.png';
 $config['chroma_keying'] = false;
+$config['chroma_size'] = '1500px';
 $config['use_collage'] = true;
 $config['continuous_collage'] = true;
 $config['background_image'] = null;

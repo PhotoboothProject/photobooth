@@ -235,6 +235,18 @@ $configsetup = [
 			'name' => 'chroma_keying',
 			'value' => $config['chroma_keying']
 		],
+		'chroma_size' => [
+			'type' => 'select',
+			'name' => 'chroma_size',
+			'placeholder' => $defaultConfig['chroma_size'],
+			'options' => [
+				'1000px' => 'S',
+				'1500px' => 'M',
+				'2000px' => 'L',
+				'2500px' => 'XL'
+			],
+			'value' => $config['chroma_size']
+		],
 		'use_collage' => [
 			'type' => 'checkbox',
 			'name' => 'use_collage',

@@ -31,6 +31,7 @@ $collage_frame_path = __DIR__ . DIRECTORY_SEPARATOR .$config['take_collage_frame
 $collage_background = __DIR__ . DIRECTORY_SEPARATOR .$config['collage_background'];
 $picture_permissions = $config['picture_permissions'];
 $thumb_size = substr($config['thumb_size'], 0, -2);
+$chroma_size = substr($config['chroma_size'], 0, -2);
 
 if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
     $collageBasename = substr($filename_tmp, 0, -4);
@@ -117,7 +118,7 @@ if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
 }
 
 if ($config['chroma_keying']) {
-    $chromaCopyResource = resizeImage($imageResource, 1500, 1000);
+    $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
     imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
     imagedestroy($chromaCopyResource);
 }
