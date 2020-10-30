@@ -2,5 +2,14 @@
   "trailingComma": "none",
   "singleQuote": true,
   "bracketSpacing": false,
-  "printWidth": 120
+  "printWidth": 120,
+  "overrides": [
+    {
+      "files": "*.php",
+      "options": {
+          "printWidth": 180,
+          "braceStyle": "1tbs",
+      }
+    },
+  ]
 }

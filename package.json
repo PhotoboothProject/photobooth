@@ -11,6 +11,7 @@
     "eslint:fix": "eslint src/js/*.js --fix",
     "format": "npm-run-all --parallel format:*",
     "format:js": "prettier src/js/*.js --write",
+    "format:php": "prettier {api,lib}/{,*/**/}*.php --write",
     "format:scss": "prettier src/sass/{,*/**/}*.scss --write",
     "pack:build": "npm-run-all --serial eslint build pack:zip",
     "pack:zip": "node scripts/pack-build.js",
@@ -56,6 +57,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "@prettier/plugin-php": "^0.16.1",
     "archiver": "^5.1.0",
     "colors": "^1.4.0",
     "eslint": "^7.16.0",
