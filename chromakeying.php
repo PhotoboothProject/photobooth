@@ -8,16 +8,17 @@ if (empty($_GET['filename'])) {
 $filename = $_GET['filename'];
 $keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
 
-// Only jpg/jpeg are supported
-$imginfo = getimagesize($keyingimage);
-$mimetype = $imginfo['mime'];
-if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    die('The source file type ' . $mimetype . ' is not supported');
-}
-
 if (file_exists($keyingimage)) {
-    $mainimage = $keyingimage;
-    $keying_possible = true;
+    // Only jpg/jpeg are supported
+    $imginfo = getimagesize($keyingimage);
+    $mimetype = $imginfo['mime'];
+    if ($mimetype == 'image/jpg' || $mimetype == 'image/jpeg') {
+        $mainimage = $keyingimage;
+        $keying_possible = true;
+    } else {
+        $keying_possible = false;
+        $mainimage = 'resources/img/bg.jpg';
+    }
 } else {
     $keying_possible = false;
     $mainimage = 'resources/img/bg.jpg';
