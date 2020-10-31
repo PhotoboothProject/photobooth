@@ -12,9 +12,10 @@ if (!isset($data['type'])) {
 }
 
 if ($data['type'] == 'zip') {
+    $source = $config['foldersAbs']['data'];
     $zipOut = $config['foldersAbs']['archives'] . DIRECTORY_SEPARATOR . $file;
 
-    HZip::zipDir($config['foldersAbs']['data'], $zipOut);
+    HZip::zipDir($source, $zipOut);
 
     echo json_encode([
         'success' => 'zip',
