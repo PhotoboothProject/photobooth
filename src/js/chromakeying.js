@@ -86,33 +86,40 @@ function setMainImage(imgSrc) {
     } else {
         const image = new Image();
         image.src = imgSrc;
-        mainImageWidth = image.width;
-        mainImageHeight = image.height;
+        image.onload = function () {
+            mainImageWidth = image.width;
+            mainImageHeight = image.height;
 
-        // create tmpcanvas and size it to image size
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = mainImageWidth;
-        tmpCanvas.height = mainImageHeight;
-        tmpCanvas.id = 'tmpimageout';
+            // create tmpcanvas and size it to image size
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = mainImageWidth;
+            tmpCanvas.height = mainImageHeight;
+            tmpCanvas.id = 'tmpimageout';
 
-        // append Canvas for Seriously to chromakey the image
-        // eslint-disable-next-line no-unused-vars
-        const body = document.getElementsByTagName('body')[0];
-        document.body.appendChild(tmpCanvas);
+            // append Canvas for Seriously to chromakey the image
+            // eslint-disable-next-line no-unused-vars
+            const body = document.getElementsByTagName('body')[0];
+            document.body.appendChild(tmpCanvas);
 
-        seriously = new Seriously();
-        target = seriously.target('#tmpimageout');
-        seriouslyimage = seriously.source(image);
-        chroma = seriously.effect('chroma');
-        chroma.source = seriouslyimage;
-        target.source = chroma;
-        seriously.go();
-        mainImage = new Image();
-        mainImage.src = tmpCanvas.toDataURL('image/png');
+            seriously = new Seriously();
+            target = seriously.target('#tmpimageout');
+            seriouslyimage = seriously.source(image);
+            chroma = seriously.effect('chroma');
+            chroma.source = seriouslyimage;
+            target.source = chroma;
+            const r = 98 / 255;
+            const g = 175 / 255;
+            const b = 116 / 255;
+            chroma.screen = [r, g, b, 1];
+            seriously.go();
+            mainImage = new Image();
+            mainImage.src = tmpCanvas.toDataURL('image/png');
 
-        mainImage.onload = function () {
-            drawCanvas();
+            mainImage.onload = function () {
+                drawCanvas();
+            };
         };
+        image.src = imgSrc;
     }
 }
 
