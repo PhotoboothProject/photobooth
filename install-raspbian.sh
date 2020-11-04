@@ -247,6 +247,23 @@ else
     cd $INSTALLFOLDERPATH
 fi
 
+echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
+read -p "### If yes, this will generate a personal configuration with all needed changes. [y/N] " -n 1 -r
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    (cat << EOF) > $INSTALLFOLDERPATH/config/my.config.inc.php
+<?php
+\$config = array (
+  'take_picture' => 
+  array (
+    'cmd' => 'raspistill -n -o %s -q 100 -t 1 | echo "Done"',
+    'msg' => 'Done',
+  ),
+);
+EOF
+fi
+
 info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
 gpasswd -a www-data plugdev
