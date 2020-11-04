@@ -89,11 +89,6 @@ $imagelist = array_reverse($images);
 	<script src="../node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/TweenLite.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/EasePack.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/jquery.gsap.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/CSSPlugin.min.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script type="text/javascript" src="../resources/js/slideshow.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>

@@ -89,11 +89,6 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/TweenLite.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/EasePack.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/jquery.gsap.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/CSSPlugin.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
