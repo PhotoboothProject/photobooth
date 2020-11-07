@@ -250,7 +250,9 @@ const photoBooth = (function () {
         $('#counter').empty();
         $('.cheese').empty();
 
-        if (photoStyle === 'photo') {
+        if (config.no_cheese) {
+            console.log('Cheese is disabled.');
+        } else if (photoStyle === 'photo') {
             const cheesemsg = i18n('cheese');
             $('.cheese').text(cheesemsg);
         } else {
@@ -272,6 +274,8 @@ const photoBooth = (function () {
             api.errorPic({
                 error: 'No preview by device cam available!'
             });
+        } else if (config.no_cheese) {
+            api.takePic(photoStyle);
         } else {
             setTimeout(() => {
                 api.takePic(photoStyle);

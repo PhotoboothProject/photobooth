@@ -160,6 +160,11 @@ $configsetup = [
 			'range_step' => 1,
 			'unit' => 'seconds'
 		],
+		'no_cheese' => [
+			'type' => 'checkbox',
+			'name' => 'no_cheese',
+			'value' => $config['no_cheese']
+		],
 		'cheese_time' => [
 			'type' => 'range',
 			'placeholder' => $defaultConfig['cheese_time'],

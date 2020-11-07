@@ -38,6 +38,7 @@ $config['collage_key'] = null;
 $config['force_buzzer'] = false;
 // control countdown timer in seconds
 $config['cntdwn_time'] = '5';
+$config['no_cheese'] = false;
  // control time for cheeeeese! in milliseconds
 $config['cheese_time'] = '1000';
  // control time in milliseconds until Photobooth reloads automatically
