@@ -13,7 +13,8 @@ $configsetup = [
 				'en' => 'EN',
 				'es' => 'ES',
 				'fr' => 'FR',
-				'pl' => 'PL'
+				'pl' => 'PL',
+				'it' => 'IT'
 			],
 			'value' => $config['language']
 		],
