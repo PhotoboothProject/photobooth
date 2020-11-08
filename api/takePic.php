@@ -110,6 +110,13 @@ if ($_POST['style'] === 'photo') {
         'current' => $number,
         'limit' => $config['collage_limit'],
     ]));
+} elseif ($_POST['style'] === 'chroma') {
+    takePicture($filename_tmp);    
+    die(json_encode([
+        'success' => 'chroma',
+        'file' => $file,
+    ]));
+
 } else {
     die(json_encode([
         'error' => 'Invalid photo style provided',

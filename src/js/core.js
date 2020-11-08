@@ -9,6 +9,7 @@ const photoBooth = (function () {
         timeToLive = config.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
+        resultChroma = $('#mainCanvas'),
         webcamConstraints = {
             audio: false,
             video: {
@@ -25,6 +26,7 @@ const photoBooth = (function () {
         isPrinting = false,
         takingPic = false,
         nextCollageNumber = 0,
+        chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.default_imagefilter,
         ioClient,
@@ -326,6 +328,10 @@ const photoBooth = (function () {
             photoStyle = 'collage';
         }
 
+        if (chromaFile) {
+            photoStyle = 'chroma';
+        }
+
         if (config.preview_mode === 'device_cam' || config.preview_mode === 'gphoto') {
             api.startVideo('view');
         } else if (config.preview_mode === 'url') {
@@ -352,6 +358,9 @@ const photoBooth = (function () {
             console.log('Cheese is disabled.');
         } else if (photoStyle === 'photo') {
             const cheesemsg = i18n('cheese');
+            $('.cheese').text(cheesemsg);
+        } else if (photoStyle === 'chroma') {
+            var cheesemsg = i18n('cheese');
             $('.cheese').text(cheesemsg);
         } else {
             const cheesemsg = i18n('cheeseCollage');
@@ -415,6 +424,10 @@ const photoBooth = (function () {
             data.collageNumber = nextCollageNumber;
         }
 
+        if (photoStyle === 'chroma') {
+            data.file = chromaFile;
+        }
+
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
         api.callTakePicApi(data);
@@ -465,6 +478,8 @@ const photoBooth = (function () {
                         const abortmsg = i18n('abort');
                         $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
                     }
+                } else if (result.success === 'chroma') {
+                    api.processPic(photoStyle, result);
                 } else {
                     currentCollageFile = '';
                     nextCollageNumber = 0;
@@ -545,7 +560,11 @@ const photoBooth = (function () {
                         ioClient.emit('photobooth-socket', 'completed');
                     }
                 } else {
-                    api.renderPic(data.file);
+                    if (photoStyle === 'chroma') {
+                        api.renderChroma(data.file);
+                    } else {
+                        api.renderPic(data.file);
+                    }
                 }
             },
             error: (jqXHR, textStatus) => {
@@ -560,6 +579,30 @@ const photoBooth = (function () {
                 }
             }
         });
+    };
+
+    // Render Chromaimage after taking
+    api.renderChroma = function (filename) {
+        // Add Image to gallery and slider
+        api.addImage(filename);
+        var imageUrl = config.folders.images + '/' + filename;
+        var preloadImage = new Image();
+
+        preloadImage.onload = function () {
+            $('body').attr('data-main-image', filename);
+            console.log(config.folders.keying + '/' + filename);
+            var chromaimage = config.folders.keying + '/' + filename;
+
+            loader.hide();
+            api.resetTimeOut();
+            setMainImage(chromaimage);
+        };
+
+        preloadImage.src = imageUrl;
+
+        if (config.remotebuzzer_enabled) {
+            ioClient.emit('photobooth-socket', 'completed');
+        }
     };
 
     // Render Picture after taking
@@ -847,6 +890,14 @@ const photoBooth = (function () {
         e.preventDefault();
 
         api.thrill('photo');
+        $('.newpic').blur();
+    });
+
+    // Take Chroma Button
+    $('.takeChroma, .newchroma').on('click', function (e) {
+        e.preventDefault();
+
+        api.thrill('chroma');
         $('.newpic').blur();
     });
 
