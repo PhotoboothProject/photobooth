@@ -51,7 +51,7 @@
     "rpio": "^2.1.1",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.1",
-    "whatwg-fetch": "^3.4.0"
+    "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
