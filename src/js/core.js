@@ -377,7 +377,7 @@ const photoBooth = (function () {
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
 
-        if (config.preview_mode === 'gphoto') {
+        if (config.preview_mode === 'gphoto' && api.stream) {
             api.stopVideoAndTakePic(data);
         } else {
             api.callTakePicApi(data);
