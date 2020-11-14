@@ -204,18 +204,18 @@ You can follow the instructions [here](https://www.geeks3d.com/hacklab/20160108/
 There's different ways depending on your needs and personal setup:
 
 1. If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".
-    - Admin panel config "See preview by device cam": `true`
+    - Admin panel config "Preview mode": `from device cam`
 
     **Note:**
-    - Preview by "device cam" will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!
+    - Preview `"from device cam"` will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!
     - Secure origin or exception required!
       - [Prefer Secure Origins For Powerful New Features](https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339)
       - [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
     - Admin panel config *"Device cam takes picture"* can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill.
 
-2. If you like to have the same preview independent of the device you access Photobooth from:
-    - Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
-    - Admin panel config *"Preview from URL"*: `true`
+2. If you like to have the same preview independent of the device you access Photobooth from:  
+   Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
+    - Admin panel config *"Preview mode"*: `from URL`
     - Admin panel config *"Preview-URL"* example (add needed IP address instead): `url(http://127.0.0.1:8081)`
 
     **Note**

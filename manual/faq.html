@@ -249,19 +249,18 @@ echo "uinput" | sudo tee -a /etc/modules
 <ol>
 <li><p>If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".</p>
 
-<ul><li>Admin panel config "See preview by device cam": <code>true</code></li></ul>
+<ul><li>Admin panel config "Preview mode": <code>from device cam</code></li></ul>
 
 <p><strong>Note:</strong></p>
 
-<ul><li>Preview by "device cam" will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!</li>
+<ul><li>Preview <code>"from device cam"</code> will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!</li>
 <li>Secure origin or exception required!
 <ul><li><a href="https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339">Prefer Secure Origins For Powerful New Features</a></li>
 <li><a href="https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features">Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins</a></li></ul></li>
 <li>Admin panel config <em>"Device cam takes picture"</em> can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill.</li></ul></li>
-<li><p>If you like to have the same preview independent of the device you access Photobooth from:</p>
+<li><p>If you like to have the same preview independent of the device you access Photobooth from: <br /><br />Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)</p>
 
-<ul><li>Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)</li>
-<li>Admin panel config <em>"Preview from URL"</em>: <code>true</code></li>
+<ul><li>Admin panel config <em>"Preview mode"</em>: <code>from URL</code></li>
 <li>Admin panel config <em>"Preview-URL"</em> example (add needed IP address instead): <code>url(<a href='http://127.0.0.1:8081'>http://127.0.0.1:8081</a>)</code></li></ul>
 
 <p><strong>Note</strong></p>
