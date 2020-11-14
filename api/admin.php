@@ -93,7 +93,7 @@ if ($data['type'] == 'config') {
         $newConfig['login_password'] = NULL;
     }
 
-    if ($newConfig['preview_mode'] != 'device_cam') {
+    if ($newConfig['preview_mode'] != 'device_cam' && $newConfig['preview_mode'] != 'gphoto') {
         $newConfig['previewCamTakesPic'] = false;
     }
 

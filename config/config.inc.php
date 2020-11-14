@@ -79,7 +79,7 @@ $config['jpeg_quality_image'] = 100;
 
 // P R E V I E W
 // Please read https://github.com/andi34/photobooth/wiki/FAQ#how-to-use-a-live-stream-as-background-at-countdown
-// possible preview_mode values: none, device_cam, url
+// possible preview_mode values: none, device_cam, url, gphoto
 $config['preview_mode'] = 'none';
 $config['previewCamTakesPic'] = false;
 $config['previewCamFlipHorizontal'] = true;

@@ -162,48 +162,76 @@ const photoBooth = (function () {
             return;
         }
 
-        jQuery
-            .post('api/takeVideo.php', dataVideo)
-            .done(function (result) {
-                console.log('Start webcam', result);
-                pid = result.pid;
-                const getMedia =
-                    navigator.mediaDevices.getUserMedia ||
-                    navigator.mediaDevices.webkitGetUserMedia ||
-                    navigator.mediaDevices.mozGetUserMedia ||
-                    false;
+        if (config.preview_mode === 'gphoto') {
+            jQuery
+                .post('api/takeVideo.php', dataVideo)
+                .done(function (result) {
+                    console.log('Start webcam', result);
+                    pid = result.pid;
+                    const getMedia =
+                        navigator.mediaDevices.getUserMedia ||
+                        navigator.mediaDevices.webkitGetUserMedia ||
+                        navigator.mediaDevices.mozGetUserMedia ||
+                        false;
 
-                if (!getMedia) {
-                    return;
-                }
+                    if (!getMedia) {
+                        return;
+                    }
 
-                if (config.previewCamFlipHorizontal) {
-                    $('#video--view').addClass('flip-horizontal');
-                    $('#video--preview').addClass('flip-horizontal');
-                }
+                    if (config.previewCamFlipHorizontal) {
+                        $('#video--view').addClass('flip-horizontal');
+                        $('#video--preview').addClass('flip-horizontal');
+                    }
 
-                getMedia
-                    .call(navigator.mediaDevices, webcamConstraints)
-                    .then(function (stream) {
-                        if (mode === 'preview') {
-                            $('#video--preview').show();
-                            videoPreview.srcObject = stream;
-                            api.stream = stream;
-                            wrapper.css('background-image', 'none');
-                            wrapper.css('background-color', 'transparent');
-                        } else {
+                    getMedia
+                        .call(navigator.mediaDevices, webcamConstraints)
+                        .then(function (stream) {
                             $('#video--view').show();
                             videoView.srcObject = stream;
-                        }
+                            api.stream = stream;
+                        })
+                        .catch(function (error) {
+                            console.log('Could not get user media: ', error);
+                        });
+                })
+                .fail(function (xhr, status, result) {
+                    console.log('Could not start webcam', result);
+                });
+        } else {
+            const getMedia =
+                navigator.mediaDevices.getUserMedia ||
+                navigator.mediaDevices.webkitGetUserMedia ||
+                navigator.mediaDevices.mozGetUserMedia ||
+                false;
+
+            if (!getMedia) {
+                return;
+            }
+
+            if (config.previewCamFlipHorizontal) {
+                $('#video--view').addClass('flip-horizontal');
+                $('#video--preview').addClass('flip-horizontal');
+            }
+
+            getMedia
+                .call(navigator.mediaDevices, webcamConstraints)
+                .then(function (stream) {
+                    if (mode === 'preview') {
+                        $('#video--preview').show();
+                        videoPreview.srcObject = stream;
                         api.stream = stream;
-                    })
-                    .catch(function (error) {
-                        console.log('Could not get user media: ', error);
-                    });
-            })
-            .fail(function (xhr, status, result) {
-                console.log('Could not start webcam', result);
-            });
+                        wrapper.css('background-image', 'none');
+                        wrapper.css('background-color', 'transparent');
+                    } else {
+                        $('#video--view').show();
+                        videoView.srcObject = stream;
+                    }
+                    api.stream = stream;
+                })
+                .catch(function (error) {
+                    console.log('Could not get user media: ', error);
+                });
+        }
     };
 
     api.stopVideo = function (mode) {
@@ -261,7 +289,7 @@ const photoBooth = (function () {
             photoStyle = 'collage';
         }
 
-        if (config.preview_mode === 'device_cam') {
+        if (config.preview_mode === 'device_cam' || config.preview_mode === 'gphoto') {
             api.startVideo('view');
         } else if (config.preview_mode === 'url') {
             $('#ipcam--view').show();
@@ -296,7 +324,13 @@ const photoBooth = (function () {
                 .appendTo('.cheese');
         }
 
-        if (config.no_cheese) {
+        if (config.preview_mode === 'device_cam' && config.previewCamTakesPic && !api.stream && !config.dev) {
+            console.log('No preview by device cam available!');
+
+            api.errorPic({
+                error: 'No preview by device cam available!'
+            });
+        } else if (config.no_cheese) {
             api.takePic(photoStyle);
         } else {
             setTimeout(() => {
@@ -315,7 +349,16 @@ const photoBooth = (function () {
             ioClient.emit('photobooth-socket', 'in progress');
         }
 
-        if (config.preview_mode === 'url') {
+        if (config.preview_mode === 'device_cam' || config.preview_mode === 'gphoto') {
+            if (config.previewCamTakesPic && !config.dev) {
+                videoSensor.width = videoView.videoWidth;
+                videoSensor.height = videoView.videoHeight;
+                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
+            }
+            if (config.preview_mode === 'device_cam') {
+                api.stopVideo('view');
+            }
+        } else if (config.preview_mode === 'url') {
             $('#ipcam--view').removeClass('streaming');
             $('#ipcam--view').hide();
         }
@@ -334,12 +377,7 @@ const photoBooth = (function () {
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
 
-        if (config.preview_mode === 'device_cam') {
-            if (config.previewCamTakesPic && !config.dev) {
-                videoSensor.width = videoView.videoWidth;
-                videoSensor.height = videoView.videoHeight;
-                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
-            }
+        if (config.preview_mode === 'gphoto') {
             api.stopVideoAndTakePic(data);
         } else {
             api.callTakePicApi(data);

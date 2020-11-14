@@ -367,7 +367,8 @@ $configsetup = [
 			'options' => [
 				'none' => 'None',
 				'device_cam' => 'from device cam',
-				'url' => 'from URL'
+				'url' => 'from URL',
+				'gphoto' => 'from gphoto2'
 			],
 			'value' => $config['preview_mode']
 		],
