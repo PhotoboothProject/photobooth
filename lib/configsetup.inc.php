@@ -316,10 +316,60 @@ $configsetup = [
 			'name' => 'continuous_collage',
 			'value' => $config['continuous_collage']
 		],
-		'previewFromCam' => [
+		'allow_delete' => [
 			'type' => 'checkbox',
-			'name' => 'previewFromCam',
-			'value' => $config['previewFromCam']
+			'name' => 'allow_delete',
+			'value' => $config['allow_delete']
+		],
+		'allow_delete_from_gallery' => [
+			'type' => 'checkbox',
+			'name' => 'allow_delete_from_gallery',
+			'value' => $config['allow_delete_from_gallery']
+		]
+	],
+	'jpeg_quality' => [
+		'jpeg_quality_image' => [
+			'type' => 'range',
+			'name' => 'jpeg_quality_image',
+			'placeholder' => $defaultConfig['jpeg_quality_image'],
+			'value' => $config['jpeg_quality_image'],
+			'range_min' => -1,
+			'range_max' => 100,
+			'range_step' => 1,
+			'unit' => 'percent'
+		],
+		'jpeg_quality_chroma' => [
+			'type' => 'range',
+			'name' => 'jpeg_quality_chroma',
+			'placeholder' => $defaultConfig['jpeg_quality_chroma'],
+			'value' => $config['jpeg_quality_chroma'],
+			'range_min' => -1,
+			'range_max' => 100,
+			'range_step' => 1,
+			'unit' => 'percent'
+		],
+		'jpeg_quality_thumb' => [
+			'type' => 'range',
+			'name' => 'jpeg_quality_thumb',
+			'placeholder' => $defaultConfig['jpeg_quality_thumb'],
+			'value' => $config['jpeg_quality_thumb'],
+			'range_min' => -1,
+			'range_max' => 100,
+			'range_step' => 1,
+			'unit' => 'percent'
+		]
+	],
+	'preview' => [
+		'mode' => [
+			'type' => 'select',
+			'name' => 'mode',
+			'placeholder' => $defaultConfig['preview_mode'],
+			'options' => [
+				'none' => 'None',
+				'device_cam' => 'from device cam',
+				'url' => 'from URL'
+			],
+			'value' => $config['preview_mode']
 		],
 		'previewCamTakesPic' => [
 			'type' => 'checkbox',
@@ -330,16 +380,6 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'previewCamFlipHorizontal',
 			'value' => $config['previewCamFlipHorizontal']
-		],
-		'previewCamBackground' => [
-			'type' => 'checkbox',
-			'name' => 'previewCamBackground',
-			'value' => $config['previewCamBackground']
-		],
-		'previewFromIPCam' => [
-			'type' => 'checkbox',
-			'name' => 'previewFromIPCam',
-			'value' => $config['previewFromIPCam']
 		],
 		'ipCamPreviewRotation' => [
 			'type' => 'select',
@@ -383,47 +423,10 @@ $configsetup = [
 			],
 			'value' => $config['camera_mode']
 		],
-		'allow_delete' => [
+		'previewCamBackground' => [
 			'type' => 'checkbox',
-			'name' => 'allow_delete',
-			'value' => $config['allow_delete']
-		],
-		'allow_delete_from_gallery' => [
-			'type' => 'checkbox',
-			'name' => 'allow_delete_from_gallery',
-			'value' => $config['allow_delete_from_gallery']
-		]
-	],
-	'jpeg_quality' => [
-		'jpeg_quality_image' => [
-			'type' => 'range',
-			'name' => 'jpeg_quality_image',
-			'placeholder' => $defaultConfig['jpeg_quality_image'],
-			'value' => $config['jpeg_quality_image'],
-			'range_min' => -1,
-			'range_max' => 100,
-			'range_step' => 1,
-			'unit' => 'percent'
-		],
-		'jpeg_quality_chroma' => [
-			'type' => 'range',
-			'name' => 'jpeg_quality_chroma',
-			'placeholder' => $defaultConfig['jpeg_quality_chroma'],
-			'value' => $config['jpeg_quality_chroma'],
-			'range_min' => -1,
-			'range_max' => 100,
-			'range_step' => 1,
-			'unit' => 'percent'
-		],
-		'jpeg_quality_thumb' => [
-			'type' => 'range',
-			'name' => 'jpeg_quality_thumb',
-			'placeholder' => $defaultConfig['jpeg_quality_thumb'],
-			'value' => $config['jpeg_quality_thumb'],
-			'range_min' => -1,
-			'range_max' => 100,
-			'range_step' => 1,
-			'unit' => 'percent'
+			'name' => 'previewCamBackground',
+			'value' => $config['previewCamBackground']
 		]
 	],
 	'user_interface' => [

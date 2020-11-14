@@ -15,7 +15,7 @@ function takePicture($filename)
             $demoFolder . $devImg[array_rand($devImg)],
             $filename
         );
-    } elseif ($config['previewFromCam'] && $config['previewCamTakesPic']) {
+    } elseif ($config['preview_mode'] === 'device_cam' && $config['previewCamTakesPic']) {
         $data = $_POST['canvasimg'];
         list($type, $data) = explode(';', $data);
         list(, $data)      = explode(',', $data);

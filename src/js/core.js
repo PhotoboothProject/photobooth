@@ -226,11 +226,9 @@ const photoBooth = (function () {
             photoStyle = 'collage';
         }
 
-        if (config.previewFromCam) {
+        if (config.preview_mode === 'device_cam') {
             api.startVideo('view');
-        }
-
-        if (config.previewFromIPCam) {
+        } else if (config.preview_mode === 'url') {
             $('#ipcam--view').show();
             $('#ipcam--view').addClass('streaming');
         }
@@ -263,13 +261,8 @@ const photoBooth = (function () {
                 .appendTo('.cheese');
         }
 
-        if (config.previewFromCam && config.previewCamTakesPic && !api.stream && !config.dev) {
+        if (config.preview_mode === 'device_cam' && config.previewCamTakesPic && !api.stream && !config.dev) {
             console.log('No preview by device cam available!');
-
-            if (config.previewFromIPCam) {
-                $('#ipcam--view').removeClass('streaming');
-                $('#ipcam--view').hide();
-            }
 
             api.errorPic({
                 error: 'No preview by device cam available!'
@@ -293,16 +286,14 @@ const photoBooth = (function () {
             ioClient.emit('photobooth-socket', 'in progress');
         }
 
-        if (config.previewFromCam) {
+        if (config.preview_mode === 'device_cam') {
             if (config.previewCamTakesPic && !config.dev) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
             api.stopVideo('view');
-        }
-
-        if (config.previewFromIPCam) {
+        } else if (config.preview_mode === 'url') {
             $('#ipcam--view').removeClass('streaming');
             $('#ipcam--view').hide();
         }

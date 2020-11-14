@@ -67,19 +67,6 @@ $config['collage_background'] = '../resources/img/frames/DefaultCollageBackgroun
 // control countdown timer between collage pictures in seconds
 $config['collage_cntdwn_time'] = '3';
 $config['continuous_collage'] = true;
-// Please read https://github.com/andi34/photobooth/wiki/FAQ#how-to-use-a-live-stream-as-background-at-countdown
-$config['previewFromCam'] = false;
-$config['previewCamTakesPic'] = false;
-$config['previewCamFlipHorizontal'] = true;
-$config['previewCamBackground'] = false;
-$config['previewFromIPCam'] = false;
-// possible ipCamPreviewRotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
-$config['ipCamPreviewRotation'] = '0deg';
-$config['ipCamURL'] = null;
-$config['videoWidth'] = '1280';
-$config['videoHeight'] = '720';
-// possible camera_mode values: "user", "environment"
-$config['camera_mode'] = 'user';
 $config['allow_delete'] = true;
 $config['allow_delete_from_gallery'] = true;
 
@@ -88,6 +75,22 @@ $config['allow_delete_from_gallery'] = true;
 $config['jpeg_quality_thumb'] = 60;
 $config['jpeg_quality_chroma'] = 100;
 $config['jpeg_quality_image'] = 100;
+
+
+// P R E V I E W
+// Please read https://github.com/andi34/photobooth/wiki/FAQ#how-to-use-a-live-stream-as-background-at-countdown
+// possible preview_mode values: none, device_cam, url
+$config['preview_mode'] = 'none';
+$config['previewCamTakesPic'] = false;
+$config['previewCamFlipHorizontal'] = true;
+// possible ipCamPreviewRotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
+$config['ipCamPreviewRotation'] = '0deg';
+$config['ipCamURL'] = null;
+$config['videoWidth'] = '1280';
+$config['videoHeight'] = '720';
+// possible camera_mode values: "user", "environment"
+$config['camera_mode'] = 'user';
+$config['previewCamBackground'] = false;
 
 
 // U S E R   I N T E R F A C E
