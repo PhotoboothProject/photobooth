@@ -246,7 +246,7 @@ const photoBooth = (function () {
         }
     };
 
-    api.stopVideoAndTakePic = function (data) {
+    api.stopPreviewVideo = function () {
         if (api.stream) {
             const dataVideo = {
                 play: 'false',
@@ -260,7 +260,6 @@ const photoBooth = (function () {
                     const track = api.stream.getTracks()[0];
                     track.stop();
                     $('#video--view').hide();
-                    api.callTakePicApi(data);
                 })
                 .fail(function (xhr, status, result) {
                     console.log('Could not stop webcam', result);
@@ -376,12 +375,7 @@ const photoBooth = (function () {
 
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
-
-        if (config.preview_mode === 'gphoto' && api.stream) {
-            api.stopVideoAndTakePic(data);
-        } else {
-            api.callTakePicApi(data);
-        }
+        api.callTakePicApi(data);
     };
 
     api.callTakePicApi = function (data) {
@@ -672,6 +666,7 @@ const photoBooth = (function () {
     api.startCountdown = function (start, element, cb) {
         let count = 0;
         let current = start;
+        const stop = start > 2 ? start - 2 : start;
 
         function timerFunction() {
             element.text(current);
@@ -686,6 +681,9 @@ const photoBooth = (function () {
                 cb();
             }
             count++;
+            if (config.preview_mode === 'gphoto' && count === stop) {
+                api.stopPreviewVideo();
+            }
         }
         timerFunction();
     };
