@@ -268,6 +268,7 @@ fi
 info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
 gpasswd -a www-data plugdev
+gpasswd -a www-data video
 
 if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
     info "### Disabling camera automount."
