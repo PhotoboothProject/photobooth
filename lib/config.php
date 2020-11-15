@@ -39,7 +39,7 @@ $cmds = [
         ],
         'preview' => [
             'cmd' => 'gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0 > /dev/null 2>&1 & echo $!',
-            'killcmd' => 'killall gphoto2',
+            'killcmd' => 'killall gphoto2 && sleep 1',
         ]
     ],
 ];
