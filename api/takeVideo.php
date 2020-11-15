@@ -20,14 +20,16 @@ function isRunning($pid) {
 }
 
 if ($_POST['play'] === "true" ) {
-    $pid = exec('gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0 > /dev/null 2>&1 & echo $!', $out);
+    $cmd = sprintf($config['preview']['cmd']);
+    $pid = exec($cmd, $out);
     sleep(3);
     die(json_encode([
         'isRunning' => isRunning($pid),
         'pid' => $pid - 1
     ]));
 } elseif($_POST['play'] === "false") {
-    exec('kill -15 '.$_POST['pid']);
+    $killcmd = sprintf($config['preview']['killcmd']);
+    exec($killcmd);
     die(json_encode([
         'isRunning' => isRunning($_POST['pid']),
         'pid' => $_POST['pid']

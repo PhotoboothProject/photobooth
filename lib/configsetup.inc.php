@@ -1070,6 +1070,18 @@ $configsetup = [
 			'placeholder' => 'exiftool_msg',
 			'name' => 'exiftool[msg]',
 			'value' => htmlentities($config['exiftool']['msg'])
+		],
+		'preview_cmd' => [
+			'type' => 'input',
+			'placeholder' => 'preview_cmd',
+			'name' => 'preview[cmd]',
+			'value' => htmlentities($config['preview']['cmd'])
+		],
+		'preview_killcmd' => [
+			'type' => 'input',
+			'placeholder' => 'preview_killcmd',
+			'name' => 'preview[killcmd]',
+			'value' => htmlentities($config['preview']['killcmd'])
 		]
 	],
 	'remotebuzzer' => [

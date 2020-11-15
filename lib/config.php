@@ -18,6 +18,10 @@ $cmds = [
         'exiftool' => [
             'cmd' => '',
             'msg' => '',
+        ],
+        'preview' => [
+            'cmd' => '',
+            'killcmd' => '',
         ]
     ],
     'linux' => [
@@ -32,6 +36,10 @@ $cmds = [
         'exiftool' => [
             'cmd' => 'exiftool -overwrite_original -TagsFromFile %s %s',
             'msg' => '',
+        ],
+        'preview' => [
+            'cmd' => 'gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0 > /dev/null 2>&1 & echo $!',
+            'killcmd' => 'killall gphoto2',
         ]
     ],
 ];
@@ -65,6 +73,8 @@ $config['print']['cmd'] = $cmds[$os]['print']['cmd'];
 $config['print']['msg'] = $cmds[$os]['print']['msg'];
 $config['exiftool']['cmd'] = $cmds[$os]['exiftool']['cmd'];
 $config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
+$config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
+$config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
 
 $config['collage_limit'] = 4;
 

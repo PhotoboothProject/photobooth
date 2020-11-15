@@ -230,6 +230,8 @@ $config['print']['cmd'] = null;
 $config['print']['msg'] = null;
 $config['exiftool']['cmd'] = null;
 $config['exiftool']['msg'] = null;
+$config['preview']['cmd'] = null;
+$config['preview']['killcmd'] = null;
 
 
 // R E M O T E   B U Z Z E R
