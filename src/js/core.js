@@ -99,7 +99,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.previewCamBackground) {
+        if (config.previewCamBackground || (config.preview_mode == 'gphoto ' && !config.preview_gphoto_bsm)) {
             api.startVideo('preview');
         }
 
@@ -163,40 +163,78 @@ const photoBooth = (function () {
         }
 
         if (config.preview_mode === 'gphoto') {
-            jQuery
-                .post('api/takeVideo.php', dataVideo)
-                .done(function (result) {
-                    console.log('Start webcam', result);
-                    pid = result.pid;
-                    const getMedia =
-                        navigator.mediaDevices.getUserMedia ||
-                        navigator.mediaDevices.webkitGetUserMedia ||
-                        navigator.mediaDevices.mozGetUserMedia ||
-                        false;
+            if (!config.preview_gphoto_bsm && mode === 'preview') {
+                jQuery
+                    .post('api/takeVideo.php', dataVideo)
+                    .done(function (result) {
+                        console.log('Start webcam', result);
+                        pid = result.pid;
+                    })
+                    .fail(function (xhr, status, result) {
+                        console.log('Could not start webcam', result);
+                    });
+            } else if (!config.preview_gphoto_bsm && mode === 'view') {
+                const getMedia =
+                    navigator.mediaDevices.getUserMedia ||
+                    navigator.mediaDevices.webkitGetUserMedia ||
+                    navigator.mediaDevices.mozGetUserMedia ||
+                    false;
 
-                    if (!getMedia) {
-                        return;
-                    }
+                if (!getMedia) {
+                    return;
+                }
 
-                    if (config.previewCamFlipHorizontal) {
-                        $('#video--view').addClass('flip-horizontal');
-                        $('#video--preview').addClass('flip-horizontal');
-                    }
+                if (config.previewCamFlipHorizontal) {
+                    $('#video--view').addClass('flip-horizontal');
+                    $('#video--preview').addClass('flip-horizontal');
+                }
 
-                    getMedia
-                        .call(navigator.mediaDevices, webcamConstraints)
-                        .then(function (stream) {
-                            $('#video--view').show();
-                            videoView.srcObject = stream;
-                            api.stream = stream;
-                        })
-                        .catch(function (error) {
-                            console.log('Could not get user media: ', error);
-                        });
-                })
-                .fail(function (xhr, status, result) {
-                    console.log('Could not start webcam', result);
-                });
+                getMedia
+                    .call(navigator.mediaDevices, webcamConstraints)
+                    .then(function (stream) {
+                        $('#video--view').show();
+                        videoView.srcObject = stream;
+                        api.stream = stream;
+                    })
+                    .catch(function (error) {
+                        console.log('Could not get user media: ', error);
+                    });
+            } else {
+                jQuery
+                    .post('api/takeVideo.php', dataVideo)
+                    .done(function (result) {
+                        console.log('Start webcam', result);
+                        pid = result.pid;
+                        const getMedia =
+                            navigator.mediaDevices.getUserMedia ||
+                            navigator.mediaDevices.webkitGetUserMedia ||
+                            navigator.mediaDevices.mozGetUserMedia ||
+                            false;
+
+                        if (!getMedia) {
+                            return;
+                        }
+
+                        if (config.previewCamFlipHorizontal) {
+                            $('#video--view').addClass('flip-horizontal');
+                            $('#video--preview').addClass('flip-horizontal');
+                        }
+
+                        getMedia
+                            .call(navigator.mediaDevices, webcamConstraints)
+                            .then(function (stream) {
+                                $('#video--view').show();
+                                videoView.srcObject = stream;
+                                api.stream = stream;
+                            })
+                            .catch(function (error) {
+                                console.log('Could not get user media: ', error);
+                            });
+                    })
+                    .fail(function (xhr, status, result) {
+                        console.log('Could not start webcam', result);
+                    });
+            }
         } else {
             const getMedia =
                 navigator.mediaDevices.getUserMedia ||

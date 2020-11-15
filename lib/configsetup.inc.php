@@ -372,6 +372,11 @@ $configsetup = [
 			],
 			'value' => $config['preview_mode']
 		],
+		'preview_gphoto_bsm' => [
+			'type' => 'checkbox',
+			'name' => 'preview_gphoto_bsm',
+			'value' => $config['preview_gphoto_bsm']
+		],
 		'previewCamTakesPic' => [
 			'type' => 'checkbox',
 			'name' => 'previewCamTakesPic',

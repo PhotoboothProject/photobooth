@@ -81,6 +81,7 @@ $config['jpeg_quality_image'] = 100;
 // Please read https://github.com/andi34/photobooth/wiki/FAQ#how-to-use-a-live-stream-as-background-at-countdown
 // possible preview_mode values: none, device_cam, url, gphoto
 $config['preview_mode'] = 'none';
+$config['preview_gphoto_bsm'] = true;
 $config['previewCamTakesPic'] = false;
 $config['previewCamFlipHorizontal'] = true;
 // possible ipCamPreviewRotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
