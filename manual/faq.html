@@ -268,6 +268,23 @@ echo "uinput" | sudo tee -a /etc/modules
 <ul><li>Do NOT enable <em>"Device cam takes picture"</em> in admin panel config!</li>
 <li>Capture pictures via <code>raspistill</code> won't work if motion is installed!</li>
 <li>Requires Photobooth v2.2.1 or later!</li></ul></li>
+<li><p>A device independent preview can also be done using the video mode of your DSLR (Linux only):</p>
+
+<ul><li>install all dependencies <code>sudo apt install ffmpeg v4l2loopback-dkms -y</code></li>
+<li>create a virtual webcam <code>modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"</code>
+<ul><li><code>/dev/video0</code> is used by default, you can use <code>v42l-ctl --list-devices</code> to check which <code>/dev/*</code> is the correct one: <br />
+If it doesn't match the default setup you need to adjust the <code>Command to generate a live preview</code> inside the admin panel!</li></ul></li>
+<li>Give permissions to /dev/video* <code>sudo gpasswd -a www-data video</code> (this was done automatically if you used the installation script) and reboot once</li>
+<li>Admin panel config <em>"Preview mode"</em>: <code>from gphoto2</code></li></ul>
+
+<p><strong>Note</strong></p>
+
+<ul><li>Requires Photobooth v2.11.0 or later!</li>
+<li>There's a delay of about 3 seconds until the preview starts, to avoid that disable the <code>Battery saving mode on gphoto2 live preview</code> option to generate a preview in background. <strong>This results in a high battery usage and also a general slowdown.</strong></li>
+<li>Sometimes Chromium doesn't detect the V4l2 camera launch from php: you need to run <code>sudo gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0</code> from terminal first and load Chromium a first time with a webpage asking for the camera.</li>
+<li>Chromium sometimes has trouble, if there is another webcam like <code>bcm2835-isp</code>, it will take it by default instead. Disable other webcams, e.g. <code>rmmod bcm2835-isp</code>.</li>
+<li>Make sure the countdown is long enough to start the preview and free gphoto2 at the end of the countdown to be able to take a picture (2 seconds before the countdown ends).
+<ul><li>For best user experience the countdown should be set at least to 8 seconds.</li></ul></li></ul></li>
 </ol>
 
 <hr>
