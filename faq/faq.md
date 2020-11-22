@@ -226,7 +226,7 @@ There's different ways depending on your needs and personal setup:
 3. A device independent preview can also be done using the video mode of your DSLR (Linux only):
     - install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
     - create a virtual webcam `modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
-      - `/dev/video0` is used by default, you can use `v42l-ctl --list-devices` to check which `/dev/*` is the correct one:  
+      - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:  
         If it doesn't match the default setup you need to adjust the `Command to generate a live preview` inside the admin panel!
     - Give permissions to /dev/video* `sudo gpasswd -a www-data video` (this was done automatically if you used the installation script) and reboot once
     - Admin panel config *"Preview mode"*: `from gphoto2`

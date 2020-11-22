@@ -272,7 +272,7 @@ echo "uinput" | sudo tee -a /etc/modules
 
 <ul><li>install all dependencies <code>sudo apt install ffmpeg v4l2loopback-dkms -y</code></li>
 <li>create a virtual webcam <code>modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"</code>
-<ul><li><code>/dev/video0</code> is used by default, you can use <code>v42l-ctl --list-devices</code> to check which <code>/dev/*</code> is the correct one: <br />
+<ul><li><code>/dev/video0</code> is used by default, you can use <code>v4l2-ctl --list-devices</code> to check which <code>/dev/*</code> is the correct one: <br />
 If it doesn't match the default setup you need to adjust the <code>Command to generate a live preview</code> inside the admin panel!</li></ul></li>
 <li>Give permissions to /dev/video* <code>sudo gpasswd -a www-data video</code> (this was done automatically if you used the installation script) and reboot once</li>
 <li>Admin panel config <em>"Preview mode"</em>: <code>from gphoto2</code></li></ul>
