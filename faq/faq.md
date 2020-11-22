@@ -237,6 +237,9 @@ There's different ways depending on your needs and personal setup:
     - There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Battery saving mode on gphoto2 live preview` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
     - Sometimes Chromium doesn't detect the V4l2 camera launch from php: you need to run `sudo gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0` from terminal first and load Chromium a first time with a webpage asking for the camera.
     - Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. `rmmod bcm2835-isp`.
+    - To ensure that the configuration works after reboot add the following lines to `/etc/rc.local` (You have to add these lines bevor `exit 0`):
+      - `modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
+      - `rmmod bcm2835-isp`
     - Make sure the countdown is long enough to start the preview and free gphoto2 at the end of the countdown to be able to take a picture (2 seconds before the countdown ends).
       - For best user experience the countdown should be set at least to 8 seconds.
 
