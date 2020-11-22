@@ -223,7 +223,7 @@ There's different ways depending on your needs and personal setup:
     - Capture pictures via `raspistill` won't work if motion is installed!
     - Requires Photobooth v2.2.1 or later!
 
-3. A device independent preview can also be done using the video mode of your DSLR (Linux only):
+3. A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
     - install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
     - create a virtual webcam `modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
       - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:  
@@ -233,6 +233,7 @@ There's different ways depending on your needs and personal setup:
 
     **Note**
     - Requires Photobooth v2.11.0 or later!
+    - You need to access Photobooth directly via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost)
     - There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Battery saving mode on gphoto2 live preview` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
     - Sometimes Chromium doesn't detect the V4l2 camera launch from php: you need to run `sudo gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0` from terminal first and load Chromium a first time with a webpage asking for the camera.
     - Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. `rmmod bcm2835-isp`.
