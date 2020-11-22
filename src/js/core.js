@@ -99,7 +99,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.previewCamBackground || (config.preview_mode == 'gphoto ' && !config.preview_gphoto_bsm)) {
+        if (config.previewCamBackground || (config.preview_mode == 'gphoto' && !config.preview_gphoto_bsm)) {
             api.startVideo('preview');
         }
 
