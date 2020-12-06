@@ -41,10 +41,15 @@
   margin: 3px;
 }
 
-.takeChroma {
+.takeChroma,
+.deletebtn {
   display: none;
 }
 
 .chromaNote {
   color: #ff0000;
+}
+
+.chroma-control-bar {
+  padding-top: 10px;
 }

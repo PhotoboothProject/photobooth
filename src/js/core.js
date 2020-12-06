@@ -593,6 +593,7 @@ const photoBooth = (function () {
 
             loader.hide();
             api.resetTimeOut();
+            api.chromaimage = filename;
             setMainImage(chromaimage);
         };
 

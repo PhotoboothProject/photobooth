@@ -187,6 +187,39 @@ function saveImage(cb) {
             imgData: dataURL
         },
         function (data) {
+            if (config.allow_delete) {
+                if ($('.deletebtn').is(':hidden')) {
+                    $('.deletebtn').show();
+                }
+                $('.chroma-control-bar')
+                    .find('.deletebtn')
+                    .off('click')
+                    .on('click', (ev) => {
+                        ev.preventDefault();
+
+                        photoBooth.deleteImage(data.filename, (result) => {
+                            if (result.success) {
+                                photoBooth.deleteImage(photoBooth.chromaimage, (result) => {
+                                    if (result.success) {
+                                        setTimeout(function () {
+                                            photoBooth.reloadPage();
+                                        }, 3000);
+                                    } else {
+                                        console.log('Error while deleting image');
+                                        setTimeout(function () {
+                                            photoBooth.reloadPage();
+                                        }, 5000);
+                                    }
+                                });
+                            } else {
+                                console.log('Error while deleting image');
+                                setTimeout(function () {
+                                    photoBooth.reloadPage();
+                                }, 5000);
+                            }
+                        });
+                    });
+            }
             if (cb) {
                 cb(data);
             }

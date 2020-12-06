@@ -74,6 +74,9 @@ require_once('lib/config.php');
 		<div class="chroma-control-bar">
 			<a href="#" class="btn takeChroma"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 			<a href="#" class="btn reloadPage"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
+			<?php if ($config['allow_delete']): ?>
+			<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+			<?php endif; ?>
 			<button hidden class="triggerChroma"></button>
 		</div>
 	<div>
