@@ -81,7 +81,6 @@ function setMainImage(imgSrc) {
             mainImage.src = tmpCanvas.toDataURL('image/png');
             mainImage.onload = function () {
                 drawCanvas();
-                saveImage();
             };
         });
     } else {
@@ -161,12 +160,11 @@ function drawCanvas() {
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
         if (config.chroma_keying_variant === 'marvinj') {
             ctx.drawImage(mainImage, 0, 0);
-            saveImage();
         } else {
             //important to fetch tmpimageout
             ctx.drawImage(document.getElementById('tmpimageout'), 0, 0);
-            saveImage();
         }
+        saveImage();
     }
 }
 
