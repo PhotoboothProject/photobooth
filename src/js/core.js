@@ -526,7 +526,7 @@ const photoBooth = (function () {
         const tempImageUrl = config.folders.tmp + '/' + result.file;
 
         $('.spinner').show();
-        $('.loading').text(photoStyle === 'photo' ? i18n('busy') : i18n('busyCollage'));
+        $('.loading').text(photoStyle === 'photo' || photoStyle === 'chroma' ? i18n('busy') : i18n('busyCollage'));
 
         takingPic = false;
         if (config.dev) {
