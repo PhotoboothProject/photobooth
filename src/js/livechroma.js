@@ -211,6 +211,7 @@ $('.takeChroma, .newchroma').on('click', function (e) {
     photoBooth.thrill('chroma');
     if ($('.takeChroma').is(':visible')) {
         $('.takeChroma').hide();
+        $('.backgrounds').hide();
 
         setTimeout(() => {
             $('.chromaNote').text(chromaInfo);

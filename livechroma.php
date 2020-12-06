@@ -59,7 +59,7 @@ require_once('lib/config.php');
 		<!-- Result Page -->
 		<div class="stages" id="result"></div>
 
-		<div style="padding-top:10px;text-align:center;">
+		<div class="backgrounds" style="padding-top:10px;text-align:center;">
 			<?php
 				$dir = join(DIRECTORY_SEPARATOR, ['resources', 'img', 'background']) . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
