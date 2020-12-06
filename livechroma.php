@@ -54,8 +54,6 @@ require_once('lib/config.php');
 		<!-- Result Page -->
 		<div class="stages" id="result"></div>
 
-
-
 		<div style="padding-top:10px;text-align:center;">
 			<?php
 				$dir = join(DIRECTORY_SEPARATOR, ['resources', 'img', 'background']) . DIRECTORY_SEPARATOR;
@@ -70,6 +68,7 @@ require_once('lib/config.php');
 
 		<div class="chroma-control-bar">
 			<a href="#" class="btn takeChroma"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+			<a href="#" class="btn reloadPage"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
 			<button hidden class="triggerChroma"></button>
 		</div>
 	<div>

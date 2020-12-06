@@ -1,4 +1,4 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage Seriously */
+/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously */
 /* exported setBackgroundImage setMainImage */
 let mainImage;
 let mainImageWidth;
@@ -53,6 +53,7 @@ function alphaBoundary(imageOut, radius) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function setMainImage(imgSrc) {
     if (config.chroma_keying_variant === 'marvinj') {
         const image = new MarvinImage();
@@ -121,6 +122,7 @@ function setMainImage(imgSrc) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function setBackgroundImage(url) {
     backgroundImage = new Image();
     backgroundImage.src = url;
@@ -193,3 +195,18 @@ function saveImage(cb) {
         }
     );
 }
+
+// Take Chroma Button
+$('.takeChroma, .newchroma').on('click', function (e) {
+    e.preventDefault();
+
+    photoBooth.thrill('chroma');
+    $('.takeChroma').hide();
+});
+
+$('.reloadPage').on('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    photoBooth.reloadPage();
+});
