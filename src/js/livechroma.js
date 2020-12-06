@@ -1,4 +1,4 @@
-/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously */
+/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously i18n*/
 /* exported setBackgroundImage setMainImage */
 let mainImage;
 let mainImageWidth;
@@ -197,15 +197,25 @@ function saveImage(cb) {
 }
 
 $('.backgroundPreview').on('click', function () {
-    $('.takeChroma').show();
+    if ($('.takeChroma').is(':hidden')) {
+        $('.takeChroma').show();
+        $('.chromaNote').empty();
+    }
 });
 
 // Take Chroma Button
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
+    const chromaInfo = i18n('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
-    $('.takeChroma').hide();
+    if ($('.takeChroma').is(':visible')) {
+        $('.takeChroma').hide();
+
+        setTimeout(() => {
+            $('.chromaNote').text(chromaInfo);
+        }, config.cntdwn_time * 1000);
+    }
 });
 
 $('.reloadPage').on('click', function (e) {

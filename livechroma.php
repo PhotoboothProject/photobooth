@@ -33,6 +33,11 @@ require_once('lib/config.php');
 		<div class="canvasWrapper">
 			<canvas id="mainCanvas"></canvas>
 		</div>
+
+		<div class="chromaNote">
+			<span data-i18n="chromaInfoBefore"></span>
+		</div>
+
 		<div class="stages" id="loader">
 			<div class="loaderInner">
 				<div class="spinner">
