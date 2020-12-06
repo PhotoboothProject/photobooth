@@ -196,6 +196,10 @@ function saveImage(cb) {
     );
 }
 
+$('.backgroundPreview').on('click', function () {
+    $('.takeChroma').show();
+});
+
 // Take Chroma Button
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
