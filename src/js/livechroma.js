@@ -1,10 +1,9 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously */
-/* exported setBackgroundImage */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage Seriously */
+/* exported setBackgroundImage setMainImage */
 let mainImage;
 let mainImageWidth;
 let mainImageHeight;
 let backgroundImage;
-let isPrinting = false;
 let seriously;
 let target;
 let chroma;

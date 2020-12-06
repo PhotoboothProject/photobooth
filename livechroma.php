@@ -30,10 +30,10 @@ require_once('lib/config.php');
 	</head>
 <body>
 	<div class="chromawrapper">
-			<div class="canvasWrapper">
+		<div class="canvasWrapper">
 			<canvas id="mainCanvas"></canvas>
-	</div>
-    <div class="stages" id="loader">
+		</div>
+		<div class="stages" id="loader">
 			<div class="loaderInner">
 				<div class="spinner">
 					<i class="fa fa-cog fa-spin"></i>
@@ -51,12 +51,8 @@ require_once('lib/config.php');
 			</div>
 		</div>
 
-
-
-        <!-- Result Page -->
-		<div class="stages" id="result">
-			
-		</div>
+		<!-- Result Page -->
+		<div class="stages" id="result"></div>
 
 
 
@@ -76,12 +72,13 @@ require_once('lib/config.php');
 			<a href="#" class="btn takeChroma"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 			<button hidden class="triggerChroma"></button>
 		</div>
-	
+	<div>
+
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="resources/js/photoinit.js"></script>
-    <script type="text/javascript" src="resources/js/core.js"></script>
+	<script type="text/javascript" src="resources/js/photoinit.js"></script>
+	<script type="text/javascript" src="resources/js/core.js"></script>
 	<?php if ($config['chroma_keying_variant'] === 'marvinj'): ?>
 	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
 	<?php else:?>

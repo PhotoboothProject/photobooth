@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM i18n io */
+/* globals initPhotoSwipeFromDOM i18n io setMainImage */
 
 const photoBooth = (function () {
     // vars
@@ -9,7 +9,6 @@ const photoBooth = (function () {
         timeToLive = config.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
-        resultChroma = $('#mainCanvas'),
         webcamConstraints = {
             audio: false,
             video: {
@@ -360,7 +359,7 @@ const photoBooth = (function () {
             const cheesemsg = i18n('cheese');
             $('.cheese').text(cheesemsg);
         } else if (photoStyle === 'chroma') {
-            var cheesemsg = i18n('cheese');
+            const cheesemsg = i18n('cheese');
             $('.cheese').text(cheesemsg);
         } else {
             const cheesemsg = i18n('cheeseCollage');
@@ -479,7 +478,7 @@ const photoBooth = (function () {
                         $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
                     }
                 } else if (result.success === 'chroma') {
-                    api.processPic(photoStyle, result);
+                    api.processPic(data.style, result);
                 } else {
                     currentCollageFile = '';
                     nextCollageNumber = 0;
@@ -559,12 +558,10 @@ const photoBooth = (function () {
                     if (config.remotebuzzer_enabled) {
                         ioClient.emit('photobooth-socket', 'completed');
                     }
+                } else if (photoStyle === 'chroma') {
+                    api.renderChroma(data.file);
                 } else {
-                    if (photoStyle === 'chroma') {
-                        api.renderChroma(data.file);
-                    } else {
-                        api.renderPic(data.file);
-                    }
+                    api.renderPic(data.file);
                 }
             },
             error: (jqXHR, textStatus) => {
@@ -585,13 +582,13 @@ const photoBooth = (function () {
     api.renderChroma = function (filename) {
         // Add Image to gallery and slider
         api.addImage(filename);
-        var imageUrl = config.folders.images + '/' + filename;
-        var preloadImage = new Image();
+        const imageUrl = config.folders.images + '/' + filename;
+        const preloadImage = new Image();
 
         preloadImage.onload = function () {
             $('body').attr('data-main-image', filename);
             console.log(config.folders.keying + '/' + filename);
-            var chromaimage = config.folders.keying + '/' + filename;
+            const chromaimage = config.folders.keying + '/' + filename;
 
             loader.hide();
             api.resetTimeOut();
