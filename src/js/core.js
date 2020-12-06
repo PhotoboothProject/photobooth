@@ -895,7 +895,7 @@ const photoBooth = (function () {
         e.preventDefault();
 
         api.thrill('chroma');
-        $('.newpic').blur();
+        $('.takeChroma').blur();
     });
 
     // Take Collage Button
