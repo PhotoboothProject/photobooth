@@ -1,0 +1,148 @@
+@import 'chromakeying';
+
+.takeChroma,
+.deletebtn {
+  display: none;
+}
+
+.chromaNote {
+  color: #ff0000;
+  padding-bottom: 10px;
+}
+
+.chroma-control-bar {
+  padding-top: 10px;
+}
+
+.go_home {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.reloadPage {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+#loader {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center center;
+  color: $countdownColor;
+  z-index: 100;
+  text-align: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+
+  &.showBackgroundImage {
+    &:after {
+      opacity: 0.5;
+    }
+  }
+
+  &.open {
+    display: flex;
+  }
+
+  .spinner {
+    color: $cheeseColor;
+    font-size: 5em;
+  }
+}
+
+#video--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#video--preview {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#ipcam--view {
+  background-image: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transform: rotate($ipCamPreviewRotation);
+
+  &.streaming {
+    background-image: $ipcamBackground;
+  }
+}
+
+.flip-horizontal {
+  transform: scaleX(-1);
+  filter: FlipH;
+}
+
+.chroma-control-bar {
+  margin-top: 12px;
+  text-align: center;
+
+  @media (max-width: 576px) {
+    span {
+      display: none;
+    }
+  }
+}
+
+#counter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 12em;
+  opacity: 0.2;
+}
+
+#counter.tick {
+  font-size: 1em;
+  opacity: 1;
+  transition: font-size 0.75s, opacity 0.75s;
+}
+
+.cheese {
+  position: absolute;
+  color: $cheeseColor;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 3em;
+}

@@ -23,7 +23,7 @@ require_once('lib/config.php');
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-		<link rel="stylesheet" href="resources/css/chromakeying.css" />
+		<link rel="stylesheet" href="resources/css/live_chromakeying.css" />
 		<?php if ($config['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>

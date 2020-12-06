@@ -40,28 +40,3 @@
   border: 2px solid $borderColor;
   margin: 3px;
 }
-
-.takeChroma,
-.deletebtn {
-  display: none;
-}
-
-.chromaNote {
-  color: #ff0000;
-}
-
-.chroma-control-bar {
-  padding-top: 10px;
-}
-
-.go_home {
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-.reloadPage {
-  position: fixed;
-  top: 0;
-  right: 0;
-}
