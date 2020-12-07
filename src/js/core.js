@@ -355,10 +355,7 @@ const photoBooth = (function () {
 
         if (config.no_cheese) {
             console.log('Cheese is disabled.');
-        } else if (photoStyle === 'photo') {
-            const cheesemsg = i18n('cheese');
-            $('.cheese').text(cheesemsg);
-        } else if (photoStyle === 'chroma') {
+        } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
             const cheesemsg = i18n('cheese');
             $('.cheese').text(cheesemsg);
         } else {
