@@ -31,8 +31,7 @@ require_once('lib/config.php');
 <body>
 	<div class="chromawrapper">
 		<div>
-			<a href="index.php" class="btn btn--small btn--flex go_home"><i class="fa fa-times"></i></a>
-			<a href="#" class="btn btn--small btn--flex reloadPage"><i class="fa fa-refresh"></i></span></a>
+			<a href="index.php" class="btn btn--small btn--flex home"><i class="fa fa-times"></i></a>
 		</div>
 
 		<div class="canvasWrapper">
@@ -81,7 +80,7 @@ require_once('lib/config.php');
 			<?php if ($config['allow_delete']): ?>
 			<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 			<?php endif; ?>
-			<button hidden class="triggerChroma"></button>
+			<a href="#" class="btn reloadPage"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
 		</div>
 	<div>
 

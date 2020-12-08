@@ -230,6 +230,7 @@ function saveImage(cb) {
 $('.backgroundPreview').on('click', function () {
     if ($('.takeChroma').is(':hidden')) {
         $('.takeChroma').show();
+        $('.reloadPage').show();
         $('.chromaNote').empty();
         $('.chromaNote').hide();
     }
