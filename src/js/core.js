@@ -361,6 +361,10 @@ const photoBooth = (function () {
                 .appendTo('.cheese');
         }
 
+        if (config.preview_mode === 'gphoto' && !config.no_cheese) {
+            api.stopPreviewVideo();
+        }
+
         if (config.preview_mode === 'device_cam' && config.previewCamTakesPic && !api.stream && !config.dev) {
             console.log('No preview by device cam available!');
 
@@ -719,7 +723,7 @@ const photoBooth = (function () {
                 cb();
             }
             count++;
-            if (config.preview_mode === 'gphoto' && count === stop) {
+            if (config.preview_mode === 'gphoto' && config.no_cheese && count === stop) {
                 api.stopPreviewVideo();
             }
         }
