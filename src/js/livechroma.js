@@ -199,11 +199,11 @@ function saveImage(cb) {
 
                         photoBooth.deleteImage(data.filename, (result) => {
                             if (result.success) {
-                                photoBooth.deleteImage(photoBooth.chromaimage, (result) => {
-                                    if (result.success) {
+                                photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
+                                    if (response.success) {
                                         setTimeout(function () {
                                             photoBooth.reloadPage();
-                                        }, 3000);
+                                        }, 1000);
                                     } else {
                                         console.log('Error while deleting image');
                                         setTimeout(function () {
@@ -231,6 +231,7 @@ $('.backgroundPreview').on('click', function () {
     if ($('.takeChroma').is(':hidden')) {
         $('.takeChroma').show();
         $('.chromaNote').empty();
+        $('.chromaNote').hide();
     }
 });
 
@@ -245,6 +246,7 @@ $('.takeChroma, .newchroma').on('click', function (e) {
         $('.backgrounds').hide();
 
         setTimeout(() => {
+            $('.chromaNote').show();
             $('.chromaNote').text(chromaInfo);
         }, config.cntdwn_time * 1000);
     }
