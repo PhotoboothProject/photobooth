@@ -1,4 +1,9 @@
 @import 'chromakeying';
+@import 'partials/email';
+@import 'partials/gallery';
+@import 'partials/modal';
+@import 'partials/scrollbar';
+@import 'vendor/photoswipe';
 
 .takeChroma,
 .deletebtn,
@@ -10,6 +15,12 @@
   position: fixed;
   top: 1em;
   right: 0;
+}
+
+.gallerybtn {
+  position: fixed;
+  top: 1em;
+  left: 0;
 }
 
 .chromaNote {
@@ -38,6 +49,17 @@
       margin: 0.5em;
     }
   }
+}
+
+#gallery .controls a.close_opengal {
+  display: none;
+  right: 30px;
+  top: 30px;
+  position: fixed;
+  z-index: 10000000;
+  font-size: 3.125em;
+  text-shadow: 0 2px 0 #000;
+  color: #fff;
 }
 
 #loader {

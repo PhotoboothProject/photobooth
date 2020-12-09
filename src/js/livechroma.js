@@ -259,3 +259,10 @@ $('.reloadPage').on('click', function (e) {
 
     photoBooth.reloadPage();
 });
+
+// Open Gallery Button
+$('.gallerybtn').on('click', function (e) {
+    e.preventDefault();
+
+    photoBooth.openGallery($(this));
+});

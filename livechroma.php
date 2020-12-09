@@ -1,6 +1,9 @@
 <?php
 require_once('lib/config.php');
+require_once('lib/db.php');
 
+$images = getImagesFromDB();
+$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
 ?>
 <!doctype html>
 <html>
@@ -23,7 +26,12 @@ require_once('lib/config.php');
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
+		<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 		<link rel="stylesheet" href="resources/css/live_chromakeying.css" />
+		<?php if ($config['gallery_bottom_bar']): ?>
+		<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
+		<?php endif; ?>
 		<?php if ($config['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>
@@ -32,6 +40,7 @@ require_once('lib/config.php');
 	<div class="chromawrapper">
 		<div>
 			<a href="index.php" class="btn btn--small btn--flex home"><i class="fa fa-times"></i></a>
+			<a class="gallerybtn btn btn--small btn--flex" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 		</div>
 
 		<div class="canvasWrapper">
@@ -84,9 +93,38 @@ require_once('lib/config.php');
 		</div>
 	<div>
 
+	<div id="wrapper">
+		<?php include('template/gallery.template.php'); ?>
+	</div>
+	<?php include('template/pswp.template.php'); ?>
+
+	<div class="send-mail">
+		<i class="fa fa-times" id="send-mail-close"></i>
+		<p data-i18n="insertMail"></p>
+		<form id="send-mail-form" style="margin: 0;">
+			<input class="mail-form-input" size="35" type="email" name="sendTo">
+			<input id="mail-form-image" type="hidden" name="image" value="">
+
+			<?php if ($config['send_all_later']): ?>
+				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
+				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
+			<?php endif; ?>
+
+			<button class="mail-form-input btn" name="submit" type="submit" value="Send"><span data-i18n="send"></span></button>
+		</form>
+
+		<div id="mail-form-message" style="max-width: 75%"></div>
+	</div>
+
+	<div class="modal" id="print_mesg">
+		<div class="modal__body"><span data-i18n="printing"></span></div>
+	</div>
+
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
 	<?php if ($config['chroma_keying_variant'] === 'marvinj'): ?>
