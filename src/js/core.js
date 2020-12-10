@@ -546,7 +546,7 @@ const photoBooth = (function () {
             data: {
                 file: result.file,
                 filter: imgFilter,
-                isCollage: photoStyle === 'collage'
+                style: photoStyle
             },
             success: (data) => {
                 console.log('picture processed', data);

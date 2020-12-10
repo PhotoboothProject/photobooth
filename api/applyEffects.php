@@ -33,7 +33,13 @@ $picture_permissions = $config['picture_permissions'];
 $thumb_size = substr($config['thumb_size'], 0, -2);
 $chroma_size = substr($config['chroma_size'], 0, -2);
 
-if (isset($_POST['isCollage']) && $_POST['isCollage'] === 'true') {
+if (!isset($_POST['style'])) {
+    die(json_encode([
+        'error' => 'No style provided'
+    ]));
+}
+
+if ($_POST['style'] === 'collage') {
     $collageBasename = substr($filename_tmp, 0, -4);
     $collageSrcImagePaths = [];
 
@@ -108,7 +114,7 @@ if ($config['polaroid_effect']) {
     $imageModified = true;
 }
 
-if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
+if ($config['take_frame'] && $_POST['style'] !== 'collage') {
     $frame = imagecreatefrompng($frame_path);
     $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
     $x = (imagesx($imageResource)/2) - (imagesx($frame)/2);
@@ -117,7 +123,7 @@ if ($config['take_frame'] && $_POST['isCollage'] !== 'true') {
     $imageModified = true;
 }
 
-if ($config['chroma_keying']) {
+if ($config['chroma_keying'] || $_POST['style'] === 'chroma') {
     $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
     imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
     imagedestroy($chromaCopyResource);
@@ -155,7 +161,9 @@ if (!$config['keep_images']) {
 imagedestroy($imageResource);
 
 // insert into database
-appendImageToDB($file);
+if ($_POST['style'] !== 'chroma') {
+    appendImageToDB($file);
+}
 
 // Change permissions
 chmod($filename_photo, octdec($picture_permissions));
