@@ -31,13 +31,11 @@ if (!unlink($filePath) || !unlink($filePathThumb)) {
     ]));
 }
 
-if ($config['chroma_keying']) {
-    if (is_readable($filePathKeying)) {
-        if (!unlink ($filePathKeying)) {
-            die(json_encode([
-                'error' => 'Could not delete keying file',
-            ]));
-        }
+if (is_readable($filePathKeying)) {
+    if (!unlink ($filePathKeying)) {
+        die(json_encode([
+            'error' => 'Could not delete keying file',
+        ]));
     }
 }
 
