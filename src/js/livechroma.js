@@ -220,6 +220,10 @@ function saveImage(cb) {
                         });
                     });
             }
+            if (data.filename) {
+                // Add Image to gallery and slider
+                photoBooth.addImage(data.filename);
+            }
             if (cb) {
                 cb(data);
             }

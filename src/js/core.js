@@ -578,8 +578,6 @@ const photoBooth = (function () {
 
     // Render Chromaimage after taking
     api.renderChroma = function (filename) {
-        // Add Image to gallery and slider
-        api.addImage(filename);
         const imageUrl = config.folders.images + '/' + filename;
         const preloadImage = new Image();
 
