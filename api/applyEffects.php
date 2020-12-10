@@ -161,7 +161,7 @@ if (!$config['keep_images']) {
 imagedestroy($imageResource);
 
 // insert into database
-if ($_POST['style'] !== 'chroma') {
+if ($_POST['style'] !== 'chroma' || $_POST['style'] === 'chroma' && $config['live_keying_show_all'] === true) {
     appendImageToDB($file);
 }
 

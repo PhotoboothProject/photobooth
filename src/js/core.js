@@ -578,6 +578,10 @@ const photoBooth = (function () {
 
     // Render Chromaimage after taking
     api.renderChroma = function (filename) {
+        if (config.live_keying_show_all) {
+            // Add Image to gallery and slider
+            api.addImage(filename);
+        }
         const imageUrl = config.folders.images + '/' + filename;
         const preloadImage = new Image();
 

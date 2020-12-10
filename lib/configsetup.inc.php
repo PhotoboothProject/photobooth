@@ -691,6 +691,11 @@ $configsetup = [
 			],
 			'value' => $config['chroma_size']
 		],
+		'live_keying_show_all' => [
+			'type' => 'checkbox',
+			'name' => 'live_keying_show_all',
+			'value' => $config['live_keying_show_all']
+		]
 	],
 	'print' => [
 		'use_print_result' => [

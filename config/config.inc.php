@@ -149,6 +149,7 @@ $config['chroma_keying'] = false;
 $config['chroma_keying_variant'] = 'marvinj';
 // possible chroma_size values: '1000px', '1500px', '2000px', '2500px'
 $config['chroma_size'] = '1500px';
+$config['live_keying_show_all'] = false;
 
 
 // P R I N T
