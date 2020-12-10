@@ -701,6 +701,11 @@ $configsetup = [
 			'type' => 'checkbox',
 			'name' => 'live_keying_show_all',
 			'value' => $config['live_keying_show_all']
+		],
+		'use_live_keying' => [
+			'type' => 'checkbox',
+			'name' => 'use_live_keying',
+			'value' => $config['use_live_keying']
 		]
 	],
 	'print' => [

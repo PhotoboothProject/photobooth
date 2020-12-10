@@ -151,6 +151,7 @@ $config['chroma_keying_variant'] = 'marvinj';
 $config['chroma_size'] = '1500px';
 $config['keying_background_path'] = 'resources/img/background';
 $config['live_keying_show_all'] = false;
+$config['use_live_keying'] = false;
 
 
 // P R I N T

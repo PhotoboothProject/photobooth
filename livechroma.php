@@ -39,7 +39,10 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 <body>
 	<div class="chromawrapper">
 		<div class="top-bar">
+			<?php if (!$config['use_live_keying']): ?>
 			<a href="index.php" class="btn btn--small btn--flex home"><i class="fa fa-times"></i></a>
+			<?php endif; ?>
+
 			<?php if ($config['show_gallery']): ?>
 			<a class="gallerybtn btn btn--small btn--flex" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>

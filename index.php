@@ -7,6 +7,10 @@ require_once('lib/filter.php');
 
 $images = getImagesFromDB();
 $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
+
+if ($config['use_live_keying']):
+header("location: livechroma.php");
+endif;
 ?>
 <!DOCTYPE html>
 <html>
