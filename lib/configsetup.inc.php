@@ -691,6 +691,12 @@ $configsetup = [
 			],
 			'value' => $config['chroma_size']
 		],
+		'background_path' => [
+			'type' => 'input',
+			'placeholder' => $defaultConfig['keying_background_path'],
+			'name' => 'keying_background_path',
+			'value' => htmlentities($config['keying_background_path'])
+		],
 		'live_keying_show_all' => [
 			'type' => 'checkbox',
 			'name' => 'live_keying_show_all',

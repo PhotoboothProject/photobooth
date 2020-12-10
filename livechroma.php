@@ -74,7 +74,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 		<div class="backgrounds" style="padding-top:10px;text-align:center;">
 			<?php
-				$dir = join(DIRECTORY_SEPARATOR, ['resources', 'img', 'background']) . DIRECTORY_SEPARATOR;
+				$dir = $config['keying_background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
