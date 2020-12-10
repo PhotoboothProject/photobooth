@@ -197,33 +197,39 @@ function saveImage(cb) {
                     .on('click', (ev) => {
                         ev.preventDefault();
 
-                        photoBooth.deleteImage(data.filename, (result) => {
-                            if (result.success) {
-                                if (config.live_keying_show_all) {
-                                    photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
-                                        if (response.success) {
-                                            setTimeout(function () {
-                                                photoBooth.reloadPage();
-                                            }, 1000);
-                                        } else {
-                                            console.log('Error while deleting image');
-                                            setTimeout(function () {
-                                                photoBooth.reloadPage();
-                                            }, 5000);
-                                        }
-                                    });
+                        const msg = i18n('really_delete_image');
+                        const really = confirm(data.filename + ' ' + msg);
+                        if (really) {
+                            photoBooth.deleteImage(data.filename, (result) => {
+                                if (result.success) {
+                                    if (config.live_keying_show_all) {
+                                        photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
+                                            if (response.success) {
+                                                setTimeout(function () {
+                                                    photoBooth.reloadPage();
+                                                }, 1000);
+                                            } else {
+                                                console.log('Error while deleting image');
+                                                setTimeout(function () {
+                                                    photoBooth.reloadPage();
+                                                }, 5000);
+                                            }
+                                        });
+                                    } else {
+                                        setTimeout(function () {
+                                            photoBooth.reloadPage();
+                                        }, 1000);
+                                    }
                                 } else {
+                                    console.log('Error while deleting image');
                                     setTimeout(function () {
                                         photoBooth.reloadPage();
-                                    }, 1000);
+                                    }, 5000);
                                 }
-                            } else {
-                                console.log('Error while deleting image');
-                                setTimeout(function () {
-                                    photoBooth.reloadPage();
-                                }, 5000);
-                            }
-                        });
+                            });
+                        } else {
+                            $('.deletebtn').blur();
+                        }
                     });
             }
             if (data.filename) {
