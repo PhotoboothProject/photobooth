@@ -40,7 +40,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<div class="chromawrapper">
 		<div class="top-bar">
 			<a href="index.php" class="btn btn--small btn--flex home"><i class="fa fa-times"></i></a>
+			<?php if ($config['show_gallery']): ?>
 			<a class="gallerybtn btn btn--small btn--flex" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+			<?php endif; ?>
 		</div>
 
 		<div class="canvasWrapper">
