@@ -199,18 +199,24 @@ function saveImage(cb) {
 
                         photoBooth.deleteImage(data.filename, (result) => {
                             if (result.success) {
-                                photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
-                                    if (response.success) {
-                                        setTimeout(function () {
-                                            photoBooth.reloadPage();
-                                        }, 1000);
-                                    } else {
-                                        console.log('Error while deleting image');
-                                        setTimeout(function () {
-                                            photoBooth.reloadPage();
-                                        }, 5000);
-                                    }
-                                });
+                                if (config.live_keying_show_all) {
+                                    photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
+                                        if (response.success) {
+                                            setTimeout(function () {
+                                                photoBooth.reloadPage();
+                                            }, 1000);
+                                        } else {
+                                            console.log('Error while deleting image');
+                                            setTimeout(function () {
+                                                photoBooth.reloadPage();
+                                            }, 5000);
+                                        }
+                                    });
+                                } else {
+                                    setTimeout(function () {
+                                        photoBooth.reloadPage();
+                                    }, 1000);
+                                }
                             } else {
                                 console.log('Error while deleting image');
                                 setTimeout(function () {

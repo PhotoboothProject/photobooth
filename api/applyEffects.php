@@ -168,6 +168,11 @@ if ($_POST['style'] !== 'chroma' || $_POST['style'] === 'chroma' && $config['liv
 // Change permissions
 chmod($filename_photo, octdec($picture_permissions));
 
+if ($_POST['style'] === 'chroma' && $config['live_keying_show_all'] === false) {
+    unlink($filename_photo);
+    unlink($filename_thumb);
+}
+
 echo json_encode([
     'file' => $file,
 ]);

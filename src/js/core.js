@@ -582,7 +582,9 @@ const photoBooth = (function () {
             // Add Image to gallery and slider
             api.addImage(filename);
         }
-        const imageUrl = config.folders.images + '/' + filename;
+        const imageUrl = config.live_keying_show_all
+            ? config.folders.images + '/' + filename
+            : config.folders.keying + '/' + filename;
         const preloadImage = new Image();
 
         preloadImage.onload = function () {
