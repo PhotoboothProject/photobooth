@@ -41,7 +41,7 @@ if ($config['chroma_keying']) {
     }
 }
 
-if ($config['keep_images']) {
+if (!$config['keep_images']) {
     if (is_readable($filePathTmp)) {
         if (!unlink ($filePathTmp)) {
             die(json_encode([
