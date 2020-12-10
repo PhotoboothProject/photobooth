@@ -52,11 +52,6 @@ $config['polaroid_effect'] = false;
 $config['polaroid_rotation'] = '0';
 $config['take_frame'] = false;
 $config['take_frame_path'] = '../resources/img/frames/frame.png';
-$config['chroma_keying'] = false;
-// possible chroma_keying_variant values: 'marvinj', 'seriouslyjs'
-$config['chroma_keying_variant'] = 'marvinj';
-// possible chroma_size values: '1000px', '1500px', '2000px', '2500px'
-$config['chroma_size'] = '1500px';
 $config['use_collage'] = true;
 $config['take_collage_frame'] = false;
 $config['take_collage_frame_always'] = false;
@@ -146,6 +141,14 @@ $config['event']['textRight'] = 'OpenSource';
 // possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o', 
 //                               'fa-heart', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
 $config['event']['symbol'] = 'fa-heart-o';
+
+
+// K E Y I N G
+$config['chroma_keying'] = false;
+// possible chroma_keying_variant values: 'marvinj', 'seriouslyjs'
+$config['chroma_keying_variant'] = 'marvinj';
+// possible chroma_size values: '1000px', '1500px', '2000px', '2500px'
+$config['chroma_size'] = '1500px';
 
 
 // P R I N T

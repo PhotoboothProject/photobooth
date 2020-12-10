@@ -236,33 +236,6 @@ $configsetup = [
 			'name' => 'take_frame_path',
 			'value' => htmlentities($config['take_frame_path'])
 		],
-		'chroma_keying' => [
-			'type' => 'checkbox',
-			'name' => 'chroma_keying',
-			'value' => $config['chroma_keying']
-		],
-		'chroma_keying_variant' => [
-			'type' => 'select',
-			'name' => 'chroma_keying_variant',
-			'placeholder' => $defaultConfig['chroma_keying_variant'],
-			'options' => [
-				'marvinj' => 'MarvinJ',
-				'seriouslyjs' => 'Seriously.js'
-			],
-			'value' => $config['chroma_keying_variant']
-		],
-		'chroma_size' => [
-			'type' => 'select',
-			'name' => 'chroma_size',
-			'placeholder' => $defaultConfig['chroma_size'],
-			'options' => [
-				'1000px' => 'S',
-				'1500px' => 'M',
-				'2000px' => 'L',
-				'2500px' => 'XL'
-			],
-			'value' => $config['chroma_size']
-		],
 		'use_collage' => [
 			'type' => 'checkbox',
 			'name' => 'use_collage',
@@ -689,6 +662,35 @@ $configsetup = [
 			],
 			'value' => $config['event']['symbol']
 		]
+	],
+	'keying' => [
+		'chroma_keying' => [
+			'type' => 'checkbox',
+			'name' => 'chroma_keying',
+			'value' => $config['chroma_keying']
+		],
+		'chroma_keying_variant' => [
+			'type' => 'select',
+			'name' => 'chroma_keying_variant',
+			'placeholder' => $defaultConfig['chroma_keying_variant'],
+			'options' => [
+				'marvinj' => 'MarvinJ',
+				'seriouslyjs' => 'Seriously.js'
+			],
+			'value' => $config['chroma_keying_variant']
+		],
+		'chroma_size' => [
+			'type' => 'select',
+			'name' => 'chroma_size',
+			'placeholder' => $defaultConfig['chroma_size'],
+			'options' => [
+				'1000px' => 'S',
+				'1500px' => 'M',
+				'2000px' => 'L',
+				'2500px' => 'XL'
+			],
+			'value' => $config['chroma_size']
+		],
 	],
 	'print' => [
 		'use_print_result' => [
