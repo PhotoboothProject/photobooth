@@ -644,16 +644,23 @@ const photoBooth = (function () {
             .on('click', (ev) => {
                 ev.preventDefault();
 
-                api.deleteImage(filename, (data) => {
-                    if (data.success) {
-                        api.reloadPage();
-                    } else {
-                        console.log('Error while deleting image');
-                        setTimeout(function () {
+                const msg = i18n('really_delete_image');
+                const really = confirm(filename + ' ' + msg);
+                if (really) {
+                    api.deleteImage(filename, (data) => {
+                        if (data.success) {
+                            console.log('Deleted ' + filename);
                             api.reloadPage();
-                        }, 5000);
-                    }
-                });
+                        } else {
+                            console.log('Error while deleting ' + filename);
+                            setTimeout(function () {
+                                api.reloadPage();
+                            }, 5000);
+                        }
+                    });
+                } else {
+                    $('.deletebtn').blur();
+                }
             });
 
         // Add Image to gallery and slider
