@@ -64,6 +64,7 @@ function createArchive(fileName, archive) {
     archive.file('gallery.php');
     archive.file('index.php');
     archive.file('LICENSE');
+    archive.file('livechroma.php');
     archive.file('package.json');
     archive.file('photobooth.desktop');
     archive.file('phpinfo.php');
