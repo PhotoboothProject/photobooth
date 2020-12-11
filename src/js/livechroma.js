@@ -8,6 +8,8 @@ let seriously;
 let target;
 let chroma;
 let seriouslyimage;
+let takingPic = false;
+let needsReload = false;
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -187,6 +189,8 @@ function saveImage(cb) {
             imgData: dataURL
         },
         function (data) {
+            takingPic = false;
+            needsReload = true;
             if (config.allow_delete) {
                 if ($('.deletebtn').is(':hidden')) {
                     $('.deletebtn').show();
@@ -255,6 +259,7 @@ $('.backgroundPreview').on('click', function () {
 // Take Chroma Button
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
+    takingPic = true;
     const chromaInfo = i18n('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
@@ -266,6 +271,37 @@ $('.takeChroma, .newchroma').on('click', function (e) {
             $('.chromaNote').show();
             $('.chromaNote').text(chromaInfo);
         }, config.cntdwn_time * 1000);
+    }
+});
+
+$(document).on('keyup', function (ev) {
+    if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
+        if (!backgroundImage) {
+            console.log('Please choose a background first!');
+        } else if (needsReload) {
+            console.log('Please reload the page to take a new Picture!');
+        } else if (!takingPic) {
+            $('.closeGallery').trigger('click');
+            $('.takeChroma').trigger('click');
+        } else if (config.dev && takingPic) {
+            console.log('Taking photo already in progress!');
+        }
+    }
+
+    if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+        if (!backgroundImage) {
+            console.log('Please choose a background first!');
+        } else if (needsReload) {
+            console.log('Please reload the page to take a new Picture!');
+        } else if (!takingPic) {
+            $('.closeGallery').trigger('click');
+            if (config.dev) {
+                console.log('Collage key pressed. Not possible on live chroma, triggering photo now.');
+            }
+            $('.takeChroma').trigger('click');
+        } else if (config.dev && takingPic) {
+            console.log('Taking photo already in progress!');
+        }
     }
 });
 

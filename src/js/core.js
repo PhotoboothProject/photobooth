@@ -1038,37 +1038,41 @@ const photoBooth = (function () {
     });
 
     $(document).on('keyup', function (ev) {
-        if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
-            if (!takingPic) {
-                $('.closeGallery').trigger('click');
-                $('.triggerPic').trigger('click');
-            } else if (config.dev && takingPic) {
-                console.log('Taking photo already in progress!');
-            }
-        }
-
-        if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
-            if (!takingPic) {
-                $('.closeGallery').trigger('click');
-                if (config.use_collage) {
-                    $('.triggerCollage').trigger('click');
-                } else {
-                    if (config.dev) {
-                        console.log('Collage key pressed. Please enable collage in your config. Triggering photo now.');
-                    }
+        if ($('.triggerPic')[0] || $('.triggerCollage')[0]) {
+            if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
+                if (!takingPic) {
+                    $('.closeGallery').trigger('click');
                     $('.triggerPic').trigger('click');
+                } else if (config.dev && takingPic) {
+                    console.log('Taking photo already in progress!');
                 }
-            } else if (config.dev && takingPic) {
-                console.log('Taking photo already in progress!');
             }
-        }
 
-        if (config.use_print_result && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
-            if (isPrinting) {
-                console.log('Printing already in progress!');
-            } else {
-                $('.printbtn').trigger('click');
-                $('.printbtn').blur();
+            if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+                if (!takingPic) {
+                    $('.closeGallery').trigger('click');
+                    if (config.use_collage) {
+                        $('.triggerCollage').trigger('click');
+                    } else {
+                        if (config.dev) {
+                            console.log(
+                                'Collage key pressed. Please enable collage in your config. Triggering photo now.'
+                            );
+                        }
+                        $('.triggerPic').trigger('click');
+                    }
+                } else if (config.dev && takingPic) {
+                    console.log('Taking photo already in progress!');
+                }
+            }
+
+            if (config.use_print_result && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+                if (isPrinting) {
+                    console.log('Printing already in progress!');
+                } else {
+                    $('.printbtn').trigger('click');
+                    $('.printbtn').blur();
+                }
             }
         }
     });
