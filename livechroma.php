@@ -46,16 +46,15 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<?php if ($config['show_gallery']): ?>
 			<a class="gallerybtn btn btn--small btn--flex" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
+
+			<div class="chromaNote">
+				<span data-i18n="chromaInfoBefore"></span>
+			</div>
 		</div>
 
 		<div class="canvasWrapper">
 			<canvas id="mainCanvas"></canvas>
 		</div>
-
-		<div class="chromaNote">
-			<span data-i18n="chromaInfoBefore"></span>
-		</div>
-
 		<div class="stages" id="loader">
 			<div class="loaderInner">
 				<div class="spinner">
@@ -77,7 +76,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		<!-- Result Page -->
 		<div class="stages" id="result"></div>
 
-		<div class="backgrounds" style="padding-top:10px;text-align:center;">
+		<div class="backgrounds"> 
 			<?php
 				$dir = $config['keying_background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
