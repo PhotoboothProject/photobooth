@@ -377,22 +377,14 @@ If you run into any errors setting up your hotspot we can remove all the setting
 sudo ./setup-network.sh --clean
 ```
 
-### Turn on picture syncing to USB
+### Automatic picture syncing to USB stick
 
-Automatic picture backup/syncing to USB via script currently works on Raspberry PI OS only. Use the `install-raspbian.sh` script to get the operating system setup in place
+This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick. Currently works on Raspberry PI OS only.
 
-In order to select which drives to sync files to, just add them via the admin panel. The list of drive identifier needs to be separated by semicolon. 
+Use the `install-raspbian.sh` script to get the operating system setup in place. The target USB device is selected through the admin panel
 
-Drive identifier can be added either with their name (e.g. `sda`), their full path (`/dev/sda1`) or with the USB stick label (`photobooth`).The default config will look for a drive with the label photobooth.
+A USB drive / stick can be identified either by the USB stick label (e.g. `photobooth`), the operating system specific USB device name (e.g. `/dev/sda1`) or the USB device system subsystem name (e.g. `sda`). The preferred method would be the USB stick label (for use of a single USB stick) or the very specific USB device name, for different USB stick use. The default config will look for a drive with the label photobooth. The script only supports one single USB stick connected at a time
 
-The following example would check
-    > Specifically for device `/dev/sda1` being mounted
-    > For a device being mounted with the name `photobooth`
-    > Any device being mounted with the string `sdb` in it's device name
+Pictures will be synced to the USB stick matched by the pattern, as long as it is  mounted (aka USB stick is plugged in)
 
-```
-Example:
-    /dev/sda1;photobooth;sdb
-```
-Pictures will be synced to all devices matched by this list, as long as they are mounted (aka USB stick is plugged in)
-
+Debugging: switch on dev settings for server logs to be written to the `data/tmp` directory of the photobooth installation (i.e. `data/tmp/synctodrive_server.log`).

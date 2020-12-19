@@ -262,4 +262,4 @@ $config['reset_remove_config'] = true;
  // S Y N C  T O  U S B  S T I C K
 $config['synctodrive_enabled'] = false;
 $config['synctodrive_target'] = 'photobooth'; //Default target for the sync script
-$config['synctodrive_interval'] = 300; 
+$config['synctodrive_interval'] = 300;

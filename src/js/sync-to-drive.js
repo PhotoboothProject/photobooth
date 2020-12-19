@@ -157,7 +157,6 @@ const startSync = ({dataAbsPath, drive}) => {
 
     log('Rsync child process PID:', rsyncSemaphore.pid, 'started');
 
-    // eslint-disable-next-line no-loop-func
     rsyncSemaphore.on('exit', () => {
         myEmitter.emit('rsync-completed', rsyncSemaphore.pid);
     });

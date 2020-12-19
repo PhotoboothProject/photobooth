@@ -319,8 +319,9 @@ cat >> /boot/config.txt  << EOF
 dtoverlay=gpio-no-irq
 EOF
 
-echo -e "\033[0;33m### You'd probably like to use the file backup feature."
-read -p "### Would you like to enable the file backup? [y/N] " -n 1 -r
+echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
+echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"
+read -p "### Would you like to enable the USB sync file backup? [y/N] " -n 1 -r
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then

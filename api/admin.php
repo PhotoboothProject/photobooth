@@ -106,7 +106,7 @@ if ($data['type'] == 'config') {
     if ($os === 'windows') {
         $newConfig['remotebuzzer_enabled'] = false;
         $newConfig['synctodrive_enabled'] = false;
-    }
+	}
 
     $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
 
