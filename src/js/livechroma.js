@@ -250,6 +250,7 @@ function saveImage(cb) {
 }
 
 $('.backgroundPreview').on('click', function () {
+    $('.canvasWrapper').removeClass('initial');
     if ($('.chroma-control-bar').is(':hidden')) {
         $('.chroma-control-bar').show();
         $('.chromaNote').empty();

@@ -49,7 +49,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 
 		</div>
 
-		<div class="canvasWrapper">
+		<div class="canvasWrapper initial">
 			<canvas id="mainCanvas"></canvas>
 		</div>
 

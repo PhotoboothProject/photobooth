@@ -53,7 +53,7 @@ if (file_exists($keyingimage)) {
 <body data-main-image="<?=$mainimage?>">
 	<div class="chromawrapper">
 	<?php if ($keying_possible): ?>
-		<div class="canvasWrapper">
+		<div class="canvasWrapper initial">
 			<canvas id="mainCanvas"></canvas>
 		</div>
 

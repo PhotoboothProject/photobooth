@@ -21,15 +21,18 @@
 }
 
 .canvasWrapper {
-  width: 1000px;
   display: inline-block;
   max-width: 100%;
   background-color: green;
   border: 4px solid $borderColor;
+  &.initial {
+    width: 1000px;
+  }
 }
 
 #mainCanvas {
   display: block;
+  max-height: 650px;
   max-width: 100%;
 }
 

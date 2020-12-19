@@ -323,4 +323,5 @@ $(document).ready(function () {
 
         $('#mainCanvas').css('height', canvasHeight - diff + 'px');
     }
+    $('.canvasWrapper').removeClass('initial');
 });
