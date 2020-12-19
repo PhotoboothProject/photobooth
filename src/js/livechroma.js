@@ -196,7 +196,7 @@ function saveImage(cb) {
                 $('.takeChroma').hide();
             }
             if (config.allow_delete) {
-                $('.deletebtn').show();
+                $('.deletebtn').css('visibility', 'visible');
                 $('.chroma-control-bar')
                     .find('.deletebtn')
                     .off('click')
@@ -255,6 +255,7 @@ $('.backgroundPreview').on('click', function () {
         $('.chromaNote').empty();
         $('.chromaNote').hide();
     }
+    $('.backgrounds').addClass('shrinked');
 });
 
 // Take Chroma Button

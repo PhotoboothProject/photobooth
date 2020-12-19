@@ -47,14 +47,16 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<a class="gallerybtn btn btn--small btn--flex" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
-			<div class="chromaNote">
-				<span data-i18n="chromaInfoBefore"></span>
-			</div>
 		</div>
 
 		<div class="canvasWrapper">
 			<canvas id="mainCanvas"></canvas>
 		</div>
+
+		<div class="chromaNote">
+			<span data-i18n="chromaInfoBefore"></span>
+		</div>
+
 		<div class="stages" id="loader">
 			<div class="loaderInner">
 				<div class="spinner">
