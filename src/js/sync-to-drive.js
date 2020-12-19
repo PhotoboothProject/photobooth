@@ -74,8 +74,7 @@ const getDriveInfo = ({drive}) => {
     }
 
     return json.blockdevices.find(
-        (blk) =>
-            blk.subsystems.includes('usb') &&
+        (blk) => blk.subsystems.includes('usb') &&
             ((blk.name && drive === blk.name.toLowerCase()) ||
                 (blk.kname && drive === blk.kname.toLowerCase()) ||
                 (blk.path && drive === blk.path.toLowerCase()) ||
@@ -125,9 +124,9 @@ const startSync = ({dataAbsPath, drive}) => {
                     '-b',
                     `--backup-dir=${path.join(drive.mountpoint, 'deleted')}`,
                     '--ignore-existing',
-                    "--include='*.jpg'",
-                    "--include='*/'",
-                    "--exclude='*'",
+                    '--include=\'*.jpg\'',
+                    '--include=\'*/\'',
+                    '--exclude=\'*\'',
                     '--prune-empty-dirs',
                     dataAbsPath,
                     path.join(drive.mountpoint, SYNC_DESTINATION_DIR)
