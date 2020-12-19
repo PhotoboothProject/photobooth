@@ -1166,11 +1166,11 @@ $configsetup = [
 			'name' => 'synctodrive_enabled',
 			'value' => $config['synctodrive_enabled']
 		],
-		'targets' => [
+		'target' => [
 			'type' => 'input',
-			'placeholder' => $defaultConfig['synctodrive_targets'],
-			'name' => 'synctodrive_targets',
-			'value' => $config['synctodrive_targets']
+			'placeholder' => $defaultConfig['synctodrive_target'],
+			'name' => 'synctodrive_target',
+			'value' => $config['synctodrive_target']
 		],
 		'interval' => [
 			'type' => 'range',

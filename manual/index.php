@@ -49,6 +49,10 @@ require_once('../lib/configsetup.inc.php');
 								echo '<div class="panel-body">';
 
 								foreach($fields as $key => $field) {
+									if ($key == 'platform') {
+									   continue;
+									   };
+
 									echo '<div class="form-row">';
 									switch($field['type']) {
 										case 'checkbox':
