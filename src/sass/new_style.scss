@@ -11,8 +11,8 @@ body {
   width: 4em;
   height: 4em;
   border-radius: 50%;
-  border: 0 none;
-  background: $mainColor;
+  border: 2px solid $borderColor;
+  background: radial-gradient(grey, $mainColor, $hoverColor);
   display: inline-block;
   color: $buttonFontColor;
   text-decoration: none;
