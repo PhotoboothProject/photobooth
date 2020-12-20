@@ -20,7 +20,7 @@ body {
   text-align: center;
   font-size: 1em;
   position: relative;
-
+  z-index: 10;
   span {
     display: none;
   }
@@ -57,7 +57,13 @@ body {
     }
   }
 
-  .fs-button,
+  .fs-button {
+    position: relative;
+    top: auto;
+    bottom: 0px;
+    left: 0px;
+  }
+
   .gallery-button {
     position: relative;
     top: auto;
