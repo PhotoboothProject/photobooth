@@ -47,6 +47,10 @@
 .fs-button {
   margin-top: 5px;
   margin-left: 5px;
+  &.round-btn {
+    margin-top: auto;
+    margin-left: auto;
+  }
 }
 
 .admin-panel,
