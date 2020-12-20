@@ -8,8 +8,8 @@ body {
 }
 
 .round-btn {
-  width: 4em;
-  height: 4em;
+  width: 5em;
+  height: 5em;
   border-radius: 50%;
   border: 2px solid $borderColor;
   background: radial-gradient(grey, $mainColor, $hoverColor);
@@ -30,6 +30,7 @@ body {
     background: $hoverColor;
   }
   .fa {
+    font-size: 1.5em;
     margin: 0;
     position: absolute;
     top: 50%;
@@ -92,6 +93,10 @@ body {
   .divinnen2 {
     margin-left: auto;
     margin-right: auto;
+  }
+  .round-btn {
+    width: 4em;
+    height: 4em;
   }
 }
 
