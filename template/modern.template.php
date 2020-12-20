@@ -47,6 +47,9 @@
 							<?php if($config['cups_button']): ?>
 							<a id="cups-button" class="round-btn cups-button" href="#" target="newwin"><i class="fa fa-cog" aria-hidden="true"></i> <span>CUPS</span></a>
 							<?php endif; ?>
+							<?php if ($config['show_gallery']): ?>
+							<a href="#" class="round-btn gallery-button"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+							<?php endif; ?>
 							<?php if($config['toggle_fs_button']): ?>
 							<a href="#" id="fs-button" class="round-btn fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
 							<?php endif; ?>
