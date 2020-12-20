@@ -34,10 +34,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
-	<link rel="stylesheet" href="resources/css/style.css" />
-	<?php if ($config['index_style'] === 'modern'): ?>
-	<link rel="stylesheet" href="resources/css/new_style.css" />
-	<?php endif; ?>
+	<link rel="stylesheet" href="resources/css/<?php echo $config['index_style']; ?>_style.css" />
 	<?php if ($config['gallery_bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>

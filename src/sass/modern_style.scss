@@ -1,4 +1,4 @@
-@import 'style';
+@import 'default_style';
 
 html,
 body {
@@ -45,19 +45,25 @@ body {
   opacity: 0.6;
 }
 
-#start .startInner .btn {
-  margin-top: 3px;
-  width: auto;
-}
-#start .startInner {
-  height: 100%;
-  width: 100%;
-  position: relative;
-  background: none;
-}
+#start {
+  .startInner {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: none;
+    .btn {
+      margin-top: 3px;
+      width: auto;
+    }
+  }
 
-#start .gallery-button {
-  position: relative;
+  .fs-button,
+  .gallery-button {
+    position: relative;
+    top: auto;
+    bottom: 0px;
+    left: auto;
+  }
 }
 
 .divaussen {
@@ -73,7 +79,14 @@ body {
   position: absolute;
   bottom: 0;
   right: 0;
-  padding: 40px;
+  padding: 10px;
+}
+
+@media (orientation: portrait) {
+  .divinnen2 {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .transparenz {

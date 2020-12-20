@@ -9,6 +9,13 @@
     position: absolute;
     left: 5px;
     bottom: 5px;
+    &.round-btn {
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      bottom: auto;
+      margin: 20px;
+    }
   }
 }
 
