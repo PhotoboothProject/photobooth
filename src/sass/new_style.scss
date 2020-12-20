@@ -1,0 +1,86 @@
+@import 'style';
+
+html,
+body {
+  height: 100%;
+  background: #ffffff;
+  margin: 0px;
+}
+
+.round-btn {
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  border: 0 none;
+  background: $mainColor;
+  display: inline-block;
+  color: $buttonFontColor;
+  text-decoration: none;
+  margin: auto;
+  text-align: center;
+  font-size: 1em;
+  position: relative;
+
+  span {
+    display: none;
+  }
+  &:active,
+  &:focus,
+  &:hover {
+    background: $hoverColor;
+  }
+  .fa {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+}
+
+.btn:active,
+.btn:focus,
+.btn:hover {
+  opacity: 0.6;
+}
+
+#start .startInner .btn {
+  margin-top: 3px;
+  width: auto;
+}
+#start .startInner {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background: none;
+}
+
+#start .gallery-button {
+  position: relative;
+}
+
+.divaussen {
+  height: 100%;
+  position: relative;
+}
+
+.divinnen {
+  float: right;
+}
+
+.divinnen2 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 40px;
+}
+
+.transparenz {
+  opacity: 0.4;
+}
+
+hr,
+hr.small {
+  display: none;
+}
