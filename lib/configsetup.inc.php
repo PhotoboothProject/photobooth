@@ -436,6 +436,16 @@ $configsetup = [
 		]
 	],
 	'user_interface' => [
+		'index_style' => [
+			'type' => 'select',
+			'name' => 'index_style',
+			'placeholder' => $defaultConfig['index_style'],
+			'options' => [
+				'default' => 'default',
+				'modern' => 'modern'
+			],
+			'value' => $config['index_style']
+		],
 		'font_size' => [
 			'type' => 'input',
 			'name' => 'font_size',

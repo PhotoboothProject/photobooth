@@ -35,6 +35,9 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/style.css" />
+	<?php if ($config['index_style'] === 'modern'): ?>
+	<link rel="stylesheet" href="resources/css/new_style.css" />
+	<?php endif; ?>
 	<?php if ($config['gallery_bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
@@ -47,70 +50,12 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 <body class="deselect">
 	<div id="wrapper">
 	<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect_index'])): ?>
-		<!-- Start Page -->
-		<div class="stages" id="start">
-			<?php if ($config['show_gallery']): ?>
-			<a class="gallery-button btn" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
-			<?php endif; ?>
 
-			<div class="startInner">
-				<?php if ($config['is_event']): ?>
-				<div class="names">
-					<hr class="small" />
-					<hr>
-					<div>
-						<h1><?=$config['event']['textLeft']?>
-							<i class="fa <?=$config['event']['symbol']?>" aria-hidden="true"></i>
-							<?=$config['event']['textRight']?>
-							<br>
-							<?=$config['start_screen_title']?>
-						</h1>
-						<h2><?=$config['start_screen_subtitle']?></h2>
-					</div>
-					<hr>
-					<hr class="small" />
-				</div>
-				<?php else: ?>
-				<div class="names">
-					<hr class="small" />
-					<hr>
-					<div>
-						<h1><?=$config['start_screen_title']?></h1>
-						<h2><?=$config['start_screen_subtitle']?></h2>
-					</div>
-					<hr>
-					<hr class="small" />
-				</div>
-				<?php endif; ?>
-
-				<?php if ($config['force_buzzer']): ?>
-				<div id="useBuzzer">
-						<span data-i18n="use_button"></span>
-				</div>
-				<?php else: ?>
-					<?php if ($config['use_collage']): ?>
-					<a href="#" class="btn takeCollage"><i class="fa fa-th-large"></i> <span
-							data-i18n="takeCollage"></span></a>
-					<?php endif; ?>
-
-					<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
-				<?php endif; ?>
-				<button hidden class="closeGallery"></button>
-				<button hidden class="triggerPic"></button>
-				<button hidden class="triggerCollage"></button>
-			</div>
-
-			<?php if ($config['show_fork']): ?>
-			<a href="https://github.com/andi34/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
-			<?php endif; ?>
-
-			<?php if($config['cups_button']): ?>
-				<a id="cups-button" class="btn cups-button" href="#" target="newwin"><span>CUPS</span></a>
-			<?php endif; ?>
-			<?php if($config['toggle_fs_button']): ?>
-				<a href="#" id="fs-button" class="btn btn--small fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
-			<?php endif; ?>
-		</div>
+		<?php if ($config['index_style'] === 'modern'): ?>
+			<?php include('template/modern_index.template.php'); ?>
+		<?php else: ?>
+			<?php include('template/index.template.php'); ?>
+		<?php endif; ?>
 
 		<!-- image Filter Pane -->
 		<?php if ($config['use_filter']): ?>

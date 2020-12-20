@@ -282,6 +282,7 @@
   "manual_user_interface_background_chroma": "CSS Style for background on chromakeying page.",
   "manual_user_interface_background_image": "CSS Style for background on start-, login- and slideshow pages.",
   "manual_user_interface_font_size": "Enter the default font size used for the Photobooth interface.",
+  "manual_user_interface_index_style": "Choose a start page styling.",
   "milliseconds": "milliseconds",
   "newCollage": "New Collage",
   "newPhoto": "New Picture",
@@ -415,5 +416,6 @@
   "user_interface_colors_secondary": "Secondary color",
   "user_interface_colors_start_font": "Start screen font color",
   "user_interface_font_size": "Default font size",
+  "user_interface_index_style": "Styling",
   "using_latest_version": "You are using the latest version of photobooth."
 }
