@@ -48,11 +48,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<div id="wrapper">
 	<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect_index'])): ?>
 
-		<?php if ($config['index_style'] === 'modern'): ?>
-			<?php include('template/modern_index.template.php'); ?>
-		<?php else: ?>
-			<?php include('template/index.template.php'); ?>
-		<?php endif; ?>
+		<?php include('template/' . $config['index_style'] . '.template.php'); ?>
 
 		<!-- image Filter Pane -->
 		<?php if ($config['use_filter']): ?>

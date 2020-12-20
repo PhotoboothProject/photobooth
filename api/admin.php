@@ -97,6 +97,12 @@ if ($data['type'] == 'config') {
         $newConfig['previewCamTakesPic'] = false;
     }
 
+    if ($newConfig['index_style'] === 'custom') {
+        if (!is_readable('../template/custom.template.php') || !is_readable('../resources/css/custom_style.css')) {
+            $newConfig['index_style'] = 'default';
+        }
+    }
+
     if ($os === 'windows') {
         $newConfig['remotebuzzer_enabled'] = false;
     }
