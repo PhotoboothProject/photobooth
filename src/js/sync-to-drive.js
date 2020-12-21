@@ -1,4 +1,6 @@
 /* This script needs to be run from within the photobooth directory */
+require('core-js/stable');
+require('regenerator-runtime/runtime');
 
 /* Imports */
 const {execSync, spawn} = require('child_process');
