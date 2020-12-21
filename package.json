@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "archiver": "^5.1.0",
     "colors": "^1.4.0",
     "eslint": "^7.15.0",
