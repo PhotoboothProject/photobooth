@@ -95,7 +95,8 @@ $config['previewCamBackground'] = false;
 
 
 // U S E R   I N T E R F A C E
-$config['index_style'] = 'default';
+// possible index_style values: "classic", "modern", "custom"
+$config['index_style'] = 'modern';
 $config['font_size'] = '16px';
 $config['background_image'] = null;
 $config['background_admin'] = null;

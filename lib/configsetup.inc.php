@@ -441,7 +441,7 @@ $configsetup = [
 			'name' => 'index_style',
 			'placeholder' => $defaultConfig['index_style'],
 			'options' => [
-				'default' => 'default',
+				'classic' => 'classic',
 				'modern' => 'modern',
 				'custom' => 'custom'
 			],
