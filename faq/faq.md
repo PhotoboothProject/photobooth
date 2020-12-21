@@ -59,6 +59,20 @@ Open `http://localhost/admin` in your Webbrowser and change the configuration fo
 
 <hr>
 
+### How to change the look of my Photobooth?
+Photobooth can be easylie styled for your personal needs via admin panel, open [localhost/admin](http://localhost/admin) in your browser and take a look at the `User Interface` options.  
+To use a private custom index you need to create the following files:
+- `resources/css/custom_style.css`
+  - Optional: `src/sass/custom_style.scss` (`yarn build` will create the `resources/css/custom_style.css` out of it)
+- `template/custom.template.php`
+
+Once you've created these 2 needed files you will be able to use the selection `custom` from the `"Styling"` option.  
+**Please note**: the custom style and template will not be tracked by git to avoid sharing by accident!  
+
+If you have e.g. private backgrounds (maybe files without a usable license) you can create a folder called `private` inside the root of your Photbooth source. This folder (and subfolders) will not be tracked by git to avoid sharing by accident!  
+
+<hr>
+
 ### How to keep pictures on my Camera using gphoto2?
 Add `--keep` (or `--keep-raw` to keep only the raw version on camera) option for gphoto2 via admin panel:
 ```
