@@ -282,7 +282,7 @@
   "manual_user_interface_background_chroma": "CSS Style for background on chromakeying page.",
   "manual_user_interface_background_image": "CSS Style for background on start-, login- and slideshow pages.",
   "manual_user_interface_font_size": "Enter the default font size used for the Photobooth interface.",
-  "manual_user_interface_index_style": "Choose a start page styling. To use custom styling please create and use \"/template/custom.template.php\" and \"/resources/css/custom_style.css\", if one of thise files is not readable we will fallback to default theme.",
+  "manual_user_interface_index_style": "Choose a start page styling. To use custom styling please create and use \"/template/custom.template.php\" and \"/resources/css/custom_style.css\", if one of these files is not readable we will fallback to default theme.",
   "milliseconds": "milliseconds",
   "newCollage": "New Collage",
   "newPhoto": "New Picture",
