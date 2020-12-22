@@ -74,7 +74,9 @@ const getDriveInfo = ({drive}) => {
     }
 
     return json.blockdevices.find(
-        (blk) => blk.subsystems.includes('usb') &&
+        (blk) =>
+            // eslint-disable-next-line implicit-arrow-linebreak
+            blk.subsystems.includes('usb') &&
             ((blk.name && drive === blk.name.toLowerCase()) ||
                 (blk.kname && drive === blk.kname.toLowerCase()) ||
                 (blk.path && drive === blk.path.toLowerCase()) ||
@@ -117,6 +119,7 @@ const startSync = ({dataAbsPath, drive}) => {
             case 'win32':
                 return null;
             case 'linux':
+                // prettier-ignore
                 return [
                     'rsync',
                     '-a',
