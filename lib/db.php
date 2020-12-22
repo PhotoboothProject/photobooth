@@ -26,6 +26,10 @@ function deleteImageFromDB($filename) {
 	$images = getImagesFromDB();
 
 	unset($images[array_search($filename, $images)]);
+
+	if (file_exists(DB_FILE) && empty($images)) {
+		unlink(DB_FILE);
+	}
 }
 
 function isImageInDB($filename) {
