@@ -14,7 +14,7 @@ gulp.task('sass', function () {
 gulp.task('js', function () {
   return gulp
     .src('./src/js/**/*.js')
-    .pipe(babel({ presets: ['@babel/env'] }))
+    .pipe(babel({ presets: ['@babel/env'], ignore: [ "src/js/sync-to-drive.js", "src/js/remotebuzzer_server.js" ] }))
     .pipe(gulp.dest('./resources/js'));
 });
 
