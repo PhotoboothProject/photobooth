@@ -7,6 +7,7 @@
 $config = array();
 
 // G E N E R A L
+$config['adminpanel_view'] = 'basic';
 // possible language values: de, el, en, es, fr, pl, it
 $config['language'] = 'en';
 $config['start_screen_title'] = 'Photobooth';

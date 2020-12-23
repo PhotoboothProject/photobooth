@@ -3,6 +3,20 @@ require_once __DIR__ . '/filter.php';
 
 $configsetup = [
     'general' => [
+        'view' => 'basic',
+        'platform' => 'all',
+        'adminpanel_view' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'adminpanel_view',
+            'placeholder' => $defaultConfig['adminpanel_view'],
+            'options' => [
+                'basic' => 'Basic View',
+                'advanced' => 'Advanced View',
+                'expert' => 'Expert View',
+            ],
+            'value' => $config['adminpanel_view'],
+        ],
         'language' => [
             'type' => 'select',
             'name' => 'language',
@@ -135,17 +149,6 @@ $configsetup = [
             'placeholder' => '',
             'value' => $config['photo_key'],
         ],
-        'collage_key' => [
-            'type' => 'input',
-            'name' => 'collage_key',
-            'placeholder' => '',
-            'value' => $config['collage_key'],
-        ],
-        'collage_limit' => [
-            'type' => 'hidden',
-            'name' => 'collage_limit',
-            'value' => $config['collage_limit'],
-        ],
         'force_buzzer' => [
             'type' => 'checkbox',
             'name' => 'force_buzzer',
@@ -236,28 +239,44 @@ $configsetup = [
             'name' => 'take_frame_path',
             'value' => htmlentities($config['take_frame_path']),
         ],
+        'allow_delete' => [
+            'type' => 'checkbox',
+            'name' => 'allow_delete',
+            'value' => $config['allow_delete'],
+        ],
+        'allow_delete_from_gallery' => [
+            'type' => 'checkbox',
+            'name' => 'allow_delete_from_gallery',
+            'value' => $config['allow_delete_from_gallery'],
+        ],
+    ],
+    'collage' => [
+        'view' => 'basic',
         'use_collage' => [
+            'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'use_collage',
             'value' => $config['use_collage'],
         ],
-        'take_collage_frame' => [
-            'type' => 'checkbox',
-            'name' => 'take_collage_frame',
-            'value' => $config['take_collage_frame'],
+        'collage_cntdwn_time' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'name' => 'collage_cntdwn_time',
+            'placeholder' => $defaultConfig['collage_cntdwn_time'],
+            'value' => $config['collage_cntdwn_time'],
+            'range_min' => 1,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
         ],
-        'take_collage_frame_always' => [
+        'continuous_collage' => [
+            'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'take_collage_frame_always',
-            'value' => $config['take_collage_frame_always'],
-        ],
-        'take_collage_frame_path' => [
-            'type' => 'input',
-            'placeholder' => $defaultConfig['take_collage_frame_path'],
-            'name' => 'take_collage_frame_path',
-            'value' => htmlentities($config['take_collage_frame_path']),
+            'name' => 'continuous_collage',
+            'value' => $config['continuous_collage'],
         ],
         'collage_layout' => [
+            'view' => 'advanced',
             'type' => 'select',
             'name' => 'collage_layout',
             'placeholder' => $defaultConfig['collage_layout'],
@@ -269,35 +288,42 @@ $configsetup = [
             'value' => $config['collage_layout'],
         ],
         'collage_background' => [
+            'view' => 'expert',
             'type' => 'input',
             'name' => 'collage_background',
             'placeholder' => $defaultConfig['collage_background'],
             'value' => $config['collage_background'],
         ],
-        'collage_cntdwn_time' => [
-            'type' => 'range',
-            'name' => 'collage_cntdwn_time',
-            'placeholder' => $defaultConfig['collage_cntdwn_time'],
-            'value' => $config['collage_cntdwn_time'],
-            'range_min' => 1,
-            'range_max' => 10,
-            'range_step' => 1,
-            'unit' => 'seconds',
+        'collage_key' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'collage_key',
+            'placeholder' => '',
+            'value' => $config['collage_key'],
         ],
-        'continuous_collage' => [
+        'take_collage_frame' => [
+            'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'continuous_collage',
-            'value' => $config['continuous_collage'],
+            'name' => 'take_collage_frame',
+            'value' => $config['take_collage_frame'],
         ],
-        'allow_delete' => [
+        'take_collage_frame_always' => [
+            'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'allow_delete',
-            'value' => $config['allow_delete'],
+            'name' => 'take_collage_frame_always',
+            'value' => $config['take_collage_frame_always'],
         ],
-        'allow_delete_from_gallery' => [
-            'type' => 'checkbox',
-            'name' => 'allow_delete_from_gallery',
-            'value' => $config['allow_delete_from_gallery'],
+        'take_collage_frame_path' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['take_collage_frame_path'],
+            'name' => 'take_collage_frame_path',
+            'value' => htmlentities($config['take_collage_frame_path']),
+        ],
+        'collage_limit' => [
+            'type' => 'hidden',
+            'name' => 'collage_limit',
+            'value' => $config['collage_limit'],
         ],
     ],
     'jpeg_quality' => [

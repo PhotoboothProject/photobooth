@@ -62,45 +62,86 @@ require_once('../lib/configsetup.inc.php');
 		<div class="accordion">
 			<form>
 				<?php
+					function html_src_intend($num) {
+						 echo "\n".str_repeat("\t",$num);
+					}
+						 
 					$i = 0;
 					foreach($configsetup as $panel => $fields) {
-						if (! empty($fields['platform']) && $fields['platform'] != 'all' && $fields['platform'] != $os) {
+						if (isset($fields['platform']) && $fields['platform'] != 'all' && $fields['platform'] != $os) {
 							continue;
+						};
+
+						if (empty($fields['view'])) {
+						   $fields['view'] = 'basic';
 						};
 
 						$open = '';
 						if($i == 0){
 							$open = ' open init';
 						}
-						echo '<div class="panel'.$open.'"><div class="panel-heading"><h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span> <a href="../manual" title="Need help?" target="newwin"><i class="fa fa-info-circle" aria-hidden="true"></i></a></h3></div>
-									<div class="panel-body">
-						';
+
+						$intend = 3;
+
+						html_src_intend($intend);
+						echo '<div class="panel'.$open.'"';
+
+						switch ($fields['view'])
+						{
+							case 'expert':
+							     if ($config['adminpanel_view'] == 'advanced') {
+							     	echo ' style="display: none;"';
+							     };
+							case 'advanced':
+							     if ($config['adminpanel_view'] == 'basic') { 
+    							     	echo ' style="display: none;"';
+							     };
+							case 'basic':
+							     break;
+						};
+						
+						echo '><div class="panel-heading"><h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span> <a href="../manual" title="Need help?" target="newwin"><i class="fa fa-info-circle" aria-hidden="true"></i></a></h3></div>';
+						html_src_intend(++$intend);
+						echo '<div class="panel-body">';
+						
+						$intend++;
 
 						foreach($fields as $key => $field){
-							if ($key == 'platform') {
+							if ($key == 'platform' || $key == 'view') {
 								continue;
 							};
+						
+							if (! isset($field['view'])) {
+						   	   $field['view'] = 'basic';
+							};
+
+							switch ($field['view'])
+							{
+								case 'expert':
+							     	     if ($config['adminpanel_view'] == 'advanced') { $field['type'] = 'hidden'; };
+								case 'advanced':
+							     	     if ($config['adminpanel_view'] == 'basic') { $field['type'] = 'hidden'; };
+								case 'basic':
+							     	     break;
+							};
+
+							html_src_intend($intend);
 							echo '<div class="form-row">';
 							switch($field['type']) {
 								case 'input':
 									echo '<label data-i18n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label><input type="text" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/>';
 									break;
 								case 'range':
-									echo '<label data-i18n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label></br>
-										<div class="'.$field['name'].'"><span>'.$field['value'].'</span> <span data-i18n="'.$field['unit'].'"</span></div>
-										<input type="range" name="'.$field['name'].'" class="slider" value="'.$field['value'].'" min="'.$field['range_min'].'" max="'.$field['range_max'].'" step="'.$field['range_step'].'" placeholder="'.$field['placeholder'].'"/>
-										<script>
-										window.addEventListener("load", function() {
-											var slider = document.querySelector("input[name='.$field['name'].']");
-											slider.addEventListener("change", function() {
-												document.querySelector(".'.$field['name'].' span").innerHTML = this.value;
-											});
-										});
-										</script>';
+									echo '<label data-i18n="'.$panel.'_'.$key.'">'.$panel.'_'.$key.'</label></br>';
+									html_src_intend(++$intend);
+									echo '<div class="'.$field['name'].'"><span>'.$field['value'].'</span> <span data-i18n="'.$field['unit'].'"</span></div>';
+									html_src_intend($intend);
+									echo '<input type="range" name="'.$field['name'].'" class="slider" value="'.$field['value'].'" min="'.$field['range_min'].'" max="'.$field['range_max'].'" step="'.$field['range_step'].'" placeholder="'.$field['placeholder'].'"/>';
+									html_src_intend($intend--);
+									echo '<script> window.addEventListener("load", function() { var slider = document.querySelector("input[name='.$field['name'].']"); slider.addEventListener("change", function() { document.querySelector(".'.$field['name'].' span").innerHTML = this.value; }); }); </script>';
 									break;
 								case 'color':
-									echo '<input type="color" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/>
-										<label data-i18n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';
+									echo '<input type="color" name="'.$field['name'].'" value="'.$field['value'].'" placeholder="'.$field['placeholder'].'"/> <label data-i18n="'.$panel.'_'.$key.'"> '.$panel.'_'.$key.'</label>';
 									break;
 								case 'hidden':
 									echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
@@ -110,8 +151,7 @@ require_once('../lib/configsetup.inc.php');
 									if ($field['value'] == 'true') {
 										$checked = ' checked="checked"';
 									}
-									echo '<span data-i18n="'.$key.'">'.$key.'</span></br>
-										<label class="switch"><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span class="toggle"></span></label>';
+									echo '<span data-i18n="'.$key.'">'.$key.'</span></br><label class="switch"><input type="checkbox" '.$checked.' name="'.$field['name'].'" value="true"/><span class="toggle"></span></label>';
 									break;
 								case 'multi-select':
 								case 'select':
