@@ -7,25 +7,29 @@ require '../vendor/PHPMailer/src/Exception.php';
 require '../vendor/PHPMailer/src/PHPMailer.php';
 require '../vendor/PHPMailer/src/SMTP.php';
 
-require_once('../lib/config.php');
-require_once('../lib/db.php');
+require_once '../lib/config.php';
+require_once '../lib/db.php';
 
 if (empty($_POST['sendTo']) || empty($_POST['image']) || !PHPMailer::validateAddress($_POST['sendTo'])) {
-    die(json_encode([
-        'success' => false,
-        'error' => 'E-Mail address invalid'
-    ]));
+    die(
+        json_encode([
+            'success' => false,
+            'error' => 'E-Mail address invalid',
+        ])
+    );
 }
 
 $postImage = basename($_POST['image']);
 if (!isImageInDB($postImage)) {
-    die(json_encode([
-        'success' => false,
-        'error' => 'Image not found in database'
-    ]));
+    die(
+        json_encode([
+            'success' => false,
+            'error' => 'Image not found in database',
+        ])
+    );
 }
 
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 $mail->setLanguage($config['language'], '../vendor/PHPMailer/language/');
 
 $mail->isSMTP();
@@ -39,10 +43,12 @@ $mail->Port = $config['mail_port'];
 $mail->setFrom($config['mail_fromAddress'], $config['mail_fromName']);
 
 if (!$mail->addAddress($_POST['sendTo'])) {
-    die(json_encode([
-        'success' => false,
-        'error' => 'E-Mail address not valid / error'
-    ]));
+    die(
+        json_encode([
+            'success' => false,
+            'error' => 'E-Mail address not valid / error',
+        ])
+    );
 }
 
 // Email subject
@@ -56,10 +62,12 @@ $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
 
 $mail->Body = $mailContent;
 if (!$mail->addAttachment($path . $postImage)) {
-    die(json_encode([
-        'success' => false,
-        'error' => 'file error:' . $path . $postImage
-    ]));
+    die(
+        json_encode([
+            'success' => false,
+            'error' => 'file error:' . $path . $postImage,
+        ])
+    );
 }
 
 if (isset($_POST['send-link']) && $_POST['send-link'] === 'yes') {
@@ -75,19 +83,25 @@ if (isset($_POST['send-link']) && $_POST['send-link'] === 'yes') {
 
     file_put_contents(MAIL_FILE, json_encode($addresses));
 
-    die(json_encode([
-        'success' => true,
-        'saved' => true
-    ]));
+    die(
+        json_encode([
+            'success' => true,
+            'saved' => true,
+        ])
+    );
 }
 
 if ($mail->send()) {
-    die(json_encode([
-        'success' => true,
-    ]));
+    die(
+        json_encode([
+            'success' => true,
+        ])
+    );
 }
 
-die(json_encode([
-    'success' => false,
-    'error' => $mail->ErrorInfo
-]));
+die(
+    json_encode([
+        'success' => false,
+        'error' => $mail->ErrorInfo,
+    ])
+);

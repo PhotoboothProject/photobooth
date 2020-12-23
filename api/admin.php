@@ -1,10 +1,10 @@
 <?php
 header('Content-Type: application/json');
 
-require_once('../lib/config.php');
-require_once('../lib/db.php');
+require_once '../lib/config.php';
+require_once '../lib/db.php';
 
-$os = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
+$os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
 
 $data = $_POST;
 if (!isset($data['type'])) {
@@ -12,12 +12,13 @@ if (!isset($data['type'])) {
 }
 
 if ($data['type'] == 'reset') {
-    if($config['reset_remove_images']) {
+    if ($config['reset_remove_images']) {
         // empty folders
         foreach ($config['foldersAbs'] as $folder) {
             if (is_dir($folder)) {
-                $files = glob($folder.'/*.jpg');
-                foreach ($files as $file) { // iterate files
+                $files = glob($folder . '/*.jpg');
+                foreach ($files as $file) {
+                    // iterate files
                     if (is_file($file)) {
                         unlink($file); // delete file
                     }
@@ -26,15 +27,15 @@ if ($data['type'] == 'reset') {
         }
     }
 
-    if($config['reset_remove_mailtxt']) {
+    if ($config['reset_remove_mailtxt']) {
         if (is_file(MAIL_FILE)) {
             unlink(MAIL_FILE); // delete file
         }
     }
 
-    if($config['reset_remove_config']) {
+    if ($config['reset_remove_config']) {
         // delete personal config
-        if(is_file('../config/my.config.inc.php')){
+        if (is_file('../config/my.config.inc.php')) {
             unlink('../config/my.config.inc.php');
         }
     }
@@ -50,9 +51,8 @@ if ($data['type'] == 'reset') {
 if ($data['type'] == 'config') {
     $newConfig = [];
 
-    foreach ($config as $k=>$conf) {
+    foreach ($config as $k => $conf) {
         if (is_array($conf)) {
-
             if (!empty($data[$k]) && is_array($data[$k])) {
                 $newConfig[$k] = $data[$k];
                 continue;
@@ -90,7 +90,7 @@ if ($data['type'] == 'config') {
             $newConfig['login_enabled'] = false;
         }
     } else {
-        $newConfig['login_password'] = NULL;
+        $newConfig['login_password'] = null;
     }
 
     if ($newConfig['preview_mode'] != 'device_cam' && $newConfig['preview_mode'] != 'gphoto') {
@@ -106,9 +106,9 @@ if ($data['type'] == 'config') {
     if ($os === 'windows') {
         $newConfig['remotebuzzer_enabled'] = false;
         $newConfig['synctodrive_enabled'] = false;
-	}
+    }
 
-    $content = "<?php\n\$config = ". var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ";";
+    $content = "<?php\n\$config = " . var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
 
     if (file_put_contents($my_config_file, $content)) {
         clearCache($my_config_file);
@@ -120,11 +120,10 @@ if ($data['type'] == 'config') {
 }
 
 /* Kill service daemons after config has changed */
-require_once('../lib/services_stop.php');
+require_once '../lib/services_stop.php';
 
-function arrayRecursiveDiff($aArray1, $aArray2)
-{
-    $aReturn = array();
+function arrayRecursiveDiff($aArray1, $aArray2) {
+    $aReturn = [];
 
     foreach ($aArray1 as $mKey => $mValue) {
         if (array_key_exists($mKey, $aArray2)) {
@@ -146,7 +145,7 @@ function arrayRecursiveDiff($aArray1, $aArray2)
 }
 
 function clearCache($file) {
-    if (function_exists('opcache_invalidate') && strlen(ini_get("opcache.restrict_api")) < 1) {
+    if (function_exists('opcache_invalidate') && strlen(ini_get('opcache.restrict_api')) < 1) {
         opcache_invalidate($file, true);
     } elseif (function_exists('apc_compile_file')) {
         apc_compile_file($file);

@@ -1,14 +1,16 @@
 <?php
 header('Content-Type: application/json');
 
-require_once('../lib/config.php');
-require_once('../lib/db.php');
-require_once('../lib/resize.php');
+require_once '../lib/config.php';
+require_once '../lib/db.php';
+require_once '../lib/resize.php';
 
 if (empty($_GET['filename'])) {
-    die(json_encode([
-        'error' => 'No file provided',
-    ]));
+    die(
+        json_encode([
+            'error' => 'No file provided',
+        ])
+    );
 }
 
 $filename = $_GET['filename'];
@@ -19,18 +21,22 @@ $status = false;
 
 // exit with error if file does not exist
 if (!file_exists($filename_source)) {
-    die(json_encode([
-        'error' => "File $filename not found",
-    ]));
+    die(
+        json_encode([
+            'error' => "File $filename not found",
+        ])
+    );
 }
 
 // Only jpg/jpeg are supported
 $imginfo = getimagesize($filename_source);
 $mimetype = $imginfo['mime'];
 if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    die(json_encode([
-        'error' => 'The source file type ' . $mimetype . ' is not supported'
-    ]));
+    die(
+        json_encode([
+            'error' => 'The source file type ' . $mimetype . ' is not supported',
+        ])
+    );
 }
 
 // QR
@@ -58,25 +64,25 @@ if (!file_exists($filename_print)) {
     if ($config['print_qrcode']) {
         // create qr code
         if (!file_exists($filename_codes)) {
-            include('../vendor/phpqrcode/qrlib.php');
-            $url = 'http://'.$SERVER_IP.'/api/download.php?image=';
-            QRcode::png($url.$filename, $filename_codes, QR_ECLEVEL_H, 10);
+            include '../vendor/phpqrcode/qrlib.php';
+            $url = 'http://' . $SERVER_IP . '/api/download.php?image=';
+            QRcode::png($url . $filename, $filename_codes, QR_ECLEVEL_H, 10);
         }
 
         // merge source and code
         list($width, $height) = getimagesize($filename_source);
-        $newwidth = $width + ($height / 2);
+        $newwidth = $width + $height / 2;
         $newheight = $height;
 
         $source = imagecreatefromjpeg($filename_source);
         $code = imagecreatefrompng($filename_codes);
 
-        if ($config['print_frame'] && !($config['take_frame'])) {
+        if ($config['print_frame'] && !$config['take_frame']) {
             $print = imagecreatefromjpeg($filename_source);
             $frame = imagecreatefrompng($print_frame);
             $frame = resizePngImage($frame, imagesx($print), imagesy($print));
-            $x = (imagesx($print)/2) - (imagesx($frame)/2);
-            $y = (imagesy($print)/2) - (imagesy($frame)/2);
+            $x = imagesx($print) / 2 - imagesx($frame) / 2;
+            $y = imagesy($print) / 2 - imagesy($frame) / 2;
             imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
             imagejpeg($print, $filename_print);
             imagedestroy($print);
@@ -89,14 +95,14 @@ if (!file_exists($filename_print)) {
 
         imagefill($print, 0, 0, imagecolorallocate($print, 255, 255, 255));
         imagecopy($print, $source, 0, 0, 0, 0, $width, $height);
-        imagecopyresized($print, $code, $width, 0, 0, 0, ($height / 2), ($height / 2), imagesx($code), imagesy($code));
+        imagecopyresized($print, $code, $width, 0, 0, 0, $height / 2, $height / 2, imagesx($code), imagesy($code));
 
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['is_textonprint'] == true) {
-            $fontcolour = imagecolorallocate($print, 0, 0, 0);  // colour of font
+            $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, $fontpath, $line3text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
         }
         // text on image - end
 
@@ -105,19 +111,19 @@ if (!file_exists($filename_print)) {
         imagedestroy($source);
     } else {
         $print = imagecreatefromjpeg($filename_source);
-        if ($config['print_frame'] == true && !($config['take_frame'])) {
+        if ($config['print_frame'] == true && !$config['take_frame']) {
             $frame = imagecreatefrompng($print_frame);
             $frame = resizePngImage($frame, imagesx($print), imagesy($print));
-            $x = (imagesx($print)/2) - (imagesx($frame)/2);
-            $y = (imagesy($print)/2) - (imagesy($frame)/2);
+            $x = imagesx($print) / 2 - imagesx($frame) / 2;
+            $y = imagesy($print) / 2 - imagesy($frame) / 2;
             imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
         }
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['is_textonprint'] == true) {
-            $fontcolour = imagecolorallocate($print, 0, 0, 0);  // colour of font
+            $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + ($linespacing *2), $fontcolour, $fontpath, $line3text);
+            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
         }
         //text on image - end
         imagejpeg($print, $filename_print);
@@ -133,21 +139,17 @@ if (!file_exists($filename_print)) {
 
 // print image
 // fixme: move the command to the config.inc.php
-$printimage = shell_exec(
-    sprintf(
-        $config['print']['cmd'],
-        $filename_print
-    )
+$printimage = shell_exec(sprintf($config['print']['cmd'], $filename_print));
+
+die(
+    json_encode([
+        'status' => 'ok',
+        'msg' => $printimage || '',
+    ])
 );
 
-die(json_encode([
-    'status' => 'ok',
-    'msg' => $printimage || '',
-]));
-
 // Resize and crop image by center
-function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 100)
-{
+function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 100) {
     $imgsize = getimagesize($source_file);
     $width = $imgsize[0];
     $height = $imgsize[1];
@@ -155,19 +157,19 @@ function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quali
 
     switch ($mime) {
         case 'image/gif':
-            $image_create = "imagecreatefromgif";
-            $image = "imagegif";
+            $image_create = 'imagecreatefromgif';
+            $image = 'imagegif';
             break;
 
         case 'image/png':
-            $image_create = "imagecreatefrompng";
-            $image = "imagepng";
+            $image_create = 'imagecreatefrompng';
+            $image = 'imagepng';
             $quality = 7;
             break;
 
         case 'image/jpeg':
-            $image_create = "imagecreatefromjpeg";
-            $image = "imagejpeg";
+            $image_create = 'imagecreatefromjpeg';
+            $image = 'imagejpeg';
             $quality = 100;
             break;
 
@@ -179,17 +181,17 @@ function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quali
     $dst_img = imagecreatetruecolor($max_width, $max_height);
     $src_img = $image_create($source_file);
 
-    $width_new = $height * $max_width / $max_height;
-    $height_new = $width * $max_height / $max_width;
+    $width_new = ($height * $max_width) / $max_height;
+    $height_new = ($width * $max_height) / $max_width;
     //if the new width is greater than the actual width of the image, then the height is too large and the rest cut off, or vice versa
     if ($width_new > $width) {
         //cut point by height
-        $h_point = (($height - $height_new) / 2);
+        $h_point = ($height - $height_new) / 2;
         //copy image
         imagecopyresampled($dst_img, $src_img, 0, 0, 0, $h_point, $max_width, $max_height, $width, $height_new);
     } else {
         //cut point by width
-        $w_point = (($width - $width_new) / 2);
+        $w_point = ($width - $width_new) / 2;
         imagecopyresampled($dst_img, $src_img, 0, 0, $w_point, 0, $max_width, $max_height, $width_new, $height);
     }
 

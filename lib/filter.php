@@ -56,8 +56,7 @@ define('AVAILABLE_FILTERS', [
     FILTER_YELLOW => 'Yellow',
 ]);
 
-function applyFilter($imgfilter, $sourceResource)
-{
+function applyFilter($imgfilter, $sourceResource) {
     switch ($imgfilter) {
         case 'antique':
             imagefilter($sourceResource, IMG_FILTER_BRIGHTNESS, 0);
@@ -88,11 +87,11 @@ function applyFilter($imgfilter, $sourceResource)
             imagefilter($sourceResource, IMG_FILTER_CONTRAST, -50);
             break;
         case 'edge':
-            $emboss = array(array(1, 1, 1), array(1, -7, 1), array(1, 1, 1));
+            $emboss = [[1, 1, 1], [1, -7, 1], [1, 1, 1]];
             imageconvolution($sourceResource, $emboss, 1, 0);
             break;
         case 'emboss':
-            $emboss = array(array(-2, -1, 0), array(-1, 1, 1), array(0, 1, 2));
+            $emboss = [[-2, -1, 0], [-1, 1, 1], [0, 1, 2]];
             imageconvolution($sourceResource, $emboss, 1, 0);
             break;
         case 'everglow':

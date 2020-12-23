@@ -1,15 +1,15 @@
 <?php
-require_once(__DIR__ . '/arrayDeepMerge.php');
+require_once __DIR__ . '/arrayDeepMerge.php';
 
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
-$os = (DIRECTORY_SEPARATOR == '\\') || (strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
+$os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
 
 $cmds = [
     'windows' => [
         'take_picture' => [
             'cmd' => 'digicamcontrol\CameraControlCmd.exe /capture /filename %s',
-            'msg' => 'Photo transfer done.'
+            'msg' => 'Photo transfer done.',
         ],
         'print' => [
             'cmd' => 'mspaint /pt %s',
@@ -25,12 +25,12 @@ $cmds = [
         ],
         'nodebin' => [
             'cmd' => '',
-        ]
+        ],
     ],
     'linux' => [
         'take_picture' => [
             'cmd' => 'gphoto2 --capture-image-and-download --filename=%s',
-            'msg' => 'New file is in location'
+            'msg' => 'New file is in location',
         ],
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',
@@ -46,7 +46,7 @@ $cmds = [
         ],
         'nodebin' => [
             'cmd' => '/usr/bin/node',
-        ]
+        ],
     ],
 ];
 
@@ -69,7 +69,7 @@ $mailTemplates = [
     ],
 ];
 
-require_once($default_config_file);
+require_once $default_config_file;
 
 $config['mail_subject'] = $mailTemplates[$config['language']]['mail_subject'];
 $config['mail_text'] = $mailTemplates[$config['language']]['mail_text'];
@@ -91,7 +91,7 @@ $config['synctodrive_logfile'] = 'synctodrive_server.log';
 $defaultConfig = $config;
 
 if (file_exists($my_config_file)) {
-    require_once($my_config_file);
+    require_once $my_config_file;
 
     $config = array_deep_merge($defaultConfig, $config);
 }

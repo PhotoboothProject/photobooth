@@ -1,25 +1,25 @@
 <?php
 header('Content-Type: application/json');
 
-require_once('../../lib/config.php');
-require_once('../../lib/db.php');
-require_once('../../lib/resize.php');
+require_once '../../lib/config.php';
+require_once '../../lib/db.php';
+require_once '../../lib/resize.php';
 
 if ($config['file_naming'] === 'numbered') {
     $images = getImagesFromDB();
     $img_number = count($images);
     $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
-    $name = $files.'.jpg';
+    $name = $files . '.jpg';
 } elseif ($config['file_naming'] === 'dateformatted') {
-    $name = date('Ymd_His').'.jpg';
+    $name = date('Ymd_His') . '.jpg';
 } else {
-    $name = md5(time()).'.jpg';
+    $name = md5(time()) . '.jpg';
 }
 
 if ($config['db_file'] === 'db') {
     $file = $name;
 } else {
-    $file = $config['db_file'].'_'.$name;
+    $file = $config['db_file'] . '_' . $name;
 }
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
@@ -52,5 +52,5 @@ chmod($filename_photo, octdec($picture_permissions));
 // send imagename to frontend
 echo json_encode([
     'success' => true,
-    'filename' => $file
+    'filename' => $file,
 ]);

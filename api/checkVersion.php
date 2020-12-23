@@ -4,10 +4,10 @@ header('Content-Type: application/json');
 $url = 'https://api.github.com/repos/andi34/photobooth/releases/latest';
 
 $options = [
-    'http'=> [
+    'http' => [
         'method' => 'GET',
-        'header' => "User-Agent: andi34/photobooth\r\n"
-    ]
+        'header' => "User-Agent: andi34/photobooth\r\n",
+    ],
 ];
 
 $context = stream_context_create($options);
