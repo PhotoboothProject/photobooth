@@ -38,20 +38,52 @@ require_once('../lib/configsetup.inc.php');
 				<?php
 					$i = 0;
 					foreach($configsetup as $panel => $fields) {
+						if (empty($fields['view'])) {
+						   $fields['view'] = 'basic';
+						};
+
 						$open = '';
 						if($i == 0){
 							$open = ' open init';
 						}
-						echo '<div class="panel'.$open.'">';
+						echo '<div class="panel'.$open.'"';
+						switch ($fields['view'])
+						{
+							case 'expert':
+							     if ($config['adminpanel_view'] == 'advanced') {
+							     	echo ' style="display: none;"';
+							     };
+							case 'advanced':
+							     if ($config['adminpanel_view'] == 'basic') { 
+    							     	echo ' style="display: none;"';
+							     };
+							case 'basic':
+							     break;
+						};
+						echo '>';
 								echo '<div class="panel-heading">';
 									echo '<h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span></h3>';
 								echo '</div>';
 								echo '<div class="panel-body">';
 
 								foreach($fields as $key => $field) {
-									if ($key == 'platform') {
+									if ($key == 'platform' || $key == 'view') {
 									   continue;
 									   };
+
+									if (! isset($field['view'])) {
+						   	   		   $field['view'] = 'basic';
+									   };
+
+									switch ($field['view'])
+									{
+										case 'expert':
+							     	     		     if ($config['adminpanel_view'] == 'advanced') { $field['type'] = 'hidden'; };
+										case 'advanced':
+							     	     		     if ($config['adminpanel_view'] == 'basic') { $field['type'] = 'hidden'; };
+										case 'basic':
+							     	     		     break;
+									};
 
 									echo '<div class="form-row">';
 									switch($field['type']) {
