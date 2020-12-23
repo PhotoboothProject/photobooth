@@ -25,8 +25,10 @@ function appendImageToDB($filename) {
 function deleteImageFromDB($filename) {
 	$images = getImagesFromDB();
 
-	unset($images[array_search($filename, $images)]);
-	file_put_contents(DB_FILE, json_encode($images));
+	if (in_array($filename, $images)) {
+		unset($images[array_search($filename, $images)]);
+		file_put_contents(DB_FILE, json_encode($images));
+	}
 
 	if (file_exists(DB_FILE) && empty($images)) {
 		unlink(DB_FILE);
