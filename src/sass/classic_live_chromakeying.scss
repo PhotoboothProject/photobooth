@@ -24,6 +24,13 @@
   z-index: 10;
 }
 
+.closebtn {
+  position: fixed;
+  top: 1em;
+  right: 0;
+  z-index: 10;
+}
+
 .top-bar {
   display: inline-block;
   width: 100%;
@@ -212,7 +219,8 @@
   }
 
   .home,
-  .gallerybtn {
+  .gallerybtn,
+  .closebtn {
     position: relative;
     top: 0;
     max-width: 150px;

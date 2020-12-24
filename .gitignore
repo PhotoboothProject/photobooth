@@ -11,6 +11,7 @@ private/
 resources/css/
 resources/js/
 src/sass/custom_style.scss
+src/sass/custom_live_chromakeying.css
 stats
 template/custom.template.php
 trash

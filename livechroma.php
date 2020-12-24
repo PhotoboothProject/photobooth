@@ -4,6 +4,15 @@ require_once('lib/db.php');
 
 $images = getImagesFromDB();
 $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
+
+if ($config['index_style'] === 'modern') {
+	$btnClass1 = 'round-btn';
+	$btnClass2 = 'round-btn';
+} else {
+	$btnClass1 = 'btn btn--small btn--flex';
+	$btnClass2 = 'btn';
+}
+
 ?>
 <!doctype html>
 <html>
@@ -28,7 +37,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 		<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
-		<link rel="stylesheet" href="resources/css/live_chromakeying.css" />
+		<link rel="stylesheet" href="resources/css/<?php echo $config['index_style']; ?>_live_chromakeying.css" />
 		<?php if ($config['gallery_bottom_bar']): ?>
 		<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 		<?php endif; ?>
@@ -40,11 +49,11 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<div class="chromawrapper">
 		<div class="top-bar">
 			<?php if (!$config['use_live_keying']): ?>
-			<a href="index.php" class="btn btn--small btn--flex home"><i class="fa fa-times"></i></a>
+			<a href="index.php" class="<?php echo $btnClass1; ?> closebtn"><i class="fa fa-times"></i></a>
 			<?php endif; ?>
 
 			<?php if ($config['show_gallery']): ?>
-			<a class="gallerybtn btn btn--small btn--flex" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+			<a href="#" class="<?php echo $btnClass1 ?> gallerybtn"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
 		</div>
@@ -91,11 +100,11 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 		</div>
 
 		<div class="chroma-control-bar">
-			<a href="#" class="btn takeChroma"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+			<a href="#" class="<?php echo $btnClass2; ?> takeChroma"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 			<?php if ($config['allow_delete']): ?>
-			<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+			<a href="#" class="deletebtn <?php echo $btnClass2; ?> "><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 			<?php endif; ?>
-			<a href="#" class="btn reloadPage"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
+			<a href="#" class="reloadPage <?php echo $btnClass2; ?> "><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
 		</div>
 	<div>
 

@@ -1,0 +1,79 @@
+@import 'classic_live_chromakeying';
+
+.backgrounds {
+  border-radius: 4%;
+}
+
+.round-btn {
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  border: 2px solid $borderColor;
+  background: radial-gradient(grey, $mainColor, $hoverColor);
+  display: inline-block;
+  color: $buttonFontColor;
+  text-decoration: none;
+  margin: auto;
+  text-align: center;
+  font-size: 1em;
+  position: relative;
+  z-index: 10;
+  span {
+    display: none;
+  }
+  &:active,
+  &:focus,
+  &:hover {
+    background: $hoverColor;
+  }
+  .fa {
+    font-size: 1.5em;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+}
+
+.gallerybtn {
+  position: fixed;
+  top: 1em;
+  left: 0;
+  z-index: 10;
+  margin: 10px;
+}
+
+.closebtn {
+  position: fixed;
+  top: 1em;
+  right: 0;
+  z-index: 10;
+  margin: 10px;
+}
+
+@media (max-width: 1280px) and (orientation: landscape) {
+  .takeChroma,
+  .reloadPage,
+  .deletebtn {
+    margin: auto;
+    display: inline-block;
+  }
+
+  .home,
+  .gallerybtn,
+  .closebtn {
+    position: relative;
+    top: 0;
+    max-width: 150px;
+  }
+}
+
+@media (max-height: 740px) and (orientation: landscape) {
+  .backgrounds {
+    &.shrinked {
+      height: 350px;
+    }
+  }
+}
