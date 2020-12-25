@@ -5,6 +5,14 @@ if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
+if ($config['index_style'] === 'modern') {
+	$btnClass1 = 'round-btn';
+	$btnClass2 = 'round-btn';
+} else {
+	$btnClass1 = 'btn btn--flex';
+	$btnClass2 = 'btn';
+}
+
 $filename = $_GET['filename'];
 $keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
 
@@ -45,7 +53,7 @@ if (file_exists($keyingimage)) {
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-		<link rel="stylesheet" href="resources/css/chromakeying.css" />
+		<link rel="stylesheet" href="resources/css/<?php echo $config['index_style']; ?>_chromakeying.css" />
 		<?php if ($config['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>
@@ -70,18 +78,18 @@ if (file_exists($keyingimage)) {
 		</div>
 
 		<div class="chroma-control-bar">
-			<a class="btn btn--flex" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
+			<a class="<?php echo $btnClass1; ?>" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
 
 			<?php if ($config['use_print_chromakeying']): ?>
-				<a class="btn btn--flex" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+				<a class="<?php echo $btnClass1; ?>" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="btn btn--flex" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass1; ?>" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">
 			<h1 style="color: red;" data-i18n="keyingerror"></h1>
-			<a class="btn" href="./"><span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass2; ?>" href="./"><span data-i18n="close"></span></a>
 		</div>
 	<?php endif; ?>
 

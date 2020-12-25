@@ -10,8 +10,9 @@ package-lock.json
 private/
 resources/css/
 resources/js/
-src/sass/custom_style.scss
+src/sass/custom_chromakeying.css
 src/sass/custom_live_chromakeying.css
+src/sass/custom_style.scss
 stats
 template/custom.template.php
 trash
