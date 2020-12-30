@@ -8,10 +8,24 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
         return false;
     }
 
+    $rotate_after_creation = false;
+
+    list($width, $height) = getimagesize($srcImagePaths[0]);
+    if ($width > $height) {
+        $landscape = true;
+    } else {
+        $landscape = false;
+        for ($i = 0; $i < 4; $i++) {
+            $tempImage = imagecreatefromjpeg($srcImagePaths[$i]);
+            $tempSubRotated = imagerotate($tempImage, 90, 0);
+            imagejpeg($tempSubRotated, $srcImagePaths[$i]);
+            imagedestroy($tempImage);
+        }
+        list($width, $height) = getimagesize($srcImagePaths[0]);
+    }
+
     switch (LAYOUT) {
         case '2x2':
-            list($width, $height) = getimagesize($srcImagePaths[0]);
-
             $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, 0, 0, 0);
             imagecolortransparent($my_collage, $background);
@@ -45,18 +59,13 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                 $y = imagesy($my_collage) / 2 - imagesy($frame) / 2;
                 imagecopy($my_collage, $frame, $x, $y, 0, 0, $width, $height);
             }
-            imagejpeg($my_collage, $destImagePath);
-            imagedestroy($my_collage);
             break;
         case '2x4':
+            if ($landscape) {
+                $rotate_after_creation = true;
+            }
             $degrees = 90;
-
-            list($width_before, $height_before) = getimagesize($srcImagePaths[0]);
-
-            $my_collage_width = $width_before;
-            $my_collage_height = $height_before;
-
-            $my_collage = imagecreatetruecolor($my_collage_width, $my_collage_height);
+            $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, 240, 240, 240);
             imagefill($my_collage, 0, 0, $background);
 
@@ -78,22 +87,22 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                 }
 
                 $tempSubRotated = imagerotate($tempSubImage, $degrees, 0);
-                $images_rotated[] = resizeImage($tempSubRotated, $height_before / 3.3, $width_before / 3.5);
+                $images_rotated[] = resizeImage($tempSubRotated, $height / 3.3, $width / 3.5);
             }
 
             if ($takeFrame && !$takeFrameAlways) {
                 $frame = imagecreatefrompng($framePath);
-                $frame = resizePngImage($frame, $my_collage_width, $my_collage_height);
+                $frame = resizePngImage($frame, $width, $height);
                 $x = imagesx($my_collage) / 2 - imagesx($frame) / 2;
                 $y = imagesy($my_collage) / 2 - imagesy($frame) / 2;
-                imagecopy($my_collage, $frame, $x, $y, 0, 0, $my_collage_width, $my_collage_height);
+                imagecopy($my_collage, $frame, $x, $y, 0, 0, $width, $height);
             }
 
             $new_width = imagesx($images_rotated[0]);
             $new_height = imagesy($images_rotated[0]);
 
-            $height_offset = ($my_collage_height / 2 - $new_height) / 2;
-            $width_offset = ($my_collage_width - $new_width * 4) / 5;
+            $height_offset = ($height / 2 - $new_height) / 2;
+            $width_offset = ($width - $new_width * 4) / 5;
 
             $positions_top = [
                 [$width_offset, $height_offset],
@@ -116,12 +125,12 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                 imagecopy($my_collage, $images_rotated[$i], $position_bottom[0], $position_bottom[1], 0, 0, $new_width, $new_height);
             }
 
-            imagescale($my_collage, $width_before, $height_before);
-
-            imagejpeg($my_collage, $destImagePath);
-            imagedestroy($my_collage);
+            imagescale($my_collage, $width, $height);
             break;
         case '2x4BI':
+            if ($landscape) {
+                $rotate_after_creation = true;
+            }
             $degrees = 90;
             $widthNew = 321;
             $heightNew = 482;
@@ -150,7 +159,6 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     }
 
                     $tempSubRotated = imagerotate($tempSubImage, $degrees, 0); // Rotate image
-                    list($width, $height) = getimagesize($srcImagePaths[0]);
                     imagecopyresized($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew, $height, $width); // copy image to background
                     imagedestroy($tempSubRotated); // Destroy temporary images
                     imagedestroy($tempSubImage); // Destroy temporary images
@@ -163,16 +171,21 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                 $y = imagesy($my_collage) / 2 - imagesy($frame) / 2;
                 imagecopy($my_collage, $frame, $x, $y, 0, 0, $bg_width, $bg_height);
             }
-            imagejpeg($my_collage, $destImagePath); // Transfer image to destImagePath with returns the image to core
-            imagedestroy($my_collage); // Destroy the created collage in memory
             break;
         default:
-            list($width, $height) = getimagesize($srcImagePaths[0]);
-
             $my_collage = imagecreatetruecolor($width, $height);
-            imagejpeg($my_collage, $destImagePath); // Transfer image to destImagePath with returns the image to core
-            imagedestroy($my_collage); // Destroy the created collage in memory
             break;
+    }
+
+    imagejpeg($my_collage, $destImagePath); // Transfer image to destImagePath with returns the image to core
+    imagedestroy($my_collage); // Destroy the created collage in memory
+
+    // Rotate image if needed
+    if ($rotate_after_creation) {
+        $tempRotatedImage = imagecreatefromjpeg($destImagePath);
+        $resultRotated = imagerotate($tempRotatedImage, -90, 0);
+        imagejpeg($resultRotated, $destImagePath);
+        imagedestroy($tempRotatedImage);
     }
     return true;
 }
