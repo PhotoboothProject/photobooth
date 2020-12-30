@@ -61,6 +61,21 @@ $line3text = $config['textonprint']['line3'];
 $print_frame = __DIR__ . DIRECTORY_SEPARATOR . $config['print_frame_path'];
 
 if (!file_exists($filename_print)) {
+    // rotate image if needed
+    list($width, $height) = getimagesize($filename_source);
+    if ($width > $height) {
+        $image = imagecreatefromjpeg($filename_source);
+        imagejpeg($image, $filename_print);
+        imagedestroy($image); // Destroy the created collage in memory
+    } else {
+        $image = imagecreatefromjpeg($filename_source);
+        $resultRotated = imagerotate($image, 90, 0); // Rotate image
+        imagejpeg($resultRotated, $filename_print);
+        imagedestroy($image); // Destroy the created collage in memory
+        // re-define width & height after rotation
+        list($width, $height) = getimagesize($filename_print);
+    }
+
     if ($config['print_qrcode']) {
         // create qr code
         if (!file_exists($filename_codes)) {
@@ -70,15 +85,14 @@ if (!file_exists($filename_print)) {
         }
 
         // merge source and code
-        list($width, $height) = getimagesize($filename_source);
         $newwidth = $width + $height / 2;
         $newheight = $height;
 
-        $source = imagecreatefromjpeg($filename_source);
+        $source = imagecreatefromjpeg($filename_print);
         $code = imagecreatefrompng($filename_codes);
 
         if ($config['print_frame'] && !$config['take_frame']) {
-            $print = imagecreatefromjpeg($filename_source);
+            $print = imagecreatefromjpeg($filename_print);
             $frame = imagecreatefrompng($print_frame);
             $frame = resizePngImage($frame, imagesx($print), imagesy($print));
             $x = imagesx($print) / 2 - imagesx($frame) / 2;
@@ -110,7 +124,7 @@ if (!file_exists($filename_print)) {
         imagedestroy($code);
         imagedestroy($source);
     } else {
-        $print = imagecreatefromjpeg($filename_source);
+        $print = imagecreatefromjpeg($filename_print);
         if ($config['print_frame'] == true && !$config['take_frame']) {
             $frame = imagecreatefrompng($print_frame);
             $frame = resizePngImage($frame, imagesx($print), imagesy($print));
@@ -138,7 +152,6 @@ if (!file_exists($filename_print)) {
 }
 
 // print image
-// fixme: move the command to the config.inc.php
 $printimage = shell_exec(sprintf($config['print']['cmd'], $filename_print));
 
 die(
