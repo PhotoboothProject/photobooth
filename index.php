@@ -8,6 +8,16 @@ require_once('lib/filter.php');
 $images = getImagesFromDB();
 $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
 
+if ($config['index_style'] === 'modern') {
+	$btnClass1 = 'round-btn';
+	$btnClass2 = 'round-btn';
+	$galleryIcon = 'fa-picture-o';
+} else {
+	$btnClass1 = 'btn';
+	$btnClass2 = '';
+	$galleryIcon = 'fa-th';
+}
+
 if ($config['use_live_keying']):
 header("location: livechroma.php");
 endif;
@@ -42,7 +52,7 @@ endif;
 	<?php if ($config['gallery_bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
-	<?php if ($config['rounded_corners']): ?>
+	<?php if ($config['rounded_corners'] && $config['index_style'] === 'classic'): ?>
 	<link rel="stylesheet" href="resources/css/rounded.css" />
 	<?php endif; ?>
 </head>
@@ -57,7 +67,7 @@ endif;
 		<!-- image Filter Pane -->
 		<?php if ($config['use_filter']): ?>
 		<div id="mySidenav" class="dragscroll sidenav">
-			<a href="#" class="closebtn"><i class="fa fa-times"></i></a>
+			<a href="#" class="closebtn <?php echo $btnClass2; ?>"><i class="fa fa-times"></i></a>
 
 			<?php foreach(AVAILABLE_FILTERS as $filter => $name): ?>
 				<?php if (!in_array($filter, $config['disabled_filters'])): ?>
@@ -78,7 +88,7 @@ endif;
 
 				<div id="ipcam--view"></div>
 
-				<video id="video--view" autoplay playsinline></video>
+				<video id="video--view" autoplay></video>
 
 				<div id="counter">
 					<canvas id="video--sensor"></canvas>
@@ -90,39 +100,39 @@ endif;
 
 		<!-- Result Page -->
 		<div class="stages" id="result">
-			<a href="#" class="btn homebtn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+			<a href="#" class="<?php echo $btnClass1; ?> homebtn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
 			<div class="resultInner hidden">
 				<?php if ($config['show_gallery']): ?>
-				<a href="#" class="btn gallery-button"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> gallery-button"><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['use_qr']): ?>
-				<a href="#" class="btn qrbtn"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> qrbtn"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['use_mail']): ?>
-				<a href="#" class="btn mailbtn"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> mailbtn"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['use_print_result']): ?>
-				<a href="#" class="btn printbtn"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> printbtn"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 				<?php endif; ?>
 
 				<?php if (!$config['force_buzzer']): ?>
-					<a href="#" class="btn newpic"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
+					<a href="#" class="<?php echo $btnClass1; ?> newpic"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
 
 					<?php if ($config['use_collage']): ?>
-					<a href="#" class="btn newcollage"><i class="fa fa-th-large"></i> <span
+					<a href="#" class="<?php echo $btnClass1; ?> newcollage"><i class="fa fa-th-large"></i> <span
 							data-i18n="newCollage"></span></a>
 					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ($config['use_filter']): ?>
-				<a href="#" class="btn imageFilter"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> imageFilter"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['allow_delete']): ?>
-				<a href="#" class="btn deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 				<?php endif; ?>
 			</div>
 
