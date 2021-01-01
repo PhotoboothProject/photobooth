@@ -444,6 +444,7 @@ $configsetup = [
                 '2x2' => '2x2',
                 '2x4' => '2x4',
                 '2x4-2' => '2x4 (2)',
+                '1+3' => '1+3',
             ],
             'value' => $config['collage']['layout'],
         ],

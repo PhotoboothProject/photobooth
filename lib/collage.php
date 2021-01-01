@@ -165,6 +165,54 @@ function createCollage($srcImagePaths, $destImagePath) {
                 }
             }
             break;
+        case '1+3':
+            $width = 1800;
+            $height = 1200;
+            $my_collage = imagecreatetruecolor($width, $height);
+            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            imagefill($my_collage, 0, 0, $background);
+
+            if ($landscape == false) {
+                $rotate_after_creation = true;
+            }
+            $degrees = 0;
+            $heightbig = 519;
+            $widthbig = 813;
+            $heightsmall = 361;
+            $widthsmall = 527;
+            $PositionsX = [0, 81, 638, 1196]; //X offset in Pixel for Small
+            $PositionsXB = 910; // X offset in Pixel for Big
+            $PositionsYB = 71; //Y offset in Pixel for Big Pic
+            $PositionsYS = 749; //Y offset in Pixel for Small Pic
+
+            for ($i = 0; $i < 4; $i++) {
+                if ($i == 0) {
+                    ResizeCropImage($widthbig, $heightbig, $srcImagePaths[$i], $srcImagePaths[$i]);
+                    // delta X
+                    $dX = $PositionsXB;
+                    $dY = $PositionsYB;
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[0]);
+                } else {
+                    ResizeCropImage($widthsmall, $heightsmall, $srcImagePaths[$i], $srcImagePaths[$i]);
+                    $dX = $PositionsX[$i];
+                    $dY = $PositionsYS;
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
+                }
+                if (!file_exists($srcImagePaths[$i])) {
+                    return false;
+                }
+
+                if (COLLAGE_TAKE_FRAME === 'always') {
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], COLLAGE_FRAME);
+                }
+
+                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
+                imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
+                imagedestroy($tempSubRotated); // Destroy temporary images
+                imagedestroy($tempSubImage); // Destroy temporary images
+            }
+            break;
         default:
             $my_collage = imagecreatetruecolor($width, $height);
             break;
