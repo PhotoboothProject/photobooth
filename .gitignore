@@ -8,8 +8,10 @@ manual/faq.html
 node_modules/
 package-lock.json
 private/
-resources/css/
-resources/js/
+resources/css/*
+!resources/css/README.md
+resources/js/*
+!resources/js/README.md
 src/sass/custom_chromakeying.css
 src/sass/custom_live_chromakeying.css
 src/sass/custom_style.scss
