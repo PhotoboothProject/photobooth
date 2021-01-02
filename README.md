@@ -127,10 +127,7 @@ This is my personal Photobooth fork with some extras on top (more information ca
     - allow to trigger print via defined key
     - options to show the print button independent (e.g. can be only visible on gallery)
   - Advanced collage options [#108](https://github.com/andi34/photobooth/pull/108):
-    - Choose collage layout:
-      - 2x2
-      - 2x4
-      - 2x4 + background image
+    - Choose between different collage layouts
     - Collage: apply frame once after taking or to every picture of the collage
 
 ## :camera: Screenshots
@@ -209,3 +206,4 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [couz74](https://github.com/couz74)
 - [thatonedude3470](https://github.com/thatonedude3470)
 - [Christian Tarne](https://github.com/Metropo)
+- [DeNeD1](https://github.com/DeNeD1)
