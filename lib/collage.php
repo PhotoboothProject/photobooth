@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/resize.php';
 
 define('LAYOUT', $config['collage_layout']);
 
@@ -139,6 +140,11 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
             $my_collage = imagecreatefrompng($background_image);
             list($bg_width, $bg_height) = getimagesize($background_image);
 
+            for ($i = 0; $i < 4; $i++) {
+                ResizeCropImage($heightNew, $widthNew, $srcImagePaths[$i], $srcImagePaths[$i]);
+            }
+            list($width, $height) = getimagesize($srcImagePaths[0]);
+
             for ($j = 0; $j < 2; $j++) {
                 //delta Y
                 $dY = $PositionsY[$j];
@@ -159,7 +165,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     }
 
                     $tempSubRotated = imagerotate($tempSubImage, $degrees, 0); // Rotate image
-                    imagecopyresized($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew, $height, $width); // copy image to background
+                    imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                     imagedestroy($tempSubRotated); // Destroy temporary images
                     imagedestroy($tempSubImage); // Destroy temporary images
                 }
