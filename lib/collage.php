@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/resize.php';
+require_once __DIR__ . '/applyFrame.php';
 
 define('LAYOUT', $config['collage']['layout']);
 
@@ -40,25 +41,13 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     return false;
                 }
 
-                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-
                 if ($takeFrame && $takeFrameAlways) {
-                    $frame = imagecreatefrompng($framePath);
-                    $frame = resizePngImage($frame, imagesx($tempSubImage), imagesy($tempSubImage));
-                    $x = imagesx($tempSubImage) / 2 - imagesx($frame) / 2;
-                    $y = imagesy($tempSubImage) / 2 - imagesy($frame) / 2;
-                    imagecopy($tempSubImage, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], $framePath);
                 }
 
+                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
                 imagecopyresized($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $width / 2, $height / 2, $width, $height);
                 imagedestroy($tempSubImage);
-            }
-            if ($takeFrame && !$takeFrameAlways) {
-                $frame = imagecreatefrompng($framePath);
-                $frame = resizePngImage($frame, $width, $height);
-                $x = imagesx($my_collage) / 2 - imagesx($frame) / 2;
-                $y = imagesy($my_collage) / 2 - imagesy($frame) / 2;
-                imagecopy($my_collage, $frame, $x, $y, 0, 0, $width, $height);
             }
             break;
         case '2x4':
@@ -80,23 +69,11 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                 }
 
                 if ($takeFrame && $takeFrameAlways) {
-                    $frame = imagecreatefrompng($framePath);
-                    $frame = resizePngImage($frame, imagesx($tempSubImage), imagesy($tempSubImage));
-                    $x = imagesx($tempSubImage) / 2 - imagesx($frame) / 2;
-                    $y = imagesy($tempSubImage) / 2 - imagesy($frame) / 2;
-                    imagecopy($tempSubImage, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], $framePath);
                 }
 
                 $tempSubRotated = imagerotate($tempSubImage, $degrees, 0);
                 $images_rotated[] = resizeImage($tempSubRotated, $height / 3.3, $width / 3.5);
-            }
-
-            if ($takeFrame && !$takeFrameAlways) {
-                $frame = imagecreatefrompng($framePath);
-                $frame = resizePngImage($frame, $width, $height);
-                $x = imagesx($my_collage) / 2 - imagesx($frame) / 2;
-                $y = imagesy($my_collage) / 2 - imagesy($frame) / 2;
-                imagecopy($my_collage, $frame, $x, $y, 0, 0, $width, $height);
             }
 
             $new_width = imagesx($images_rotated[0]);
@@ -154,28 +131,17 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     if (!file_exists($srcImagePaths[$i])) {
                         return false;
                     }
-                    $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
 
                     if ($takeFrame && $takeFrameAlways) {
-                        $frame = imagecreatefrompng($framePath);
-                        $frame = resizePngImage($frame, imagesx($tempSubImage), imagesy($tempSubImage));
-                        $x = imagesx($tempSubImage) / 2 - imagesx($frame) / 2;
-                        $y = imagesy($tempSubImage) / 2 - imagesy($frame) / 2;
-                        imagecopy($tempSubImage, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+                        ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], $framePath);
                     }
 
+                    $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
                     $tempSubRotated = imagerotate($tempSubImage, $degrees, 0); // Rotate image
                     imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                     imagedestroy($tempSubRotated); // Destroy temporary images
                     imagedestroy($tempSubImage); // Destroy temporary images
                 }
-            }
-            if ($takeFrame && !$takeFrameAlways) {
-                $frame = imagecreatefrompng($framePath);
-                $frame = resizePngImage($frame, $bg_width, $bg_height);
-                $x = imagesx($my_collage) / 2 - imagesx($frame) / 2;
-                $y = imagesy($my_collage) / 2 - imagesy($frame) / 2;
-                imagecopy($my_collage, $frame, $x, $y, 0, 0, $bg_width, $bg_height);
             }
             break;
         default:
@@ -185,6 +151,10 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
 
     imagejpeg($my_collage, $destImagePath); // Transfer image to destImagePath with returns the image to core
     imagedestroy($my_collage); // Destroy the created collage in memory
+
+    if ($takeFrame && !$takeFrameAlways) {
+        ApplyFrame($destImagePath, $destImagePath, $framePath);
+    }
 
     // Rotate image if needed
     if ($rotate_after_creation) {

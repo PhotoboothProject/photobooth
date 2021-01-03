@@ -4,6 +4,7 @@ header('Content-Type: application/json');
 require_once '../lib/config.php';
 require_once '../lib/db.php';
 require_once '../lib/resize.php';
+require_once '../lib/applyFrame.php';
 
 if (empty($_GET['filename'])) {
     die(
@@ -88,61 +89,44 @@ if (!file_exists($filename_print)) {
         $newwidth = $width + $height / 2;
         $newheight = $height;
 
-        $source = imagecreatefromjpeg($filename_print);
-        $code = imagecreatefrompng($filename_codes);
-
         if ($config['print']['frame'] && !$config['picture']['take_frame']) {
-            $print = imagecreatefromjpeg($filename_print);
-            $frame = imagecreatefrompng($print_frame);
-            $frame = resizePngImage($frame, imagesx($print), imagesy($print));
-            $x = imagesx($print) / 2 - imagesx($frame) / 2;
-            $y = imagesy($print) / 2 - imagesy($frame) / 2;
-            imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
-            imagejpeg($print, $filename_print);
-            imagedestroy($print);
-            // $source needs to be redefined, picture with frame now exists inside $filename_print
-            imagedestroy($source);
-            $source = imagecreatefromjpeg($filename_print);
+            ApplyFrame($filename_print, $filename_print, $print_frame);
         }
 
+        $source = imagecreatefromjpeg($filename_print);
+        $code = imagecreatefrompng($filename_codes);
         $print = imagecreatetruecolor($newwidth, $newheight);
 
         imagefill($print, 0, 0, imagecolorallocate($print, 255, 255, 255));
         imagecopy($print, $source, 0, 0, 0, 0, $width, $height);
         imagecopyresized($print, $code, $width, 0, 0, 0, $height / 2, $height / 2, imagesx($code), imagesy($code));
 
-        // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
         if ($config['textonprint']['enabled'] == true) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
         }
-        // text on image - end
 
         imagejpeg($print, $filename_print);
         imagedestroy($code);
         imagedestroy($source);
+        imagedestroy($print);
     } else {
-        $print = imagecreatefromjpeg($filename_print);
-        if ($config['print']['frame'] == true && !$config['picture']['take_frame']) {
-            $frame = imagecreatefrompng($print_frame);
-            $frame = resizePngImage($frame, imagesx($print), imagesy($print));
-            $x = imagesx($print) / 2 - imagesx($frame) / 2;
-            $y = imagesy($print) / 2 - imagesy($frame) / 2;
-            imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+        if ($config['print']['frame'] && !$config['picture']['take_frame']) {
+            ApplyFrame($filename_print, $filename_print, $print_frame);
         }
-        // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
+
         if ($config['textonprint']['enabled'] == true) {
+            $print = imagecreatefromjpeg($filename_print);
             $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
+            imagejpeg($print, $filename_print);
+            imagedestroy($print);
         }
-        //text on image - end
-        imagejpeg($print, $filename_print);
     }
-    imagedestroy($print);
 
     if ($config['print']['crop']) {
         $crop_width = $config['print']['crop_width'];
