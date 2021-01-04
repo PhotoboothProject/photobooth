@@ -1,13 +1,10 @@
 @import 'modules/theme';
 @import 'partials/basic';
-@import 'partials/button';
-@import 'partials/fonts';
-@import 'partials/toggle';
 
 $error: #e74c3c;
 $success: #2ecc71;
 
-.adminwrapper {
+body {
   display: block;
   position: relative;
   overflow-y: auto;
@@ -21,106 +18,205 @@ $success: #2ecc71;
   background-attachment: fixed;
 }
 
-input[type='text'],
-select {
-  background: $boxColor;
-  border: 1px solid $borderColor;
-  border-radius: 4px;
-  width: 100%;
-  padding: 0 10px;
-  color: $fontColor;
+/***********************
+* side nav bar
+***********************/
+div.admincontent {
+  margin-left: 200px;
+  padding: 1px 16px;
+  overflow: auto;
+  height: 100%;
 }
 
-.slider {
-  -webkit-appearance: none;
-  height: 15px;
-  width: 100%;
-  background: $boxColor;
-  outline: none;
-}
-
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 15px;
-  height: 20px;
-  background: $mainColor;
-  cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-  width: 15px;
-  height: 20px;
-  background: $mainColor;
-  cursor: pointer;
-}
-
-.admin-panel {
-  width: calc(31.25 * 1em);
-  padding: 30px 30px 90px;
-  height: auto;
-  margin: 50px auto;
+.adminsidebar {
+  margin: 0;
+  padding: 0;
+  width: 200px;
   background: $panelColor;
-  position: relative;
-  max-width: 100%;
   color: $fontColor;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
 }
 
-.panel {
-  .panel-heading {
-    padding: 10px;
-    cursor: pointer;
-    border: 1px solid $borderColor;
-    .plus {
-      display: inline-block;
-    }
-    .minus {
-      display: none;
-    }
+ul.adminnavlist {
+  list-style-position: inside;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+}
 
-    &:hover {
-      background: $hoverPanelColor;
-    }
-  }
-  .panel-body {
-    display: none;
-    padding: 20px;
-    border: 1px solid $borderColor;
-  }
+/* nav bar links */
+a.adminnavlistelement {
+  display: block;
+  color: $fontColor;
+  padding: 16px;
+  text-decoration: none;
+}
 
-  &.open {
-    .panel-heading {
-      .minus {
-        display: inline-block;
-      }
-      .plus {
-        display: none;
-      }
-    }
-  }
+/* nav bar active/current link */
+a.adminnavlistelement.active {
+  background-color: $hoverPanelColor;
+  border-style: groove;
+  font-weight: bold;
+}
 
-  &.init {
-    .panel-body {
-      display: block;
-    }
+/* nav bar links on mouse-over */
+a.adminnavlistelement:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+@media screen and (max-width: 700px) {
+  .adminsidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .adminsidebar a {
+    float: left;
+  }
+  div.admincontent {
+    margin-left: 0;
   }
 }
 
-.form-row {
-  margin-bottom: 15px;
+/**************************
+* Settings Content Container
+**************************/
+
+/* settings section container */
+div.setting_section {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7);
+  display: block;
+  padding: 5px 5px;
+  margin: 25px;
+  background-color: $panelColor;
 }
 
-.save-btn,
-.reset-btn {
-  cursor: pointer;
+/* Clear floats */
+.setting_section::after {
+  content: '';
+  clear: both;
+  display: table;
+}
+
+.setting_section_heading {
+  padding: 10px 0px;
+  margin: 0px;
+  text-transform: uppercase;
+}
+
+div.setting_element {
+  float: left;
+  width: 32%;
+  height: 5em;
+  margin-bottom: 16px;
+  margin-right: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+  display: none;
+}
+
+.settinglabel {
+  width: 100%;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+.floatright {
+  float: right;
+}
+
+.settinginput {
+  width: 100%;
+}
+
+.settinginput.color {
+  width: 30%;
+  display: block;
+}
+
+@media screen and (max-width: 1400px) {
+  div.setting_element {
+    float: left;
+    width: 48%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  div.setting_element {
+    width: 98%;
+    float: left;
+  }
+}
+
+/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+}
+
+/* Manual as tooltip for setting element */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  width: 300px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip .tooltiptext::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+/***************
+* SAVE button
+***************/
+
+.save-btn {
+  width: 15%;
+  max-width: 15em;
+  height: 3em;
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  z-index: 300;
   background: $mainColor;
   color: $buttonFontColor;
-  width: 100%;
-  position: absolute;
-  padding: 20px;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  cursor: pointer;
   transition: background 0.7s ease;
 
   &:hover {
@@ -172,35 +268,136 @@ select {
   }
 }
 
+/******************
+* RESET button
+******************/
+
 .reset-btn {
-  background: $error;
-  position: absolute;
-  top: 50px;
-  right: 30px;
-  left: auto;
-  width: auto;
-  bottom: auto;
-  padding: 5px 10px;
+  cursor: pointer;
+  float: right;
+  width: 15%;
+  max-width: 15em;
+  height: 3em;
+  background: $mainColor;
+  color: $buttonFontColor;
+  transition: background 0.7s ease;
+  z-index: 300;
+  float: right;
 
   &:hover {
-    background: #c0392b;
+    background: $hoverColor;
+  }
+
+  .saving,
+  .success,
+  .error {
+    display: none;
+  }
+
+  &.saving {
+    .saving {
+      display: inline-block;
+    }
+
+    .save,
+    .success,
+    .error {
+      display: none;
+    }
+  }
+
+  &.success {
+    background: $success;
+    .success {
+      display: inline-block;
+    }
+
+    .save,
+    .saving,
+    .error {
+      display: none;
+    }
+  }
+
+  &.error {
+    background: $error;
+    .error {
+      display: inline-block;
+    }
+
+    .save,
+    .saving,
+    .success {
+      display: none;
+    }
   }
 }
 
-.back-to-pb {
-  color: $fontColor;
-  text-decoration: none;
-  padding: 0 3px;
+/*****************
+* Toggle Button
+*****************/
 
-  &:hover {
-    background-color: $hoverPanelColor;
-  }
+/* https://wiki.selfhtml.org/extensions/Selfhtml/example.php/Beispiel:HTML-Tut-button-5.html */
+
+.toggle input {
+  display: none;
 }
 
-#diskUsage {
+.toggle .slider {
+  /* Grundfläche */
+  position: relative;
+  cursor: pointer;
+  display: block;
+  left: 0.2em;
+  width: 2.9em;
+  height: 1.4em;
+  background-color: rgba(195, 46, 4, 0.6);
+  border-radius: 1em;
+  transition: all 0.3s ease-in-out;
+}
+
+.toggle .slider::before {
+  /* verschiebbarer Button */
   position: absolute;
-  top: 100px;
-  right: 30px;
-  left: auto;
-  bottom: auto;
+  content: '';
+  height: 1.2em;
+  width: 1.2em;
+  left: 0.1em;
+  bottom: 0.1em;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
 }
+.toggle input:checked + .slider {
+  background-color: rgba(90, 153, 00, 0.8); /* green */
+}
+
+.toggle input:focus + .slider {
+  background-color: pink;
+  box-shadow: 0 0 1px #5a9900;
+}
+
+.toggle input:checked + .slider:before {
+  -webkit-transform: translateX(1.5em); /* Android 4 */
+  -ms-transform: translateX(1.5em); /* IE9 */
+  transform: translateX(1.5em);
+}
+
+.toggletext .slider:after {
+  /* Text vor dem FlipFlop-Schalter */
+  position: absolute;
+  content: 'Aus';
+  color: #000000;
+  left: 4.5em;
+}
+
+.toggletext input:checked + .slider:after {
+  /* Text hinter dem FlipFlop-Schalter */
+
+  position: absolute;
+  content: 'An';
+  color: #000000;
+  left: 4.5em;
+}
+
+/* Style SELECT Element https://css-tricks.com/the-current-state-of-styling-selects-in-2019/ */

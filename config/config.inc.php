@@ -95,18 +95,18 @@ $config['previewCamBackground'] = false;
 $config['index_style'] = 'modern';
 $config['font_size'] = '16px';
 $config['background_image'] = null;
-$config['background_admin'] = null;
-$config['background_chroma'] = null;
+$config['background_admin'] = 'url(../img/bg_bluegray.jpg)';
+$config['background_chroma'] = 'url(../img/bg.jpg)';
 $config['show_fork'] = true;
 $config['cups_button'] = false;
 $config['toggle_fs_button'] = false;
 $config['rounded_corners'] = false;
 $config['colors']['primary'] = '#0a6071';
 $config['colors']['secondary'] = '#214852';
-$config['colors']['font'] = '#79bad9';
+$config['colors']['font'] = '#000000';
 $config['colors']['button_font'] = '#ffffff';
 $config['colors']['start_font'] = '#ffffff';
-$config['colors']['panel'] = '#2d4157';
+$config['colors']['panel'] = '#c0c0c0';
 $config['colors']['hover_panel'] = '#446781';
 $config['colors']['border'] = '#eeeeee';
 $config['colors']['box'] = '#f8f9fc';
@@ -256,8 +256,8 @@ $config['remotebuzzer_collagetime'] = '2'; // control time to distinguish pictur
 
 // R E S E T
 $config['reset_remove_images'] = true;
-$config['reset_remove_mailtxt'] = true;
-$config['reset_remove_config'] = true;
+$config['reset_remove_mailtxt'] = false;
+$config['reset_remove_config'] = false;
 
 
  // S Y N C  T O  U S B  S T I C K

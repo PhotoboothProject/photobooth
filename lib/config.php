@@ -83,6 +83,8 @@ $config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
 $config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
 $config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
 
+$config['adminpanel_view_default'] = 'expert';
+
 $config['collage_limit'] = 4;
 
 $config['remotebuzzer_logfile'] = 'remotebuzzer_server.log';

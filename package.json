@@ -52,6 +52,7 @@
     "rpio": "^2.1.1",
     "socket.io": "^3.1.2",
     "socket.io-client": "^3.1.2",
+    "waypoints": "^4.0.1",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {

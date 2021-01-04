@@ -1,17 +1,5 @@
 /* globals i18n */
 $(function () {
-    $('.panel-heading').on('click', function () {
-        const panel = $(this).parents('.panel');
-        const others = $(this).parents('.accordion').find('.open').not(panel);
-
-        others.removeClass('open init');
-
-        panel.toggleClass('open');
-        panel.find('.panel-body').slideToggle();
-
-        others.find('.panel-body').slideUp('fast');
-    });
-
     $('.reset-btn').on('click', function () {
         const msg = i18n('really_delete');
         const really = confirm(msg);
@@ -97,15 +85,121 @@ $(function () {
             }
         });
     });
-    $('option').mousedown(function (e) {
+
+    // Admin Panel active section at init
+    $('#nav-general').addClass('active');
+
+    /*
+     * Check if element is visible in current viewport on screen
+     * https://www.javascripttutorial.net/dom/css/check-if-an-element-is-visible-in-the-viewport
+     */
+    function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    // Range slider - dynamically update value when being moved
+    $(document).on('input', '.configslider', function () {
+        // console.log('slider moves - query #' + this.name + '-value');
+        document.querySelector('#' + this.name + '-value span').innerHTML = this.value;
+    });
+
+    /*
+     * Install waypoints for each section, to enable dynamic nav bar
+     * FIXME - trigger waypoints for settings at bottom of screen (those WPs never trigger automatically)
+     */
+    $('.setting_section').waypoint({
+        handler: function (direction) {
+            //console.log('waypoint triggered ' + this.element.id + ' - scroll direction is ' + direction);
+            $('.adminnavlistelement').removeClass('active');
+            $('#nav-' + this.element.id).addClass('active');
+
+            const contentpage = document.getElementById('adminsidebar');
+            const elemTarget = document.getElementById('nav-' + this.element.id);
+
+            if (!isInViewport(elemTarget)) {
+                const topPos = elemTarget.offsetTop;
+                let newPos = 0;
+
+                if (direction == 'down') {
+                    newPos = topPos + elemTarget.offsetHeight - window.innerHeight;
+                    //console.log('Nav bar element nav-' + this.element.id + ' out of viewport - winInner:' + window.innerHeight + ' Element height:' + elemTarget.offsetHeight + '  new scroll pos:' + newPos);
+                } else {
+                    newPos = topPos;
+                }
+                contentpage.scrollTop = newPos;
+            }
+        }
+    });
+
+    // Click on nav bar element scrolls settings content page
+    $('.adminnavlistelement').click(function (e) {
         e.preventDefault();
-        const originalScrollTop = $(this).parent().scrollTop();
-        $(this).prop('selected', !$(this).prop('selected'));
-        const that = this;
-        $(this).parent().focus();
-        setTimeout(function () {
-            $(that).parent().scrollTop(originalScrollTop);
-        }, 0);
+
+        //console.log('nav clicked ' + this.id);
+
+        if (this.id == 'nav-ref-main') {
+            location.assign('..');
+
+            return false;
+        }
+
+        const target = $(this).attr('href');
+        //console.log('target is ' + target.substring(1));
+
+        // scroll content page if we need to
+        const contentpage = document.getElementById('admincontentpage');
+        const elemTarget = document.getElementById(target.substring(1));
+
+        const totalPageHeight = contentpage.scrollHeight;
+        const scrollPoint = window.scrollY + window.innerHeight;
+
+        //console.log('scrollY: ' + window.scrollY + '::: target scroll element: ' + elemTarget.scrollTop);
+
+        if (isInViewport(elemTarget) && scrollPoint >= totalPageHeight) {
+            $('.adminnavlistelement').removeClass('active');
+            $('#' + this.id).addClass('active');
+
+            return false;
+        }
+
+        // console.log("target element is currently not visible - need to scroll");
+        $('html, body').animate(
+            {
+                scrollTop: $(target).offset().top
+            },
+            1000,
+            () => {
+                //console.log('callback triggered ' + this.id);
+                $('.adminnavlistelement').removeClass('active');
+                $('#' + this.id).addClass('active');
+
+                // scroll nav bar if needed
+                const cp = document.getElementById('adminsidebar');
+                const eT = document.getElementById(this.id);
+
+                if (!isInViewport(eT)) {
+                    const viewportOffset = elemTarget.getBoundingClientRect();
+                    let newPos = 0;
+                    //console.log('viewportoffset.top: ' + viewportOffset.top)
+                    if (viewportOffset.top < 0) {
+                        newPos = eT.offsetTop;
+                    } else {
+                        newPos = window.innerHeight - eT.offsetHeight;
+                        //console.log('Nav bar element ' + this.id + ' out of viewport - winInner:' + window.innerHeight + ' Element height:' + eT.offsetHeight + '  new scroll pos:' + newPos);
+                    }
+                    cp.scrollTop = newPos;
+                }
+
+                return false;
+            }
+        );
 
         return false;
     });

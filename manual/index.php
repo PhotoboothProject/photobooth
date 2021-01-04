@@ -88,16 +88,16 @@ require_once('../lib/configsetup.inc.php');
 									echo '<div class="form-row">';
 									switch($field['type']) {
 										case 'checkbox':
-											echo '<p><h4><span data-i18n="'.$key.'">'.$key.'</span></h4></p>';
-											echo '<p><span data-i18n="manual_'.$key.'">manual_'.$key.'</span></p><hr>';
+											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'">'.$panel.':'.$key.'</span></h4></p>';
+											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
 											echo '</div>';
 											break;
 										case 'multi-select':
 										case 'range':
 										case 'select':
 										case 'input':
-											echo '<p><h4><span data-i18n="'.$panel.'_'.$key.'"></span></h4></p>';
-											echo '<p><span data-i18n="manual_'.$panel.'_'.$key.'">manual_'.$panel.'_'.$key.'</span></p><hr>';
+											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'"></span></h4></p>';
+											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
 											echo '</div>';
 											break;
 										case 'color':
