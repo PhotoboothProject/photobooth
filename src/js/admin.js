@@ -203,4 +203,18 @@ $(function () {
 
         return false;
     });
+
+    // Localization of toggle button text
+    $('.toggle').click(function () {
+        if ($('input', this).is(':checked')) {
+            $('.toggleTextON', this).removeClass('hidden');
+            $('.toggleTextOFF', this).addClass('hidden');
+        } else {
+            $('.toggleTextOFF', this).removeClass('hidden');
+            $('.toggleTextON', this).addClass('hidden');
+        }
+    });
+
+    // activate selectize library for multi-selects
+    $('.multi-select').selectize({});
 });

@@ -107,6 +107,8 @@ div.setting_section {
   padding: 10px 0px;
   margin: 0px;
   text-transform: uppercase;
+  font-size: 1.8em;
+  font-weight: bold;
 }
 
 div.setting_element {
@@ -383,21 +385,31 @@ div.setting_element {
   transform: translateX(1.5em);
 }
 
-.toggletext .slider:after {
-  /* Text vor dem FlipFlop-Schalter */
+.toggleTextON,
+.toggleTextOFF {
+  display: hidden;
   position: absolute;
-  content: 'Aus';
   color: #000000;
   left: 4.5em;
 }
 
-.toggletext input:checked + .slider:after {
-  /* Text hinter dem FlipFlop-Schalter */
-
-  position: absolute;
-  content: 'An';
-  color: #000000;
-  left: 4.5em;
+/********************************************
+* Adjust style of selectize lib for our needs - multiselects only
+********************************************/
+.selectize-control.multi .selectize-input.has-items {
+  height: 3.35em;
+  overflow: auto;
+  font-size: var(--fontSize);
+  padding: 0 0 0;
 }
 
-/* Style SELECT Element https://css-tricks.com/the-current-state-of-styling-selects-in-2019/ */
+.selectize-control.multi .selectize-input > div.active {
+  background-color: #dddddd;
+}
+
+.selectize-control.multi .selectize-input > div {
+  font-family: inherit;
+  font-size: var(--fontSize);
+  margin: 0 1px 0px 0;
+  padding: 0px 2px;
+}

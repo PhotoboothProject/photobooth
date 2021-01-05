@@ -20,6 +20,7 @@ require_once('../lib/configsetup.inc.php');
 
 	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
 	<link rel="stylesheet" type="text/css" href="../resources/css/admin.css">
 </head>
 <body>
@@ -184,14 +185,25 @@ require_once('../lib/configsetup.inc.php');
 				case 'checkbox':
 					echo '<div class="tooltip"><label class="settinglabel"><span data-i18n="'.$i18ntag.'">'.$i18ntag.'</span></label>';
 					echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';					
-					echo '<label class="toggle toggletext settinginput"> <input type="checkbox" '.(($setting['value'] == 'true')?' checked="checked"':'').' name="'.$setting['name'].'" value="true"/><span class="slider"></span></label>';
+					echo '<label class="toggle settinginput"> <input type="checkbox" '.(($setting['value'] == 'true')?' checked="checked"':'').' name="'.$setting['name'].'" value="true"/>';
+					echo '<span class="slider">';
+					if ($setting['value'] == 'true')
+					{
+						echo '<label class="toggleTextON" data-i18n="adminpanel_toggletextON">ON</label><label class="toggleTextOFF hidden" data-i18n="adminpanel_toggletextOFF">OFF</label>';
+					} else
+					{
+						echo '<label class="toggleTextON hidden" data-i18n="adminpanel_toggletextON">ON</label><label class="toggleTextOFF" data-i18n="adminpanel_toggletextOFF">OFF</label>';
+					}
+					echo '</span></label>';
 					break;
 				case 'multi-select':
 				case 'select':
 					echo '<div class="tooltip">';
 					echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
 					echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';					
-					echo '<select class="settinginput" name="'.$setting['name'] . ($setting['type'] === 'multi-select' ? '[]' : '') . '"' . ($setting['type'] === 'multi-select' ? ' multiple="multiple" size="2"' : '') . '>';
+					echo '<select class="settinginput'.($setting['type'] === 'multi-select' ? ' multi-select' : '');
+					echo '" name="'.$setting['name'] . ($setting['type'] === 'multi-select' ? '[]' : '');
+					echo '"' . ($setting['type'] === 'multi-select' ? ' multiple="multiple"' : '') . '>';
 						foreach($setting['options'] as $val => $option) {
 							$selected = '';
 							if ((is_array($setting['value']) && in_array($val, $setting['value'])) || ($val === $setting['value'])) {
@@ -218,6 +230,7 @@ require_once('../lib/configsetup.inc.php');
         <script type="text/javascript" src="../api/config.php"></script>
         <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="../node_modules/waypoints/lib/jquery.waypoints.min.js"></script>
+        <script type="text/javascript" src="../node_modules/selectize/dist/js/standalone/selectize.min.js"></script>
         <script type="text/javascript" src="../resources/js/theme.js"></script>
         <script type="text/javascript" src="../resources/js/admin.js"></script>
         <script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
