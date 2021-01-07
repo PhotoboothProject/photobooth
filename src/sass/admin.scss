@@ -53,6 +53,7 @@ a.adminnavlistelement {
   color: $fontColor;
   padding: 16px;
   text-decoration: none;
+  font-size: var(--fontSize);
 }
 
 /* nav bar active/current link */
@@ -83,6 +84,16 @@ a.adminnavlistelement:hover:not(.active) {
   }
 }
 
+#adminnavlisttextback {
+  position: relative;
+  top: -0.3em;
+  left: 0.5em;
+}
+
+#adminnavlisttextlogout {
+  padding: 5px;
+}
+
 /**************************
 * Settings Content Container
 **************************/
@@ -107,7 +118,7 @@ div.setting_section {
   padding: 10px 0px;
   margin: 0px;
   text-transform: uppercase;
-  font-size: 1.8em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 

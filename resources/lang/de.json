@@ -2,6 +2,7 @@
   "abort": "Abbrechen",
   "adminpanel_toggletextON": "An",
   "adminpanel_toggletextOFF": "Aus",
+  "adminpanel_back": "Zurück",
   "admin_panel": "Admin Panel",
   "pictures:allow_delete": "Löschen des Bildes erlauben",
   "gallery:allow_delete_from_gallery": "Löschen von Bildern aus der Galerie zulassen",

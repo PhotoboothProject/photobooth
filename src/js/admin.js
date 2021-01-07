@@ -150,6 +150,12 @@ $(function () {
             return false;
         }
 
+        if (this.id == 'nav-ref-logout') {
+            location.assign('../login/logout.php');
+
+            return false;
+        }
+
         const target = $(this).attr('href');
         //console.log('target is ' + target.substring(1));
 

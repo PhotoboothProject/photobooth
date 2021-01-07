@@ -2,6 +2,7 @@
   "abort": "Abort",
   "adminpanel_toggletextON": "On",
   "adminpanel_toggletextOFF": "Off",
+  "adminpanel_back": "Back",
   "admin_panel": "Admin panel",
   "manual:general:adminpanel_view": "Allows to set different views in the admin panel with more (Expert View) or less (Basic View) options accessible",
   "pictures:allow_delete": "Allow deletion of the image",
