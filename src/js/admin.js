@@ -1,6 +1,7 @@
 /* globals i18n */
 $(function () {
-    $('.reset-btn').on('click', function () {
+    $('.reset-btn').on('click', function (e) {
+        e.preventDefault();
         const msg = i18n('really_delete');
         const really = confirm(msg);
         const data = {type: 'reset'};

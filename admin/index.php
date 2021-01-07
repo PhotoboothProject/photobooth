@@ -201,10 +201,10 @@ require_once('../lib/configsetup.inc.php');
                                                 echo '<span class="slider">';
                                                 if ($setting['value'] == 'true')
                                                 {
-                                                        echo '<label class="toggleTextON" data-i18n="adminpanel_toggletextON">ON</label><label class="toggleTextOFF hidden" data-i18n="adminpanel_toggletextOFF">OFF</label>';
+                                                        echo '<label class="toggleTextON" data-i18n="adminpanel_toggletextON"></label><label class="toggleTextOFF hidden" data-i18n="adminpanel_toggletextOFF"></label>';
                                                 } else
                                                 {
-                                                        echo '<label class="toggleTextON hidden" data-i18n="adminpanel_toggletextON">ON</label><label class="toggleTextOFF" data-i18n="adminpanel_toggletextOFF">OFF</label>';
+                                                        echo '<label class="toggleTextON hidden" data-i18n="adminpanel_toggletextON"></label><label class="toggleTextOFF" data-i18n="adminpanel_toggletextOFF"></label>';
                                                 }
                                                 echo '</span></label>';
                                                 break;
