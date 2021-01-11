@@ -58,7 +58,7 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@prettier/plugin-php": "^0.16.1",
-    "archiver": "^5.1.0",
+    "archiver": "^5.2.0",
     "colors": "^1.4.0",
     "eslint": "^7.17.0",
     "eslint-plugin-node": "^11.1.0",
