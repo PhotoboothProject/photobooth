@@ -50,7 +50,7 @@
     "normalize.css": "^8.0.1",
     "npm-run-all": "^4.1.5",
     "rpio": "^2.1.1",
-    "socket.io": "^2.3.0",
+    "socket.io": "^3.1.0",
     "socket.io-client": "^3.0.5",
     "whatwg-fetch": "^3.5.0"
   },
