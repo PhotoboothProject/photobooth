@@ -48,8 +48,7 @@ fs.writeFile(pidFilename, myPid, function (err) {
 console.log(
     'socket.io server [',
     myPid,
-    ']: Requested to start on port ',
-    config.remotebuzzer_port,
+    ']: Requested to start on http://' + config.webserver_ip + ':' + config.remotebuzzer_port,
     ', Pin ',
     config.remotebuzzer_pin
 );
@@ -99,7 +98,12 @@ function photoboothAction(type) {
     }
 }
 
-const ioServer = require('socket.io')(config.remotebuzzer_port);
+const ioServer = require('socket.io')(config.remotebuzzer_port, {
+    cors: {
+        origin: 'http://' + config.webserver_ip,
+        methods: ['GET', 'POST']
+    }
+});
 
 ioServer.on('connection', function (client) {
     console.log('socket.io server [', myPid, ']: New client connected - ID', client.id);

@@ -32,7 +32,7 @@ if ($config['remotebuzzer_enabled']) {
         print "\t<!-- Remote Buzzer Enabled --- server already started (port in use) -->\n";
     }
 
-    print "\t<script type=\"text/javascript\" src=\"node_modules/socket.io-client/dist/socket.io.slim.js\"></script>\n";
+    print "\t<script type=\"text/javascript\" src=\"node_modules/socket.io-client/dist/socket.io.min.js\"></script>\n";
 }
 
 if ($config['synctodrive_enabled']) {
