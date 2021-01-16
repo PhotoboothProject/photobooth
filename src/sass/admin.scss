@@ -56,10 +56,14 @@ a.adminnavlistelement {
   font-size: var(--fontSize);
 }
 
+a.adminnavlistelement > div {
+  display: table-cell;
+  vertical-align: middle;
+}
+
 /* nav bar active/current link */
 a.adminnavlistelement.active {
   background-color: $hoverPanelColor;
-  border-style: groove;
   font-weight: bold;
 }
 
@@ -67,21 +71,6 @@ a.adminnavlistelement.active {
 a.adminnavlistelement:hover:not(.active) {
   background-color: #555;
   color: white;
-}
-
-/* On screens that are less than 700px wide, make the sidebar into a topbar */
-@media screen and (max-width: 700px) {
-  .adminsidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .adminsidebar a {
-    float: left;
-  }
-  div.admincontent {
-    margin-left: 0;
-  }
 }
 
 #adminnavlisttextback {
@@ -118,7 +107,7 @@ div.setting_section {
   padding: 10px 0px;
   margin: 0px;
   text-transform: uppercase;
-  font-size: 1.5em;
+  font-size: 1.4em;
   font-weight: bold;
 }
 
@@ -169,11 +158,26 @@ div.setting_element {
   }
 }
 
-/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
-@media screen and (max-width: 400px) {
-  .sidebar a {
-    text-align: center;
-    float: none;
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+@media screen and (max-width: 700px) {
+  .adminsidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .adminsidebar a {
+    float: left;
+  }
+  div.admincontent {
+    margin-left: 0;
+    padding: 0 0;
+  }
+  a.adminnavlistelement {
+    height: 3.5em;
+  }
+
+  div.setting_section {
+    margin: 0 0 0 0;
   }
 }
 
@@ -187,7 +191,7 @@ div.setting_element {
 .tooltip .tooltiptext {
   width: 300px;
   bottom: 100%;
-  left: 50%;
+  left: 5em;
   margin-left: -60px;
   visibility: hidden;
   background-color: black;
@@ -222,6 +226,7 @@ div.setting_element {
 .save-btn {
   width: 15%;
   max-width: 15em;
+  min-width: 6em;
   height: 3em;
   position: fixed;
   right: 10px;
@@ -286,6 +291,7 @@ div.setting_element {
 ******************/
 
 .reset-btn {
+  min-width: 7em;
   cursor: pointer;
   float: right;
   width: 15%;

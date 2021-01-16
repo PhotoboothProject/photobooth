@@ -106,7 +106,7 @@ require_once('../lib/configsetup.inc.php');
                         */
                         
         
-                        echo '<li><a class="'.isElementHidden('adminnavlistelement',$fields).'" href="#'.$section.'" id="nav-'.$section.'"><span data-i18n="'.$section.'">'.$section.'</span></a></li>';
+                        echo '<li><a class="'.isElementHidden('adminnavlistelement',$fields).'" href="#'.$section.'" id="nav-'.$section.'"><div><span data-i18n="'.$section.'">'.$section.'</span></div></a></li>';
         
                 }
         
