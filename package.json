@@ -11,7 +11,7 @@
     "eslint:fix": "eslint src/js/*.js --fix",
     "format": "npm-run-all --parallel format:*",
     "format:js": "prettier src/js/*.js --write",
-    "format:php": "prettier {api,lib}/{,*/**/}*.php --write",
+    "format:php": "prettier {api,lib,test}/{,*/**/}*.php --write",
     "format:scss": "prettier src/sass/{,*/**/}*.scss --write",
     "pack:build": "npm-run-all --serial eslint build pack:zip",
     "pack:zip": "node scripts/pack-build.js",

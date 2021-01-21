@@ -56,6 +56,7 @@ function createArchive(fileName, archive) {
     archive.directory('resources');
     archive.directory('slideshow');
     archive.directory('template');
+    archive.directory('test');
     archive.directory('vendor');
     archive.file('button.py');
     archive.file('config/.htaccess');
