@@ -4,8 +4,10 @@ require_once __DIR__ . '/resize.php';
 require_once __DIR__ . '/applyFrame.php';
 
 define('LAYOUT', $config['collage']['layout']);
+define('FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path']);
+define('BACKGROUND', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['background']);
 
-function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlways, $framePath, $background_image) {
+function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlways) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== 4) {
         return false;
     }
@@ -42,7 +44,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                 }
 
                 if ($takeFrame && $takeFrameAlways) {
-                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], $framePath);
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
                 }
 
                 $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
@@ -69,7 +71,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                 }
 
                 if ($takeFrame && $takeFrameAlways) {
-                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], $framePath);
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
                 }
 
                 $tempSubRotated = imagerotate($tempSubImage, $degrees, 0);
@@ -114,8 +116,8 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
             $heightNew = 482;
             $PositionsX = [63, 423, 785, 1146]; //X offset in Pixel
             $PositionsY = [57, 642]; //Y offset in Pixel
-            $my_collage = imagecreatefrompng($background_image);
-            list($bg_width, $bg_height) = getimagesize($background_image);
+            $my_collage = imagecreatefrompng(BACKGROUND);
+            list($bg_width, $bg_height) = getimagesize(BACKGROUND);
 
             for ($i = 0; $i < 4; $i++) {
                 ResizeCropImage($heightNew, $widthNew, $srcImagePaths[$i], $srcImagePaths[$i]);
@@ -133,7 +135,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     }
 
                     if ($takeFrame && $takeFrameAlways) {
-                        ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], $framePath);
+                        ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
                     }
 
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
@@ -153,7 +155,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
     imagedestroy($my_collage); // Destroy the created collage in memory
 
     if ($takeFrame && !$takeFrameAlways) {
-        ApplyFrame($destImagePath, $destImagePath, $framePath);
+        ApplyFrame($destImagePath, $destImagePath, FRAME);
     }
 
     // Rotate image if needed
