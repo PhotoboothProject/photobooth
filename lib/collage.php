@@ -6,8 +6,9 @@ require_once __DIR__ . '/applyFrame.php';
 define('LAYOUT', $config['collage']['layout']);
 define('FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path']);
 define('BACKGROUND', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['background']);
+define('TAKE_FRAME', $config['collage']['take_frame']);
 
-function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlways) {
+function createCollage($srcImagePaths, $destImagePath) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== 4) {
         return false;
     }
@@ -43,7 +44,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     return false;
                 }
 
-                if ($takeFrame && $takeFrameAlways) {
+                if (TAKE_FRAME === 'always') {
                     ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
                 }
 
@@ -70,7 +71,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                     return false;
                 }
 
-                if ($takeFrame && $takeFrameAlways) {
+                if (TAKE_FRAME === 'always') {
                     ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
                 }
 
@@ -134,7 +135,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
                         return false;
                     }
 
-                    if ($takeFrame && $takeFrameAlways) {
+                    if (TAKE_FRAME === 'always') {
                         ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
                     }
 
@@ -154,7 +155,7 @@ function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlw
     imagejpeg($my_collage, $destImagePath); // Transfer image to destImagePath with returns the image to core
     imagedestroy($my_collage); // Destroy the created collage in memory
 
-    if ($takeFrame && !$takeFrameAlways) {
+    if (TAKE_FRAME === 'once') {
         ApplyFrame($destImagePath, $destImagePath, FRAME);
     }
 

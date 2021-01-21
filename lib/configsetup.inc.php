@@ -453,15 +453,15 @@ $configsetup = [
         ],
         'collage_take_frame' => [
             'view' => 'advanced',
-            'type' => 'checkbox',
+            'type' => 'select',
             'name' => 'collage[take_frame]',
+            'placeholder' => $defaultConfig['collage']['take_frame'],
+            'options' => [
+                'off' => 'Off',
+                'always' => 'Always',
+                'once' => 'Once',
+            ],
             'value' => $config['collage']['take_frame'],
-        ],
-        'collage_take_frame_always' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'collage[take_frame_always]',
-            'value' => $config['collage']['take_frame_always'],
         ],
         'collage_frame_path' => [
             'view' => 'expert',

@@ -76,8 +76,8 @@ $config['collage']['background'] = '../resources/img/frames/DefaultCollageBackgr
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code
 $config['collage']['key'] = null;
-$config['collage']['take_frame'] = false;
-$config['collage']['take_frame_always'] = false;
+// possible take_frame values: 'off', 'always', 'once'
+$config['collage']['take_frame'] = 'off';
 $config['collage']['frame_path'] = '../resources/img/frames/frame.png';
 
 

@@ -21,7 +21,6 @@
   "collage:collage_key": "Kod klawisza, który wyzwala kolaż",
   "collage:collage_layout": "Wybierz układ kolażu:",
   "collage:collage_take_frame": "Zrób kolaż z ramką",
-  "collage:collage_take_frame_always": "Zastosuj ramkę do każdego zdjęcia kolażu",
   "commands": "Polecenia",
   "commands:exiftool_cmd": "Polecenie EXIFtool",
   "commands:print_cmd": "Polecenie Drukuj",
