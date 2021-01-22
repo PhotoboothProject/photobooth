@@ -93,8 +93,6 @@ $config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';
 
-$config['collage']['limit'] = 4;
-
 $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
 
@@ -116,6 +114,10 @@ if ($config['dev']['enabled']) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+}
+
+if (!isset($config['collage']['limit'])) {
+    $config['collage']['limit'] = 4;
 }
 
 if (!isset($config['background']['defaults'])) {

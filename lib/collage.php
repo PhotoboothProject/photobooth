@@ -6,9 +6,10 @@ require_once __DIR__ . '/applyFrame.php';
 define('LAYOUT', $config['collage']['layout']);
 define('FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path']);
 define('TAKE_FRAME', $config['collage']['take_frame']);
+define('COLLAGE_LIMIT', $config['collage']['limit']);
 
 function createCollage($srcImagePaths, $destImagePath) {
-    if (!is_array($srcImagePaths) || count($srcImagePaths) !== 4) {
+    if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
         return false;
     }
 
@@ -23,7 +24,7 @@ function createCollage($srcImagePaths, $destImagePath) {
         $landscape = true;
     } else {
         $landscape = false;
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
             $tempImage = imagecreatefromjpeg($srcImagePaths[$i]);
             $tempSubRotated = imagerotate($tempImage, 90, $white);
             imagejpeg($tempSubRotated, $srcImagePaths[$i]);

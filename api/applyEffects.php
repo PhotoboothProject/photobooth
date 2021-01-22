@@ -47,7 +47,7 @@ if ($_POST['style'] === 'collage') {
     $collageBasename = substr($filename_tmp, 0, -4);
     $collageSrcImagePaths = [];
 
-    for ($i = 0; $i < 4; $i++) {
+    for ($i = 0; $i < $config['collage']['limit']; $i++) {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 

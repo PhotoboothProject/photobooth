@@ -96,7 +96,7 @@ if ($_POST['style'] === 'photo') {
 
     $number = $_POST['collageNumber'] + 0;
 
-    if ($number > 3) {
+    if ($number > $config['collage']['limit']) {
         die(
             json_encode([
                 'error' => 'Collage consists only of ' . $config['collage']['limit'] . ' pictures',
