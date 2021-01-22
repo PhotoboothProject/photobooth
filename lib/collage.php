@@ -241,21 +241,19 @@ function createCollage($srcImagePaths, $destImagePath) {
                     $dX = $PositionsXB;
                     $dY = $PositionsYB;
                     $degrees = 11;
-                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[0]);
-                }
-                if ($i == 1) {
-                    ResizeCropImage($widthbig, $heightbig, $srcImagePaths[$i], $srcImagePaths[$i]);
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
+                } elseif ($i == 1) {
+                    ResizeCropImage($widthsmall, $heightsmall, $srcImagePaths[$i], $srcImagePaths[$i]);
                     // delta X
                     $dX = $PositionsX;
                     $dY = $PositionsYS;
-                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[0]);
-                }
-                if ($i == 2) {
-                    ResizeCropImage($widthbig, $heightbig, $srcImagePaths[$i], $srcImagePaths[$i]);
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
+                } elseif ($i == 2) {
+                    ResizeCropImage($widthsmall, $heightsmall, $srcImagePaths[$i], $srcImagePaths[$i]);
                     // delta X
                     $dX = $PositionsX;
                     $dY = $PositionsYSs;
-                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[0]);
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
                 }
 
                 if (!file_exists($srcImagePaths[$i])) {
@@ -271,6 +269,7 @@ function createCollage($srcImagePaths, $destImagePath) {
                 imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                 imagedestroy($tempSubRotated); // Destroy temporary images
                 imagedestroy($tempSubImage); // Destroy temporary images
+                $degrees = 0;
             }
             break;
         default:
