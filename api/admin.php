@@ -123,6 +123,12 @@ if ($data['type'] == 'config') {
         $newConfig['synctodrive']['enabled'] = false;
     }
 
+    if ($newConfig['collage']['layout'] === '1+2') {
+        $newConfig['collage']['limit'] = 3;
+    } else {
+        $newConfig['collage']['limit'] = 4;
+    }
+
     $content = "<?php\n\$config = " . var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
 
     if (file_put_contents($my_config_file, $content)) {

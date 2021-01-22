@@ -159,7 +159,7 @@
   "manual:collage:collage_enabled": "If enabled, user can take a collage. A collage consists of 4 pictures. Optional you can take a collage with or without interruption.",
   "manual:collage:collage_frame": "Enter the path of the frame which is applied to your collage after taking it.",
   "manual:collage:collage_key": "Specify the key id to use that key to take a collage (e.g. 13 is the enter key). For example use <a href=\"https://keycode.info\"  target=\"_blank\">https://keycode.info</a> to find out the key id.",
-  "manual:collage:collage_layout": "Choose between 2x2 and 2x4 pictures collage layout.",
+  "manual:collage:collage_layout": "Choose between different collage layouts.",
   "manual:collage:collage_take_frame": "If enabled, defined frame will be applied to your collage after taking it.",
   "manual:commands:exiftool_cmd": "EXIFtool command line which is executed after taking a picture if \"Preserve EXIF data\" is enabled.",
   "manual:commands:exiftool_msg": "Message returned from EXIFtool commandline.",
