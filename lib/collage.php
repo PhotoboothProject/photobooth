@@ -7,10 +7,17 @@ define('LAYOUT', $config['collage']['layout']);
 define('FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path']);
 define('TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
+define('KEEP_IMAGE', $config['picture']['keep_original'] === true ? 'keep' : 'discard');
 
 function createCollage($srcImagePaths, $destImagePath) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
         return false;
+    }
+
+    if (KEEP_IMAGE === 'keep') {
+        for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+            copy($srcImagePaths[$i], $srcImagePaths[$i] . '_orig.jpg');
+        }
     }
 
     $rotate_after_creation = false;
