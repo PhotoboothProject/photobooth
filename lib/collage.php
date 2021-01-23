@@ -5,7 +5,6 @@ require_once __DIR__ . '/applyFrame.php';
 
 define('LAYOUT', $config['collage']['layout']);
 define('FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path']);
-define('BACKGROUND', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['background']);
 define('TAKE_FRAME', $config['collage']['take_frame']);
 
 function createCollage($srcImagePaths, $destImagePath) {
@@ -108,7 +107,13 @@ function createCollage($srcImagePaths, $destImagePath) {
 
             imagescale($my_collage, $width, $height);
             break;
-        case '2x4BI':
+        case '2x4-2':
+            $width = 1775;
+            $height = 1184;
+            $my_collage = imagecreatetruecolor($width, $height);
+            $background = imagecolorallocate($my_collage, 240, 240, 240);
+            imagefill($my_collage, 0, 0, $background);
+
             if ($landscape) {
                 $rotate_after_creation = true;
             }
@@ -117,8 +122,6 @@ function createCollage($srcImagePaths, $destImagePath) {
             $heightNew = 482;
             $PositionsX = [63, 423, 785, 1146]; //X offset in Pixel
             $PositionsY = [57, 642]; //Y offset in Pixel
-            $my_collage = imagecreatefrompng(BACKGROUND);
-            list($bg_width, $bg_height) = getimagesize(BACKGROUND);
 
             for ($i = 0; $i < 4; $i++) {
                 ResizeCropImage($heightNew, $widthNew, $srcImagePaths[$i], $srcImagePaths[$i]);

@@ -433,16 +433,9 @@ $configsetup = [
             'options' => [
                 '2x2' => '2x2',
                 '2x4' => '2x4',
-                '2x4BI' => '2x4 + background image',
+                '2x4-2' => '2x4 (2)',
             ],
             'value' => $config['collage']['layout'],
-        ],
-        'collage_background' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'name' => 'collage[background]',
-            'placeholder' => $defaultConfig['collage']['background'],
-            'value' => $config['collage']['background'],
         ],
         'collage_key' => [
             'view' => 'expert',
