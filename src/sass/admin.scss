@@ -53,7 +53,7 @@ a.adminnavlistelement {
   color: $fontColor;
   padding: 16px;
   text-decoration: none;
-  font-size: var(--fontSize);
+  font-size: $fontSize;
 }
 
 a.adminnavlistelement > div {
@@ -69,7 +69,7 @@ a.adminnavlistelement.active {
 
 /* nav bar links on mouse-over */
 a.adminnavlistelement:hover:not(.active) {
-  background-color: #555;
+  background-color: $hoverPanelColor;
   color: white;
 }
 
@@ -93,6 +93,7 @@ div.setting_section {
   display: block;
   padding: 5px 5px;
   margin: 25px;
+  color: $fontColor;
   background-color: $panelColor;
 }
 
@@ -405,7 +406,7 @@ div.setting_element {
 .toggleTextON,
 .toggleTextOFF {
   position: absolute;
-  color: #000000;
+  color: $fontColor;
   left: 4.5em;
 }
 
@@ -415,7 +416,7 @@ div.setting_element {
 .selectize-control.multi .selectize-input.has-items {
   height: 3.35em;
   overflow: auto;
-  font-size: var(--fontSize);
+  font-size: $fontSize;
   padding: 0 0 0;
 }
 
@@ -425,7 +426,7 @@ div.setting_element {
 
 .selectize-control.multi .selectize-input > div {
   font-family: inherit;
-  font-size: var(--fontSize);
+  font-size: $fontSize;
   margin: 0 1px 0px 0;
   padding: 0px 2px;
 }

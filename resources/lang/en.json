@@ -125,6 +125,8 @@
   "keying:use_live_keying": "Use live keying as start page",
   "keyingerror": "Chroma keying not possible!",
   "login_invalid": "Username or password is invalid!",
+  "login_password": "Password",
+  "login_username": "Username",
   "logout": "Logout",
   "mail": "E-Mail",
   "mail:file": "File name e-mail addresses database",
