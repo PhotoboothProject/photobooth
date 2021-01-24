@@ -1208,7 +1208,7 @@ $configsetup = [
         'background_image' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'user_interface_background_image',
+            'name' => 'background_image',
             'placeholder' => $defaultConfig['background_image'],
             'value' => htmlentities($config['background_image']),
         ],
