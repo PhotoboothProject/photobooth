@@ -108,8 +108,8 @@ function createCollage($srcImagePaths, $destImagePath) {
             imagescale($my_collage, $width, $height);
             break;
         case '2x4-2':
-            $width = 1775;
-            $height = 1184;
+            $width = 1800;
+            $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, 255, 255, 255);
             imagefill($my_collage, 0, 0, $background);
@@ -121,7 +121,7 @@ function createCollage($srcImagePaths, $destImagePath) {
             $widthNew = 321;
             $heightNew = 482;
             $PositionsX = [63, 423, 785, 1146]; //X offset in Pixel
-            $PositionsY = [57, 642]; //Y offset in Pixel
+            $PositionsY = [64, 652]; //Y offset in Pixel
 
             for ($i = 0; $i < 4; $i++) {
                 ResizeCropImage($heightNew, $widthNew, $srcImagePaths[$i], $srcImagePaths[$i]);
