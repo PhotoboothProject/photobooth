@@ -264,35 +264,17 @@ function createCollage($srcImagePaths, $destImagePath) {
 
                 if ($i == 0) {
                     $degrees = 11;
-                    // create PNG to have transparent background on rotate
-                    $srcImagePathsNew = $srcImagePaths[$i] . '.png';
-                    $convertPng = imagecreatefromjpeg($srcImagePaths[$i]);
-                    imagepng($convertPng, $srcImagePathsNew);
+                    $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
+                    // Rotate image and add white background
+                    $tempRotate = imagerotate($tempSubImage, $degrees, $white);
+                    imagejpeg($tempRotate, $srcImagePaths[$i]);
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
 
-                    // add transparent background
-                    $resource = imagecreatefrompng($srcImagePathsNew);
-                    $pngTransparency = imagecolorallocatealpha($resource, 0, 0, 0, 127);
-                    imagefill($resource, 0, 0, $pngTransparency);
-
-                    // rotate the image
-                    $tempSubRotated = imagerotate($resource, $degrees, $pngTransparency);
-                    imagealphablending($tempSubRotated, true);
-                    imagesavealpha($tempSubRotated, true);
-
-                    // we need to get the new dimensions after roation
-                    imagepng($tempSubRotated, $srcImagePathsNew);
-                    list($widthNew, $heightNew) = getimagesize($srcImagePathsNew);
-
-                    // copy image to background
-                    imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew);
-
-                    // Destroy temporary images
-                    imagedestroy($tempSubRotated);
-                    imagedestroy($resource);
-                    imagedestroy($convertPng);
-
-                    // delete rotated png
-                    unlink($srcImagePathsNew);
+                    $tempSubRotated = imagecreatefromjpeg($srcImagePaths[$i]);
+                    imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
+                    imagedestroy($tempRotate); // Destroy temporary images
+                    imagedestroy($tempSubRotated); // Destroy temporary images
+                    imagedestroy($tempSubImage); // Destroy temporary images
                 } else {
                     $degrees = 0;
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
