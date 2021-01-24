@@ -268,21 +268,17 @@ function createCollage($srcImagePaths, $destImagePath) {
                     // Rotate image and add white background
                     $tempRotate = imagerotate($tempSubImage, $degrees, $white);
                     imagejpeg($tempRotate, $srcImagePaths[$i]);
+                    // get new width and height after rotation
                     list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
-
-                    $tempSubRotated = imagecreatefromjpeg($srcImagePaths[$i]);
-                    imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
-                    imagedestroy($tempRotate); // Destroy temporary images
-                    imagedestroy($tempSubRotated); // Destroy temporary images
-                    imagedestroy($tempSubImage); // Destroy temporary images
-                } else {
-                    $degrees = 0;
-                    $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-                    $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
-                    imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
-                    imagedestroy($tempSubRotated); // Destroy temporary images
-                    imagedestroy($tempSubImage); // Destroy temporary images
+                    imagedestroy($tempRotate);
+                    imagedestroy($tempSubImage);
                 }
+                $degrees = 0;
+                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
+                imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
+                imagedestroy($tempSubRotated); // Destroy temporary images
+                imagedestroy($tempSubImage); // Destroy temporary images
             }
             break;
         default:
