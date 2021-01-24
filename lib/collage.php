@@ -58,7 +58,7 @@ function createCollage($srcImagePaths, $destImagePath) {
             }
             $degrees = 90;
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 240, 240, 240);
+            $background = imagecolorallocate($my_collage, 255, 255, 255);
             imagefill($my_collage, 0, 0, $background);
 
             $images_rotated = [];
@@ -111,7 +111,7 @@ function createCollage($srcImagePaths, $destImagePath) {
             $width = 1775;
             $height = 1184;
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 240, 240, 240);
+            $background = imagecolorallocate($my_collage, 255, 255, 255);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape) {
