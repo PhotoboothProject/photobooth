@@ -674,7 +674,7 @@ $configsetup = [
         ],
         'ipCamURL' => [
             'type' => 'input',
-            'name' => 'preview_ipCamURL',
+            'name' => 'ipCamURL',
             'placeholder' => 'url(http://localhost:8081)',
             'value' => htmlentities($config['ipCamURL']),
         ],
@@ -815,7 +815,7 @@ $configsetup = [
         'print_key' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'print_print_key',
+            'name' => 'print_key',
             'placeholder' => '',
             'value' => $config['print_key'],
         ],
