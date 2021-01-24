@@ -14,6 +14,10 @@ function createCollage($srcImagePaths, $destImagePath) {
 
     $rotate_after_creation = false;
 
+    // colors for background while rotating jpeg images
+    $white = 16777215;
+    $black = 0;
+
     list($width, $height) = getimagesize($srcImagePaths[0]);
     if ($width > $height) {
         $landscape = true;
@@ -21,7 +25,7 @@ function createCollage($srcImagePaths, $destImagePath) {
         $landscape = false;
         for ($i = 0; $i < 4; $i++) {
             $tempImage = imagecreatefromjpeg($srcImagePaths[$i]);
-            $tempSubRotated = imagerotate($tempImage, 90, 0);
+            $tempSubRotated = imagerotate($tempImage, 90, $white);
             imagejpeg($tempSubRotated, $srcImagePaths[$i]);
             imagedestroy($tempImage);
         }
@@ -74,7 +78,7 @@ function createCollage($srcImagePaths, $destImagePath) {
                     ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
                 }
 
-                $tempSubRotated = imagerotate($tempSubImage, $degrees, 0);
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white);
                 $images_rotated[] = resizeImage($tempSubRotated, $height / 3.3, $width / 3.5);
             }
 
@@ -143,7 +147,7 @@ function createCollage($srcImagePaths, $destImagePath) {
                     }
 
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-                    $tempSubRotated = imagerotate($tempSubImage, $degrees, 0); // Rotate image
+                    $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
                     imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                     imagedestroy($tempSubRotated); // Destroy temporary images
                     imagedestroy($tempSubImage); // Destroy temporary images
@@ -165,7 +169,7 @@ function createCollage($srcImagePaths, $destImagePath) {
     // Rotate image if needed
     if ($rotate_after_creation) {
         $tempRotatedImage = imagecreatefromjpeg($destImagePath);
-        $resultRotated = imagerotate($tempRotatedImage, -90, 0);
+        $resultRotated = imagerotate($tempRotatedImage, -90, $white);
         imagejpeg($resultRotated, $destImagePath);
         imagedestroy($tempRotatedImage);
     }
