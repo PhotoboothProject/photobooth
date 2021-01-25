@@ -52,27 +52,35 @@ $cmds = [
 
 $mailTemplates = [
     'de' => [
-        'mail_subject' => 'Hier ist dein Bild',
-        'mail_text' => 'Hey, dein Bild ist angehangen.',
+        'mail' => [
+            'subject' => 'Hier ist dein Bild',
+            'text' => 'Hey, dein Bild ist angehangen.',
+        ],
     ],
     'en' => [
-        'mail_subject' => 'Here is your picture',
-        'mail_text' => 'Hey, your picture is attached.',
+        'mail' => [
+            'subject' => 'Here is your picture',
+            'text' => 'Hey, your picture is attached.',
+        ],
     ],
     'es' => [
-        'mail_subject' => 'Aquí está tu foto',
-        'mail_text' => 'Hola, tu foto está adjunta.',
+        'mail' => [
+            'subject' => 'Aquí está tu foto',
+            'text' => 'Hola, tu foto está adjunta.',
+        ],
     ],
     'fr' => [
-        'mail_subject' => 'Voici votre photo',
-        'mail_text' => 'Hé, ta photo est attachée.',
+        'mail' => [
+            'subject' => 'Voici votre photo',
+            'text' => 'Hé, ta photo est attachée.',
+        ],
     ],
 ];
 
 require_once $default_config_file;
 
-$config['mail_subject'] = $mailTemplates[$config['language']]['mail_subject'];
-$config['mail_text'] = $mailTemplates[$config['language']]['mail_text'];
+$config['mail']['subject'] = $mailTemplates[$config['language']]['mail']['subject'];
+$config['mail']['text'] = $mailTemplates[$config['language']]['mail']['text'];
 $config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
 $config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
 $config['print']['cmd'] = $cmds[$os]['print']['cmd'];

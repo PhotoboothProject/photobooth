@@ -169,18 +169,18 @@ $config['textonprint']['linespace'] = '100';
 // Please read https://github.com/andi34/photobooth/wiki/FAQ#ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem
 //
 // If send_all_later is enabled, a checkbox to save the current mail address for later in {mail_file}.txt is visible
-$config['use_mail'] = false;
-$config['send_all_later'] = false;
-$config['mail_subject'] = null; 	// if empty, default translation is used
-$config['mail_text'] = null;		// if empty, default translation is used
-$config['mail_host'] = 'smtp.example.com';
-$config['mail_username'] = 'photobooth@example.com';
-$config['mail_password'] = 'yourpassword';
-$config['mail_fromAddress'] = 'photobooth@example.com';
-$config['mail_fromName'] = 'Photobooth';
-$config['mail_file'] = 'mail-adresses';
-$config['mail_secure'] = 'tls';
-$config['mail_port'] = '587';
+$config['mail']['enabled'] = false;
+$config['mail']['send_all_later'] = false;
+$config['mail']['subject'] = null; 	// if empty, default translation is used
+$config['mail']['text'] = null;		// if empty, default translation is used
+$config['mail']['host'] = 'smtp.example.com';
+$config['mail']['username'] = 'photobooth@example.com';
+$config['mail']['password'] = 'yourpassword';
+$config['mail']['fromAddress'] = 'photobooth@example.com';
+$config['mail']['fromName'] = 'Photobooth';
+$config['mail']['file'] = 'mail-adresses';
+$config['mail']['secure'] = 'tls';
+$config['mail']['port'] = '587';
 
 
 // S T A N D A L O N E   S L I D E S H O W

@@ -33,14 +33,14 @@ $mail = new PHPMailer();
 $mail->setLanguage($config['language'], '../vendor/PHPMailer/language/');
 
 $mail->isSMTP();
-$mail->Host = $config['mail_host'];
+$mail->Host = $config['mail']['host'];
 $mail->SMTPAuth = true;
 $mail->SMTPDebug = 0;
-$mail->Username = $config['mail_username'];
-$mail->Password = $config['mail_password'];
-$mail->SMTPSecure = $config['mail_secure'];
-$mail->Port = $config['mail_port'];
-$mail->setFrom($config['mail_fromAddress'], $config['mail_fromName']);
+$mail->Username = $config['mail']['username'];
+$mail->Password = $config['mail']['password'];
+$mail->SMTPSecure = $config['mail']['secure'];
+$mail->Port = $config['mail']['port'];
+$mail->setFrom($config['mail']['fromAddress'], $config['mail']['fromName']);
 
 if (!$mail->addAddress($_POST['sendTo'])) {
     die(
@@ -52,10 +52,10 @@ if (!$mail->addAddress($_POST['sendTo'])) {
 }
 
 // Email subject
-$mail->Subject = $config['mail_subject'];
+$mail->Subject = $config['mail']['subject'];
 
 // Email body content
-$mailContent = $config['mail_text'];
+$mailContent = $config['mail']['text'];
 
 // for send an attachment
 $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;

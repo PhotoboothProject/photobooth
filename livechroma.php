@@ -120,7 +120,7 @@ if ($config['index_style'] === 'modern') {
 			<input class="mail-form-input" size="35" type="email" name="sendTo">
 			<input id="mail-form-image" type="hidden" name="image" value="">
 
-			<?php if ($config['send_all_later']): ?>
+			<?php if ($config['mail']['send_all_later']): ?>
 				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
 				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
 			<?php endif; ?>

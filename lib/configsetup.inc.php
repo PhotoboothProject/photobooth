@@ -943,87 +943,87 @@ $configsetup = [
     ],
     'mail' => [
         'view' => 'basic',
-        'use_mail' => [
+        'mail_enabled' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'use_mail',
-            'value' => $config['use_mail'],
+            'name' => 'mail[enabled]',
+            'value' => $config['mail']['enabled'],
         ],
-        'send_all_later' => [
+        'mail_send_all_later' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'send_all_later',
-            'value' => $config['send_all_later'],
+            'name' => 'mail[send_all_later]',
+            'value' => $config['mail']['send_all_later'],
         ],
-        'subject' => [
+        'mail_subject' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_subject'],
-            'name' => 'mail_subject',
-            'value' => htmlentities($config['mail_subject']),
+            'placeholder' => $defaultConfig['mail']['subject'],
+            'name' => 'mail[subject]',
+            'value' => htmlentities($config['mail']['subject']),
         ],
-        'text' => [
+        'mail_text' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_text'],
-            'name' => 'mail_text',
-            'value' => htmlentities($config['mail_text']),
+            'placeholder' => $defaultConfig['mail']['text'],
+            'name' => 'mail[text]',
+            'value' => htmlentities($config['mail']['text']),
         ],
-        'host' => [
+        'mail_host' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_host'],
-            'name' => 'mail_host',
-            'value' => $config['mail_host'],
+            'placeholder' => $defaultConfig['mail']['host'],
+            'name' => 'mail[host]',
+            'value' => $config['mail']['host'],
         ],
-        'username' => [
+        'mail_username' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_username'],
-            'name' => 'mail_username',
-            'value' => $config['mail_username'],
+            'placeholder' => $defaultConfig['mail']['username'],
+            'name' => 'mail[username]',
+            'value' => $config['mail']['username'],
         ],
-        'password' => [
+        'mail_password' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_password'],
-            'name' => 'mail_password',
-            'value' => htmlentities($config['mail_password']),
+            'placeholder' => $defaultConfig['mail']['password'],
+            'name' => 'mail[password]',
+            'value' => htmlentities($config['mail']['password']),
         ],
-        'fromAddress' => [
+        'mail_fromAddress' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_fromAddress'],
-            'name' => 'mail_fromAddress',
-            'value' => $config['mail_fromAddress'],
+            'placeholder' => $defaultConfig['mail']['fromAddress'],
+            'name' => 'mail[fromAddress]',
+            'value' => $config['mail']['fromAddress'],
         ],
-        'fromName' => [
+        'mail_fromName' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_fromName'],
-            'name' => 'mail_fromName',
-            'value' => $config['mail_fromName'],
+            'placeholder' => $defaultConfig['mail']['fromName'],
+            'name' => 'mail[fromName]',
+            'value' => $config['mail']['fromName'],
         ],
-        'file' => [
+        'mail_file' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_file'],
-            'name' => 'mail_file',
-            'value' => $config['mail_file'],
+            'placeholder' => $defaultConfig['mail']['file'],
+            'name' => 'mail[file]',
+            'value' => $config['mail']['file'],
         ],
-        'secure' => [
+        'mail_secure' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_secure'],
-            'name' => 'mail_secure',
-            'value' => $config['mail_secure'],
+            'placeholder' => $defaultConfig['mail']['secure'],
+            'name' => 'mail[secure]',
+            'value' => $config['mail']['secure'],
         ],
-        'port' => [
+        'mail_port' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail_port'],
-            'name' => 'mail_port',
-            'value' => $config['mail_port'],
+            'placeholder' => $defaultConfig['mail']['port'],
+            'name' => 'mail[port]',
+            'value' => $config['mail']['port'],
         ],
     ],
     'slideshow' => [

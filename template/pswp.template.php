@@ -29,7 +29,7 @@
                 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
 
                 <!-- custom buttons: -->
-                <?php if ($config['use_mail']): ?>
+                <?php if ($config['mail']['enabled']): ?>
                 <button type="button" class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
                 <?php endif; ?>
 
