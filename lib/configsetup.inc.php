@@ -399,7 +399,7 @@ $configsetup = [
             'name' => 'use_collage',
             'value' => $config['use_collage'],
         ],
-        'collage_cntdwn_time' => [
+        'cntdwn_time' => [
             'view' => 'basic',
             'type' => 'range',
             'name' => 'collage_cntdwn_time',
@@ -416,7 +416,7 @@ $configsetup = [
             'name' => 'continuous_collage',
             'value' => $config['continuous_collage'],
         ],
-        'collage_layout' => [
+        'layout' => [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'collage_layout',
@@ -428,14 +428,14 @@ $configsetup = [
             ],
             'value' => $config['collage_layout'],
         ],
-        'collage_background' => [
+        'background' => [
             'view' => 'expert',
             'type' => 'input',
             'name' => 'collage_background',
             'placeholder' => $defaultConfig['collage_background'],
             'value' => $config['collage_background'],
         ],
-        'collage_key' => [
+        'key' => [
             'view' => 'expert',
             'type' => 'input',
             'name' => 'collage_key',
@@ -461,7 +461,7 @@ $configsetup = [
             'name' => 'take_collage_frame_path',
             'value' => htmlentities($config['take_collage_frame_path']),
         ],
-        'collage_limit' => [
+        'limit' => [
             'type' => 'hidden',
             'name' => 'collage_limit',
             'value' => $config['collage_limit'],
@@ -525,7 +525,7 @@ $configsetup = [
             'name' => 'gallery[date_format]',
             'value' => $config['gallery']['date_format'],
         ],
-        'gallery_db_check_enabled' => [
+        'db_check_enabled' => [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'gallery_db_check_enabled',
@@ -550,7 +550,7 @@ $configsetup = [
             'name' => 'scrollbar',
             'value' => $config['scrollbar'],
         ],
-        'gallery_bottom_bar' => [
+        'bottom_bar' => [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'gallery_bottom_bar',
@@ -643,7 +643,7 @@ $configsetup = [
             ],
             'value' => $config['preview_mode'],
         ],
-        'preview_gphoto_bsm' => [
+        'gphoto_bsm' => [
             'type' => 'checkbox',
             'name' => 'preview_gphoto_bsm',
             'value' => $config['preview_gphoto_bsm'],
@@ -763,31 +763,31 @@ $configsetup = [
         'cups_button' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'print_cups_button',
+            'name' => 'cups_button',
             'value' => $config['cups_button'],
         ],
         'use_print_result' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'print_use_print_result',
+            'name' => 'use_print_result',
             'value' => $config['use_print_result'],
         ],
         'use_print_gallery' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'print_use_print_gallery',
+            'name' => 'use_print_gallery',
             'value' => $config['use_print_gallery'],
         ],
         'use_print_chromakeying' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'print_use_print_chromakeying',
+            'name' => 'use_print_chromakeying',
             'value' => $config['use_print_chromakeying'],
         ],
         'auto_print' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'print_auto_print',
+            'name' => 'auto_print',
             'value' => $config['auto_print'],
         ],
         'auto_print_delay' => [
@@ -812,20 +812,20 @@ $configsetup = [
             'range_step' => 250,
             'unit' => 'milliseconds',
         ],
-        'print_key' => [
+        'key' => [
             'view' => 'expert',
             'type' => 'input',
             'name' => 'print_key',
             'placeholder' => '',
             'value' => $config['print_key'],
         ],
-        'print_qrcode' => [
+        'qrcode' => [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'print_qrcode',
             'value' => $config['print_qrcode'],
         ],
-        'print_frame' => [
+        'frame' => [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'print_frame',
@@ -862,7 +862,7 @@ $configsetup = [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'is_textonprint',
-            'value' => htmlentities($config['is_textonprint']),
+            'value' => $config['is_textonprint'],
         ],
         'line1' => [
             'view' => 'advanced',
@@ -1049,7 +1049,7 @@ $configsetup = [
     'remotebuzzer' => [
         'view' => 'advanced',
         'platform' => 'linux',
-        'remotebuzzer_enabled' => [
+        'enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'remotebuzzer_enabled',
@@ -1091,7 +1091,7 @@ $configsetup = [
     'synctodrive' => [
         'platform' => 'linux',
         'view' => 'advanced',
-        'synctodrive_enabled' => [
+        'enabled' => [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'synctodrive_enabled',
