@@ -153,16 +153,16 @@ $config['print_frame_path'] = '../resources/img/frames/frame.png';
 $config['crop_onprint'] = false;
 $config['crop_width'] = '1000';
 $config['crop_height'] = '500';
-$config['is_textonprint'] = false;
+$config['textonprint']['enabled'] = false;
 $config['textonprint']['line1'] = 'line 1';
 $config['textonprint']['line2'] = 'line 2';
 $config['textonprint']['line3'] = 'line 3';
-$config['locationx'] = '2250';
-$config['locationy'] = '1050';
-$config['rotation'] = '40';
-$config['font_path'] = '../resources/fonts/GreatVibes-Regular.ttf';
-$config['fontsize'] = '100';
-$config['linespace'] = '100';
+$config['textonprint']['locationx'] = '2250';
+$config['textonprint']['locationy'] = '1050';
+$config['textonprint']['rotation'] = '40';
+$config['textonprint']['font_path'] = '../resources/fonts/GreatVibes-Regular.ttf';
+$config['textonprint']['font_size'] = '100';
+$config['textonprint']['linespace'] = '100';
 
 
 // E -  M A I L

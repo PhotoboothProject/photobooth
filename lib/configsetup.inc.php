@@ -867,78 +867,78 @@ $configsetup = [
             'placeholder' => $defaultConfig['crop_height'],
             'value' => $config['crop_height'],
         ],
-        'is_textonprint' => [
+        'textonprint_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'is_textonprint',
-            'value' => $config['is_textonprint'],
+            'name' => 'textonprint[enabled]',
+            'value' => $config['textonprint']['enabled'],
         ],
-        'line1' => [
+        'textonprint_line1' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonprint']['line1'],
             'name' => 'textonprint[line1]',
             'value' => htmlentities($config['textonprint']['line1']),
         ],
-        'line2' => [
+        'textonprint_line2' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonprint']['line2'],
             'name' => 'textonprint[line2]',
             'value' => htmlentities($config['textonprint']['line2']),
         ],
-        'line3' => [
+        'textonprint_line3' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonprint']['line3'],
             'name' => 'textonprint[line3]',
             'value' => htmlentities($config['textonprint']['line3']),
         ],
-        'locationx' => [
+        'textonprint_locationx' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['locationx'],
-            'name' => 'locationx',
-            'value' => $config['locationx'],
+            'placeholder' => $defaultConfig['textonprint']['locationx'],
+            'name' => 'textonprint[locationx]',
+            'value' => $config['textonprint']['locationx'],
         ],
-        'locationy' => [
+        'textonprint_locationy' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['locationy'],
-            'name' => 'locationy',
-            'value' => $config['locationy'],
+            'placeholder' => $defaultConfig['textonprint']['locationy'],
+            'name' => 'textonprint[locationy]',
+            'value' => $config['textonprint']['locationy'],
         ],
-        'rotation' => [
+        'textonprint_rotation' => [
             'view' => 'expert',
             'type' => 'range',
-            'placeholder' => $defaultConfig['rotation'],
-            'name' => 'rotation',
-            'value' => $config['rotation'],
+            'placeholder' => $defaultConfig['textonprint']['rotation'],
+            'name' => 'textonprint[rotation]',
+            'value' => $config['textonprint']['rotation'],
             'range_min' => -180,
             'range_max' => 180,
             'range_step' => 5,
             'unit' => 'degrees',
         ],
-        'font_path' => [
+        'textonprint_font_path' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['font_path'],
-            'name' => 'font_path',
-            'value' => htmlentities($config['font_path']),
+            'placeholder' => $defaultConfig['textonprint']['font_path'],
+            'name' => 'textonprint[font_path]',
+            'value' => htmlentities($config['textonprint']['font_path']),
         ],
-        'fontsize' => [
+        'textonprint_font_size' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => $defaultConfig['fontsize'],
-            'name' => 'fontsize',
-            'value' => $config['fontsize'],
+            'placeholder' => $defaultConfig['textonprint']['font_size'],
+            'name' => 'textonprint[font_size]',
+            'value' => $config['textonprint']['font_size'],
         ],
-        'linespace' => [
+        'textonprint_linespace' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['linespace'],
-            'name' => 'linespace',
-            'value' => $config['linespace'],
+            'placeholder' => $defaultConfig['textonprint']['linespace'],
+            'name' => 'textonprint[linespace]',
+            'value' => $config['textonprint']['linespace'],
         ],
     ],
     'mail' => [

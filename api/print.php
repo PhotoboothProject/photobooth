@@ -47,12 +47,12 @@ if (!isset($config['webserver_ip'])) {
 }
 
 // text on print variables
-$fontpath = __DIR__ . DIRECTORY_SEPARATOR . $config['font_path'];
-$fontsize = $config['fontsize'];
-$fontlocx = $config['locationx'];
-$fontlocy = $config['locationy'];
-$linespacing = $config['linespace'];
-$fontrot = $config['rotation'];
+$fontpath = __DIR__ . DIRECTORY_SEPARATOR . $config['textonprint']['font_path'];
+$fontsize = $config['textonprint']['font_size'];
+$fontlocx = $config['textonprint']['locationx'];
+$fontlocy = $config['textonprint']['locationy'];
+$linespacing = $config['textonprint']['linespace'];
+$fontrot = $config['textonprint']['rotation'];
 $line1text = $config['textonprint']['line1'];
 $line2text = $config['textonprint']['line2'];
 $line3text = $config['textonprint']['line3'];
@@ -112,7 +112,7 @@ if (!file_exists($filename_print)) {
         imagecopyresized($print, $code, $width, 0, 0, 0, $height / 2, $height / 2, imagesx($code), imagesy($code));
 
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
-        if ($config['is_textonprint'] == true) {
+        if ($config['textonprint']['enabled'] == true) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
@@ -133,7 +133,7 @@ if (!file_exists($filename_print)) {
             imagecopy($print, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
         }
         // text on image - start  - IMPORTANT  ensure you download Google Great Vibes font
-        if ($config['is_textonprint'] == true) {
+        if ($config['textonprint']['enabled'] == true) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
