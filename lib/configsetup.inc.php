@@ -1475,23 +1475,23 @@ $configsetup = [
     ],
     'reset' => [
         'view' => 'basic',
-        'remove_images' => [
+        'reset_remove_images' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'reset_remove_images',
-            'value' => $config['reset_remove_images'],
+            'name' => 'reset[remove_images]',
+            'value' => $config['reset']['remove_images'],
         ],
-        'remove_mailtxt' => [
+        'reset_remove_mailtxt' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'reset_remove_mailtxt',
-            'value' => $config['reset_remove_mailtxt'],
+            'name' => 'reset[remove_mailtxt]',
+            'value' => $config['reset']['remove_mailtxt'],
         ],
-        'remove_config' => [
+        'reset_remove_config' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'reset_remove_config',
-            'value' => $config['reset_remove_config'],
+            'name' => 'reset[remove_config]',
+            'value' => $config['reset']['remove_config'],
         ],
         'reset_button' => [
             'view' => 'basic',

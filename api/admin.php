@@ -12,7 +12,7 @@ if (!isset($data['type'])) {
 }
 
 if ($data['type'] == 'reset') {
-    if ($config['reset_remove_images']) {
+    if ($config['reset']['remove_images']) {
         // empty folders
         foreach ($config['foldersAbs'] as $folder) {
             if (is_dir($folder)) {
@@ -27,13 +27,13 @@ if ($data['type'] == 'reset') {
         }
     }
 
-    if ($config['reset_remove_mailtxt']) {
+    if ($config['reset']['remove_mailtxt']) {
         if (is_file(MAIL_FILE)) {
             unlink(MAIL_FILE); // delete file
         }
     }
 
-    if ($config['reset_remove_config']) {
+    if ($config['reset']['remove_config']) {
         // delete personal config
         if (is_file('../config/my.config.inc.php')) {
             unlink('../config/my.config.inc.php');

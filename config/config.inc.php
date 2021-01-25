@@ -266,6 +266,6 @@ $config['folders']['archives'] = 'archives';
 
 
 // R E S E T
-$config['reset_remove_images'] = true;
-$config['reset_remove_mailtxt'] = false;
-$config['reset_remove_config'] = false;
+$config['reset']['remove_images'] = true;
+$config['reset']['remove_mailtxt'] = false;
+$config['reset']['remove_config'] = false;
