@@ -18,7 +18,7 @@
 // Size of the DB - is used to determine changes
 let lastDBSize = -1;
 // Interval, the page is checked (/ms)
-const interval = 1000 * config.gallery_db_check_time;
+const interval = 1000 * config.gallery.db_check_time;
 // URL to request for changes
 const ajaxurl = 'gallery.php?status';
 

@@ -6,7 +6,7 @@ require_once('lib/db.php');
 require_once('lib/filter.php');
 
 $images = getImagesFromDB();
-$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
+$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 
 if ($config['index_style'] === 'modern') {
 	$btnClass1 = 'round-btn';
@@ -49,7 +49,7 @@ endif;
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/<?php echo $config['index_style']; ?>_style.css" />
-	<?php if ($config['gallery_bottom_bar']): ?>
+	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
 	<?php if ($config['rounded_corners'] && $config['index_style'] === 'classic'): ?>
@@ -102,7 +102,7 @@ endif;
 		<div class="stages" id="result">
 			<a href="#" class="<?php echo $btnClass1; ?> homebtn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
 			<div class="resultInner hidden">
-				<?php if ($config['show_gallery']): ?>
+				<?php if ($config['gallery']['enabled']): ?>
 				<a href="#" class="<?php echo $btnClass1; ?> gallery-button"><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
 				<?php endif; ?>
 
@@ -143,7 +143,7 @@ endif;
 			<?php endif; ?>
 		</div>
 
-		<?php if ($config['show_gallery']): ?>
+		<?php if ($config['gallery']['enabled']): ?>
 		<?php include('template/gallery.template.php'); ?>
 		<?php endif; ?>
 	</div>

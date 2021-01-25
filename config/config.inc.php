@@ -82,32 +82,32 @@ $config['collage']['frame_path'] = '../resources/img/frames/frame.png';
 
 
 // G A L L E R Y
-$config['show_gallery'] = true;
-$config['newest_first'] = true;
-$config['use_slideshow'] = true;
-$config['gallery_pictureTime'] = '3000';
-$config['pswp_animateTransitions'] = false;
-$config['pswp_fullscreenEl'] = false;
-$config['pswp_counterEl'] = true;
-$config['pswp_history'] = true;
+$config['gallery']['enabled'] = true;
+$config['gallery']['newest_first'] = true;
+$config['gallery']['use_slideshow'] = true;
+$config['gallery']['pictureTime'] = '3000';
+$config['pswp']['animateTransitions'] = false;
+$config['pswp']['fullscreenEl'] = false;
+$config['pswp']['counterEl'] = true;
+$config['pswp']['history'] = true;
 // show_date only works if file_naming = 'dateformatted' in general section
-$config['show_date'] = true;
+$config['gallery']['show_date'] = true;
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
-$config['gallery_db_check_enabled'] = true;
-$config['gallery_db_check_time'] = '10';
-$config['allow_delete_from_gallery'] = true;
-$config['scrollbar'] = false;
-$config['gallery_bottom_bar'] = true;
-$config['pswp_clickToCloseNonZoomable'] = false;
-$config['pswp_closeOnScroll'] = false;
-$config['pswp_closeOnOutsideClick'] = false;
-$config['pswp_preventSwiping'] = false;
-$config['pswp_pinchToClose'] = true;
-$config['pswp_closeOnVerticalDrag'] = true;
-$config['pswp_tapToToggleControls'] = true;
-$config['pswp_zoomEl'] = false;
-$config['pswp_loop'] = true;
-$config['pswp_bgOpacity'] = 1;
+$config['gallery']['db_check_enabled'] = true;
+$config['gallery']['db_check_time'] = '10';
+$config['gallery']['allow_delete'] = true;
+$config['gallery']['scrollbar'] = false;
+$config['gallery']['bottom_bar'] = true;
+$config['pswp']['clickToCloseNonZoomable'] = false;
+$config['pswp']['closeOnScroll'] = false;
+$config['pswp']['closeOnOutsideClick'] = false;
+$config['pswp']['preventSwiping'] = false;
+$config['pswp']['pinchToClose'] = true;
+$config['pswp']['closeOnVerticalDrag'] = true;
+$config['pswp']['tapToToggleControls'] = true;
+$config['pswp']['zoomEl'] = false;
+$config['pswp']['loop'] = true;
+$config['pswp']['bgOpacity'] = 1;
 
 
 // P R E V I E W

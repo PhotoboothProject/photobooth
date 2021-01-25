@@ -50,11 +50,11 @@
                 <button type="button" class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['use_slideshow']): ?>
+                <?php if ($config['gallery']['use_slideshow']): ?>
                 <button type="button" class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
                 <?php endif; ?>
 
-                <?php if ($config['allow_delete_from_gallery']): ?>
+                <?php if ($config['gallery']['allow_delete']): ?>
                 <button type="button" class="pswp__button pswp__button--delete" title="Delete"><i class="fa fa-trash"></i></button>
                 <?php endif; ?>
 

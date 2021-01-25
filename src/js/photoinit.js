@@ -7,7 +7,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         ssOnce = false,
         isPrinting = false;
 
-    const ssDelay = config.gallery_pictureTime,
+    const ssDelay = config.gallery.pictureTime,
         ssButtonClass = '.pswp__button--playpause';
 
     const parseThumbnailElements = function (container) {
@@ -74,21 +74,21 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             },
 
             focus: true,
-            clickToCloseNonZoomable: config.pswp_clickToCloseNonZoomablefalse,
-            closeOnScroll: config.pswp_closeOnScroll,
-            closeOnOutsideClick: config.pswp_closeOnOutsideClick,
-            preventSwiping: config.pswp_preventSwiping,
-            pinchToClose: config.pswp_pinchToClose,
-            closeOnVerticalDrag: config.pswp_closeOnVerticalDrag,
-            tapToToggleControls: config.pswp_tapToToggleControls,
-            animateTransitions: config.pswp_animateTransitions,
+            clickToCloseNonZoomable: config.pswp.clickToCloseNonZoomablefalse,
+            closeOnScroll: config.pswp.closeOnScroll,
+            closeOnOutsideClick: config.pswp.closeOnOutsideClick,
+            preventSwiping: config.pswp.preventSwiping,
+            pinchToClose: config.pswp.pinchToClose,
+            closeOnVerticalDrag: config.pswp.closeOnVerticalDrag,
+            tapToToggleControls: config.pswp.tapToToggleControls,
+            animateTransitions: config.pswp.animateTransitions,
             shareEl: false,
-            zoomEl: config.pswp_zoomEl,
-            fullscreenEl: config.pswp_fullscreenEl,
-            counterEl: config.pswp_counterEl,
-            history: config.pswp_history,
-            loop: config.pswp_loop,
-            bgOpacity: config.pswp_bgOpacity
+            zoomEl: config.pswp.zoomEl,
+            fullscreenEl: config.pswp.fullscreenEl,
+            counterEl: config.pswp.counterEl,
+            history: config.pswp.history,
+            loop: config.pswp.loop,
+            bgOpacity: config.pswp.bgOpacity
         };
 
         // Pass data to PhotoSwipe and initialize it

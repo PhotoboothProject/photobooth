@@ -1,6 +1,6 @@
 		<!-- Start Page -->
 		<div class="stages" id="start">
-			<?php if ($config['show_gallery']): ?>
+			<?php if ($config['gallery']['enabled']): ?>
 			<a class="gallery-button btn" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 

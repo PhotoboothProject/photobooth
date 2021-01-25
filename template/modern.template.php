@@ -56,7 +56,7 @@
 								<?php endif; ?>
 							<?php endif; ?>
 
-							<?php if ($config['show_gallery']): ?>
+							<?php if ($config['gallery']['enabled']): ?>
 							<a href="#" class="round-btn gallery-button"><i class="fa fa-picture-o"></i> <span data-i18n="gallery"></span></a>
 							<?php endif; ?>
 							<?php if($config['toggle_fs_button']): ?>

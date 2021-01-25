@@ -3,7 +3,7 @@ require_once('lib/config.php');
 require_once('lib/db.php');
 
 $images = getImagesFromDB();
-$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
+$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 
 if ($config['index_style'] === 'modern') {
 	$btnClass1 = 'round-btn';
@@ -38,7 +38,7 @@ if ($config['index_style'] === 'modern') {
 		<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 		<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 		<link rel="stylesheet" href="resources/css/<?php echo $config['index_style']; ?>_live_chromakeying.css" />
-		<?php if ($config['gallery_bottom_bar']): ?>
+		<?php if ($config['gallery']['bottom_bar']): ?>
 		<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 		<?php endif; ?>
 		<?php if ($config['rounded_corners']): ?>
@@ -52,7 +52,7 @@ if ($config['index_style'] === 'modern') {
 			<a href="index.php" class="<?php echo $btnClass1; ?> closebtn"><i class="fa fa-times"></i></a>
 			<?php endif; ?>
 
-			<?php if ($config['show_gallery']): ?>
+			<?php if ($config['gallery']['enabled']): ?>
 			<a href="#" class="<?php echo $btnClass1 ?> gallerybtn"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 

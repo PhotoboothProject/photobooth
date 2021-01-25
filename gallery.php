@@ -13,7 +13,7 @@ if (isset($_GET['status'])){
 }
 
 $images = getImagesFromDB();
-$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
+$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,7 +42,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/classic_style.css" />
-	<?php if ($config['gallery_bottom_bar']): ?>
+	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
 	<?php if ($config['rounded_corners']): ?>
@@ -95,7 +95,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
 	<script type="text/javascript" src="resources/js/gallery.js"></script>
-	<?php if ($config['gallery_db_check_enabled']): ?>
+	<?php if ($config['gallery']['db_check_enabled']): ?>
 	<script type="text/javascript" src="resources/js/gallery_updatecheck.js"></script>
 	<?php endif; ?>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>

@@ -51,7 +51,7 @@ $imagelist = array_reverse($images);
 		<?php
 
 		$date = 'Photobooth Slideshow';
-		if ($config['file_naming'] === 'dateformatted') {
+		if ($config['file_naming'] === 'dateformatted' && $config['gallery']['show_date']) {
 			if ($config['db_file'] != 'db') {
 				$db = strlen($config['db_file']);
 				$name = substr($image, ++$db);

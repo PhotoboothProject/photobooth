@@ -731,7 +731,7 @@ const photoBooth = (function () {
             linkElement.attr('data-med', config.folders.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);
 
-            if (config.newest_first) {
+            if (config.gallery.newest_first) {
                 linkElement.prependTo($('#galimages'));
             } else {
                 linkElement.appendTo($('#galimages'));
@@ -743,7 +743,7 @@ const photoBooth = (function () {
 
     // Open Gallery Overview
     api.openGallery = function () {
-        if (config.scrollbar) {
+        if (config.gallery.scrollbar) {
             gallery.addClass('scrollbar');
         }
 
