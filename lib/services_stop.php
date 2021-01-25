@@ -27,6 +27,6 @@ function killProcessIfActive($pName, $pidFile, $logfileName, $killSig) {
 }
 
 killProcessIfActive('remotebuzzer_server.js', '../' . $config['folders']['tmp'] . '/remotebuzzer_server.pid', $config['remotebuzzer_logfile'], 9);
-killProcessIfActive('sync-to-drive.js', '../' . $config['folders']['tmp'] . '/synctodrive_server.pid', $config['synctodrive_logfile'], 15);
+killProcessIfActive('sync-to-drive.js', '../' . $config['folders']['tmp'] . '/synctodrive_server.pid', $config['synctodrive']['logfile'], 15);
 
 ?>

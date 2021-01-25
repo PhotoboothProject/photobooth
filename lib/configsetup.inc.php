@@ -1100,35 +1100,35 @@ $configsetup = [
     'synctodrive' => [
         'platform' => 'linux',
         'view' => 'advanced',
-        'enabled' => [
+        'synctodrive_enabled' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'synctodrive_enabled',
-            'value' => $config['synctodrive_enabled'],
+            'name' => 'synctodrive[enabled]',
+            'value' => $config['synctodrive']['enabled'],
         ],
-        'target' => [
+        'synctodrive_target' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['synctodrive_target'],
-            'name' => 'synctodrive_target',
-            'value' => $config['synctodrive_target'],
+            'placeholder' => $defaultConfig['synctodrive']['target'],
+            'name' => 'synctodrive[target]',
+            'value' => $config['synctodrive']['target'],
         ],
-        'interval' => [
+        'synctodrive_interval' => [
             'view' => 'advanced',
             'type' => 'range',
-            'placeholder' => $defaultConfig['synctodrive_interval'],
-            'name' => 'synctodrive_interval',
-            'value' => $config['synctodrive_interval'],
+            'placeholder' => $defaultConfig['synctodrive']['interval'],
+            'name' => 'synctodrive[interval]',
+            'value' => $config['synctodrive']['interval'],
             'range_min' => 10,
             'range_max' => 600,
             'range_step' => 1,
             'unit' => 'seconds',
         ],
-        'logfile' => [
+        'synctodrive_logfile' => [
             'view' => 'expert',
             'type' => 'hidden',
-            'name' => 'synctodrive_logfile',
-            'value' => $config['synctodrive_logfile'],
+            'name' => 'synctodrive[logfile]',
+            'value' => $config['synctodrive']['logfile'],
         ],
     ],
     'authentication' => [

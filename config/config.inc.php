@@ -199,9 +199,9 @@ $config['remotebuzzer_pin'] = 40;
 
 
 // S Y N C  T O  U S B  S T I C K
-$config['synctodrive_enabled'] = false;
-$config['synctodrive_target'] = 'photobooth'; //Default target for the sync script
-$config['synctodrive_interval'] = 300;
+$config['synctodrive']['enabled'] = false;
+$config['synctodrive']['target'] = 'photobooth'; //Default target for the sync script
+$config['synctodrive']['interval'] = 300;
 
 
 // A U T H E N T I C A T I O N

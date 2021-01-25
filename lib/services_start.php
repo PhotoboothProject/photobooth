@@ -35,9 +35,9 @@ if ($config['remotebuzzer_enabled']) {
     print "\t<script type=\"text/javascript\" src=\"node_modules/socket.io-client/dist/socket.io.min.js\"></script>\n";
 }
 
-if ($config['synctodrive_enabled']) {
+if ($config['synctodrive']['enabled']) {
     if ($config['dev']) {
-        $logfile = $config['foldersAbs']['tmp'] . '/' . $config['synctodrive_logfile'];
+        $logfile = $config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile'];
     } else {
         $logfile = '/dev/null';
     }
