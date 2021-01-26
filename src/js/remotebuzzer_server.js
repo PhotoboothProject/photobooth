@@ -48,9 +48,9 @@ fs.writeFile(pidFilename, myPid, function (err) {
 console.log(
     'socket.io server [',
     myPid,
-    ']: Requested to start on http://' + config.webserver_ip + ':' + config.remotebuzzer_port,
+    ']: Requested to start on http://' + config.webserver_ip + ':' + config.remotebuzzer.port,
     ', Pin ',
-    config.remotebuzzer_pin
+    config.remotebuzzer.pin
 );
 
 function photoboothAction(type) {
@@ -98,7 +98,7 @@ function photoboothAction(type) {
     }
 }
 
-const ioServer = require('socket.io')(config.remotebuzzer_port, {
+const ioServer = require('socket.io')(config.remotebuzzer.port, {
     cors: {
         origin: 'http://' + config.webserver_ip,
         methods: ['GET', 'POST']
@@ -160,7 +160,7 @@ console.log('socket.io server [', myPid, ']: socket.io server started');
 
 /* LISTEN TO GPIO STATUS https://www.npmjs.com/package/rpio */
 
-if (config.remotebuzzer_pin >= 1 && config.remotebuzzer_pin <= 40) {
+if (config.remotebuzzer.pin >= 1 && config.remotebuzzer.pin <= 40) {
     const pollcb = function pollcb(pin) {
         /* if there is some activity in progress ignore GPIO pin for now */
         if (!triggerArmed) {
@@ -223,7 +223,7 @@ if (config.remotebuzzer_pin >= 1 && config.remotebuzzer_pin <= 40) {
         rpio.msleep(200);
     };
 
-    console.log('socket.io server [', myPid, ']: Connecting to Raspberry pin P', config.remotebuzzer_pin);
-    rpio.open(config.remotebuzzer_pin, rpio.INPUT, rpio.PULL_UP);
-    rpio.poll(config.remotebuzzer_pin, pollcb, rpio.POLL_BOTH);
+    console.log('socket.io server [', myPid, ']: Connecting to Raspberry pin P', config.remotebuzzer.pin);
+    rpio.open(config.remotebuzzer.pin, rpio.INPUT, rpio.PULL_UP);
+    rpio.poll(config.remotebuzzer.pin, pollcb, rpio.POLL_BOTH);
 }

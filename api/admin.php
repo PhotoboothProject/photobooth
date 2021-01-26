@@ -106,7 +106,7 @@ if ($data['type'] == 'config') {
     }
 
     if ($os === 'windows') {
-        $newConfig['remotebuzzer_enabled'] = false;
+        $newConfig['remotebuzzer']['enabled'] = false;
         $newConfig['synctodrive']['enabled'] = false;
     }
 

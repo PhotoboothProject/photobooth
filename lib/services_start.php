@@ -15,12 +15,12 @@ function processIsRunning($pName, $pidFile) {
     return count($output) - 1 ? true : false; // true if process is active
 }
 
-if ($config['remotebuzzer_enabled']) {
-    $connection = @fsockopen('127.0.0.1', $config['remotebuzzer_port']);
+if ($config['remotebuzzer']['enabled']) {
+    $connection = @fsockopen('127.0.0.1', $config['remotebuzzer']['port']);
 
     if (!is_resource($connection)) {
         if ($config['dev']) {
-            $logfile = $config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer_logfile'];
+            $logfile = $config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile'];
         } else {
             $logfile = '/dev/null';
         }

@@ -104,12 +104,12 @@ const photoBooth = (function () {
             api.startVideo('preview');
         }
 
-        if (config.remotebuzzer_enabled) {
+        if (config.remotebuzzer.enabled) {
             if (config.webserver_ip) {
-                ioClient = io('http://' + config.webserver_ip + ':' + config.remotebuzzer_port);
+                ioClient = io('http://' + config.webserver_ip + ':' + config.remotebuzzer.port);
 
                 console.log(
-                    ' Remote buzzer connecting to http://' + config.webserver_ip + ':' + config.remotebuzzer_port
+                    ' Remote buzzer connecting to http://' + config.webserver_ip + ':' + config.remotebuzzer.port
                 );
 
                 ioClient.on('photobooth-socket', function (data) {
@@ -315,7 +315,7 @@ const photoBooth = (function () {
             console.log('Taking photo:', takingPic);
         }
 
-        if (config.remotebuzzer_enabled) {
+        if (config.remotebuzzer.enabled) {
             ioClient.emit('photobooth-socket', 'in progress');
         }
 
@@ -391,7 +391,7 @@ const photoBooth = (function () {
             console.log('Take Picture:' + photoStyle);
         }
 
-        if (config.remotebuzzer_enabled) {
+        if (config.remotebuzzer.enabled) {
             ioClient.emit('photobooth-socket', 'in progress');
         }
 
@@ -460,7 +460,7 @@ const photoBooth = (function () {
                             api.thrill('collage');
                         }, 1000);
                     } else {
-                        if (config.remotebuzzer_enabled) {
+                        if (config.remotebuzzer.enabled) {
                             ioClient.emit('photobooth-socket', 'collage-wait-for-next');
                         }
 
@@ -553,7 +553,7 @@ const photoBooth = (function () {
 
                 if (data.error) {
                     api.errorPic(data);
-                    if (config.remotebuzzer_enabled) {
+                    if (config.remotebuzzer.enabled) {
                         ioClient.emit('photobooth-socket', 'completed');
                     }
                 } else if (photoStyle === 'chroma') {
@@ -569,7 +569,7 @@ const photoBooth = (function () {
                     error: 'Request failed: ' + textStatus
                 });
 
-                if (config.remotebuzzer_enabled) {
+                if (config.remotebuzzer.enabled) {
                     ioClient.emit('photobooth-socket', 'completed');
                 }
             }
@@ -600,7 +600,7 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
-        if (config.remotebuzzer_enabled) {
+        if (config.remotebuzzer.enabled) {
             ioClient.emit('photobooth-socket', 'completed');
         }
     };
@@ -692,7 +692,7 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
-        if (config.remotebuzzer_enabled) {
+        if (config.remotebuzzer.enabled) {
             ioClient.emit('photobooth-socket', 'completed');
         }
     };

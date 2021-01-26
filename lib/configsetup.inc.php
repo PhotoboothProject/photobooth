@@ -1058,13 +1058,13 @@ $configsetup = [
     'remotebuzzer' => [
         'view' => 'advanced',
         'platform' => 'linux',
-        'enabled' => [
+        'remotebuzzer_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'remotebuzzer_enabled',
-            'value' => $config['remotebuzzer_enabled'],
+            'name' => 'remotebuzzer[enabled]',
+            'value' => $config['remotebuzzer']['enabled'],
         ],
-        'collagetime' => [
+        'remotebuzzer_collagetime' => [
             'view' => 'advanced',
             'type' => 'range',
             'placeholder' => $defaultConfig['remotebuzzer_collagetime'],
@@ -1075,26 +1075,26 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'seconds',
         ],
-        'port' => [
+        'remotebuzzer_port' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['remotebuzzer_port'],
-            'name' => 'remotebuzzer_port',
-            'value' => $config['remotebuzzer_port'],
+            'placeholder' => $defaultConfig['remotebuzzer']['port'],
+            'name' => 'remotebuzzer[port]',
+            'value' => $config['remotebuzzer']['port'],
         ],
-        'pin' => [
+        'remotebuzzer_pin' => [
             'view' => 'expert',
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => $defaultConfig['remotebuzzer_pin'],
-            'name' => 'remotebuzzer_pin',
-            'value' => $config['remotebuzzer_pin'],
+            'placeholder' => $defaultConfig['remotebuzzer']['pin'],
+            'name' => 'remotebuzzer[pin]',
+            'value' => $config['remotebuzzer']['pin'],
         ],
-        'logfile' => [
+        'remotebuzzer_logfile' => [
             'view' => 'expert',
             'type' => 'hidden',
-            'name' => 'remotebuzzer_logfile',
-            'value' => $config['remotebuzzer_logfile'],
+            'name' => 'remotebuzzer[logfile]',
+            'value' => $config['remotebuzzer']['logfile'],
         ],
     ],
     'synctodrive' => [
