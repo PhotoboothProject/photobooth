@@ -16,7 +16,7 @@ $imagelist = array_reverse($images);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
-	<meta http-equiv="refresh" content= "<?=$config['slideshow_refresh_time']?>">
+	<meta http-equiv="refresh" content= "<?=$config['slideshow']['refresh_time']?>">
 
 
 	<title>Photobooth Slideshow</title>
@@ -43,7 +43,7 @@ $imagelist = array_reverse($images);
 		<h1 data-i18n="gallery_no_image"></h1>
 		<?php else: ?>
 		<?php
-		if ($config['slideshow_randomPicture']):
+		if ($config['slideshow']['randomPicture']):
 		shuffle($imagelist);
 		endif;
 		?>
@@ -64,7 +64,7 @@ $imagelist = array_reverse($images);
 			}
 		}
 
-		if ($config['slideshow_use_thumbs']) {
+		if ($config['slideshow']['use_thumbs']) {
 			$filename_photo = '../' . $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 			if (!is_readable($filename_photo)) {
 				$filename_photo = '../' . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;

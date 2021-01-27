@@ -184,10 +184,10 @@ $config['mail']['port'] = '587';
 
 
 // S T A N D A L O N E   S L I D E S H O W
-$config['slideshow_refreshTime'] = '60';
-$config['slideshow_pictureTime'] = '3000';
-$config['slideshow_randomPicture'] = true;
-$config['slideshow_use_thumbs'] = false;
+$config['slideshow']['refreshTime'] = '60';
+$config['slideshow']['pictureTime'] = '3000';
+$config['slideshow']['randomPicture'] = true;
+$config['slideshow']['use_thumbs'] = false;
 
 
 // R E M O T E   B U Z Z E R

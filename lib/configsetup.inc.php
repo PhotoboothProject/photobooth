@@ -1028,31 +1028,31 @@ $configsetup = [
     ],
     'slideshow' => [
         'view' => 'advanced',
-        'refreshTime' => [
+        'slideshow_refreshTime' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['slideshow_refreshTime'],
-            'name' => 'slideshow_refreshTime',
-            'value' => $config['slideshow_refreshTime'],
+            'placeholder' => $defaultConfig['slideshow']['refreshTime'],
+            'name' => 'slideshow[refreshTime]',
+            'value' => $config['slideshow']['refreshTime'],
         ],
-        'pictureTime' => [
+        'slideshow_pictureTime' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['slideshow_pictureTime'],
-            'name' => 'slideshow_pictureTime',
-            'value' => $config['slideshow_pictureTime'],
+            'placeholder' => $defaultConfig['slideshow']['pictureTime'],
+            'name' => 'slideshow[pictureTime]',
+            'value' => $config['slideshow']['pictureTime'],
         ],
-        'randomPicture' => [
+        'slideshow_randomPicture' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'slideshow_randomPicture',
-            'value' => $config['slideshow_randomPicture'],
+            'name' => 'slideshow[randomPicture]',
+            'value' => $config['slideshow']['randomPicture'],
         ],
-        'use_thumbs' => [
+        'slideshow_use_thumbs' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'slideshow_use_thumbs',
-            'value' => $config['slideshow_use_thumbs'],
+            'name' => 'slideshow[use_thumbs]',
+            'value' => $config['slideshow']['use_thumbs'],
         ],
     ],
     'remotebuzzer' => [
