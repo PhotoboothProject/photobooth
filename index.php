@@ -18,7 +18,7 @@ if ($config['index_style'] === 'modern') {
 	$galleryIcon = 'fa-th';
 }
 
-if ($config['use_live_keying']):
+if ($config['live_keying']['enabled']):
 header("location: livechroma.php");
 endif;
 ?>

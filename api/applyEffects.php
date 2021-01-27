@@ -35,7 +35,7 @@ $collage_frame_path = __DIR__ . DIRECTORY_SEPARATOR . $config['take_collage_fram
 $collage_background = __DIR__ . DIRECTORY_SEPARATOR . $config['collage_background'];
 $picture_permissions = $config['picture_permissions'];
 $thumb_size = substr($config['thumb_size'], 0, -2);
-$chroma_size = substr($config['chroma_size'], 0, -2);
+$chroma_size = substr($config['keying']['size'], 0, -2);
 
 if (!isset($_POST['style'])) {
     die(
@@ -139,7 +139,7 @@ if ($config['take_frame'] && $_POST['style'] !== 'collage') {
     $imageModified = true;
 }
 
-if ($config['chroma_keying'] || $_POST['style'] === 'chroma') {
+if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
     $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
     imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
     imagedestroy($chromaCopyResource);
@@ -179,14 +179,14 @@ if (!$config['keep_images']) {
 imagedestroy($imageResource);
 
 // insert into database
-if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying_show_all'] === true)) {
+if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === true)) {
     appendImageToDB($file);
 }
 
 // Change permissions
 chmod($filename_photo, octdec($picture_permissions));
 
-if ($_POST['style'] === 'chroma' && $config['live_keying_show_all'] === false) {
+if ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === false) {
     unlink($filename_photo);
     unlink($filename_thumb);
 }

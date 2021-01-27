@@ -67,7 +67,7 @@ if (file_exists($keyingimage)) {
 
 		<div style="padding-top:10px;text-align:center;">
 			<?php
-				$dir = $config['keying_background_path'] . DIRECTORY_SEPARATOR;
+				$dir = $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
@@ -103,7 +103,7 @@ if (file_exists($keyingimage)) {
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<?php if ($config['chroma_keying_variant'] === 'marvinj'): ?>
+	<?php if ($config['keying']['variant'] === 'marvinj'): ?>
 	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
 	<?php else:?>
 	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>

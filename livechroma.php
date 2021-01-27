@@ -48,7 +48,7 @@ if ($config['index_style'] === 'modern') {
 <body>
 	<div class="chromawrapper">
 		<div class="top-bar">
-			<?php if (!$config['use_live_keying']): ?>
+			<?php if (!$config['live_keying']['enabled']): ?>
 			<a href="index.php" class="<?php echo $btnClass1; ?> closebtn"><i class="fa fa-times"></i></a>
 			<?php endif; ?>
 
@@ -89,7 +89,7 @@ if ($config['index_style'] === 'modern') {
 
 		<div class="backgrounds"> 
 			<?php
-				$dir = $config['keying_background_path'] . DIRECTORY_SEPARATOR;
+				$dir = $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
@@ -142,7 +142,7 @@ if ($config['index_style'] === 'modern') {
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
-	<?php if ($config['chroma_keying_variant'] === 'marvinj'): ?>
+	<?php if ($config['keying']['variant'] === 'marvinj'): ?>
 	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
 	<?php else:?>
 	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>

@@ -74,7 +74,7 @@
   "jpeg_quality:jpeg_quality_chroma": "JPEG qualité pour chroma-keying (10 ... 100)",
   "jpeg_quality:jpeg_quality_image": "JPEG qualité des images (-1 ... 100)",
   "jpeg_quality:jpeg_quality_thumb": "JPEG qualité des thumbnails (10 ... 100)",
-  "keying:chroma_keying": "Activez le fond vert",
+  "keying:keying_enabled": "Activez le fond vert",
   "keyingerror": "L'incrustation sur fond vert n'est pas possible!",
   "mail": "e-mail",
   "mail:mail_enabled": "Utiliser le courrier électronique",

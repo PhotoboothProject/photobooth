@@ -57,7 +57,7 @@ function alphaBoundary(imageOut, radius) {
 
 // eslint-disable-next-line no-unused-vars
 function setMainImage(imgSrc) {
-    if (config.chroma_keying_variant === 'marvinj') {
+    if (config.keying.variant === 'marvinj') {
         const image = new MarvinImage();
         image.load(imgSrc, function () {
             mainImageWidth = image.getWidth();
@@ -160,7 +160,7 @@ function drawCanvas() {
     }
 
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
-        if (config.chroma_keying_variant === 'marvinj') {
+        if (config.keying.variant === 'marvinj') {
             ctx.drawImage(mainImage, 0, 0);
         } else {
             //important to fetch tmpimageout
@@ -208,7 +208,7 @@ function saveImage(cb) {
                         if (really) {
                             photoBooth.deleteImage(data.filename, (result) => {
                                 if (result.success) {
-                                    if (config.live_keying_show_all) {
+                                    if (config.live_keying.show_all) {
                                         photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
                                             if (response.success) {
                                                 setTimeout(function () {

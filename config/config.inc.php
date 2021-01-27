@@ -128,14 +128,14 @@ $config['previewCamBackground'] = false;
 
 
 // K E Y I N G
-$config['chroma_keying'] = false;
-// possible chroma_size values: '1000px', '1500px', '2000px', '2500px'
-$config['chroma_size'] = '1500px';
-$config['use_live_keying'] = false;
-// possible chroma_keying_variant values: 'marvinj', 'seriouslyjs'
-$config['chroma_keying_variant'] = 'marvinj';
-$config['keying_background_path'] = 'resources/img/background';
-$config['live_keying_show_all'] = false;
+$config['keying']['enabled'] = false;
+// possible size values: '1000px', '1500px', '2000px', '2500px'
+$config['keying']['size'] = '1500px';
+$config['live_keying']['enabled'] = false;
+// possible variant values: 'marvinj', 'seriouslyjs'
+$config['keying']['variant'] = 'marvinj';
+$config['keying']['background_path'] = 'resources/img/background';
+$config['live_keying']['show_all'] = false;
 
 
 // P R I N T

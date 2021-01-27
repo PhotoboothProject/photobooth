@@ -55,7 +55,7 @@ function alphaBoundary(imageOut, radius) {
 }
 
 function setMainImage(imgSrc) {
-    if (config.chroma_keying_variant === 'marvinj') {
+    if (config.keying.variant === 'marvinj') {
         const image = new MarvinImage();
         image.load(imgSrc, function () {
             mainImageWidth = image.getWidth();
@@ -160,7 +160,7 @@ function drawCanvas() {
     }
 
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
-        if (config.chroma_keying_variant === 'marvinj') {
+        if (config.keying.variant === 'marvinj') {
             ctx.drawImage(mainImage, 0, 0);
         } else {
             //important to fetch tmpimageout

@@ -46,7 +46,7 @@
 		<a href="" download="" class="pswp__button pswp__button--custom-download" title="Download"><i class="fa fa-download"></i></a>
                 <?php endif; ?>
 
-                <?php if ($config['chroma_keying']): ?>
+                <?php if ($config['keying']['enabled']): ?>
                 <button type="button" class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 

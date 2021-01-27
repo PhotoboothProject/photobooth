@@ -717,54 +717,54 @@ $configsetup = [
     ],
     'keying' => [
         'view' => 'advanced',
-        'chroma_keying' => [
+        'keying_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'chroma_keying',
-            'value' => $config['chroma_keying'],
+            'name' => 'keying[enabled]',
+            'value' => $config['keying']['enabled'],
         ],
-        'chroma_size' => [
+        'keying_size' => [
             'view' => 'advanced',
             'type' => 'select',
-            'name' => 'chroma_size',
-            'placeholder' => $defaultConfig['chroma_size'],
+            'name' => 'keying[size]',
+            'placeholder' => $defaultConfig['keying']['size'],
             'options' => [
                 '1000px' => 'S',
                 '1500px' => 'M',
                 '2000px' => 'L',
                 '2500px' => 'XL',
             ],
-            'value' => $config['chroma_size'],
+            'value' => $config['keying']['size'],
         ],
-        'use_live_keying' => [
+        'live_keying_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'use_live_keying',
-            'value' => $config['use_live_keying'],
+            'name' => 'live_keying[enabled]',
+            'value' => $config['live_keying']['enabled'],
         ],
-        'chroma_keying_variant' => [
+        'keying_variant' => [
             'view' => 'expert',
             'type' => 'select',
-            'name' => 'chroma_keying_variant',
-            'placeholder' => $defaultConfig['chroma_keying_variant'],
+            'name' => 'keying[variant]',
+            'placeholder' => $defaultConfig['keying']['variant'],
             'options' => [
                 'marvinj' => 'MarvinJ',
                 'seriouslyjs' => 'Seriously.js',
             ],
-            'value' => $config['chroma_keying_variant'],
+            'value' => $config['keying']['variant'],
         ],
-        'background_path' => [
+        'keying_background_path' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['keying_background_path'],
-            'name' => 'keying_background_path',
-            'value' => htmlentities($config['keying_background_path']),
+            'placeholder' => $defaultConfig['keying']['background_path'],
+            'name' => 'keying[background_path]',
+            'value' => htmlentities($config['keying']['background_path']),
         ],
         'live_keying_show_all' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'live_keying_show_all',
-            'value' => $config['live_keying_show_all'],
+            'name' => 'live_keying[show_all]',
+            'value' => $config['live_keying']['show_all'],
         ],
     ],
     'print' => [

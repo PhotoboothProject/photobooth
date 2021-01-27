@@ -285,7 +285,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
         const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-        if (config.chroma_keying) {
+        if (config.keying.enabled) {
             location = 'chromakeying.php?filename=' + encodeURI(img);
         }
     });
