@@ -112,16 +112,16 @@ if ($config['dev']) {
     error_reporting(E_ALL);
 }
 
-if (!isset($config['background_image'])) {
-    $config['background_image'] = 'url(../img/bg_bluegray.jpg)';
+if (!isset($config['background']['defaults'])) {
+    $config['background']['defaults'] = 'url(../img/bg_bluegray.jpg)';
 }
 
-if (!isset($config['background_admin'])) {
-    $config['background_admin'] = 'url(../img/bg_bluegray.jpg)';
+if (!isset($config['background']['admin'])) {
+    $config['background']['admin'] = 'url(../img/bg_bluegray.jpg)';
 }
 
-if (!isset($config['background_chroma'])) {
-    $config['background_chroma'] = 'url(../img/bg_bluegray.jpg)';
+if (!isset($config['background']['chroma'])) {
+    $config['background']['chroma'] = 'url(../img/bg_bluegray.jpg)';
 }
 
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {

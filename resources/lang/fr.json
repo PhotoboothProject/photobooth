@@ -137,6 +137,6 @@
   "use_button": "Utilisez le bouton matériel pour prendre une photo",
   "userinterface": "Interface utilisateur",
   "userinterface:background_admin": "Chemin de l'image d'arrière-plan du panneau d'administration",
-  "userinterface:background_image": "Chemin de l'image de fond",
+  "userinterface:background_defaults": "Chemin de l'image de fond",
   "using_latest_version": "Vous utilisez la dernière version du Photobooth."
 }
