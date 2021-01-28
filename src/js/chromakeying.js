@@ -213,7 +213,7 @@ function printImage(filename, cb) {
                         }
                         cb();
                         isPrinting = false;
-                    }, config.printing_time);
+                    }, config.print.time);
                 },
                 error: (jqXHR, textStatus) => {
                     console.log('An error occurred: ', textStatus);
@@ -295,7 +295,7 @@ function closeHandler(ev) {
 }
 
 $(document).on('keyup', function (ev) {
-    if (config.use_print_chromakeying && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+    if (config.print.from_chromakeying && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
         if (isPrinting) {
             console.log('Printing already in progress!');
         } else {

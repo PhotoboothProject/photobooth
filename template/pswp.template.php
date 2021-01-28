@@ -33,7 +33,7 @@
                 <button type="button" class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['use_print_gallery']): ?>
+                <?php if ($config['print']['from_gallery']): ?>
                 <button type="button" class="pswp__button pswp__button--print" title="Print"><i class="fa fa-print"></i></button>
                 <?php endif; ?>
 

@@ -114,7 +114,7 @@ endif;
 				<a href="#" class="<?php echo $btnClass1; ?> mailbtn"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
 				<?php endif; ?>
 
-				<?php if ($config['use_print_result']): ?>
+				<?php if ($config['print']['from_result']): ?>
 				<a href="#" class="<?php echo $btnClass1; ?> printbtn"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 				<?php endif; ?>
 

@@ -58,7 +58,7 @@ $line2text = $config['textonprint']['line2'];
 $line3text = $config['textonprint']['line3'];
 
 // print frame
-$print_frame = __DIR__ . DIRECTORY_SEPARATOR . $config['print_frame_path'];
+$print_frame = __DIR__ . DIRECTORY_SEPARATOR . $config['print']['frame_path'];
 
 if (!file_exists($filename_print)) {
     // rotate image if needed
@@ -76,7 +76,7 @@ if (!file_exists($filename_print)) {
         list($width, $height) = getimagesize($filename_print);
     }
 
-    if ($config['print_qrcode']) {
+    if ($config['print']['qrcode']) {
         // create qr code
         if (!file_exists($filename_codes)) {
             include '../vendor/phpqrcode/qrlib.php';
@@ -91,7 +91,7 @@ if (!file_exists($filename_print)) {
         $source = imagecreatefromjpeg($filename_print);
         $code = imagecreatefrompng($filename_codes);
 
-        if ($config['print_frame'] && !$config['take_frame']) {
+        if ($config['print']['frame'] && !$config['take_frame']) {
             $print = imagecreatefromjpeg($filename_print);
             $frame = imagecreatefrompng($print_frame);
             $frame = resizePngImage($frame, imagesx($print), imagesy($print));
@@ -125,7 +125,7 @@ if (!file_exists($filename_print)) {
         imagedestroy($source);
     } else {
         $print = imagecreatefromjpeg($filename_print);
-        if ($config['print_frame'] == true && !$config['take_frame']) {
+        if ($config['print']['frame'] == true && !$config['take_frame']) {
             $frame = imagecreatefrompng($print_frame);
             $frame = resizePngImage($frame, imagesx($print), imagesy($print));
             $x = imagesx($print) / 2 - imagesx($frame) / 2;
@@ -144,9 +144,9 @@ if (!file_exists($filename_print)) {
     }
     imagedestroy($print);
 
-    if ($config['crop_onprint']) {
-        $crop_width = $config['crop_width'];
-        $crop_height = $config['crop_height'];
+    if ($config['print']['crop']) {
+        $crop_width = $config['print']['crop_width'];
+        $crop_height = $config['print']['crop_height'];
         ResizeCropImage($crop_width, $crop_height, $filename_print, $filename_print);
     }
 }

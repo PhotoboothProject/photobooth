@@ -775,97 +775,97 @@ $configsetup = [
             'name' => 'cups_button',
             'value' => $config['cups_button'],
         ],
-        'use_print_result' => [
+        'print_from_result' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'use_print_result',
-            'value' => $config['use_print_result'],
+            'name' => 'print[from_result]',
+            'value' => $config['print']['from_result'],
         ],
-        'use_print_gallery' => [
+        'print_from_gallery' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'use_print_gallery',
-            'value' => $config['use_print_gallery'],
+            'name' => 'print[from_gallery]',
+            'value' => $config['print']['from_gallery'],
         ],
-        'use_print_chromakeying' => [
+        'print_from_chromakeying' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'use_print_chromakeying',
-            'value' => $config['use_print_chromakeying'],
+            'name' => 'print[from_chromakeying]',
+            'value' => $config['print']['from_chromakeying'],
         ],
-        'auto_print' => [
+        'print_auto' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'auto_print',
-            'value' => $config['auto_print'],
+            'name' => 'print[auto]',
+            'value' => $config['print']['auto'],
         ],
-        'auto_print_delay' => [
+        'print_auto_delay' => [
             'view' => 'expert',
             'type' => 'range',
-            'placeholder' => $defaultConfig['auto_print_delay'],
-            'name' => 'auto_print_delay',
-            'value' => $config['auto_print_delay'],
+            'placeholder' => $defaultConfig['print']['auto_delay'],
+            'name' => 'print[auto_delay]',
+            'value' => $config['print']['auto_delay'],
             'range_min' => 250,
             'range_max' => 10000,
             'range_step' => 250,
             'unit' => 'milliseconds',
         ],
-        'printing_time' => [
+        'print_time' => [
             'view' => 'advanced',
             'type' => 'range',
-            'placeholder' => $defaultConfig['printing_time'],
-            'name' => 'printing_time',
-            'value' => $config['printing_time'],
+            'placeholder' => $defaultConfig['print']['time'],
+            'name' => 'print[time]',
+            'value' => $config['print']['time'],
             'range_min' => 250,
             'range_max' => 20000,
             'range_step' => 250,
             'unit' => 'milliseconds',
         ],
-        'key' => [
+        'print_key' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'print_key',
+            'name' => 'print[key]',
             'placeholder' => '',
-            'value' => $config['print_key'],
+            'value' => $config['print']['key'],
         ],
-        'qrcode' => [
+        'print_qrcode' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'print_qrcode',
-            'value' => $config['print_qrcode'],
+            'name' => 'print[qrcode]',
+            'value' => $config['print']['qrcode'],
         ],
-        'frame' => [
+        'print_frame' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'print_frame',
-            'value' => $config['print_frame'],
+            'name' => 'print[frame]',
+            'value' => $config['print']['frame'],
         ],
-        'frame_path' => [
+        'print_frame_path' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['print_frame_path'],
-            'name' => 'print_frame_path',
-            'value' => htmlentities($config['print_frame_path']),
+            'placeholder' => $defaultConfig['print']['frame_path'],
+            'name' => 'print[frame_path]',
+            'value' => htmlentities($config['print']['frame_path']),
         ],
-        'crop_onprint' => [
+        'print_crop' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'crop_onprint',
-            'value' => $config['crop_onprint'],
+            'name' => 'print[crop]',
+            'value' => $config['print']['crop'],
         ],
-        'crop_width' => [
+        'print_crop_width' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'crop_width',
-            'placeholder' => $defaultConfig['crop_width'],
-            'value' => $config['crop_width'],
+            'name' => 'print[crop_width]',
+            'placeholder' => $defaultConfig['print']['crop_width'],
+            'value' => $config['print']['crop_width'],
         ],
-        'crop_height' => [
+        'print_crop_height' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'crop_height',
-            'placeholder' => $defaultConfig['crop_height'],
-            'value' => $config['crop_height'],
+            'name' => 'print[crop_height]',
+            'placeholder' => $defaultConfig['print']['crop_height'],
+            'value' => $config['print']['crop_height'],
         ],
         'textonprint_enabled' => [
             'view' => 'advanced',
