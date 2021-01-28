@@ -11,8 +11,8 @@ $config = array();
 $config['language'] = 'en';
 $config['adminpanel_view'] = 'basic';
 $config['dev'] = false;
-$config['start_screen_title'] = 'Photobooth';
-$config['start_screen_subtitle'] = NULL;
+$config['start_screen']['title'] = 'Photobooth';
+$config['start_screen']['subtitle'] = NULL;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
 $config['thumb_size'] = '540px';
 $config['show_error_messages'] = true;

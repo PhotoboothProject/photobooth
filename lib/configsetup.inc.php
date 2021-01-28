@@ -113,15 +113,15 @@ $configsetup = [
         ],
         'start_screen_title' => [
             'type' => 'input',
-            'placeholder' => $defaultConfig['start_screen_title'],
-            'name' => 'start_screen_title',
-            'value' => htmlentities($config['start_screen_title']),
+            'placeholder' => $defaultConfig['start_screen']['title'],
+            'name' => 'start_screen[title]',
+            'value' => htmlentities($config['start_screen']['title']),
         ],
         'start_screen_subtitle' => [
             'type' => 'input',
-            'placeholder' => $defaultConfig['start_screen_subtitle'],
-            'name' => 'start_screen_subtitle',
-            'value' => htmlentities($config['start_screen_subtitle']),
+            'placeholder' => $defaultConfig['start_screen']['subtitle'],
+            'name' => 'start_screen[subtitle]',
+            'value' => htmlentities($config['start_screen']['subtitle']),
         ],
         'thumb_size' => [
             'view' => 'advanced',

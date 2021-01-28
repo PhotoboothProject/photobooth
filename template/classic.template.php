@@ -14,9 +14,9 @@
 							<i class="fa <?=$config['event']['symbol']?>" aria-hidden="true"></i>
 							<?=$config['event']['textRight']?>
 							<br>
-							<?=$config['start_screen_title']?>
+							<?=$config['start_screen']['title']?>
 						</h1>
-						<h2><?=$config['start_screen_subtitle']?></h2>
+						<h2><?=$config['start_screen']['subtitle']?></h2>
 					</div>
 					<hr>
 					<hr class="small" />
@@ -26,8 +26,8 @@
 					<hr class="small" />
 					<hr>
 					<div>
-						<h1><?=$config['start_screen_title']?></h1>
-						<h2><?=$config['start_screen_subtitle']?></h2>
+						<h1><?=$config['start_screen']['title']?></h1>
+						<h2><?=$config['start_screen']['subtitle']?></h2>
 					</div>
 					<hr>
 					<hr class="small" />
