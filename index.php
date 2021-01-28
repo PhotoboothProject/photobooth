@@ -121,7 +121,7 @@ endif;
 				<?php if (!$config['force_buzzer']): ?>
 					<a href="#" class="<?php echo $btnClass1; ?> newpic"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
 
-					<?php if ($config['use_collage']): ?>
+					<?php if ($config['collage']['enabled']): ?>
 					<a href="#" class="<?php echo $btnClass1; ?> newcollage"><i class="fa fa-th-large"></i> <span
 							data-i18n="newCollage"></span></a>
 					<?php endif; ?>

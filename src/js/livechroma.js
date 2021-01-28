@@ -291,7 +291,7 @@ $(document).on('keyup', function (ev) {
         }
     }
 
-    if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+    if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
         if (!backgroundImage) {
             console.log('Please choose a background first!');
         } else if (needsReload) {

@@ -402,78 +402,78 @@ $configsetup = [
     ],
     'collage' => [
         'view' => 'basic',
-        'use_collage' => [
+        'collage_enabled' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'use_collage',
-            'value' => $config['use_collage'],
+            'name' => 'collage[enabled]',
+            'value' => $config['collage']['enabled'],
         ],
-        'cntdwn_time' => [
+        'collage_cntdwn_time' => [
             'view' => 'basic',
             'type' => 'range',
-            'name' => 'collage_cntdwn_time',
-            'placeholder' => $defaultConfig['collage_cntdwn_time'],
-            'value' => $config['collage_cntdwn_time'],
+            'name' => 'collage[cntdwn_time]',
+            'placeholder' => $defaultConfig['collage']['cntdwn_time'],
+            'value' => $config['collage']['cntdwn_time'],
             'range_min' => 1,
             'range_max' => 10,
             'range_step' => 1,
             'unit' => 'seconds',
         ],
-        'continuous_collage' => [
+        'collage_continuous' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'continuous_collage',
-            'value' => $config['continuous_collage'],
+            'name' => 'collage[continuous]',
+            'value' => $config['collage']['continuous'],
         ],
-        'layout' => [
+        'collage_layout' => [
             'view' => 'advanced',
             'type' => 'select',
-            'name' => 'collage_layout',
-            'placeholder' => $defaultConfig['collage_layout'],
+            'name' => 'collage[layout]',
+            'placeholder' => $defaultConfig['collage']['layout'],
             'options' => [
                 '2x2' => '2x2',
                 '2x4' => '2x4',
                 '2x4BI' => '2x4 + background image',
             ],
-            'value' => $config['collage_layout'],
+            'value' => $config['collage']['layout'],
         ],
-        'background' => [
+        'collage_background' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'collage_background',
-            'placeholder' => $defaultConfig['collage_background'],
-            'value' => $config['collage_background'],
+            'name' => 'collage[background]',
+            'placeholder' => $defaultConfig['collage']['background'],
+            'value' => $config['collage']['background'],
         ],
-        'key' => [
+        'collage_key' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'collage_key',
+            'name' => 'collage[key]',
             'placeholder' => '',
-            'value' => $config['collage_key'],
+            'value' => $config['collage']['key'],
         ],
-        'take_collage_frame' => [
+        'collage_take_frame' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'take_collage_frame',
-            'value' => $config['take_collage_frame'],
+            'name' => 'collage[take_frame]',
+            'value' => $config['collage']['take_frame'],
         ],
-        'take_collage_frame_always' => [
+        'collage_take_frame_always' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'take_collage_frame_always',
-            'value' => $config['take_collage_frame_always'],
+            'name' => 'collage[take_frame_always]',
+            'value' => $config['collage']['take_frame_always'],
         ],
-        'take_collage_frame_path' => [
+        'collage_frame_path' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['take_collage_frame_path'],
-            'name' => 'take_collage_frame_path',
-            'value' => htmlentities($config['take_collage_frame_path']),
+            'placeholder' => $defaultConfig['collage']['frame_path'],
+            'name' => 'collage[frame_path]',
+            'value' => htmlentities($config['collage']['frame_path']),
         ],
-        'limit' => [
+        'collage_limit' => [
             'type' => 'hidden',
-            'name' => 'collage_limit',
-            'value' => $config['collage_limit'],
+            'name' => 'collage[limit]',
+            'value' => $config['collage']['limit'],
         ],
     ],
     'gallery' => [

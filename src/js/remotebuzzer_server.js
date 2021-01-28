@@ -186,7 +186,7 @@ if (config.remotebuzzer.pin >= 1 && config.remotebuzzer.pin <= 40) {
                 );
                 photoboothAction('reset');
             } else if (
-                !config.use_collage ||
+                !config.collage.enabled ||
                 (dTimeTrigger <= config.remotebuzzer.collagetime * 1000 && !collageInProgress)
             ) {
                 /* Picture */

@@ -99,7 +99,7 @@ if ($_POST['style'] === 'photo') {
     if ($number > 3) {
         die(
             json_encode([
-                'error' => 'Collage consists only of ' . $config['collage_limit'] . ' pictures',
+                'error' => 'Collage consists only of ' . $config['collage']['limit'] . ' pictures',
             ])
         );
     }
@@ -114,7 +114,7 @@ if ($_POST['style'] === 'photo') {
             'success' => 'collage',
             'file' => $file,
             'current' => $number,
-            'limit' => $config['collage_limit'],
+            'limit' => $config['collage']['limit'],
         ])
     );
 } elseif ($_POST['style'] === 'chroma') {

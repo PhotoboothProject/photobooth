@@ -66,19 +66,19 @@ $config['allow_delete'] = true;
 
 
 // C O L L A G E
-$config['use_collage'] = true;
+$config['collage']['enabled'] = true;
 // control countdown timer between collage pictures in seconds
-$config['collage_cntdwn_time'] = '3';
-$config['continuous_collage'] = true;
-// possible collage_layout values: '2x2', '2x4', '2x4BI'
-$config['collage_layout'] = '2x2';
-$config['collage_background'] = '../resources/img/frames/DefaultCollageBackground.png';
-// specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage_key)
+$config['collage']['cntdwn_time'] = '3';
+$config['collage']['continuous'] = true;
+// possible layout values: '2x2', '2x4', '2x4BI'
+$config['collage']['layout'] = '2x2';
+$config['collage']['background'] = '../resources/img/frames/DefaultCollageBackground.png';
+// specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code
-$config['collage_key'] = null;
-$config['take_collage_frame'] = false;
-$config['take_collage_frame_always'] = false;
-$config['take_collage_frame_path'] = '../resources/img/frames/frame.png';
+$config['collage']['key'] = null;
+$config['collage']['take_frame'] = false;
+$config['collage']['take_frame_always'] = false;
+$config['collage']['frame_path'] = '../resources/img/frames/frame.png';
 
 
 // G A L L E R Y

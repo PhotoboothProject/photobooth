@@ -2,7 +2,7 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/resize.php';
 
-define('LAYOUT', $config['collage_layout']);
+define('LAYOUT', $config['collage']['layout']);
 
 function createCollage($srcImagePaths, $destImagePath, $takeFrame, $takeFrameAlways, $framePath, $background_image) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== 4) {

@@ -119,7 +119,7 @@ const photoBooth = (function () {
                             api.thrill('photo');
                             break;
                         case 'start-collage':
-                            if (config.use_collage) {
+                            if (config.collage.enabled) {
                                 $('.resultInner').removeClass('show');
                                 api.thrill('collage');
                             }
@@ -339,7 +339,7 @@ const photoBooth = (function () {
         }
 
         loader.addClass('open');
-        api.startCountdown(nextCollageNumber ? config.collage_cntdwn_time : config.cntdwn_time, $('#counter'), () => {
+        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.cntdwn_time, $('#counter'), () => {
             api.cheese(photoStyle);
         });
     };
@@ -362,7 +362,7 @@ const photoBooth = (function () {
             const cheesemsg = i18n('cheeseCollage');
             $('.cheese').text(cheesemsg);
             $('<p>')
-                .text(`${nextCollageNumber + 1} / ${config.collage_limit}`)
+                .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
                 .appendTo('.cheese');
         }
 
@@ -455,7 +455,7 @@ const photoBooth = (function () {
                     $('.loading').empty();
                     $('#video--sensor').hide();
 
-                    if (config.continuous_collage) {
+                    if (config.collage.continuous) {
                         setTimeout(() => {
                             api.thrill('collage');
                         }, 1000);
@@ -1051,10 +1051,10 @@ const photoBooth = (function () {
                 }
             }
 
-            if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
+            if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
                 if (!takingPic) {
                     $('.closeGallery').trigger('click');
-                    if (config.use_collage) {
+                    if (config.collage.enabled) {
                         $('.triggerCollage').trigger('click');
                     } else {
                         if (config.dev) {

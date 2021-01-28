@@ -93,7 +93,7 @@ $config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
 
 $config['adminpanel_view_default'] = 'expert';
 
-$config['collage_limit'] = 4;
+$config['collage']['limit'] = 4;
 
 $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';

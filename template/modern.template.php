@@ -51,7 +51,7 @@
 							<?php else: ?>
 								<a href="#" class="round-btn takePic"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 
-								<?php if ($config['use_collage']): ?>
+								<?php if ($config['collage']['enabled']): ?>
 								<a href="#" class="round-btn takeCollage"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
 								<?php endif; ?>
 							<?php endif; ?>
