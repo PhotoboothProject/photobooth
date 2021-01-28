@@ -1136,34 +1136,34 @@ $configsetup = [
         'login_enabled' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'login_enabled',
-            'value' => $config['login_enabled'],
+            'name' => 'login[enabled]',
+            'value' => $config['login']['enabled'],
         ],
-        'username' => [
+        'login_username' => [
             'view' => 'basic',
             'type' => 'input',
             'placeholder' => 'Photo',
-            'name' => 'login_username',
-            'value' => $config['login_username'],
+            'name' => 'login[username]',
+            'value' => $config['login']['username'],
         ],
-        'password' => [
+        'login_password' => [
             'view' => 'basic',
             'type' => 'input',
             'placeholder' => null,
-            'name' => 'login_password',
-            'value' => $config['login_password'],
+            'name' => 'login[password]',
+            'value' => htmlentities($config['login']['password']),
         ],
         'protect_admin' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'protect_admin',
-            'value' => $config['protect_admin'],
+            'name' => 'protect[admin]',
+            'value' => $config['protect']['admin'],
         ],
         'protect_index' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'protect_index',
-            'value' => $config['protect_index'],
+            'name' => 'protect[index]',
+            'value' => $config['protect']['index'],
         ],
     ],
     'userinterface' => [

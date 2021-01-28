@@ -4,8 +4,8 @@ session_start();
 require_once('../lib/config.php');
 
 // LOGIN
-$username = $config['login_username'];
-$hashed_password = $config['login_password'];
+$username = $config['login']['username'];
+$hashed_password = $config['login']['password'];
 $error = false;
 
 if (isset($_POST['submit'])) {
@@ -55,7 +55,7 @@ if (isset($_POST['submit'])) {
 	<div class="login-panel">
 		<h2>Photobooth Login</h2>
 		<hr>
-		<?php if($config['login_enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<?php if($config['login']['enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<form method='post' class="login">
 			<label for="username"><span data-i18n="login_username"></span></label>
 			<input type="text" name="username" id="username" autocomplete="on" required>
@@ -70,7 +70,7 @@ if (isset($_POST['submit'])) {
 		</form>
 		<hr>
 		<?php endif; ?>
-		<?php if(!$config['protect_admin'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<?php if(!$config['protect']['admin'] || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../admin" class="btn btn--login"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a></p>
 		<?php endif; ?>
 		<p><a href="../gallery.php" class="btn btn--login"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a></p>
@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
 		<p><a href="../manual/faq.html" class="btn btn--login" title="FAQ" target="newwin"><i class="fa fa-question-circle" aria-hidden="true"></i> <span data-i18n="show_faq"></span></a></p>
 		<p><a href="../manual" class="btn btn--login" title="Manual" target="newwin"><i class="fa fa-info-circle" aria-hidden="true"></i> <span data-i18n="show_manual"></span></a></p>
 		<p><a href="./" class="btn btn--login"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a></p>
-		<?php if(!$config['protect_index'] || !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<?php if(!$config['protect']['index'] || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../" class="btn btn--login" ><i class="fa fa-times"></i> <span data-i18n="close"></span></a></p>
 		<?php endif; ?>
 		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>

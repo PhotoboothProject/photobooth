@@ -77,17 +77,17 @@ if ($data['type'] == 'config') {
         }
     }
 
-    if ($newConfig['login_enabled']) {
-        if (isset($newConfig['login_password']) && !empty($newConfig['login_password'])) {
-            if (!($newConfig['login_password'] === $config['login_password'])) {
-                $hashing = password_hash($newConfig['login_password'], PASSWORD_DEFAULT);
-                $newConfig['login_password'] = $hashing;
+    if (isset($newConfig['login']['enabled']) && $newConfig['login']['enabled'] == true) {
+        if (isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) {
+            if (!($newConfig['login']['password'] === $config['login']['password'])) {
+                $hashing = password_hash($newConfig['login']['password'], PASSWORD_DEFAULT);
+                $newConfig['login']['password'] = $hashing;
             }
         } else {
-            $newConfig['login_enabled'] = false;
+            $newConfig['login']['enabled'] = false;
         }
     } else {
-        $newConfig['login_password'] = null;
+        $newConfig['login']['password'] = null;
     }
 
     if ($newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {

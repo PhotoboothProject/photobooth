@@ -205,11 +205,11 @@ $config['synctodrive']['interval'] = 300;
 
 
 // A U T H E N T I C A T I O N
-$config['login_enabled'] = false;
-$config['login_username'] = 'Photo';
-$config['login_password'] = NULL;
-$config['protect_admin'] = true;
-$config['protect_index'] = false;
+$config['login']['enabled'] = false;
+$config['login']['username'] = 'Photo';
+$config['login']['password'] = NULL;
+$config['protect']['admin'] = true;
+$config['protect']['index'] = false;
 
 
 // U S E R   I N T E R F A C E

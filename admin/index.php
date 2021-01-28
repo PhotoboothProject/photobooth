@@ -27,7 +27,7 @@ require_once('../lib/configsetup.inc.php');
 <!-- NavBar content -->
 <?php
         // Login / Authentication check
-        if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin'] )
+        if( !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['admin'] )
         {
 
                 /***********************
