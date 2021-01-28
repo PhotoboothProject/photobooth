@@ -639,38 +639,38 @@ $configsetup = [
     ],
     'preview' => [
         'view' => 'advanced',
-        'mode' => [
+        'preview_mode' => [
             'view' => 'advanced',
             'type' => 'select',
-            'name' => 'preview_mode',
-            'placeholder' => $defaultConfig['preview_mode'],
+            'name' => 'preview[mode]',
+            'placeholder' => $defaultConfig['preview']['mode'],
             'options' => [
                 'none' => 'None',
                 'device_cam' => 'from device cam',
                 'url' => 'from URL',
                 'gphoto' => 'from gphoto2',
             ],
-            'value' => $config['preview_mode'],
+            'value' => $config['preview']['mode'],
         ],
-        'gphoto_bsm' => [
+        'preview_gphoto_bsm' => [
             'type' => 'checkbox',
-            'name' => 'preview_gphoto_bsm',
-            'value' => $config['preview_gphoto_bsm'],
+            'name' => 'preview[gphoto_bsm]',
+            'value' => $config['preview']['gphoto_bsm'],
         ],
-        'previewCamTakesPic' => [
+        'preview_camTakesPic' => [
             'type' => 'checkbox',
-            'name' => 'previewCamTakesPic',
-            'value' => $config['previewCamTakesPic'],
+            'name' => 'preview[camTakesPic]',
+            'value' => $config['preview']['camTakesPic'],
         ],
-        'previewCamFlipHorizontal' => [
+        'preview_flipHorizontal' => [
             'type' => 'checkbox',
-            'name' => 'previewCamFlipHorizontal',
-            'value' => $config['previewCamFlipHorizontal'],
+            'name' => 'preview[flipHorizontal]',
+            'value' => $config['preview']['flipHorizontal'],
         ],
-        'ipCamPreviewRotation' => [
+        'preview_rotation' => [
             'type' => 'select',
-            'name' => 'ipCamPreviewRotation',
-            'placeholder' => $defaultConfig['ipCamPreviewRotation'],
+            'name' => 'preview[rotation]',
+            'placeholder' => $defaultConfig['preview']['rotation'],
             'options' => [
                 '0deg' => 'No rotation',
                 '90deg' => '90°',
@@ -679,40 +679,40 @@ $configsetup = [
                 '45deg' => '45°',
                 '-45deg' => '-45°',
             ],
-            'value' => $config['ipCamPreviewRotation'],
+            'value' => $config['preview']['rotation'],
         ],
-        'ipCamURL' => [
+        'preview_url' => [
             'type' => 'input',
-            'name' => 'ipCamURL',
+            'name' => 'preview[url]',
             'placeholder' => 'url(http://localhost:8081)',
-            'value' => htmlentities($config['ipCamURL']),
+            'value' => htmlentities($config['preview']['url']),
         ],
-        'videoWidth' => [
+        'preview_videoWidth' => [
             'type' => 'input',
-            'name' => 'videoWidth',
-            'placeholder' => $defaultConfig['videoWidth'],
-            'value' => $config['videoWidth'],
+            'name' => 'preview[videoWidth]',
+            'placeholder' => $defaultConfig['preview']['videoWidth'],
+            'value' => $config['preview']['videoWidth'],
         ],
-        'videoHeight' => [
+        'preview_videoHeight' => [
             'type' => 'input',
-            'name' => 'videoHeight',
-            'placeholder' => $defaultConfig['videoHeight'],
-            'value' => $config['videoHeight'],
+            'name' => 'preview[videoHeight]',
+            'placeholder' => $defaultConfig['preview']['videoHeight'],
+            'value' => $config['preview']['videoHeight'],
         ],
-        'camera_mode' => [
+        'preview_camera_mode' => [
             'type' => 'select',
-            'name' => 'camera_mode',
-            'placeholder' => $defaultConfig['camera_mode'],
+            'name' => 'preview[camera_mode]',
+            'placeholder' => $defaultConfig['preview']['camera_mode'],
             'options' => [
                 'user' => 'Front facing camera',
                 'environment' => 'Back facing camera',
             ],
-            'value' => $config['camera_mode'],
+            'value' => $config['preview']['camera_mode'],
         ],
-        'previewCamBackground' => [
+        'preview_asBackground' => [
             'type' => 'checkbox',
-            'name' => 'previewCamBackground',
-            'value' => $config['previewCamBackground'],
+            'name' => 'preview[asBackground]',
+            'value' => $config['preview']['asBackground'],
         ],
     ],
     'keying' => [

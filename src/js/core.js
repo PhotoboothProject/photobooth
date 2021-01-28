@@ -12,9 +12,9 @@ const photoBooth = (function () {
         webcamConstraints = {
             audio: false,
             video: {
-                width: config.videoWidth,
-                height: config.videoHeight,
-                facingMode: config.camera_mode
+                width: config.preview.videoWidth,
+                height: config.preview.videoHeight,
+                facingMode: config.preview.camera_mode
             }
         },
         videoView = $('#video--view').get(0),
@@ -100,7 +100,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.previewCamBackground || (config.preview_mode == 'gphoto' && !config.preview_gphoto_bsm)) {
+        if (config.previewCamBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
             api.startVideo('preview');
         }
 
@@ -163,8 +163,8 @@ const photoBooth = (function () {
             return;
         }
 
-        if (config.preview_mode === 'gphoto') {
-            if (!config.preview_gphoto_bsm && mode === 'preview') {
+        if (config.preview.mode === 'gphoto') {
+            if (!config.preview.gphoto_bsm && mode === 'preview') {
                 jQuery
                     .post('api/takeVideo.php', dataVideo)
                     .done(function (result) {
@@ -174,7 +174,7 @@ const photoBooth = (function () {
                     .fail(function (xhr, status, result) {
                         console.log('Could not start webcam', result);
                     });
-            } else if (!config.preview_gphoto_bsm && mode === 'view') {
+            } else if (!config.preview.gphoto_bsm && mode === 'view') {
                 const getMedia =
                     navigator.mediaDevices.getUserMedia ||
                     navigator.mediaDevices.webkitGetUserMedia ||
@@ -185,7 +185,7 @@ const photoBooth = (function () {
                     return;
                 }
 
-                if (config.previewCamFlipHorizontal) {
+                if (config.preview.flipHorizontal) {
                     $('#video--view').addClass('flip-horizontal');
                     $('#video--preview').addClass('flip-horizontal');
                 }
@@ -216,7 +216,7 @@ const photoBooth = (function () {
                             return;
                         }
 
-                        if (config.previewCamFlipHorizontal) {
+                        if (config.preview.flipHorizontal) {
                             $('#video--view').addClass('flip-horizontal');
                             $('#video--preview').addClass('flip-horizontal');
                         }
@@ -247,7 +247,7 @@ const photoBooth = (function () {
                 return;
             }
 
-            if (config.previewCamFlipHorizontal) {
+            if (config.preview.flipHorizontal) {
                 $('#video--view').addClass('flip-horizontal');
                 $('#video--preview').addClass('flip-horizontal');
             }
@@ -331,9 +331,9 @@ const photoBooth = (function () {
             photoStyle = 'chroma';
         }
 
-        if (config.preview_mode === 'device_cam' || config.preview_mode === 'gphoto') {
+        if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
             api.startVideo('view');
-        } else if (config.preview_mode === 'url') {
+        } else if (config.preview.mode === 'url') {
             $('#ipcam--view').show();
             $('#ipcam--view').addClass('streaming');
         }
@@ -366,11 +366,11 @@ const photoBooth = (function () {
                 .appendTo('.cheese');
         }
 
-        if (config.preview_mode === 'gphoto' && !config.no_cheese) {
+        if (config.preview.mode === 'gphoto' && !config.no_cheese) {
             api.stopPreviewVideo();
         }
 
-        if (config.preview_mode === 'device_cam' && config.previewCamTakesPic && !api.stream && !config.dev) {
+        if (config.preview.mode === 'device_cam' && config.preview.camTakesPic && !api.stream && !config.dev) {
             console.log('No preview by device cam available!');
 
             api.errorPic({
@@ -395,16 +395,16 @@ const photoBooth = (function () {
             ioClient.emit('photobooth-socket', 'in progress');
         }
 
-        if (config.preview_mode === 'device_cam' || config.preview_mode === 'gphoto') {
-            if (config.previewCamTakesPic && !config.dev) {
+        if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
+            if (config.preview.camTakesPic && !config.dev) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
-            if (config.preview_mode === 'device_cam') {
+            if (config.preview.mode === 'device_cam') {
                 api.stopVideo('view');
             }
-        } else if (config.preview_mode === 'url') {
+        } else if (config.preview.mode === 'url') {
             $('#ipcam--view').removeClass('streaming');
             $('#ipcam--view').hide();
         }
@@ -435,7 +435,7 @@ const photoBooth = (function () {
             .done(function (result) {
                 console.log('took picture', result);
                 $('.cheese').empty();
-                if (config.previewCamFlipHorizontal) {
+                if (config.preview.flipHorizontal) {
                     $('#video--view').removeClass('flip-horizontal');
                     $('#video--preview').removeClass('flip-horizontal');
                 }
@@ -776,7 +776,7 @@ const photoBooth = (function () {
                 cb();
             }
             count++;
-            if (config.preview_mode === 'gphoto' && config.no_cheese && count === stop) {
+            if (config.preview.mode === 'gphoto' && config.no_cheese && count === stop) {
                 api.stopPreviewVideo();
             }
         }

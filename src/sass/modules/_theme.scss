@@ -16,7 +16,7 @@
   --background-default: none;
   --background-admin: none;
   --background-chroma: none;
-  --background-ipcam: none;
+  --background-url: none;
   --fontSize: 16px;
   --preview-rotation: 0deg;
 }
@@ -37,6 +37,6 @@ $galleryButtonColor: var(--gallery-button-color);
 $backgroundImage: var(--background-default);
 $adminBackground: var(--background-admin);
 $chromaBackground: var(--background-chroma);
-$ipcamBackground: var(--background-ipcam);
+$urlBackground: var(--background-url);
 $fontSize: var(--fontSize);
-$ipCamPreviewRotation: var(--preview-rotation);
+$previewRotation: var(--preview-rotation);

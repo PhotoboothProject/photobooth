@@ -113,18 +113,18 @@ $config['pswp_bgOpacity'] = 1;
 // P R E V I E W
 // Please read https://github.com/andi34/photobooth/wiki/FAQ#how-to-use-a-live-stream-as-background-at-countdown
 // possible preview_mode values: none, device_cam, url, gphoto
-$config['preview_mode'] = 'none';
-$config['preview_gphoto_bsm'] = true;
-$config['previewCamTakesPic'] = false;
-$config['previewCamFlipHorizontal'] = true;
-// possible ipCamPreviewRotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
-$config['ipCamPreviewRotation'] = '0deg';
-$config['ipCamURL'] = null;
-$config['videoWidth'] = '1280';
-$config['videoHeight'] = '720';
+$config['preview']['mode'] = 'none';
+$config['preview']['gphoto_bsm'] = true;
+$config['preview']['camTakesPic'] = false;
+$config['preview']['flipHorizontal'] = true;
+// possible rotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
+$config['preview']['rotation'] = '0deg';
+$config['preview']['url'] = null;
+$config['preview']['videoWidth'] = '1280';
+$config['preview']['videoHeight'] = '720';
 // possible camera_mode values: "user", "environment"
-$config['camera_mode'] = 'user';
-$config['previewCamBackground'] = false;
+$config['preview']['camera_mode'] = 'user';
+$config['preview']['asBackground'] = false;
 
 
 // K E Y I N G

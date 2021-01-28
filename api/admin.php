@@ -90,8 +90,8 @@ if ($data['type'] == 'config') {
         $newConfig['login_password'] = null;
     }
 
-    if ($newConfig['preview_mode'] != 'device_cam' && $newConfig['preview_mode'] != 'gphoto') {
-        $newConfig['previewCamTakesPic'] = false;
+    if ($newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
+        $newConfig['preview']['camTakesPic'] = false;
     }
 
     if ($newConfig['index_style'] === 'custom') {

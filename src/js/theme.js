@@ -16,9 +16,9 @@ style.setProperty('--gallery-button-color', config.colors.gallery_button);
 style.setProperty('--background-default', config.background_image);
 style.setProperty('--background-admin', config.background_admin);
 style.setProperty('--background-chroma', config.background_chroma);
-style.setProperty('--background-ipcam', config.ipCamURL);
+style.setProperty('--background-url', config.preview.url);
 style.setProperty('--fontSize', config.font_size);
-style.setProperty('--preview-rotation', config.ipCamPreviewRotation);
+style.setProperty('--preview-rotation', config.preview.rotation);
 
 $(function () {
     $('#wrapper').show();

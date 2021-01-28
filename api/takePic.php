@@ -11,7 +11,7 @@ function takePicture($filename) {
         $demoFolder = __DIR__ . '/../resources/img/demo/';
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $filename);
-    } elseif ($config['preview_mode'] === 'device_cam' && $config['previewCamTakesPic']) {
+    } elseif ($config['preview']['mode'] === 'device_cam' && $config['preview']['camTakesPic']) {
         $data = $_POST['canvasimg'];
         list($type, $data) = explode(';', $data);
         list(, $data) = explode(',', $data);
@@ -19,7 +19,7 @@ function takePicture($filename) {
 
         file_put_contents($filename, $data);
 
-        if ($config['previewCamFlipHorizontal']) {
+        if ($config['preview']['flipHorizontal']) {
             $im = imagecreatefromjpeg($filename);
             imageflip($im, IMG_FLIP_HORIZONTAL);
             imagejpeg($im, $filename);
