@@ -108,7 +108,9 @@ $(function () {
     // Range slider - dynamically update value when being moved
     $(document).on('input', '.configslider', function () {
         // console.log('slider moves - query #' + this.name + '-value');
-        document.querySelector('#' + this.name + '-value span').innerHTML = this.value;
+        document.querySelector(
+            '#' + this.name.replace('[', '\\[').replace(']', '\\]') + '-value span'
+        ).innerHTML = this.value;
     });
 
     /*
