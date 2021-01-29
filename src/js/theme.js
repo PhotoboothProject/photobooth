@@ -17,7 +17,7 @@ style.setProperty('--background-default', config.background.defaults);
 style.setProperty('--background-admin', config.background.admin);
 style.setProperty('--background-chroma', config.background.chroma);
 style.setProperty('--background-url', config.preview.url);
-style.setProperty('--fontSize', config.font_size);
+style.setProperty('--fontSize', config.ui.font_size);
 style.setProperty('--preview-rotation', config.preview.rotation);
 
 $(function () {

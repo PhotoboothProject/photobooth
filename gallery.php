@@ -45,7 +45,7 @@ $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($imag
 	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
-	<?php if ($config['rounded_corners']): ?>
+	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" href="resources/css/rounded.css" />
 	<?php endif; ?>
 </head>

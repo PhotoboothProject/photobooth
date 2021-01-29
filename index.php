@@ -8,7 +8,7 @@ require_once('lib/filter.php');
 $images = getImagesFromDB();
 $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 
-if ($config['index_style'] === 'modern') {
+if ($config['ui']['style'] === 'modern') {
 	$btnClass1 = 'round-btn';
 	$btnClass2 = 'round-btn';
 	$galleryIcon = 'fa-picture-o';
@@ -48,11 +48,11 @@ endif;
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
-	<link rel="stylesheet" href="resources/css/<?php echo $config['index_style']; ?>_style.css" />
+	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
 	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
-	<?php if ($config['rounded_corners'] && $config['index_style'] === 'classic'): ?>
+	<?php if ($config['ui']['rounded_corners'] && $config['ui']['style'] === 'classic'): ?>
 	<link rel="stylesheet" href="resources/css/rounded.css" />
 	<?php endif; ?>
 </head>
@@ -62,7 +62,7 @@ endif;
 	<div id="wrapper">
 	<?php if( !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect']['index'])): ?>
 
-		<?php include('template/' . $config['index_style'] . '.template.php'); ?>
+		<?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
 
 		<!-- image Filter Pane -->
 		<?php if ($config['use_filter']): ?>

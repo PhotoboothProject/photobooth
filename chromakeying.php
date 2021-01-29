@@ -5,7 +5,7 @@ if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
-if ($config['index_style'] === 'modern') {
+if ($config['ui']['style'] === 'modern') {
 	$btnClass1 = 'round-btn';
 	$btnClass2 = 'round-btn';
 } else {
@@ -53,8 +53,8 @@ if (file_exists($keyingimage)) {
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-		<link rel="stylesheet" href="resources/css/<?php echo $config['index_style']; ?>_chromakeying.css" />
-		<?php if ($config['rounded_corners']): ?>
+		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css" />
+		<?php if ($config['ui']['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>
 	</head>

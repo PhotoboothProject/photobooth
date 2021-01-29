@@ -285,9 +285,9 @@
   "manual:userinterface:background_admin": "Stile CSS per lo sfondo sul pannello di amministrazione.",
   "manual:userinterface:background_chroma": "Stile CSS per lo sfondo sulla pagina di chromakeying.",
   "manual:userinterface:background_defaults": "Stile CSS per lo sfondo nelle pagine start-, login- e slideshow.",
-  "manual:userinterface:font_size": "Inserisci la dimensione predefinita del carattere usata per l'interfaccia Photobooth.",
-  "manual:userinterface:rounded_corners": "Se abilitata, l'interfaccia utente di Photobooth utilizza bordi arrotondati lisci.",
   "manual:userinterface:toggle_fs_button": "Se abilitata, verrà aggiunto alla schermata iniziale un pulsante per attivare o disattivare la modalità schermo intero.",
+  "manual:userinterface:ui_font_size": "Inserisci la dimensione predefinita del carattere usata per l'interfaccia Photobooth.",
+  "manual:userinterface:ui_rounded_corners": "Se abilitata, l'interfaccia utente di Photobooth utilizza bordi arrotondati lisci.",
   "milliseconds": "millisecondi",
   "newCollage": "Nuovo Collage",
   "newPhoto": "Nuova immagine",
@@ -402,8 +402,8 @@
   "userinterface:colors_primary": "Colore primario",
   "userinterface:colors_secondary": "Colore secondario",
   "userinterface:colors_start_font": "Colore carattere schermata iniziale",
-  "userinterface:font_size": "Grandezza carattere di default",
-  "userinterface:rounded_corners": "Spigoli arrotondati",
   "userinterface:toggle_fs_button": "Mostra pulsante per attivare/disattivare schermo intero",
+  "userinterface:ui_font_size": "Grandezza carattere di default",
+  "userinterface:ui_rounded_corners": "Spigoli arrotondati",
   "using_latest_version": "Stai usando l'ultima versione di photobooth."
 }

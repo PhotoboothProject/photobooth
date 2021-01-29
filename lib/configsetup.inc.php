@@ -1168,17 +1168,17 @@ $configsetup = [
     ],
     'userinterface' => [
         'view' => 'basic',
-        'index_style' => [
+        'ui_style' => [
             'view' => 'basic',
             'type' => 'select',
-            'name' => 'index_style',
-            'placeholder' => $defaultConfig['index_style'],
+            'name' => 'ui[style]',
+            'placeholder' => $defaultConfig['ui']['style'],
             'options' => [
                 'classic' => 'classic',
                 'modern' => 'modern',
                 'custom' => 'custom',
             ],
-            'value' => $config['index_style'],
+            'value' => $config['ui']['style'],
         ],
         'toggle_fs_button' => [
             'view' => 'basic',
@@ -1186,12 +1186,12 @@ $configsetup = [
             'name' => 'toggle_fs_button',
             'value' => $config['toggle_fs_button'],
         ],
-        'font_size' => [
+        'ui_font_size' => [
             'view' => 'advanced',
             'type' => 'input',
-            'name' => 'font_size',
-            'placeholder' => $defaultConfig['font_size'],
-            'value' => $config['font_size'],
+            'name' => 'ui[font_size]',
+            'placeholder' => $defaultConfig['ui']['font_size'],
+            'value' => $config['ui']['font_size'],
         ],
         'colors_countdown' => [
             'view' => 'advanced',
@@ -1235,11 +1235,11 @@ $configsetup = [
             'placeholder' => $defaultConfig['background']['chroma'],
             'value' => htmlentities($config['background']['chroma']),
         ],
-        'rounded_corners' => [
+        'ui_rounded_corners' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'rounded_corners',
-            'value' => $config['rounded_corners'],
+            'name' => 'ui[rounded_corners]',
+            'value' => $config['ui']['rounded_corners'],
         ],
         'colors_primary' => [
             'view' => 'expert',

@@ -285,9 +285,9 @@
   "manual:userinterface:background_admin": "Estilo CSS para fondo en el panel de administración.",
   "manual:userinterface:background_chroma": "Estilo CSS para fondo en la página de cromakeying.",
   "manual:userinterface:background_defaults": "Estilo CSS para fondo en páginas de inicio, inicio de sesión y presentación de diapositivas.",
-  "manual:userinterface:font_size": "Introduzca el tamaño de fuente predeterminado utilizado para la interfaz Photobooth.",
-  "manual:userinterface:rounded_corners": "Si está habilitada, la interfaz de usuario de Photobooth utiliza bordes redondeados suaves.",
   "manual:userinterface:toggle_fs_button": "Si está activado, se agregará un botón para alternar el modo de pantalla completa a la pantalla de inicio.",
+  "manual:userinterface:ui_font_size": "Introduzca el tamaño de fuente predeterminado utilizado para la interfaz Photobooth.",
+  "manual:userinterface:ui_rounded_corners": "Si está habilitada, la interfaz de usuario de Photobooth utiliza bordes redondeados suaves.",
   "milliseconds": "milisegundos",
   "newCollage": "Un collage más",
   "newPhoto": "Una foto más",
@@ -402,8 +402,8 @@
   "userinterface:colors_primary": "El color primario",
   "userinterface:colors_secondary": "Color secundario",
   "userinterface:colors_start_font": "Color de fuente de la pantalla de inicio",
-  "userinterface:font_size": "Tamaño de fuente predeterminado",
-  "userinterface:rounded_corners": "Esquinas redondeadas",
   "userinterface:toggle_fs_button": "Mostrar botón para alternar la pantalla completa",
+  "userinterface:ui_font_size": "Tamaño de fuente predeterminado",
+  "userinterface:ui_rounded_corners": "Esquinas redondeadas",
   "using_latest_version": "Estás utilizando la última versión de photobooth"
 }

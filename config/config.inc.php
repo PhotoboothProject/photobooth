@@ -213,17 +213,17 @@ $config['protect']['index'] = false;
 
 
 // U S E R   I N T E R F A C E
-// possible index_style values: "classic", "modern", "custom"
-$config['index_style'] = 'modern';
+// possible style values: "classic", "modern", "custom"
+$config['ui']['style'] = 'modern';
 $config['toggle_fs_button'] = false;
-$config['font_size'] = '16px';
+$config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#ffffff';
 $config['colors']['background_countdown'] = '#214852';
 $config['colors']['cheese'] = '#ffffff';
 $config['background']['defaults'] = null;
 $config['background']['admin'] = null;
 $config['background']['chroma'] = null;
-$config['rounded_corners'] = false;
+$config['ui']['rounded_corners'] = false;
 $config['colors']['primary'] = '#0a6071';
 $config['colors']['secondary'] = '#214852';
 $config['colors']['font'] = '#79bad9';

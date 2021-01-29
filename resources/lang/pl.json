@@ -211,7 +211,7 @@
   "manual:print:textonprint_locationy": "Współrzędne Y tekstu podczas drukowania tekstu na zdjęciu.",
   "manual:print:textonprint_rotation": "Wprowadź wartość, która ustawi stopnie obrotu obrazu do wydruku.",
   "manual:slideshow:slideshow_randomPicture": "Jeśli włączone, losowe zdjęcia będą wyświetlane na galerii samodzielnej.",
-  "manual:userinterface:font_size": "Wprowadź domyślny rozmiar czcionki używany dla interfejsu Fotobudki.",
+  "manual:userinterface:ui_font_size": "Wprowadź domyślny rozmiar czcionki używany dla interfejsu Fotobudki.",
   "milliseconds": "milisekundy",
   "newCollage": "Nowy kolaż",
   "newPhoto": "Nowy obraz",
@@ -306,8 +306,8 @@
   "userinterface:colors_primary": "Kolor podstawowy",
   "userinterface:colors_secondary": "Kolor Dodatkowy",
   "userinterface:colors_start_font": "Kolor czcionki ekranu startowego",
-  "userinterface:font_size": "Domyślny rozmiar czcionki",
-  "userinterface:rounded_corners": "Zaokrąglone narożniki",
   "userinterface:toggle_fs_button": "Pokaż przycisk, aby włączyć tryb pełnoekranowy",
+  "userinterface:ui_font_size": "Domyślny rozmiar czcionki",
+  "userinterface:ui_rounded_corners": "Zaokrąglone narożniki",
   "using_latest_version": "Używasz najnowszej dostępnej wersji Fotobudki."
 }

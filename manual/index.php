@@ -24,7 +24,7 @@ require_once('../lib/configsetup.inc.php');
 	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/manual.css" />
-	<?php if ($config['rounded_corners']): ?>
+	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" type="text/css" href="../resources/css/rounded.css" />
 	<?php endif; ?>
 </head>
