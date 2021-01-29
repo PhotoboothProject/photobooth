@@ -192,8 +192,8 @@ $config['slideshow_use_thumbs'] = false;
 
 // R E M O T E   B U Z Z E R
 $config['remotebuzzer']['enabled'] = false;
-// remotebuzzer_collagetime controls the time to distinguish picture from collage in seconds
-$config['remotebuzzer_collagetime'] = '2';
+// collagetime controls the time to distinguish picture from collage in seconds
+$config['remotebuzzer']['collagetime'] = '2';
 $config['remotebuzzer']['port'] = 14711;
 $config['remotebuzzer']['pin'] = 40;
 
