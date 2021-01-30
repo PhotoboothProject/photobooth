@@ -237,9 +237,9 @@ $config['colors']['gallery_button'] = '#ffffff';
 
 
 // J P E G   Q U A L I T Y
-$config['jpeg_quality_image'] = 100;
-$config['jpeg_quality_chroma'] = 100;
-$config['jpeg_quality_thumb'] = 60;
+$config['jpeg_quality']['image'] = 100;
+$config['jpeg_quality']['chroma'] = 100;
+$config['jpeg_quality']['thumb'] = 60;
 
 
 // C O M M A N D S

@@ -33,12 +33,12 @@ $img = str_replace('data:image/png;base64,', '', $img);
 $img = str_replace(' ', '+', $img);
 $data = base64_decode($img);
 $imageResource = imagecreatefromstring($data);
-imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
+imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
 copy($filename_photo, $filename_keying);
 
 // image scale, create thumbnail
 $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
-imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
+imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality']['thumb']);
 imagedestroy($thumbResource);
 
 imagedestroy($imageResource);

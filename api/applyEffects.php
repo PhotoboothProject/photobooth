@@ -141,18 +141,18 @@ if ($config['take_frame'] && $_POST['style'] !== 'collage') {
 
 if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
     $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
-    imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality_chroma']);
+    imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality']['chroma']);
     imagedestroy($chromaCopyResource);
 }
 
 // image scale, create thumbnail
 $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
 
-imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality_thumb']);
+imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality']['thumb']);
 imagedestroy($thumbResource);
 
-if ($imageModified || ($config['jpeg_quality_image'] >= 0 && $config['jpeg_quality_image'] < 100)) {
-    imagejpeg($imageResource, $filename_photo, $config['jpeg_quality_image']);
+if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
+    imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
     // preserve jpeg meta data
     if ($config['preserve_exif_data'] && $config['exiftool']['cmd']) {
         $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
