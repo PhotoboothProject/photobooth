@@ -36,7 +36,7 @@ $config['event']['textLeft'] = 'We';
 //                               'fa-heart', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
 $config['event']['symbol'] = 'fa-heart-o';
 $config['event']['textRight'] = 'OpenSource';
-$config['force_buzzer'] = false;
+$config['button']['force_buzzer'] = false;
 
 
 // P I C T U R E S
@@ -139,7 +139,7 @@ $config['live_keying']['show_all'] = false;
 
 
 // P R I N T
-$config['cups_button'] = false;
+$config['button']['show_cups'] = false;
 $config['print']['from_result'] = false;
 $config['print']['from_gallery'] = false;
 $config['print']['from_chromakeying'] = false;
@@ -215,7 +215,7 @@ $config['protect']['index'] = false;
 // U S E R   I N T E R F A C E
 // possible style values: "classic", "modern", "custom"
 $config['ui']['style'] = 'modern';
-$config['toggle_fs_button'] = false;
+$config['button']['show_fs'] = false;
 $config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#ffffff';
 $config['colors']['background_countdown'] = '#214852';

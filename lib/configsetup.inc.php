@@ -263,11 +263,11 @@ $configsetup = [
             'name' => 'event[textRight]',
             'value' => htmlentities($config['event']['textRight']),
         ],
-        'force_buzzer' => [
+        'button_force_buzzer' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'force_buzzer',
-            'value' => $config['force_buzzer'],
+            'name' => 'button[force_buzzer]',
+            'value' => $config['button']['force_buzzer'],
         ],
     ],
     'pictures' => [
@@ -769,11 +769,11 @@ $configsetup = [
     ],
     'print' => [
         'view' => 'basic',
-        'cups_button' => [
+        'button_show_cups' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'cups_button',
-            'value' => $config['cups_button'],
+            'name' => 'button[show_cups]',
+            'value' => $config['button']['show_cups'],
         ],
         'print_from_result' => [
             'view' => 'basic',
@@ -1180,11 +1180,11 @@ $configsetup = [
             ],
             'value' => $config['ui']['style'],
         ],
-        'toggle_fs_button' => [
+        'button_show_fs' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'toggle_fs_button',
-            'value' => $config['toggle_fs_button'],
+            'name' => 'button[show_fs]',
+            'value' => $config['button']['show_fs'],
         ],
         'ui_font_size' => [
             'view' => 'advanced',

@@ -118,7 +118,7 @@ endif;
 				<a href="#" class="<?php echo $btnClass1; ?> printbtn"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 				<?php endif; ?>
 
-				<?php if (!$config['force_buzzer']): ?>
+				<?php if (!$config['button']['force_buzzer']): ?>
 					<a href="#" class="<?php echo $btnClass1; ?> newpic"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
 
 					<?php if ($config['collage']['enabled']): ?>

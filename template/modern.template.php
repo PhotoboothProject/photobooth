@@ -40,11 +40,11 @@
 							</div>
 							<?php endif; ?>
 
-							<?php if($config['cups_button']): ?>
+							<?php if($config['button']['show_cups']): ?>
 							<a id="cups-button" class="round-btn cups-button" href="#" target="newwin"><i class="fa fa-print" aria-hidden="true"></i> <span>CUPS</span></a>
 							<?php endif; ?>
 
-							<?php if ($config['force_buzzer']): ?>
+							<?php if ($config['button']['force_buzzer']): ?>
 								<div id="useBuzzer">
 									<span data-i18n="use_button"></span>
 								</div>
@@ -59,7 +59,7 @@
 							<?php if ($config['gallery']['enabled']): ?>
 							<a href="#" class="round-btn gallery-button"><i class="fa fa-picture-o"></i> <span data-i18n="gallery"></span></a>
 							<?php endif; ?>
-							<?php if($config['toggle_fs_button']): ?>
+							<?php if($config['button']['show_fs']): ?>
 							<a href="#" id="fs-button" class="round-btn fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
 							<?php endif; ?>
 						</div>
