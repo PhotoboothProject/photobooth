@@ -12,8 +12,8 @@
 			<?php
             $date = 'Photobooth Gallery';
             if ($config['file_naming'] === 'dateformatted' && $config['gallery']['show_date']) {
-                if ($config['db_file'] != 'db') {
-                    $db = strlen($config['db_file']);
+                if ($config['database']['file'] != 'db') {
+                    $db = strlen($config['database']['file']);
                     $name = substr($image, ++$db);
                 } else {
                     $name = $image;

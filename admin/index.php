@@ -47,15 +47,15 @@ require_once('../lib/configsetup.inc.php');
                         */
         
                         if (empty($setting['view'])) {
-                           $setting['view'] = $config['adminpanel_view_default'];
+                           $setting['view'] = $config['adminpanel']['view_default'];
                         };
         
                         switch ($setting['view'])
                         {
                                 case 'expert':
-                                     if ($config['adminpanel_view'] == 'advanced') { $element_class = 'hidden'; };
+                                     if ($config['adminpanel']['view'] == 'advanced') { $element_class = 'hidden'; };
                                 case 'advanced':
-                                     if ($config['adminpanel_view'] == 'basic') { $element_class = 'hidden'; };
+                                     if ($config['adminpanel']['view'] == 'basic') { $element_class = 'hidden'; };
                                 case 'basic':
                                      break;
                         };

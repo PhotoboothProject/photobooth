@@ -35,7 +35,7 @@ function dbUpdated() {
 const checkForUpdates = function () {
     if (photoBooth.isTimeOutPending()) {
         // If there is user interaction, do not check for updates
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Timeout pending, waiting to refresh the standalone gallery');
         }
 

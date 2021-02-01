@@ -6,7 +6,7 @@ const photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         wrapper = $('#wrapper'),
-        timeToLive = config.time_to_live,
+        timeToLive = config.picture.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
         webcamConstraints = {
@@ -105,11 +105,11 @@ const photoBooth = (function () {
         }
 
         if (config.remotebuzzer.enabled) {
-            if (config.webserver_ip) {
-                ioClient = io('http://' + config.webserver_ip + ':' + config.remotebuzzer.port);
+            if (config.webserver.ip) {
+                ioClient = io('http://' + config.webserver.ip + ':' + config.remotebuzzer.port);
 
                 console.log(
-                    ' Remote buzzer connecting to http://' + config.webserver_ip + ':' + config.remotebuzzer.port
+                    ' Remote buzzer connecting to http://' + config.webserver.ip + ':' + config.remotebuzzer.port
                 );
 
                 ioClient.on('photobooth-socket', function (data) {
@@ -133,7 +133,7 @@ const photoBooth = (function () {
                     console.log(' Remote buzzer unable to connect');
                 });
             } else {
-                console.log(' Remote buzzer unable to connect - webserver_ip not defined in config');
+                console.log(' Remote buzzer unable to connect - webserver.ip not defined in config');
             }
         }
     };
@@ -311,7 +311,7 @@ const photoBooth = (function () {
         api.reset();
 
         takingPic = true;
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
 
@@ -346,7 +346,7 @@ const photoBooth = (function () {
 
     // Cheese
     api.cheese = function (photoStyle) {
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log(photoStyle);
         }
 
@@ -370,7 +370,7 @@ const photoBooth = (function () {
             api.stopPreviewVideo();
         }
 
-        if (config.preview.mode === 'device_cam' && config.preview.camTakesPic && !api.stream && !config.dev) {
+        if (config.preview.mode === 'device_cam' && config.preview.camTakesPic && !api.stream && !config.dev.enabled) {
             console.log('No preview by device cam available!');
 
             api.errorPic({
@@ -387,7 +387,7 @@ const photoBooth = (function () {
 
     // take Picture
     api.takePic = function (photoStyle) {
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Take Picture:' + photoStyle);
         }
 
@@ -396,7 +396,7 @@ const photoBooth = (function () {
         }
 
         if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
-            if (config.preview.camTakesPic && !config.dev) {
+            if (config.preview.camTakesPic && !config.dev.enabled) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
@@ -500,14 +500,14 @@ const photoBooth = (function () {
             loader.addClass('error');
             const errormsg = i18n('error');
             takingPic = false;
-            if (config.dev) {
+            if (config.dev.enabled) {
                 console.log('Taking photo:', takingPic);
             }
             $('.loading').append($('<p>').text(errormsg));
-            if (config.show_error_messages || config.dev) {
+            if (config.dev.error_messages || config.dev.enabled) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
-            if (config.auto_reload_on_error) {
+            if (config.dev.reload_on_error) {
                 const reloadmsg = i18n('auto_reload');
                 $('.loading').append($('<p>').text(reloadmsg));
                 setTimeout(function () {
@@ -527,11 +527,11 @@ const photoBooth = (function () {
         $('.loading').text(photoStyle === 'photo' || photoStyle === 'chroma' ? i18n('busy') : i18n('busyCollage'));
 
         takingPic = false;
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
 
-        if (photoStyle === 'photo' && config.image_preview_before_processing) {
+        if (photoStyle === 'photo' && config.picture.preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
                 $('#loader').css('background-image', `url(${tempImageUrl})`);
@@ -616,7 +616,7 @@ const photoBooth = (function () {
             $(this).appendTo(body);
             $('<p>')
                 .css('max-width', this.width + 'px')
-                .html(i18n('qrHelp') + '</br><b>' + config.wifi_ssid + '</b>')
+                .html(i18n('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
                 .appendTo(body);
         });
 
@@ -889,7 +889,7 @@ const photoBooth = (function () {
 
         imgFilter = $(this).attr('id');
         const result = {file: $('#result').attr('data-img')};
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Applying filter', imgFilter, result);
         }
         api.processPic(imgFilter, result);
@@ -1046,7 +1046,7 @@ const photoBooth = (function () {
                 if (!takingPic) {
                     $('.closeGallery').trigger('click');
                     $('.triggerPic').trigger('click');
-                } else if (config.dev && takingPic) {
+                } else if (config.dev.enabled && takingPic) {
                     console.log('Taking photo already in progress!');
                 }
             }
@@ -1057,14 +1057,14 @@ const photoBooth = (function () {
                     if (config.collage.enabled) {
                         $('.triggerCollage').trigger('click');
                     } else {
-                        if (config.dev) {
+                        if (config.dev.enabled) {
                             console.log(
                                 'Collage key pressed. Please enable collage in your config. Triggering photo now.'
                             );
                         }
                         $('.triggerPic').trigger('click');
                     }
-                } else if (config.dev && takingPic) {
+                } else if (config.dev.enabled && takingPic) {
                     console.log('Taking photo already in progress!');
                 }
             }
@@ -1088,7 +1088,7 @@ const photoBooth = (function () {
     });
 
     // Disable Right-Click
-    if (!config.dev) {
+    if (!config.dev.enabled) {
         $(this).on('contextmenu', function (e) {
             e.preventDefault();
         });

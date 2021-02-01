@@ -30,7 +30,7 @@ if (!isImageInDB($postImage)) {
 }
 
 $mail = new PHPMailer();
-$mail->setLanguage($config['language'], '../vendor/PHPMailer/language/');
+$mail->setLanguage($config['ui']['language'], '../vendor/PHPMailer/language/');
 
 $mail->isSMTP();
 $mail->Host = $config['mail']['host'];

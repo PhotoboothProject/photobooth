@@ -71,11 +71,11 @@ $configsetup = [
     'general' => [
         'view' => 'basic',
         'platform' => 'all',
-        'language' => [
+        'ui_language' => [
             'view' => 'basic',
             'type' => 'select',
-            'name' => 'language',
-            'placeholder' => $defaultConfig['language'],
+            'name' => 'ui[language]',
+            'placeholder' => $defaultConfig['ui']['language'],
             'options' => [
                 'de' => 'DE',
                 'el' => 'EL',
@@ -85,31 +85,31 @@ $configsetup = [
                 'pl' => 'PL',
                 'it' => 'IT',
             ],
-            'value' => $config['language'],
+            'value' => $config['ui']['language'],
         ],
         'adminpanel_view' => [
             'view' => 'basic',
             'type' => 'select',
-            'name' => 'adminpanel_view',
-            'placeholder' => $defaultConfig['adminpanel_view'],
+            'name' => 'adminpanel[view]',
+            'placeholder' => $defaultConfig['adminpanel']['view'],
             'options' => [
                 'basic' => 'Basic View',
                 'advanced' => 'Advanced View',
                 'expert' => 'Expert View',
             ],
-            'value' => $config['adminpanel_view'],
+            'value' => $config['adminpanel']['view'],
         ],
         'adminpanel_view_default' => [
             'view' => 'expert',
             'type' => 'hidden',
-            'name' => 'adminpanel_view_default',
-            'value' => $config['adminpanel_view_default'],
+            'name' => 'adminpanel[view_default]',
+            'value' => $config['adminpanel']['view_default'],
         ],
-        'dev' => [
+        'dev_enabled' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'dev',
-            'value' => $config['dev'],
+            'name' => 'dev[enabled]',
+            'value' => $config['dev']['enabled'],
         ],
         'start_screen_title' => [
             'type' => 'input',
@@ -123,11 +123,11 @@ $configsetup = [
             'name' => 'start_screen[subtitle]',
             'value' => htmlentities($config['start_screen']['subtitle']),
         ],
-        'thumb_size' => [
+        'picture_thumb_size' => [
             'view' => 'advanced',
             'type' => 'select',
-            'name' => 'thumb_size',
-            'placeholder' => $defaultConfig['thumb_size'],
+            'name' => 'picture[thumb_size]',
+            'placeholder' => $defaultConfig['picture']['thumb_size'],
             'options' => [
                 '360px' => 'XS',
                 '540px' => 'S',
@@ -135,75 +135,75 @@ $configsetup = [
                 '1080px' => 'L',
                 '1260px' => 'XL',
             ],
-            'value' => $config['thumb_size'],
+            'value' => $config['picture']['thumb_size'],
         ],
-        'show_error_messages' => [
+        'dev_error_messages' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'show_error_messages',
-            'value' => $config['show_error_messages'],
+            'name' => 'dev[error_messages]',
+            'value' => $config['dev']['error_messages'],
         ],
-        'auto_reload_on_error' => [
+        'dev_reload_on_error' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'auto_reload_on_error',
-            'value' => $config['auto_reload_on_error'],
+            'name' => 'dev[reload_on_error]',
+            'value' => $config['dev']['reload_on_error'],
         ],
-        'use_qr' => [
+        'qr_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'use_qr',
-            'value' => $config['use_qr'],
+            'name' => 'qr[enabled]',
+            'value' => $config['qr']['enabled'],
         ],
         'webserver_ip' => [
             'view' => 'advanced',
             'type' => 'input',
-            'name' => 'webserver_ip',
+            'name' => 'webserver[ip]',
             'placeholder' => '127.0.0.1',
-            'value' => $config['webserver_ip'],
+            'value' => $config['webserver']['ip'],
         ],
-        'wifi_ssid' => [
+        'webserver_ssid' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'wifi_ssid',
+            'name' => 'webserver[ssid]',
             'placeholder' => 'Photobooth',
-            'value' => htmlentities($config['wifi_ssid']),
+            'value' => htmlentities($config['webserver']['ssid']),
         ],
-        'use_download' => [
+        'download_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'use_download',
-            'value' => $config['use_download'],
+            'name' => 'download[enabled]',
+            'value' => $config['download']['enabled'],
         ],
         'download_thumbs' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'download_thumbs',
-            'value' => $config['download_thumbs'],
+            'name' => 'download[thumbs]',
+            'value' => $config['download']['thumbs'],
         ],
-        'time_to_live' => [
+        'picture_time_to_live' => [
             'view' => 'expert',
             'type' => 'range',
-            'placeholder' => $defaultConfig['time_to_live'],
-            'name' => 'time_to_live',
-            'value' => $config['time_to_live'],
+            'placeholder' => $defaultConfig['picture']['time_to_live'],
+            'name' => 'picture[time_to_live]',
+            'value' => $config['picture']['time_to_live'],
             'range_min' => 1000,
             'range_max' => 90000,
             'range_step' => 1000,
             'unit' => 'milliseconds',
         ],
-        'image_preview_before_processing' => [
+        'picture_preview_before_processing' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'image_preview_before_processing',
-            'value' => $config['image_preview_before_processing'],
+            'name' => 'picture[preview_before_processing]',
+            'value' => $config['picture']['preview_before_processing'],
         ],
-        'db_file' => [
+        'database_file' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['db_file'],
-            'name' => 'db_file',
-            'value' => $config['db_file'],
+            'placeholder' => $defaultConfig['database']['file'],
+            'name' => 'database[file]',
+            'value' => $config['database']['file'],
         ],
         'diskusage_button' => [
             'view' => 'basic',

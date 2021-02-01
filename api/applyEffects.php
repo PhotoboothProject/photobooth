@@ -34,7 +34,7 @@ $frame_path = __DIR__ . DIRECTORY_SEPARATOR . $config['take_frame_path'];
 $collage_frame_path = __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path'];
 $collage_background = __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['background'];
 $picture_permissions = $config['picture_permissions'];
-$thumb_size = substr($config['thumb_size'], 0, -2);
+$thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 $chroma_size = substr($config['keying']['size'], 0, -2);
 
 if (!isset($_POST['style'])) {

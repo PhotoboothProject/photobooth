@@ -50,11 +50,11 @@ require_once('../lib/configsetup.inc.php');
 						switch ($fields['view'])
 						{
 							case 'expert':
-							     if ($config['adminpanel_view'] == 'advanced') {
+							     if ($config['adminpanel']['view'] == 'advanced') {
 							     	echo ' style="display: none;"';
 							     };
 							case 'advanced':
-							     if ($config['adminpanel_view'] == 'basic') { 
+							     if ($config['adminpanel']['view'] == 'basic') { 
     							     	echo ' style="display: none;"';
 							     };
 							case 'basic':
@@ -78,9 +78,9 @@ require_once('../lib/configsetup.inc.php');
 									switch ($field['view'])
 									{
 										case 'expert':
-							     	     		     if ($config['adminpanel_view'] == 'advanced') { $field['type'] = 'hidden'; };
+							     	     		     if ($config['adminpanel']['view'] == 'advanced') { $field['type'] = 'hidden'; };
 										case 'advanced':
-							     	     		     if ($config['adminpanel_view'] == 'basic') { $field['type'] = 'hidden'; };
+							     	     		     if ($config['adminpanel']['view'] == 'basic') { $field['type'] = 'hidden'; };
 										case 'basic':
 							     	     		     break;
 									};

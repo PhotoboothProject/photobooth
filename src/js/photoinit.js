@@ -148,7 +148,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gallery.listen('afterChange', function () {
             const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-            if (config.dev) {
+            if (config.dev.enabled) {
                 console.log('Current image: ' + img);
             }
 
@@ -271,7 +271,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.preventDefault();
 
         if (gallery) {
-            if (config.dev) {
+            if (config.dev.enabled) {
                 console.log('Closing Gallery');
             }
             gallery.close();

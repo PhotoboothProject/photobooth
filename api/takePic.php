@@ -7,7 +7,7 @@ require_once '../lib/db.php';
 function takePicture($filename) {
     global $config;
 
-    if ($config['dev']) {
+    if ($config['dev']['enabled']) {
         $demoFolder = __DIR__ . '/../resources/img/demo/';
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $filename);
@@ -67,10 +67,10 @@ if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))
     $name = md5(time()) . '.jpg';
 }
 
-if ($config['db_file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))) {
+if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))) {
     $file = $name;
 } else {
-    $file = $config['db_file'] . '_' . $name;
+    $file = $config['database']['file'] . '_' . $name;
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;

@@ -16,17 +16,17 @@ if ($config['file_naming'] === 'numbered') {
     $name = md5(time()) . '.jpg';
 }
 
-if ($config['db_file'] === 'db') {
+if ($config['database']['file'] === 'db') {
     $file = $name;
 } else {
-    $file = $config['db_file'] . '_' . $name;
+    $file = $config['database']['file'] . '_' . $name;
 }
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $picture_permissions = $config['picture_permissions'];
-$thumb_size = substr($config['thumb_size'], 0, -2);
+$thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 
 $img = $_POST['imgData'];
 $img = str_replace('data:image/png;base64,', '', $img);

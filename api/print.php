@@ -40,10 +40,10 @@ if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
 }
 
 // QR
-if (!isset($config['webserver_ip'])) {
+if (!isset($config['webserver']['ip'])) {
     $SERVER_IP = $_SERVER['HTTP_HOST'];
 } else {
-    $SERVER_IP = $config['webserver_ip'];
+    $SERVER_IP = $config['webserver']['ip'];
 }
 
 // text on print variables

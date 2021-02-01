@@ -1,10 +1,10 @@
 <?php
 require_once '../lib/config.php';
 
-if (!isset($config['webserver_ip'])) {
+if (!isset($config['webserver']['ip'])) {
     $SERVER_IP = $_SERVER['HTTP_HOST'];
 } else {
-    $SERVER_IP = $config['webserver_ip'];
+    $SERVER_IP = $config['webserver']['ip'];
 }
 
 $filename = $_GET['filename'];

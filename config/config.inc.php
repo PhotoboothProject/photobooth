@@ -8,24 +8,24 @@ $config = array();
 
 // G E N E R A L
 // possible language values: de, el, en, es, fr, pl, it
-$config['language'] = 'en';
-$config['adminpanel_view'] = 'basic';
-$config['dev'] = false;
+$config['ui']['language'] = 'en';
+$config['adminpanel']['view'] = 'basic';
+$config['dev']['enabled'] = false;
 $config['start_screen']['title'] = 'Photobooth';
 $config['start_screen']['subtitle'] = NULL;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
-$config['thumb_size'] = '540px';
-$config['show_error_messages'] = true;
-$config['auto_reload_on_error'] = true;
-$config['use_qr'] = true;
-$config['webserver_ip'] = null;
-$config['wifi_ssid'] = 'Photobooth';
-$config['use_download'] = true;
-$config['download_thumbs'] = false;
+$config['picture']['thumb_size'] = '540px';
+$config['dev']['error_messages'] = true;
+$config['dev']['reload_on_error'] = true;
+$config['qr']['enabled'] = true;
+$config['webserver']['ip'] = null;
+$config['webserver']['ssid'] = 'Photobooth';
+$config['download']['enabled'] = true;
+$config['download']['thumbs'] = false;
 // control time in milliseconds until Photobooth reloads automatically
-$config['time_to_live'] = '90000';
-$config['image_preview_before_processing'] = true;
-$config['db_file'] = 'db';
+$config['picture']['time_to_live'] = '90000';
+$config['picture']['preview_before_processing'] = true;
+$config['database']['file'] = 'db';
 
 
 // F R O N T P A G E

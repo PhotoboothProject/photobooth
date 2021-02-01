@@ -91,7 +91,7 @@ $config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
 $config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
 $config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
 
-$config['adminpanel_view_default'] = 'expert';
+$config['adminpanel']['view_default'] = 'expert';
 
 $config['collage']['limit'] = 4;
 
@@ -106,7 +106,7 @@ if (file_exists($my_config_file)) {
     $config = array_deep_merge($defaultConfig, $config);
 }
 
-if ($config['dev']) {
+if ($config['dev']['enabled']) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);

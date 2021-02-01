@@ -286,7 +286,7 @@ $(document).on('keyup', function (ev) {
         } else if (!takingPic) {
             $('.closeGallery').trigger('click');
             $('.takeChroma').trigger('click');
-        } else if (config.dev && takingPic) {
+        } else if (config.dev.enabled && takingPic) {
             console.log('Taking photo already in progress!');
         }
     }
@@ -298,11 +298,11 @@ $(document).on('keyup', function (ev) {
             console.log('Please reload the page to take a new Picture!');
         } else if (!takingPic) {
             $('.closeGallery').trigger('click');
-            if (config.dev) {
+            if (config.dev.enabled) {
                 console.log('Collage key pressed. Not possible on live chroma, triggering photo now.');
             }
             $('.takeChroma').trigger('click');
-        } else if (config.dev && takingPic) {
+        } else if (config.dev.enabled && takingPic) {
             console.log('Taking photo already in progress!');
         }
     }

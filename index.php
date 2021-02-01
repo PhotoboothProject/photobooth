@@ -106,7 +106,7 @@ endif;
 				<a href="#" class="<?php echo $btnClass1; ?> gallery-button"><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
 				<?php endif; ?>
 
-				<?php if ($config['use_qr']): ?>
+				<?php if ($config['qr']['enabled']): ?>
 				<a href="#" class="<?php echo $btnClass1; ?> qrbtn"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
 				<?php endif; ?>
 
@@ -136,7 +136,7 @@ endif;
 				<?php endif; ?>
 			</div>
 
-			<?php if ($config['use_qr']): ?>
+			<?php if ($config['qr']['enabled']): ?>
 			<div id="qrCode" class="modal">
 				<div class="modal__body"></div>
 			</div>

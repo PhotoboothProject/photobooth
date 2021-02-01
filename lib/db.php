@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['db_file'] . '.txt');
+define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');
 define('MAIL_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt');
 
 function getImagesFromDB() {

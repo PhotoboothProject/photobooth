@@ -1,7 +1,7 @@
 <?php
 require_once '../lib/config.php';
 
-$download_thumbs = $config['download_thumbs'];
+$download_thumbs = $config['download']['thumbs'];
 $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : false;
 if ($image) {
     $fullres = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
