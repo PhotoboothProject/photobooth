@@ -101,7 +101,7 @@ if ($config['ui']['style'] === 'modern') {
 
 		<div class="chroma-control-bar">
 			<a href="#" class="<?php echo $btnClass2; ?> takeChroma"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
-			<?php if ($config['allow_delete']): ?>
+			<?php if ($config['picture']['allow_delete']): ?>
 			<a href="#" class="deletebtn <?php echo $btnClass2; ?> "><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 			<?php endif; ?>
 			<a href="#" class="reloadPage <?php echo $btnClass2; ?> "><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>

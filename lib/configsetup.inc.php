@@ -273,131 +273,131 @@ $configsetup = [
     'pictures' => [
         'view' => 'basic',
         'platform' => 'all',
-        'cntdwn_time' => [
+        'picture_cntdwn_time' => [
             'view' => 'basic',
             'type' => 'range',
-            'name' => 'cntdwn_time',
-            'placeholder' => $defaultConfig['cntdwn_time'],
-            'value' => $config['cntdwn_time'],
+            'name' => 'picture[cntdwn_time]',
+            'placeholder' => $defaultConfig['picture']['cntdwn_time'],
+            'value' => $config['picture']['cntdwn_time'],
             'range_min' => 1,
             'range_max' => 10,
             'range_step' => 1,
             'unit' => 'seconds',
         ],
-        'no_cheese' => [
+        'picture_no_cheese' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'no_cheese',
-            'value' => $config['no_cheese'],
+            'name' => 'picture[no_cheese]',
+            'value' => $config['picture']['no_cheese'],
         ],
-        'cheese_time' => [
+        'picture_cheese_time' => [
             'view' => 'advanced',
             'type' => 'range',
-            'placeholder' => $defaultConfig['cheese_time'],
-            'name' => 'cheese_time',
-            'value' => $config['cheese_time'],
+            'placeholder' => $defaultConfig['picture']['cheese_time'],
+            'name' => 'picture[cheese_time]',
+            'value' => $config['picture']['cheese_time'],
             'range_min' => 250,
             'range_max' => 10000,
             'range_step' => 250,
             'unit' => 'milliseconds',
         ],
-        'pictureRotation' => [
+        'picture_rotation' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => $defaultConfig['pictureRotation'],
-            'name' => 'pictureRotation',
-            'value' => $config['pictureRotation'],
+            'placeholder' => $defaultConfig['picture']['rotation'],
+            'name' => 'picture[rotation]',
+            'value' => $config['picture']['rotation'],
         ],
-        'polaroid_effect' => [
+        'picture_polaroid_effect' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'polaroid_effect',
-            'value' => $config['polaroid_effect'],
+            'name' => 'picture[polaroid_effect]',
+            'value' => $config['picture']['polaroid_effect'],
         ],
-        'polaroid_rotation' => [
+        'picture_polaroid_rotation' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => $defaultConfig['polaroid_rotation'],
-            'name' => 'polaroid_rotation',
-            'value' => $config['polaroid_rotation'],
+            'placeholder' => $defaultConfig['picture']['polaroid_rotation'],
+            'name' => 'picture[polaroid_rotation]',
+            'value' => $config['picture']['polaroid_rotation'],
         ],
-        'use_filter' => [
+        'filters_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'use_filter',
-            'value' => $config['use_filter'],
+            'name' => 'filters[enabled]',
+            'value' => $config['filters']['enabled'],
         ],
-        'default_imagefilter' => [
+        'filters_defaults' => [
             'view' => 'advanced',
             'type' => 'select',
-            'name' => 'default_imagefilter',
-            'placeholder' => $defaultConfig['default_imagefilter'],
+            'name' => 'filters[defaults]',
+            'placeholder' => $defaultConfig['filters']['defaults'],
             'options' => AVAILABLE_FILTERS,
-            'value' => $config['default_imagefilter'],
+            'value' => $config['filters']['defaults'],
         ],
-        'disabled_filters' => [
+        'filters_disabled' => [
             'view' => 'expert',
             'type' => 'multi-select',
-            'name' => 'disabled_filters',
+            'name' => 'filters[disabled]',
             'options' => AVAILABLE_FILTERS,
-            'value' => $config['disabled_filters'],
+            'value' => $config['filters']['disabled'],
         ],
-        'take_frame' => [
+        'picture_take_frame' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'take_frame',
-            'value' => $config['take_frame'],
+            'name' => 'picture[take_frame]',
+            'value' => $config['picture']['take_frame'],
         ],
-        'take_frame_path' => [
+        'picture_frame_path' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['take_frame_path'],
-            'name' => 'take_frame_path',
-            'value' => htmlentities($config['take_frame_path']),
+            'placeholder' => $defaultConfig['picture']['frame_path'],
+            'name' => 'picture[frame_path]',
+            'value' => htmlentities($config['picture']['frame_path']),
         ],
-        'photo_key' => [
+        'picture_key' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'photo_key',
+            'name' => 'picture[key]',
             'placeholder' => '',
-            'value' => $config['photo_key'],
+            'value' => $config['picture']['key'],
         ],
-        'file_naming' => [
+        'picture_naming' => [
             'view' => 'advanced',
             'type' => 'select',
-            'name' => 'file_naming',
-            'placeholder' => $defaultConfig['file_naming'],
+            'name' => 'picture[naming]',
+            'placeholder' => $defaultConfig['picture']['naming'],
             'options' => [
                 'dateformatted' => 'Date formatted',
                 'numbered' => 'Numbered',
                 'random' => 'Random',
             ],
-            'value' => $config['file_naming'],
+            'value' => $config['picture']['naming'],
         ],
         'picture_permissions' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'picture_permissions',
+            'name' => 'picture[permissions]',
             'placeholder' => '0644',
-            'value' => $config['picture_permissions'],
+            'value' => $config['picture']['permissions'],
         ],
-        'keep_images' => [
+        'picture_keep_original' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'keep_images',
-            'value' => $config['keep_images'],
+            'name' => 'picture[keep_original]',
+            'value' => $config['picture']['keep_original'],
         ],
-        'preserve_exif_data' => [
+        'picture_preserve_exif_data' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'preserve_exif_data',
-            'value' => $config['preserve_exif_data'],
+            'name' => 'picture[preserve_exif_data]',
+            'value' => $config['picture']['preserve_exif_data'],
         ],
-        'allow_delete' => [
+        'picture_allow_delete' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'allow_delete',
-            'value' => $config['allow_delete'],
+            'name' => 'picture[allow_delete]',
+            'value' => $config['picture']['allow_delete'],
         ],
     ],
     'collage' => [

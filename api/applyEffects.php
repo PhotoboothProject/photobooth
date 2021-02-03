@@ -30,10 +30,10 @@ $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
-$frame_path = __DIR__ . DIRECTORY_SEPARATOR . $config['take_frame_path'];
+$frame_path = __DIR__ . DIRECTORY_SEPARATOR . $config['picture']['frame_path'];
 $collage_frame_path = __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path'];
 $collage_background = __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['background'];
-$picture_permissions = $config['picture_permissions'];
+$picture_permissions = $config['picture']['permissions'];
 $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 $chroma_size = substr($config['keying']['size'], 0, -2);
 
@@ -61,7 +61,7 @@ if ($_POST['style'] === 'collage') {
         );
     }
 
-    if (!$config['keep_images']) {
+    if (!$config['picture']['keep_original']) {
         foreach ($collageSrcImagePaths as $tmp) {
             unlink($tmp);
         }
@@ -118,19 +118,19 @@ if ($image_filter) {
     $imageModified = true;
 }
 
-if ($config['pictureRotation'] !== '0') {
-    $rotatedImg = imagerotate($imageResource, $config['pictureRotation'], 0);
+if ($config['picture']['rotation'] !== '0') {
+    $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
     $imageResource = $rotatedImg;
     $imageModified = true;
 }
 
-if ($config['polaroid_effect']) {
-    $polaroid_rotation = $config['polaroid_rotation'];
+if ($config['picture']['polaroid_effect']) {
+    $polaroid_rotation = $config['picture']['polaroid_rotation'];
     $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
     $imageModified = true;
 }
 
-if ($config['take_frame'] && $_POST['style'] !== 'collage') {
+if ($config['picture']['take_frame'] && $_POST['style'] !== 'collage') {
     $frame = imagecreatefrompng($frame_path);
     $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
     $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
@@ -154,7 +154,7 @@ imagedestroy($thumbResource);
 if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
     imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
     // preserve jpeg meta data
-    if ($config['preserve_exif_data'] && $config['exiftool']['cmd']) {
+    if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
         $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
         exec($cmd, $output, $returnValue);
         if ($returnValue) {
@@ -172,7 +172,7 @@ if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_qu
     copy($filename_tmp, $filename_photo);
 }
 
-if (!$config['keep_images']) {
+if (!$config['picture']['keep_original']) {
     unlink($filename_tmp);
 }
 

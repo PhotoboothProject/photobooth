@@ -5,12 +5,12 @@ require_once '../../lib/config.php';
 require_once '../../lib/db.php';
 require_once '../../lib/resize.php';
 
-if ($config['file_naming'] === 'numbered') {
+if ($config['picture']['naming'] === 'numbered') {
     $images = getImagesFromDB();
     $img_number = count($images);
     $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
     $name = $files . '.jpg';
-} elseif ($config['file_naming'] === 'dateformatted') {
+} elseif ($config['picture']['naming'] === 'dateformatted') {
     $name = date('Ymd_His') . '.jpg';
 } else {
     $name = md5(time()) . '.jpg';
@@ -25,7 +25,7 @@ if ($config['database']['file'] === 'db') {
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
 $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
-$picture_permissions = $config['picture_permissions'];
+$picture_permissions = $config['picture']['permissions'];
 $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 
 $img = $_POST['imgData'];

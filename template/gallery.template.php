@@ -11,7 +11,7 @@
 			<?php foreach ($imagelist as $image): ?>
 			<?php
             $date = 'Photobooth Gallery';
-            if ($config['file_naming'] === 'dateformatted' && $config['gallery']['show_date']) {
+            if ($config['picture']['naming'] === 'dateformatted' && $config['gallery']['show_date']) {
                 if ($config['database']['file'] != 'db') {
                     $db = strlen($config['database']['file']);
                     $name = substr($image, ++$db);

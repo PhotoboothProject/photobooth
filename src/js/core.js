@@ -27,7 +27,7 @@ const photoBooth = (function () {
         nextCollageNumber = 0,
         chromaFile = '',
         currentCollageFile = '',
-        imgFilter = config.default_imagefilter,
+        imgFilter = config.filters.defaults,
         ioClient,
         pid;
 
@@ -339,9 +339,13 @@ const photoBooth = (function () {
         }
 
         loader.addClass('open');
-        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.cntdwn_time, $('#counter'), () => {
-            api.cheese(photoStyle);
-        });
+        api.startCountdown(
+            nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time,
+            $('#counter'),
+            () => {
+                api.cheese(photoStyle);
+            }
+        );
     };
 
     // Cheese
@@ -353,7 +357,7 @@ const photoBooth = (function () {
         $('#counter').empty();
         $('.cheese').empty();
 
-        if (config.no_cheese) {
+        if (config.picture.no_cheese) {
             console.log('Cheese is disabled.');
         } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
             const cheesemsg = i18n('cheese');
@@ -366,7 +370,7 @@ const photoBooth = (function () {
                 .appendTo('.cheese');
         }
 
-        if (config.preview.mode === 'gphoto' && !config.no_cheese) {
+        if (config.preview.mode === 'gphoto' && !config.picture.no_cheese) {
             api.stopPreviewVideo();
         }
 
@@ -376,12 +380,12 @@ const photoBooth = (function () {
             api.errorPic({
                 error: 'No preview by device cam available!'
             });
-        } else if (config.no_cheese) {
+        } else if (config.picture.no_cheese) {
             api.takePic(photoStyle);
         } else {
             setTimeout(() => {
                 api.takePic(photoStyle);
-            }, config.cheese_time);
+            }, config.picture.cheese_time);
         }
     };
 
@@ -441,7 +445,7 @@ const photoBooth = (function () {
                 }
 
                 // reset filter (selection) after picture was taken
-                imgFilter = config.default_imagefilter;
+                imgFilter = config.filters.defaults;
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
                 $('#' + imgFilter).addClass('activeSidenavBtn');
 
@@ -776,7 +780,7 @@ const photoBooth = (function () {
                 cb();
             }
             count++;
-            if (config.preview.mode === 'gphoto' && config.no_cheese && count === stop) {
+            if (config.preview.mode === 'gphoto' && config.picture.no_cheese && count === stop) {
                 api.stopPreviewVideo();
             }
         }
@@ -1042,7 +1046,7 @@ const photoBooth = (function () {
 
     $(document).on('keyup', function (ev) {
         if ($('.triggerPic')[0] || $('.triggerCollage')[0]) {
-            if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
+            if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (!takingPic) {
                     $('.closeGallery').trigger('click');
                     $('.triggerPic').trigger('click');

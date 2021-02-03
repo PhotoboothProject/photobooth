@@ -65,13 +65,13 @@ endif;
 		<?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
 
 		<!-- image Filter Pane -->
-		<?php if ($config['use_filter']): ?>
+		<?php if ($config['filters']['enabled']): ?>
 		<div id="mySidenav" class="dragscroll sidenav">
 			<a href="#" class="closebtn <?php echo $btnClass2; ?>"><i class="fa fa-times"></i></a>
 
 			<?php foreach(AVAILABLE_FILTERS as $filter => $name): ?>
-				<?php if (!in_array($filter, $config['disabled_filters'])): ?>
-					<div id="<?=$filter?>" class="filter <?php if($config['default_imagefilter'] === $filter)echo 'activeSidenavBtn'; ?>">
+				<?php if (!in_array($filter, $config['filters']['disabled'])): ?>
+					<div id="<?=$filter?>" class="filter <?php if($config['filters']['defaults'] === $filter)echo 'activeSidenavBtn'; ?>">
 						<a class="btn btn--small" href="#"><?=$name?></a>
 					</div>
 				<?php endif; ?>
@@ -127,11 +127,11 @@ endif;
 					<?php endif; ?>
 				<?php endif; ?>
 
-				<?php if ($config['use_filter']): ?>
+				<?php if ($config['filters']['enabled']): ?>
 				<a href="#" class="<?php echo $btnClass1; ?> imageFilter"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
 				<?php endif; ?>
 
-				<?php if ($config['allow_delete']): ?>
+				<?php if ($config['picture']['allow_delete']): ?>
 				<a href="#" class="<?php echo $btnClass1; ?> deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 				<?php endif; ?>
 			</div>

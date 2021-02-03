@@ -41,28 +41,28 @@ $config['button']['force_buzzer'] = false;
 
 // P I C T U R E S
 // control countdown timer in seconds
-$config['cntdwn_time'] = '5';
-$config['no_cheese'] = false;
+$config['picture']['cntdwn_time'] = '5';
+$config['picture']['no_cheese'] = false;
 // control time for cheeeeese! in milliseconds
-$config['cheese_time'] = '1000';
-$config['pictureRotation'] = '0';
-$config['polaroid_effect'] = false;
-$config['polaroid_rotation'] = '0';
-$config['use_filter'] = true;
-$config['default_imagefilter'] = 'plain';
-$config['disabled_filters'] = array();
-$config['take_frame'] = false;
-$config['take_frame_path'] = '../resources/img/frames/frame.png';
-// specify key id (e.g. 13 is the enter key) to use that key to take a picture (photo_key)
+$config['picture']['cheese_time'] = '1000';
+$config['picture']['rotation'] = '0';
+$config['picture']['polaroid_effect'] = false;
+$config['picture']['polaroid_rotation'] = '0';
+$config['filters']['enabled'] = true;
+$config['filters']['defaults'] = 'plain';
+$config['filters']['disabled'] = array();
+$config['picture']['take_frame'] = false;
+$config['picture']['frame_path'] = '../resources/img/frames/frame.png';
+// specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
-$config['photo_key'] = null;
-// possible file_naming values: 'dateformatted', 'numbered', 'random'
-$config['file_naming'] = 'dateformatted';
-// picture_permissions example values: '0644' (rw-r--r--), '0666' (rw-rw-rw-), '0600' (rw-------)
-$config['picture_permissions'] = '0644';
-$config['keep_images'] = true;
-$config['preserve_exif_data'] = false;
-$config['allow_delete'] = true;
+$config['picture']['key'] = null;
+// possible naming values: 'dateformatted', 'numbered', 'random'
+$config['picture']['naming'] = 'dateformatted';
+// permissions example values: '0644' (rw-r--r--), '0666' (rw-rw-rw-), '0600' (rw-------)
+$config['picture']['permissions'] = '0644';
+$config['picture']['keep_original'] = true;
+$config['picture']['preserve_exif_data'] = false;
+$config['picture']['allow_delete'] = true;
 
 
 // C O L L A G E
@@ -90,7 +90,7 @@ $config['pswp']['animateTransitions'] = false;
 $config['pswp']['fullscreenEl'] = false;
 $config['pswp']['counterEl'] = true;
 $config['pswp']['history'] = true;
-// show_date only works if file_naming = 'dateformatted' in general section
+// show_date only works if picture naming  = 'dateformatted'
 $config['gallery']['show_date'] = true;
 $config['gallery']['date_format'] = 'd.m.Y - G:i';
 $config['gallery']['db_check_enabled'] = true;

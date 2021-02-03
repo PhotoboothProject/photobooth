@@ -56,12 +56,12 @@ function takePicture($filename) {
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $name = $_POST['file'];
-} elseif ($config['file_naming'] === 'numbered') {
+} elseif ($config['picture']['naming'] === 'numbered') {
     $images = getImagesFromDB();
     $img_number = count($images);
     $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
     $name = $files . '.jpg';
-} elseif ($config['file_naming'] === 'dateformatted') {
+} elseif ($config['picture']['naming'] === 'dateformatted') {
     $name = date('Ymd_His') . '.jpg';
 } else {
     $name = md5(time()) . '.jpg';

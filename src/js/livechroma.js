@@ -195,7 +195,7 @@ function saveImage(cb) {
                 $('.chroma-control-bar').show();
                 $('.takeChroma').hide();
             }
-            if (config.allow_delete) {
+            if (config.picture.allow_delete) {
                 $('.deletebtn').css('visibility', 'visible');
                 $('.chroma-control-bar')
                     .find('.deletebtn')
@@ -273,12 +273,12 @@ $('.takeChroma, .newchroma').on('click', function (e) {
         setTimeout(() => {
             $('.chromaNote').show();
             $('.chromaNote').text(chromaInfo);
-        }, config.cntdwn_time * 1000);
+        }, config.picture.cntdwn_time * 1000);
     }
 });
 
 $(document).on('keyup', function (ev) {
-    if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
+    if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
         if (!backgroundImage) {
             console.log('Please choose a background first!');
         } else if (needsReload) {
