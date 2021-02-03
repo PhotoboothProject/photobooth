@@ -215,25 +215,25 @@ $configsetup = [
     ],
     'frontpage' => [
         'view' => 'basic',
-        'show_fork' => [
+        'ui_show_fork' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'show_fork',
-            'value' => $config['show_fork'],
+            'name' => 'ui[show_fork]',
+            'value' => $config['ui']['show_fork'],
         ],
-        'is_event' => [
+        'event_enabled' => [
             'type' => 'checkbox',
-            'name' => 'is_event',
-            'value' => $config['is_event'],
+            'name' => 'event[enabled]',
+            'value' => $config['event']['enabled'],
         ],
-        'textLeft' => [
+        'event_textLeft' => [
             'view' => 'basic',
             'type' => 'input',
             'placeholder' => 'Name 1',
             'name' => 'event[textLeft]',
             'value' => htmlentities($config['event']['textLeft']),
         ],
-        'symbol' => [
+        'event_symbol' => [
             'view' => 'basic',
             'type' => 'select',
             'name' => 'event[symbol]',
@@ -256,7 +256,7 @@ $configsetup = [
             ],
             'value' => $config['event']['symbol'],
         ],
-        'textRight' => [
+        'event_textRight' => [
             'view' => 'basic',
             'type' => 'input',
             'placeholder' => 'Name 2',

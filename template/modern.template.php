@@ -4,7 +4,7 @@
 				<div class="divaussen">
 					<div class="divinnen">
             					<div class="divinnen2">
-							<?php if ($config['is_event']): ?>
+							<?php if ($config['event']['enabled']): ?>
 							<div class="names">
 								<hr class="small" />
 								<hr>
@@ -70,7 +70,7 @@
 				</div>
 			</div>
 
-			<?php if ($config['show_fork']): ?>
+			<?php if ($config['ui']['show_fork']): ?>
 			<a href="https://github.com/andi34/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
 			<?php endif; ?>
 		</div>

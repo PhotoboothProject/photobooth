@@ -5,7 +5,7 @@
 			<?php endif; ?>
 
 			<div class="startInner">
-				<?php if ($config['is_event']): ?>
+				<?php if ($config['event']['enabled']): ?>
 				<div class="names">
 					<hr class="small" />
 					<hr>
@@ -51,7 +51,7 @@
 				<button hidden class="triggerCollage"></button>
 			</div>
 
-			<?php if ($config['show_fork']): ?>
+			<?php if ($config['ui']['show_fork']): ?>
 			<a href="https://github.com/andi34/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
 			<?php endif; ?>
 

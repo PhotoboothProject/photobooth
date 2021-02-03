@@ -29,8 +29,8 @@ $config['database']['file'] = 'db';
 
 
 // F R O N T P A G E
-$config['show_fork'] = true;
-$config['is_event'] = true;
+$config['ui']['show_fork'] = true;
+$config['event']['enabled'] = true;
 $config['event']['textLeft'] = 'We';
 // possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o', 
 //                               'fa-heart', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
