@@ -1416,56 +1416,56 @@ $configsetup = [
     ],
     'folders' => [
         'view' => 'expert',
-        'data' => [
+        'folders_data' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['folders']['data'],
             'name' => 'folders[data]',
             'value' => $config['folders']['data'],
         ],
-        'images' => [
+        'folders_images' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['folders']['images'],
             'name' => 'folders[images]',
             'value' => $config['folders']['images'],
         ],
-        'keying' => [
+        'folders_keying' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['folders']['keying'],
             'name' => 'folders[keying]',
             'value' => $config['folders']['keying'],
         ],
-        'print' => [
+        'folders_print' => [
             'view' => 'expert',
             'type' => 'input',
             'name' => 'folders[print]',
             'placeholder' => $defaultConfig['folders']['print'],
             'value' => $config['folders']['print'],
         ],
-        'qrcodes' => [
+        'folders_qrcodes' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['folders']['qrcodes'],
             'name' => 'folders[qrcodes]',
             'value' => $config['folders']['qrcodes'],
         ],
-        'thumbs' => [
+        'folders_thumbs' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['folders']['thumbs'],
             'name' => 'folders[thumbs]',
             'value' => $config['folders']['thumbs'],
         ],
-        'tmp' => [
+        'folders_tmp' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['folders']['tmp'],
             'name' => 'folders[tmp]',
             'value' => $config['folders']['tmp'],
         ],
-        'archives' => [
+        'folders_archives' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['folders']['archives'],
