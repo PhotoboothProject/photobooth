@@ -38,6 +38,9 @@ function createCollage($srcImagePaths, $destImagePath) {
             $background = imagecolorallocate($my_collage, 0, 0, 0);
             imagecolortransparent($my_collage, $background);
 
+            if ($landscape == false) {
+                $rotate_after_creation = true;
+            }
             $positions = [[0, 0], [$width / 2, 0], [0, $height / 2], [$width / 2, $height / 2]];
 
             for ($i = 0; $i < 4; $i++) {
@@ -57,14 +60,14 @@ function createCollage($srcImagePaths, $destImagePath) {
             }
             break;
         case '2x4':
-            if ($landscape) {
-                $rotate_after_creation = true;
-            }
-            $degrees = 90;
             $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, 255, 255, 255);
             imagefill($my_collage, 0, 0, $background);
 
+            if ($landscape) {
+                $rotate_after_creation = true;
+            }
+            $degrees = 90;
             $images_rotated = [];
 
             for ($i = 0; $i < 4; $i++) {
