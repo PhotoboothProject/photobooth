@@ -114,9 +114,9 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/nan');
     archive.directory('node_modules/negotiator');
     archive.directory('node_modules/object-component');
+    archive.directory('node_modules/onoff');
     archive.directory('node_modules/parseqs');
     archive.directory('node_modules/parseuri');
-    archive.directory('node_modules/rpio');
     archive.directory('node_modules/selectize');
     archive.directory('node_modules/socket.io');
     archive.directory('node_modules/socket.io-adapter');

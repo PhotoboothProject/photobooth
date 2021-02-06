@@ -309,15 +309,26 @@ EOF
 
 fi
 
-info "### Enable Nodejs GPIO access - please reboot in order to use the Remote Buzzer Feature"
-usermod -a -G gpio www-data
-cat > /etc/udev/rules.d/20-photobooth-gpiomem.rules <<EOF
-SUBSYSTEM=="bcm2835-gpiomem", KERNEL=="gpiomem", GROUP="gpio", MODE="0660"
-EOF
+info "### Remote Buzzer Feature"
+info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
+# remove old artifacts from node-rpio library, if there was
+rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
 sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+# add configuration required for onoff library
+usermod -a -G gpio www-data
+sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
 cat >> /boot/config.txt  << EOF
-dtoverlay=gpio-no-irq
+# Photobooth
+gpio=16,20,21=pu
+# Photobooth End
 EOF
+# add configuration required for www-data to be able to initiate system shutdown
+info "### Note: In order for the shutdown button to work we install /etc/sudoers.d/020_www-data-shutdown"
+cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
+## Photobooth Remotebuzzer shutdown button for www-data to shutdown the system
+www-data ALL=NOPASSWD: /sbin/shutdown
+EOF
+echo -e "\033[0m"
 
 echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
 echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"

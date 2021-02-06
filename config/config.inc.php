@@ -198,7 +198,13 @@ $config['remotebuzzer']['enabled'] = false;
 // collagetime controls the time to distinguish picture from collage in seconds
 $config['remotebuzzer']['collagetime'] = '2';
 $config['remotebuzzer']['port'] = 14711;
-$config['remotebuzzer']['pin'] = 40;
+$config['remotebuzzer']['picturebutton'] = true;
+$config['remotebuzzer']['picturegpio'] = 21;
+$config['remotebuzzer']['collagebutton'] = false;
+$config['remotebuzzer']['collagegpio'] = 20;
+$config['remotebuzzer']['shutdownbutton'] = false;
+$config['remotebuzzer']['shutdowngpio'] = 16;
+$config['remotebuzzer']['shutdownholdtime'] = '5';
 
 
 // S Y N C  T O  U S B  S T I C K

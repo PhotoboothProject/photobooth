@@ -126,23 +126,47 @@ sudo crontab -e
 <hr>
 
 ### Hardware Button for WLAN connected screen (i.e. iPad) - Remote Buzzer Server
-This feature enables a GPIO pin connected hardware button / buzzer for a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad). Configuration takes place in the admin settings - Remote Buzzer Server area.
+This feature enables multiple GPIO pin connected hardware buttons (buzzer) in a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad). Configuration takes place in the admin settings - Remote Buzzer Server area.
 
 **Important: You must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
 
 Debugging: switch on dev settings for server logs to be written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/io_server.log`). Clients will log server communication information to the browser console.
 
-If you experience crashes or access permission problems to GPIO pins, check [https://www.npmjs.com/package/rpio](https://www.npmjs.com/package/rpio) for additional settings required on the Pi
-
 ***************
-Hardware Buzzer / Button
+Hardware Button (Buzzer)
 ***************
-The hardware buzzer connects to a GPIO pin, the server will watch for a PIN_DOWN event (pull to ground). This will initiate a message to the photobooth screen over network / WLAN, to trigger the action (thrill).
+The server supports up to three connected hardware buttons for the following functionalities.
 
-- Short button press (default <= 2 sec) will trigger a single picture
-- Long button press (default > 2 sec) will trigger a collage
- - If collage is configured with interruption, next button presses will trigger the next collage pictures. 
- - If collage is disabled in the admin settings, long button press also triggers a single picture
+1) **Picture Button**
+
+- Defaults to GPIO21
+- Short button press (default <= 2 sec) will trigger a single picture in Photobooth
+- Long button press (default > 2 sec) will trigger a collage in Photobooth
+
+Note:
+ -  If collage is configured with interruption, next button presses will trigger the next collage pictures. 
+ -  If collage is disabled in the admin settings, long button press also triggers a single picture
+ -  If the collage button is activated (see next), the picture button will never trigger a collage, regardless
+
+2)  **Collage Button**
+
+- Defaults to GPIO20
+- Button press will trigger a collage in Photobooth.
+
+Note:
+- If collage is configured with interruption, next button presses will trigger the next collage pictures. 
+ - If collage is disabled in the admin settings, this button will do nothing even if it is activated in the admin settings
+
+3) **Shutdown Button**
+
+- Defaults to GPIO16
+- This button will initate a safe system shutdown and halt (`shutdown -h now`).
+
+Note:
+- One needs to hold the button for a defined time to initiate the shut down (defaults to 3 seconds). This can be adjusted in the admin settings.
+- The shutdown button will only trigger if there is currently no action in progress in Photobooth (picture, collage). 
+
+All hardware buttons connect to a GPIO pin and the server will watch for a PIN_DOWN event (pull to ground). This will initiate a message to the photobooth screen over network / WLAN, to trigger the action (thrill).
 
 After triggered, the hardware button remains disabled until an action (picture / collage) has fully completed. Then the hardware button re-arms / is active again.
 
