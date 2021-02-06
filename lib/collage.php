@@ -67,6 +67,51 @@ function createCollage($srcImagePaths, $destImagePath) {
                 imagedestroy($tempSubImage);
             }
             break;
+        case '2x2-2':
+            $width = 1800;
+            $height = 1200;
+            $my_collage = imagecreatetruecolor($width, $height);
+            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            imagefill($my_collage, 0, 0, $background);
+
+            if ($landscape == false) {
+                $rotate_after_creation = true;
+            }
+            $degrees = 0;
+            $heightp = 469;
+            $widthp = 636;
+            $PositionsX = [125, 810, 125, 810]; //X offset in Pixel
+            $PositionsYtop = 111; // y offset for top pictures
+            $PositionsYbot = 625; //y offset for bottom pictures
+
+            for ($i = 0; $i < 4; $i++) {
+                if ($i < 2) {
+                    ResizeCropImage($widthp, $heightp, $srcImagePaths[$i], $srcImagePaths[$i]);
+                    $dX = $PositionsX[$i];
+                    $dY = $PositionsYtop;
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
+                } else {
+                    ResizeCropImage($widthp, $heightp, $srcImagePaths[$i], $srcImagePaths[$i]);
+                    $dX = $PositionsX[$i];
+                    $dY = $PositionsYbot;
+                    list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
+                }
+
+                if (!file_exists($srcImagePaths[$i])) {
+                    return false;
+                }
+
+                if (COLLAGE_TAKE_FRAME === 'always') {
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], COLLAGE_FRAME);
+                }
+
+                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
+                imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
+                imagedestroy($tempSubRotated); // Destroy temporary images
+                imagedestroy($tempSubImage); // Destroy temporary images
+            }
+            break;
         case '2x4':
             $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, 255, 255, 255);

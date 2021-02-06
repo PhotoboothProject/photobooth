@@ -442,6 +442,7 @@ $configsetup = [
             'placeholder' => $defaultConfig['collage']['layout'],
             'options' => [
                 '2x2' => '2x2',
+                '2x2-2' => '2x2 (2)',
                 '2x4' => '2x4',
                 '2x4-2' => '2x4 (2)',
                 '1+3' => '1+3',
