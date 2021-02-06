@@ -41,9 +41,9 @@ require_once __DIR__ . '/filter.php';
  **   - The i18n tag for translation is identified by concatenation of  section key, ':', setting key. Tags for manual entries
  **     start with "manual:"
  **     Examples:
- **		"general:language"
- **		"user_interface:toggle_fs_button"
- **		"manual:print:use_print_result"
+ **		"general:ui_language"
+ **		"user_interface:button_show_fs"
+ **		"manual:print:print_from_result"
  **
  **   - Parameter: Can be key/value or key/array pairs. Sort order does not matter.
  **    	* 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
@@ -51,12 +51,12 @@ require_once __DIR__ . '/filter.php';
  ** 	* 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
  ** 	* 'type': Values are 'input', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
  ** 	  	  input type in the admin panel for this setting.
- ** 	* 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['auto_reload_on_error']) and pre-
+ ** 	* 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
  ** 	  	   populates the current config value into the admin panel
  **		   Exceptionally, for type 'button' this is the HTML element ID applied to the actual button itself.
  ** 	* 'placeholder': For types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
  ** 	  		 field / range selector. Often references the default config for this setting
- ** 			 (i.e 'placeholder' => $defaultConfig['time_to_live'])
+ ** 			 (i.e 'placeholder' => $defaultConfig['picture']['time_to_live'])
  **			 For type 'button' this is the i18ntag string for the actual button text.
  ** 	* 'option': Only for types 'select','multi-select'. Lists the options available in this setting (i.e.
  **   	                'options' => [
