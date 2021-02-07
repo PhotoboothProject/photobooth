@@ -463,7 +463,7 @@ const photoBooth = (function () {
 
                 if (result.error) {
                     api.errorPic(result);
-                } else if (result.success === 'collage' && result.current + 1 < result.limit) {
+                } else if (result.success === 'collage') {
                     currentCollageFile = result.file;
                     nextCollageNumber = result.current + 1;
 
@@ -472,13 +472,20 @@ const photoBooth = (function () {
                     $('#video--sensor').hide();
 
                     if (config.collage.continuous) {
-                        setTimeout(() => {
-                            api.thrill('collage');
-                        }, 1000);
+                        if (result.current + 1 < result.limit) {
+                            setTimeout(() => {
+                                api.thrill('collage');
+                            }, 1000);
+                        } else {
+                            currentCollageFile = '';
+                            nextCollageNumber = 0;
+
+                            api.processPic(data.style, result);
+                        }
                     } else {
                         let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
-                        let preloadImage = new Image();
-                        let picdate = Date.now;
+                        const preloadImage = new Image();
+                        const picdate = Date.now;
                         preloadImage.onload = () => {
                             $('.loaderImage').css({
                                 'background-image': `url(${imageUrl}?filter=${imgFilter})`
@@ -493,16 +500,32 @@ const photoBooth = (function () {
                             ioClient.emit('photobooth-socket', 'collage-wait-for-next');
                         }
 
-                        $('<a class="btn" href="#">' + api.getTranslation('nextPhoto') + '</a>')
-                            .appendTo('.loading')
-                            .click((ev) => {
-                                ev.preventDefault();
-                                $('.loaderImage').css('background-image', 'none');
-                                imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
-                                api.deleteTmpImage(result.collage_file);
-                                api.thrill('collage');
-                            });
+                        if (result.current + 1 < result.limit) {
+                            $('<a class="btn" href="#">' + api.getTranslation('nextPhoto') + '</a>')
+                                .appendTo('.loading')
+                                .click((ev) => {
+                                    ev.preventDefault();
+                                    $('.loaderImage').css('background-image', 'none');
+                                    imageUrl = '';
+                                    $('.loaderImage').css('display', 'none');
+                                    api.deleteTmpImage(result.collage_file);
+                                    api.thrill('collage');
+                                });
+                        } else {
+                            $('<a class="btn" href="#">' + api.getTranslation('processPhoto') + '</a>')
+                                .appendTo('.loading')
+                                .click((ev) => {
+                                    ev.preventDefault();
+                                    $('.loaderImage').css('background-image', 'none');
+                                    imageUrl = '';
+                                    $('.loaderImage').css('display', 'none');
+                                    api.deleteTmpImage(result.collage_file);
+                                    currentCollageFile = '';
+                                    nextCollageNumber = 0;
+
+                                    api.processPic(data.style, result);
+                                });
+                        }
                         $(
                             '<a class="btn" style="margin-left:2px" href="#">' +
                                 api.getTranslation('retakePhoto') +
@@ -525,58 +548,10 @@ const photoBooth = (function () {
                     chromaFile = result.file;
                     api.processPic(data.style, result);
                 } else {
-                    if (config.collage.continuous) {
-                        currentCollageFile = '';
-                        nextCollageNumber = 0;
+                    currentCollageFile = '';
+                    nextCollageNumber = 0;
 
-                        api.processPic(data.style, result);
-                    } else {
-                        let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
-                        let preloadImage = new Image();
-                        let picdate = Date.now;
-                        preloadImage.onload = () => {
-                            $('.loaderImage').css({
-                                'background-image': `url(${imageUrl}?filter=${imgFilter})`
-                            });
-                            $('.loaderImage').attr('data-img', picdate);
-                        };
-
-                        preloadImage.src = imageUrl;
-
-                        $('.loaderImage').show();
-                        if (config.remotebuzzer.enabled) {
-                            ioClient.emit('photobooth-socket', 'collage-wait-for-next');
-                        }
-
-                        $('<a class="btn" href="#">' + api.getTranslation('processPhoto') + '</a>')
-                            .appendTo('.loading')
-                            .click((ev) => {
-                                ev.preventDefault();
-                                $('.loaderImage').css('background-image', 'none');
-                                imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
-                                api.deleteTmpImage(result.collage_file);
-                                currentCollageFile = '';
-                                nextCollageNumber = 0;
-
-                                api.processPic(data.style, result);
-                            });
-                        $(
-                            '<a class="btn" style="margin-left:2px" href="#">' +
-                                api.getTranslation('retakePhoto') +
-                                '</a>'
-                        )
-                            .appendTo('.loading')
-                            .click((ev) => {
-                                ev.preventDefault();
-                                $('.loaderImage').css('background-image', 'url(resources/img/spacer.png)');
-                                imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
-                                api.deleteTmpImage(result.collage_file);
-                                nextCollageNumber = result.current;
-                                api.thrill('collage');
-                            });
-                    }
+                    api.processPic(data.style, result);
                 }
             })
             .fail(function (xhr, status, result) {
