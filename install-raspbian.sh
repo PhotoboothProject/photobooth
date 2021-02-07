@@ -312,8 +312,11 @@ fi
 info "### Remote Buzzer Feature"
 info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
 # remove old artifacts from node-rpio library, if there was
-rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
-sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
+    info "### Remotebuzzer switched from node-rpio to onoff library. We detected an old remotebuzzer installation and will remove artifacts"
+    rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
+    sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+fi
 # add configuration required for onoff library
 usermod -a -G gpio www-data
 sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt

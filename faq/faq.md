@@ -128,9 +128,11 @@ sudo crontab -e
 ### Hardware Button for WLAN connected screen (i.e. iPad) - Remote Buzzer Server
 This feature enables multiple GPIO pin connected hardware buttons (buzzer) in a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad). Configuration takes place in the admin settings - Remote Buzzer Server area.
 
-**Important: You must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
+Troubleshooting / Debugging:
 
-Debugging: switch on dev settings for server logs to be written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/io_server.log`). Clients will log server communication information to the browser console.
+- **Important: You must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
+- Switch on dev settings for server logs to be written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/remotebuzzer_server.log`). Clients will log server communication information to the browser console.
+- If hardware buttons do not trigger, GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
 
 ***************
 Hardware Button (Buzzer)
@@ -179,7 +181,7 @@ The trigger server controls and coordinates sending commands via socket.io to th
 - Commands: `start-picture`, `start-collage`
 - Response: `completed`  will be emitted to the client, once photobooth finished the task
 
-This functionality is experimental and largely untested. 
+This functionality is experimental and largely untested. Not sure if there is a use-case but if you have one, happy to learn about it. 
 
 <hr>
 
