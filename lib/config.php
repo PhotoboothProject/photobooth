@@ -79,8 +79,8 @@ $mailTemplates = [
 
 require_once $default_config_file;
 
-$config['mail']['subject'] = $mailTemplates[$config['language']]['mail']['subject'];
-$config['mail']['text'] = $mailTemplates[$config['language']]['mail']['text'];
+$config['mail']['subject'] = $mailTemplates[$config['ui']['language']]['mail']['subject'];
+$config['mail']['text'] = $mailTemplates[$config['ui']['language']]['mail']['text'];
 $config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
 $config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
 $config['print']['cmd'] = $cmds[$os]['print']['cmd'];
@@ -103,6 +103,12 @@ $defaultConfig = $config;
 if (file_exists($my_config_file)) {
     require_once $my_config_file;
 
+    if (!isset($config['mail']['subject'])) {
+        $config['mail']['subject'] = $mailTemplates[$config['ui']['language']]['mail']['subject'];
+    }
+    if (!isset($config['mail']['text'])) {
+        $config['mail']['text'] = $mailTemplates[$config['ui']['language']]['mail']['text'];
+    }
     $config = array_deep_merge($defaultConfig, $config);
 }
 

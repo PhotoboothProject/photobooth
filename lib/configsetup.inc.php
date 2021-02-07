@@ -958,14 +958,14 @@ $configsetup = [
         'mail_subject' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail']['subject'],
+            'placeholder' => '',
             'name' => 'mail[subject]',
             'value' => htmlentities($config['mail']['subject']),
         ],
         'mail_text' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail']['text'],
+            'placeholder' => '',
             'name' => 'mail[text]',
             'value' => htmlentities($config['mail']['text']),
         ],
