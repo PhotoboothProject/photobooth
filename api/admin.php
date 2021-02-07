@@ -53,18 +53,15 @@ if ($data['type'] == 'config') {
 
     foreach ($config as $k => $conf) {
         if (is_array($conf)) {
-            if (!empty($data[$k]) && is_array($data[$k])) {
-                $newConfig[$k] = $data[$k];
-                continue;
-            }
-
             foreach ($conf as $sk => $sc) {
-                if (isset($data[$k][$sk]) && !empty($data[$k][$sk])) {
+                if (isset($data[$k][$sk])) {
                     if ($data[$k][$sk] == 'true') {
                         $newConfig[$k][$sk] = true;
                     } else {
                         $newConfig[$k][$sk] = $data[$k][$sk];
                     }
+                } elseif (isset($defaultConfig[$k][$sk])) {
+                    $newConfig[$k][$sk] = false;
                 }
             }
         } else {
