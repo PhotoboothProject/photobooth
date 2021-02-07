@@ -167,7 +167,28 @@
   width: 100%;
 }
 
+.loaderImage {
+  display: none;
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  background: center center no-repeat;
+  background-size: contain;
+  @media (max-width: 767px) {
+    width: 80%;
+    height: 80%;
+  }
+}
+
 .loading {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0;
+  z-index: 102;
   font-size: 3.125em;
   text-align: center;
   width: 100%;
@@ -178,6 +199,10 @@
 
   .btn {
     font-size: 0.4em;
+  }
+
+  @media (max-width: 767px) {
+    bottom: 0.5em;
   }
 }
 

@@ -476,6 +476,19 @@ const photoBooth = (function () {
                             api.thrill('collage');
                         }, 1000);
                     } else {
+                        let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
+                        let preloadImage = new Image();
+                        let picdate = Date.now;
+                        preloadImage.onload = () => {
+                            $('.loaderImage').css({
+                                'background-image': `url(${imageUrl}?filter=${imgFilter})`
+                            });
+                            $('.loaderImage').attr('data-img', picdate);
+                        };
+
+                        preloadImage.src = imageUrl;
+
+                        $('.loaderImage').show();
                         if (config.remotebuzzer.enabled) {
                             ioClient.emit('photobooth-socket', 'collage-wait-for-next');
                         }
@@ -484,7 +497,24 @@ const photoBooth = (function () {
                             .appendTo('.loading')
                             .click((ev) => {
                                 ev.preventDefault();
-
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
+                                api.thrill('collage');
+                            });
+                        $(
+                            '<a class="btn" style="margin-left:2px" href="#">' +
+                                api.getTranslation('retakePhoto') +
+                                '</a>'
+                        )
+                            .appendTo('.loading')
+                            .click((ev) => {
+                                ev.preventDefault();
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
+                                api.deleteTmpImage(result.collage_file);
+                                nextCollageNumber = result.current;
                                 api.thrill('collage');
                             });
                         const abortmsg = api.getTranslation('abort');
@@ -494,10 +524,57 @@ const photoBooth = (function () {
                     chromaFile = result.file;
                     api.processPic(data.style, result);
                 } else {
-                    currentCollageFile = '';
-                    nextCollageNumber = 0;
+                    if (config.collage.continuous) {
+                        currentCollageFile = '';
+                        nextCollageNumber = 0;
 
-                    api.processPic(data.style, result);
+                        api.processPic(data.style, result);
+                    } else {
+                        let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
+                        let preloadImage = new Image();
+                        let picdate = Date.now;
+                        preloadImage.onload = () => {
+                            $('.loaderImage').css({
+                                'background-image': `url(${imageUrl}?filter=${imgFilter})`
+                            });
+                            $('.loaderImage').attr('data-img', picdate);
+                        };
+
+                        preloadImage.src = imageUrl;
+
+                        $('.loaderImage').show();
+                        if (config.remotebuzzer.enabled) {
+                            ioClient.emit('photobooth-socket', 'collage-wait-for-next');
+                        }
+
+                        $('<a class="btn" href="#">' + api.getTranslation('processPhoto') + '</a>')
+                            .appendTo('.loading')
+                            .click((ev) => {
+                                ev.preventDefault();
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
+                                currentCollageFile = '';
+                                nextCollageNumber = 0;
+
+                                api.processPic(data.style, result);
+                            });
+                        $(
+                            '<a class="btn" style="margin-left:2px" href="#">' +
+                                api.getTranslation('retakePhoto') +
+                                '</a>'
+                        )
+                            .appendTo('.loading')
+                            .click((ev) => {
+                                ev.preventDefault();
+                                $('.loaderImage').css('background-image', 'url(resources/img/spacer.png)');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
+                                api.deleteTmpImage(result.collage_file);
+                                nextCollageNumber = result.current;
+                                api.thrill('collage');
+                            });
+                    }
                 }
             })
             .fail(function (xhr, status, result) {
@@ -875,6 +952,27 @@ const photoBooth = (function () {
                     console.log('Error while deleting image');
                 }
                 cb(data);
+            },
+            error: (jqXHR, textStatus) => {
+                console.log('Error while deleting image: ', textStatus);
+                setTimeout(function () {
+                    api.reloadPage();
+                }, 5000);
+            }
+        });
+    };
+
+    api.deleteTmpImage = function (imageName) {
+        $.ajax({
+            url: 'api/deleteTmpPhoto.php',
+            method: 'POST',
+            data: {
+                file: imageName
+            },
+            success: (data) => {
+                if (data.error) {
+                    console.log('Error while deleting image');
+                }
             },
             error: (jqXHR, textStatus) => {
                 console.log('Error while deleting image: ', textStatus);

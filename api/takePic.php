@@ -104,6 +104,9 @@ if ($_POST['style'] === 'photo') {
         );
     }
 
+    $basecollage = substr($file, 0, -4);
+    $collage_name = $basecollage . '-' . $number . '.jpg';
+
     $basename = substr($filename_tmp, 0, -4);
     $filename = $basename . '-' . $number . '.jpg';
 
@@ -113,6 +116,7 @@ if ($_POST['style'] === 'photo') {
         json_encode([
             'success' => 'collage',
             'file' => $file,
+            'collage_file' => $collage_name,
             'current' => $number,
             'limit' => $config['collage']['limit'],
         ])

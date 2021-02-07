@@ -94,6 +94,7 @@ endif;
 					<canvas id="video--sensor"></canvas>
 				</div>
 				<div class="cheese"></div>
+				<div class="loaderImage"></div>
 				<div class="loading"></div>
 			</div>
 		</div>
