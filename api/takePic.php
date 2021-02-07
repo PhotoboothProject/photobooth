@@ -105,12 +105,13 @@ if ($_POST['style'] === 'photo') {
     }
 
     $basecollage = substr($file, 0, -4);
-    $collage_name = $basecollage . '-' . $number . '.jpg';
+    $collage_name = $basecollage . '-' . date('Ymd_His') . '.jpg';
 
     $basename = substr($filename_tmp, 0, -4);
     $filename = $basename . '-' . $number . '.jpg';
 
     takePicture($filename);
+    copy($filename, $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $collage_name);
 
     die(
         json_encode([
