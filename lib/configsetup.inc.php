@@ -229,7 +229,7 @@ $configsetup = [
         'event_textLeft' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => 'Name 1',
+            'placeholder' => 'Text Left',
             'name' => 'event[textLeft]',
             'value' => htmlentities($config['event']['textLeft']),
         ],
@@ -259,7 +259,7 @@ $configsetup = [
         'event_textRight' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => 'Name 2',
+            'placeholder' => 'Text Right',
             'name' => 'event[textRight]',
             'value' => htmlentities($config['event']['textRight']),
         ],
