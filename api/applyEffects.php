@@ -44,6 +44,24 @@ if (!isset($_POST['style'])) {
 }
 
 if ($_POST['style'] === 'collage') {
+    if ($config['collage']['take_frame'] !== 'off') {
+        if (is_dir(COLLAGE_FRAME)) {
+            die(
+                json_encode([
+                    'error' => 'Frame not set! ' . COLLAGE_FRAME . ' is a path but needs to be a png!',
+                ])
+            );
+        }
+
+        if (!file_exists(COLLAGE_FRAME)) {
+            die(
+                json_encode([
+                    'error' => 'Frame ' . COLLAGE_FRAME . ' does not exist!',
+                ])
+            );
+        }
+    }
+
     $collageBasename = substr($filename_tmp, 0, -4);
     $collageSrcImagePaths = [];
 
