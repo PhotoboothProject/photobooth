@@ -3,18 +3,18 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/resize.php';
 require_once __DIR__ . '/applyFrame.php';
 
-define('LAYOUT', $config['collage']['layout']);
-define('FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path']);
-define('TAKE_FRAME', $config['collage']['take_frame']);
+define('COLLAGE_LAYOUT', $config['collage']['layout']);
+define('COLLAGE_FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame_path']);
+define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
-define('KEEP_IMAGE', $config['picture']['keep_original'] === true ? 'keep' : 'discard');
+define('PICTURE_KEEP_ORIGINAL', $config['picture']['keep_original'] === true ? 'keep' : 'discard');
 
 function createCollage($srcImagePaths, $destImagePath) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
         return false;
     }
 
-    if (KEEP_IMAGE === 'keep') {
+    if (PICTURE_KEEP_ORIGINAL === 'keep') {
         for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
             copy($srcImagePaths[$i], $srcImagePaths[$i] . '_orig.jpg');
         }
@@ -40,7 +40,7 @@ function createCollage($srcImagePaths, $destImagePath) {
         list($width, $height) = getimagesize($srcImagePaths[0]);
     }
 
-    switch (LAYOUT) {
+    switch (COLLAGE_LAYOUT) {
         case '2x2':
             $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, 0, 0, 0);
@@ -58,8 +58,8 @@ function createCollage($srcImagePaths, $destImagePath) {
                     return false;
                 }
 
-                if (TAKE_FRAME === 'always') {
-                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always') {
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], COLLAGE_FRAME);
                 }
 
                 $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
@@ -85,8 +85,8 @@ function createCollage($srcImagePaths, $destImagePath) {
                     return false;
                 }
 
-                if (TAKE_FRAME === 'always') {
-                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always') {
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], COLLAGE_FRAME);
                 }
 
                 $tempSubRotated = imagerotate($tempSubImage, $degrees, $white);
@@ -153,8 +153,8 @@ function createCollage($srcImagePaths, $destImagePath) {
                         return false;
                     }
 
-                    if (TAKE_FRAME === 'always') {
-                        ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], FRAME);
+                    if (COLLAGE_TAKE_FRAME === 'always') {
+                        ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], COLLAGE_FRAME);
                     }
 
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
@@ -173,8 +173,8 @@ function createCollage($srcImagePaths, $destImagePath) {
     imagejpeg($my_collage, $destImagePath); // Transfer image to destImagePath with returns the image to core
     imagedestroy($my_collage); // Destroy the created collage in memory
 
-    if (TAKE_FRAME === 'once') {
-        ApplyFrame($destImagePath, $destImagePath, FRAME);
+    if (COLLAGE_TAKE_FRAME === 'once') {
+        ApplyFrame($destImagePath, $destImagePath, COLLAGE_FRAME);
     }
 
     // Rotate image if needed
