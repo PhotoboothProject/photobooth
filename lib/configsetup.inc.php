@@ -456,12 +456,12 @@ $configsetup = [
             ],
             'value' => $config['collage']['take_frame'],
         ],
-        'collage_frame_path' => [
+        'collage_frame' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['collage']['frame_path'],
-            'name' => 'collage[frame_path]',
-            'value' => htmlentities($config['collage']['frame_path']),
+            'placeholder' => $defaultConfig['collage']['frame'],
+            'name' => 'collage[frame]',
+            'value' => htmlentities($config['collage']['frame']),
         ],
         'collage_limit' => [
             'type' => 'hidden',

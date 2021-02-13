@@ -77,7 +77,7 @@ $config['collage']['layout'] = '2x2';
 $config['collage']['key'] = null;
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
-$config['collage']['frame_path'] = '../resources/img/frames/frame.png';
+$config['collage']['frame'] = '../resources/img/frames/frame.png';
 // DO NOT CHANGE limit here
 $config['collage']['limit'] = NULL;
 
