@@ -210,7 +210,9 @@ $config['login']['enabled'] = false;
 $config['login']['username'] = 'Photo';
 $config['login']['password'] = NULL;
 $config['protect']['admin'] = true;
+$config['protect']['localhost_admin'] = true;
 $config['protect']['index'] = false;
+$config['protect']['localhost_index'] = false;
 
 
 // U S E R   I N T E R F A C E

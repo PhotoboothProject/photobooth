@@ -60,7 +60,7 @@ endif;
 <video id="video--preview" autoplay playsinline></video>
 <body class="deselect">
 	<div id="wrapper">
-	<?php if( !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect']['index'])): ?>
+	<?php if( !$config['login']['enabled'] || !$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect']['index'])): ?>
 
 		<?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
 

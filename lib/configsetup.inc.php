@@ -1152,11 +1152,23 @@ $configsetup = [
             'name' => 'protect[admin]',
             'value' => $config['protect']['admin'],
         ],
+        'protect_localhost_admin' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'protect[localhost_admin]',
+            'value' => $config['protect']['localhost_admin'],
+        ],
         'protect_index' => [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'protect[index]',
             'value' => $config['protect']['index'],
+        ],
+        'protect_localhost_index' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'protect[localhost_index]',
+            'value' => $config['protect']['localhost_index'],
         ],
     ],
     'userinterface' => [
