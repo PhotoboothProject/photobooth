@@ -4,7 +4,7 @@ require_once __DIR__ . '/resize.php';
 require_once __DIR__ . '/applyFrame.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
-define('COLLAGE_FRAME', __DIR__ . DIRECTORY_SEPARATOR . $config['collage']['frame']);
+define('COLLAGE_FRAME', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']));
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
 define('PICTURE_KEEP_ORIGINAL', $config['picture']['keep_original'] === true ? 'keep' : 'discard');

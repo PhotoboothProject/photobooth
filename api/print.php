@@ -48,7 +48,7 @@ if (!isset($config['webserver']['ip'])) {
 }
 
 // text on print variables
-$fontpath = __DIR__ . DIRECTORY_SEPARATOR . $config['textonprint']['font'];
+$fontpath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['textonprint']['font']);
 $fontsize = $config['textonprint']['font_size'];
 $fontlocx = $config['textonprint']['locationx'];
 $fontlocy = $config['textonprint']['locationy'];
@@ -59,7 +59,7 @@ $line2text = $config['textonprint']['line2'];
 $line3text = $config['textonprint']['line3'];
 
 // print frame
-$print_frame = __DIR__ . DIRECTORY_SEPARATOR . $config['print']['frame'];
+$print_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['print']['frame']);
 
 if (!file_exists($filename_print)) {
     // rotate image if needed
