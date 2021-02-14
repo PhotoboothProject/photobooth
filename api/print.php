@@ -61,6 +61,42 @@ $line3text = $config['textonprint']['line3'];
 // print frame
 $print_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['print']['frame']);
 
+if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
+    if (is_dir($print_frame)) {
+        die(
+            json_encode([
+                'error' => 'Frame not set! ' . $print_frame . ' is a path but needs to be a png!',
+            ])
+        );
+    }
+
+    if (!file_exists($print_frame)) {
+        die(
+            json_encode([
+                'error' => 'Frame ' . $print_frame . ' does not exist!',
+            ])
+        );
+    }
+}
+
+if ($config['textonprint']['enabled']) {
+    if (is_dir($fontpath)) {
+        die(
+            json_encode([
+                'error' => 'Frame not set! ' . $fontpath . ' is a path but needs to be a png!',
+            ])
+        );
+    }
+
+    if (!file_exists($fontpath)) {
+        die(
+            json_encode([
+                'error' => 'Frame ' . $fontpath . ' does not exist!',
+            ])
+        );
+    }
+}
+
 if (!file_exists($filename_print)) {
     // rotate image if needed
     list($width, $height) = getimagesize($filename_source);
@@ -101,7 +137,7 @@ if (!file_exists($filename_print)) {
         imagecopy($print, $source, 0, 0, 0, 0, $width, $height);
         imagecopyresized($print, $code, $width, 0, 0, 0, $height / 2, $height / 2, imagesx($code), imagesy($code));
 
-        if ($config['textonprint']['enabled'] == true) {
+        if ($config['textonprint']['enabled']) {
             $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
@@ -117,7 +153,7 @@ if (!file_exists($filename_print)) {
             ApplyFrame($filename_print, $filename_print, $print_frame);
         }
 
-        if ($config['textonprint']['enabled'] == true) {
+        if ($config['textonprint']['enabled']) {
             $print = imagecreatefromjpeg($filename_print);
             $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);

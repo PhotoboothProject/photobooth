@@ -30,7 +30,7 @@ $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
 $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
-$frame_path = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['picture']['frame']);
+$picture_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['picture']['frame']);
 $picture_permissions = $config['picture']['permissions'];
 $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 $chroma_size = substr($config['keying']['size'], 0, -2);
@@ -92,6 +92,24 @@ if (!file_exists($filename_tmp)) {
     );
 }
 
+if ($config['picture']['take_frame']) {
+    if (is_dir($picture_frame)) {
+        die(
+            json_encode([
+                'error' => 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!',
+            ])
+        );
+    }
+
+    if (!file_exists($picture_frame)) {
+        die(
+            json_encode([
+                'error' => 'Frame ' . $picture_frame . ' does not exist!',
+            ])
+        );
+    }
+}
+
 // Only jpg/jpeg are supported
 $imginfo = getimagesize($filename_tmp);
 $mimetype = $imginfo['mime'];
@@ -147,7 +165,7 @@ if ($config['picture']['polaroid_effect']) {
 }
 
 if ($config['picture']['take_frame'] && $_POST['style'] !== 'collage') {
-    $frame = imagecreatefrompng($frame_path);
+    $frame = imagecreatefrompng($picture_frame);
     $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
     $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
     $y = imagesy($imageResource) / 2 - imagesy($frame) / 2;
