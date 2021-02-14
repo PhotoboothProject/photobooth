@@ -65,12 +65,12 @@ $imagelist = array_reverse($images);
 		}
 
 		if ($config['slideshow']['use_thumbs']) {
-			$filename_photo = '../' . $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+			$filename_photo = '../' . $config['foldersRoot']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 			if (!is_readable($filename_photo)) {
-				$filename_photo = '../' . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+				$filename_photo = '../' . $config['foldersRoot']['images'] . DIRECTORY_SEPARATOR . $image;
 			}
 		} else {
-			$filename_photo = '../' . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+			$filename_photo = '../' . $config['foldersRoot']['images'] . DIRECTORY_SEPARATOR . $image;
 		}
 
 		if (is_readable($filename_photo)) {

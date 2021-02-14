@@ -138,8 +138,15 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
+$basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
+
 foreach ($config['folders'] as $key => $folder) {
-    $path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $folder;
+    if ($folder === 'data' || $folder === 'archives') {
+        $path = $basepath . DIRECTORY_SEPARATOR . $folder;
+    } else {
+        $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
+        $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
+    }
 
     if (!file_exists($path)) {
         if (!mkdir($path, 0755, true)) {

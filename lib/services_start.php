@@ -20,7 +20,7 @@ if ($config['remotebuzzer']['enabled']) {
 
     if (!is_resource($connection)) {
         if ($config['dev']['enabled']) {
-            $logfile = $config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile'];
+            $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['remotebuzzer']['logfile'];
         } else {
             $logfile = '/dev/null';
         }
@@ -37,12 +37,12 @@ if ($config['remotebuzzer']['enabled']) {
 
 if ($config['synctodrive']['enabled']) {
     if ($config['dev']['enabled']) {
-        $logfile = $config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile'];
+        $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['synctodrive']['logfile'];
     } else {
         $logfile = '/dev/null';
     }
 
-    if (processIsRunning('sync-to-drive.js', $config['foldersAbs']['tmp'] . '/synctodrive_server.pid')) {
+    if (processIsRunning('sync-to-drive.js', $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'synctodrive_server.pid')) {
         print "\t<!-- Sync To Drive enabled --- server already active -->\n";
     } else {
         print "\t<!-- Sync To Drive enabled --- starting server -->\n";

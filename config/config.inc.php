@@ -257,12 +257,12 @@ $config['nodebin']['cmd'] = null;
 
 // F O L D E R S
 $config['folders']['data'] = 'data';
-$config['folders']['images'] = 'data/images';
-$config['folders']['keying'] = 'data/keying';
-$config['folders']['print'] = 'data/print';
-$config['folders']['qrcodes'] = 'data/qrcodes';
-$config['folders']['thumbs'] = 'data/thumbs';
-$config['folders']['tmp'] = 'data/tmp';
+$config['folders']['images'] = 'images';
+$config['folders']['keying'] = 'keying';
+$config['folders']['print'] = 'print';
+$config['folders']['qrcodes'] = 'qrcodes';
+$config['folders']['thumbs'] = 'thumbs';
+$config['folders']['tmp'] = 'tmp';
 $config['folders']['archives'] = 'archives';
 
 

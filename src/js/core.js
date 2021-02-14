@@ -525,7 +525,7 @@ const photoBooth = (function () {
     };
 
     api.processPic = function (photoStyle, result) {
-        const tempImageUrl = config.folders.tmp + '/' + result.file;
+        const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
 
         $('.spinner').show();
         $('.loading').text(photoStyle === 'photo' || photoStyle === 'chroma' ? i18n('busy') : i18n('busyCollage'));
@@ -587,14 +587,14 @@ const photoBooth = (function () {
             api.addImage(filename);
         }
         const imageUrl = config.live_keying.show_all
-            ? config.folders.images + '/' + filename
-            : config.folders.keying + '/' + filename;
+            ? config.foldersRoot.images + '/' + filename
+            : config.foldersRoot.keying + '/' + filename;
         const preloadImage = new Image();
 
         preloadImage.onload = function () {
             $('body').attr('data-main-image', filename);
-            console.log(config.folders.keying + '/' + filename);
-            const chromaimage = config.folders.keying + '/' + filename;
+            console.log(config.foldersRoot.keying + '/' + filename);
+            const chromaimage = config.foldersRoot.keying + '/' + filename;
 
             loader.hide();
             api.resetTimeOut();
@@ -673,7 +673,7 @@ const photoBooth = (function () {
         // Add Image to gallery and slider
         api.addImage(filename);
 
-        const imageUrl = config.folders.images + '/' + filename;
+        const imageUrl = config.foldersRoot.images + '/' + filename;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
@@ -724,15 +724,15 @@ const photoBooth = (function () {
             }
         };
 
-        bigImg.src = config.folders.images + '/' + imageName;
-        thumbImg.src = config.folders.thumbs + '/' + imageName;
+        bigImg.src = config.foldersRoot.images + '/' + imageName;
+        thumbImg.src = config.foldersRoot.thumbs + '/' + imageName;
 
         function allLoaded() {
             const linkElement = $('<a>').html(thumbImg);
 
             linkElement.attr('data-size', bigSize);
-            linkElement.attr('href', config.folders.images + '/' + imageName);
-            linkElement.attr('data-med', config.folders.thumbs + '/' + imageName);
+            linkElement.attr('href', config.foldersRoot.images + '/' + imageName);
+            linkElement.attr('data-med', config.foldersRoot.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);
 
             if (config.gallery.newest_first) {

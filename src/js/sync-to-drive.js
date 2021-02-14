@@ -210,7 +210,7 @@ const parsedConfig = parseConfig(phpConfig);
 log('USB target ', ...parsedConfig.drive);
 
 /* WRITE PROCESS PID FILE */
-writePIDFile(path.join(phpConfig.folders.tmp, 'synctodrive_server.pid'));
+writePIDFile(path.join(phpConfig.foldersRoot.tmp, 'synctodrive_server.pid'));
 
 /* INSTALL HANDLER TO MONITOR CHILD PROCESS EXITS */
 myEmitter.on('rsync-completed', (childPID) => {

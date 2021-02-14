@@ -24,12 +24,12 @@
                 }
             }
 
-            $filename_photo = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+            $filename_photo = $config['foldersRoot']['images'] . DIRECTORY_SEPARATOR . $image;
             if (is_readable($filename_photo)) {
-                $filename_thumb = $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+                $filename_thumb = $config['foldersRoot']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 
                 if (!is_readable($filename_thumb)) {
-                    $filename_thumb = $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+                    $filename_thumb = $config['foldersRoot']['images'] . DIRECTORY_SEPARATOR . $image;
                 }
                 $imageinfo = getimagesize($filename_photo);
                 $imageinfoThumb = getimagesize($filename_thumb);

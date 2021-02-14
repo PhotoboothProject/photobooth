@@ -31,7 +31,7 @@ const config = JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
 
 /* WRITE PROCESS PID FILE */
 
-const pidFilename = config.folders.tmp + '/remotebuzzer_server.pid';
+const pidFilename = config.foldersRoot.tmp + '/remotebuzzer_server.pid';
 
 const fs = require('fs');
 

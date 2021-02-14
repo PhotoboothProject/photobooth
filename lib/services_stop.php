@@ -11,7 +11,7 @@ function killProcessIfActive($pName, $pidFile, $logfileName, $killSig) {
     if (count($pids) > 1) {
         foreach ($pids as $procPID) {
             if ($config['dev']['enabled']) {
-                $logfile = $config['foldersAbs']['tmp'] . '/' . $logfileName;
+                $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $logfileName;
                 $fp = fopen($logfile, 'a'); //opens file in append mode.
                 fwrite($fp, 'Service Control [ config ]: Photobooth config has changed, killed processes by name ' . $pName . ' -> PID ' . $procPID . "\n");
                 fclose($fp);
@@ -26,7 +26,17 @@ function killProcessIfActive($pName, $pidFile, $logfileName, $killSig) {
     }
 }
 
-killProcessIfActive('remotebuzzer_server.js', '../' . $config['folders']['tmp'] . '/remotebuzzer_server.pid', $config['remotebuzzer']['logfile'], 9);
-killProcessIfActive('sync-to-drive.js', '../' . $config['folders']['tmp'] . '/synctodrive_server.pid', $config['synctodrive']['logfile'], 15);
+killProcessIfActive(
+    'remotebuzzer_server.js',
+    '..' . DIRECTORY_SEPARATOR . $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'remotebuzzer_server.pid',
+    $config['remotebuzzer']['logfile'],
+    9
+);
+killProcessIfActive(
+    'sync-to-drive.js',
+    '..' . DIRECTORY_SEPARATOR . $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'synctodrive_server.pid',
+    $config['synctodrive']['logfile'],
+    15
+);
 
 ?>

@@ -14,7 +14,7 @@ if ($config['ui']['style'] === 'modern') {
 }
 
 $filename = $_GET['filename'];
-$keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$keyingimage = $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
 
 if (file_exists($keyingimage)) {
     // Only jpg/jpeg are supported
