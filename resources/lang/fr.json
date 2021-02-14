@@ -109,7 +109,7 @@
   "print:print_crop": "Recadrer la photo à imprimer",
   "print:print_crop_height": "Nouvelle hauteur à l'impression (px)",
   "print:print_crop_width": "Nouvelle largeur à l'impression (px)",
-  "print:print_frame": "Imprimez le contour sur la photo",
+  "print:print_print_frame": "Imprimez le contour sur la photo",
   "print:print_qrcode": "QR-Code sur l'image en cours d'impression",
   "print:textonprint_enabled": "Imprimez un texte sur la photo",
   "print:textonprint_font_size": "Taille de la police",

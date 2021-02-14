@@ -52,7 +52,7 @@ $config['filters']['enabled'] = true;
 $config['filters']['defaults'] = 'plain';
 $config['filters']['disabled'] = array();
 $config['picture']['take_frame'] = false;
-$config['picture']['frame_path'] = '../resources/img/frames/frame.png';
+$config['picture']['frame'] = '../resources/img/frames/frame.png';
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
 $config['picture']['key'] = null;
@@ -149,8 +149,8 @@ $config['print']['auto_delay'] = '1000';
 $config['print']['time'] = '5000';
 $config['print']['key'] = null;
 $config['print']['qrcode'] = false;
-$config['print']['frame'] = false;
-$config['print']['frame_path'] = '../resources/img/frames/frame.png';
+$config['print']['print_frame'] = false;
+$config['print']['frame'] = '../resources/img/frames/frame.png';
 $config['print']['crop'] = false;
 $config['print']['crop_width'] = '1000';
 $config['print']['crop_height'] = '500';
@@ -161,7 +161,7 @@ $config['textonprint']['line3'] = 'line 3';
 $config['textonprint']['locationx'] = '2250';
 $config['textonprint']['locationy'] = '1050';
 $config['textonprint']['rotation'] = '40';
-$config['textonprint']['font_path'] = '../resources/fonts/GreatVibes-Regular.ttf';
+$config['textonprint']['font'] = '../resources/fonts/GreatVibes-Regular.ttf';
 $config['textonprint']['font_size'] = '100';
 $config['textonprint']['linespace'] = '100';
 

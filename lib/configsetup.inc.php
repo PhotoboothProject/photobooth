@@ -348,12 +348,12 @@ $configsetup = [
             'name' => 'picture[take_frame]',
             'value' => $config['picture']['take_frame'],
         ],
-        'picture_frame_path' => [
+        'picture_frame' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['picture']['frame_path'],
-            'name' => 'picture[frame_path]',
-            'value' => htmlentities($config['picture']['frame_path']),
+            'placeholder' => $defaultConfig['picture']['frame'],
+            'name' => 'picture[frame]',
+            'value' => htmlentities($config['picture']['frame']),
         ],
         'picture_key' => [
             'view' => 'expert',
@@ -827,18 +827,18 @@ $configsetup = [
             'name' => 'print[qrcode]',
             'value' => $config['print']['qrcode'],
         ],
-        'print_frame' => [
+        'print_print_frame' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'print[frame]',
-            'value' => $config['print']['frame'],
+            'name' => 'print[print_frame]',
+            'value' => $config['print']['print_frame'],
         ],
-        'print_frame_path' => [
+        'print_frame' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['print']['frame_path'],
-            'name' => 'print[frame_path]',
-            'value' => htmlentities($config['print']['frame_path']),
+            'placeholder' => $defaultConfig['print']['frame'],
+            'name' => 'print[frame]',
+            'value' => htmlentities($config['print']['frame']),
         ],
         'print_crop' => [
             'view' => 'expert',
@@ -912,12 +912,12 @@ $configsetup = [
             'range_step' => 5,
             'unit' => 'degrees',
         ],
-        'textonprint_font_path' => [
+        'textonprint_font' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['textonprint']['font_path'],
-            'name' => 'textonprint[font_path]',
-            'value' => htmlentities($config['textonprint']['font_path']),
+            'placeholder' => $defaultConfig['textonprint']['font'],
+            'name' => 'textonprint[font]',
+            'value' => htmlentities($config['textonprint']['font']),
         ],
         'textonprint_font_size' => [
             'view' => 'advanced',

@@ -82,7 +82,7 @@
   "print:print_crop": "Τραβήξτε την εικόνα όταν εκτυπώνετε",
   "print:print_crop_height": "Νέο ύψος εικόνας στην εκτύπωση (px)",
   "print:print_crop_width": "Νέο πλάτος εικόνας στην εκτύπωση (px)",
-  "print:print_frame": "Εκτύπωση πλαισίου στην εικόνα",
+  "print:print_print_frame": "Εκτύπωση πλαισίου στην εικόνα",
   "print:print_qrcode": "QR κώδικα στην εικόνα κατά την εκτύπωση",
   "print:textonprint_enabled": "Εκτυπώστε κείμενο στην εικόνα",
   "print:textonprint_font_size": "το μέγεθος της γραμματοσειράς",
