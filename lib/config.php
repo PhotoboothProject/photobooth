@@ -121,15 +121,15 @@ if (!isset($config['collage']['limit'])) {
 }
 
 if (!isset($config['background']['defaults'])) {
-    $config['background']['defaults'] = 'url(../img/bg_bluegray.jpg)';
+    $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
 }
 
 if (!isset($config['background']['admin'])) {
-    $config['background']['admin'] = 'url(../img/bg_bluegray.jpg)';
+    $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
 }
 
 if (!isset($config['background']['chroma'])) {
-    $config['background']['chroma'] = 'url(../img/bg_bluegray.jpg)';
+    $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
 }
 
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {
@@ -151,4 +151,10 @@ foreach ($config['folders'] as $key => $folder) {
 
     $path = realpath($path);
     $config['foldersAbs'][$key] = $path;
+}
+
+function getrootpath($relative_path) {
+    $realpath = realpath($relative_path);
+    $rootpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $realpath);
+    return $rootpath;
 }
