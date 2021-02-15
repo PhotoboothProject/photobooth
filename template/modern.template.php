@@ -6,8 +6,10 @@
             					<div class="divinnen2">
 							<?php if ($config['event']['enabled']): ?>
 							<div class="names">
+								<?php if ($config['ui']['decore_lines']): ?>
 								<hr class="small" />
 								<hr>
+								<?php endif; ?>
 								<div>
 									<h1>
 									<?=$config['event']['textLeft']?>
@@ -18,25 +20,25 @@
 									</h1>
 									<h2><?=$config['start_screen']['subtitle']?></h2>
 								</div>
-
+								<?php if ($config['ui']['decore_lines']): ?>
 								<hr>
 								<hr class="small" />
-
+								<?php endif; ?>
 							</div>
 							<?php else: ?>
 							<div class="names">
-
+								<?php if ($config['ui']['decore_lines']): ?>
 								<hr class="small" />
 								<hr>
-
+								<?php endif; ?>
 								<div>
 									<h1><?=$config['start_screen']['title']?></h1>
 									<h2><?=$config['start_screen']['subtitle']?></h2>
 								</div>
-
+								<?php if ($config['ui']['decore_lines']): ?>
 								<hr>
 								<hr class="small" />
-
+								<?php endif; ?>
 							</div>
 							<?php endif; ?>
 

@@ -226,6 +226,7 @@ $config['colors']['cheese'] = '#ffffff';
 $config['background']['defaults'] = null;
 $config['background']['admin'] = null;
 $config['background']['chroma'] = null;
+$config['ui']['decore_lines'] = true;
 $config['ui']['rounded_corners'] = false;
 $config['colors']['primary'] = '#0a6071';
 $config['colors']['secondary'] = '#214852';

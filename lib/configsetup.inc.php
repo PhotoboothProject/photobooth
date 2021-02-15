@@ -1240,6 +1240,12 @@ $configsetup = [
             'placeholder' => $defaultConfig['background']['chroma'],
             'value' => htmlentities($config['background']['chroma']),
         ],
+        'ui_decore_lines' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'ui[decore_lines]',
+            'value' => $config['ui']['decore_lines'],
+        ],
         'ui_rounded_corners' => [
             'view' => 'expert',
             'type' => 'checkbox',
