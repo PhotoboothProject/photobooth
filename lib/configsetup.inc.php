@@ -117,11 +117,21 @@ $configsetup = [
             'name' => 'start_screen[title]',
             'value' => htmlentities($config['start_screen']['title']),
         ],
+        'start_screen_title_visible' => [
+            'type' => 'checkbox',
+            'name' => 'start_screen[title_visible]',
+            'value' => $config['start_screen']['title_visible'],
+        ],
         'start_screen_subtitle' => [
             'type' => 'input',
             'placeholder' => $defaultConfig['start_screen']['subtitle'],
             'name' => 'start_screen[subtitle]',
             'value' => htmlentities($config['start_screen']['subtitle']),
+        ],
+        'start_screen_subtitle_visible' => [
+            'type' => 'checkbox',
+            'name' => 'start_screen[subtitle_visible]',
+            'value' => $config['start_screen']['subtitle_visible'],
         ],
         'picture_thumb_size' => [
             'view' => 'advanced',

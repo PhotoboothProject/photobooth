@@ -12,7 +12,9 @@ $config['ui']['language'] = 'en';
 $config['adminpanel']['view'] = 'basic';
 $config['dev']['enabled'] = false;
 $config['start_screen']['title'] = 'Photobooth';
+$config['start_screen']['title_visible'] = true;
 $config['start_screen']['subtitle'] = NULL;
+$config['start_screen']['subtitle_visible'] = true;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
 $config['picture']['thumb_size'] = '540px';
 $config['dev']['error_messages'] = true;
