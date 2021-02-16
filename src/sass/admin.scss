@@ -287,22 +287,19 @@ div.setting_element {
   }
 }
 
-/******************
-* RESET button
-******************/
+/*****************************
+* Embedded ADMIN PANEL button
+*****************************/
 
-.reset-btn {
-  min-width: 7em;
+.adminpanel-setting-btn {
   cursor: pointer;
-  float: right;
-  width: 15%;
-  max-width: 15em;
-  height: 3em;
+  width: 10em;
+  height: 2.5em;
   background: $mainColor;
   color: $buttonFontColor;
   transition: background 0.7s ease;
   z-index: 300;
-  float: right;
+  float: left;
 
   &:hover {
     background: $hoverColor;

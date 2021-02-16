@@ -1,6 +1,6 @@
 /* globals i18n */
 $(function () {
-    $('.reset-btn').on('click', function (e) {
+    $('#reset-btn').on('click', function (e) {
         e.preventDefault();
         const msg = i18n('really_delete');
         const really = confirm(msg);
@@ -29,7 +29,7 @@ $(function () {
         }
     });
 
-    $('.save-btn').on('click', function (e) {
+    $('#save-btn').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
         elem.addClass('saving');
@@ -52,6 +52,13 @@ $(function () {
                 }, 2000);
             }
         });
+    });
+
+    $('#diskusage-btn').on('click', function (e) {
+        e.preventDefault();
+        location.assign('diskusage.php');
+
+        return false;
     });
 
     $('#checkVersion a').on('click', function (ev) {

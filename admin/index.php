@@ -119,7 +119,7 @@ require_once('../lib/configsetup.inc.php');
         <form  autocomplete="off">
         
         <div class="admincontent" id="admincontentpage">
-            <button class="save-btn">
+            <button class="save-btn" id="save-btn">
                      <span class="save"><span data-i18n="save"></span></span>
                      <span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>
                      <span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>
@@ -138,18 +138,6 @@ require_once('../lib/configsetup.inc.php');
         
                         echo '<!-- SECTION '.$section.'-->';
                         echo '<div class="'.isElementHidden('setting_section',$fields).'" id="'.$section.'">';
-        
-                        if ($section == 'reset') {
-                                   html_src_indent($indent++);
-                                   echo '<button class="reset-btn">';
-                                   html_src_indent($indent);
-                                   echo '<span class="save"><span data-i18n="reset"></span></span>';
-                                   echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>';
-                                   echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
-                                   echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
-                                   html_src_indent(--$indent);                
-                                   echo '</button>';
-                           }
         
                         html_src_indent($indent);
                         echo '<h1 class="setting_section_heading"> <span data-i18n="'.$section.'">'.$section.'</span></h1>';
@@ -225,6 +213,24 @@ require_once('../lib/configsetup.inc.php');
                                                         }
                                                 echo '</select>';
                                                 break;
+					case 'button':
+					     echo '<div class="tooltip">';
+					     echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
+                                             echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
+                                             echo '<div><button class="adminpanel-setting-btn" id="'.$setting['value'].'">';
+                                             switch ($key) {
+						    case 'reset_button':
+							 echo '<span class="save"><span data-i18n="reset"></span></span>';
+							 echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>';
+							 echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
+							 echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
+							 break;
+						    default:
+							 echo '<span data-i18n="'.$setting['placeholder'].'"></span>';
+							 break;
+							 }
+					     echo '</button></div>';
+					     break;
                                 }
         
                                 echo '</div>';

@@ -46,16 +46,18 @@ require_once __DIR__ . '/filter.php';
  **		"manual:print:use_print_result"
  **
  **   - Parameter: Can be key/value or key/array pairs. Sort order does not matter.
- **     	* 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
+ **    	* 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
  ** 	  	 	     the section is shown or not. Missing parameter defaults to 'expert'.
- ** 	* 'name': Matches the name of the config variable or array
- ** 	* 'type': Values are 'input', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select'. Defines the actual
+ ** 	* 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
+ ** 	* 'type': Values are 'input', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
  ** 	  	  input type in the admin panel for this setting.
  ** 	* 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['auto_reload_on_error']) and pre-
  ** 	  	   populates the current config value into the admin panel
- ** 	* 'placeholder': Only for types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
+ **		   Exceptionally, for type 'button' this is the HTML element ID applied to the actual button itself.
+ ** 	* 'placeholder': For types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
  ** 	  		 field / range selector. Often references the default config for this setting
  ** 			 (i.e 'placeholder' => $defaultConfig['time_to_live'])
+ **			 For type 'button' this is the i18ntag string for the actual button text.
  ** 	* 'option': Only for types 'select','multi-select'. Lists the options available in this setting (i.e.
  **   	                'options' => [
  **                 		  '360px' => 'XS',
@@ -202,6 +204,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['db_file'],
             'name' => 'db_file',
             'value' => $config['db_file'],
+        ],
+        'diskusage_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'disk_usage',
+            'name' => 'DISKUSAGEBUTTON',
+            'value' => 'diskusage-btn',
         ],
     ],
     'frontpage' => [
@@ -1483,6 +1492,13 @@ $configsetup = [
             'type' => 'checkbox',
             'name' => 'reset_remove_config',
             'value' => $config['reset_remove_config'],
+        ],
+        'reset_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'reset',
+            'name' => 'RESETBUTTON',
+            'value' => 'reset-btn',
         ],
     ],
 ];
