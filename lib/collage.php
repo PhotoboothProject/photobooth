@@ -258,6 +258,52 @@ function createCollage($srcImagePaths, $destImagePath) {
                 imagedestroy($tempSubImage); // Destroy temporary images
             }
             break;
+        case '1+3-2':
+            $width = 1800;
+            $height = 1200;
+            $my_collage = imagecreatetruecolor($width, $height);
+            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            imagefill($my_collage, 0, 0, $background);
+
+            if ($landscape == false) {
+                $rotate_after_creation = true;
+            }
+
+            $positions = [[60, 60], [60, 730], [640, 730], [1220, 730]];
+
+            for ($i = 0; $i < 4; $i++) {
+                $position = $positions[$i];
+
+                if (!file_exists($srcImagePaths[$i])) {
+                    return false;
+                }
+
+                list($picWidth, $picHeight) = getimagesize($srcImagePaths[$i]);
+                switch ($i) {
+                    // Picture 1
+                    case 0:
+                        $widthNew = $picWidth * 0.65;
+                        $heightNew = $picHeight * 0.65;
+                        break;
+                    // Picture 2, // Picture 3, // Picture 4
+                    case 1:
+                    case 2:
+                    case 3:
+                        $widthNew = $picWidth * 0.4;
+                        $heightNew = $picHeight * 0.4;
+                        break;
+                }
+                ResizeCropImage($widthNew, $heightNew, $srcImagePaths[$i], $srcImagePaths[$i]);
+
+                if (COLLAGE_TAKE_FRAME === 'always') {
+                    ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], COLLAGE_FRAME);
+                }
+
+                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
+                imagecopy($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $widthNew, $heightNew); // copy image to background
+                imagedestroy($tempSubImage);
+            }
+            break;
         case '1+2':
             $width = 1800;
             $height = 1200;
