@@ -1,4 +1,4 @@
-/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously i18n*/
+/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously */
 /* exported setBackgroundImage setMainImage */
 let mainImage;
 let mainImageWidth;
@@ -203,7 +203,7 @@ function saveImage(cb) {
                     .on('click', (ev) => {
                         ev.preventDefault();
 
-                        const msg = i18n('really_delete_image');
+                        const msg = photoBooth.getTranslation('really_delete_image');
                         const really = confirm(data.filename + ' ' + msg);
                         if (really) {
                             photoBooth.deleteImage(data.filename, (result) => {
@@ -263,7 +263,7 @@ $('.backgroundPreview').on('click', function () {
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
     takingPic = true;
-    const chromaInfo = i18n('chromaInfoAfter');
+    const chromaInfo = photoBooth.getTranslation('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
     if ($('.chroma-control-bar').is(':visible')) {
