@@ -138,6 +138,18 @@ const photoBooth = (function () {
         }
     };
 
+    api.getTranslation = function (key) {
+        const translation = i18n(key, config.ui.language);
+        const fallbackTranslation = i18n(key, 'en');
+        if (translation) {
+            return translation;
+        } else if (fallbackTranslation) {
+            return fallbackTranslation;
+        }
+
+        return key;
+    };
+
     api.openNav = function () {
         $('#mySidenav').addClass('sidenav--open');
     };
@@ -360,10 +372,10 @@ const photoBooth = (function () {
         if (config.picture.no_cheese) {
             console.log('Cheese is disabled.');
         } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
-            const cheesemsg = i18n('cheese');
+            const cheesemsg = api.getTranslation('cheese');
             $('.cheese').text(cheesemsg);
         } else {
-            const cheesemsg = i18n('cheeseCollage');
+            const cheesemsg = api.getTranslation('cheeseCollage');
             $('.cheese').text(cheesemsg);
             $('<p>')
                 .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
@@ -468,14 +480,14 @@ const photoBooth = (function () {
                             ioClient.emit('photobooth-socket', 'collage-wait-for-next');
                         }
 
-                        $('<a class="btn" href="#">' + i18n('nextPhoto') + '</a>')
+                        $('<a class="btn" href="#">' + api.getTranslation('nextPhoto') + '</a>')
                             .appendTo('.loading')
                             .click((ev) => {
                                 ev.preventDefault();
 
                                 api.thrill('collage');
                             });
-                        const abortmsg = i18n('abort');
+                        const abortmsg = api.getTranslation('abort');
                         $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
                     }
                 } else if (result.success === 'chroma') {
@@ -502,7 +514,7 @@ const photoBooth = (function () {
             $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
-            const errormsg = i18n('error');
+            const errormsg = api.getTranslation('error');
             takingPic = false;
             if (config.dev.enabled) {
                 console.log('Taking photo:', takingPic);
@@ -512,13 +524,13 @@ const photoBooth = (function () {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
             if (config.dev.reload_on_error) {
-                const reloadmsg = i18n('auto_reload');
+                const reloadmsg = api.getTranslation('auto_reload');
                 $('.loading').append($('<p>').text(reloadmsg));
                 setTimeout(function () {
                     api.reloadPage();
                 }, 5000);
             } else {
-                const reloadmsg = i18n('reload');
+                const reloadmsg = api.getTranslation('reload');
                 $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
             }
         }, 500);
@@ -528,7 +540,11 @@ const photoBooth = (function () {
         const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
 
         $('.spinner').show();
-        $('.loading').text(photoStyle === 'photo' || photoStyle === 'chroma' ? i18n('busy') : i18n('busyCollage'));
+        $('.loading').text(
+            photoStyle === 'photo' || photoStyle === 'chroma'
+                ? api.getTranslation('busy')
+                : api.getTranslation('busyCollage')
+        );
 
         takingPic = false;
         if (config.dev.enabled) {
@@ -620,7 +636,7 @@ const photoBooth = (function () {
             $(this).appendTo(body);
             $('<p>')
                 .css('max-width', this.width + 'px')
-                .html(i18n('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
+                .html(api.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
                 .appendTo(body);
         });
 
@@ -648,7 +664,7 @@ const photoBooth = (function () {
             .on('click', (ev) => {
                 ev.preventDefault();
 
-                const msg = i18n('really_delete_image');
+                const msg = api.getTranslation('really_delete_image');
                 const really = confirm(filename + ' ' + msg);
                 if (really) {
                     api.deleteImage(filename, (data) => {
@@ -788,7 +804,7 @@ const photoBooth = (function () {
     };
 
     api.printImage = function (imageSrc, cb) {
-        const errormsg = i18n('error');
+        const errormsg = api.getTranslation('error');
 
         if (isPrinting) {
             console.log('Printing already: ' + isPrinting);
@@ -818,7 +834,7 @@ const photoBooth = (function () {
                             if (data.error) {
                                 $('#print_mesg').empty();
                                 $('#print_mesg').html(
-                                    '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                                    '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
                                 );
                             }
                             cb();
@@ -836,7 +852,7 @@ const photoBooth = (function () {
                             modal.close('#print_mesg');
                             $('#print_mesg').empty();
                             $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                                '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
                             );
                             cb();
                             isPrinting = false;
@@ -966,16 +982,20 @@ const photoBooth = (function () {
             success: function (result) {
                 if (result.success) {
                     if (result.saved) {
-                        message.fadeIn().html('<span style="color:green">' + i18n('mailSaved') + '</span>');
+                        message
+                            .fadeIn()
+                            .html('<span style="color:green">' + api.getTranslation('mailSaved') + '</span>');
                     } else {
-                        message.fadeIn().html('<span style="color:green">' + i18n('mailSent') + '</span>');
+                        message
+                            .fadeIn()
+                            .html('<span style="color:green">' + api.getTranslation('mailSent') + '</span>');
                     }
                 } else {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
             error: function () {
-                message.fadeIn('fast').html('<span style="color: red;">' + i18n('mailError') + '</span>');
+                message.fadeIn('fast').html('<span style="color: red;">' + api.getTranslation('mailError') + '</span>');
             },
             complete: function () {
                 form.find('.btn').html(oldValue);
