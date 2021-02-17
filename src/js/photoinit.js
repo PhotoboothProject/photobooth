@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth i18n */
+/* global photoBooth */
 // eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
@@ -193,7 +193,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         let img = gallery.currItem.src;
         img = img.split('\\').pop().split('/').pop();
 
-        const msg = i18n('really_delete_image');
+        const msg = photoBooth.getTranslation('really_delete_image');
         const really = confirm(img + ' ' + msg);
         if (really) {
             $.ajax({
