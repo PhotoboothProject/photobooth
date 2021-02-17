@@ -1,8 +1,20 @@
 /* globals i18n */
 $(function () {
+    const getTranslation = function (key) {
+        const translation = i18n(key, config.ui.language);
+        const fallbackTranslation = i18n(key, 'en');
+        if (translation) {
+            return translation;
+        } else if (fallbackTranslation) {
+            return fallbackTranslation;
+        }
+
+        return key;
+    };
+
     $('#reset-btn').on('click', function (e) {
         e.preventDefault();
-        const msg = i18n('really_delete');
+        const msg = getTranslation('really_delete');
         const really = confirm(msg);
         const data = {type: 'reset'};
         const elem = $(this);
@@ -74,20 +86,20 @@ $(function () {
                 $('#checkVersion').empty();
                 console.log('data', data);
                 if (!data.updateAvailable) {
-                    message = i18n('using_latest_version');
+                    message = getTranslation('using_latest_version');
                 } else if (/^\d+\.\d+\.\d+$/u.test(data.availableVersion)) {
-                    message = i18n('update_available');
+                    message = getTranslation('update_available');
                 } else {
-                    message = i18n('test_update_available');
+                    message = getTranslation('test_update_available');
                 }
 
                 const textElement = $('<p>');
                 textElement.text(message);
                 textElement.append('<br />');
-                textElement.append(i18n('current_version') + ': ');
+                textElement.append(getTranslation('current_version') + ': ');
                 textElement.append(data.currentVersion);
                 textElement.append('<br />');
-                textElement.append(i18n('available_version') + ': ');
+                textElement.append(getTranslation('available_version') + ': ');
                 textElement.append(data.availableVersion);
                 textElement.appendTo('#checkVersion');
             }
