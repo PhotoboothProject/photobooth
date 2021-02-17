@@ -37,6 +37,24 @@ div.admincontent {
   position: fixed;
   height: 100%;
   overflow: auto;
+  display: block;
+  z-index: 10;
+}
+
+.admintopnavbar {
+  display: none;
+  height: 4em;
+  width: 100%;
+  position: fixed;
+  z-index: 15;
+  top: 0;
+  background-color: $panelColor;
+}
+
+.admintopnavbar > i {
+  color: $fontColor;
+  position: initial;
+  padding: 0.15em 0.2em 0em 0.2em;
 }
 
 ul.adminnavlist {
@@ -159,26 +177,28 @@ div.setting_element {
   }
 }
 
-/* On screens that are less than 700px wide, make the sidebar into a topbar */
+/* On screens that are less than 700px wide, make the sidebar hidden */
 @media screen and (max-width: 700px) {
-  .adminsidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
+  div.adminsidebar {
+    display: none;
+    padding-top: 5em;
   }
-  .adminsidebar a {
-    float: left;
+
+  .admintopnavbar {
+    display: block;
   }
+
   div.admincontent {
-    margin-left: 0;
-    padding: 0 0;
-  }
-  a.adminnavlistelement {
-    height: 3.5em;
+    margin-left: 0px;
+    padding-top: 5em;
   }
 
   div.setting_section {
     margin: 0 0 0 0;
+  }
+
+  #nav-ref-main {
+    display: none;
   }
 }
 
@@ -231,7 +251,7 @@ div.setting_element {
   height: 3em;
   position: fixed;
   right: 10px;
-  top: 10px;
+  top: 0.5em;
   z-index: 300;
   background: $mainColor;
   color: $buttonFontColor;

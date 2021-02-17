@@ -152,7 +152,12 @@ $(function () {
     $('.adminnavlistelement').click(function (e) {
         e.preventDefault();
 
-        //console.log('nav clicked ' + this.id);
+        // console.log('nav clicked ' + this.id);
+
+        // on small screens, hide navbar after click
+        if ($('div.admintopnavbar').is(':visible')) {
+            $('div.adminsidebar').toggle();
+        }
 
         if (this.id == 'nav-ref-main') {
             location.assign('../');
@@ -233,4 +238,14 @@ $(function () {
 
     // activate selectize library for multi-selects
     $('.multi-select').selectize({});
+
+    // menu toggle button for topnavbar (small screen sizes)
+    $('#admintopnavbarmenutoggle').on('click', function () {
+        $('div.adminsidebar').toggle();
+    });
+
+    // back  button for topnavbar (small screen sizes)
+    $('#admintopnavbarback').on('click', function () {
+        location.assign('../');
+    });
 });

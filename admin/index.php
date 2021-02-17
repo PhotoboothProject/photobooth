@@ -25,6 +25,7 @@ require_once('../lib/configsetup.inc.php');
 </head>
 <body>
 <!-- NavBar content -->
+<div>
 <div class="adminsidebar" id="adminsidebar">
 <?php
         // Login / Authentication check
@@ -117,7 +118,7 @@ require_once('../lib/configsetup.inc.php');
         
         <!-- Settings page content -->
         <form  autocomplete="off">
-        
+	<div class="admintopnavbar"><i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i><i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"> </i></div>        
         <div class="admincontent" id="admincontentpage">
             <button class="save-btn" id="save-btn">
                      <span class="save"><span data-i18n="save"></span></span>
