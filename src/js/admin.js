@@ -35,6 +35,8 @@ $(function () {
                     }, 3000);
                 }
             });
+        } else {
+            elem.removeClass('saving');
         }
     });
 
