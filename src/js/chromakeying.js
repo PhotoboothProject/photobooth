@@ -10,6 +10,18 @@ let target;
 let chroma;
 let seriouslyimage;
 
+const getTranslation = function (key) {
+    const translation = i18n(key, config.ui.language);
+    const fallbackTranslation = i18n(key, 'en');
+    if (translation) {
+        return translation;
+    } else if (fallbackTranslation) {
+        return fallbackTranslation;
+    }
+
+    return key;
+};
+
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
         for (let x = 0; x < imageIn.getWidth(); x++) {
@@ -179,7 +191,7 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 }
 
 function printImage(filename, cb) {
-    const errormsg = i18n('error');
+    const errormsg = getTranslation('error');
 
     if (isPrinting) {
         console.log('Printing already: ' + isPrinting);
@@ -208,7 +220,7 @@ function printImage(filename, cb) {
                         if (data.error) {
                             $('#print_mesg').empty();
                             $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                                '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
                             );
                         }
                         cb();
@@ -225,7 +237,9 @@ function printImage(filename, cb) {
                     setTimeout(function () {
                         $('#print_mesg').removeClass('modal--show');
                         $('#print_mesg').empty();
-                        $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
+                        $('#print_mesg').html(
+                            '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
+                        );
                         cb();
                         isPrinting = false;
                     }, 5000);
