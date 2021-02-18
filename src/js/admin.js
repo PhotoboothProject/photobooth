@@ -114,7 +114,6 @@ $(function () {
 
     // Range slider - dynamically update value when being moved
     $(document).on('input', '.configslider', function () {
-        // console.log('slider moves - query #' + this.name + '-value');
         document.querySelector(
             '#' + this.name.replace('[', '\\[').replace(']', '\\]') + '-value span'
         ).innerHTML = this.value;
@@ -126,7 +125,6 @@ $(function () {
      */
     $('.setting_section').waypoint({
         handler: function (direction) {
-            //console.log('waypoint triggered ' + this.element.id + ' - scroll direction is ' + direction);
             $('.adminnavlistelement').removeClass('active');
             $('#nav-' + this.element.id).addClass('active');
 
@@ -139,7 +137,6 @@ $(function () {
 
                 if (direction == 'down') {
                     newPos = topPos + elemTarget.offsetHeight - window.innerHeight;
-                    //console.log('Nav bar element nav-' + this.element.id + ' out of viewport - winInner:' + window.innerHeight + ' Element height:' + elemTarget.offsetHeight + '  new scroll pos:' + newPos);
                 } else {
                     newPos = topPos;
                 }
@@ -152,27 +149,12 @@ $(function () {
     $('.adminnavlistelement').click(function (e) {
         e.preventDefault();
 
-        // console.log('nav clicked ' + this.id);
-
         // on small screens, hide navbar after click
-        if ($('div.admintopnavbar').is(':visible')) {
+        if (window.matchMedia('screen and (max-width: 700px)').matches) {
             $('div.adminsidebar').toggle();
         }
 
-        if (this.id == 'nav-ref-main') {
-            location.assign('../');
-
-            return false;
-        }
-
-        if (this.id == 'nav-ref-logout') {
-            location.assign('../login/logout.php');
-
-            return false;
-        }
-
         const target = $(this).attr('href');
-        //console.log('target is ' + target.substring(1));
 
         // scroll content page if we need to
         const contentpage = document.getElementById('admincontentpage');
@@ -181,8 +163,6 @@ $(function () {
         const totalPageHeight = contentpage.scrollHeight;
         const scrollPoint = window.scrollY + window.innerHeight;
 
-        //console.log('scrollY: ' + window.scrollY + '::: target scroll element: ' + elemTarget.scrollTop);
-
         if (isInViewport(elemTarget) && scrollPoint >= totalPageHeight) {
             $('.adminnavlistelement').removeClass('active');
             $('#' + this.id).addClass('active');
@@ -190,14 +170,14 @@ $(function () {
             return false;
         }
 
-        // console.log("target element is currently not visible - need to scroll");
         $('html, body').animate(
             {
-                scrollTop: $(target).offset().top
+                // sroll element to 5em below top - and have to disable eslint rule because prettier removes unnecessary but clarifying parenthesis
+                // eslint-disable-next-line no-mixed-operators
+                scrollTop: $(target).offset().top - 5 * parseInt(config.ui.font_size, 10)
             },
             1000,
             () => {
-                //console.log('callback triggered ' + this.id);
                 $('.adminnavlistelement').removeClass('active');
                 $('#' + this.id).addClass('active');
 
@@ -208,12 +188,11 @@ $(function () {
                 if (!isInViewport(eT)) {
                     const viewportOffset = elemTarget.getBoundingClientRect();
                     let newPos = 0;
-                    //console.log('viewportoffset.top: ' + viewportOffset.top)
+
                     if (viewportOffset.top < 0) {
                         newPos = eT.offsetTop;
                     } else {
                         newPos = window.innerHeight - eT.offsetHeight;
-                        //console.log('Nav bar element ' + this.id + ' out of viewport - winInner:' + window.innerHeight + ' Element height:' + eT.offsetHeight + '  new scroll pos:' + newPos);
                     }
                     cp.scrollTop = newPos;
                 }
@@ -241,11 +220,33 @@ $(function () {
 
     // menu toggle button for topnavbar (small screen sizes)
     $('#admintopnavbarmenutoggle').on('click', function () {
-        $('div.adminsidebar').toggle();
+        $('.adminsidebar').toggle();
+        if (window.matchMedia('screen and (min-width: 701px)').matches) {
+            if ($('#adminsidebar').is(':visible')) {
+                $('#admincontentpage').css('margin-left', '200px');
+            } else {
+                $('#admincontentpage').css('margin-left', '0px');
+            }
+        }
     });
 
     // back  button for topnavbar (small screen sizes)
     $('#admintopnavbarback').on('click', function () {
         location.assign('../');
     });
+
+    // logout button for topnavbar (small screen sizes)
+    $('#admintopnavbarlogout').on('click', function () {
+        location.assign('../login/logout.php');
+    });
+
+    // check padding of settings content on window resize
+    window.addEventListener('resize', onWindowResize);
+    function onWindowResize() {
+        if (window.matchMedia('screen and (max-width: 700px)').matches) {
+            $('#admincontentpage').css('margin-left', '0px');
+        } else if ($('#adminsidebar').is(':visible')) {
+            $('#admincontentpage').css('margin-left', '200px');
+        }
+    }
 });

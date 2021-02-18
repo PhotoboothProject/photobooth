@@ -22,15 +22,18 @@ body {
 * side nav bar
 ***********************/
 div.admincontent {
-  margin-left: 200px;
-  padding: 1px 16px;
   overflow: auto;
   height: 100%;
+  padding: 5em 1em;
+}
+
+#admincontentpage {
+  margin-left: 200px;
 }
 
 .adminsidebar {
   margin: 0;
-  padding: 0;
+  padding: 5em 1em;
   width: 200px;
   background: $panelColor;
   color: $fontColor;
@@ -42,7 +45,6 @@ div.admincontent {
 }
 
 .admintopnavbar {
-  display: none;
   height: 4em;
   width: 100%;
   position: fixed;
@@ -110,7 +112,7 @@ div.setting_section {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7);
   display: block;
   padding: 5px 5px;
-  margin: 25px;
+  margin: 0 25px 25px 25px;
   color: $fontColor;
   background-color: $panelColor;
 }
@@ -163,6 +165,9 @@ div.setting_element {
   display: block;
 }
 
+/***************************
+* Screen size @media queries
+****************************/
 @media screen and (max-width: 1400px) {
   div.setting_element {
     float: left;
@@ -177,32 +182,41 @@ div.setting_element {
   }
 }
 
+@media screen and (min-width: 701px) {
+  .adminsidebar {
+    display: block;
+  }
+}
 /* On screens that are less than 700px wide, make the sidebar hidden */
 @media screen and (max-width: 700px) {
-  div.adminsidebar {
+  .adminsidebar {
     display: none;
     padding-top: 5em;
   }
 
-  .admintopnavbar {
-    display: block;
+  #adminsidebar {
+    display: none;
+    padding-top: 5em;
+  }
+
+  #admincontentpage {
+    margin-left: 0px;
   }
 
   div.admincontent {
-    margin-left: 0px;
     padding-top: 5em;
+    width: 100%;
   }
 
   div.setting_section {
-    margin: 0 0 0 0;
-  }
-
-  #nav-ref-main {
-    display: none;
+    margin: 0 0 25px 0;
   }
 }
 
-/* Manual as tooltip for setting element */
+/*************************
+* Show manual as tooltip
+* for setting elements
+*************************/
 
 .tooltip {
   position: relative;

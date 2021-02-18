@@ -25,8 +25,6 @@ require_once('../lib/configsetup.inc.php');
 </head>
 <body>
 <!-- NavBar content -->
-<div>
-<div class="adminsidebar" id="adminsidebar">
 <?php
         // Login / Authentication check
         if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin'] )
@@ -80,22 +78,36 @@ require_once('../lib/configsetup.inc.php');
                 }
         
         
-                /*******************
-                * Create nav panel *
-                *******************/
-                $indent = 3;
+                $indent = 2;
+
+		/********************
+                * Create topnav bar *
+                *********************/
                 html_src_indent($indent++);
-        
+		echo '<div class="admintopnavbar">';
+                html_src_indent($indent);
+		echo '<i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i>';
+                if(isset($_SESSION['auth']) && $_SESSION['auth'] === true)
+		{
+	                html_src_indent($indent);
+			echo '	   <i class="fa fa-sign-out fa-3x" id="admintopnavbarlogout"></i>';
+		}
+                html_src_indent($indent);
+		echo '	   <i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"></i>';
+                html_src_indent(--$indent);
+		echo '</div>';
+
+		/*********************
+                * Create sidenav bar *
+                *********************/
+                html_src_indent($indent++);
+		echo '<div>';
+                html_src_indent($indent);
+		echo '<div class="adminsidebar" id="adminsidebar">';
+		html_src_indent(++$indent);
                 echo '<ul class="adminnavlist" id="navlist">';
 
-                if(isset($_SESSION['auth']) && $_SESSION['auth'] === true)
-                {
-                        html_src_indent($indent);
-                        echo '<li><a class="adminnavlistelement" href="#" id="nav-ref-logout"> <div><i class="fa fa-sign-out fa-lg"></i><label id="adminnavlisttextlogout"><span data-i18n="logout"></span></div></a></li>';
-                }
-
-                html_src_indent($indent);
-                echo '<li><a class="adminnavlistelement" href="#" id="nav-ref-main"><div><i class="fa fa-long-arrow-left fa-2x"></i><label id="adminnavlisttextback"><span data-i18n="adminpanel_back"></span></label></div></a></li>';
+                html_src_indent(++$indent);
         
         
                 foreach($configsetup as $section => $fields)
@@ -114,13 +126,12 @@ require_once('../lib/configsetup.inc.php');
                 html_src_indent(--$indent);
                 echo '</ul>';
         ?>
-        </div>
-        
-        <!-- Settings page content -->
-        <form  autocomplete="off">
-	<div class="admintopnavbar"><i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i><i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"> </i></div>        
-        <div class="admincontent" id="admincontentpage">
-            <button class="save-btn" id="save-btn">
+</div>
+<!-- Settings page content -->
+<form  autocomplete="off">
+
+	<div class="admincontent" id="admincontentpage">
+	            <button class="save-btn" id="save-btn">
                      <span class="save"><span data-i18n="save"></span></span>
                      <span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>
                      <span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>
