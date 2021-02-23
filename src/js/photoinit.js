@@ -196,12 +196,25 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         const msg = i18n('really_delete_image');
         const really = confirm(img + ' ' + msg);
         if (really) {
-            photoBooth.deleteImage(img, (data) => {
-                if (data.success) {
-                    console.log('Deleted ' + img);
-                    photoBooth.reloadPage();
-                } else {
-                    console.log('Error while deleting ' + img);
+            $.ajax({
+                url: 'api/deletePhoto.php',
+                method: 'POST',
+                data: {
+                    file: img
+                },
+                success: (data) => {
+                    if (data.success) {
+                        console.log('Deleted ' + img);
+                        photoBooth.reloadPage();
+                    } else {
+                        console.log('Error while deleting ' + img);
+                        setTimeout(function () {
+                            photoBooth.reloadPage();
+                        }, 5000);
+                    }
+                },
+                error: (jqXHR, textStatus) => {
+                    console.log('Error while deleting image: ', textStatus);
                     setTimeout(function () {
                         photoBooth.reloadPage();
                     }, 5000);
