@@ -653,6 +653,9 @@ const photoBooth = (function () {
                             api.reloadPage();
                         } else {
                             console.log('Error while deleting ' + filename);
+                            if (data.error) {
+                                console.log(data.error);
+                            }
                             setTimeout(function () {
                                 api.reloadPage();
                             }, 5000);

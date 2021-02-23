@@ -208,6 +208,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                         photoBooth.reloadPage();
                     } else {
                         console.log('Error while deleting ' + img);
+                        if (data.error) {
+                            console.log(data.error);
+                        }
                         setTimeout(function () {
                             photoBooth.reloadPage();
                         }, 5000);
