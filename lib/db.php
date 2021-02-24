@@ -27,7 +27,7 @@ function deleteImageFromDB($filename) {
 
     if (in_array($filename, $images)) {
         unset($images[array_search($filename, $images)]);
-        file_put_contents(DB_FILE, json_encode($images));
+        file_put_contents(DB_FILE, json_encode(array_values($images)));
     }
 
     if (file_exists(DB_FILE) && empty($images)) {
