@@ -6,6 +6,8 @@ set -e
 # Show all commands
 # set -x
 
+RUNNING_ON_PI=true
+
 if [ ! -z $1 ]; then
     webserver=$1
 else
@@ -20,21 +22,31 @@ function error {
     echo -e "\033[0;31m${1}\033[0m"
 }
 
+function no_raspberry {
+    error "WARNING: This reset script is only intended to run on a Raspberry Pi."
+    info "Running the script on Debian is possible, but PI specific features will be missing!"
+    read -p "Do you want to continue? (y/n)" -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        RUNNING_ON_PI=false
+        return
+    fi
+    exit ${1}
+}
+
 if [ $UID != 0 ]; then
     error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
 fi
 
 if [ ! -f /proc/device-tree/model ]; then
-    error "ERROR: This installer is only intended to run on a Raspberry Pi."
-    exit 2
-fi
+    no_raspberry 2
+else
+    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
 
-PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
-
-if [[ $PI_MODEL != Raspberry* ]]; then
-    error "ERROR: This installer is only intended to run on a Raspberry Pi."
-    exit 3
+    if [[ $PI_MODEL != Raspberry* ]]; then
+        no_raspberry 3
+    fi
 fi
 
 if [[ ! -z $1 && ("$1" = "nginx" || "$1" = "lighttpd") ]]; then
@@ -44,6 +56,7 @@ else
 fi
 
 COMMON_PACKAGES=(
+    'curl'
     'git'
     'gphoto2'
     'jq'
@@ -231,6 +244,8 @@ info "### Get yourself a hot beverage. The following step can take up to 15 minu
 yarn install
 yarn build
 
+# Pi specific setup start
+if [ "$RUNNING_ON_PI" = true ]; then
 echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
 read -p "### If yes, this will generate a personal configuration with all needed changes. [y/N] " -n 1 -r
 echo -e "\033[0m"
@@ -247,6 +262,8 @@ then
 );
 EOF
 fi
+fi
+# Pi specific setup end
 
 info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
@@ -270,6 +287,8 @@ then
     gpasswd -a www-data lpadmin
 fi
 
+# Pi specific setup start
+if [ "$RUNNING_ON_PI" = true ]; then
 echo -e "\033[0;33m### You probably like to start the browser on every start."
 read -p "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " -n 1 -r
 echo -e "\033[0m"
@@ -330,15 +349,17 @@ ResultActive=yes
 EOF
 
 fi
+fi
+# Pi specific setup end
 
 info "### Congratulations you finished the install process."
-info "### Have fun with your Photobooth, but first restart your Pi."
+info "### Have fun with your Photobooth, but first restart your device."
 
 echo -e "\033[0;33m"
 read -p "### Do you like to reboot now? [y/N] " -n 1 -r
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    info "### Your Raspberry Pi will reboot now."
+    info "### Your device will reboot now."
     shutdown -r now
 fi
