@@ -23,8 +23,8 @@ function error {
 }
 
 function no_raspberry {
-    error "WARNING: This reset script is only intended to run on a Raspberry Pi."
-    info "Running the script on Debian is possible, but PI specific features will be missing!"
+    info "WARNING: This reset script is intended to run on a Raspberry Pi."
+    info "Running the script on other devices running Debian / a Debian based distribution is possible, but PI specific features will be missing!"
     read -p "Do you want to continue? (y/n)" -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
