@@ -96,12 +96,25 @@ if ($data['type'] == 'config') {
 
     if ($newConfig['ui']['style'] === 'custom') {
         if (
-            !is_readable('../template/custom.template.php') ||
-            !is_readable('../resources/css/custom_style.css') ||
-            !is_readable('../resources/css/custom_chromakeying.css') ||
+            !is_readable('../template/custom.template.php') &&
+            !is_readable('../resources/css/custom_style.css') &&
+            !is_readable('../resources/css/custom_chromakeying.css') &&
             !is_readable('../resources/css/custom_live_chromakeying.css')
         ) {
             $newConfig['ui']['style'] = 'default';
+        } else {
+            if (!file_exists('../template/custom.template.php')) {
+                copy('../template/modern.template.php', '../template/custom.template.php');
+            }
+            if (!file_exists('../resources/css/custom_style.css')) {
+                copy('../resources/css/modern_style.css', '../resources/css/custom_style.css');
+            }
+            if (!file_exists('../resources/css/custom_chromakeying.css')) {
+                copy('../resources/css/modern_chromakeying.css.css', '../resources/css/custom_chromakeying.css');
+            }
+            if (!file_exists('../resources/css/custom_live_chromakeying.css')) {
+                copy('../resources/css/modern_live_chromakeying.css', '../resources/css/custom_live_chromakeying.css');
+            }
         }
     }
 
