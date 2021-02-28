@@ -1144,7 +1144,14 @@ const photoBooth = (function () {
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (!takingPic) {
                     $('.closeGallery').trigger('click');
-                    $('.triggerPic').trigger('click');
+                    if (config.collage.enabled && config.collage.only) {
+                        if (config.dev.enabled) {
+                            console.log('Picture key pressed, but only collage allowed. Triggering collage now.');
+                        }
+                        $('.triggerCollage').trigger('click');
+                    } else {
+                        $('.triggerPic').trigger('click');
+                    }
                 } else if (config.dev.enabled && takingPic) {
                     console.log('Taking photo already in progress!');
                 }

@@ -69,6 +69,7 @@ $config['picture']['allow_delete'] = true;
 
 // C O L L A G E
 $config['collage']['enabled'] = true;
+$config['collage']['only'] = false;
 // control countdown timer between collage pictures in seconds
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;

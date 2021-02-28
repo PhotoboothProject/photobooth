@@ -60,7 +60,9 @@
 							data-i18n="takeCollage"></span></a>
 					<?php endif; ?>
 
+					<?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
 					<a href="#" class="btn takePic"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+					<?php endif; ?>
 				<?php endif; ?>
 				<button hidden class="closeGallery"></button>
 				<button hidden class="triggerPic"></button>

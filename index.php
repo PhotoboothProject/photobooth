@@ -120,7 +120,9 @@ endif;
 				<?php endif; ?>
 
 				<?php if (!$config['button']['force_buzzer']): ?>
+					<?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
 					<a href="#" class="<?php echo $btnClass1; ?> newpic"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
+					<?php endif; ?>
 
 					<?php if ($config['collage']['enabled']): ?>
 					<a href="#" class="<?php echo $btnClass1; ?> newcollage"><i class="fa fa-th-large"></i> <span

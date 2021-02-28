@@ -418,6 +418,12 @@ $configsetup = [
             'name' => 'collage[enabled]',
             'value' => $config['collage']['enabled'],
         ],
+        'collage_only' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'collage[only]',
+            'value' => $config['collage']['only'],
+        ],
         'collage_cntdwn_time' => [
             'view' => 'basic',
             'type' => 'range',
