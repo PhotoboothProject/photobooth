@@ -1285,6 +1285,18 @@ $configsetup = [
             'name' => 'remotebuzzer[enabled]',
             'value' => $config['remotebuzzer']['enabled'],
         ],
+        'remotebuzzer_userotary' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[userotary]',
+            'value' => $config['remotebuzzer']['userotary'],
+        ],
+        'remotebuzzer_picturebutton' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[picturebutton]',
+            'value' => $config['remotebuzzer']['picturebutton'],
+        ],
         'remotebuzzer_collagetime' => [
             'view' => 'expert',
             'type' => 'range',
@@ -1295,12 +1307,6 @@ $configsetup = [
             'range_max' => 6,
             'range_step' => 1,
             'unit' => 'seconds',
-        ],
-        'remotebuzzer_picturebutton' => [
-            'view' => 'advanced',
-            'type' => 'checkbox',
-            'name' => 'remotebuzzer[picturebutton]',
-            'value' => $config['remotebuzzer']['picturebutton'],
         ],
         'remotebuzzer_picturegpio' => [
             'view' => 'advanced',

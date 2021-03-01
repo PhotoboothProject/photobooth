@@ -112,38 +112,29 @@ Follow the steps mentioned here: [How to Fix NGINX 413 Request Entity Too Large 
 
 <hr>
 
-### Can I use Hardware Button to take a Picture on my Raspberry Pi?
-When the photobooth display / screen is directly connected to the Raspberry Pi, this is a simple way to use a hardware button connected on GPIO24 to trigger a photo. Set the "Take Pictures key" to `13` (enter key) via Admin panel to specify the key. Next you have to install some dependencies:
+### Can I use Hardware Button on my Raspberry Pi, to take a Picture ?
+Yes, the **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins . This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.
 
-```
-sudo apt install libudev-dev
-sudo pip install python-uinput
-echo "uinput" | sudo tee -a /etc/modules
-```
+The Hardware Button functionality supports two separate modes of operation (select via admin panel):
+- **Button Mode**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
+- **Rotary Mode**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. 
+Modes can not be combined.
 
-After a reboot (`sudo shutdown -r now`), you should check if the uinput kernel module is loaded by executing `lsmod | grep uinput`. If you get some output, everything is fine.
-
-You also need to run a python script in background to read the state of GPIO24 and send the key if hardware button is pressed to trigger the website to take a photo.
-```
-sudo crontab -e
-@reboot python /var/www/html/button.py &
-```
-
-<hr>
-
-### Hardware Button for WLAN connected screen (i.e. iPad) - Remote Buzzer Server
-This feature enables multiple GPIO pin connected hardware buttons (buzzer) in a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad). Configuration takes place in the admin settings - Remote Buzzer Server area.
+In any mode, Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. 
 
 Troubleshooting / Debugging:
 
-- **Important: You must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
-- Switch on dev settings for server logs to be written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/remotebuzzer_server.log`). Clients will log server communication information to the browser console.
+- **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
+- In "dev" mode the remote buzzer server logs to be written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/remotebuzzer_server.log`). Clients will log server communication information to the browser console.
 - If hardware buttons do not trigger, GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
 
+As of Photobooth v3, hardware button support is fully integrated into Photobooth. Therefore the `button.py` script has been removed from the distribution. In case you are, for continued use of that script, for backward compatiblity please do not activate the Hardware Button feature in the admin GUI.
+
+
 ***************
-Hardware Button (Buzzer)
+**Button Mode**
 ***************
-The server supports up to three connected hardware buttons for the following functionalities.
+The server supports up to three connected hardware buttons for the following functionalities:
 
 1) **Picture Button**
 
@@ -163,7 +154,7 @@ Note:
 
 Note:
 - If collage is configured with interruption, next button presses will trigger the next collage pictures. 
- - If collage is disabled in the admin settings, this button will do nothing even if it is activated in the admin settings
+- If collage is disabled in the admin settings (Collage section), this button will do nothing.
 
 3) **Shutdown Button**
 
@@ -171,12 +162,32 @@ Note:
 - This button will initate a safe system shutdown and halt (`shutdown -h now`).
 
 Note:
-- One needs to hold the button for a defined time to initiate the shut down (defaults to 3 seconds). This can be adjusted in the admin settings.
+- Hold the button for a defined time to initiate the shut down (defaults to 5 seconds). This can be adjusted in the admin settings.
 - The shutdown button will only trigger if there is currently no action in progress in Photobooth (picture, collage). 
 
-All hardware buttons connect to a GPIO pin and the server will watch for a PIN_DOWN event (pull to ground). This will initiate a message to the photobooth screen over network / WLAN, to trigger the action (thrill).
+After any button is triggered, all hardware button remain disabled until the action (picture / collage) completed. Once completed, the hardware buttons re-arms / are active again.
 
-After triggered, the hardware button remains disabled until an action (picture / collage) has fully completed. Then the hardware button re-arms / is active again.
+***************
+**Rotary Mode**
+***************
+In rotary mode a rotary encoder (i.e. [KY-040](https://sensorkit.en.joy-it.net/index.php?title=KY-040_Rotary_encoder)) is connected to the GPIOs. Turning the rotary left / right will navigate through the currently visible set of buttons on the screen. Button press on the rotary will activate the currently highlighted button in Photobooth
+
+The wiring layout is
+```
+Raspberry        Rotary Encoder
+GPIO 24	   ---   DT
+GPIO 20    ---   CLK
+GPIO 16    ---   SW
+3V3        ---   +
+GND        ---   GND
+```
+
+Known limitations:
+The following elements are currently not supported and not accessible through the rotary navigation
+- Photoswipe and all it's functionalities (slide show, chroma keying, delete picture, etc.).
+- Results Screen > Delete Picture
+- Full Screen Mode button
+- Live chroma keying
 
 **************
 Other Remote Trigger (experimental)
@@ -187,7 +198,7 @@ The trigger server controls and coordinates sending commands via socket.io to th
 - Commands: `start-picture`, `start-collage`
 - Response: `completed`  will be emitted to the client, once photobooth finished the task
 
-This functionality is experimental and largely untested. Not sure if there is a use-case but if you have one, happy to learn about it. 
+This functionality is experimental and largely untested. Not sure if there is a use-case but if you have one, happy to learn about it. Currently this does not support rotary encoder use but could be if needed.
 
 <hr>
 

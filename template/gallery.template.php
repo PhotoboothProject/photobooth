@@ -1,8 +1,8 @@
-<div id="gallery" class="gallery">
+<div id="gallery" class="gallery rotarygroup">
 	<div class="gallery__inner">
 		<div class="gallery__header">
 			<h1><span data-i18n="gallery"></span></h1>
-			<a href="#" class="gallery__close close_gal"><i class="fa fa-times"></i></a>
+			<a href="#" class="gallery__close close_gal rotaryfocus"><i class="fa fa-times"></i></a>
 		</div>
 		<div class="gallery__body" id="galimages">
 			<?php if (empty($imagelist)): ?>
@@ -35,7 +35,7 @@
                 $imageinfoThumb = getimagesize($filename_thumb);
             ?>
 
-			<a href="<?=$filename_photo?>" data-size="<?=$imageinfo[0]?>x<?=$imageinfo[1]?>"
+			<a href="<?=$filename_photo?>" class="gallery__img rotaryfocus" data-size="<?=$imageinfo[0]?>x<?=$imageinfo[1]?>"
 				data-med="<?=$filename_thumb?>" data-med-size="<?=$imageinfoThumb[0]?>x<?=$imageinfoThumb[1]?>">
 				<figure>
 					<img src="<?=$filename_thumb?>" alt="<?=$image?>" />

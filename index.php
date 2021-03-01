@@ -79,13 +79,13 @@ if (
 
 		<!-- image Filter Pane -->
 		<?php if ($config['filters']['enabled']): ?>
-		<div id="mySidenav" class="dragscroll sidenav">
-			<a href="#" class="closebtn <?php echo $btnClass2; ?>"><i class="fa fa-times"></i></a>
+		<div id="mySidenav" class="dragscroll sidenav rotarygroup">
+			<a href="#" class="closebtn <?php echo $btnClass2; ?> rotaryfocus"><i class="fa fa-times"></i></a>
 
 			<?php foreach(AVAILABLE_FILTERS as $filter => $name): ?>
 				<?php if (!in_array($filter, $config['filters']['disabled'])): ?>
 					<div id="<?=$filter?>" class="filter <?php if($config['filters']['defaults'] === $filter)echo 'activeSidenavBtn'; ?>">
-						<a class="btn btn--small" href="#"><?=$name?></a>
+						<a class="btn btn--small rotaryfocus" href="#"><?=$name?></a>
 					</div>
 				<?php endif; ?>
 			<?php endforeach; ?>
@@ -108,43 +108,43 @@ if (
 				</div>
 				<div class="cheese"></div>
 				<div class="loaderImage"></div>
-				<div class="loading"></div>
+				<div class="loading rotarygroup"></div>
 			</div>
 		</div>
 
 		<!-- Result Page -->
-		<div class="stages" id="result">
-			<a href="#" class="<?php echo $btnClass1; ?> homebtn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+		<div class="stages rotarygroup" id="result">
+			<a href="#" class="<?php echo $btnClass1; ?> homebtn rotaryfocus"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
 			<div class="resultInner hidden">
 				<?php if ($config['gallery']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> gallery-button"><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> gallery-button rotaryfocus" ><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['qr']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> qrbtn"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> qrbtn rotaryfocus"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['mail']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> mailbtn"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> mailbtn rotaryfocus"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['print']['from_result']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> printbtn"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> printbtn rotaryfocus"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 				<?php endif; ?>
 
 				<?php if (!$config['button']['force_buzzer']): ?>
 					<?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
-					<a href="#" class="<?php echo $btnClass1; ?> newpic"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
+					<a href="#" class="<?php echo $btnClass1; ?> newpic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
 					<?php endif; ?>
 
 					<?php if ($config['collage']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass1; ?> newcollage"><i class="fa fa-th-large"></i> <span
+					<a href="#" class="<?php echo $btnClass1; ?> newcollage rotaryfocus"><i class="fa fa-th-large"></i> <span
 							data-i18n="newCollage"></span></a>
 					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ($config['filters']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> imageFilter"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> imageFilter rotaryfocus"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['picture']['allow_delete']): ?>
@@ -178,7 +178,7 @@ if (
 				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
 			<?php endif; ?>
 
-			<button class="mail-form-input btn" name="submit" type="submit" value="Send"><span data-i18n="send"></span></button>
+			<button class="mail-form-input btn rotaryfocus" name="submit" type="submit" value="Send"><span data-i18n="send"></span></button>
 		</form>
 
 		<div id="mail-form-message" style="max-width: 75%"></div>

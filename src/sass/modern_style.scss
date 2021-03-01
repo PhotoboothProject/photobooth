@@ -92,7 +92,16 @@ body {
 
 .round-btn:active,
 .round-btn:focus,
-.round-btn:hover {
+.round-btn:hover,
+.gallery__close:active,
+.gallery__close:hover,
+.gallery__close:focus,
+.gallery__img:active > figure,
+.gallery__img:focus > figure,
+.gallery__img:hover > figure,
+.gallery__img:active > img,
+.gallery__img:focus > img,
+.gallery__img:hover > img {
   opacity: 0.6;
 }
 

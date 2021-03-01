@@ -20,7 +20,7 @@ $config['picture']['thumb_size'] = '540px';
 $config['dev']['error_messages'] = true;
 $config['dev']['reload_on_error'] = true;
 $config['qr']['enabled'] = true;
-$config['webserver']['ip'] = null;
+$config['webserver']['ip'] = '127.0.0.1';
 $config['webserver']['ssid'] = 'Photobooth';
 $config['download']['enabled'] = true;
 $config['download']['thumbs'] = false;
@@ -225,16 +225,17 @@ $config['slideshow']['use_thumbs'] = false;
 
 // R E M O T E   B U Z Z E R
 $config['remotebuzzer']['enabled'] = false;
+$config['remotebuzzer']['userotary'] = false;
+$config['remotebuzzer']['picturebutton'] = true;
 // collagetime controls the time to distinguish picture from collage in seconds
 $config['remotebuzzer']['collagetime'] = '2';
-$config['remotebuzzer']['port'] = 14711;
-$config['remotebuzzer']['picturebutton'] = true;
 $config['remotebuzzer']['picturegpio'] = 21;
 $config['remotebuzzer']['collagebutton'] = false;
 $config['remotebuzzer']['collagegpio'] = 20;
 $config['remotebuzzer']['shutdownbutton'] = false;
 $config['remotebuzzer']['shutdowngpio'] = 16;
 $config['remotebuzzer']['shutdownholdtime'] = '5';
+$config['remotebuzzer']['port'] = 14711;
 
 
 // S Y N C  T O  U S B  S T I C K

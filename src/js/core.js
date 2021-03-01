@@ -36,6 +36,8 @@ const photoBooth = (function () {
             $(selector).addClass('modal--show');
         },
         close: function (selector) {
+            $('.resultInner').addClass('show');
+
             if ($(selector).hasClass('modal--show')) {
                 $(selector).removeClass('modal--show');
 
@@ -124,6 +126,18 @@ const photoBooth = (function () {
                                 api.thrill('collage');
                             }
                             break;
+                        case 'rotary-cw':
+                            rotaryControl.focusNext();
+                            break;
+
+                        case 'rotary-ccw':
+                            rotaryControl.focusPrev();
+                            break;
+
+                        case 'rotary-btn-press':
+                            rotaryControl.click();
+                            break;
+
                         default:
                             break;
                     }
@@ -132,6 +146,9 @@ const photoBooth = (function () {
                 ioClient.on('connect_failed', function () {
                     console.log(' Remote buzzer unable to connect');
                 });
+
+                rotaryControl.enabled = config.remotebuzzer.userotary;
+                rotaryControl.focusSet('#start');
             } else {
                 console.log(' Remote buzzer unable to connect - webserver.ip not defined in config');
             }
@@ -152,6 +169,7 @@ const photoBooth = (function () {
 
     api.openNav = function () {
         $('#mySidenav').addClass('sidenav--open');
+        rotaryControl.focusSet('#mySidenav');
     };
 
     api.closeNav = function () {
@@ -160,6 +178,10 @@ const photoBooth = (function () {
 
     api.toggleNav = function () {
         $('#mySidenav').toggleClass('sidenav--open');
+
+        if ($('#mySidenav').hasClass('sidenav--open')) {
+            rotaryControl.focusSet('#mySidenav');
+        }
     };
 
     api.startVideo = function (mode) {
@@ -351,6 +373,7 @@ const photoBooth = (function () {
         }
 
         loader.addClass('open');
+
         api.startCountdown(
             nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time,
             $('#counter'),
@@ -483,6 +506,7 @@ const photoBooth = (function () {
                             api.processPic(data.style, result);
                         }
                     } else {
+                        // collage with interruption
                         let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                         const preloadImage = new Image();
                         const picdate = Date.now;
@@ -496,14 +520,16 @@ const photoBooth = (function () {
                         preloadImage.src = imageUrl;
 
                         $('.loaderImage').show();
+
                         if (config.remotebuzzer.enabled) {
                             ioClient.emit('photobooth-socket', 'collage-wait-for-next');
                         }
 
                         if (result.current + 1 < result.limit) {
-                            $('<a class="btn" href="#">' + api.getTranslation('nextPhoto') + '</a>')
+                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('nextPhoto') + '</a>')
                                 .appendTo('.loading')
                                 .click((ev) => {
+                                    ev.stopPropagation();
                                     ev.preventDefault();
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
@@ -512,9 +538,10 @@ const photoBooth = (function () {
                                     api.thrill('collage');
                                 });
                         } else {
-                            $('<a class="btn" href="#">' + api.getTranslation('processPhoto') + '</a>')
+                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('processPhoto') + '</a>')
                                 .appendTo('.loading')
                                 .click((ev) => {
+                                    ev.stopPropagation();
                                     ev.preventDefault();
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
@@ -527,12 +554,13 @@ const photoBooth = (function () {
                                 });
                         }
                         $(
-                            '<a class="btn" style="margin-left:2px" href="#">' +
+                            '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
                                 api.getTranslation('retakePhoto') +
                                 '</a>'
                         )
                             .appendTo('.loading')
                             .click((ev) => {
+                                ev.stopPropagation();
                                 ev.preventDefault();
                                 $('.loaderImage').css('background-image', 'none');
                                 imageUrl = '';
@@ -541,8 +569,15 @@ const photoBooth = (function () {
                                 nextCollageNumber = result.current;
                                 api.thrill('collage');
                             });
+
                         const abortmsg = api.getTranslation('abort');
-                        $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
+                        $('.loading')
+                            .append($('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(abortmsg))
+                            .click(() => {
+                                location.assign('./');
+                            });
+
+                        rotaryControl.focusSet('.loading.rotarygroup');
                     }
                 } else if (result.success === 'chroma') {
                     chromaFile = result.file;
@@ -761,6 +796,10 @@ const photoBooth = (function () {
             $('#loader').css('background-image', 'url()');
             $('#loader').removeClass('showBackgroundImage');
 
+            if (!$('#mySidenav').hasClass('sidenav--open')) {
+                rotaryControl.focusSet('#result');
+            }
+
             api.resetTimeOut();
         };
 
@@ -800,6 +839,7 @@ const photoBooth = (function () {
         function allLoaded() {
             const linkElement = $('<a>').html(thumbImg);
 
+            linkElement.attr('class', 'gallery__img rotaryfocus');
             linkElement.attr('data-size', bigSize);
             linkElement.attr('href', config.foldersRoot.images + '/' + imageName);
             linkElement.attr('data-med', config.foldersRoot.thumbs + '/' + imageName);
@@ -823,7 +863,10 @@ const photoBooth = (function () {
 
         gallery.addClass('gallery--open');
 
-        setTimeout(() => gallery.find('.gallery__inner').show(), 300);
+        setTimeout(() => {
+            gallery.find('.gallery__inner').show();
+            rotaryControl.focusSet('#gallery');
+        }, 300);
     };
 
     api.resetMailForm = function () {
@@ -974,7 +1017,8 @@ const photoBooth = (function () {
     };
 
     //Filter
-    $('.imageFilter').on('click', function () {
+    $('.imageFilter').on('click', function (e) {
+        e.preventDefault();
         api.toggleNav();
     });
 
@@ -988,6 +1032,8 @@ const photoBooth = (function () {
             console.log('Applying filter', imgFilter, result);
         }
         api.processPic(imgFilter, result);
+
+        rotaryControl.focusSet('#mySidenav');
     });
 
     // Take Picture Button
@@ -1010,6 +1056,7 @@ const photoBooth = (function () {
         e.preventDefault();
 
         api.closeNav();
+        rotaryControl.focusSet('#result');
     });
 
     // Open Gallery Button
@@ -1026,6 +1073,14 @@ const photoBooth = (function () {
 
         gallery.find('.gallery__inner').hide();
         gallery.removeClass('gallery--open');
+
+        $('.resultInner').addClass('show');
+
+        if ($('#result').is(':visible')) {
+            rotaryControl.focusSet('#result');
+        } else if ($('#start').is(':visible')) {
+            rotaryControl.focusSet('#start');
+        }
     });
 
     $('.mailbtn').on('click touchstart', function (e) {
@@ -1085,7 +1140,11 @@ const photoBooth = (function () {
 
     $('#result').on('click', function () {
         if (!modal.close('#qrCode')) {
-            $('.resultInner').toggleClass('show');
+            $('.resultInner').addClass('show');
+        }
+
+        if (!$('#mySidenav').hasClass('sidenav--open')) {
+            rotaryControl.focusSet('#result');
         }
     });
 
@@ -1094,7 +1153,8 @@ const photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
 
-        modal.toggle('#qrCode');
+        modal.open('#qrCode');
+        rotaryControl.focusSet('#qrCode');
     });
 
     $('.homebtn').on('click', function (e) {
@@ -1199,6 +1259,83 @@ const photoBooth = (function () {
             e.preventDefault();
         });
     }
+
+    const rotaryControl = {
+        enabled: false,
+        focusSet: function (id) {
+            if (rotaryControl.enabled) {
+                rotaryControl.focusRemove();
+                $(id).find('.rotaryfocus').first().addClass('focused').focus();
+            }
+        },
+        focusRemove: function () {
+            $('.focused').removeClass('focused');
+        },
+        focusNext: function () {
+            if (rotaryControl.rotationInactive() || !rotaryControl.enabled) {
+                return;
+            }
+
+            const parent = $('.focused').parents('.rotarygroup').first();
+            const buttonlist = parent.find('.rotaryfocus');
+            let index = buttonlist.index($('.focused'));
+
+            if (buttonlist.eq(index + 1).exists()) {
+                index += 1;
+            } else if (buttonlist.eq(0).exists()) {
+                index = 0;
+            }
+
+            $('.focused')
+                .removeClass('focused')
+                .parents('.rotarygroup')
+                .find('.rotaryfocus')
+                .eq(index)
+                .addClass('focused')
+                .focus();
+        },
+        focusPrev: function () {
+            if (rotaryControl.rotationInactive() || !rotaryControl.enabled) {
+                return;
+            }
+
+            const parent = $('.focused').parents('.rotarygroup').first();
+            const buttonlist = parent.find('.rotaryfocus');
+            const index = buttonlist.index($('.focused'));
+
+            if (buttonlist.eq(index - 1).exists()) {
+                $('.focused')
+                    .removeClass('focused')
+                    .parents('.rotarygroup')
+                    .find('.rotaryfocus')
+                    .eq(index - 1)
+                    .addClass('focused')
+                    .focus();
+            }
+        },
+        rotationInactive: function () {
+            if ($('.modal.modal--show').exists()) {
+                return true;
+            }
+
+            return false;
+        },
+
+        click: function () {
+            if (rotaryControl.enabled) {
+                // click modal if open
+                if ($('#qrCode.modal.modal--show').exists()) {
+                    $('#qrCode').click();
+                } else if (!$('.focused').hasClass('gallery__img')) {
+                    // currently photoswipe is not supported by rotaryControl
+                    $('.focused').blur().trigger('click');
+                }
+            }
+        }
+    };
+    $.fn.exists = function () {
+        return this.length !== 0;
+    };
 
     return api;
 })();
