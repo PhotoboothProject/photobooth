@@ -120,13 +120,27 @@ The Hardware Button functionality supports two separate modes of operation (sele
 - **Rotary Mode**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. 
 Modes can not be combined.
 
-In any mode, Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. 
+In any mode, Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
 
 Troubleshooting / Debugging:
 
 - **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
-- In "dev" mode the remote buzzer server logs to be written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/remotebuzzer_server.log`). Clients will log server communication information to the browser console.
-- If hardware buttons do not trigger, GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
+- In "Dev" mode the remote buzzer server logs are written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/remotebuzzer_server.log`). Clients will log server communication information to the browser console. Activate "Dev" mode and check the logs for any error messages.
+- If hardware buttons do not trigger
+ - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
+ - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
+
+```
+         gpio=16,20,21=pu
+```
+
+- For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as
+
+```
+     cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
+     www-data ALL=NOPASSWD: /sbin/shutdown
+     EOF
+```
 
 As of Photobooth v3, hardware button support is fully integrated into Photobooth. Therefore the `button.py` script has been removed from the distribution. In case you are, for continued use of that script, for backward compatiblity please do not activate the Hardware Button feature in the admin GUI.
 
@@ -173,13 +187,16 @@ After any button is triggered, all hardware button remain disabled until the act
 In rotary mode a rotary encoder (i.e. [KY-040](https://sensorkit.en.joy-it.net/index.php?title=KY-040_Rotary_encoder)) is connected to the GPIOs. Turning the rotary left / right will navigate through the currently visible set of buttons on the screen. Button press on the rotary will activate the currently highlighted button in Photobooth
 
 The wiring layout is
+
 ```
-Raspberry        Rotary Encoder
-GPIO 24	   ---   DT
-GPIO 20    ---   CLK
-GPIO 16    ---   SW
-3V3        ---   +
-GND        ---   GND
+Button                          Rotary Encoder
+Mode           Raspberry        Mode
+
+Picture  ---   GPIO 21    ---   DT
+Collage  ---   GPIO 20    ---   CLK
+Shutdown ---   GPIO 16    ---   SW
+                3V3       ---   +
+                GND       ---   GND
 ```
 
 Known limitations:

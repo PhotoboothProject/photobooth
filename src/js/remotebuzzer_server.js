@@ -151,18 +151,25 @@ log('socket.io server started');
 
 /* SANITY CHECKS */
 function gpioSanity(gpioconfig) {
-    return !(isNaN(gpioconfig) || gpioconfig < 0 || gpioconfig > 21);
+    if (isNaN(gpioconfig)) {
+        throw new Error(gpioconfig + ' is not a valid number');
+    }
+
+    if (gpioconfig < 1 || gpioconfig > 26) {
+        throw new Error('GPIO' + gpioconfig + ' number is out of range (1-26)');
+    }
+
+    cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
+    stdout = execSync(cmd).toString();
+
+    if (!stdout.split(',').find((el) => el == gpioconfig)) {
+        throw new Error('GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details');
+    }
 }
 
-if (!gpioSanity(config.remotebuzzer.picturegpio)) {
-    log('GPIO configuration for Picture Button is invalid: ', config.remotebuzzer.picturegpio);
-}
-if (!gpioSanity(config.remotebuzzer.collagegpio)) {
-    log('GPIO configuration for Collage Button is invalid: ', config.remotebuzzer.collagegpio);
-}
-if (!gpioSanity(config.remotebuzzer.shutdowngpio)) {
-    log('GPIO configuration for Shutdown Button is invalid: ', config.remotebuzzer.shutdowngpio);
-}
+gpioSanity(config.remotebuzzer.picturegpio);
+gpioSanity(config.remotebuzzer.collagegpio);
+gpioSanity(config.remotebuzzer.shutdowngpio);
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
 function buttonActiveCheck(gpio, value) {
@@ -173,7 +180,6 @@ function buttonActiveCheck(gpio, value) {
 
     /* clean state - no button pressed - activate lock */
     if (buttonActiveCheck.buttonIsPressed == 0 && !value) {
-        // log('buttonActiveCheck: LOCK gpio ', gpio, ', value ', value);
         buttonActiveCheck.buttonIsPressed = gpio;
         buttonTimer(Date.now('millis'));
 
@@ -182,7 +188,6 @@ function buttonActiveCheck(gpio, value) {
 
     /* clean state - locked button release - release lock */
     if (buttonActiveCheck.buttonIsPressed == gpio && value) {
-        // log('buttonActiveCheck: RELEASE gpio ', gpio, ', value ', value);
         buttonActiveCheck.buttonIsPressed = 0;
         buttonTimer(Date.now('millis'));
 
@@ -191,7 +196,6 @@ function buttonActiveCheck(gpio, value) {
 
     /* forced reset */
     if (gpio == -1 && value == -1) {
-        // log('buttonActiveCheck - forced state reset');
         buttonActiveCheck.buttonIsPressed = 0;
         buttonTimer(0);
 
@@ -227,7 +231,6 @@ function buttonTimer(millis) {
     /* start timer */
     if (buttonTimer.millis === 0) {
         buttonTimer.millis = millis;
-        // log('buttonTimer started - value saved: ', millis);
 
         return true;
     }
@@ -244,7 +247,6 @@ function buttonTimer(millis) {
     if (millis - buttonTimer.millis > 0) {
         buttonTimer.duration = millis - buttonTimer.millis;
         buttonTimer.millis = 0;
-        // log('buttonTimer ended - ', buttonTimer.duration, ' ms');
 
         return buttonTimer.duration;
     }
@@ -257,7 +259,6 @@ function buttonTimer(millis) {
 
 /* WATCH FUNCTION PICTURE BUTTON WITH LONGPRESS FOR COLLAGE*/
 const watchPictureGPIOwithCollage = function watchPictureGPIOwithCollage(err, gpioValue) {
-    //log('FUNCTION: watchPictureGPIOwithCollage()');
     if (err) {
         throw err;
     }
@@ -293,7 +294,6 @@ const watchPictureGPIOwithCollage = function watchPictureGPIOwithCollage(err, gp
 
 /* WATCH FUNCTION PICTURE BUTTON */
 const watchPictureGPIO = function watchPictureGPIO(err, gpioValue) {
-    //log('FUNCTION: watchPictureGPIO()');
     if (err) {
         throw err;
     }
@@ -327,7 +327,6 @@ const watchPictureGPIO = function watchPictureGPIO(err, gpioValue) {
 
 /* WATCH FUNCTION COLLAGE BUTTON */
 const watchCollageGPIO = function watchCollageGPIO(err, gpioValue) {
-    //log('FUNCTION: watchCollageGPIO()');
     if (err) {
         throw err;
     }
