@@ -18,6 +18,7 @@ $filename = $_GET['filename'];
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
 $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
+$quality = 100;
 $status = false;
 
 // exit with error if file does not exist
@@ -102,12 +103,12 @@ if (!file_exists($filename_print)) {
     list($width, $height) = getimagesize($filename_source);
     if ($width > $height) {
         $image = imagecreatefromjpeg($filename_source);
-        imagejpeg($image, $filename_print);
+        imagejpeg($image, $filename_print, $quality);
         imagedestroy($image); // Destroy the created collage in memory
     } else {
         $image = imagecreatefromjpeg($filename_source);
         $resultRotated = imagerotate($image, 90, 0); // Rotate image
-        imagejpeg($resultRotated, $filename_print);
+        imagejpeg($resultRotated, $filename_print, $quality);
         imagedestroy($image); // Destroy the created collage in memory
         // re-define width & height after rotation
         list($width, $height) = getimagesize($filename_print);
@@ -144,7 +145,7 @@ if (!file_exists($filename_print)) {
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
         }
 
-        imagejpeg($print, $filename_print);
+        imagejpeg($print, $filename_print, $quality);
         imagedestroy($code);
         imagedestroy($source);
         imagedestroy($print);
@@ -159,7 +160,7 @@ if (!file_exists($filename_print)) {
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
             imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
-            imagejpeg($print, $filename_print);
+            imagejpeg($print, $filename_print, $quality);
             imagedestroy($print);
         }
     }

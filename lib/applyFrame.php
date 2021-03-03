@@ -7,5 +7,5 @@ function ApplyFrame($srcImagePath, $destImagePath, $framePath) {
     $x = imagesx($image) / 2 - imagesx($frame) / 2;
     $y = imagesy($image) / 2 - imagesy($frame) / 2;
     imagecopy($image, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
-    imagejpeg($image, $destImagePath);
+    imagejpeg($image, $destImagePath, 100);
 }

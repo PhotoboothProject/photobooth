@@ -21,6 +21,7 @@ function createCollage($srcImagePaths, $destImagePath) {
     }
 
     $rotate_after_creation = false;
+    $quality = 100;
 
     // colors for background while rotating jpeg images
     $white = 16777215;
@@ -34,7 +35,7 @@ function createCollage($srcImagePaths, $destImagePath) {
         for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
             $tempImage = imagecreatefromjpeg($srcImagePaths[$i]);
             $tempSubRotated = imagerotate($tempImage, 90, $white);
-            imagejpeg($tempSubRotated, $srcImagePaths[$i]);
+            imagejpeg($tempSubRotated, $srcImagePaths[$i], $quality);
             imagedestroy($tempImage);
         }
         list($width, $height) = getimagesize($srcImagePaths[0]);
@@ -358,7 +359,7 @@ function createCollage($srcImagePaths, $destImagePath) {
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
                     // Rotate image and add white background
                     $tempRotate = imagerotate($tempSubImage, $degrees, $white);
-                    imagejpeg($tempRotate, $srcImagePaths[$i]);
+                    imagejpeg($tempRotate, $srcImagePaths[$i], $quality);
                     // get new width and height after rotation
                     list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
                     imagedestroy($tempRotate);
@@ -377,7 +378,7 @@ function createCollage($srcImagePaths, $destImagePath) {
             break;
     }
 
-    imagejpeg($my_collage, $destImagePath); // Transfer image to destImagePath with returns the image to core
+    imagejpeg($my_collage, $destImagePath, $quality); // Transfer image to destImagePath with returns the image to core
     imagedestroy($my_collage); // Destroy the created collage in memory
 
     if (COLLAGE_TAKE_FRAME === 'once') {
@@ -388,7 +389,7 @@ function createCollage($srcImagePaths, $destImagePath) {
     if ($rotate_after_creation) {
         $tempRotatedImage = imagecreatefromjpeg($destImagePath);
         $resultRotated = imagerotate($tempRotatedImage, -90, $white);
-        imagejpeg($resultRotated, $destImagePath);
+        imagejpeg($resultRotated, $destImagePath, $quality);
         imagedestroy($tempRotatedImage);
     }
     return true;
