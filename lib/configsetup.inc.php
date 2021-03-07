@@ -221,6 +221,13 @@ $configsetup = [
             'name' => 'database[file]',
             'value' => $config['database']['file'],
         ],
+        'database_rebuild' => [
+            'view' => 'expert',
+            'type' => 'button',
+            'placeholder' => 'database_rebuild',
+            'name' => 'DATABASEREBUILDBUTTON',
+            'value' => 'databaserebuild-btn',
+        ],
         'diskusage_button' => [
             'view' => 'basic',
             'type' => 'button',

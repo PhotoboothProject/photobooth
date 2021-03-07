@@ -3,6 +3,7 @@ require_once __DIR__ . '/config.php';
 
 define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');
 define('MAIL_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt');
+define('IMG_DIR', $config['foldersAbs']['images']);
 
 function getImagesFromDB() {
     // get data from db.txt
@@ -46,4 +47,23 @@ function getDBSize() {
         return (int) filesize(DB_FILE);
     }
     return 0;
+}
+
+function rebuildPictureDB() {
+    $output = [];
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(IMG_DIR, FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS)) as $value) {
+        if ($value->isFile()) {
+            $output[] = [$value->getMTime(), $value->getFilename()];
+        }
+    }
+
+    usort($output, function ($a, $b) {
+        return $a[0] > $b[0];
+    });
+
+    if (file_put_contents(DB_FILE, json_encode(array_column($output, 1))) === 'false') {
+        echo json_encode('error');
+    } else {
+        echo json_encode('success');
+    }
 }

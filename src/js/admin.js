@@ -73,6 +73,26 @@ $(function () {
         return false;
     });
 
+    $('#databaserebuild-btn').on('click', function (e) {
+        e.preventDefault();
+        const elem = $(this);
+        $('#databaserebuild-btn').children('.text').toggle();
+        elem.addClass('saving');
+
+        $.ajax({
+            url: '../api/rebuildImageDB.php',
+            success: function (resp) {
+                elem.removeClass('saving');
+                elem.addClass(resp);
+
+                setTimeout(function () {
+                    elem.removeClass('error success');
+                    $('#databaserebuild-btn').children('.text').toggle();
+                }, 2000);
+            }
+        });
+    });
+
     $('#checkVersion a').on('click', function (ev) {
         ev.preventDefault();
 

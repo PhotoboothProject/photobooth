@@ -237,8 +237,12 @@ require_once('../lib/configsetup.inc.php');
 							 echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
 							 echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
 							 break;
+						    case 'database_rebuild':
+							 echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="busy"></span></span>';
+							 echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
+							 echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
 						    default:
-							 echo '<span data-i18n="'.$setting['placeholder'].'"></span>';
+							 echo '<span class="text" data-i18n="'.$setting['placeholder'].'"></span>';
 							 break;
 							 }
 					     echo '</button></div>';
