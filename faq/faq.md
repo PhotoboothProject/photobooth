@@ -131,7 +131,7 @@ Troubleshooting / Debugging:
  - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
 
 ```
-         gpio=16,20,21=pu
+         gpio=16,20,21,26=pu
 ```
 
 - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as

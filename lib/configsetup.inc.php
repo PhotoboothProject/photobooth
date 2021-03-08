@@ -169,7 +169,7 @@ $configsetup = [
             'view' => 'advanced',
             'type' => 'input',
             'name' => 'webserver[ip]',
-            'placeholder' => '127.0.0.1',
+            'placeholder' => $defaultConfig['webserver']['ip'],
             'value' => $config['webserver']['ip'],
         ],
         'webserver_ssid' => [
@@ -1328,8 +1328,21 @@ $configsetup = [
             'name' => 'remotebuzzer[collagegpio]',
             'value' => $config['remotebuzzer']['collagegpio'],
         ],
+        'remotebuzzer_printbutton' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[printbutton]',
+            'value' => $config['remotebuzzer']['printbutton'],
+        ],
+        'remotebuzzer_printgpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['printgpio'],
+            'name' => 'remotebuzzer[printgpio]',
+            'value' => $config['remotebuzzer']['printgpio'],
+        ],
         'remotebuzzer_shutdownbutton' => [
-            'view' => 'advanced',
+            'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[shutdownbutton]',
             'value' => $config['remotebuzzer']['shutdownbutton'],

@@ -126,6 +126,18 @@ const photoBooth = (function () {
                                 api.thrill('collage');
                             }
                             break;
+
+                        case 'print':
+                            if ($('#result').is(':visible')) {
+                                $('.printbtn').trigger('click');
+                                $('.printbtn').blur();
+                            } else if ($('.pswp__button--print').is(':visible')) {
+                                $('.pswp__button--print').trigger('click');
+                            } else {
+                                ioClient.emit('photobooth-socket', 'completed');
+                            }
+                            break;
+
                         case 'rotary-cw':
                             rotaryControl.focusNext();
                             break;
@@ -908,6 +920,11 @@ const photoBooth = (function () {
         } else {
             modal.open('#print_mesg');
             isPrinting = true;
+
+            if (config.remotebuzzer.enabled) {
+                ioClient.emit('photobooth-socket', 'in progress');
+            }
+
             setTimeout(function () {
                 $.ajax({
                     method: 'GET',
@@ -936,6 +953,9 @@ const photoBooth = (function () {
                             }
                             cb();
                             isPrinting = false;
+                            if (config.remotebuzzer.enabled) {
+                                ioClient.emit('photobooth-socket', 'completed');
+                            }
                         }, config.print.time);
                     },
                     error: (jqXHR, textStatus) => {
@@ -953,6 +973,9 @@ const photoBooth = (function () {
                             );
                             cb();
                             isPrinting = false;
+                            if (config.remotebuzzer.enabled) {
+                                ioClient.emit('photobooth-socket', 'completed');
+                            }
                         }, 5000);
                     }
                 });
