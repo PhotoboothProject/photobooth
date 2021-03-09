@@ -226,6 +226,7 @@ echo -e "\033[0m"
 if [[ $REPLY =~ ^[1]$ ]]
 then
   info "### We are installing last development version"
+  VERSION="development"
   git fetch origin dev
   git checkout origin/dev
 else
@@ -234,6 +235,7 @@ else
     info "### Invalid choice!"
   fi
   LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
+  VERSION="stable2"
   info "### We are installing last stable Release: Version $LATEST_VERSION"
   git checkout $LATEST_VERSION
 fi
@@ -311,6 +313,23 @@ fi
 
 info "### Remote Buzzer Feature"
 info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
+usermod -a -G gpio www-data
+
+# remotebuzzer config depending on version
+if [ "$VERSION" === "stable2" ]; then
+# stable2
+info "### Enable Nodejs GPIO access - please reboot in order to use the Remote Buzzer Feature"
+cat > /etc/udev/rules.d/20-photobooth-gpiomem.rules <<EOF
+SUBSYSTEM=="bcm2835-gpiomem", KERNEL=="gpiomem", GROUP="gpio", MODE="0660"
+EOF
+sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+cat >> /boot/config.txt  << EOF
+dtoverlay=gpio-no-irq
+EOF
+
+else
+# latest development version + stable3
+
 # remove old artifacts from node-rpio library, if there was
 if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
     info "### Remotebuzzer switched from node-rpio to onoff library. We detected an old remotebuzzer installation and will remove artifacts"
@@ -318,7 +337,6 @@ if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
     sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
 fi
 # add configuration required for onoff library
-usermod -a -G gpio www-data
 sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
 cat >> /boot/config.txt  << EOF
 # Photobooth
@@ -331,7 +349,8 @@ cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
 ## Photobooth Remotebuzzer shutdown button for www-data to shutdown the system
 www-data ALL=NOPASSWD: /sbin/shutdown
 EOF
-echo -e "\033[0m"
+fi
+# remotebuzzer config depending on version end
 
 echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
 echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"
