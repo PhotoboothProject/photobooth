@@ -15,14 +15,7 @@ if (isset($_GET['status'])){
 if ($config['database']['enabled']) {
 	$images = getImagesFromDB();
 } else {
-	$directory = $config['foldersAbs']['images'];
-	$dh = opendir($directory);
-
-	while (false !== ($filename = readdir($dh))) {
-		$files[] = $filename;
-	}
-	closedir($dh);
-	$images = preg_grep('/\.(jpg|jpeg|JPG|JPEG)$/i', $files);
+	$images = getImagesFromDirectory($config['foldersAbs']['images']);
 }
 
 $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;

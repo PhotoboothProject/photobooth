@@ -14,6 +14,17 @@ function getImagesFromDB() {
     return [];
 }
 
+function getImagesFromDirectory($directory) {
+    $dh = opendir($directory);
+
+    while (false !== ($filename = readdir($dh))) {
+        $files[] = $filename;
+    }
+    closedir($dh);
+    $images = preg_grep('/\.(jpg|jpeg|JPG|JPEG)$/i', $files);
+    return $images;
+}
+
 function appendImageToDB($filename) {
     $images = getImagesFromDB();
 
