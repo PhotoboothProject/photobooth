@@ -140,3 +140,7 @@ hr,
 hr.small {
   display: none;
 }
+
+.pwsp-rotary-focus {
+  background: radial-gradient(grey, $mainColor, $hoverColor) !important;
+}

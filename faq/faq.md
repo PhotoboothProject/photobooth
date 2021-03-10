@@ -201,10 +201,10 @@ Shutdown ---   GPIO 16    ---   SW
 
 Known limitations:
 The following elements are currently not supported and not accessible through the rotary navigation
-- Photoswipe and all it's functionalities (slide show, chroma keying, delete picture, etc.).
-- Results Screen > Delete Picture
+- Delete Picture
 - Full Screen Mode button
 - Live chroma keying
+- Gallery chroma keying
 
 **************
 Other Remote Trigger (experimental)

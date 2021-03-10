@@ -1,5 +1,6 @@
 /* exported initPhotoSwipeFromDOM */
 /* global photoBooth */
+let globalGalleryHandle;
 // eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
@@ -50,7 +51,8 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         const element = $(ev.target).closest('a');
         const index = $(gallerySelector).find('>a').index(element);
 
-        openPhotoSwipe(index);
+        // eslint-disable-next-line no-unused-vars
+        globalGalleryHandle = openPhotoSwipe(index);
     };
 
     const openPhotoSwipe = function (index) {
@@ -163,6 +165,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             }
         });
 
+        gallery.listen('destroy', function () {
+            photoBooth.rotaryControl.focusSet('#gallery');
+        });
+
         const resetMailForm = function () {
             $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
 
@@ -183,6 +189,12 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gallery.listen('close', stopSlideshow);
 
         gallery.init();
+
+        if (config.remotebuzzer.enabled && config.remotebuzzer.userotary) {
+            $('.pswp__button--close').addClass('focused pwsp-rotary-focus').focus();
+        }
+
+        return gallery;
     };
 
     // Delete from DB in gallery
