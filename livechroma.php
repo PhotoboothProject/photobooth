@@ -1,24 +1,34 @@
 <?php
 session_start();
 
-require_once('lib/config.php');
-require_once('lib/db.php');
+require_once 'lib/config.php';
 
-if ($config['database']['enabled']) {
-	$images = getImagesFromDB();
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
+) {
+    require_once 'lib/db.php';
+
+    if ($config['database']['enabled']) {
+        $images = getImagesFromDB();
+    } else {
+        $images = getImagesFromDirectory($config['foldersAbs']['images']);
+    }
+    $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
+
+    if ($config['ui']['style'] === 'modern') {
+        $btnClass1 = 'round-btn';
+        $btnClass2 = 'round-btn';
+    } else {
+        $btnClass1 = 'btn btn--small btn--flex';
+        $btnClass2 = 'btn';
+    }
 } else {
-	$images = getImagesFromDirectory($config['foldersAbs']['images']);
+    header('location: login');
+    exit();
 }
-$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
-
-if ($config['ui']['style'] === 'modern') {
-	$btnClass1 = 'round-btn';
-	$btnClass2 = 'round-btn';
-} else {
-	$btnClass1 = 'btn btn--small btn--flex';
-	$btnClass2 = 'btn';
-}
-
 ?>
 <!doctype html>
 <html>
@@ -53,7 +63,6 @@ if ($config['ui']['style'] === 'modern') {
 	</head>
 <body>
 	<div class="chromawrapper">
-	<?php if( !$config['login']['enabled'] || !$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect']['index'])): ?>
 		<div class="top-bar">
 			<?php if (!$config['live_keying']['enabled']): ?>
 			<a href="index.php" class="<?php echo $btnClass1; ?> closebtn"><i class="fa fa-times"></i></a>
@@ -140,10 +149,6 @@ if ($config['ui']['style'] === 'modern') {
 
 	<div class="modal" id="print_mesg">
 		<div class="modal__body"><span data-i18n="printing"></span></div>
-	<?php else:
-	header("location: login");
-	exit;
-	endif; ?>
 	</div>
 
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>

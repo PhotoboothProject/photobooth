@@ -1,8 +1,21 @@
 <?php
 session_start();
 
-require_once('../lib/config.php');
-require_once('../lib/diskusage.php');
+require_once '../lib/config.php';
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
+    !$config['protect']['admin']
+) {
+    require_once '../lib/diskusage.php';
+} else {
+    header('location: ../login');
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +51,6 @@ require_once('../lib/diskusage.php');
 <body class="loginbody">
 	<div class="login-panel">
 		<h2>Photobooth <span data-i18n="disk_usage"></span></h2>
-		<?php if( !$config['login']['enabled'] || !$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['admin']): ?>
 		<a class="btn btn--tiny btn--flex back-to-admin" href="./"><i class="fa fa-arrow-left"></i></a>
 		<button class="download-zip-btn btn btn--tiny btn--flex">
 			<span data-i18n="download_zip"></span>
@@ -55,10 +67,6 @@ require_once('../lib/diskusage.php');
 
     }
 ?>
-		<?php else:
-		header("location: ../login");
-		exit;
-		endif; ?>
 	</div>
 
 	<div id="adminsettings">

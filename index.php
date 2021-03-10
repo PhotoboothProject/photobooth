@@ -1,31 +1,41 @@
 <?php
 session_start();
 
-require_once('lib/config.php');
-require_once('lib/db.php');
-require_once('lib/filter.php');
-
-if ($config['database']['enabled']) {
-	$images = getImagesFromDB();
-} else {
-	$images = getImagesFromDirectory($config['foldersAbs']['images']);
+require_once 'lib/config.php';
+if ($config['live_keying']['enabled']) {
+    header('location: livechroma.php');
 }
 
-$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
+) {
+    require_once 'lib/db.php';
+    require_once 'lib/filter.php';
 
-if ($config['ui']['style'] === 'modern') {
-	$btnClass1 = 'round-btn';
-	$btnClass2 = 'round-btn';
-	$galleryIcon = 'fa-picture-o';
+    if ($config['database']['enabled']) {
+        $images = getImagesFromDB();
+    } else {
+        $images = getImagesFromDirectory($config['foldersAbs']['images']);
+    }
+
+    $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
+
+    if ($config['ui']['style'] === 'modern') {
+        $btnClass1 = 'round-btn';
+        $btnClass2 = 'round-btn';
+        $galleryIcon = 'fa-picture-o';
+    } else {
+        $btnClass1 = 'btn';
+        $btnClass2 = '';
+        $galleryIcon = 'fa-th';
+    }
 } else {
-	$btnClass1 = 'btn';
-	$btnClass2 = '';
-	$galleryIcon = 'fa-th';
+    header('location: login');
+    exit();
 }
-
-if ($config['live_keying']['enabled']):
-header("location: livechroma.php");
-endif;
 ?>
 <!DOCTYPE html>
 <html>
@@ -65,8 +75,6 @@ endif;
 <video id="video--preview" autoplay playsinline></video>
 <body class="deselect">
 	<div id="wrapper">
-	<?php if( !$config['login']['enabled'] || !$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true || !$config['protect']['index'])): ?>
-
 		<?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
 
 		<!-- image Filter Pane -->
@@ -184,10 +192,6 @@ endif;
 		<div style="position:absolute; bottom:0; right:0;">
 			<img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
 		</div>
-	<?php else:
-	header("location: login");
-	exit;
-	endif; ?>
 	</div>
 
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>

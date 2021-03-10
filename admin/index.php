@@ -1,7 +1,19 @@
 <?php
 session_start();
-require_once('../lib/config.php');
-require_once('../lib/configsetup.inc.php');
+require_once '../lib/config.php';
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
+    !$config['protect']['admin']
+) {
+    require_once '../lib/configsetup.inc.php';
+} else {
+    header('location: ../login');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,10 +38,6 @@ require_once('../lib/configsetup.inc.php');
 <body>
 <!-- NavBar content -->
 <?php
-        // Login / Authentication check
-        if( !$config['login']['enabled'] || !$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['admin'] )
-        {
-
                 /***********************
                 ** PHP helper functions
                 ***********************/
@@ -257,12 +265,6 @@ require_once('../lib/configsetup.inc.php');
         
                         echo '</div>';
                 }
-        }
-        else
-        {
-                header("location: ../login");
-                exit;
-        }
 ?>
 </div>
 </form>
