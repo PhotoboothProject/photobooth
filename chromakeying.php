@@ -59,7 +59,7 @@ if (file_exists($keyingimage)) {
 		<?php endif; ?>
 	</head>
 <body data-main-image="<?=$mainimage?>">
-	<div class="chromawrapper">
+	<div class="chromawrapper rotarygroup">
 	<?php if ($keying_possible): ?>
 		<div class="canvasWrapper initial">
 			<canvas id="mainCanvas"></canvas>
@@ -71,20 +71,20 @@ if (file_exists($keyingimage)) {
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" class="backgroundPreview" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="'.$dir.$value.'" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
 		</div>
 
 		<div class="chroma-control-bar">
-			<a class="<?php echo $btnClass1; ?>" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
+			<a class="<?php echo $btnClass1; ?> rotaryfocus" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
 
 			<?php if ($config['print']['from_chromakeying']): ?>
-				<a class="<?php echo $btnClass1; ?>" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+				<a class="<?php echo $btnClass1; ?> rotaryfocus" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="<?php echo $btnClass1; ?>" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass1; ?> rotaryfocus" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">
@@ -109,9 +109,12 @@ if (file_exists($keyingimage)) {
 	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
 	<script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
 	<?php endif; ?>
+	<script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
 	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
+
+	<?php require_once('lib/services_start.php'); ?>
 </body>
 </html>

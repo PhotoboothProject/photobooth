@@ -43,3 +43,7 @@
   border: 2px solid $borderColor;
   margin: 3px;
 }
+
+.rotaryfocus.focused {
+  opacity: 0.6 !important;
+}

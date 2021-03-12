@@ -1,6 +1,8 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth */
+/* global photoBooth rotaryController */
+
 let globalGalleryHandle;
+
 // eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
@@ -166,7 +168,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         });
 
         gallery.listen('destroy', function () {
-            photoBooth.rotaryControl.focusSet('#gallery');
+            rotaryController.focusSet('#gallery');
         });
 
         const resetMailForm = function () {
@@ -190,9 +192,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
         gallery.init();
 
-        if (config.remotebuzzer.enabled && config.remotebuzzer.userotary) {
-            $('.pswp__button--close').addClass('focused pwsp-rotary-focus').focus();
-        }
+        rotaryController.focusSet('.pswp');
 
         return gallery;
     };

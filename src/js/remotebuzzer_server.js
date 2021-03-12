@@ -105,8 +105,9 @@ const ioServer = require('socket.io')(config.remotebuzzer.port, {
 /* NEW CLIENT CONNECTED */
 ioServer.on('connection', function (client) {
     log('New client connected - ID', client.id);
+
     client.on('photobooth-socket', function (data) {
-        log('Data from client ID ', client.id, ': [ photobooth-socket ] =>  [', data, ']');
+        log('Data from client ID ', client.id, ': [ photobooth-socket ] =>  [' + data + ']');
 
         /* CLIENT COMMANDS RECEIVED */
         switch (data) {
@@ -440,6 +441,11 @@ const watchRotaryClk = function watchRotaryClk(err, gpioValue) {
         throw err;
     }
 
+    /* if there is some activity in progress ignore GPIO pin for now */
+    if (!triggerArmed) {
+        return;
+    }
+
     if (gpioValue) {
         if (rotaryDtPin) {
             /* rotation */
@@ -458,6 +464,11 @@ const watchRotaryDt = function watchRotaryDt(err, gpioValue) {
         throw err;
     }
 
+    /* if there is some activity in progress ignore GPIO pin for now */
+    if (!triggerArmed) {
+        return;
+    }
+
     if (gpioValue) {
         if (rotaryClkPin) {
             /* rotation */
@@ -474,6 +485,11 @@ const watchRotaryDt = function watchRotaryDt(err, gpioValue) {
 const watchRotaryBtn = function watchRotaryBtn(err, gpioValue) {
     if (err) {
         throw err;
+    }
+
+    /* if there is some activity in progress ignore GPIO pin for now */
+    if (!triggerArmed) {
+        return;
     }
 
     if (gpioValue) {

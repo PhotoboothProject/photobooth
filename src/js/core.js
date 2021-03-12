@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM i18n io setMainImage globalGalleryHandle */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController */
 
 const photoBooth = (function () {
     // vars
@@ -28,7 +28,6 @@ const photoBooth = (function () {
         chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
-        ioClient,
         pid;
 
     const modal = {
@@ -36,7 +35,7 @@ const photoBooth = (function () {
             $(selector).addClass('modal--show');
         },
         close: function (selector) {
-            $('.resultInner').addClass('show');
+            //api.showResultInner(true);
 
             if ($(selector).hasClass('modal--show')) {
                 $(selector).removeClass('modal--show');
@@ -106,65 +105,8 @@ const photoBooth = (function () {
             api.startVideo('preview');
         }
 
-        if (config.remotebuzzer.enabled) {
-            if (config.webserver.ip) {
-                ioClient = io('http://' + config.webserver.ip + ':' + config.remotebuzzer.port);
-
-                console.log(
-                    ' Remote buzzer connecting to http://' + config.webserver.ip + ':' + config.remotebuzzer.port
-                );
-
-                ioClient.on('photobooth-socket', function (data) {
-                    switch (data) {
-                        case 'start-picture':
-                            $('.resultInner').removeClass('show');
-                            api.thrill('photo');
-                            break;
-                        case 'start-collage':
-                            if (config.collage.enabled) {
-                                $('.resultInner').removeClass('show');
-                                api.thrill('collage');
-                            }
-                            break;
-
-                        case 'print':
-                            if ($('#result').is(':visible')) {
-                                $('.printbtn').trigger('click');
-                                $('.printbtn').blur();
-                            } else if ($('.pswp__button--print').is(':visible')) {
-                                $('.pswp__button--print').trigger('click');
-                            } else {
-                                ioClient.emit('photobooth-socket', 'completed');
-                            }
-                            break;
-
-                        case 'rotary-cw':
-                            api.rotaryControl.focusNext();
-                            break;
-
-                        case 'rotary-ccw':
-                            api.rotaryControl.focusPrev();
-                            break;
-
-                        case 'rotary-btn-press':
-                            api.rotaryControl.click();
-                            break;
-
-                        default:
-                            break;
-                    }
-                });
-
-                ioClient.on('connect_failed', function () {
-                    console.log(' Remote buzzer unable to connect');
-                });
-
-                api.rotaryControl.enabled = config.remotebuzzer.userotary;
-                api.rotaryControl.focusSet('#start');
-            } else {
-                console.log(' Remote buzzer unable to connect - webserver.ip not defined in config');
-            }
-        }
+        initRemoteBuzzerFromDOM();
+        rotaryController.focusSet('#start');
     };
 
     api.getTranslation = function (key) {
@@ -181,7 +123,7 @@ const photoBooth = (function () {
 
     api.openNav = function () {
         $('#mySidenav').addClass('sidenav--open');
-        api.rotaryControl.focusSet('#mySidenav');
+        rotaryController.focusSet('#mySidenav');
     };
 
     api.closeNav = function () {
@@ -192,7 +134,7 @@ const photoBooth = (function () {
         $('#mySidenav').toggleClass('sidenav--open');
 
         if ($('#mySidenav').hasClass('sidenav--open')) {
-            api.rotaryControl.focusSet('#mySidenav');
+            rotaryController.focusSet('#mySidenav');
         }
     };
 
@@ -352,17 +294,24 @@ const photoBooth = (function () {
         }
     };
 
+    api.showResultInner = function (flag) {
+        if (flag) {
+            $('.resultInner').addClass('show');
+        } else {
+            $('.resultInner').removeClass('show');
+        }
+    };
+
     api.thrill = function (photoStyle) {
         api.closeNav();
         api.reset();
+        api.showResultInner(false);
+
+        remoteBuzzerClient.inProgress(true);
 
         takingPic = true;
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
-        }
-
-        if (config.remotebuzzer.enabled) {
-            ioClient.emit('photobooth-socket', 'in-progress');
         }
 
         if (config.previewCamBackground) {
@@ -442,9 +391,7 @@ const photoBooth = (function () {
             console.log('Take Picture:' + photoStyle);
         }
 
-        if (config.remotebuzzer.enabled) {
-            ioClient.emit('photobooth-socket', 'in-progress');
-        }
+        remoteBuzzerClient.inProgress(true);
 
         if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
             if (config.preview.camTakesPic && !config.dev.enabled) {
@@ -533,9 +480,7 @@ const photoBooth = (function () {
 
                         $('.loaderImage').show();
 
-                        if (config.remotebuzzer.enabled) {
-                            ioClient.emit('photobooth-socket', 'collage-wait-for-next');
-                        }
+                        remoteBuzzerClient.collageWaitForNext();
 
                         if (result.current + 1 < result.limit) {
                             $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('nextPhoto') + '</a>')
@@ -589,7 +534,7 @@ const photoBooth = (function () {
                                 location.assign('./');
                             });
 
-                        api.rotaryControl.focusSet('.loading.rotarygroup');
+                        rotaryController.focusSet('.loading.rotarygroup');
                     }
                 } else if (result.success === 'chroma') {
                     chromaFile = result.file;
@@ -674,9 +619,7 @@ const photoBooth = (function () {
 
                 if (data.error) {
                     api.errorPic(data);
-                    if (config.remotebuzzer.enabled) {
-                        ioClient.emit('photobooth-socket', 'completed');
-                    }
+                    remoteBuzzerClient.inProgress(false);
                 } else if (photoStyle === 'chroma') {
                     api.renderChroma(data.file);
                 } else {
@@ -690,9 +633,7 @@ const photoBooth = (function () {
                     error: 'Request failed: ' + textStatus
                 });
 
-                if (config.remotebuzzer.enabled) {
-                    ioClient.emit('photobooth-socket', 'completed');
-                }
+                remoteBuzzerClient.inProgress(false);
             }
         });
     };
@@ -721,9 +662,7 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
-        if (config.remotebuzzer.enabled) {
-            ioClient.emit('photobooth-socket', 'completed');
-        }
+        remoteBuzzerClient.inProgress(false);
     };
 
     // Render Picture after taking
@@ -802,14 +741,15 @@ const photoBooth = (function () {
             startPage.hide();
             resultPage.show();
 
-            $('.resultInner').addClass('show');
+            api.showResultInner(true);
+
             loader.removeClass('open');
 
             $('#loader').css('background-image', 'url()');
             $('#loader').removeClass('showBackgroundImage');
 
             if (!$('#mySidenav').hasClass('sidenav--open')) {
-                api.rotaryControl.focusSet('#result');
+                rotaryController.focusSet('#result');
             }
 
             api.resetTimeOut();
@@ -817,9 +757,7 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
-        if (config.remotebuzzer.enabled) {
-            ioClient.emit('photobooth-socket', 'completed');
-        }
+        remoteBuzzerClient.inProgress(false);
     };
 
     // add image to Gallery
@@ -877,7 +815,7 @@ const photoBooth = (function () {
 
         setTimeout(() => {
             gallery.find('.gallery__inner').show();
-            api.rotaryControl.focusSet('#gallery');
+            rotaryController.focusSet('#gallery');
         }, 300);
     };
 
@@ -921,9 +859,7 @@ const photoBooth = (function () {
             modal.open('#print_mesg');
             isPrinting = true;
 
-            if (config.remotebuzzer.enabled) {
-                ioClient.emit('photobooth-socket', 'in progress');
-            }
+            remoteBuzzerClient.inProgress(true);
 
             setTimeout(function () {
                 $.ajax({
@@ -953,9 +889,7 @@ const photoBooth = (function () {
                             }
                             cb();
                             isPrinting = false;
-                            if (config.remotebuzzer.enabled) {
-                                ioClient.emit('photobooth-socket', 'completed');
-                            }
+                            remoteBuzzerClient.inProgress(false);
                         }, config.print.time);
                     },
                     error: (jqXHR, textStatus) => {
@@ -973,9 +907,7 @@ const photoBooth = (function () {
                             );
                             cb();
                             isPrinting = false;
-                            if (config.remotebuzzer.enabled) {
-                                ioClient.emit('photobooth-socket', 'completed');
-                            }
+                            remoteBuzzerClient.inProgress(false);
                         }, 5000);
                     }
                 });
@@ -1056,7 +988,7 @@ const photoBooth = (function () {
         }
         api.processPic(imgFilter, result);
 
-        api.rotaryControl.focusSet('#mySidenav');
+        rotaryController.focusSet('#mySidenav');
     });
 
     // Take Picture Button
@@ -1079,7 +1011,7 @@ const photoBooth = (function () {
         e.preventDefault();
 
         api.closeNav();
-        api.rotaryControl.focusSet('#result');
+        rotaryController.focusSet('#result');
     });
 
     // Open Gallery Button
@@ -1097,12 +1029,12 @@ const photoBooth = (function () {
         gallery.find('.gallery__inner').hide();
         gallery.removeClass('gallery--open');
 
-        $('.resultInner').addClass('show');
+        api.showResultInner(true);
 
         if ($('#result').is(':visible')) {
-            api.rotaryControl.focusSet('#result');
+            rotaryController.focusSet('#result');
         } else if ($('#start').is(':visible')) {
-            api.rotaryControl.focusSet('#start');
+            rotaryController.focusSet('#start');
         }
     });
 
@@ -1163,11 +1095,11 @@ const photoBooth = (function () {
 
     $('#result').on('click', function () {
         if (!modal.close('#qrCode')) {
-            $('.resultInner').addClass('show');
+            //api.showResultInner(true);
         }
 
         if (!$('#mySidenav').hasClass('sidenav--open')) {
-            api.rotaryControl.focusSet('#result');
+            rotaryController.focusSet('#result');
         }
     });
 
@@ -1177,7 +1109,7 @@ const photoBooth = (function () {
         e.stopPropagation();
 
         modal.open('#qrCode');
-        api.rotaryControl.focusSet('#qrCode');
+        rotaryController.focusSet('#qrCode');
     });
 
     $('.homebtn').on('click', function (e) {
@@ -1186,7 +1118,7 @@ const photoBooth = (function () {
 
         api.reloadPage();
 
-        api.rotaryControl.focusSet('#start');
+        rotaryController.focusSet('#start');
     });
 
     $('#cups-button').on('click', function (ev) {
@@ -1284,128 +1216,6 @@ const photoBooth = (function () {
             e.preventDefault();
         });
     }
-
-    api.rotaryControl = {
-        enabled: false,
-        focusSet: function (id) {
-            if (this.enabled) {
-                this.focusRemove();
-                $(id).find('.rotaryfocus').first().addClass('focused').focus();
-            }
-        },
-        focusRemove: function () {
-            $('.focused').removeClass('focused');
-        },
-        focusNext: function () {
-            if (this.rotationInactive() || !this.enabled) {
-                return;
-            }
-
-            if ($('.pswp.pswp--open').is(':visible')) {
-                // photoswipe navigation
-                const buttonList = $('.pswp.pswp--open').find('.pswp__button:visible');
-                let focusIndex = buttonList.index($('.focused'));
-
-                if (buttonList.eq(focusIndex + 1).exists()) {
-                    focusIndex += 1;
-                } else if (buttonList.eq(0).exists()) {
-                    focusIndex = 0;
-                }
-
-                globalGalleryHandle.ui.setIdle(false);
-
-                $('.focused')
-                    .removeClass('focused pwsp-rotary-focus')
-                    .parents('.pswp.pswp--open')
-                    .find('.pswp__button:visible')
-                    .eq(focusIndex)
-                    .addClass('focused pwsp-rotary-focus')
-                    .focus()
-                    .find('i.fa')
-                    .css('z-index', '1');
-            } else {
-                const buttonList = $('.focused').parents('.rotarygroup').find('.rotaryfocus');
-                let focusIndex = buttonList.index($('.focused'));
-
-                if (buttonList.eq(focusIndex + 1).exists()) {
-                    focusIndex += 1;
-                } else if (buttonList.eq(0).exists()) {
-                    focusIndex = 0;
-                }
-
-                $('.focused')
-                    .removeClass('focused')
-                    .parents('.rotarygroup')
-                    .find('.rotaryfocus')
-                    .eq(focusIndex)
-                    .addClass('focused')
-                    .focus();
-            }
-        },
-        focusPrev: function () {
-            if (this.rotationInactive() || !this.enabled) {
-                return;
-            }
-
-            if ($('.pswp.pswp--open').is(':visible')) {
-                // photoswipe navigation
-                const buttonList = $('.pswp.pswp--open').find('.pswp__button:visible');
-                const focusIndex = buttonList.index($('.focused'));
-
-                if (buttonList.eq(focusIndex - 1).exists()) {
-                    globalGalleryHandle.ui.setIdle(false);
-
-                    $('.focused')
-                        .removeClass('focused pwsp-rotary-focus')
-                        .parents('.pswp.pswp--open')
-                        .find('.pswp__button:visible')
-                        .eq(focusIndex - 1)
-                        .addClass('focused pwsp-rotary-focus')
-                        .focus()
-                        .find('i.fa')
-                        .css('z-index', '1');
-                }
-            } else {
-                const buttonList = $('.focused').parents('.rotarygroup').find('.rotaryfocus');
-                const focusIndex = buttonList.index($('.focused'));
-
-                if (buttonList.eq(focusIndex - 1).exists()) {
-                    $('.focused')
-                        .removeClass('focused')
-                        .parents('.rotarygroup')
-                        .find('.rotaryfocus')
-                        .eq(focusIndex - 1)
-                        .addClass('focused')
-                        .focus();
-                }
-            }
-        },
-        rotationInactive: function () {
-            if ($('.modal.modal--show').exists()) {
-                return true;
-            }
-
-            return false;
-        },
-
-        click: function () {
-            if (this.enabled) {
-                // click modal if open
-                if ($('#qrCode.modal.modal--show').exists()) {
-                    $('#qrCode').click();
-                } else {
-                    $('.focused').blur().trigger('click');
-
-                    if ($('.pswp.pswp--open').is(':visible')) {
-                        globalGalleryHandle.ui.setIdle(true);
-                    }
-                }
-            }
-        }
-    };
-    $.fn.exists = function () {
-        return this.length !== 0;
-    };
 
     return api;
 })();

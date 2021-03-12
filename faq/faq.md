@@ -204,7 +204,7 @@ The following elements are currently not supported and not accessible through th
 - Delete Picture
 - Full Screen Mode button
 - Live chroma keying
-- Gallery chroma keying
+- Photoswipe download button
 
 **************
 Other Remote Trigger (experimental)

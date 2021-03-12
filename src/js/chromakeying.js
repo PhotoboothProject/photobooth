@@ -1,4 +1,4 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously initRemoteBuzzerFromDOM rotaryController */
 /* exported setBackgroundImage */
 let mainImage;
 let mainImageWidth;
@@ -338,4 +338,7 @@ $(document).ready(function () {
         $('#mainCanvas').css('height', canvasHeight - diff + 'px');
     }
     $('.canvasWrapper').removeClass('initial');
+
+    initRemoteBuzzerFromDOM();
+    rotaryController.focusSet('.chromawrapper');
 });
