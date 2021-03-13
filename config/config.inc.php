@@ -48,6 +48,8 @@ $config['picture']['cntdwn_time'] = '5';
 $config['picture']['no_cheese'] = false;
 // control time for cheeeeese! in milliseconds
 $config['picture']['cheese_time'] = '1000';
+// possible flip values: 'off', 'horizontal', 'vertical', 'both'
+$config['picture']['flip'] = 'off';
 $config['picture']['rotation'] = '0';
 $config['picture']['polaroid_effect'] = false;
 $config['picture']['polaroid_rotation'] = '0';

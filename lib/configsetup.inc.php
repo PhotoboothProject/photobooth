@@ -324,6 +324,19 @@ $configsetup = [
             'range_step' => 250,
             'unit' => 'milliseconds',
         ],
+        'picture_flip' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'picture[flip]',
+            'placeholder' => $defaultConfig['picture']['flip'],
+            'options' => [
+                'off' => 'off',
+                'horizontal' => 'horizontal',
+                'vertical' => 'vertical',
+                'both' => 'horizontal + vertical',
+            ],
+            'value' => $config['picture']['flip'],
+        ],
         'picture_rotation' => [
             'view' => 'advanced',
             'type' => 'input',

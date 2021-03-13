@@ -8,6 +8,7 @@ define('COLLAGE_FRAME', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTOR
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
 define('PICTURE_KEEP_ORIGINAL', $config['picture']['keep_original'] === true ? 'keep' : 'discard');
+define('PICTURE_FLIP', $config['picture']['flip']);
 
 function createCollage($srcImagePaths, $destImagePath) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
@@ -26,6 +27,21 @@ function createCollage($srcImagePaths, $destImagePath) {
     // colors for background while rotating jpeg images
     $white = 16777215;
     $black = 0;
+
+    if (PICTURE_FLIP !== 'off') {
+        for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+            $imageResource = imagecreatefromjpeg($srcImagePaths[$i]);
+            if (PICTURE_FLIP === 'horizontal') {
+                imageflip($imageResource, IMG_FLIP_HORIZONTAL);
+            } elseif (PICTURE_FLIP === 'vertical') {
+                imageflip($imageResource, IMG_FLIP_VERTICAL);
+            } elseif (PICTURE_FLIP === 'both') {
+                imageflip($imageResource, IMG_FLIP_BOTH);
+            }
+            imagejpeg($imageResource, $srcImagePaths[$i], $quality);
+            imagedestroy($imageResource);
+        }
+    }
 
     list($width, $height) = getimagesize($srcImagePaths[0]);
     if ($width > $height) {

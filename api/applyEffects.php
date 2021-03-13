@@ -146,6 +146,16 @@ if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
     $image_filter = $_POST['filter'];
 }
 
+if ($config['picture']['flip'] !== 'off') {
+    if ($config['picture']['flip'] === 'horizontal') {
+        imageflip($imageResource, IMG_FLIP_HORIZONTAL);
+    } elseif ($config['picture']['flip'] === 'vertical') {
+        imageflip($imageResource, IMG_FLIP_VERTICAL);
+    } elseif ($config['picture']['flip'] === 'both') {
+        imageflip($imageResource, IMG_FLIP_BOTH);
+    }
+    $imageModified = true;
+}
 // apply filter
 if ($image_filter) {
     applyFilter($image_filter, $imageResource);
