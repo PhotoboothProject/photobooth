@@ -1,4 +1,4 @@
-/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously */
+/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously rotaryController */
 /* exported setBackgroundImage setMainImage */
 let mainImage;
 let mainImageWidth;
@@ -266,6 +266,7 @@ $('.takeChroma, .newchroma').on('click', function (e) {
     const chromaInfo = photoBooth.getTranslation('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
+
     if ($('.chroma-control-bar').is(':visible')) {
         $('.chroma-control-bar').hide();
         $('.backgrounds').hide();
@@ -273,6 +274,10 @@ $('.takeChroma, .newchroma').on('click', function (e) {
         setTimeout(() => {
             $('.chromaNote').show();
             $('.chromaNote').text(chromaInfo);
+            $('.chroma-control-bar > .takeChroma').hide();
+            $('.chroma-control-bar > .deleteBtn').hide();
+            $('.chroma-control-bar > .reloadPage').show();
+            $('.chroma-control-bar').show();
         }, config.picture.cntdwn_time * 1000);
     }
 });
@@ -320,4 +325,14 @@ $('.gallerybtn').on('click', function (e) {
     e.preventDefault();
 
     photoBooth.openGallery($(this));
+});
+
+// Close Button
+$('.closebtn').on('click', function () {
+    location.assign('./index.php');
+});
+
+$(document).ready(function () {
+    console.log('DOM ready');
+    rotaryController.focusSet('#start');
 });

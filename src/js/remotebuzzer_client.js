@@ -164,7 +164,7 @@ function initRemoteBuzzerFromDOM() {
                     .find('i.fa')
                     .css('z-index', '1');
             } else {
-                const buttonList = $('.focused').parents('.rotarygroup').find('.rotaryfocus');
+                const buttonList = $('.focused').parents('.rotarygroup').find('.rotaryfocus:visible');
                 let focusIndex = buttonList.index($('.focused'));
 
                 if (buttonList.eq(focusIndex + 1).exists()) {
@@ -176,10 +176,12 @@ function initRemoteBuzzerFromDOM() {
                 $('.focused')
                     .removeClass('focused')
                     .parents('.rotarygroup')
-                    .find('.rotaryfocus')
+                    .find('.rotaryfocus:visible')
                     .eq(focusIndex)
                     .addClass('focused')
                     .focus();
+
+                console.log('set focus to', $('.focused'));
             }
         };
 
@@ -206,7 +208,7 @@ function initRemoteBuzzerFromDOM() {
                         .css('z-index', '1');
                 }
             } else {
-                const buttonList = $('.focused').parents('.rotarygroup').find('.rotaryfocus');
+                const buttonList = $('.focused').parents('.rotarygroup').find('.rotaryfocus:visible');
                 const focusIndex = buttonList.index($('.focused'));
 
                 if (buttonList.eq(focusIndex - 1).exists()) {

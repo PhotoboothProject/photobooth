@@ -63,13 +63,14 @@ if (
 	</head>
 <body>
 	<div class="chromawrapper">
+	<div class="rotarygroup" id="start">
 		<div class="top-bar">
 			<?php if (!$config['live_keying']['enabled']): ?>
-			<a href="index.php" class="<?php echo $btnClass1; ?> closebtn"><i class="fa fa-times"></i></a>
+			<a href="index.php" class="<?php echo $btnClass1; ?> closebtn rotaryfocus"><i class="fa fa-times"></i></a>
 			<?php endif; ?>
 
 			<?php if ($config['gallery']['enabled']): ?>
-			<a href="#" class="<?php echo $btnClass1 ?> gallerybtn"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+			<a href="#" class="<?php echo $btnClass1 ?> gallerybtn rotaryfocus"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
 		</div>
@@ -109,20 +110,21 @@ if (
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" class="backgroundPreview" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="'.$dir.$value.'" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
 		</div>
 
 		<div class="chroma-control-bar">
-			<a href="#" class="<?php echo $btnClass2; ?> takeChroma"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+			<a href="#" class="<?php echo $btnClass2; ?> takeChroma rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 			<?php if ($config['picture']['allow_delete']): ?>
-			<a href="#" class="deletebtn <?php echo $btnClass2; ?> "><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+			<a href="#" class="<?php echo $btnClass2; ?> deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 			<?php endif; ?>
-			<a href="#" class="reloadPage <?php echo $btnClass2; ?> "><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
+			<a href="#" class="reloadPage <?php echo $btnClass2; ?> rotaryfocus"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
 		</div>
-	<div>
+	</div>
+	<div class="rotarygroup">
 
 	<div id="wrapper">
 		<?php include('template/gallery.template.php'); ?>
@@ -165,8 +167,11 @@ if (
 	<script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
 	<?php endif; ?>
 	<script type="text/javascript" src="resources/js/livechroma.js"></script>
+	<script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
+
+	<?php require_once('lib/services_start.php'); ?>
 </body>
 </html>
