@@ -388,7 +388,7 @@ const watchShutdownGPIO = function watchShutdownGPIO(err, gpioValue) {
             if (timeElapsed >= config.remotebuzzer.shutdownholdtime * 1000) {
                 log('System shutdown initiated - bye bye');
                 /*  Initiate system shutdown */
-                cmd = 'sudo /sbin/shutdown -r now';
+                cmd = 'sudo ' + config.shutdown.cmd;
                 stdout = execSync(cmd);
             }
         } else {

@@ -1713,6 +1713,13 @@ $configsetup = [
             'name' => 'nodebin[cmd]',
             'value' => htmlentities($config['nodebin']['cmd']),
         ],
+        'shutdown_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['shutdown']['cmd'],
+            'name' => 'shutdown[cmd]',
+            'value' => htmlentities($config['shutdown']['cmd']),
+        ],
     ],
     'folders' => [
         'view' => 'expert',
