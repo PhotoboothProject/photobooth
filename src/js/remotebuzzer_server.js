@@ -95,7 +95,7 @@ ioServer.on('connection', function (client) {
                 photoboothAction('completed');
                 break;
 
-            case 'in progress':
+            case 'in-progress':
                 triggerArmed = false;
                 break;
 

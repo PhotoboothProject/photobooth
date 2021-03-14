@@ -328,7 +328,7 @@ const photoBooth = (function () {
         }
 
         if (config.remotebuzzer.enabled) {
-            ioClient.emit('photobooth-socket', 'in progress');
+            ioClient.emit('photobooth-socket', 'in-progress');
         }
 
         if (config.previewCamBackground) {
@@ -408,7 +408,7 @@ const photoBooth = (function () {
         }
 
         if (config.remotebuzzer.enabled) {
-            ioClient.emit('photobooth-socket', 'in progress');
+            ioClient.emit('photobooth-socket', 'in-progress');
         }
 
         if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
