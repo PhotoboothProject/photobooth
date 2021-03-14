@@ -180,8 +180,6 @@ function initRemoteBuzzerFromDOM() {
                     .eq(focusIndex)
                     .addClass('focused')
                     .focus();
-
-                console.log('set focus to', $('.focused'));
             }
         };
 
