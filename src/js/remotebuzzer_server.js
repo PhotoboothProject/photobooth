@@ -364,7 +364,7 @@ const watchShutdownGPIO = function watchShutdownGPIO(err, gpioValue) {
         const timeElapsed = buttonTimer();
 
         if (timeElapsed) {
-            log('GPIO', config.remotebuzzer.collagegpio, '- Shutdown button released ', timeElapsed, ' [ms] ');
+            log('GPIO', config.remotebuzzer.shutdowngpio, '- Shutdown button released ', timeElapsed, ' [ms] ');
 
             if (timeElapsed >= config.remotebuzzer.shutdownholdtime * 1000) {
                 log('System shutdown initiated - bye bye');
