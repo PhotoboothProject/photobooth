@@ -41,7 +41,7 @@ fs.writeFile(pidFilename, PID, function (err) {
 });
 
 /* START WEBSOCKET SERVER */
-log('Server starting on http://' + config.webserver_ip + ':' + config.remotebuzzer.port);
+log('Server starting on http://' + config.webserver.ip + ':' + config.remotebuzzer.port);
 
 function photoboothAction(type) {
     switch (type) {
