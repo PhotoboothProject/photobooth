@@ -97,8 +97,7 @@ function photoboothAction(type) {
 
 const ioServer = require('socket.io')(config.remotebuzzer.port, {
     cors: {
-        origin: 'http://' + config.webserver.ip,
-        methods: ['GET', 'POST']
+        origin: '*'
     }
 });
 
