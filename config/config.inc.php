@@ -68,6 +68,18 @@ $config['picture']['permissions'] = '0644';
 $config['picture']['keep_original'] = true;
 $config['picture']['preserve_exif_data'] = false;
 $config['picture']['allow_delete'] = true;
+$config['textonpicture']['enabled'] = false;
+$config['textonpicture']['line1'] = 'line 1';
+$config['textonpicture']['line2'] = 'line 2';
+$config['textonpicture']['line3'] = 'line 3';
+$config['textonpicture']['locationx'] = '80';
+$config['textonpicture']['locationy'] = '80';
+$config['textonpicture']['rotation'] = '0';
+$config['textonpicture']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+// possible font_color values: 'white', 'grey', 'black'
+$config['textonpicture']['font_color'] = 'white';
+$config['textonpicture']['font_size'] = '80';
+$config['textonpicture']['linespace'] = '90';
 
 
 // C O L L A G E
@@ -84,6 +96,18 @@ $config['collage']['key'] = null;
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
 $config['collage']['frame'] = 'resources/img/frames/frame.png';
+$config['textoncollage']['enabled'] = false;
+$config['textoncollage']['line1'] = 'line 1';
+$config['textoncollage']['line2'] = 'line 2';
+$config['textoncollage']['line3'] = 'line 3';
+$config['textoncollage']['locationx'] = '80';
+$config['textoncollage']['locationy'] = '80';
+$config['textoncollage']['rotation'] = '0';
+$config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+// possible font_color values: 'white', 'grey', 'black'
+$config['textoncollage']['font_color'] = 'white';
+$config['textoncollage']['font_size'] = '80';
+$config['textoncollage']['linespace'] = '90';
 // DO NOT CHANGE limit here
 $config['collage']['limit'] = NULL;
 
@@ -168,6 +192,8 @@ $config['textonprint']['locationx'] = '2250';
 $config['textonprint']['locationy'] = '1050';
 $config['textonprint']['rotation'] = '40';
 $config['textonprint']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+// possible font_color values: 'white', 'grey', 'black'
+$config['textonprint']['font_color'] = 'black';
 $config['textonprint']['font_size'] = '100';
 $config['textonprint']['linespace'] = '100';
 

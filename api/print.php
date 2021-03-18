@@ -5,6 +5,7 @@ require_once '../lib/config.php';
 require_once '../lib/db.php';
 require_once '../lib/resize.php';
 require_once '../lib/applyFrame.php';
+require_once '../lib/applyText.php';
 
 if (empty($_GET['filename'])) {
     die(
@@ -49,7 +50,8 @@ if (!isset($config['webserver']['ip'])) {
 }
 
 // text on print variables
-$fontpath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['textonprint']['font']);
+$fontpath = $config['textonprint']['font'];
+$fontcolor = $config['textonprint']['font_color'];
 $fontsize = $config['textonprint']['font_size'];
 $fontlocx = $config['textonprint']['locationx'];
 $fontlocy = $config['textonprint']['locationy'];
@@ -81,18 +83,18 @@ if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
 }
 
 if ($config['textonprint']['enabled']) {
-    if (is_dir($fontpath)) {
+    if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
         die(
             json_encode([
-                'error' => 'Frame not set! ' . $fontpath . ' is a path but needs to be a png!',
+                'error' => 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!',
             ])
         );
     }
 
-    if (!file_exists($fontpath)) {
+    if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
         die(
             json_encode([
-                'error' => 'Frame ' . $fontpath . ' does not exist!',
+                'error' => 'Font ' . $fontpath . ' does not exist!',
             ])
         );
     }
@@ -137,14 +139,6 @@ if (!file_exists($filename_print)) {
         imagefill($print, 0, 0, imagecolorallocate($print, 255, 255, 255));
         imagecopy($print, $source, 0, 0, 0, 0, $width, $height);
         imagecopyresized($print, $code, $width, 0, 0, 0, $height / 2, $height / 2, imagesx($code), imagesy($code));
-
-        if ($config['textonprint']['enabled']) {
-            $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
-        }
-
         imagejpeg($print, $filename_print, $quality);
         imagedestroy($code);
         imagedestroy($source);
@@ -153,16 +147,12 @@ if (!file_exists($filename_print)) {
         if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
             ApplyFrame($filename_print, $filename_print, $print_frame);
         }
+    }
 
-        if ($config['textonprint']['enabled']) {
-            $print = imagecreatefromjpeg($filename_print);
-            $fontcolour = imagecolorallocate($print, 0, 0, 0); // colour of font
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolour, $fontpath, $line1text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $fontcolour, $fontpath, $line2text);
-            imagettftext($print, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $fontcolour, $fontpath, $line3text);
-            imagejpeg($print, $filename_print, $quality);
-            imagedestroy($print);
-        }
+    if ($config['textonprint']['enabled']) {
+        $print = imagecreatefromjpeg($filename_print);
+        ApplyText($filename_print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
+        imagedestroy($print);
     }
 
     if ($config['print']['crop']) {

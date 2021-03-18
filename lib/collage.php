@@ -2,6 +2,7 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/resize.php';
 require_once __DIR__ . '/applyFrame.php';
+require_once __DIR__ . '/applyText.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
 define('COLLAGE_FRAME', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']));
@@ -9,6 +10,17 @@ define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
 define('PICTURE_KEEP_ORIGINAL', $config['picture']['keep_original'] === true ? 'keep' : 'discard');
 define('PICTURE_FLIP', $config['picture']['flip']);
+define('TEXTONCOLLAGE_ENABLED', $config['textoncollage']['enabled'] === true ? 'enabled' : 'disabled');
+define('TEXTONCOLLAGE_LINE1', $config['textoncollage']['line1']);
+define('TEXTONCOLLAGE_LINE2', $config['textoncollage']['line2']);
+define('TEXTONCOLLAGE_LINE3', $config['textoncollage']['line3']);
+define('TEXTONCOLLAGE_LOCATIONX', $config['textoncollage']['locationx']);
+define('TEXTONCOLLAGE_LOCATIONY', $config['textoncollage']['locationy']);
+define('TEXTONCOLLAGE_ROTATION', $config['textoncollage']['rotation']);
+define('TEXTONCOLLAGE_FONT', $config['textoncollage']['font']);
+define('TEXTONCOLLAGE_FONT_COLOR', $config['textoncollage']['font_color']);
+define('TEXTONCOLLAGE_FONT_SIZE', $config['textoncollage']['font_size']);
+define('TEXTONCOLLAGE_LINESPACE', $config['textoncollage']['linespace']);
 
 function createCollage($srcImagePaths, $destImagePath) {
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
@@ -395,11 +407,28 @@ function createCollage($srcImagePaths, $destImagePath) {
     }
 
     imagejpeg($my_collage, $destImagePath, $quality); // Transfer image to destImagePath with returns the image to core
-    imagedestroy($my_collage); // Destroy the created collage in memory
 
     if (COLLAGE_TAKE_FRAME === 'once') {
         ApplyFrame($destImagePath, $destImagePath, COLLAGE_FRAME);
     }
+
+    if (TEXTONCOLLAGE_ENABLED === 'enabled') {
+        ApplyText(
+            $destImagePath,
+            TEXTONCOLLAGE_FONT_SIZE,
+            TEXTONCOLLAGE_ROTATION,
+            TEXTONCOLLAGE_LOCATIONX,
+            TEXTONCOLLAGE_LOCATIONY,
+            TEXTONCOLLAGE_FONT_COLOR,
+            TEXTONCOLLAGE_FONT,
+            TEXTONCOLLAGE_LINE1,
+            TEXTONCOLLAGE_LINE2,
+            TEXTONCOLLAGE_LINE3,
+            TEXTONCOLLAGE_LINESPACE
+        );
+    }
+
+    imagedestroy($my_collage); // Destroy the created collage in memory
 
     // Rotate image if needed
     if ($rotate_after_creation) {

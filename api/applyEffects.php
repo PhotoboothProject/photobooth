@@ -7,6 +7,7 @@ require_once '../lib/filter.php';
 require_once '../lib/polaroid.php';
 require_once '../lib/resize.php';
 require_once '../lib/collage.php';
+require_once '../lib/applyText.php';
 
 if (!extension_loaded('gd')) {
     die(
@@ -35,6 +36,18 @@ $picture_permissions = $config['picture']['permissions'];
 $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 $chroma_size = substr($config['keying']['size'], 0, -2);
 
+// text on picture variables
+$fontpath = $config['textonpicture']['font'];
+$fontcolor = $config['textonpicture']['font_color'];
+$fontsize = $config['textonpicture']['font_size'];
+$fontlocx = $config['textonpicture']['locationx'];
+$fontlocy = $config['textonpicture']['locationy'];
+$linespacing = $config['textonpicture']['linespace'];
+$fontrot = $config['textonpicture']['rotation'];
+$line1text = $config['textonpicture']['line1'];
+$line2text = $config['textonpicture']['line2'];
+$line3text = $config['textonpicture']['line3'];
+
 if (!isset($_POST['style'])) {
     die(
         json_encode([
@@ -57,6 +70,24 @@ if ($_POST['style'] === 'collage') {
             die(
                 json_encode([
                     'error' => 'Frame ' . COLLAGE_FRAME . ' does not exist!',
+                ])
+            );
+        }
+    }
+
+    if ($config['textoncollage']['enabled']) {
+        if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
+            die(
+                json_encode([
+                    'error' => 'Font not set! ' . TEXTONCOLLAGE_FONT . ' is a path but needs to be a ttf!',
+                ])
+            );
+        }
+
+        if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
+            die(
+                json_encode([
+                    'error' => 'Font ' . TEXTONCOLLAGE_FONT . ' does not exist!',
                 ])
             );
         }
@@ -105,6 +136,24 @@ if ($config['picture']['take_frame']) {
         die(
             json_encode([
                 'error' => 'Frame ' . $picture_frame . ' does not exist!',
+            ])
+        );
+    }
+}
+
+if ($config['textonpicture']['enabled']) {
+    if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
+        die(
+            json_encode([
+                'error' => 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!',
+            ])
+        );
+    }
+
+    if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
+        die(
+            json_encode([
+                'error' => 'Font ' . $fontpath . ' does not exist!',
             ])
         );
     }
@@ -187,6 +236,14 @@ if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
     $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
     imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality']['chroma']);
     imagedestroy($chromaCopyResource);
+}
+
+if ($config['textonpicture']['enabled'] && $_POST['style'] !== 'collage') {
+    imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
+    imagedestroy($imageResource);
+    ApplyText($filename_photo, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
+    $imageModified = true;
+    $imageResource = imagecreatefromjpeg($filename_photo);
 }
 
 // image scale, create thumbnail
