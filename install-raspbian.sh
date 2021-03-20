@@ -316,7 +316,7 @@ info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order u
 usermod -a -G gpio www-data
 
 # remotebuzzer config depending on version
-if [ "$VERSION" === "stable2" ]; then
+if [ "$VERSION" == "stable2" ]; then
 # stable2
 info "### Enable Nodejs GPIO access - please reboot in order to use the Remote Buzzer Feature"
 cat > /etc/udev/rules.d/20-photobooth-gpiomem.rules <<EOF
