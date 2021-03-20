@@ -89,24 +89,24 @@ $config['collage']['only'] = false;
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;
 // possible layout values: '2x2', '2x2-2', '2x4', '2x4-2', '1+3', '1+2'
-$config['collage']['layout'] = '2x2';
+$config['collage']['layout'] = '2x2-2';
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code
 $config['collage']['key'] = null;
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
 $config['collage']['frame'] = 'resources/img/frames/frame.png';
-$config['textoncollage']['enabled'] = false;
-$config['textoncollage']['line1'] = 'line 1';
-$config['textoncollage']['line2'] = 'line 2';
-$config['textoncollage']['line3'] = 'line 3';
-$config['textoncollage']['locationx'] = '80';
-$config['textoncollage']['locationy'] = '80';
+$config['textoncollage']['enabled'] = true;
+$config['textoncollage']['line1'] = 'Photobooth';
+$config['textoncollage']['line2'] = '   we love';
+$config['textoncollage']['line3'] = 'OpenSource';
+$config['textoncollage']['locationx'] = '1470';
+$config['textoncollage']['locationy'] = '250';
 $config['textoncollage']['rotation'] = '0';
 $config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
 // possible font_color values: 'white', 'grey', 'black'
-$config['textoncollage']['font_color'] = 'white';
-$config['textoncollage']['font_size'] = '80';
+$config['textoncollage']['font_color'] = 'black';
+$config['textoncollage']['font_size'] = '50';
 $config['textoncollage']['linespace'] = '90';
 // DO NOT CHANGE limit here
 $config['collage']['limit'] = NULL;
