@@ -15,10 +15,18 @@ function ApplyText($srcImagePath, $fontsize, $fontrot, $fontlocx, $fontlocy, $fo
         imagettftext($image, $fontsize, $fontrot, $fontlocx, $fontlocy, $color, $font, $line1text);
     }
     if (!empty($line2text)) {
-        imagettftext($image, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $color, $font, $line2text);
+        if ($fontrot < 45 && $fontrot > -45) {
+            imagettftext($image, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $color, $font, $line2text);
+        } else {
+            imagettftext($image, $fontsize, $fontrot, $fontlocx + $linespacing, $fontlocy, $color, $font, $line2text);
+        }
     }
     if (!empty($line3text)) {
-        imagettftext($image, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $color, $font, $line3text);
+        if ($fontrot < 45 && $fontrot > -45) {
+            imagettftext($image, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $color, $font, $line3text);
+        } else {
+            imagettftext($image, $fontsize, $fontrot, $fontlocx + $linespacing * 2, $fontlocy, $color, $font, $line3text);
+        }
     }
     imagejpeg($image, $srcImagePath, $quality);
     imagedestroy($image);
