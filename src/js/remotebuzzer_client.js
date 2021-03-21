@@ -78,8 +78,16 @@ function initRemoteBuzzerFromDOM() {
                     }
                 });
 
-                ioClient.on('connect_failed', function () {
-                    console.log('ERROR: remotebuzzer_client unable to connect to webserver ip');
+                ioClient.on('connect_error', function () {
+                    console.log(
+                        'ERROR: remotebuzzer_client unable to connect to webserver ip - please ensure remotebuzzer_server is running on Photobooth server. Use Photobooth dev mode to create log file for debugging'
+                    );
+                });
+
+                ioClient.on('connect', function () {
+                    if (config.dev.enabled) {
+                        console.log('remotebuzzer_client successfully connected to Photobooth webserver ip');
+                    }
                 });
 
                 rotaryController.focusSet('#start');

@@ -124,9 +124,12 @@ In any mode, Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware 
 
 Troubleshooting / Debugging:
 
-- **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to. 
-- In "Dev" mode the remote buzzer server logs are written to the "tmp" directory of the photobooth installation (i.e. `data/tmp/remotebuzzer_server.log`). Clients will log server communication information to the browser console. Activate "Dev" mode and check the logs for any error messages.
-- If hardware buttons do not trigger
+- **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
+- Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
+- Reload the Photobooth homepage
+- Check the browser developer console for error logs
+- Check the server logs for errors (file `data/tmp/remotebuzzer_server.log`).
+- If there is no errors logged but hardware buttons still do not trigger
  - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
  - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
 
@@ -138,11 +141,11 @@ Troubleshooting / Debugging:
 
 ```
      cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
-     www-data ALL=NOPASSWD: /sbin/shutdown
+     www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
      EOF
 ```
 
-As of Photobooth v3, hardware button support is fully integrated into Photobooth. Therefore the `button.py` script has been removed from the distribution. In case you are, for continued use of that script, for backward compatiblity please do not activate the Hardware Button feature in the admin GUI.
+As of Photobooth v3, hardware button support is fully integrated into Photobooth. Therefore the `button.py` script has been removed from the distribution. In case you are using this script and for continued backward compatibility please do not activate the Remote Buzzer Hardware Button feature in the admin GUI. Please note that continued backward compatibility is not guaranteed and in case of issues please switch to the integrated functionality.
 
 
 ***************
@@ -184,7 +187,7 @@ After any button is triggered, all hardware button remain disabled until the act
 ***************
 **Rotary Mode**
 ***************
-In rotary mode a rotary encoder (i.e. [KY-040](https://sensorkit.en.joy-it.net/index.php?title=KY-040_Rotary_encoder)) is connected to the GPIOs. Turning the rotary left / right will navigate through the currently visible set of buttons on the screen. Button press on the rotary will activate the currently highlighted button in Photobooth
+In rotary mode a rotary encoder (i.e. [KY-040](https://sensorkit.en.joy-it.net/index.php?title=KY-040_Rotary_encoder)) is connected to the GPIOs. Turning the rotary left / right will navigate through the currently visible set of buttons on the screen. Button press on the rotary will activate the currently highlighted button in Photobooth.
 
 The wiring layout is
 
