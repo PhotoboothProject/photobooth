@@ -62,6 +62,7 @@ function createArchive(fileName, archive) {
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
     archive.file('chromakeying.php');
+    archive.file('faq/index.php');
     archive.file('gallery.php');
     archive.file('index.php');
     archive.file('LICENSE');
