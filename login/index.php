@@ -70,17 +70,17 @@ if (isset($_POST['submit'])) {
 		</form>
 		<hr>
 		<?php endif; ?>
-		<?php if(!$config['protect']['admin'] || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<?php if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../admin" class="btn btn--login"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a></p>
 		<?php endif; ?>
 		<p><a href="../gallery.php" class="btn btn--login"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a></p>
 		<p><a href="../slideshow" class="btn btn--login"><i class="fa fa-play"></i> <span data-i18n="slideshow"></span></a></p>
-		<?php if(!$config['protect']['manual'] || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<?php if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../manual/faq.php" class="btn btn--login" title="FAQ" target="newwin"><i class="fa fa-question-circle" aria-hidden="true"></i> <span data-i18n="show_faq"></span></a></p>
 		<p><a href="../manual" class="btn btn--login" title="Manual" target="newwin"><i class="fa fa-info-circle" aria-hidden="true"></i> <span data-i18n="show_manual"></span></a></p>
 		<?php endif; ?>
 		<p><a href="./" class="btn btn--login"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a></p>
-		<?php if(!$config['protect']['index'] || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../" class="btn btn--login" ><i class="fa fa-times"></i> <span data-i18n="close"></span></a></p>
 		<?php endif; ?>
 		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
