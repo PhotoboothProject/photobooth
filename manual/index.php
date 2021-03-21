@@ -97,9 +97,9 @@ if (
 							     	     		     break;
 									};
 
-									echo '<div class="form-row">';
 									switch($field['type']) {
 										case 'checkbox':
+											echo '<div class="form-row">';
 											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'">'.$panel.':'.$key.'</span></h4></p>';
 											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
 											echo '</div>';
@@ -108,12 +108,14 @@ if (
 										case 'range':
 										case 'select':
 										case 'input':
+											echo '<div class="form-row">';
 											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'"></span></h4></p>';
 											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
 											echo '</div>';
 											break;
 										case 'color':
 										case 'hidden':
+											echo '<div class="form-row">';
 											echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
 											echo '</div>';
 											break;
