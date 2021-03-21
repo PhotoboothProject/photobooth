@@ -1459,6 +1459,18 @@ $configsetup = [
             'name' => 'protect[localhost_index]',
             'value' => $config['protect']['localhost_index'],
         ],
+        'protect_manual' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'protect[manual]',
+            'value' => $config['protect']['manual'],
+        ],
+        'protect_localhost_manual' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'protect[localhost_manual]',
+            'value' => $config['protect']['localhost_manual'],
+        ],
     ],
     'userinterface' => [
         'view' => 'basic',

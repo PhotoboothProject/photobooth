@@ -1,7 +1,19 @@
 <?php
+session_start();
 
 require_once('../lib/config.php');
-require_once('../lib/configsetup.inc.php');
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['manual'])
+) {
+    require_once('../lib/configsetup.inc.php');
+} else {
+    header('location: ../login');
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
@@ -113,7 +125,7 @@ require_once('../lib/configsetup.inc.php');
 					}
 				?>
 			</br>
-			<a href="faq.html" class="btn faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
+			<a href="faq.php" class="btn faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
 			</form>
 			<a href="https://github.com/andi34/photobooth/wiki" class="btn wiki-btn"><span data-i18n="show_wiki"></span></a>
 		</div>

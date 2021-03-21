@@ -4,7 +4,7 @@
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "scripts": {
     "build": "npm-run-all --serial format build:faq build:gulp",
-    "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.html --footer faq/footer.html",
+    "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.php --footer faq/footer.html && mv manual/faq.html manual/faq.php",
     "build:gulp": "gulp",
     "build:sass": "gulp sass",
     "eslint": "eslint src/js/*.js",

@@ -60,7 +60,7 @@ This is my personal Photobooth fork with some extras on top (more information ca
   - standalone slideshow via [localhost/slideshow](http://localhost/slideshow)
   - access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php)
   - offline manual with settings explained under [localhost/manual](http://localhost/manual) ([andi34/photobooth#59](https://github.com/andi34/photobooth/pull/59))
-  - offline FAQ under [localhost/manual/faq.html](http://localhost/manual/faq.html)
+  - offline FAQ under [localhost/manual/faq.php](http://localhost/manual/faq.php)
   - disk usage page, access via admin panel or at [localhost/admin/diskusage.php](http://localhost/admin/diskusage.php)
   - fix windows compatibility
   - fix check for image filter

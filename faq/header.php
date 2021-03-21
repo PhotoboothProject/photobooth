@@ -1,3 +1,22 @@
+<?php
+session_start();
+
+require_once('../lib/config.php');
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['manual'])
+) {
+    require_once('../lib/configsetup.inc.php');
+} else {
+    header('location: ../login');
+    exit();
+}
+
+?>
+<!DOCTYPE html>
 <html>
   <head>
 	<meta charset="UTF-8" />
