@@ -971,7 +971,7 @@ $configsetup = [
             'range_min' => 0,
             'range_max' => 255,
             'range_step' => 1,
-            'unit' => '',
+            'unit' => 'empty',
         ],
         'seriouslyjs_g' => [
             'view' => 'expert',
@@ -982,7 +982,7 @@ $configsetup = [
             'range_min' => 0,
             'range_max' => 255,
             'range_step' => 1,
-            'unit' => '',
+            'unit' => 'empty',
         ],
         'seriouslyjs_b' => [
             'view' => 'expert',
@@ -993,7 +993,7 @@ $configsetup = [
             'range_min' => 0,
             'range_max' => 255,
             'range_step' => 1,
-            'unit' => '',
+            'unit' => 'empty',
         ],
         'keying_background_path' => [
             'view' => 'expert',

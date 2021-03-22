@@ -191,7 +191,7 @@ if (
                                                 echo '<div class="tooltip">';
                                                 echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
                                                 echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
-                                                echo '<label class="floatright" id="'.$setting['name'].'-value"><span>'.$setting['value'].'</span> <span data-i18n="'.$setting['unit'].'">'.$setting['unit'].'</span></label>';
+                                                echo '<label class="floatright" id="'.$setting['name'].'-value"><span>'.$setting['value'].'</span>'.(($setting['unit'] == 'empty')?'': '<span data-i18n="'.$setting['unit'].'">'.$setting['unit'].'</span>').'</label>';
                                                 echo '<input type="range" name="'.$setting['name'].'" class="configslider settinginput" value="'.$setting['value'].'" min="'.$setting['range_min'].'" max="'.$setting['range_max'].'" step="'.$setting['range_step'].'" placeholder="'.$setting['placeholder'].'"/>';
                                                 echo '<label>'.$setting['range_min'].'</label><label class="floatright">'.$setting['range_max'].'</label>';
                                                 break;
