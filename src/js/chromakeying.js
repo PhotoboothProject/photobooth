@@ -119,9 +119,9 @@ function setMainImage(imgSrc) {
             chroma = seriously.effect('chroma');
             chroma.source = seriouslyimage;
             target.source = chroma;
-            const r = 98 / 255;
-            const g = 175 / 255;
-            const b = 116 / 255;
+            const r = config.seriouslyjs.r / 255;
+            const g = config.seriouslyjs.g / 255;
+            const b = config.seriouslyjs.b / 255;
             chroma.screen = [r, g, b, 1];
             seriously.go();
             mainImage = new Image();

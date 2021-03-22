@@ -165,6 +165,10 @@ $config['keying']['size'] = '1500px';
 $config['live_keying']['enabled'] = false;
 // possible variant values: 'marvinj', 'seriouslyjs'
 $config['keying']['variant'] = 'marvinj';
+// Seriously.js RGB values
+$config['seriouslyjs']['r'] = '98';
+$config['seriouslyjs']['g'] = '175';
+$config['seriouslyjs']['b']  = '116';
 $config['keying']['background_path'] = 'resources/img/background';
 $config['live_keying']['show_all'] = false;
 
