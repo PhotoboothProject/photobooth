@@ -765,6 +765,10 @@ const photoBooth = (function () {
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
+
+        if (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm) {
+            api.startVideo('preview');
+        }
     };
 
     // add image to Gallery
