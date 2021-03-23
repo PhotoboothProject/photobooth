@@ -119,9 +119,14 @@ function setMainImage(imgSrc) {
             chroma = seriously.effect('chroma');
             chroma.source = seriouslyimage;
             target.source = chroma;
-            const r = config.seriouslyjs.r / 255;
-            const g = config.seriouslyjs.g / 255;
-            const b = config.seriouslyjs.b / 255;
+            const color = config.keying.seriouslyjs_color;
+            const r = parseInt(color.substr(1, 2), 16) / 255;
+            const g = parseInt(color.substr(3, 2), 16) / 255;
+            const b = parseInt(color.substr(5, 2), 16) / 255;
+            if (config.dev.enabled) {
+                console.log('Chromakeying color:', color);
+                console.log('Red:', r, 'Green:', g, 'Blue:', b);
+            }
             chroma.screen = [r, g, b, 1];
             seriously.go();
             mainImage = new Image();
