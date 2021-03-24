@@ -244,6 +244,12 @@ $configsetup = [
             'name' => 'ui[show_fork]',
             'value' => $config['ui']['show_fork'],
         ],
+        'ui_github' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'ui[github]',
+            'value' => $config['ui']['github'],
+        ],
         'event_enabled' => [
             'type' => 'checkbox',
             'name' => 'event[enabled]',
@@ -1629,6 +1635,12 @@ $configsetup = [
             'name' => 'colors[gallery_button]',
             'placeholder' => $defaultConfig['colors']['gallery_button'],
             'value' => $config['colors']['gallery_button'],
+        ],
+        'ui_branding' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'ui[branding]',
+            'value' => $config['ui']['branding'],
         ],
     ],
     'jpeg_quality' => [

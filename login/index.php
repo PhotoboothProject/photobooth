@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth Login</title>
+	<title><?=$config['ui']['branding']?> Login</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
 
 <body class="loginbody">
 	<div class="login-panel">
-		<h2>Photobooth Login</h2>
+		<h2><?=$config['ui']['branding']?> Login</h2>
 		<hr>
 		<?php if($config['login']['enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<form method='post' class="login">

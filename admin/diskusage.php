@@ -27,7 +27,7 @@ if (
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth Disk Usage</title>
+	<title><?=$config['ui']['branding']?> Disk Usage</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
@@ -50,7 +50,7 @@ if (
 
 <body class="loginbody">
 	<div class="login-panel">
-		<h2>Photobooth <span data-i18n="disk_usage"></span></h2>
+		<h2><?=$config['ui']['branding']?> <span data-i18n="disk_usage"></span></h2>
 		<a class="btn btn--tiny btn--flex back-to-admin" href="./"><i class="fa fa-arrow-left"></i></a>
 		<button class="download-zip-btn btn btn--tiny btn--flex">
 			<span data-i18n="download_zip"></span>

@@ -1,12 +1,14 @@
 <?php
 header('Content-Type: application/json');
 
-$url = 'https://api.github.com/repos/andi34/photobooth/releases/latest';
+require_once '../lib/config.php';
 
+$url = 'https://api.github.com/repos/' . $config['ui']['github'] . '/photobooth/releases/latest';
+$gh = $config['ui']['github'];
 $options = [
     'http' => [
         'method' => 'GET',
-        'header' => "User-Agent: andi34/photobooth\r\n",
+        'header' => "User-Agent: $gh/photobooth\r\n",
     ],
 ];
 

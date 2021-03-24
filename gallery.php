@@ -29,7 +29,7 @@ $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($imag
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth Gallery</title>
+	<title><?=$config['ui']['branding']?> Gallery</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="resources/img/apple-touch-icon.png">

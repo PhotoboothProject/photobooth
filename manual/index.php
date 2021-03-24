@@ -24,7 +24,7 @@ if (
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth Manual</title>
+	<title><?=$config['ui']['branding']?> Manual</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
@@ -42,7 +42,7 @@ if (
 </head>
 <body class="manualwrapper">
 	<div class="manual-panel">
-		<h2>Photobooth Manual</h2>
+		<h2><?=$config['ui']['branding']?> Manual</h2>
 		<h3><a class="back-to-pb" href="../">Photobooth</a></h3>
 
 		<div class="accordion">
@@ -129,7 +129,7 @@ if (
 			</br>
 			<a href="faq.php" class="btn faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
 			</form>
-			<a href="https://github.com/andi34/photobooth/wiki" class="btn wiki-btn"><span data-i18n="show_wiki"></span></a>
+			<a href="https://github.com/<?=$config['ui']['github']?>/photobooth/wiki" class="btn wiki-btn"><span data-i18n="show_wiki"></span></a>
 		</div>
 	</div>
 

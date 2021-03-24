@@ -46,7 +46,7 @@ if (
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth</title>
+	<title><?=$config['ui']['branding']?></title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="resources/img/apple-touch-icon.png">

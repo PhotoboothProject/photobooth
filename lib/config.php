@@ -103,6 +103,9 @@ $config['adminpanel']['view_default'] = 'expert';
 $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
 
+$config['ui']['github'] = 'andi34';
+$config['ui']['branding'] = 'Photobooth';
+
 $defaultConfig = $config;
 
 if (file_exists($my_config_file)) {

@@ -23,7 +23,7 @@ $imagelist = array_reverse($images);
 	<meta http-equiv="refresh" content= "<?=$config['slideshow']['refresh_time']?>">
 
 
-	<title>Photobooth Slideshow</title>
+	<title><?=$config['ui']['branding']?> Slideshow</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
@@ -54,7 +54,7 @@ $imagelist = array_reverse($images);
 		<?php foreach ($imagelist as $image): ?>
 		<?php
 
-		$date = 'Photobooth Slideshow';
+		$date = $config['ui']['branding'] . ' Slideshow';
 		if ($config['picture']['naming'] === 'dateformatted' && $config['gallery']['show_date']) {
 			if ($config['database']['file'] != 'db') {
 				$db = strlen($config['database']['file']);
