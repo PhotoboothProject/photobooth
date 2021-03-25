@@ -561,10 +561,6 @@ const photoBooth = (function () {
             $('#video--sensor').hide();
             loader.addClass('error');
             const errormsg = api.getTranslation('error');
-            takingPic = false;
-            if (config.dev.enabled) {
-                console.log('Taking photo:', takingPic);
-            }
             $('.loading').append($('<p>').text(errormsg));
             if (config.dev.error_messages || config.dev.enabled) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
@@ -592,11 +588,6 @@ const photoBooth = (function () {
                 : api.getTranslation('busyCollage')
         );
 
-        takingPic = false;
-        if (config.dev.enabled) {
-            console.log('Taking photo:', takingPic);
-        }
-
         if (photoStyle === 'photo' && config.picture.preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
@@ -619,7 +610,11 @@ const photoBooth = (function () {
 
                 if (data.error) {
                     api.errorPic(data);
+                    takingPic = false;
                     remoteBuzzerClient.inProgress(false);
+                    if (config.dev.enabled) {
+                        console.log('Taking photo:', takingPic);
+                    }
                 } else if (photoStyle === 'chroma') {
                     api.renderChroma(data.file);
                 } else {
@@ -633,7 +628,11 @@ const photoBooth = (function () {
                     error: 'Request failed: ' + textStatus
                 });
 
+                takingPic = false;
                 remoteBuzzerClient.inProgress(false);
+                if (config.dev.enabled) {
+                    console.log('Taking photo:', takingPic);
+                }
             }
         });
     };
@@ -662,7 +661,11 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
+        takingPic = false;
         remoteBuzzerClient.inProgress(false);
+        if (config.dev.enabled) {
+            console.log('Taking photo:', takingPic);
+        }
     };
 
     // Render Picture after taking
@@ -757,7 +760,11 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
+        takingPic = false;
         remoteBuzzerClient.inProgress(false);
+        if (config.dev.enabled) {
+            console.log('Taking photo:', takingPic);
+        }
     };
 
     // add image to Gallery
