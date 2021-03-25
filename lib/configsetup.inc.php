@@ -208,6 +208,12 @@ $configsetup = [
             'name' => 'picture[preview_before_processing]',
             'value' => $config['picture']['preview_before_processing'],
         ],
+        'delete_no_request' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'delete[no_request]',
+            'value' => $config['delete']['no_request'],
+        ],
         'database_enabled' => [
             'view' => 'expert',
             'type' => 'checkbox',

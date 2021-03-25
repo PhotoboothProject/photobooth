@@ -705,7 +705,7 @@ const photoBooth = (function () {
                 ev.preventDefault();
 
                 const msg = api.getTranslation('really_delete_image');
-                const really = confirm(filename + ' ' + msg);
+                const really = config.delete.no_request ? true : confirm(filename + ' ' + msg);
                 if (really) {
                     api.deleteImage(filename, (data) => {
                         if (data.success) {

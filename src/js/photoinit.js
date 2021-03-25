@@ -206,7 +206,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         img = img.split('\\').pop().split('/').pop();
 
         const msg = photoBooth.getTranslation('really_delete_image');
-        const really = confirm(img + ' ' + msg);
+        const really = config.delete.no_request ? true : confirm(img + ' ' + msg);
         if (really) {
             $.ajax({
                 url: 'api/deletePhoto.php',

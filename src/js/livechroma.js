@@ -209,7 +209,7 @@ function saveImage(cb) {
                         ev.preventDefault();
 
                         const msg = photoBooth.getTranslation('really_delete_image');
-                        const really = confirm(data.filename + ' ' + msg);
+                        const really = config.delete.no_request ? true : confirm(data.filename + ' ' + msg);
                         if (really) {
                             photoBooth.deleteImage(data.filename, (result) => {
                                 if (result.success) {
