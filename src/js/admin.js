@@ -93,35 +93,48 @@ $(function () {
         });
     });
 
-    $('#checkVersion a').on('click', function (ev) {
+    $('#checkversion-btn').on('click', function (ev) {
         ev.preventDefault();
-
-        $(this).html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>');
+        const elem = $(this);
+        $('#checkversion-btn').children('.text').toggle();
+        elem.addClass('saving');
 
         $.ajax({
             url: '../api/checkVersion.php',
             method: 'GET',
             success: (data) => {
-                let message = 'Error';
                 $('#checkVersion').empty();
                 console.log('data', data);
                 if (!data.updateAvailable) {
-                    message = getTranslation('using_latest_version');
+                    $('#current_version_text').text(getTranslation('using_latest_version'));
                 } else if (/^\d+\.\d+\.\d+$/u.test(data.availableVersion)) {
-                    message = getTranslation('update_available');
+                    $('#current_version_text').text(getTranslation('current_version'));
+                    $('#current_version').text(data.currentVersion);
+                    $('#available_version_text').text(getTranslation('available_version'));
+                    $('#available_version').text(data.availableVersion);
                 } else {
-                    message = getTranslation('test_update_available');
+                    $('#current_version_text').text(getTranslation('test_update_available'));
                 }
 
-                const textElement = $('<p>');
-                textElement.text(message);
-                textElement.append('<br />');
-                textElement.append(getTranslation('current_version') + ': ');
-                textElement.append(data.currentVersion);
-                textElement.append('<br />');
-                textElement.append(getTranslation('available_version') + ': ');
-                textElement.append(data.availableVersion);
-                textElement.appendTo('#checkVersion');
+                elem.removeClass('saving');
+                elem.addClass('success');
+
+                setTimeout(function () {
+                    elem.removeClass('error success');
+                    $('#checkversion-btn').children('.text').toggle();
+                }, 2000);
+            },
+
+            error: (jqXHR) => {
+                console.log('Error checking Version: ', jqXHR.responseText);
+
+                elem.removeClass('saving');
+                elem.addClass('error');
+
+                setTimeout(function () {
+                    elem.removeClass('error success');
+                    $('#checkversion-btn').children('.text').toggle();
+                }, 2000);
             }
         });
     });

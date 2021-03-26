@@ -461,3 +461,17 @@ div.setting_element {
   margin: 0 1px 0px 0;
   padding: 0px 2px;
 }
+
+/**************************
+* Version Check text table
+***************************/
+#version_text_table {
+  height: 3em;
+  position: relative;
+  left: 1em;
+  top: -0.5em;
+}
+
+#version_text_table + td {
+  padding: 0 1em 0 0;
+}

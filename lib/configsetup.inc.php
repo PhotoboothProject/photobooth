@@ -1845,4 +1845,14 @@ $configsetup = [
             'value' => 'reset-btn',
         ],
     ],
+    'version' => [
+        'view' => 'basic',
+        'check_version' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'check_version',
+            'name' => 'CHECKVERSIONBUTTON',
+            'value' => 'checkversion-btn',
+        ],
+    ],
 ];

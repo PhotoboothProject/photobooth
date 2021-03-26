@@ -88,31 +88,31 @@ if (
         
                 $indent = 2;
 
-		/********************
+                /********************
                 * Create topnav bar *
                 *********************/
                 html_src_indent($indent++);
-		echo '<div class="admintopnavbar">';
+                echo '<div class="admintopnavbar">';
                 html_src_indent($indent);
-		echo '<i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i>';
+                echo '<i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i>';
                 if(isset($_SESSION['auth']) && $_SESSION['auth'] === true)
-		{
-	                html_src_indent($indent);
-			echo '	   <i class="fa fa-sign-out fa-3x" id="admintopnavbarlogout"></i>';
-		}
+                {
+                        html_src_indent($indent);
+                        echo '     <i class="fa fa-sign-out fa-3x" id="admintopnavbarlogout"></i>';
+                }
                 html_src_indent($indent);
-		echo '	   <i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"></i>';
+                echo '     <i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"></i>';
                 html_src_indent(--$indent);
-		echo '</div>';
+                echo '</div>';
 
-		/*********************
+                /*********************
                 * Create sidenav bar *
                 *********************/
                 html_src_indent($indent++);
-		echo '<div>';
+                echo '<div>';
                 html_src_indent($indent);
-		echo '<div class="adminsidebar" id="adminsidebar">';
-		html_src_indent(++$indent);
+                echo '<div class="adminsidebar" id="adminsidebar">';
+                html_src_indent(++$indent);
                 echo '<ul class="adminnavlist" id="navlist">';
 
                 html_src_indent(++$indent);
@@ -138,8 +138,8 @@ if (
 <!-- Settings page content -->
 <form  autocomplete="off">
 
-	<div class="admincontent" id="admincontentpage">
-	            <button class="save-btn" id="save-btn">
+        <div class="admincontent" id="admincontentpage">
+                    <button class="save-btn" id="save-btn">
                      <span class="save"><span data-i18n="save"></span></span>
                      <span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>
                      <span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>
@@ -233,28 +233,41 @@ if (
                                                         }
                                                 echo '</select>';
                                                 break;
-					case 'button':
-					     echo '<div class="tooltip">';
-					     echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
+                                        case 'button':
+                                             echo '<div class="tooltip">';
+                                             echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
                                              echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
                                              echo '<div><button class="adminpanel-setting-btn" id="'.$setting['value'].'">';
                                              switch ($key) {
-						    case 'reset_button':
-							 echo '<span class="save"><span data-i18n="reset"></span></span>';
-							 echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>';
-							 echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
-							 echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
-							 break;
-						    case 'database_rebuild':
-							 echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="busy"></span></span>';
-							 echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
-							 echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
-						    default:
-							 echo '<span class="text" data-i18n="'.$setting['placeholder'].'"></span>';
-							 break;
-							 }
-					     echo '</button></div>';
-					     break;
+                                                    case 'reset_button':
+                                                         echo '<span class="save"><span data-i18n="reset"></span></span>';
+                                                         echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>';
+                                                         echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
+                                                         echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
+                                                         break;
+                                                    case 'database_rebuild':
+                                                    case 'check_version':
+                                                         echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="busy"></span></span>';
+                                                         echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
+                                                         echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
+                                                         echo '<span class="text" data-i18n="'.$setting['placeholder'].'"></span>';
+                                                         break;
+                                                    default:
+                                                         echo '<span class="text" data-i18n="'.$setting['placeholder'].'"></span>';
+                                                         break;
+                                                         }
+                                             echo '</button>';
+                                             echo '</div>';
+
+                                             switch ($key) {
+                                                    case 'check_version':
+                                                         echo '<table id="version_text_table"><tr><td><span id="current_version_text"></span></td><td><span id="current_version"></span></td></tr><tr><td><span id="available_version_text"></span></td><td></span><span id="available_version"></td></tr></table>';
+                                                         break;
+                                                    default:
+                                                        break;
+                                                }
+
+                                             break;
                                 }
         
                                 echo '</div>';
