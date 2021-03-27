@@ -148,7 +148,7 @@ if (
 				<?php endif; ?>
 
 				<?php if ($config['picture']['allow_delete']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+				<a href="#" class="<?php echo $btnClass1; ?> deletebtn <?php if ($config['delete']['no_request']){ echo 'rotaryfocus';} ?> "><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 				<?php endif; ?>
 			</div>
 

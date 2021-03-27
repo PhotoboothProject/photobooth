@@ -203,10 +203,11 @@ Shutdown ---   GPIO 16    ---   SW
 ```
 
 Known limitations:
-The following elements are currently not supported and not accessible through the rotary navigation
+- Delete Picture: in order to be able to access the Delete button through rotary control, please activate admin setting General -> "Delete images without confirm request"
+
+The following elements are currently not supported and not accessible through rotary control navigation
 - Full Screen Mode button: Looks like modern browser only allow to change to full screen mode upon user gesture. It seems not possible to change to full-screen using Javascript.
 - Photoswipe download button: Not needed for Rotary Control. (well, if you can come up with a decent use-case, let us know).
-- Delete Picture
 
 **************
 Other Remote Trigger (experimental)

@@ -55,7 +55,7 @@
                 <?php endif; ?>
 
                 <?php if ($config['gallery']['allow_delete']): ?>
-                <button type="button" class="pswp__button pswp__button--delete" title="Delete"><i class="fa fa-trash"></i></button>
+                <button type="button" class="pswp__button pswp__button--delete <?php if ($config['delete']['no_request']){ echo 'rotaryfocus';} ?> " title="Delete"><i class="fa fa-trash"></i></button>
                 <?php endif; ?>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
