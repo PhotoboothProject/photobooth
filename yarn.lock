@@ -868,10 +868,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@prettier/plugin-php@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.16.1.tgz#0255749fe1a36c00c7ddc049ec8dc2928a8ac512"
-  integrity sha512-U0G5MnWEw3H4o53ZKmIDNBAN9w/7jkiFAhWPG6DJ+FyB9RmdhDouW05wLq8UraxjigzmXNZzT+ZQor697iW9Hg==
+"@prettier/plugin-php@^0.16.2":
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.16.2.tgz#11f124f84a3daec40f672987a0b9887d479d61a9"
+  integrity sha512-0pqK5hIDTSy07O55sJu86sxqfLHlzoDYn64GyNVhft9unc/7UCQui/s2gpTTwfTpU26YHUDEqL8CT8p5Rl3s6Q==
   dependencies:
     linguist-languages "^7.5.1"
     mem "^8.0.0"
