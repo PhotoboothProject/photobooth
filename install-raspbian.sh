@@ -217,10 +217,12 @@ fi
 info "### Now we are going to install Photobooth."
 git clone https://github.com/andi34/photobooth $INSTALLFOLDER
 cd $INSTALLFOLDERPATH
+LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
 
 echo -e "\033[0;33m### Please select a version to install:"
 echo -e "    1 Install last development version"
-echo -e "    2 Install last stable Release"
+echo -e "    2 Install latest stable Release: $LATEST_VERSION"
+echo -e "    3 Install last v2 Release (v2.10.0)"
 read -p "Please enter your choice: " -n 1 -r
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[1]$ ]]
@@ -229,14 +231,19 @@ then
   VERSION="development"
   git fetch origin dev
   git checkout origin/dev
+elif [[ $REPLY =~ ^[3]$ ]]
+then
+  info "### We are installing v2.10.0"
+  VERSION="stable2"
+  git fetch origin stable2
+  git checkout origin/stable2
 else
   if [[ ! $REPLY =~ ^[2]$ ]]
     then
     info "### Invalid choice!"
   fi
-  LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
-  VERSION="stable2"
-  info "### We are installing last stable Release: Version $LATEST_VERSION"
+  VERSION="stable3"
+  info "### We are installing latest stable Release: $LATEST_VERSION"
   git checkout $LATEST_VERSION
 fi
 
