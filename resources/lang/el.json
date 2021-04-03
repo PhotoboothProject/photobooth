@@ -1,7 +1,5 @@
 {
   "abort": "Αποβάλλω",
-  "available_version": "Διαθέσιμη έκδοση",
-  "check_version": "Επαληθεύστε την έκδοση",
   "cheeseCollage": "Cheeeeeeeese κολάάάάάάζζζζζζζζ!",
   "close": "Κλείσε",
   "collage:collage_cntdwn_time": "Χρονοδιακόπτης αντίστροφης μέτρησης φωτογραφιών σε δευτερόλεπτα",
@@ -13,7 +11,6 @@
   "commands:print_msg": "Μήνυμα επιτυχίας για εκτύπωση",
   "commands:take_picture_cmd": "Εντολή ενεργοποίησης στην κάμερα",
   "commands:take_picture_msg": "Μήνυμα επιτυχίας για τη φωτογραφία",
-  "current_version": "Τρέχουσα έκδοση",
   "delete": "διαγραφή",
   "error": "Παρουσιάστηκε σφάλμα, δοκιμάστε ξανά!",
   "event": "Εκδήλωση",
