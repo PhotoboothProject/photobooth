@@ -1,4 +1,4 @@
-# Photobooth
+# Photobooth v3
 
 A Photobooth web interface for Raspberry Pi and Windows.
 
