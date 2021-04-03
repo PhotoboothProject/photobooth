@@ -112,12 +112,13 @@ Follow the steps mentioned here: [How to Fix NGINX 413 Request Entity Too Large 
 
 <hr>
 
-### Can I use Hardware Button on my Raspberry Pi, to take a Picture ?
+### Can I use Hardware Button on my Raspberry Pi, to take a Picture?
 Yes, the **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins . This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.
 
 The Hardware Button functionality supports two separate modes of operation (select via admin panel):
 - **Button Mode**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
 - **Rotary Mode**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. 
+
 Modes can not be combined.
 
 In any mode, Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
@@ -439,6 +440,8 @@ If you run into any errors setting up your hotspot we can remove all the setting
 ```
 sudo ./setup-network.sh --clean
 ```
+
+<hr>
 
 ### Automatic picture syncing to USB stick
 

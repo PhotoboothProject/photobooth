@@ -36,7 +36,7 @@ _(The full changelog can be found inside [the Photobooth Wiki](https://github.co
   - Login to protect Admin Panel, Start page and/or Manual & FAQ can be enabled.
   - Hardware Button functionality, supports two separate modes of operation (select via admin panel):
     - **Button Mode**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
-    - **Rotary Mode**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. Modes can not be combined.
+    - **Rotary Mode**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions.
   - Gallery:
     - Order pictures in gallery ascending oder descending by picture age.
     - Hide the gallery.
