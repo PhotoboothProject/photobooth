@@ -58,7 +58,6 @@ function createArchive(fileName, archive) {
     archive.directory('template');
     archive.directory('test');
     archive.directory('vendor');
-    archive.file('button.py');
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
     archive.file('chromakeying.php');
