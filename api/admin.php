@@ -123,6 +123,10 @@ if ($data['type'] == 'config') {
         $newConfig['synctodrive']['enabled'] = false;
     }
 
+    if (isset($newConfig['remotebuzzer']['port']) && empty($newConfig['remotebuzzer']['port'])) {
+        $newConfig['remotebuzzer']['port'] = 14711;
+    }
+
     if ($newConfig['collage']['layout'] === '1+2') {
         $newConfig['collage']['limit'] = 3;
     } else {
