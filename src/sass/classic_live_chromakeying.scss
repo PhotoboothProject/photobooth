@@ -1,0 +1,305 @@
+@import 'classic_chromakeying';
+@import 'partials/email';
+@import 'partials/gallery';
+@import 'partials/modal';
+@import 'partials/scrollbar';
+@import 'vendor/photoswipe';
+
+.home {
+  position: fixed;
+  top: 1em;
+  right: 0;
+  z-index: 10;
+}
+
+.deletebtn {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.gallerybtn {
+  position: fixed;
+  top: 1em;
+  left: 0;
+  z-index: 10;
+}
+
+.closebtn {
+  position: fixed;
+  top: 1em;
+  right: 0;
+  z-index: 10;
+}
+
+.top-bar {
+  display: inline-block;
+  width: 100%;
+  margin: 1.5em;
+}
+
+.chromaNote {
+  color: #ff0000;
+  padding-bottom: 10px;
+  background-color: $mainColor;
+  border: 4px solid $borderColor;
+  width: 1000px;
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  max-width: 100%;
+  z-index: 10;
+}
+
+.chroma-control-bar {
+  margin-top: 12px;
+  text-align: center;
+  display: none;
+  padding-top: 10px;
+
+  @media (max-width: 576px) {
+    span {
+      display: none;
+    }
+    .btn {
+      margin: 0.5em;
+    }
+  }
+}
+
+#gallery .controls a.close_opengal {
+  display: none;
+  right: 30px;
+  top: 30px;
+  position: fixed;
+  z-index: 10000000;
+  font-size: 3.125em;
+  text-shadow: 0 2px 0 #000;
+  color: #fff;
+}
+
+.backgrounds {
+  padding-top: 10px;
+  text-align: center;
+}
+
+#loader {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center center;
+  color: $countdownColor;
+  z-index: 100;
+  text-align: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+
+  &.showBackgroundImage {
+    &:after {
+      opacity: 0.5;
+    }
+  }
+
+  &.open {
+    display: flex;
+  }
+
+  .spinner {
+    color: $cheeseColor;
+    font-size: 5em;
+  }
+}
+
+#video--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#video--preview {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#ipcam--view {
+  background-image: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transform: rotate($previewRotation);
+
+  &.streaming {
+    background-image: $urlBackground;
+  }
+}
+
+.flip-horizontal {
+  transform: scaleX(-1);
+  filter: FlipH;
+}
+
+#counter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 12em;
+  opacity: 0.2;
+}
+
+#counter.tick {
+  font-size: 1em;
+  opacity: 1;
+  transition: font-size 0.75s, opacity 0.75s;
+}
+
+.cheese {
+  position: absolute;
+  color: $cheeseColor;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 3em;
+}
+
+@media (max-width: 1280px) and (orientation: landscape) {
+  .chromawrapper {
+    padding: 0;
+    margin: 0;
+  }
+
+  .canvasWrapper {
+    display: block;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    max-width: 950px;
+    max-height: 100%;
+    border: 4px solid $borderColor;
+    &.initial {
+      width: 950px;
+    }
+  }
+
+  .takeChroma,
+  .reloadPage,
+  .deletebtn {
+    margin: 0.5em;
+    display: block;
+  }
+
+  .home,
+  .gallerybtn,
+  .closebtn {
+    position: relative;
+    top: 0;
+    max-width: 150px;
+  }
+
+  .top-bar {
+    display: block;
+    position: relative;
+    top: 50px;
+    left: 0;
+    width: 250px;
+    margin: 0;
+  }
+
+  .chromaNote {
+    position: absolute;
+    display: block;
+    bottom: 40px;
+    right: 0;
+    width: 950px;
+  }
+
+  .backgrounds {
+    display: block;
+    position: relative;
+    top: 50px;
+    left: 0px;
+    width: 250px;
+    height: 400px;
+    overflow-y: auto;
+    border: 2px solid $borderColor;
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .backgroundPreview {
+    max-width: 250px;
+    max-height: 150px;
+  }
+
+  .chroma-control-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+  }
+
+  #mainCanvas {
+    max-height: 100%;
+  }
+}
+
+@media (max-height: 740px) and (orientation: landscape) {
+  .backgrounds {
+    &.shrinked {
+      height: 250px;
+    }
+  }
+}
+
+@media (max-width: 1200px) and (orientation: landscape) {
+  .canvasWrapper,
+  .chromaNote {
+    max-width: 750px;
+    &.initial {
+      width: 750px;
+    }
+  }
+}
+
+@media (max-width: 1000px) and (orientation: landscape) {
+  .canvasWrapper,
+  .chromaNote {
+    max-width: 650px;
+    &.initial {
+      width: 650px;
+    }
+  }
+}

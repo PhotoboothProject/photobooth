@@ -2,6 +2,7 @@
 @import 'partials/fonts';
 @import 'partials/basic';
 @import 'partials/button';
+@import 'partials/email';
 @import 'partials/gallery';
 @import 'partials/sidenav';
 @import 'partials/scrollbar';
@@ -160,49 +161,34 @@
   }
 }
 
-.send-mail {
-  z-index: 16777371;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: $panelColor;
-  color: $fontColor;
-  padding: 25px 15px 15px;
-  min-width: 250px;
-  display: none;
-}
-
-#send-mail-close {
-  position: absolute;
-  right: 14px;
-  top: 14px;
-  font-size: 1.75em;
-  cursor: pointer;
-}
-
-.mail-form-input {
-  padding: 15px;
-  margin: 12px 0;
-  width: 100%;
-}
-
-input[type='email'] {
-  color: $fontColor;
-  background: $boxColor;
-  border: 1px solid $borderColor;
-  border-radius: 4px;
-  width: 100%;
-  padding: 0 10px;
-}
-
 .spacer {
   clear: both;
   height: 50px;
   width: 100%;
 }
 
+.loaderImage {
+  display: none;
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  background: center center no-repeat;
+  background-size: contain;
+  @media (max-width: 767px) {
+    width: 80%;
+    height: 80%;
+  }
+}
+
 .loading {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0;
+  z-index: 102;
   font-size: 3.125em;
   text-align: center;
   width: 100%;
@@ -213,6 +199,10 @@ input[type='email'] {
 
   .btn {
     font-size: 0.4em;
+  }
+
+  @media (max-width: 767px) {
+    bottom: 0.5em;
   }
 }
 
@@ -397,10 +387,10 @@ hr.small {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  transform: rotate($ipCamPreviewRotation);
+  transform: rotate($previewRotation);
 
   &.streaming {
-    background-image: $ipcamBackground;
+    background-image: $urlBackground;
   }
 }
 
@@ -430,12 +420,38 @@ hr.small {
 }
 
 #useBuzzer {
-  font-size: 2em;
+  font-size: 1.75em;
   margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+@media (max-width: 1024px) {
+  #useBuzzer {
+    font-size: 1.25em;
+  }
 }
 
 @media (max-width: 767px) {
   .takePic {
     bottom: auto;
   }
+}
+
+.gallery__close:active,
+.gallery__close:hover,
+.gallery__close:focus,
+.gallery__close.focused,
+.gallery__img:active > figure,
+.gallery__img:focus > figure,
+.gallery__img:hover > figure,
+.gallery__img.focused > figure,
+.gallery__img:active > img,
+.gallery__img:focus > img,
+.gallery__img:hover > img,
+.gallery__img.focused > img {
+  opacity: 0.6;
+}
+
+.pswp-rotary-focus {
+  background: $mainColor !important;
 }

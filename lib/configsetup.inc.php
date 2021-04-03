@@ -1,1083 +1,1858 @@
 <?php
-require_once(__DIR__ . '/filter.php');
+require_once __DIR__ . '/filter.php';
+/*
+ ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows
+ **
+ ** Admin panel
+ **     |- Section 1
+ **     |  |- Parameter 1
+ **     |  |- Parameter 2
+ **     |  |- Setting A
+ **     |  |- Setting B
+ **     |
+ **     |- Section 2
+ **     |  |- Setting C
+ **     |  |- Setting D
+ **     |  |- Setting E
+ **     |
+ **     |- Section 3
+ **     |  |- Parameter 1
+ **     |  |- ...
+ **     |
+ **     |...
+ **
+ ** * Section descriptor
+ **   - Always key / array pair
+ **      * 'key': always starts with a character, consists of characters, numbers and underscore only
+ **   - Admin panel sort order is defined by the order in this config file
+ **   - The i18n tag for translation is identified by the actual section key
+ **   - Parameter: Key / Value pairs are parameters which apply to how the section is displayed in the admin panel
+ **     	* 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
+ ** 	  	 	     the section is shown or not. Missing parameter defaults to 'expert'.
+ ** 	* 'platform' (optional): Accepted values are 'all', 'linux', 'windows'. Defines whether the section is visible
+ ** 	  	     		 by platform. Missing parameter defaults to 'all'
+ **   - Settings: Key / Array pairs define a setting (see next)
+ **
+ ** * Settings descriptor
+ **   - Is a key / array pair where the key string is distinct across the entire admin panel. Even with different sections, no
+ **     duplicate setting keys are allowed across the file.
+ **      * 'key': always starts with a character, consists of characters, numbers and underscore only
+ **   - Admin panel sort order is defined by the order in this config file
+ **   - The i18n tag for translation is identified by concatenation of  section key, ':', setting key. Tags for manual entries
+ **     start with "manual:"
+ **     Examples:
+ **		"general:ui_language"
+ **		"user_interface:button_show_fs"
+ **		"manual:print:print_from_result"
+ **
+ **   - Parameter: Can be key/value or key/array pairs. Sort order does not matter.
+ **    	* 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
+ ** 	  	 	     the section is shown or not. Missing parameter defaults to 'expert'.
+ ** 	* 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
+ ** 	* 'type': Values are 'input', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
+ ** 	  	  input type in the admin panel for this setting.
+ ** 	* 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
+ ** 	  	   populates the current config value into the admin panel
+ **		   Exceptionally, for type 'button' this is the HTML element ID applied to the actual button itself.
+ ** 	* 'placeholder': For types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
+ ** 	  		 field / range selector. Often references the default config for this setting
+ ** 			 (i.e 'placeholder' => $defaultConfig['picture']['time_to_live'])
+ **			 For type 'button' this is the i18ntag string for the actual button text.
+ ** 	* 'option': Only for types 'select','multi-select'. Lists the options available in this setting (i.e.
+ **   	                'options' => [
+ **                 		  '360px' => 'XS',
+ **                 		  '540px' => 'S',
+ ** 				  ]
+ ** 	* 'range_min', 'range_max', 'range_step': Only for type 'range'. Define the slider range and step when moved
+ ** 	* 'unit': Only for type 'range'. Defines the unit of the slider and is used to identify the i18n tag for translation of the unit
+ */
 
 $configsetup = [
-	'general' => [
-		'language' => [
-			'type' => 'select',
-			'name' => 'language',
-			'placeholder' => $defaultConfig['language'],
-			'options' => [
-				'de' => 'DE',
-				'el' => 'EL',
-				'en' => 'EN',
-				'es' => 'ES',
-				'fr' => 'FR',
-				'pl' => 'PL'
-			],
-			'value' => $config['language']
-		],
-		'start_screen_title' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['start_screen_title'],
-			'name' => 'start_screen_title',
-			'value' => htmlentities($config['start_screen_title'])
-		],
-		'start_screen_subtitle' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['start_screen_subtitle'],
-			'name' => 'start_screen_subtitle',
-			'value' => htmlentities($config['start_screen_subtitle'])
-		],
-		'dev' => [
-			'type' => 'checkbox',
-			'name' => 'dev',
-			'value' => $config['dev']
-		],
-		'pictureRotation' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['pictureRotation'],
-			'name' => 'pictureRotation',
-			'value' => $config['pictureRotation']
-		],
-		'keep_images' => [
-			'type' => 'checkbox',
-			'name' => 'keep_images',
-			'value' => $config['keep_images']
-		],
-		'thumb_size' => [
-			'type' => 'select',
-			'name' => 'thumb_size',
-			'placeholder' => $defaultConfig['thumb_size'],
-			'options' => [
-				'360px' => 'XS',
-				'540px' => 'S',
-				'900px' => 'M',
-				'1080px' => 'L',
-				'1260px' => 'XL'
-			],
-			'value' => $config['thumb_size']
-		],
-		'show_error_messages' => [
-			'type' => 'checkbox',
-			'name' => 'show_error_messages',
-			'value' => $config['show_error_messages']
-		],
-		'auto_reload_on_error' => [
-			'type' => 'checkbox',
-			'name' => 'auto_reload_on_error',
-			'value' => $config['auto_reload_on_error']
-		],
-		'db_file' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['db_file'],
-			'name' => 'db_file',
-			'value' => $config['db_file']
-		],
-		'file_naming' => [
-			'type' => 'select',
-			'name' => 'file_naming',
-			'placeholder' => $defaultConfig['file_naming'],
-			'options' => [
-				'dateformatted' => 'Date formatted',
-				'numbered' => 'Numbered',
-				'random' => 'Random'
-			],
-			'value' => $config['file_naming']
-		],
-		'picture_permissions' => [
-			'type' => 'input',
-			'name' => 'picture_permissions',
-			'placeholder' => '0644',
-			'value' => $config['picture_permissions']
-		],
-		'use_qr' => [
-			'type' => 'checkbox',
-			'name' => 'use_qr',
-			'value' => $config['use_qr']
-		],
-		'webserver_ip' => [
-			'type' => 'input',
-			'name' => 'webserver_ip',
-			'placeholder' => '127.0.0.1',
-			'value' => $config['webserver_ip']
-		],
-		'wifi_ssid' => [
-			'type' => 'input',
-			'name' => 'wifi_ssid',
-			'placeholder' => 'Photobooth',
-			'value' => htmlentities($config['wifi_ssid'])
-		],
-		'use_download' => [
-			'type' => 'checkbox',
-			'name' => 'use_download',
-			'value' => $config['use_download']
-		],
-		'download_thumbs' => [
-			'type' => 'checkbox',
-			'name' => 'download_thumbs',
-			'value' => $config['download_thumbs']
-		],
-		'use_slideshow' => [
-			'type' => 'checkbox',
-			'name' => 'use_slideshow',
-			'value' => $config['use_slideshow']
-		],
-		'use_mail' => [
-			'type' => 'checkbox',
-			'name' => 'use_mail',
-			'value' => $config['use_mail']
-		],
-		'photo_key' => [
-			'type' => 'input',
-			'name' => 'photo_key',
-			'placeholder' => '',
-			'value' => $config['photo_key']
-		],
-		'collage_key' => [
-			'type' => 'input',
-			'name' => 'collage_key',
-			'placeholder' => '',
-			'value' => $config['collage_key']
-		],
-		'collage_limit' => [
-			'type' => 'hidden',
-			'name' => 'collage_limit',
-			'value' => $config['collage_limit']
-		],
-		'force_buzzer' => [
-			'type' => 'checkbox',
-			'name' => 'force_buzzer',
-			'value' => $config['force_buzzer']
-		],
-		'cntdwn_time' => [
-			'type' => 'range',
-			'name' => 'cntdwn_time',
-			'placeholder' => $defaultConfig['cntdwn_time'],
-			'value' => $config['cntdwn_time'],
-			'range_min' => 1,
-			'range_max' => 10,
-			'range_step' => 1,
-			'unit' => 'seconds'
-		],
-		'cheese_time' => [
-			'type' => 'range',
-			'placeholder' => $defaultConfig['cheese_time'],
-			'name' => 'cheese_time',
-			'value' => $config['cheese_time'],
-			'range_min' => 250,
-			'range_max' => 10000,
-			'range_step' => 250,
-			'unit' => 'milliseconds'
-		],
-		'time_to_live' => [
-			'type' => 'range',
-			'placeholder' => $defaultConfig['time_to_live'],
-			'name' => 'time_to_live',
-			'value' => $config['time_to_live'],
-			'range_min' => 1000,
-			'range_max' => 90000,
-			'range_step' => 1000,
-			'unit' => 'milliseconds'
-		],
-		'image_preview_before_processing' => [
-			'type' => 'checkbox',
-			'name' => 'image_preview_before_processing',
-			'value' => $config['image_preview_before_processing']
-		],
-		'preserve_exif_data' => [
-			'type' => 'checkbox',
-			'name' => 'preserve_exif_data',
-			'value' => $config['preserve_exif_data']
-		],
-		'use_filter' => [
-			'type' => 'checkbox',
-			'name' => 'use_filter',
-			'value' => $config['use_filter']
-		],
-		'default_imagefilter' => [
-			'type' => 'select',
-			'name' => 'default_imagefilter',
-			'placeholder' => 'default_imagefilter',
-			'options' => AVAILABLE_FILTERS,
-			'value' => $config['default_imagefilter']
-		],
-		'disabled_filters' => [
-			'type' => 'multi-select',
-			'name' => 'disabled_filters',
-			'options' => AVAILABLE_FILTERS,
-			'value' => $config['disabled_filters']
-		],
-		'polaroid_effect' => [
-			'type' => 'checkbox',
-			'name' => 'polaroid_effect',
-			'value' => $config['polaroid_effect']
-		],
-		'polaroid_rotation' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['polaroid_rotation'],
-			'name' => 'polaroid_rotation',
-			'value' => $config['polaroid_rotation']
-		],
-		'take_frame' => [
-			'type' => 'checkbox',
-			'name' => 'take_frame',
-			'value' => $config['take_frame']
-		],
-		'take_frame_path' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['take_frame_path'],
-			'name' => 'take_frame_path',
-			'value' => htmlentities($config['take_frame_path'])
-		],
-		'chroma_keying' => [
-			'type' => 'checkbox',
-			'name' => 'chroma_keying',
-			'value' => $config['chroma_keying']
-		],
-		'use_collage' => [
-			'type' => 'checkbox',
-			'name' => 'use_collage',
-			'value' => $config['use_collage']
-		],
-		'take_collage_frame' => [
-			'type' => 'checkbox',
-			'name' => 'take_collage_frame',
-			'value' => $config['take_collage_frame']
-		],
-		'take_collage_frame_always' => [
-			'type' => 'checkbox',
-			'name' => 'take_collage_frame_always',
-			'value' => $config['take_collage_frame_always']
-		],
-		'take_collage_frame_path' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['take_collage_frame_path'],
-			'name' => 'take_collage_frame_path',
-			'value' => htmlentities($config['take_collage_frame_path'])
-		],
-		'collage_layout' => [
-			'type' => 'select',
-			'name' => 'collage_layout',
-			'placeholder' => $defaultConfig['collage_layout'],
-			'options' => [
-				'2x2' => '2x2',
-				'2x4' => '2x4',
-				'2x4BI' => '2x4 + background image'
-			],
-			'value' => $config['collage_layout']
-		],
-		'collage_background' => [
-			'type' => 'input',
-			'name' => 'collage_background',
-			'placeholder' => $defaultConfig['collage_background'],
-			'value' => $config['collage_background']
-		],
-		'collage_cntdwn_time' => [
-			'type' => 'range',
-			'name' => 'collage_cntdwn_time',
-			'placeholder' => $defaultConfig['collage_cntdwn_time'],
-			'value' => $config['collage_cntdwn_time'],
-			'range_min' => 1,
-			'range_max' => 10,
-			'range_step' => 1,
-			'unit' => 'seconds'
-		],
-		'continuous_collage' => [
-			'type' => 'checkbox',
-			'name' => 'continuous_collage',
-			'value' => $config['continuous_collage']
-		],
-		'previewFromCam' => [
-			'type' => 'checkbox',
-			'name' => 'previewFromCam',
-			'value' => $config['previewFromCam']
-		],
-		'previewCamTakesPic' => [
-			'type' => 'checkbox',
-			'name' => 'previewCamTakesPic',
-			'value' => $config['previewCamTakesPic']
-		],
-		'previewCamFlipHorizontal' => [
-			'type' => 'checkbox',
-			'name' => 'previewCamFlipHorizontal',
-			'value' => $config['previewCamFlipHorizontal']
-		],
-		'previewCamBackground' => [
-			'type' => 'checkbox',
-			'name' => 'previewCamBackground',
-			'value' => $config['previewCamBackground']
-		],
-		'previewFromIPCam' => [
-			'type' => 'checkbox',
-			'name' => 'previewFromIPCam',
-			'value' => $config['previewFromIPCam']
-		],
-		'ipCamPreviewRotation' => [
-			'type' => 'select',
-			'name' => 'ipCamPreviewRotation',
-			'placeholder' => $defaultConfig['ipCamPreviewRotation'],
-			'options' => [
-				'0deg' => 'No rotation',
-				'90deg' => '90°',
-				'-90deg' => '-90°',
-				'180deg' => '180°',
-				'45deg' => '45°',
-				'-45deg' => '-45°'
-			],
-			'value' => $config['ipCamPreviewRotation']
-		],
-		'ipCamURL' => [
-			'type' => 'input',
-			'name' => 'ipCamURL',
-			'placeholder' => 'url(http://localhost:8081)',
-			'value' => htmlentities($config['ipCamURL'])
-		],
-		'videoWidth' => [
-			'type' => 'input',
-			'name' => 'videoWidth',
-			'placeholder' => $defaultConfig['videoWidth'],
-			'value' => $config['videoWidth']
-		],
-		'videoHeight' => [
-			'type' => 'input',
-			'name' => 'videoHeight',
-			'placeholder' => $defaultConfig['videoHeight'],
-			'value' => $config['videoHeight']
-		],
-		'camera_mode' => [
-			'type' => 'select',
-			'name' => 'camera_mode',
-			'placeholder' => $defaultConfig['camera_mode'],
-			'options' => [
-				'user' => 'Front facing camera',
-				'environment' => 'Back facing camera'
-			],
-			'value' => $config['camera_mode']
-		],
-		'allow_delete' => [
-			'type' => 'checkbox',
-			'name' => 'allow_delete',
-			'value' => $config['allow_delete']
-		],
-		'allow_delete_from_gallery' => [
-			'type' => 'checkbox',
-			'name' => 'allow_delete_from_gallery',
-			'value' => $config['allow_delete_from_gallery']
-		]
-	],
-	'jpeg_quality' => [
-		'jpeg_quality_image' => [
-			'type' => 'range',
-			'name' => 'jpeg_quality_image',
-			'placeholder' => $defaultConfig['jpeg_quality_image'],
-			'value' => $config['jpeg_quality_image'],
-			'range_min' => -1,
-			'range_max' => 100,
-			'range_step' => 1,
-			'unit' => 'percent'
-		],
-		'jpeg_quality_chroma' => [
-			'type' => 'range',
-			'name' => 'jpeg_quality_chroma',
-			'placeholder' => $defaultConfig['jpeg_quality_chroma'],
-			'value' => $config['jpeg_quality_chroma'],
-			'range_min' => -1,
-			'range_max' => 100,
-			'range_step' => 1,
-			'unit' => 'percent'
-		],
-		'jpeg_quality_thumb' => [
-			'type' => 'range',
-			'name' => 'jpeg_quality_thumb',
-			'placeholder' => $defaultConfig['jpeg_quality_thumb'],
-			'value' => $config['jpeg_quality_thumb'],
-			'range_min' => -1,
-			'range_max' => 100,
-			'range_step' => 1,
-			'unit' => 'percent'
-		]
-	],
-	'user_interface' => [
-		'font_size' => [
-			'type' => 'input',
-			'name' => 'font_size',
-			'placeholder' => $defaultConfig['font_size'],
-			'value' => $config['font_size']
-		],
-		'background_image' => [
-			'type' => 'input',
-			'name' => 'background_image',
-			'placeholder' => 'url(../img/bg.jpg)',
-			'value' => htmlentities($config['background_image'])
-		],
-		'background_admin' => [
-			'type' => 'input',
-			'name' => 'background_admin',
-			'placeholder' => 'url(../img/bg.jpg)',
-			'value' => htmlentities($config['background_admin'])
-		],
-		'background_chroma' => [
-			'type' => 'input',
-			'name' => 'background_chroma',
-			'placeholder' => 'url(../img/bg.jpg)',
-			'value' => htmlentities($config['background_chroma'])
-		],
-		'show_fork' => [
-			'type' => 'checkbox',
-			'name' => 'show_fork',
-			'value' => $config['show_fork']
-		],
-		'cups_button' => [
-			'type' => 'checkbox',
-			'name' => 'cups_button',
-			'value' => $config['cups_button']
-		],
-		'toggle_fs_button' => [
-			'type' => 'checkbox',
-			'name' => 'toggle_fs_button',
-			'value' => $config['toggle_fs_button']
-		],
-		'rounded_corners' => [
-			'type' => 'checkbox',
-			'name' => 'rounded_corners',
-			'value' => $config['rounded_corners']
-		],
-		'colors_primary' => [
-			'type' => 'color',
-			'name' => 'colors[primary]',
-			'placeholder' => $defaultConfig['colors']['primary'],
-			'value' => $config['colors']['primary']
-		],
-		'colors_secondary' => [
-			'type' => 'color',
-			'name' => 'colors[secondary]',
-			'placeholder' => $defaultConfig['colors']['secondary'],
-			'value' => $config['colors']['secondary']
-		],
-		'colors_font' => [
-			'type' => 'color',
-			'name' => 'colors[font]',
-			'placeholder' => $defaultConfig['colors']['font'],
-			'value' => $config['colors']['font']
-		],
-		'colors_button_font' => [
-			'type' => 'color',
-			'name' => 'colors[button_font]',
-			'placeholder' => $defaultConfig['colors']['button_font'],
-			'value' => $config['colors']['button_font']
-		],
-		'colors_start_font' => [
-			'type' => 'color',
-			'name' => 'colors[start_font]',
-			'placeholder' => $defaultConfig['colors']['start_font'],
-			'value' => $config['colors']['start_font']
-		],
-		'colors_panel' => [
-			'type' => 'color',
-			'name' => 'colors[panel]',
-			'placeholder' => $defaultConfig['colors']['panel'],
-			'value' => $config['colors']['panel']
-		],
-		'colors_hover_panel' => [
-			'type' => 'color',
-			'name' => 'colors[hover_panel]',
-			'placeholder' => $defaultConfig['colors']['hover_panel'],
-			'value' => $config['colors']['hover_panel']
-		],
-		'colors_border' => [
-			'type' => 'color',
-			'name' => 'colors[border]',
-			'placeholder' => $defaultConfig['colors']['border'],
-			'value' => $config['colors']['border']
-		],
-		'colors_box' => [
-			'type' => 'color',
-			'name' => 'colors[box]',
-			'placeholder' => $defaultConfig['colors']['box'],
-			'value' => $config['colors']['box']
-		],
-		'colors_gallery_button' => [
-			'type' => 'color',
-			'name' => 'colors[gallery_button]',
-			'placeholder' => $defaultConfig['colors']['gallery_button'],
-			'value' => $config['colors']['gallery_button']
-		],
-		'colors_countdown' => [
-			'type' => 'color',
-			'name' => 'colors[countdown]',
-			'placeholder' => $defaultConfig['colors']['countdown'],
-			'value' => $config['colors']['countdown']
-		],
-		'colors_background_countdown' => [
-			'type' => 'color',
-			'name' => 'colors[background_countdown]',
-			'placeholder' => $defaultConfig['colors']['background_countdown'],
-			'value' => $config['colors']['background_countdown']
-		],
-		'colors_cheese' => [
-			'type' => 'color',
-			'name' => 'colors[cheese]',
-			'placeholder' => $defaultConfig['colors']['cheese'],
-			'value' => $config['colors']['cheese']
-		]
-	],
-	'login' => [
-		'login_enabled' => [
-			'type' => 'checkbox',
-			'name' => 'login_enabled',
-			'value' => $config['login_enabled']
-		],
-		'username' => [
-			'type' => 'input',
-			'placeholder' => 'Photo',
-			'name' => 'login_username',
-			'value' => $config['login_username']
-		],
-		'password' => [
-			'type' => 'input',
-			'placeholder' => NULL,
-			'name' => 'login_password',
-			'value' => $config['login_password']
-		],
-		'protect_admin' => [
-			'type' => 'checkbox',
-			'name' => 'protect_admin',
-			'value' => $config['protect_admin']
-		],
-		'protect_index' => [
-			'type' => 'checkbox',
-			'name' => 'protect_index',
-			'value' => $config['protect_index']
-		]
-	],
-	'folders' => [
-		'data' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['data'],
-			'name' => 'folders[data]',
-			'value' => $config['folders']['data']
-		],
-		'images' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['images'],
-			'name' => 'folders[images]',
-			'value' => $config['folders']['images']
-		],
-		'keying' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['keying'],
-			'name' => 'folders[keying]',
-			'value' => $config['folders']['keying']
-		],
-		'print' => [
-			'type' => 'input',
-			'name' => 'folders[print]',
-			'placeholder' => $defaultConfig['folders']['print'],
-			'value' => $config['folders']['print']
-		],
-		'qrcodes' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['qrcodes'],
-			'name' => 'folders[qrcodes]',
-			'value' => $config['folders']['qrcodes']
-		],
-		'thumbs' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['thumbs'],
-			'name' => 'folders[thumbs]',
-			'value' => $config['folders']['thumbs']
-		],
-		'tmp' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['folders']['tmp'],
-			'name' => 'folders[tmp]',
-			'value' => $config['folders']['tmp']
-		]
-	],
-	'event' => [
-		'is_event' => [
-			'type' => 'checkbox',
-			'name' => 'is_event',
-			'value' => $config['is_event']
-		],
-		'textLeft' => [
-			'type' => 'input',
-			'placeholder' => 'Name 1',
-			'name' => 'event[textLeft]',
-			'value' => htmlentities($config['event']['textLeft'])
-		],
-		'textRight' => [
-			'type' => 'input',
-			'placeholder' => 'Name 2',
-			'name' => 'event[textRight]',
-			'value' => htmlentities($config['event']['textRight'])
-		],
-		'symbol' => [
-			'type' => 'select',
-			'name' => 'event[symbol]',
-			'placeholder' => $defaultConfig['event']['symbol'],
-			'options' => [
-				'fa-camera' => 'Camera',
-				'fa-camera-retro' => 'Camera Retro',
-				'fa-birthday-cake' => 'Birthday Cake',
-				'fa-gift' => 'Gift',
-				'fa-tree' => 'Tree',
-				'fa-snowflake-o' => 'Snowflake',
-				'fa-heart-o' => 'Heart',
-				'fa-heart' => 'Heart filled',
-				'fa-heartbeat' => 'Heartbeat',
-				'fa-apple' => 'Apple',
-				'fa-anchor' => 'Anchor',
-				'fa-glass' => 'Glass',
-				'fa-gears' => 'Gears',
-				'fa-users' => 'People'
-			],
-			'value' => $config['event']['symbol']
-		]
-	],
-	'print' => [
-		'use_print_result' => [
-			'type' => 'checkbox',
-			'name' => 'use_print_result',
-			'value' => $config['use_print_result']
-		],
-		'use_print_gallery' => [
-			'type' => 'checkbox',
-			'name' => 'use_print_gallery',
-			'value' => $config['use_print_gallery']
-		],
-		'use_print_chromakeying' => [
-			'type' => 'checkbox',
-			'name' => 'use_print_chromakeying',
-			'value' => $config['use_print_chromakeying']
-		],
-		'auto_print' => [
-			'type' => 'checkbox',
-			'name' => 'auto_print',
-			'value' => $config['auto_print']
-		],
-		'auto_print_delay' => [
-			'type' => 'range',
-			'placeholder' => $defaultConfig['auto_print_delay'],
-			'name' => 'auto_print_delay',
-			'value' => $config['auto_print_delay'],
-			'range_min' => 250,
-			'range_max' => 10000,
-			'range_step' => 250,
-			'unit' => 'milliseconds'
-		],
-		'printing_time' => [
-			'type' => 'range',
-			'placeholder' => $defaultConfig['printing_time'],
-			'name' => 'printing_time',
-			'value' => $config['printing_time'],
-			'range_min' => 250,
-			'range_max' => 20000,
-			'range_step' => 250,
-			'unit' => 'milliseconds'
-		],
-		'print_key' => [
-			'type' => 'input',
-			'name' => 'print_key',
-			'placeholder' => '',
-			'value' => $config['print_key']
-		],
-		'print_qrcode' => [
-			'type' => 'checkbox',
-			'name' => 'print_qrcode',
-			'value' => $config['print_qrcode']
-		],
-		'print_frame' => [
-			'type' => 'checkbox',
-			'name' => 'print_frame',
-			'value' => $config['print_frame']
-		],
-		'frame_path' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['print_frame_path'],
-			'name' => 'print_frame_path',
-			'value' => htmlentities($config['print_frame_path'])
-		],
-		'crop_onprint' => [
-			'type' => 'checkbox',
-			'name' => 'crop_onprint',
-			'value' => $config['crop_onprint']
-		],
-		'crop_width' => [
-			'type' => 'input',
-			'name' => 'crop_width',
-			'placeholder' => $defaultConfig['crop_width'],
-			'value' => $config['crop_width']
-		],
-		'crop_height' => [
-			'type' => 'input',
-			'name' => 'crop_height',
-			'placeholder' => $defaultConfig['crop_height'],
-			'value' => $config['crop_height']
-		],
-		'is_textonprint' => [
-			'type' => 'checkbox',
-			'name' => 'is_textonprint',
-			'value' => htmlentities($config['is_textonprint'])
-		],
-		'line1' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['textonprint']['line1'],
-			'name' => 'textonprint[line1]',
-			'value' => htmlentities($config['textonprint']['line1'])
-		],
-		'line2' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['textonprint']['line2'],
-			'name' => 'textonprint[line2]',
-			'value' => htmlentities($config['textonprint']['line2'])
-		],
-		'line3' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['textonprint']['line3'],
-			'name' => 'textonprint[line3]',
-			'value' => htmlentities($config['textonprint']['line3'])
-		],
-		'locationx' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['locationx'],
-			'name' => 'locationx',
-			'value' => $config['locationx']
-		],
-		'locationy' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['locationy'],
-			'name' => 'locationy',
-			'value' => $config['locationy']
-		],
-		'rotation' => [
-			'type' => 'range',
-			'placeholder' => $defaultConfig['rotation'],
-			'name' => 'rotation',
-			'value' => $config['rotation'],
-			'range_min' => -180,
-			'range_max' => 180,
-			'range_step' => 5,
-			'unit' => 'degrees'
-		],
-		'font_path' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['font_path'],
-			'name' => 'font_path',
-			'value' => htmlentities($config['font_path'])
-		],
-		'fontsize' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['fontsize'],
-			'name' => 'fontsize',
-			'value' => $config['fontsize']
-		],
-		'linespace' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['linespace'],
-			'name' => 'linespace',
-			'value' => $config['linespace']
-		],
-	],
-	'gallery' => [
-		'show_gallery' => [
-			'type' => 'checkbox',
-			'name' => 'show_gallery',
-			'value' => $config['show_gallery']
-		],
-		'newest_first' => [
-			'type' => 'checkbox',
-			'name' => 'newest_first',
-			'value' => $config['newest_first']
-		],
-		'scrollbar' => [
-			'type' => 'checkbox',
-			'name' => 'scrollbar',
-			'value' => $config['scrollbar']
-		],
-		'show_date' => [
-			'type' => 'checkbox',
-			'name' => 'show_date',
-			'value' => $config['show_date']
-		],
-		'date_format' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['gallery']['date_format'],
-			'name' => 'gallery[date_format]',
-			'value' => $config['gallery']['date_format']
-		],
-		'gallery_bottom_bar' => [
-			'type' => 'checkbox',
-			'name' => 'gallery_bottom_bar',
-			'value' => $config['gallery_bottom_bar']
-		],
-		'pictureTime' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['gallery_pictureTime'],
-			'name' => 'gallery_pictureTime',
-			'value' => $config['gallery_pictureTime']
-		],
-		'pswp_clickToCloseNonZoomable' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_clickToCloseNonZoomable',
-			'value' => $config['pswp_clickToCloseNonZoomable']
-		],
-		'pswp_closeOnScroll' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_closeOnScroll',
-			'value' => $config['pswp_closeOnScroll']
-		],
-		'pswp_closeOnOutsideClick' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_closeOnOutsideClick',
-			'value' => $config['pswp_closeOnOutsideClick']
-		],
-		'pswp_preventSwiping' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_preventSwiping',
-			'value' => $config['pswp_preventSwiping']
-		],
-		'pswp_pinchToClose' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_pinchToClose',
-			'value' => $config['pswp_pinchToClose']
-		],
-		'pswp_closeOnVerticalDrag' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_closeOnVerticalDrag',
-			'value' => $config['pswp_closeOnVerticalDrag']
-		],
-		'pswp_tapToToggleControls' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_tapToToggleControls',
-			'value' => $config['pswp_tapToToggleControls']
-		],
-		'pswp_animateTransitions' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_animateTransitions',
-			'value' => $config['pswp_animateTransitions']
-		],
-		'pswp_zoomEl' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_zoomEl',
-			'value' => $config['pswp_zoomEl']
-		],
-		'pswp_fullscreenEl' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_fullscreenEl',
-			'value' => $config['pswp_fullscreenEl']
-		],
-		'pswp_counterEl' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_counterEl',
-			'value' => $config['pswp_counterEl']
-		],
-		'pswp_history' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_history',
-			'value' => $config['pswp_history']
-		],
-		'pswp_loop' => [
-			'type' => 'checkbox',
-			'name' => 'pswp_loop',
-			'value' => $config['pswp_loop']
-		],
-		'pswp_bgOpacity' => [
-			'type' => 'range',
-			'placeholder' => $defaultConfig['pswp_bgOpacity'],
-			'name' => 'pswp_bgOpacity',
-			'value' => $config['pswp_bgOpacity'],
-			'range_min' => 0,
-			'range_max' => 1,
-			'range_step' => 0.05,
-			'unit' => 'dot'
-		]
-	],
-	'mail' => [
-		'send_all_later' => [
-			'type' => 'checkbox',
-			'name' => 'send_all_later',
-			'value' => $config['send_all_later']
-		],
-		'file' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_file'],
-			'name' => 'mail_file',
-			'value' => $config['mail_file']
-		],
-		'host' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_host'],
-			'name' => 'mail_host',
-			'value' => $config['mail_host']
-		],
-		'username' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_username'],
-			'name' => 'mail_username',
-			'value' => $config['mail_username']
-		],
-		'password' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_password'],
-			'name' => 'mail_password',
-			'value' => htmlentities($config['mail_password'])
-		],
-		'secure' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_secure'],
-			'name' => 'mail_secure',
-			'value' => $config['mail_secure']
-		],
-		'port' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_port'],
-			'name' => 'mail_port',
-			'value' => $config['mail_port']
-		],
-		'fromAddress' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_fromAddress'],
-			'name' => 'mail_fromAddress',
-			'value' => $config['mail_fromAddress']
-		],
-		'fromName' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_fromName'],
-			'name' => 'mail_fromName',
-			'value' => $config['mail_fromName']
-		],
-		'subject' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_subject'],
-			'name' => 'mail_subject',
-			'value' => htmlentities($config['mail_subject'])
-		],
-		'text' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['mail_text'],
-			'name' => 'mail_text',
-			'value' => htmlentities($config['mail_text'])
-		],
-	],
-	'slideshow' => [
-		'refreshTime' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['slideshow_refreshTime'],
-			'name' => 'slideshow_refreshTime',
-			'value' => $config['slideshow_refreshTime']
-		],
-		'pictureTime' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['slideshow_pictureTime'],
-			'name' => 'slideshow_pictureTime',
-			'value' => $config['slideshow_pictureTime']
-		],
-		'randomPicture' => [
-			'type' => 'checkbox',
-			'name' => 'slideshow_randomPicture',
-			'value' => $config['slideshow_randomPicture']
-		],
-		'use_thumbs' => [
-			'type' => 'checkbox',
-			'name' => 'slideshow_use_thumbs',
-			'value' => $config['slideshow_use_thumbs']
-		]
-	],
-	'commands' => [
-		'take_picture_cmd' => [
-			'type' => 'input',
-			'placeholder' => 'take_picture_cmd',
-			'name' => 'take_picture[cmd]',
-			'value' => htmlentities($config['take_picture']['cmd']),
-		],
-		'take_picture_msg' => [
-			'type' => 'input',
-			'placeholder' => 'take_picture_msg',
-			'name' => 'take_picture[msg]',
-			'value' => htmlentities($config['take_picture']['msg'])
-		],
-		'print_cmd' => [
-			'type' => 'input',
-			'placeholder' => 'print_cmd',
-			'name' => 'print[cmd]',
-			'value' => htmlentities($config['print']['cmd'])
-		],
-		'print_msg' => [
-			'type' => 'input',
-			'placeholder' => 'print_msg',
-			'name' => 'print[msg]',
-			'value' => htmlentities($config['print']['msg'])
-		],
-		'exiftool_cmd' => [
-			'type' => 'input',
-			'placeholder' => 'exiftool_cmd',
-			'name' => 'exiftool[cmd]',
-			'value' => htmlentities($config['exiftool']['cmd'])
-		],
-		'exiftool_msg' => [
-			'type' => 'input',
-			'placeholder' => 'exiftool_msg',
-			'name' => 'exiftool[msg]',
-			'value' => htmlentities($config['exiftool']['msg'])
-		]
-	],
-	'remotebuzzer' => [
-		'remotebuzzer_enabled' => [
-			'type' => 'checkbox',
-			'name' => 'remotebuzzer_enabled',
-			'value' => $config['remotebuzzer_enabled']
-		],
-		'collagetime' => [
-			'type' => 'range',
-			'placeholder' => $defaultConfig['remotebuzzer_collagetime'],
-			'name' => 'remotebuzzer_collagetime',
-			'value' => $config['remotebuzzer_collagetime'],
-			'range_min' => 1,
-			'range_max' => 6,
-			'range_step' => 1,
-			'unit' => 'seconds'
-		],
-		'port' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['remotebuzzer_port'],
-			'name' => 'remotebuzzer_port',
-			'value' => $config['remotebuzzer_port']
-		],
-		'pin' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['remotebuzzer_pin'],
-			'name' => 'remotebuzzer_pin',
-			'value' => $config['remotebuzzer_pin']
-		],
-		'nodebin' => [
-			'type' => 'input',
-			'placeholder' => $defaultConfig['remotebuzzer_nodebin'],
-			'name' => 'remotebuzzer_nodebin',
-			'value' => $config['remotebuzzer_nodebin']
- 		],
-		'logfile' => [
-			'type' => 'hidden',
-			'name' => 'remotebuzzer_logfile',
-			'value' => $config['remotebuzzer_logfile']
-		]
- 	],
-	'reset' => [
-		'remove_images' => [
-			'type' => 'checkbox',
-			'name' => 'reset_remove_images',
-			'value' => $config['reset_remove_images']
-		],
-		'remove_mailtxt' => [
-			'type' => 'checkbox',
-			'name' => 'reset_remove_mailtxt',
-			'value' => $config['reset_remove_mailtxt']
-		],
-		'remove_config' => [
-			'type' => 'checkbox',
-			'name' => 'reset_remove_config',
-			'value' => $config['reset_remove_config']
-		]
-	]
+    'general' => [
+        'view' => 'basic',
+        'platform' => 'all',
+        'ui_language' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'ui[language]',
+            'placeholder' => $defaultConfig['ui']['language'],
+            'options' => [
+                'de' => 'DE',
+                'el' => 'EL',
+                'en' => 'EN',
+                'es' => 'ES',
+                'fr' => 'FR',
+                'pl' => 'PL',
+                'it' => 'IT',
+            ],
+            'value' => $config['ui']['language'],
+        ],
+        'adminpanel_view' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'adminpanel[view]',
+            'placeholder' => $defaultConfig['adminpanel']['view'],
+            'options' => [
+                'basic' => 'Basic View',
+                'advanced' => 'Advanced View',
+                'expert' => 'Expert View',
+            ],
+            'value' => $config['adminpanel']['view'],
+        ],
+        'adminpanel_view_default' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'adminpanel[view_default]',
+            'value' => $config['adminpanel']['view_default'],
+        ],
+        'dev_enabled' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'dev[enabled]',
+            'value' => $config['dev']['enabled'],
+        ],
+        'start_screen_title' => [
+            'type' => 'input',
+            'placeholder' => $defaultConfig['start_screen']['title'],
+            'name' => 'start_screen[title]',
+            'value' => htmlentities($config['start_screen']['title']),
+        ],
+        'start_screen_title_visible' => [
+            'type' => 'checkbox',
+            'name' => 'start_screen[title_visible]',
+            'value' => $config['start_screen']['title_visible'],
+        ],
+        'start_screen_subtitle' => [
+            'type' => 'input',
+            'placeholder' => $defaultConfig['start_screen']['subtitle'],
+            'name' => 'start_screen[subtitle]',
+            'value' => htmlentities($config['start_screen']['subtitle']),
+        ],
+        'start_screen_subtitle_visible' => [
+            'type' => 'checkbox',
+            'name' => 'start_screen[subtitle_visible]',
+            'value' => $config['start_screen']['subtitle_visible'],
+        ],
+        'picture_thumb_size' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'picture[thumb_size]',
+            'placeholder' => $defaultConfig['picture']['thumb_size'],
+            'options' => [
+                '360px' => 'XS',
+                '540px' => 'S',
+                '900px' => 'M',
+                '1080px' => 'L',
+                '1260px' => 'XL',
+            ],
+            'value' => $config['picture']['thumb_size'],
+        ],
+        'dev_error_messages' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'dev[error_messages]',
+            'value' => $config['dev']['error_messages'],
+        ],
+        'dev_reload_on_error' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'dev[reload_on_error]',
+            'value' => $config['dev']['reload_on_error'],
+        ],
+        'qr_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'qr[enabled]',
+            'value' => $config['qr']['enabled'],
+        ],
+        'webserver_ip' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'name' => 'webserver[ip]',
+            'placeholder' => $defaultConfig['webserver']['ip'],
+            'value' => $config['webserver']['ip'],
+        ],
+        'webserver_ssid' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'webserver[ssid]',
+            'placeholder' => 'Photobooth',
+            'value' => htmlentities($config['webserver']['ssid']),
+        ],
+        'download_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'download[enabled]',
+            'value' => $config['download']['enabled'],
+        ],
+        'download_thumbs' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'download[thumbs]',
+            'value' => $config['download']['thumbs'],
+        ],
+        'picture_time_to_live' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['picture']['time_to_live'],
+            'name' => 'picture[time_to_live]',
+            'value' => $config['picture']['time_to_live'],
+            'range_min' => 1000,
+            'range_max' => 90000,
+            'range_step' => 1000,
+            'unit' => 'milliseconds',
+        ],
+        'picture_preview_before_processing' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'picture[preview_before_processing]',
+            'value' => $config['picture']['preview_before_processing'],
+        ],
+        'delete_no_request' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'delete[no_request]',
+            'value' => $config['delete']['no_request'],
+        ],
+        'database_enabled' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'database[enabled]',
+            'value' => $config['database']['enabled'],
+        ],
+        'database_file' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['database']['file'],
+            'name' => 'database[file]',
+            'value' => $config['database']['file'],
+        ],
+        'database_rebuild' => [
+            'view' => 'expert',
+            'type' => 'button',
+            'placeholder' => 'database_rebuild',
+            'name' => 'DATABASEREBUILDBUTTON',
+            'value' => 'databaserebuild-btn',
+        ],
+        'diskusage_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'disk_usage',
+            'name' => 'DISKUSAGEBUTTON',
+            'value' => 'diskusage-btn',
+        ],
+    ],
+    'frontpage' => [
+        'view' => 'basic',
+        'ui_show_fork' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'ui[show_fork]',
+            'value' => $config['ui']['show_fork'],
+        ],
+        'ui_github' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'ui[github]',
+            'value' => $config['ui']['github'],
+        ],
+        'event_enabled' => [
+            'type' => 'checkbox',
+            'name' => 'event[enabled]',
+            'value' => $config['event']['enabled'],
+        ],
+        'event_textLeft' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => 'Text Left',
+            'name' => 'event[textLeft]',
+            'value' => htmlentities($config['event']['textLeft']),
+        ],
+        'event_symbol' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'event[symbol]',
+            'placeholder' => $defaultConfig['event']['symbol'],
+            'options' => [
+                'fa-camera' => 'Camera',
+                'fa-camera-retro' => 'Camera Retro',
+                'fa-birthday-cake' => 'Birthday Cake',
+                'fa-gift' => 'Gift',
+                'fa-tree' => 'Tree',
+                'fa-snowflake-o' => 'Snowflake',
+                'fa-heart-o' => 'Heart',
+                'fa-heart' => 'Heart filled',
+                'fa-heartbeat' => 'Heartbeat',
+                'fa-apple' => 'Apple',
+                'fa-anchor' => 'Anchor',
+                'fa-glass' => 'Glass',
+                'fa-gears' => 'Gears',
+                'fa-users' => 'People',
+            ],
+            'value' => $config['event']['symbol'],
+        ],
+        'event_textRight' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => 'Text Right',
+            'name' => 'event[textRight]',
+            'value' => htmlentities($config['event']['textRight']),
+        ],
+        'button_force_buzzer' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'button[force_buzzer]',
+            'value' => $config['button']['force_buzzer'],
+        ],
+    ],
+    'pictures' => [
+        'view' => 'basic',
+        'platform' => 'all',
+        'picture_cntdwn_time' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'name' => 'picture[cntdwn_time]',
+            'placeholder' => $defaultConfig['picture']['cntdwn_time'],
+            'value' => $config['picture']['cntdwn_time'],
+            'range_min' => 1,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
+        'picture_no_cheese' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'picture[no_cheese]',
+            'value' => $config['picture']['no_cheese'],
+        ],
+        'picture_cheese_time' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['picture']['cheese_time'],
+            'name' => 'picture[cheese_time]',
+            'value' => $config['picture']['cheese_time'],
+            'range_min' => 250,
+            'range_max' => 10000,
+            'range_step' => 250,
+            'unit' => 'milliseconds',
+        ],
+        'picture_flip' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'picture[flip]',
+            'placeholder' => $defaultConfig['picture']['flip'],
+            'options' => [
+                'off' => 'off',
+                'horizontal' => 'horizontal',
+                'vertical' => 'vertical',
+                'both' => 'horizontal + vertical',
+            ],
+            'value' => $config['picture']['flip'],
+        ],
+        'picture_rotation' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['picture']['rotation'],
+            'name' => 'picture[rotation]',
+            'value' => $config['picture']['rotation'],
+        ],
+        'picture_polaroid_effect' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'picture[polaroid_effect]',
+            'value' => $config['picture']['polaroid_effect'],
+        ],
+        'picture_polaroid_rotation' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['picture']['polaroid_rotation'],
+            'name' => 'picture[polaroid_rotation]',
+            'value' => $config['picture']['polaroid_rotation'],
+        ],
+        'filters_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'filters[enabled]',
+            'value' => $config['filters']['enabled'],
+        ],
+        'filters_defaults' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'filters[defaults]',
+            'placeholder' => $defaultConfig['filters']['defaults'],
+            'options' => AVAILABLE_FILTERS,
+            'value' => $config['filters']['defaults'],
+        ],
+        'filters_disabled' => [
+            'view' => 'expert',
+            'type' => 'multi-select',
+            'name' => 'filters[disabled]',
+            'options' => AVAILABLE_FILTERS,
+            'value' => $config['filters']['disabled'],
+        ],
+        'picture_take_frame' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'picture[take_frame]',
+            'value' => $config['picture']['take_frame'],
+        ],
+        'picture_frame' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['picture']['frame'],
+            'name' => 'picture[frame]',
+            'value' => htmlentities($config['picture']['frame']),
+        ],
+        'picture_key' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'picture[key]',
+            'placeholder' => '',
+            'value' => $config['picture']['key'],
+        ],
+        'picture_naming' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'picture[naming]',
+            'placeholder' => $defaultConfig['picture']['naming'],
+            'options' => [
+                'dateformatted' => 'Date formatted',
+                'numbered' => 'Numbered',
+                'random' => 'Random',
+            ],
+            'value' => $config['picture']['naming'],
+        ],
+        'picture_permissions' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'picture[permissions]',
+            'placeholder' => '0644',
+            'value' => $config['picture']['permissions'],
+        ],
+        'picture_keep_original' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'picture[keep_original]',
+            'value' => $config['picture']['keep_original'],
+        ],
+        'picture_preserve_exif_data' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'picture[preserve_exif_data]',
+            'value' => $config['picture']['preserve_exif_data'],
+        ],
+        'picture_allow_delete' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'picture[allow_delete]',
+            'value' => $config['picture']['allow_delete'],
+        ],
+        'textonpicture_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'textonpicture[enabled]',
+            'value' => $config['textonpicture']['enabled'],
+        ],
+        'textonpicture_line1' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['line1'],
+            'name' => 'textonpicture[line1]',
+            'value' => htmlentities($config['textonpicture']['line1']),
+        ],
+        'textonpicture_line2' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['line2'],
+            'name' => 'textonpicture[line2]',
+            'value' => htmlentities($config['textonpicture']['line2']),
+        ],
+        'textonpicture_line3' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['line3'],
+            'name' => 'textonpicture[line3]',
+            'value' => htmlentities($config['textonpicture']['line3']),
+        ],
+        'textonpicture_locationx' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['locationx'],
+            'name' => 'textonpicture[locationx]',
+            'value' => $config['textonpicture']['locationx'],
+        ],
+        'textonpicture_locationy' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['locationy'],
+            'name' => 'textonpicture[locationy]',
+            'value' => $config['textonpicture']['locationy'],
+        ],
+        'textonpicture_rotation' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['textonpicture']['rotation'],
+            'name' => 'textonpicture[rotation]',
+            'value' => $config['textonpicture']['rotation'],
+            'range_min' => -180,
+            'range_max' => 180,
+            'range_step' => 5,
+            'unit' => 'degrees',
+        ],
+        'textonpicture_font' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['font'],
+            'name' => 'textonpicture[font]',
+            'value' => htmlentities($config['textonpicture']['font']),
+        ],
+        'textonpicture_font_color' => [
+            'view' => 'expert',
+            'type' => 'select',
+            'name' => 'textonpicture[font_color]',
+            'placeholder' => $defaultConfig['textonpicture']['font_color'],
+            'options' => [
+                'white' => 'white',
+                'grey' => 'grey',
+                'black' => 'black',
+            ],
+            'value' => $config['textonpicture']['font_color'],
+        ],
+        'textonpicture_font_size' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['font_size'],
+            'name' => 'textonpicture[font_size]',
+            'value' => $config['textonpicture']['font_size'],
+        ],
+        'textonpicture_linespace' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonpicture']['linespace'],
+            'name' => 'textonpicture[linespace]',
+            'value' => $config['textonpicture']['linespace'],
+        ],
+    ],
+    'collage' => [
+        'view' => 'basic',
+        'collage_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'collage[enabled]',
+            'value' => $config['collage']['enabled'],
+        ],
+        'collage_only' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'collage[only]',
+            'value' => $config['collage']['only'],
+        ],
+        'collage_cntdwn_time' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'name' => 'collage[cntdwn_time]',
+            'placeholder' => $defaultConfig['collage']['cntdwn_time'],
+            'value' => $config['collage']['cntdwn_time'],
+            'range_min' => 1,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
+        'collage_continuous' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'collage[continuous]',
+            'value' => $config['collage']['continuous'],
+        ],
+        'collage_layout' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'collage[layout]',
+            'placeholder' => $defaultConfig['collage']['layout'],
+            'options' => [
+                '2x2' => '2x2',
+                '2x2-2' => '2x2 (2)',
+                '2x4' => '2x4',
+                '2x4-2' => '2x4 (2)',
+                '1+3' => '1+3',
+                '1+3-2' => '1+3 (2)',
+                '1+2' => '1+2',
+            ],
+            'value' => $config['collage']['layout'],
+        ],
+        'collage_key' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'collage[key]',
+            'placeholder' => '',
+            'value' => $config['collage']['key'],
+        ],
+        'collage_take_frame' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'collage[take_frame]',
+            'placeholder' => $defaultConfig['collage']['take_frame'],
+            'options' => [
+                'off' => 'Off',
+                'always' => 'Always',
+                'once' => 'Once',
+            ],
+            'value' => $config['collage']['take_frame'],
+        ],
+        'collage_frame' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['collage']['frame'],
+            'name' => 'collage[frame]',
+            'value' => htmlentities($config['collage']['frame']),
+        ],
+        'textoncollage_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'textoncollage[enabled]',
+            'value' => $config['textoncollage']['enabled'],
+        ],
+        'textoncollage_line1' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['line1'],
+            'name' => 'textoncollage[line1]',
+            'value' => htmlentities($config['textoncollage']['line1']),
+        ],
+        'textoncollage_line2' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['line2'],
+            'name' => 'textoncollage[line2]',
+            'value' => htmlentities($config['textoncollage']['line2']),
+        ],
+        'textoncollage_line3' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['line3'],
+            'name' => 'textoncollage[line3]',
+            'value' => htmlentities($config['textoncollage']['line3']),
+        ],
+        'textoncollage_locationx' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['locationx'],
+            'name' => 'textoncollage[locationx]',
+            'value' => $config['textoncollage']['locationx'],
+        ],
+        'textoncollage_locationy' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['locationy'],
+            'name' => 'textoncollage[locationy]',
+            'value' => $config['textoncollage']['locationy'],
+        ],
+        'textoncollage_rotation' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['textoncollage']['rotation'],
+            'name' => 'textoncollage[rotation]',
+            'value' => $config['textoncollage']['rotation'],
+            'range_min' => -180,
+            'range_max' => 180,
+            'range_step' => 5,
+            'unit' => 'degrees',
+        ],
+        'textoncollage_font' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['font'],
+            'name' => 'textoncollage[font]',
+            'value' => htmlentities($config['textoncollage']['font']),
+        ],
+        'textoncollage_font_color' => [
+            'view' => 'expert',
+            'type' => 'select',
+            'name' => 'textoncollage[font_color]',
+            'placeholder' => $defaultConfig['textoncollage']['font_color'],
+            'options' => [
+                'white' => 'white',
+                'grey' => 'grey',
+                'black' => 'black',
+            ],
+            'value' => $config['textoncollage']['font_color'],
+        ],
+        'textoncollage_font_size' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['font_size'],
+            'name' => 'textoncollage[font_size]',
+            'value' => $config['textoncollage']['font_size'],
+        ],
+        'textoncollage_linespace' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textoncollage']['linespace'],
+            'name' => 'textoncollage[linespace]',
+            'value' => $config['textoncollage']['linespace'],
+        ],
+        'collage_limit' => [
+            'type' => 'hidden',
+            'name' => 'collage[limit]',
+            'value' => $config['collage']['limit'],
+        ],
+    ],
+    'gallery' => [
+        'view' => 'basic',
+        'gallery_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'gallery[enabled]',
+            'value' => $config['gallery']['enabled'],
+        ],
+        'gallery_newest_first' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'gallery[newest_first]',
+            'value' => $config['gallery']['newest_first'],
+        ],
+        'gallery_use_slideshow' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'gallery[use_slideshow]',
+            'value' => $config['gallery']['use_slideshow'],
+        ],
+        'gallery_pictureTime' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['gallery']['pictureTime'],
+            'name' => 'gallery[pictureTime]',
+            'value' => $config['gallery']['pictureTime'],
+        ],
+        'pswp_animateTransitions' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'pswp[animateTransitions]',
+            'value' => $config['pswp']['animateTransitions'],
+        ],
+        'pswp_counterEl' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'pswp[counterEl]',
+            'value' => $config['pswp']['counterEl'],
+        ],
+        'pswp_history' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'pswp[history]',
+            'value' => $config['pswp']['history'],
+        ],
+        'gallery_show_date' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'gallery[show_date]',
+            'value' => $config['gallery']['show_date'],
+        ],
+        'gallery_date_format' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['gallery']['date_format'],
+            'name' => 'gallery[date_format]',
+            'value' => $config['gallery']['date_format'],
+        ],
+        'gallery_db_check_enabled' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'gallery[db_check_enabled]',
+            'value' => $config['gallery']['db_check_enabled'],
+        ],
+        'gallery_db_check_time' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['gallery']['db_check_time'],
+            'name' => 'gallery[db_check_time]',
+            'value' => $config['gallery']['db_check_time'],
+        ],
+        'gallery_allow_delete' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'gallery[allow_delete]',
+            'value' => $config['gallery']['allow_delete'],
+        ],
+        'gallery_scrollbar' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'gallery[scrollbar]',
+            'value' => $config['gallery']['scrollbar'],
+        ],
+        'gallery_bottom_bar' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'gallery[bottom_bar]',
+            'value' => $config['gallery']['bottom_bar'],
+        ],
+        'pswp_clickToCloseNonZoomable' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[clickToCloseNonZoomable]',
+            'value' => $config['pswp']['clickToCloseNonZoomable'],
+        ],
+        'pswp_closeOnScroll' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[closeOnScroll]',
+            'value' => $config['pswp']['closeOnScroll'],
+        ],
+        'pswp_closeOnOutsideClick' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[closeOnOutsideClick]',
+            'value' => $config['pswp']['closeOnOutsideClick'],
+        ],
+        'pswp_preventSwiping' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[preventSwiping]',
+            'value' => $config['pswp']['preventSwiping'],
+        ],
+        'pswp_pinchToClose' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[pinchToClose]',
+            'value' => $config['pswp']['pinchToClose'],
+        ],
+        'pswp_closeOnVerticalDrag' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[closeOnVerticalDrag]',
+            'value' => $config['pswp']['closeOnVerticalDrag'],
+        ],
+        'pswp_tapToToggleControls' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'pswp[tapToToggleControls]',
+            'value' => $config['pswp']['tapToToggleControls'],
+        ],
+        'pswp_zoomEl' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[zoomEl]',
+            'value' => $config['pswp']['zoomEl'],
+        ],
+        'pswp_fullscreenEl' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[fullscreenEl]',
+            'value' => $config['pswp']['fullscreenEl'],
+        ],
+        'pswp_loop' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'pswp[loop]',
+            'value' => $config['pswp']['loop'],
+        ],
+        'pswp_bgOpacity' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['pswp']['bgOpacity'],
+            'name' => 'pswp[bgOpacity]',
+            'value' => $config['pswp']['bgOpacity'],
+            'range_min' => 0,
+            'range_max' => 1,
+            'range_step' => 0.05,
+            'unit' => 'dot',
+        ],
+    ],
+    'preview' => [
+        'view' => 'advanced',
+        'preview_mode' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'preview[mode]',
+            'placeholder' => $defaultConfig['preview']['mode'],
+            'options' => [
+                'none' => 'None',
+                'device_cam' => 'from device cam',
+                'url' => 'from URL',
+                'gphoto' => 'from gphoto2',
+            ],
+            'value' => $config['preview']['mode'],
+        ],
+        'preview_gphoto_bsm' => [
+            'type' => 'checkbox',
+            'name' => 'preview[gphoto_bsm]',
+            'value' => $config['preview']['gphoto_bsm'],
+        ],
+        'preview_camTakesPic' => [
+            'type' => 'checkbox',
+            'name' => 'preview[camTakesPic]',
+            'value' => $config['preview']['camTakesPic'],
+        ],
+        'preview_flipHorizontal' => [
+            'type' => 'checkbox',
+            'name' => 'preview[flipHorizontal]',
+            'value' => $config['preview']['flipHorizontal'],
+        ],
+        'preview_rotation' => [
+            'type' => 'select',
+            'name' => 'preview[rotation]',
+            'placeholder' => $defaultConfig['preview']['rotation'],
+            'options' => [
+                '0deg' => 'No rotation',
+                '90deg' => '90°',
+                '-90deg' => '-90°',
+                '180deg' => '180°',
+                '45deg' => '45°',
+                '-45deg' => '-45°',
+            ],
+            'value' => $config['preview']['rotation'],
+        ],
+        'preview_url' => [
+            'type' => 'input',
+            'name' => 'preview[url]',
+            'placeholder' => 'url(http://localhost:8081)',
+            'value' => htmlentities($config['preview']['url']),
+        ],
+        'preview_videoWidth' => [
+            'type' => 'input',
+            'name' => 'preview[videoWidth]',
+            'placeholder' => $defaultConfig['preview']['videoWidth'],
+            'value' => $config['preview']['videoWidth'],
+        ],
+        'preview_videoHeight' => [
+            'type' => 'input',
+            'name' => 'preview[videoHeight]',
+            'placeholder' => $defaultConfig['preview']['videoHeight'],
+            'value' => $config['preview']['videoHeight'],
+        ],
+        'preview_camera_mode' => [
+            'type' => 'select',
+            'name' => 'preview[camera_mode]',
+            'placeholder' => $defaultConfig['preview']['camera_mode'],
+            'options' => [
+                'user' => 'Front facing camera',
+                'environment' => 'Back facing camera',
+            ],
+            'value' => $config['preview']['camera_mode'],
+        ],
+        'preview_asBackground' => [
+            'type' => 'checkbox',
+            'name' => 'preview[asBackground]',
+            'value' => $config['preview']['asBackground'],
+        ],
+    ],
+    'keying' => [
+        'view' => 'advanced',
+        'keying_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'keying[enabled]',
+            'value' => $config['keying']['enabled'],
+        ],
+        'keying_size' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'keying[size]',
+            'placeholder' => $defaultConfig['keying']['size'],
+            'options' => [
+                '1000px' => 'S',
+                '1500px' => 'M',
+                '2000px' => 'L',
+                '2500px' => 'XL',
+            ],
+            'value' => $config['keying']['size'],
+        ],
+        'live_keying_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'live_keying[enabled]',
+            'value' => $config['live_keying']['enabled'],
+        ],
+        'keying_variant' => [
+            'view' => 'expert',
+            'type' => 'select',
+            'name' => 'keying[variant]',
+            'placeholder' => $defaultConfig['keying']['variant'],
+            'options' => [
+                'marvinj' => 'MarvinJ',
+                'seriouslyjs' => 'Seriously.js',
+            ],
+            'value' => $config['keying']['variant'],
+        ],
+        'keying_seriouslyjs_color' => [
+            'view' => 'advanced',
+            'type' => 'color',
+            'name' => 'keying[seriouslyjs_color]',
+            'placeholder' => $defaultConfig['keying']['seriouslyjs_color'],
+            'value' => $config['keying']['seriouslyjs_color'],
+        ],
+        'keying_background_path' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['keying']['background_path'],
+            'name' => 'keying[background_path]',
+            'value' => htmlentities($config['keying']['background_path']),
+        ],
+        'live_keying_show_all' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'live_keying[show_all]',
+            'value' => $config['live_keying']['show_all'],
+        ],
+    ],
+    'print' => [
+        'view' => 'basic',
+        'button_show_cups' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'button[show_cups]',
+            'value' => $config['button']['show_cups'],
+        ],
+        'print_from_result' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'print[from_result]',
+            'value' => $config['print']['from_result'],
+        ],
+        'print_from_gallery' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'print[from_gallery]',
+            'value' => $config['print']['from_gallery'],
+        ],
+        'print_from_chromakeying' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'print[from_chromakeying]',
+            'value' => $config['print']['from_chromakeying'],
+        ],
+        'print_auto' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'print[auto]',
+            'value' => $config['print']['auto'],
+        ],
+        'print_auto_delay' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['print']['auto_delay'],
+            'name' => 'print[auto_delay]',
+            'value' => $config['print']['auto_delay'],
+            'range_min' => 250,
+            'range_max' => 10000,
+            'range_step' => 250,
+            'unit' => 'milliseconds',
+        ],
+        'print_time' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['print']['time'],
+            'name' => 'print[time]',
+            'value' => $config['print']['time'],
+            'range_min' => 250,
+            'range_max' => 20000,
+            'range_step' => 250,
+            'unit' => 'milliseconds',
+        ],
+        'print_key' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'print[key]',
+            'placeholder' => '',
+            'value' => $config['print']['key'],
+        ],
+        'print_qrcode' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'print[qrcode]',
+            'value' => $config['print']['qrcode'],
+        ],
+        'print_print_frame' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'print[print_frame]',
+            'value' => $config['print']['print_frame'],
+        ],
+        'print_frame' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['print']['frame'],
+            'name' => 'print[frame]',
+            'value' => htmlentities($config['print']['frame']),
+        ],
+        'print_crop' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'print[crop]',
+            'value' => $config['print']['crop'],
+        ],
+        'print_crop_width' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'print[crop_width]',
+            'placeholder' => $defaultConfig['print']['crop_width'],
+            'value' => $config['print']['crop_width'],
+        ],
+        'print_crop_height' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'print[crop_height]',
+            'placeholder' => $defaultConfig['print']['crop_height'],
+            'value' => $config['print']['crop_height'],
+        ],
+        'textonprint_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'textonprint[enabled]',
+            'value' => $config['textonprint']['enabled'],
+        ],
+        'textonprint_line1' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['line1'],
+            'name' => 'textonprint[line1]',
+            'value' => htmlentities($config['textonprint']['line1']),
+        ],
+        'textonprint_line2' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['line2'],
+            'name' => 'textonprint[line2]',
+            'value' => htmlentities($config['textonprint']['line2']),
+        ],
+        'textonprint_line3' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['line3'],
+            'name' => 'textonprint[line3]',
+            'value' => htmlentities($config['textonprint']['line3']),
+        ],
+        'textonprint_locationx' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['locationx'],
+            'name' => 'textonprint[locationx]',
+            'value' => $config['textonprint']['locationx'],
+        ],
+        'textonprint_locationy' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['locationy'],
+            'name' => 'textonprint[locationy]',
+            'value' => $config['textonprint']['locationy'],
+        ],
+        'textonprint_rotation' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['textonprint']['rotation'],
+            'name' => 'textonprint[rotation]',
+            'value' => $config['textonprint']['rotation'],
+            'range_min' => -180,
+            'range_max' => 180,
+            'range_step' => 5,
+            'unit' => 'degrees',
+        ],
+        'textonprint_font' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['font'],
+            'name' => 'textonprint[font]',
+            'value' => htmlentities($config['textonprint']['font']),
+        ],
+        'textonprint_font_color' => [
+            'view' => 'expert',
+            'type' => 'select',
+            'name' => 'textonprint[font_color]',
+            'placeholder' => $defaultConfig['textonprint']['font_color'],
+            'options' => [
+                'white' => 'white',
+                'grey' => 'grey',
+                'black' => 'black',
+            ],
+            'value' => $config['textonprint']['font_color'],
+        ],
+        'textonprint_font_size' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['font_size'],
+            'name' => 'textonprint[font_size]',
+            'value' => $config['textonprint']['font_size'],
+        ],
+        'textonprint_linespace' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['textonprint']['linespace'],
+            'name' => 'textonprint[linespace]',
+            'value' => $config['textonprint']['linespace'],
+        ],
+    ],
+    'mail' => [
+        'view' => 'basic',
+        'mail_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'mail[enabled]',
+            'value' => $config['mail']['enabled'],
+        ],
+        'mail_send_all_later' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'mail[send_all_later]',
+            'value' => $config['mail']['send_all_later'],
+        ],
+        'mail_subject' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => '',
+            'name' => 'mail[subject]',
+            'value' => htmlentities($config['mail']['subject']),
+        ],
+        'mail_text' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => '',
+            'name' => 'mail[text]',
+            'value' => htmlentities($config['mail']['text']),
+        ],
+        'mail_host' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['host'],
+            'name' => 'mail[host]',
+            'value' => $config['mail']['host'],
+        ],
+        'mail_username' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['username'],
+            'name' => 'mail[username]',
+            'value' => $config['mail']['username'],
+        ],
+        'mail_password' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['password'],
+            'name' => 'mail[password]',
+            'value' => htmlentities($config['mail']['password']),
+        ],
+        'mail_fromAddress' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['fromAddress'],
+            'name' => 'mail[fromAddress]',
+            'value' => $config['mail']['fromAddress'],
+        ],
+        'mail_fromName' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['fromName'],
+            'name' => 'mail[fromName]',
+            'value' => $config['mail']['fromName'],
+        ],
+        'mail_file' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['file'],
+            'name' => 'mail[file]',
+            'value' => $config['mail']['file'],
+        ],
+        'mail_secure' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['secure'],
+            'name' => 'mail[secure]',
+            'value' => $config['mail']['secure'],
+        ],
+        'mail_port' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['mail']['port'],
+            'name' => 'mail[port]',
+            'value' => $config['mail']['port'],
+        ],
+    ],
+    'slideshow' => [
+        'view' => 'advanced',
+        'slideshow_refreshTime' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['slideshow']['refreshTime'],
+            'name' => 'slideshow[refreshTime]',
+            'value' => $config['slideshow']['refreshTime'],
+        ],
+        'slideshow_pictureTime' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['slideshow']['pictureTime'],
+            'name' => 'slideshow[pictureTime]',
+            'value' => $config['slideshow']['pictureTime'],
+        ],
+        'slideshow_randomPicture' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'slideshow[randomPicture]',
+            'value' => $config['slideshow']['randomPicture'],
+        ],
+        'slideshow_use_thumbs' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'slideshow[use_thumbs]',
+            'value' => $config['slideshow']['use_thumbs'],
+        ],
+    ],
+    'remotebuzzer' => [
+        'view' => 'advanced',
+        'platform' => 'linux',
+        'remotebuzzer_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[enabled]',
+            'value' => $config['remotebuzzer']['enabled'],
+        ],
+        'remotebuzzer_userotary' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[userotary]',
+            'value' => $config['remotebuzzer']['userotary'],
+        ],
+        'remotebuzzer_picturebutton' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[picturebutton]',
+            'value' => $config['remotebuzzer']['picturebutton'],
+        ],
+        'remotebuzzer_collagetime' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['remotebuzzer']['collagetime'],
+            'name' => 'remotebuzzer[collagetime]',
+            'value' => $config['remotebuzzer']['collagetime'],
+            'range_min' => 1,
+            'range_max' => 6,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
+        'remotebuzzer_picturegpio' => [
+            'view' => 'advanced',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['picturegpio'],
+            'name' => 'remotebuzzer[picturegpio]',
+            'value' => $config['remotebuzzer']['picturegpio'],
+        ],
+        'remotebuzzer_collagebutton' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[collagebutton]',
+            'value' => $config['remotebuzzer']['collagebutton'],
+        ],
+        'remotebuzzer_collagegpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['collagegpio'],
+            'name' => 'remotebuzzer[collagegpio]',
+            'value' => $config['remotebuzzer']['collagegpio'],
+        ],
+        'remotebuzzer_printbutton' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[printbutton]',
+            'value' => $config['remotebuzzer']['printbutton'],
+        ],
+        'remotebuzzer_printgpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['printgpio'],
+            'name' => 'remotebuzzer[printgpio]',
+            'value' => $config['remotebuzzer']['printgpio'],
+        ],
+        'remotebuzzer_shutdownbutton' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[shutdownbutton]',
+            'value' => $config['remotebuzzer']['shutdownbutton'],
+        ],
+        'remotebuzzer_shutdowngpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['shutdowngpio'],
+            'name' => 'remotebuzzer[shutdowngpio]',
+            'value' => $config['remotebuzzer']['shutdowngpio'],
+        ],
+        'remotebuzzer_shutdownholdtime' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['remotebuzzer']['shutdownholdtime'],
+            'name' => 'remotebuzzer[shutdownholdtime]',
+            'value' => $config['remotebuzzer']['shutdownholdtime'],
+            'range_min' => 0,
+            'range_max' => 9,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
+        'remotebuzzer_logfile' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'remotebuzzer[logfile]',
+            'value' => $config['remotebuzzer']['logfile'],
+        ],
+        'remotebuzzer_port' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['remotebuzzer']['port'],
+            'name' => 'remotebuzzer[port]',
+            'value' => $config['remotebuzzer']['port'],
+        ],
+    ],
+    'synctodrive' => [
+        'platform' => 'linux',
+        'view' => 'advanced',
+        'synctodrive_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'synctodrive[enabled]',
+            'value' => $config['synctodrive']['enabled'],
+        ],
+        'synctodrive_target' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['synctodrive']['target'],
+            'name' => 'synctodrive[target]',
+            'value' => $config['synctodrive']['target'],
+        ],
+        'synctodrive_interval' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['synctodrive']['interval'],
+            'name' => 'synctodrive[interval]',
+            'value' => $config['synctodrive']['interval'],
+            'range_min' => 10,
+            'range_max' => 600,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
+        'synctodrive_logfile' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'synctodrive[logfile]',
+            'value' => $config['synctodrive']['logfile'],
+        ],
+    ],
+    'authentication' => [
+        'view' => 'basic',
+        'login_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'login[enabled]',
+            'value' => $config['login']['enabled'],
+        ],
+        'login_username' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => 'Photo',
+            'name' => 'login[username]',
+            'value' => $config['login']['username'],
+        ],
+        'login_password' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => null,
+            'name' => 'login[password]',
+            'value' => htmlentities($config['login']['password']),
+        ],
+        'protect_admin' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'protect[admin]',
+            'value' => $config['protect']['admin'],
+        ],
+        'protect_localhost_admin' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'protect[localhost_admin]',
+            'value' => $config['protect']['localhost_admin'],
+        ],
+        'protect_index' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'protect[index]',
+            'value' => $config['protect']['index'],
+        ],
+        'protect_localhost_index' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'protect[localhost_index]',
+            'value' => $config['protect']['localhost_index'],
+        ],
+        'protect_manual' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'protect[manual]',
+            'value' => $config['protect']['manual'],
+        ],
+        'protect_localhost_manual' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'protect[localhost_manual]',
+            'value' => $config['protect']['localhost_manual'],
+        ],
+    ],
+    'userinterface' => [
+        'view' => 'basic',
+        'ui_style' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'ui[style]',
+            'placeholder' => $defaultConfig['ui']['style'],
+            'options' => [
+                'classic' => 'classic',
+                'modern' => 'modern',
+                'custom' => 'custom',
+            ],
+            'value' => $config['ui']['style'],
+        ],
+        'button_show_fs' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'button[show_fs]',
+            'value' => $config['button']['show_fs'],
+        ],
+        'ui_font_size' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'name' => 'ui[font_size]',
+            'placeholder' => $defaultConfig['ui']['font_size'],
+            'value' => $config['ui']['font_size'],
+        ],
+        'colors_countdown' => [
+            'view' => 'advanced',
+            'type' => 'color',
+            'name' => 'colors[countdown]',
+            'placeholder' => $defaultConfig['colors']['countdown'],
+            'value' => $config['colors']['countdown'],
+        ],
+        'colors_background_countdown' => [
+            'view' => 'advanced',
+            'type' => 'color',
+            'name' => 'colors[background_countdown]',
+            'placeholder' => $defaultConfig['colors']['background_countdown'],
+            'value' => $config['colors']['background_countdown'],
+        ],
+        'colors_cheese' => [
+            'view' => 'advanced',
+            'type' => 'color',
+            'name' => 'colors[cheese]',
+            'placeholder' => $defaultConfig['colors']['cheese'],
+            'value' => $config['colors']['cheese'],
+        ],
+        'background_defaults' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'background[defaults]',
+            'placeholder' => $defaultConfig['background']['defaults'],
+            'value' => htmlentities($config['background']['defaults']),
+        ],
+        'background_admin' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'background[admin]',
+            'placeholder' => $defaultConfig['background']['admin'],
+            'value' => htmlentities($config['background']['admin']),
+        ],
+        'background_chroma' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'background[chroma]',
+            'placeholder' => $defaultConfig['background']['chroma'],
+            'value' => htmlentities($config['background']['chroma']),
+        ],
+        'ui_decore_lines' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'ui[decore_lines]',
+            'value' => $config['ui']['decore_lines'],
+        ],
+        'ui_rounded_corners' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'ui[rounded_corners]',
+            'value' => $config['ui']['rounded_corners'],
+        ],
+        'colors_primary' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[primary]',
+            'placeholder' => $defaultConfig['colors']['primary'],
+            'value' => $config['colors']['primary'],
+        ],
+        'colors_secondary' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[secondary]',
+            'placeholder' => $defaultConfig['colors']['secondary'],
+            'value' => $config['colors']['secondary'],
+        ],
+        'colors_font' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[font]',
+            'placeholder' => $defaultConfig['colors']['font'],
+            'value' => $config['colors']['font'],
+        ],
+        'colors_button_font' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[button_font]',
+            'placeholder' => $defaultConfig['colors']['button_font'],
+            'value' => $config['colors']['button_font'],
+        ],
+        'colors_start_font' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[start_font]',
+            'placeholder' => $defaultConfig['colors']['start_font'],
+            'value' => $config['colors']['start_font'],
+        ],
+        'colors_panel' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[panel]',
+            'placeholder' => $defaultConfig['colors']['panel'],
+            'value' => $config['colors']['panel'],
+        ],
+        'colors_hover_panel' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[hover_panel]',
+            'placeholder' => $defaultConfig['colors']['hover_panel'],
+            'value' => $config['colors']['hover_panel'],
+        ],
+        'colors_border' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[border]',
+            'placeholder' => $defaultConfig['colors']['border'],
+            'value' => $config['colors']['border'],
+        ],
+        'colors_box' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[box]',
+            'placeholder' => $defaultConfig['colors']['box'],
+            'value' => $config['colors']['box'],
+        ],
+        'colors_gallery_button' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[gallery_button]',
+            'placeholder' => $defaultConfig['colors']['gallery_button'],
+            'value' => $config['colors']['gallery_button'],
+        ],
+        'ui_branding' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'ui[branding]',
+            'value' => $config['ui']['branding'],
+        ],
+    ],
+    'jpeg_quality' => [
+        'view' => 'expert',
+        'jpeg_quality_image' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'name' => 'jpeg_quality[image]',
+            'placeholder' => $defaultConfig['jpeg_quality']['image'],
+            'value' => $config['jpeg_quality']['image'],
+            'range_min' => -1,
+            'range_max' => 100,
+            'range_step' => 1,
+            'unit' => 'percent',
+        ],
+        'jpeg_quality_chroma' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'name' => 'jpeg_quality[chroma]',
+            'placeholder' => $defaultConfig['jpeg_quality']['chroma'],
+            'value' => $config['jpeg_quality']['chroma'],
+            'range_min' => 10,
+            'range_max' => 100,
+            'range_step' => 1,
+            'unit' => 'percent',
+        ],
+        'jpeg_quality_thumb' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'name' => 'jpeg_quality[thumb]',
+            'placeholder' => $defaultConfig['jpeg_quality']['thumb'],
+            'value' => $config['jpeg_quality']['thumb'],
+            'range_min' => 10,
+            'range_max' => 100,
+            'range_step' => 1,
+            'unit' => 'percent',
+        ],
+    ],
+    'commands' => [
+        'view' => 'expert',
+        'take_picture_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['take_picture']['cmd'],
+            'name' => 'take_picture[cmd]',
+            'value' => htmlentities($config['take_picture']['cmd']),
+        ],
+        'take_picture_msg' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['take_picture']['msg'],
+            'name' => 'take_picture[msg]',
+            'value' => htmlentities($config['take_picture']['msg']),
+        ],
+        'print_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['print']['cmd'],
+            'name' => 'print[cmd]',
+            'value' => htmlentities($config['print']['cmd']),
+        ],
+        'print_msg' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['print']['msg'],
+            'name' => 'print[msg]',
+            'value' => htmlentities($config['print']['msg']),
+        ],
+        'exiftool_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['exiftool']['cmd'],
+            'name' => 'exiftool[cmd]',
+            'value' => htmlentities($config['exiftool']['cmd']),
+        ],
+        'exiftool_msg' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['exiftool']['msg'],
+            'name' => 'exiftool[msg]',
+            'value' => htmlentities($config['exiftool']['msg']),
+        ],
+        'preview_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['preview']['cmd'],
+            'name' => 'preview[cmd]',
+            'value' => htmlentities($config['preview']['cmd']),
+        ],
+        'preview_killcmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['preview']['killcmd'],
+            'name' => 'preview[killcmd]',
+            'value' => htmlentities($config['preview']['killcmd']),
+        ],
+        'nodebin_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['nodebin']['cmd'],
+            'name' => 'nodebin[cmd]',
+            'value' => htmlentities($config['nodebin']['cmd']),
+        ],
+        'shutdown_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['shutdown']['cmd'],
+            'name' => 'shutdown[cmd]',
+            'value' => htmlentities($config['shutdown']['cmd']),
+        ],
+    ],
+    'folders' => [
+        'view' => 'expert',
+        'folders_data' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['data'],
+            'name' => 'folders[data]',
+            'value' => $config['folders']['data'],
+        ],
+        'folders_images' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['images'],
+            'name' => 'folders[images]',
+            'value' => $config['folders']['images'],
+        ],
+        'folders_keying' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['keying'],
+            'name' => 'folders[keying]',
+            'value' => $config['folders']['keying'],
+        ],
+        'folders_print' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'folders[print]',
+            'placeholder' => $defaultConfig['folders']['print'],
+            'value' => $config['folders']['print'],
+        ],
+        'folders_qrcodes' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['qrcodes'],
+            'name' => 'folders[qrcodes]',
+            'value' => $config['folders']['qrcodes'],
+        ],
+        'folders_thumbs' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['thumbs'],
+            'name' => 'folders[thumbs]',
+            'value' => $config['folders']['thumbs'],
+        ],
+        'folders_tmp' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['tmp'],
+            'name' => 'folders[tmp]',
+            'value' => $config['folders']['tmp'],
+        ],
+        'folders_archives' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['archives'],
+            'name' => 'folders[archives]',
+            'value' => $config['folders']['archives'],
+        ],
+    ],
+    'reset' => [
+        'view' => 'basic',
+        'reset_remove_images' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'reset[remove_images]',
+            'value' => $config['reset']['remove_images'],
+        ],
+        'reset_remove_mailtxt' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'reset[remove_mailtxt]',
+            'value' => $config['reset']['remove_mailtxt'],
+        ],
+        'reset_remove_config' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'reset[remove_config]',
+            'value' => $config['reset']['remove_config'],
+        ],
+        'reset_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'reset',
+            'name' => 'RESETBUTTON',
+            'value' => 'reset-btn',
+        ],
+    ],
+    'version' => [
+        'view' => 'basic',
+        'check_version' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'check_version',
+            'name' => 'CHECKVERSIONBUTTON',
+            'value' => 'checkversion-btn',
+        ],
+    ],
 ];

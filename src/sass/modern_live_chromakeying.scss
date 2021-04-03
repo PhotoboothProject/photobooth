@@ -1,0 +1,56 @@
+@import 'classic_live_chromakeying';
+@import 'partials/modern_button';
+
+.backgrounds {
+  border-radius: 4%;
+}
+
+.round-btn {
+  width: 4em;
+  height: 4em;
+}
+
+.gallerybtn {
+  position: fixed;
+  top: 1em;
+  left: 0;
+  z-index: 10;
+  margin: 10px;
+}
+
+.closebtn {
+  position: fixed;
+  top: 1em;
+  right: 0;
+  z-index: 10;
+  margin: 10px;
+}
+
+@media (max-width: 1280px) and (orientation: landscape) {
+  .takeChroma,
+  .reloadPage,
+  .deletebtn {
+    margin: auto;
+    display: inline-block;
+  }
+
+  .home,
+  .gallerybtn,
+  .closebtn {
+    position: relative;
+    top: 0;
+    max-width: 150px;
+  }
+}
+
+@media (max-height: 740px) and (orientation: landscape) {
+  .backgrounds {
+    &.shrinked {
+      height: 350px;
+    }
+  }
+}
+
+.pswp-rotary-focus {
+  background: radial-gradient(grey, $mainColor, $hoverColor) !important;
+}

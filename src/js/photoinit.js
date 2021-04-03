@@ -1,5 +1,8 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth i18n */
+/* global photoBooth rotaryController */
+
+let globalGalleryHandle;
+
 // eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
@@ -7,7 +10,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         ssOnce = false,
         isPrinting = false;
 
-    const ssDelay = config.gallery_pictureTime,
+    const ssDelay = config.gallery.pictureTime,
         ssButtonClass = '.pswp__button--playpause';
 
     const parseThumbnailElements = function (container) {
@@ -50,7 +53,8 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         const element = $(ev.target).closest('a');
         const index = $(gallerySelector).find('>a').index(element);
 
-        openPhotoSwipe(index);
+        // eslint-disable-next-line no-unused-vars
+        globalGalleryHandle = openPhotoSwipe(index);
     };
 
     const openPhotoSwipe = function (index) {
@@ -74,21 +78,21 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             },
 
             focus: true,
-            clickToCloseNonZoomable: config.pswp_clickToCloseNonZoomablefalse,
-            closeOnScroll: config.pswp_closeOnScroll,
-            closeOnOutsideClick: config.pswp_closeOnOutsideClick,
-            preventSwiping: config.pswp_preventSwiping,
-            pinchToClose: config.pswp_pinchToClose,
-            closeOnVerticalDrag: config.pswp_closeOnVerticalDrag,
-            tapToToggleControls: config.pswp_tapToToggleControls,
-            animateTransitions: config.pswp_animateTransitions,
+            clickToCloseNonZoomable: config.pswp.clickToCloseNonZoomablefalse,
+            closeOnScroll: config.pswp.closeOnScroll,
+            closeOnOutsideClick: config.pswp.closeOnOutsideClick,
+            preventSwiping: config.pswp.preventSwiping,
+            pinchToClose: config.pswp.pinchToClose,
+            closeOnVerticalDrag: config.pswp.closeOnVerticalDrag,
+            tapToToggleControls: config.pswp.tapToToggleControls,
+            animateTransitions: config.pswp.animateTransitions,
             shareEl: false,
-            zoomEl: config.pswp_zoomEl,
-            fullscreenEl: config.pswp_fullscreenEl,
-            counterEl: config.pswp_counterEl,
-            history: config.pswp_history,
-            loop: config.pswp_loop,
-            bgOpacity: config.pswp_bgOpacity
+            zoomEl: config.pswp.zoomEl,
+            fullscreenEl: config.pswp.fullscreenEl,
+            counterEl: config.pswp.counterEl,
+            history: config.pswp.history,
+            loop: config.pswp.loop,
+            bgOpacity: config.pswp.bgOpacity
         };
 
         // Pass data to PhotoSwipe and initialize it
@@ -148,7 +152,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gallery.listen('afterChange', function () {
             const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-            if (config.dev) {
+            if (config.dev.enabled) {
                 console.log('Current image: ' + img);
             }
 
@@ -161,6 +165,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 ssOnce = false;
                 setTimeout(gotoNextSlide, ssDelay);
             }
+        });
+
+        gallery.listen('destroy', function () {
+            rotaryController.focusSet('#gallery');
         });
 
         const resetMailForm = function () {
@@ -183,6 +191,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gallery.listen('close', stopSlideshow);
 
         gallery.init();
+
+        rotaryController.focusSet('.pswp');
+
+        return gallery;
     };
 
     // Delete from DB in gallery
@@ -193,15 +205,31 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         let img = gallery.currItem.src;
         img = img.split('\\').pop().split('/').pop();
 
-        const msg = i18n('really_delete_image');
-        const really = confirm(img + ' ' + msg);
+        const msg = photoBooth.getTranslation('really_delete_image');
+        const really = config.delete.no_request ? true : confirm(img + ' ' + msg);
         if (really) {
-            photoBooth.deleteImage(img, (data) => {
-                if (data.success) {
-                    console.log('Deleted ' + img);
-                    photoBooth.reloadPage();
-                } else {
-                    console.log('Error while deleting ' + img);
+            $.ajax({
+                url: 'api/deletePhoto.php',
+                method: 'POST',
+                data: {
+                    file: img
+                },
+                success: (data) => {
+                    if (data.success) {
+                        console.log('Deleted ' + img);
+                        photoBooth.reloadPage();
+                    } else {
+                        console.log('Error while deleting ' + img);
+                        if (data.error) {
+                            console.log(data.error);
+                        }
+                        setTimeout(function () {
+                            photoBooth.reloadPage();
+                        }, 5000);
+                    }
+                },
+                error: (jqXHR, textStatus) => {
+                    console.log('Error while deleting image: ', textStatus);
                     setTimeout(function () {
                         photoBooth.reloadPage();
                     }, 5000);
@@ -255,7 +283,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.preventDefault();
 
         if (gallery) {
-            if (config.dev) {
+            if (config.dev.enabled) {
                 console.log('Closing Gallery');
             }
             gallery.close();
@@ -269,7 +297,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
         const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-        if (config.chroma_keying) {
+        if (config.keying.enabled) {
             location = 'chromakeying.php?filename=' + encodeURI(img);
         }
     });
@@ -311,7 +339,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
     $(gallerySelector).on('click', onThumbnailClick);
 
     $(document).on('keyup', function (ev) {
-        if (config.use_print_gallery && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+        if (config.print.from_gallery && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
             if (isPrinting) {
                 console.log('Printing already in progress!');
             } else if ($('#gallery').hasClass('gallery--open') && typeof gallery !== 'undefined') {

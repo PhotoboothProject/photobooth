@@ -13,12 +13,12 @@ style.setProperty('--hover-panel-color', config.colors.hover_panel);
 style.setProperty('--border-color', config.colors.border);
 style.setProperty('--box-color', config.colors.box);
 style.setProperty('--gallery-button-color', config.colors.gallery_button);
-style.setProperty('--background-default', config.background_image);
-style.setProperty('--background-admin', config.background_admin);
-style.setProperty('--background-chroma', config.background_chroma);
-style.setProperty('--background-ipcam', config.ipCamURL);
-style.setProperty('--fontSize', config.font_size);
-style.setProperty('--preview-rotation', config.ipCamPreviewRotation);
+style.setProperty('--background-default', config.background.defaults);
+style.setProperty('--background-admin', config.background.admin);
+style.setProperty('--background-chroma', config.background.chroma);
+style.setProperty('--background-url', config.preview.url);
+style.setProperty('--fontSize', config.ui.font_size);
+style.setProperty('--preview-rotation', config.preview.rotation);
 
 $(function () {
     $('#wrapper').show();

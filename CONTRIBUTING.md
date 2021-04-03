@@ -36,11 +36,16 @@ If you want to build the project, run `yarn build`.
 ## Committing and pushing changes
 
 Please make sure to run `yarn build` and `yarn eslint` before you commit your changes. Running `yarn eslint:fix` might be able to fix general issues on `*.js` files for you.  
-If you're making changes to the FAQ (`faq/faq.md`) please run `yarn build:faq` before committing to generate needed HTML page.
+
+**General Notes**  
+- changes to the FAQ need to be done inside the `faq/faq.md`
+- changes to the css-files need to be done inside [src/sass/](src/sass/) (Information can be found [here](resources/css/README.md))
+- changes to the js-files need to be done inside [src/js/](src/js/) (Information can be found [here](resources/js/README.md))
+- translation need to be done on [Crowdin](https://crowdin.com/project/photobooth)
 
 ## Help needed
 
 Please checkout the [open issues](https://github.com/andi34/photobooth/issues).
 
-Also, please watch the repo and respond to questions/bug reports/feature
-requests. Thanks!
+Also, please watch the repo and respond to questions / bug reports / feature requests.  
+Thanks!

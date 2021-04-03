@@ -91,7 +91,10 @@ COMMON_PACKAGES=(
     'libimage-exiftool-perl'
     'nodejs'
     'php-gd'
+    'php-zip'
     'yarn'
+    'rsync'
+    'udisks2'
 )
 
 if [[ ! -d "${booth_source}" ]]; then

@@ -1,9 +1,28 @@
+<?php
+session_start();
+
+require_once('../lib/config.php');
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['manual'])
+) {
+    require_once('../lib/configsetup.inc.php');
+} else {
+    header('location: ../login');
+    exit();
+}
+
+?>
+<!DOCTYPE html>
 <html>
   <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 
-	<title>Photobooth FAQ</title>
+	<title><?=$config['ui']['branding']?> FAQ</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">

@@ -1,0 +1,35 @@
+.send-mail {
+  z-index: 16777371;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $panelColor;
+  color: $fontColor;
+  padding: 25px 15px 15px;
+  min-width: 250px;
+  display: none;
+}
+
+#send-mail-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 1.75em;
+  cursor: pointer;
+}
+
+.mail-form-input {
+  padding: 15px;
+  margin: 12px 0;
+  width: 100%;
+}
+
+input[type='email'] {
+  color: $fontColor;
+  background: $boxColor;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  width: 100%;
+  padding: 0 10px;
+}

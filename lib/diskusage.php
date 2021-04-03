@@ -4,16 +4,15 @@ $units = explode(' ', 'B KB MB GB TB PB');
 function foldersize($path) {
     $total_size = 0;
     $files = scandir($path);
-    $cleanPath = rtrim($path, '/'). '/';
+    $cleanPath = rtrim($path, '/') . '/';
 
-    foreach($files as $t) {
-        if ($t<>"." && $t<>"..") {
+    foreach ($files as $t) {
+        if ($t != '.' && $t != '..') {
             $currentFile = $cleanPath . $t;
             if (is_dir($currentFile)) {
                 $size = foldersize($currentFile);
                 $total_size += $size;
-            }
-            else {
+            } else {
                 $size = filesize($currentFile);
                 $total_size += $size;
             }
@@ -32,9 +31,9 @@ function format_size($size) {
         $size /= $mod;
     }
 
-    $endIndex = strpos($size, ".")+3;
+    $endIndex = strpos($size, '.') + 3;
 
-    return substr( $size, 0, $endIndex).' '.$units[$i];
+    return substr($size, 0, $endIndex) . ' ' . $units[$i];
 }
 
 function get_filecount($path) {

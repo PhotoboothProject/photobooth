@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM i18n io */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController */
 
 const photoBooth = (function () {
     // vars
@@ -6,15 +6,15 @@ const photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         wrapper = $('#wrapper'),
-        timeToLive = config.time_to_live,
+        timeToLive = config.picture.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
         webcamConstraints = {
             audio: false,
             video: {
-                width: config.videoWidth,
-                height: config.videoHeight,
-                facingMode: config.camera_mode
+                width: config.preview.videoWidth,
+                height: config.preview.videoHeight,
+                facingMode: config.preview.camera_mode
             }
         },
         videoView = $('#video--view').get(0),
@@ -25,16 +25,18 @@ const photoBooth = (function () {
         isPrinting = false,
         takingPic = false,
         nextCollageNumber = 0,
+        chromaFile = '',
         currentCollageFile = '',
-        imgFilter = config.default_imagefilter;
-
-    let ioClient;
+        imgFilter = config.filters.defaults,
+        pid;
 
     const modal = {
         open: function (selector) {
             $(selector).addClass('modal--show');
         },
         close: function (selector) {
+            //api.showResultInner(true);
+
             if ($(selector).hasClass('modal--show')) {
                 $(selector).removeClass('modal--show');
 
@@ -55,6 +57,11 @@ const photoBooth = (function () {
 
     api.reloadPage = function () {
         window.location.reload();
+    };
+
+    // Returns true when timeOut is pending
+    api.isTimeOutPending = function () {
+        return typeof timeOut !== 'undefined';
     };
 
     // timeOut function
@@ -94,46 +101,29 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.previewCamBackground) {
+        if (config.previewCamBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
             api.startVideo('preview');
         }
 
-        if (config.remotebuzzer_enabled) {
-            if (config.webserver_ip) {
-                ioClient = io('http://' + config.webserver_ip + ':' + config.remotebuzzer_port);
+        initRemoteBuzzerFromDOM();
+        rotaryController.focusSet('#start');
+    };
 
-                console.log(
-                    ' Remote buzzer connecting to http://' + config.webserver_ip + ':' + config.remotebuzzer_port
-                );
-
-                ioClient.on('photobooth-socket', function (data) {
-                    switch (data) {
-                        case 'start-picture':
-                            $('.resultInner').removeClass('show');
-                            api.thrill('photo');
-                            break;
-                        case 'start-collage':
-                            if (config.use_collage) {
-                                $('.resultInner').removeClass('show');
-                                api.thrill('collage');
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                });
-
-                ioClient.on('connect_failed', function () {
-                    console.log(' Remote buzzer unable to connect');
-                });
-            } else {
-                console.log(' Remote buzzer unable to connect - webserver_ip not defined in config');
-            }
+    api.getTranslation = function (key) {
+        const translation = i18n(key, config.ui.language);
+        const fallbackTranslation = i18n(key, 'en');
+        if (translation) {
+            return translation;
+        } else if (fallbackTranslation) {
+            return fallbackTranslation;
         }
+
+        return key;
     };
 
     api.openNav = function () {
         $('#mySidenav').addClass('sidenav--open');
+        rotaryController.focusSet('#mySidenav');
     };
 
     api.closeNav = function () {
@@ -142,6 +132,10 @@ const photoBooth = (function () {
 
     api.toggleNav = function () {
         $('#mySidenav').toggleClass('sidenav--open');
+
+        if ($('#mySidenav').hasClass('sidenav--open')) {
+            rotaryController.focusSet('#mySidenav');
+        }
     };
 
     api.startVideo = function (mode) {
@@ -149,43 +143,122 @@ const photoBooth = (function () {
             api.stopVideo('preview');
         }
 
+        const dataVideo = {
+            play: 'true'
+        };
+
         if (!navigator.mediaDevices) {
             return;
         }
 
-        const getMedia =
-            navigator.mediaDevices.getUserMedia ||
-            navigator.mediaDevices.webkitGetUserMedia ||
-            navigator.mediaDevices.mozGetUserMedia ||
-            false;
+        if (config.preview.mode === 'gphoto') {
+            if (!config.preview.gphoto_bsm && mode === 'preview') {
+                jQuery
+                    .post('api/takeVideo.php', dataVideo)
+                    .done(function (result) {
+                        console.log('Start webcam', result);
+                        pid = result.pid;
+                    })
+                    .fail(function (xhr, status, result) {
+                        console.log('Could not start webcam', result);
+                    });
+            } else if (!config.preview.gphoto_bsm && mode === 'view') {
+                const getMedia =
+                    navigator.mediaDevices.getUserMedia ||
+                    navigator.mediaDevices.webkitGetUserMedia ||
+                    navigator.mediaDevices.mozGetUserMedia ||
+                    false;
 
-        if (!getMedia) {
-            return;
-        }
-
-        if (config.previewCamFlipHorizontal) {
-            $('#video--view').addClass('flip-horizontal');
-            $('#video--preview').addClass('flip-horizontal');
-        }
-
-        getMedia
-            .call(navigator.mediaDevices, webcamConstraints)
-            .then(function (stream) {
-                if (mode === 'preview') {
-                    $('#video--preview').show();
-                    videoPreview.srcObject = stream;
-                    api.stream = stream;
-                    wrapper.css('background-image', 'none');
-                    wrapper.css('background-color', 'transparent');
-                } else {
-                    $('#video--view').show();
-                    videoView.srcObject = stream;
+                if (!getMedia) {
+                    return;
                 }
-                api.stream = stream;
-            })
-            .catch(function (error) {
-                console.log('Could not get user media: ', error);
-            });
+
+                if (config.preview.flipHorizontal) {
+                    $('#video--view').addClass('flip-horizontal');
+                    $('#video--preview').addClass('flip-horizontal');
+                }
+
+                getMedia
+                    .call(navigator.mediaDevices, webcamConstraints)
+                    .then(function (stream) {
+                        $('#video--view').show();
+                        videoView.srcObject = stream;
+                        api.stream = stream;
+                    })
+                    .catch(function (error) {
+                        console.log('Could not get user media: ', error);
+                    });
+            } else {
+                jQuery
+                    .post('api/takeVideo.php', dataVideo)
+                    .done(function (result) {
+                        console.log('Start webcam', result);
+                        pid = result.pid;
+                        const getMedia =
+                            navigator.mediaDevices.getUserMedia ||
+                            navigator.mediaDevices.webkitGetUserMedia ||
+                            navigator.mediaDevices.mozGetUserMedia ||
+                            false;
+
+                        if (!getMedia) {
+                            return;
+                        }
+
+                        if (config.preview.flipHorizontal) {
+                            $('#video--view').addClass('flip-horizontal');
+                            $('#video--preview').addClass('flip-horizontal');
+                        }
+
+                        getMedia
+                            .call(navigator.mediaDevices, webcamConstraints)
+                            .then(function (stream) {
+                                $('#video--view').show();
+                                videoView.srcObject = stream;
+                                api.stream = stream;
+                            })
+                            .catch(function (error) {
+                                console.log('Could not get user media: ', error);
+                            });
+                    })
+                    .fail(function (xhr, status, result) {
+                        console.log('Could not start webcam', result);
+                    });
+            }
+        } else {
+            const getMedia =
+                navigator.mediaDevices.getUserMedia ||
+                navigator.mediaDevices.webkitGetUserMedia ||
+                navigator.mediaDevices.mozGetUserMedia ||
+                false;
+
+            if (!getMedia) {
+                return;
+            }
+
+            if (config.preview.flipHorizontal) {
+                $('#video--view').addClass('flip-horizontal');
+                $('#video--preview').addClass('flip-horizontal');
+            }
+
+            getMedia
+                .call(navigator.mediaDevices, webcamConstraints)
+                .then(function (stream) {
+                    if (mode === 'preview') {
+                        $('#video--preview').show();
+                        videoPreview.srcObject = stream;
+                        api.stream = stream;
+                        wrapper.css('background-image', 'none');
+                        wrapper.css('background-color', 'transparent');
+                    } else {
+                        $('#video--view').show();
+                        videoView.srcObject = stream;
+                    }
+                    api.stream = stream;
+                })
+                .catch(function (error) {
+                    console.log('Could not get user media: ', error);
+                });
+        }
     };
 
     api.stopVideo = function (mode) {
@@ -200,17 +273,45 @@ const photoBooth = (function () {
         }
     };
 
+    api.stopPreviewVideo = function () {
+        if (api.stream) {
+            const dataVideo = {
+                play: 'false',
+                pid: pid
+            };
+
+            jQuery
+                .post('api/takeVideo.php', dataVideo)
+                .done(function (result) {
+                    console.log('Stop webcam', result);
+                    const track = api.stream.getTracks()[0];
+                    track.stop();
+                    $('#video--view').hide();
+                })
+                .fail(function (xhr, status, result) {
+                    console.log('Could not stop webcam', result);
+                });
+        }
+    };
+
+    api.showResultInner = function (flag) {
+        if (flag) {
+            $('.resultInner').addClass('show');
+        } else {
+            $('.resultInner').removeClass('show');
+        }
+    };
+
     api.thrill = function (photoStyle) {
         api.closeNav();
         api.reset();
+        api.showResultInner(false);
+
+        remoteBuzzerClient.inProgress(true);
 
         takingPic = true;
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
-        }
-
-        if (config.remotebuzzer_enabled) {
-            ioClient.emit('photobooth-socket', 'in progress');
         }
 
         if (config.previewCamBackground) {
@@ -221,79 +322,87 @@ const photoBooth = (function () {
             photoStyle = 'collage';
         }
 
-        if (config.previewFromCam) {
-            api.startVideo('view');
+        if (chromaFile) {
+            photoStyle = 'chroma';
         }
 
-        if (config.previewFromIPCam) {
+        if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
+            api.startVideo('view');
+        } else if (config.preview.mode === 'url') {
             $('#ipcam--view').show();
             $('#ipcam--view').addClass('streaming');
         }
 
         loader.addClass('open');
-        api.startCountdown(nextCollageNumber ? config.collage_cntdwn_time : config.cntdwn_time, $('#counter'), () => {
-            api.cheese(photoStyle);
-        });
+
+        api.startCountdown(
+            nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time,
+            $('#counter'),
+            () => {
+                api.cheese(photoStyle);
+            }
+        );
     };
 
     // Cheese
     api.cheese = function (photoStyle) {
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log(photoStyle);
         }
 
         $('#counter').empty();
         $('.cheese').empty();
 
-        if (photoStyle === 'photo') {
-            const cheesemsg = i18n('cheese');
+        if (config.picture.no_cheese) {
+            console.log('Cheese is disabled.');
+        } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
+            const cheesemsg = api.getTranslation('cheese');
             $('.cheese').text(cheesemsg);
         } else {
-            const cheesemsg = i18n('cheeseCollage');
+            const cheesemsg = api.getTranslation('cheeseCollage');
             $('.cheese').text(cheesemsg);
             $('<p>')
-                .text(`${nextCollageNumber + 1} / ${config.collage_limit}`)
+                .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
                 .appendTo('.cheese');
         }
 
-        if (config.previewFromCam && config.previewCamTakesPic && !api.stream && !config.dev) {
-            console.log('No preview by device cam available!');
+        if (config.preview.mode === 'gphoto' && !config.picture.no_cheese) {
+            api.stopPreviewVideo();
+        }
 
-            if (config.previewFromIPCam) {
-                $('#ipcam--view').removeClass('streaming');
-                $('#ipcam--view').hide();
-            }
+        if (config.preview.mode === 'device_cam' && config.preview.camTakesPic && !api.stream && !config.dev.enabled) {
+            console.log('No preview by device cam available!');
 
             api.errorPic({
                 error: 'No preview by device cam available!'
             });
+        } else if (config.picture.no_cheese) {
+            api.takePic(photoStyle);
         } else {
             setTimeout(() => {
                 api.takePic(photoStyle);
-            }, config.cheese_time);
+            }, config.picture.cheese_time);
         }
     };
 
     // take Picture
     api.takePic = function (photoStyle) {
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Take Picture:' + photoStyle);
         }
 
-        if (config.remotebuzzer_enabled) {
-            ioClient.emit('photobooth-socket', 'in progress');
-        }
+        remoteBuzzerClient.inProgress(true);
 
-        if (config.previewFromCam) {
-            if (config.previewCamTakesPic && !config.dev) {
+        if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
+            if (config.preview.camTakesPic && !config.dev.enabled) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
-            api.stopVideo('view');
-        }
-
-        if (config.previewFromIPCam) {
+            if (config.preview.mode === 'device_cam') {
+                api.stopVideo('view');
+            }
+        } else if (config.preview.mode === 'url') {
             $('#ipcam--view').removeClass('streaming');
             $('#ipcam--view').hide();
         }
@@ -309,27 +418,34 @@ const photoBooth = (function () {
             data.collageNumber = nextCollageNumber;
         }
 
+        if (photoStyle === 'chroma') {
+            data.file = chromaFile;
+        }
+
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
+        api.callTakePicApi(data);
+    };
 
+    api.callTakePicApi = function (data) {
         jQuery
             .post('api/takePic.php', data)
             .done(function (result) {
                 console.log('took picture', result);
                 $('.cheese').empty();
-                if (config.previewCamFlipHorizontal) {
+                if (config.preview.flipHorizontal) {
                     $('#video--view').removeClass('flip-horizontal');
                     $('#video--preview').removeClass('flip-horizontal');
                 }
 
                 // reset filter (selection) after picture was taken
-                imgFilter = config.default_imagefilter;
+                imgFilter = config.filters.defaults;
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
                 $('#' + imgFilter).addClass('activeSidenavBtn');
 
                 if (result.error) {
                     api.errorPic(result);
-                } else if (result.success === 'collage' && result.current + 1 < result.limit) {
+                } else if (result.success === 'collage') {
                     currentCollageFile = result.file;
                     nextCollageNumber = result.current + 1;
 
@@ -337,30 +453,97 @@ const photoBooth = (function () {
                     $('.loading').empty();
                     $('#video--sensor').hide();
 
-                    if (config.continuous_collage) {
-                        setTimeout(() => {
-                            api.thrill('collage');
-                        }, 1000);
-                    } else {
-                        if (config.remotebuzzer_enabled) {
-                            ioClient.emit('photobooth-socket', 'collage-wait-for-next');
-                        }
+                    if (config.collage.continuous) {
+                        if (result.current + 1 < result.limit) {
+                            setTimeout(() => {
+                                api.thrill('collage');
+                            }, 1000);
+                        } else {
+                            currentCollageFile = '';
+                            nextCollageNumber = 0;
 
-                        $('<a class="btn" href="#">' + i18n('nextPhoto') + '</a>')
+                            api.processPic(data.style, result);
+                        }
+                    } else {
+                        // collage with interruption
+                        let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
+                        const preloadImage = new Image();
+                        const picdate = Date.now;
+                        preloadImage.onload = () => {
+                            $('.loaderImage').css({
+                                'background-image': `url(${imageUrl}?filter=${imgFilter})`
+                            });
+                            $('.loaderImage').attr('data-img', picdate);
+                        };
+
+                        preloadImage.src = imageUrl;
+
+                        $('.loaderImage').show();
+
+                        remoteBuzzerClient.collageWaitForNext();
+
+                        if (result.current + 1 < result.limit) {
+                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('nextPhoto') + '</a>')
+                                .appendTo('.loading')
+                                .click((ev) => {
+                                    ev.stopPropagation();
+                                    ev.preventDefault();
+                                    $('.loaderImage').css('background-image', 'none');
+                                    imageUrl = '';
+                                    $('.loaderImage').css('display', 'none');
+                                    api.deleteTmpImage(result.collage_file);
+                                    api.thrill('collage');
+                                });
+                        } else {
+                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('processPhoto') + '</a>')
+                                .appendTo('.loading')
+                                .click((ev) => {
+                                    ev.stopPropagation();
+                                    ev.preventDefault();
+                                    $('.loaderImage').css('background-image', 'none');
+                                    imageUrl = '';
+                                    $('.loaderImage').css('display', 'none');
+                                    api.deleteTmpImage(result.collage_file);
+                                    currentCollageFile = '';
+                                    nextCollageNumber = 0;
+
+                                    api.processPic(data.style, result);
+                                });
+                        }
+                        $(
+                            '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
+                                api.getTranslation('retakePhoto') +
+                                '</a>'
+                        )
                             .appendTo('.loading')
                             .click((ev) => {
+                                ev.stopPropagation();
                                 ev.preventDefault();
-
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
+                                api.deleteTmpImage(result.collage_file);
+                                nextCollageNumber = result.current;
                                 api.thrill('collage');
                             });
-                        const abortmsg = i18n('abort');
-                        $('.loading').append($('<a class="btn" style="margin-left:2px" href="./">').text(abortmsg));
+
+                        const abortmsg = api.getTranslation('abort');
+                        $('.loading')
+                            .append($('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(abortmsg))
+                            .click(() => {
+                                location.assign('./');
+                            });
+
+                        rotaryController.focusSet('.loading.rotarygroup');
                     }
+                } else if (result.success === 'chroma') {
+                    chromaFile = result.file;
+                    api.processPic(data.style, result);
                 } else {
                     currentCollageFile = '';
                     nextCollageNumber = 0;
 
-                    api.processPic(photoStyle, result);
+                    api.processPic(data.style, result);
                 }
             })
             .fail(function (xhr, status, result) {
@@ -377,40 +560,35 @@ const photoBooth = (function () {
             $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
-            const errormsg = i18n('error');
-            takingPic = false;
-            if (config.dev) {
-                console.log('Taking photo:', takingPic);
-            }
+            const errormsg = api.getTranslation('error');
             $('.loading').append($('<p>').text(errormsg));
-            if (config.show_error_messages || config.dev) {
+            if (config.dev.error_messages || config.dev.enabled) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
-            if (config.auto_reload_on_error) {
-                const reloadmsg = i18n('auto_reload');
+            if (config.dev.reload_on_error) {
+                const reloadmsg = api.getTranslation('auto_reload');
                 $('.loading').append($('<p>').text(reloadmsg));
                 setTimeout(function () {
                     api.reloadPage();
                 }, 5000);
             } else {
-                const reloadmsg = i18n('reload');
+                const reloadmsg = api.getTranslation('reload');
                 $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
             }
         }, 500);
     };
 
     api.processPic = function (photoStyle, result) {
-        const tempImageUrl = config.folders.tmp + '/' + result.file;
+        const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
 
         $('.spinner').show();
-        $('.loading').text(photoStyle === 'photo' ? i18n('busy') : i18n('busyCollage'));
+        $('.loading').text(
+            photoStyle === 'photo' || photoStyle === 'chroma'
+                ? api.getTranslation('busy')
+                : api.getTranslation('busyCollage')
+        );
 
-        takingPic = false;
-        if (config.dev) {
-            console.log('Taking photo:', takingPic);
-        }
-
-        if (photoStyle === 'photo' && config.image_preview_before_processing) {
+        if (photoStyle === 'photo' && config.picture.preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
                 $('#loader').css('background-image', `url(${tempImageUrl})`);
@@ -425,16 +603,20 @@ const photoBooth = (function () {
             data: {
                 file: result.file,
                 filter: imgFilter,
-                isCollage: photoStyle === 'collage'
+                style: photoStyle
             },
             success: (data) => {
                 console.log('picture processed', data);
 
                 if (data.error) {
                     api.errorPic(data);
-                    if (config.remotebuzzer_enabled) {
-                        ioClient.emit('photobooth-socket', 'completed');
+                    takingPic = false;
+                    remoteBuzzerClient.inProgress(false);
+                    if (config.dev.enabled) {
+                        console.log('Taking photo:', takingPic);
                     }
+                } else if (photoStyle === 'chroma') {
+                    api.renderChroma(data.file);
                 } else {
                     api.renderPic(data.file);
                 }
@@ -446,11 +628,44 @@ const photoBooth = (function () {
                     error: 'Request failed: ' + textStatus
                 });
 
-                if (config.remotebuzzer_enabled) {
-                    ioClient.emit('photobooth-socket', 'completed');
+                takingPic = false;
+                remoteBuzzerClient.inProgress(false);
+                if (config.dev.enabled) {
+                    console.log('Taking photo:', takingPic);
                 }
             }
         });
+    };
+
+    // Render Chromaimage after taking
+    api.renderChroma = function (filename) {
+        if (config.live_keying.show_all) {
+            // Add Image to gallery and slider
+            api.addImage(filename);
+        }
+        const imageUrl = config.live_keying.show_all
+            ? config.foldersRoot.images + '/' + filename
+            : config.foldersRoot.keying + '/' + filename;
+        const preloadImage = new Image();
+
+        preloadImage.onload = function () {
+            $('body').attr('data-main-image', filename);
+            console.log(config.foldersRoot.keying + '/' + filename);
+            const chromaimage = config.foldersRoot.keying + '/' + filename;
+
+            loader.hide();
+            api.resetTimeOut();
+            api.chromaimage = filename;
+            setMainImage(chromaimage);
+        };
+
+        preloadImage.src = imageUrl;
+
+        takingPic = false;
+        remoteBuzzerClient.inProgress(false);
+        if (config.dev.enabled) {
+            console.log('Taking photo:', takingPic);
+        }
     };
 
     // Render Picture after taking
@@ -464,7 +679,7 @@ const photoBooth = (function () {
             $(this).appendTo(body);
             $('<p>')
                 .css('max-width', this.width + 'px')
-                .html(i18n('qrHelp') + '</br><b>' + config.wifi_ssid + '</b>')
+                .html(api.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
                 .appendTo(body);
         });
 
@@ -480,10 +695,10 @@ const photoBooth = (function () {
         });
 
         // If autoprint is activated the picture will immediately printed after taken.
-        if (config.auto_print) {
+        if (config.print.auto) {
             setTimeout(function () {
                 api.printImage(filename);
-            }, config.auto_print_delay);
+            }, config.print.auto_delay);
         }
 
         resultPage
@@ -492,22 +707,32 @@ const photoBooth = (function () {
             .on('click', (ev) => {
                 ev.preventDefault();
 
-                api.deleteImage(filename, (data) => {
-                    if (data.success) {
-                        api.reloadPage();
-                    } else {
-                        console.log('Error while deleting image');
-                        setTimeout(function () {
+                const msg = api.getTranslation('really_delete_image');
+                const really = config.delete.no_request ? true : confirm(filename + ' ' + msg);
+                if (really) {
+                    api.deleteImage(filename, (data) => {
+                        if (data.success) {
+                            console.log('Deleted ' + filename);
                             api.reloadPage();
-                        }, 5000);
-                    }
-                });
+                        } else {
+                            console.log('Error while deleting ' + filename);
+                            if (data.error) {
+                                console.log(data.error);
+                            }
+                            setTimeout(function () {
+                                api.reloadPage();
+                            }, 5000);
+                        }
+                    });
+                } else {
+                    $('.deletebtn').blur();
+                }
             });
 
         // Add Image to gallery and slider
         api.addImage(filename);
 
-        const imageUrl = config.folders.images + '/' + filename;
+        const imageUrl = config.foldersRoot.images + '/' + filename;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
@@ -519,19 +744,30 @@ const photoBooth = (function () {
             startPage.hide();
             resultPage.show();
 
-            $('.resultInner').addClass('show');
+            api.showResultInner(true);
+
             loader.removeClass('open');
 
             $('#loader').css('background-image', 'url()');
             $('#loader').removeClass('showBackgroundImage');
+
+            if (!$('#mySidenav').hasClass('sidenav--open')) {
+                rotaryController.focusSet('#result');
+            }
 
             api.resetTimeOut();
         };
 
         preloadImage.src = imageUrl;
 
-        if (config.remotebuzzer_enabled) {
-            ioClient.emit('photobooth-socket', 'completed');
+        takingPic = false;
+        remoteBuzzerClient.inProgress(false);
+        if (config.dev.enabled) {
+            console.log('Taking photo:', takingPic);
+        }
+
+        if (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm) {
+            api.startVideo('preview');
         }
     };
 
@@ -558,18 +794,19 @@ const photoBooth = (function () {
             }
         };
 
-        bigImg.src = config.folders.images + '/' + imageName;
-        thumbImg.src = config.folders.thumbs + '/' + imageName;
+        bigImg.src = config.foldersRoot.images + '/' + imageName;
+        thumbImg.src = config.foldersRoot.thumbs + '/' + imageName;
 
         function allLoaded() {
             const linkElement = $('<a>').html(thumbImg);
 
+            linkElement.attr('class', 'gallery__img rotaryfocus');
             linkElement.attr('data-size', bigSize);
-            linkElement.attr('href', config.folders.images + '/' + imageName);
-            linkElement.attr('data-med', config.folders.thumbs + '/' + imageName);
+            linkElement.attr('href', config.foldersRoot.images + '/' + imageName);
+            linkElement.attr('data-med', config.foldersRoot.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);
 
-            if (config.newest_first) {
+            if (config.gallery.newest_first) {
                 linkElement.prependTo($('#galimages'));
             } else {
                 linkElement.appendTo($('#galimages'));
@@ -581,13 +818,16 @@ const photoBooth = (function () {
 
     // Open Gallery Overview
     api.openGallery = function () {
-        if (config.scrollbar) {
+        if (config.gallery.scrollbar) {
             gallery.addClass('scrollbar');
         }
 
         gallery.addClass('gallery--open');
 
-        setTimeout(() => gallery.find('.gallery__inner').show(), 300);
+        setTimeout(() => {
+            gallery.find('.gallery__inner').show();
+            rotaryController.focusSet('#gallery');
+        }, 300);
     };
 
     api.resetMailForm = function () {
@@ -599,6 +839,7 @@ const photoBooth = (function () {
     api.startCountdown = function (start, element, cb) {
         let count = 0;
         let current = start;
+        const stop = start > 2 ? start - 2 : start;
 
         function timerFunction() {
             element.text(current);
@@ -613,18 +854,24 @@ const photoBooth = (function () {
                 cb();
             }
             count++;
+            if (config.preview.mode === 'gphoto' && config.picture.no_cheese && count === stop) {
+                api.stopPreviewVideo();
+            }
         }
         timerFunction();
     };
 
     api.printImage = function (imageSrc, cb) {
-        const errormsg = i18n('error');
+        const errormsg = api.getTranslation('error');
 
         if (isPrinting) {
             console.log('Printing already: ' + isPrinting);
         } else {
             modal.open('#print_mesg');
             isPrinting = true;
+
+            remoteBuzzerClient.inProgress(true);
+
             setTimeout(function () {
                 $.ajax({
                     method: 'GET',
@@ -648,12 +895,13 @@ const photoBooth = (function () {
                             if (data.error) {
                                 $('#print_mesg').empty();
                                 $('#print_mesg').html(
-                                    '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                                    '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
                                 );
                             }
                             cb();
                             isPrinting = false;
-                        }, config.printing_time);
+                            remoteBuzzerClient.inProgress(false);
+                        }, config.print.time);
                     },
                     error: (jqXHR, textStatus) => {
                         console.log('An error occurred: ', textStatus);
@@ -666,10 +914,11 @@ const photoBooth = (function () {
                             modal.close('#print_mesg');
                             $('#print_mesg').empty();
                             $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                                '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
                             );
                             cb();
                             isPrinting = false;
+                            remoteBuzzerClient.inProgress(false);
                         }, 5000);
                     }
                 });
@@ -699,6 +948,27 @@ const photoBooth = (function () {
         });
     };
 
+    api.deleteTmpImage = function (imageName) {
+        $.ajax({
+            url: 'api/deleteTmpPhoto.php',
+            method: 'POST',
+            data: {
+                file: imageName
+            },
+            success: (data) => {
+                if (data.error) {
+                    console.log('Error while deleting image');
+                }
+            },
+            error: (jqXHR, textStatus) => {
+                console.log('Error while deleting image: ', textStatus);
+                setTimeout(function () {
+                    api.reloadPage();
+                }, 5000);
+            }
+        });
+    };
+
     api.toggleMailDialog = function (img) {
         const mail = $('.send-mail');
 
@@ -713,7 +983,8 @@ const photoBooth = (function () {
     };
 
     //Filter
-    $('.imageFilter').on('click', function () {
+    $('.imageFilter').on('click', function (e) {
+        e.preventDefault();
         api.toggleNav();
     });
 
@@ -723,10 +994,12 @@ const photoBooth = (function () {
 
         imgFilter = $(this).attr('id');
         const result = {file: $('#result').attr('data-img')};
-        if (config.dev) {
+        if (config.dev.enabled) {
             console.log('Applying filter', imgFilter, result);
         }
         api.processPic(imgFilter, result);
+
+        rotaryController.focusSet('#mySidenav');
     });
 
     // Take Picture Button
@@ -749,6 +1022,7 @@ const photoBooth = (function () {
         e.preventDefault();
 
         api.closeNav();
+        rotaryController.focusSet('#result');
     });
 
     // Open Gallery Button
@@ -765,6 +1039,14 @@ const photoBooth = (function () {
 
         gallery.find('.gallery__inner').hide();
         gallery.removeClass('gallery--open');
+
+        api.showResultInner(true);
+
+        if ($('#result').is(':visible')) {
+            rotaryController.focusSet('#result');
+        } else if ($('#start').is(':visible')) {
+            rotaryController.focusSet('#start');
+        }
     });
 
     $('.mailbtn').on('click touchstart', function (e) {
@@ -796,16 +1078,20 @@ const photoBooth = (function () {
             success: function (result) {
                 if (result.success) {
                     if (result.saved) {
-                        message.fadeIn().html('<span style="color:green">' + i18n('mailSaved') + '</span>');
+                        message
+                            .fadeIn()
+                            .html('<span style="color:green">' + api.getTranslation('mailSaved') + '</span>');
                     } else {
-                        message.fadeIn().html('<span style="color:green">' + i18n('mailSent') + '</span>');
+                        message
+                            .fadeIn()
+                            .html('<span style="color:green">' + api.getTranslation('mailSent') + '</span>');
                     }
                 } else {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
             error: function () {
-                message.fadeIn('fast').html('<span style="color: red;">' + i18n('mailError') + '</span>');
+                message.fadeIn('fast').html('<span style="color: red;">' + api.getTranslation('mailError') + '</span>');
             },
             complete: function () {
                 form.find('.btn').html(oldValue);
@@ -820,7 +1106,11 @@ const photoBooth = (function () {
 
     $('#result').on('click', function () {
         if (!modal.close('#qrCode')) {
-            $('.resultInner').toggleClass('show');
+            //api.showResultInner(true);
+        }
+
+        if (!$('#mySidenav').hasClass('sidenav--open')) {
+            rotaryController.focusSet('#result');
         }
     });
 
@@ -829,7 +1119,8 @@ const photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
 
-        modal.toggle('#qrCode');
+        modal.open('#qrCode');
+        rotaryController.focusSet('#qrCode');
     });
 
     $('.homebtn').on('click', function (e) {
@@ -837,6 +1128,8 @@ const photoBooth = (function () {
         e.stopPropagation();
 
         api.reloadPage();
+
+        rotaryController.focusSet('#start');
     });
 
     $('#cups-button').on('click', function (ev) {
@@ -875,37 +1168,48 @@ const photoBooth = (function () {
     });
 
     $(document).on('keyup', function (ev) {
-        if (config.photo_key && parseInt(config.photo_key, 10) === ev.keyCode) {
-            if (!takingPic) {
-                $('.closeGallery').trigger('click');
-                $('.triggerPic').trigger('click');
-            } else if (config.dev && takingPic) {
-                console.log('Taking photo already in progress!');
-            }
-        }
-
-        if (config.collage_key && parseInt(config.collage_key, 10) === ev.keyCode) {
-            if (!takingPic) {
-                $('.closeGallery').trigger('click');
-                if (config.use_collage) {
-                    $('.triggerCollage').trigger('click');
-                } else {
-                    if (config.dev) {
-                        console.log('Collage key pressed. Please enable collage in your config. Triggering photo now.');
+        if ($('.triggerPic')[0] || $('.triggerCollage')[0]) {
+            if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
+                if (!takingPic) {
+                    $('.closeGallery').trigger('click');
+                    if (config.collage.enabled && config.collage.only) {
+                        if (config.dev.enabled) {
+                            console.log('Picture key pressed, but only collage allowed. Triggering collage now.');
+                        }
+                        $('.triggerCollage').trigger('click');
+                    } else {
+                        $('.triggerPic').trigger('click');
                     }
-                    $('.triggerPic').trigger('click');
+                } else if (config.dev.enabled && takingPic) {
+                    console.log('Taking photo already in progress!');
                 }
-            } else if (config.dev && takingPic) {
-                console.log('Taking photo already in progress!');
             }
-        }
 
-        if (config.use_print_result && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
-            if (isPrinting) {
-                console.log('Printing already in progress!');
-            } else {
-                $('.printbtn').trigger('click');
-                $('.printbtn').blur();
+            if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
+                if (!takingPic) {
+                    $('.closeGallery').trigger('click');
+                    if (config.collage.enabled) {
+                        $('.triggerCollage').trigger('click');
+                    } else {
+                        if (config.dev.enabled) {
+                            console.log(
+                                'Collage key pressed. Please enable collage in your config. Triggering photo now.'
+                            );
+                        }
+                        $('.triggerPic').trigger('click');
+                    }
+                } else if (config.dev.enabled && takingPic) {
+                    console.log('Taking photo already in progress!');
+                }
+            }
+
+            if (config.print.from_result && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
+                if (isPrinting) {
+                    console.log('Printing already in progress!');
+                } else {
+                    $('.printbtn').trigger('click');
+                    $('.printbtn').blur();
+                }
             }
         }
     });
@@ -918,7 +1222,7 @@ const photoBooth = (function () {
     });
 
     // Disable Right-Click
-    if (!config.dev) {
+    if (!config.dev.enabled) {
         $(this).on('contextmenu', function (e) {
             e.preventDefault();
         });

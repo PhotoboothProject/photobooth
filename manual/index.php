@@ -1,7 +1,19 @@
 <?php
+session_start();
 
 require_once('../lib/config.php');
-require_once('../lib/configsetup.inc.php');
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['manual'])
+) {
+    require_once('../lib/configsetup.inc.php');
+} else {
+    header('location: ../login');
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
@@ -12,7 +24,7 @@ require_once('../lib/configsetup.inc.php');
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth Manual</title>
+	<title><?=$config['ui']['branding']?> Manual</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
@@ -24,13 +36,13 @@ require_once('../lib/configsetup.inc.php');
 	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/manual.css" />
-	<?php if ($config['rounded_corners']): ?>
+	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" type="text/css" href="../resources/css/rounded.css" />
 	<?php endif; ?>
 </head>
 <body class="manualwrapper">
 	<div class="manual-panel">
-		<h2>Photobooth Manual</h2>
+		<h2><?=$config['ui']['branding']?> Manual</h2>
 		<h3><a class="back-to-pb" href="../">Photobooth</a></h3>
 
 		<div class="accordion">
@@ -38,34 +50,72 @@ require_once('../lib/configsetup.inc.php');
 				<?php
 					$i = 0;
 					foreach($configsetup as $panel => $fields) {
+						if (empty($fields['view'])) {
+						   $fields['view'] = 'basic';
+						};
+
 						$open = '';
 						if($i == 0){
 							$open = ' open init';
 						}
-						echo '<div class="panel'.$open.'">';
+						echo '<div class="panel'.$open.'"';
+						switch ($fields['view'])
+						{
+							case 'expert':
+							     if ($config['adminpanel']['view'] == 'advanced') {
+							     	echo ' style="display: none;"';
+							     };
+							case 'advanced':
+							     if ($config['adminpanel']['view'] == 'basic') { 
+    							     	echo ' style="display: none;"';
+							     };
+							case 'basic':
+							     break;
+						};
+						echo '>';
 								echo '<div class="panel-heading">';
 									echo '<h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span></h3>';
 								echo '</div>';
 								echo '<div class="panel-body">';
 
 								foreach($fields as $key => $field) {
-									echo '<div class="form-row">';
+									if ($key == 'platform' || $key == 'view') {
+									   continue;
+									   };
+
+									if (! isset($field['view'])) {
+						   	   		   $field['view'] = 'basic';
+									   };
+
+									switch ($field['view'])
+									{
+										case 'expert':
+							     	     		     if ($config['adminpanel']['view'] == 'advanced') { $field['type'] = 'hidden'; };
+										case 'advanced':
+							     	     		     if ($config['adminpanel']['view'] == 'basic') { $field['type'] = 'hidden'; };
+										case 'basic':
+							     	     		     break;
+									};
+
 									switch($field['type']) {
 										case 'checkbox':
-											echo '<p><h4><span data-i18n="'.$key.'">'.$key.'</span></h4></p>';
-											echo '<p><span data-i18n="manual_'.$key.'">manual_'.$key.'</span></p><hr>';
+											echo '<div class="form-row">';
+											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'">'.$panel.':'.$key.'</span></h4></p>';
+											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
 											echo '</div>';
 											break;
 										case 'multi-select':
 										case 'range':
 										case 'select':
 										case 'input':
-											echo '<p><h4><span data-i18n="'.$panel.'_'.$key.'"></span></h4></p>';
-											echo '<p><span data-i18n="manual_'.$panel.'_'.$key.'">manual_'.$panel.'_'.$key.'</span></p><hr>';
+											echo '<div class="form-row">';
+											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'"></span></h4></p>';
+											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
 											echo '</div>';
 											break;
 										case 'color':
 										case 'hidden':
+											echo '<div class="form-row">';
 											echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
 											echo '</div>';
 											break;
@@ -77,9 +127,9 @@ require_once('../lib/configsetup.inc.php');
 					}
 				?>
 			</br>
-			<a href="faq.html" class="btn faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
+			<a href="faq.php" class="btn faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
 			</form>
-			<a href="https://github.com/andi34/photobooth/wiki" class="btn wiki-btn"><span data-i18n="show_wiki"></span></a>
+			<a href="https://github.com/<?=$config['ui']['github']?>/photobooth/wiki" class="btn wiki-btn"><span data-i18n="show_wiki"></span></a>
 		</div>
 	</div>
 

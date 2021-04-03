@@ -3,8 +3,22 @@
 require_once('lib/config.php');
 require_once('lib/db.php');
 
-$images = getImagesFromDB();
-$imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $images;
+// Check if there is a request for the status of the database
+if (isset($_GET['status'])){
+	// Request for DB-Status,
+	// Currently reports back the DB-Size to give the Client the ability
+	// to detect changes
+	$resp = array('dbsize'=>getDBSize());
+	exit(json_encode($resp));
+}
+
+if ($config['database']['enabled']) {
+	$images = getImagesFromDB();
+} else {
+	$images = getImagesFromDirectory($config['foldersAbs']['images']);
+}
+
+$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,7 +29,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth Gallery</title>
+	<title><?=$config['ui']['branding']?> Gallery</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="resources/img/apple-touch-icon.png">
@@ -32,11 +46,11 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
-	<link rel="stylesheet" href="resources/css/style.css" />
-	<?php if ($config['gallery_bottom_bar']): ?>
+	<link rel="stylesheet" href="resources/css/classic_style.css" />
+	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
-	<?php if ($config['rounded_corners']): ?>
+	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" href="resources/css/rounded.css" />
 	<?php endif; ?>
 </head>
@@ -55,7 +69,7 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 			<input class="mail-form-input" size="35" type="email" name="sendTo">
 			<input id="mail-form-image" type="hidden" name="image" value="">
 
-			<?php if ($config['send_all_later']): ?>
+			<?php if ($config['mail']['send_all_later']): ?>
 				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
 				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
 			<?php endif; ?>
@@ -80,17 +94,15 @@ $imagelist = ($config['newest_first'] === true) ? array_reverse($images) : $imag
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/TweenLite.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/EasePack.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/jquery.gsap.min.js"></script>
-	<script type="text/javascript" src="resources/js/vendor/CSSPlugin.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
 	<script type="text/javascript" src="resources/js/gallery.js"></script>
+	<?php if ($config['gallery']['db_check_enabled']): ?>
+	<script type="text/javascript" src="resources/js/gallery_updatecheck.js"></script>
+	<?php endif; ?>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
 </body>

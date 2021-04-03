@@ -5,19 +5,28 @@ if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
-$filename = $_GET['filename'];
-$keyingimage = $config['folders']['keying'] . DIRECTORY_SEPARATOR . $filename;
-
-// Only jpg/jpeg are supported
-$imginfo = getimagesize($keyingimage);
-$mimetype = $imginfo['mime'];
-if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    die('The source file type ' . $mimetype . ' is not supported');
+if ($config['ui']['style'] === 'modern') {
+	$btnClass1 = 'round-btn';
+	$btnClass2 = 'round-btn';
+} else {
+	$btnClass1 = 'btn btn--flex';
+	$btnClass2 = 'btn';
 }
 
+$filename = $_GET['filename'];
+$keyingimage = $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
+
 if (file_exists($keyingimage)) {
-    $mainimage = $keyingimage;
-    $keying_possible = true;
+    // Only jpg/jpeg are supported
+    $imginfo = getimagesize($keyingimage);
+    $mimetype = $imginfo['mime'];
+    if ($mimetype == 'image/jpg' || $mimetype == 'image/jpeg') {
+        $mainimage = $keyingimage;
+        $keying_possible = true;
+    } else {
+        $keying_possible = false;
+        $mainimage = 'resources/img/bg.jpg';
+    }
 } else {
     $keying_possible = false;
     $mainimage = 'resources/img/bg.jpg';
@@ -44,43 +53,43 @@ if (file_exists($keyingimage)) {
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-		<link rel="stylesheet" href="resources/css/chromakeying.css" />
-		<?php if ($config['rounded_corners']): ?>
+		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css" />
+		<?php if ($config['ui']['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>
 	</head>
 <body data-main-image="<?=$mainimage?>">
-	<div class="chromawrapper">
+	<div class="chromawrapper rotarygroup">
 	<?php if ($keying_possible): ?>
-		<div class="canvasWrapper">
+		<div class="canvasWrapper initial">
 			<canvas id="mainCanvas"></canvas>
 		</div>
 
 		<div style="padding-top:10px;text-align:center;">
 			<?php
-				$dir = join(DIRECTORY_SEPARATOR, ['resources', 'img', 'background']) . DIRECTORY_SEPARATOR;
+				$dir = $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" class="backgroundPreview" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="'.$dir.$value.'" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
 		</div>
 
 		<div class="chroma-control-bar">
-			<a class="btn btn--flex" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
+			<a class="<?php echo $btnClass1; ?> rotaryfocus" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
 
-			<?php if ($config['use_print_chromakeying']): ?>
-				<a class="btn btn--flex" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+			<?php if ($config['print']['from_chromakeying']): ?>
+				<a class="<?php echo $btnClass1; ?> rotaryfocus" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="btn btn--flex" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass1; ?> rotaryfocus" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">
 			<h1 style="color: red;" data-i18n="keyingerror"></h1>
-			<a class="btn" href="./"><span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass2; ?>" href="./"><span data-i18n="close"></span></a>
 		</div>
 	<?php endif; ?>
 
@@ -94,10 +103,18 @@ if (file_exists($keyingimage)) {
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-0.8.js"></script>
+	<?php if ($config['keying']['variant'] === 'marvinj'): ?>
+	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
+	<?php else:?>
+	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
+	<script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
+	<?php endif; ?>
+	<script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
 	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
+
+	<?php require_once('lib/services_start.php'); ?>
 </body>
 </html>

@@ -1,0 +1,150 @@
+@import 'classic_style';
+@import 'partials/modern_button';
+
+html,
+body {
+  height: 100%;
+  background: #ffffff;
+  margin: 0px;
+}
+
+#start {
+  .startInner {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background: none;
+    .btn {
+      margin-top: 3px;
+      width: auto;
+    }
+  }
+
+  .fs-button {
+    position: relative;
+    top: auto;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  .gallery-button {
+    position: relative;
+    top: auto;
+    bottom: 0px;
+    left: auto;
+  }
+
+  .cups-button {
+    &.round-btn {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: auto;
+      margin: 20px;
+    }
+  }
+}
+
+.homebtn {
+  &.round-btn {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: auto;
+    margin: 20px;
+  }
+}
+
+.resultInner {
+  display: block;
+  width: auto;
+  max-width: 90%;
+  position: fixed;
+  right: 0;
+  left: auto;
+  bottom: -15em;
+  top: auto;
+  justify-content: center;
+  transition: bottom 0.5s;
+  z-index: 100;
+  margin: 20px;
+  .round-btn {
+    display: inline-block;
+  }
+  &.show {
+    position: fixed;
+    bottom: 0;
+  }
+}
+
+.sidenav {
+  .closebtn {
+    width: 1.625em;
+    height: 1.625em;
+    margin: 0.3em;
+    background: radial-gradient(grey, $mainColor, $hoverColor);
+    color: $buttonFontColor;
+    .fa {
+      font-size: 0.8em;
+    }
+  }
+}
+
+.round-btn:active,
+.round-btn:focus,
+.round-btn:hover,
+.round-btn.focused,
+.gallery__close:active,
+.gallery__close:hover,
+.gallery__close:focus,
+.gallery__close.focused,
+.gallery__img:active > figure,
+.gallery__img:focus > figure,
+.gallery__img:hover > figure,
+.gallery__img.focused > figure,
+.gallery__img:active > img,
+.gallery__img:focus > img,
+.gallery__img:hover > img,
+.gallery__img.focused > img {
+  opacity: 0.6 !important;
+}
+
+.divaussen {
+  height: 100%;
+  position: relative;
+}
+
+.divinnen {
+  float: right;
+}
+
+.divinnen2 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+}
+
+@media (orientation: portrait) {
+  .divinnen2 {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .round-btn {
+    width: 4em;
+    height: 4em;
+  }
+}
+
+.transparenz {
+  opacity: 0.4;
+}
+
+hr,
+hr.small {
+  display: none;
+}
+
+.pswp-rotary-focus {
+  background: radial-gradient(grey, $mainColor, $hoverColor) !important;
+}

@@ -6,6 +6,8 @@ set -e
 # Show all commands
 # set -x
 
+RUNNING_ON_PI=true
+
 if [ ! -z $1 ]; then
     webserver=$1
 else
@@ -20,21 +22,31 @@ function error {
     echo -e "\033[0;31m${1}\033[0m"
 }
 
+function no_raspberry {
+    info "WARNING: This reset script is intended to run on a Raspberry Pi."
+    info "Running the script on other devices running Debian / a Debian based distribution is possible, but PI specific features will be missing!"
+    read -p "Do you want to continue? (y/n)" -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        RUNNING_ON_PI=false
+        return
+    fi
+    exit ${1}
+}
+
 if [ $UID != 0 ]; then
     error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
 fi
 
 if [ ! -f /proc/device-tree/model ]; then
-    error "ERROR: This installer is only intended to run on a Raspberry Pi."
-    exit 2
-fi
+    no_raspberry 2
+else
+    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
 
-PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
-
-if [[ $PI_MODEL != Raspberry* ]]; then
-    error "ERROR: This installer is only intended to run on a Raspberry Pi."
-    exit 3
+    if [[ $PI_MODEL != Raspberry* ]]; then
+        no_raspberry 3
+    fi
 fi
 
 if [[ ! -z $1 && ("$1" = "nginx" || "$1" = "lighttpd") ]]; then
@@ -44,6 +56,7 @@ else
 fi
 
 COMMON_PACKAGES=(
+    'curl'
     'git'
     'gphoto2'
     'jq'
@@ -51,7 +64,10 @@ COMMON_PACKAGES=(
     'nodejs'
     'npm'
     'php-gd'
+    'php-zip'
     'yarn'
+    'rsync'
+    'udisks2'
 )
 
 apache_webserver() {
@@ -198,58 +214,70 @@ else
     INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER/"
 fi
 
-echo -e "\033[0;33m### Do you like to install from git? This will take more"
-read -p "### time but it is recommended and makes updating Photobooth easier. [y/N] " -n 1 -r
+info "### Now we are going to install Photobooth."
+git clone https://github.com/andi34/photobooth $INSTALLFOLDER
+cd $INSTALLFOLDERPATH
+LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
+
+echo -e "\033[0;33m### Please select a version to install:"
+echo -e "    1 Install last development version"
+echo -e "    2 Install latest stable Release: $LATEST_VERSION"
+echo -e "    3 Install last v2 Release (v2.10.0)"
+read -p "Please enter your choice: " -n 1 -r
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[1]$ ]]
+then
+  info "### We are installing last development version"
+  VERSION="development"
+  git fetch origin dev
+  git checkout origin/dev
+elif [[ $REPLY =~ ^[3]$ ]]
+then
+  info "### We are installing v2.10.0"
+  VERSION="stable2"
+  git fetch origin stable2
+  git checkout origin/stable2
+else
+  if [[ ! $REPLY =~ ^[2]$ ]]
+    then
+    info "### Invalid choice!"
+  fi
+  VERSION="stable3"
+  info "### We are installing latest stable Release: $LATEST_VERSION"
+  git checkout $LATEST_VERSION
+fi
+
+git submodule update --init
+
+info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
+yarn install
+yarn build
+
+# Pi specific setup start
+if [ "$RUNNING_ON_PI" = true ]; then
+echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
+read -p "### If yes, this will generate a personal configuration with all needed changes. [y/N] " -n 1 -r
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    info "### Your wish is my command!"
-
-    info "### Now we are going to install Photobooth."
-    git clone https://github.com/andi34/photobooth $INSTALLFOLDER
-    cd $INSTALLFOLDERPATH
-
-    echo -e "\033[0;33m### Please select a version to install:"
-    echo -e "    1 Install last development version"
-    echo -e "    2 Install last stable Release"
-    read -p "Please enter your choice: " -n 1 -r
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[1]$ ]]
-    then
-      info "### We are installing last development version"
-      git fetch origin dev
-      git checkout origin/dev
-    else
-      if [[ ! $REPLY =~ ^[2]$ ]]
-        then
-        info "### Invalid choice!"
-      fi
-      LATEST_VERSION=$( git describe --tags `git rev-list --tags --max-count=1` )
-      info "### We are installing last stable Release: Version $LATEST_VERSION"
-      git checkout $LATEST_VERSION
-    fi
-
-    git submodule update --init
-
-    info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
-    yarn install
-    yarn build
-else
-    info "### Your wish is my command!"
-
-    info "### Downloading the latest release and extracting it."
-    curl -s https://api.github.com/repos/andi34/photobooth/releases/latest |
-        jq '.assets[].browser_download_url | select(endswith(".tar.gz"))' |
-        xargs curl -L --output /tmp/photobooth-latest.tar.gz
-
-    mkdir -p $INSTALLFOLDERPATH
-    tar -xzvf /tmp/photobooth-latest.tar.gz -C $INSTALLFOLDERPATH
-    cd $INSTALLFOLDERPATH
+    (cat << EOF) > $INSTALLFOLDERPATH/config/my.config.inc.php
+<?php
+\$config = array (
+  'take_picture' => 
+  array (
+    'cmd' => 'raspistill -n -o %s -q 100 -t 1 | echo "Done"',
+    'msg' => 'Done',
+  ),
+);
+EOF
 fi
+fi
+# Pi specific setup end
 
 info "### Setting permissions."
 chown -R www-data:www-data $INSTALLFOLDERPATH
 gpasswd -a www-data plugdev
+gpasswd -a www-data video
 
 if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
     info "### Disabling camera automount."
@@ -268,6 +296,8 @@ then
     gpasswd -a www-data lpadmin
 fi
 
+# Pi specific setup start
+if [ "$RUNNING_ON_PI" = true ]; then
 echo -e "\033[0;33m### You probably like to start the browser on every start."
 read -p "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " -n 1 -r
 echo -e "\033[0m"
@@ -288,8 +318,14 @@ EOF
 
 fi
 
-info "### Enable Nodejs GPIO access - please reboot in order to use the Remote Buzzer Feature"
+info "### Remote Buzzer Feature"
+info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
 usermod -a -G gpio www-data
+
+# remotebuzzer config depending on version
+if [ "$VERSION" == "stable2" ]; then
+# stable2
+info "### Enable Nodejs GPIO access - please reboot in order to use the Remote Buzzer Feature"
 cat > /etc/udev/rules.d/20-photobooth-gpiomem.rules <<EOF
 SUBSYSTEM=="bcm2835-gpiomem", KERNEL=="gpiomem", GROUP="gpio", MODE="0660"
 EOF
@@ -298,14 +334,72 @@ cat >> /boot/config.txt  << EOF
 dtoverlay=gpio-no-irq
 EOF
 
+else
+# latest development version + stable3
+
+# remove old artifacts from node-rpio library, if there was
+if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
+    info "### Remotebuzzer switched from node-rpio to onoff library. We detected an old remotebuzzer installation and will remove artifacts"
+    rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
+    sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+fi
+# add configuration required for onoff library
+sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
+cat >> /boot/config.txt  << EOF
+# Photobooth
+gpio=16,20,21,26=pu
+# Photobooth End
+EOF
+# add configuration required for www-data to be able to initiate system shutdown
+info "### Note: In order for the shutdown button to work we install /etc/sudoers.d/020_www-data-shutdown"
+cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
+# Photobooth Remotebuzzer shutdown button for www-data to shutdown the system
+www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
+EOF
+fi
+# remotebuzzer config depending on version end
+
+echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
+echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"
+read -p "### Would you like to enable the USB sync file backup? [y/N] " -n 1 -r
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    info "### Disabling automount for pi user"
+
+    mkdir -p /home/pi/.config/pcmanfm/LXDE-pi/
+    cat >> /home/pi/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+[volume]
+mount_on_startup=0
+mount_removable=0
+autorun=0
+EOF
+
+    chown -R pi:pi /home/pi/.config/pcmanfm
+
+    info "### Adding polkit rule so www-data can (un)mount drives"
+
+    cat >> /etc/polkit-1/localauthority/50-local.d/udisks2.pkla <<EOF
+[Allow www-data to mount drives with udisks2]
+Identity=unix-user:www-data
+Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+
+fi
+fi
+# Pi specific setup end
+
 info "### Congratulations you finished the install process."
-info "### Have fun with your Photobooth, but first restart your Pi."
+info "### Have fun with your Photobooth, but first restart your device."
 
 echo -e "\033[0;33m"
 read -p "### Do you like to reboot now? [y/N] " -n 1 -r
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    info "### Your Raspberry Pi will reboot now."
+    info "### Your device will reboot now."
     shutdown -r now
 fi

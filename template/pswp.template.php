@@ -1,5 +1,5 @@
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="pswp rotarygroup" tabindex="-1" role="dialog" aria-hidden="true">
 
     <!-- Background of PhotoSwipe.
     It's a separate element, as animating opacity is faster than rgba(). -->
@@ -23,39 +23,39 @@
                 <!--  Controls are self-explanatory. Order can be changed. -->
 
                 <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"><i class="fa fa-times"></i></button>
-                <button class="pswp__button pswp__button--share" title="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
+                <button class="pswp__button pswp__button--close rotaryfocus" title="Close (Esc)"><i class="fa fa-times"></i></button>
+                <button class="pswp__button pswp__button--share rotaryfocus" title="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
                 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+                <button class="pswp__button pswp__button--zoom rotaryfocus" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
 
                 <!-- custom buttons: -->
-                <?php if ($config['use_mail']): ?>
-                <button type="button" class="pswp__button pswp__button--mail" title="Send Email"><i class="fa fa-envelope"></i></button>
+                <?php if ($config['mail']['enabled']): ?>
+                <button type="button" class="pswp__button pswp__button--mail rotaryfocus" title="Send Email"><i class="fa fa-envelope"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['use_print_gallery']): ?>
-                <button type="button" class="pswp__button pswp__button--print" title="Print"><i class="fa fa-print"></i></button>
+                <?php if ($config['print']['from_gallery']): ?>
+                <button type="button" class="pswp__button pswp__button--print rotaryfocus" title="Print"><i class="fa fa-print"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['use_qr']): ?>
-                <button type="button" class="pswp__button pswp__button--qrcode" title="QR Code"><i class="fa fa-qrcode"></i></button>
+                <?php if ($config['qr']['enabled']): ?>
+                <button type="button" class="pswp__button pswp__button--qrcode rotaryfocus" title="QR Code"><i class="fa fa-qrcode"></i></button>
                 <?php endif; ?>
 
-		<?php if ($config['use_download'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev'])): ?>
+		<?php if ($config['download']['enabled'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev']['enabled'])): ?>
 		<!-- <button type="button" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></button> -->
-		<a href="" download="" class="pswp__button pswp__button--custom-download" title="Download"><i class="fa fa-download"></i></a>
+		<a href="" download="" class="pswp__button pswp__button--custom-download rotaryfocus" title="Download"><i class="fa fa-download"></i></a>
                 <?php endif; ?>
 
-                <?php if ($config['chroma_keying']): ?>
-                <button type="button" class="pswp__button pswp__button--print-chroma-keying" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
+                <?php if ($config['keying']['enabled']): ?>
+                <button type="button" class="pswp__button pswp__button--print-chroma-keying rotaryfocus" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['use_slideshow']): ?>
-                <button type="button" class="pswp__button pswp__button--playpause fa fa-play" title="Play Slideshow"></button>
+                <?php if ($config['gallery']['use_slideshow']): ?>
+                <button type="button" class="pswp__button pswp__button--playpause fa fa-play rotaryfocus" title="Play Slideshow"></button>
                 <?php endif; ?>
 
-                <?php if ($config['allow_delete_from_gallery']): ?>
-                <button type="button" class="pswp__button pswp__button--delete" title="Delete"><i class="fa fa-trash"></i></button>
+                <?php if ($config['gallery']['allow_delete']): ?>
+                <button type="button" class="pswp__button pswp__button--delete <?php if ($config['delete']['no_request']){ echo 'rotaryfocus';} ?> " title="Delete"><i class="fa fa-trash"></i></button>
                 <?php endif; ?>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
@@ -73,10 +73,10 @@
                 <div class="pswp__share-tooltip"></div>
             </div>
 
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            <button class="pswp__button pswp__button--arrow--left rotaryfocus" title="Previous (arrow left)">
             </button>
 
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            <button class="pswp__button pswp__button--arrow--right rotaryfocus" title="Next (arrow right)">
             </button>
 
             <div class="pswp__caption">

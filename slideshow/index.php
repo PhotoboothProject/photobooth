@@ -4,7 +4,11 @@ require_once('../lib/config.php');
 require_once('../lib/db.php');
 require_once('../lib/filter.php');
 
-$images = getImagesFromDB();
+if ($config['database']['enabled']) {
+	$images = getImagesFromDB();
+} else {
+	$images = getImagesFromDirectory($config['foldersAbs']['images']);
+}
 $imagelist = array_reverse($images);
 
 ?>
@@ -16,10 +20,10 @@ $imagelist = array_reverse($images);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
-	<meta http-equiv="refresh" content= "<?=$config['slideshow_refresh_time']?>">
+	<meta http-equiv="refresh" content= "<?=$config['slideshow']['refresh_time']?>">
 
 
-	<title>Photobooth Slideshow</title>
+	<title><?=$config['ui']['branding']?> Slideshow</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
@@ -43,17 +47,17 @@ $imagelist = array_reverse($images);
 		<h1 data-i18n="gallery_no_image"></h1>
 		<?php else: ?>
 		<?php
-		if ($config['slideshow_randomPicture']):
+		if ($config['slideshow']['randomPicture']):
 		shuffle($imagelist);
 		endif;
 		?>
 		<?php foreach ($imagelist as $image): ?>
 		<?php
 
-		$date = 'Photobooth Slideshow';
-		if ($config['file_naming'] === 'dateformatted') {
-			if ($config['db_file'] != 'db') {
-				$db = strlen($config['db_file']);
+		$date = $config['ui']['branding'] . ' Slideshow';
+		if ($config['picture']['naming'] === 'dateformatted' && $config['gallery']['show_date']) {
+			if ($config['database']['file'] != 'db') {
+				$db = strlen($config['database']['file']);
 				$name = substr($image, ++$db);
 			} else {
 				$name = $image;
@@ -64,13 +68,13 @@ $imagelist = array_reverse($images);
 			}
 		}
 
-		if ($config['slideshow_use_thumbs']) {
-			$filename_photo = '../' . $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+		if ($config['slideshow']['use_thumbs']) {
+			$filename_photo = '../' . $config['foldersRoot']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 			if (!is_readable($filename_photo)) {
-				$filename_photo = '../' . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+				$filename_photo = '../' . $config['foldersRoot']['images'] . DIRECTORY_SEPARATOR . $image;
 			}
 		} else {
-			$filename_photo = '../' . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
+			$filename_photo = '../' . $config['foldersRoot']['images'] . DIRECTORY_SEPARATOR . $image;
 		}
 
 		if (is_readable($filename_photo)) {
@@ -89,11 +93,6 @@ $imagelist = array_reverse($images);
 	<script src="../node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/TweenLite.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/EasePack.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/jquery.gsap.min.js"></script>
-	<script type="text/javascript" src="../resources/js/vendor/CSSPlugin.min.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script type="text/javascript" src="../resources/js/slideshow.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>

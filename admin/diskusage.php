@@ -1,8 +1,21 @@
 <?php
 session_start();
 
-require_once('../lib/config.php');
-require_once('../lib/diskusage.php');
+require_once '../lib/config.php';
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
+    !$config['protect']['admin']
+) {
+    require_once '../lib/diskusage.php';
+} else {
+    header('location: ../login');
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +27,7 @@ require_once('../lib/diskusage.php');
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-	<title>Photobooth Disk Usage</title>
+	<title><?=$config['ui']['branding']?> Disk Usage</title>
 
 	<!-- Favicon + Android/iPhone Icons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
@@ -30,16 +43,18 @@ require_once('../lib/diskusage.php');
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="../resources/css/login.css" />
-	<?php if ($config['rounded_corners']): ?>
+	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" href="../resources/css/rounded.css" />
 	<?php endif; ?>
 </head>
 
 <body class="loginbody">
 	<div class="login-panel">
-		<h2>Photobooth <span data-i18n="disk_usage"></span></h2>
-		<?php if( !$config['login_enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect_admin']): ?>
+		<h2><?=$config['ui']['branding']?> <span data-i18n="disk_usage"></span></h2>
 		<a class="btn btn--tiny btn--flex back-to-admin" href="./"><i class="fa fa-arrow-left"></i></a>
+		<button class="download-zip-btn btn btn--tiny btn--flex">
+			<span data-i18n="download_zip"></span>
+		</button>
 		<hr>
 <?php
     foreach ($config['foldersAbs'] as $key => $folder) {
@@ -52,10 +67,6 @@ require_once('../lib/diskusage.php');
 
     }
 ?>
-		<?php else:
-		header("location: ../login");
-		exit;
-		endif; ?>
 	</div>
 
 	<div id="adminsettings">
@@ -64,9 +75,14 @@ require_once('../lib/diskusage.php');
 		</div>
 	</div>
 
+	<div class="modal" id="save_mesg">
+		<div class="modal__body" id="save_mesg_text"><span data-i18n="saving"></span></div>
+	</div>
+
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../resources/js/adminshortcut.js"></script>
+	<script type="text/javascript" src="../resources/js/diskusage.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="module" src="../resources/js/i18n-sub.js"></script>

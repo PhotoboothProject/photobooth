@@ -1,10 +1,26 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously initRemoteBuzzerFromDOM rotaryController */
 /* exported setBackgroundImage */
 let mainImage;
 let mainImageWidth;
 let mainImageHeight;
 let backgroundImage;
 let isPrinting = false;
+let seriously;
+let target;
+let chroma;
+let seriouslyimage;
+
+const getTranslation = function (key) {
+    const translation = i18n(key, config.ui.language);
+    const fallbackTranslation = i18n(key, 'en');
+    if (translation) {
+        return translation;
+    } else if (fallbackTranslation) {
+        return fallbackTranslation;
+    }
+
+    return key;
+};
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -51,33 +67,77 @@ function alphaBoundary(imageOut, radius) {
 }
 
 function setMainImage(imgSrc) {
-    const image = new MarvinImage();
-    image.load(imgSrc, function () {
-        mainImageWidth = image.getWidth();
-        mainImageHeight = image.getHeight();
+    if (config.keying.variant === 'marvinj') {
+        const image = new MarvinImage();
+        image.load(imgSrc, function () {
+            mainImageWidth = image.getWidth();
+            mainImageHeight = image.getHeight();
 
-        const imageOut = new MarvinImage(image.getWidth(), image.getHeight());
+            const imageOut = new MarvinImage(image.getWidth(), image.getHeight());
 
-        //1. Convert green to transparency
-        greenToTransparency(image, imageOut);
+            //1. Convert green to transparency
+            greenToTransparency(image, imageOut);
 
-        // 2. Reduce remaining green pixels
-        reduceGreen(imageOut);
+            // 2. Reduce remaining green pixels
+            reduceGreen(imageOut);
 
-        // 3. Apply alpha to the boundary
-        alphaBoundary(imageOut, 6);
+            // 3. Apply alpha to the boundary
+            alphaBoundary(imageOut, 6);
 
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = mainImageWidth;
-        tmpCanvas.height = mainImageHeight;
-        imageOut.draw(tmpCanvas);
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = mainImageWidth;
+            tmpCanvas.height = mainImageHeight;
+            imageOut.draw(tmpCanvas);
 
-        mainImage = new Image();
-        mainImage.src = tmpCanvas.toDataURL('image/png');
-        mainImage.onload = function () {
-            drawCanvas();
+            mainImage = new Image();
+            mainImage.src = tmpCanvas.toDataURL('image/png');
+            mainImage.onload = function () {
+                drawCanvas();
+            };
+        });
+    } else {
+        const image = new Image();
+        image.src = imgSrc;
+        image.onload = function () {
+            mainImageWidth = image.width;
+            mainImageHeight = image.height;
+
+            // create tmpcanvas and size it to image size
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = mainImageWidth;
+            tmpCanvas.height = mainImageHeight;
+            tmpCanvas.id = 'tmpimageout';
+
+            // append Canvas for Seriously to chromakey the image
+            // eslint-disable-next-line no-unused-vars
+            const body = document.getElementsByTagName('body')[0];
+            document.body.appendChild(tmpCanvas);
+
+            seriously = new Seriously();
+            target = seriously.target('#tmpimageout');
+            seriouslyimage = seriously.source(image);
+            chroma = seriously.effect('chroma');
+            chroma.source = seriouslyimage;
+            target.source = chroma;
+            const color = config.keying.seriouslyjs_color;
+            const r = parseInt(color.substr(1, 2), 16) / 255;
+            const g = parseInt(color.substr(3, 2), 16) / 255;
+            const b = parseInt(color.substr(5, 2), 16) / 255;
+            if (config.dev.enabled) {
+                console.log('Chromakeying color:', color);
+                console.log('Red:', r, 'Green:', g, 'Blue:', b);
+            }
+            chroma.screen = [r, g, b, 1];
+            seriously.go();
+            mainImage = new Image();
+            mainImage.src = tmpCanvas.toDataURL('image/png');
+
+            mainImage.onload = function () {
+                drawCanvas();
+            };
         };
-    });
+        image.src = imgSrc;
+    }
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -117,7 +177,12 @@ function drawCanvas() {
     }
 
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
-        ctx.drawImage(mainImage, 0, 0);
+        if (config.keying.variant === 'marvinj') {
+            ctx.drawImage(mainImage, 0, 0);
+        } else {
+            //important to fetch tmpimageout
+            ctx.drawImage(document.getElementById('tmpimageout'), 0, 0);
+        }
     }
 }
 
@@ -131,7 +196,7 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 }
 
 function printImage(filename, cb) {
-    const errormsg = i18n('error');
+    const errormsg = getTranslation('error');
 
     if (isPrinting) {
         console.log('Printing already: ' + isPrinting);
@@ -160,12 +225,12 @@ function printImage(filename, cb) {
                         if (data.error) {
                             $('#print_mesg').empty();
                             $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + i18n('printing') + '</span></div>'
+                                '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
                             );
                         }
                         cb();
                         isPrinting = false;
-                    }, config.printing_time);
+                    }, config.print.time);
                 },
                 error: (jqXHR, textStatus) => {
                     console.log('An error occurred: ', textStatus);
@@ -177,7 +242,9 @@ function printImage(filename, cb) {
                     setTimeout(function () {
                         $('#print_mesg').removeClass('modal--show');
                         $('#print_mesg').empty();
-                        $('#print_mesg').html('<div class="modal__body"><span>' + i18n('printing') + '</span></div>');
+                        $('#print_mesg').html(
+                            '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
+                        );
                         cb();
                         isPrinting = false;
                     }, 5000);
@@ -247,7 +314,7 @@ function closeHandler(ev) {
 }
 
 $(document).on('keyup', function (ev) {
-    if (config.use_print_chromakeying && config.print_key && parseInt(config.print_key, 10) === ev.keyCode) {
+    if (config.print.from_chromakeying && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
         if (isPrinting) {
             console.log('Printing already in progress!');
         } else {
@@ -275,4 +342,8 @@ $(document).ready(function () {
 
         $('#mainCanvas').css('height', canvasHeight - diff + 'px');
     }
+    $('.canvasWrapper').removeClass('initial');
+
+    initRemoteBuzzerFromDOM();
+    rotaryController.focusSet('.chromawrapper');
 });
