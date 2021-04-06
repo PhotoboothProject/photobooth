@@ -55,6 +55,7 @@ if (!$mail->addAddress($_POST['sendTo'])) {
 $mail->Subject = $config['mail']['subject'];
 
 // Email body content
+$mail->isHTML( $config['mail']['is_html'] );
 $mailContent = $config['mail']['text'];
 
 // for send an attachment

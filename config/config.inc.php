@@ -208,6 +208,7 @@ $config['mail']['enabled'] = false;
 $config['mail']['send_all_later'] = false;
 $config['mail']['subject'] = null; 	// if empty, default translation is used
 $config['mail']['text'] = null;		// if empty, default translation is used
+$config['mail']['is_html'] = false;
 $config['mail']['host'] = 'smtp.example.com';
 $config['mail']['username'] = 'photobooth@example.com';
 $config['mail']['password'] = 'yourpassword';
