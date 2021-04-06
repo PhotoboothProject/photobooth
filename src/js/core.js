@@ -28,7 +28,8 @@ const photoBooth = (function () {
         chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
-        pid;
+        pid,
+	command;
 
     const modal = {
         open: function (selector) {
@@ -302,6 +303,34 @@ const photoBooth = (function () {
         }
     };
 
+    api.preCommand = function () {
+        command = {
+            mode: 'pre-command'
+        };
+        jQuery
+            .post('api/preCommand.php', command)
+            .done(function (result) {
+                console.log('Pre-photo command: ', result);
+            })
+            .fail(function (xhr, status, result) {
+                console.log('Pre-photo command: ', result);
+            });
+    };
+
+    api.postCommand = function () {
+        command = {
+            mode: 'post-command'
+        };
+        jQuery
+            .post('api/postCommand.php', command)
+            .done(function (result) {
+                console.log('Post-photo command: ', result);
+            })
+            .fail(function (xhr, status, result) {
+                console.log('Post-photo command: ', result);
+            });
+    };
+
     api.thrill = function (photoStyle) {
         api.closeNav();
         api.reset();
@@ -310,6 +339,15 @@ const photoBooth = (function () {
         remoteBuzzerClient.inProgress(true);
 
         takingPic = true;
+
+	if (config.pre_photo.cmd) {
+	    if( config.dev.enabled)
+	    {
+		console.log('Run pre-command:', config.pre_photo.cmd);
+	    }
+            api.preCommand();
+        }
+
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
@@ -856,6 +894,10 @@ const photoBooth = (function () {
             count++;
             if (config.preview.mode === 'gphoto' && config.picture.no_cheese && count === stop) {
                 api.stopPreviewVideo();
+            }
+
+	    if (config.post_photo.cmd && count === stop) {
+                api.postCommand();
             }
         }
         timerFunction();

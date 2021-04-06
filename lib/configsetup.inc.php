@@ -27,10 +27,10 @@ require_once __DIR__ . '/filter.php';
  **   - Admin panel sort order is defined by the order in this config file
  **   - The i18n tag for translation is identified by the actual section key
  **   - Parameter: Key / Value pairs are parameters which apply to how the section is displayed in the admin panel
- **     	* 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
- ** 	  	 	     the section is shown or not. Missing parameter defaults to 'expert'.
- ** 	* 'platform' (optional): Accepted values are 'all', 'linux', 'windows'. Defines whether the section is visible
- ** 	  	     		 by platform. Missing parameter defaults to 'all'
+ **             * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
+ **                          the section is shown or not. Missing parameter defaults to 'expert'.
+ **     * 'platform' (optional): Accepted values are 'all', 'linux', 'windows'. Defines whether the section is visible
+ **                              by platform. Missing parameter defaults to 'all'
  **   - Settings: Key / Array pairs define a setting (see next)
  **
  ** * Settings descriptor
@@ -41,30 +41,30 @@ require_once __DIR__ . '/filter.php';
  **   - The i18n tag for translation is identified by concatenation of  section key, ':', setting key. Tags for manual entries
  **     start with "manual:"
  **     Examples:
- **		"general:ui_language"
- **		"user_interface:button_show_fs"
- **		"manual:print:print_from_result"
+ **             "general:ui_language"
+ **             "user_interface:button_show_fs"
+ **             "manual:print:print_from_result"
  **
  **   - Parameter: Can be key/value or key/array pairs. Sort order does not matter.
- **    	* 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
- ** 	  	 	     the section is shown or not. Missing parameter defaults to 'expert'.
- ** 	* 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
- ** 	* 'type': Values are 'input', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
- ** 	  	  input type in the admin panel for this setting.
- ** 	* 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
- ** 	  	   populates the current config value into the admin panel
- **		   Exceptionally, for type 'button' this is the HTML element ID applied to the actual button itself.
- ** 	* 'placeholder': For types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
- ** 	  		 field / range selector. Often references the default config for this setting
- ** 			 (i.e 'placeholder' => $defaultConfig['picture']['time_to_live'])
- **			 For type 'button' this is the i18ntag string for the actual button text.
- ** 	* 'option': Only for types 'select','multi-select'. Lists the options available in this setting (i.e.
- **   	                'options' => [
- **                 		  '360px' => 'XS',
- **                 		  '540px' => 'S',
- ** 				  ]
- ** 	* 'range_min', 'range_max', 'range_step': Only for type 'range'. Define the slider range and step when moved
- ** 	* 'unit': Only for type 'range'. Defines the unit of the slider and is used to identify the i18n tag for translation of the unit
+ **     * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
+ **                          the section is shown or not. Missing parameter defaults to 'expert'.
+ **     * 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
+ **     * 'type': Values are 'input', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
+ **               input type in the admin panel for this setting.
+ **     * 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
+ **                populates the current config value into the admin panel
+ **                Exceptionally, for type 'button' this is the HTML element ID applied to the actual button itself.
+ **     * 'placeholder': For types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
+ **                      field / range selector. Often references the default config for this setting
+ **                      (i.e 'placeholder' => $defaultConfig['picture']['time_to_live'])
+ **                      For type 'button' this is the i18ntag string for the actual button text.
+ **     * 'option': Only for types 'select','multi-select'. Lists the options available in this setting (i.e.
+ **                     'options' => [
+ **                               '360px' => 'XS',
+ **                               '540px' => 'S',
+ **                               ]
+ **     * 'range_min', 'range_max', 'range_step': Only for type 'range'. Define the slider range and step when moved
+ **     * 'unit': Only for type 'range'. Defines the unit of the slider and is used to identify the i18n tag for translation of the unit
  */
 
 $configsetup = [
@@ -1686,7 +1686,7 @@ $configsetup = [
         ],
     ],
     'commands' => [
-        'view' => 'expert',
+        'view' => 'advanced',
         'take_picture_cmd' => [
             'view' => 'expert',
             'type' => 'input',
@@ -1700,6 +1700,20 @@ $configsetup = [
             'placeholder' => $defaultConfig['take_picture']['msg'],
             'name' => 'take_picture[msg]',
             'value' => htmlentities($config['take_picture']['msg']),
+        ],
+        'pre_photo_cmd' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => '$defaultConfig['pre_photo_cmd']['cmd'],
+            'name' => 'pre_photo[cmd]',
+            'value' => htmlentities($config['pre_photo']['cmd']),
+        ],
+        'post_photo_cmd' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['post_photo_cmd']['cmd],
+            'name' => 'post_photo[cmd]',
+            'value' => htmlentities($config['post_photo']['cmd']),
         ],
         'print_cmd' => [
             'view' => 'expert',

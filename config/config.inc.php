@@ -301,7 +301,8 @@ $config['exiftool']['msg'] = null;
 $config['preview']['cmd'] = null;
 $config['preview']['killcmd'] = null;
 $config['nodebin']['cmd'] = null;
-
+$config['pre_photo']['cmd'] = null;
+$config['post_photo']['cmd'] = null;
 
 // F O L D E R S
 $config['folders']['data'] = 'data';
