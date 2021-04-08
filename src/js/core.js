@@ -29,7 +29,7 @@ const photoBooth = (function () {
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
         pid,
-	command;
+        command;
 
     const modal = {
         open: function (selector) {
@@ -303,31 +303,20 @@ const photoBooth = (function () {
         }
     };
 
-    api.preCommand = function () {
+    api.shellCommand = function ($mode) {
         command = {
-            mode: 'pre-command'
+            mode: $mode
         };
-        jQuery
-            .post('api/preCommand.php', command)
-            .done(function (result) {
-                console.log('Pre-photo command: ', result);
-            })
-            .fail(function (xhr, status, result) {
-                console.log('Pre-photo command: ', result);
-            });
-    };
 
-    api.postCommand = function () {
-        command = {
-            mode: 'post-command'
-        };
+        console.log('Run', $mode);
+
         jQuery
-            .post('api/postCommand.php', command)
+            .post('api/shellCommand.php', command)
             .done(function (result) {
-                console.log('Post-photo command: ', result);
+                console.log($mode, 'result: ', result);
             })
             .fail(function (xhr, status, result) {
-                console.log('Post-photo command: ', result);
+                console.log($mode, 'result: ', result);
             });
     };
 
@@ -340,16 +329,12 @@ const photoBooth = (function () {
 
         takingPic = true;
 
-	if (config.pre_photo.cmd) {
-	    if( config.dev.enabled)
-	    {
-		console.log('Run pre-command:', config.pre_photo.cmd);
-	    }
-            api.preCommand();
-        }
-
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
+        }
+
+        if (config.pre_photo.cmd) {
+            api.shellCommand('pre-command');
         }
 
         if (config.previewCamBackground) {
@@ -798,8 +783,14 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
+        if (config.post_photo.cmd) {
+            api.shellCommand('post-command');
+        }
+
         takingPic = false;
+
         remoteBuzzerClient.inProgress(false);
+
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
@@ -894,10 +885,6 @@ const photoBooth = (function () {
             count++;
             if (config.preview.mode === 'gphoto' && config.picture.no_cheese && count === stop) {
                 api.stopPreviewVideo();
-            }
-
-	    if (config.post_photo.cmd && count === stop) {
-                api.postCommand();
             }
         }
         timerFunction();

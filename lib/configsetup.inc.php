@@ -1686,7 +1686,7 @@ $configsetup = [
         ],
     ],
     'commands' => [
-        'view' => 'advanced',
+        'view' => 'expert',
         'take_picture_cmd' => [
             'view' => 'expert',
             'type' => 'input',
@@ -1702,16 +1702,16 @@ $configsetup = [
             'value' => htmlentities($config['take_picture']['msg']),
         ],
         'pre_photo_cmd' => [
-            'view' => 'advanced',
+            'view' => 'expert',
             'type' => 'input',
-            'placeholder' => '$defaultConfig['pre_photo_cmd']['cmd'],
+            'placeholder' => $defaultConfig['pre_photo']['cmd'],
             'name' => 'pre_photo[cmd]',
             'value' => htmlentities($config['pre_photo']['cmd']),
         ],
         'post_photo_cmd' => [
-            'view' => 'advanced',
+            'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['post_photo_cmd']['cmd],
+            'placeholder' => $defaultConfig['post_photo']['cmd'],
             'name' => 'post_photo[cmd]',
             'value' => htmlentities($config['post_photo']['cmd']),
         ],
