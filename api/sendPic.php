@@ -55,10 +55,16 @@ if (!$mail->addAddress($_POST['sendTo'])) {
 $mail->Subject = $config['mail']['subject'];
 
 // Email body content
-$mail->isHTML( $config['mail']['is_html'] );
-$mail->Body = $config['mail']['text'];
+$mail->isHTML($config['mail']['is_html']);
 if ($config['mail']['is_html']) {
-    $mail->AltBody = $config['mail']['alt_text'];
+    if (isset($config['mail']['alt_text']) && empty($config['mail']['alt_text'])) {
+        $mail->msgHTML($config['mail']['text']);
+    } else {
+        $mail->Body = $config['mail']['text'];
+        $mail->AltBody = $config['mail']['alt_text'];
+    }
+} else {
+    $mail->Body = $config['mail']['text'];
 }
 
 // for send an attachment
