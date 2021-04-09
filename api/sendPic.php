@@ -56,12 +56,14 @@ $mail->Subject = $config['mail']['subject'];
 
 // Email body content
 $mail->isHTML( $config['mail']['is_html'] );
-$mailContent = $config['mail']['text'];
+$mail->Body = $config['mail']['text'];
+if ($config['mail']['is_html']) {
+    $mail->AltBody = $config['mail']['alt_text'];
+}
 
 // for send an attachment
 $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
 
-$mail->Body = $mailContent;
 if (!$mail->addAttachment($path . $postImage)) {
     die(
         json_encode([

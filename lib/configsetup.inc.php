@@ -1209,6 +1209,13 @@ $configsetup = [
             'name' => 'mail[text]',
             'value' => htmlentities($config['mail']['text']),
         ],
+        'mail_alt_text' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => '',
+            'name' => 'mail[alt_text]',
+            'value' => htmlentities($config['mail']['alt_text']),
+        ],
         'mail_is_html' => [
             'view' => 'advanced',
             'type' => 'checkbox',
