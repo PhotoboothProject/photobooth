@@ -2,6 +2,7 @@
 
 require_once('lib/config.php');
 $os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
+$path = __DIR__ . DIRECTORY_SEPARATOR;
 
 function is_connected() {
     $connected = @fsockopen("www.google.com", 80);
@@ -16,34 +17,64 @@ function is_connected() {
     return $is_conn;
 }
 
+if ($_GET['updatedev'] === "start" || $_GET['updatestable'] === "start" ) {
+    $checked = true;
+    $needs_commit = false;
 
-if ($os === 'linux') {
-    if (is_connected()) {
-        $status = 'Connected. Trying to update...';
-        $path = __DIR__ . DIRECTORY_SEPARATOR;
-        $ghscript = realpath($path . 'resources/sh/checkgithub.sh');
-        $updscript = realpath($path . 'resources/sh/update.sh');
-        // $script = 'git fetch origin && && git checkout origin/dev && git submodule update --init && yarn install && yarn build';
-        $gitcheck = exec('bash ' . $ghscript  . ' 2>&1');
-        if ($gitcheck === "1") {
-          $message = 'Update possible! Trying to update. This might take a while...';
-          $instructions = exec('bash ' . $updscript  . ' 2>&1');
-        } elseif ($gitcheck === "2") {
-          $message = 'Update impossible! Please commit your changes first!';
-          $instructions = 'Open a Terminal and run the following commands, after that please try again: </br>cd ' . realpath(__DIR__) . '</br> sudo -u www-data -s </br> git add --all </br> git commit -a -m "My Changes" </br> git checkout -b "backup-' . date('Ymd') . '"';
-        } else {
-          $message = 'Can not update! This is not a git repo!';
-          $instructions = 'Please install via git to use the updater.';
-        }
-
+    if ($_GET['updatedev'] === "start") {
+        $updscript = realpath($path . 'resources/sh/update-dev.sh');
     } else {
-        $status = 'Connection failure. ';
+        $updscript = realpath($path . 'resources/sh/update-stable.sh');
     }
 
+    $execute = exec('bash ' . $updscript  . ' 2>&1');
+} elseif ($_GET['commit'] === "start") {
+    $checked = true;
+    $needs_commit = true;
+    $commitscript = realpath($path . 'resources/sh/commit.sh');
+    $execute = exec('bash ' . $commitscript  . ' 2>&1');
 } else {
-    $status = 'Update not possible!';
-    $message = 'Updater only works on Linux!';
-    $instructions = '';
+    $needs_commit = false;
+    $checked = false;
+}
+
+if ($checked === false) {
+    if ($os === 'linux') {
+        if (is_connected()) {
+            $status = 'Connected. Trying to update...';
+            $ghscript = realpath($path . 'resources/sh/checkgithub.sh');
+            $ghnamescript = realpath($path . 'resources/sh/setup-gitname.sh');
+            $ghemailscript = realpath($path . 'resources/sh/setup-gitemail.sh');
+            $ghname = exec('bash ' . $ghnamescript  . ' 2>&1');
+            $ghemail = exec('bash ' . $ghemailscript  . ' 2>&1');
+            $gitcheck = exec('bash ' . $ghscript  . ' 2>&1');
+            if ($gitcheck === "1") {
+                $message = 'Update possible! Click to start the update! Please be Patient - this might take a while!';
+                $instructions = '';
+                $update_possible = true;
+                $can_commit = false;
+            } elseif ($gitcheck === "2") {
+                $message = 'Update impossible! Please commit your changes first!';
+                $instructions = 'Commit changes and backup in branch: "backup-' . date('Ymd') . '"?';
+                $update_possible = false;
+                $can_commit = true;
+            } else {
+                $message = 'Can not update! This is not a git repo!';
+                $instructions = 'Please install via git to use the updater.';
+                $update_possible = false;
+                $can_commit = false;
+            }
+
+        } else {
+            $status = 'Connection failure. ';
+        }
+
+    // WINDOWS
+    } else {
+        $status = 'Update not possible!';
+        $message = 'Updater only works on Linux!';
+        $instructions = '';
+    }
 }
 
 ?>
@@ -82,12 +113,52 @@ if ($os === 'linux') {
 
 	<div class="white-box"><h2>
 	<?php
+	    if ($checked === false) {
 		print_r($status);
                 echo '<br/>';
 		print_r($message);
                 echo '<br/>';
                 echo '<br/>';
 		print_r($instructions);
+                echo '<br/>';
+                if ($update_possible === true) {
+        ?>
+		<form action="update.php" method="get">
+			<input type="hidden" name="updatedev" value="start">
+			<input type="submit" value="Update to latest development version">
+		</form>
+
+		<br/>
+
+		<form action="update.php" method="get">
+			<input type="hidden" name="updatestable" value="start">
+			<input type="submit" value="Update to latest Stable v3 Release">
+		</form>
+	<?php
+                } elseif ($can_commit === true) {
+                    print_r($ghname);
+                    echo '<br/>';
+                    print_r($ghemail);
+                    echo '<br/>';
+
+        ?>
+		<br/>
+		<form action="update.php" method="get">
+			<input type="hidden" name="commit" value="start">
+			<input type="submit" value="Commit & backup">
+		</form>
+	<?php
+                }
+
+            // $_GET['updatestable'] or $_GET['updatedev'] or $_GET['commit'] === "start"
+	    } else {
+                echo '<br/>';
+                print_r($execute);
+                if ($needs_commit === true) {
+                    header("refresh: 10; url=update.php");
+                }
+
+            }
 	?>
 	</h2></div>
 
