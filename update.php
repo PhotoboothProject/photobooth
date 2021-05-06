@@ -41,7 +41,7 @@ if ($_GET['updatedev'] === "start" || $_GET['updatestable'] === "start" ) {
 if ($checked === false) {
     if ($os === 'linux') {
         if (is_connected()) {
-            $status = 'Connected. Trying to update...';
+            $status = 'Internet connection ok. </br> Trying to update...';
             $ghscript = realpath($path . 'resources/sh/checkgithub.sh');
             $ghnamescript = realpath($path . 'resources/sh/setup-gitname.sh');
             $ghemailscript = realpath($path . 'resources/sh/setup-gitemail.sh');
@@ -49,7 +49,7 @@ if ($checked === false) {
             $ghemail = exec('bash ' . $ghemailscript  . ' 2>&1');
             $gitcheck = exec('bash ' . $ghscript  . ' 2>&1');
             if ($gitcheck === "1") {
-                $message = 'Update possible! Click to start the update! Please be Patient - this might take a while!';
+                $message = 'Update possible! </br> Click to start the update! </br> Please be patient - this might take a while! </br> Page reloads automatically once the Update is done.';
                 $instructions = '';
                 $update_possible = true;
                 $can_commit = false;
@@ -112,6 +112,7 @@ if ($checked === false) {
 <body class="updatewrapper">
 
 	<div class="white-box"><h2>
+	<br/>
 	<?php
 	    if ($checked === false) {
 		print_r($status);
@@ -125,15 +126,16 @@ if ($checked === false) {
         ?>
 		<form action="update.php" method="get">
 			<input type="hidden" name="updatedev" value="start">
-			<input type="submit" value="Update to latest development version">
+			<button type="submit" class="btn btn--submit"><i class="fa fa-play-circle" aria-hidden="true"></i> Update to latest development version</button>
 		</form>
 
 		<br/>
 
 		<form action="update.php" method="get">
 			<input type="hidden" name="updatestable" value="start">
-			<input type="submit" value="Update to latest Stable v3 Release">
+			<button type="submit" class="btn btn--submit"><i class="fa fa-play-circle" aria-hidden="true"></i> Update to latest Stable v3 Release</button>
 		</form>
+		<br/>
 	<?php
                 } elseif ($can_commit === true) {
                     print_r($ghname);
@@ -145,8 +147,9 @@ if ($checked === false) {
 		<br/>
 		<form action="update.php" method="get">
 			<input type="hidden" name="commit" value="start">
-			<input type="submit" value="Commit & backup">
+			<button type="submit" class="btn btn--submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Commit & backup</button>
 		</form>
+		<br/>
 	<?php
                 }
 
@@ -154,12 +157,14 @@ if ($checked === false) {
 	    } else {
                 echo '<br/>';
                 print_r($execute);
+                echo '<br/>';
                 if ($needs_commit === true) {
                     header("refresh: 10; url=update.php");
                 }
 
             }
 	?>
+	<br/>
 	</h2></div>
 
 	<div>
