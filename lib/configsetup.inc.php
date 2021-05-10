@@ -1552,6 +1552,18 @@ $configsetup = [
             'name' => 'protect[localhost_admin]',
             'value' => $config['protect']['localhost_admin'],
         ],
+        'protect_update' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'protect[update]',
+            'value' => $config['protect']['update'],
+        ],
+        'protect_localhost_update' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'protect[localhost_update]',
+            'value' => $config['protect']['localhost_update'],
+        ],
         'protect_index' => [
             'view' => 'advanced',
             'type' => 'checkbox',
