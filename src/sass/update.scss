@@ -18,9 +18,15 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
+  .btn {
+    margin-top: 0.2em;
+  }
 }
 
 .white-box {
   background-color: white;
   color: black;
+  white-space: normal;
+  overflow: scroll;
+  max-height: 70%;
 }

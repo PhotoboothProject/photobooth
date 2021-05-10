@@ -1,16 +1,19 @@
 #!/bin/bash
 
+# Stop on the first sign of trouble
+set -e
+
 inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
 
 if [ $inside_git_repo == 'true' ];
 then
 	if [ -z "$(git status --porcelain)" ];
 	then
-		echo "1"
+		echo "true"
 	else
-		echo "2"
+		echo "commit"
 	fi
 else
-	echo "3"
+	echo "false"
 fi
 
