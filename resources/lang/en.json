@@ -548,7 +548,6 @@
   "update_done": "Updated!",
   "update_error": "Something went wrong!",
   "update_fail": "Failed! Check console log for more informations!",
-  "update_git_check": "Check for Update",
   "update_git_commit": "Commit & Backup",
   "update_git_commited": "Changes committed!",
   "update_no_connection": "Not internect connection!",

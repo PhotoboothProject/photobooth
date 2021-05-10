@@ -8,7 +8,6 @@ const updater = (function () {
 
     // init
     api.init = function () {
-        $('.checkGit').hide();
         $('.gitCommit').hide();
         $('.updateDev').hide();
         $('.updateStable').hide();
@@ -40,12 +39,14 @@ const updater = (function () {
         jQuery
             .post('api/checkConnection.php')
             .done(function (result) {
-                const ok = api.getTranslation('ok');
-                const updateNoConnection = api.getTranslation('update_no_connection');
+                const ok = api.getTranslation('ok'),
+                    updateNoConnection = api.getTranslation('update_no_connection'),
+                    updateCheckGit = api.getTranslation('update_check_git');
                 console.log('result: ', result);
                 if (result.success === true) {
                     $('.white-box').append($('<p style="color:green">').text(ok));
-                    $('.checkGit').show();
+                    $('.white-box').append($('<p>').text(updateCheckGit));
+                    api.runCmd('check-git');
                 } else {
                     $('.white-box').append($('<p style="color:red">').text(updateNoConnection));
                 }
@@ -88,7 +89,6 @@ const updater = (function () {
 
                 if (result.success) {
                     if ($mode === 'check-git') {
-                        $('.checkGit').hide();
                         if (result.output == 'commit') {
                             $('.white-box').append($('<p style="color:red">').text(updateCommitBackup));
                             $('.gitCommit').show();
@@ -101,7 +101,6 @@ const updater = (function () {
                             $('.white-box').append($('<p style="color:red">').text(updateNoGit));
                         }
                     } else if ($mode === 'commit') {
-                        $('.checkGit').hide();
                         $('.gitCommit').hide();
                         if (config.dev.enabled) {
                             // eslint-disable-next-line
@@ -132,14 +131,6 @@ const updater = (function () {
                 console.log($mode, 'result: ', result);
             });
     };
-
-    $('.checkGit').on('click', function (e) {
-        e.preventDefault();
-        const updateCheckGit = api.getTranslation('update_check_git');
-        $('.white-box').append($('<p>').text(updateCheckGit));
-        api.runCmd('check-git');
-        $('.checkGit').blur();
-    });
 
     $('.gitCommit').on('click', function (e) {
         e.preventDefault();

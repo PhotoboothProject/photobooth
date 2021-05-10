@@ -55,7 +55,6 @@ if (
 		<h2><?=$config['ui']['branding']?> Updater</h2>
 		<p><span data-i18n="update_os_check"></span></p>
 	</div>
-		<a href="#" class="checkGit btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_git_check"></span></a>
 
 		<a href="#" class="gitCommit btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_git_commit"></span></a>
 
