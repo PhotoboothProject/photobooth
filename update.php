@@ -56,14 +56,16 @@ if (
 		<p><span data-i18n="os_check"></span></p>
 	</div>
 
-		<a href="#" class="gitCommit btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_git_commit"></span></a>
+	<a href="#" class="gitCommit btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_git_commit"></span></a>
 
-		<a href="#" class="updateDev btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_dev"></span></a>
+	<a href="#" class="updateDev btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_dev"></span></a>
 
-		<a href="#" class="updateStable btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_stable"></span></a>
+	<a href="#" class="updateStable btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_stable"></span></a>
 
 	<div>
 		<a href="./" class="btn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+
+		<a href="admin" class="btn"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

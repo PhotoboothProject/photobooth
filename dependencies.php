@@ -57,6 +57,8 @@ if (
 
 	<div>
 		<a href="./" class="btn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+
+		<a href="admin" class="btn"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

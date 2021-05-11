@@ -254,6 +254,13 @@ $configsetup = [
             'name' => 'DISKUSAGEBUTTON',
             'value' => 'diskusage-btn',
         ],
+        'dependencies_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'dependencies_check',
+            'name' => 'DEPENDENCIESBUTTON',
+            'value' => 'dependencies-btn',
+        ],
     ],
     'frontpage' => [
         'view' => 'basic',
@@ -1990,6 +1997,13 @@ $configsetup = [
             'placeholder' => 'check_version',
             'name' => 'CHECKVERSIONBUTTON',
             'value' => 'checkversion-btn',
+        ],
+        'updater_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'updater',
+            'name' => 'UPDATERBUTTON',
+            'value' => 'updater-btn',
         ],
     ],
 ];
