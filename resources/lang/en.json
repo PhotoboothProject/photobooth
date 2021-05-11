@@ -149,6 +149,7 @@
   "keying:live_keying_enabled": "Use live keying as start page",
   "keying:live_keying_show_all": "Show original and keyed image inside gallery while using live keying",
   "keyingerror": "Chroma keying not possible!",
+  "livechroma": "Live keying",
   "login_invalid": "Username or password is invalid!",
   "login_password": "Password",
   "login_username": "Username",
