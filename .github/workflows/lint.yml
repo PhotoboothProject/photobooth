@@ -5,12 +5,14 @@ on:
     branches:
       - dev
       - stable2
+      - stable3
     paths:
       - '**.js'
   pull_request:
     branches:
       - dev
       - stable2
+      - stable3
     paths:
       - '**.js'
   workflow_dispatch:
