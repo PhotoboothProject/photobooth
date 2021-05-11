@@ -1,21 +1,6 @@
 <?php
-session_start();
 
 require_once('lib/config.php');
-
-// Login / Authentication check
-if (
-    !$config['login']['enabled'] ||
-    (!$config['protect']['localhost_update'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
-    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['update'])
-) {
-
-    // nothing for now
-
-} else {
-    header('location: login');
-    exit();
-}
 
 ?>
 <!DOCTYPE html>
@@ -52,15 +37,9 @@ if (
 <body class="updatewrapper">
 
 	<div class="white-box" id="white-box">
-		<h2><?=$config['ui']['branding']?> Updater</h2>
+		<h2><?=$config['ui']['branding']?> dependencies check</h2>
 		<p><span data-i18n="os_check"></span></p>
 	</div>
-
-		<a href="#" class="gitCommit btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_git_commit"></span></a>
-
-		<a href="#" class="updateDev btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_dev"></span></a>
-
-		<a href="#" class="updateStable btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_stable"></span></a>
 
 	<div>
 		<a href="./" class="btn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
@@ -69,7 +48,7 @@ if (
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="api/config.php"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
-	<script type="text/javascript" src="resources/js/update.js"></script>
+	<script type="text/javascript" src="resources/js/dependencies.js"></script>
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>

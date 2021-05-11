@@ -3,10 +3,11 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 
-$ghscript = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/checkgithub.sh';
+$ghscript = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/check-github.sh';
 $commitscript = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/commit.sh';
 $upddev = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/update-dev.sh';
 $updstable = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/update-stable.sh';
+$checkdeps = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/check-dependencies.sh';
 
 $mode = $_POST['mode'];
 
@@ -22,6 +23,9 @@ switch ($mode) {
         break;
     case 'update-stable':
         $cmd = sprintf($updstable);
+        break;
+    case 'check-deps':
+        $cmd = sprintf($checkdeps);
         break;
     default:
         $cmd = 'echo "Error!"';

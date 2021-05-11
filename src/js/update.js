@@ -18,15 +18,15 @@ const updater = (function () {
         jQuery
             .post('api/checkOS.php')
             .done(function (result) {
-                const updateCheckConnection = api.getTranslation('update_check_connection');
-                const updateUnsupportedOs = api.getTranslation('update_unsupported_os');
+                const checkConnection = api.getTranslation('check_connection');
+                const unsupportedOs = api.getTranslation('unsupported_os');
                 console.log('result: ', result);
                 if (result.success == 'linux') {
                     $('.white-box').append($('<p style="color:green">').text(result.success));
-                    $('.white-box').append($('<p>').text(updateCheckConnection));
+                    $('.white-box').append($('<p>').text(checkConnection));
                     api.checkConnection();
                 } else {
-                    $('.white-box').append($('<p style="color:red">').text(updateUnsupportedOs));
+                    $('.white-box').append($('<p style="color:red">').text(unsupportedOs));
                     $('.white-box').append($('<p style="color:red">').text(result.success));
                 }
             })
@@ -40,7 +40,7 @@ const updater = (function () {
             .post('api/checkConnection.php')
             .done(function (result) {
                 const ok = api.getTranslation('ok'),
-                    updateNoConnection = api.getTranslation('update_no_connection'),
+                    noConnection = api.getTranslation('no_connection'),
                     updateCheckGit = api.getTranslation('update_check_git');
                 console.log('result: ', result);
                 if (result.success === true) {
@@ -48,7 +48,7 @@ const updater = (function () {
                     $('.white-box').append($('<p>').text(updateCheckGit));
                     api.runCmd('check-git');
                 } else {
-                    $('.white-box').append($('<p style="color:red">').text(updateNoConnection));
+                    $('.white-box').append($('<p style="color:red">').text(noConnection));
                 }
             })
             .fail(function (xhr, status, result) {
