@@ -1,6 +1,7 @@
 /* exported initPhotoSwipeFromDOM */
 /* global photoBooth rotaryController */
 
+// eslint-disable-next-line no-unused-vars
 let globalGalleryHandle;
 
 // eslint-disable-next-line no-unused-vars
