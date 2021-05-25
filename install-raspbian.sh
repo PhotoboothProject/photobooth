@@ -7,11 +7,17 @@ set -e
 # set -x
 
 RUNNING_ON_PI=true
+SILENT_INSTALL=false
 
 if [ ! -z $1 ]; then
     webserver=$1
 else
     webserver=apache
+fi
+
+if [ "silent" = "$2" ]; then
+    SILENT_INSTALL=true
+    info "Performing silent install"
 fi
 
 function info {
@@ -22,10 +28,19 @@ function error {
     echo -e "\033[0;31m${1}\033[0m"
 }
 
+#Param 1: Question / Param 2: Default / silent answer
+function ask_yes_no {
+    if [ "$SILENT_INSTALL" = false ]; then
+        read -p "${1}: " -n 1 -r
+    else
+        REPLY=${2}
+    fi
+}
+
 function no_raspberry {
     info "WARNING: This reset script is intended to run on a Raspberry Pi."
     info "Running the script on other devices running Debian / a Debian based distribution is possible, but PI specific features will be missing!"
-    read -p "Do you want to continue? (y/n)" -n 1 -r
+    ask_yes_no "Do you want to continue? (y/n)" "Y"
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         RUNNING_ON_PI=false
@@ -199,9 +214,9 @@ for package in "${COMMON_PACKAGES[@]}"; do
 done
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
-read -p "### Warning: If typing y, the whole /var/www/html folder will be removed! [y/N] " -n 1 -r deleteHtmlFolder
+ask_yes_no "### Warning: If typing y, the whole /var/www/html folder will be removed! [y/N] " "Y"
 echo -e "\033[0m"
-if [ "$deleteHtmlFolder" != "${deleteHtmlFolder#[Yy]}" ] ;then
+if [ "$REPLY" != "${REPLY#[Yy]}" ] ;then
     info "### Ok, we will replace the html folder with the Photobooth."
     cd /var/www/
     rm -rf html
@@ -223,7 +238,7 @@ echo -e "\033[0;33m### Please select a version to install:"
 echo -e "    1 Install last development version"
 echo -e "    2 Install latest stable Release: $LATEST_VERSION"
 echo -e "    3 Install last v2 Release (v2.10.0)"
-read -p "Please enter your choice: " -n 1 -r
+ask_yes_no "Please enter your choice" "1"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[1]$ ]]
 then
@@ -256,7 +271,7 @@ yarn build
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
 echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
-read -p "### If yes, this will generate a personal configuration with all needed changes. [y/N] " -n 1 -r
+ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "Y"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -285,7 +300,7 @@ if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
 fi
 
 echo -e "\033[0;33m### You probably like to use a printer."
-read -p "### You like to install CUPS and set needing printer permissions? [y/N] " -n 1 -r
+ask_yes_no "### You like to install CUPS and set needing printer permissions? [y/N] " "Y"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -299,7 +314,7 @@ fi
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
 echo -e "\033[0;33m### You probably like to start the browser on every start."
-read -p "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " -n 1 -r
+ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " "Y"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -367,7 +382,7 @@ fi
 
 echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
 echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"
-read -p "### Would you like to enable the USB sync file backup? [y/N] " -n 1 -r
+ask_yes_no "### Would you like to enable the USB sync file backup? [y/N] " "Y"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -402,7 +417,7 @@ info "### Congratulations you finished the install process."
 info "### Have fun with your Photobooth, but first restart your device."
 
 echo -e "\033[0;33m"
-read -p "### Do you like to reboot now? [y/N] " -n 1 -r
+ask_yes_no "### Do you like to reboot now? [y/N] " "N"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
