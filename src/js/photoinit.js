@@ -256,6 +256,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             $('<img>')
                 .attr('src', 'api/qrcode.php?filename=' + img)
                 .appendTo(pswpQR);
+            $('<p>')
+                .css('max-width', this.width + 'px')
+                .html(photoBooth.getTranslation('qrHelp') + '<b>' + config.webserver.ssid + '</b>')
+                .appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');
         }
