@@ -102,7 +102,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.previewCamBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
+        if (config.preview.asBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
             api.startVideo('preview');
         }
 
@@ -140,7 +140,7 @@ const photoBooth = (function () {
     };
 
     api.startVideo = function (mode) {
-        if (config.previewCamBackground) {
+        if (config.preview.asBackground) {
             api.stopVideo('preview');
         }
 
@@ -337,7 +337,7 @@ const photoBooth = (function () {
             api.shellCommand('pre-command');
         }
 
-        if (config.previewCamBackground) {
+        if (config.preview.asBackground) {
             wrapper.css('background-color', config.colors.panel);
         }
 
