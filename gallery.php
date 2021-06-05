@@ -96,6 +96,7 @@ $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($imag
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
+	<script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
 	<script type="text/javascript" src="resources/js/photoinit.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>
 	<script type="text/javascript" src="resources/js/core.js"></script>
@@ -105,5 +106,7 @@ $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($imag
 	<?php endif; ?>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
+
+	<?php require_once('lib/services_start.php'); ?>
 </body>
 </html>

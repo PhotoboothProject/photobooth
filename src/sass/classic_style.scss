@@ -449,7 +449,8 @@ hr.small {
 .gallery__img:active > img,
 .gallery__img:focus > img,
 .gallery__img:hover > img,
-.gallery__img.focused > img {
+.gallery__img.focused > img,
+.rotaryfocus.focused {
   opacity: 0.6;
 }
 
