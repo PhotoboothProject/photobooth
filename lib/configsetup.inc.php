@@ -1524,6 +1524,12 @@ $configsetup = [
             'name' => 'button[show_fs]',
             'value' => $config['button']['show_fs'],
         ],
+        'button_homescreen' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'button[homescreen]',
+            'value' => $config['button']['homescreen'],
+        ],
         'ui_font_size' => [
             'view' => 'advanced',
             'type' => 'input',
