@@ -266,6 +266,7 @@ $config['protect']['localhost_manual'] = false;
 // possible style values: "classic", "modern", "custom"
 $config['ui']['style'] = 'modern';
 $config['button']['show_fs'] = false;
+$config['button']['homescreen'] = true;
 $config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#ffffff';
 $config['colors']['background_countdown'] = '#214852';
