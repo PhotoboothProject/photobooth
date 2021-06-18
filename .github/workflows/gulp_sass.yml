@@ -5,12 +5,14 @@ on:
     branches:
       - dev
       - stable2
+      - stable3
     paths:
       - '**.scss'
   pull_request:
     branches:
       - dev
       - stable2
+      - stable3
     paths:
       - '**.scss'
   workflow_dispatch:

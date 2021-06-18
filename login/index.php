@@ -75,9 +75,13 @@ if (isset($_POST['submit'])) {
 		<?php endif; ?>
 		<p><a href="../gallery.php" class="btn btn--login"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a></p>
 		<p><a href="../slideshow" class="btn btn--login"><i class="fa fa-play"></i> <span data-i18n="slideshow"></span></a></p>
+		<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<p><a href="../livechroma.php" class="btn btn--login"><i class="fa fa-paint-brush"></i> <span data-i18n="livechroma"></span></a></p>
+		<?php endif; ?>
 		<?php if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../manual/faq.php" class="btn btn--login" title="FAQ" target="newwin"><i class="fa fa-question-circle" aria-hidden="true"></i> <span data-i18n="show_faq"></span></a></p>
 		<p><a href="../manual" class="btn btn--login" title="Manual" target="newwin"><i class="fa fa-info-circle" aria-hidden="true"></i> <span data-i18n="show_manual"></span></a></p>
+		<p><a href="https://t.me/PhotoboothGroup" class="btn btn--login" title="Telegram" target="newwin"><i class="fa fa-telegram" aria-hidden="true"></i> <span data-i18n="telegram"></span></a></p>
 		<?php endif; ?>
 		<p><a href="./" class="btn btn--login"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a></p>
 		<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>

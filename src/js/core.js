@@ -28,7 +28,8 @@ const photoBooth = (function () {
         chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
-        pid;
+        pid,
+        command;
 
     const modal = {
         open: function (selector) {
@@ -101,7 +102,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.previewCamBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
+        if (config.preview.asBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
             api.startVideo('preview');
         }
 
@@ -139,7 +140,7 @@ const photoBooth = (function () {
     };
 
     api.startVideo = function (mode) {
-        if (config.previewCamBackground) {
+        if (config.preview.asBackground) {
             api.stopVideo('preview');
         }
 
@@ -302,6 +303,23 @@ const photoBooth = (function () {
         }
     };
 
+    api.shellCommand = function ($mode) {
+        command = {
+            mode: $mode
+        };
+
+        console.log('Run', $mode);
+
+        jQuery
+            .post('api/shellCommand.php', command)
+            .done(function (result) {
+                console.log($mode, 'result: ', result);
+            })
+            .fail(function (xhr, status, result) {
+                console.log($mode, 'result: ', result);
+            });
+    };
+
     api.thrill = function (photoStyle) {
         api.closeNav();
         api.reset();
@@ -310,11 +328,16 @@ const photoBooth = (function () {
         remoteBuzzerClient.inProgress(true);
 
         takingPic = true;
+
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
 
-        if (config.previewCamBackground) {
+        if (config.pre_photo.cmd) {
+            api.shellCommand('pre-command');
+        }
+
+        if (config.preview.asBackground) {
             wrapper.css('background-color', config.colors.panel);
         }
 
@@ -760,8 +783,14 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
+        if (config.post_photo.cmd) {
+            api.shellCommand('post-command');
+        }
+
         takingPic = false;
+
         remoteBuzzerClient.inProgress(false);
+
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }

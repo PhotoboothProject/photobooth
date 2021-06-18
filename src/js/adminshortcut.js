@@ -8,7 +8,7 @@ function countreset() {
 // eslint-disable-next-line no-unused-vars
 function adminsettings() {
     if (admincount == 3) {
-        window.location.href = 'admin/index.php';
+        window.location.href = 'login/index.php';
     }
     console.log(admincount);
     admincount++;

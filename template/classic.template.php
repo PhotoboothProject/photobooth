@@ -31,8 +31,8 @@
 				</div>
 				<?php else: ?>
 				<div class="names">
-					<hr class="small" />
 					<?php if ($config['ui']['decore_lines']): ?>
+					<hr class="small" />
 					<hr>
 					<?php endif; ?>
 					<div>

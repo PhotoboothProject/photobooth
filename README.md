@@ -11,8 +11,8 @@ _(The full changelog can be found inside [the Photobooth Wiki](https://github.co
 
 [![Translate on Crowdin](https://img.shields.io/badge/Traslate%20on-Crowdin-green.svg)](https://crowdin.com/project/photobooth)  
 
-[![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable2)](https://github.com/andi34/photobooth/actions?query=branch%3Astable2+workflow%3ALint)
-[![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable2)](https://github.com/andi34/photobooth/actions?query=branch%3Astable2+workflow%3Agulp-sass)
+[![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable3)](https://github.com/andi34/photobooth/actions?query=branch%3Astable3+workflow%3ALint)
+[![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable3)](https://github.com/andi34/photobooth/actions?query=branch%3Astable3+workflow%3Agulp-sass)
 
 ## :heart_eyes: Features
 

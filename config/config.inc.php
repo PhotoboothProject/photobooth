@@ -208,6 +208,8 @@ $config['mail']['enabled'] = false;
 $config['mail']['send_all_later'] = false;
 $config['mail']['subject'] = null; 	// if empty, default translation is used
 $config['mail']['text'] = null;		// if empty, default translation is used
+$config['mail']['alt_text'] = null;		// if empty, default translation is used
+$config['mail']['is_html'] = false;
 $config['mail']['host'] = 'smtp.example.com';
 $config['mail']['username'] = 'photobooth@example.com';
 $config['mail']['password'] = 'yourpassword';
@@ -264,6 +266,7 @@ $config['protect']['localhost_manual'] = false;
 // possible style values: "classic", "modern", "custom"
 $config['ui']['style'] = 'modern';
 $config['button']['show_fs'] = false;
+$config['button']['homescreen'] = true;
 $config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#ffffff';
 $config['colors']['background_countdown'] = '#214852';
@@ -301,7 +304,8 @@ $config['exiftool']['msg'] = null;
 $config['preview']['cmd'] = null;
 $config['preview']['killcmd'] = null;
 $config['nodebin']['cmd'] = null;
-
+$config['pre_photo']['cmd'] = null;
+$config['post_photo']['cmd'] = null;
 
 // F O L D E R S
 $config['folders']['data'] = 'data';

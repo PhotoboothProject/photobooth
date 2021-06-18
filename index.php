@@ -114,7 +114,11 @@ if (
 
 		<!-- Result Page -->
 		<div class="stages rotarygroup" id="result">
+
+			<?php if ($config['button']['homescreen']): ?>
 			<a href="#" class="<?php echo $btnClass1; ?> homebtn rotaryfocus"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+			<?php endif; ?>
+
 			<div class="resultInner hidden">
 				<?php if ($config['gallery']['enabled']): ?>
 				<a href="#" class="<?php echo $btnClass1; ?> gallery-button rotaryfocus" ><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
