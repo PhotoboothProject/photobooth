@@ -1323,6 +1323,13 @@ $configsetup = [
             'name' => 'remotebuzzer[userotary]',
             'value' => $config['remotebuzzer']['userotary'],
         ],
+        'remotebuzzer_enable_standalonegallery' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[enable_standalonegallery]',
+            'value' => $config['remotebuzzer']['enable_standalonegallery'],
+        ],
+
         'remotebuzzer_picturebutton' => [
             'view' => 'advanced',
             'type' => 'checkbox',

@@ -131,6 +131,16 @@ function initRemoteBuzzerFromDOM() {
         // API functions
         api.init = function () {
             enabled = config.remotebuzzer.userotary;
+            if (typeof onStandaloneGalleryView !== 'undefined') {
+                enabled = enabled && config.remotebuzzer.enable_standalonegallery;
+                if (config.dev.enabled) {
+                    console.log(
+                        'Rotary Controller is ',
+                        config.remotebuzzer.enable_standalonegallery ? 'enabled' : 'disabled',
+                        ' for standalone gallery view'
+                    );
+                }
+            }
         };
 
         api.focusSet = function (id) {
