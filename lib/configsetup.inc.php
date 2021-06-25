@@ -1329,11 +1329,11 @@ $configsetup = [
     'remotebuzzer' => [
         'view' => 'advanced',
         'platform' => 'linux',
-        'remotebuzzer_enabled' => [
+        'remotebuzzer_usebuttons' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'remotebuzzer[enabled]',
-            'value' => $config['remotebuzzer']['enabled'],
+            'name' => 'remotebuzzer[usebuttons]',
+            'value' => $config['remotebuzzer']['usebuttons'],
         ],
         'remotebuzzer_userotary' => [
             'view' => 'advanced',
@@ -1341,13 +1341,6 @@ $configsetup = [
             'name' => 'remotebuzzer[userotary]',
             'value' => $config['remotebuzzer']['userotary'],
         ],
-        'remotebuzzer_enable_standalonegallery' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'remotebuzzer[enable_standalonegallery]',
-            'value' => $config['remotebuzzer']['enable_standalonegallery'],
-        ],
-
         'remotebuzzer_picturebutton' => [
             'view' => 'advanced',
             'type' => 'checkbox',
@@ -1421,6 +1414,33 @@ $configsetup = [
             'range_max' => 9,
             'range_step' => 1,
             'unit' => 'seconds',
+        ],
+        'remotebuzzer_rotaryclkgpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['rotaryclkgpio'],
+            'name' => 'remotebuzzer[rotaryclkgpio]',
+            'value' => $config['remotebuzzer']['rotaryclkgpio'],
+        ],
+        'remotebuzzer_rotarydtgpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['rotarydtgpio'],
+            'name' => 'remotebuzzer[rotarydtgpio]',
+            'value' => $config['remotebuzzer']['rotarydtgpio'],
+        ],
+        'remotebuzzer_rotarybtngpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['rotarybtngpio'],
+            'name' => 'remotebuzzer[rotarybtngpio]',
+            'value' => $config['remotebuzzer']['rotarybtngpio'],
+        ],
+        'remotebuzzer_enable_standalonegallery' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[enable_standalonegallery]',
+            'value' => $config['remotebuzzer']['enable_standalonegallery'],
         ],
         'remotebuzzer_logfile' => [
             'view' => 'expert',

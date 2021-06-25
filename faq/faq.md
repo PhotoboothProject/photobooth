@@ -116,12 +116,12 @@ Follow the steps mentioned here: [How to Fix NGINX 413 Request Entity Too Large 
 Yes, the **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins . This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.
 
 The Hardware Button functionality supports two separate modes of operation (select via admin panel):
-- **Button Mode**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
-- **Rotary Mode**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. 
+- **Buttons**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
+- **Rotary Encoder**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. 
 
-Modes can not be combined.
+Both buttons and rotary encoder controls can be combined.
 
-In any mode, Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
+Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
 
 Troubleshooting / Debugging:
 
@@ -135,7 +135,7 @@ Troubleshooting / Debugging:
  - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
 
 ```
-         gpio=16,20,21,26=pu
+         gpio=16,17,20,21,22,26,27=pu
 ```
 
 - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as
@@ -149,10 +149,10 @@ Troubleshooting / Debugging:
 As of Photobooth v3, hardware button support is fully integrated into Photobooth. Therefore the `button.py` script has been removed from the distribution. In case you are using this script and for continued backward compatibility please do not activate the Remote Buzzer Hardware Button feature in the admin GUI. Please note that continued backward compatibility is not guaranteed and in case of issues please switch to the integrated functionality.
 
 
-***************
-**Button Mode**
-***************
-The server supports up to three connected hardware buttons for the following functionalities:
+******************
+**Button Support**
+******************
+The server supports up to four connected hardware buttons for the following functionalities:
 
 1) **Picture Button**
 
@@ -183,24 +183,43 @@ Note:
 - Hold the button for a defined time to initiate the shut down (defaults to 5 seconds). This can be adjusted in the admin settings.
 - The shutdown button will only trigger if there is currently no action in progress in Photobooth (picture, collage). 
 
-After any button is triggered, all hardware button remain disabled until the action (picture / collage) completed. Once completed, the hardware buttons re-arms / are active again.
+4) **Print Button**
 
-***************
-**Rotary Mode**
-***************
-In rotary mode a rotary encoder (i.e. [KY-040](https://sensorkit.en.joy-it.net/index.php?title=KY-040_Rotary_encoder)) is connected to the GPIOs. Turning the rotary left / right will navigate through the currently visible set of buttons on the screen. Button press on the rotary will activate the currently highlighted button in Photobooth.
+- Defaults to GPIO26
+- This button will initiate a print of the current picture either from the results screen or the gallery.
+
+
+After any button is triggered, all hardware button remain disabled until the action (picture / collage) completed. Once completed, the hardware buttons re-arms / are active again.
 
 The wiring layout is
 
 ```
-Button                          Rotary Encoder
-Mode           Raspberry        Mode
+Button            Raspberry
 
-Picture  ---   GPIO 21    ---   DT
-Collage  ---   GPIO 20    ---   CLK
-Shutdown ---   GPIO 16    ---   SW
-                3V3       ---   +
-                GND       ---   GND
+Picture     ---   GPIO 21
+Collage     ---   GPIO 20
+Shutdown    ---   GPIO 16
+Print       ---   GPIO 26
+All         ---   GND
+```
+
+
+******************
+**Rotary Encoder**
+******************
+A rotary encoder (i.e. [KY-040](https://sensorkit.en.joy-it.net/index.php?title=KY-040_Rotary_encoder)) is connected to the GPIOs. Turning the rotary left / right will navigate through the currently visible set of buttons on the screen. Button press on the rotary will activate the currently highlighted button in Photobooth.
+
+The wiring layout is
+
+```
+Rotary
+Encoder    Raspberry
+
+CLK  ---   GPIO 27
+DT   ---   GPIO 17
+BTN  ---   GPIO 22
++    ---   3V3
+GND  ---   GND
 ```
 
 Known limitations:
@@ -215,7 +234,7 @@ Other Remote Trigger (experimental)
 **************
 The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
 
-- Channel: `photobooth-socket`
+- Channel:  `photobooth-socket`
 - Commands: `start-picture`, `start-collage`
 - Response: `completed`  will be emitted to the client, once photobooth finished the task
 

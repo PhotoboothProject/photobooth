@@ -347,7 +347,7 @@ fi
 sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
 cat >> /boot/config.txt  << EOF
 # Photobooth
-gpio=16,20,21,26=pu
+gpio=16,17,20,21,22,26,27=pu
 # Photobooth End
 EOF
 # add configuration required for www-data to be able to initiate system shutdown

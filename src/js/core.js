@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController globalGalleryHandle */
 
 const photoBooth = (function () {
     // vars
@@ -323,6 +323,7 @@ const photoBooth = (function () {
         api.closeNav();
         api.reset();
         api.showResultInner(false);
+        api.closeGallery();
 
         remoteBuzzerClient.inProgress(true);
 
@@ -861,6 +862,24 @@ const photoBooth = (function () {
         }, 300);
     };
 
+    // close Gallery Overview and Slideshow if visible
+    api.closeGallery = function () {
+        if (typeof globalGalleryHandle !== 'undefined') {
+            globalGalleryHandle.close();
+        }
+
+        gallery.find('.gallery__inner').hide();
+        gallery.removeClass('gallery--open');
+
+        api.showResultInner(true);
+
+        if ($('#result').is(':visible')) {
+            rotaryController.focusSet('#result');
+        } else if ($('#start').is(':visible')) {
+            rotaryController.focusSet('#start');
+        }
+    };
+
     api.resetMailForm = function () {
         $('#send-mail-form').trigger('reset');
         $('#mail-form-message').html('');
@@ -1068,16 +1087,7 @@ const photoBooth = (function () {
     $('.gallery__close').on('click', function (e) {
         e.preventDefault();
 
-        gallery.find('.gallery__inner').hide();
-        gallery.removeClass('gallery--open');
-
-        api.showResultInner(true);
-
-        if ($('#result').is(':visible')) {
-            rotaryController.focusSet('#result');
-        } else if ($('#start').is(':visible')) {
-            rotaryController.focusSet('#start');
-        }
+        api.closeGallery();
     });
 
     $('.mailbtn').on('click touchstart', function (e) {

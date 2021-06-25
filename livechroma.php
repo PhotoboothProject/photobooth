@@ -173,5 +173,10 @@ if (
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
 
 	<?php require_once('lib/services_start.php'); ?>
+
+	<script type="text/javascript">
+		onLiveChromaKeyingView = true;
+	</script>
+
 </body>
 </html>

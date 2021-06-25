@@ -3,15 +3,19 @@
 
 let remoteBuzzerClient;
 let rotaryController;
+let buttonController;
+
 // eslint-disable-next-line no-unused-vars
 function initRemoteBuzzerFromDOM() {
     if (config.dev.enabled) {
-        console.log('Remote Buzzer client is', config.remotebuzzer.enabled ? 'enabled' : 'disabled');
+        console.log(
+            'Remote Buzzer client is',
+            config.remotebuzzer.usebuttons || config.remotebuzzer.userotary ? 'enabled' : 'disabled'
+        );
     }
 
     /*
      ** Communication with Remote Buzzer Server
-     ** Controls PB when in BUTTON mode
      */
 
     remoteBuzzerClient = (function () {
@@ -19,7 +23,7 @@ function initRemoteBuzzerFromDOM() {
         const api = {};
 
         api.enabled = function () {
-            return config.remotebuzzer.enabled;
+            return config.remotebuzzer.usebuttons || config.remotebuzzer.userotary;
         };
 
         api.init = function () {
@@ -39,26 +43,15 @@ function initRemoteBuzzerFromDOM() {
                 ioClient.on('photobooth-socket', function (data) {
                     switch (data) {
                         case 'start-picture':
-                            $('.resultInner').removeClass('show');
-                            photoBooth.thrill('photo');
+                            buttonController.takePicture();
                             break;
 
                         case 'start-collage':
-                            if (config.collage.enabled) {
-                                $('.resultInner').removeClass('show');
-                                photoBooth.thrill('collage');
-                            }
+                            buttonController.takeCollage();
                             break;
 
                         case 'print':
-                            if ($('#result').is(':visible')) {
-                                $('.printbtn').trigger('click');
-                                $('.printbtn').blur();
-                            } else if ($('.pswp__button--print').is(':visible')) {
-                                $('.pswp__button--print').trigger('click');
-                            } else {
-                                ioClient.emit('photobooth-socket', 'completed');
-                            }
+                            buttonController.print();
                             break;
 
                         case 'rotary-cw':
@@ -90,29 +83,46 @@ function initRemoteBuzzerFromDOM() {
                     }
                 });
 
+                buttonController.init();
+                rotaryController.init();
+
                 rotaryController.focusSet('#start');
             } else {
                 console.log(
                     'ERROR: remotebuzzer_client unable to connect - webserver.ip not defined in photobooth config'
                 );
             }
-
-            rotaryController.init();
         };
 
         api.inProgress = function (flag) {
             if (this.enabled()) {
                 if (flag) {
-                    ioClient.emit('photobooth-socket', 'in-progress');
+                    this.emitToServer('in-progress');
                 } else {
-                    ioClient.emit('photobooth-socket', 'completed');
+                    this.emitToServer('completed');
                 }
             }
         };
 
         api.collageWaitForNext = function () {
             if (this.enabled()) {
-                ioClient.emit('photobooth-socket', 'collage-wait-for-next');
+                this.emitToServer('collage-wait-for-next');
+            }
+        };
+
+        api.emitToServer = function (cmd) {
+            switch (cmd) {
+                case 'in-progress':
+                    ioClient.emit('photobooth-socket', 'in-progress');
+                    break;
+                case 'completed':
+                    ioClient.emit('photobooth-socket', 'completed');
+                    break;
+                case 'collage-wait-for-next':
+                    ioClient.emit('photobooth-socket', 'collage-wait-for-next');
+                    break;
+                default:
+                    break;
             }
         };
 
@@ -120,31 +130,80 @@ function initRemoteBuzzerFromDOM() {
     })();
 
     /*
-     ** Controls PB when in ROTARY mode
+     ** Controls PB with hardware BUTTONS
+     */
+    buttonController = (function () {
+        // vars
+        const api = {};
+
+        api.init = function () {
+            // nothing to init
+        };
+
+        api.enabled = function () {
+            return (
+                config.remotebuzzer.usebuttons &&
+                typeof onStandaloneGalleryView === 'undefined' &&
+                typeof onLiveChromaKeyingView === 'undefined'
+            );
+        };
+
+        api.takePicture = function () {
+            if (this.enabled()) {
+                $('.resultInner').removeClass('show');
+                photoBooth.thrill('photo');
+            }
+        };
+
+        api.takeCollage = function () {
+            if (this.enabled() && config.collage.enabled) {
+                $('.resultInner').removeClass('show');
+                photoBooth.thrill('collage');
+            }
+        };
+
+        api.print = function () {
+            if ($('#result').is(':visible')) {
+                $('.printbtn').trigger('click');
+                $('.printbtn').blur();
+            } else if ($('.pswp__button--print').is(':visible')) {
+                $('.pswp__button--print').trigger('click');
+            } else {
+                remoteBuzzerClient.emitToServer('completed');
+            }
+        };
+
+        return api;
+    })();
+
+    /*
+     ** Controls PB with ROTARY encoder
      */
 
     rotaryController = (function () {
         // vars
-        let enabled = false;
         const api = {};
 
         // API functions
+        api.enabled = function () {
+            return (
+                config.remotebuzzer.userotary &&
+                (typeof onStandaloneGalleryView === 'undefined' ? true : config.remotebuzzer.enable_standalonegallery)
+            );
+        };
+
         api.init = function () {
-            enabled = config.remotebuzzer.userotary;
-            if (typeof onStandaloneGalleryView !== 'undefined') {
-                enabled = enabled && config.remotebuzzer.enable_standalonegallery;
-                if (config.dev.enabled) {
-                    console.log(
-                        'Rotary Controller is ',
-                        config.remotebuzzer.enable_standalonegallery ? 'enabled' : 'disabled',
-                        ' for standalone gallery view'
-                    );
-                }
+            if (config.dev.enabled && typeof onStandaloneGalleryView !== 'undefined') {
+                console.log(
+                    'Rotary Controller is ',
+                    config.remotebuzzer.enable_standalonegallery ? 'enabled' : 'disabled',
+                    ' for standalone gallery view'
+                );
             }
         };
 
         api.focusSet = function (id) {
-            if (enabled) {
+            if (this.enabled()) {
                 this.focusRemove();
                 $(id).find('.rotaryfocus').first().addClass('focused');
             }
@@ -155,7 +214,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.focusNext = function () {
-            if (this.rotationInactive() || !enabled) {
+            if (this.rotationInactive() || !this.enabled()) {
                 return;
             }
 
@@ -202,7 +261,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.focusPrev = function () {
-            if (this.rotationInactive() || !enabled) {
+            if (this.rotationInactive() || !this.enabled()) {
                 return;
             }
 
@@ -248,7 +307,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.click = function () {
-            if (enabled) {
+            if (this.enabled()) {
                 // click modal if open
                 if ($('#qrCode.modal.modal--show').exists()) {
                     $('#qrCode').click();
