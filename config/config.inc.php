@@ -230,6 +230,7 @@ $config['slideshow']['use_thumbs'] = false;
 // R E M O T E   B U Z Z E R
 $config['remotebuzzer']['enabled'] = false;
 $config['remotebuzzer']['userotary'] = false;
+$config['remotebuzzer']['enable_standalonegallery'] = false;
 $config['remotebuzzer']['picturebutton'] = true;
 // collagetime controls the time to distinguish picture from collage in seconds
 $config['remotebuzzer']['collagetime'] = '2';
