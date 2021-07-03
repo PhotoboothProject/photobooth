@@ -476,9 +476,26 @@ const photoBooth = (function () {
                     $('.loading').empty();
                     $('#video--sensor').hide();
 
+                    let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
+                    const preloadImage = new Image();
+                    const picdate = Date.now;
+                    preloadImage.onload = () => {
+                        $('.loaderImage').css({
+                            'background-image': `url(${imageUrl}?filter=${imgFilter})`
+                        });
+                        $('.loaderImage').attr('data-img', picdate);
+                    };
+
+                    preloadImage.src = imageUrl;
+
+                    $('.loaderImage').show();
+
                     if (config.collage.continuous) {
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
                                 api.thrill('collage');
                             }, 1000);
                         } else {
@@ -489,20 +506,6 @@ const photoBooth = (function () {
                         }
                     } else {
                         // collage with interruption
-                        let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
-                        const preloadImage = new Image();
-                        const picdate = Date.now;
-                        preloadImage.onload = () => {
-                            $('.loaderImage').css({
-                                'background-image': `url(${imageUrl}?filter=${imgFilter})`
-                            });
-                            $('.loaderImage').attr('data-img', picdate);
-                        };
-
-                        preloadImage.src = imageUrl;
-
-                        $('.loaderImage').show();
-
                         remoteBuzzerClient.collageWaitForNext();
 
                         if (result.current + 1 < result.limit) {
