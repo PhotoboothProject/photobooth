@@ -497,7 +497,7 @@ const photoBooth = (function () {
                                 imageUrl = '';
                                 $('.loaderImage').css('display', 'none');
                                 api.thrill('collage');
-                            }, 1000);
+                            }, 5000);
                         } else {
                             currentCollageFile = '';
                             nextCollageNumber = 0;
