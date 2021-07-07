@@ -564,6 +564,17 @@ $configsetup = [
             'name' => 'collage[continuous]',
             'value' => $config['collage']['continuous'],
         ],
+        'collage_continuous_time' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'name' => 'collage[continuous_time]',
+            'placeholder' => $defaultConfig['collage']['continuous_time'],
+            'value' => $config['collage']['continuous_time'],
+            'range_min' => 1,
+            'range_max' => 20,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
         'collage_layout' => [
             'view' => 'advanced',
             'type' => 'select',
