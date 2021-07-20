@@ -25,7 +25,7 @@ const getConfigFromPHP = () => {
     try {
         const stdout = execSync(cmd).toString();
 
-        return JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
+        return JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
     } catch (err) {
         log('ERROR: Unable to load photobooth config', err);
     }

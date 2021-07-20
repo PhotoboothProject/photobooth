@@ -27,7 +27,7 @@ process.on('uncaughtException', function (err) {
 const {execSync} = require('child_process');
 let cmd = `cd ${API_DIR_NAME} && php ./${API_FILE_NAME}`;
 let stdout = execSync(cmd).toString();
-const config = JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
+const config = JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
 
 /* WRITE PROCESS PID FILE */
 const pidFilename = config.foldersRoot.tmp + '/remotebuzzer_server.pid';
