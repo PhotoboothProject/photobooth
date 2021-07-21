@@ -4,6 +4,21 @@ header('Content-Type: application/json');
 require_once '../lib/config.php';
 require_once '../lib/db.php';
 
+function logError($data) {
+    global $config;
+    $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['take_picture']['logfile'];
+
+    $file_data = date('c') . ":\n" . print_r($data, true) . "\n";
+    if (is_file($logfile)) {
+        $file_data .= file_get_contents($logfile);
+    }
+    file_put_contents($logfile, $file_data);
+
+    //$fp = fopen($logfile, 'a'); //opens file in append mode.
+    //fwrite($fp, date('c') . ":\n\t" . $message . "\n");
+    //fclose($fp);
+}
+
 function takePicture($filename) {
     global $config;
 
@@ -29,27 +44,30 @@ function takePicture($filename) {
         $dir = dirname($filename);
         chdir($dir); //gphoto must be executed in a dir with write permission
         $cmd = sprintf($config['take_picture']['cmd'], $filename);
+        $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
         exec($cmd, $output, $returnValue);
 
         if ($returnValue) {
-            die(
-                json_encode([
-                    'error' => 'Gphoto returned with an error code',
-                    'cmd' => $cmd,
-                    'returnValue' => $returnValue,
-                    'output' => $output,
-                ])
-            );
+            $ErrorData = [
+                'error' => 'Gphoto returned with an error code',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ];
+            $ErrorString = json_encode($ErrorData);
+            logError($ErrorData);
+            die($ErrorString);
         } elseif (!file_exists($filename)) {
-            die(
-                json_encode([
-                    'error' => 'File was not created',
-                    'cmd' => $cmd,
-                    'returnValue' => $returnValue,
-                    'output' => $output,
-                ])
-            );
+            $ErrorData = [
+                'error' => 'File was not created',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ];
+            $ErrorString = json_encode($ErrorData);
+            logError($ErrorData);
+            die($ErrorString);
         }
     }
 }

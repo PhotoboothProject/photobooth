@@ -25,6 +25,10 @@ if ($data['type'] == 'reset') {
                 }
             }
         }
+        $logFile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['take_picture']['logfile'];
+        if (is_file($logFile)) {
+            unlink($logFile);
+        }
     }
 
     if ($config['reset']['remove_mailtxt']) {

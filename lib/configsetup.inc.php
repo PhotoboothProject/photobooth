@@ -1738,6 +1738,12 @@ $configsetup = [
             'name' => 'take_picture[cmd]',
             'value' => htmlentities($config['take_picture']['cmd']),
         ],
+        'take_picture_logfile' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'take_picture[logfile]',
+            'value' => $config['take_picture']['logfile'],
+        ],
         'take_picture_msg' => [
             'view' => 'expert',
             'type' => 'input',
