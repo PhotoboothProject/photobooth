@@ -17,7 +17,9 @@ let rsyncStartTime = 0;
 
 /* Functions */
 
-const log = (...optionalParams) => console.log(`Sync-To-Drive server [${PID}]:`, ...optionalParams);
+const log = function (...optionalParams) {
+    console.log('[', new Date().toISOString(), ']:', ` Sync-To-Drive server [${PID}]:`, ...optionalParams);
+};
 
 const getConfigFromPHP = () => {
     const cmd = `cd ${API_DIR_NAME} && php ./${API_FILE_NAME}`;
@@ -92,7 +94,7 @@ const getDriveInfo = ({drive}) => {
 };
 
 const mountDrive = (drive) => {
-    if (drive && !drive.mountpoint) {
+    if (typeof drive.mountpoint === 'undefined' || !drive.mountpoint) {
         try {
             const mountRes = execSync(`export LC_ALL=C; udisksctl mount -b ${drive.path}; unset LC_ALL`).toString();
             const mountPoint = mountRes

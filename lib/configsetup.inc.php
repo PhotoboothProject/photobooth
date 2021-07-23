@@ -111,6 +111,13 @@ $configsetup = [
             'name' => 'dev[enabled]',
             'value' => $config['dev']['enabled'],
         ],
+        'dev_debugpanel' => [
+            'view' => 'expert',
+            'type' => 'button',
+            'placeholder' => 'dev_debugpanel',
+            'name' => 'DEBUGPANEL',
+            'value' => 'debugpanel-btn',
+        ],
         'start_screen_title' => [
             'type' => 'input',
             'placeholder' => $defaultConfig['start_screen']['title'],
@@ -1866,6 +1873,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['folders']['archives'],
             'name' => 'folders[archives]',
             'value' => $config['folders']['archives'],
+        ],
+        'folders_config' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['folders']['config'],
+            'name' => 'folders[config]',
+            'value' => $config['folders']['config'],
         ],
     ],
     'reset' => [

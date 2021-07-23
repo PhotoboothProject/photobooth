@@ -7,7 +7,9 @@ const PID = process.pid;
 let rotaryClkPin, rotaryDtPin;
 
 /* LOGGING FUNCTION */
-const log = (...optionalParams) => console.log(`Remote Buzzer Server [${PID}]:`, ...optionalParams);
+const log = function (...optionalParams) {
+    console.log('[', new Date().toISOString(), ']:', ` Remote Buzzer Server [${PID}]:`, ...optionalParams);
+};
 
 /* HANDLE EXCEPTIONS */
 process.on('uncaughtException', function (err) {
