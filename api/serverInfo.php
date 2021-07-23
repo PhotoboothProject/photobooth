@@ -1,7 +1,9 @@
 <?php
 header('Content-Type: application/json');
 
-require_once '../lib/config.php';
+ob_start();
+require_once 'config.php';
+$output = ob_end_clean();
 
 $content = $_GET['content'];
 
@@ -15,7 +17,7 @@ switch ($content) {
         break;
 
     case 'nav-myconfig':
-        echo dumpfile($config['foldersAbs']['config'] . '/' . 'my.config.inc.php');
+        print_r($config);
         break;
 
     case 'nav-serverprocesses':
