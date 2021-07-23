@@ -52,6 +52,7 @@ const parseConfig = (config) => {
 
 const getDriveInfo = ({drive}) => {
     let json = null;
+    let device = false;
 
     drive = drive.toLowerCase();
 
@@ -74,27 +75,24 @@ const getDriveInfo = ({drive}) => {
     }
 
     try {
-	device = json.blockdevices.find(
+        device = json.blockdevices.find(
             (blk) =>
-		// eslint-disable-next-line implicit-arrow-linebreak
-            blk.subsystems.includes('usb') &&
-		((blk.name && drive === blk.name.toLowerCase()) ||
-                 (blk.kname && drive === blk.kname.toLowerCase()) ||
-                 (blk.path && drive === blk.path.toLowerCase()) ||
-                 (blk.label && drive === blk.label.toLowerCase()))
-	);
-    }
-    catch
-    {
-	device = false;
+                // eslint-disable-next-line implicit-arrow-linebreak
+                blk.subsystems.includes('usb') &&
+                ((blk.name && drive === blk.name.toLowerCase()) ||
+                    (blk.kname && drive === blk.kname.toLowerCase()) ||
+                    (blk.path && drive === blk.path.toLowerCase()) ||
+                    (blk.label && drive === blk.label.toLowerCase()))
+        );
+    } catch (err) {
+        device = false;
     }
 
     return device;
 };
 
 const mountDrive = (drive) => {
-
-    if ( drive && !drive.mountpoint) {
+    if (drive && !drive.mountpoint) {
         try {
             const mountRes = execSync(`export LC_ALL=C; udisksctl mount -b ${drive.path}; unset LC_ALL`).toString();
             const mountPoint = mountRes
@@ -189,17 +187,15 @@ const unmountDrive = () => {
     const driveInfo = getDriveInfo(parsedConfig);
     const mountedDrive = mountDrive(driveInfo);
 
-    if (mountedDrive)
-    {
-	try {
+    if (mountedDrive) {
+        try {
             execSync(`export LC_ALL=C; udisksctl unmount -b ${mountedDrive.path}; unset LC_ALL`).toString();
             log('Unmounted drive', mountedDrive.path);
-	} catch (error) {
+        } catch (error) {
             log('ERROR: unable to unmount drive', mountedDrive.path);
-	}
-    } else
-    {
-	log('Nothing to umount');
+        }
+    } else {
+        log('Nothing to umount');
     }
 };
 
