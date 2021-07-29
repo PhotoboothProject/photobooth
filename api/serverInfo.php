@@ -9,11 +9,11 @@ $content = $_GET['content'];
 
 switch ($content) {
     case 'nav-remotebuzzerlog':
-        echo file_get_contents($config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile']);
+        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile']);
         break;
 
     case 'nav-synctodrivelog':
-        echo file_get_contents($config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile']);
+        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile']);
         break;
 
     case 'nav-myconfig':
