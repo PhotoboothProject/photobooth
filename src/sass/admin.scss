@@ -113,6 +113,11 @@ div.debugcontent {
   background-color: white;
 }
 
+/* debug panel text output */
+pre {
+  white-space: pre-wrap;
+}
+
 /**************************
 * Settings Content Container
 **************************/
