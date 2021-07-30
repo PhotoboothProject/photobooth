@@ -6,7 +6,6 @@ const photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         wrapper = $('#wrapper'),
-        timeToLive = config.picture.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
         webcamConstraints = {
@@ -71,7 +70,7 @@ const photoBooth = (function () {
 
         timeOut = setTimeout(function () {
             api.reloadPage();
-        }, timeToLive);
+        }, config.picture.time_to_live);
     };
 
     // reset whole thing
