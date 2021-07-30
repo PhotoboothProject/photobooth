@@ -1,6 +1,5 @@
 {
   "abort": "Abort",
-  "cameralog": "gphoto logs",
   "admin_panel": "Admin panel",
   "adminpanel_back": "Back",
   "adminpanel_toggletextOFF": "Off",
@@ -20,6 +19,7 @@
   "bootconfig": "config.txt",
   "busy": "Processing ...",
   "busyCollage": "Processing Collage ...",
+  "cameralog": "gphoto logs",
   "check_version": "Check online",
   "cheese": "Cheeeeeeeese!",
   "cheeseCollage": "Cheeeeeeeese Collageeeeeeeeeee!",
