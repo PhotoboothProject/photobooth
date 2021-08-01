@@ -68,9 +68,11 @@ const photoBooth = (function () {
     api.resetTimeOut = function () {
         clearTimeout(timeOut);
 
-        timeOut = setTimeout(function () {
-            api.reloadPage();
-        }, config.picture.time_to_live);
+        if (!takingPic) {
+            timeOut = setTimeout(function () {
+                api.reloadPage();
+            }, config.picture.time_to_live);
+        }
     };
 
     // reset whole thing
@@ -328,6 +330,10 @@ const photoBooth = (function () {
         remoteBuzzerClient.inProgress(true);
 
         takingPic = true;
+
+        if (api.isTimeOutPending()) {
+            api.resetTimeOut();
+        }
 
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
@@ -680,7 +686,6 @@ const photoBooth = (function () {
             const chromaimage = config.foldersRoot.keying + '/' + filename;
 
             loader.hide();
-            api.resetTimeOut();
             api.chromaimage = filename;
             setMainImage(chromaimage);
         };
@@ -689,6 +694,9 @@ const photoBooth = (function () {
 
         takingPic = false;
         remoteBuzzerClient.inProgress(false);
+
+        api.resetTimeOut();
+
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
@@ -780,8 +788,6 @@ const photoBooth = (function () {
             if (!$('#mySidenav').hasClass('sidenav--open')) {
                 rotaryController.focusSet('#result');
             }
-
-            api.resetTimeOut();
         };
 
         preloadImage.src = imageUrl;
@@ -791,8 +797,9 @@ const photoBooth = (function () {
         }
 
         takingPic = false;
-
         remoteBuzzerClient.inProgress(false);
+
+        api.resetTimeOut();
 
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
