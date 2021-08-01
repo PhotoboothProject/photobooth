@@ -356,6 +356,9 @@ cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
 # Photobooth Remotebuzzer shutdown button for www-data to shutdown the system
 www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
+
+# update artifacts in user configuration from old remotebuzzer implementation
+sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' config/my.config.inc.php
 fi
 # remotebuzzer config depending on version end
 
