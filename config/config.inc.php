@@ -46,6 +46,7 @@ $config['button']['force_buzzer'] = false;
 // P I C T U R E S
 // control countdown timer in seconds
 $config['picture']['cntdwn_time'] = '5';
+$config['picture']['cntdwn_offset'] = '0';
 $config['picture']['no_cheese'] = false;
 // control time for cheeeeese! in milliseconds
 $config['picture']['cheese_time'] = '1000';

@@ -899,7 +899,7 @@ const photoBooth = (function () {
         const stop = start > 2 ? start - 2 : start;
 
         function timerFunction() {
-            element.text(current);
+            element.text(Number(current) + Number(config.picture.cntdwn_offset));
             current--;
 
             element.removeClass('tick');

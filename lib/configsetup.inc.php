@@ -326,6 +326,17 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'seconds',
         ],
+        'picture_cntdwn_offset' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'name' => 'picture[cntdwn_offset]',
+            'placeholder' => $defaultConfig['picture']['cntdwn_offset'],
+            'value' => $config['picture']['cntdwn_offset'],
+            'range_min' => 0,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
         'picture_no_cheese' => [
             'view' => 'basic',
             'type' => 'checkbox',
