@@ -18,20 +18,21 @@ const updater = (function () {
         jQuery
             .post('api/checkOS.php')
             .done(function (result) {
-                const checkConnection = api.getTranslation('check_connection');
-                const unsupportedOs = api.getTranslation('unsupported_os');
-                console.log('result: ', result);
-                if (result.success == 'linux') {
-                    $('.white-box').append($('<p style="color:green">').text(result.success));
+                console.log('Operating system: ', result);
+                const checkConnection = api.getTranslation('check_connection'),
+                    unsupportedOs = api.getTranslation('unsupported_os');
+
+                if (result.os == 'linux') {
+                    $('.white-box').append($('<p style="color:green">').text(result.os));
                     $('.white-box').append($('<p>').text(checkConnection));
                     api.checkConnection();
                 } else {
                     $('.white-box').append($('<p style="color:red">').text(unsupportedOs));
-                    $('.white-box').append($('<p style="color:red">').text(result.success));
+                    $('.white-box').append($('<p style="color:red">').text(result.os));
                 }
             })
             .fail(function (xhr, status, result) {
-                console.log('result: ', result);
+                console.log('Operating system check failed: ', result);
             });
     };
 
@@ -39,11 +40,12 @@ const updater = (function () {
         jQuery
             .post('api/checkConnection.php')
             .done(function (result) {
+                console.log('Connected: ', result);
                 const ok = api.getTranslation('ok'),
                     noConnection = api.getTranslation('no_connection'),
                     updateCheckGit = api.getTranslation('update_check_git');
-                console.log('result: ', result);
-                if (result.success === true) {
+
+                if (result.connected === true) {
                     $('.white-box').append($('<p style="color:green">').text(ok));
                     $('.white-box').append($('<p>').text(updateCheckGit));
                     api.runCmd('check-git');
@@ -52,7 +54,7 @@ const updater = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                console.log('result: ', result);
+                console.log('Checking connection failed: ', result);
             });
     };
 

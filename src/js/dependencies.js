@@ -15,20 +15,21 @@ const dependencies = (function () {
         jQuery
             .post('api/checkOS.php')
             .done(function (result) {
-                const checkDependencies = api.getTranslation('check_dependencies');
-                const unsupportedOs = api.getTranslation('unsupported_os');
-                console.log('result: ', result);
-                if (result.success == 'linux') {
-                    $('.white-box').append($('<p style="color:green">').text(result.success));
+                console.log('Operating system: ', result);
+                const checkDependencies = api.getTranslation('check_dependencies'),
+                    unsupportedOs = api.getTranslation('unsupported_os');
+
+                if (result.os == 'linux') {
+                    $('.white-box').append($('<p style="color:green">').text(result.os));
                     $('.white-box').append($('<p>').text(checkDependencies));
                     api.runCmd('check-deps');
                 } else {
                     $('.white-box').append($('<p style="color:red">').text(unsupportedOs));
-                    $('.white-box').append($('<p style="color:red">').text(result.success));
+                    $('.white-box').append($('<p style="color:red">').text(result.os));
                 }
             })
             .fail(function (xhr, status, result) {
-                console.log('result: ', result);
+                console.log('Operating system check failed: ', result);
             });
     };
 

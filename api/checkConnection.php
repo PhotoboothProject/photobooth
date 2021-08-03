@@ -15,10 +15,10 @@ function is_connected() {
 
 if (is_connected()) {
     echo json_encode([
-        'success' => true,
+        'connected' => true,
     ]);
 } else {
     echo json_encode([
-        'success' => false,
+        'connected' => false,
     ]);
 }
