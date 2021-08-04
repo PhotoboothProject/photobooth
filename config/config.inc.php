@@ -90,7 +90,7 @@ $config['collage']['only'] = false;
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;
 $config['collage']['continuous_time'] = '5';
-// possible layout values: '2x2', '2x2-2', '2x4', '2x4-2', '1+3', '1+2'
+// possible layout values: '2x2', '2x2-2', '2x4', '2x4-2', '1+3', '1+3-2', '3+1', '1+2'
 $config['collage']['layout'] = '2x2-2';
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code

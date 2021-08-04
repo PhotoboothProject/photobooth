@@ -288,6 +288,7 @@ function createCollage($srcImagePaths, $destImagePath) {
             }
             break;
         case '1+3-2':
+        case '3+1':
             $width = 1800;
             $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
@@ -298,7 +299,12 @@ function createCollage($srcImagePaths, $destImagePath) {
                 $rotate_after_creation = true;
             }
 
-            $positions = [[60, 60], [60, 730], [640, 730], [1220, 730]];
+            if (COLLAGE_LAYOUT === '1+3-2') {
+                $positions = [[60, 60], [60, 730], [640, 730], [1220, 730]];
+            } else {
+                // 3+1 Layout
+                $positions = [[60, 60], [640, 60], [1220, 60], [60, 505]];
+            }
 
             for ($i = 0; $i < 4; $i++) {
                 $position = $positions[$i];
@@ -308,19 +314,37 @@ function createCollage($srcImagePaths, $destImagePath) {
                 }
 
                 list($picWidth, $picHeight) = getimagesize($srcImagePaths[$i]);
-                switch ($i) {
-                    // Picture 1
-                    case 0:
-                        $widthNew = $picWidth * 0.65;
-                        $heightNew = $picHeight * 0.65;
-                        break;
-                    // Picture 2, // Picture 3, // Picture 4
-                    case 1:
-                    case 2:
-                    case 3:
-                        $widthNew = $picWidth * 0.4;
-                        $heightNew = $picHeight * 0.4;
-                        break;
+                if (COLLAGE_LAYOUT === '1+3-2') {
+                    switch ($i) {
+                        // Picture 1, // Picture 2, // Picture 3,
+                        case 0:
+                            $widthNew = $picWidth * 0.65;
+                            $heightNew = $picHeight * 0.65;
+                            break;
+                        // Picture 2, // Picture 3, // Picture 4
+                        case 1:
+                        case 2:
+                        case 3:
+                            $widthNew = $picWidth * 0.4;
+                            $heightNew = $picHeight * 0.4;
+                            break;
+                    }
+                } else {
+                    // 3+1 Layout
+                    switch ($i) {
+                        // Picture 1, // Picture 2, // Picture 3
+                        case 0:
+                        case 1:
+                        case 2:
+                            $widthNew = $picWidth * 0.4;
+                            $heightNew = $picHeight * 0.4;
+                            break;
+                        // Picture 4
+                        case 3:
+                            $widthNew = $picWidth * 0.75;
+                            $heightNew = $picHeight * 0.75;
+                            break;
+                    }
                 }
                 ResizeCropImage($widthNew, $heightNew, $srcImagePaths[$i], $srcImagePaths[$i]);
 
