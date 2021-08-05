@@ -1265,7 +1265,7 @@ const photoBooth = (function () {
     // clear Timeout to not reset the gallery, if you clicked anywhere
     $(document).on('click', function () {
         if (!startPage.is(':visible')) {
-            api.resetTimeOut();
+	    clearTimeout(timeOut);
         }
     });
 
