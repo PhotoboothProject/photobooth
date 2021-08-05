@@ -153,8 +153,6 @@ function createCollage($srcImagePaths, $destImagePath) {
             $images_rotated = [];
 
             for ($i = 0; $i < 4; $i++) {
-                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-
                 if (!file_exists($srcImagePaths[$i])) {
                     return false;
                 }
@@ -163,6 +161,7 @@ function createCollage($srcImagePaths, $destImagePath) {
                     ApplyFrame($srcImagePaths[$i], $srcImagePaths[$i], COLLAGE_FRAME);
                 }
 
+                $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
                 $tempSubRotated = imagerotate($tempSubImage, $degrees, $white);
                 $images_rotated[] = resizeImage($tempSubRotated, $height / 3.3, $width / 3.5);
             }
