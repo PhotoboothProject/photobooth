@@ -358,7 +358,10 @@ www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 
 # update artifacts in user configuration from old remotebuzzer implementation
-sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' $INSTALLFOLDERPATH/config/my.config.inc.php
+if [ -f "$INSTALLFOLDERPATH/config/my.config.inc.php" ]; then
+    sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' $INSTALLFOLDERPATH/config/my.config.inc.php
+fi
+
 fi
 # remotebuzzer config depending on version end
 
