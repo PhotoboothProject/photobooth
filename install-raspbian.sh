@@ -206,12 +206,12 @@ if [ "$deleteHtmlFolder" != "${deleteHtmlFolder#[Yy]}" ] ;then
     cd /var/www/
     rm -rf html
     INSTALLFOLDER="html"
-    INSTALLFOLDERPATH="/var/www/html/"
+    INSTALLFOLDERPATH="/var/www/html"
 else
     info "### Ok, we will install Photobooth into /var/www/html/photobooth."
     cd /var/www/html/
     INSTALLFOLDER="photobooth"
-    INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER/"
+    INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
 fi
 
 info "### Now we are going to install Photobooth."
@@ -275,7 +275,7 @@ fi
 # Pi specific setup end
 
 info "### Setting permissions."
-chown -R www-data:www-data $INSTALLFOLDERPATH
+chown -R www-data:www-data $INSTALLFOLDERPATH/
 gpasswd -a www-data plugdev
 gpasswd -a www-data video
 
