@@ -523,7 +523,6 @@ const photoBooth = (function () {
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
                                     $('.loaderImage').css('display', 'none');
-                                    api.deleteTmpImage(result.collage_file);
                                     api.thrill('collage');
                                 });
                         } else {
@@ -535,7 +534,6 @@ const photoBooth = (function () {
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
                                     $('.loaderImage').css('display', 'none');
-                                    api.deleteTmpImage(result.collage_file);
                                     currentCollageFile = '';
                                     nextCollageNumber = 0;
 
