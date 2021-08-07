@@ -29,7 +29,9 @@ function createCollage($srcImagePaths, $destImagePath) {
 
     if (PICTURE_KEEP_ORIGINAL === 'keep') {
         for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-            copy($srcImagePaths[$i], $srcImagePaths[$i] . '_orig.jpg');
+            $singleimage = substr($srcImagePaths[$i], 0, -4);
+            $origfilename = $singleimage . '-orig.jpg';
+            copy($srcImagePaths[$i], $origfilename);
         }
     }
 
