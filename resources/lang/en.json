@@ -556,5 +556,6 @@
   "userinterface:ui_style": "Styling",
   "using_latest_version": "You are using the latest version of photobooth.",
   "version": "Version",
-  "version:check_version": "Photobooth version"
+  "version:check_version": "Photobooth version",
+  "wait_message": "Please wait..."
 }

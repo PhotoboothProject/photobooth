@@ -485,6 +485,8 @@ const photoBooth = (function () {
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now;
+                    const waitmsg = api.getTranslation('wait_message');
+                    $('.loading').append($('<p>').text(waitmsg));
                     preloadImage.onload = () => {
                         $('.loaderImage').css({
                             'background-image': `url(${imageUrl}?filter=${imgFilter})`
