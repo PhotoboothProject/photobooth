@@ -509,8 +509,12 @@ const photoBooth = (function () {
                         } else {
                             currentCollageFile = '';
                             nextCollageNumber = 0;
-
-                            api.processPic(data.style, result);
+                            setTimeout(() => {
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
+                                api.processPic(data.style, result);
+                            }, config.collage.continuous_time * 1000);
                         }
                     } else {
                         // collage with interruption
