@@ -43,11 +43,25 @@ $line1text = $config['textonpicture']['line1'];
 $line2text = $config['textonpicture']['line2'];
 $line3text = $config['textonpicture']['line3'];
 
+$quality = 100;
+$imageModified = false;
+$image_filter = false;
+
 if (!isset($_POST['style'])) {
     $errormsg = 'No style provided';
     logErrorAndDie($errormsg);
 }
 
+if (!isset($_POST['filter'])) {
+    $errormsg = 'No filter provided';
+    logErrorAndDie($errormsg);
+}
+
+if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
+    $image_filter = $_POST['filter'];
+}
+
+// Check collage configuration
 if ($_POST['style'] === 'collage') {
     if ($config['collage']['take_frame'] !== 'off') {
         if (is_dir(COLLAGE_FRAME)) {
@@ -72,7 +86,40 @@ if ($_POST['style'] === 'collage') {
             logErrorAndDie($errormsg);
         }
     }
+} else {
+    // Check picture configuration
+    if (!file_exists($filename_tmp)) {
+        $errormsg = 'File ' . $filename_tmp . ' does not exist';
+        logErrorAndDie($errormsg);
+    }
 
+    if ($config['picture']['take_frame']) {
+        if (is_dir($picture_frame)) {
+            $errormsg = 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!';
+            logErrorAndDie($errormsg);
+        }
+
+        if (!file_exists($picture_frame)) {
+            $errormsg = 'Frame ' . $picture_frame . ' does not exist!';
+            logErrorAndDie($errormsg);
+        }
+    }
+
+    if ($config['textonpicture']['enabled']) {
+        if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
+            $errormsg = 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!';
+            logErrorAndDie($errormsg);
+        }
+
+        if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
+            $errormsg = 'Font ' . $fontpath . ' does not exist!';
+            logErrorAndDie($errormsg);
+        }
+    }
+}
+
+// Process Collage
+if ($_POST['style'] === 'collage') {
     $collageBasename = substr($filename_tmp, 0, -4);
     $collageSrcImagePaths = [];
 
@@ -80,7 +127,7 @@ if ($_POST['style'] === 'collage') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp)) {
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
         $errormsg = 'Could not create collage';
         logErrorAndDie($errormsg);
     }
@@ -92,90 +139,52 @@ if ($_POST['style'] === 'collage') {
     }
 }
 
-if (!file_exists($filename_tmp)) {
-    $errormsg = 'File does not exist';
-    logErrorAndDie($errormsg);
-}
-
-if ($config['picture']['take_frame']) {
-    if (is_dir($picture_frame)) {
-        $errormsg = 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!';
-        logErrorAndDie($errormsg);
-    }
-
-    if (!file_exists($picture_frame)) {
-        $errormsg = 'Frame ' . $picture_frame . ' does not exist!';
-        logErrorAndDie($errormsg);
-    }
-}
-
-if ($config['textonpicture']['enabled']) {
-    if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        $errormsg = 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!';
-        logErrorAndDie($errormsg);
-    }
-
-    if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        $errormsg = 'Font ' . $fontpath . ' does not exist!';
-        logErrorAndDie($errormsg);
-    }
-}
-
 $imageResource = imagecreatefromjpeg($filename_tmp);
-$imageModified = false;
 
-// Only jpg/jpeg are supported
-if (!$imageResource) {
-    $errormsg = 'Could not read jpeg file. Are you taking raws?';
-    logErrorAndDie($errormsg);
-}
-
-if (!isset($_POST['filter'])) {
-    $errormsg = 'No filter provided';
-    logErrorAndDie($errormsg);
-}
-
-$image_filter = false;
-
-if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
-    $image_filter = $_POST['filter'];
-}
-
-if ($config['picture']['flip'] !== 'off') {
-    if ($config['picture']['flip'] === 'horizontal') {
-        imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-    } elseif ($config['picture']['flip'] === 'vertical') {
-        imageflip($imageResource, IMG_FLIP_VERTICAL);
-    } elseif ($config['picture']['flip'] === 'both') {
-        imageflip($imageResource, IMG_FLIP_BOTH);
+if ($_POST['style'] !== 'collage') {
+    // Only jpg/jpeg are supported
+    if (!$imageResource) {
+        $errormsg = 'Could not read jpeg file. Are you taking raws?';
+        logErrorAndDie($errormsg);
     }
-    $imageModified = true;
-}
-// apply filter
-if ($image_filter) {
-    applyFilter($image_filter, $imageResource);
-    $imageModified = true;
-}
 
-if ($config['picture']['rotation'] !== '0') {
-    $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
-    $imageResource = $rotatedImg;
-    $imageModified = true;
-}
+    if ($config['picture']['flip'] !== 'off') {
+        if ($config['picture']['flip'] === 'horizontal') {
+            imageflip($imageResource, IMG_FLIP_HORIZONTAL);
+        } elseif ($config['picture']['flip'] === 'vertical') {
+            imageflip($imageResource, IMG_FLIP_VERTICAL);
+        } elseif ($config['picture']['flip'] === 'both') {
+            imageflip($imageResource, IMG_FLIP_BOTH);
+        }
+        $imageModified = true;
+    }
 
-if ($config['picture']['polaroid_effect']) {
-    $polaroid_rotation = $config['picture']['polaroid_rotation'];
-    $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
-    $imageModified = true;
-}
+    // apply filter
+    if ($image_filter) {
+        applyFilter($image_filter, $imageResource);
+        $imageModified = true;
+    }
 
-if ($config['picture']['take_frame'] && $_POST['style'] !== 'collage') {
-    $frame = imagecreatefrompng($picture_frame);
-    $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
-    $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
-    $y = imagesy($imageResource) / 2 - imagesy($frame) / 2;
-    imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
-    $imageModified = true;
+    if ($config['picture']['rotation'] !== '0') {
+        $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
+        $imageResource = $rotatedImg;
+        $imageModified = true;
+    }
+
+    if ($config['picture']['polaroid_effect'] && $_POST['style'] !== 'collage') {
+        $polaroid_rotation = $config['picture']['polaroid_rotation'];
+        $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
+        $imageModified = true;
+    }
+
+    if ($config['picture']['take_frame']) {
+        $frame = imagecreatefrompng($picture_frame);
+        $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
+        $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
+        $y = imagesy($imageResource) / 2 - imagesy($frame) / 2;
+        imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+        $imageModified = true;
+    }
 }
 
 if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {

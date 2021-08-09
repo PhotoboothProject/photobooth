@@ -1,8 +1,11 @@
 <?php
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/log.php';
 require_once __DIR__ . '/resize.php';
 require_once __DIR__ . '/applyFrame.php';
 require_once __DIR__ . '/applyText.php';
+require_once __DIR__ . '/filter.php';
+require_once __DIR__ . '/polaroid.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
 define('COLLAGE_FRAME', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']));
@@ -10,6 +13,9 @@ define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
 define('PICTURE_KEEP_ORIGINAL', $config['picture']['keep_original'] === true ? 'keep' : 'discard');
 define('PICTURE_FLIP', $config['picture']['flip']);
+define('PICTURE_ROTATION', $config['picture']['rotation']);
+define('PICTURE_POLAROID_EFFECT', $config['picture']['polaroid_effect'] === true ? 'enabled' : 'disabled');
+define('PICTURE_POLAROID_ROTATION', $config['picture']['polaroid_rotation']);
 define('TEXTONCOLLAGE_ENABLED', $config['textoncollage']['enabled'] === true ? 'enabled' : 'disabled');
 define('TEXTONCOLLAGE_LINE1', $config['textoncollage']['line1']);
 define('TEXTONCOLLAGE_LINE2', $config['textoncollage']['line2']);
@@ -22,29 +28,42 @@ define('TEXTONCOLLAGE_FONT_COLOR', $config['textoncollage']['font_color']);
 define('TEXTONCOLLAGE_FONT_SIZE', $config['textoncollage']['font_size']);
 define('TEXTONCOLLAGE_LINESPACE', $config['textoncollage']['linespace']);
 
-function createCollage($srcImagePaths, $destImagePath) {
-    if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
-        return false;
-    }
-
-    if (PICTURE_KEEP_ORIGINAL === 'keep') {
-        for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-            $singleimage = substr($srcImagePaths[$i], 0, -4);
-            $origfilename = $singleimage . '-orig.jpg';
-            copy($srcImagePaths[$i], $origfilename);
-        }
-    }
-
+function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     $rotate_after_creation = false;
     $quality = 100;
+    $image_filter = false;
+    if (!empty($filter) && $filter !== 'plain') {
+        $image_filter = $filter;
+    }
 
     // colors for background while rotating jpeg images
     $white = 16777215;
     $black = 0;
 
-    if (PICTURE_FLIP !== 'off') {
-        for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-            $imageResource = imagecreatefromjpeg($srcImagePaths[$i]);
+    if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
+        return false;
+    }
+
+    for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+        if (!file_exists($srcImagePaths[$i])) {
+            $errormsg = 'File ' . $srcImagePaths[$i] . ' does not exist';
+            logErrorAndDie($errormsg);
+        }
+
+        $imageResource = imagecreatefromjpeg($srcImagePaths[$i]);
+        // Only jpg/jpeg are supported
+        if (!$imageResource) {
+            $errormsg = 'Could not read jpeg file. Are you taking raws?';
+            logErrorAndDie($errormsg);
+        }
+
+        if (PICTURE_KEEP_ORIGINAL === 'keep') {
+            $singleimage = substr($srcImagePaths[$i], 0, -4);
+            $origfilename = $singleimage . '-orig.jpg';
+            copy($srcImagePaths[$i], $origfilename);
+        }
+
+        if (PICTURE_FLIP !== 'off') {
             if (PICTURE_FLIP === 'horizontal') {
                 imageflip($imageResource, IMG_FLIP_HORIZONTAL);
             } elseif (PICTURE_FLIP === 'vertical') {
@@ -52,9 +71,32 @@ function createCollage($srcImagePaths, $destImagePath) {
             } elseif (PICTURE_FLIP === 'both') {
                 imageflip($imageResource, IMG_FLIP_BOTH);
             }
-            imagejpeg($imageResource, $srcImagePaths[$i], $quality);
-            imagedestroy($imageResource);
+            $imageModified = true;
         }
+
+        // apply filter
+        if ($image_filter) {
+            applyFilter($image_filter, $imageResource);
+            $imageModified = true;
+        }
+
+        if (PICTURE_ROTATION !== '0') {
+            $rotatedImg = imagerotate($imageResource, PICTURE_ROTATION, $white);
+            $imageResource = $rotatedImg;
+            $imageModified = true;
+        }
+
+        if (PICTURE_POLAROID_EFFECT === 'enabled') {
+            $polaroid_rotation = PICTURE_POLAROID_ROTATION;
+            $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
+            $imageModified = true;
+        }
+
+        if ($imageModified) {
+            imagejpeg($imageResource, $srcImagePaths[$i], $quality);
+        }
+
+        imagedestroy($imageResource);
     }
 
     list($width, $height) = getimagesize($srcImagePaths[0]);
