@@ -8,21 +8,16 @@ require_once '../lib/polaroid.php';
 require_once '../lib/resize.php';
 require_once '../lib/collage.php';
 require_once '../lib/applyText.php';
+require_once '../lib/log.php';
 
 if (!extension_loaded('gd')) {
-    die(
-        json_encode([
-            'error' => 'GD library not loaded! Please enable GD!',
-        ])
-    );
+    $errormsg = 'GD library not loaded! Please enable GD!';
+    logErrorAndDie($errormsg);
 }
 
 if (empty($_POST['file'])) {
-    die(
-        json_encode([
-            'error' => 'No file provided',
-        ])
-    );
+    $errormsg = 'No file provided';
+    logErrorAndDie($errormsg);
 }
 
 $file = $_POST['file'];
@@ -49,47 +44,32 @@ $line2text = $config['textonpicture']['line2'];
 $line3text = $config['textonpicture']['line3'];
 
 if (!isset($_POST['style'])) {
-    die(
-        json_encode([
-            'error' => 'No style provided',
-        ])
-    );
+    $errormsg = 'No style provided';
+    logErrorAndDie($errormsg);
 }
 
 if ($_POST['style'] === 'collage') {
     if ($config['collage']['take_frame'] !== 'off') {
         if (is_dir(COLLAGE_FRAME)) {
-            die(
-                json_encode([
-                    'error' => 'Frame not set! ' . COLLAGE_FRAME . ' is a path but needs to be a png!',
-                ])
-            );
+            $errormsg = 'Frame not set! ' . COLLAGE_FRAME . ' is a path but needs to be a png!';
+            logErrorAndDie($errormsg);
         }
 
         if (!file_exists(COLLAGE_FRAME)) {
-            die(
-                json_encode([
-                    'error' => 'Frame ' . COLLAGE_FRAME . ' does not exist!',
-                ])
-            );
+            $errormsg = 'Frame ' . COLLAGE_FRAME . ' does not exist!';
+            logErrorAndDie($errormsg);
         }
     }
 
     if ($config['textoncollage']['enabled']) {
         if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
-            die(
-                json_encode([
-                    'error' => 'Font not set! ' . TEXTONCOLLAGE_FONT . ' is a path but needs to be a ttf!',
-                ])
-            );
+            $errormsg = 'Font not set! ' . TEXTONCOLLAGE_FONT . ' is a path but needs to be a ttf!';
+            logErrorAndDie($errormsg);
         }
 
         if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
-            die(
-                json_encode([
-                    'error' => 'Font ' . TEXTONCOLLAGE_FONT . ' does not exist!',
-                ])
-            );
+            $errormsg = 'Font ' . TEXTONCOLLAGE_FONT . ' does not exist!';
+            logErrorAndDie($errormsg);
         }
     }
 
@@ -101,11 +81,8 @@ if ($_POST['style'] === 'collage') {
     }
 
     if (!createCollage($collageSrcImagePaths, $filename_tmp)) {
-        die(
-            json_encode([
-                'error' => 'Could not create collage',
-            ])
-        );
+        $errormsg = 'Could not create collage';
+        logErrorAndDie($errormsg);
     }
 
     if (!$config['picture']['keep_original']) {
@@ -116,77 +93,46 @@ if ($_POST['style'] === 'collage') {
 }
 
 if (!file_exists($filename_tmp)) {
-    die(
-        json_encode([
-            'error' => 'File does not exist',
-        ])
-    );
+    $errormsg = 'File does not exist';
+    logErrorAndDie($errormsg);
 }
 
 if ($config['picture']['take_frame']) {
     if (is_dir($picture_frame)) {
-        die(
-            json_encode([
-                'error' => 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!',
-            ])
-        );
+        $errormsg = 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!';
+        logErrorAndDie($errormsg);
     }
 
     if (!file_exists($picture_frame)) {
-        die(
-            json_encode([
-                'error' => 'Frame ' . $picture_frame . ' does not exist!',
-            ])
-        );
+        $errormsg = 'Frame ' . $picture_frame . ' does not exist!';
+        logErrorAndDie($errormsg);
     }
 }
 
 if ($config['textonpicture']['enabled']) {
     if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        die(
-            json_encode([
-                'error' => 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!',
-            ])
-        );
+        $errormsg = 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!';
+        logErrorAndDie($errormsg);
     }
 
     if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        die(
-            json_encode([
-                'error' => 'Font ' . $fontpath . ' does not exist!',
-            ])
-        );
+        $errormsg = 'Font ' . $fontpath . ' does not exist!';
+        logErrorAndDie($errormsg);
     }
-}
-
-// Only jpg/jpeg are supported
-$imginfo = getimagesize($filename_tmp);
-$mimetype = $imginfo['mime'];
-if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    die(
-        json_encode([
-            'error' => 'The source file type ' . $mimetype . ' is not supported',
-        ])
-    );
 }
 
 $imageResource = imagecreatefromjpeg($filename_tmp);
 $imageModified = false;
 
+// Only jpg/jpeg are supported
 if (!$imageResource) {
-    die(
-        json_encode([
-            'error' => 'Could not read jpeg file. Are you taking raws?',
-        ])
-    );
+    $errormsg = 'Could not read jpeg file. Are you taking raws?';
+    logErrorAndDie($errormsg);
 }
 
 if (!isset($_POST['filter'])) {
-    die(
-        json_encode([
-            'error' => 'No filter provided',
-        ])
-    );
+    $errormsg = 'No filter provided';
+    logErrorAndDie($errormsg);
 }
 
 $image_filter = false;
@@ -257,16 +203,20 @@ if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_qu
     // preserve jpeg meta data
     if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
         $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+        $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
+
         exec($cmd, $output, $returnValue);
+
         if ($returnValue) {
-            die(
-                json_encode([
-                    'error' => 'exiftool returned with an error code',
-                    'cmd' => $cmd,
-                    'returnValue' => $returnValue,
-                    'output' => $output,
-                ])
-            );
+            $ErrorData = [
+                'error' => 'exiftool returned with an error code',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ];
+            $ErrorString = json_encode($ErrorData);
+            logError($ErrorData);
+            die($ErrorString);
         }
     }
 } else {
