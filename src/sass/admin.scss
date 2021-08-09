@@ -103,6 +103,21 @@ a.adminnavlistelement:hover:not(.active) {
   padding: 5px;
 }
 
+/* navbar debug panel */
+#debugpanel_autorefresh {
+  float: right;
+  margin-right: 2em;
+}
+
+div.debugcontent {
+  background-color: white;
+}
+
+/* debug panel text output */
+pre {
+  white-space: pre-wrap;
+}
+
 /**************************
 * Settings Content Container
 **************************/

@@ -111,6 +111,13 @@ $configsetup = [
             'name' => 'dev[enabled]',
             'value' => $config['dev']['enabled'],
         ],
+        'dev_debugpanel' => [
+            'view' => 'expert',
+            'type' => 'button',
+            'placeholder' => 'dev_debugpanel',
+            'name' => 'DEBUGPANEL',
+            'value' => 'debugpanel-btn',
+        ],
         'start_screen_title' => [
             'type' => 'input',
             'placeholder' => $defaultConfig['start_screen']['title'],
@@ -319,6 +326,17 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'seconds',
         ],
+        'picture_cntdwn_offset' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'name' => 'picture[cntdwn_offset]',
+            'placeholder' => $defaultConfig['picture']['cntdwn_offset'],
+            'value' => $config['picture']['cntdwn_offset'],
+            'range_min' => 0,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
         'picture_no_cheese' => [
             'view' => 'basic',
             'type' => 'checkbox',
@@ -417,7 +435,6 @@ $configsetup = [
             'placeholder' => $defaultConfig['picture']['naming'],
             'options' => [
                 'dateformatted' => 'Date formatted',
-                'numbered' => 'Numbered',
                 'random' => 'Random',
             ],
             'value' => $config['picture']['naming'],
@@ -564,6 +581,17 @@ $configsetup = [
             'name' => 'collage[continuous]',
             'value' => $config['collage']['continuous'],
         ],
+        'collage_continuous_time' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'name' => 'collage[continuous_time]',
+            'placeholder' => $defaultConfig['collage']['continuous_time'],
+            'value' => $config['collage']['continuous_time'],
+            'range_min' => 1,
+            'range_max' => 20,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
         'collage_layout' => [
             'view' => 'advanced',
             'type' => 'select',
@@ -576,6 +604,7 @@ $configsetup = [
                 '2x4-2' => '2x4 (2)',
                 '1+3' => '1+3',
                 '1+3-2' => '1+3 (2)',
+                '3+1' => '3+1',
                 '1+2' => '1+2',
             ],
             'value' => $config['collage']['layout'],
@@ -1311,11 +1340,11 @@ $configsetup = [
     'remotebuzzer' => [
         'view' => 'advanced',
         'platform' => 'linux',
-        'remotebuzzer_enabled' => [
+        'remotebuzzer_usebuttons' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'remotebuzzer[enabled]',
-            'value' => $config['remotebuzzer']['enabled'],
+            'name' => 'remotebuzzer[usebuttons]',
+            'value' => $config['remotebuzzer']['usebuttons'],
         ],
         'remotebuzzer_userotary' => [
             'view' => 'advanced',
@@ -1396,6 +1425,33 @@ $configsetup = [
             'range_max' => 9,
             'range_step' => 1,
             'unit' => 'seconds',
+        ],
+        'remotebuzzer_rotaryclkgpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['rotaryclkgpio'],
+            'name' => 'remotebuzzer[rotaryclkgpio]',
+            'value' => $config['remotebuzzer']['rotaryclkgpio'],
+        ],
+        'remotebuzzer_rotarydtgpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['rotarydtgpio'],
+            'name' => 'remotebuzzer[rotarydtgpio]',
+            'value' => $config['remotebuzzer']['rotarydtgpio'],
+        ],
+        'remotebuzzer_rotarybtngpio' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['remotebuzzer']['rotarybtngpio'],
+            'name' => 'remotebuzzer[rotarybtngpio]',
+            'value' => $config['remotebuzzer']['rotarybtngpio'],
+        ],
+        'remotebuzzer_enable_standalonegallery' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[enable_standalonegallery]',
+            'value' => $config['remotebuzzer']['enable_standalonegallery'],
         ],
         'remotebuzzer_logfile' => [
             'view' => 'expert',
@@ -1713,6 +1769,12 @@ $configsetup = [
             'name' => 'take_picture[cmd]',
             'value' => htmlentities($config['take_picture']['cmd']),
         ],
+        'take_picture_logfile' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'take_picture[logfile]',
+            'value' => $config['take_picture']['logfile'],
+        ],
         'take_picture_msg' => [
             'view' => 'expert',
             'type' => 'input',
@@ -1848,6 +1910,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['folders']['archives'],
             'name' => 'folders[archives]',
             'value' => $config['folders']['archives'],
+        ],
+        'folders_config' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['folders']['config'],
+            'name' => 'folders[config]',
+            'value' => $config['folders']['config'],
         ],
     ],
     'reset' => [

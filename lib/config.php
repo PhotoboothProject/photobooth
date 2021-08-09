@@ -100,6 +100,7 @@ $config['adminpanel']['view_default'] = 'expert';
 
 $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
+$config['take_picture']['logfile'] = 'take_picture.log';
 
 $config['ui']['github'] = 'andi34';
 $config['ui']['branding'] = 'Photobooth';
@@ -158,7 +159,7 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
 $basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 
 foreach ($config['folders'] as $key => $folder) {
-    if ($folder === 'data' || $folder === 'archives') {
+    if ($folder === 'data' || $folder === 'archives' || $folder === 'config') {
         $path = $basepath . DIRECTORY_SEPARATOR . $folder;
     } else {
         $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;

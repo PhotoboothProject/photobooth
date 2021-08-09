@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController globalGalleryHandle */
 
 const photoBooth = (function () {
     // vars
@@ -6,7 +6,6 @@ const photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         wrapper = $('#wrapper'),
-        timeToLive = config.picture.time_to_live,
         gallery = $('#gallery'),
         resultPage = $('#result'),
         webcamConstraints = {
@@ -69,9 +68,11 @@ const photoBooth = (function () {
     api.resetTimeOut = function () {
         clearTimeout(timeOut);
 
-        timeOut = setTimeout(function () {
-            api.reloadPage();
-        }, timeToLive);
+        if (!takingPic) {
+            timeOut = setTimeout(function () {
+                api.reloadPage();
+            }, config.picture.time_to_live);
+        }
     };
 
     // reset whole thing
@@ -324,10 +325,15 @@ const photoBooth = (function () {
         api.closeNav();
         api.reset();
         api.showResultInner(false);
+        api.closeGallery();
 
         remoteBuzzerClient.inProgress(true);
 
         takingPic = true;
+
+        if (api.isTimeOutPending()) {
+            api.resetTimeOut();
+        }
 
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
@@ -476,33 +482,42 @@ const photoBooth = (function () {
                     $('.loading').empty();
                     $('#video--sensor').hide();
 
+                    let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
+                    const preloadImage = new Image();
+                    const picdate = Date.now;
+                    const waitmsg = api.getTranslation('wait_message');
+                    $('.loading').append($('<p>').text(waitmsg));
+                    preloadImage.onload = () => {
+                        $('.loaderImage').css({
+                            'background-image': `url(${imageUrl}?filter=${imgFilter})`
+                        });
+                        $('.loaderImage').attr('data-img', picdate);
+                    };
+
+                    preloadImage.src = imageUrl;
+
+                    $('.loaderImage').show();
+
                     if (config.collage.continuous) {
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
                                 api.thrill('collage');
-                            }, 1000);
+                            }, config.collage.continuous_time * 1000);
                         } else {
                             currentCollageFile = '';
                             nextCollageNumber = 0;
-
-                            api.processPic(data.style, result);
+                            setTimeout(() => {
+                                $('.loaderImage').css('background-image', 'none');
+                                imageUrl = '';
+                                $('.loaderImage').css('display', 'none');
+                                api.processPic(data.style, result);
+                            }, config.collage.continuous_time * 1000);
                         }
                     } else {
                         // collage with interruption
-                        let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
-                        const preloadImage = new Image();
-                        const picdate = Date.now;
-                        preloadImage.onload = () => {
-                            $('.loaderImage').css({
-                                'background-image': `url(${imageUrl}?filter=${imgFilter})`
-                            });
-                            $('.loaderImage').attr('data-img', picdate);
-                        };
-
-                        preloadImage.src = imageUrl;
-
-                        $('.loaderImage').show();
-
                         remoteBuzzerClient.collageWaitForNext();
 
                         if (result.current + 1 < result.limit) {
@@ -514,7 +529,6 @@ const photoBooth = (function () {
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
                                     $('.loaderImage').css('display', 'none');
-                                    api.deleteTmpImage(result.collage_file);
                                     api.thrill('collage');
                                 });
                         } else {
@@ -526,7 +540,6 @@ const photoBooth = (function () {
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
                                     $('.loaderImage').css('display', 'none');
-                                    api.deleteTmpImage(result.collage_file);
                                     currentCollageFile = '';
                                     nextCollageNumber = 0;
 
@@ -677,7 +690,6 @@ const photoBooth = (function () {
             const chromaimage = config.foldersRoot.keying + '/' + filename;
 
             loader.hide();
-            api.resetTimeOut();
             api.chromaimage = filename;
             setMainImage(chromaimage);
         };
@@ -686,6 +698,9 @@ const photoBooth = (function () {
 
         takingPic = false;
         remoteBuzzerClient.inProgress(false);
+
+        api.resetTimeOut();
+
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
         }
@@ -777,8 +792,6 @@ const photoBooth = (function () {
             if (!$('#mySidenav').hasClass('sidenav--open')) {
                 rotaryController.focusSet('#result');
             }
-
-            api.resetTimeOut();
         };
 
         preloadImage.src = imageUrl;
@@ -788,8 +801,9 @@ const photoBooth = (function () {
         }
 
         takingPic = false;
-
         remoteBuzzerClient.inProgress(false);
+
+        api.resetTimeOut();
 
         if (config.dev.enabled) {
             console.log('Taking photo:', takingPic);
@@ -859,6 +873,24 @@ const photoBooth = (function () {
         }, 300);
     };
 
+    // close Gallery Overview and Slideshow if visible
+    api.closeGallery = function () {
+        if (typeof globalGalleryHandle !== 'undefined') {
+            globalGalleryHandle.close();
+        }
+
+        gallery.find('.gallery__inner').hide();
+        gallery.removeClass('gallery--open');
+
+        api.showResultInner(true);
+
+        if ($('#result').is(':visible')) {
+            rotaryController.focusSet('#result');
+        } else if ($('#start').is(':visible')) {
+            rotaryController.focusSet('#start');
+        }
+    };
+
     api.resetMailForm = function () {
         $('#send-mail-form').trigger('reset');
         $('#mail-form-message').html('');
@@ -871,7 +903,7 @@ const photoBooth = (function () {
         const stop = start > 2 ? start - 2 : start;
 
         function timerFunction() {
-            element.text(current);
+            element.text(Number(current) + Number(config.picture.cntdwn_offset));
             current--;
 
             element.removeClass('tick');
@@ -1066,16 +1098,7 @@ const photoBooth = (function () {
     $('.gallery__close').on('click', function (e) {
         e.preventDefault();
 
-        gallery.find('.gallery__inner').hide();
-        gallery.removeClass('gallery--open');
-
-        api.showResultInner(true);
-
-        if ($('#result').is(':visible')) {
-            rotaryController.focusSet('#result');
-        } else if ($('#start').is(':visible')) {
-            rotaryController.focusSet('#start');
-        }
+        api.closeGallery();
     });
 
     $('.mailbtn').on('click touchstart', function (e) {
@@ -1246,7 +1269,7 @@ const photoBooth = (function () {
     // clear Timeout to not reset the gallery, if you clicked anywhere
     $(document).on('click', function () {
         if (!startPage.is(':visible')) {
-            api.resetTimeOut();
+            clearTimeout(timeOut);
         }
     });
 

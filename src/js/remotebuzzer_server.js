@@ -7,7 +7,9 @@ const PID = process.pid;
 let rotaryClkPin, rotaryDtPin;
 
 /* LOGGING FUNCTION */
-const log = (...optionalParams) => console.log(`Remote Buzzer Server [${PID}]:`, ...optionalParams);
+const log = function (...optionalParams) {
+    console.log('[', new Date().toISOString(), ']:', ` Remote Buzzer Server [${PID}]:`, ...optionalParams);
+};
 
 /* HANDLE EXCEPTIONS */
 process.on('uncaughtException', function (err) {
@@ -27,7 +29,7 @@ process.on('uncaughtException', function (err) {
 const {execSync} = require('child_process');
 let cmd = `cd ${API_DIR_NAME} && php ./${API_FILE_NAME}`;
 let stdout = execSync(cmd).toString();
-const config = JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
+const config = JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
 
 /* WRITE PROCESS PID FILE */
 const pidFilename = config.foldersRoot.tmp + '/remotebuzzer_server.pid';
@@ -162,8 +164,8 @@ function gpioSanity(gpioconfig) {
         throw new Error(gpioconfig + ' is not a valid number');
     }
 
-    if (gpioconfig < 1 || gpioconfig > 26) {
-        throw new Error('GPIO' + gpioconfig + ' number is out of range (1-26)');
+    if (gpioconfig < 1 || gpioconfig > 27) {
+        throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
     }
 
     cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
@@ -178,6 +180,9 @@ gpioSanity(config.remotebuzzer.picturegpio);
 gpioSanity(config.remotebuzzer.collagegpio);
 gpioSanity(config.remotebuzzer.shutdowngpio);
 gpioSanity(config.remotebuzzer.printgpio);
+gpioSanity(config.remotebuzzer.rotaryclkgpio);
+gpioSanity(config.remotebuzzer.rotarydtgpio);
+gpioSanity(config.remotebuzzer.rotarybtngpio);
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
 function buttonActiveCheck(gpio, value) {
@@ -503,10 +508,10 @@ const Gpio = require('onoff').Gpio;
 /* ROTARY ENCODER MODE */
 if (config.remotebuzzer.userotary) {
     /* ROTARY ENCODER MODE */
-    log('Operating in ROTARY mode');
-    const rotaryClk = new Gpio(config.remotebuzzer.picturegpio, 'in', 'both');
-    const rotaryDt = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both');
-    const rotaryBtn = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {debounceTimeout: 20});
+    log('ROTARY support active');
+    const rotaryClk = new Gpio(config.remotebuzzer.rotaryclkgpio, 'in', 'both');
+    const rotaryDt = new Gpio(config.remotebuzzer.rotarydtgpio, 'in', 'both');
+    const rotaryBtn = new Gpio(config.remotebuzzer.rotarybtngpio, 'in', 'both', {debounceTimeout: 20});
 
     rotaryClkPin = 0;
     rotaryDtPin = 0;
@@ -516,14 +521,19 @@ if (config.remotebuzzer.userotary) {
     rotaryBtn.watch(watchRotaryBtn);
 
     log(
-        'Ready for Rotary Encoder on GPIOs',
-        config.remotebuzzer.picturegpio,
-        config.remotebuzzer.collagegpio,
-        config.remotebuzzer.shutdowngpio
+        'Looking for Rotary Encoder connected to GPIOs ',
+        config.remotebuzzer.rotaryclkgpio,
+        '(CLK) ',
+        config.remotebuzzer.rotarydtgpio,
+        '(DT) ',
+        config.remotebuzzer.rotarybtngpio,
+        '(BTN)'
     );
-} else {
-    /* NORMAL BUTTON BUTTON */
-    log('Operating in BUTTON mode');
+}
+
+/* NORMAL BUTTON SUPPORT */
+if (config.remotebuzzer.usebuttons) {
+    log('BUTTON support active');
     if (config.remotebuzzer.picturebutton) {
         const pictureButton = new Gpio(config.remotebuzzer.picturegpio, 'in', 'both', {debounceTimeout: 20});
 
@@ -534,28 +544,28 @@ if (config.remotebuzzer.userotary) {
             pictureButton.watch(watchPictureGPIO);
         }
 
-        log('Connecting Picture Button to Raspberry GPIO', config.remotebuzzer.picturegpio);
+        log('Looking for Picture Button on Raspberry GPIO', config.remotebuzzer.picturegpio);
     }
 
     /* COLLAGE BUTTON */
     if (config.remotebuzzer.collagebutton && config.collage.enabled) {
         const collageButton = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both', {debounceTimeout: 20});
         collageButton.watch(watchCollageGPIO);
-        log('Connecting Collage Button to Raspberry GPIO', config.remotebuzzer.collagegpio);
+        log('Looking for Collage Button on Raspberry GPIO', config.remotebuzzer.collagegpio);
     }
 
     /* SHUTDOWN BUTTON */
     if (config.remotebuzzer.shutdownbutton) {
         const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {debounceTimeout: 20});
         shutdownButton.watch(watchShutdownGPIO);
-        log('Connecting Shutdown Button to Raspberry GPIO', config.remotebuzzer.shutdowngpio);
+        log('Looking for Shutdown Button on Raspberry GPIO', config.remotebuzzer.shutdowngpio);
     }
 
     /* PRINT BUTTON */
     if (config.remotebuzzer.printbutton) {
         const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {debounceTimeout: 20});
         printButton.watch(watchPrintGPIO);
-        log('Connecting Print Button to Raspberry GPIO', config.remotebuzzer.printgpio);
+        log('Looking for Print Button on Raspberry GPIO', config.remotebuzzer.printgpio);
     }
 }
 log('Initialization completed');

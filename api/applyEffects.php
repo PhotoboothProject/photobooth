@@ -8,21 +8,16 @@ require_once '../lib/polaroid.php';
 require_once '../lib/resize.php';
 require_once '../lib/collage.php';
 require_once '../lib/applyText.php';
+require_once '../lib/log.php';
 
 if (!extension_loaded('gd')) {
-    die(
-        json_encode([
-            'error' => 'GD library not loaded! Please enable GD!',
-        ])
-    );
+    $errormsg = 'GD library not loaded! Please enable GD!';
+    logErrorAndDie($errormsg);
 }
 
 if (empty($_POST['file'])) {
-    die(
-        json_encode([
-            'error' => 'No file provided',
-        ])
-    );
+    $errormsg = 'No file provided';
+    logErrorAndDie($errormsg);
 }
 
 $file = $_POST['file'];
@@ -48,51 +43,83 @@ $line1text = $config['textonpicture']['line1'];
 $line2text = $config['textonpicture']['line2'];
 $line3text = $config['textonpicture']['line3'];
 
+$quality = 100;
+$imageModified = false;
+$image_filter = false;
+
 if (!isset($_POST['style'])) {
-    die(
-        json_encode([
-            'error' => 'No style provided',
-        ])
-    );
+    $errormsg = 'No style provided';
+    logErrorAndDie($errormsg);
 }
 
+if (!isset($_POST['filter'])) {
+    $errormsg = 'No filter provided';
+    logErrorAndDie($errormsg);
+}
+
+if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
+    $image_filter = $_POST['filter'];
+}
+
+// Check collage configuration
 if ($_POST['style'] === 'collage') {
     if ($config['collage']['take_frame'] !== 'off') {
         if (is_dir(COLLAGE_FRAME)) {
-            die(
-                json_encode([
-                    'error' => 'Frame not set! ' . COLLAGE_FRAME . ' is a path but needs to be a png!',
-                ])
-            );
+            $errormsg = 'Frame not set! ' . COLLAGE_FRAME . ' is a path but needs to be a png!';
+            logErrorAndDie($errormsg);
         }
 
         if (!file_exists(COLLAGE_FRAME)) {
-            die(
-                json_encode([
-                    'error' => 'Frame ' . COLLAGE_FRAME . ' does not exist!',
-                ])
-            );
+            $errormsg = 'Frame ' . COLLAGE_FRAME . ' does not exist!';
+            logErrorAndDie($errormsg);
         }
     }
 
     if ($config['textoncollage']['enabled']) {
         if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
-            die(
-                json_encode([
-                    'error' => 'Font not set! ' . TEXTONCOLLAGE_FONT . ' is a path but needs to be a ttf!',
-                ])
-            );
+            $errormsg = 'Font not set! ' . TEXTONCOLLAGE_FONT . ' is a path but needs to be a ttf!';
+            logErrorAndDie($errormsg);
         }
 
         if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
-            die(
-                json_encode([
-                    'error' => 'Font ' . TEXTONCOLLAGE_FONT . ' does not exist!',
-                ])
-            );
+            $errormsg = 'Font ' . TEXTONCOLLAGE_FONT . ' does not exist!';
+            logErrorAndDie($errormsg);
+        }
+    }
+} else {
+    // Check picture configuration
+    if (!file_exists($filename_tmp)) {
+        $errormsg = 'File ' . $filename_tmp . ' does not exist';
+        logErrorAndDie($errormsg);
+    }
+
+    if ($config['picture']['take_frame']) {
+        if (is_dir($picture_frame)) {
+            $errormsg = 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!';
+            logErrorAndDie($errormsg);
+        }
+
+        if (!file_exists($picture_frame)) {
+            $errormsg = 'Frame ' . $picture_frame . ' does not exist!';
+            logErrorAndDie($errormsg);
         }
     }
 
+    if ($config['textonpicture']['enabled']) {
+        if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
+            $errormsg = 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!';
+            logErrorAndDie($errormsg);
+        }
+
+        if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
+            $errormsg = 'Font ' . $fontpath . ' does not exist!';
+            logErrorAndDie($errormsg);
+        }
+    }
+}
+
+// Process Collage
+if ($_POST['style'] === 'collage') {
     $collageBasename = substr($filename_tmp, 0, -4);
     $collageSrcImagePaths = [];
 
@@ -100,12 +127,9 @@ if ($_POST['style'] === 'collage') {
         $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
     }
 
-    if (!createCollage($collageSrcImagePaths, $filename_tmp)) {
-        die(
-            json_encode([
-                'error' => 'Could not create collage',
-            ])
-        );
+    if (!createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
+        $errormsg = 'Could not create collage';
+        logErrorAndDie($errormsg);
     }
 
     if (!$config['picture']['keep_original']) {
@@ -115,121 +139,52 @@ if ($_POST['style'] === 'collage') {
     }
 }
 
-if (!file_exists($filename_tmp)) {
-    die(
-        json_encode([
-            'error' => 'File does not exist',
-        ])
-    );
-}
-
-if ($config['picture']['take_frame']) {
-    if (is_dir($picture_frame)) {
-        die(
-            json_encode([
-                'error' => 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!',
-            ])
-        );
-    }
-
-    if (!file_exists($picture_frame)) {
-        die(
-            json_encode([
-                'error' => 'Frame ' . $picture_frame . ' does not exist!',
-            ])
-        );
-    }
-}
-
-if ($config['textonpicture']['enabled']) {
-    if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        die(
-            json_encode([
-                'error' => 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!',
-            ])
-        );
-    }
-
-    if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        die(
-            json_encode([
-                'error' => 'Font ' . $fontpath . ' does not exist!',
-            ])
-        );
-    }
-}
-
-// Only jpg/jpeg are supported
-$imginfo = getimagesize($filename_tmp);
-$mimetype = $imginfo['mime'];
-if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    die(
-        json_encode([
-            'error' => 'The source file type ' . $mimetype . ' is not supported',
-        ])
-    );
-}
-
 $imageResource = imagecreatefromjpeg($filename_tmp);
-$imageModified = false;
 
-if (!$imageResource) {
-    die(
-        json_encode([
-            'error' => 'Could not read jpeg file. Are you taking raws?',
-        ])
-    );
-}
-
-if (!isset($_POST['filter'])) {
-    die(
-        json_encode([
-            'error' => 'No filter provided',
-        ])
-    );
-}
-
-$image_filter = false;
-
-if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
-    $image_filter = $_POST['filter'];
-}
-
-if ($config['picture']['flip'] !== 'off') {
-    if ($config['picture']['flip'] === 'horizontal') {
-        imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-    } elseif ($config['picture']['flip'] === 'vertical') {
-        imageflip($imageResource, IMG_FLIP_VERTICAL);
-    } elseif ($config['picture']['flip'] === 'both') {
-        imageflip($imageResource, IMG_FLIP_BOTH);
+if ($_POST['style'] !== 'collage') {
+    // Only jpg/jpeg are supported
+    if (!$imageResource) {
+        $errormsg = 'Could not read jpeg file. Are you taking raws?';
+        logErrorAndDie($errormsg);
     }
-    $imageModified = true;
-}
-// apply filter
-if ($image_filter) {
-    applyFilter($image_filter, $imageResource);
-    $imageModified = true;
-}
 
-if ($config['picture']['rotation'] !== '0') {
-    $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
-    $imageResource = $rotatedImg;
-    $imageModified = true;
-}
+    if ($config['picture']['flip'] !== 'off') {
+        if ($config['picture']['flip'] === 'horizontal') {
+            imageflip($imageResource, IMG_FLIP_HORIZONTAL);
+        } elseif ($config['picture']['flip'] === 'vertical') {
+            imageflip($imageResource, IMG_FLIP_VERTICAL);
+        } elseif ($config['picture']['flip'] === 'both') {
+            imageflip($imageResource, IMG_FLIP_BOTH);
+        }
+        $imageModified = true;
+    }
 
-if ($config['picture']['polaroid_effect']) {
-    $polaroid_rotation = $config['picture']['polaroid_rotation'];
-    $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
-    $imageModified = true;
-}
+    // apply filter
+    if ($image_filter) {
+        applyFilter($image_filter, $imageResource);
+        $imageModified = true;
+    }
 
-if ($config['picture']['take_frame'] && $_POST['style'] !== 'collage') {
-    $frame = imagecreatefrompng($picture_frame);
-    $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
-    $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
-    $y = imagesy($imageResource) / 2 - imagesy($frame) / 2;
-    imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
-    $imageModified = true;
+    if ($config['picture']['rotation'] !== '0') {
+        $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
+        $imageResource = $rotatedImg;
+        $imageModified = true;
+    }
+
+    if ($config['picture']['polaroid_effect'] && $_POST['style'] !== 'collage') {
+        $polaroid_rotation = $config['picture']['polaroid_rotation'];
+        $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
+        $imageModified = true;
+    }
+
+    if ($config['picture']['take_frame']) {
+        $frame = imagecreatefrompng($picture_frame);
+        $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
+        $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
+        $y = imagesy($imageResource) / 2 - imagesy($frame) / 2;
+        imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+        $imageModified = true;
+    }
 }
 
 if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
@@ -257,16 +212,20 @@ if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_qu
     // preserve jpeg meta data
     if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
         $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+        $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
+
         exec($cmd, $output, $returnValue);
+
         if ($returnValue) {
-            die(
-                json_encode([
-                    'error' => 'exiftool returned with an error code',
-                    'cmd' => $cmd,
-                    'returnValue' => $returnValue,
-                    'output' => $output,
-                ])
-            );
+            $ErrorData = [
+                'error' => 'exiftool returned with an error code',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ];
+            $ErrorString = json_encode($ErrorData);
+            logError($ErrorData);
+            die($ErrorString);
         }
     }
 } else {

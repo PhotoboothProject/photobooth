@@ -17,7 +17,9 @@ let rsyncStartTime = 0;
 
 /* Functions */
 
-const log = (...optionalParams) => console.log(`Sync-To-Drive server [${PID}]:`, ...optionalParams);
+const log = function (...optionalParams) {
+    console.log('[', new Date().toISOString(), ']:', ` Sync-To-Drive server [${PID}]:`, ...optionalParams);
+};
 
 const getConfigFromPHP = () => {
     const cmd = `cd ${API_DIR_NAME} && php ./${API_FILE_NAME}`;
@@ -25,7 +27,7 @@ const getConfigFromPHP = () => {
     try {
         const stdout = execSync(cmd).toString();
 
-        return JSON.parse(stdout.slice(stdout.indexOf('{'), -1));
+        return JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
     } catch (err) {
         log('ERROR: Unable to load photobooth config', err);
     }
@@ -52,6 +54,7 @@ const parseConfig = (config) => {
 
 const getDriveInfo = ({drive}) => {
     let json = null;
+    let device = false;
 
     drive = drive.toLowerCase();
 
@@ -73,19 +76,25 @@ const getDriveInfo = ({drive}) => {
         return null;
     }
 
-    return json.blockdevices.find(
-        (blk) =>
-            // eslint-disable-next-line implicit-arrow-linebreak
-            blk.subsystems.includes('usb') &&
-            ((blk.name && drive === blk.name.toLowerCase()) ||
-                (blk.kname && drive === blk.kname.toLowerCase()) ||
-                (blk.path && drive === blk.path.toLowerCase()) ||
-                (blk.label && drive === blk.label.toLowerCase()))
-    );
+    try {
+        device = json.blockdevices.find(
+            (blk) =>
+                // eslint-disable-next-line implicit-arrow-linebreak
+                blk.subsystems.includes('usb') &&
+                ((blk.name && drive === blk.name.toLowerCase()) ||
+                    (blk.kname && drive === blk.kname.toLowerCase()) ||
+                    (blk.path && drive === blk.path.toLowerCase()) ||
+                    (blk.label && drive === blk.label.toLowerCase()))
+        );
+    } catch (err) {
+        device = false;
+    }
+
+    return device;
 };
 
 const mountDrive = (drive) => {
-    if (!drive.mountpoint) {
+    if (typeof drive.mountpoint === 'undefined' || !drive.mountpoint) {
         try {
             const mountRes = execSync(`export LC_ALL=C; udisksctl mount -b ${drive.path}; unset LC_ALL`).toString();
             const mountPoint = mountRes
@@ -180,11 +189,15 @@ const unmountDrive = () => {
     const driveInfo = getDriveInfo(parsedConfig);
     const mountedDrive = mountDrive(driveInfo);
 
-    try {
-        execSync(`export LC_ALL=C; udisksctl unmount -b ${mountedDrive.path}; unset LC_ALL`).toString();
-        log('Unmounted drive', mountedDrive.path);
-    } catch (error) {
-        log('ERROR: unable to unmount drive', mountedDrive.path);
+    if (mountedDrive) {
+        try {
+            execSync(`export LC_ALL=C; udisksctl unmount -b ${mountedDrive.path}; unset LC_ALL`).toString();
+            log('Unmounted drive', mountedDrive.path);
+        } catch (error) {
+            log('ERROR: unable to unmount drive', mountedDrive.path);
+        }
+    } else {
+        log('Nothing to umount');
     }
 };
 

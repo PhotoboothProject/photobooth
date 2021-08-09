@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 require_once '../lib/db.php';
+require_once '../lib/log.php';
 
 function takePicture($filename) {
     global $config;
@@ -29,27 +30,30 @@ function takePicture($filename) {
         $dir = dirname($filename);
         chdir($dir); //gphoto must be executed in a dir with write permission
         $cmd = sprintf($config['take_picture']['cmd'], $filename);
+        $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
         exec($cmd, $output, $returnValue);
 
         if ($returnValue) {
-            die(
-                json_encode([
-                    'error' => 'Gphoto returned with an error code',
-                    'cmd' => $cmd,
-                    'returnValue' => $returnValue,
-                    'output' => $output,
-                ])
-            );
+            $ErrorData = [
+                'error' => 'Gphoto returned with an error code',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ];
+            $ErrorString = json_encode($ErrorData);
+            logError($ErrorData);
+            die($ErrorString);
         } elseif (!file_exists($filename)) {
-            die(
-                json_encode([
-                    'error' => 'File was not created',
-                    'cmd' => $cmd,
-                    'returnValue' => $returnValue,
-                    'output' => $output,
-                ])
-            );
+            $ErrorData = [
+                'error' => 'File was not created',
+                'cmd' => $cmd,
+                'returnValue' => $returnValue,
+                'output' => $output,
+            ];
+            $ErrorString = json_encode($ErrorData);
+            logError($ErrorData);
+            die($ErrorString);
         }
     }
 }
@@ -109,13 +113,12 @@ if ($_POST['style'] === 'photo') {
     }
 
     $basecollage = substr($file, 0, -4);
-    $collage_name = $basecollage . '-' . date('Ymd_His') . '.jpg';
+    $collage_name = $basecollage . '-' . $number . '.jpg';
 
     $basename = substr($filename_tmp, 0, -4);
     $filename = $basename . '-' . $number . '.jpg';
 
     takePicture($filename);
-    copy($filename, $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $collage_name);
 
     die(
         json_encode([

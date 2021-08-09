@@ -206,12 +206,12 @@ if [ "$deleteHtmlFolder" != "${deleteHtmlFolder#[Yy]}" ] ;then
     cd /var/www/
     rm -rf html
     INSTALLFOLDER="html"
-    INSTALLFOLDERPATH="/var/www/html/"
+    INSTALLFOLDERPATH="/var/www/html"
 else
     info "### Ok, we will install Photobooth into /var/www/html/photobooth."
     cd /var/www/html/
     INSTALLFOLDER="photobooth"
-    INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER/"
+    INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
 fi
 
 info "### Now we are going to install Photobooth."
@@ -275,7 +275,7 @@ fi
 # Pi specific setup end
 
 info "### Setting permissions."
-chown -R www-data:www-data $INSTALLFOLDERPATH
+chown -R www-data:www-data $INSTALLFOLDERPATH/
 gpasswd -a www-data plugdev
 gpasswd -a www-data video
 
@@ -347,7 +347,7 @@ fi
 sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
 cat >> /boot/config.txt  << EOF
 # Photobooth
-gpio=16,20,21,26=pu
+gpio=16,17,20,21,22,26,27=pu
 # Photobooth End
 EOF
 # add configuration required for www-data to be able to initiate system shutdown
@@ -356,6 +356,12 @@ cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
 # Photobooth Remotebuzzer shutdown button for www-data to shutdown the system
 www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
+
+# update artifacts in user configuration from old remotebuzzer implementation
+if [ -f "$INSTALLFOLDERPATH/config/my.config.inc.php" ]; then
+    sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' $INSTALLFOLDERPATH/config/my.config.inc.php
+fi
+
 fi
 # remotebuzzer config depending on version end
 

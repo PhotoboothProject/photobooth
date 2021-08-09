@@ -139,6 +139,13 @@ $(function () {
         });
     });
 
+    $('#debugpanel-btn').on('click', function (ev) {
+        ev.preventDefault();
+        window.open('debugpanel.php');
+
+        return false;
+    });
+
     // Admin Panel active section at init
     $('#nav-general').addClass('active');
 

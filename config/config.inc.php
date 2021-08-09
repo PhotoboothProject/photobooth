@@ -46,6 +46,7 @@ $config['button']['force_buzzer'] = false;
 // P I C T U R E S
 // control countdown timer in seconds
 $config['picture']['cntdwn_time'] = '5';
+$config['picture']['cntdwn_offset'] = '0';
 $config['picture']['no_cheese'] = false;
 // control time for cheeeeese! in milliseconds
 $config['picture']['cheese_time'] = '1000';
@@ -62,7 +63,7 @@ $config['picture']['frame'] = 'resources/img/frames/frame.png';
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
 $config['picture']['key'] = null;
-// possible naming values: 'dateformatted', 'numbered', 'random'
+// possible naming values: 'dateformatted', 'random'
 $config['picture']['naming'] = 'dateformatted';
 // permissions example values: '0644' (rw-r--r--), '0666' (rw-rw-rw-), '0600' (rw-------)
 $config['picture']['permissions'] = '0644';
@@ -89,7 +90,8 @@ $config['collage']['only'] = false;
 // control countdown timer between collage pictures in seconds
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;
-// possible layout values: '2x2', '2x2-2', '2x4', '2x4-2', '1+3', '1+2'
+$config['collage']['continuous_time'] = '5';
+// possible layout values: '2x2', '2x2-2', '2x4', '2x4-2', '1+3', '1+3-2', '3+1', '1+2'
 $config['collage']['layout'] = '2x2-2';
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code
@@ -228,8 +230,12 @@ $config['slideshow']['use_thumbs'] = false;
 
 
 // R E M O T E   B U Z Z E R
-$config['remotebuzzer']['enabled'] = false;
+$config['remotebuzzer']['usebuttons'] = false;
 $config['remotebuzzer']['userotary'] = false;
+$config['remotebuzzer']['enable_standalonegallery'] = false;
+$config['remotebuzzer']['rotaryclkgpio'] = 27;
+$config['remotebuzzer']['rotarydtgpio'] = 17;
+$config['remotebuzzer']['rotarybtngpio'] = 22;
 $config['remotebuzzer']['picturebutton'] = true;
 // collagetime controls the time to distinguish picture from collage in seconds
 $config['remotebuzzer']['collagetime'] = '2';
@@ -307,7 +313,9 @@ $config['nodebin']['cmd'] = null;
 $config['pre_photo']['cmd'] = null;
 $config['post_photo']['cmd'] = null;
 
+
 // F O L D E R S
+$config['folders']['config'] = 'config';
 $config['folders']['data'] = 'data';
 $config['folders']['images'] = 'images';
 $config['folders']['keying'] = 'keying';

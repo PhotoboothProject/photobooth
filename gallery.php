@@ -108,5 +108,9 @@ $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($imag
 	<script type="text/javascript" src="resources/js/i18n.js"></script>
 
 	<?php require_once('lib/services_start.php'); ?>
+
+	<script type="text/javascript">
+		onStandaloneGalleryView = true;
+	</script>
 </body>
 </html>

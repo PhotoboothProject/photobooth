@@ -62,7 +62,7 @@ _(The full changelog can be found inside [the Photobooth Wiki](https://github.co
       - M = max 900px
       - L = max 1080px
       - XL = max 1260px"
-  - Choose between date-formatted, numbered or random image names.
+  - Choose between date-formatted or random image names.
   - Choose an image filter after taking a picture.
   - QR-Code to allow downloading pictures from your Photobooth.
   - Pictures can be directly downloaded from the gallery.

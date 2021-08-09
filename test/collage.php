@@ -36,7 +36,7 @@ for ($j = 0; $j < $config['collage']['limit']; $j++) {
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
 $out_file = $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
 
-if (createCollage($collageSrcImagePaths, $filename_tmp)) {
+if (createCollage($collageSrcImagePaths, $filename_tmp, $config['filters']['defaults'])) {
     for ($k = 0; $k < $config['collage']['limit']; $k++) {
         unlink($collageSrcImagePaths[$k]);
     } ?>
