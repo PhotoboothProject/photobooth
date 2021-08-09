@@ -29,7 +29,7 @@ switch ($content) {
         break;
 
     case 'nav-cameralog':
-        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['take_picture']['logfile'], false);
+        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['take_picture']['logfile'], null);
         break;
 
     default:
