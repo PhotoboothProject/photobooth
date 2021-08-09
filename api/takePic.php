@@ -3,21 +3,7 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 require_once '../lib/db.php';
-
-function logError($data) {
-    global $config;
-    $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['take_picture']['logfile'];
-
-    $file_data = date('c') . ":\n" . print_r($data, true) . "\n";
-    if (is_file($logfile)) {
-        $file_data .= file_get_contents($logfile);
-    }
-    file_put_contents($logfile, $file_data);
-
-    //$fp = fopen($logfile, 'a'); //opens file in append mode.
-    //fwrite($fp, date('c') . ":\n\t" . $message . "\n");
-    //fclose($fp);
-}
+require_once '../lib/log.php';
 
 function takePicture($filename) {
     global $config;
