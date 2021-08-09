@@ -316,7 +316,7 @@
   "manual:pictures:picture_frame": "Enter the path of the frame which is applied to your picture after taking it.",
   "manual:pictures:picture_keep_original": "If enabled, original images will be kept inside tmp folder.",
   "manual:pictures:picture_key": "Specify the key id to use that key to take a picture (e.g. 13 is the enter key). For example use <a href=\"https://keycode.info\"  target=\"_blank\">https://keycode.info</a> to find out the key id.",
-  "manual:pictures:picture_naming": "Choose between date formatted, numbered or random named images. For date formatted images, you can display the image with the date and time inside the gallery.",
+  "manual:pictures:picture_naming": "Choose between date formatted or random named images. For date formatted images, you can display the image with the date and time inside the gallery.",
   "manual:pictures:picture_no_cheese": "If enabled, pictures will be taken right after the countdown. This skips the \"Cheeeeeeeese!\" message.",
   "manual:pictures:picture_permissions": "Change taken picture permissions with \"chmod\" command. Please only change this value if you are familiar with file permissions in Linux/Unix.",
   "manual:pictures:picture_polaroid_effect": "If enabled, a polaroid effect is applied to your picture after it was taken.",

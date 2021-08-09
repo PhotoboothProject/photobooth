@@ -435,7 +435,6 @@ $configsetup = [
             'placeholder' => $defaultConfig['picture']['naming'],
             'options' => [
                 'dateformatted' => 'Date formatted',
-                'numbered' => 'Numbered',
                 'random' => 'Random',
             ],
             'value' => $config['picture']['naming'],

@@ -63,7 +63,7 @@ $config['picture']['frame'] = 'resources/img/frames/frame.png';
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
 $config['picture']['key'] = null;
-// possible naming values: 'dateformatted', 'numbered', 'random'
+// possible naming values: 'dateformatted', 'random'
 $config['picture']['naming'] = 'dateformatted';
 // permissions example values: '0644' (rw-r--r--), '0666' (rw-rw-rw-), '0600' (rw-------)
 $config['picture']['permissions'] = '0644';
