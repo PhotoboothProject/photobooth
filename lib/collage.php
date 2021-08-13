@@ -32,6 +32,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     $rotate_after_creation = false;
     $quality = 100;
     $image_filter = false;
+    $imageModified = false;
     if (!empty($filter) && $filter !== 'plain') {
         $image_filter = $filter;
     }
