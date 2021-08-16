@@ -511,7 +511,7 @@ if (config.remotebuzzer.userotary) {
     log('ROTARY support active');
     const rotaryClk = new Gpio(config.remotebuzzer.rotaryclkgpio, 'in', 'both');
     const rotaryDt = new Gpio(config.remotebuzzer.rotarydtgpio, 'in', 'both');
-    const rotaryBtn = new Gpio(config.remotebuzzer.rotarybtngpio, 'in', 'both', {debounceTimeout: 20});
+    const rotaryBtn = new Gpio(config.remotebuzzer.rotarybtngpio, 'in', 'both', {debounceTimeout: config.remotebuzzer.debounce});
 
     rotaryClkPin = 0;
     rotaryDtPin = 0;
@@ -535,7 +535,7 @@ if (config.remotebuzzer.userotary) {
 if (config.remotebuzzer.usebuttons) {
     log('BUTTON support active');
     if (config.remotebuzzer.picturebutton) {
-        const pictureButton = new Gpio(config.remotebuzzer.picturegpio, 'in', 'both', {debounceTimeout: 20});
+        const pictureButton = new Gpio(config.remotebuzzer.picturegpio, 'in', 'both', {debounceTimeout: config.remotebuzzer.debounce});
 
         if (!config.remotebuzzer.collagebutton && config.collage.enabled) {
             pictureButton.watch(watchPictureGPIOwithCollage);
@@ -549,21 +549,21 @@ if (config.remotebuzzer.usebuttons) {
 
     /* COLLAGE BUTTON */
     if (config.remotebuzzer.collagebutton && config.collage.enabled) {
-        const collageButton = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both', {debounceTimeout: 20});
+        const collageButton = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both', {debounceTimeout: config.remotebuzzer.debounce});
         collageButton.watch(watchCollageGPIO);
         log('Looking for Collage Button on Raspberry GPIO', config.remotebuzzer.collagegpio);
     }
 
     /* SHUTDOWN BUTTON */
     if (config.remotebuzzer.shutdownbutton) {
-        const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {debounceTimeout: 20});
+        const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {debounceTimeout: config.remotebuzzer.debounce});
         shutdownButton.watch(watchShutdownGPIO);
         log('Looking for Shutdown Button on Raspberry GPIO', config.remotebuzzer.shutdowngpio);
     }
 
     /* PRINT BUTTON */
     if (config.remotebuzzer.printbutton) {
-        const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {debounceTimeout: 20});
+        const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {debounceTimeout: config.remotebuzzer.debounce});
         printButton.watch(watchPrintGPIO);
         log('Looking for Print Button on Raspberry GPIO', config.remotebuzzer.printgpio);
     }

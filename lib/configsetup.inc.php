@@ -1453,7 +1453,18 @@ $configsetup = [
             'name' => 'remotebuzzer[enable_standalonegallery]',
             'value' => $config['remotebuzzer']['enable_standalonegallery'],
         ],
-        'remotebuzzer_logfile' => [
+        'remotebuzzer_debounce' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['remotebuzzer']['debounce'],
+            'name' => 'remotebuzzer[debounce]',
+            'value' => $config['remotebuzzer']['debounce'],
+            'range_min' => 0,
+            'range_max' => 100,
+            'range_step' => 5,
+            'unit' => 'milliseconds',
+	],
+	'remotebuzzer_logfile' => [
             'view' => 'expert',
             'type' => 'hidden',
             'name' => 'remotebuzzer[logfile]',
