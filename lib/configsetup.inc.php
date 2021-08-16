@@ -1463,8 +1463,8 @@ $configsetup = [
             'range_max' => 100,
             'range_step' => 5,
             'unit' => 'milliseconds',
-	],
-	'remotebuzzer_logfile' => [
+        ],
+        'remotebuzzer_logfile' => [
             'view' => 'expert',
             'type' => 'hidden',
             'name' => 'remotebuzzer[logfile]',
