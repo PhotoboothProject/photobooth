@@ -324,8 +324,8 @@ const photoBooth = (function () {
     api.thrill = function (photoStyle) {
         api.closeNav();
         api.reset();
-        api.showResultInner(false);
         api.closeGallery();
+        api.showResultInner(false);
 
         remoteBuzzerClient.inProgress(true);
 
