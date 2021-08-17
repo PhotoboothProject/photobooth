@@ -271,7 +271,7 @@ yarn build
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
 echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
-ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "Y"
+ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "N"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
