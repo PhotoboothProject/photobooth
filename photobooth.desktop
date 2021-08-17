@@ -1,9 +1,9 @@
 [Desktop Entry]
-Version=1.0
+Version=1.1
 Terminal=false
 Type=Application
 Name=Photobooth
-Exec=chromium-browser --noerrdialogs --start-fullscreen --kiosk http://127.0.0.1 --incognito --disable-translate --no-first-run --fast --fast-start --disable-infobars --touch-events=enabled
+Exec=chromium-browser --noerrdialogs --disable-infobars --disable-translate --no-first-run --check-for-update-interval=31536000 --use-fake-ui-for-media-stream --start-fullscreen --kiosk http://127.0.0.1 --incognito --touch-events=enabled
 Icon=/var/www/html/resources/img/favicon-96x96.png
 StartupNotify=false
 Terminal=false
