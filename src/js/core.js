@@ -399,7 +399,12 @@ const photoBooth = (function () {
             api.stopPreviewVideo();
         }
 
-        if (config.preview.mode === 'device_cam' && config.preview.camTakesPic && !api.stream && !config.dev.enabled) {
+        if (
+            config.preview.mode === 'device_cam' &&
+            config.preview.camTakesPic &&
+            !api.stream &&
+            !config.dev.demo_images
+        ) {
             console.log('No preview by device cam available!');
 
             api.errorPic({
@@ -423,7 +428,7 @@ const photoBooth = (function () {
         remoteBuzzerClient.inProgress(true);
 
         if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
-            if (config.preview.camTakesPic && !config.dev.enabled) {
+            if (config.preview.camTakesPic && !config.dev.demo_images) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
@@ -598,7 +603,7 @@ const photoBooth = (function () {
             loader.addClass('error');
             const errormsg = api.getTranslation('error');
             $('.loading').append($('<p>').text(errormsg));
-            if (config.dev.error_messages || config.dev.enabled) {
+            if (config.dev.error_messages) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
             if (config.dev.reload_on_error) {

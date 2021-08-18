@@ -111,6 +111,12 @@ $configsetup = [
             'name' => 'dev[enabled]',
             'value' => $config['dev']['enabled'],
         ],
+        'dev_demo_images' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'dev[demo_images]',
+            'value' => $config['dev']['demo_images'],
+        ],
         'dev_debugpanel' => [
             'view' => 'expert',
             'type' => 'button',

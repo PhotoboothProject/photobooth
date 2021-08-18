@@ -10,7 +10,8 @@ $config = array();
 // possible language values: de, el, en, es, fr, pl, it
 $config['ui']['language'] = 'en';
 $config['adminpanel']['view'] = 'basic';
-$config['dev']['enabled'] = false;
+$config['dev']['enabled'] = true;
+$config['dev']['demo_images'] = false;
 $config['start_screen']['title'] = 'Photobooth';
 $config['start_screen']['title_visible'] = true;
 $config['start_screen']['subtitle'] = NULL;

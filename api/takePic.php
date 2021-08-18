@@ -8,7 +8,7 @@ require_once '../lib/log.php';
 function takePicture($filename) {
     global $config;
 
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['demo_images']) {
         $demoFolder = __DIR__ . '/../resources/img/demo/';
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $filename);
