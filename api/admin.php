@@ -127,6 +127,14 @@ if ($data['type'] == 'config') {
         $newConfig['synctodrive']['enabled'] = false;
     }
 
+    if (isset($newConfig['database']['file']) && empty($newConfig['database']['file'])) {
+        $newConfig['database']['file'] = 'db';
+    }
+
+    if (isset($newConfig['mail']['file']) && empty($newConfig['mail']['file'])) {
+        $newConfig['mail']['file'] = 'mail-adresses';
+    }
+
     if (isset($newConfig['remotebuzzer']['port']) && empty($newConfig['remotebuzzer']['port'])) {
         $newConfig['remotebuzzer']['port'] = 14711;
     }
