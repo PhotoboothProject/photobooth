@@ -25,8 +25,8 @@ $config['webserver']['ip'] = '127.0.0.1';
 $config['webserver']['ssid'] = 'Photobooth';
 $config['download']['enabled'] = true;
 $config['download']['thumbs'] = false;
-// control time in milliseconds until Photobooth reloads automatically
-$config['picture']['time_to_live'] = '90000';
+// control time in seconds until Photobooth reloads automatically
+$config['picture']['time_to_live'] = '90';
 $config['picture']['preview_before_processing'] = false;
 $config['delete']['no_request'] = false;
 $config['database']['enabled'] = true;

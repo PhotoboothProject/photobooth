@@ -275,7 +275,7 @@
   "manual:general:download_thumbs": "If enabled, thumbnails will be used at download (if exist) instead the full sized image.",
   "manual:general:picture_preview_before_processing": "If enabled, images are preloaded and shown during filter processing.",
   "manual:general:picture_thumb_size": "Choose thumbnail size: XS = max 360px, S = max 540px, M = max 900px, L = max 1080px, XL = max 1260px",
-  "manual:general:picture_time_to_live": "Enter a value used as milliseconds. This value defines the time your picture is visible on the result screen after taking a picture.",
+  "manual:general:picture_time_to_live": "Choose a time between 1 and 90 seconds. Your picture is visible for that time on the result screen after taking it.",
   "manual:general:qr_enabled": "If enabled, a QR-Button is visible on the result screen and inside gallery. User can download a picture while scanning the QR-Code. If you're accessing Photobooth via \"localhost\", \"127.0.0.1\" or if you have Photobooth installed inside a subfolder, please define IP address of the Photobooth web server to make the QR-Code working. <p>Example if Photobooth can be accessed directly: <code>192.168.0.50</code>.</p><p>Example if Photobooth is installed inside a subfolder: <code>192.168.0.50/photobooth</code>.</p>",
   "manual:general:start_screen_subtitle": "Enter the subtitle visible on startpage.",
   "manual:general:start_screen_subtitle_visible": "If enabled, entered subtitle is visible on start screen.",

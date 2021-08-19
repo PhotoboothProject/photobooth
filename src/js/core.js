@@ -71,7 +71,7 @@ const photoBooth = (function () {
         if (!takingPic) {
             timeOut = setTimeout(function () {
                 api.reloadPage();
-            }, config.picture.time_to_live);
+            }, config.picture.time_to_live * 1000);
         }
     };
 
