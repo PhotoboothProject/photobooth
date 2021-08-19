@@ -1603,6 +1603,12 @@ $configsetup = [
             'name' => 'button[homescreen]',
             'value' => $config['button']['homescreen'],
         ],
+        'ui_result_buttons' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'ui[result_buttons]',
+            'value' => $config['ui']['result_buttons'],
+        ],
         'ui_font_size' => [
             'view' => 'advanced',
             'type' => 'input',

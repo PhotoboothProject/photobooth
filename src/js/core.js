@@ -35,8 +35,6 @@ const photoBooth = (function () {
             $(selector).addClass('modal--show');
         },
         close: function (selector) {
-            //api.showResultInner(true);
-
             if ($(selector).hasClass('modal--show')) {
                 $(selector).removeClass('modal--show');
 
@@ -787,7 +785,7 @@ const photoBooth = (function () {
             startPage.hide();
             resultPage.show();
 
-            api.showResultInner(true);
+            api.showResultInner(config.ui.result_buttons);
 
             loader.removeClass('open');
 
