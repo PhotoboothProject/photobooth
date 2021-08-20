@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - dev
-      - stable2
-      - stable3
   pull_request:
     branches:
       - dev
-      - stable2
-      - stable3
   workflow_dispatch:
 
 jobs:
@@ -31,7 +27,7 @@ jobs:
         run: yarn pack:build
       - name: Publish zip
         uses: actions/upload-artifact@v2
+        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         with:
           name: photobooth
           path: archives/photobooth-*.zip
-
