@@ -73,6 +73,7 @@ function createArchive(fileName, archive) {
     archive.file('private/README.md');
     archive.file('README.md');
     archive.file('update-booth.sh');
+    archive.file('welcome.php');
     archive.directory('node_modules/@andreasremdt/simple-translator/');
     archive.directory('node_modules/font-awesome/');
     archive.file('node_modules/github-markdown-css/github-markdown.css');

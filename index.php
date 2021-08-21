@@ -1,4 +1,8 @@
 <?php
+if (!is_file('.skip_welcome')) {
+    header('location: welcome.php');
+}
+
 session_start();
 
 require_once 'lib/config.php';

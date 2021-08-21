@@ -25,4 +25,5 @@ vendor/simple-translator/
 /.htaccess
 .htpasswd
 *.patch
+.skip_welcome
 .vscode

@@ -1,0 +1,23 @@
+@import 'modules/theme';
+@import 'partials/fonts';
+@import 'partials/basic';
+@import 'partials/button';
+@import 'partials/scrollbar';
+
+html,
+body {
+  background-color: $panelColor;
+  p {
+    font-size: 1.2em;
+  }
+  h3 {
+    font-size: 1.3em;
+  }
+  overflow-y: auto;
+}
+
+.welcome {
+  padding: 1em;
+  text-align: center;
+  color: $fontColor;
+}
