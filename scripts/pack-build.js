@@ -69,6 +69,7 @@ function createArchive(fileName, archive) {
     archive.file('package.json');
     archive.file('photobooth.desktop');
     archive.file('phpinfo.php');
+    archive.file('private/README.md');
     archive.file('README.md');
     archive.file('update-booth.sh');
     archive.directory('node_modules/@andreasremdt/simple-translator/');
