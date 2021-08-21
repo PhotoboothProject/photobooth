@@ -39,6 +39,9 @@ $imagelist = array_reverse($images);
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="../resources/css/slideshow.css" />
+	<?php if (is_file("../private/overrides.css")): ?>
+	<link rel="stylesheet" href="../private/overrides.css" />
+	<?php endif; ?>
 </head>
 
 <body class="sshow">

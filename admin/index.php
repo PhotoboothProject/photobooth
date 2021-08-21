@@ -34,6 +34,9 @@ if (
         <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
         <link rel="stylesheet" type="text/css" href="../resources/css/admin.css">
+	<?php if (is_file("../private/overrides.css")): ?>
+	<link rel="stylesheet" href="../private/overrides.css" />
+	<?php endif; ?>
 </head>
 <body>
 <!-- NavBar content -->

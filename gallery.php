@@ -53,6 +53,9 @@ $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($imag
 	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" href="resources/css/rounded.css" />
 	<?php endif; ?>
+	<?php if (is_file("private/overrides.css")): ?>
+	<link rel="stylesheet" href="private/overrides.css" />
+	<?php endif; ?>
 </head>
 
 <body class="deselect">

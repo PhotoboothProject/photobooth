@@ -57,6 +57,9 @@ if (file_exists($keyingimage)) {
 		<?php if ($config['ui']['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>
+		<?php if (is_file("private/overrides.css")): ?>
+		<link rel="stylesheet" href="private/overrides.css" />
+		<?php endif; ?>
 	</head>
 <body data-main-image="<?=$mainimage?>">
 	<div class="chromawrapper rotarygroup">
