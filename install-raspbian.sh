@@ -8,6 +8,7 @@ set -e
 
 RUNNING_ON_PI=true
 SILENT_INSTALL=false
+DATE=$(date +"%Y%m%d-%H-%M")
 
 if [ ! -z $1 ]; then
     webserver=$1
@@ -214,19 +215,35 @@ for package in "${COMMON_PACKAGES[@]}"; do
 done
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
-ask_yes_no "### Warning: If typing y, the whole /var/www/html folder will be removed! [y/N] " "Y"
+echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
+ask_yes_no "          to /var/www/html-$DATE if exists! [y/N] " "Y"
 echo -e "\033[0m"
 if [ "$REPLY" != "${REPLY#[Yy]}" ] ;then
     info "### Ok, we will replace the html folder with the Photobooth."
     cd /var/www/
-    rm -rf html
     INSTALLFOLDER="html"
     INSTALLFOLDERPATH="/var/www/html"
+    if [ -d "$INSTALLFOLDERPATH" ]; then
+        BACKUPFOLDER="html-$DATE"
+        info "${INSTALLFOLDERPATH} found. Creating backup as ${BACKUPFOLDER}."
+        mv "$INSTALLFOLDER" "$BACKUPFOLDER"
+    else
+        info "$INSTALLFOLDERPATH not found."
+    fi
+fi
+
 else
     info "### Ok, we will install Photobooth into /var/www/html/photobooth."
     cd /var/www/html/
     INSTALLFOLDER="photobooth"
     INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
+    if [ -d "$INSTALLFOLDERPATH" ]; then
+        BACKUPFOLDER="photobooth-$DATE"
+        info "${INSTALLFOLDERPATH} found. Creating backup as ${BACKUPFOLDER}."
+        mv "$INSTALLFOLDER" "$BACKUPFOLDER"
+    else
+        info "$INSTALLFOLDERPATH not found."
+    fi
 fi
 
 info "### Now we are going to install Photobooth."
