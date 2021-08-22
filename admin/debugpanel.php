@@ -95,6 +95,7 @@ if (
                 echo '<li><a class="adminnavlistelement" href="#cameralog" id="nav-cameralog"><div><span data-i18n="cameralog">cameralog</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#serverprocesses" id="nav-serverprocesses"><div><span data-i18n="serverprocesses">serverprocesses</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#bootconfig" id="nav-bootconfig"><div><span data-i18n="bootconfig">bootconfig</span></div></a></li>';
+                echo '<li><a class="adminnavlistelement" href="#githead" id="nav-githead"><div><span data-i18n="githead">githead</span></div></a></li>';
         
                 html_src_indent(--$indent);
                 echo '</ul>';

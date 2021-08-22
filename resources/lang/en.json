@@ -142,6 +142,7 @@
   "general:ui_language": "Choose Language",
   "general:webserver_ip": "IP address of the Photobooth web server",
   "general:webserver_ssid": "Wireless network name (SSID) used to access the photobooth",
+  "githead": "Latest changes",
   "home": "Home",
   "insertMail": "Enter your e-mail address to receive the photo.",
   "jpeg_quality": "JPEG quality",

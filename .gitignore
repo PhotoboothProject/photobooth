@@ -4,6 +4,7 @@ config/*
 !config/config.inc.php
 data/
 digicamcontrol/
+HEAD
 manual/faq.*
 node_modules/
 package-lock.json

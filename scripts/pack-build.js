@@ -63,6 +63,7 @@ function createArchive(fileName, archive) {
     archive.file('chromakeying.php');
     archive.file('faq/index.php');
     archive.file('gallery.php');
+    archive.file('HEAD');
     archive.file('index.php');
     archive.file('LICENSE');
     archive.file('livechroma.php');

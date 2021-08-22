@@ -32,6 +32,22 @@ switch ($content) {
         echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['take_picture']['logfile'], null);
         break;
 
+    case 'nav-githead':
+        $get_head = shell_exec('git rev-parse --is-inside-work-tree 2>/dev/null && git log --format="%h %s" -n 20 || false');
+        $file_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'HEAD';
+        $head_file = realpath($file_path);
+
+        if (is_file($head_file)) {
+            echo 'Latest commits:' . "\r\n";
+            echo dumpfile($head_file, null);
+        } elseif ($get_head) {
+            echo 'Latest commits:' . "\r\n";
+            echo $get_head;
+        } else {
+            echo 'Can not get latest commits of this Photobooth installation.';
+        }
+        break;
+
     default:
         echo 'Unknown debug panel parameter';
         break;
