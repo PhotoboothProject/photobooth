@@ -246,9 +246,9 @@ else
 fi
 
 if [ "$INSTALLFOLDER" == "photobooth" ] ;then
-    $URL = "http://$IPADDRESS/photobooth"
+    URL="http://$IPADDRESS/photobooth"
 else
-    $URL = "http://$IPADDRESS"
+    URL="http://$IPADDRESS"
 fi
 
 info "### Now we are going to install Photobooth."
