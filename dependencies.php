@@ -1,7 +1,21 @@
 <?php
+session_start();
 
 require_once('lib/config.php');
 
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
+    !$config['protect']['admin']
+) {
+    // nothing to do for now
+
+} else {
+    header('location: login');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html>
