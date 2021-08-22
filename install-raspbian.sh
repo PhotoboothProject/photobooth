@@ -9,6 +9,7 @@ set -e
 RUNNING_ON_PI=true
 SILENT_INSTALL=false
 DATE=$(date +"%Y%m%d-%H-%M")
+IPADDRESS=$('hostname -I | cut -d " " -f 1')
 
 if [ ! -z $1 ]; then
     webserver=$1
@@ -246,6 +247,12 @@ else
     fi
 fi
 
+if [ "$INSTALLFOLDER" == "photobooth" ] ;then
+    $URL = "http://$IPADDRESS/photobooth"
+else
+    $URL = "http://$IPADDRESS"
+fi
+
 info "### Now we are going to install Photobooth."
 git clone https://github.com/andi34/photobooth $INSTALLFOLDER
 cd $INSTALLFOLDERPATH
@@ -431,6 +438,9 @@ fi
 # Pi specific setup end
 
 info "### Congratulations you finished the install process."
+info "    Photobooth can be accessed at:"
+info "        $URL"
+info "###"
 info "### Have fun with your Photobooth, but first restart your device."
 
 echo -e "\033[0;33m"
