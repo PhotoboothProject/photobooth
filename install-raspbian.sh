@@ -231,8 +231,6 @@ if [ "$REPLY" != "${REPLY#[Yy]}" ] ;then
     else
         info "$INSTALLFOLDERPATH not found."
     fi
-fi
-
 else
     info "### Ok, we will install Photobooth into /var/www/html/photobooth."
     cd /var/www/html/
