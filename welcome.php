@@ -4,6 +4,25 @@ require_once 'lib/config.php';
 if (!is_file('.skip_welcome')) {
     touch('.skip_welcome');
 }
+
+if ($os == 'linux') {
+    $get_ip = shell_exec('hostname -I | cut -d " " -f 1');
+
+    if (!$get_ip) {
+        $IP = $_SERVER['HTTP_HOST'];
+    } else {
+        $IP = $get_ip;
+    }
+
+    if (getcwd() == '/var/www/html/photobooth') {
+        $URL = $IP . '/photobooth';
+    } else {
+        $URL = $IP;
+    }
+} else {
+        $URL = $_SERVER['HTTP_HOST'];
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,14 +57,14 @@ if (!is_file('.skip_welcome')) {
 <body>
 	<div id="wrapper" class="welcome">
 		<h1>Welcome to your own Photobooth</h1>
-
-		<p>Photobooth is an OpenSource Photobooth web interface for Linux and Windows.</p>
-		</br>
+		<p></p>
+		<p>OpenSource Photobooth web interface for Linux and Windows.</p>
+		<p></p>
 		<p>Photobooth was initally developped by Andre Rinas especially to run on a Raspberry Pi.<br>
 		In 2019 Andreas Blaesius picked up the work and continued to work on the source.</p>
 		<p>With the help of the community Photobooth growed to a powerfull Photobooth software with a lot of features and possibilities.<br>
-		By a lot of features, we mean a lot (!!!) and you might have some questions, now or later. You can find a lot of useful information inside
-		our <a href="https://github.com/andi34/photobooth/wiki" target="_blank" rel="noopener noreferrer">Photobooth-Wiki</a> or at our <a href="https://t.me/PhotoboothGroup" target="_blank" rel="noopener noreferrer">Telegram group</a>.</p>
+		By a lot of features, we mean a lot (!!!) and you might have some questions - now or later. You can find a lot of useful information inside
+		the <a href="https://github.com/andi34/photobooth/wiki" target="_blank" rel="noopener noreferrer">Photobooth-Wiki</a> or at the <a href="https://t.me/PhotoboothGroup" target="_blank" rel="noopener noreferrer">Telegram group</a>.</p>
 		<p></p>
 		<h3>Here are some basic information for you:</h3>
 		<p><b>Location of your Photobooth installation:</b> <?=getcwd()?><br>
@@ -53,15 +72,16 @@ if (!is_file('.skip_welcome')) {
 		<p><b>Images can be found at:</b> <?=$config['foldersAbs']['images']?></p>
 		<p><b>Databases are placed at:</b> <?=$config['foldersAbs']['data']?></p>
 		<p><b>Add your own files (e.g. background images, frames, override.css) inside:</b> <?=getcwd() . "/private"?><br>
-		<i>All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i><p>
-		<p>You can change the settings and look of Photobooth via <a href="admin" target="_blank" rel="noopener noreferrer">Admin panel</a>.
-		</br>
+		<i>All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i></p>
+		<p>You can change the settings and look of Photobooth using the Admin panel at <a href="admin" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/admin</a>.<br>
+		A standalone gallery can be found at <a href="gallery.php" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/gallery.php</a>.<br>
+		A standalone slideshow can be found at <a href="slideshow" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/slideshow</a>.</p>
+		<p></p>
 		<p>You are missing some translation or your language isn't supported yet? Don't worry! You can request new language support at <a href="https://github.com/andi34/photobooth/issues" target="_blank" rel="noopener noreferrer">GitHub</a>,
 		you can translate Photobooth at <a href="https://crowdin.com/project/photobooth" target="_blank" rel="noopener noreferrer">Crowdin</a>.</p>
-		</br>
-		<p>Thanks for the reading! Enjoy your Photobooth!<br>
-		<a href="./" class="btn btn--flex">Start Photobooth</a></p>
-
+		<p></p>
+		<p>Thanks for the reading! Enjoy your Photobooth!</p>
+		<p><a href="./" class="btn btn--flex">Start Photobooth</a></p>
 	</div>
 
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
