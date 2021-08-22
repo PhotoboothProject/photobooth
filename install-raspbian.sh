@@ -9,7 +9,7 @@ set -e
 RUNNING_ON_PI=true
 SILENT_INSTALL=false
 DATE=$(date +"%Y%m%d-%H-%M")
-IPADDRESS=$('hostname -I | cut -d " " -f 1')
+IPADDRESS=$(hostname -I | cut -d " " -f 1)
 
 if [ ! -z $1 ]; then
     webserver=$1
