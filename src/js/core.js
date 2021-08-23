@@ -604,6 +604,11 @@ const photoBooth = (function () {
             if (config.dev.error_messages) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
             }
+            takingPic = false;
+            remoteBuzzerClient.inProgress(false);
+            if (config.dev.enabled) {
+                console.log('Taking photo:', takingPic);
+            }
             if (config.dev.reload_on_error) {
                 const reloadmsg = api.getTranslation('auto_reload');
                 $('.loading').append($('<p>').text(reloadmsg));
@@ -649,11 +654,6 @@ const photoBooth = (function () {
 
                 if (data.error) {
                     api.errorPic(data);
-                    takingPic = false;
-                    remoteBuzzerClient.inProgress(false);
-                    if (config.dev.enabled) {
-                        console.log('Taking photo:', takingPic);
-                    }
                 } else if (photoStyle === 'chroma') {
                     api.renderChroma(data.file);
                 } else {
@@ -666,12 +666,6 @@ const photoBooth = (function () {
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
-
-                takingPic = false;
-                remoteBuzzerClient.inProgress(false);
-                if (config.dev.enabled) {
-                    console.log('Taking photo:', takingPic);
-                }
             }
         });
     };
