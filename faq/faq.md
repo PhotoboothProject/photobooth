@@ -321,6 +321,7 @@ There's different ways depending on your needs and personal setup:
     - Requires Photobooth v2.2.1 or later!
 
 3. A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
+    - Liveview must be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
     - install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
     - create a virtual webcam `modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
       - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:  
