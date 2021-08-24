@@ -66,7 +66,13 @@ const photoBooth = (function () {
     api.resetTimeOut = function () {
         clearTimeout(timeOut);
 
+        if (config.dev.enabled) {
+            console.log('Timeout for auto reload cleared.');
+        }
         if (!takingPic) {
+            if (config.dev.enabled) {
+                console.log('Timeout for auto reload set to', config.picture.time_to_live * 1000, ' seconds.');
+            }
             timeOut = setTimeout(function () {
                 api.reloadPage();
             }, config.picture.time_to_live * 1000);
@@ -1263,10 +1269,23 @@ const photoBooth = (function () {
         }
     });
 
-    // clear Timeout to not reset the gallery, if you clicked anywhere
+    // clear Timeout
     $(document).on('click', function () {
-        if (!startPage.is(':visible')) {
-            clearTimeout(timeOut);
+        if (api.isTimeOutPending()) {
+            if (typeof onStandaloneGalleryView !== 'undefined') {
+                clearTimeout(timeOut);
+                if (config.dev.enabled) {
+                    console.log('Standalone Gallery: Timeout for auto reload cleared.');
+                }
+            } else if (startPage.is(':visible')) {
+                clearTimeout(timeOut);
+                if (config.dev.enabled) {
+                    console.log('Timeout for auto reload cleared.');
+                }
+            } else {
+                // if !startPage.is(':visible')
+                api.resetTimeOut();
+            }
         }
     });
 
