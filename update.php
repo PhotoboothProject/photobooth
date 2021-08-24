@@ -47,6 +47,9 @@ if (
 	<?php if ($config['ui']['rounded_corners'] && $config['ui']['style'] === 'classic'): ?>
 	<link rel="stylesheet" href="resources/css/rounded.css" />
 	<?php endif; ?>
+	<?php if (is_file("private/overrides.css")): ?>
+	<link rel="stylesheet" href="private/overrides.css" />
+	<?php endif; ?>
 </head>
 
 <body class="updatewrapper">
