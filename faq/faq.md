@@ -482,3 +482,72 @@ A USB drive / stick can be identified either by the USB stick label (e.g. `photo
 Pictures will be synced to the USB stick matched by the pattern, as long as it is  mounted (aka USB stick is plugged in)
 
 Debugging: switch on dev settings for server logs to be written to the `data/tmp` directory of the photobooth installation (i.e. `data/tmp/synctodrive_server.log`).
+
+<hr>
+
+### Raspberry Touchpanel DSI simultaneously with HDMI
+
+When using a touchscreen on DSI and an HDMI screen simultaneously, the touch input is offset. This is because both monitors are recognized as one screen.
+
+The remedy is the following:
+```
+xinput list
+```
+remember the device id=[X] of the touchscreen.
+```
+xinput list-props "Device Name" 
+```
+Get the ID in brackets (Y) of Coordinate Transformation Matrix
+
+```
+xinput set-prop [X] --type=float [Y] c0 0 c1 0 c2 c3 0 0 1
+```
+
+adjust the coding c0 0 c1 0 c2 c3 0 0 1 with your own data.  
+You can get the values of your screens with the following command:
+
+```
+xrandr | grep \* # xrandr uses "*" 
+```
+to identify the screen being used
+```
+c0 = touch_area_width / total_width
+(width of touch screen divided by width of both screens)
+c2 = touch_area_height / total_height
+(height touch screen divided by height of both screens)
+c1 = touch_area_x_offset / total_width
+c3 = touch_area_y_offset / total_height
+```
+and execute the above command again with your own coding!
+
+Example:
+
+```
+xinput set-prop 6 --type=float 136 0.3478260869565217 0 0 0.55555555555556 0 0 0 1
+```
+
+Now unfortunately the settings are only valid for the current session. So create the following desktop startup file with your own values:
+
+```
+nano ~/.config/autostart/touch.desktop
+```
+
+```
+[Desktop Entry]
+Name=TouchSettingsAutostart
+Comment=Set up touch screen setting when starting desktop
+Type=Application
+## Adapt command to own values
+Exec=xinput set-prop 6 --type=float 136 0.3478260869565217 0 0 0 0.55555555555556 0 0 0 1
+Terminal=false
+```
+
+If you want to use the touchscreen as photobooth and the second monitor for the standalone slideshow for example, open the autostart file:
+```
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+```
+and enter/adjust the @chromium-browser entries as followed (adjust the value _1920_ to your own resolution and URL if necessary):
+```
+@chromium-browser --new-window --start-fullscreen --kiosk http://localhost --window-position=1920,0 --user-data-dir=Default
+@chromium-browser --new-window --start-fullscreen --kiosk http://localhost/slideshow/ --window-position=0,0 --user-data-dir='Profile 1'
+```
