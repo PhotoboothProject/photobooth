@@ -23,6 +23,8 @@ if ($os == 'linux') {
         $URL = $_SERVER['HTTP_HOST'];
 }
 
+$PHOTOBOOTH_HOME = getcwd();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,11 +69,11 @@ if ($os == 'linux') {
 		the <a href="https://github.com/andi34/photobooth/wiki" target="_blank" rel="noopener noreferrer">Photobooth-Wiki</a> or at the <a href="https://t.me/PhotoboothGroup" target="_blank" rel="noopener noreferrer">Telegram group</a>.</p>
 		<p></p>
 		<h3>Here are some basic information for you:</h3>
-		<p><b>Location of your Photobooth installation:</b> <?=getcwd()?><br>
+		<p><b>Location of your Photobooth installation:</b> <?=$PHOTOBOOTH_HOME?><br>
 		<i>All files and folders inside this path belong to the Webserver user "www-data".</i><p>
 		<p><b>Images can be found at:</b> <?=$config['foldersAbs']['images']?></p>
 		<p><b>Databases are placed at:</b> <?=$config['foldersAbs']['data']?></p>
-		<p><b>Add your own files (e.g. background images, frames, override.css) inside:</b> <?=getcwd() . "/private"?><br>
+		<p><b>Add your own files (e.g. background images, frames, overrides.css) inside:</b> <?=$PHOTOBOOTH_HOME . "/private"?><br>
 		<i>All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i></p>
 		<p>You can change the settings and look of Photobooth using the Admin panel at <a href="admin" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/admin</a>.<br>
 		A standalone gallery can be found at <a href="gallery.php" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/gallery.php</a>.<br>
