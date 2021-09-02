@@ -252,7 +252,7 @@ and add the following lines:
 @xset s off
 @xset -dpms
 @xset s noblank
-@chromium-browser --incognito --kiosk http://localhost/
+@chromium-browser --noerrdialogs --disable-infobars --disable-translate --no-first-run --check-for-update-interval=31536000 --use-fake-ui-for-media-stream --start-fullscreen --kiosk http://127.0.0.1 --incognito --touch-events=enabled
 ```
 **NOTE:** If you're using QR-Code replace `http://localhost/` with your local IP-Adress (e.g. `http://192.168.4.1`), else QR-Code does not work.
 
