@@ -467,7 +467,15 @@ sudo ./setup-network.sh --clean
 
 This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick. Currently works on Raspberry PI OS only.
 
-Use the `install-raspbian.sh` script to get the operating system setup in place. The target USB device is selected through the admin panel
+Use the `install-raspbian.sh` script to get the operating system setup in place.  
+**Note:** If you have declined the question to enable the USB sync file backup while running the `install-raspbian.sh` you need to run the following commands to get the operating system setup done:
+```
+wget https://raw.githubusercontent.com/andi34/photobooth/dev/enable-usb-sync.sh
+sudo bash enable-usb-sync.sh
+
+```
+
+The target USB device is selected through the admin panel.
 
 A USB drive / stick can be identified either by the USB stick label (e.g. `photobooth`), the operating system specific USB device name (e.g. `/dev/sda1`) or the USB device system subsystem name (e.g. `sda`). The preferred method would be the USB stick label (for use of a single USB stick) or the very specific USB device name, for different USB stick use. The default config will look for a drive with the label photobooth. The script only supports one single USB stick connected at a time
 
