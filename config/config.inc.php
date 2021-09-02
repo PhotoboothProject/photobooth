@@ -35,6 +35,7 @@ $config['database']['file'] = 'db';
 
 // F R O N T P A G E
 $config['ui']['show_fork'] = true;
+$config['ui']['skip_welcome'] = false;
 $config['event']['enabled'] = true;
 $config['event']['textLeft'] = 'We';
 // possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o', 

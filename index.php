@@ -1,13 +1,17 @@
 <?php
-if (!is_file('.skip_welcome')) {
-    header('location: welcome.php');
-}
-
 session_start();
 
 require_once 'lib/config.php';
+if (!$config['ui']['skip_welcome']) {
+    if (!is_file('.skip_welcome')) {
+        header('location: welcome.php');
+        exit();
+    }
+}
+
 if ($config['live_keying']['enabled']) {
     header('location: livechroma.php');
+    exit();
 }
 
 // Login / Authentication check

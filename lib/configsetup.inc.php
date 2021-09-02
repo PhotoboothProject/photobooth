@@ -270,6 +270,12 @@ $configsetup = [
             'name' => 'ui[show_fork]',
             'value' => $config['ui']['show_fork'],
         ],
+        'ui_skip_welcome' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'ui[skip_welcome]',
+            'value' => $config['ui']['skip_welcome'],
+        ],
         'ui_github' => [
             'view' => 'expert',
             'type' => 'hidden',
