@@ -624,6 +624,12 @@ $configsetup = [
             ],
             'value' => $config['collage']['layout'],
         ],
+        'collage_keep_single_images' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'collage[keep_single_images]',
+            'value' => $config['collage']['keep_single_images'],
+        ],
         'collage_key' => [
             'view' => 'expert',
             'type' => 'input',
