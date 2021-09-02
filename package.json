@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "scripts": {
-    "build": "npm-run-all --serial format build:faq build:gulp build:head",
+    "build": "npm-run-all --serial format build:faq build:gulp build:head clean:skipwelcome",
     "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.php --footer faq/footer.html && mv manual/faq.html manual/faq.php",
     "build:gulp": "gulp",
     "build:head": "git log --format='%h %s' -n 20 > HEAD",
@@ -14,6 +14,7 @@
     "clean:head": "rm HEAD || echo 'HEAD can not be removed or file not exist!'",
     "clean:js": "rm resources/js/*.js || echo 'resources/js/*.js can not be removed or no .js files exist!'",
     "clean:node": "rm -rf node_modules/ || echo 'node_modules/ can not be removed or does not exist!'",
+    "clean:skipwelcome": "rm .skip_welcome || echo '.skip_welcome can not be removed or does not exist!'",
     "eslint": "eslint src/js/*.js",
     "eslint:fix": "eslint src/js/*.js --fix",
     "format": "npm-run-all --parallel format:*",
