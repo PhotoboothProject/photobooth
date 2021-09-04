@@ -551,3 +551,15 @@ and enter/adjust the @chromium-browser entries as followed (adjust the value _19
 @chromium-browser --new-window --start-fullscreen --kiosk http://localhost --window-position=1920,0 --user-data-dir=Default
 @chromium-browser --new-window --start-fullscreen --kiosk http://localhost/slideshow/ --window-position=0,0 --user-data-dir='Profile 1'
 ```
+
+<hr>
+
+### How to administer CUPS remotely using the web interface?
+
+By default the CUPS webinterface can only be accessed via [http://localhost:631](http://localhost:631) from your local machine.  
+To remote access CUPS from other clients you need to run the following commands:
+```
+sudo cupsctl --remote-any
+sudo /etc/init.d/cups restart
+```
+
