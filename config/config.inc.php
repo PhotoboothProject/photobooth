@@ -259,6 +259,13 @@ $config['synctodrive']['target'] = 'photobooth'; //Default target for the sync s
 $config['synctodrive']['interval'] = 300;
 
 
+// G E T  R E Q U E S T
+$config['get_request']['enabled'] = false;
+$config['get_request']['server'] = NULL;
+$config['get_request']['picture'] = 'CNTDWNPHOTO';
+$config['get_request']['collage'] = 'CNTDWNCOLLAGE';
+
+
 // A U T H E N T I C A T I O N
 $config['login']['enabled'] = false;
 $config['login']['username'] = 'Photo';

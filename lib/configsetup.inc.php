@@ -1531,6 +1531,37 @@ $configsetup = [
             'value' => $config['synctodrive']['logfile'],
         ],
     ],
+    'get_request' => [
+        'platform' => 'linux',
+        'view' => 'advanced',
+        'get_request_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'get_request[enabled]',
+            'value' => $config['get_request']['enabled'],
+        ],
+        'get_request_server' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => 'http://xxx.xxx.xxx.xxx',
+            'name' => 'get_request[server]',
+            'value' => htmlentities($config['get_request']['server']),
+        ],
+        'get_request_picture' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['get_request']['picture'],
+            'name' => 'get_request[picture]',
+            'value' => htmlentities($config['get_request']['picture']),
+        ],
+        'get_request_collage' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['get_request']['collage'],
+            'name' => 'get_request[collage]',
+            'value' => htmlentities($config['get_request']['collage']),
+        ],
+    ],
     'authentication' => [
         'view' => 'basic',
         'login_enabled' => [
