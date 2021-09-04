@@ -12,6 +12,12 @@ switch ($mode) {
     case 'post-command':
         $cmd = sprintf($config['post_photo']['cmd']);
         break;
+    case 'reboot':
+        $cmd = 'sudo ' . sprintf($config['reboot']['cmd']);
+        break;
+    case 'shutdown':
+        $cmd = 'sudo ' . sprintf($config['shutdown']['cmd']);
+        break;
     default:
         $cmd = 'echo "Error for mode ' . $mode . ' - command not defined in configuration"';
         break;

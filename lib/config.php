@@ -26,6 +26,9 @@ $cmds = [
         'nodebin' => [
             'cmd' => '',
         ],
+        'reboot' => [
+            'cmd' => '',
+        ],
         'shutdown' => [
             'cmd' => '',
         ],
@@ -49,6 +52,9 @@ $cmds = [
         ],
         'nodebin' => [
             'cmd' => '/usr/bin/node',
+        ],
+        'reboot' => [
+            'cmd' => '/sbin/shutdown -r now',
         ],
         'shutdown' => [
             'cmd' => '/sbin/shutdown -h now',
@@ -94,6 +100,7 @@ $config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
 $config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
 $config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
 $config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
+$config['reboot']['cmd'] = $cmds[$os]['reboot']['cmd'];
 $config['shutdown']['cmd'] = $cmds[$os]['shutdown']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';

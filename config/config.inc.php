@@ -318,7 +318,8 @@ $config['preview']['killcmd'] = null;
 $config['nodebin']['cmd'] = null;
 $config['pre_photo']['cmd'] = null;
 $config['post_photo']['cmd'] = null;
-
+$config['reboot']['cmd'] = null;
+$config['shutdown']['cmd'] = null;
 
 // F O L D E R S
 $config['folders']['config'] = 'config';

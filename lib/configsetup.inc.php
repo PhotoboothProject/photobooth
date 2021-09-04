@@ -1893,6 +1893,13 @@ $configsetup = [
             'name' => 'nodebin[cmd]',
             'value' => htmlentities($config['nodebin']['cmd']),
         ],
+        'reboot_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['reboot']['cmd'],
+            'name' => 'reboot[cmd]',
+            'value' => htmlentities($config['reboot']['cmd']),
+        ],
         'shutdown_cmd' => [
             'view' => 'expert',
             'type' => 'input',
@@ -2010,6 +2017,24 @@ $configsetup = [
             'placeholder' => 'updater',
             'name' => 'UPDATERBUTTON',
             'value' => 'updater-btn',
+        ],
+    ],
+    'power' => [
+        'view' => 'basic',
+        'platform' => 'linux',
+        'reboot_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'reboot_button',
+            'name' => 'REBOOTBUTTON',
+            'value' => 'reboot-btn',
+        ],
+        'shutdown_button' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'shutdown_button',
+            'name' => 'SHUTDOWNBUTTON',
+            'value' => 'shutdown-btn',
         ],
     ],
 ];

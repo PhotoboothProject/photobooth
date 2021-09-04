@@ -343,6 +343,13 @@ then
     fi
 fi
 
+# Add configuration required for www-data to be able to initiate system shutdown / reboot
+info "### Note: In order for the shutdown and reboot button to work we install /etc/sudoers.d/020_www-data-shutdown"
+cat > /etc/sudoers.d/020_www-data-shutdown << EOF
+# Photobooth buttons for www-data to shutdown or reboot the system from admin panel or via remotebuzzer
+www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
+EOF
+
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
 echo -e "\033[0;33m### You probably like to start the browser on every start."
@@ -396,12 +403,6 @@ cat >> /boot/config.txt  << EOF
 # Photobooth
 gpio=16,17,20,21,22,26,27=pu
 # Photobooth End
-EOF
-# add configuration required for www-data to be able to initiate system shutdown
-info "### Note: In order for the shutdown button to work we install /etc/sudoers.d/020_www-data-shutdown"
-cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
-# Photobooth Remotebuzzer shutdown button for www-data to shutdown the system
-www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 
 # update artifacts in user configuration from old remotebuzzer implementation

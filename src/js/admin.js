@@ -12,6 +12,23 @@ $(function () {
         return key;
     };
 
+    const shellCommand = function ($mode) {
+        const command = {
+            mode: $mode
+        };
+
+        console.log('Run', $mode);
+
+        jQuery
+            .post('../api/shellCommand.php', command)
+            .done(function (result) {
+                console.log($mode, 'result: ', result);
+            })
+            .fail(function (xhr, status, result) {
+                console.log($mode, 'result: ', result);
+            });
+    };
+
     $('#reset-btn').on('click', function (e) {
         e.preventDefault();
         const msg = getTranslation('really_delete');
@@ -156,6 +173,20 @@ $(function () {
     $('#debugpanel-btn').on('click', function (ev) {
         ev.preventDefault();
         window.open('debugpanel.php');
+
+        return false;
+    });
+
+    $('#reboot-btn').on('click', function (ev) {
+        ev.preventDefault();
+        shellCommand('reboot');
+
+        return false;
+    });
+
+    $('#shutdown-btn').on('click', function (ev) {
+        ev.preventDefault();
+        shellCommand('shutdown');
 
         return false;
     });
