@@ -20,4 +20,15 @@ body {
   padding: 1em;
   text-align: center;
   color: $fontColor;
+  a {
+    color: $fontColor;
+  }
+  a:link,
+  a:visited {
+    text-decoration: none;
+  }
+  a:hover,
+  a:active {
+    text-decoration: underline;
+  }
 }
