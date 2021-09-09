@@ -300,46 +300,49 @@ You can follow the instructions [here](https://www.geeks3d.com/hacklab/20160108/
 ### How to use a live stream as background at countdown?
 There's different ways depending on your needs and personal setup:
 
-1. If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".
-    - Admin panel config "Preview mode": `from device cam`
+#### Preview _"from device cam"_
+If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".
+- Admin panel config "Preview mode": `from device cam`
 
-    **Note:**
-    - Preview `"from device cam"` will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!
-    - Secure origin or exception required!
-      - [Prefer Secure Origins For Powerful New Features](https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339)
-      - [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
-    - Admin panel config *"Device cam takes picture"* can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill.
+**Note:**
+- Preview `"from device cam"` will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!
+- Secure origin or exception required!
+  - [Prefer Secure Origins For Powerful New Features](https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339)
+  - [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
+- Admin panel config *"Device cam takes picture"* can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill.
 
-2. If you like to have the same preview independent of the device you access Photobooth from:  
-   Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
-    - Admin panel config *"Preview mode"*: `from URL`
-    - Admin panel config *"Preview-URL"* example (add needed IP address instead): `url(http://127.0.0.1:8081)`
+#### Preview _"from URL"_
+If you like to have the same preview independent of the device you access Photobooth from:  
+Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
+- Admin panel config *"Preview mode"*: `from URL`
+- Admin panel config *"Preview-URL"* example (add needed IP address instead): `url(http://127.0.0.1:8081)`
 
-    **Note**
-    - Do NOT enable *"Device cam takes picture"* in admin panel config!
-    - Capture pictures via `raspistill` won't work if motion is installed!
-    - Requires Photobooth v2.2.1 or later!
+**Note**
+- Do NOT enable *"Device cam takes picture"* in admin panel config!
+- Capture pictures via `raspistill` won't work if motion is installed!
+- Requires Photobooth v2.2.1 or later!
 
-3. A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
-    - Liveview must be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
-    - install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
-    - create a virtual webcam `modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
-      - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:  
-        If it doesn't match the default setup you need to adjust the `Command to generate a live preview` inside the admin panel!
-    - Give permissions to /dev/video* `sudo gpasswd -a www-data video` (this was done automatically if you used the installation script) and reboot once
-    - Admin panel config *"Preview mode"*: `from gphoto2`
+#### Preview _"from gohoto2"_
+A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
+- Liveview **must** be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
+- install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
+- create a virtual webcam `sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
+  - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:  
+    If it doesn't match the default setup you need to adjust the `Command to generate a live preview` inside the admin panel!
+- Give permissions to /dev/video* `sudo gpasswd -a www-data video` (this was done automatically if you used the installation script) and reboot once
+- Admin panel config *"Preview mode"*: `from gphoto2`
 
-    **Note**
-    - Requires Photobooth v2.11.0 or later!
-    - You need to access Photobooth directly via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost)
-    - There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Battery saving mode on gphoto2 live preview` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
-    - Sometimes Chromium doesn't detect the V4l2 camera launch from php: you need to run `sudo gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0` from terminal first and load Chromium a first time with a webpage asking for the camera.
-    - Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. `rmmod bcm2835-isp`.
-    - To ensure that the configuration works after reboot add the following lines to `/etc/rc.local` (You have to add these lines bevor `exit 0`):
-      - `modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
-      - `rmmod bcm2835-isp`
-    - Make sure the countdown is long enough to start the preview and free gphoto2 at the end of the countdown to be able to take a picture (2 seconds before the countdown ends).
-      - For best user experience the countdown should be set at least to 8 seconds.
+**Note**
+- Requires Photobooth v2.11.0 or later!
+- You need to access Photobooth directly via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost), you won't be able to see the preview on a different device (e.g. Tablet)
+- There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Battery saving mode on gphoto2 live preview` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
+- Sometimes Chromium doesn't detect the V4l2 camera launch from php: you need to run `sudo gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0` from terminal first and load Chromium a first time with a webpage asking for the camera.
+- Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. ` sudo rmmod bcm2835-isp`.
+- To ensure that the configuration works after reboot add the following lines to `/etc/rc.local` (You have to add these lines bevor `exit 0`):
+  - `modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
+  - `rmmod bcm2835-isp`
+- Make sure the countdown is long enough to start the preview and free gphoto2 at the end of the countdown to be able to take a picture (2 seconds before the countdown ends).
+  - For best user experience the countdown should be set at least to 8 seconds.
 
 <hr>
 
