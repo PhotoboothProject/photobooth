@@ -9,14 +9,14 @@ set_username="$(git config user.name Photobooth)"
 get_useremail="$(git config user.email)"
 set_useremail="$(git config user.email Photobooth@localhost)"
 
-if [ -z $get_username ];
+if [ -z "$get_username" ];
 then
 	echo "git user.name not set!"
 	echo "Setting git user.name."
 	$set_username
 fi
 
-if [ -z $get_useremail ];
+if [ -z "$get_useremail" ];
 then
 	echo "git user.email not set!"
 	echo "Setting git user.email."
