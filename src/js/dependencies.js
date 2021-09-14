@@ -1,4 +1,4 @@
-/* global i18n */
+/* global i18n photoboothTools */
 
 const dependencies = (function () {
     // vars
@@ -15,7 +15,7 @@ const dependencies = (function () {
         jQuery
             .post('api/checkOS.php')
             .done(function (result) {
-                console.log('Operating system: ', result);
+                photoboothTools.console.log('Operating system: ' + result.os);
                 const checkDependencies = api.getTranslation('check_dependencies'),
                     unsupportedOs = api.getTranslation('unsupported_os');
 
@@ -29,7 +29,7 @@ const dependencies = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                console.log('Operating system check failed: ', result);
+                photoboothTools.console.log('Operating system check failed: ', result);
             });
     };
 
@@ -50,12 +50,12 @@ const dependencies = (function () {
             mode: $mode
         };
 
-        console.log('Run', $mode);
+        photoboothTools.console.log('Run' + $mode);
 
         jQuery
             .post('api/update.php', command)
             .done(function (result) {
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
                 const updateError = api.getTranslation('update_error');
 
                 if (result.success) {
@@ -72,7 +72,7 @@ const dependencies = (function () {
             .fail(function (xhr, status, result) {
                 const updateFail = api.getTranslation('update_fail');
                 $('.white-box').append($('<p style="color:red">').text(updateFail));
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
             });
     };
 

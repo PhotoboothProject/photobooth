@@ -84,6 +84,7 @@ if (
 
 	<script type="text/javascript" src="../api/config.php"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="../resources/js/tools.js"></script>
 	<script type="text/javascript" src="../resources/js/adminshortcut.js"></script>
 	<script type="text/javascript" src="../resources/js/diskusage.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>

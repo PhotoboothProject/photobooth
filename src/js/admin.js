@@ -1,4 +1,4 @@
-/* globals i18n */
+/* globals i18n photoboothTools */
 $(function () {
     const getTranslation = function (key) {
         const translation = i18n(key, config.ui.language);
@@ -17,15 +17,15 @@ $(function () {
             mode: $mode
         };
 
-        console.log('Run', $mode);
+        photoboothTools.console.log('Run' + $mode);
 
         jQuery
             .post('../api/shellCommand.php', command)
             .done(function (result) {
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
             })
             .fail(function (xhr, status, result) {
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
             });
     };
 
@@ -135,7 +135,7 @@ $(function () {
             method: 'GET',
             success: (data) => {
                 $('#checkVersion').empty();
-                console.log('data', data);
+                photoboothTools.console.log('data', data);
                 if (!data.updateAvailable) {
                     $('#current_version_text').text(getTranslation('using_latest_version'));
                 } else if (/^\d+\.\d+\.\d+$/u.test(data.availableVersion)) {
@@ -157,7 +157,7 @@ $(function () {
             },
 
             error: (jqXHR) => {
-                console.log('Error checking Version: ', jqXHR.responseText);
+                photoboothTools.console.log('Error checking Version: ', jqXHR.responseText);
 
                 elem.removeClass('saving');
                 elem.addClass('error');

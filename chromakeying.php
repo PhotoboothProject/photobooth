@@ -112,6 +112,7 @@ if (file_exists($keyingimage)) {
 	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
 	<script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
 	<?php endif; ?>
+    <script type="text/javascript" src="resources/js/tools.js"></script>
 	<script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
 	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>

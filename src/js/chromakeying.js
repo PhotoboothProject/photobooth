@@ -1,4 +1,4 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously initRemoteBuzzerFromDOM rotaryController */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously initRemoteBuzzerFromDOM rotaryController photoboothTools */
 /* exported setBackgroundImage */
 let mainImage;
 let mainImageWidth;
@@ -123,10 +123,8 @@ function setMainImage(imgSrc) {
             const r = parseInt(color.substr(1, 2), 16) / 255;
             const g = parseInt(color.substr(3, 2), 16) / 255;
             const b = parseInt(color.substr(5, 2), 16) / 255;
-            if (config.dev.enabled) {
-                console.log('Chromakeying color:', color);
-                console.log('Red:', r, 'Green:', g, 'Blue:', b);
-            }
+            photoboothTools.console.logDev('Chromakeying color:', color);
+            photoboothTools.console.logDev('Red:', r, 'Green:', g, 'Blue:', b);
             chroma.screen = [r, g, b, 1];
             seriously.go();
             mainImage = new Image();
@@ -199,7 +197,7 @@ function printImage(filename, cb) {
     const errormsg = getTranslation('error');
 
     if (isPrinting) {
-        console.log('Printing already: ' + isPrinting);
+        photoboothTools.console.log('Printing already: ' + isPrinting);
     } else {
         isPrinting = true;
         setTimeout(function () {
@@ -210,10 +208,10 @@ function printImage(filename, cb) {
                     filename: filename
                 },
                 success: (data) => {
-                    console.log('Picture processed: ', data);
+                    photoboothTools.console.log('Picture processed: ', data);
 
                     if (data.error) {
-                        console.log('An error occurred: ', data.error);
+                        photoboothTools.console.log('An error occurred: ', data.error);
                         $('#print_mesg').empty();
                         $('#print_mesg').html(
                             '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
@@ -233,7 +231,7 @@ function printImage(filename, cb) {
                     }, config.print.time);
                 },
                 error: (jqXHR, textStatus) => {
-                    console.log('An error occurred: ', textStatus);
+                    photoboothTools.console.log('An error occurred: ', textStatus);
                     $('#print_mesg').empty();
                     $('#print_mesg').html(
                         '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
@@ -316,7 +314,7 @@ function closeHandler(ev) {
 $(document).on('keyup', function (ev) {
     if (config.print.from_chromakeying && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
         if (isPrinting) {
-            console.log('Printing already in progress!');
+            photoboothTools.console.log('Printing already in progress!');
         } else {
             $('#print-btn').trigger('click');
         }

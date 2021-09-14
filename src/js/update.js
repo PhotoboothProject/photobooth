@@ -1,4 +1,4 @@
-/* global i18n */
+/* globals i18n photoboothTools */
 
 const updater = (function () {
     // vars
@@ -18,7 +18,7 @@ const updater = (function () {
         jQuery
             .post('api/checkOS.php')
             .done(function (result) {
-                console.log('Operating system: ', result);
+                photoboothTools.console.log('Operating system: ' + result.os);
                 const checkConnection = api.getTranslation('check_connection'),
                     unsupportedOs = api.getTranslation('unsupported_os');
 
@@ -32,7 +32,7 @@ const updater = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                console.log('Operating system check failed: ', result);
+                photoboothTools.console.log('Operating system check failed: ', result);
             });
     };
 
@@ -40,7 +40,7 @@ const updater = (function () {
         jQuery
             .post('api/checkConnection.php')
             .done(function (result) {
-                console.log('Connected: ', result);
+                photoboothTools.console.log('Connected: ', result);
                 const ok = api.getTranslation('ok'),
                     noConnection = api.getTranslation('no_connection'),
                     updateCheckGit = api.getTranslation('update_check_git');
@@ -54,7 +54,7 @@ const updater = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                console.log('Checking connection failed: ', result);
+                photoboothTools.console.log('Checking connection failed: ', result);
             });
     };
 
@@ -75,12 +75,12 @@ const updater = (function () {
             mode: $mode
         };
 
-        console.log('Run', $mode);
+        photoboothTools.console.log('Run ' + $mode);
 
         jQuery
             .post('api/update.php', command)
             .done(function (result) {
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
                 const updateCommitBackup = api.getTranslation('update_commit_backup'),
                     updateReady = api.getTranslation('update_ready'),
                     updateNoGit = api.getTranslation('update_no_git'),
@@ -130,7 +130,7 @@ const updater = (function () {
             .fail(function (xhr, status, result) {
                 const updateFail = api.getTranslation('update_fail');
                 $('.white-box').append($('<p style="color:red">').text(updateFail));
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
             });
     };
 

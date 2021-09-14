@@ -1,4 +1,4 @@
-/* globals photoBooth */
+/* globals photoBooth photoboothTools */
 /*
  * This script checks for new pictures in regular intervals.
  * If changes are detected, the page will automatically be reloaded.
@@ -27,7 +27,7 @@ const ajaxurl = 'gallery.php?status';
  */
 
 function dbUpdated() {
-    console.log('DB is updated - refreshing');
+    photoboothTools.console.log('DB is updated - refreshing');
     //location.reload(true); //Alternative
     photoBooth.reloadPage();
 }
@@ -35,9 +35,7 @@ function dbUpdated() {
 const checkForUpdates = function () {
     if (photoBooth.isTimeOutPending()) {
         // If there is user interaction, do not check for updates
-        if (config.dev.enabled) {
-            console.log('Timeout pending, waiting to refresh the standalone gallery');
-        }
+        photoboothTools.console.logDev('Timeout pending, waiting to refresh the standalone gallery');
 
         return;
     }

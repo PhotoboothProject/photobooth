@@ -289,6 +289,7 @@ if (
         <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="../node_modules/waypoints/lib/jquery.waypoints.min.js"></script>
         <script type="text/javascript" src="../node_modules/selectize/dist/js/standalone/selectize.min.js"></script>
+        <script type="text/javascript" src="../resources/js/tools.js"></script>
         <script type="text/javascript" src="../resources/js/theme.js"></script>
         <script type="text/javascript" src="../resources/js/admin.js"></script>
         <script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
