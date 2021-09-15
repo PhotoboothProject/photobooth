@@ -28,7 +28,10 @@ const photoBooth = (function () {
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
         pid,
-        command;
+        command,
+        startTime,
+        endTime,
+        totalTime;
 
     // Returns true when timeOut is pending
     api.isTimeOutPending = function () {
@@ -434,10 +437,14 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = function (data) {
+        startTime = new Date().getTime();
         jQuery
             .post('api/takePic.php', data)
             .done(function (result) {
-                photoboothTools.console.log('took picture', result);
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.log('took ' + data.style, result);
+                photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
                 $('.cheese').empty();
                 if (config.preview.flipHorizontal) {
                     $('#video--view').removeClass('flip-horizontal');
@@ -595,6 +602,7 @@ const photoBooth = (function () {
     };
 
     api.processPic = function (photoStyle, result) {
+        startTime = new Date().getTime();
         const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
 
         $('.spinner').show();
@@ -622,7 +630,10 @@ const photoBooth = (function () {
                 style: photoStyle
             },
             success: (data) => {
-                photoboothTools.console.log('picture processed', data);
+                photoboothTools.console.log(photoStyle + ' processed', data);
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.logDev('Processing ' + photoStyle + ' took ' + totalTime + 'ms');
 
                 if (data.error) {
                     api.errorPic(data);
