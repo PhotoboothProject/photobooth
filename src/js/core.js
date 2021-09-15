@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools */
 
 const photoBooth = (function () {
     // vars
@@ -90,18 +90,6 @@ const photoBooth = (function () {
 
         initRemoteBuzzerFromDOM();
         rotaryController.focusSet('#start');
-    };
-
-    api.getTranslation = function (key) {
-        const translation = i18n(key, config.ui.language);
-        const fallbackTranslation = i18n(key, 'en');
-        if (translation) {
-            return translation;
-        } else if (fallbackTranslation) {
-            return fallbackTranslation;
-        }
-
-        return key;
     };
 
     api.openNav = function () {
@@ -362,10 +350,10 @@ const photoBooth = (function () {
         if (config.picture.no_cheese) {
             photoboothTools.console.log('Cheese is disabled.');
         } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
-            const cheesemsg = api.getTranslation('cheese');
+            const cheesemsg = photoboothTools.getTranslation('cheese');
             $('.cheese').text(cheesemsg);
         } else {
-            const cheesemsg = api.getTranslation('cheeseCollage');
+            const cheesemsg = photoboothTools.getTranslation('cheeseCollage');
             $('.cheese').text(cheesemsg);
             $('<p>')
                 .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
@@ -469,7 +457,7 @@ const photoBooth = (function () {
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now;
-                    const waitmsg = api.getTranslation('wait_message');
+                    const waitmsg = photoboothTools.getTranslation('wait_message');
                     $('.loading').append($('<p>').text(waitmsg));
                     preloadImage.onload = () => {
                         $('.loaderImage').css({
@@ -505,7 +493,11 @@ const photoBooth = (function () {
                         remoteBuzzerClient.collageWaitForNext();
 
                         if (result.current + 1 < result.limit) {
-                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('nextPhoto') + '</a>')
+                            $(
+                                '<a class="btn rotaryfocus" href="#">' +
+                                    photoboothTools.getTranslation('nextPhoto') +
+                                    '</a>'
+                            )
                                 .appendTo('.loading')
                                 .click((ev) => {
                                     ev.stopPropagation();
@@ -516,7 +508,11 @@ const photoBooth = (function () {
                                     api.thrill('collage');
                                 });
                         } else {
-                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('processPhoto') + '</a>')
+                            $(
+                                '<a class="btn rotaryfocus" href="#">' +
+                                    photoboothTools.getTranslation('processPhoto') +
+                                    '</a>'
+                            )
                                 .appendTo('.loading')
                                 .click((ev) => {
                                     ev.stopPropagation();
@@ -532,7 +528,7 @@ const photoBooth = (function () {
                         }
                         $(
                             '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
-                                api.getTranslation('retakePhoto') +
+                                photoboothTools.getTranslation('retakePhoto') +
                                 '</a>'
                         )
                             .appendTo('.loading')
@@ -547,7 +543,7 @@ const photoBooth = (function () {
                                 api.thrill('collage');
                             });
 
-                        const abortmsg = api.getTranslation('abort');
+                        const abortmsg = photoboothTools.getTranslation('abort');
                         $('.loading')
                             .append($('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(abortmsg))
                             .click(() => {
@@ -580,7 +576,7 @@ const photoBooth = (function () {
             $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
-            const errormsg = api.getTranslation('error');
+            const errormsg = photoboothTools.getTranslation('error');
             $('.loading').append($('<p>').text(errormsg));
             if (config.dev.error_messages) {
                 $('.loading').append($('<p class="text-muted">').text(data.error));
@@ -589,13 +585,13 @@ const photoBooth = (function () {
             remoteBuzzerClient.inProgress(false);
             photoboothTools.console.logDev('Taking photo: ' + takingPic);
             if (config.dev.reload_on_error) {
-                const reloadmsg = api.getTranslation('auto_reload');
+                const reloadmsg = photoboothTools.getTranslation('auto_reload');
                 $('.loading').append($('<p>').text(reloadmsg));
                 setTimeout(function () {
                     photoboothTools.reloadPage();
                 }, 5000);
             } else {
-                const reloadmsg = api.getTranslation('reload');
+                const reloadmsg = photoboothTools.getTranslation('reload');
                 $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
             }
         }, 500);
@@ -608,8 +604,8 @@ const photoBooth = (function () {
         $('.spinner').show();
         $('.loading').text(
             photoStyle === 'photo' || photoStyle === 'chroma'
-                ? api.getTranslation('busy')
-                : api.getTranslation('busyCollage')
+                ? photoboothTools.getTranslation('busy')
+                : photoboothTools.getTranslation('busyCollage')
         );
 
         if (photoStyle === 'photo' && config.picture.preview_before_processing) {
@@ -694,7 +690,7 @@ const photoBooth = (function () {
             $(this).appendTo(body);
             $('<p>')
                 .css('max-width', this.width + 'px')
-                .html(api.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
+                .html(photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
                 .appendTo(body);
         });
 
@@ -722,7 +718,7 @@ const photoBooth = (function () {
             .on('click', (ev) => {
                 ev.preventDefault();
 
-                const msg = api.getTranslation('really_delete_image');
+                const msg = photoboothTools.getTranslation('really_delete_image');
                 const really = config.delete.no_request ? true : confirm(filename + ' ' + msg);
                 if (really) {
                     api.deleteImage(filename, (data) => {
@@ -898,7 +894,7 @@ const photoBooth = (function () {
     };
 
     api.printImage = function (imageSrc, cb) {
-        const errormsg = api.getTranslation('error');
+        const errormsg = photoboothTools.getTranslation('error');
 
         if (isPrinting) {
             photoboothTools.console.log('Printing already: ' + isPrinting);
@@ -931,7 +927,9 @@ const photoBooth = (function () {
                             if (data.error) {
                                 $('#print_mesg').empty();
                                 $('#print_mesg').html(
-                                    '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
+                                    '<div class="modal__body"><span>' +
+                                        photoboothTools.getTranslation('printing') +
+                                        '</span></div>'
                                 );
                             }
                             cb();
@@ -950,7 +948,9 @@ const photoBooth = (function () {
                             photoboothTools.modal.close('#print_mesg');
                             $('#print_mesg').empty();
                             $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
+                                '<div class="modal__body"><span>' +
+                                    photoboothTools.getTranslation('printing') +
+                                    '</span></div>'
                             );
                             cb();
                             isPrinting = false;
@@ -1107,18 +1107,24 @@ const photoBooth = (function () {
                     if (result.saved) {
                         message
                             .fadeIn()
-                            .html('<span style="color:green">' + api.getTranslation('mailSaved') + '</span>');
+                            .html(
+                                '<span style="color:green">' + photoboothTools.getTranslation('mailSaved') + '</span>'
+                            );
                     } else {
                         message
                             .fadeIn()
-                            .html('<span style="color:green">' + api.getTranslation('mailSent') + '</span>');
+                            .html(
+                                '<span style="color:green">' + photoboothTools.getTranslation('mailSent') + '</span>'
+                            );
                     }
                 } else {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
             error: function () {
-                message.fadeIn('fast').html('<span style="color: red;">' + api.getTranslation('mailError') + '</span>');
+                message
+                    .fadeIn('fast')
+                    .html('<span style="color: red;">' + photoboothTools.getTranslation('mailError') + '</span>');
             },
             complete: function () {
                 form.find('.btn').html(oldValue);

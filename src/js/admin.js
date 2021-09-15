@@ -1,17 +1,5 @@
-/* globals i18n photoboothTools */
+/* globals photoboothTools */
 $(function () {
-    const getTranslation = function (key) {
-        const translation = i18n(key, config.ui.language);
-        const fallbackTranslation = i18n(key, 'en');
-        if (translation) {
-            return translation;
-        } else if (fallbackTranslation) {
-            return fallbackTranslation;
-        }
-
-        return key;
-    };
-
     const shellCommand = function ($mode) {
         const command = {
             mode: $mode
@@ -31,7 +19,7 @@ $(function () {
 
     $('#reset-btn').on('click', function (e) {
         e.preventDefault();
-        const msg = getTranslation('really_delete');
+        const msg = photoboothTools.getTranslation('really_delete');
         const really = confirm(msg);
         const data = {type: 'reset'};
         const elem = $(this);
@@ -137,14 +125,14 @@ $(function () {
                 $('#checkVersion').empty();
                 photoboothTools.console.log('data', data);
                 if (!data.updateAvailable) {
-                    $('#current_version_text').text(getTranslation('using_latest_version'));
+                    $('#current_version_text').text(photoboothTools.getTranslation('using_latest_version'));
                 } else if (/^\d+\.\d+\.\d+$/u.test(data.availableVersion)) {
-                    $('#current_version_text').text(getTranslation('current_version'));
+                    $('#current_version_text').text(photoboothTools.getTranslation('current_version'));
                     $('#current_version').text(data.currentVersion);
-                    $('#available_version_text').text(getTranslation('available_version'));
+                    $('#available_version_text').text(photoboothTools.getTranslation('available_version'));
                     $('#available_version').text(data.availableVersion);
                 } else {
-                    $('#current_version_text').text(getTranslation('test_update_available'));
+                    $('#current_version_text').text(photoboothTools.getTranslation('test_update_available'));
                 }
 
                 elem.removeClass('saving');

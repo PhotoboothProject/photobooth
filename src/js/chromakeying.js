@@ -1,4 +1,4 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously initRemoteBuzzerFromDOM rotaryController photoboothTools */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage Seriously initRemoteBuzzerFromDOM rotaryController photoboothTools */
 /* exported setBackgroundImage */
 let mainImage;
 let mainImageWidth;
@@ -9,18 +9,6 @@ let seriously;
 let target;
 let chroma;
 let seriouslyimage;
-
-const getTranslation = function (key) {
-    const translation = i18n(key, config.ui.language);
-    const fallbackTranslation = i18n(key, 'en');
-    if (translation) {
-        return translation;
-    } else if (fallbackTranslation) {
-        return fallbackTranslation;
-    }
-
-    return key;
-};
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -194,7 +182,7 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 }
 
 function printImage(filename, cb) {
-    const errormsg = getTranslation('error');
+    const errormsg = photoboothTools.getTranslation('error');
 
     if (isPrinting) {
         photoboothTools.console.log('Printing already: ' + isPrinting);
@@ -223,7 +211,9 @@ function printImage(filename, cb) {
                         if (data.error) {
                             photoboothTools.modal.empty('#print_mesg');
                             $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
+                                '<div class="modal__body"><span>' +
+                                    photoboothTools.getTranslation('printing') +
+                                    '</span></div>'
                             );
                         }
                         cb();
@@ -241,7 +231,9 @@ function printImage(filename, cb) {
                         photoboothTools.modal.close('#print_mesg');
                         photoboothTools.modal.empty('#print_mesg');
                         $('#print_mesg').html(
-                            '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
+                            '<div class="modal__body"><span>' +
+                                photoboothTools.getTranslation('printing') +
+                                '</span></div>'
                         );
                         cb();
                         isPrinting = false;

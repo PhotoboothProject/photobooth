@@ -207,7 +207,7 @@ function saveImage(cb) {
                     .on('click', (ev) => {
                         ev.preventDefault();
 
-                        const msg = photoBooth.getTranslation('really_delete_image');
+                        const msg = photoboothTools.getTranslation('really_delete_image');
                         const really = config.delete.no_request ? true : confirm(data.filename + ' ' + msg);
                         if (really) {
                             photoBooth.deleteImage(data.filename, (result) => {
@@ -267,7 +267,7 @@ $('.backgroundPreview').on('click', function () {
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
     takingPic = true;
-    const chromaInfo = photoBooth.getTranslation('chromaInfoAfter');
+    const chromaInfo = photoboothTools.getTranslation('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
 

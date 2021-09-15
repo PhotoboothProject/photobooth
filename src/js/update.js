@@ -1,4 +1,4 @@
-/* globals i18n photoboothTools */
+/* globals photoboothTools */
 
 const updater = (function () {
     // vars
@@ -19,8 +19,8 @@ const updater = (function () {
             .post('api/checkOS.php')
             .done(function (result) {
                 photoboothTools.console.log('Operating system: ' + result.os);
-                const checkConnection = api.getTranslation('check_connection'),
-                    unsupportedOs = api.getTranslation('unsupported_os');
+                const checkConnection = photoboothTools.getTranslation('check_connection'),
+                    unsupportedOs = photoboothTools.getTranslation('unsupported_os');
 
                 if (result.os == 'linux') {
                     $('.white-box').append($('<p style="color:green">').text(result.os));
@@ -41,9 +41,9 @@ const updater = (function () {
             .post('api/checkConnection.php')
             .done(function (result) {
                 photoboothTools.console.log('Connected: ', result);
-                const ok = api.getTranslation('ok'),
-                    noConnection = api.getTranslation('no_connection'),
-                    updateCheckGit = api.getTranslation('update_check_git');
+                const ok = photoboothTools.getTranslation('ok'),
+                    noConnection = photoboothTools.getTranslation('no_connection'),
+                    updateCheckGit = photoboothTools.getTranslation('update_check_git');
 
                 if (result.connected === true) {
                     $('.white-box').append($('<p style="color:green">').text(ok));
@@ -58,18 +58,6 @@ const updater = (function () {
             });
     };
 
-    api.getTranslation = function (key) {
-        const translation = i18n(key, config.ui.language);
-        const fallbackTranslation = i18n(key, 'en');
-        if (translation) {
-            return translation;
-        } else if (fallbackTranslation) {
-            return fallbackTranslation;
-        }
-
-        return key;
-    };
-
     api.runCmd = function ($mode) {
         command = {
             mode: $mode
@@ -81,13 +69,13 @@ const updater = (function () {
             .post('api/update.php', command)
             .done(function (result) {
                 photoboothTools.console.log($mode, 'result: ', result);
-                const updateCommitBackup = api.getTranslation('update_commit_backup'),
-                    updateReady = api.getTranslation('update_ready'),
-                    updateNoGit = api.getTranslation('update_no_git'),
-                    updateGitCommited = api.getTranslation('update_git_commited'),
-                    updateDone = api.getTranslation('update_done'),
-                    updateError = api.getTranslation('update_error'),
-                    ok = api.getTranslation('ok');
+                const updateCommitBackup = photoboothTools.getTranslation('update_commit_backup'),
+                    updateReady = photoboothTools.getTranslation('update_ready'),
+                    updateNoGit = photoboothTools.getTranslation('update_no_git'),
+                    updateGitCommited = photoboothTools.getTranslation('update_git_commited'),
+                    updateDone = photoboothTools.getTranslation('update_done'),
+                    updateError = photoboothTools.getTranslation('update_error'),
+                    ok = photoboothTools.getTranslation('ok');
 
                 if (result.success) {
                     if ($mode === 'check-git') {
@@ -128,7 +116,7 @@ const updater = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                const updateFail = api.getTranslation('update_fail');
+                const updateFail = photoboothTools.getTranslation('update_fail');
                 $('.white-box').append($('<p style="color:red">').text(updateFail));
                 photoboothTools.console.log($mode, 'result: ', result);
             });
@@ -136,7 +124,7 @@ const updater = (function () {
 
     $('.gitCommit').on('click', function (e) {
         e.preventDefault();
-        const updateCommitting = api.getTranslation('update_committing');
+        const updateCommitting = photoboothTools.getTranslation('update_committing');
         $('.white-box').append($('<p>').text(updateCommitting));
         api.runCmd('commit');
         $('.gitCommit').blur();
@@ -144,7 +132,7 @@ const updater = (function () {
 
     $('.updateDev').on('click', function (e) {
         e.preventDefault();
-        const updateRunning = api.getTranslation('update_running');
+        const updateRunning = photoboothTools.getTranslation('update_running');
         $('.white-box').append($('<p>').text(updateRunning));
         api.runCmd('update-dev');
         $('.updateDev').blur();
@@ -154,7 +142,7 @@ const updater = (function () {
 
     $('.updateStable').on('click', function (e) {
         e.preventDefault();
-        const updateRunning = api.getTranslation('update_running');
+        const updateRunning = photoboothTools.getTranslation('update_running');
         $('.white-box').append($('<p>').text(updateRunning));
         api.runCmd('update-stable');
         $('.updateStable').blur();

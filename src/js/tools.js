@@ -1,3 +1,4 @@
+/* globals i18n */
 const photoboothTools = (function () {
     // vars
     const api = {};
@@ -11,6 +12,18 @@ const photoboothTools = (function () {
                 console.log('[', new Date().toISOString(), ']:', content);
             }
         }
+    };
+
+    api.getTranslation = function (key) {
+        const translation = i18n(key, config.ui.language);
+        const fallbackTranslation = i18n(key, 'en');
+        if (translation) {
+            return translation;
+        } else if (fallbackTranslation) {
+            return fallbackTranslation;
+        }
+
+        return key;
     };
 
     api.modal = {

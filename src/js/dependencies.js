@@ -1,4 +1,4 @@
-/* global i18n photoboothTools */
+/* globals photoboothTools */
 
 const dependencies = (function () {
     // vars
@@ -16,8 +16,8 @@ const dependencies = (function () {
             .post('api/checkOS.php')
             .done(function (result) {
                 photoboothTools.console.log('Operating system: ' + result.os);
-                const checkDependencies = api.getTranslation('check_dependencies'),
-                    unsupportedOs = api.getTranslation('unsupported_os');
+                const checkDependencies = photoboothTools.getTranslation('check_dependencies'),
+                    unsupportedOs = photoboothTools.getTranslation('unsupported_os');
 
                 if (result.os == 'linux') {
                     $('.white-box').append($('<p style="color:green">').text(result.os));
@@ -33,18 +33,6 @@ const dependencies = (function () {
             });
     };
 
-    api.getTranslation = function (key) {
-        const translation = i18n(key, config.ui.language);
-        const fallbackTranslation = i18n(key, 'en');
-        if (translation) {
-            return translation;
-        } else if (fallbackTranslation) {
-            return fallbackTranslation;
-        }
-
-        return key;
-    };
-
     api.runCmd = function ($mode) {
         command = {
             mode: $mode
@@ -56,7 +44,7 @@ const dependencies = (function () {
             .post('api/update.php', command)
             .done(function (result) {
                 photoboothTools.console.log($mode, 'result: ', result);
-                const updateError = api.getTranslation('update_error');
+                const updateError = photoboothTools.getTranslation('update_error');
 
                 if (result.success) {
                     if ($mode == 'check-deps') {
@@ -70,7 +58,7 @@ const dependencies = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                const updateFail = api.getTranslation('update_fail');
+                const updateFail = photoboothTools.getTranslation('update_fail');
                 $('.white-box').append($('<p style="color:red">').text(updateFail));
                 photoboothTools.console.log($mode, 'result: ', result);
             });

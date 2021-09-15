@@ -204,7 +204,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         let img = gallery.currItem.src;
         img = img.split('\\').pop().split('/').pop();
 
-        const msg = photoBooth.getTranslation('really_delete_image');
+        const msg = photoboothTools.getTranslation('really_delete_image');
         const really = config.delete.no_request ? true : confirm(img + ' ' + msg);
         if (really) {
             $.ajax({
@@ -256,7 +256,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 .appendTo(pswpQR);
             $('<p>')
                 .css('max-width', this.width + 'px')
-                .html(photoBooth.getTranslation('qrHelp') + '<b>' + config.webserver.ssid + '</b>')
+                .html(photoboothTools.getTranslation('qrHelp') + '<b>' + config.webserver.ssid + '</b>')
                 .appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');
