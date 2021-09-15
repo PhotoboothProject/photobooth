@@ -293,6 +293,6 @@ if (
         <script type="text/javascript" src="../resources/js/theme.js"></script>
         <script type="text/javascript" src="../resources/js/admin.js"></script>
         <script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-        <script type="text/javascript" src="../resources/js/i18n-sub.js"></script>
+        <script type="text/javascript" src="../resources/js/i18n.js"></script>
  </body>
 </html>

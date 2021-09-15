@@ -185,6 +185,8 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = $path;
 }
 
+$config['folders']['lang'] = getrootpath('../resources/lang');
+
 function getrootpath($relative_path) {
     $realpath = realpath($relative_path);
     $rootpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $realpath);
