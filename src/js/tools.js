@@ -13,6 +13,29 @@ const photoboothTools = (function () {
         }
     };
 
+    api.modal = {
+        open: function (selector) {
+            $(selector).addClass('modal--show');
+        },
+        close: function (selector) {
+            if ($(selector).hasClass('modal--show')) {
+                $(selector).removeClass('modal--show');
+
+                return true;
+            }
+
+            return false;
+        },
+        toggle: function (selector) {
+            $(selector).toggleClass('modal--show');
+        },
+        empty: function (selector) {
+            api.modal.close(selector);
+
+            $(selector).find('.modal__body').empty();
+        }
+    };
+
     api.reloadPage = function () {
         window.location.reload();
     };

@@ -30,29 +30,6 @@ const photoBooth = (function () {
         pid,
         command;
 
-    const modal = {
-        open: function (selector) {
-            $(selector).addClass('modal--show');
-        },
-        close: function (selector) {
-            if ($(selector).hasClass('modal--show')) {
-                $(selector).removeClass('modal--show');
-
-                return true;
-            }
-
-            return false;
-        },
-        toggle: function (selector) {
-            $(selector).toggleClass('modal--show');
-        },
-        empty: function (selector) {
-            modal.close(selector);
-
-            $(selector).find('.modal__body').empty();
-        }
-    };
-
     // Returns true when timeOut is pending
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -80,7 +57,7 @@ const photoBooth = (function () {
     api.reset = function () {
         loader.removeClass('open');
         loader.removeClass('error');
-        modal.empty('#qrCode');
+        photoboothTools.modal.empty('#qrCode');
         $('.qrbtn').removeClass('active').attr('style', '');
         $('.loading').text('');
         gallery.removeClass('gallery--open');
@@ -699,7 +676,7 @@ const photoBooth = (function () {
     api.renderPic = function (filename) {
         // Add QR Code Image
         const qrCodeModal = $('#qrCode');
-        modal.empty(qrCodeModal);
+        photoboothTools.modal.empty(qrCodeModal);
         $('<img src="api/qrcode.php?filename=' + filename + '"/>').on('load', function () {
             const body = qrCodeModal.find('.modal__body');
 
@@ -915,7 +892,7 @@ const photoBooth = (function () {
         if (isPrinting) {
             photoboothTools.console.log('Printing already: ' + isPrinting);
         } else {
-            modal.open('#print_mesg');
+            photoboothTools.modal.open('#print_mesg');
             isPrinting = true;
 
             remoteBuzzerClient.inProgress(true);
@@ -939,7 +916,7 @@ const photoBooth = (function () {
                         }
 
                         setTimeout(function () {
-                            modal.close('#print_mesg');
+                            photoboothTools.modal.close('#print_mesg');
                             if (data.error) {
                                 $('#print_mesg').empty();
                                 $('#print_mesg').html(
@@ -959,7 +936,7 @@ const photoBooth = (function () {
                         );
 
                         setTimeout(function () {
-                            modal.close('#print_mesg');
+                            photoboothTools.modal.close('#print_mesg');
                             $('#print_mesg').empty();
                             $('#print_mesg').html(
                                 '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
@@ -1144,10 +1121,6 @@ const photoBooth = (function () {
     });
 
     $('#result').on('click', function () {
-        if (!modal.close('#qrCode')) {
-            //api.showResultInner(true);
-        }
-
         if (!$('#mySidenav').hasClass('sidenav--open')) {
             rotaryController.focusSet('#result');
         }
@@ -1158,7 +1131,7 @@ const photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
 
-        modal.open('#qrCode');
+        photoboothTools.modal.open('#qrCode');
         rotaryController.focusSet('#qrCode');
     });
 
