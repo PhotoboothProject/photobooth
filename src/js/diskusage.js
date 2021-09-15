@@ -2,7 +2,7 @@
 $(function () {
     $('.download-zip-btn').on('click', function (e) {
         e.preventDefault();
-        $('#save_mesg').addClass('modal--show');
+        photoboothTools.modal.open('#save_mesg');
         const data = {type: 'zip'};
         $.ajax({
             url: '../api/diskusage.php',
@@ -24,13 +24,13 @@ $(function () {
                             }
                         });
                     }
-                    $('#save_mesg').removeClass('modal--show');
+                    photoboothTools.modal.close('#save_mesg');
                     $('.download-zip-btn').blur();
                 }, 10000);
             },
             error: function (jqXHR, textStatus) {
                 photoboothTools.console.log('Error while downloading: ', textStatus);
-                $('#save_mesg').removeClass('modal--show');
+                photoboothTools.modal.close('#save_mesg');
             }
         });
     });

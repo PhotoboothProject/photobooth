@@ -212,16 +212,16 @@ function printImage(filename, cb) {
 
                     if (data.error) {
                         photoboothTools.console.log('An error occurred: ', data.error);
-                        $('#print_mesg').empty();
+                        photoboothTools.modal.empty('#print_mesg');
                         $('#print_mesg').html(
                             '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
                         );
                     }
 
                     setTimeout(function () {
-                        $('#print_mesg').removeClass('modal--show');
+                        photoboothTools.modal.close('#print_mesg');
                         if (data.error) {
-                            $('#print_mesg').empty();
+                            photoboothTools.modal.empty('#print_mesg');
                             $('#print_mesg').html(
                                 '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
                             );
@@ -232,14 +232,14 @@ function printImage(filename, cb) {
                 },
                 error: (jqXHR, textStatus) => {
                     photoboothTools.console.log('An error occurred: ', textStatus);
-                    $('#print_mesg').empty();
+                    photoboothTools.modal.empty('#print_mesg');
                     $('#print_mesg').html(
                         '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
                     );
 
                     setTimeout(function () {
-                        $('#print_mesg').removeClass('modal--show');
-                        $('#print_mesg').empty();
+                        photoboothTools.modal.close('#print_mesg');
+                        photoboothTools.modal.empty('#print_mesg');
                         $('#print_mesg').html(
                             '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
                         );
@@ -271,7 +271,7 @@ function saveImage(cb) {
 
 function printImageHandler(ev) {
     ev.preventDefault();
-    $('#print_mesg').addClass('modal--show');
+    photoboothTools.modal.open('#print_mesg');
 
     setTimeout(function () {
         saveImage((data) => {
@@ -289,12 +289,12 @@ function printImageHandler(ev) {
 function saveImageHandler(ev) {
     ev.preventDefault();
 
-    $('#save_mesg').addClass('modal--show');
+    photoboothTools.modal.open('#save_mesg');
 
     setTimeout(function () {
         saveImage(() => {
             setTimeout(function () {
-                $('#save_mesg').removeClass('modal--show');
+                photoboothTools.modal.close('#save_mesg');
                 $('#save-btn').blur();
             }, 2000);
         });
