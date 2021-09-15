@@ -216,24 +216,24 @@ function saveImage(cb) {
                                         photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
                                             if (response.success) {
                                                 setTimeout(function () {
-                                                    photoBooth.reloadPage();
+                                                    photoboothTools.reloadPage();
                                                 }, 1000);
                                             } else {
                                                 photoboothTools.console.log('Error while deleting image');
                                                 setTimeout(function () {
-                                                    photoBooth.reloadPage();
+                                                    photoboothTools.reloadPage();
                                                 }, 5000);
                                             }
                                         });
                                     } else {
                                         setTimeout(function () {
-                                            photoBooth.reloadPage();
+                                            photoboothTools.reloadPage();
                                         }, 1000);
                                     }
                                 } else {
                                     photoboothTools.console.log('Error while deleting image');
                                     setTimeout(function () {
-                                        photoBooth.reloadPage();
+                                        photoboothTools.reloadPage();
                                     }, 5000);
                                 }
                             });
@@ -319,7 +319,7 @@ $('.reloadPage').on('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    photoBooth.reloadPage();
+    photoboothTools.reloadPage();
 });
 
 // Open Gallery Button

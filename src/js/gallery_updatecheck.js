@@ -5,7 +5,7 @@
  *
  * Needs:
  * - jQuery
- * - photoBooth Javascript
+ * - photoBooth & photoboothTools Javascript
  *
  * Remarks:
  * - Not made for highly demanded pages (as pages is requested regulary
@@ -29,7 +29,7 @@ const ajaxurl = 'gallery.php?status';
 function dbUpdated() {
     photoboothTools.console.log('DB is updated - refreshing');
     //location.reload(true); //Alternative
-    photoBooth.reloadPage();
+    photoboothTools.reloadPage();
 }
 
 const checkForUpdates = function () {

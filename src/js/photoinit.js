@@ -216,21 +216,21 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 success: (data) => {
                     if (data.success) {
                         photoboothTools.console.log('Deleted ' + img);
-                        photoBooth.reloadPage();
+                        photoboothTools.reloadPage();
                     } else {
                         photoboothTools.console.log('Error while deleting ' + img);
                         if (data.error) {
                             photoboothTools.console.log(data.error);
                         }
                         setTimeout(function () {
-                            photoBooth.reloadPage();
+                            photoboothTools.reloadPage();
                         }, 5000);
                     }
                 },
                 error: (jqXHR, textStatus) => {
                     photoboothTools.console.log('Error while deleting image: ', textStatus);
                     setTimeout(function () {
-                        photoBooth.reloadPage();
+                        photoboothTools.reloadPage();
                     }, 5000);
                 }
             });

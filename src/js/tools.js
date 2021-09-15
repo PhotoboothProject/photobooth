@@ -13,6 +13,10 @@ const photoboothTools = (function () {
         }
     };
 
+    api.reloadPage = function () {
+        window.location.reload();
+    };
+
     return api;
 })();
 

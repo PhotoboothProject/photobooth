@@ -53,10 +53,6 @@ const photoBooth = (function () {
         }
     };
 
-    api.reloadPage = function () {
-        window.location.reload();
-    };
-
     // Returns true when timeOut is pending
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -75,7 +71,7 @@ const photoBooth = (function () {
                 ' seconds.'
             );
             timeOut = setTimeout(function () {
-                api.reloadPage();
+                photoboothTools.reloadPage();
             }, config.picture.time_to_live * 1000);
         }
     };
@@ -612,7 +608,7 @@ const photoBooth = (function () {
                 const reloadmsg = api.getTranslation('auto_reload');
                 $('.loading').append($('<p>').text(reloadmsg));
                 setTimeout(function () {
-                    api.reloadPage();
+                    photoboothTools.reloadPage();
                 }, 5000);
             } else {
                 const reloadmsg = api.getTranslation('reload');
@@ -744,14 +740,14 @@ const photoBooth = (function () {
                     api.deleteImage(filename, (data) => {
                         if (data.success) {
                             photoboothTools.console.log('Deleted ' + filename);
-                            api.reloadPage();
+                            photoboothTools.reloadPage();
                         } else {
                             photoboothTools.console.log('Error while deleting ' + filename);
                             if (data.error) {
                                 photoboothTools.console.log(data.error);
                             }
                             setTimeout(function () {
-                                api.reloadPage();
+                                photoboothTools.reloadPage();
                             }, 5000);
                         }
                     });
@@ -994,7 +990,7 @@ const photoBooth = (function () {
             error: (jqXHR, textStatus) => {
                 photoboothTools.console.log('Error while deleting image: ', textStatus);
                 setTimeout(function () {
-                    api.reloadPage();
+                    photoboothTools.reloadPage();
                 }, 5000);
             }
         });
@@ -1015,7 +1011,7 @@ const photoBooth = (function () {
             error: (jqXHR, textStatus) => {
                 photoboothTools.console.log('Error while deleting image: ', textStatus);
                 setTimeout(function () {
-                    api.reloadPage();
+                    photoboothTools.reloadPage();
                 }, 5000);
             }
         });
@@ -1170,7 +1166,7 @@ const photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
 
-        api.reloadPage();
+        photoboothTools.reloadPage();
 
         rotaryController.focusSet('#start');
     });
