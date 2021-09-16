@@ -1532,7 +1532,6 @@ $configsetup = [
         ],
     ],
     'get_request' => [
-        'platform' => 'linux',
         'view' => 'advanced',
         'get_request_enabled' => [
             'view' => 'basic',
