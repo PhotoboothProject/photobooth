@@ -1059,8 +1059,11 @@ const photoBooth = (function () {
     // Take Picture Button
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
-
-        api.thrill('photo');
+        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+            remoteBuzzerClient.startPicture();
+        } else {
+            api.thrill('photo');
+        }
         $('.newpic').blur();
     });
 
@@ -1068,7 +1071,12 @@ const photoBooth = (function () {
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
 
-        api.thrill('collage');
+        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+            remoteBuzzerClient.startCollage();
+        } else {
+            api.thrill('collage');
+        }
+
         $('.newcollage').blur();
     });
 
@@ -1203,14 +1211,24 @@ const photoBooth = (function () {
     $('.triggerPic').on('click', function (e) {
         e.preventDefault();
 
-        api.thrill('photo');
+        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+            remoteBuzzerClient.startPicture();
+        } else {
+            api.thrill('photo');
+        }
+
         $('.newpic').blur();
     });
 
     $('.triggerCollage').on('click', function (e) {
         e.preventDefault();
 
-        api.thrill('collage');
+        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+            remoteBuzzerClient.startCollage();
+        } else {
+            api.thrill('collage');
+        }
+
         $('.newcollage').blur();
     });
 

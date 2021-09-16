@@ -106,8 +106,26 @@ function initRemoteBuzzerFromDOM() {
             }
         };
 
+        api.startPicture = function () {
+            if (this.enabled()) {
+                this.emitToServer('start-picture');
+            }
+        };
+
+        api.startCollage = function () {
+            if (this.enabled()) {
+                this.emitToServer('start-collage');
+            }
+        };
+
         api.emitToServer = function (cmd) {
             switch (cmd) {
+                case 'start-picture':
+                    ioClient.emit('photobooth-socket', 'start-picture');
+                    break;
+                case 'start-collage':
+                    ioClient.emit('photobooth-socket', 'start-collage');
+                    break;
                 case 'in-progress':
                     ioClient.emit('photobooth-socket', 'in-progress');
                     break;

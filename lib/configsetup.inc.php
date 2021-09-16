@@ -1357,6 +1357,12 @@ $configsetup = [
             'name' => 'remotebuzzer[userotary]',
             'value' => $config['remotebuzzer']['userotary'],
         ],
+        'remotebuzzer_usegpio' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[usegpio]',
+            'value' => $config['remotebuzzer']['usegpio'],
+        ],
         'remotebuzzer_picturebutton' => [
             'view' => 'advanced',
             'type' => 'checkbox',
