@@ -260,7 +260,8 @@ $config['synctodrive']['interval'] = 300;
 
 
 // G E T  R E Q U E S T
-$config['get_request']['enabled'] = false;
+$config['get_request']['countdown'] = false;
+$config['get_request']['processed'] = false;
 $config['get_request']['server'] = NULL;
 $config['get_request']['picture'] = 'CNTDWNPHOTO';
 $config['get_request']['collage'] = 'CNTDWNCOLLAGE';

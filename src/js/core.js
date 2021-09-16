@@ -631,10 +631,10 @@ const photoBooth = (function () {
                 totalTime = endTime - startTime;
                 photoboothTools.console.logDev('Processing ' + photoStyle + ' took ' + totalTime + 'ms');
 
-                if (config.get_request.enabled) {
+                if (config.get_request.processed) {
                     const getUrl = config.get_request.server + '/' + photoStyle;
                     const request = new XMLHttpRequest();
-                    console.log('Sending GET request to: ' + getUrl);
+                    photoboothTools.console.log('Sending GET request to: ' + getUrl);
                     request.open('GET', getUrl);
                     request.send();
                 }
@@ -881,12 +881,12 @@ const photoBooth = (function () {
         let current = start;
         const stop = start > 2 ? start - 2 : start;
 
-        if (config.get_request.enabled) {
+        if (config.get_request.countdown) {
             const getMode =
                 start == config.picture.cntdwn_time ? config.get_request.picture : config.get_request.collage;
             const getUrl = config.get_request.server + '/' + getMode;
             const request = new XMLHttpRequest();
-            console.log('Sending GET request to: ' + getUrl);
+            photoboothTools.console.log('Sending GET request to: ' + getUrl);
             request.open('GET', getUrl);
             request.send();
         }

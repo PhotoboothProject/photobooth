@@ -1533,11 +1533,17 @@ $configsetup = [
     ],
     'get_request' => [
         'view' => 'advanced',
-        'get_request_enabled' => [
+        'get_request_countdown' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'get_request[enabled]',
-            'value' => $config['get_request']['enabled'],
+            'name' => 'get_request[countdown]',
+            'value' => $config['get_request']['countdown'],
+        ],
+        'get_request_processed' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'get_request[processed]',
+            'value' => $config['get_request']['processed'],
         ],
         'get_request_server' => [
             'view' => 'advanced',
