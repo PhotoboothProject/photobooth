@@ -62,6 +62,7 @@ Open `http://localhost/admin` in your Webbrowser and change the configuration fo
 ### How to change the look of my Photobooth?
 Photobooth can be easylie styled for your personal needs via admin panel, open [localhost/admin](http://localhost/admin) in your browser and take a look at the `User Interface` options.  
 To use a private custom index you need to create the following files:
+
 - `resources/css/custom_style.css`
   - Optional: `src/sass/custom_style.scss` (`yarn build` will create the `resources/css/custom_style.css` out of it)
 - `resources/css/custom_chromakeying.css`
@@ -119,15 +120,15 @@ Yes, there's different ways!
 An HID device connected to your hardware can trigger different actions on your device. The HID device must be connected to the device you're accessing Photobooth from!  
 For example use <a href="https://keycode.info" target="_blank">https://keycode.info</a> to find out the key id of the button you like to use.  
 
-Related configuration:  
-**PICTURE section**:  
-- Key code which triggers a picture: **define**
+- Related configuration:
+  **PICTURE section**:
+  - Key code which triggers a picture: **define**
 
-**COLLAGE section**:  
-- Key code which triggers a collage: **define**
+  **COLLAGE section**:
+  - Key code which triggers a collage: **define**
 
-**PRINT section**:  
-- Key code which triggers printing: **define**
+  **PRINT section**:
+  - Key code which triggers printing: **define**
 
 #### Remotebuzzer Hardware Button feature using connected HID devices (Linux only)
 An HID device connected to your hardware can trigger different actions. The HID device must be connected to one device you're accessing Photobooth from.  
@@ -148,7 +149,8 @@ For example use <a href="https://keycode.info" target="_blank">https://keycode.i
   - Enable Hardware Buttons: **on**
   - Use GPIO for remotebuzzer: **off**
 
-Special Notes:  
+Special Notes:
+
 - **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
 - Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
 - Reload the Photobooth homepage
@@ -161,6 +163,7 @@ The **Hardware Button** feature enables to control Photobooth through hardware b
 Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!  
 
 The Hardware Button functionality supports two separate modes of operation (select via admin panel):
+
 - **Buttons**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
 - **Rotary Encoder**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. 
 
@@ -206,6 +209,7 @@ The server supports up to four connected hardware buttons for the following func
 - Long button press (default > 2 sec) will trigger a collage in Photobooth
 
 Note:
+
  -  If collage is configured with interruption, next button presses will trigger the next collage pictures. 
  -  If collage is disabled in the admin settings, long button press also triggers a single picture
  -  If the collage button is activated (see next), the picture button will never trigger a collage, regardless
@@ -216,6 +220,7 @@ Note:
 - Button press will trigger a collage in Photobooth.
 
 Note:
+
 - If collage is configured with interruption, next button presses will trigger the next collage pictures. 
 - If collage is disabled in the admin settings (Collage section), this button will do nothing.
 
@@ -225,6 +230,7 @@ Note:
 - This button will initate a safe system shutdown and halt (`shutdown -h now`).
 
 Note:
+
 - Hold the button for a defined time to initiate the shut down (defaults to 5 seconds). This can be adjusted in the admin settings.
 - The shutdown button will only trigger if there is currently no action in progress in Photobooth (picture, collage). 
 
@@ -268,9 +274,11 @@ GND  ---   GND
 ```
 
 Known limitations:
+
 - Delete Picture: in order to be able to access the Delete button through rotary control, please activate admin setting General -> "Delete images without confirm request"
 
 The following elements are currently not supported and not accessible through rotary control navigation
+
 - Full Screen Mode button: Looks like modern browser only allow to change to full screen mode upon user gesture. It seems not possible to change to full-screen using Javascript.
 - Photoswipe download button: Not needed for Rotary Control. (well, if you can come up with a decent use-case, let us know).
 
@@ -347,9 +355,11 @@ There's different ways depending on your needs and personal setup:
 
 #### Preview _"from device cam"_
 If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".
+
 - Admin panel config "Preview mode": `from device cam`
 
 **Note:**
+
 - Preview `"from device cam"` will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!
 - Secure origin or exception required!
   - [Prefer Secure Origins For Powerful New Features](https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339)
@@ -359,16 +369,19 @@ If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camer
 #### Preview _"from URL"_
 If you like to have the same preview independent of the device you access Photobooth from:  
 Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
+
 - Admin panel config *"Preview mode"*: `from URL`
 - Admin panel config *"Preview-URL"* example (add needed IP address instead): `url(http://127.0.0.1:8081)`
 
 **Note**
+
 - Do NOT enable *"Device cam takes picture"* in admin panel config!
 - Capture pictures via `raspistill` won't work if motion is installed!
 - Requires Photobooth v2.2.1 or later!
 
 #### Preview _"from gohoto2"_
 A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
+
 - Liveview **must** be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
 - install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
 - create a virtual webcam `sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
@@ -378,6 +391,7 @@ A preview can also be done using the video mode of your DSLR (Linux only), but o
 - Admin panel config *"Preview mode"*: `from gphoto2`
 
 **Note**
+
 - Requires Photobooth v2.11.0 or later!
 - You need to access Photobooth directly via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost), you won't be able to see the preview on a different device (e.g. Tablet)
 - There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Battery saving mode on gphoto2 live preview` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
@@ -495,6 +509,7 @@ First head over to the hotspot directory to run the installer:
 cd /var/www/html/vendor/rpihotspot
 ```
 There are a couple of flags you need to change from the example command below:
+
  - change `password` to your desired password, make it easy enough for guests to remember.
  - change `country code` from `CA` to your own localization.
  - keep or change the ip address `10.10.10.10`. Remember what you change it to.
