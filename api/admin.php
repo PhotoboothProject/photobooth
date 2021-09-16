@@ -139,6 +139,11 @@ if ($data['type'] == 'config') {
         $newConfig['remotebuzzer']['port'] = 14711;
     }
 
+    if (isset($newConfig['get_request']['server']) && empty($newConfig['get_request']['server'])) {
+        $newConfig['get_request']['countdown'] = false;
+        $newConfig['get_request']['processed'] = false;
+    }
+
     if ($newConfig['collage']['layout'] === '1+2') {
         $newConfig['collage']['limit'] = 3;
     } else {
