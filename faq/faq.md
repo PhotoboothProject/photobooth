@@ -112,8 +112,53 @@ Follow the steps mentioned here: [How to Fix NGINX 413 Request Entity Too Large 
 
 <hr>
 
-### Can I use Hardware Button on my Raspberry Pi, to take a Picture?
-Yes, the **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins . This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.
+### Can I use Hardware Button to take a Picture?
+Yes, there's different ways!  
+
+#### Key code using connected HID devices
+An HID device connected to your hardware can trigger different actions on your device. The HID device must be connected to the device you're accessing Photobooth from!  
+For example use <a href="https://keycode.info" target="_blank">https://keycode.info</a> to find out the key id of the button you like to use.  
+
+Related configuration:  
+**PICTURE section**:  
+- Key code which triggers a picture: **define**
+
+**COLLAGE section**:  
+- Key code which triggers a collage: **define**
+
+**PRINT section**:  
+- Key code which triggers printing: **define**
+
+#### Remotebuzzer Hardware Button feature using connected HID devices (Linux only)
+An HID device connected to your hardware can trigger different actions. The HID device must be connected to one device you're accessing Photobooth from.  
+Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!  
+For example use <a href="https://keycode.info" target="_blank">https://keycode.info</a> to find out the key id of the button you like to use.  
+
+- Related configuration:
+  **GENERAL section**:
+  - IP address of the Photobooth web server: **define**
+
+  **PICTURE section**:
+  - Key code which triggers a picture: **define**
+
+  **COLLAGE section**:
+  - Key code which triggers a collage: **define**
+
+  **HARDWARE BUTTON section**:
+  - Enable Hardware Buttons: **on**
+  - Use GPIO for remotebuzzer: **off**
+
+Special Notes:  
+- **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
+- Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
+- Reload the Photobooth homepage
+- Check the browser developer console for error logs
+- Check the server logs for errors (file `data/tmp/remotebuzzer_server.log`)
+- GPIO connected Hardware Button and Rotary Encoder don't work!
+
+#### Remotebuzzer Hardware Button feature using GPIO connected hardware (Raspberry Pi only)
+The **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins. This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.  
+Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!  
 
 The Hardware Button functionality supports two separate modes of operation (select via admin panel):
 - **Buttons**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
