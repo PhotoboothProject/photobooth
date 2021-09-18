@@ -544,14 +544,9 @@ $configsetup = [
         ],
         'textonpicture_font_color' => [
             'view' => 'expert',
-            'type' => 'select',
+            'type' => 'color',
             'name' => 'textonpicture[font_color]',
             'placeholder' => $defaultConfig['textonpicture']['font_color'],
-            'options' => [
-                'white' => 'white',
-                'grey' => 'grey',
-                'black' => 'black',
-            ],
             'value' => $config['textonpicture']['font_color'],
         ],
         'textonpicture_font_size' => [
@@ -715,14 +710,9 @@ $configsetup = [
         ],
         'textoncollage_font_color' => [
             'view' => 'expert',
-            'type' => 'select',
+            'type' => 'color',
             'name' => 'textoncollage[font_color]',
             'placeholder' => $defaultConfig['textoncollage']['font_color'],
-            'options' => [
-                'white' => 'white',
-                'grey' => 'grey',
-                'black' => 'black',
-            ],
             'value' => $config['textoncollage']['font_color'],
         ],
         'textoncollage_font_size' => [
@@ -1204,14 +1194,9 @@ $configsetup = [
         ],
         'textonprint_font_color' => [
             'view' => 'expert',
-            'type' => 'select',
+            'type' => 'color',
             'name' => 'textonprint[font_color]',
             'placeholder' => $defaultConfig['textonprint']['font_color'],
-            'options' => [
-                'white' => 'white',
-                'grey' => 'grey',
-                'black' => 'black',
-            ],
             'value' => $config['textonprint']['font_color'],
         ],
         'textonprint_font_size' => [

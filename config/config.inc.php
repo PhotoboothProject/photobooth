@@ -80,8 +80,7 @@ $config['textonpicture']['locationx'] = '80';
 $config['textonpicture']['locationy'] = '80';
 $config['textonpicture']['rotation'] = '0';
 $config['textonpicture']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
-// possible font_color values: 'white', 'grey', 'black'
-$config['textonpicture']['font_color'] = 'white';
+$config['textonpicture']['font_color'] = '#ffffff';
 $config['textonpicture']['font_size'] = '80';
 $config['textonpicture']['linespace'] = '90';
 
@@ -109,8 +108,7 @@ $config['textoncollage']['locationx'] = '1470';
 $config['textoncollage']['locationy'] = '250';
 $config['textoncollage']['rotation'] = '0';
 $config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
-// possible font_color values: 'white', 'grey', 'black'
-$config['textoncollage']['font_color'] = 'black';
+$config['textoncollage']['font_color'] = '#000000';
 $config['textoncollage']['font_size'] = '50';
 $config['textoncollage']['linespace'] = '90';
 // DO NOT CHANGE limit here
@@ -198,8 +196,7 @@ $config['textonprint']['locationx'] = '2250';
 $config['textonprint']['locationy'] = '1050';
 $config['textonprint']['rotation'] = '40';
 $config['textonprint']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
-// possible font_color values: 'white', 'grey', 'black'
-$config['textonprint']['font_color'] = 'black';
+$config['textonprint']['font_color'] = '#ffffff';
 $config['textonprint']['font_size'] = '100';
 $config['textonprint']['linespace'] = '100';
 

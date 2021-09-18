@@ -4,13 +4,9 @@ function ApplyText($srcImagePath, $fontsize, $fontrot, $fontlocx, $fontlocy, $fo
     $quality = 100;
     $font = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath);
     $image = imagecreatefromjpeg($srcImagePath);
-    if ($fontcolor === 'white') {
-        $color = imagecolorallocate($image, 255, 255, 255);
-    } elseif ($fontcolor === 'grey') {
-        $color = imagecolorallocate($image, 128, 128, 128);
-    } else {
-        $color = imagecolorallocate($image, 0, 0, 0);
-    }
+    list($r, $g, $b) = sscanf($fontcolor, '#%02x%02x%02x');
+    $color = imagecolorallocate($image, $r, $g, $b);
+
     if (!empty($line1text)) {
         imagettftext($image, $fontsize, $fontrot, $fontlocx, $fontlocy, $color, $font, $line1text);
     }
