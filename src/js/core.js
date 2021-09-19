@@ -692,15 +692,16 @@ const photoBooth = (function () {
         // Add QR Code Image
         const qrCodeModal = $('#qrCode');
         photoboothTools.modal.empty(qrCodeModal);
+        const body = qrCodeModal.find('.modal__body');
+        $('<button>').on('click touchstart', function(e) {
+            photoboothTools.modal.close('#qrCode');
+        }).append($('<i>').addClass('fa fa-times')).css('float', 'right').appendTo(body);
         $('<img src="api/qrcode.php?filename=' + filename + '"/>').on('load', function () {
-            const body = qrCodeModal.find('.modal__body');
-
-            $(this).appendTo(body);
             $('<p>')
                 .css('max-width', this.width + 'px')
                 .html(photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
                 .appendTo(body);
-        });
+        }).appendTo(body);
 
         // Add Print Link
         $(document).off('click touchstart', '.printbtn');
