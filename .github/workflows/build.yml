@@ -31,3 +31,14 @@ jobs:
         with:
           name: photobooth
           path: archives/photobooth-*.zip
+  buildmacos:
+    runs-on: macos-11
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install modules
+        run: yarn install
+      - name: Build
+        run: yarn build
