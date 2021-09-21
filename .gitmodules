@@ -10,3 +10,6 @@
 [submodule "vendor/Seriously"]
 	path = vendor/Seriously
 	url = https://github.com/brianchirls/Seriously.js
+[submodule "vendor/phpqrcode"]
+	path = vendor/phpqrcode
+	url = https://github.com/andi34/phpqrcode

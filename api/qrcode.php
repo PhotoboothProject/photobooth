@@ -9,6 +9,6 @@ if (!isset($config['webserver']['ip'])) {
 
 $filename = $_GET['filename'];
 $api_path = getrootpath('../api');
-include '../vendor/phpqrcode/qrlib.php';
+include '../vendor/phpqrcode/lib/full/qrlib.php';
 $url = 'http://' . $SERVER_IP . $api_path . '/download.php?image=';
 QRcode::png($url . $filename, false, QR_ECLEVEL_H, 10);

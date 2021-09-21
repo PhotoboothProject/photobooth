@@ -116,10 +116,10 @@ if (!file_exists($filename_print)) {
         list($width, $height) = getimagesize($filename_print);
     }
 
-    if ($config['print']['qrcode']) {
+    if ($config['print']['qrcode'] && file_exists('../vendor/phpqrcode/lib/full/qrlib.php')) {
         // create qr code
         if (!file_exists($filename_codes)) {
-            include '../vendor/phpqrcode/qrlib.php';
+            include '../vendor/phpqrcode/lib/full/qrlib.php';
             $url = 'http://' . $SERVER_IP . '/api/download.php?image=';
             QRcode::png($url . $filename, $filename_codes, QR_ECLEVEL_H, 10);
         }
