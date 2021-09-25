@@ -1059,7 +1059,7 @@ const photoBooth = (function () {
     // Take Picture Button
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
-        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+        if (config.remotebuzzer.usesoftbtn) {
             remoteBuzzerClient.startPicture();
         } else {
             api.thrill('photo');
@@ -1071,7 +1071,7 @@ const photoBooth = (function () {
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
 
-        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+        if (config.remotebuzzer.usesoftbtn) {
             remoteBuzzerClient.startCollage();
         } else {
             api.thrill('collage');
@@ -1211,7 +1211,7 @@ const photoBooth = (function () {
     $('.triggerPic').on('click', function (e) {
         e.preventDefault();
 
-        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+        if (config.remotebuzzer.usehid) {
             remoteBuzzerClient.startPicture();
         } else {
             api.thrill('photo');
@@ -1223,7 +1223,7 @@ const photoBooth = (function () {
     $('.triggerCollage').on('click', function (e) {
         e.preventDefault();
 
-        if (config.remotebuzzer.usebuttons || config.remotebuzzer.userotary) {
+        if (config.remotebuzzer.usehid) {
             remoteBuzzerClient.startCollage();
         } else {
             api.thrill('collage');

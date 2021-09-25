@@ -21,7 +21,12 @@ function initRemoteBuzzerFromDOM() {
         const api = {};
 
         api.enabled = function () {
-            return config.remotebuzzer.usebuttons || config.remotebuzzer.userotary;
+            return (
+                config.remotebuzzer.usebuttons ||
+                config.remotebuzzer.userotary ||
+                config.remotebuzzer.usehid ||
+                config.remotebuzzer.usesoftbtn
+            );
         };
 
         api.init = function () {

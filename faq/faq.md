@@ -130,6 +130,27 @@ For example use <a href="https://keycode.info" target="_blank">https://keycode.i
   **PRINT section**:
   - Key code which triggers printing: **define**
 
+#### Remotebuzzer Software Button feature (Linux only)
+Software buttons can use the Remotebuzzer feature to make the button action taking effect at the same time on all devices accessing Photobooth!  
+
+- Related configuration:
+  **GENERAL section**:
+  - IP address of the Photobooth web server: **define**
+
+  **HARDWARE BUTTON section**:
+  - Enable Software Buttons: **on**
+  - __Optional:__ Use GPIO for remotebuzzer: **off**
+
+Special Notes:
+
+- **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
+- Can be combined with HID-Device buttons, GPIO connected Hardware Button and Rotary Encoder!
+- Having trouble?
+  - Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
+  - Reload the Photobooth homepage
+  - Check the browser developer console for error logs
+  - Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
+
 #### Remotebuzzer Hardware Button feature using connected HID devices (Linux only)
 An HID device connected to your hardware can trigger different actions. The HID device must be connected to one device you're accessing Photobooth from.  
 Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!  
@@ -146,17 +167,18 @@ For example use <a href="https://keycode.info" target="_blank">https://keycode.i
   - Key code which triggers a collage: **define**
 
   **HARDWARE BUTTON section**:
-  - Enable Hardware Buttons: **on**
-  - Use GPIO for remotebuzzer: **off**
+  - Enable HID-Device Buttons: **on**
+  - __Optional:__ Use GPIO for remotebuzzer: **off**
 
 Special Notes:
 
 - **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
-- Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
-- Reload the Photobooth homepage
-- Check the browser developer console for error logs
-- Check the server logs for errors (file `data/tmp/remotebuzzer_server.log`)
-- GPIO connected Hardware Button and Rotary Encoder don't work!
+- Can be combined with GPIO connected Hardware Button and Rotary Encoder!
+- Having trouble?
+  - Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
+  - Reload the Photobooth homepage
+  - Check the browser developer console for error logs
+  - Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
 
 #### Remotebuzzer Hardware Button feature using GPIO connected hardware (Raspberry Pi only)
 The **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins. This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.  
@@ -174,19 +196,20 @@ Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs 
 Troubleshooting / Debugging:
 
 - **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
-- Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
-- Reload the Photobooth homepage
-- Check the browser developer console for error logs
-- Check the server logs for errors (file `data/tmp/remotebuzzer_server.log`).
-- If there is no errors logged but hardware buttons still do not trigger
- - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
- - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
+- Having trouble?
+  - Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
+  - Reload the Photobooth homepage
+  - Check the browser developer console for error logs
+  - Check the server logs for errors (file `data/tmp/remotebuzzer_server.log`)
+  - If there is no errors logged but hardware buttons still do not trigger:
+    - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
+    - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
 
 ```
          gpio=16,17,20,21,22,26,27=pu
 ```
 
-- For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as
+    - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as
 
 ```
      cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
