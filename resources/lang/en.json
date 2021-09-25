@@ -253,7 +253,7 @@
   "manual:frontpage:event_textLeft": "Enter the text visible on the left side of the chosen symbol.",
   "manual:frontpage:event_textRight": "Enter the text visible on the right side of the chosen symbol.",
   "manual:frontpage:ui_show_fork": "If enabled, a fork badge is shown on the right upper corner on the start screen.",
-  "manual:frontpage:ui_skip_welcome": "If enabled, a welcome screen is visible while accessing Photobooth the first time after installation / update.",
+  "manual:frontpage:ui_skip_welcome": "If enabled, the welcome screen won't be visible while accessing Photobooth the first time after installation / update.",
   "manual:gallery:gallery_allow_delete": "If enabled pictures can be deleted from the gallery at any time.",
   "manual:gallery:gallery_bottom_bar": "If enabled, the button bar is shown in the gallery below.",
   "manual:gallery:gallery_date_format": "Enter your date style.",
