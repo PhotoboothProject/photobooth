@@ -283,6 +283,7 @@ $configsetup = [
             'value' => $config['ui']['github'],
         ],
         'event_enabled' => [
+            'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'event[enabled]',
             'value' => $config['event']['enabled'],
