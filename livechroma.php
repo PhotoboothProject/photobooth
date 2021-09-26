@@ -26,7 +26,7 @@ if (
         $btnClass2 = 'btn';
     }
 } else {
-    header('location: login');
+    header('location: ' . $config['protect']['index_redirect']);
     exit();
 }
 ?>
