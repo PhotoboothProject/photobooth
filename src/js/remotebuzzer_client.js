@@ -9,7 +9,12 @@ let buttonController;
 function initRemoteBuzzerFromDOM() {
     photoboothTools.console.logDev(
         'Remote Buzzer client:',
-        config.remotebuzzer.usebuttons || config.remotebuzzer.userotary ? 'enabled' : 'disabled'
+        config.remotebuzzer.usebuttons ||
+            config.remotebuzzer.userotary ||
+            config.remotebuzzer.usehid ||
+            config.remotebuzzer.usesoftbtn
+            ? 'enabled'
+            : 'disabled'
     );
 
     /*
@@ -161,7 +166,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.enabled = function () {
             return (
-                config.remotebuzzer.usebuttons &&
+                (config.remotebuzzer.usebuttons || config.remotebuzzer.usehid || config.remotebuzzer.usesoftbtn) &&
                 typeof onStandaloneGalleryView === 'undefined' &&
                 typeof onLiveChromaKeyingView === 'undefined'
             );
