@@ -693,15 +693,24 @@ const photoBooth = (function () {
         const qrCodeModal = $('#qrCode');
         photoboothTools.modal.empty(qrCodeModal);
         const body = qrCodeModal.find('.modal__body');
-        $('<button>').on('click touchstart', function(e) {
-            photoboothTools.modal.close('#qrCode');
-        }).append($('<i>').addClass('fa fa-times')).css('float', 'right').appendTo(body);
-        $('<img src="api/qrcode.php?filename=' + filename + '"/>').on('load', function () {
-            $('<p>')
-                .css('max-width', this.width + 'px')
-                .html(photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
-                .appendTo(body);
-        }).appendTo(body);
+        $('<button>')
+            .on('click touchstart', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                photoboothTools.modal.close('#qrCode');
+            })
+            .append($('<i>').addClass('fa fa-times'))
+            .css('float', 'right')
+            .appendTo(body);
+        $('<img src="api/qrcode.php?filename=' + filename + '"/>')
+            .on('load', function () {
+                $('<p>')
+                    .css('max-width', this.width + 'px')
+                    .html(photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
+                    .appendTo(body);
+            })
+            .appendTo(body);
 
         // Add Print Link
         $(document).off('click touchstart', '.printbtn');

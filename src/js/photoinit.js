@@ -251,11 +251,15 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             let img = gallery.currItem.src;
             img = img.split('\\').pop().split('/').pop();
 
-            $('<button>').on('click touchstart', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $('.pswp__qr').empty().removeClass('qr-active').fadeOut('fast');
-            }).append($('<i>').addClass('fa fa-times')).css('float', 'right').appendTo(pswpQR);
+            $('<button>')
+                .on('click touchstart', function (ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    $('.pswp__qr').empty().removeClass('qr-active').fadeOut('fast');
+                })
+                .append($('<i>').addClass('fa fa-times'))
+                .css('float', 'right')
+                .appendTo(pswpQR);
             $('<img>')
                 .attr('src', 'api/qrcode.php?filename=' + img)
                 .appendTo(pswpQR);
