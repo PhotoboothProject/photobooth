@@ -1671,6 +1671,13 @@ $configsetup = [
             'name' => 'protect[localhost_index]',
             'value' => $config['protect']['localhost_index'],
         ],
+        'index_redirect' => [
+            'view' => 'advanced',
+            'type' => 'input',
+	        'placeholder' => $defaultConfig['protect']['index_redirect'],
+            'name' => 'protect[index_redirect]',
+            'value' => $config['protect']['index_redirect'],
+        ],
         'protect_manual' => [
             'view' => 'advanced',
             'type' => 'checkbox',

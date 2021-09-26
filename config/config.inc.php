@@ -286,6 +286,7 @@ $config['protect']['update'] = true;
 $config['protect']['localhost_update'] = true;
 $config['protect']['index'] = false;
 $config['protect']['localhost_index'] = false;
+$config['protect']['index_redirect'] = 'login';
 $config['protect']['manual'] = false;
 $config['protect']['localhost_manual'] = false;
 

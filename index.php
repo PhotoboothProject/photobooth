@@ -41,7 +41,7 @@ if (
         $galleryIcon = 'fa-th';
     }
 } else {
-    header('location: login');
+    header('location: ' . $config['protect']['index_redirect']);
     exit();
 }
 ?>
