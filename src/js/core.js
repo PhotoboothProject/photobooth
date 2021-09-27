@@ -630,6 +630,7 @@ const photoBooth = (function () {
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
                 photoboothTools.console.logDev('Processing ' + photoStyle + ' took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Images:', data.images);
 
                 if (config.get_request.processed) {
                     const getUrl = config.get_request.server + '/' + photoStyle;
@@ -644,7 +645,7 @@ const photoBooth = (function () {
                 } else if (photoStyle === 'chroma') {
                     api.renderChroma(data.file);
                 } else {
-                    api.renderPic(data.file);
+                    api.renderPic(data.file, data.images);
                 }
             },
             error: (jqXHR, textStatus) => {
@@ -688,7 +689,7 @@ const photoBooth = (function () {
     };
 
     // Render Picture after taking
-    api.renderPic = function (filename) {
+    api.renderPic = function (filename, files) {
         // Add QR Code Image
         const qrCodeModal = $('#qrCode');
         photoboothTools.modal.empty(qrCodeModal);
@@ -739,23 +740,27 @@ const photoBooth = (function () {
                 const msg = photoboothTools.getTranslation('really_delete_image');
                 const really = config.delete.no_request ? true : confirm(filename + ' ' + msg);
                 if (really) {
-                    api.deleteImage(filename, (data) => {
-                        if (data.success) {
-                            photoboothTools.console.log('Deleted ' + filename);
-                            photoboothTools.reloadPage();
-                        } else {
-                            photoboothTools.console.log('Error while deleting ' + filename);
-                            if (data.error) {
-                                photoboothTools.console.log(data.error);
+                    files.forEach(function (file, index, array) {
+                        photoboothTools.console.logDev('Index:', index);
+                        photoboothTools.console.logDev('Array:', array);
+                        api.deleteImage(file, (data) => {
+                            if (data.success) {
+                                photoboothTools.console.log('Deleted ' + file);
+                            } else {
+                                photoboothTools.console.log('Error while deleting ' + file);
+                                if (data.error) {
+                                    photoboothTools.console.log(data.error);
+                                }
+                                setTimeout(function () {
+                                    photoboothTools.reloadPage();
+                                }, 5000);
                             }
-                            setTimeout(function () {
-                                photoboothTools.reloadPage();
-                            }, 5000);
-                        }
+                        });
                     });
                 } else {
                     $('.deletebtn').blur();
                 }
+                photoboothTools.reloadPage();
             });
 
         // Add Image to gallery and slider

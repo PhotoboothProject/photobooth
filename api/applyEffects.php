@@ -269,4 +269,5 @@ if ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === false
 
 echo json_encode([
     'file' => $file,
+    'images' => $srcImages,
 ]);
