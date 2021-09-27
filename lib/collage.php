@@ -8,6 +8,7 @@ require_once __DIR__ . '/filter.php';
 require_once __DIR__ . '/polaroid.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
+define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']));
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
@@ -37,9 +38,9 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         $image_filter = $filter;
     }
 
-    // colors for background while rotating jpeg images
-    $white = 16777215;
-    $black = 0;
+    // colors for background and while rotating jpeg images
+    list($bg_r, $bg_g, $bg_b) = sscanf(COLLAGE_BACKGROUND_COLOR, '#%02x%02x%02x');
+    $bg_color_hex = hexdec(substr(COLLAGE_BACKGROUND_COLOR, 1));
 
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
         return false;
@@ -82,7 +83,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         }
 
         if (PICTURE_ROTATION !== '0') {
-            $rotatedImg = imagerotate($imageResource, PICTURE_ROTATION, $white);
+            $rotatedImg = imagerotate($imageResource, PICTURE_ROTATION, $bg_color_hex);
             $imageResource = $rotatedImg;
             $imageModified = true;
         }
@@ -107,7 +108,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         $landscape = false;
         for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
             $tempImage = imagecreatefromjpeg($srcImagePaths[$i]);
-            $tempSubRotated = imagerotate($tempImage, 90, $white);
+            $tempSubRotated = imagerotate($tempImage, 90, $bg_color_hex);
             imagejpeg($tempSubRotated, $srcImagePaths[$i], $quality);
             imagedestroy($tempImage);
         }
@@ -117,7 +118,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     switch (COLLAGE_LAYOUT) {
         case '2x2':
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 0, 0, 0);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
             imagecolortransparent($my_collage, $background);
 
             if ($landscape == false) {
@@ -145,7 +146,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $width = 1800;
             $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape == false) {
@@ -180,7 +181,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
 
                 $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $bg_color_hex); // Rotate image
                 imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                 imagedestroy($tempSubRotated); // Destroy temporary images
                 imagedestroy($tempSubImage); // Destroy temporary images
@@ -188,7 +189,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             break;
         case '2x4':
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape) {
@@ -207,7 +208,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
 
                 $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white);
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $bg_color_hex);
                 $images_rotated[] = resizeImage($tempSubRotated, $height / 3.3, $width / 3.5);
             }
 
@@ -244,7 +245,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $width = 1800;
             $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape) {
@@ -276,7 +277,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     }
 
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-                    $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
+                    $tempSubRotated = imagerotate($tempSubImage, $degrees, $bg_color_hex); // Rotate image
                     imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                     imagedestroy($tempSubRotated); // Destroy temporary images
                     imagedestroy($tempSubImage); // Destroy temporary images
@@ -287,7 +288,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $width = 1800;
             $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape == false) {
@@ -325,7 +326,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
 
                 $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $bg_color_hex); // Rotate image
                 imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                 imagedestroy($tempSubRotated); // Destroy temporary images
                 imagedestroy($tempSubImage); // Destroy temporary images
@@ -336,7 +337,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $width = 1800;
             $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape == false) {
@@ -405,7 +406,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $width = 1800;
             $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, 255, 255, 255);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape == false) {
@@ -454,7 +455,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     $degrees = 11;
                     $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
                     // Rotate image and add white background
-                    $tempRotate = imagerotate($tempSubImage, $degrees, $white);
+                    $tempRotate = imagerotate($tempSubImage, $degrees, $bg_color_hex);
                     imagejpeg($tempRotate, $srcImagePaths[$i], $quality);
                     // get new width and height after rotation
                     list($widthNew, $heightNew) = getimagesize($srcImagePaths[$i]);
@@ -463,7 +464,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
                 $degrees = 0;
                 $tempSubImage = imagecreatefromjpeg($srcImagePaths[$i]);
-                $tempSubRotated = imagerotate($tempSubImage, $degrees, $white); // Rotate image
+                $tempSubRotated = imagerotate($tempSubImage, $degrees, $bg_color_hex); // Rotate image
                 imagecopy($my_collage, $tempSubRotated, $dX, $dY, 0, 0, $widthNew, $heightNew); // copy image to background
                 imagedestroy($tempSubRotated); // Destroy temporary images
                 imagedestroy($tempSubImage); // Destroy temporary images
@@ -501,7 +502,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     // Rotate image if needed
     if ($rotate_after_creation) {
         $tempRotatedImage = imagecreatefromjpeg($destImagePath);
-        $resultRotated = imagerotate($tempRotatedImage, -90, $white);
+        $resultRotated = imagerotate($tempRotatedImage, -90, $bg_color_hex);
         imagejpeg($resultRotated, $destImagePath, $quality);
         imagedestroy($tempRotatedImage);
     }

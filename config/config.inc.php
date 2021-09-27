@@ -97,6 +97,7 @@ $config['collage']['layout'] = '2x2-2';
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code
 $config['collage']['key'] = null;
+$config['collage']['background_color'] = '#ffffff';
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
 $config['collage']['frame'] = 'resources/img/frames/frame.png';

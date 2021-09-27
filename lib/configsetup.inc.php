@@ -631,6 +631,13 @@ $configsetup = [
             'placeholder' => '',
             'value' => $config['collage']['key'],
         ],
+        'collage_background_color' => [
+            'view' => 'basic',
+            'type' => 'color',
+            'name' => 'collage[background_color]',
+            'placeholder' => $defaultConfig['collage']['background_color'],
+            'value' => $config['collage']['background_color'],
+        ],
         'collage_take_frame' => [
             'view' => 'advanced',
             'type' => 'select',

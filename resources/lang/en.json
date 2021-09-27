@@ -31,6 +31,7 @@
   "chromaInfoBefore": "Please choose a background to take a Picture",
   "close": "Close",
   "collage": "Collage",
+  "collage:collage_background_color": "Collage background color",
   "collage:collage_cntdwn_time": "Collage-countdown timer:",
   "collage:collage_continuous": "Take collage without interruption",
   "collage:collage_continuous_time": "Show single images on continuous collage for:",
