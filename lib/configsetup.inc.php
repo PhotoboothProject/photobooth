@@ -1223,22 +1223,22 @@ $configsetup = [
         ],
     ],
     'qr' => [
-        'view' => 'advanced',
+        'view' => 'basic',
         'qr_enabled' => [
-            'view' => 'advanced',
+            'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'qr[enabled]',
             'value' => $config['qr']['enabled'],
         ],
         'qr_url' => [
-            'view' => 'advanced',
+            'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['qr']['url'],
             'name' => 'qr[url]',
             'value' => htmlentities($config['qr']['url']),
         ],
         'qr_append_filename' => [
-            'view' => 'advanced',
+            'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'qr[append_filename]',
             'value' => $config['qr']['append_filename'],
