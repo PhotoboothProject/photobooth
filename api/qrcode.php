@@ -1,14 +1,10 @@
 <?php
 require_once '../lib/config.php';
-
-if (!isset($config['webserver']['ip'])) {
-    $SERVER_IP = $_SERVER['HTTP_HOST'];
-} else {
-    $SERVER_IP = $config['webserver']['ip'];
-}
+require_once '../lib/helper.php';
 
 $filename = $_GET['filename'];
-$api_path = getrootpath('../api');
+$photoboothUrl = getPhotoboothUrl();
+
 include '../vendor/phpqrcode/lib/full/qrlib.php';
-$url = 'http://' . $SERVER_IP . $api_path . '/download.php?image=';
-QRcode::png($url . $filename, false, QR_ECLEVEL_H, 10);
+$url = $photoboothUrl . '/api/download.php?image=' . $filename;
+QRcode::png($url, false, QR_ECLEVEL_H, 10);

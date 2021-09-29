@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/arrayDeepMerge.php';
+require_once __DIR__ . '/helper.php';
 
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
@@ -157,6 +158,15 @@ if (!isset($config['background']['chroma'])) {
     $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
 }
 
+if (!isset($config['webserver']['ip'])) {
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+        $protocol = 'https://';
+    } else {
+        $protocol = 'http://';
+    }
+    $config['webserver']['ip'] = str_replace($protocol, '', getPhotoboothUrl());
+}
+
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not write config/my.config.inc.php.');
 } elseif (!file_exists($my_config_file) && !is_writable(__DIR__ . '/../config/')) {
@@ -186,9 +196,3 @@ foreach ($config['folders'] as $key => $folder) {
 }
 
 $config['folders']['lang'] = getrootpath('../resources/lang');
-
-function getrootpath($relative_path) {
-    $realpath = realpath($relative_path);
-    $rootpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $realpath);
-    return $rootpath;
-}

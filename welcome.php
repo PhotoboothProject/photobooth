@@ -1,29 +1,15 @@
 <?php
 require_once 'lib/config.php';
+require_once 'lib/helper.php';
 
 if (!is_file('.skip_welcome')) {
     touch('.skip_welcome');
 }
 
-if ($os == 'linux') {
-    $get_ip = shell_exec('hostname -I | cut -d " " -f 1');
 
-    if (!$get_ip) {
-        $IP = $_SERVER['HTTP_HOST'];
-    } else {
-        $IP = $get_ip;
-    }
-
-    if (getcwd() == '/var/www/html/photobooth') {
-        $URL = $IP . '/photobooth';
-    } else {
-        $URL = $IP;
-    }
-} else {
-        $URL = $_SERVER['HTTP_HOST'];
-}
-
+$URL = getPhotoboothUrl();
 $PHOTOBOOTH_HOME = getcwd();
+
 
 ?>
 <!DOCTYPE html>
@@ -75,10 +61,10 @@ $PHOTOBOOTH_HOME = getcwd();
 		<p><b>Databases are placed at:</b> <?=$config['foldersAbs']['data']?></p>
 		<p><b>Add your own files (e.g. background images, frames, overrides.css) inside:</b> <?=$PHOTOBOOTH_HOME . "/private"?><br>
 		<i>All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i></p>
-		<p>You can change the settings and look of Photobooth using the Admin panel at <a href="admin" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/admin</a>.<br>
-		A standalone gallery can be found at <a href="gallery.php" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/gallery.php</a>.<br>
-		A standalone slideshow can be found at <a href="slideshow" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/slideshow</a>.<br>
-		An integrated FAQ to answer a lot of questions can be found at <a href="faq" target="_blank" rel="noopener noreferrer">http://<?=$URL;?>/faq</a>.</p>
+		<p>You can change the settings and look of Photobooth using the Admin panel at <a href="admin" target="_blank" rel="noopener noreferrer"><?=$URL;?>/admin</a>.<br>
+		A standalone gallery can be found at <a href="gallery.php" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery.php</a>.<br>
+		A standalone slideshow can be found at <a href="slideshow" target="_blank" rel="noopener noreferrer"><?=$URL;?>/slideshow</a>.<br>
+		An integrated FAQ to answer a lot of questions can be found at <a href="faq" target="_blank" rel="noopener noreferrer"><?=$URL;?>/faq</a>.</p>
 		<p></p>
 		<p>You are missing some translation or your language isn't supported yet? Don't worry! You can request new language support at <a href="https://github.com/andi34/photobooth/issues" target="_blank" rel="noopener noreferrer">GitHub</a>,
 		you can translate Photobooth at <a href="https://crowdin.com/project/photobooth" target="_blank" rel="noopener noreferrer">Crowdin</a>.</p>
