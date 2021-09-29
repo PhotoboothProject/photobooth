@@ -200,7 +200,7 @@ Troubleshooting / Debugging:
   - Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
   - Reload the Photobooth homepage
   - Check the browser developer console for error logs
-  - Check the server logs for errors (file `data/tmp/remotebuzzer_server.log`)
+  - Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
   - If there is no errors logged but hardware buttons still do not trigger:
     - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
     - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
@@ -567,7 +567,7 @@ A USB drive / stick can be identified either by the USB stick label (e.g. `photo
 
 Pictures will be synced to the USB stick matched by the pattern, as long as it is  mounted (aka USB stick is plugged in)
 
-Debugging: switch on dev settings for server logs to be written to the `data/tmp` directory of the photobooth installation (i.e. `data/tmp/synctodrive_server.log`).
+Debugging: Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
 
 <hr>
 
