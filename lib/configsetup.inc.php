@@ -1678,6 +1678,7 @@ $configsetup = [
                 'login' => 'Login',
                 'gallery.php' => 'Standalone Gallery',
                 'slideshow' => 'Standalone Slideshow',
+                'private' => 'Private Folder (index.php)'
             ],
             'placeholder' => $defaultConfig['protect']['index_redirect'],
             'name' => 'protect[index_redirect]',
