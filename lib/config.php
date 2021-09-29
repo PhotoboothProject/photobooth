@@ -167,6 +167,10 @@ if (!isset($config['webserver']['ip'])) {
     $config['webserver']['ip'] = str_replace($protocol, '', getPhotoboothUrl());
 }
 
+if (!isset($config['qr']['url'])) {
+    $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
+}
+
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not write config/my.config.inc.php.');
 } elseif (!file_exists($my_config_file) && !is_writable(__DIR__ . '/../config/')) {

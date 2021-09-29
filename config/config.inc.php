@@ -20,7 +20,6 @@ $config['start_screen']['subtitle_visible'] = true;
 $config['picture']['thumb_size'] = '540px';
 $config['dev']['error_messages'] = true;
 $config['dev']['reload_on_error'] = true;
-$config['qr']['enabled'] = true;
 $config['webserver']['ip'] = NULL;
 $config['webserver']['ssid'] = 'Photobooth';
 $config['download']['enabled'] = true;
@@ -201,6 +200,14 @@ $config['textonprint']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
 $config['textonprint']['font_color'] = '#ffffff';
 $config['textonprint']['font_size'] = '100';
 $config['textonprint']['linespace'] = '100';
+
+
+// Q R  -  C O D E
+$config['qr']['enabled'] = true;
+$config['qr']['url'] = NULL;
+$config['qr']['append_filename'] = true;
+$config['qr']['custom_text'] = false;
+$config['qr']['text'] = NULL;
 
 
 // E -  M A I L

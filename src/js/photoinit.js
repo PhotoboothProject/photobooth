@@ -248,6 +248,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             pswpQR.removeClass('qr-active').fadeOut('fast');
         } else {
             pswpQR.empty();
+            const qrHelpText = config.qr.custom_text
+                ? config.qr.text
+                : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
             let img = gallery.currItem.src;
             img = img.split('\\').pop().split('/').pop();
 
@@ -265,7 +268,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 .appendTo(pswpQR);
             $('<p>')
                 .css('max-width', this.width + 'px')
-                .html(photoboothTools.getTranslation('qrHelp') + '<b>' + config.webserver.ssid + '</b>')
+                .html(qrHelpText)
                 .appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');

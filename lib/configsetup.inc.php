@@ -172,12 +172,6 @@ $configsetup = [
             'name' => 'dev[reload_on_error]',
             'value' => $config['dev']['reload_on_error'],
         ],
-        'qr_enabled' => [
-            'view' => 'advanced',
-            'type' => 'checkbox',
-            'name' => 'qr[enabled]',
-            'value' => $config['qr']['enabled'],
-        ],
         'webserver_ip' => [
             'view' => 'advanced',
             'type' => 'input',
@@ -1226,6 +1220,41 @@ $configsetup = [
             'placeholder' => $defaultConfig['textonprint']['linespace'],
             'name' => 'textonprint[linespace]',
             'value' => $config['textonprint']['linespace'],
+        ],
+    ],
+    'qr' => [
+        'view' => 'advanced',
+        'qr_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'qr[enabled]',
+            'value' => $config['qr']['enabled'],
+        ],
+        'qr_url' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['qr']['url'],
+            'name' => 'qr[url]',
+            'value' => htmlentities($config['qr']['url']),
+        ],
+        'qr_append_filename' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'qr[append_filename]',
+            'value' => $config['qr']['append_filename'],
+        ],
+        'qr_custom_text' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'qr[custom_text]',
+            'value' => $config['qr']['custom_text'],
+        ],
+        'qr_text' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['qr']['text'],
+            'name' => 'qr[text]',
+            'value' => htmlentities($config['qr']['text']),
         ],
     ],
     'mail' => [

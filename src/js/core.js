@@ -691,6 +691,9 @@ const photoBooth = (function () {
     // Render Picture after taking
     api.renderPic = function (filename, files) {
         // Add QR Code Image
+        const qrHelpText = config.qr.custom_text
+            ? config.qr.text
+            : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
         const qrCodeModal = $('#qrCode');
         photoboothTools.modal.empty(qrCodeModal);
         const body = qrCodeModal.find('.modal__body');
@@ -708,7 +711,7 @@ const photoBooth = (function () {
             .on('load', function () {
                 $('<p>')
                     .css('max-width', this.width + 'px')
-                    .html(photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
+                    .html(qrHelpText)
                     .appendTo(body);
             })
             .appendTo(body);
