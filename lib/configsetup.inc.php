@@ -1401,19 +1401,19 @@ $configsetup = [
         ],
         'remotebuzzer_usehid' => [
             'view' => 'advanced',
-            'type' => 'checkbox',
+            'type' => 'hidden',
             'name' => 'remotebuzzer[usehid]',
             'value' => $config['remotebuzzer']['usehid'],
         ],
         'remotebuzzer_usesoftbtn' => [
             'view' => 'advanced',
-            'type' => 'checkbox',
+            'type' => 'hidden',
             'name' => 'remotebuzzer[usesoftbtn]',
             'value' => $config['remotebuzzer']['usesoftbtn'],
         ],
         'remotebuzzer_usegpio' => [
             'view' => 'advanced',
-            'type' => 'checkbox',
+            'type' => 'hidden',
             'name' => 'remotebuzzer[usegpio]',
             'value' => $config['remotebuzzer']['usegpio'],
         ],
