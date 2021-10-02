@@ -198,14 +198,13 @@ sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/
 
 # Run Chromium in kiosk mode
 chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
-
 EOF
 
 cat >> /etc/X11/Xwrapper.config <<EOF
 allowed_users = anybody
 EOF
 
-cat >> ~/.bash_profile <<EOF
+cat >> /home/pi/.bash_profile <<EOF
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
 EOF
 
@@ -415,25 +414,28 @@ ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cur
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    echo -e "\033[0;33m### Please choose the PiOS version installed to do the right setup."
-    echo -e "    1 Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
-    echo -e "    2 Raspberry Pi OS Lite"
-    ask_yes_no "Please enter your choice" "1"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[1]$ ]]
-    then
+#    echo -e "\033[0;33m### Please choose the PiOS version installed to do the right setup."
+#    echo -e "    1 Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
+#    echo -e "    2 Raspberry Pi OS Lite"
+#    ask_yes_no "Please enter your choice" "1"
+#    echo -e "\033[0m"
+#    if [[ $REPLY =~ ^[1]$ ]]
+#    then
+#        info "### We are installing Photobooth in Kiosk Mode for"
+#        info "### Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
+#        kioskbooth_desktop
+#    elif [[ $REPLY =~ ^[2]$ ]]
+#    then
+#        info "### We are installing Photobooth in Kiosk Mode for"
+#        info "### Raspberry Pi OS light"
+#        kioskbooth_light
+#    else
+#        info "### Invalid choice!"
+#    fi
+#
         info "### We are installing Photobooth in Kiosk Mode for"
         info "### Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
-        kioskbooth_desktop
-    elif [[ $REPLY =~ ^[2]$ ]]
-    then
-        info "### We are installing Photobooth in Kiosk Mode for"
-        info "### Raspberry Pi OS light"
-        kioskbooth_light
-    else
-        info "### Invalid choice!"
-    fi
-
+    kioskbooth_desktop
 else
         info "### Skipping setup for Photobooth in Kiosk Mode."
 fi
