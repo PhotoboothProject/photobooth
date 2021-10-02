@@ -156,6 +156,63 @@ EOF
     fi
 }
 
+kioskbooth_desktop() {
+    info "### Installing needed dependencies..."
+    apt install -y unclutter
+
+cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+# turn off display power management system
+@xset -dpms
+# turn off screen blanking
+@xset s noblank
+# turn off screen saver
+@xset s off
+
+# Run Chromium in kiosk mode
+@chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
+
+# Hide mousecursor
+@unclutter -idle 3
+
+EOF
+}
+
+kioskbooth_light() {
+    info "### Installing needed dependencies..."
+    apt-get install --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox chromium-browser
+
+cat >> /etc/xdg/openbox/autostart <<EOF
+# turn off display power management system
+xset -dpms
+# turn off screen blanking
+xset s noblank
+# turn off screen saver
+xset s off
+
+# Allow quitting the X server with CTRL-ATL-Backspace
+setxkbmap -option terminate:ctrl_alt_bksp
+
+# Remove exit errors from the config files that could trigger a warning
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
+
+# Run Chromium in kiosk mode
+chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
+
+EOF
+
+cat >> /etc/X11/Xwrapper.config <<EOF
+allowed_users = anybody
+EOF
+
+cat >> ~/.bash_profile <<EOF
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
+EOF
+
+chmod u+s /usr/bin/Xorg
+usermod -a -G tty pi
+}
+
 echo "
 
 
@@ -352,24 +409,33 @@ EOF
 
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
+
 echo -e "\033[0;33m### You probably like to start the browser on every start."
 ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " "N"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    apt install -y unclutter
+    echo -e "\033[0;33m### Please choose the PiOS version installed to do the right setup."
+    echo -e "    1 Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
+    echo -e "    2 Raspberry Pi OS Lite"
+    ask_yes_no "Please enter your choice" "1"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[1]$ ]]
+    then
+        info "### We are installing Photobooth in Kiosk Mode for"
+        info "### Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
+        kioskbooth_desktop
+    elif [[ $REPLY =~ ^[2]$ ]]
+    then
+        info "### We are installing Photobooth in Kiosk Mode for"
+        info "### Raspberry Pi OS light"
+        kioskbooth_light
+    else
+        info "### Invalid choice!"
+    fi
 
-    cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
-
-@xset s off
-@xset -dpms
-@xset s noblank
-@chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
-
-@unclutter -idle 3
-
-EOF
-
+else
+        info "### Skipping setup for Photobooth in Kiosk Mode."
 fi
 
 info "### Remote Buzzer Feature"
