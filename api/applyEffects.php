@@ -59,50 +59,54 @@ if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
 // Check collage configuration
 if ($_POST['style'] === 'collage') {
     if ($config['collage']['take_frame'] !== 'off') {
-        if (is_dir(COLLAGE_FRAME)) {
-            $errormsg = 'Frame not set! ' . COLLAGE_FRAME . ' is a path but needs to be a png!';
+        $frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']);
+        if (is_dir($frame)) {
+            $errormsg = 'Frame not set! ' . $frame . ' is a path but needs to be a png!';
             logErrorAndDie($errormsg);
         }
 
-        if (!file_exists(COLLAGE_FRAME)) {
-            $errormsg = 'Frame ' . COLLAGE_FRAME . ' does not exist!';
+        if (!file_exists($frame)) {
+            $errormsg = 'Frame ' . $frame . ' does not exist!';
             logErrorAndDie($errormsg);
         }
     }
 
     if ($config['textoncollage']['enabled']) {
-        if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
-            $errormsg = 'Font not set! ' . TEXTONCOLLAGE_FONT . ' is a path but needs to be a ttf!';
+        $font = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['textoncollage']['font']);
+        if (is_dir($font)) {
+            $errormsg = 'Font not set! ' . $font . ' is a path but needs to be a ttf!';
             logErrorAndDie($errormsg);
         }
 
-        if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . TEXTONCOLLAGE_FONT))) {
-            $errormsg = 'Font ' . TEXTONCOLLAGE_FONT . ' does not exist!';
+        if (!file_exists($font)) {
+            $errormsg = 'Font ' . $font . ' does not exist!';
             logErrorAndDie($errormsg);
         }
     }
 } else {
     // Check picture configuration
     if ($config['picture']['take_frame']) {
-        if (is_dir($picture_frame)) {
-            $errormsg = 'Frame not set! ' . $picture_frame . ' is a path but needs to be a png!';
+        $frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['picture']['frame']);
+        if (is_dir($frame)) {
+            $errormsg = 'Frame not set! ' . $frame . ' is a path but needs to be a png!';
             logErrorAndDie($errormsg);
         }
 
-        if (!file_exists($picture_frame)) {
-            $errormsg = 'Frame ' . $picture_frame . ' does not exist!';
+        if (!file_exists($frame)) {
+            $errormsg = 'Frame ' . $frame . ' does not exist!';
             logErrorAndDie($errormsg);
         }
     }
 
     if ($config['textonpicture']['enabled']) {
-        if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-            $errormsg = 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!';
+        $font = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath);
+        if (is_dir($font)) {
+            $errormsg = 'Font not set! ' . $font . ' is a path but needs to be a ttf!';
             logErrorAndDie($errormsg);
         }
 
-        if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-            $errormsg = 'Font ' . $fontpath . ' does not exist!';
+        if (!file_exists($font)) {
+            $errormsg = 'Font ' . $font . ' does not exist!';
             logErrorAndDie($errormsg);
         }
     }
