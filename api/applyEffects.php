@@ -182,24 +182,24 @@ foreach ($srcImages as $image) {
             $imageModified = true;
         }
 
-        if ($config['picture']['rotation'] !== '0') {
-            $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
-            $imageResource = $rotatedImg;
-            $imageModified = true;
-        }
-
         if ($config['picture']['polaroid_effect'] && $_POST['style'] !== 'collage') {
             $polaroid_rotation = $config['picture']['polaroid_rotation'];
             $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
             $imageModified = true;
         }
 
-        if ($config['picture']['take_frame'] || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
+        if (($config['picture']['take_frame'] && $_POST['style'] !== 'collage') || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
             $frame = imagecreatefrompng($picture_frame);
             $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
             $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
             $y = imagesy($imageResource) / 2 - imagesy($frame) / 2;
             imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+            $imageModified = true;
+        }
+
+        if ($config['picture']['rotation'] !== '0') {
+            $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
+            $imageResource = $rotatedImg;
             $imageModified = true;
         }
     }
