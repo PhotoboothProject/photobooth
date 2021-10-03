@@ -201,11 +201,11 @@ chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate 
 EOF
 
 cat >> /etc/X11/Xwrapper.config <<EOF
-allowed_users = anybody
+allowed_users=anybody
 EOF
 
 cat >> /home/pi/.bash_profile <<EOF
-[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
+[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && startx -- -nocursor
 EOF
 
 chmod u+s /usr/bin/Xorg
