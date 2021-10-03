@@ -353,7 +353,7 @@ ask_yes_no "### If yes, this will generate a personal configuration with all nee
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    (cat << EOF) > $INSTALLFOLDERPATH/config/my.config.inc.php
+    cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
   'take_picture' => 
