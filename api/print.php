@@ -42,13 +42,6 @@ if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
     );
 }
 
-// QR
-if (!isset($config['webserver']['ip'])) {
-    $SERVER_IP = $_SERVER['HTTP_HOST'];
-} else {
-    $SERVER_IP = $config['webserver']['ip'];
-}
-
 // text on print variables
 $fontpath = $config['textonprint']['font'];
 $fontcolor = $config['textonprint']['font_color'];
@@ -119,9 +112,13 @@ if (!file_exists($filename_print)) {
     if ($config['print']['qrcode'] && file_exists('../vendor/phpqrcode/lib/full/qrlib.php')) {
         // create qr code
         if (!file_exists($filename_codes)) {
+            if ($config['qr']['append_filename']) {
+                $url = $config['qr']['url'] . $filename;
+            } else {
+                $url = $config['qr']['url'];
+            }
             include '../vendor/phpqrcode/lib/full/qrlib.php';
-            $url = 'http://' . $SERVER_IP . '/api/download.php?image=';
-            QRcode::png($url . $filename, $filename_codes, QR_ECLEVEL_H, 10);
+            QRcode::png($url, $filename_codes, QR_ECLEVEL_H, 10);
         }
 
         // merge source and code
