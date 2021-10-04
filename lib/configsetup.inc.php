@@ -123,6 +123,12 @@ $configsetup = [
             'name' => 'dev[advanced_log]',
             'value' => $config['dev']['advanced_log'],
         ],
+        'dev_logfile' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'name' => 'dev[logfile]',
+            'value' => $config['dev']['logfile'],
+        ],
         'dev_debugpanel' => [
             'view' => 'expert',
             'type' => 'button',
@@ -1917,12 +1923,6 @@ $configsetup = [
             'placeholder' => $defaultConfig['take_picture']['cmd'],
             'name' => 'take_picture[cmd]',
             'value' => htmlentities($config['take_picture']['cmd']),
-        ],
-        'take_picture_logfile' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'name' => 'take_picture[logfile]',
-            'value' => $config['take_picture']['logfile'],
         ],
         'take_picture_msg' => [
             'view' => 'expert',

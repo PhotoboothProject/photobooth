@@ -108,7 +108,7 @@ $config['adminpanel']['view_default'] = 'expert';
 
 $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
-$config['take_picture']['logfile'] = 'take_picture.log';
+$config['dev']['logfile'] = 'error.log';
 
 $config['ui']['github'] = 'andi34';
 $config['ui']['branding'] = 'Photobooth';

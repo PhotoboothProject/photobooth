@@ -92,7 +92,7 @@ if (
                 echo '<li><a class="adminnavlistelement" href="#myconfig" id="nav-myconfig"><div><span data-i18n="myconfig">myconfig</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#remotebuzzerlog" id="nav-remotebuzzerlog"><div><span data-i18n="remotebuzzer">remotebuzzer</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#synctodrivelog" id="nav-synctodrivelog"><div><span data-i18n="synctodrive">synctodrive</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#cameralog" id="nav-cameralog"><div><span data-i18n="cameralog">cameralog</span></div></a></li>';
+                echo '<li><a class="adminnavlistelement" href="#devlog" id="nav-devlog"><div><span data-i18n="devlog">devlog</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#serverprocesses" id="nav-serverprocesses"><div><span data-i18n="serverprocesses">serverprocesses</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#bootconfig" id="nav-bootconfig"><div><span data-i18n="bootconfig">bootconfig</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#githead" id="nav-githead"><div><span data-i18n="githead">githead</span></div></a></li>';

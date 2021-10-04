@@ -28,8 +28,8 @@ switch ($content) {
         echo dumpfile('/boot/config.txt', null);
         break;
 
-    case 'nav-cameralog':
-        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['take_picture']['logfile'], null);
+    case 'nav-devlog':
+        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['dev']['logfile'], null);
         break;
 
     case 'nav-githead':
