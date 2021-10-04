@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 
 require_once '../lib/config.php';
+require_once '../lib/log.php';
 
 $url = 'https://api.github.com/repos/' . $config['ui']['github'] . '/photobooth/releases/latest';
 $gh = $config['ui']['github'];
@@ -21,8 +22,14 @@ $packageContent = file_get_contents('../package.json');
 $package = json_decode($packageContent, true);
 $localVersion = $package['version'];
 
-echo json_encode([
+$LogData = [
     'updateAvailable' => $remoteVersion !== $localVersion,
     'currentVersion' => $localVersion,
     'availableVersion' => $remoteVersion,
-]);
+    'php' => basename($_SERVER['PHP_SELF']),
+];
+$LogString = json_encode($LogData);
+if ($config['dev']['enabled']) {
+    logError($LogData);
+}
+die($LogString);

@@ -48,15 +48,27 @@ if (isset($success)) {
             break;
     }
 
-    echo json_encode([
+    $LogData = [
         'success' => $success,
         'output' => $output,
         'retval' => $retval,
         'command' => $cmd,
-    ]);
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+        logError($LogData);
+    }
+    echo $LogString;
 } else {
-    echo json_encode([
+    $LogData = [
         'success' => 'false',
         'command' => $cmd,
-    ]);
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+        logError($LogData);
+    }
+    echo $LogString;
 }

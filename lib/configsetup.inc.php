@@ -117,6 +117,12 @@ $configsetup = [
             'name' => 'dev[demo_images]',
             'value' => $config['dev']['demo_images'],
         ],
+        'dev_advanced_log' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'dev[advanced_log]',
+            'value' => $config['dev']['advanced_log'],
+        ],
         'dev_debugpanel' => [
             'view' => 'expert',
             'type' => 'button',

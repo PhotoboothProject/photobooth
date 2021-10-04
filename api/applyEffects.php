@@ -11,12 +11,12 @@ require_once '../lib/applyText.php';
 require_once '../lib/log.php';
 
 if (!extension_loaded('gd')) {
-    $errormsg = 'GD library not loaded! Please enable GD!';
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': GD library not loaded! Please enable GD!';
     logErrorAndDie($errormsg);
 }
 
 if (empty($_POST['file'])) {
-    $errormsg = 'No file provided';
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided';
     logErrorAndDie($errormsg);
 }
 
@@ -43,7 +43,7 @@ $imageModified = false;
 $image_filter = false;
 
 if (!isset($_POST['style'])) {
-    $errormsg = 'No style provided';
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': No style provided';
     logErrorAndDie($errormsg);
 }
 
@@ -86,7 +86,7 @@ if ($_POST['style'] === 'collage') {
     }
 
     if (!createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
-        $errormsg = 'Could not create collage';
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
         logErrorAndDie($errormsg);
     }
 }
@@ -98,7 +98,7 @@ foreach ($srcImages as $image) {
     $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 
     if (!file_exists($filename_tmp)) {
-        $errormsg = 'File ' . $filename_tmp . ' does not exist';
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $filename_tmp . ' does not exist';
         logErrorAndDie($errormsg);
     }
 
@@ -115,7 +115,7 @@ foreach ($srcImages as $image) {
     if ($_POST['style'] !== 'collage' || $editSingleCollage) {
         // Only jpg/jpeg are supported
         if (!$imageResource) {
-            $errormsg = 'Could not read jpeg file. Are you taking raws?';
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not read jpeg file. Are you taking raws?';
             logErrorAndDie($errormsg);
         }
 
@@ -228,7 +228,13 @@ if ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === false
     unlink($filename_thumb);
 }
 
-echo json_encode([
+$LogData = [
     'file' => $file,
     'images' => $srcImages,
-]);
+    'php' => basename($_SERVER['PHP_SELF']),
+];
+$LogString = json_encode($LogData);
+if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+    logError($LogData);
+}
+echo $LogString;

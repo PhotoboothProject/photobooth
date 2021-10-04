@@ -9,7 +9,7 @@ require_once '../lib/applyText.php';
 require_once '../lib/log.php';
 
 if (empty($_GET['filename'])) {
-    $errormsg = 'No file provided!';
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided!';
     logErrorAndDie($errormsg);
 }
 
@@ -31,7 +31,7 @@ if (!file_exists($filename_source)) {
 $imginfo = getimagesize($filename_source);
 $mimetype = $imginfo['mime'];
 if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    $errormsg = 'The source file type ' . $mimetype . ' is not supported';
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': The source file type ' . $mimetype . ' is not supported';
     logErrorAndDie($errormsg);
 }
 
@@ -124,7 +124,10 @@ $LogData = [
     'msg' => $cmd,
     'returnValue' => $returnValue,
     'output' => $output,
+    'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);
-logError($LogData);
+if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+    logError($LogData);
+}
 die($LogString);

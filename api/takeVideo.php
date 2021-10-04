@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 
 require_once '../lib/config.php';
+require_once '../lib/log.php';
 
 function isRunning($pid) {
     try {
@@ -20,19 +21,28 @@ if ($_POST['play'] === 'true') {
     $cmd = sprintf($config['preview']['cmd']);
     $pid = exec($cmd, $out);
     sleep(3);
-    die(
-        json_encode([
-            'isRunning' => isRunning($pid),
-            'pid' => $pid - 1,
-        ])
-    );
+    $LogData = [
+        'isRunning' => isRunning($pid),
+        'pid' => $pid - 1,
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+        logError($LogData);
+    }
+    die($LogString);
 } elseif ($_POST['play'] === 'false') {
     $killcmd = sprintf($config['preview']['killcmd']);
     exec($killcmd);
-    die(
-        json_encode([
-            'isRunning' => isRunning($_POST['pid']),
-            'pid' => $_POST['pid'],
-        ])
-    );
+
+    $LogData = [
+        'isRunning' => isRunning($_POST['pid']),
+        'pid' => $_POST['pid'],
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+        logError($LogData);
+    }
+    die($LogString);
 }

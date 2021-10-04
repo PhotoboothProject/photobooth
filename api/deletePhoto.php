@@ -3,13 +3,11 @@ header('Content-Type: application/json');
 
 require_once '../lib/db.php';
 require_once '../lib/config.php';
+require_once '../lib/log.php';
 
 if (empty($_POST['file'])) {
-    die(
-        json_encode([
-            'error' => 'No file provided',
-        ])
-    );
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided';
+    logErrorAndDie($errormsg);
 }
 
 $file = $_POST['file'];
@@ -19,31 +17,22 @@ $filePathKeying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
 $filePathTmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 
 if (!unlink($filePath) || !unlink($filePathThumb)) {
-    die(
-        json_encode([
-            'error' => 'Could not delete file',
-        ])
-    );
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not delete file';
+    logErrorAndDie($errormsg);
 }
 
 if (is_readable($filePathKeying)) {
     if (!unlink($filePathKeying)) {
-        die(
-            json_encode([
-                'error' => 'Could not delete keying file',
-            ])
-        );
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not delete keying file';
+        logErrorAndDie($errormsg);
     }
 }
 
 if (!$config['picture']['keep_original']) {
     if (is_readable($filePathTmp)) {
         if (!unlink($filePathTmp)) {
-            die(
-                json_encode([
-                    'error' => 'Could not delete tmp file',
-                ])
-            );
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not delete tmp file';
+            logErrorAndDie($errormsg);
         }
     }
 }

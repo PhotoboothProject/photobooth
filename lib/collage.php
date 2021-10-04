@@ -49,7 +49,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 
     for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
         if (!file_exists($srcImagePaths[$i])) {
-            $errormsg = 'File ' . $srcImagePaths[$i] . ' does not exist';
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $srcImagePaths[$i] . ' does not exist';
             logErrorAndDie($errormsg);
         }
 
@@ -63,7 +63,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         $imageResource = imagecreatefromjpeg($editImages[$i]);
         // Only jpg/jpeg are supported
         if (!$imageResource) {
-            $errormsg = 'Could not read jpeg file. Are you taking raws?';
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not read jpeg file. Are you taking raws?';
             logErrorAndDie($errormsg);
         }
 
