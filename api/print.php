@@ -64,7 +64,7 @@ $line3text = $config['textonprint']['line3'];
 // print frame
 $print_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['print']['frame']);
 
-if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
+if ($config['print']['print_frame']) {
     if (is_dir($print_frame)) {
         die(
             json_encode([
@@ -128,7 +128,7 @@ if (!file_exists($filename_print)) {
         $newwidth = $width + $height / 2;
         $newheight = $height;
 
-        if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
+        if ($config['print']['print_frame']) {
             ApplyFrame($filename_print, $filename_print, $print_frame);
         }
 
@@ -144,7 +144,7 @@ if (!file_exists($filename_print)) {
         imagedestroy($source);
         imagedestroy($print);
     } else {
-        if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
+        if ($config['print']['print_frame']) {
             ApplyFrame($filename_print, $filename_print, $print_frame);
         }
     }
