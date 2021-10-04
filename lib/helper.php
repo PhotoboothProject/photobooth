@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/log.php';
 
 function getrootpath($relative_path) {
     $realpath = realpath($relative_path);
@@ -41,4 +42,24 @@ function getPhotoboothIp() {
     }
 
     return $ip;
+}
+
+function testFile($file) {
+    $realPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $file);
+    if (is_dir($realPath)) {
+        $ErrorData = [
+            'error' => $file . ' is a path! Frames need to be PNG, Fonts need to be ttf!',
+        ];
+        logError($ErrorData);
+        return false;
+    }
+
+    if (!file_exists($realPath)) {
+        $ErrorData = [
+            'error' => $file . ' does not exist!',
+        ];
+        logError($ErrorData);
+        return false;
+    }
+    return true;
 }

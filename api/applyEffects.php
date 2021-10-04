@@ -48,8 +48,11 @@ if (!isset($_POST['style'])) {
 }
 
 if (!isset($_POST['filter'])) {
-    $errormsg = 'No filter provided';
-    logErrorAndDie($errormsg);
+    $ErrorData = [
+        'warning' => 'No filter provided! Using plain image filter!',
+    ];
+    logError($ErrorData);
+    $image_filter = 'plain';
 }
 
 if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
@@ -58,57 +61,8 @@ if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
 
 // Check collage configuration
 if ($_POST['style'] === 'collage') {
-    if ($config['collage']['take_frame'] !== 'off') {
-        $frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']);
-        if (is_dir($frame)) {
-            $errormsg = 'Frame not set! ' . $frame . ' is a path but needs to be a png!';
-            logErrorAndDie($errormsg);
-        }
-
-        if (!file_exists($frame)) {
-            $errormsg = 'Frame ' . $frame . ' does not exist!';
-            logErrorAndDie($errormsg);
-        }
-    }
-
     if ($config['textoncollage']['enabled']) {
-        $font = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['textoncollage']['font']);
-        if (is_dir($font)) {
-            $errormsg = 'Font not set! ' . $font . ' is a path but needs to be a ttf!';
-            logErrorAndDie($errormsg);
-        }
-
-        if (!file_exists($font)) {
-            $errormsg = 'Font ' . $font . ' does not exist!';
-            logErrorAndDie($errormsg);
-        }
-    }
-} else {
-    // Check picture configuration
-    if ($config['picture']['take_frame']) {
-        $frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['picture']['frame']);
-        if (is_dir($frame)) {
-            $errormsg = 'Frame not set! ' . $frame . ' is a path but needs to be a png!';
-            logErrorAndDie($errormsg);
-        }
-
-        if (!file_exists($frame)) {
-            $errormsg = 'Frame ' . $frame . ' does not exist!';
-            logErrorAndDie($errormsg);
-        }
-    }
-
-    if ($config['textonpicture']['enabled']) {
-        $font = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath);
-        if (is_dir($font)) {
-            $errormsg = 'Font not set! ' . $font . ' is a path but needs to be a ttf!';
-            logErrorAndDie($errormsg);
-        }
-
-        if (!file_exists($font)) {
-            $errormsg = 'Font ' . $font . ' does not exist!';
-            logErrorAndDie($errormsg);
-        }
+        testFile($config['textoncollage']['font']);
     }
 }
 
@@ -188,7 +142,10 @@ foreach ($srcImages as $image) {
             $imageModified = true;
         }
 
-        if (($config['picture']['take_frame'] && $_POST['style'] !== 'collage') || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
+        if (
+            ($config['picture']['take_frame'] && $_POST['style'] !== 'collage' && testFile($config['picture']['frame'])) ||
+            ($editSingleCollage && $config['collage']['take_frame'] === 'always' && testFile($config['collage']['frame']))
+        ) {
             $frame = imagecreatefrompng($picture_frame);
             $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
             $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
@@ -210,7 +167,7 @@ foreach ($srcImages as $image) {
         imagedestroy($chromaCopyResource);
     }
 
-    if ($config['textonpicture']['enabled'] && $_POST['style'] !== 'collage') {
+    if ($config['textonpicture']['enabled'] && testFile($config['textonpicture']['font']) && $_POST['style'] !== 'collage') {
         imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
         imagedestroy($imageResource);
         ApplyText($filename_photo, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);

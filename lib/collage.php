@@ -9,7 +9,7 @@ require_once __DIR__ . '/polaroid.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
-define('COLLAGE_FRAME', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']));
+define('COLLAGE_FRAME', $config['collage']['frame']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
 define('PICTURE_FLIP', $config['picture']['flip']);
@@ -34,6 +34,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     $quality = 100;
     $image_filter = false;
     $imageModified = false;
+    $frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . COLLAGE_FRAME);
     if (!empty($filter) && $filter !== 'plain') {
         $image_filter = $filter;
     }
@@ -134,8 +135,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                if (COLLAGE_TAKE_FRAME === 'always') {
-                    ApplyFrame($editImages[$i], $editImages[$i], COLLAGE_FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
                 }
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
@@ -177,8 +178,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                if (COLLAGE_TAKE_FRAME === 'always') {
-                    ApplyFrame($editImages[$i], $editImages[$i], COLLAGE_FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
                 }
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
@@ -204,8 +205,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                if (COLLAGE_TAKE_FRAME === 'always') {
-                    ApplyFrame($editImages[$i], $editImages[$i], COLLAGE_FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
                 }
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
@@ -273,8 +274,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                         return false;
                     }
 
-                    if (COLLAGE_TAKE_FRAME === 'always') {
-                        ApplyFrame($editImages[$i], $editImages[$i], COLLAGE_FRAME);
+                    if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                        ApplyFrame($editImages[$i], $editImages[$i], $frame);
                     }
 
                     $tempSubImage = imagecreatefromjpeg($editImages[$i]);
@@ -322,8 +323,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                if (COLLAGE_TAKE_FRAME === 'always') {
-                    ApplyFrame($editImages[$i], $editImages[$i], COLLAGE_FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
                 }
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
@@ -394,8 +395,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
                 ResizeCropImage($widthNew, $heightNew, $editImages[$i], $editImages[$i]);
 
-                if (COLLAGE_TAKE_FRAME === 'always') {
-                    ApplyFrame($editImages[$i], $editImages[$i], COLLAGE_FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
                 }
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
@@ -448,8 +449,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                if (COLLAGE_TAKE_FRAME === 'always') {
-                    ApplyFrame($editImages[$i], $editImages[$i], COLLAGE_FRAME);
+                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
                 }
 
                 if ($i == 0) {
@@ -478,11 +479,11 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 
     imagejpeg($my_collage, $destImagePath, $quality); // Transfer image to destImagePath with returns the image to core
 
-    if (COLLAGE_TAKE_FRAME === 'once') {
+    if (COLLAGE_TAKE_FRAME === 'once' && testFile(COLLAGE_FRAME)) {
         ApplyFrame($destImagePath, $destImagePath, COLLAGE_FRAME);
     }
 
-    if (TEXTONCOLLAGE_ENABLED === 'enabled') {
+    if (TEXTONCOLLAGE_ENABLED === 'enabled' && testFile(TEXTONCOLLAGE_FONT)) {
         ApplyText(
             $destImagePath,
             TEXTONCOLLAGE_FONT_SIZE,
