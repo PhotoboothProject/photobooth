@@ -20,14 +20,11 @@ if ($data['type'] == 'reset') {
                 foreach ($files as $file) {
                     // iterate files
                     if (is_file($file)) {
-                        unlink($file); // delete file
+                        // delete file
+                        unlink($file);
                     }
                 }
             }
-        }
-        $logFile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['take_picture']['logfile'];
-        if (is_file($logFile)) {
-            unlink($logFile);
         }
     }
 
@@ -44,9 +41,19 @@ if ($data['type'] == 'reset') {
         }
     }
 
+    $logFiles = glob($config['foldersAbs']['tmp'] . '/*.log');
+    foreach ($logFiles as $logFile) {
+        // iterate files
+        if (is_file($logFile)) {
+            // delete file
+            unlink($logFile);
+        }
+    }
+
     // delete db.txt
     if (is_file(DB_FILE)) {
-        unlink(DB_FILE); // delete file
+        // delete file
+        unlink(DB_FILE);
     }
 
     die(json_encode('success'));
