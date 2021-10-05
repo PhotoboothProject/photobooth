@@ -480,7 +480,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     imagejpeg($my_collage, $destImagePath, $quality); // Transfer image to destImagePath with returns the image to core
 
     if (COLLAGE_TAKE_FRAME === 'once' && testFile(COLLAGE_FRAME)) {
-        ApplyFrame($destImagePath, $destImagePath, COLLAGE_FRAME);
+        ApplyFrame($destImagePath, $destImagePath, $frame);
     }
 
     if (TEXTONCOLLAGE_ENABLED === 'enabled' && testFile(TEXTONCOLLAGE_FONT)) {
