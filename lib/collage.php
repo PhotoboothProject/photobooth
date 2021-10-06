@@ -133,11 +133,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
+                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
+                    $tempSubImage = applyFrame($tempSubImage, $frame);
                 }
 
-                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
                 // copy image to background
                 imagecopyresized($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $width / 2, $height / 2, $width, $height);
                 // destroy temporary images
@@ -171,11 +172,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 ResizeCropImage($widthp, $heightp, $editImages[$i], $editImages[$i]);
                 list($widthNew, $heightNew) = getimagesize($editImages[$i]);
 
+                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
+                    $tempSubImage = applyFrame($tempSubImage, $frame);
                 }
 
-                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
                 // copy image to background
                 imagecopy($my_collage, $tempSubImage, $dX, $dY, 0, 0, $widthNew, $heightNew);
                 // destroy temporary images
@@ -198,11 +200,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
+                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
+                    $tempSubImage = applyFrame($tempSubImage, $frame);
                 }
 
-                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
                 $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
                 $images_rotated[] = resizeImage($tempSubImage, $height / 3.3, $width / 3.5);
             }
@@ -268,11 +271,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     // delta X
                     $dX = $PositionsX[$i];
 
+                    $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+
                     if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                        ApplyFrame($editImages[$i], $editImages[$i], $frame);
+                        $tempSubImage = applyFrame($tempSubImage, $frame);
                     }
 
-                    $tempSubImage = imagecreatefromjpeg($editImages[$i]);
                     // Rotate image
                     $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
                     // copy image to background
@@ -315,11 +319,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $dX = $PositionsX[$i];
                 $dY = $PositionsY[$i];
 
+                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
+                    $tempSubImage = applyFrame($tempSubImage, $frame);
                 }
 
-                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
                 // copy image to background
                 imagecopy($my_collage, $tempSubImage, $dX, $dY, 0, 0, $widthNew, $heightNew);
                 // destroy temporary images
@@ -387,11 +392,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
                 ResizeCropImage($widthNew, $heightNew, $editImages[$i], $editImages[$i]);
 
+                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
+                    $tempSubImage = applyFrame($tempSubImage, $frame);
                 }
 
-                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
                 // copy image to background
                 imagecopy($my_collage, $tempSubImage, $position[0], $position[1], 0, 0, $widthNew, $heightNew);
                 // destroy temporary images
@@ -430,11 +436,11 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $dX = $PositionsX[$i];
                 $dY = $PositionsY[$i];
 
-                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    ApplyFrame($editImages[$i], $editImages[$i], $frame);
-                }
-
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+
+                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
+                    $tempSubImage = applyFrame($tempSubImage, $frame);
+                }
 
                 if ($i == 0) {
                     $degrees = 11;
@@ -459,12 +465,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             break;
     }
 
+    if (COLLAGE_TAKE_FRAME === 'once' && testFile(COLLAGE_FRAME)) {
+        $my_collage = applyFrame($my_collage, $frame);
+    }
+
     // Transfer image to destImagePath with returns the image to core
     imagejpeg($my_collage, $destImagePath, $quality);
-
-    if (COLLAGE_TAKE_FRAME === 'once' && testFile(COLLAGE_FRAME)) {
-        ApplyFrame($destImagePath, $destImagePath, $frame);
-    }
 
     if (TEXTONCOLLAGE_ENABLED === 'enabled' && testFile(TEXTONCOLLAGE_FONT)) {
         ApplyText(

@@ -63,6 +63,8 @@ if (!file_exists($filename_print)) {
         list($width, $height) = getimagesize($filename_print);
     }
 
+    $source = imagecreatefromjpeg($filename_print);
+
     if ($config['print']['qrcode'] && file_exists('../vendor/phpqrcode/lib/full/qrlib.php')) {
         // create qr code
         if (!file_exists($filename_codes)) {
@@ -80,10 +82,9 @@ if (!file_exists($filename_print)) {
         $newheight = $height;
 
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            ApplyFrame($filename_print, $filename_print, $print_frame);
+            $source = applyFrame($source, $print_frame);
         }
 
-        $source = imagecreatefromjpeg($filename_print);
         $code = imagecreatefrompng($filename_codes);
         $print = imagecreatetruecolor($newwidth, $newheight);
 
@@ -96,14 +97,13 @@ if (!file_exists($filename_print)) {
         imagedestroy($print);
     } else {
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            ApplyFrame($filename_print, $filename_print, $print_frame);
+            $source = applyFrame($source, $print_frame);
+            imagejpeg($source, $filename_print, $quality);
         }
     }
 
     if ($config['textonprint']['enabled'] && testFile($config['textonprint']['font'])) {
-        $print = imagecreatefromjpeg($filename_print);
         ApplyText($filename_print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
-        imagedestroy($print);
     }
 
     if ($config['print']['crop']) {

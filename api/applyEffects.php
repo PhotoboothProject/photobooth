@@ -146,11 +146,7 @@ foreach ($srcImages as $image) {
             ($config['picture']['take_frame'] && $_POST['style'] !== 'collage' && testFile($config['picture']['frame'])) ||
             ($editSingleCollage && $config['collage']['take_frame'] === 'always' && testFile($config['collage']['frame']))
         ) {
-            $frame = imagecreatefrompng($picture_frame);
-            $frame = resizePngImage($frame, imagesx($imageResource), imagesy($imageResource));
-            $x = imagesx($imageResource) / 2 - imagesx($frame) / 2;
-            $y = imagesy($imageResource) / 2 - imagesy($frame) / 2;
-            imagecopy($imageResource, $frame, $x, $y, 0, 0, imagesx($frame), imagesy($frame));
+            $imageResource = applyFrame($imageResource, $picture_frame);
             $imageModified = true;
         }
 
