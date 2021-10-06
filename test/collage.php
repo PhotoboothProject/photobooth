@@ -2,16 +2,6 @@
 require_once '../lib/config.php';
 require_once '../lib/collage.php';
 
-if ($config['collage']['take_frame'] !== 'off') {
-    if (is_dir(COLLAGE_FRAME)) {
-        die('Frame not set! ' . COLLAGE_FRAME . ' is a path but needs to be a png!');
-    }
-
-    if (!file_exists(COLLAGE_FRAME)) {
-        die('Frame ' . COLLAGE_FRAME . ' does not exist!');
-    }
-}
-
 $demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
 $demoFolder = realpath($demoPath);
 $demoImages = [
