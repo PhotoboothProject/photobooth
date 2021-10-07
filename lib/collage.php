@@ -469,12 +469,9 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         $my_collage = applyFrame($my_collage, $frame);
     }
 
-    // Transfer image to destImagePath with returns the image to core
-    imagejpeg($my_collage, $destImagePath, $quality);
-
     if (TEXTONCOLLAGE_ENABLED === 'enabled' && testFile(TEXTONCOLLAGE_FONT)) {
-        ApplyText(
-            $destImagePath,
+        $my_collage = applyText(
+            $my_collage,
             TEXTONCOLLAGE_FONT_SIZE,
             TEXTONCOLLAGE_ROTATION,
             TEXTONCOLLAGE_LOCATIONX,
@@ -488,16 +485,15 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         );
     }
 
-    // Destroy the created collage in memory
-    imagedestroy($my_collage);
-
     // Rotate image if needed
     if ($rotate_after_creation) {
-        $tempRotatedImage = imagecreatefromjpeg($destImagePath);
-        $resultRotated = imagerotate($tempRotatedImage, -90, $bg_color_hex);
-        imagejpeg($resultRotated, $destImagePath, $quality);
-        imagedestroy($tempRotatedImage);
+        $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
     }
+
+    // Transfer image to destImagePath with returns the image to core
+    imagejpeg($my_collage, $destImagePath, $quality);
+    // Destroy the created collage in memory
+    imagedestroy($my_collage);
 
     foreach ($editImages as $tmp) {
         unlink($tmp);

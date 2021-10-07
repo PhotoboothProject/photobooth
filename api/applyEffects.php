@@ -163,11 +163,8 @@ foreach ($srcImages as $image) {
     }
 
     if ($config['textonpicture']['enabled'] && testFile($config['textonpicture']['font']) && $_POST['style'] !== 'collage') {
-        imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
-        imagedestroy($imageResource);
-        ApplyText($filename_photo, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
+        $imageResource = applyText($imageResource, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
         $imageModified = true;
-        $imageResource = imagecreatefromjpeg($filename_photo);
     }
 
     // image scale, create thumbnail

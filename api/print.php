@@ -98,13 +98,14 @@ if (!file_exists($filename_print)) {
     } else {
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
             $source = applyFrame($source, $print_frame);
-            imagejpeg($source, $filename_print, $quality);
         }
     }
 
     if ($config['textonprint']['enabled'] && testFile($config['textonprint']['font'])) {
-        ApplyText($filename_print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
+        $source = applyText($source, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
     }
+
+    imagejpeg($source, $filename_print, $quality);
 
     if ($config['print']['crop']) {
         $crop_width = $config['print']['crop_width'];
