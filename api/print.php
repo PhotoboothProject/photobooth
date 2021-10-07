@@ -105,13 +105,13 @@ if (!file_exists($filename_print)) {
         $source = applyText($source, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
     }
 
-    imagejpeg($source, $filename_print, $quality);
-
     if ($config['print']['crop']) {
         $crop_width = $config['print']['crop_width'];
         $crop_height = $config['print']['crop_height'];
-        ResizeCropImage($crop_width, $crop_height, $filename_print, $filename_print);
+        $source = resizeCropImage($crop_width, $crop_height, $source);
     }
+
+    imagejpeg($source, $filename_print, $quality);
 }
 
 // print image

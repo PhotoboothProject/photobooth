@@ -162,17 +162,18 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $PositionsY = [111, 111, 625, 625]; // Y offset in Pixel
 
             for ($i = 0; $i < 4; $i++) {
-                $dX = $PositionsX[$i];
-                $dY = $PositionsY[$i];
-
                 if (!file_exists($editImages[$i])) {
                     return false;
                 }
 
-                ResizeCropImage($widthp, $heightp, $editImages[$i], $editImages[$i]);
-                list($widthNew, $heightNew) = getimagesize($editImages[$i]);
+                $dX = $PositionsX[$i];
+                $dY = $PositionsY[$i];
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+                $tempSubImage = resizeCropImage($widthp, $heightp, $tempSubImage);
+
+                $widthNew = imagesx($tempSubImage);
+                $heightNew = imagesy($tempSubImage);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
                     $tempSubImage = applyFrame($tempSubImage, $frame);
@@ -260,18 +261,15 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                ResizeCropImage($heightNew, $widthNew, $editImages[$i], $editImages[$i]);
-            }
-            list($width, $height) = getimagesize($editImages[0]);
-
-            for ($j = 0; $j < 2; $j++) {
-                //delta Y
-                $dY = $PositionsY[$j];
-                for ($i = 0; $i < 4; $i++) {
-                    // delta X
+                for ($j = 0; $j < 2; $j++) {
                     $dX = $PositionsX[$i];
+                    $dY = $PositionsY[$j];
 
                     $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+                    $tempSubImage = resizeCropImage($heightNew, $widthNew, $tempSubImage);
+
+                    $width = imagesx($tempSubImage);
+                    $height = imagesy($tempSubImage);
 
                     if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
                         $tempSubImage = applyFrame($tempSubImage, $frame);
@@ -309,17 +307,18 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                if ($i == 0) {
-                    ResizeCropImage($widthNewBig, $heightNewBig, $editImages[$i], $editImages[$i]);
-                } else {
-                    ResizeCropImage($widthNewSmall, $heightNewSmall, $editImages[$i], $editImages[$i]);
-                }
-                list($widthNew, $heightNew) = getimagesize($editImages[$i]);
-
-                $dX = $PositionsX[$i];
                 $dY = $PositionsY[$i];
+                $dX = $PositionsX[$i];
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+                if ($i == 0) {
+                    $tempSubImage = resizeCropImage($widthNewBig, $heightNewBig, $tempSubImage);
+                } else {
+                    $tempSubImage = resizeCropImage($widthNewSmall, $heightNewSmall, $tempSubImage);
+                }
+
+                $widthNew = imagesx($tempSubImage);
+                $heightNew = imagesy($tempSubImage);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
                     $tempSubImage = applyFrame($tempSubImage, $frame);
@@ -390,9 +389,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                             break;
                     }
                 }
-                ResizeCropImage($widthNew, $heightNew, $editImages[$i], $editImages[$i]);
-
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+                $tempSubImage = resizeCropImage($widthNew, $heightNew, $tempSubImage);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
                     $tempSubImage = applyFrame($tempSubImage, $frame);
@@ -427,16 +425,15 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     return false;
                 }
 
-                if ($i == 0) {
-                    ResizeCropImage($widthNewBig, $heightNewBig, $editImages[$i], $editImages[$i]);
-                } else {
-                    ResizeCropImage($widthNewSmall, $heightNewSmall, $editImages[$i], $editImages[$i]);
-                }
-
                 $dX = $PositionsX[$i];
                 $dY = $PositionsY[$i];
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+                if ($i == 0) {
+                    $tempSubImage = resizeCropImage($widthNewBig, $heightNewBig, $tempSubImage);
+                } else {
+                    $tempSubImage = resizeCropImage($widthNewSmall, $heightNewSmall, $tempSubImage);
+                }
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
                     $tempSubImage = applyFrame($tempSubImage, $frame);
