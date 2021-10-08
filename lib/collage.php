@@ -156,8 +156,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             }
             $degrees = 0;
             $heightp = 469;
-            $widthp = 636;
-            $PositionsX = [125, 810, 125, 810]; // X offset in Pixel
+            $widthp = $heightp * 1.5;
+            $PositionsX = [170, 925, 170, 925]; // X offset in Pixel
             $PositionsY = [111, 111, 625, 625]; // Y offset in Pixel
 
             for ($i = 0; $i < 4; $i++) {
@@ -248,7 +248,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             }
             $degrees = 90;
             $widthNew = 321;
-            $heightNew = 482;
+            $heightNew = $widthNew * 1.5;
             $PositionsX = [63, 423, 785, 1146]; // X offset in Pixel
             $PositionsY = [64, 652]; // Y offset in Pixel
 
@@ -293,11 +293,11 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $rotate_after_creation = true;
             }
             $degrees = 0;
-            $heightNewBig = 519;
-            $widthNewBig = 813;
-            $heightNewSmall = 361;
-            $widthNewSmall = 527;
-            $PositionsX = [910, 81, 638, 1196]; // X offset in Pixel
+            $heightNewBig = 520;
+            $widthNewBig = $heightNewBig * 1.5;
+            $heightNewSmall = 360;
+            $widthNewSmall = $heightNewSmall * 1.5;
+            $PositionsX = [950, 80, 637, 1195]; // X offset in Pixel
             $PositionsY = [71, 749, 749, 749]; // Y offset in Pixel
 
             for ($i = 0; $i < 4; $i++) {
@@ -410,10 +410,10 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             }
             $degrees = 0;
             $heightNewBig = 626;
-            $widthNewBig = 965;
+            $widthNewBig = $heightNewBig * 1.5;
             $heightNewSmall = 422;
-            $widthNewSmall = 624;
-            $PositionsX = [22, 1125, 1125]; // X offset in Pixel
+            $widthNewSmall = $heightNewSmall * 1.5;
+            $PositionsX = [40, 1125, 1125]; // X offset in Pixel
             $PositionsY = [65, 133, 634]; // Y offset in Pixel
 
             for ($i = 0; $i < 3; $i++) {
