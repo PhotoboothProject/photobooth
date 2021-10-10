@@ -85,7 +85,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         }
 
         if (PICTURE_ROTATION !== '0') {
-            $imageResource = imagerotate($imageResource, PICTURE_ROTATION, $bg_color_hex);
+            $imageResource = rotateResizeImage($imageResource, PICTURE_ROTATION, COLLAGE_BACKGROUND_COLOR);
             $imageModified = true;
         }
 
@@ -439,7 +439,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 if ($i == 0) {
                     $degrees = 11;
                     // Rotate image and add background
-                    $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
+                    $tempSubImage = rotateResizeImage($tempSubImage, $degrees, COLLAGE_BACKGROUND_COLOR);
                 }
 
                 $widthNew = imagesx($tempSubImage);

@@ -155,8 +155,7 @@ foreach ($srcImages as $image) {
         }
 
         if ($config['picture']['rotation'] !== '0') {
-            $rotatedImg = imagerotate($imageResource, $config['picture']['rotation'], 0);
-            $imageResource = $rotatedImg;
+            $imageResource = rotateResizeImage($imageResource, $config['picture']['rotation']);
             $imageModified = true;
         }
     }

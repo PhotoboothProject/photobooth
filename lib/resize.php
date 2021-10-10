@@ -1,5 +1,50 @@
 <?php
 
+function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
+    if (!$image) {
+        return false;
+    }
+
+    list($bg_r, $bg_g, $bg_b) = sscanf($bg_color, '#%02x%02x%02x');
+    $bg_color_hex = hexdec(substr($bg_color, 1));
+
+    // simple rotate if possible and ignore changed dimensions
+    $simple_rotate = [-180, -90, 0, 180, 90, 360];
+    if (in_array($rotation, $simple_rotate)) {
+        $new = imagerotate($image, $rotation, $bg_color_hex);
+    } else {
+        // get old dimensions
+        $old_width = imagesx($image);
+        $old_height = imagesy($image);
+
+        // create new image with old dimensions
+        $new = imagecreatetruecolor($old_width, $old_height);
+
+        // color background as defined
+        $background = imagecolorallocate($new, $bg_r, $bg_g, $bg_b);
+        imagefill($new, 0, 0, $background);
+
+        // rotate the image
+        $image = imagerotate($image, $rotation, $bg_color_hex);
+
+        // make sure width and/or height fits into old dimensions
+        $image = resizeImage($image, $old_width, $old_height);
+
+        // get new dimensions after rotate and resize
+        $new_width = imagesx($image);
+        $new_height = imagesy($image);
+
+        // center rotated image
+        $x = ($old_width - $new_width) / 2;
+        $y = ($old_height - $new_height) / 2;
+
+        // copy rotated image to new image with old dimensions
+        imagecopy($new, $image, $x, $y, 0, 0, $new_width, $new_height);
+    }
+
+    return $new;
+}
+
 function resizeImage($image, $max_width, $max_height) {
     if (!$image) {
         return false;
