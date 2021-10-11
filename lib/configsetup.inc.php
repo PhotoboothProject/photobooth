@@ -630,6 +630,13 @@ $configsetup = [
             ],
             'value' => $config['collage']['layout'],
         ],
+        'collage_dashedline_color' => [
+            'view' => 'advanced',
+            'type' => 'color',
+            'name' => 'collage[dashedline_color]',
+            'placeholder' => $defaultConfig['collage']['dashedline_color'],
+            'value' => $config['collage']['dashedline_color'],
+        ],
         'collage_keep_single_images' => [
             'view' => 'advanced',
             'type' => 'checkbox',

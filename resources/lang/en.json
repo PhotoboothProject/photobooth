@@ -35,6 +35,7 @@
   "collage:collage_cntdwn_time": "Collage-countdown timer:",
   "collage:collage_continuous": "Take collage without interruption",
   "collage:collage_continuous_time": "Show single images on continuous collage for:",
+  "collage:collage_dashedline_color": "Cutting line color on 2x4 Collage layouts",
   "collage:collage_enabled": "Allow photo collage",
   "collage:collage_frame": "Frame",
   "collage:collage_keep_single_images": "Add single images from collage to gallery",

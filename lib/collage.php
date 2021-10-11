@@ -11,6 +11,7 @@ define('COLLAGE_LAYOUT', $config['collage']['layout']);
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', $config['collage']['frame']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
+define('COLLAGE_DASHEDLINE_COLOR', $config['collage']['dashedline_color']);
 define('COLLAGE_LIMIT', $config['collage']['limit']);
 define('PICTURE_FLIP', $config['picture']['flip']);
 define('PICTURE_ROTATION', $config['picture']['rotation']);
@@ -42,6 +43,9 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     // colors for background and while rotating jpeg images
     list($bg_r, $bg_g, $bg_b) = sscanf(COLLAGE_BACKGROUND_COLOR, '#%02x%02x%02x');
     $bg_color_hex = hexdec(substr(COLLAGE_BACKGROUND_COLOR, 1));
+
+    // dashedline color on 2x4 collage layouts
+    list($dashed_r, $dashed_g, $dashed_b) = sscanf(COLLAGE_DASHEDLINE_COLOR, '#%02x%02x%02x');
 
     if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
         return false;
@@ -188,6 +192,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         case '2x4':
             $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+            $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape) {
@@ -239,12 +244,14 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             }
 
             imagescale($my_collage, $width, $height);
+            imagedashedline($my_collage, 50, $height / 2, $width - 50, $height / 2, $dashedline_color);
             break;
         case '2x4-2':
             $width = 1800;
             $height = 1200;
             $my_collage = imagecreatetruecolor($width, $height);
             $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+            $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             imagefill($my_collage, 0, 0, $background);
 
             if ($landscape) {
@@ -279,10 +286,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
                     // copy image to background
                     imagecopy($my_collage, $tempSubImage, $dX, $dY, 0, 0, $widthNew, $heightNew);
+
                     // destroy temporary images
                     imagedestroy($tempSubImage);
                 }
             }
+            imagedashedline($my_collage, 50, 600, 1750, 600, $dashedline_color);
             break;
         case '1+3':
             $width = 1800;
