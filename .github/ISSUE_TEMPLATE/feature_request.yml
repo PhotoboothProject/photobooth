@@ -1,0 +1,52 @@
+name: "\U0001F680 Feature request"
+description: Suggest an idea for this project
+labels: enhancement
+body:
+- type: markdown
+  attributes:
+    value: |
+      1. Please speak English, this is the language all maintainers can speak and write.
+      2. Please ask questions or configuration/deploy problems in our Telegram group (https://t.me/PhotoboothGroup).
+      3. Please take a moment to check that your feature hasn't already been suggested.
+
+- type: dropdown
+  id: problem-related
+  attributes:
+    label: Is your feature request related to a problem?
+    description: |
+      If so, please please describe in the Description field.
+    options:
+    - "Yes"
+    - "No"
+  validations:
+    required: true
+- type: textarea
+  id: problem-description
+  attributes:
+    label: Description
+    description: |
+      A clear and concise description of what the problem is. Ex. I'm always frustrated when [...].
+
+- type: textarea
+  id: description
+  attributes:
+    label: Describe the solution you'd like
+    placeholder: |
+      A clear and concise description of what you want to happen.
+  validations:
+    required: true
+
+- type: textarea
+  id: alternatives
+  attributes:
+    label: Describe alternatives you've considered
+    placeholder: |
+      A clear and concise description of any alternative solutions or features you've considered.
+  validations:
+    required: true
+
+- type: textarea
+  id: additional
+  attributes:
+    label: Additional context
+    description: Add any other context or screenshots about the feature request here.
