@@ -1,5 +1,7 @@
 name: "\U0001F5FA Request a new language"
 description: Your language isn't supported? Create a localization request here!
+title: "[LOCALIZATION]: "
+labels: localization
 body:
 - type: markdown
   attributes:
