@@ -256,10 +256,6 @@ else
 fi
 
 info "### Installing common software..."
-# Node.js v17.x is needed
-curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
-apt install -y nodejs
-
 for package in "${COMMON_PACKAGES[@]}"; do
     if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
         info "[Package]   ${package} installed already"
@@ -273,6 +269,10 @@ for package in "${COMMON_PACKAGES[@]}"; do
         apt install -y ${package}
     fi
 done
+
+# Node.js v17.x is needed
+curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+apt install -y nodejs
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
