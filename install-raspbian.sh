@@ -78,7 +78,6 @@ COMMON_PACKAGES=(
     'gphoto2'
     'jq'
     'libimage-exiftool-perl'
-    'nodejs'
     'npm'
     'php-gd'
     'php-zip'
@@ -257,6 +256,10 @@ else
 fi
 
 info "### Installing common software..."
+# Node.js v17.x is needed
+curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+apt install -y nodejs
+
 for package in "${COMMON_PACKAGES[@]}"; do
     if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
         info "[Package]   ${package} installed already"
