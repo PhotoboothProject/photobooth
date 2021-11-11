@@ -78,6 +78,7 @@ COMMON_PACKAGES=(
     'gphoto2'
     'jq'
     'libimage-exiftool-perl'
+    'nodejs'
     'npm'
     'php-gd'
     'php-zip'
@@ -269,10 +270,6 @@ for package in "${COMMON_PACKAGES[@]}"; do
         apt install -y ${package}
     fi
 done
-
-# Node.js v17.x is needed
-curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
-apt install -y nodejs
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
