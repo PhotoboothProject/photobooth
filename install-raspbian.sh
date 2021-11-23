@@ -334,7 +334,7 @@ then
 \$config = array (
   'take_picture' => 
   array (
-    'cmd' => 'raspistill -n -o %s -q 100 -t 1 | echo "Done"',
+    'cmd' => 'libcamera-still -n -o %s -q 100 -t 1 | echo "Done"',
     'msg' => 'Done',
   ),
 );
