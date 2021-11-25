@@ -313,8 +313,8 @@ cd $INSTALLFOLDERPATH
 
 info "### We are installing last development version for bullseye"
 VERSION="development"
-git fetch origin bullseye
-git checkout origin/bullseye
+git fetch origin dev
+git checkout origin/dev
 
 git submodule update --init
 
