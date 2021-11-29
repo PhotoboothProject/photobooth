@@ -17,6 +17,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
       - name: Install modules
         run: yarn install
       - name: Build
@@ -38,6 +41,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
       - name: Install modules
         run: yarn install
       - name: Build
