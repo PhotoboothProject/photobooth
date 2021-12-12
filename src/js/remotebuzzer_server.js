@@ -62,6 +62,11 @@ function photoboothAction(type) {
             ioServer.emit('photobooth-socket', 'start-collage');
             break;
 
+        case 'collage-next':
+            log('Photobooth COLLAGE : [ photobooth-socket ]  => [ All Clients ]: command [ collage-next ]');
+            ioServer.emit('photobooth-socket', 'collage-next');
+            break;
+
         case 'completed':
             triggerArmed = true;
             collageInProgress = false;
@@ -188,6 +193,11 @@ if (config.remotebuzzer.usegpio) {
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
 function buttonActiveCheck(gpio, value) {
+    /*
+     * value = 0 : button is pressed (connected to GND - pulled down)
+     * value = 1 : button is not pressed (pull-up)
+     */
+
     /* init */
     if (typeof buttonActiveCheck.buttonIsPressed == 'undefined') {
         buttonActiveCheck.buttonIsPressed = 0;
@@ -219,12 +229,13 @@ function buttonActiveCheck(gpio, value) {
 
     /* error state - do nothing */
     log(
-        'buttonActiveCheck error state - requested GPIO ',
+        'buttonActiveCheck WARNING - requested GPIO ',
         gpio,
         ', for value ',
         value,
         'but buttonIsPressed:',
-        buttonActiveCheck.buttonIsPressed
+        buttonActiveCheck.buttonIsPressed,
+        ' Please consider to add an external pull-up resistor to all your input GPIOs, this might help to eliminate this warning. Regardless of this warning, Photobooth should be fully functional.'
     );
 
     return true;
@@ -296,6 +307,10 @@ const watchPictureGPIOwithCollage = function watchPictureGPIOwithCollage(err, gp
             /* Start Picture */
             log('GPIO', config.remotebuzzer.picturegpio, '- Picture button released - normal -', timeElapsed, ' [ms] ');
             photoboothAction('picture');
+        } else if (collageInProgress) {
+            /* Next Collage Picture*/
+            log('GPIO', config.remotebuzzer.picturegpio, '- Picture button released - long -', timeElapsed, ' [ms] ');
+            photoboothAction('collage-next');
         } else {
             /* Start Collage */
             log('GPIO', config.remotebuzzer.picturegpio, '- Picture button released - long -', timeElapsed, ' [ms] ');
@@ -358,8 +373,11 @@ const watchCollageGPIO = function watchCollageGPIO(err, gpioValue) {
         if (timeElapsed) {
             log('GPIO', config.remotebuzzer.collagegpio, '- Collage button released ', timeElapsed, ' [ms] ');
 
-            /* Start Collage */
-            if (!collageInProgress) {
+            /* Collage Trigger Next */
+            if (collageInProgress) {
+                photoboothAction('collage-next');
+            } else {
+                /* Start Collage */
                 photoboothAction('collage');
             }
         } else {

@@ -470,6 +470,10 @@ const photoBooth = (function () {
 
                     $('.loaderImage').show();
 
+                    photoboothTools.console.logDev(
+                        'Taken collage photo number: ' + (result.current + 1) + ' / ' + result.limit
+                    );
+
                     if (config.collage.continuous) {
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
@@ -490,11 +494,9 @@ const photoBooth = (function () {
                         }
                     } else {
                         // collage with interruption
-                        remoteBuzzerClient.collageWaitForNext();
-
                         if (result.current + 1 < result.limit) {
                             $(
-                                '<a class="btn rotaryfocus" href="#">' +
+                                '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
                                     photoboothTools.getTranslation('nextPhoto') +
                                     '</a>'
                             )
@@ -502,14 +504,17 @@ const photoBooth = (function () {
                                 .click((ev) => {
                                     ev.stopPropagation();
                                     ev.preventDefault();
+
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
                                     $('.loaderImage').css('display', 'none');
                                     api.thrill('collage');
                                 });
+
+                            remoteBuzzerClient.collageWaitForNext();
                         } else {
                             $(
-                                '<a class="btn rotaryfocus" href="#">' +
+                                '<a class="btn rotaryfocus" href="#" id="btnCollageProcess">' +
                                     photoboothTools.getTranslation('processPhoto') +
                                     '</a>'
                             )
@@ -517,6 +522,7 @@ const photoBooth = (function () {
                                 .click((ev) => {
                                     ev.stopPropagation();
                                     ev.preventDefault();
+
                                     $('.loaderImage').css('background-image', 'none');
                                     imageUrl = '';
                                     $('.loaderImage').css('display', 'none');
@@ -525,7 +531,10 @@ const photoBooth = (function () {
 
                                     api.processPic(data.style, result);
                                 });
+
+                            remoteBuzzerClient.collageWaitForProcessing();
                         }
+
                         $(
                             '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
                                 photoboothTools.getTranslation('retakePhoto') +

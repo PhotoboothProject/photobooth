@@ -56,6 +56,15 @@ function initRemoteBuzzerFromDOM() {
                             buttonController.takeCollage();
                             break;
 
+                        case 'collage-next':
+                            // Need to handle collage process in button handler
+                            if (buttonController.waitingToProcessCollage) {
+                                buttonController.processCollage();
+                            } else {
+                                buttonController.takeCollageNext();
+                            }
+                            break;
+
                         case 'print':
                             buttonController.print();
                             break;
@@ -116,6 +125,14 @@ function initRemoteBuzzerFromDOM() {
             }
         };
 
+        api.collageWaitForProcessing = function () {
+            buttonController.waitingToProcessCollage = true;
+
+            if (this.enabled()) {
+                this.emitToServer('collage-wait-for-next');
+            }
+        };
+
         api.startPicture = function () {
             if (this.enabled()) {
                 this.emitToServer('start-picture');
@@ -159,6 +176,7 @@ function initRemoteBuzzerFromDOM() {
     buttonController = (function () {
         // vars
         const api = {};
+        api.waitingToProcessCollage = false;
 
         api.init = function () {
             // nothing to init
@@ -182,8 +200,18 @@ function initRemoteBuzzerFromDOM() {
         api.takeCollage = function () {
             if (this.enabled() && config.collage.enabled) {
                 $('.resultInner').removeClass('show');
+                this.waitingToProcessCollage = false;
                 photoBooth.thrill('collage');
             }
+        };
+
+        api.takeCollageNext = function () {
+            $('#btnCollageNext').trigger('click');
+        };
+
+        api.processCollage = function () {
+            this.waitingToProcessCollage = false;
+            $('#btnCollageProcess').trigger('click');
         };
 
         api.print = function () {
