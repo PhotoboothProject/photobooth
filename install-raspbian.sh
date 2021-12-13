@@ -220,12 +220,10 @@ EOF
 
 general_setup() {
     if [ "$SUBFOLDER" == true ]; then
-        info "### Ok, we will replace the html folder with the Photobooth."
         cd /var/www/
         INSTALLFOLDER="html"
         INSTALLFOLDERPATH="/var/www/html"
     else
-        info "### Ok, we will install Photobooth into /var/www/html/photobooth."
         cd /var/www/html/
         INSTALLFOLDER="photobooth"
         INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
@@ -426,7 +424,10 @@ echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
 ask_yes_no "          to /var/www/html-$DATE if exists! [y/N] " "Y"
 echo -e "\033[0m"
 if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
+    info "### We will install Photobooth into /var/www/html."     
     SUBFOLDER=false
+else
+    info "### We will install Photobooth into /var/www/html/photobooth."
 fi
 
 echo -e "\033[0;33m### You probably like to use a printer."
