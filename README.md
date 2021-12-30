@@ -115,6 +115,13 @@ before opening a new issue.
 
 Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).
 
+### :copyright: License
+
+Photobooth source is licensed under the MIT license.  
+  
+Once build, Photobooth incorporates several parts and optimizations that are covered by a different license which could apply to Photobooth as well.  
+All dependencies include their respective LICENSE files.
+
 ### :tada: Donation
 
 If you like my work and like to keep me motivated you can buy me a coconut water:
