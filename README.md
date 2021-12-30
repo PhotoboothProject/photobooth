@@ -1,8 +1,8 @@
 # Photobooth v3
 
-A Photobooth web interface for Raspberry Pi and Windows.
+A Photobooth web interface for Linux and Windows.
 
-Photobooth was initially developped by Andre Rinas, you can find his source [here](https://github.com/andreknieriem/photobooth).
+Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).
 
 **This is my personal Photobooth fork with a lot of extras and improvements.**  
 _(The full changelog can be found inside [the Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).)_
