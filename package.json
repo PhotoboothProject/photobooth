@@ -49,7 +49,7 @@
     "events"
   ],
   "dependencies": {
-    "@andreasremdt/simple-translator": "^2.0.3",
+    "@andreasremdt/simple-translator": "^2.0.4",
     "font-awesome": "^4.7.0",
     "gh-markdown-cli": "^0.2.0",
     "github-markdown-css": "^5.0.0",
