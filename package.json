@@ -52,7 +52,7 @@
     "@andreasremdt/simple-translator": "^2.0.4",
     "font-awesome": "^4.7.0",
     "gh-markdown-cli": "^0.2.0",
-    "github-markdown-css": "^5.0.0",
+    "github-markdown-css": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-sass": "^5.1.0",
     "jquery": "^3.6.0",
