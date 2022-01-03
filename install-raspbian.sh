@@ -220,13 +220,13 @@ EOF
 
 general_setup() {
     if [ "$SUBFOLDER" == true ]; then
-        cd /var/www/
-        INSTALLFOLDER="html"
-        INSTALLFOLDERPATH="/var/www/html"
-    else
         cd /var/www/html/
         INSTALLFOLDER="photobooth"
         INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
+    else
+        cd /var/www/
+        INSTALLFOLDER="html"
+        INSTALLFOLDERPATH="/var/www/html"
     fi
 
     if [ -d "$INSTALLFOLDERPATH" ]; then
