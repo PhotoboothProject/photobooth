@@ -2,8 +2,11 @@
   "name": "photobooth",
   "version": "3.0.0",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
+  "engines": {
+    "node": "12.22"
+  },
   "scripts": {
-    "build": "check-node-version --node '>= 12.22' && check-node-version --node '< 13' && npm-run-all --serial format build:faq build:gulp build:head clean:skipwelcome",
+    "build": "npm-run-all --serial format build:faq build:gulp build:head clean:skipwelcome",
     "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.php --footer faq/footer.html && mv manual/faq.html manual/faq.php",
     "build:gulp": "gulp",
     "build:head": "git log --format='%h %s' -n 20 > HEAD",
@@ -50,7 +53,6 @@
   ],
   "dependencies": {
     "@andreasremdt/simple-translator": "^2.0.4",
-    "check-node-version": "^4.2.1",
     "font-awesome": "^4.7.0",
     "gh-markdown-cli": "^0.2.0",
     "github-markdown-css": "^5.1.0",
