@@ -364,7 +364,7 @@ EOF
 
 kioskbooth_light() {
     info "### Installing needed dependencies..."
-    apt install -y --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox chromium-browser
+    apt install -y --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox chromium-browser libgtk-3-0
 
 cat >> /etc/xdg/openbox/autostart <<EOF
 # turn off display power management system
