@@ -219,7 +219,7 @@ EOF
 }
 
 general_setup() {
-    if [ "$SUBFOLDER" == true ]; then
+    if [ "$SUBFOLDER" = true ]; then
         cd /var/www/html/
         INSTALLFOLDER="photobooth"
         INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
@@ -402,7 +402,7 @@ cups_setup() {
     info "### Setting printer permissions."
     gpasswd -a www-data lp
     gpasswd -a www-data lpadmin
-    if [ "$CUPS_REMOTE_ANY" == true]; then
+    if [ "$CUPS_REMOTE_ANY" = true ]; then
         info "### Access to CUPS will be allowed from all devices in your network."
         cupsctl --remote-any
         /etc/init.d/cups restart
@@ -484,13 +484,13 @@ common_software
 general_setup
 start_install
 general_permissions
-if [ "$PI_CAMERA" == true]; then
+if [ "$PI_CAMERA" = true ]; then
     pi_camera
 fi
-if [ "$KIOSK_MODE" == true]; then
+if [ "$KIOSK_MODE" = true ]; then
     kioskbooth_desktop
 fi
-if [ "$SETUP_CUPS" == true]; then
+if [ "$SETUP_CUPS" = true ]; then
     cups_setup
 fi
 
