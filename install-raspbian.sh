@@ -80,7 +80,6 @@ COMMON_PACKAGES=(
     'jq'
     'libimage-exiftool-perl'
     'nodejs'
-    'npm'
     'php-gd'
     'php-zip'
     'yarn'
