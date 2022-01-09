@@ -195,13 +195,15 @@ const photoBooth = (function () {
         }
 
         if (config.preview.mode === 'gphoto') {
-            if (!config.preview.gphoto_bsm && mode === 'preview') {
-                api.startWebcam();
-                if (config.preview.asBackground) {
-                    api.getAndDisplayMedia('preview');
+            if (!config.preview.gphoto_bsm) {
+                if (mode === 'view') {
+                    api.getAndDisplayMedia('view');
+                } else {
+                    api.startWebcam();
+                    if (mode === 'preview' && config.preview.asBackground) {
+                        api.getAndDisplayMedia('preview');
+                    }
                 }
-            } else if (!config.preview.gphoto_bsm && mode === 'view') {
-                api.getAndDisplayMedia('view');
             } else {
                 api.startWebcam();
                 api.getAndDisplayMedia('view');
@@ -790,7 +792,7 @@ const photoBooth = (function () {
         photoboothTools.console.logDev('Taking photo: ' + takingPic);
 
         if (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm) {
-            api.startVideo('preview');
+            api.startVideo('init');
         }
     };
 
