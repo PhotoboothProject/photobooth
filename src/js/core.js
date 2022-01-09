@@ -400,7 +400,7 @@ const photoBooth = (function () {
         api.callTakePicApi(data);
     };
 
-    api.callTakePicApi = function (data) {
+    api.callTakePicApi = function (data, retry = 0) {
         startTime = new Date().getTime();
         jQuery
             .post('api/takePic.php', data)
@@ -548,7 +548,15 @@ const photoBooth = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                api.errorPic(result);
+                if (retry < 3) {
+                    retry += 1;
+                    photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
+                    setTimeout(function () {
+                        api.callTakePicApi(data, retry);
+                    }, retry * 250);
+                } else {
+                    api.errorPic(result);
+                }
             });
     };
 
