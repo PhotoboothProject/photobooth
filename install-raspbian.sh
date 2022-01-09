@@ -18,6 +18,12 @@ USB_SYNC=false
 SETUP_CUPS=false
 CUPS_REMOTE_ANY=false
 
+# Node.js v12.22.(4 or newer) is needed on installation via git
+NEEDS_NODEJS_CHECK=true
+NEEDED_NODE_VERSION="v12.22.(4 or newer)"
+NODEJS_NEEDS_UPDATE=false
+NODEJS_CHECKED=false
+
 if [ ! -z $1 ]; then
     WEBSERVER=$1
 else
@@ -118,6 +124,86 @@ echo "
 "
 }
 
+check_nodejs() {
+    NODE_VERSION=$(node -v || echo "0")
+    IFS=. VER=(${NODE_VERSION##*v})
+    major=${VER[0]}
+    minor=${VER[1]}
+    micro=${VER[2]}
+
+    if [[ -n "$major" && "$major" -eq "12" ]]; then
+        if [[ -n "$minor" && "$minor" -eq "22" ]]; then
+            if [[ -n "$micro" && "$micro" -ge "4" ]]; then
+                info "[Info]      Node.js matches our requirements!"
+            elif [[ -n "$micro" ]]; then
+                error "[WARN]      Node.js needs to be updated, micro version not matching our requirements!"
+                error "[WARN]      Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+                NODEJS_NEEDS_UPDATE=true
+                if [ "$NODEJS_CHECKED" = true ]; then
+                    error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
+                    exit 1
+                else
+                    update_nodejs
+                fi
+            else
+                error "[ERROR]     Unable to handle Node.js version string (micro)"
+                exit 1
+            fi
+        elif [[ -n "$minor" ]]; then
+            error "[WARN]      Node.js needs to be updated, minor version not matching our requirements!"
+            error "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+            NODEJS_NEEDS_UPDATE=true
+            if [ "$NODEJS_CHECKED" = true ]; then
+                error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
+                exit 1
+            else
+                update_nodejs
+            fi
+        else
+            error "[ERROR]     Unable to handle Node.js version string (minor)"
+            exit 1
+        fi
+    elif [[ -n "$major" ]]; then
+        error "[WARN]      Node.js needs to be updated, major version not matching our requirements!"
+        error "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+        if [ "$NODEJS_CHECKED" = true ]; then
+            error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
+            exit 1
+        else
+            update_nodejs
+        fi
+    else
+        error "[ERROR]     Unable to handle Node.js version string (major)"
+        exit 1
+    fi
+}
+
+update_nodejs() {
+    if [ $(dpkg-query -W -f='${Status}' "nodejs" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        info "[Cleanup]   Removing nodejs package"
+        apt purge -y ${package}
+    fi
+
+    if [ $(dpkg-query -W -f='${Status}' "nodejs-doc" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        info "[Cleanup]   Removing nodejs-doc package"
+        apt purge -y ${package}
+    fi
+
+    if [ "$RUNNING_ON_PI" = true ]; then
+        info "[Package]   Installing Node.js v12.22.8"
+        wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
+        node-install -v 12.22.8
+        NODEJS_CHECKED=true
+        check_nodejs
+    else
+        info "[Package]   Installing latest Node.js v12"
+        curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+        apt-get install -y nodejs
+        NODEJS_CHECKED=true
+        check_nodejs
+    fi
+}
+
 common_software() {
     info "### First we update your system. That's not worth mentioning."
     apt update
@@ -136,28 +222,20 @@ common_software() {
     for package in "${COMMON_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Package]   ${package} installed already"
-            if [[ ${package} == "nodejs" ]]; then
-                info "[Cleanup]   Removing ${package}, we'll update this package later"
-                node -v
-                apt purge -y ${package}
-            fi
         else
-            if [[ ${package} != "nodejs" ]]; then
-                info "[Package]   Installing missing common package: ${package}"
-                if [[ ${package} == "yarn" ]]; then
-                    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-                    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-                    apt update
-                fi
-                apt install -y ${package}
+            info "[Package]   Installing missing common package: ${package}"
+            if [[ ${package} == "yarn" ]]; then
+                curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+                echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+                apt update
             fi
+            apt install -y ${package}
         fi
     done
 
-    info "[Package]   Installing latest Node.js v12"
-    curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
-    apt-get install -y nodejs
-    node -v
+    if [ "$NEEDS_NODEJS_CHECK" = true ]; then
+        check_nodejs
+    fi
 }
 
 apache_webserver() {
