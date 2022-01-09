@@ -128,14 +128,67 @@ const photoBooth = (function () {
         }
     };
 
+    api.getAndDisplayMedia = function (mode, retry = 0) {
+        const getMedia =
+            navigator.mediaDevices.getUserMedia ||
+            navigator.mediaDevices.webkitGetUserMedia ||
+            navigator.mediaDevices.mozGetUserMedia ||
+            false;
+
+        if (!getMedia) {
+            return;
+        }
+
+        if (config.preview.flipHorizontal) {
+            idVideoView.addClass('flip-horizontal');
+            idVideoPreview.addClass('flip-horizontal');
+        }
+
+        getMedia
+            .call(navigator.mediaDevices, webcamConstraints)
+            .then(function (stream) {
+                if (mode === 'preview') {
+                    idVideoPreview.show();
+                    videoPreview.srcObject = stream;
+                    wrapper.css('background-image', 'none');
+                    wrapper.css('background-color', 'transparent');
+                } else {
+                    idVideoView.show();
+                    videoView.srcObject = stream;
+                }
+                api.stream = stream;
+            })
+            .catch(function (error) {
+                photoboothTools.console.log('Could not get user media: ', error);
+                if (config.preview.mode === 'gphoto' && retry < 3) {
+                    retry += 1;
+                    setTimeout(function () {
+                        api.getAndDisplayMedia('preview', retry);
+                    }, retry * 1000);
+                }
+            });
+    };
+
+    api.startWebcam = function () {
+        const dataVideo = {
+            play: 'true'
+        };
+
+        jQuery
+            .post('api/takeVideo.php', dataVideo)
+            .done(function (result) {
+                photoboothTools.console.log('Start webcam', result);
+                pid = result.pid;
+            })
+            .fail(function (xhr, status, result) {
+                photoboothTools.console.log('Could not start webcam', result);
+            });
+    };
+
     api.startVideo = function (mode) {
         if (config.preview.asBackground) {
             api.stopVideo('preview');
         }
-
-        const dataVideo = {
-            play: 'true'
-        };
 
         if (!navigator.mediaDevices) {
             return;
@@ -143,111 +196,18 @@ const photoBooth = (function () {
 
         if (config.preview.mode === 'gphoto') {
             if (!config.preview.gphoto_bsm && mode === 'preview') {
-                jQuery
-                    .post('api/takeVideo.php', dataVideo)
-                    .done(function (result) {
-                        photoboothTools.console.log('Start webcam', result);
-                        pid = result.pid;
-                    })
-                    .fail(function (xhr, status, result) {
-                        photoboothTools.console.log('Could not start webcam', result);
-                    });
+                api.startWebcam();
+                if (config.preview.asBackground) {
+                    api.getAndDisplayMedia('preview');
+                }
             } else if (!config.preview.gphoto_bsm && mode === 'view') {
-                const getMedia =
-                    navigator.mediaDevices.getUserMedia ||
-                    navigator.mediaDevices.webkitGetUserMedia ||
-                    navigator.mediaDevices.mozGetUserMedia ||
-                    false;
-
-                if (!getMedia) {
-                    return;
-                }
-
-                if (config.preview.flipHorizontal) {
-                    idVideoView.addClass('flip-horizontal');
-                    idVideoPreview.addClass('flip-horizontal');
-                }
-
-                getMedia
-                    .call(navigator.mediaDevices, webcamConstraints)
-                    .then(function (stream) {
-                        idVideoView.show();
-                        videoView.srcObject = stream;
-                        api.stream = stream;
-                    })
-                    .catch(function (error) {
-                        photoboothTools.console.log('Could not get user media: ', error);
-                    });
+                api.getAndDisplayMedia('view');
             } else {
-                jQuery
-                    .post('api/takeVideo.php', dataVideo)
-                    .done(function (result) {
-                        photoboothTools.console.log('Start webcam', result);
-                        pid = result.pid;
-                        const getMedia =
-                            navigator.mediaDevices.getUserMedia ||
-                            navigator.mediaDevices.webkitGetUserMedia ||
-                            navigator.mediaDevices.mozGetUserMedia ||
-                            false;
-
-                        if (!getMedia) {
-                            return;
-                        }
-
-                        if (config.preview.flipHorizontal) {
-                            idVideoView.addClass('flip-horizontal');
-                            idVideoPreview.addClass('flip-horizontal');
-                        }
-
-                        getMedia
-                            .call(navigator.mediaDevices, webcamConstraints)
-                            .then(function (stream) {
-                                idVideoView.show();
-                                videoView.srcObject = stream;
-                                api.stream = stream;
-                            })
-                            .catch(function (error) {
-                                photoboothTools.console.log('Could not get user media: ', error);
-                            });
-                    })
-                    .fail(function (xhr, status, result) {
-                        photoboothTools.console.log('Could not start webcam', result);
-                    });
+                api.startWebcam();
+                api.getAndDisplayMedia('view');
             }
         } else {
-            const getMedia =
-                navigator.mediaDevices.getUserMedia ||
-                navigator.mediaDevices.webkitGetUserMedia ||
-                navigator.mediaDevices.mozGetUserMedia ||
-                false;
-
-            if (!getMedia) {
-                return;
-            }
-
-            if (config.preview.flipHorizontal) {
-                idVideoView.addClass('flip-horizontal');
-                idVideoPreview.addClass('flip-horizontal');
-            }
-
-            getMedia
-                .call(navigator.mediaDevices, webcamConstraints)
-                .then(function (stream) {
-                    if (mode === 'preview') {
-                        idVideoPreview.show();
-                        videoPreview.srcObject = stream;
-                        api.stream = stream;
-                        wrapper.css('background-image', 'none');
-                        wrapper.css('background-color', 'transparent');
-                    } else {
-                        idVideoView.show();
-                        videoView.srcObject = stream;
-                    }
-                    api.stream = stream;
-                })
-                .catch(function (error) {
-                    photoboothTools.console.log('Could not get user media: ', error);
-                });
+            api.getAndDisplayMedia('preview');
         }
     };
 
