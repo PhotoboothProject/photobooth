@@ -7,7 +7,17 @@ const photoBooth = (function () {
         startPage = $('#start'),
         wrapper = $('#wrapper'),
         gallery = $('#gallery'),
+        cheese = $('.cheese'),
         resultPage = $('#result'),
+        mySideNav = $('#mySidenav'),
+        ipcamView = $('#ipcam--view'),
+        galimages = $('#galimages'),
+        printMesg = $('#print_mesg'),
+        loading = $('.loading'),
+        loaderImage = $('.loaderImage'),
+        triggerPic = $('.triggerPic'),
+        triggerCollage = $('.triggerCollage'),
+        printBtn = $('.printbtn'),
         webcamConstraints = {
             audio: false,
             video: {
@@ -62,7 +72,7 @@ const photoBooth = (function () {
         loader.removeClass('error');
         photoboothTools.modal.empty('#qrCode');
         $('.qrbtn').removeClass('active').attr('style', '');
-        $('.loading').text('');
+        loading.text('');
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
         $('.spinner').hide();
@@ -70,10 +80,10 @@ const photoBooth = (function () {
         $('#video--view').hide();
         $('#video--preview').hide();
         $('#video--sensor').hide();
-        $('#ipcam--view').hide();
+        ipcamView.hide();
         api.resetMailForm();
-        $('#loader').css('background', config.colors.background_countdown);
-        $('#loader').css('background-color', config.colors.background_countdown);
+        loader.css('background', config.colors.background_countdown);
+        loader.css('background-color', config.colors.background_countdown);
     };
 
     // init
@@ -93,18 +103,18 @@ const photoBooth = (function () {
     };
 
     api.openNav = function () {
-        $('#mySidenav').addClass('sidenav--open');
+        mySideNav.addClass('sidenav--open');
         rotaryController.focusSet('#mySidenav');
     };
 
     api.closeNav = function () {
-        $('#mySidenav').removeClass('sidenav--open');
+        mySideNav.removeClass('sidenav--open');
     };
 
     api.toggleNav = function () {
-        $('#mySidenav').toggleClass('sidenav--open');
+        mySideNav.toggleClass('sidenav--open');
 
-        if ($('#mySidenav').hasClass('sidenav--open')) {
+        if (mySideNav.hasClass('sidenav--open')) {
             rotaryController.focusSet('#mySidenav');
         }
     };
@@ -325,8 +335,8 @@ const photoBooth = (function () {
         if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
             api.startVideo('view');
         } else if (config.preview.mode === 'url') {
-            $('#ipcam--view').show();
-            $('#ipcam--view').addClass('streaming');
+            ipcamView.show();
+            ipcamView.addClass('streaming');
         }
 
         loader.addClass('open');
@@ -345,16 +355,16 @@ const photoBooth = (function () {
         photoboothTools.console.logDev('Photostyle: ' + photoStyle);
 
         $('#counter').empty();
-        $('.cheese').empty();
+        cheese.empty();
 
         if (config.picture.no_cheese) {
             photoboothTools.console.log('Cheese is disabled.');
         } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
             const cheesemsg = photoboothTools.getTranslation('cheese');
-            $('.cheese').text(cheesemsg);
+            cheese.text(cheesemsg);
         } else {
             const cheesemsg = photoboothTools.getTranslation('cheeseCollage');
-            $('.cheese').text(cheesemsg);
+            cheese.text(cheesemsg);
             $('<p>')
                 .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
                 .appendTo('.cheese');
@@ -400,8 +410,8 @@ const photoBooth = (function () {
                 api.stopVideo('view');
             }
         } else if (config.preview.mode === 'url') {
-            $('#ipcam--view').removeClass('streaming');
-            $('#ipcam--view').hide();
+            ipcamView.removeClass('streaming');
+            ipcamView.hide();
         }
 
         const data = {
@@ -433,7 +443,7 @@ const photoBooth = (function () {
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('took ' + data.style, result);
                 photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
-                $('.cheese').empty();
+                cheese.empty();
                 if (config.preview.flipHorizontal) {
                     $('#video--view').removeClass('flip-horizontal');
                     $('#video--preview').removeClass('flip-horizontal');
@@ -451,24 +461,24 @@ const photoBooth = (function () {
                     nextCollageNumber = result.current + 1;
 
                     $('.spinner').hide();
-                    $('.loading').empty();
+                    loading.empty();
                     $('#video--sensor').hide();
 
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now;
                     const waitmsg = photoboothTools.getTranslation('wait_message');
-                    $('.loading').append($('<p>').text(waitmsg));
+                    loading.append($('<p>').text(waitmsg));
                     preloadImage.onload = () => {
-                        $('.loaderImage').css({
+                        loaderImage.css({
                             'background-image': `url(${imageUrl}?filter=${imgFilter})`
                         });
-                        $('.loaderImage').attr('data-img', picdate);
+                        loaderImage.attr('data-img', picdate);
                     };
 
                     preloadImage.src = imageUrl;
 
-                    $('.loaderImage').show();
+                    loaderImage.show();
 
                     photoboothTools.console.logDev(
                         'Taken collage photo number: ' + (result.current + 1) + ' / ' + result.limit
@@ -477,18 +487,18 @@ const photoBooth = (function () {
                     if (config.collage.continuous) {
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
-                                $('.loaderImage').css('background-image', 'none');
+                                loaderImage.css('background-image', 'none');
                                 imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
+                                loaderImage.css('display', 'none');
                                 api.thrill('collage');
                             }, config.collage.continuous_time * 1000);
                         } else {
                             currentCollageFile = '';
                             nextCollageNumber = 0;
                             setTimeout(() => {
-                                $('.loaderImage').css('background-image', 'none');
+                                loaderImage.css('background-image', 'none');
                                 imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
+                                loaderImage.css('display', 'none');
                                 api.processPic(data.style, result);
                             }, config.collage.continuous_time * 1000);
                         }
@@ -505,9 +515,9 @@ const photoBooth = (function () {
                                     ev.stopPropagation();
                                     ev.preventDefault();
 
-                                    $('.loaderImage').css('background-image', 'none');
+                                    loaderImage.css('background-image', 'none');
                                     imageUrl = '';
-                                    $('.loaderImage').css('display', 'none');
+                                    loaderImage.css('display', 'none');
                                     api.thrill('collage');
                                 });
 
@@ -523,9 +533,9 @@ const photoBooth = (function () {
                                     ev.stopPropagation();
                                     ev.preventDefault();
 
-                                    $('.loaderImage').css('background-image', 'none');
+                                    loaderImage.css('background-image', 'none');
                                     imageUrl = '';
-                                    $('.loaderImage').css('display', 'none');
+                                    loaderImage.css('display', 'none');
                                     currentCollageFile = '';
                                     nextCollageNumber = 0;
 
@@ -544,16 +554,16 @@ const photoBooth = (function () {
                             .click((ev) => {
                                 ev.stopPropagation();
                                 ev.preventDefault();
-                                $('.loaderImage').css('background-image', 'none');
+                                loaderImage.css('background-image', 'none');
                                 imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
+                                loaderImage.css('display', 'none');
                                 api.deleteTmpImage(result.collage_file);
                                 nextCollageNumber = result.current;
                                 api.thrill('collage');
                             });
 
                         const abortmsg = photoboothTools.getTranslation('abort');
-                        $('.loading')
+                        loading
                             .append($('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(abortmsg))
                             .click(() => {
                                 location.assign('./');
@@ -580,28 +590,28 @@ const photoBooth = (function () {
     api.errorPic = function (data) {
         setTimeout(function () {
             $('.spinner').hide();
-            $('.loading').empty();
-            $('.cheese').empty();
+            loading.empty();
+            cheese.empty();
             $('#video--view').hide();
             $('#video--sensor').hide();
             loader.addClass('error');
             const errormsg = photoboothTools.getTranslation('error');
-            $('.loading').append($('<p>').text(errormsg));
+            loading.append($('<p>').text(errormsg));
             if (config.dev.error_messages) {
-                $('.loading').append($('<p class="text-muted">').text(data.error));
+                loading.append($('<p class="text-muted">').text(data.error));
             }
             takingPic = false;
             remoteBuzzerClient.inProgress(false);
             photoboothTools.console.logDev('Taking photo: ' + takingPic);
             if (config.dev.reload_on_error) {
                 const reloadmsg = photoboothTools.getTranslation('auto_reload');
-                $('.loading').append($('<p>').text(reloadmsg));
+                loading.append($('<p>').text(reloadmsg));
                 setTimeout(function () {
                     photoboothTools.reloadPage();
                 }, 5000);
             } else {
                 const reloadmsg = photoboothTools.getTranslation('reload');
-                $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
+                loading.append($('<a class="btn" href="./">').text(reloadmsg));
             }
         }, 500);
     };
@@ -611,7 +621,7 @@ const photoBooth = (function () {
         const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
 
         $('.spinner').show();
-        $('.loading').text(
+        loading.text(
             photoStyle === 'photo' || photoStyle === 'chroma'
                 ? photoboothTools.getTranslation('busy')
                 : photoboothTools.getTranslation('busyCollage')
@@ -620,8 +630,8 @@ const photoBooth = (function () {
         if (photoStyle === 'photo' && config.picture.preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
-                $('#loader').css('background-image', `url(${tempImageUrl})`);
-                $('#loader').addClass('showBackgroundImage');
+                loader.css('background-image', `url(${tempImageUrl})`);
+                loader.addClass('showBackgroundImage');
             };
             preloadImage.src = tempImageUrl;
         }
@@ -732,7 +742,7 @@ const photoBooth = (function () {
             e.stopPropagation();
 
             api.printImage(filename, () => {
-                $('.printbtn').blur();
+                printBtn.blur();
             });
         });
 
@@ -794,10 +804,10 @@ const photoBooth = (function () {
 
             loader.removeClass('open');
 
-            $('#loader').css('background-image', 'url()');
-            $('#loader').removeClass('showBackgroundImage');
+            loader.css('background-image', 'url()');
+            loader.removeClass('showBackgroundImage');
 
-            if (!$('#mySidenav').hasClass('sidenav--open')) {
+            if (!mySideNav.hasClass('sidenav--open')) {
                 rotaryController.focusSet('#result');
             }
         };
@@ -856,12 +866,12 @@ const photoBooth = (function () {
             linkElement.attr('data-med-size', thumbSize);
 
             if (config.gallery.newest_first) {
-                linkElement.prependTo($('#galimages'));
+                linkElement.prependTo(galimages);
             } else {
-                linkElement.appendTo($('#galimages'));
+                linkElement.appendTo(galimages);
             }
 
-            $('#galimages').children().not('a').remove();
+            galimages.children().not('a').remove();
         }
     };
 
@@ -890,7 +900,7 @@ const photoBooth = (function () {
 
         api.showResultInner(true);
 
-        if ($('#result').is(':visible')) {
+        if (resultPage.is(':visible')) {
             rotaryController.focusSet('#result');
         } else if ($('#start').is(':visible')) {
             rotaryController.focusSet('#start');
@@ -961,8 +971,8 @@ const photoBooth = (function () {
 
                         if (data.error) {
                             photoboothTools.console.log('An error occurred: ', data.error);
-                            $('#print_mesg').empty();
-                            $('#print_mesg').html(
+                            printMesg.empty();
+                            printMesg.html(
                                 '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
                             );
                         }
@@ -970,8 +980,8 @@ const photoBooth = (function () {
                         setTimeout(function () {
                             photoboothTools.modal.close('#print_mesg');
                             if (data.error) {
-                                $('#print_mesg').empty();
-                                $('#print_mesg').html(
+                                printMesg.empty();
+                                printMesg.html(
                                     '<div class="modal__body"><span>' +
                                         photoboothTools.getTranslation('printing') +
                                         '</span></div>'
@@ -984,15 +994,15 @@ const photoBooth = (function () {
                     },
                     error: (jqXHR, textStatus) => {
                         photoboothTools.console.log('An error occurred: ', textStatus);
-                        $('#print_mesg').empty();
-                        $('#print_mesg').html(
+                        printMesg.empty();
+                        printMesg.html(
                             '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
                         );
 
                         setTimeout(function () {
                             photoboothTools.modal.close('#print_mesg');
-                            $('#print_mesg').empty();
-                            $('#print_mesg').html(
+                            printMesg.empty();
+                            printMesg.html(
                                 '<div class="modal__body"><span>' +
                                     photoboothTools.getTranslation('printing') +
                                     '</span></div>'
@@ -1074,7 +1084,7 @@ const photoBooth = (function () {
         $(this).addClass('activeSidenavBtn');
 
         imgFilter = $(this).attr('id');
-        const result = {file: $('#result').attr('data-img')};
+        const result = {file: resultPage.attr('data-img')};
 
         photoboothTools.console.logDev('Applying filter', imgFilter, result);
 
@@ -1145,7 +1155,6 @@ const photoBooth = (function () {
         message.empty();
 
         const form = $(this);
-        const oldValue = form.find('.btn').html();
 
         form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
 
@@ -1178,9 +1187,6 @@ const photoBooth = (function () {
                 message
                     .fadeIn('fast')
                     .html('<span style="color: red;">' + photoboothTools.getTranslation('mailError') + '</span>');
-            },
-            complete: function () {
-                form.find('.btn').html(oldValue);
             }
         });
     });
@@ -1190,8 +1196,8 @@ const photoBooth = (function () {
         $('.send-mail').removeClass('mail-active').fadeOut('fast');
     });
 
-    $('#result').on('click', function () {
-        if (!$('#mySidenav').hasClass('sidenav--open')) {
+    resultPage.on('click', function () {
+        if (!mySideNav.hasClass('sidenav--open')) {
             rotaryController.focusSet('#result');
         }
     });
@@ -1235,7 +1241,7 @@ const photoBooth = (function () {
     });
 
     // Fake buttons
-    $('.triggerPic').on('click', function (e) {
+    triggerPic.on('click', function (e) {
         e.preventDefault();
 
         if (config.remotebuzzer.usehid) {
@@ -1247,7 +1253,7 @@ const photoBooth = (function () {
         $('.newpic').blur();
     });
 
-    $('.triggerCollage').on('click', function (e) {
+    triggerCollage.on('click', function (e) {
         e.preventDefault();
 
         if (config.remotebuzzer.usehid) {
@@ -1260,7 +1266,7 @@ const photoBooth = (function () {
     });
 
     $(document).on('keyup', function (ev) {
-        if ($('.triggerPic')[0] || $('.triggerCollage')[0]) {
+        if (triggerPic[0] || triggerCollage[0]) {
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (takingPic) {
                     photoboothTools.console.logDev('Taking photo already in progress!');
@@ -1270,9 +1276,9 @@ const photoBooth = (function () {
                         photoboothTools.console.logDev(
                             'Picture key pressed, but only collage allowed. Triggering collage now.'
                         );
-                        $('.triggerCollage').trigger('click');
+                        triggerCollage.trigger('click');
                     } else {
-                        $('.triggerPic').trigger('click');
+                        triggerPic.trigger('click');
                     }
                 }
             }
@@ -1283,12 +1289,12 @@ const photoBooth = (function () {
                 } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled) {
-                        $('.triggerCollage').trigger('click');
+                        triggerCollage.trigger('click');
                     } else {
                         photoboothTools.console.logDev(
                             'Collage key pressed. Please enable collage in your config. Triggering photo now.'
                         );
-                        $('.triggerPic').trigger('click');
+                        triggerPic.trigger('click');
                     }
                 }
             }
@@ -1297,8 +1303,8 @@ const photoBooth = (function () {
                 if (isPrinting) {
                     photoboothTools.console.log('Printing already in progress!');
                 } else {
-                    $('.printbtn').trigger('click');
-                    $('.printbtn').blur();
+                    printBtn.trigger('click');
+                    printBtn.blur();
                 }
             }
         }
