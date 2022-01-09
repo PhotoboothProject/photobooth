@@ -103,7 +103,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.preview.asBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
+        if (config.preview.asBackground || (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm)) {
             api.startVideo('preview');
         }
 
@@ -829,7 +829,7 @@ const photoBooth = (function () {
 
         photoboothTools.console.logDev('Taking photo: ' + takingPic);
 
-        if (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm) {
+        if (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm) {
             api.startVideo('preview');
         }
     };
@@ -845,14 +845,14 @@ const photoBooth = (function () {
 
         thumbImg.onload = function () {
             thumbSize = this.width + 'x' + this.height;
-            if (--imgtoLoad == 0) {
+            if (--imgtoLoad === 0) {
                 allLoaded();
             }
         };
 
         bigImg.onload = function () {
             bigSize = this.width + 'x' + this.height;
-            if (--imgtoLoad == 0) {
+            if (--imgtoLoad === 0) {
                 allLoaded();
             }
         };
@@ -924,7 +924,7 @@ const photoBooth = (function () {
 
         if (config.get_request.countdown) {
             const getMode =
-                start == config.picture.cntdwn_time ? config.get_request.picture : config.get_request.collage;
+                start === config.picture.cntdwn_time ? config.get_request.picture : config.get_request.collage;
             const getUrl = config.get_request.server + '/' + getMode;
             const request = new XMLHttpRequest();
             photoboothTools.console.log('Sending GET request to: ' + getUrl);
