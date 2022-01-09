@@ -374,41 +374,6 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 EOF
 }
 
-kioskbooth_light() {
-    info "### Installing needed dependencies..."
-    apt install -y --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox chromium-browser libgtk-3-0
-
-cat >> /etc/xdg/openbox/autostart <<EOF
-# turn off display power management system
-xset -dpms
-# turn off screen blanking
-xset s noblank
-# turn off screen saver
-xset s off
-
-# Allow quitting the X server with CTRL-ATL-Backspace
-setxkbmap -option terminate:ctrl_alt_bksp
-
-# Remove exit errors from the config files that could trigger a warning
-sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
-sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
-
-# Run Chromium in kiosk mode
-chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
-EOF
-
-cat >> /etc/X11/Xwrapper.config <<EOF
-allowed_users=anybody
-EOF
-
-cat >> /home/pi/.bash_profile <<EOF
-[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && startx -- -nocursor
-EOF
-
-chmod u+s /usr/bin/Xorg
-usermod -a -G tty pi
-}
-
 cups_setup() {
     info "### Setting printer permissions."
     gpasswd -a www-data lp
