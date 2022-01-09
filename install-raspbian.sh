@@ -11,6 +11,8 @@ SILENT_INSTALL=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
 
+BRANCH="dev"
+GIT_INSTALL=true
 SUBFOLDER=true
 PI_CAMERA=false
 KIOSK_MODE=false
@@ -81,14 +83,11 @@ fi
 
 COMMON_PACKAGES=(
     'curl'
-    'git'
     'gphoto2'
-    'jq'
     'libimage-exiftool-perl'
     'nodejs'
     'php-gd'
     'php-zip'
-    'yarn'
     'rsync'
     'udisks2'
 )
@@ -336,19 +335,29 @@ general_setup() {
 
 start_install() {
     info "### Now we are going to install Photobooth."
-    git clone https://github.com/andi34/photobooth $INSTALLFOLDER
-    cd $INSTALLFOLDERPATH
+    if [ $GIT_INSTALL = true ]; then
+        git clone https://github.com/andi34/photobooth $INSTALLFOLDER
+        cd $INSTALLFOLDERPATH
 
-    info "### We are installing last development version for bullseye"
-    VERSION="development"
-    git fetch origin dev
-    git checkout origin/dev
+        info "### We are installing last development version via git."
+        git fetch origin $BRANCH
+        git checkout origin/$BRANCH
 
-    git submodule update --init
+        git submodule update --init
 
-    info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
-    yarn install
-    yarn build
+        info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
+        yarn install
+        yarn build
+    else
+        info "### We are downloading the latest release and extracting it to $INSTALLFOLDERPATH."
+        curl -s https://api.github.com/repos/andi34/photobooth/releases/latest |
+            jq '.assets[].browser_download_url | select(endswith(".tar.gz"))' |
+            xargs curl -L --output /tmp/photobooth-latest.tar.gz
+
+        mkdir -p $INSTALLFOLDERPATH
+        tar -xzvf /tmp/photobooth-latest.tar.gz -C $INSTALLFOLDERPATH
+        cd $INSTALLFOLDERPATH
+    fi
 }
 
 pi_camera() {
@@ -472,6 +481,30 @@ cups_setup() {
 print_logo
 
 info "### The Photobooth installer for your Raspberry Pi."
+
+echo -e "\033[0;33m### Please select a version to install:"
+echo -e "    1 Install last development version (git)"
+echo -e "    2 Install latest stable Release (package)"
+ask_yes_no "Please enter your choice" "1"
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[1]$ ]]; then
+    info "### We are installing last development version via git"
+    BRANCH="dev"
+    GIT_INSTALL=true
+    COMMON_PACKAGES+=(
+        'git'
+        'yarn'
+    )
+else
+    if [[ ! $REPLY =~ ^[2]$ ]]; then
+        info "### Invalid choice!"
+    fi
+    info "### We are installing latest stable Release from package"
+    BRANCH="stable3"
+    GIT_INSTALL=false
+    NEEDS_NODEJS_CHECK=false
+    COMMON_PACKAGES+=('jq')
+fi
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
