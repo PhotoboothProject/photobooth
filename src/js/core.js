@@ -18,6 +18,15 @@ const photoBooth = (function () {
         triggerPic = $('.triggerPic'),
         triggerCollage = $('.triggerCollage'),
         printBtn = $('.printbtn'),
+        deleteBtn = $('.deletebtn'),
+        qrCodeModal = $('#qrCode'),
+        counter = $('#counter'),
+        resultInner = $('.resultInner'),
+        spinner = $('.spinner'),
+        sendMail = $('.send-mail'),
+        idVideoView = $('#video--view'),
+        idVideoPreview = $('#video--preview'),
+        idVideoSensor = $('#video--sensor'),
         webcamConstraints = {
             audio: false,
             video: {
@@ -75,11 +84,11 @@ const photoBooth = (function () {
         loading.text('');
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
-        $('.spinner').hide();
-        $('.send-mail').hide();
-        $('#video--view').hide();
-        $('#video--preview').hide();
-        $('#video--sensor').hide();
+        spinner.hide();
+        sendMail.hide();
+        idVideoView.hide();
+        idVideoPreview.hide();
+        idVideoSensor.hide();
         ipcamView.hide();
         api.resetMailForm();
         loader.css('background', config.colors.background_countdown);
@@ -155,14 +164,14 @@ const photoBooth = (function () {
                 }
 
                 if (config.preview.flipHorizontal) {
-                    $('#video--view').addClass('flip-horizontal');
-                    $('#video--preview').addClass('flip-horizontal');
+                    idVideoView.addClass('flip-horizontal');
+                    idVideoPreview.addClass('flip-horizontal');
                 }
 
                 getMedia
                     .call(navigator.mediaDevices, webcamConstraints)
                     .then(function (stream) {
-                        $('#video--view').show();
+                        idVideoView.show();
                         videoView.srcObject = stream;
                         api.stream = stream;
                     })
@@ -186,14 +195,14 @@ const photoBooth = (function () {
                         }
 
                         if (config.preview.flipHorizontal) {
-                            $('#video--view').addClass('flip-horizontal');
-                            $('#video--preview').addClass('flip-horizontal');
+                            idVideoView.addClass('flip-horizontal');
+                            idVideoPreview.addClass('flip-horizontal');
                         }
 
                         getMedia
                             .call(navigator.mediaDevices, webcamConstraints)
                             .then(function (stream) {
-                                $('#video--view').show();
+                                idVideoView.show();
                                 videoView.srcObject = stream;
                                 api.stream = stream;
                             })
@@ -217,21 +226,21 @@ const photoBooth = (function () {
             }
 
             if (config.preview.flipHorizontal) {
-                $('#video--view').addClass('flip-horizontal');
-                $('#video--preview').addClass('flip-horizontal');
+                idVideoView.addClass('flip-horizontal');
+                idVideoPreview.addClass('flip-horizontal');
             }
 
             getMedia
                 .call(navigator.mediaDevices, webcamConstraints)
                 .then(function (stream) {
                     if (mode === 'preview') {
-                        $('#video--preview').show();
+                        idVideoPreview.show();
                         videoPreview.srcObject = stream;
                         api.stream = stream;
                         wrapper.css('background-image', 'none');
                         wrapper.css('background-color', 'transparent');
                     } else {
-                        $('#video--view').show();
+                        idVideoView.show();
                         videoView.srcObject = stream;
                     }
                     api.stream = stream;
@@ -247,9 +256,9 @@ const photoBooth = (function () {
             const track = api.stream.getTracks()[0];
             track.stop();
             if (mode === 'preview') {
-                $('#video--preview').hide();
+                idVideoPreview.hide();
             } else {
-                $('#video--view').hide();
+                idVideoView.hide();
             }
         }
     };
@@ -267,7 +276,7 @@ const photoBooth = (function () {
                     photoboothTools.console.log('Stop webcam', result);
                     const track = api.stream.getTracks()[0];
                     track.stop();
-                    $('#video--view').hide();
+                    idVideoView.hide();
                 })
                 .fail(function (xhr, status, result) {
                     photoboothTools.console.log('Could not stop webcam', result);
@@ -277,9 +286,9 @@ const photoBooth = (function () {
 
     api.showResultInner = function (flag) {
         if (flag) {
-            $('.resultInner').addClass('show');
+            resultInner.addClass('show');
         } else {
-            $('.resultInner').removeClass('show');
+            resultInner.removeClass('show');
         }
     };
 
@@ -341,20 +350,16 @@ const photoBooth = (function () {
 
         loader.addClass('open');
 
-        api.startCountdown(
-            nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time,
-            $('#counter'),
-            () => {
-                api.cheese(photoStyle);
-            }
-        );
+        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
+            api.cheese(photoStyle);
+        });
     };
 
     // Cheese
     api.cheese = function (photoStyle) {
         photoboothTools.console.logDev('Photostyle: ' + photoStyle);
 
-        $('#counter').empty();
+        counter.empty();
         cheese.empty();
 
         if (config.picture.no_cheese) {
@@ -445,8 +450,8 @@ const photoBooth = (function () {
                 photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
                 cheese.empty();
                 if (config.preview.flipHorizontal) {
-                    $('#video--view').removeClass('flip-horizontal');
-                    $('#video--preview').removeClass('flip-horizontal');
+                    idVideoView.removeClass('flip-horizontal');
+                    idVideoPreview.removeClass('flip-horizontal');
                 }
 
                 // reset filter (selection) after picture was taken
@@ -460,9 +465,9 @@ const photoBooth = (function () {
                     currentCollageFile = result.file;
                     nextCollageNumber = result.current + 1;
 
-                    $('.spinner').hide();
+                    spinner.hide();
                     loading.empty();
-                    $('#video--sensor').hide();
+                    idVideoSensor.hide();
 
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
@@ -589,11 +594,11 @@ const photoBooth = (function () {
     // Show error Msg and reset
     api.errorPic = function (data) {
         setTimeout(function () {
-            $('.spinner').hide();
+            spinner.hide();
             loading.empty();
             cheese.empty();
-            $('#video--view').hide();
-            $('#video--sensor').hide();
+            idVideoView.hide();
+            idVideoSensor.hide();
             loader.addClass('error');
             const errormsg = photoboothTools.getTranslation('error');
             loading.append($('<p>').text(errormsg));
@@ -620,7 +625,7 @@ const photoBooth = (function () {
         startTime = new Date().getTime();
         const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
 
-        $('.spinner').show();
+        spinner.show();
         loading.text(
             photoStyle === 'photo' || photoStyle === 'chroma'
                 ? photoboothTools.getTranslation('busy')
@@ -713,7 +718,6 @@ const photoBooth = (function () {
         const qrHelpText = config.qr.custom_text
             ? config.qr.text
             : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
-        const qrCodeModal = $('#qrCode');
         photoboothTools.modal.empty(qrCodeModal);
         const body = qrCodeModal.find('.modal__body');
         $('<button>')
@@ -780,7 +784,7 @@ const photoBooth = (function () {
                         });
                     });
                 } else {
-                    $('.deletebtn').blur();
+                    deleteBtn.blur();
                 }
                 photoboothTools.reloadPage();
             });
@@ -902,7 +906,7 @@ const photoBooth = (function () {
 
         if (resultPage.is(':visible')) {
             rotaryController.focusSet('#result');
-        } else if ($('#start').is(':visible')) {
+        } else if (startPage.is(':visible')) {
             rotaryController.focusSet('#start');
         }
     };
