@@ -401,6 +401,7 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = function (data, retry = 0) {
+        const retrymsg = photoboothTools.getTranslation('retry_message');
         startTime = new Date().getTime();
         jQuery
             .post('api/takePic.php', data)
@@ -421,7 +422,41 @@ const photoBooth = (function () {
                 $('#' + imgFilter).addClass('activeSidenavBtn');
 
                 if (result.error) {
-                    api.errorPic(result);
+                    if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
+                        photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
+                        retry += 1;
+                        loading.append(
+                            $('<p class="text-muted">').text(
+                                retrymsg + ' ' + retry + '/' + config.picture.retry_on_error
+                            )
+                        );
+                        api.startCountdown(config.picture.retry_timeout, counter, () => {
+                            loading.empty();
+                            counter.empty();
+                            cheese.empty();
+
+                            if (config.picture.no_cheese) {
+                                photoboothTools.console.log('Cheese is disabled.');
+                                api.callTakePicApi(data, retry);
+                            } else {
+                                if (data.style === 'photo' || data.style === 'chroma') {
+                                    const cheesemsg = photoboothTools.getTranslation('cheese');
+                                    cheese.text(cheesemsg);
+                                } else {
+                                    const cheesemsg = photoboothTools.getTranslation('cheeseCollage');
+                                    cheese.text(cheesemsg);
+                                    $('<p>')
+                                        .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
+                                        .appendTo('.cheese');
+                                }
+                                setTimeout(() => {
+                                    api.callTakePicApi(data, retry);
+                                }, config.picture.cheese_time);
+                            }
+                        });
+                    } else {
+                        api.errorPic(result);
+                    }
                 } else if (result.success === 'collage') {
                     currentCollageFile = result.file;
                     nextCollageNumber = result.current + 1;
