@@ -159,12 +159,7 @@ if (!isset($config['background']['chroma'])) {
 }
 
 if (!isset($config['webserver']['ip'])) {
-    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-        $protocol = 'https://';
-    } else {
-        $protocol = 'http://';
-    }
-    $config['webserver']['ip'] = str_replace($protocol, '', getPhotoboothUrl());
+    $config['webserver']['ip'] = getPhotoboothIp();
 }
 
 if (!isset($config['qr']['url'])) {
