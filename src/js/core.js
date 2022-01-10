@@ -195,18 +195,16 @@ const photoBooth = (function () {
         }
 
         if (config.preview.mode === 'gphoto') {
-            if (!config.preview.gphoto_bsm) {
-                if (mode === 'view') {
-                    api.getAndDisplayMedia('view');
-                } else {
-                    api.startWebcam();
-                    if (mode === 'preview' && config.preview.asBackground) {
-                        api.getAndDisplayMedia('preview');
-                    }
-                }
-            } else {
+            if (config.preview.gphoto_bsm) {
                 api.startWebcam();
                 api.getAndDisplayMedia('view');
+            } else if (mode === 'view') {
+                api.getAndDisplayMedia('view');
+            } else {
+                api.startWebcam();
+                if (mode === 'preview' && config.preview.asBackground) {
+                    api.getAndDisplayMedia('preview');
+                }
             }
         } else {
             api.getAndDisplayMedia('preview');
