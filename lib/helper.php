@@ -8,6 +8,33 @@ function getrootpath($relative_path) {
     return $rootpath;
 }
 
+function getPhotoboothIp() {
+    $os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
+    if ($os == 'linux') {
+        $get_ip = shell_exec('hostname -I | cut -d " " -f 1');
+
+        if (!$get_ip) {
+            $ip = $_SERVER['HTTP_HOST'];
+        } else {
+            $ip = $get_ip;
+        }
+    } else {
+        $ip = $_SERVER['HTTP_HOST'];
+    }
+
+    return $ip;
+}
+
+function getPhotoboothFolder() {
+    $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+    if ($path == $_SERVER['DOCUMENT_ROOT']) {
+        return false;
+    } else {
+        $folder = str_replace($_SERVER['DOCUMENT_ROOT'], '', $path);
+        return $folder;
+    }
+}
+
 function getPhotoboothUrl() {
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
         $protocol = 'https';
@@ -25,23 +52,6 @@ function getPhotoboothUrl() {
     }
 
     return $url;
-}
-
-function getPhotoboothIp() {
-    $os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
-    if ($os == 'linux') {
-        $get_ip = shell_exec('hostname -I | cut -d " " -f 1');
-
-        if (!$get_ip) {
-            $ip = $_SERVER['HTTP_HOST'];
-        } else {
-            $ip = $get_ip;
-        }
-    } else {
-        $ip = $_SERVER['HTTP_HOST'];
-    }
-
-    return $ip;
 }
 
 function testFile($file) {
