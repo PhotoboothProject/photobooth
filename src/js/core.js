@@ -161,6 +161,7 @@ const photoBooth = (function () {
             .catch(function (error) {
                 photoboothTools.console.log('Could not get user media: ', error);
                 if (config.preview.mode === 'gphoto' && retry < 3) {
+                    photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
                     retry += 1;
                     setTimeout(function () {
                         api.getAndDisplayMedia('preview', retry);
