@@ -312,6 +312,9 @@ const photoBooth = (function () {
         loader.addClass('open');
 
         api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
+            if (config.get_request.countdown) {
+                api.getRequest(photoStyle);
+            }
             api.cheese(photoStyle);
         });
     };
@@ -920,21 +923,22 @@ const photoBooth = (function () {
         $('#mail-form-message').html('');
     };
 
+    // GET Request
+    api.getRequest = function (photoStyle) {
+        const getMode =
+            photoStyle === 'photo' || photoStyle === 'chroma' ? config.get_request.picture : config.get_request.collage;
+        const getUrl = config.get_request.server + '/' + getMode;
+        const request = new XMLHttpRequest();
+        photoboothTools.console.log('Sending GET request to: ' + getUrl);
+        request.open('GET', getUrl);
+        request.send();
+    };
+
     // Countdown Function
     api.startCountdown = function (start, element, cb) {
         let count = 0;
         let current = start;
         const stop = start > 2 ? start - 2 : start;
-
-        if (config.get_request.countdown) {
-            const getMode =
-                start === config.picture.cntdwn_time ? config.get_request.picture : config.get_request.collage;
-            const getUrl = config.get_request.server + '/' + getMode;
-            const request = new XMLHttpRequest();
-            photoboothTools.console.log('Sending GET request to: ' + getUrl);
-            request.open('GET', getUrl);
-            request.send();
-        }
 
         function timerFunction() {
             element.text(Number(current) + Number(config.picture.cntdwn_offset));
