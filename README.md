@@ -1,5 +1,13 @@
 # Photobooth v3
 
+## python-gphoto2 information
+python script for using python-gphoto2 for dslr preview and image taking.
+First version. For trying this out you might need to copy your gphoto2 settings to user www-data with `sudo cp ~/.gphoto/settings /var/www/.gphoto/settings` (especially for Canon cameras which like to save photos only in memory)
+Commands need to be adjusted:
+preview: python3 /var/www/html/cameracontrol.py
+take image: python3 /var/www/html/cameracontrol.py capture %s
+no command required to end preview as the preview script starts a server to listen for commands and takes care of capturing the picture, as well. Take image basically only sends a tcp message and waits for a response.
+
 A Photobooth web interface for Linux and Windows.
 
 Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).
