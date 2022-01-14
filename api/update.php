@@ -3,11 +3,13 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 
-$ghscript = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/check-github.sh';
-$commitscript = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/commit.sh';
-$upddev = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/update-dev.sh';
-$updstable = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/update-stable.sh';
-$checkdeps = __DIR__ . DIRECTORY_SEPARATOR . '../resources/sh/check-dependencies.sh';
+$path = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+
+$ghscript = $path . DIRECTORY_SEPARATOR . 'resources/sh/check-github.sh';
+$commitscript = $path . DIRECTORY_SEPARATOR . 'resources/sh/commit.sh';
+$upddev = $path . DIRECTORY_SEPARATOR . 'resources/sh/update-dev.sh';
+$updstable = $path . DIRECTORY_SEPARATOR . 'resources/sh/update-stable.sh';
+$checkdeps = $path . DIRECTORY_SEPARATOR . 'resources/sh/check-dependencies.sh';
 
 $mode = $_POST['mode'];
 
