@@ -570,10 +570,10 @@ fi
 common_software
 general_setup
 start_install
-general_permissions
 if [ "$PI_CAMERA" = true ]; then
     pi_camera
 fi
+general_permissions
 if [ "$KIOSK_MODE" = true ]; then
     kioskbooth_desktop
 fi
