@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Stop on the first sign of trouble
-set -e
+# set -e
 
 date=$(date +"%Y%m%d-%H-%M")
 get_username="$(git config user.name)"
@@ -14,6 +14,7 @@ then
 	echo "git user.name not set!"
 	echo "Setting git user.name."
 	$set_username
+	get_username="$(git config user.name)"
 fi
 
 if [ -z "$get_useremail" ];
@@ -21,8 +22,8 @@ then
 	echo "git user.email not set!"
 	echo "Setting git user.email."
 	$set_useremail
+	get_useremail="$(git config user.email)"
 fi
-
 
 echo "git user.name: $get_username"
 echo "git user.email: $get_useremail"
