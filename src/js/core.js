@@ -35,8 +35,8 @@ const photoBooth = (function () {
                 facingMode: config.preview.camera_mode
             }
         },
-        videoView = $('#video--view').get(0),
-        videoPreview = $('#video--preview').get(0),
+        videoView = idVideoView.get(0),
+        videoPreview = idVideoPreview.get(0),
         videoSensor = document.querySelector('#video--sensor');
 
     let timeOut,
