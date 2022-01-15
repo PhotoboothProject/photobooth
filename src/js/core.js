@@ -215,18 +215,25 @@ const photoBooth = (function () {
             return;
         }
 
-        if (mode === CameraDisplayMode.INIT) {
-            api.startWebcam();
-        } else if (mode === CameraDisplayMode.BACKGROUND) {
-            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm) {
+        switch (mode) {
+            case CameraDisplayMode.INIT:
                 api.startWebcam();
-            }
-            api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
-        } else if (mode === CameraDisplayMode.COUNTDOWN) {
-            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && config.preview.gphoto_bsm) {
-                api.startWebcam();
-            }
-            api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
+                break;
+            case CameraDisplayMode.BACKGROUND:
+                if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm) {
+                    api.startWebcam();
+                }
+                api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
+                break;
+            case CameraDisplayMode.COUNTDOWN:
+                if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && config.preview.gphoto_bsm) {
+                    api.startWebcam();
+                }
+                api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
+                break;
+            default:
+                photoboothTools.console.log('Call for unexpected video mode');
+                break;
         }
     };
 
