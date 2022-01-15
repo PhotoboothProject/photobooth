@@ -1233,10 +1233,10 @@ const photoBooth = (function () {
     // Go Fullscreen
     $('#fs-button').on('click', function (e) {
         e.preventDefault();
-        if (!document.fullscreenElement) {
-            document.body.requestFullscreen();
-        } else if (document.fullscreenElement) {
+        if (document.fullscreenElement) {
             document.exitFullscreen();
+        } else {
+            document.body.requestFullscreen();
         }
         $('#fs-button').blur();
     });
