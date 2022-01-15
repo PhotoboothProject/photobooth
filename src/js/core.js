@@ -1,7 +1,6 @@
 /* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools */
 
 const photoBooth = (function () {
-    // vars
     const api = {},
         loader = $('#loader'),
         startPage = $('#start'),
@@ -39,7 +38,6 @@ const photoBooth = (function () {
         videoPreview = idVideoPreview.get(0),
         videoSensor = document.querySelector('#video--sensor');
 
-    // enums
     const PhotoStyle = {
             PHOTO: 'photo',
             COLLAGE: 'collage',
@@ -69,12 +67,10 @@ const photoBooth = (function () {
         endTime,
         totalTime;
 
-    // Returns true when timeOut is pending
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
     };
 
-    // timeOut function
     api.resetTimeOut = function () {
         clearTimeout(timeOut);
 
@@ -92,7 +88,6 @@ const photoBooth = (function () {
         }
     };
 
-    // reset whole thing
     api.reset = function () {
         loader.removeClass('open');
         loader.removeClass('error');
@@ -112,7 +107,6 @@ const photoBooth = (function () {
         loader.css('background-color', config.colors.background_countdown);
     };
 
-    // init
     api.init = function () {
         api.reset();
 
@@ -347,7 +341,6 @@ const photoBooth = (function () {
         });
     };
 
-    // Cheese
     api.cheese = function (photoStyle, retry = 0) {
         photoboothTools.console.logDev('Photostyle: ' + photoStyle);
 
@@ -393,7 +386,6 @@ const photoBooth = (function () {
         }
     };
 
-    // take Picture
     api.takePic = function (photoStyle) {
         photoboothTools.console.log('Take Picture:', photoStyle);
 
@@ -452,7 +444,6 @@ const photoBooth = (function () {
                     idVideoPreview.removeClass('flip-horizontal');
                 }
 
-                // reset filter (selection) after picture was taken
                 imgFilter = config.filters.defaults;
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
                 $('#' + imgFilter).addClass('activeSidenavBtn');
@@ -620,7 +611,6 @@ const photoBooth = (function () {
             });
     };
 
-    // Show error Msg and reset
     api.errorPic = function (data) {
         setTimeout(function () {
             spinner.hide();
@@ -711,10 +701,8 @@ const photoBooth = (function () {
         });
     };
 
-    // Render Chromaimage after taking
     api.renderChroma = function (filename) {
         if (config.live_keying.show_all) {
-            // Add Image to gallery and slider
             api.addImage(filename);
         }
         const imageUrl = config.live_keying.show_all
@@ -741,9 +729,7 @@ const photoBooth = (function () {
         photoboothTools.console.logDev('Taking photo: ' + takingPic);
     };
 
-    // Render Picture after taking
     api.renderPic = function (filename, files) {
-        // Add QR Code Image
         const qrHelpText = config.qr.custom_text
             ? config.qr.text
             : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
@@ -768,7 +754,6 @@ const photoBooth = (function () {
             })
             .appendTo(body);
 
-        // Add Print Link
         $(document).off('click touchstart', '.printbtn');
         $(document).on('click', '.printbtn', function (e) {
             e.preventDefault();
@@ -779,7 +764,6 @@ const photoBooth = (function () {
             });
         });
 
-        // If autoprint is activated the picture will immediately printed after taken.
         if (config.print.auto) {
             setTimeout(function () {
                 api.printImage(filename);
@@ -818,7 +802,6 @@ const photoBooth = (function () {
                 photoboothTools.reloadPage();
             });
 
-        // Add Image to gallery and slider
         api.addImage(filename);
 
         const imageUrl = config.foldersRoot.images + '/' + filename;
@@ -863,7 +846,6 @@ const photoBooth = (function () {
         }
     };
 
-    // add image to Gallery
     api.addImage = function (imageName) {
         const thumbImg = new Image();
         const bigImg = new Image();
@@ -908,7 +890,6 @@ const photoBooth = (function () {
         }
     };
 
-    // Open Gallery Overview
     api.openGallery = function () {
         if (config.gallery.scrollbar) {
             gallery.addClass('scrollbar');
@@ -922,7 +903,6 @@ const photoBooth = (function () {
         }, 300);
     };
 
-    // close Gallery Overview and Slideshow if visible
     api.closeGallery = function () {
         if (typeof globalGalleryHandle !== 'undefined') {
             globalGalleryHandle.close();
@@ -945,7 +925,6 @@ const photoBooth = (function () {
         $('#mail-form-message').html('');
     };
 
-    // GET Request
     api.getRequest = function (photoStyle) {
         const getMode =
             photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
@@ -958,7 +937,6 @@ const photoBooth = (function () {
         request.send();
     };
 
-    // Countdown Function
     api.startCountdown = function (start, element, cb) {
         let count = 0;
         let current = start;
@@ -1110,7 +1088,6 @@ const photoBooth = (function () {
         }
     };
 
-    //Filter
     $('.imageFilter').on('click', function (e) {
         e.preventDefault();
         api.toggleNav();
@@ -1130,7 +1107,6 @@ const photoBooth = (function () {
         rotaryController.focusSet('#mySidenav');
     });
 
-    // Take Picture Button
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
         if (config.remotebuzzer.usesoftbtn) {
@@ -1141,7 +1117,6 @@ const photoBooth = (function () {
         $('.newpic').blur();
     });
 
-    // Take Collage Button
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
 
@@ -1161,7 +1136,6 @@ const photoBooth = (function () {
         rotaryController.focusSet('#result');
     });
 
-    // Open Gallery Button
     $('.gallery-button').on('click', function (e) {
         e.preventDefault();
 
@@ -1169,7 +1143,6 @@ const photoBooth = (function () {
         api.openGallery($(this));
     });
 
-    // Close Gallery Overview
     $('.gallery__close').on('click', function (e) {
         e.preventDefault();
 
@@ -1239,7 +1212,6 @@ const photoBooth = (function () {
         }
     });
 
-    // Show QR Code
     $('.qrbtn').on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -1266,7 +1238,6 @@ const photoBooth = (function () {
         window.open(url, 'newwin', features);
     });
 
-    // Go Fullscreen
     $('#fs-button').on('click', function (e) {
         e.preventDefault();
         if (document.fullscreenElement) {
@@ -1347,7 +1318,6 @@ const photoBooth = (function () {
         }
     });
 
-    // clear Timeout
     $(document).on('click', function () {
         if (api.isTimeOutPending()) {
             if (typeof onStandaloneGalleryView !== 'undefined') {
@@ -1357,7 +1327,6 @@ const photoBooth = (function () {
                 clearTimeout(timeOut);
                 photoboothTools.console.logDev('Timeout for auto reload cleared.');
             } else {
-                // if !startPage.is(':visible')
                 api.resetTimeOut();
             }
         }
@@ -1373,7 +1342,6 @@ const photoBooth = (function () {
     return api;
 })();
 
-// Init on domready
 $(function () {
     photoBooth.init();
 });
