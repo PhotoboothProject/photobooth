@@ -39,6 +39,23 @@ const photoBooth = (function () {
         videoPreview = idVideoPreview.get(0),
         videoSensor = document.querySelector('#video--sensor');
 
+    // enums
+    const PhotoStyle = {
+            PHOTO: 'photo',
+            COLLAGE: 'collage',
+            CHROMA: 'chroma'
+        },
+        CameraDisplayMode = {
+            INIT: 1,
+            BACKGROUND: 2,
+            COUNTDOWN: 3
+        },
+        PreviewMode = {
+            DEVICE: 'device_cam',
+            URL: 'url',
+            GPHOTO: 'gphoto'
+        };
+
     let timeOut,
         isPrinting = false,
         takingPic = false,
@@ -103,8 +120,11 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.preview.asBackground || (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm)) {
-            api.startVideo('preview');
+        if (
+            config.preview.asBackground ||
+            (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm)
+        ) {
+            api.startVideo(CameraDisplayMode.BACKGROUND);
         }
 
         initRemoteBuzzerFromDOM();
@@ -147,7 +167,7 @@ const photoBooth = (function () {
         getMedia
             .call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
-                if (mode === 'preview') {
+                if (mode === CameraDisplayMode.BACKGROUND) {
                     idVideoPreview.show();
                     videoPreview.srcObject = stream;
                     wrapper.css('background-image', 'none');
@@ -160,11 +180,11 @@ const photoBooth = (function () {
             })
             .catch(function (error) {
                 photoboothTools.console.log('Could not get user media: ', error);
-                if (config.preview.mode === 'gphoto' && retry < 3) {
+                if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && retry < 3) {
                     photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
                     retry += 1;
                     setTimeout(function () {
-                        api.getAndDisplayMedia('preview', retry);
+                        api.getAndDisplayMedia(mode, retry);
                     }, retry * 1000);
                 }
             });
@@ -188,25 +208,25 @@ const photoBooth = (function () {
 
     api.startVideo = function (mode) {
         if (config.preview.asBackground) {
-            api.stopVideo('preview');
+            api.stopVideo(CameraDisplayMode.BACKGROUND);
         }
 
         if (!navigator.mediaDevices) {
             return;
         }
 
-        if (mode === 'preview') {
-            if (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm) {
-                api.startWebcam();
-            }
-            api.getAndDisplayMedia('preview');
-        } else if (mode === 'init') {
+        if (mode === CameraDisplayMode.INIT) {
             api.startWebcam();
-        } else {
-            if (config.preview.mode === 'gphoto' && config.preview.gphoto_bsm) {
+        } else if (mode === CameraDisplayMode.BACKGROUND) {
+            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm) {
                 api.startWebcam();
             }
-            api.getAndDisplayMedia('view');
+            api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
+        } else if (mode === CameraDisplayMode.COUNTDOWN) {
+            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && config.preview.gphoto_bsm) {
+                api.startWebcam();
+            }
+            api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
         }
     };
 
@@ -214,7 +234,7 @@ const photoBooth = (function () {
         if (api.stream) {
             const track = api.stream.getTracks()[0];
             track.stop();
-            if (mode === 'preview') {
+            if (mode === CameraDisplayMode.BACKGROUND) {
                 idVideoPreview.hide();
             } else {
                 idVideoView.hide();
@@ -293,16 +313,19 @@ const photoBooth = (function () {
         }
 
         if (currentCollageFile && nextCollageNumber) {
-            photoStyle = 'collage';
+            photoStyle = PhotoStyle.COLLAGE;
         }
 
         if (chromaFile) {
-            photoStyle = 'chroma';
+            photoStyle = PhotoStyle.CHROMA;
         }
 
-        if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
-            api.startVideo('view');
-        } else if (config.preview.mode === 'url') {
+        if (
+            config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+            config.preview.mode === PreviewMode.GPHOTO.valueOf()
+        ) {
+            api.startVideo(CameraDisplayMode.COUNTDOWN);
+        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             ipcamView.show();
             ipcamView.addClass('streaming');
         }
@@ -326,7 +349,7 @@ const photoBooth = (function () {
 
         if (config.picture.no_cheese) {
             photoboothTools.console.log('Cheese is disabled.');
-        } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
+        } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
             const cheesemsg = photoboothTools.getTranslation('cheese');
             cheese.text(cheesemsg);
         } else {
@@ -338,12 +361,12 @@ const photoBooth = (function () {
         }
 
         if (retry <= 0) {
-            if (config.preview.mode === 'gphoto' && !config.picture.no_cheese) {
+            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.picture.no_cheese) {
                 api.stopPreviewVideo();
             }
 
             if (
-                config.preview.mode === 'device_cam' &&
+                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
                 config.preview.camTakesPic &&
                 !api.stream &&
                 !config.dev.demo_images
@@ -369,32 +392,35 @@ const photoBooth = (function () {
 
         remoteBuzzerClient.inProgress(true);
 
-        if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
+        if (
+            config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+            config.preview.mode === PreviewMode.GPHOTO.valueOf()
+        ) {
             if (config.preview.camTakesPic && !config.dev.demo_images) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
-            if (config.preview.mode === 'device_cam') {
-                api.stopVideo('view');
+            if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
+                api.stopVideo(CameraDisplayMode.COUNTDOWN);
             }
-        } else if (config.preview.mode === 'url') {
+        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             ipcamView.removeClass('streaming');
             ipcamView.hide();
         }
 
         const data = {
             filter: imgFilter,
-            style: photoStyle,
+            style: photoStyle.valueOf(),
             canvasimg: videoSensor.toDataURL('image/jpeg')
         };
 
-        if (photoStyle === 'collage') {
+        if (photoStyle === PhotoStyle.COLLAGE) {
             data.file = currentCollageFile;
             data.collageNumber = nextCollageNumber;
         }
 
-        if (photoStyle === 'chroma') {
+        if (photoStyle === PhotoStyle.CHROMA) {
             data.file = chromaFile;
         }
 
@@ -449,7 +475,7 @@ const photoBooth = (function () {
                     } else {
                         api.errorPic(result);
                     }
-                } else if (result.success === 'collage') {
+                } else if (result.success === PhotoStyle.COLLAGE) {
                     currentCollageFile = result.file;
                     nextCollageNumber = result.current + 1;
 
@@ -483,7 +509,7 @@ const photoBooth = (function () {
                                 loaderImage.css('background-image', 'none');
                                 imageUrl = '';
                                 loaderImage.css('display', 'none');
-                                api.thrill('collage');
+                                api.thrill(PhotoStyle.COLLAGE);
                             }, config.collage.continuous_time * 1000);
                         } else {
                             currentCollageFile = '';
@@ -511,7 +537,7 @@ const photoBooth = (function () {
                                     loaderImage.css('background-image', 'none');
                                     imageUrl = '';
                                     loaderImage.css('display', 'none');
-                                    api.thrill('collage');
+                                    api.thrill(PhotoStyle.COLLAGE);
                                 });
 
                             remoteBuzzerClient.collageWaitForNext();
@@ -552,7 +578,7 @@ const photoBooth = (function () {
                                 loaderImage.css('display', 'none');
                                 api.deleteTmpImage(result.collage_file);
                                 nextCollageNumber = result.current;
-                                api.thrill('collage');
+                                api.thrill(PhotoStyle.COLLAGE);
                             });
 
                         const abortmsg = photoboothTools.getTranslation('abort');
@@ -564,7 +590,7 @@ const photoBooth = (function () {
 
                         rotaryController.focusSet('.loading.rotarygroup');
                     }
-                } else if (result.success === 'chroma') {
+                } else if (result.success === PhotoStyle.CHROMA) {
                     chromaFile = result.file;
                     api.processPic(data.style, result);
                 } else {
@@ -623,12 +649,12 @@ const photoBooth = (function () {
 
         spinner.show();
         loading.text(
-            photoStyle === 'photo' || photoStyle === 'chroma'
+            photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
                 ? photoboothTools.getTranslation('busy')
                 : photoboothTools.getTranslation('busyCollage')
         );
 
-        if (photoStyle === 'photo' && config.picture.preview_before_processing) {
+        if (photoStyle === PhotoStyle.PHOTO && config.picture.preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
                 loader.css('background-image', `url(${tempImageUrl})`);
@@ -662,7 +688,7 @@ const photoBooth = (function () {
 
                 if (data.error) {
                     api.errorPic(data);
-                } else if (photoStyle === 'chroma') {
+                } else if (photoStyle === PhotoStyle.CHROMA) {
                     api.renderChroma(data.file);
                 } else {
                     api.renderPic(data.file, data.images);
@@ -825,8 +851,8 @@ const photoBooth = (function () {
 
         photoboothTools.console.logDev('Taking photo: ' + takingPic);
 
-        if (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm) {
-            api.startVideo('init');
+        if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm) {
+            api.startVideo(CameraDisplayMode.INIT);
         }
     };
 
@@ -915,7 +941,9 @@ const photoBooth = (function () {
     // GET Request
     api.getRequest = function (photoStyle) {
         const getMode =
-            photoStyle === 'photo' || photoStyle === 'chroma' ? config.get_request.picture : config.get_request.collage;
+            photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
+                ? config.get_request.picture
+                : config.get_request.collage;
         const getUrl = config.get_request.server + '/' + getMode;
         const request = new XMLHttpRequest();
         photoboothTools.console.log('Sending GET request to: ' + getUrl);
@@ -942,10 +970,11 @@ const photoBooth = (function () {
                 cb();
             }
             count++;
-            if (config.preview.mode === 'gphoto' && config.picture.no_cheese && count === stop) {
+            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && config.picture.no_cheese && count === stop) {
                 api.stopPreviewVideo();
             }
         }
+
         timerFunction();
     };
 
@@ -1100,7 +1129,7 @@ const photoBooth = (function () {
         if (config.remotebuzzer.usesoftbtn) {
             remoteBuzzerClient.startPicture();
         } else {
-            api.thrill('photo');
+            api.thrill(PhotoStyle.PHOTO);
         }
         $('.newpic').blur();
     });
@@ -1112,7 +1141,7 @@ const photoBooth = (function () {
         if (config.remotebuzzer.usesoftbtn) {
             remoteBuzzerClient.startCollage();
         } else {
-            api.thrill('collage');
+            api.thrill(PhotoStyle.COLLAGE);
         }
 
         $('.newcollage').blur();
@@ -1248,7 +1277,7 @@ const photoBooth = (function () {
         if (config.remotebuzzer.usehid) {
             remoteBuzzerClient.startPicture();
         } else {
-            api.thrill('photo');
+            api.thrill(PhotoStyle.PHOTO);
         }
 
         $('.newpic').blur();
@@ -1260,7 +1289,7 @@ const photoBooth = (function () {
         if (config.remotebuzzer.usehid) {
             remoteBuzzerClient.startCollage();
         } else {
-            api.thrill('collage');
+            api.thrill(PhotoStyle.COLLAGE);
         }
 
         $('.newcollage').blur();
