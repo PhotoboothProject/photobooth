@@ -233,8 +233,7 @@ const photoBooth = (function () {
 
     api.stopVideo = function (mode) {
         if (api.stream) {
-            const track = api.stream.getTracks()[0];
-            track.stop();
+            api.stream.getTracks()[0].stop();
             if (mode === CameraDisplayMode.BACKGROUND) {
                 idVideoPreview.hide();
             } else {
@@ -350,11 +349,9 @@ const photoBooth = (function () {
         if (config.picture.no_cheese) {
             photoboothTools.console.log('Cheese is disabled.');
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
-            const cheesemsg = photoboothTools.getTranslation('cheese');
-            cheese.text(cheesemsg);
+            cheese.text(photoboothTools.getTranslation('cheese'));
         } else {
-            const cheesemsg = photoboothTools.getTranslation('cheeseCollage');
-            cheese.text(cheesemsg);
+            cheese.text(photoboothTools.getTranslation('cheeseCollage'));
             $('<p>')
                 .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
                 .appendTo('.cheese');
@@ -429,7 +426,6 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = function (data, retry = 0) {
-        const retrymsg = photoboothTools.getTranslation('retry_message');
         startTime = new Date().getTime();
         jQuery
             .post('api/takePic.php', data)
@@ -454,7 +450,11 @@ const photoBooth = (function () {
                         retry += 1;
                         loading.append(
                             $('<p class="text-muted">').text(
-                                retrymsg + ' ' + retry + '/' + config.picture.retry_on_error
+                                photoboothTools.getTranslation('retry_message') +
+                                    ' ' +
+                                    retry +
+                                    '/' +
+                                    config.picture.retry_on_error
                             )
                         );
                         api.startCountdown(config.picture.retry_timeout, counter, () => {
@@ -484,8 +484,7 @@ const photoBooth = (function () {
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now;
-                    const waitmsg = photoboothTools.getTranslation('wait_message');
-                    loading.append($('<p>').text(waitmsg));
+                    loading.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
                     preloadImage.onload = () => {
                         loaderImage.css({
                             'background-image': `url(${imageUrl}?filter=${imgFilter})`
@@ -579,9 +578,12 @@ const photoBooth = (function () {
                                 api.thrill(PhotoStyle.COLLAGE);
                             });
 
-                        const abortmsg = photoboothTools.getTranslation('abort');
                         loading
-                            .append($('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(abortmsg))
+                            .append(
+                                $('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(
+                                    photoboothTools.getTranslation('abort')
+                                )
+                            )
                             .click(() => {
                                 location.assign('./');
                             });
@@ -619,8 +621,7 @@ const photoBooth = (function () {
             idVideoView.hide();
             idVideoSensor.hide();
             loader.addClass('error');
-            const errormsg = photoboothTools.getTranslation('error');
-            loading.append($('<p>').text(errormsg));
+            loading.append($('<p>').text(photoboothTools.getTranslation('error')));
             if (config.dev.error_messages) {
                 loading.append($('<p class="text-muted">').text(data.error));
             }
@@ -628,14 +629,12 @@ const photoBooth = (function () {
             remoteBuzzerClient.inProgress(false);
             photoboothTools.console.logDev('Taking photo: ' + takingPic);
             if (config.dev.reload_on_error) {
-                const reloadmsg = photoboothTools.getTranslation('auto_reload');
-                loading.append($('<p>').text(reloadmsg));
+                loading.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
                 setTimeout(function () {
                     photoboothTools.reloadPage();
                 }, 5000);
             } else {
-                const reloadmsg = photoboothTools.getTranslation('reload');
-                loading.append($('<a class="btn" href="./">').text(reloadmsg));
+                loading.append($('<a class="btn" href="./">').text(photoboothTools.getTranslation('reload')));
             }
         }, 500);
     };
@@ -776,8 +775,9 @@ const photoBooth = (function () {
             .on('click', (ev) => {
                 ev.preventDefault();
 
-                const msg = photoboothTools.getTranslation('really_delete_image');
-                const really = config.delete.no_request ? true : confirm(filename + ' ' + msg);
+                const really = config.delete.no_request
+                    ? true
+                    : confirm(filename + ' ' + photoboothTools.getTranslation('really_delete_image'));
                 if (really) {
                     files.forEach(function (file, index, array) {
                         photoboothTools.console.logDev('Index:', index);
@@ -964,8 +964,6 @@ const photoBooth = (function () {
     };
 
     api.printImage = function (imageSrc, cb) {
-        const errormsg = photoboothTools.getTranslation('error');
-
         if (isPrinting) {
             photoboothTools.console.log('Printing already: ' + isPrinting);
         } else {
@@ -1011,7 +1009,9 @@ const photoBooth = (function () {
                         photoboothTools.console.log('An error occurred: ', textStatus);
                         printMesg.empty();
                         printMesg.html(
-                            '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
+                            '<div class="modal__body"><span style="color:red">' +
+                                photoboothTools.getTranslation('error') +
+                                '</span></div>'
                         );
 
                         setTimeout(function () {
