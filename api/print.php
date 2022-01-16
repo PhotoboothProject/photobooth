@@ -6,47 +6,33 @@ require_once '../lib/db.php';
 require_once '../lib/resize.php';
 require_once '../lib/applyFrame.php';
 require_once '../lib/applyText.php';
+require_once '../lib/log.php';
 
 if (empty($_GET['filename'])) {
-    die(
-        json_encode([
-            'error' => 'No file provided',
-        ])
-    );
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided!';
+    logErrorAndDie($errormsg);
 }
 
 $filename = $_GET['filename'];
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
 $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
+$print_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['print']['frame']);
 $quality = 100;
 $status = false;
 
 // exit with error if file does not exist
 if (!file_exists($filename_source)) {
-    die(
-        json_encode([
-            'error' => "File $filename not found",
-        ])
-    );
+    $errormsg = "File $filename not found";
+    logErrorAndDie($errormsg);
 }
 
 // Only jpg/jpeg are supported
 $imginfo = getimagesize($filename_source);
 $mimetype = $imginfo['mime'];
 if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    die(
-        json_encode([
-            'error' => 'The source file type ' . $mimetype . ' is not supported',
-        ])
-    );
-}
-
-// QR
-if (!isset($config['webserver']['ip'])) {
-    $SERVER_IP = $_SERVER['HTTP_HOST'];
-} else {
-    $SERVER_IP = $config['webserver']['ip'];
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': The source file type ' . $mimetype . ' is not supported';
+    logErrorAndDie($errormsg);
 }
 
 // text on print variables
@@ -60,45 +46,6 @@ $fontrot = $config['textonprint']['rotation'];
 $line1text = $config['textonprint']['line1'];
 $line2text = $config['textonprint']['line2'];
 $line3text = $config['textonprint']['line3'];
-
-// print frame
-$print_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['print']['frame']);
-
-if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
-    if (is_dir($print_frame)) {
-        die(
-            json_encode([
-                'error' => 'Frame not set! ' . $print_frame . ' is a path but needs to be a png!',
-            ])
-        );
-    }
-
-    if (!file_exists($print_frame)) {
-        die(
-            json_encode([
-                'error' => 'Frame ' . $print_frame . ' does not exist!',
-            ])
-        );
-    }
-}
-
-if ($config['textonprint']['enabled']) {
-    if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        die(
-            json_encode([
-                'error' => 'Font not set! ' . $fontpath . ' is a path but needs to be a ttf!',
-            ])
-        );
-    }
-
-    if (!file_exists(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $fontpath))) {
-        die(
-            json_encode([
-                'error' => 'Font ' . $fontpath . ' does not exist!',
-            ])
-        );
-    }
-}
 
 if (!file_exists($filename_print)) {
     // rotate image if needed
@@ -116,23 +63,28 @@ if (!file_exists($filename_print)) {
         list($width, $height) = getimagesize($filename_print);
     }
 
-    if ($config['print']['qrcode']) {
+    $source = imagecreatefromjpeg($filename_print);
+
+    if ($config['print']['qrcode'] && file_exists('../vendor/phpqrcode/lib/full/qrlib.php')) {
         // create qr code
         if (!file_exists($filename_codes)) {
-            include '../vendor/phpqrcode/qrlib.php';
-            $url = 'http://' . $SERVER_IP . '/api/download.php?image=';
-            QRcode::png($url . $filename, $filename_codes, QR_ECLEVEL_H, 10);
+            if ($config['qr']['append_filename']) {
+                $url = $config['qr']['url'] . $filename;
+            } else {
+                $url = $config['qr']['url'];
+            }
+            include '../vendor/phpqrcode/lib/full/qrlib.php';
+            QRcode::png($url, $filename_codes, QR_ECLEVEL_H, 10);
         }
 
         // merge source and code
         $newwidth = $width + $height / 2;
         $newheight = $height;
 
-        if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
-            ApplyFrame($filename_print, $filename_print, $print_frame);
+        if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
+            $source = applyFrame($source, $print_frame);
         }
 
-        $source = imagecreatefromjpeg($filename_print);
         $code = imagecreatefrompng($filename_codes);
         $print = imagecreatetruecolor($newwidth, $newheight);
 
@@ -144,30 +96,39 @@ if (!file_exists($filename_print)) {
         imagedestroy($source);
         imagedestroy($print);
     } else {
-        if ($config['print']['print_frame'] && !$config['picture']['take_frame']) {
-            ApplyFrame($filename_print, $filename_print, $print_frame);
+        if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
+            $source = applyFrame($source, $print_frame);
         }
     }
 
-    if ($config['textonprint']['enabled']) {
-        $print = imagecreatefromjpeg($filename_print);
-        ApplyText($filename_print, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
-        imagedestroy($print);
+    if ($config['textonprint']['enabled'] && testFile($config['textonprint']['font'])) {
+        $source = applyText($source, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
     }
 
     if ($config['print']['crop']) {
         $crop_width = $config['print']['crop_width'];
         $crop_height = $config['print']['crop_height'];
-        ResizeCropImage($crop_width, $crop_height, $filename_print, $filename_print);
+        $source = resizeCropImage($crop_width, $crop_height, $source);
     }
+
+    imagejpeg($source, $filename_print, $quality);
 }
 
 // print image
-$printimage = shell_exec(sprintf($config['print']['cmd'], $filename_print));
+$cmd = sprintf($config['print']['cmd'], $filename_print);
+$cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
-die(
-    json_encode([
-        'status' => 'ok',
-        'msg' => $printimage || '',
-    ])
-);
+exec($cmd, $output, $returnValue);
+
+$LogData = [
+    'status' => 'ok',
+    'msg' => $cmd,
+    'returnValue' => $returnValue,
+    'output' => $output,
+    'php' => basename($_SERVER['PHP_SELF']),
+];
+$LogString = json_encode($LogData);
+if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+    logError($LogData);
+}
+die($LogString);

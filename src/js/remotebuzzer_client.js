@@ -1,5 +1,5 @@
 /* exported rotaryController initRemoteBuzzerFromDOM remoteBuzzerClient */
-/* global photoBooth globalGalleryHandle io */
+/* global photoBooth photoboothTools globalGalleryHandle io */
 
 let remoteBuzzerClient;
 let rotaryController;
@@ -7,12 +7,15 @@ let buttonController;
 
 // eslint-disable-next-line no-unused-vars
 function initRemoteBuzzerFromDOM() {
-    if (config.dev.enabled) {
-        console.log(
-            'Remote Buzzer client is',
-            config.remotebuzzer.usebuttons || config.remotebuzzer.userotary ? 'enabled' : 'disabled'
-        );
-    }
+    photoboothTools.console.logDev(
+        'Remote Buzzer client:',
+        config.remotebuzzer.usebuttons ||
+            config.remotebuzzer.userotary ||
+            config.remotebuzzer.usehid ||
+            config.remotebuzzer.usesoftbtn
+            ? 'enabled'
+            : 'disabled'
+    );
 
     /*
      ** Communication with Remote Buzzer Server
@@ -23,7 +26,12 @@ function initRemoteBuzzerFromDOM() {
         const api = {};
 
         api.enabled = function () {
-            return config.remotebuzzer.usebuttons || config.remotebuzzer.userotary;
+            return (
+                config.remotebuzzer.usebuttons ||
+                config.remotebuzzer.userotary ||
+                config.remotebuzzer.usehid ||
+                config.remotebuzzer.usesoftbtn
+            );
         };
 
         api.init = function () {
@@ -34,11 +42,9 @@ function initRemoteBuzzerFromDOM() {
             if (config.webserver.ip) {
                 ioClient = io('http://' + config.webserver.ip + ':' + config.remotebuzzer.port);
 
-                if (config.dev.enabled) {
-                    console.log(
-                        'Remote buzzer connecting to http://' + config.webserver.ip + ':' + config.remotebuzzer.port
-                    );
-                }
+                photoboothTools.console.logDev(
+                    'Remote buzzer connecting to http://' + config.webserver.ip + ':' + config.remotebuzzer.port
+                );
 
                 ioClient.on('photobooth-socket', function (data) {
                     switch (data) {
@@ -48,6 +54,15 @@ function initRemoteBuzzerFromDOM() {
 
                         case 'start-collage':
                             buttonController.takeCollage();
+                            break;
+
+                        case 'collage-next':
+                            // Need to handle collage process in button handler
+                            if (buttonController.waitingToProcessCollage) {
+                                buttonController.processCollage();
+                            } else {
+                                buttonController.takeCollageNext();
+                            }
                             break;
 
                         case 'print':
@@ -72,15 +87,15 @@ function initRemoteBuzzerFromDOM() {
                 });
 
                 ioClient.on('connect_error', function () {
-                    console.log(
+                    photoboothTools.console.log(
                         'ERROR: remotebuzzer_client unable to connect to webserver ip - please ensure remotebuzzer_server is running on Photobooth server. Use Photobooth dev mode to create log file for debugging'
                     );
                 });
 
                 ioClient.on('connect', function () {
-                    if (config.dev.enabled) {
-                        console.log('remotebuzzer_client successfully connected to Photobooth webserver ip');
-                    }
+                    photoboothTools.console.logDev(
+                        'remotebuzzer_client successfully connected to Photobooth webserver ip'
+                    );
                 });
 
                 buttonController.init();
@@ -88,7 +103,7 @@ function initRemoteBuzzerFromDOM() {
 
                 rotaryController.focusSet('#start');
             } else {
-                console.log(
+                photoboothTools.console.log(
                     'ERROR: remotebuzzer_client unable to connect - webserver.ip not defined in photobooth config'
                 );
             }
@@ -110,8 +125,34 @@ function initRemoteBuzzerFromDOM() {
             }
         };
 
+        api.collageWaitForProcessing = function () {
+            buttonController.waitingToProcessCollage = true;
+
+            if (this.enabled()) {
+                this.emitToServer('collage-wait-for-next');
+            }
+        };
+
+        api.startPicture = function () {
+            if (this.enabled()) {
+                this.emitToServer('start-picture');
+            }
+        };
+
+        api.startCollage = function () {
+            if (this.enabled()) {
+                this.emitToServer('start-collage');
+            }
+        };
+
         api.emitToServer = function (cmd) {
             switch (cmd) {
+                case 'start-picture':
+                    ioClient.emit('photobooth-socket', 'start-picture');
+                    break;
+                case 'start-collage':
+                    ioClient.emit('photobooth-socket', 'start-collage');
+                    break;
                 case 'in-progress':
                     ioClient.emit('photobooth-socket', 'in-progress');
                     break;
@@ -135,6 +176,7 @@ function initRemoteBuzzerFromDOM() {
     buttonController = (function () {
         // vars
         const api = {};
+        api.waitingToProcessCollage = false;
 
         api.init = function () {
             // nothing to init
@@ -142,7 +184,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.enabled = function () {
             return (
-                config.remotebuzzer.usebuttons &&
+                (config.remotebuzzer.usebuttons || config.remotebuzzer.usehid || config.remotebuzzer.usesoftbtn) &&
                 typeof onStandaloneGalleryView === 'undefined' &&
                 typeof onLiveChromaKeyingView === 'undefined'
             );
@@ -158,8 +200,18 @@ function initRemoteBuzzerFromDOM() {
         api.takeCollage = function () {
             if (this.enabled() && config.collage.enabled) {
                 $('.resultInner').removeClass('show');
+                this.waitingToProcessCollage = false;
                 photoBooth.thrill('collage');
             }
+        };
+
+        api.takeCollageNext = function () {
+            $('#btnCollageNext').trigger('click');
+        };
+
+        api.processCollage = function () {
+            this.waitingToProcessCollage = false;
+            $('#btnCollageProcess').trigger('click');
         };
 
         api.print = function () {
@@ -194,7 +246,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.init = function () {
             if (config.dev.enabled && typeof onStandaloneGalleryView !== 'undefined') {
-                console.log(
+                photoboothTools.console.log(
                     'Rotary Controller is ',
                     config.remotebuzzer.enable_standalonegallery ? 'enabled' : 'disabled',
                     ' for standalone gallery view'

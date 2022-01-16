@@ -9,24 +9,33 @@ require '../vendor/PHPMailer/src/SMTP.php';
 
 require_once '../lib/config.php';
 require_once '../lib/db.php';
+require_once '../lib/log.php';
 
 if (empty($_POST['sendTo']) || empty($_POST['image']) || !PHPMailer::validateAddress($_POST['sendTo'])) {
-    die(
-        json_encode([
-            'success' => false,
-            'error' => 'E-Mail address invalid',
-        ])
-    );
+    $LogData = [
+        'success' => false,
+        'error' => 'E-Mail address invalid',
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled']) {
+        logError($LogData);
+    }
+    die($LogString);
 }
 
 $postImage = basename($_POST['image']);
 if (!isImageInDB($postImage)) {
-    die(
-        json_encode([
-            'success' => false,
-            'error' => 'Image not found in database',
-        ])
-    );
+    $LogData = [
+        'success' => false,
+        'error' => 'Image not found in database',
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled']) {
+        logError($LogData);
+    }
+    die($LogString);
 }
 
 $mail = new PHPMailer();
@@ -43,12 +52,16 @@ $mail->Port = $config['mail']['port'];
 $mail->setFrom($config['mail']['fromAddress'], $config['mail']['fromName']);
 
 if (!$mail->addAddress($_POST['sendTo'])) {
-    die(
-        json_encode([
-            'success' => false,
-            'error' => 'E-Mail address not valid / error',
-        ])
-    );
+    $LogData = [
+        'success' => false,
+        'error' => 'E-Mail address not valid / error',
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled']) {
+        logError($LogData);
+    }
+    die($LogString);
 }
 
 // Email subject
@@ -71,12 +84,16 @@ if ($config['mail']['is_html']) {
 $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
 
 if (!$mail->addAttachment($path . $postImage)) {
-    die(
-        json_encode([
-            'success' => false,
-            'error' => 'file error:' . $path . $postImage,
-        ])
-    );
+    $LogData = [
+        'success' => false,
+        'error' => 'File error:' . $path . $postImage,
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled']) {
+        logError($LogData);
+    }
+    die($LogString);
 }
 
 if (isset($_POST['send-link']) && $_POST['send-link'] === 'yes') {
@@ -108,9 +125,13 @@ if ($mail->send()) {
     );
 }
 
-die(
-    json_encode([
-        'success' => false,
-        'error' => $mail->ErrorInfo,
-    ])
-);
+$LogData = [
+    'success' => false,
+    'error' => $mail->ErrorInfo,
+    'php' => basename($_SERVER['PHP_SELF']),
+];
+$LogString = json_encode($LogData);
+if ($config['dev']['enabled']) {
+    logError($LogData);
+}
+die($LogString);

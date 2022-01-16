@@ -57,6 +57,9 @@ if (file_exists($keyingimage)) {
 		<?php if ($config['ui']['rounded_corners']): ?>
 		<link rel="stylesheet" href="resources/css/rounded.css" />
 		<?php endif; ?>
+		<?php if (is_file("private/overrides.css")): ?>
+		<link rel="stylesheet" href="private/overrides.css" />
+		<?php endif; ?>
 	</head>
 <body data-main-image="<?=$mainimage?>">
 	<div class="chromawrapper rotarygroup">
@@ -109,6 +112,7 @@ if (file_exists($keyingimage)) {
 	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
 	<script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
 	<?php endif; ?>
+    <script type="text/javascript" src="resources/js/tools.js"></script>
 	<script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
 	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
 	<script type="text/javascript" src="resources/js/theme.js"></script>

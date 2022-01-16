@@ -20,7 +20,7 @@ $imagelist = array_reverse($images);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
-	<meta http-equiv="refresh" content= "<?=$config['slideshow']['refresh_time']?>">
+	<meta http-equiv="refresh" content= "<?=$config['slideshow']['refreshTime']?>">
 
 
 	<title><?=$config['ui']['branding']?> Slideshow</title>
@@ -39,6 +39,9 @@ $imagelist = array_reverse($images);
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="../resources/css/slideshow.css" />
+	<?php if (is_file("../private/overrides.css")): ?>
+	<link rel="stylesheet" href="../private/overrides.css" />
+	<?php endif; ?>
 </head>
 
 <body class="sshow">
@@ -96,6 +99,6 @@ $imagelist = array_reverse($images);
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script type="text/javascript" src="../resources/js/slideshow.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="../resources/js/i18n-sub.js"></script>
+	<script type="text/javascript" src="../resources/js/i18n.js"></script>
 </body>
 </html>

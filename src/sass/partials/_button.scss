@@ -27,6 +27,11 @@
     width: 50%;
   }
 
+  &--submit {
+    font-size: 0.75em;
+    white-space: normal;
+  }
+
   &:active,
   &:focus,
   &:hover,

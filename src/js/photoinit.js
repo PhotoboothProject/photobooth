@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth rotaryController */
+/* global photoBooth photoboothTools rotaryController */
 
 // eslint-disable-next-line no-unused-vars
 let globalGalleryHandle;
@@ -153,9 +153,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gallery.listen('afterChange', function () {
             const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-            if (config.dev.enabled) {
-                console.log('Current image: ' + img);
-            }
+            photoboothTools.console.logDev('Current image: ' + img);
 
             $('.pswp__button--custom-download').attr({
                 href: 'api/download.php?image=' + img,
@@ -206,7 +204,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         let img = gallery.currItem.src;
         img = img.split('\\').pop().split('/').pop();
 
-        const msg = photoBooth.getTranslation('really_delete_image');
+        const msg = photoboothTools.getTranslation('really_delete_image');
         const really = config.delete.no_request ? true : confirm(img + ' ' + msg);
         if (really) {
             $.ajax({
@@ -217,22 +215,22 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 },
                 success: (data) => {
                     if (data.success) {
-                        console.log('Deleted ' + img);
-                        photoBooth.reloadPage();
+                        photoboothTools.console.log('Deleted ' + img);
+                        photoboothTools.reloadPage();
                     } else {
-                        console.log('Error while deleting ' + img);
+                        photoboothTools.console.log('Error while deleting ' + img);
                         if (data.error) {
-                            console.log(data.error);
+                            photoboothTools.console.log(data.error);
                         }
                         setTimeout(function () {
-                            photoBooth.reloadPage();
+                            photoboothTools.reloadPage();
                         }, 5000);
                     }
                 },
                 error: (jqXHR, textStatus) => {
-                    console.log('Error while deleting image: ', textStatus);
+                    photoboothTools.console.log('Error while deleting image: ', textStatus);
                     setTimeout(function () {
-                        photoBooth.reloadPage();
+                        photoboothTools.reloadPage();
                     }, 5000);
                 }
             });
@@ -250,15 +248,27 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             pswpQR.removeClass('qr-active').fadeOut('fast');
         } else {
             pswpQR.empty();
+            const qrHelpText = config.qr.custom_text
+                ? config.qr.text
+                : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
             let img = gallery.currItem.src;
             img = img.split('\\').pop().split('/').pop();
 
+            $('<button>')
+                .on('click touchstart', function (ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    $('.pswp__qr').empty().removeClass('qr-active').fadeOut('fast');
+                })
+                .append($('<i>').addClass('fa fa-times'))
+                .css('float', 'right')
+                .appendTo(pswpQR);
             $('<img>')
                 .attr('src', 'api/qrcode.php?filename=' + img)
                 .appendTo(pswpQR);
             $('<p>')
                 .css('max-width', this.width + 'px')
-                .html(photoBooth.getTranslation('qrHelp') + '<b>' + config.webserver.ssid + '</b>')
+                .html(qrHelpText)
                 .appendTo(pswpQR);
 
             pswpQR.addClass('qr-active').fadeIn('fast');
@@ -271,7 +281,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.stopPropagation();
 
         if (isPrinting) {
-            console.log('Printing already in progress!');
+            photoboothTools.console.log('Printing already in progress!');
         } else {
             isPrinting = true;
             const img = gallery.currItem.src.split('\\').pop().split('/').pop();
@@ -288,9 +298,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.preventDefault();
 
         if (gallery) {
-            if (config.dev.enabled) {
-                console.log('Closing Gallery');
-            }
+            photoboothTools.console.logDev('Closing Gallery');
             gallery.close();
         }
     });
@@ -346,7 +354,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
     $(document).on('keyup', function (ev) {
         if (config.print.from_gallery && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
             if (isPrinting) {
-                console.log('Printing already in progress!');
+                photoboothTools.console.log('Printing already in progress!');
             } else if ($('#gallery').hasClass('gallery--open') && typeof gallery !== 'undefined') {
                 $('.pswp__button--print').trigger('click');
             }

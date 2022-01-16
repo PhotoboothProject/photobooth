@@ -1,5 +1,50 @@
 <?php
 
+function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
+    if (!$image) {
+        return false;
+    }
+
+    list($bg_r, $bg_g, $bg_b) = sscanf($bg_color, '#%02x%02x%02x');
+    $bg_color_hex = hexdec(substr($bg_color, 1));
+
+    // simple rotate if possible and ignore changed dimensions
+    $simple_rotate = [-180, -90, 0, 180, 90, 360];
+    if (in_array($rotation, $simple_rotate)) {
+        $new = imagerotate($image, $rotation, $bg_color_hex);
+    } else {
+        // get old dimensions
+        $old_width = imagesx($image);
+        $old_height = imagesy($image);
+
+        // create new image with old dimensions
+        $new = imagecreatetruecolor($old_width, $old_height);
+
+        // color background as defined
+        $background = imagecolorallocate($new, $bg_r, $bg_g, $bg_b);
+        imagefill($new, 0, 0, $background);
+
+        // rotate the image
+        $image = imagerotate($image, $rotation, $bg_color_hex);
+
+        // make sure width and/or height fits into old dimensions
+        $image = resizeImage($image, $old_width, $old_height);
+
+        // get new dimensions after rotate and resize
+        $new_width = imagesx($image);
+        $new_height = imagesy($image);
+
+        // center rotated image
+        $x = ($old_width - $new_width) / 2;
+        $y = ($old_height - $new_height) / 2;
+
+        // copy rotated image to new image with old dimensions
+        imagecopy($new, $image, $x, $y, 0, 0, $new_width, $new_height);
+    }
+
+    return $new;
+}
+
 function resizeImage($image, $max_width, $max_height) {
     if (!$image) {
         return false;
@@ -35,58 +80,24 @@ function resizePngImage($image, $max_width, $max_height) {
 }
 
 // Resize and crop image by center
-function ResizeCropImage($max_width, $max_height, $source_file, $dst_dir, $quality = 100) {
-    $imgsize = getimagesize($source_file);
-    $width = $imgsize[0];
-    $height = $imgsize[1];
-    $mime = $imgsize['mime'];
-
-    switch ($mime) {
-        case 'image/gif':
-            $image_create = 'imagecreatefromgif';
-            $image = 'imagegif';
-            break;
-
-        case 'image/png':
-            $image_create = 'imagecreatefrompng';
-            $image = 'imagepng';
-            $quality = 7;
-            break;
-
-        case 'image/jpeg':
-            $image_create = 'imagecreatefromjpeg';
-            $image = 'imagejpeg';
-            $quality = 100;
-            break;
-
-        default:
-            return false;
-            break;
-    }
+function resizeCropImage($max_width, $max_height, $source_file, $quality = 100) {
+    $old_width = imagesx($source_file);
+    $old_height = imagesy($source_file);
+    $new_width = ($old_height * $max_width) / $max_height;
+    $new_height = ($old_width * $max_height) / $max_width;
 
     $dst_img = imagecreatetruecolor($max_width, $max_height);
-    $src_img = $image_create($source_file);
-
-    $width_new = ($height * $max_width) / $max_height;
-    $height_new = ($width * $max_height) / $max_width;
     //if the new width is greater than the actual width of the image, then the height is too large and the rest cut off, or vice versa
-    if ($width_new > $width) {
+    if ($new_width > $old_width) {
         //cut point by height
-        $h_point = ($height - $height_new) / 2;
+        $h_point = ($old_height - $new_height) / 2;
         //copy image
-        imagecopyresampled($dst_img, $src_img, 0, 0, 0, $h_point, $max_width, $max_height, $width, $height_new);
+        imagecopyresampled($dst_img, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height);
     } else {
         //cut point by width
-        $w_point = ($width - $width_new) / 2;
-        imagecopyresampled($dst_img, $src_img, 0, 0, $w_point, 0, $max_width, $max_height, $width_new, $height);
+        $w_point = ($old_width - $new_width) / 2;
+        imagecopyresampled($dst_img, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height);
     }
 
-    $image($dst_img, $dst_dir, $quality);
-
-    if ($dst_img) {
-        imagedestroy($dst_img);
-    }
-    if ($src_img) {
-        imagedestroy($src_img);
-    }
+    return $dst_img;
 }

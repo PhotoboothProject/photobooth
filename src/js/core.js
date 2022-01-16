@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM i18n setMainImage remoteBuzzerClient rotaryController globalGalleryHandle */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools */
 
 const photoBooth = (function () {
     // vars
@@ -7,7 +7,26 @@ const photoBooth = (function () {
         startPage = $('#start'),
         wrapper = $('#wrapper'),
         gallery = $('#gallery'),
+        cheese = $('.cheese'),
         resultPage = $('#result'),
+        mySideNav = $('#mySidenav'),
+        ipcamView = $('#ipcam--view'),
+        galimages = $('#galimages'),
+        printMesg = $('#print_mesg'),
+        loading = $('.loading'),
+        loaderImage = $('.loaderImage'),
+        triggerPic = $('.triggerPic'),
+        triggerCollage = $('.triggerCollage'),
+        printBtn = $('.printbtn'),
+        deleteBtn = $('.deletebtn'),
+        qrCodeModal = $('#qrCode'),
+        counter = $('#counter'),
+        resultInner = $('.resultInner'),
+        spinner = $('.spinner'),
+        sendMail = $('.send-mail'),
+        idVideoView = $('#video--view'),
+        idVideoPreview = $('#video--preview'),
+        idVideoSensor = $('#video--sensor'),
         webcamConstraints = {
             audio: false,
             video: {
@@ -28,36 +47,10 @@ const photoBooth = (function () {
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
         pid,
-        command;
-
-    const modal = {
-        open: function (selector) {
-            $(selector).addClass('modal--show');
-        },
-        close: function (selector) {
-            //api.showResultInner(true);
-
-            if ($(selector).hasClass('modal--show')) {
-                $(selector).removeClass('modal--show');
-
-                return true;
-            }
-
-            return false;
-        },
-        toggle: function (selector) {
-            $(selector).toggleClass('modal--show');
-        },
-        empty: function (selector) {
-            modal.close(selector);
-
-            $(selector).find('.modal__body').empty();
-        }
-    };
-
-    api.reloadPage = function () {
-        window.location.reload();
-    };
+        command,
+        startTime,
+        endTime,
+        totalTime;
 
     // Returns true when timeOut is pending
     api.isTimeOutPending = function () {
@@ -68,10 +61,17 @@ const photoBooth = (function () {
     api.resetTimeOut = function () {
         clearTimeout(timeOut);
 
+        photoboothTools.console.log('Timeout for auto reload cleared.');
+
         if (!takingPic) {
+            photoboothTools.console.logDev(
+                'Timeout for auto reload set to',
+                config.picture.time_to_live * 1000,
+                ' seconds.'
+            );
             timeOut = setTimeout(function () {
-                api.reloadPage();
-            }, config.picture.time_to_live);
+                photoboothTools.reloadPage();
+            }, config.picture.time_to_live * 1000);
         }
     };
 
@@ -79,20 +79,20 @@ const photoBooth = (function () {
     api.reset = function () {
         loader.removeClass('open');
         loader.removeClass('error');
-        modal.empty('#qrCode');
+        photoboothTools.modal.empty('#qrCode');
         $('.qrbtn').removeClass('active').attr('style', '');
-        $('.loading').text('');
+        loading.text('');
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
-        $('.spinner').hide();
-        $('.send-mail').hide();
-        $('#video--view').hide();
-        $('#video--preview').hide();
-        $('#video--sensor').hide();
-        $('#ipcam--view').hide();
+        spinner.hide();
+        sendMail.hide();
+        idVideoView.hide();
+        idVideoPreview.hide();
+        idVideoSensor.hide();
+        ipcamView.hide();
         api.resetMailForm();
-        $('#loader').css('background', config.colors.background_countdown);
-        $('#loader').css('background-color', config.colors.background_countdown);
+        loader.css('background', config.colors.background_countdown);
+        loader.css('background-color', config.colors.background_countdown);
     };
 
     // init
@@ -103,7 +103,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (config.preview.asBackground || (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm)) {
+        if (config.preview.asBackground || (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm)) {
             api.startVideo('preview');
         }
 
@@ -111,33 +111,79 @@ const photoBooth = (function () {
         rotaryController.focusSet('#start');
     };
 
-    api.getTranslation = function (key) {
-        const translation = i18n(key, config.ui.language);
-        const fallbackTranslation = i18n(key, 'en');
-        if (translation) {
-            return translation;
-        } else if (fallbackTranslation) {
-            return fallbackTranslation;
-        }
-
-        return key;
-    };
-
     api.openNav = function () {
-        $('#mySidenav').addClass('sidenav--open');
+        mySideNav.addClass('sidenav--open');
         rotaryController.focusSet('#mySidenav');
     };
 
     api.closeNav = function () {
-        $('#mySidenav').removeClass('sidenav--open');
+        mySideNav.removeClass('sidenav--open');
     };
 
     api.toggleNav = function () {
-        $('#mySidenav').toggleClass('sidenav--open');
+        mySideNav.toggleClass('sidenav--open');
 
-        if ($('#mySidenav').hasClass('sidenav--open')) {
+        if (mySideNav.hasClass('sidenav--open')) {
             rotaryController.focusSet('#mySidenav');
         }
+    };
+
+    api.getAndDisplayMedia = function (mode, retry = 0) {
+        const getMedia =
+            navigator.mediaDevices.getUserMedia ||
+            navigator.mediaDevices.webkitGetUserMedia ||
+            navigator.mediaDevices.mozGetUserMedia ||
+            false;
+
+        if (!getMedia) {
+            return;
+        }
+
+        if (config.preview.flipHorizontal) {
+            idVideoView.addClass('flip-horizontal');
+            idVideoPreview.addClass('flip-horizontal');
+        }
+
+        getMedia
+            .call(navigator.mediaDevices, webcamConstraints)
+            .then(function (stream) {
+                if (mode === 'preview') {
+                    idVideoPreview.show();
+                    videoPreview.srcObject = stream;
+                    wrapper.css('background-image', 'none');
+                    wrapper.css('background-color', 'transparent');
+                } else {
+                    idVideoView.show();
+                    videoView.srcObject = stream;
+                }
+                api.stream = stream;
+            })
+            .catch(function (error) {
+                photoboothTools.console.log('Could not get user media: ', error);
+                if (config.preview.mode === 'gphoto' && retry < 3) {
+                    photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
+                    retry += 1;
+                    setTimeout(function () {
+                        api.getAndDisplayMedia('preview', retry);
+                    }, retry * 1000);
+                }
+            });
+    };
+
+    api.startWebcam = function () {
+        const dataVideo = {
+            play: 'true'
+        };
+
+        jQuery
+            .post('api/takeVideo.php', dataVideo)
+            .done(function (result) {
+                photoboothTools.console.log('Start webcam', result);
+                pid = result.pid;
+            })
+            .fail(function (xhr, status, result) {
+                photoboothTools.console.log('Could not start webcam', result);
+            });
     };
 
     api.startVideo = function (mode) {
@@ -145,121 +191,22 @@ const photoBooth = (function () {
             api.stopVideo('preview');
         }
 
-        const dataVideo = {
-            play: 'true'
-        };
-
         if (!navigator.mediaDevices) {
             return;
         }
 
-        if (config.preview.mode === 'gphoto') {
-            if (!config.preview.gphoto_bsm && mode === 'preview') {
-                jQuery
-                    .post('api/takeVideo.php', dataVideo)
-                    .done(function (result) {
-                        console.log('Start webcam', result);
-                        pid = result.pid;
-                    })
-                    .fail(function (xhr, status, result) {
-                        console.log('Could not start webcam', result);
-                    });
-            } else if (!config.preview.gphoto_bsm && mode === 'view') {
-                const getMedia =
-                    navigator.mediaDevices.getUserMedia ||
-                    navigator.mediaDevices.webkitGetUserMedia ||
-                    navigator.mediaDevices.mozGetUserMedia ||
-                    false;
-
-                if (!getMedia) {
-                    return;
-                }
-
-                if (config.preview.flipHorizontal) {
-                    $('#video--view').addClass('flip-horizontal');
-                    $('#video--preview').addClass('flip-horizontal');
-                }
-
-                getMedia
-                    .call(navigator.mediaDevices, webcamConstraints)
-                    .then(function (stream) {
-                        $('#video--view').show();
-                        videoView.srcObject = stream;
-                        api.stream = stream;
-                    })
-                    .catch(function (error) {
-                        console.log('Could not get user media: ', error);
-                    });
-            } else {
-                jQuery
-                    .post('api/takeVideo.php', dataVideo)
-                    .done(function (result) {
-                        console.log('Start webcam', result);
-                        pid = result.pid;
-                        const getMedia =
-                            navigator.mediaDevices.getUserMedia ||
-                            navigator.mediaDevices.webkitGetUserMedia ||
-                            navigator.mediaDevices.mozGetUserMedia ||
-                            false;
-
-                        if (!getMedia) {
-                            return;
-                        }
-
-                        if (config.preview.flipHorizontal) {
-                            $('#video--view').addClass('flip-horizontal');
-                            $('#video--preview').addClass('flip-horizontal');
-                        }
-
-                        getMedia
-                            .call(navigator.mediaDevices, webcamConstraints)
-                            .then(function (stream) {
-                                $('#video--view').show();
-                                videoView.srcObject = stream;
-                                api.stream = stream;
-                            })
-                            .catch(function (error) {
-                                console.log('Could not get user media: ', error);
-                            });
-                    })
-                    .fail(function (xhr, status, result) {
-                        console.log('Could not start webcam', result);
-                    });
+        if (mode === 'preview') {
+            if (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm) {
+                api.startWebcam();
             }
+            api.getAndDisplayMedia('preview');
+        } else if (mode === 'init') {
+            api.startWebcam();
         } else {
-            const getMedia =
-                navigator.mediaDevices.getUserMedia ||
-                navigator.mediaDevices.webkitGetUserMedia ||
-                navigator.mediaDevices.mozGetUserMedia ||
-                false;
-
-            if (!getMedia) {
-                return;
+            if (config.preview.mode === 'gphoto' && config.preview.gphoto_bsm) {
+                api.startWebcam();
             }
-
-            if (config.preview.flipHorizontal) {
-                $('#video--view').addClass('flip-horizontal');
-                $('#video--preview').addClass('flip-horizontal');
-            }
-
-            getMedia
-                .call(navigator.mediaDevices, webcamConstraints)
-                .then(function (stream) {
-                    if (mode === 'preview') {
-                        $('#video--preview').show();
-                        videoPreview.srcObject = stream;
-                        api.stream = stream;
-                        wrapper.css('background-image', 'none');
-                        wrapper.css('background-color', 'transparent');
-                    } else {
-                        $('#video--view').show();
-                        videoView.srcObject = stream;
-                    }
-                    api.stream = stream;
-                })
-                .catch(function (error) {
-                    console.log('Could not get user media: ', error);
-                });
+            api.getAndDisplayMedia('view');
         }
     };
 
@@ -268,9 +215,9 @@ const photoBooth = (function () {
             const track = api.stream.getTracks()[0];
             track.stop();
             if (mode === 'preview') {
-                $('#video--preview').hide();
+                idVideoPreview.hide();
             } else {
-                $('#video--view').hide();
+                idVideoView.hide();
             }
         }
     };
@@ -285,22 +232,22 @@ const photoBooth = (function () {
             jQuery
                 .post('api/takeVideo.php', dataVideo)
                 .done(function (result) {
-                    console.log('Stop webcam', result);
+                    photoboothTools.console.log('Stop webcam', result);
                     const track = api.stream.getTracks()[0];
                     track.stop();
-                    $('#video--view').hide();
+                    idVideoView.hide();
                 })
                 .fail(function (xhr, status, result) {
-                    console.log('Could not stop webcam', result);
+                    photoboothTools.console.log('Could not stop webcam', result);
                 });
         }
     };
 
     api.showResultInner = function (flag) {
         if (flag) {
-            $('.resultInner').addClass('show');
+            resultInner.addClass('show');
         } else {
-            $('.resultInner').removeClass('show');
+            resultInner.removeClass('show');
         }
     };
 
@@ -309,23 +256,23 @@ const photoBooth = (function () {
             mode: $mode
         };
 
-        console.log('Run', $mode);
+        photoboothTools.console.log('Run', $mode);
 
         jQuery
             .post('api/shellCommand.php', command)
             .done(function (result) {
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
             })
             .fail(function (xhr, status, result) {
-                console.log($mode, 'result: ', result);
+                photoboothTools.console.log($mode, 'result: ', result);
             });
     };
 
     api.thrill = function (photoStyle) {
         api.closeNav();
         api.reset();
-        api.showResultInner(false);
         api.closeGallery();
+        api.showResultInner(false);
 
         remoteBuzzerClient.inProgress(true);
 
@@ -335,9 +282,7 @@ const photoBooth = (function () {
             api.resetTimeOut();
         }
 
-        if (config.dev.enabled) {
-            console.log('Taking photo:', takingPic);
-        }
+        photoboothTools.console.logDev('Taking photo: ' + takingPic);
 
         if (config.pre_photo.cmd) {
             api.shellCommand('pre-command');
@@ -358,72 +303,74 @@ const photoBooth = (function () {
         if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
             api.startVideo('view');
         } else if (config.preview.mode === 'url') {
-            $('#ipcam--view').show();
-            $('#ipcam--view').addClass('streaming');
+            ipcamView.show();
+            ipcamView.addClass('streaming');
         }
 
         loader.addClass('open');
 
-        api.startCountdown(
-            nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time,
-            $('#counter'),
-            () => {
-                api.cheese(photoStyle);
+        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
+            if (config.get_request.countdown) {
+                api.getRequest(photoStyle);
             }
-        );
+            api.cheese(photoStyle);
+        });
     };
 
     // Cheese
-    api.cheese = function (photoStyle) {
-        if (config.dev.enabled) {
-            console.log(photoStyle);
-        }
+    api.cheese = function (photoStyle, retry = 0) {
+        photoboothTools.console.logDev('Photostyle: ' + photoStyle);
 
-        $('#counter').empty();
-        $('.cheese').empty();
+        counter.empty();
+        cheese.empty();
 
         if (config.picture.no_cheese) {
-            console.log('Cheese is disabled.');
+            photoboothTools.console.log('Cheese is disabled.');
         } else if (photoStyle === 'photo' || photoStyle === 'chroma') {
-            const cheesemsg = api.getTranslation('cheese');
-            $('.cheese').text(cheesemsg);
+            const cheesemsg = photoboothTools.getTranslation('cheese');
+            cheese.text(cheesemsg);
         } else {
-            const cheesemsg = api.getTranslation('cheeseCollage');
-            $('.cheese').text(cheesemsg);
+            const cheesemsg = photoboothTools.getTranslation('cheeseCollage');
+            cheese.text(cheesemsg);
             $('<p>')
                 .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
                 .appendTo('.cheese');
         }
 
-        if (config.preview.mode === 'gphoto' && !config.picture.no_cheese) {
-            api.stopPreviewVideo();
-        }
+        if (retry <= 0) {
+            if (config.preview.mode === 'gphoto' && !config.picture.no_cheese) {
+                api.stopPreviewVideo();
+            }
 
-        if (config.preview.mode === 'device_cam' && config.preview.camTakesPic && !api.stream && !config.dev.enabled) {
-            console.log('No preview by device cam available!');
+            if (
+                config.preview.mode === 'device_cam' &&
+                config.preview.camTakesPic &&
+                !api.stream &&
+                !config.dev.demo_images
+            ) {
+                photoboothTools.console.log('No preview by device cam available!');
 
-            api.errorPic({
-                error: 'No preview by device cam available!'
-            });
-        } else if (config.picture.no_cheese) {
-            api.takePic(photoStyle);
-        } else {
-            setTimeout(() => {
+                api.errorPic({
+                    error: 'No preview by device cam available!'
+                });
+            } else if (config.picture.no_cheese) {
                 api.takePic(photoStyle);
-            }, config.picture.cheese_time);
+            } else {
+                setTimeout(() => {
+                    api.takePic(photoStyle);
+                }, config.picture.cheese_time);
+            }
         }
     };
 
     // take Picture
     api.takePic = function (photoStyle) {
-        if (config.dev.enabled) {
-            console.log('Take Picture:' + photoStyle);
-        }
+        photoboothTools.console.log('Take Picture:', photoStyle);
 
         remoteBuzzerClient.inProgress(true);
 
         if (config.preview.mode === 'device_cam' || config.preview.mode === 'gphoto') {
-            if (config.preview.camTakesPic && !config.dev.enabled) {
+            if (config.preview.camTakesPic && !config.dev.demo_images) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
@@ -432,8 +379,8 @@ const photoBooth = (function () {
                 api.stopVideo('view');
             }
         } else if (config.preview.mode === 'url') {
-            $('#ipcam--view').removeClass('streaming');
-            $('#ipcam--view').hide();
+            ipcamView.removeClass('streaming');
+            ipcamView.hide();
         }
 
         const data = {
@@ -456,15 +403,20 @@ const photoBooth = (function () {
         api.callTakePicApi(data);
     };
 
-    api.callTakePicApi = function (data) {
+    api.callTakePicApi = function (data, retry = 0) {
+        const retrymsg = photoboothTools.getTranslation('retry_message');
+        startTime = new Date().getTime();
         jQuery
             .post('api/takePic.php', data)
             .done(function (result) {
-                console.log('took picture', result);
-                $('.cheese').empty();
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.log('took ' + data.style, result);
+                photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
+                cheese.empty();
                 if (config.preview.flipHorizontal) {
-                    $('#video--view').removeClass('flip-horizontal');
-                    $('#video--preview').removeClass('flip-horizontal');
+                    idVideoView.removeClass('flip-horizontal');
+                    idVideoPreview.removeClass('flip-horizontal');
                 }
 
                 // reset filter (selection) after picture was taken
@@ -473,98 +425,138 @@ const photoBooth = (function () {
                 $('#' + imgFilter).addClass('activeSidenavBtn');
 
                 if (result.error) {
-                    api.errorPic(result);
+                    if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
+                        photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
+                        retry += 1;
+                        loading.append(
+                            $('<p class="text-muted">').text(
+                                retrymsg + ' ' + retry + '/' + config.picture.retry_on_error
+                            )
+                        );
+                        api.startCountdown(config.picture.retry_timeout, counter, () => {
+                            loading.empty();
+
+                            if (config.picture.no_cheese) {
+                                photoboothTools.console.log('Cheese is disabled.');
+                                api.callTakePicApi(data, retry);
+                            } else {
+                                api.cheese(data.style, retry);
+                                setTimeout(() => {
+                                    api.callTakePicApi(data, retry);
+                                }, config.picture.cheese_time);
+                            }
+                        });
+                    } else {
+                        api.errorPic(result);
+                    }
                 } else if (result.success === 'collage') {
                     currentCollageFile = result.file;
                     nextCollageNumber = result.current + 1;
 
-                    $('.spinner').hide();
-                    $('.loading').empty();
-                    $('#video--sensor').hide();
+                    spinner.hide();
+                    loading.empty();
+                    idVideoSensor.hide();
 
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now;
-                    const waitmsg = api.getTranslation('wait_message');
-                    $('.loading').append($('<p>').text(waitmsg));
+                    const waitmsg = photoboothTools.getTranslation('wait_message');
+                    loading.append($('<p>').text(waitmsg));
                     preloadImage.onload = () => {
-                        $('.loaderImage').css({
+                        loaderImage.css({
                             'background-image': `url(${imageUrl}?filter=${imgFilter})`
                         });
-                        $('.loaderImage').attr('data-img', picdate);
+                        loaderImage.attr('data-img', picdate);
                     };
 
                     preloadImage.src = imageUrl;
 
-                    $('.loaderImage').show();
+                    loaderImage.show();
+
+                    photoboothTools.console.logDev(
+                        'Taken collage photo number: ' + (result.current + 1) + ' / ' + result.limit
+                    );
 
                     if (config.collage.continuous) {
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
-                                $('.loaderImage').css('background-image', 'none');
+                                loaderImage.css('background-image', 'none');
                                 imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
+                                loaderImage.css('display', 'none');
                                 api.thrill('collage');
                             }, config.collage.continuous_time * 1000);
                         } else {
                             currentCollageFile = '';
                             nextCollageNumber = 0;
                             setTimeout(() => {
-                                $('.loaderImage').css('background-image', 'none');
+                                loaderImage.css('background-image', 'none');
                                 imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
+                                loaderImage.css('display', 'none');
                                 api.processPic(data.style, result);
                             }, config.collage.continuous_time * 1000);
                         }
                     } else {
                         // collage with interruption
-                        remoteBuzzerClient.collageWaitForNext();
-
                         if (result.current + 1 < result.limit) {
-                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('nextPhoto') + '</a>')
+                            $(
+                                '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
+                                    photoboothTools.getTranslation('nextPhoto') +
+                                    '</a>'
+                            )
                                 .appendTo('.loading')
                                 .click((ev) => {
                                     ev.stopPropagation();
                                     ev.preventDefault();
-                                    $('.loaderImage').css('background-image', 'none');
+
+                                    loaderImage.css('background-image', 'none');
                                     imageUrl = '';
-                                    $('.loaderImage').css('display', 'none');
+                                    loaderImage.css('display', 'none');
                                     api.thrill('collage');
                                 });
+
+                            remoteBuzzerClient.collageWaitForNext();
                         } else {
-                            $('<a class="btn rotaryfocus" href="#">' + api.getTranslation('processPhoto') + '</a>')
+                            $(
+                                '<a class="btn rotaryfocus" href="#" id="btnCollageProcess">' +
+                                    photoboothTools.getTranslation('processPhoto') +
+                                    '</a>'
+                            )
                                 .appendTo('.loading')
                                 .click((ev) => {
                                     ev.stopPropagation();
                                     ev.preventDefault();
-                                    $('.loaderImage').css('background-image', 'none');
+
+                                    loaderImage.css('background-image', 'none');
                                     imageUrl = '';
-                                    $('.loaderImage').css('display', 'none');
+                                    loaderImage.css('display', 'none');
                                     currentCollageFile = '';
                                     nextCollageNumber = 0;
 
                                     api.processPic(data.style, result);
                                 });
+
+                            remoteBuzzerClient.collageWaitForProcessing();
                         }
+
                         $(
                             '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
-                                api.getTranslation('retakePhoto') +
+                                photoboothTools.getTranslation('retakePhoto') +
                                 '</a>'
                         )
                             .appendTo('.loading')
                             .click((ev) => {
                                 ev.stopPropagation();
                                 ev.preventDefault();
-                                $('.loaderImage').css('background-image', 'none');
+                                loaderImage.css('background-image', 'none');
                                 imageUrl = '';
-                                $('.loaderImage').css('display', 'none');
+                                loaderImage.css('display', 'none');
                                 api.deleteTmpImage(result.collage_file);
                                 nextCollageNumber = result.current;
                                 api.thrill('collage');
                             });
 
-                        const abortmsg = api.getTranslation('abort');
-                        $('.loading')
+                        const abortmsg = photoboothTools.getTranslation('abort');
+                        loading
                             .append($('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(abortmsg))
                             .click(() => {
                                 location.assign('./');
@@ -583,52 +575,64 @@ const photoBooth = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                api.errorPic(result);
+                if (retry < 3) {
+                    retry += 1;
+                    photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
+                    setTimeout(function () {
+                        api.callTakePicApi(data, retry);
+                    }, retry * 250);
+                } else {
+                    api.errorPic(result);
+                }
             });
     };
 
     // Show error Msg and reset
     api.errorPic = function (data) {
         setTimeout(function () {
-            $('.spinner').hide();
-            $('.loading').empty();
-            $('.cheese').empty();
-            $('#video--view').hide();
-            $('#video--sensor').hide();
+            spinner.hide();
+            loading.empty();
+            cheese.empty();
+            idVideoView.hide();
+            idVideoSensor.hide();
             loader.addClass('error');
-            const errormsg = api.getTranslation('error');
-            $('.loading').append($('<p>').text(errormsg));
-            if (config.dev.error_messages || config.dev.enabled) {
-                $('.loading').append($('<p class="text-muted">').text(data.error));
+            const errormsg = photoboothTools.getTranslation('error');
+            loading.append($('<p>').text(errormsg));
+            if (config.dev.error_messages) {
+                loading.append($('<p class="text-muted">').text(data.error));
             }
+            takingPic = false;
+            remoteBuzzerClient.inProgress(false);
+            photoboothTools.console.logDev('Taking photo: ' + takingPic);
             if (config.dev.reload_on_error) {
-                const reloadmsg = api.getTranslation('auto_reload');
-                $('.loading').append($('<p>').text(reloadmsg));
+                const reloadmsg = photoboothTools.getTranslation('auto_reload');
+                loading.append($('<p>').text(reloadmsg));
                 setTimeout(function () {
-                    api.reloadPage();
+                    photoboothTools.reloadPage();
                 }, 5000);
             } else {
-                const reloadmsg = api.getTranslation('reload');
-                $('.loading').append($('<a class="btn" href="./">').text(reloadmsg));
+                const reloadmsg = photoboothTools.getTranslation('reload');
+                loading.append($('<a class="btn" href="./">').text(reloadmsg));
             }
         }, 500);
     };
 
     api.processPic = function (photoStyle, result) {
+        startTime = new Date().getTime();
         const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
 
-        $('.spinner').show();
-        $('.loading').text(
+        spinner.show();
+        loading.text(
             photoStyle === 'photo' || photoStyle === 'chroma'
-                ? api.getTranslation('busy')
-                : api.getTranslation('busyCollage')
+                ? photoboothTools.getTranslation('busy')
+                : photoboothTools.getTranslation('busyCollage')
         );
 
         if (photoStyle === 'photo' && config.picture.preview_before_processing) {
             const preloadImage = new Image();
             preloadImage.onload = () => {
-                $('#loader').css('background-image', `url(${tempImageUrl})`);
-                $('#loader').addClass('showBackgroundImage');
+                loader.css('background-image', `url(${tempImageUrl})`);
+                loader.addClass('showBackgroundImage');
             };
             preloadImage.src = tempImageUrl;
         }
@@ -642,33 +646,34 @@ const photoBooth = (function () {
                 style: photoStyle
             },
             success: (data) => {
-                console.log('picture processed', data);
+                photoboothTools.console.log(photoStyle + ' processed', data);
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.logDev('Processing ' + photoStyle + ' took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Images:', data.images);
+
+                if (config.get_request.processed) {
+                    const getUrl = config.get_request.server + '/' + photoStyle;
+                    const request = new XMLHttpRequest();
+                    photoboothTools.console.log('Sending GET request to: ' + getUrl);
+                    request.open('GET', getUrl);
+                    request.send();
+                }
 
                 if (data.error) {
                     api.errorPic(data);
-                    takingPic = false;
-                    remoteBuzzerClient.inProgress(false);
-                    if (config.dev.enabled) {
-                        console.log('Taking photo:', takingPic);
-                    }
                 } else if (photoStyle === 'chroma') {
                     api.renderChroma(data.file);
                 } else {
-                    api.renderPic(data.file);
+                    api.renderPic(data.file, data.images);
                 }
             },
             error: (jqXHR, textStatus) => {
-                console.log('An error occurred', textStatus);
+                photoboothTools.console.log('An error occurred', textStatus);
 
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
-
-                takingPic = false;
-                remoteBuzzerClient.inProgress(false);
-                if (config.dev.enabled) {
-                    console.log('Taking photo:', takingPic);
-                }
             }
         });
     };
@@ -686,7 +691,7 @@ const photoBooth = (function () {
 
         preloadImage.onload = function () {
             $('body').attr('data-main-image', filename);
-            console.log(config.foldersRoot.keying + '/' + filename);
+            photoboothTools.console.log(config.foldersRoot.keying + '/' + filename);
             const chromaimage = config.foldersRoot.keying + '/' + filename;
 
             loader.hide();
@@ -700,26 +705,35 @@ const photoBooth = (function () {
         remoteBuzzerClient.inProgress(false);
 
         api.resetTimeOut();
-
-        if (config.dev.enabled) {
-            console.log('Taking photo:', takingPic);
-        }
+        photoboothTools.console.logDev('Taking photo: ' + takingPic);
     };
 
     // Render Picture after taking
-    api.renderPic = function (filename) {
+    api.renderPic = function (filename, files) {
         // Add QR Code Image
-        const qrCodeModal = $('#qrCode');
-        modal.empty(qrCodeModal);
-        $('<img src="api/qrcode.php?filename=' + filename + '"/>').on('load', function () {
-            const body = qrCodeModal.find('.modal__body');
+        const qrHelpText = config.qr.custom_text
+            ? config.qr.text
+            : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
+        photoboothTools.modal.empty(qrCodeModal);
+        const body = qrCodeModal.find('.modal__body');
+        $('<button>')
+            .on('click touchstart', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
 
-            $(this).appendTo(body);
-            $('<p>')
-                .css('max-width', this.width + 'px')
-                .html(api.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>')
-                .appendTo(body);
-        });
+                photoboothTools.modal.close('#qrCode');
+            })
+            .append($('<i>').addClass('fa fa-times'))
+            .css('float', 'right')
+            .appendTo(body);
+        $('<img src="api/qrcode.php?filename=' + filename + '" alt="qr code"/>')
+            .on('load', function () {
+                $('<p>')
+                    .css('max-width', this.width + 'px')
+                    .html(qrHelpText)
+                    .appendTo(body);
+            })
+            .appendTo(body);
 
         // Add Print Link
         $(document).off('click touchstart', '.printbtn');
@@ -728,7 +742,7 @@ const photoBooth = (function () {
             e.stopPropagation();
 
             api.printImage(filename, () => {
-                $('.printbtn').blur();
+                printBtn.blur();
             });
         });
 
@@ -745,26 +759,30 @@ const photoBooth = (function () {
             .on('click', (ev) => {
                 ev.preventDefault();
 
-                const msg = api.getTranslation('really_delete_image');
+                const msg = photoboothTools.getTranslation('really_delete_image');
                 const really = config.delete.no_request ? true : confirm(filename + ' ' + msg);
                 if (really) {
-                    api.deleteImage(filename, (data) => {
-                        if (data.success) {
-                            console.log('Deleted ' + filename);
-                            api.reloadPage();
-                        } else {
-                            console.log('Error while deleting ' + filename);
-                            if (data.error) {
-                                console.log(data.error);
+                    files.forEach(function (file, index, array) {
+                        photoboothTools.console.logDev('Index:', index);
+                        photoboothTools.console.logDev('Array:', array);
+                        api.deleteImage(file, (data) => {
+                            if (data.success) {
+                                photoboothTools.console.log('Deleted ' + file);
+                            } else {
+                                photoboothTools.console.log('Error while deleting ' + file);
+                                if (data.error) {
+                                    photoboothTools.console.log(data.error);
+                                }
+                                setTimeout(function () {
+                                    photoboothTools.reloadPage();
+                                }, 5000);
                             }
-                            setTimeout(function () {
-                                api.reloadPage();
-                            }, 5000);
-                        }
+                        });
                     });
                 } else {
-                    $('.deletebtn').blur();
+                    deleteBtn.blur();
                 }
+                photoboothTools.reloadPage();
             });
 
         // Add Image to gallery and slider
@@ -782,14 +800,14 @@ const photoBooth = (function () {
             startPage.hide();
             resultPage.show();
 
-            api.showResultInner(true);
+            api.showResultInner(config.ui.result_buttons);
 
             loader.removeClass('open');
 
-            $('#loader').css('background-image', 'url()');
-            $('#loader').removeClass('showBackgroundImage');
+            loader.css('background-image', 'url()');
+            loader.removeClass('showBackgroundImage');
 
-            if (!$('#mySidenav').hasClass('sidenav--open')) {
+            if (!mySideNav.hasClass('sidenav--open')) {
                 rotaryController.focusSet('#result');
             }
         };
@@ -805,12 +823,10 @@ const photoBooth = (function () {
 
         api.resetTimeOut();
 
-        if (config.dev.enabled) {
-            console.log('Taking photo:', takingPic);
-        }
+        photoboothTools.console.logDev('Taking photo: ' + takingPic);
 
-        if (config.preview.mode == 'gphoto' && !config.preview.gphoto_bsm) {
-            api.startVideo('preview');
+        if (config.preview.mode === 'gphoto' && !config.preview.gphoto_bsm) {
+            api.startVideo('init');
         }
     };
 
@@ -825,14 +841,14 @@ const photoBooth = (function () {
 
         thumbImg.onload = function () {
             thumbSize = this.width + 'x' + this.height;
-            if (--imgtoLoad == 0) {
+            if (--imgtoLoad === 0) {
                 allLoaded();
             }
         };
 
         bigImg.onload = function () {
             bigSize = this.width + 'x' + this.height;
-            if (--imgtoLoad == 0) {
+            if (--imgtoLoad === 0) {
                 allLoaded();
             }
         };
@@ -850,12 +866,12 @@ const photoBooth = (function () {
             linkElement.attr('data-med-size', thumbSize);
 
             if (config.gallery.newest_first) {
-                linkElement.prependTo($('#galimages'));
+                linkElement.prependTo(galimages);
             } else {
-                linkElement.appendTo($('#galimages'));
+                linkElement.appendTo(galimages);
             }
 
-            $('#galimages').children().not('a').remove();
+            galimages.children().not('a').remove();
         }
     };
 
@@ -884,9 +900,9 @@ const photoBooth = (function () {
 
         api.showResultInner(true);
 
-        if ($('#result').is(':visible')) {
+        if (resultPage.is(':visible')) {
             rotaryController.focusSet('#result');
-        } else if ($('#start').is(':visible')) {
+        } else if (startPage.is(':visible')) {
             rotaryController.focusSet('#start');
         }
     };
@@ -894,6 +910,17 @@ const photoBooth = (function () {
     api.resetMailForm = function () {
         $('#send-mail-form').trigger('reset');
         $('#mail-form-message').html('');
+    };
+
+    // GET Request
+    api.getRequest = function (photoStyle) {
+        const getMode =
+            photoStyle === 'photo' || photoStyle === 'chroma' ? config.get_request.picture : config.get_request.collage;
+        const getUrl = config.get_request.server + '/' + getMode;
+        const request = new XMLHttpRequest();
+        photoboothTools.console.log('Sending GET request to: ' + getUrl);
+        request.open('GET', getUrl);
+        request.send();
     };
 
     // Countdown Function
@@ -923,12 +950,12 @@ const photoBooth = (function () {
     };
 
     api.printImage = function (imageSrc, cb) {
-        const errormsg = api.getTranslation('error');
+        const errormsg = photoboothTools.getTranslation('error');
 
         if (isPrinting) {
-            console.log('Printing already: ' + isPrinting);
+            photoboothTools.console.log('Printing already: ' + isPrinting);
         } else {
-            modal.open('#print_mesg');
+            photoboothTools.modal.open('#print_mesg');
             isPrinting = true;
 
             remoteBuzzerClient.inProgress(true);
@@ -941,22 +968,24 @@ const photoBooth = (function () {
                         filename: imageSrc
                     },
                     success: (data) => {
-                        console.log('Picture processed: ', data);
+                        photoboothTools.console.log('Picture processed: ', data);
 
                         if (data.error) {
-                            console.log('An error occurred: ', data.error);
-                            $('#print_mesg').empty();
-                            $('#print_mesg').html(
+                            photoboothTools.console.log('An error occurred: ', data.error);
+                            printMesg.empty();
+                            printMesg.html(
                                 '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
                             );
                         }
 
                         setTimeout(function () {
-                            modal.close('#print_mesg');
+                            photoboothTools.modal.close('#print_mesg');
                             if (data.error) {
-                                $('#print_mesg').empty();
-                                $('#print_mesg').html(
-                                    '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
+                                printMesg.empty();
+                                printMesg.html(
+                                    '<div class="modal__body"><span>' +
+                                        photoboothTools.getTranslation('printing') +
+                                        '</span></div>'
                                 );
                             }
                             cb();
@@ -965,17 +994,19 @@ const photoBooth = (function () {
                         }, config.print.time);
                     },
                     error: (jqXHR, textStatus) => {
-                        console.log('An error occurred: ', textStatus);
-                        $('#print_mesg').empty();
-                        $('#print_mesg').html(
+                        photoboothTools.console.log('An error occurred: ', textStatus);
+                        printMesg.empty();
+                        printMesg.html(
                             '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
                         );
 
                         setTimeout(function () {
-                            modal.close('#print_mesg');
-                            $('#print_mesg').empty();
-                            $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + api.getTranslation('printing') + '</span></div>'
+                            photoboothTools.modal.close('#print_mesg');
+                            printMesg.empty();
+                            printMesg.html(
+                                '<div class="modal__body"><span>' +
+                                    photoboothTools.getTranslation('printing') +
+                                    '</span></div>'
                             );
                             cb();
                             isPrinting = false;
@@ -996,14 +1027,14 @@ const photoBooth = (function () {
             },
             success: (data) => {
                 if (data.error) {
-                    console.log('Error while deleting image');
+                    photoboothTools.console.log('Error while deleting image');
                 }
                 cb(data);
             },
             error: (jqXHR, textStatus) => {
-                console.log('Error while deleting image: ', textStatus);
+                photoboothTools.console.log('Error while deleting image: ', textStatus);
                 setTimeout(function () {
-                    api.reloadPage();
+                    photoboothTools.reloadPage();
                 }, 5000);
             }
         });
@@ -1018,13 +1049,13 @@ const photoBooth = (function () {
             },
             success: (data) => {
                 if (data.error) {
-                    console.log('Error while deleting image');
+                    photoboothTools.console.log('Error while deleting image');
                 }
             },
             error: (jqXHR, textStatus) => {
-                console.log('Error while deleting image: ', textStatus);
+                photoboothTools.console.log('Error while deleting image: ', textStatus);
                 setTimeout(function () {
-                    api.reloadPage();
+                    photoboothTools.reloadPage();
                 }, 5000);
             }
         });
@@ -1054,10 +1085,10 @@ const photoBooth = (function () {
         $(this).addClass('activeSidenavBtn');
 
         imgFilter = $(this).attr('id');
-        const result = {file: $('#result').attr('data-img')};
-        if (config.dev.enabled) {
-            console.log('Applying filter', imgFilter, result);
-        }
+        const result = {file: resultPage.attr('data-img')};
+
+        photoboothTools.console.logDev('Applying filter', imgFilter, result);
+
         api.processPic(imgFilter, result);
 
         rotaryController.focusSet('#mySidenav');
@@ -1066,8 +1097,11 @@ const photoBooth = (function () {
     // Take Picture Button
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
-
-        api.thrill('photo');
+        if (config.remotebuzzer.usesoftbtn) {
+            remoteBuzzerClient.startPicture();
+        } else {
+            api.thrill('photo');
+        }
         $('.newpic').blur();
     });
 
@@ -1075,7 +1109,12 @@ const photoBooth = (function () {
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
 
-        api.thrill('collage');
+        if (config.remotebuzzer.usesoftbtn) {
+            remoteBuzzerClient.startCollage();
+        } else {
+            api.thrill('collage');
+        }
+
         $('.newcollage').blur();
     });
 
@@ -1117,7 +1156,6 @@ const photoBooth = (function () {
         message.empty();
 
         const form = $(this);
-        const oldValue = form.find('.btn').html();
 
         form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
 
@@ -1132,21 +1170,24 @@ const photoBooth = (function () {
                     if (result.saved) {
                         message
                             .fadeIn()
-                            .html('<span style="color:green">' + api.getTranslation('mailSaved') + '</span>');
+                            .html(
+                                '<span style="color:green">' + photoboothTools.getTranslation('mailSaved') + '</span>'
+                            );
                     } else {
                         message
                             .fadeIn()
-                            .html('<span style="color:green">' + api.getTranslation('mailSent') + '</span>');
+                            .html(
+                                '<span style="color:green">' + photoboothTools.getTranslation('mailSent') + '</span>'
+                            );
                     }
                 } else {
                     message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
             error: function () {
-                message.fadeIn('fast').html('<span style="color: red;">' + api.getTranslation('mailError') + '</span>');
-            },
-            complete: function () {
-                form.find('.btn').html(oldValue);
+                message
+                    .fadeIn('fast')
+                    .html('<span style="color: red;">' + photoboothTools.getTranslation('mailError') + '</span>');
             }
         });
     });
@@ -1156,12 +1197,8 @@ const photoBooth = (function () {
         $('.send-mail').removeClass('mail-active').fadeOut('fast');
     });
 
-    $('#result').on('click', function () {
-        if (!modal.close('#qrCode')) {
-            //api.showResultInner(true);
-        }
-
-        if (!$('#mySidenav').hasClass('sidenav--open')) {
+    resultPage.on('click', function () {
+        if (!mySideNav.hasClass('sidenav--open')) {
             rotaryController.focusSet('#result');
         }
     });
@@ -1171,7 +1208,7 @@ const photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
 
-        modal.open('#qrCode');
+        photoboothTools.modal.open('#qrCode');
         rotaryController.focusSet('#qrCode');
     });
 
@@ -1179,7 +1216,7 @@ const photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
 
-        api.reloadPage();
+        photoboothTools.reloadPage();
 
         rotaryController.focusSet('#start');
     });
@@ -1205,71 +1242,88 @@ const photoBooth = (function () {
     });
 
     // Fake buttons
-    $('.triggerPic').on('click', function (e) {
+    triggerPic.on('click', function (e) {
         e.preventDefault();
 
-        api.thrill('photo');
+        if (config.remotebuzzer.usehid) {
+            remoteBuzzerClient.startPicture();
+        } else {
+            api.thrill('photo');
+        }
+
         $('.newpic').blur();
     });
 
-    $('.triggerCollage').on('click', function (e) {
+    triggerCollage.on('click', function (e) {
         e.preventDefault();
 
-        api.thrill('collage');
+        if (config.remotebuzzer.usehid) {
+            remoteBuzzerClient.startCollage();
+        } else {
+            api.thrill('collage');
+        }
+
         $('.newcollage').blur();
     });
 
     $(document).on('keyup', function (ev) {
-        if ($('.triggerPic')[0] || $('.triggerCollage')[0]) {
+        if (triggerPic[0] || triggerCollage[0]) {
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
-                if (!takingPic) {
+                if (takingPic) {
+                    photoboothTools.console.logDev('Taking photo already in progress!');
+                } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled && config.collage.only) {
-                        if (config.dev.enabled) {
-                            console.log('Picture key pressed, but only collage allowed. Triggering collage now.');
-                        }
-                        $('.triggerCollage').trigger('click');
+                        photoboothTools.console.logDev(
+                            'Picture key pressed, but only collage allowed. Triggering collage now.'
+                        );
+                        triggerCollage.trigger('click');
                     } else {
-                        $('.triggerPic').trigger('click');
+                        triggerPic.trigger('click');
                     }
-                } else if (config.dev.enabled && takingPic) {
-                    console.log('Taking photo already in progress!');
                 }
             }
 
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
-                if (!takingPic) {
+                if (takingPic) {
+                    photoboothTools.console.logDev('Taking photo already in progress!');
+                } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled) {
-                        $('.triggerCollage').trigger('click');
+                        triggerCollage.trigger('click');
                     } else {
-                        if (config.dev.enabled) {
-                            console.log(
-                                'Collage key pressed. Please enable collage in your config. Triggering photo now.'
-                            );
-                        }
-                        $('.triggerPic').trigger('click');
+                        photoboothTools.console.logDev(
+                            'Collage key pressed. Please enable collage in your config. Triggering photo now.'
+                        );
+                        triggerPic.trigger('click');
                     }
-                } else if (config.dev.enabled && takingPic) {
-                    console.log('Taking photo already in progress!');
                 }
             }
 
             if (config.print.from_result && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
                 if (isPrinting) {
-                    console.log('Printing already in progress!');
+                    photoboothTools.console.log('Printing already in progress!');
                 } else {
-                    $('.printbtn').trigger('click');
-                    $('.printbtn').blur();
+                    printBtn.trigger('click');
+                    printBtn.blur();
                 }
             }
         }
     });
 
-    // clear Timeout to not reset the gallery, if you clicked anywhere
+    // clear Timeout
     $(document).on('click', function () {
-        if (!startPage.is(':visible')) {
-            clearTimeout(timeOut);
+        if (api.isTimeOutPending()) {
+            if (typeof onStandaloneGalleryView !== 'undefined') {
+                clearTimeout(timeOut);
+                photoboothTools.console.logDev('Standalone Gallery: Timeout for auto reload cleared.');
+            } else if (startPage.is(':visible')) {
+                clearTimeout(timeOut);
+                photoboothTools.console.logDev('Timeout for auto reload cleared.');
+            } else {
+                // if !startPage.is(':visible')
+                api.resetTimeOut();
+            }
         }
     });
 

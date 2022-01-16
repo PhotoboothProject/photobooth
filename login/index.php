@@ -49,6 +49,9 @@ if (isset($_POST['submit'])) {
 	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" href="../resources/css/rounded.css" />
 	<?php endif; ?>
+	<?php if (is_file("../private/overrides.css")): ?>
+	<link rel="stylesheet" href="../private/overrides.css" />
+	<?php endif; ?>
 </head>
 
 <body class="loginbody">
@@ -72,6 +75,10 @@ if (isset($_POST['submit'])) {
 		<?php endif; ?>
 		<?php if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../admin" class="btn btn--login"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a></p>
+		<p><a href="../dependencies.php" class="btn btn--login"><i class="fa fa-list-ul"></i> <span data-i18n="dependencies_check"></span></a></p>
+		<?php endif; ?>
+		<?php if(!$config['protect']['update'] || (!$config['protect']['localhost_update'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+		<p><a href="../update.php" class="btn btn--login"><i class="fa fa-tasks"></i> <span data-i18n="updater"></span></a></p>
 		<?php endif; ?>
 		<p><a href="../gallery.php" class="btn btn--login"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a></p>
 		<p><a href="../slideshow" class="btn btn--login"><i class="fa fa-play"></i> <span data-i18n="slideshow"></span></a></p>
@@ -105,6 +112,6 @@ if (isset($_POST['submit'])) {
 	<script type="text/javascript" src="../resources/js/login.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="../resources/js/i18n-sub.js"></script>
+	<script type="text/javascript" src="../resources/js/i18n.js"></script>
 </body>
 </html>

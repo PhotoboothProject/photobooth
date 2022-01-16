@@ -39,6 +39,9 @@ if (
 	<?php if ($config['ui']['rounded_corners']): ?>
 	<link rel="stylesheet" type="text/css" href="../resources/css/rounded.css" />
 	<?php endif; ?>
+	<?php if (is_file("../private/overrides.css")): ?>
+	<link rel="stylesheet" href="../private/overrides.css" />
+	<?php endif; ?>
 </head>
 <body class="manualwrapper">
 	<div class="manual-panel">
@@ -139,7 +142,7 @@ if (
 	<script type="text/javascript" src="../resources/js/manual.js"></script>
 	<script type="text/javascript" src="../resources/js/theme.js"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="../resources/js/i18n-sub.js"></script>
+	<script type="text/javascript" src="../resources/js/i18n.js"></script>
 
 </body>
 </html>

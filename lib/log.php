@@ -3,7 +3,7 @@ require_once __DIR__ . '/config.php';
 
 function logError($data) {
     global $config;
-    $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['take_picture']['logfile'];
+    $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['dev']['logfile'];
 
     $file_data = date('c') . ":\n" . print_r($data, true) . "\n";
     if (is_file($logfile)) {

@@ -4,10 +4,12 @@ config/*
 !config/config.inc.php
 data/
 digicamcontrol/
+HEAD
 manual/faq.*
 node_modules/
 package-lock.json
-private/
+private/*
+!private/README.md
 resources/css/*
 !resources/css/README.md
 resources/js/*
@@ -23,4 +25,5 @@ vendor/simple-translator/
 /.htaccess
 .htpasswd
 *.patch
+.skip_welcome
 .vscode

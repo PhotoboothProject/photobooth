@@ -142,7 +142,7 @@ else
 	info "[Info]      Skipping common software checks..."
 fi
 
-cp -rf ./* "${booth_source}/"
+cp -rf ./ "${booth_source}/"
 chown -R www-data:www-data ${booth_source}
 
 for file in "${OLDFILES[@]}"; do

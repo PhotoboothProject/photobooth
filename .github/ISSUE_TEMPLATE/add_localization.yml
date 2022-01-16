@@ -1,0 +1,25 @@
+name: "\U0001F5FA Request a new language"
+description: Your language isn't supported? Create a localization request here!
+title: "[LOCALIZATION]: "
+labels: localization
+body:
+- type: markdown
+  attributes:
+    value: |
+      1. Please speak English, this is the language all maintainers can speak and write.
+      2. Please ask questions or configuration/deploy problems in our Telegram group (https://t.me/PhotoboothGroup).
+      3. Please take a moment to check that your language hasn't already been suggested.
+      4. Request as translator on (https://crowdin.com/project/photobooth).
+- type: textarea
+  id: description
+  attributes:
+    label: Request a language
+    placeholder: |
+      Please tell which language you are missing in Photobooth.
+  validations:
+    required: true
+- type: textarea
+  id: additional
+  attributes:
+    label: Additional context
+    description: Add any other context here.

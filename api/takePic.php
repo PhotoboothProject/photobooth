@@ -8,7 +8,7 @@ require_once '../lib/log.php';
 function takePicture($filename) {
     global $config;
 
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['demo_images']) {
         $demoFolder = __DIR__ . '/../resources/img/demo/';
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $filename);
@@ -40,6 +40,7 @@ function takePicture($filename) {
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => $output,
+                'php' => basename($_SERVER['PHP_SELF']),
             ];
             $ErrorString = json_encode($ErrorData);
             logError($ErrorData);
@@ -50,6 +51,7 @@ function takePicture($filename) {
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => $output,
+                'php' => basename($_SERVER['PHP_SELF']),
             ];
             $ErrorString = json_encode($ErrorData);
             logError($ErrorData);
@@ -84,32 +86,23 @@ if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_matc
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 
 if (!isset($_POST['style'])) {
-    die(
-        json_encode([
-            'error' => 'No style provided',
-        ])
-    );
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': No style provided';
+    logErrorAndDie($errormsg);
 }
 
 if ($_POST['style'] === 'photo') {
     takePicture($filename_tmp);
 } elseif ($_POST['style'] === 'collage') {
     if (!is_numeric($_POST['collageNumber'])) {
-        die(
-            json_encode([
-                'error' => 'No or invalid collage number provided',
-            ])
-        );
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': No or invalid collage number provided';
+        logErrorAndDie($errormsg);
     }
 
     $number = $_POST['collageNumber'] + 0;
 
     if ($number > $config['collage']['limit']) {
-        die(
-            json_encode([
-                'error' => 'Collage consists only of ' . $config['collage']['limit'] . ' pictures',
-            ])
-        );
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': Collage consists only of ' . $config['collage']['limit'] . ' pictures';
+        logErrorAndDie($errormsg);
     }
 
     $basecollage = substr($file, 0, -4);
@@ -120,33 +113,44 @@ if ($_POST['style'] === 'photo') {
 
     takePicture($filename);
 
-    die(
-        json_encode([
-            'success' => 'collage',
-            'file' => $file,
-            'collage_file' => $collage_name,
-            'current' => $number,
-            'limit' => $config['collage']['limit'],
-        ])
-    );
+    $LogData = [
+        'success' => 'collage',
+        'file' => $file,
+        'collage_file' => $collage_name,
+        'current' => $number,
+        'limit' => $config['collage']['limit'],
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled']) {
+        logError($LogData);
+    }
+    die($LogString);
 } elseif ($_POST['style'] === 'chroma') {
     takePicture($filename_tmp);
-    die(
-        json_encode([
-            'success' => 'chroma',
-            'file' => $file,
-        ])
-    );
+    $LogData = [
+        'success' => 'chroma',
+        'file' => $file,
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
+    $LogString = json_encode($LogData);
+    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+        logError($LogData);
+    }
+    die($LogString);
 } else {
-    die(
-        json_encode([
-            'error' => 'Invalid photo style provided',
-        ])
-    );
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': Invalid photo style provided';
+    logErrorAndDie($errormsg);
 }
 
 // send imagename to frontend
-echo json_encode([
+$LogData = [
     'success' => 'image',
     'file' => $file,
-]);
+    'php' => basename($_SERVER['PHP_SELF']),
+];
+$LogString = json_encode($LogData);
+if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+    logError($LogData);
+}
+die($LogString);

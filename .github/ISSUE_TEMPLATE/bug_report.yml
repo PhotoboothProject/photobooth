@@ -1,0 +1,86 @@
+name: "\U0001F41E Bug report"
+description: Create a report to help us improve
+title: "[BUG]: "
+labels: bug
+body:
+- type: markdown
+  attributes:
+    value: |
+      1. Please speak English, this is the language all maintainers can speak and write.
+      2. Please ask questions or configuration/deploy problems in our Telegram group (https://t.me/PhotoboothGroup).
+      3. Please take a moment to check that your bug hasn't already been reported.
+      4. Make sure it's not mentioned in the [FAQ](https://github.com/andi34/photobooth/blob/wiki/FAQ.md).
+      5. Please give all relevant information below for bug reports, because incomplete details will be handled as an invalid report!
+
+- type: textarea
+  id: description
+  attributes:
+    label: Describe the bug
+    description: |
+      A clear and concise description of what the bug is.
+  validations:
+    required: true
+
+- type: textarea
+  id: reproduce
+  attributes:
+    label: Steps to reproduce the behavior
+    description: |
+      1. Go to ...
+      2. Click on ....
+      3. Scroll down to ....
+      4. See error
+  validations:
+    required: true
+
+- type: textarea
+  id: expection
+  attributes:
+    label: Expected behavior
+    placeholder: |
+      A clear and concise description of what you expected to happen
+  validations:
+    required: true
+
+- type: input
+  id: photobooth-ver
+  attributes:
+    label: Photobooth Version
+    description: Photobooth Version (or commit reference) your instance is running
+  validations:
+    required: true
+
+- type: input
+  id: browser-ver
+  attributes:
+    label: Browser and browser version
+    description: Browser and version of the browser you are accessing Photobooth from
+
+- type: input
+  id: os-ver
+  attributes:
+    label: Operating System
+    description: The operating system you are using to run Photobooth, e.g Raspberry Pi OS with desktop
+
+
+- type: dropdown
+  id: workbefore
+  attributes:
+    label: Did it work before?
+    options:
+    - "Yes"
+    - "No"
+  validations:
+    required: true
+- type: input
+  id: workbefore-description
+  attributes:
+    label: Latest working version
+    description: |
+        If it worked before, please tell the latest working version.
+
+- type: textarea
+  id: additional
+  attributes:
+    label: Additional context
+    description: Add any other context or screenshots about the bug here.

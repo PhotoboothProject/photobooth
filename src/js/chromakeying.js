@@ -1,4 +1,4 @@
-/* globals MarvinColorModelConverter AlphaBoundary MarvinImage i18n Seriously initRemoteBuzzerFromDOM rotaryController */
+/* globals MarvinColorModelConverter AlphaBoundary MarvinImage Seriously initRemoteBuzzerFromDOM rotaryController photoboothTools */
 /* exported setBackgroundImage */
 let mainImage;
 let mainImageWidth;
@@ -9,18 +9,6 @@ let seriously;
 let target;
 let chroma;
 let seriouslyimage;
-
-const getTranslation = function (key) {
-    const translation = i18n(key, config.ui.language);
-    const fallbackTranslation = i18n(key, 'en');
-    if (translation) {
-        return translation;
-    } else if (fallbackTranslation) {
-        return fallbackTranslation;
-    }
-
-    return key;
-};
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -123,10 +111,8 @@ function setMainImage(imgSrc) {
             const r = parseInt(color.substr(1, 2), 16) / 255;
             const g = parseInt(color.substr(3, 2), 16) / 255;
             const b = parseInt(color.substr(5, 2), 16) / 255;
-            if (config.dev.enabled) {
-                console.log('Chromakeying color:', color);
-                console.log('Red:', r, 'Green:', g, 'Blue:', b);
-            }
+            photoboothTools.console.logDev('Chromakeying color:', color);
+            photoboothTools.console.logDev('Red:', r, 'Green:', g, 'Blue:', b);
             chroma.screen = [r, g, b, 1];
             seriously.go();
             mainImage = new Image();
@@ -196,10 +182,10 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 }
 
 function printImage(filename, cb) {
-    const errormsg = getTranslation('error');
+    const errormsg = photoboothTools.getTranslation('error');
 
     if (isPrinting) {
-        console.log('Printing already: ' + isPrinting);
+        photoboothTools.console.log('Printing already: ' + isPrinting);
     } else {
         isPrinting = true;
         setTimeout(function () {
@@ -210,22 +196,24 @@ function printImage(filename, cb) {
                     filename: filename
                 },
                 success: (data) => {
-                    console.log('Picture processed: ', data);
+                    photoboothTools.console.log('Picture processed: ', data);
 
                     if (data.error) {
-                        console.log('An error occurred: ', data.error);
-                        $('#print_mesg').empty();
+                        photoboothTools.console.log('An error occurred: ', data.error);
+                        photoboothTools.modal.empty('#print_mesg');
                         $('#print_mesg').html(
                             '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
                         );
                     }
 
                     setTimeout(function () {
-                        $('#print_mesg').removeClass('modal--show');
+                        photoboothTools.modal.close('#print_mesg');
                         if (data.error) {
-                            $('#print_mesg').empty();
+                            photoboothTools.modal.empty('#print_mesg');
                             $('#print_mesg').html(
-                                '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
+                                '<div class="modal__body"><span>' +
+                                    photoboothTools.getTranslation('printing') +
+                                    '</span></div>'
                             );
                         }
                         cb();
@@ -233,17 +221,19 @@ function printImage(filename, cb) {
                     }, config.print.time);
                 },
                 error: (jqXHR, textStatus) => {
-                    console.log('An error occurred: ', textStatus);
-                    $('#print_mesg').empty();
+                    photoboothTools.console.log('An error occurred: ', textStatus);
+                    photoboothTools.modal.empty('#print_mesg');
                     $('#print_mesg').html(
                         '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
                     );
 
                     setTimeout(function () {
-                        $('#print_mesg').removeClass('modal--show');
-                        $('#print_mesg').empty();
+                        photoboothTools.modal.close('#print_mesg');
+                        photoboothTools.modal.empty('#print_mesg');
                         $('#print_mesg').html(
-                            '<div class="modal__body"><span>' + getTranslation('printing') + '</span></div>'
+                            '<div class="modal__body"><span>' +
+                                photoboothTools.getTranslation('printing') +
+                                '</span></div>'
                         );
                         cb();
                         isPrinting = false;
@@ -273,7 +263,7 @@ function saveImage(cb) {
 
 function printImageHandler(ev) {
     ev.preventDefault();
-    $('#print_mesg').addClass('modal--show');
+    photoboothTools.modal.open('#print_mesg');
 
     setTimeout(function () {
         saveImage((data) => {
@@ -291,12 +281,12 @@ function printImageHandler(ev) {
 function saveImageHandler(ev) {
     ev.preventDefault();
 
-    $('#save_mesg').addClass('modal--show');
+    photoboothTools.modal.open('#save_mesg');
 
     setTimeout(function () {
         saveImage(() => {
             setTimeout(function () {
-                $('#save_mesg').removeClass('modal--show');
+                photoboothTools.modal.close('#save_mesg');
                 $('#save-btn').blur();
             }, 2000);
         });
@@ -316,7 +306,7 @@ function closeHandler(ev) {
 $(document).on('keyup', function (ev) {
     if (config.print.from_chromakeying && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
         if (isPrinting) {
-            console.log('Printing already in progress!');
+            photoboothTools.console.log('Printing already in progress!');
         } else {
             $('#print-btn').trigger('click');
         }

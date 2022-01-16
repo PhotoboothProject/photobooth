@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/arrayDeepMerge.php';
+require_once __DIR__ . '/helper.php';
 
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
@@ -26,6 +27,9 @@ $cmds = [
         'nodebin' => [
             'cmd' => '',
         ],
+        'reboot' => [
+            'cmd' => '',
+        ],
         'shutdown' => [
             'cmd' => '',
         ],
@@ -49,6 +53,9 @@ $cmds = [
         ],
         'nodebin' => [
             'cmd' => '/usr/bin/node',
+        ],
+        'reboot' => [
+            'cmd' => '/sbin/shutdown -r now',
         ],
         'shutdown' => [
             'cmd' => '/sbin/shutdown -h now',
@@ -94,13 +101,14 @@ $config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
 $config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
 $config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
 $config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
+$config['reboot']['cmd'] = $cmds[$os]['reboot']['cmd'];
 $config['shutdown']['cmd'] = $cmds[$os]['shutdown']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';
 
 $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
-$config['take_picture']['logfile'] = 'take_picture.log';
+$config['dev']['logfile'] = 'error.log';
 
 $config['ui']['github'] = 'andi34';
 $config['ui']['branding'] = 'Photobooth';
@@ -150,6 +158,14 @@ if (!isset($config['background']['chroma'])) {
     $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
 }
 
+if (!isset($config['webserver']['ip'])) {
+    $config['webserver']['ip'] = getPhotoboothIp();
+}
+
+if (!isset($config['qr']['url'])) {
+    $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
+}
+
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not write config/my.config.inc.php.');
 } elseif (!file_exists($my_config_file) && !is_writable(__DIR__ . '/../config/')) {
@@ -178,8 +194,4 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = $path;
 }
 
-function getrootpath($relative_path) {
-    $realpath = realpath($relative_path);
-    $rootpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $realpath);
-    return $rootpath;
-}
+$config['folders']['lang'] = getrootpath('../resources/lang');

@@ -20,14 +20,11 @@ if ($data['type'] == 'reset') {
                 foreach ($files as $file) {
                     // iterate files
                     if (is_file($file)) {
-                        unlink($file); // delete file
+                        // delete file
+                        unlink($file);
                     }
                 }
             }
-        }
-        $logFile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['take_picture']['logfile'];
-        if (is_file($logFile)) {
-            unlink($logFile);
         }
     }
 
@@ -44,9 +41,19 @@ if ($data['type'] == 'reset') {
         }
     }
 
+    $logFiles = glob($config['foldersAbs']['tmp'] . '/*.log');
+    foreach ($logFiles as $logFile) {
+        // iterate files
+        if (is_file($logFile)) {
+            // delete file
+            unlink($logFile);
+        }
+    }
+
     // delete db.txt
     if (is_file(DB_FILE)) {
-        unlink(DB_FILE); // delete file
+        // delete file
+        unlink(DB_FILE);
     }
 
     die(json_encode('success'));
@@ -114,7 +121,7 @@ if ($data['type'] == 'config') {
                 copy('../resources/css/modern_style.css', '../resources/css/custom_style.css');
             }
             if (!file_exists('../resources/css/custom_chromakeying.css')) {
-                copy('../resources/css/modern_chromakeying.css.css', '../resources/css/custom_chromakeying.css');
+                copy('../resources/css/modern_chromakeying.css', '../resources/css/custom_chromakeying.css');
             }
             if (!file_exists('../resources/css/custom_live_chromakeying.css')) {
                 copy('../resources/css/modern_live_chromakeying.css', '../resources/css/custom_live_chromakeying.css');
@@ -127,8 +134,21 @@ if ($data['type'] == 'config') {
         $newConfig['synctodrive']['enabled'] = false;
     }
 
+    if (isset($newConfig['database']['file']) && empty($newConfig['database']['file'])) {
+        $newConfig['database']['file'] = 'db';
+    }
+
+    if (isset($newConfig['mail']['file']) && empty($newConfig['mail']['file'])) {
+        $newConfig['mail']['file'] = 'mail-adresses';
+    }
+
     if (isset($newConfig['remotebuzzer']['port']) && empty($newConfig['remotebuzzer']['port'])) {
         $newConfig['remotebuzzer']['port'] = 14711;
+    }
+
+    if (isset($newConfig['get_request']['server']) && empty($newConfig['get_request']['server'])) {
+        $newConfig['get_request']['countdown'] = false;
+        $newConfig['get_request']['processed'] = false;
     }
 
     if ($newConfig['collage']['layout'] === '1+2') {

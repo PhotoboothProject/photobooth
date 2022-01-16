@@ -39,6 +39,9 @@ if (
         <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
         <link rel="stylesheet" type="text/css" href="../resources/css/admin.css">
+	<?php if (is_file("../private/overrides.css")): ?>
+	<link rel="stylesheet" href="../private/overrides.css" />
+	<?php endif; ?>
 </head>
 <body>
 <!-- NavBar content -->
@@ -89,9 +92,10 @@ if (
                 echo '<li><a class="adminnavlistelement" href="#myconfig" id="nav-myconfig"><div><span data-i18n="myconfig">myconfig</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#remotebuzzerlog" id="nav-remotebuzzerlog"><div><span data-i18n="remotebuzzer">remotebuzzer</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#synctodrivelog" id="nav-synctodrivelog"><div><span data-i18n="synctodrive">synctodrive</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#cameralog" id="nav-cameralog"><div><span data-i18n="cameralog">cameralog</span></div></a></li>';
+                echo '<li><a class="adminnavlistelement" href="#devlog" id="nav-devlog"><div><span data-i18n="devlog">devlog</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#serverprocesses" id="nav-serverprocesses"><div><span data-i18n="serverprocesses">serverprocesses</span></div></a></li>';
                 echo '<li><a class="adminnavlistelement" href="#bootconfig" id="nav-bootconfig"><div><span data-i18n="bootconfig">bootconfig</span></div></a></li>';
+                echo '<li><a class="adminnavlistelement" href="#githead" id="nav-githead"><div><span data-i18n="githead">githead</span></div></a></li>';
         
                 html_src_indent(--$indent);
                 echo '</ul>';
@@ -107,10 +111,11 @@ if (
         <script type="text/javascript" src="../api/config.php"></script>
         <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="../node_modules/selectize/dist/js/standalone/selectize.min.js"></script>
+        <script type="text/javascript" src="../resources/js/tools.js"></script>
         <script type="text/javascript" src="../resources/js/theme.js"></script>
         <script type="text/javascript" src="../resources/js/debugpanel.js"></script>
         <script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-        <script type="text/javascript" src="../resources/js/i18n-sub.js"></script>
+        <script type="text/javascript" src="../resources/js/i18n.js"></script>
 </body>
 </html>
 

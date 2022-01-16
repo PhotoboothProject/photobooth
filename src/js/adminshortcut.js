@@ -1,3 +1,4 @@
+/* globals photoboothTools */
 /* exported adminsettings */
 let admincount = 0;
 
@@ -10,7 +11,7 @@ function adminsettings() {
     if (admincount == 3) {
         window.location.href = 'login/index.php';
     }
-    console.log(admincount);
+    photoboothTools.console.log(admincount);
     admincount++;
     setTimeout(countreset, 10000);
 }

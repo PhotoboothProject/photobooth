@@ -1,20 +1,25 @@
-/* globals i18n */
+/* globals photoboothTools */
 $(function () {
-    const getTranslation = function (key) {
-        const translation = i18n(key, config.ui.language);
-        const fallbackTranslation = i18n(key, 'en');
-        if (translation) {
-            return translation;
-        } else if (fallbackTranslation) {
-            return fallbackTranslation;
-        }
+    const shellCommand = function ($mode) {
+        const command = {
+            mode: $mode
+        };
 
-        return key;
+        photoboothTools.console.log('Run' + $mode);
+
+        jQuery
+            .post('../api/shellCommand.php', command)
+            .done(function (result) {
+                photoboothTools.console.log($mode, 'result: ', result);
+            })
+            .fail(function (xhr, status, result) {
+                photoboothTools.console.log($mode, 'result: ', result);
+            });
     };
 
     $('#reset-btn').on('click', function (e) {
         e.preventDefault();
-        const msg = getTranslation('really_delete');
+        const msg = photoboothTools.getTranslation('really_delete');
         const really = confirm(msg);
         const data = {type: 'reset'};
         const elem = $(this);
@@ -73,6 +78,20 @@ $(function () {
         return false;
     });
 
+    $('#updater-btn').on('click', function (e) {
+        e.preventDefault();
+        location.assign('../update.php');
+
+        return false;
+    });
+
+    $('#dependencies-btn').on('click', function (e) {
+        e.preventDefault();
+        location.assign('../dependencies.php');
+
+        return false;
+    });
+
     $('#databaserebuild-btn').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
@@ -104,16 +123,16 @@ $(function () {
             method: 'GET',
             success: (data) => {
                 $('#checkVersion').empty();
-                console.log('data', data);
+                photoboothTools.console.log('data', data);
                 if (!data.updateAvailable) {
-                    $('#current_version_text').text(getTranslation('using_latest_version'));
+                    $('#current_version_text').text(photoboothTools.getTranslation('using_latest_version'));
                 } else if (/^\d+\.\d+\.\d+$/u.test(data.availableVersion)) {
-                    $('#current_version_text').text(getTranslation('current_version'));
+                    $('#current_version_text').text(photoboothTools.getTranslation('current_version'));
                     $('#current_version').text(data.currentVersion);
-                    $('#available_version_text').text(getTranslation('available_version'));
+                    $('#available_version_text').text(photoboothTools.getTranslation('available_version'));
                     $('#available_version').text(data.availableVersion);
                 } else {
-                    $('#current_version_text').text(getTranslation('test_update_available'));
+                    $('#current_version_text').text(photoboothTools.getTranslation('test_update_available'));
                 }
 
                 elem.removeClass('saving');
@@ -126,7 +145,7 @@ $(function () {
             },
 
             error: (jqXHR) => {
-                console.log('Error checking Version: ', jqXHR.responseText);
+                photoboothTools.console.log('Error checking Version: ', jqXHR.responseText);
 
                 elem.removeClass('saving');
                 elem.addClass('error');
@@ -142,6 +161,20 @@ $(function () {
     $('#debugpanel-btn').on('click', function (ev) {
         ev.preventDefault();
         window.open('debugpanel.php');
+
+        return false;
+    });
+
+    $('#reboot-btn').on('click', function (ev) {
+        ev.preventDefault();
+        shellCommand('reboot');
+
+        return false;
+    });
+
+    $('#shutdown-btn').on('click', function (ev) {
+        ev.preventDefault();
+        shellCommand('shutdown');
 
         return false;
     });

@@ -4,7 +4,7 @@ const translator = new Translator({
     defaultLanguage: 'en',
     detectLanguage: false,
     registerGlobally: 'i18n',
-    filesLocation: 'resources/lang',
+    filesLocation: config.folders.lang,
     debug: config.dev.enabled
 });
 

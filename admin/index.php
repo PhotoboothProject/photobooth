@@ -34,6 +34,9 @@ if (
         <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
         <link rel="stylesheet" type="text/css" href="../resources/css/admin.css">
+	<?php if (is_file("../private/overrides.css")): ?>
+	<link rel="stylesheet" href="../private/overrides.css" />
+	<?php endif; ?>
 </head>
 <body>
 <!-- NavBar content -->
@@ -286,9 +289,10 @@ if (
         <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="../node_modules/waypoints/lib/jquery.waypoints.min.js"></script>
         <script type="text/javascript" src="../node_modules/selectize/dist/js/standalone/selectize.min.js"></script>
+        <script type="text/javascript" src="../resources/js/tools.js"></script>
         <script type="text/javascript" src="../resources/js/theme.js"></script>
         <script type="text/javascript" src="../resources/js/admin.js"></script>
         <script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-        <script type="text/javascript" src="../resources/js/i18n-sub.js"></script>
+        <script type="text/javascript" src="../resources/js/i18n.js"></script>
  </body>
 </html>

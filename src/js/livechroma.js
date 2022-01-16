@@ -1,4 +1,4 @@
-/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously rotaryController */
+/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously rotaryController photoboothTools */
 /* exported setBackgroundImage setMainImage */
 let mainImage;
 let mainImageWidth;
@@ -57,6 +57,7 @@ function alphaBoundary(imageOut, radius) {
 
 // eslint-disable-next-line no-unused-vars
 function setMainImage(imgSrc) {
+    photoboothTools.console.logDev('[LIVECHROMA] Keying variant: ' + config.keying.variant);
     if (config.keying.variant === 'marvinj') {
         const image = new MarvinImage();
         image.load(imgSrc, function () {
@@ -113,10 +114,8 @@ function setMainImage(imgSrc) {
             const r = parseInt(color.substr(1, 2), 16) / 255;
             const g = parseInt(color.substr(3, 2), 16) / 255;
             const b = parseInt(color.substr(5, 2), 16) / 255;
-            if (config.dev.enabled) {
-                console.log('Chromakeying color:', color);
-                console.log('Red:', r, 'Green:', g, 'Blue:', b);
-            }
+            photoboothTools.console.logDev('Chromakeying color:', color);
+            photoboothTools.console.logDev('Red:', r, 'Green:', g, 'Blue:', b);
             chroma.screen = [r, g, b, 1];
             seriously.go();
             mainImage = new Image();
@@ -208,7 +207,7 @@ function saveImage(cb) {
                     .on('click', (ev) => {
                         ev.preventDefault();
 
-                        const msg = photoBooth.getTranslation('really_delete_image');
+                        const msg = photoboothTools.getTranslation('really_delete_image');
                         const really = config.delete.no_request ? true : confirm(data.filename + ' ' + msg);
                         if (really) {
                             photoBooth.deleteImage(data.filename, (result) => {
@@ -217,24 +216,24 @@ function saveImage(cb) {
                                         photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
                                             if (response.success) {
                                                 setTimeout(function () {
-                                                    photoBooth.reloadPage();
+                                                    photoboothTools.reloadPage();
                                                 }, 1000);
                                             } else {
-                                                console.log('Error while deleting image');
+                                                photoboothTools.console.log('Error while deleting image');
                                                 setTimeout(function () {
-                                                    photoBooth.reloadPage();
+                                                    photoboothTools.reloadPage();
                                                 }, 5000);
                                             }
                                         });
                                     } else {
                                         setTimeout(function () {
-                                            photoBooth.reloadPage();
+                                            photoboothTools.reloadPage();
                                         }, 1000);
                                     }
                                 } else {
-                                    console.log('Error while deleting image');
+                                    photoboothTools.console.log('Error while deleting image');
                                     setTimeout(function () {
-                                        photoBooth.reloadPage();
+                                        photoboothTools.reloadPage();
                                     }, 5000);
                                 }
                             });
@@ -268,7 +267,7 @@ $('.backgroundPreview').on('click', function () {
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
     takingPic = true;
-    const chromaInfo = photoBooth.getTranslation('chromaInfoAfter');
+    const chromaInfo = photoboothTools.getTranslation('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
 
@@ -290,30 +289,28 @@ $('.takeChroma, .newchroma').on('click', function (e) {
 $(document).on('keyup', function (ev) {
     if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
         if (!backgroundImage) {
-            console.log('Please choose a background first!');
+            photoboothTools.console.log('Please choose a background first!');
         } else if (needsReload) {
-            console.log('Please reload the page to take a new Picture!');
+            photoboothTools.console.log('Please reload the page to take a new Picture!');
         } else if (!takingPic) {
             $('.closeGallery').trigger('click');
             $('.takeChroma').trigger('click');
         } else if (config.dev.enabled && takingPic) {
-            console.log('Taking photo already in progress!');
+            photoboothTools.console.log('Taking photo already in progress!');
         }
     }
 
     if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
         if (!backgroundImage) {
-            console.log('Please choose a background first!');
+            photoboothTools.console.log('Please choose a background first!');
         } else if (needsReload) {
-            console.log('Please reload the page to take a new Picture!');
+            photoboothTools.console.log('Please reload the page to take a new Picture!');
         } else if (!takingPic) {
             $('.closeGallery').trigger('click');
-            if (config.dev.enabled) {
-                console.log('Collage key pressed. Not possible on live chroma, triggering photo now.');
-            }
+            photoboothTools.console.logDev('Collage key pressed. Not possible on live chroma, triggering photo now.');
             $('.takeChroma').trigger('click');
         } else if (config.dev.enabled && takingPic) {
-            console.log('Taking photo already in progress!');
+            photoboothTools.console.log('Taking photo already in progress!');
         }
     }
 });
@@ -322,7 +319,7 @@ $('.reloadPage').on('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    photoBooth.reloadPage();
+    photoboothTools.reloadPage();
 });
 
 // Open Gallery Button
@@ -338,6 +335,6 @@ $('.closebtn').on('click', function () {
 });
 
 $(document).ready(function () {
-    console.log('DOM ready');
+    photoboothTools.console.log('[LIVECHROMA] DOM ready');
     rotaryController.focusSet('#start');
 });

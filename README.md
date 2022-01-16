@@ -1,8 +1,8 @@
 # Photobooth v3
 
-A Photobooth web interface for Raspberry Pi and Windows.
+A Photobooth web interface for Linux and Windows.
 
-Photobooth was initially developped by Andre Rinas, you can find his source [here](https://github.com/andreknieriem/photobooth).
+Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).
 
 **This is my personal Photobooth fork with a lot of extras and improvements.**  
 _(The full changelog can be found inside [the Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).)_
@@ -107,13 +107,16 @@ If you're having trouble or questions please take a look at our
 [FAQ](https://github.com/andi34/photobooth/wiki#faq---frequently-asked-questions)
 before opening a new issue.
 
-## :globe_with_meridians: Browser support
-
-[Click here](https://github.com/andi34/photobooth/wiki#browser-support) to find out if your Browser is supported.
-
 ### :mag: Changelog
 
 Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).
+
+### :copyright: License
+
+Photobooth source is licensed under the MIT license.  
+  
+Once build, Photobooth incorporates several parts and optimizations that are covered by a different license which could apply to Photobooth as well.  
+All dependencies include their respective LICENSE files.
 
 ### :tada: Donation
 
@@ -123,7 +126,9 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 
 ### :mortar_board: Tutorial
 
-[Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)
+[Raspberry Pi Weddingphotobooth (german)](https://www.andrerinas.de/tutorials/raspberry-pi-einen-dslr-weddingphotobooth-erstellen.html)  
+[Raspberry Pi Fotobox für Hochzeiten und Geburtstage (German)](https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochzeiten-und-geburtstage)  
+[Raspberry Pi Photobooth in a classic vintage plate camera](https://florianmuller.com/raspberry-pi-photobooth-in-a-classic-vintage-plate-camera)  
 
 ### :clap: Contributors and thanks to
 
@@ -165,4 +170,5 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [Christian Tarne](https://github.com/Metropo)
 - [DeNeD1](https://github.com/DeNeD1)
 - [DIY89](https://github.com/DIY89)
-
+- [mhellmeier](https://github.com/mhellmeier)
+- [Uwe Pieper](https://github.com/up-87)
