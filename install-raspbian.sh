@@ -482,13 +482,26 @@ print_logo
 
 info "### The Photobooth installer for your Raspberry Pi."
 
-echo -e "\033[0;33m### Please select a version to install:"
-echo -e "    1 Install last development version (git)"
-echo -e "    2 Install latest stable Release (package)"
+echo -e "\033[0;33m### Choose your Photobooth version."
+echo -e "    Note: Installation via git will take more time"
+echo -e "    and is recommended for brave users."
+echo -e "    "
+echo -e "    Versions available: "
+echo -e "    1 Install latest stable Release (git)"
+echo -e "    2 Install latest development version (git)"
+echo -e "    3 Install latest stable Release (package)"
 ask_yes_no "Please enter your choice" "1"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[1]$ ]]; then
-    info "### We are installing last development version via git"
+    info "### We are installing last stable Release via git."
+    BRANCH="stable3"
+    GIT_INSTALL=true
+    COMMON_PACKAGES+=(
+        'git'
+        'yarn'
+    )
+elif [[ $REPLY =~ ^[2]$ ]]; then
+    info "### We are installing last development version via git."
     BRANCH="dev"
     GIT_INSTALL=true
     COMMON_PACKAGES+=(
@@ -496,10 +509,10 @@ if [[ $REPLY =~ ^[1]$ ]]; then
         'yarn'
     )
 else
-    if [[ ! $REPLY =~ ^[2]$ ]]; then
+    if [[ ! $REPLY =~ ^[3]$ ]]; then
         info "### Invalid choice!"
     fi
-    info "### We are installing latest stable Release from package"
+    info "### We are installing latest stable Release from package."
     BRANCH="stable3"
     GIT_INSTALL=false
     NEEDS_NODEJS_CHECK=false
