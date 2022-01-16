@@ -444,10 +444,14 @@ const photoBooth = (function () {
                     },
                     500,
                     function () {
+                        blocker.css('opacity', '0');
                         blocker.hide();
                     }
                 );
                 aperture.fadeTo(1000, 0, function () {
+                    aperture.css('opacity', '1');
+                    aperture.css('width', '150%');
+                    aperture.css('padding-bottom', '150%');
                     aperture.hide();
                 });
                 cheese.empty();
