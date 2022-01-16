@@ -1752,6 +1752,12 @@ $configsetup = [
             ],
             'value' => $config['ui']['style'],
         ],
+        'ui_shutter_animation' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'ui[shutter_animation]',
+            'value' => $config['ui']['shutter_animation'],
+        ],
         'button_show_fs' => [
             'view' => 'basic',
             'type' => 'checkbox',

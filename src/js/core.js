@@ -427,7 +427,9 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = function (data, retry = 0) {
-        blocker.fadeTo(500, 1);
+        if (config.ui.shutter_animation) {
+            blocker.fadeTo(500, 1);
+        }
         startTime = new Date().getTime();
         jQuery
             .post('api/takePic.php', data)
@@ -436,24 +438,26 @@ const photoBooth = (function () {
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('took ' + data.style, result);
                 photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
-                aperture.show();
-                aperture.animate(
-                    {
-                        width: 0,
-                        'padding-bottom': 0
-                    },
-                    500,
-                    function () {
-                        blocker.css('opacity', '0');
-                        blocker.hide();
-                    }
-                );
-                aperture.fadeTo(1000, 0, function () {
-                    aperture.css('opacity', '1');
-                    aperture.css('width', '150%');
-                    aperture.css('padding-bottom', '150%');
-                    aperture.hide();
-                });
+                if (config.ui.shutter_animation) {
+                    aperture.show();
+                    aperture.animate(
+                        {
+                            width: 0,
+                            'padding-bottom': 0
+                        },
+                        500,
+                        function () {
+                            blocker.css('opacity', '0');
+                            blocker.hide();
+                        }
+                    );
+                    aperture.fadeTo(1000, 0, function () {
+                        aperture.css('opacity', '1');
+                        aperture.css('width', '150%');
+                        aperture.css('padding-bottom', '150%');
+                        aperture.hide();
+                    });
+                }
                 cheese.empty();
                 if (config.preview.flipHorizontal) {
                     idVideoView.removeClass('flip-horizontal');

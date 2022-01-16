@@ -298,6 +298,7 @@ $config['protect']['localhost_manual'] = false;
 // U S E R   I N T E R F A C E
 // possible style values: "classic", "modern", "custom"
 $config['ui']['style'] = 'modern';
+$config['ui']['shutter_animation'] = true;
 $config['button']['show_fs'] = false;
 $config['button']['homescreen'] = true;
 $config['ui']['result_buttons'] = true;
