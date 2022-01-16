@@ -36,7 +36,7 @@ function takePicture($filename) {
 
         if ($returnValue) {
             $ErrorData = [
-                'error' => 'Gphoto returned with an error code',
+                'error' => 'Take picture command returned an error code',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => $output,
