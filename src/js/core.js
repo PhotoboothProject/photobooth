@@ -253,8 +253,7 @@ const photoBooth = (function () {
                 .post('api/takeVideo.php', dataVideo)
                 .done(function (result) {
                     photoboothTools.console.log('Stop webcam', result);
-                    const track = api.stream.getTracks()[0];
-                    track.stop();
+                    api.stream.getTracks()[0].stop();
                     idVideoView.hide();
                 })
                 .fail(function (xhr, status, result) {
