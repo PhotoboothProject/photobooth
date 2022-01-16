@@ -85,6 +85,8 @@ if (
 
 <video id="video--preview" autoplay playsinline></video>
 <body class="deselect">
+<div id="blocker"></div>
+<div id="aperture"></div>
 	<div id="wrapper">
 		<?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
 
