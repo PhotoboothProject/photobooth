@@ -264,6 +264,32 @@ const photoBooth = (function () {
         }
     };
 
+    api.shutter = {
+        start: function () {
+            blocker.fadeTo(500, 1);
+        },
+        stop: function () {
+            aperture.show();
+            aperture.animate(
+                {
+                    width: 0,
+                    'padding-bottom': 0
+                },
+                500,
+                function () {
+                    blocker.css('opacity', '0');
+                    blocker.hide();
+                }
+            );
+            aperture.fadeTo(1000, 0, function () {
+                aperture.css('opacity', '1');
+                aperture.css('width', '150%');
+                aperture.css('padding-bottom', '150%');
+                aperture.hide();
+            });
+        }
+    };
+
     api.showResultInner = function (flag) {
         if (flag) {
             resultInner.addClass('show');
@@ -428,7 +454,7 @@ const photoBooth = (function () {
 
     api.callTakePicApi = function (data, retry = 0) {
         if (config.ui.shutter_animation) {
-            blocker.fadeTo(500, 1);
+            api.shutter.start();
         }
         startTime = new Date().getTime();
         jQuery
@@ -439,24 +465,7 @@ const photoBooth = (function () {
                 photoboothTools.console.log('took ' + data.style, result);
                 photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
                 if (config.ui.shutter_animation) {
-                    aperture.show();
-                    aperture.animate(
-                        {
-                            width: 0,
-                            'padding-bottom': 0
-                        },
-                        500,
-                        function () {
-                            blocker.css('opacity', '0');
-                            blocker.hide();
-                        }
-                    );
-                    aperture.fadeTo(1000, 0, function () {
-                        aperture.css('opacity', '1');
-                        aperture.css('width', '150%');
-                        aperture.css('padding-bottom', '150%');
-                        aperture.hide();
-                    });
+                    api.shutter.stop();
                 }
                 cheese.empty();
                 if (config.preview.flipHorizontal) {
