@@ -65,6 +65,8 @@ if (
 		<?php endif; ?>
 	</head>
 <body>
+<div id="blocker"></div>
+<div id="aperture"></div>
 	<div class="chromawrapper">
 	<div class="rotarygroup" id="start">
 		<div class="top-bar">
