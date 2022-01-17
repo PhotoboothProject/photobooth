@@ -192,6 +192,34 @@
   font-size: 3em;
 }
 
+.loading {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0;
+  z-index: 102;
+  font-size: 3.125em;
+  text-align: center;
+  width: 100%;
+
+  p {
+    margin: 0 0 0.2em;
+  }
+
+  .btn {
+    font-size: 0.4em;
+  }
+
+  @media (max-width: 767px) {
+    bottom: 0.5em;
+  }
+}
+
+.error {
+  p {
+    color: red;
+  }
+}
+
 @media (max-width: 1280px) and (orientation: landscape) {
   .chromawrapper {
     padding: 0;
