@@ -372,7 +372,6 @@ const photoBooth = (function () {
             if (config.get_request.countdown) {
                 api.getRequest(photoStyle);
             }
-            counter.empty();
 
             if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.picture.no_cheese) {
                 api.stopPreviewVideo();
@@ -977,6 +976,7 @@ const photoBooth = (function () {
                 window.setTimeout(() => element.addClass('tick'), 50);
                 window.setTimeout(timerFunction, 1000);
             } else {
+                element.empty();
                 cb();
             }
             count++;
