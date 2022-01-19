@@ -352,6 +352,12 @@ const photoBooth = (function () {
             config.preview.mode === PreviewMode.DEVICE.valueOf() ||
             config.preview.mode === PreviewMode.GPHOTO.valueOf()
         ) {
+            if (
+                config.preview.mode === PreviewMode.GPHOTO.valueOf() &&
+                ((!config.preview.gphoto_bsm && retry > 0) || nextCollageNumber > 0)
+            ) {
+                api.startVideo(CameraDisplayMode.INIT);
+            }
             api.startVideo(CameraDisplayMode.COUNTDOWN);
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             ipcamView.show();
