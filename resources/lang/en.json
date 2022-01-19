@@ -305,7 +305,7 @@
   "manual:general:download_thumbs": "If enabled, thumbnails will be used at download (if exist) instead the full sized image.",
   "manual:general:picture_preview_before_processing": "If enabled, images are preloaded and shown during filter processing.",
   "manual:general:picture_retry_on_error": "Set how often the system will try to take a picture in the event of an error. 0 = disabled.",
-  "manual:general:picture_retry_timeout": "Set a time after which the photo recording will be tried again (countdown). \"Retry taking a picture\" needs to be set to a value > 0.",
+  "manual:general:picture_retry_timeout": "Set a time after which the photo recording will be tried again. A notification is visible for defined time. Countdown will be used as defined for picture / next collage image. \"Retry taking a picture\" needs to be set to a value > 0.",
   "manual:general:picture_thumb_size": "Choose thumbnail size: XS = max 360px, S = max 540px, M = max 900px, L = max 1080px, XL = max 1260px",
   "manual:general:picture_time_to_live": "Choose a time between 1 and 90 seconds. Your picture is visible for that time on the result screen after taking it.",
   "manual:general:start_screen_subtitle": "Enter the subtitle visible on startpage.",

@@ -67,8 +67,7 @@ const photoBooth = (function () {
         command,
         startTime,
         endTime,
-        totalTime,
-        countdownTime = config.picture.cntdwn_time;
+        totalTime;
 
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -366,12 +365,7 @@ const photoBooth = (function () {
 
         loader.addClass('open');
 
-        if (retry > 0) {
-            countdownTime = config.picture.retry_timeout;
-        } else if (nextCollageNumber > 0) {
-            countdownTime = config.collage.cntdwn_time;
-        }
-        api.startCountdown(countdownTime, counter, () => {
+        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
             if (config.get_request.countdown) {
                 api.getRequest(photoStyle);
             }
@@ -501,7 +495,7 @@ const photoBooth = (function () {
                         );
                         setTimeout(() => {
                             api.thrill(data.style, retry);
-                        }, 2000);
+                        }, config.picture.retry_timeout * 1000);
                     } else {
                         api.errorPic(result);
                     }
