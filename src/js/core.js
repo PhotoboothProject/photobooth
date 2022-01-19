@@ -100,6 +100,14 @@ const photoBooth = (function () {
         gallery.find('.gallery__inner').hide();
         spinner.hide();
         sendMail.hide();
+        if (config.preview.flipHorizontal) {
+            if (!idVideoView.hasClass('flip-horizontal')) {
+                idVideoView.addClass('flip-horizontal');
+            }
+            if (!idVideoPreview.hasClass('flip-horizontal')) {
+                idVideoPreview.addClass('flip-horizontal');
+            }
+        }
         idVideoView.hide();
         idVideoPreview.hide();
         idVideoSensor.hide();
@@ -153,11 +161,6 @@ const photoBooth = (function () {
 
         if (!getMedia) {
             return;
-        }
-
-        if (config.preview.flipHorizontal) {
-            idVideoView.addClass('flip-horizontal');
-            idVideoPreview.addClass('flip-horizontal');
         }
 
         getMedia
@@ -471,10 +474,6 @@ const photoBooth = (function () {
                     api.shutter.stop();
                 }
                 cheese.empty();
-                if (config.preview.flipHorizontal) {
-                    idVideoView.removeClass('flip-horizontal');
-                    idVideoPreview.removeClass('flip-horizontal');
-                }
 
                 imgFilter = config.filters.defaults;
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
