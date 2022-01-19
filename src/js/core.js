@@ -67,7 +67,8 @@ const photoBooth = (function () {
         command,
         startTime,
         endTime,
-        totalTime;
+        totalTime,
+        countdownTime = config.picture.cntdwn_time;
 
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -315,7 +316,7 @@ const photoBooth = (function () {
             });
     };
 
-    api.thrill = function (photoStyle) {
+    api.thrill = function (photoStyle, retry = 0) {
         api.closeNav();
         api.reset();
         api.closeGallery();
@@ -359,32 +360,17 @@ const photoBooth = (function () {
 
         loader.addClass('open');
 
-        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
+        if (retry > 0) {
+            countdownTime = config.picture.retry_timeout;
+        } else if (nextCollageNumber > 0) {
+            countdownTime = config.collage.cntdwn_time;
+        }
+        api.startCountdown(countdownTime, counter, () => {
             if (config.get_request.countdown) {
                 api.getRequest(photoStyle);
             }
-            api.cheese(photoStyle);
-        });
-    };
+            counter.empty();
 
-    api.cheese = function (photoStyle, retry = 0) {
-        photoboothTools.console.logDev('Photostyle: ' + photoStyle);
-
-        counter.empty();
-        cheese.empty();
-
-        if (config.picture.no_cheese) {
-            photoboothTools.console.log('Cheese is disabled.');
-        } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
-            cheese.text(photoboothTools.getTranslation('cheese'));
-        } else {
-            cheese.text(photoboothTools.getTranslation('cheeseCollage'));
-            $('<p>')
-                .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
-                .appendTo('.cheese');
-        }
-
-        if (retry <= 0) {
             if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.picture.no_cheese) {
                 api.stopPreviewVideo();
             }
@@ -401,16 +387,32 @@ const photoBooth = (function () {
                     error: 'No preview by device cam available!'
                 });
             } else if (config.picture.no_cheese) {
-                api.takePic(photoStyle);
+                photoboothTools.console.log('Cheese is disabled.');
+                api.takePic(photoStyle, retry);
             } else {
+                api.cheese(photoStyle);
                 setTimeout(() => {
-                    api.takePic(photoStyle);
+                    api.takePic(photoStyle, retry);
                 }, config.picture.cheese_time);
             }
+        });
+    };
+
+    api.cheese = function (photoStyle) {
+        photoboothTools.console.logDev('Photostyle: ' + photoStyle);
+        cheese.empty();
+
+        if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
+            cheese.text(photoboothTools.getTranslation('cheese'));
+        } else {
+            cheese.text(photoboothTools.getTranslation('cheeseCollage'));
+            $('<p>')
+                .text(`${nextCollageNumber + 1} / ${config.collage.limit}`)
+                .appendTo('.cheese');
         }
     };
 
-    api.takePic = function (photoStyle) {
+    api.takePic = function (photoStyle, retry) {
         photoboothTools.console.log('Take Picture:', photoStyle);
 
         remoteBuzzerClient.inProgress(true);
@@ -449,7 +451,8 @@ const photoBooth = (function () {
 
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
-        api.callTakePicApi(data);
+
+        api.callTakePicApi(data, retry);
     };
 
     api.callTakePicApi = function (data, retry = 0) {
@@ -490,19 +493,9 @@ const photoBooth = (function () {
                                     config.picture.retry_on_error
                             )
                         );
-                        api.startCountdown(config.picture.retry_timeout, counter, () => {
-                            loading.empty();
-
-                            if (config.picture.no_cheese) {
-                                photoboothTools.console.log('Cheese is disabled.');
-                                api.callTakePicApi(data, retry);
-                            } else {
-                                api.cheese(data.style, retry);
-                                setTimeout(() => {
-                                    api.callTakePicApi(data, retry);
-                                }, config.picture.cheese_time);
-                            }
-                        });
+                        setTimeout(() => {
+                            api.thrill(data.style, retry);
+                        }, 2000);
                     } else {
                         api.errorPic(result);
                     }
