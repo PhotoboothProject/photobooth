@@ -373,12 +373,9 @@ const photoBooth = (function () {
                 api.getRequest(photoStyle);
             }
 
-            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.picture.no_cheese) {
-                api.stopPreviewVideo();
-            }
-
             if (
-                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
+                (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+                    config.preview.mode === PreviewMode.GPHOTO.valueOf()) &&
                 config.preview.camTakesPic &&
                 !api.stream &&
                 !config.dev.demo_images
@@ -430,6 +427,8 @@ const photoBooth = (function () {
             }
             if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
                 api.stopVideo(CameraDisplayMode.COUNTDOWN);
+            } else if (config.preview.mode === PreviewMode.GPHOTO.valueOf()) {
+                api.stopPreviewVideo();
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             ipcamView.removeClass('streaming');
@@ -980,7 +979,7 @@ const photoBooth = (function () {
                 cb();
             }
             count++;
-            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && config.picture.no_cheese && count === stop) {
+            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.camTakesPic && count === stop) {
                 api.stopPreviewVideo();
             }
         }
