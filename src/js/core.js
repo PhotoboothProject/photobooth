@@ -205,9 +205,10 @@ const photoBooth = (function () {
             });
     };
 
-    api.startVideo = function (mode) {
+    api.startVideo = function (mode, retry = 0) {
         if (config.preview.asBackground) {
             api.stopVideo(CameraDisplayMode.BACKGROUND);
+            wrapper.css('background-color', config.colors.panel);
         }
 
         if (!navigator.mediaDevices) {
@@ -225,10 +226,28 @@ const photoBooth = (function () {
                 api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
                 break;
             case CameraDisplayMode.COUNTDOWN:
-                if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && config.preview.gphoto_bsm) {
-                    api.startWebcam();
+                switch (config.preview.mode) {
+                    case PreviewMode.DEVICE.valueOf():
+                        api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
+                        break;
+                    case PreviewMode.GPHOTO.valueOf():
+                        if (
+                            config.preview.gphoto_bsm ||
+                            (!config.preview.gphoto_bsm && retry > 0) ||
+                            nextCollageNumber > 0
+                        ) {
+                            api.startWebcam();
+                        }
+                        api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
+                        break;
+                    case PreviewMode.URL.valueOf():
+                        ipcamView.show();
+                        ipcamView.addClass('streaming');
+                        break;
+                    default:
+                        photoboothTools.console.log('Call for unexpected preview mode');
+                        break;
                 }
-                api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
                 break;
             default:
                 photoboothTools.console.log('Call for unexpected video mode');
@@ -359,10 +378,6 @@ const photoBooth = (function () {
             api.shellCommand('pre-command');
         }
 
-        if (config.preview.asBackground) {
-            wrapper.css('background-color', config.colors.panel);
-        }
-
         if (currentCollageFile && nextCollageNumber) {
             photoStyle = PhotoStyle.COLLAGE;
         }
@@ -371,21 +386,7 @@ const photoBooth = (function () {
             photoStyle = PhotoStyle.CHROMA;
         }
 
-        if (
-            config.preview.mode === PreviewMode.DEVICE.valueOf() ||
-            config.preview.mode === PreviewMode.GPHOTO.valueOf()
-        ) {
-            if (
-                config.preview.mode === PreviewMode.GPHOTO.valueOf() &&
-                ((!config.preview.gphoto_bsm && retry > 0) || nextCollageNumber > 0)
-            ) {
-                api.startVideo(CameraDisplayMode.INIT);
-            }
-            api.startVideo(CameraDisplayMode.COUNTDOWN);
-        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            ipcamView.show();
-            ipcamView.addClass('streaming');
-        }
+        api.startVideo(CameraDisplayMode.COUNTDOWN, retry);
 
         loader.addClass('open');
 
