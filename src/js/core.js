@@ -236,6 +236,27 @@ const photoBooth = (function () {
         }
     };
 
+    api.stopPreviewAndCaptureFromVideo = function () {
+        if (
+            config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+            config.preview.mode === PreviewMode.GPHOTO.valueOf()
+        ) {
+            if (config.preview.camTakesPic && !config.dev.demo_images) {
+                videoSensor.width = videoView.videoWidth;
+                videoSensor.height = videoView.videoHeight;
+                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
+            }
+            if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
+                api.stopVideo(CameraDisplayMode.COUNTDOWN);
+            } else if (config.preview.mode === PreviewMode.GPHOTO.valueOf()) {
+                api.stopPreviewVideo();
+            }
+        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
+            ipcamView.removeClass('streaming');
+            ipcamView.hide();
+        }
+    };
+
     api.stopVideo = function (mode) {
         if (api.stream) {
             api.stream.getTracks()[0].stop();
@@ -416,24 +437,7 @@ const photoBooth = (function () {
 
         remoteBuzzerClient.inProgress(true);
 
-        if (
-            config.preview.mode === PreviewMode.DEVICE.valueOf() ||
-            config.preview.mode === PreviewMode.GPHOTO.valueOf()
-        ) {
-            if (config.preview.camTakesPic && !config.dev.demo_images) {
-                videoSensor.width = videoView.videoWidth;
-                videoSensor.height = videoView.videoHeight;
-                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
-            }
-            if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
-                api.stopVideo(CameraDisplayMode.COUNTDOWN);
-            } else if (config.preview.mode === PreviewMode.GPHOTO.valueOf()) {
-                api.stopPreviewVideo();
-            }
-        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            ipcamView.removeClass('streaming');
-            ipcamView.hide();
-        }
+        api.stopPreviewAndCaptureFromVideo();
 
         const data = {
             filter: imgFilter,
