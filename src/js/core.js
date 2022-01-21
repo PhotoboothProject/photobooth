@@ -51,6 +51,7 @@ const photoBooth = (function () {
             COUNTDOWN: 3
         },
         PreviewMode = {
+            NONE: 'none',
             DEVICE: 'device_cam',
             URL: 'url',
             GPHOTO: 'gphoto'
@@ -227,10 +228,15 @@ const photoBooth = (function () {
                 break;
             case CameraDisplayMode.COUNTDOWN:
                 switch (config.preview.mode) {
+                    case PreviewMode.NONE.valueOf():
+                        photoboothTools.console.logDev('Preview at countdown disabled.');
+                        break;
                     case PreviewMode.DEVICE.valueOf():
+                        photoboothTools.console.logDev('Preview at countdown from device cam.');
                         api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
                         break;
                     case PreviewMode.GPHOTO.valueOf():
+                        photoboothTools.console.logDev('Preview at countdown from gphoto.');
                         if (
                             config.preview.gphoto_bsm ||
                             (!config.preview.gphoto_bsm && retry > 0) ||
@@ -241,16 +247,17 @@ const photoBooth = (function () {
                         api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
                         break;
                     case PreviewMode.URL.valueOf():
+                        photoboothTools.console.logDev('Preview at countdown from URL.');
                         ipcamView.show();
                         ipcamView.addClass('streaming');
                         break;
                     default:
-                        photoboothTools.console.log('Call for unexpected preview mode');
+                        photoboothTools.console.log('Call for unexpected preview mode.');
                         break;
                 }
                 break;
             default:
-                photoboothTools.console.log('Call for unexpected video mode');
+                photoboothTools.console.log('Call for unexpected video mode.');
                 break;
         }
     };
