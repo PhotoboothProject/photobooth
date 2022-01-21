@@ -87,6 +87,13 @@ $configsetup = [
             ],
             'value' => $config['ui']['language'],
         ],
+        'translate' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'translate',
+            'name' => 'translate',
+            'value' => 'translate-btn',
+        ],
         'adminpanel_view' => [
             'view' => 'basic',
             'type' => 'select',

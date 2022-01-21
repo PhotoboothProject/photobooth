@@ -165,6 +165,13 @@ $(function () {
         return false;
     });
 
+    $('#translate-btn').on('click', function (ev) {
+        ev.preventDefault();
+        window.open('https://crowdin.com/project/photobooth');
+
+        return false;
+    });
+
     $('#reboot-btn').on('click', function (ev) {
         ev.preventDefault();
         shellCommand('reboot');
