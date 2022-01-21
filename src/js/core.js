@@ -126,8 +126,9 @@ const photoBooth = (function () {
         resultPage.hide();
         startPage.addClass('open');
         if (
-            config.preview.asBackground ||
-            (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm)
+            config.preview.asBackground &&
+            (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+                (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm))
         ) {
             api.startVideo(CameraDisplayMode.BACKGROUND);
         }
