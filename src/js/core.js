@@ -42,7 +42,8 @@ const photoBooth = (function () {
         },
         videoView = idVideoView.get(0),
         videoPreview = idVideoPreview.get(0),
-        videoSensor = document.querySelector('#video--sensor');
+        videoSensor = document.querySelector('#video--sensor'),
+        cheeseTime = config.picture.no_cheese ? 0 : config.picture.cheese_time;
 
     const PhotoStyle = {
             PHOTO: 'photo',
@@ -417,14 +418,15 @@ const photoBooth = (function () {
                 api.errorPic({
                     error: 'No preview by device cam available!'
                 });
-            } else if (config.picture.no_cheese) {
-                photoboothTools.console.log('Cheese is disabled.');
-                api.takePic(photoStyle, retry);
             } else {
-                api.cheese(photoStyle);
+                if (config.picture.no_cheese) {
+                    photoboothTools.console.log('Cheese is disabled.');
+                } else {
+                    api.cheese(photoStyle);
+                }
                 setTimeout(() => {
                     api.takePic(photoStyle, retry);
-                }, config.picture.cheese_time);
+                }, cheeseTime);
             }
         });
     };
