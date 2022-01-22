@@ -23,6 +23,9 @@ const photoBooth = (function () {
         resultInner = $('.resultInner'),
         spinner = $('.spinner'),
         sendMail = $('.send-mail'),
+        mailMessageForm = $('#mail-form-message'),
+        mailImageForm = $('#mail-form-image'),
+        mailSendForm = $('#send-mail-form'),
         blocker = $('#blocker'),
         aperture = $('#aperture'),
         idVideoView = $('#video--view'),
@@ -957,8 +960,8 @@ const photoBooth = (function () {
     };
 
     api.resetMailForm = function () {
-        $('#send-mail-form').trigger('reset');
-        $('#mail-form-message').html('');
+        mailSendForm.trigger('reset');
+        mailMessageForm.html('');
     };
 
     api.getRequest = function (photoStyle) {
@@ -1113,15 +1116,12 @@ const photoBooth = (function () {
     };
 
     api.toggleMailDialog = function (img) {
-        const mail = $('.send-mail');
-
-        if (mail.hasClass('mail-active')) {
+        if (sendMail.hasClass('mail-active')) {
             api.resetMailForm();
-            mail.removeClass('mail-active').fadeOut('fast');
+            sendMail.removeClass('mail-active').fadeOut('fast');
         } else {
-            $('#mail-form-image').val(img);
-
-            mail.addClass('mail-active').fadeIn('fast');
+            mailImageForm.val(img);
+            sendMail.addClass('mail-active').fadeIn('fast');
         }
     };
 
@@ -1198,11 +1198,9 @@ const photoBooth = (function () {
     $('#send-mail-form').on('submit', function (e) {
         e.preventDefault();
 
-        const message = $('#mail-form-message');
-        message.empty();
-
         const form = $(this);
 
+        mailMessageForm.empty();
         form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
 
         $.ajax({
@@ -1214,24 +1212,24 @@ const photoBooth = (function () {
             success: function (result) {
                 if (result.success) {
                     if (result.saved) {
-                        message
+                        mailMessageForm
                             .fadeIn()
                             .html(
                                 '<span style="color:green">' + photoboothTools.getTranslation('mailSaved') + '</span>'
                             );
                     } else {
-                        message
+                        mailMessageForm
                             .fadeIn()
                             .html(
                                 '<span style="color:green">' + photoboothTools.getTranslation('mailSent') + '</span>'
                             );
                     }
                 } else {
-                    message.fadeIn().html('<span style="color:red">' + result.error + '</span>');
+                    mailMessageForm.fadeIn().html('<span style="color:red">' + result.error + '</span>');
                 }
             },
             error: function () {
-                message
+                mailMessageForm
                     .fadeIn('fast')
                     .html('<span style="color: red;">' + photoboothTools.getTranslation('mailError') + '</span>');
             }
@@ -1240,7 +1238,7 @@ const photoBooth = (function () {
 
     $('#send-mail-close').on('click', function () {
         api.resetMailForm();
-        $('.send-mail').removeClass('mail-active').fadeOut('fast');
+        sendMail.removeClass('mail-active').fadeOut('fast');
     });
 
     resultPage.on('click', function () {
