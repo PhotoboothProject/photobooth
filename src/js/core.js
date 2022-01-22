@@ -18,6 +18,7 @@ const photoBooth = (function () {
         triggerCollage = $('.triggerCollage'),
         printBtn = $('.printbtn'),
         deleteBtn = $('.deletebtn'),
+        qrBtn = $('.qrbtn'),
         qrCodeModal = $('#qrCode'),
         counter = $('#counter'),
         resultInner = $('.resultInner'),
@@ -95,15 +96,18 @@ const photoBooth = (function () {
     };
 
     api.reset = function () {
+        loader.css('background', config.colors.background_countdown);
+        loader.css('background-color', config.colors.background_countdown);
         loader.removeClass('open');
         loader.removeClass('error');
-        photoboothTools.modal.empty('#qrCode');
-        $('.qrbtn').removeClass('active').attr('style', '');
         loading.text('');
+        spinner.hide();
+        photoboothTools.modal.empty('#qrCode');
+        qrBtn.removeClass('active').attr('style', '');
+        api.resetMailForm();
+        sendMail.hide();
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
-        spinner.hide();
-        sendMail.hide();
         if (config.preview.flipHorizontal) {
             if (!idVideoView.hasClass('flip-horizontal')) {
                 idVideoView.addClass('flip-horizontal');
@@ -116,9 +120,6 @@ const photoBooth = (function () {
         idVideoPreview.hide();
         idVideoSensor.hide();
         ipcamView.hide();
-        api.resetMailForm();
-        loader.css('background', config.colors.background_countdown);
-        loader.css('background-color', config.colors.background_countdown);
     };
 
     api.init = function () {
