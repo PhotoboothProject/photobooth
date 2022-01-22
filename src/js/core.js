@@ -414,8 +414,6 @@ const photoBooth = (function () {
                 !api.stream &&
                 !config.dev.demo_images
             ) {
-                photoboothTools.console.log('No preview by device cam available!');
-
                 api.errorPic({
                     error: 'No preview by device cam available!'
                 });
@@ -662,6 +660,7 @@ const photoBooth = (function () {
             idVideoSensor.hide();
             loader.addClass('error');
             loading.append($('<p>').text(photoboothTools.getTranslation('error')));
+            photoboothTools.console.log('An error occurred:', data.error);
             if (config.dev.error_messages) {
                 loading.append($('<p class="text-muted">').text(data.error));
             }
@@ -731,8 +730,6 @@ const photoBooth = (function () {
                 }
             },
             error: (jqXHR, textStatus) => {
-                photoboothTools.console.log('An error occurred', textStatus);
-
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
