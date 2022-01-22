@@ -478,7 +478,7 @@ const photoBooth = (function () {
             .done(function (result) {
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
-                photoboothTools.console.log('took ' + data.style, result);
+                photoboothTools.console.log('Took ' + data.style, result);
                 photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
                 if (config.ui.shutter_animation) {
                     api.shutter.stop();
@@ -663,7 +663,7 @@ const photoBooth = (function () {
             }
             takingPic = false;
             remoteBuzzerClient.inProgress(false);
-            photoboothTools.console.logDev('Taking photo: ' + takingPic);
+            photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
             if (config.dev.reload_on_error) {
                 loading.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
                 setTimeout(function () {
@@ -745,7 +745,7 @@ const photoBooth = (function () {
 
         preloadImage.onload = function () {
             $('body').attr('data-main-image', filename);
-            photoboothTools.console.log(config.foldersRoot.keying + '/' + filename);
+            photoboothTools.console.log('Chroma image: ' + config.foldersRoot.keying + '/' + filename);
             const chromaimage = config.foldersRoot.keying + '/' + filename;
 
             loader.hide();
@@ -757,9 +757,9 @@ const photoBooth = (function () {
 
         takingPic = false;
         remoteBuzzerClient.inProgress(false);
+        photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
 
         api.resetTimeOut();
-        photoboothTools.console.logDev('Taking photo: ' + takingPic);
     };
 
     api.renderPic = function (filename, files) {
@@ -822,7 +822,7 @@ const photoBooth = (function () {
                             } else {
                                 photoboothTools.console.log('Error while deleting ' + file);
                                 if (data.error) {
-                                    photoboothTools.console.log(data.error);
+                                    photoboothTools.console.log('Error: ' + data.error);
                                 }
                                 setTimeout(function () {
                                     photoboothTools.reloadPage();
@@ -870,10 +870,9 @@ const photoBooth = (function () {
 
         takingPic = false;
         remoteBuzzerClient.inProgress(false);
+        photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
 
         api.resetTimeOut();
-
-        photoboothTools.console.logDev('Taking photo: ' + takingPic);
 
         if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm) {
             api.startVideo(CameraDisplayMode.INIT);
@@ -1000,7 +999,7 @@ const photoBooth = (function () {
 
     api.printImage = function (imageSrc, cb) {
         if (isPrinting) {
-            photoboothTools.console.log('Printing already: ' + isPrinting);
+            photoboothTools.console.log('Printing in progress: ' + isPrinting);
         } else {
             photoboothTools.modal.open('#print_mesg');
             isPrinting = true;
@@ -1076,7 +1075,7 @@ const photoBooth = (function () {
             },
             success: (data) => {
                 if (data.error) {
-                    photoboothTools.console.log('Error while deleting image');
+                    photoboothTools.console.log('Error while deleting image!');
                 }
                 cb(data);
             },
@@ -1098,7 +1097,7 @@ const photoBooth = (function () {
             },
             success: (data) => {
                 if (data.error) {
-                    photoboothTools.console.log('Error while deleting image');
+                    photoboothTools.console.log('Error while deleting image!');
                 }
             },
             error: (jqXHR, textStatus) => {
@@ -1132,7 +1131,7 @@ const photoBooth = (function () {
         imgFilter = $(this).attr('id');
         const result = {file: resultPage.attr('data-img')};
 
-        photoboothTools.console.logDev('Applying filter', imgFilter, result);
+        photoboothTools.console.logDev('Applying filter: ' + imgFilter, result);
 
         api.processPic(imgFilter, result);
 
@@ -1307,7 +1306,7 @@ const photoBooth = (function () {
         if (triggerPic[0] || triggerCollage[0]) {
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (takingPic) {
-                    photoboothTools.console.logDev('Taking photo already in progress!');
+                    photoboothTools.console.logDev('Taking picture already in progress!');
                 } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled && config.collage.only) {
@@ -1323,7 +1322,7 @@ const photoBooth = (function () {
 
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
                 if (takingPic) {
-                    photoboothTools.console.logDev('Taking photo already in progress!');
+                    photoboothTools.console.logDev('Taking picture already in progress!');
                 } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled) {
