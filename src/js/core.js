@@ -377,14 +377,12 @@ const photoBooth = (function () {
         api.showResultInner(false);
 
         remoteBuzzerClient.inProgress(true);
-
         takingPic = true;
+        photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
 
         if (api.isTimeOutPending()) {
             api.resetTimeOut();
         }
-
-        photoboothTools.console.logDev('Taking photo: ' + takingPic);
 
         if (config.pre_photo.cmd) {
             api.shellCommand('pre-command');
@@ -397,6 +395,8 @@ const photoBooth = (function () {
         if (chromaFile) {
             photoStyle = PhotoStyle.CHROMA;
         }
+
+        photoboothTools.console.log('PhotoStyle: ', photoStyle);
 
         api.startVideo(CameraDisplayMode.COUNTDOWN, retry);
 
@@ -430,7 +430,6 @@ const photoBooth = (function () {
     };
 
     api.cheese = function (photoStyle) {
-        photoboothTools.console.logDev('Photostyle: ' + photoStyle);
         cheese.empty();
 
         if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
@@ -444,8 +443,6 @@ const photoBooth = (function () {
     };
 
     api.takePic = function (photoStyle, retry) {
-        photoboothTools.console.log('Take Picture:', photoStyle);
-
         remoteBuzzerClient.inProgress(true);
 
         api.stopPreviewAndCaptureFromVideo();
