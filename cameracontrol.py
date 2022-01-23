@@ -1,8 +1,9 @@
 import os
-import psutil
+import signal
 import sys
 import time
 import argparse
+import psutil
 import zmq
 from subprocess import Popen, PIPE
 import gphoto2 as gp
@@ -13,6 +14,17 @@ class CameraControl:
         try:
             self.camera = gp.Camera()
             self.camera.init()
+            print('Connected to camera')
+        except gp.GPhoto2Error:
+            pass
+
+    def disable_video(self):
+        self.showVideo = False
+        try:
+            config = gp.check_result(gp.gp_camera_get_config(self.camera))
+            viewfinder = gp.check_result(gp.gp_widget_get_child_by_name(config, 'viewfinder'))
+            gp.check_result(gp.gp_widget_set_value(viewfinder, 0))
+            gp.check_result(gp.gp_camera_set_config(self.camera, config))
         except gp.GPhoto2Error:
             pass
 
@@ -20,7 +32,7 @@ class CameraControl:
         command = message[0]
         if command == 'captureImage' and len(message) == 2:
             try:
-                print('capturing image')
+                print('Capturing image')
                 file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
                 # refresh images on camera
                 gp.check_result(gp.gp_camera_wait_for_event(self.camera, 1000))
@@ -32,15 +44,23 @@ class CameraControl:
                 camera_file.save(target)
                 self.socket.send_string('Image captured')
                 if self.bsm:
-                    raise KeyboardInterrupt
-            except gp.GPhoto2Error:
+                    self.disable_video()
+            except gp.GPhoto2Error as e:
+                print('An error occured: %s' % e)
                 self.socket.send_string('failure')
         elif command == 'startVideo':
-            self.socket.send_string('Starting Service')
-            self.showVideo = True
+            try:
+                self.showVideo = True
+                self.connect_to_camera()
+                self.socket.send_string('Starting Video')
+            except gp.GPhoto2Error:
+                self.socket.send_string('failure')
         elif command == 'stopVideo':
-            self.socket.send_string('Stopping Video')
-            self.showVideo = True
+            try:
+                self.disable_video()
+                self.socket.send_string('Stopping Video')
+            except gp.GPhoto2Error:
+                self.socket.send_string('failure')
         elif command == 'stop':
             self.socket.send_string('Stopping Service')
             raise KeyboardInterrupt
@@ -48,12 +68,21 @@ class CameraControl:
             self.socket.send_string('failure')
             print('Received message that can\'t be handled')
 
+    def exit_gracefully(self):
+        if self.camera:
+            self.camera.exit()
+        print('Exiting...')
+        sys.exit(0)
+
     def __init__(self, args):
         self.device = args.device
         self.bsm = args.bsm
         self.showVideo = not args.noVideo
         self.camera = None
         os.environ['HOME'] = '/var/www/'
+
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
 
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
@@ -72,7 +101,8 @@ class CameraControl:
                 try:
                     if self.showVideo:
                         capture = self.camera.capture_preview()
-                        ffmpeg.stdin.write(memoryview(capture.get_data_and_size()).tobytes())
+                        img_bytes = memoryview(capture.get_data_and_size()).tobytes()
+                        ffmpeg.stdin.write(img_bytes)
                     else:
                         time.sleep(0.1)
                 except gp.GPhoto2Error:
@@ -80,13 +110,12 @@ class CameraControl:
                     print('Not connected to camera. Trying to reconnect...')
                     self.connect_to_camera()
         except KeyboardInterrupt:
-            print('Exiting...')
-            sys.exit(0)
+            print("keyboard")
+            self.exit_gracefully()
 
 
 class MessageSender:
-    def __init__(self, args):
-        message = args.message
+    def __init__(self, message):
         try:
             context = zmq.Context()
             socket = context.socket(zmq.REQ)
@@ -103,15 +132,13 @@ class MessageSender:
             exit(1)
 
 
-def limit_to_one_instance():
+def is_already_running():
     instances = 0
     for p in psutil.process_iter(['name', 'cmdline']):
         if p.name() == 'python3':
             if p.cmdline()[1].endswith('cameracontrol.py'):
                 instances += 1
-    if instances > 1:
-        print('Camera Control is already running...')
-        sys.exit(0)
+    return instances > 1
 
 
 def main():
@@ -131,15 +158,20 @@ def main():
     parser.add_argument('-m', '--message',
                         nargs='?', default=None, help='send a message to running cameracontrol script \
                                                       (values: captureImage, startVideo, stopVideo, stop)')
-    parser.add_argument('-b', '--bsm', action='store_true', help='start preview and quit after taking a photo')
+    parser.add_argument('-b', '--bsm', action='store_true', help='quit preview after taking an image')
     parser.add_argument('-n', '--noVideo', action='store_true', help='start without showing video')
 
     args = parser.parse_args()
     if args.message:
-        MessageSender(args)
+        MessageSender(args.message)
     else:
-        limit_to_one_instance()
-        CameraControl(args)
+        if not is_already_running():
+            CameraControl(args)
+        else:
+            if args.bsm:
+                MessageSender('startVideo')
+            else:
+                print('Camera Control is already running...')
 
 
 if __name__ == '__main__':
