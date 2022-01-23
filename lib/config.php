@@ -142,6 +142,22 @@ if ($config['dev']['enabled']) {
     error_reporting(E_ALL);
 }
 
+if (!isset($config['picture']['frame'])) {
+    $config['picture']['frame'] = 'resources/img/frames/frame.png';
+}
+
+if (!isset($config['textonpicture']['font'])) {
+    $config['textonpicture']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+}
+
+if (!isset($config['collage']['frame'])) {
+    $config['collage']['frame'] = 'resources/img/frames/frame.png';
+}
+
+if (!isset($config['textoncollage']['font'])) {
+    $config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+}
+
 if (!isset($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }

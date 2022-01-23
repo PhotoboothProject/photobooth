@@ -63,7 +63,7 @@ $config['filters']['enabled'] = true;
 $config['filters']['defaults'] = 'plain';
 $config['filters']['disabled'] = array();
 $config['picture']['take_frame'] = false;
-$config['picture']['frame'] = 'resources/img/frames/frame.png';
+$config['picture']['frame'] = null;
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
 $config['picture']['key'] = null;
@@ -81,7 +81,7 @@ $config['textonpicture']['line3'] = 'line 3';
 $config['textonpicture']['locationx'] = '80';
 $config['textonpicture']['locationy'] = '80';
 $config['textonpicture']['rotation'] = '0';
-$config['textonpicture']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+$config['textonpicture']['font'] = null;
 $config['textonpicture']['font_color'] = '#ffffff';
 $config['textonpicture']['font_size'] = '80';
 $config['textonpicture']['linespace'] = '90';
@@ -104,7 +104,7 @@ $config['collage']['key'] = null;
 $config['collage']['background_color'] = '#ffffff';
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
-$config['collage']['frame'] = 'resources/img/frames/frame.png';
+$config['collage']['frame'] = null;
 $config['textoncollage']['enabled'] = true;
 $config['textoncollage']['line1'] = 'Photobooth';
 $config['textoncollage']['line2'] = '   we love';
@@ -112,7 +112,7 @@ $config['textoncollage']['line3'] = 'OpenSource';
 $config['textoncollage']['locationx'] = '1470';
 $config['textoncollage']['locationy'] = '250';
 $config['textoncollage']['rotation'] = '0';
-$config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+$config['textoncollage']['font'] = null;
 $config['textoncollage']['font_color'] = '#000000';
 $config['textoncollage']['font_size'] = '50';
 $config['textoncollage']['linespace'] = '90';
