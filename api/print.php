@@ -93,8 +93,8 @@ if (!file_exists($filename_print)) {
         imagecopyresized($print, $code, $width, 0, 0, 0, $height / 2, $height / 2, imagesx($code), imagesy($code));
         imagejpeg($print, $filename_print, $quality);
         imagedestroy($code);
-        imagedestroy($source);
         imagedestroy($print);
+        $source = imagecreatefromjpeg($filename_print);
     } else {
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
             $source = applyFrame($source, $print_frame);
@@ -112,6 +112,7 @@ if (!file_exists($filename_print)) {
     }
 
     imagejpeg($source, $filename_print, $quality);
+    imagedestroy($source);
 }
 
 // print image
