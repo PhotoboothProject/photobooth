@@ -97,7 +97,11 @@ if (!file_exists($filename_print)) {
 
         list($qrWidth, $qrHeight) = getimagesize($filename_codes);
 
-        $offset = $config['print']['qrOffset'];
+        if (is_numeric($config['print']['qrOffset'])) {
+            $offset = $config['print']['qrOffset'];
+        } else {
+            $offset = 10;
+        }
 
         switch ($config['print']['qrPosition']) {
             case 'topLeft':
