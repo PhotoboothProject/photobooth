@@ -185,10 +185,11 @@ if (
                                 
                                 switch($setting['type']) {
                                         case 'input':
+                                        case 'number':
                                                 echo '<div class="tooltip">';
                                                 echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
                                                 echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
-                                                echo '<input class="settinginput" type="text" name="'.$setting['name'].'" value="'.$setting['value'].'" placeholder="'.$setting['placeholder'].'"/>';
+                                                echo '<input class="settinginput" type="'.($setting['type'] === 'number' ? 'number' : 'text').'" name="'.$setting['name'].'" value="'.$setting['value'].'" placeholder="'.$setting['placeholder'].'"/>';
                                                 break;
                                         case 'range':
                                                 echo '<div class="tooltip">';
