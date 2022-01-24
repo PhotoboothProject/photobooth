@@ -15,18 +15,50 @@ class CameraControl:
             self.camera = gp.Camera()
             self.camera.init()
             print('Connected to camera')
+            if self.config is not None:
+                for c in self.config:
+                    cs = c.split("=")
+                    if len(cs) == 2:
+                        print('Setting config %s' % c)
+                        self.set_config(cs[0], cs[1])
+                    else:
+                        print('Invalid config %s' % c)
         except gp.GPhoto2Error:
             pass
 
+    def set_config(self, name, value):
+        try:
+            config = self.camera.get_config()
+            setting = config.get_child_by_name(name)
+            setting_type = setting.get_type()
+            if setting_type == gp.GP_WIDGET_RADIO \
+                    or setting_type == gp.GP_WIDGET_MENU \
+                    or setting_type == gp.GP_WIDGET_TEXT:
+                v = int(value)
+                count = setting.count_choices()
+                if v < 0 or v >= count:
+                    print('Parameter out of range')
+                    raise KeyboardInterrupt
+                v = setting.get_choice(v)
+                setting.set_value(v)
+            elif setting_type == gp.GP_WIDGET_TOGGLE:
+                setting.set_value(int(value))
+            elif setting_type == gp.GP_WIDGET_RANGE:
+                setting.set_value(float(value))
+            else:
+                # unhandled types (most don't make any sense to handle)
+                # GP_WIDGET_SECTION, GP_WIDGET_WINDOW, GP_WIDGET_BUTTON, GP_WIDGET_DATE
+                print('Unhandled setting type %s for %s=%s' % (setting_type, name, value))
+                raise KeyboardInterrupt
+            self.camera.set_config(config)
+            print('Config set %s=%s' % (name, value))
+        except gp.GPhoto2Error or ValueError:
+            print('Config error for %s=%s' % (name, value))
+            raise KeyboardInterrupt
+
     def disable_video(self):
         self.showVideo = False
-        try:
-            config = gp.check_result(gp.gp_camera_get_config(self.camera))
-            viewfinder = gp.check_result(gp.gp_widget_get_child_by_name(config, 'viewfinder'))
-            gp.check_result(gp.gp_widget_set_value(viewfinder, 0))
-            gp.check_result(gp.gp_camera_set_config(self.camera, config))
-        except gp.GPhoto2Error:
-            pass
+        self.set_config('viewfinder', 0)
 
     def handle_message(self, message):
         command = message[0]
@@ -68,7 +100,7 @@ class CameraControl:
             self.socket.send_string('failure')
             print('Received message that can\'t be handled')
 
-    def exit_gracefully(self):
+    def exit_gracefully(self, *args):
         if self.camera:
             self.camera.exit()
         print('Exiting...')
@@ -76,8 +108,9 @@ class CameraControl:
 
     def __init__(self, args):
         self.device = args.device
+        self.config = args.set_config
         self.bsm = args.bsm
-        self.showVideo = not args.noVideo
+        self.showVideo = not args.no_video
         self.camera = None
         os.environ['HOME'] = '/var/www/'
 
@@ -110,7 +143,6 @@ class CameraControl:
                     print('Not connected to camera. Trying to reconnect...')
                     self.connect_to_camera()
         except KeyboardInterrupt:
-            print("keyboard")
             self.exit_gracefully()
 
 
@@ -143,23 +175,19 @@ def is_already_running():
 
 def main():
     parser = argparse.ArgumentParser(description='Simple Camera Control script using libgphoto2 and python-gphoto2. \
-                                                 The script has two distinct modes: Sending a message or starting \
-                                                 camera control. A message is sent when param "message" is set.',
-                                     epilog='libgphoto2 automatically uses the config of the User calling the script. \
-                                            This means the config has to be present at "~/.gphoto/settings" and owned \
-                                            by the User. If this script is used by www-data this means there has to be \
-                                            a config at "/var/www/.gphoto/settings" or the default config is used. \
-                                            Which might lead to the camera not transferring any photos as they are \
-                                            only stored in RAM (Canon). You can copy the config of any User but make \
-                                            sure the target User has appropriate rights on the config file and the \
-                                            path.')
-    parser.add_argument('-d', '--device',
-                        nargs='?', default='/dev/video0', help='virtual device the ffmpeg stream is sent to')
-    parser.add_argument('-m', '--message',
-                        nargs='?', default=None, help='send a message to running cameracontrol script \
-                                                      (values: captureImage, startVideo, stopVideo, stop)')
+    The script has two distinct modes: Sending a message or starting camera control. A message is sent when param \
+    "message" is set.', epilog='If you don\'t want images to be stored on the camera make sure that capturetarget \
+    is set to internal ram (might be device dependent but it\'s 0 for Canon cameras. Additionally you should \
+    configure your camera to capture only jpeg images.')
+    parser.add_argument('-d', '--device', nargs='?', default='/dev/video0',
+                        help='virtual device the ffmpeg stream is sent to')
+    parser.add_argument('-s', '--set-config', action='append', default=None,
+                        help='CONFIGENTRY=CONFIGVALUE analog to gphoto2 cli. Not tested for all configentries!')
+    parser.add_argument('-m', '--message', nargs='?', default=None,
+                        help='send a message to running cameracontrol script \
+                        (values: captureImage "path", startVideo, stopVideo, stop)')
     parser.add_argument('-b', '--bsm', action='store_true', help='quit preview after taking an image')
-    parser.add_argument('-n', '--noVideo', action='store_true', help='start without showing video')
+    parser.add_argument('-n', '--no-video', action='store_true', help='start without showing video')
 
     args = parser.parse_args()
     if args.message:
