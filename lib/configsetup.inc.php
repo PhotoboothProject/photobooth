@@ -49,7 +49,7 @@ require_once __DIR__ . '/filter.php';
  **     * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
  **                          the section is shown or not. Missing parameter defaults to 'expert'.
  **     * 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
- **     * 'type': Values are 'input', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
+ **     * 'type': Values are 'input', 'number', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
  **               input type in the admin panel for this setting.
  **     * 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
  **                populates the current config value into the admin panel
@@ -424,7 +424,7 @@ $configsetup = [
         ],
         'picture_rotation' => [
             'view' => 'advanced',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['picture']['rotation'],
             'name' => 'picture[rotation]',
             'value' => $config['picture']['rotation'],
@@ -437,7 +437,7 @@ $configsetup = [
         ],
         'picture_polaroid_rotation' => [
             'view' => 'advanced',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['picture']['polaroid_rotation'],
             'name' => 'picture[polaroid_rotation]',
             'value' => $config['picture']['polaroid_rotation'],
@@ -496,7 +496,7 @@ $configsetup = [
         ],
         'picture_permissions' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'name' => 'picture[permissions]',
             'placeholder' => '0644',
             'value' => $config['picture']['permissions'],
@@ -548,14 +548,14 @@ $configsetup = [
         ],
         'textonpicture_locationx' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonpicture']['locationx'],
             'name' => 'textonpicture[locationx]',
             'value' => $config['textonpicture']['locationx'],
         ],
         'textonpicture_locationy' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonpicture']['locationy'],
             'name' => 'textonpicture[locationy]',
             'value' => $config['textonpicture']['locationy'],
@@ -587,14 +587,14 @@ $configsetup = [
         ],
         'textonpicture_font_size' => [
             'view' => 'advanced',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonpicture']['font_size'],
             'name' => 'textonpicture[font_size]',
             'value' => $config['textonpicture']['font_size'],
         ],
         'textonpicture_linespace' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonpicture']['linespace'],
             'name' => 'textonpicture[linespace]',
             'value' => $config['textonpicture']['linespace'],
@@ -734,14 +734,14 @@ $configsetup = [
         ],
         'textoncollage_locationx' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['locationx'],
             'name' => 'textoncollage[locationx]',
             'value' => $config['textoncollage']['locationx'],
         ],
         'textoncollage_locationy' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['locationy'],
             'name' => 'textoncollage[locationy]',
             'value' => $config['textoncollage']['locationy'],
@@ -773,14 +773,14 @@ $configsetup = [
         ],
         'textoncollage_font_size' => [
             'view' => 'advanced',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['font_size'],
             'name' => 'textoncollage[font_size]',
             'value' => $config['textoncollage']['font_size'],
         ],
         'textoncollage_linespace' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['linespace'],
             'name' => 'textoncollage[linespace]',
             'value' => $config['textoncollage']['linespace'],
@@ -813,7 +813,7 @@ $configsetup = [
         ],
         'gallery_pictureTime' => [
             'view' => 'advanced',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['gallery']['pictureTime'],
             'name' => 'gallery[pictureTime]',
             'value' => $config['gallery']['pictureTime'],
@@ -857,7 +857,7 @@ $configsetup = [
         ],
         'gallery_db_check_time' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['gallery']['db_check_time'],
             'name' => 'gallery[db_check_time]',
             'value' => $config['gallery']['db_check_time'],
@@ -1003,13 +1003,13 @@ $configsetup = [
             'value' => htmlentities($config['preview']['url']),
         ],
         'preview_videoWidth' => [
-            'type' => 'input',
+            'type' => 'number',
             'name' => 'preview[videoWidth]',
             'placeholder' => $defaultConfig['preview']['videoWidth'],
             'value' => $config['preview']['videoWidth'],
         ],
         'preview_videoHeight' => [
-            'type' => 'input',
+            'type' => 'number',
             'name' => 'preview[videoHeight]',
             'placeholder' => $defaultConfig['preview']['videoHeight'],
             'value' => $config['preview']['videoHeight'],
@@ -1182,7 +1182,7 @@ $configsetup = [
         ],
         'print_qrOffset' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['print']['qrOffset'],
             'name' => 'print[qrOffset]',
             'value' => $config['print']['qrOffset'],
@@ -1208,14 +1208,14 @@ $configsetup = [
         ],
         'print_crop_width' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'name' => 'print[crop_width]',
             'placeholder' => $defaultConfig['print']['crop_width'],
             'value' => $config['print']['crop_width'],
         ],
         'print_crop_height' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'name' => 'print[crop_height]',
             'placeholder' => $defaultConfig['print']['crop_height'],
             'value' => $config['print']['crop_height'],
@@ -1249,14 +1249,14 @@ $configsetup = [
         ],
         'textonprint_locationx' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['locationx'],
             'name' => 'textonprint[locationx]',
             'value' => $config['textonprint']['locationx'],
         ],
         'textonprint_locationy' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['locationy'],
             'name' => 'textonprint[locationy]',
             'value' => $config['textonprint']['locationy'],
@@ -1288,14 +1288,14 @@ $configsetup = [
         ],
         'textonprint_font_size' => [
             'view' => 'advanced',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['font_size'],
             'name' => 'textonprint[font_size]',
             'value' => $config['textonprint']['font_size'],
         ],
         'textonprint_linespace' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['linespace'],
             'name' => 'textonprint[linespace]',
             'value' => $config['textonprint']['linespace'],
@@ -1440,7 +1440,7 @@ $configsetup = [
         ],
         'mail_port' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['mail']['port'],
             'name' => 'mail[port]',
             'value' => $config['mail']['port'],
@@ -1450,14 +1450,14 @@ $configsetup = [
         'view' => 'advanced',
         'slideshow_refreshTime' => [
             'view' => 'basic',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['slideshow']['refreshTime'],
             'name' => 'slideshow[refreshTime]',
             'value' => $config['slideshow']['refreshTime'],
         ],
         'slideshow_pictureTime' => [
             'view' => 'basic',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['slideshow']['pictureTime'],
             'name' => 'slideshow[pictureTime]',
             'value' => $config['slideshow']['pictureTime'],
@@ -1628,7 +1628,7 @@ $configsetup = [
         ],
         'remotebuzzer_port' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'number',
             'placeholder' => $defaultConfig['remotebuzzer']['port'],
             'name' => 'remotebuzzer[port]',
             'value' => $config['remotebuzzer']['port'],
