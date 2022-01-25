@@ -59,13 +59,13 @@ if (!file_exists($filename_print)) {
     if ($width > $height) {
         $image = imagecreatefromjpeg($filename_source);
         imagejpeg($image, $filename_print, $quality);
-        imagedestroy($image); // Destroy the created collage in memory
+        imagedestroy($image);
         $rotateQr = false;
     } else {
         $image = imagecreatefromjpeg($filename_source);
-        $resultRotated = imagerotate($image, 90, 0); // Rotate image
+        $resultRotated = imagerotate($image, 90, 0);
         imagejpeg($resultRotated, $filename_print, $quality);
-        imagedestroy($image); // Destroy the created collage in memory
+        imagedestroy($image);
         $rotateQr = true;
         // re-define width & height after rotation
         list($width, $height) = getimagesize($filename_print);
