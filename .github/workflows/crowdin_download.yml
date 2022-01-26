@@ -1,0 +1,38 @@
+name: Crowdin Translation Download
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'resources/lang/en.json'
+  workflow_dispatch:
+
+jobs:
+  synchronize-with-crowdin:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: crowdin action
+      uses: crowdin/github-action@1.4.6
+      with:
+        upload_sources: true
+        upload_translations: false
+        download_translations: true
+        skip_untranslated_strings: true
+        skip_untranslated_files: true
+        export_only_approved: false
+        push_translations: true
+        localization_branch_name: crowdin_auto_import
+        pull_request_title: '[Crowdin] Automatic translation import'
+        pull_request_body: 'Automatic translation import from https://crowdin.com/project/photobooth'
+        pull_request_base_branch_name: dev
+        config: 'crowdin/config.yml'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
