@@ -1,11 +1,9 @@
 name: Crowdin Translation Download
 
 on:
-  push:
-    branches:
-      - dev
-    paths:
-      - 'resources/lang/en.json'
+  schedule:
+    # Run weekly on Sunday at 23:50
+    - cron:  '50 23 * * 7'
   workflow_dispatch:
 
 jobs:
