@@ -1,4 +1,4 @@
-name: Crowdin Tranation Upload
+name: Crowdin Translation Upload
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
         upload_translations: false
         push_translations: false
         download_translations: false
-        source: 'resources/lang/en.json'
-        translation: 'resources/lang/%two_letters_code%.json'
-        project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-        token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        config: 'crowdin/config.yml'
+      env:
+        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
