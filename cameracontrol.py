@@ -15,8 +15,8 @@ class CameraControl:
             self.camera = gp.Camera()
             self.camera.init()
             print('Connected to camera')
-            if self.config is not None:
-                for c in self.config:
+            if self.args.set_config is not None:
+                for c in self.args.set_config:
                     cs = c.split("=")
                     if len(cs) == 2:
                         print('Setting config %s' % c)
@@ -26,6 +26,17 @@ class CameraControl:
         except gp.GPhoto2Error:
             pass
 
+    def capture_image(self, path):
+        print('Capturing image')
+        file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
+        # refresh images on camera
+        gp.check_result(gp.gp_camera_wait_for_event(self.camera, 1000))
+        print('Camera file path: {0}/{1}'.format(file_path.folder, file_path.name))
+        file_jpg = str(file_path.name).replace('.CR2', '.JPG')
+        print('Copying image to', path)
+        camera_file = self.camera.file_get(file_path.folder, file_jpg, gp.GP_FILE_TYPE_NORMAL)
+        camera_file.save(path)
+
     def set_config(self, name, value):
         try:
             config = self.camera.get_config()
@@ -34,13 +45,16 @@ class CameraControl:
             if setting_type == gp.GP_WIDGET_RADIO \
                     or setting_type == gp.GP_WIDGET_MENU \
                     or setting_type == gp.GP_WIDGET_TEXT:
-                v = int(value)
-                count = setting.count_choices()
-                if v < 0 or v >= count:
-                    print('Parameter out of range')
-                    raise KeyboardInterrupt
-                v = setting.get_choice(v)
-                setting.set_value(v)
+                try:
+                    int_value = int(value)
+                    count = setting.count_choices()
+                    if int_value < 0 or int_value >= count:
+                        print('Parameter out of range')
+                        raise KeyboardInterrupt
+                    choice = setting.get_choice(int_value)
+                    setting.set_value(choice)
+                except ValueError:
+                    setting.set_value(value)
             elif setting_type == gp.GP_WIDGET_TOGGLE:
                 setting.set_value(int(value))
             elif setting_type == gp.GP_WIDGET_RANGE:
@@ -64,18 +78,10 @@ class CameraControl:
         command = message[0]
         if command == 'captureImage' and len(message) == 2:
             try:
-                print('Capturing image')
-                file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
-                # refresh images on camera
-                gp.check_result(gp.gp_camera_wait_for_event(self.camera, 1000))
-                print('Camera file path: {0}/{1}'.format(file_path.folder, file_path.name))
-                file_jpg = str(file_path.name).replace('.CR2', '.JPG')
-                target = message[1]
-                print('Copying image to', target)
-                camera_file = self.camera.file_get(file_path.folder, file_jpg, gp.GP_FILE_TYPE_NORMAL)
-                camera_file.save(target)
+                path = message[1]
+                self.capture_image(path)
                 self.socket.send_string('Image captured')
-                if self.bsm:
+                if self.args.bsm:
                     self.disable_video()
             except gp.GPhoto2Error as e:
                 print('An error occured: %s' % e)
@@ -107,22 +113,33 @@ class CameraControl:
         sys.exit(0)
 
     def __init__(self, args):
-        self.device = args.device
-        self.config = args.set_config
-        self.bsm = args.bsm
+        self.args = args
         self.showVideo = not args.no_video
         self.camera = None
+        self.socket = None
         os.environ['HOME'] = '/var/www/'
 
         signal.signal(signal.SIGINT, self.exit_gracefully)
         signal.signal(signal.SIGTERM, self.exit_gracefully)
 
+        self.connect_to_camera()
+
+        if self.args.capture_image_and_download is not None:
+            try:
+                self.capture_image(self.args.capture_image_and_download)
+            except gp.GPhoto2Error as e:
+                print('An error occured: %s' % e)
+                sys.exit(1)
+        else:
+            self.pipe_video_to_ffmpeg_and_wait_for_commands()
+
+    def pipe_video_to_ffmpeg_and_wait_for_commands(self):
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.socket.bind('tcp://*:5555')
-        self.connect_to_camera()
-        ffmpeg = Popen(['ffmpeg', '-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p', '-f', 'v4l2', self.device],
-                       stdin=PIPE)
+        ffmpeg = Popen(
+            ['ffmpeg', '-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p', '-f', 'v4l2', self.args.device],
+            stdin=PIPE)
         try:
             while True:
                 try:
@@ -158,10 +175,10 @@ class MessageSender:
             response = socket.recv_string()
             print(response)
             if response == 'failure':
-                exit(1)
+                sys.exit(1)
         except zmq.Again:
             print('Message receival not confirmed')
-            exit(1)
+            sys.exit(1)
 
 
 def is_already_running():
@@ -174,32 +191,33 @@ def is_already_running():
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Simple Camera Control script using libgphoto2 and python-gphoto2. \
-    The script has two distinct modes: Sending a message or starting camera control. A message is sent when param \
-    "message" is set.', epilog='If you don\'t want images to be stored on the camera make sure that capturetarget \
+    parser = argparse.ArgumentParser(description='Simple Camera Control script using libgphoto2 through \
+    python-gphoto2.', epilog='If you don\'t want images to be stored on the camera make sure that capturetarget \
     is set to internal ram (might be device dependent but it\'s 0 for Canon cameras. Additionally you should \
     configure your camera to capture only jpeg images.')
     parser.add_argument('-d', '--device', nargs='?', default='/dev/video0',
                         help='virtual device the ffmpeg stream is sent to')
     parser.add_argument('-s', '--set-config', action='append', default=None,
                         help='CONFIGENTRY=CONFIGVALUE analog to gphoto2 cli. Not tested for all configentries!')
+    parser.add_argument('-c', '--capture-image-and-download', default=None, type=str, help='capture an image and \
+    download it to the computer. If it stays stored on the camera as well depends on the camera config.')
     parser.add_argument('-m', '--message', nargs='?', default=None,
                         help='send a message to running cameracontrol script \
                         (values: captureImage "path", startVideo, stopVideo, stop)')
-    parser.add_argument('-b', '--bsm', action='store_true', help='quit preview after taking an image')
+    parser.add_argument('-b', '--bsm', action='store_true', help='quit preview after taking an image and wait for \
+    message to start ')
     parser.add_argument('-n', '--no-video', action='store_true', help='start without showing video')
 
     args = parser.parse_args()
-    if args.message:
-        MessageSender(args.message)
+    if not is_already_running():
+        CameraControl(args)
     else:
-        if not is_already_running():
-            CameraControl(args)
+        if args.capture_image_and_download is not None:
+            MessageSender('captureImage %s' % args.capture_image_and_download)
+        elif args.message:
+            MessageSender(args.message)
         else:
-            if args.bsm:
-                MessageSender('startVideo')
-            else:
-                print('Camera Control is already running...')
+            MessageSender('startVideo')
 
 
 if __name__ == '__main__':
