@@ -26,6 +26,9 @@ jobs:
         skip_untranslated_strings: true
         export_only_approved: false
         push_translations: true
+        commit_message: 'crowdin: automatic translation import'
+        github_user_email: 'andi@unlegacy-android.org'
+        github_user_name: 'Andreas Blaesius'
         localization_branch_name: crowdin_auto_import
         pull_request_title: '[Crowdin] Automatic translation import'
         pull_request_body: 'Automatic translation import from https://crowdin.com/project/photobooth'
