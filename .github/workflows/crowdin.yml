@@ -20,7 +20,9 @@ jobs:
     - name: crowdin action
       uses: crowdin/github-action@1.4.6
       with:
-        upload_translations: true
+        upload_sources: true
+        upload_translations: false
+        push_translations: false
         download_translations: false
         source: 'resources/lang/en.json'
         translation: 'resources/lang/%two_letters_code%.json'
