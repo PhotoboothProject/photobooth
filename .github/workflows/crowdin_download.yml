@@ -24,7 +24,6 @@ jobs:
         upload_translations: false
         download_translations: true
         skip_untranslated_strings: true
-        skip_untranslated_files: true
         export_only_approved: false
         push_translations: true
         localization_branch_name: crowdin_auto_import
