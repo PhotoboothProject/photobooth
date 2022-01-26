@@ -1,0 +1,27 @@
+name: Crowdin Tranation Upload
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'resources/lang/en.json'
+  workflow_dispatch:
+
+jobs:
+  synchronize-with-crowdin:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: crowdin action
+      uses: crowdin/github-action@1.4.6
+      with:
+        upload_translations: true
+        download_translations: false
+        source: 'resources/lang/en.json'
+        project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+        token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
