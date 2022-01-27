@@ -111,6 +111,13 @@ before opening a new issue.
 
 Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).
 
+### :warning: Security advice
+
+Photobooth is not hardened against any kind of *targeted* attacks.
+It uses user defined commands for tasks like taking photos and is allowed to replace its own files for easy updating.
+Because of this it's not advised to operate Photobooth in an untrusted network and 
+**you should absolutely not make Photobooth accessible through the internet without heavy modifications!**
+
 ### :copyright: License
 
 Photobooth source is licensed under the MIT license.  
