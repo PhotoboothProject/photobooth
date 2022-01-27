@@ -3,7 +3,7 @@ name: Crowdin Translation Download
 on:
   schedule:
     # Run weekly on Sunday at 23:50
-    - cron:  '50 23 * * 7'
+    - cron: '50 23 * * 0'
   workflow_dispatch:
 
 jobs:
