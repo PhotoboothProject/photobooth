@@ -43,7 +43,10 @@ const photoBooth = (function () {
         videoView = idVideoView.get(0),
         videoPreview = idVideoPreview.get(0),
         videoSensor = document.querySelector('#video--sensor'),
-        cheeseTime = config.picture.no_cheese ? 0 : config.picture.cheese_time;
+        cheeseTime = config.picture.no_cheese ? 0 : config.picture.cheese_time,
+        timeToLive = config.picture.time_to_live * 1000,
+        continuousCollageTime = config.collage.continuous_time * 1000,
+        retryTimeout = config.picture.retry_timeout * 1000;
 
     const PhotoStyle = {
             PHOTO: 'photo',
@@ -85,14 +88,10 @@ const photoBooth = (function () {
         photoboothTools.console.log('Timeout for auto reload cleared.');
 
         if (!takingPic) {
-            photoboothTools.console.logDev(
-                'Timeout for auto reload set to',
-                config.picture.time_to_live * 1000,
-                ' seconds.'
-            );
+            photoboothTools.console.logDev('Timeout for auto reload set to', timeToLive, ' milliseconds.');
             timeOut = setTimeout(function () {
                 photoboothTools.reloadPage();
-            }, config.picture.time_to_live * 1000);
+            }, timeToLive);
         }
     };
 
@@ -191,7 +190,7 @@ const photoBooth = (function () {
                     retry += 1;
                     setTimeout(function () {
                         api.getAndDisplayMedia(mode, retry);
-                    }, retry * 1000);
+                    }, retryTimeout);
                 }
             });
     };
@@ -506,7 +505,7 @@ const photoBooth = (function () {
                         );
                         setTimeout(() => {
                             api.thrill(data.style, retry);
-                        }, config.picture.retry_timeout * 1000);
+                        }, retryTimeout);
                     } else {
                         api.errorPic(result);
                     }
@@ -544,7 +543,7 @@ const photoBooth = (function () {
                                 imageUrl = '';
                                 loaderImage.css('display', 'none');
                                 api.thrill(PhotoStyle.COLLAGE);
-                            }, config.collage.continuous_time * 1000);
+                            }, continuousCollageTime);
                         } else {
                             currentCollageFile = '';
                             nextCollageNumber = 0;
@@ -553,7 +552,7 @@ const photoBooth = (function () {
                                 imageUrl = '';
                                 loaderImage.css('display', 'none');
                                 api.processPic(data.style, result);
-                            }, config.collage.continuous_time * 1000);
+                            }, continuousCollageTime);
                         }
                     } else {
                         // collage with interruption
