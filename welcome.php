@@ -69,12 +69,12 @@ $PHOTOBOOTH_HOME = getcwd();
 		<p>You are missing some translation or your language isn't supported yet? Don't worry! You can request new language support at <a href="https://github.com/andi34/photobooth/issues" target="_blank" rel="noopener noreferrer">GitHub</a>,
 		you can translate Photobooth at <a href="https://crowdin.com/project/photobooth" target="_blank" rel="noopener noreferrer">Crowdin</a>.</p>
 		<p></p>
-        <p class="security-advice"><b>Security advice</b><br><br>
-        Photobooth is not hardened against any kind of <i>targeted</i> attacks.<br>
-        It uses user defined commands for tasks like taking photos and is allowed to replace its own files for easy updating.<br>
-        Because of this it's not advised to operate Photobooth in an untrusted network and<br>
-        <b>you should absolutely not make Photobooth accessible through the internet without heavy modifications!</b></p>
-        <p></p>
+		<p class="security-advice"><b>Security advice</b><br><br>
+		Photobooth is not hardened against any kind of <i>targeted</i> attacks.<br>
+		It uses user defined commands for tasks like taking photos and is allowed to replace its own files for easy updating.<br>
+		Because of this it's not advised to operate Photobooth in an untrusted network and<br>
+		<b>you should absolutely not make Photobooth accessible through the internet without heavy modifications!</b></p>
+		<p></p>
 		<p>Thanks for the reading! Enjoy your Photobooth!</p>
 		<p><a href="./" class="btn btn--flex">Start Photobooth</a></p>
 	</div>
