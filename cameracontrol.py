@@ -88,9 +88,12 @@ class CameraControl:
                 self.socket.send_string('failure')
         elif command == 'startVideo':
             try:
-                self.showVideo = True
-                self.connect_to_camera()
-                self.socket.send_string('Starting Video')
+                if not self.showVideo:
+                    self.showVideo = True
+                    self.connect_to_camera()
+                    self.socket.send_string('Starting Video')
+                else:
+                    self.socket.send_string('Video already running')
             except gp.GPhoto2Error:
                 self.socket.send_string('failure')
         elif command == 'stopVideo':
