@@ -110,9 +110,11 @@ class CameraControl:
             print('Received message that can\'t be handled')
 
     def exit_gracefully(self, *args):
-        if self.camera:
-            self.camera.exit()
         print('Exiting...')
+        if self.camera:
+            self.disable_video()
+            self.camera.exit()
+            print('Closed camera connection')
         sys.exit(0)
 
     def __init__(self, args):
