@@ -4009,10 +4009,10 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
-sass@^1.45.2:
-  version "1.45.2"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.45.2.tgz#130b428c1692201cfa181139835d6fc378a33323"
-  integrity sha512-cKfs+F9AMPAFlbbTXNsbGvg3y58nV0mXA3E94jqaySKcC8Kq3/8983zVKQ0TLMUrHw7hF9Tnd3Bz9z5Xgtrl9g==
+sass@^1.49.1:
+  version "1.49.1"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.49.1.tgz#a4b79241b4f219cf591453e4477db0136b9d41be"
+  integrity sha512-VF/Ov0LVmcQeeScqAc6NVodjtE1mrXbSutEFKYmiyS/9WL1mKPFpZ9kJHha/D6t4ofWWpCDvk1B75lfu+cF1XQ==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
