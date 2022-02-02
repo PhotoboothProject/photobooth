@@ -361,7 +361,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
 
 - Liveview **must** be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
-- install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
+- install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms v4l-utils -y`
 - create a virtual webcam `sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
   - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:  
     If it doesn't match the default setup you need to adjust the `Command to generate a live preview` inside the admin panel!
@@ -408,6 +408,43 @@ Yes you can. There's different ways depending on your needs and personal setup:
 
     For reference:
     https://github.com/andreknieriem/photobooth/pull/20
+
+<hr>
+
+### How to get better performance using gphoto2 as preview?
+By now the DSLR handling of Photobooth was done exclusively using `gphoto2 CLI` (command line interface). When taking pictures while using preview video from the same camera one command has to be stopped and another one is run after that.
+The computer terminates the connection to the camera just to reconnect immediately. Because of that there was an ugly video gap and the noises of the camera could be irritating as stopping the video sounded very similar to taking a picture. But most cameras can shoot quickly from live-view...
+The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed using several programming languages. Because of this we can have a python script that handles both preview and taking pictures without terminating the connection to the camera in between.
+
+To try using `gphoto-python` first execute `install-gphoto-python.sh` from the Photobooth installation subdirectory `gphoto`.
+```
+bash gphoto/install-gphoto-python.sh
+```
+After that just change your commands to use the python script. For Live preview use: *(assuming your Photobooth install is at `var/www/html/`)*
+```
+python3 /var/www/html/cameracontrol.py
+```
+And for the take picture command:
+```
+python3 /var/www/html/cameracontrol.py --capture-image-and-download %s
+```
+There's no need for a command to end the live preview. So just empty that field.
+
+As you possibly noticed the params of the script are designed to be similar to the ones of `gphoto2 CLI` but with some shortcuts like `-c` for `--capture-image-and-download`. If you want to know more check out the help of the script by running:
+```
+python3 /var/www/html/cameracontrol.py --help
+```
+If you want to keep your images on the camera you need to use the same `capturetarget` config as when you were using `gphoto CLI` (see "How to keep pictures on my Camera using gphoto2?"). Set the config on the preview command like this:
+```
+python3 /var/www/html/cameracontrol.py --set-config capturetarget=1
+```
+If you don't want to use the DSLR view as background video enable the respective setting of Photobooth add `--bsm` to the preview command. The preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting the next photo.
+
+If you get errors from Photobooth and want to get more information try to run the preview command manually. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
+
+Finally if you just run `python3 /var/www/html/cameracontrol.py --capture-image-and-download %s` as take picture command without having a preview started it only takes a picture without starting any kind of preview and ends the script immediately after the picture. In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` for all DSLR connection handling in the future.
+
+But by now this was not tested with distinct setups and different cameras... so feel free to give feedback!
 
 <hr>
 
@@ -472,7 +509,7 @@ Open [http://localhost/phpinfo.php](http://localhost/phpinfo.php) in your browse
 Take a look for "Loaded Configuration File", you need  sudo rights to edit the file.
 Page will look like this:
 <details><summary>CLICK ME</summary>
-<img src="../resources/img/faq/php-ini.png">
+<img src="../resources/img/faq/php-ini.png" alt="php.ini Screenshot">
 </details>
 
 <hr>

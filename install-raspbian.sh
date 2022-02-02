@@ -295,7 +295,7 @@ lighttpd_webserver() {
 # http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
 
 ## Start an FastCGI server for php (needs the php5-cgi package)
-fastcgi.server += ( ".php" => 
+fastcgi.server += ( ".php" =>
 	((
 		"socket" => "/var/run/php/php7.3-fpm.sock",
 		"broken-scriptfilename" => "enable"
@@ -370,7 +370,7 @@ pi_camera() {
     cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
-  'take_picture' => 
+  'take_picture' =>
   array (
     'cmd' => 'libcamera-still -n -o %s -q 100 -t 1 | echo "Done"',
     'msg' => 'Done',
@@ -544,7 +544,7 @@ echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
 ask_yes_no "          to /var/www/html-$DATE if exists! [y/N] " "Y"
 echo -e "\033[0m"
 if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
-    info "### We will install Photobooth into /var/www/html."     
+    info "### We will install Photobooth into /var/www/html."
     SUBFOLDER=false
 else
     info "### We will install Photobooth into /var/www/html/photobooth."
