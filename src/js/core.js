@@ -43,6 +43,10 @@ const photoBooth = (function () {
         videoView = idVideoView.get(0),
         videoPreview = idVideoPreview.get(0),
         videoSensor = document.querySelector('#video--sensor'),
+        usesBackgroundPreview =
+            config.preview.asBackground &&
+            (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+                (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm)),
         cheeseTime = config.picture.no_cheese ? 0 : config.picture.cheese_time,
         timeToLive = config.picture.time_to_live * 1000,
         continuousCollageTime = config.collage.continuous_time * 1000,
@@ -129,11 +133,7 @@ const photoBooth = (function () {
 
         resultPage.hide();
         startPage.addClass('open');
-        if (
-            config.preview.asBackground &&
-            (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
-                (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm))
-        ) {
+        if (usesBackgroundPreview) {
             api.startVideo(CameraDisplayMode.BACKGROUND);
         }
 
@@ -212,13 +212,15 @@ const photoBooth = (function () {
     };
 
     api.startVideo = function (mode, retry = 0) {
-        if (config.preview.asBackground) {
+        if (usesBackgroundPreview) {
             api.stopVideo(CameraDisplayMode.BACKGROUND);
             wrapper.css('background-color', config.colors.panel);
         }
 
-        if (!navigator.mediaDevices) {
-            return;
+        if (config.preview.mode != PreviewMode.URL.valueOf()) {
+            if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
+                return;
+            }
         }
 
         switch (mode) {
