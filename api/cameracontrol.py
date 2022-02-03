@@ -56,7 +56,7 @@ class CameraControl:
                     count = setting.count_choices()
                     if int_value < 0 or int_value >= count:
                         print('Parameter out of range')
-                        raise KeyboardInterrupt
+                        self.exit_gracefully()
                     choice = setting.get_choice(int_value)
                     setting.set_value(choice)
                 except ValueError:
@@ -69,12 +69,12 @@ class CameraControl:
                 # unhandled types (most don't make any sense to handle)
                 # GP_WIDGET_SECTION, GP_WIDGET_WINDOW, GP_WIDGET_BUTTON, GP_WIDGET_DATE
                 print('Unhandled setting type %s for %s=%s' % (setting_type, name, value))
-                raise KeyboardInterrupt
+                self.exit_gracefully()
             self.camera.set_config(config)
             print('Config set %s=%s' % (name, value))
         except gp.GPhoto2Error or ValueError:
             print('Config error for %s=%s' % (name, value))
-            raise KeyboardInterrupt
+            self.exit_gracefully()
 
     def disable_video(self):
         self.showVideo = False

@@ -422,27 +422,27 @@ bash gphoto/install-gphoto-python.sh
 ```
 After that just change your commands to use the python script. For Live preview use: *(assuming your Photobooth install is at `var/www/html/`)*
 ```
-python3 /var/www/html/cameracontrol.py
+python3 cameracontrol.py
 ```
 And for the take picture command:
 ```
-python3 /var/www/html/cameracontrol.py --capture-image-and-download %s
+python3 cameracontrol.py --capture-image-and-download %s
 ```
 There's no need for a command to end the live preview. So just empty that field.
 
 As you possibly noticed the params of the script are designed to be similar to the ones of `gphoto2 CLI` but with some shortcuts like `-c` for `--capture-image-and-download`. If you want to know more check out the help of the script by running:
 ```
-python3 /var/www/html/cameracontrol.py --help
+python3 cameracontrol.py --help
 ```
 If you want to keep your images on the camera you need to use the same `capturetarget` config as when you were using `gphoto CLI` (see "How to keep pictures on my Camera using gphoto2?"). Set the config on the preview command like this:
 ```
-python3 /var/www/html/cameracontrol.py --set-config capturetarget=1
+python3 cameracontrol.py --set-config capturetarget=1
 ```
 If you don't want to use the DSLR view as background video enable the respective setting of Photobooth add `--bsm` to the preview command. The preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting the next photo.
 
-If you get errors from Photobooth and want to get more information try to run the preview command manually. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
+If you get errors from Photobooth and want to get more information try to run the preview command manually. The script is in Photobooth's api folder. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
 
-Finally if you just run `python3 /var/www/html/cameracontrol.py --capture-image-and-download %s` as take picture command without having a preview started it only takes a picture without starting any kind of preview and ends the script immediately after the picture. In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` for all DSLR connection handling in the future.
+Finally if you just run `python3 cameracontrol.py --capture-image-and-download %s` as take picture command without having a preview started it only takes a picture without starting any kind of preview and ends the script immediately after the picture. In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` for all DSLR connection handling in the future.
 
 But by now this was not tested with distinct setups and different cameras... so feel free to give feedback!
 
