@@ -404,11 +404,11 @@ const photoBooth = (function () {
 
         loader.addClass('open');
 
-        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
-            if (config.get_request.countdown) {
-                api.getRequest(photoStyle);
-            }
+        if (config.get_request.countdown) {
+            api.getRequest(photoStyle);
+        }
 
+        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
             if (
                 (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
                     config.preview.mode === PreviewMode.GPHOTO.valueOf()) &&
