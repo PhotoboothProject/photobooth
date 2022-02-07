@@ -379,6 +379,18 @@ general_permissions() {
     gpasswd -a www-data plugdev
     gpasswd -a www-data video
 
+    if [ -f "/var/www/.yarnrc" ]; then
+        info "### .yarnrc exists."
+        info "### Fixing permissions on .yarnrc"
+        chown www-data:www-data "/var/www/.yarnrc"
+    fi
+
+    if [ -d "/var/www/.cache/yarn" ]; then
+        info "### Cache folder for yarn found."
+        info "### Fixing permissions on yarns cache folder."
+        chown -R www-data:www-data "/var/www/.cache/yarn/"
+    fi
+
     if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
         info "### Disabling camera automount."
         chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
