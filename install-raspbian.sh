@@ -45,6 +45,12 @@ function error {
     echo -e "\033[0;31m${1}\033[0m"
 }
 
+print_spaces() {
+    echo ""
+    info "###########################################################"
+    echo ""
+}
+
 #Param 1: Question / Param 2: Default / silent answer
 function ask_yes_no {
     if [ "$SILENT_INSTALL" = false ]; then
@@ -531,6 +537,8 @@ else
     COMMON_PACKAGES+=('jq')
 fi
 
+print_spaces
+
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
 ask_yes_no "          to /var/www/html-$DATE if exists! [y/N] " "Y"
@@ -541,6 +549,8 @@ if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
 else
     info "### We will install Photobooth into /var/www/html/photobooth."
 fi
+
+print_spaces
 
 echo -e "\033[0;33m### You probably like to use a printer."
 ask_yes_no "### You like to install CUPS and set needing printer permissions? [y/N] " "Y"
@@ -558,6 +568,8 @@ then
     fi
 fi
 
+print_spaces
+
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
     echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
@@ -567,6 +579,8 @@ if [ "$RUNNING_ON_PI" = true ]; then
         PI_CAMERA=true
     fi
 
+    print_spaces
+
     echo -e "\033[0;33m### You probably like to start the browser on every start."
     ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " "N"
     echo -e "\033[0m"
@@ -574,6 +588,8 @@ if [ "$RUNNING_ON_PI" = true ]; then
         KIOSK_MODE=true
         COMMON_PACKAGES+=('unclutter')
     fi
+
+    print_spaces
 
     echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
     echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"
@@ -591,6 +607,11 @@ fi
 # Go through the installation steps of Photobooth          #
 #                                                          #
 ############################################################
+
+
+print_spaces
+info "### Starting installation..."
+print_spaces
 
 common_software
 general_setup
