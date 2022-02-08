@@ -559,12 +559,25 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     SETUP_CUPS=true
     COMMON_PACKAGES+=('cups')
+    print_spaces
+
     echo -e "\033[0;33m### By default CUPS can only be accessed via localhost."
     ask_yes_no "### You like to allow remote access to CUPS over IP from all devices inside your network? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         CUPS_REMOTE_ANY=true
+    fi
+
+    print_spaces
+
+    echo -e "\033[0;33m### You might need some additional drivers to use the print function."
+    echo -e "### You like to install a collection of free-software printer drivers"
+    ask_yes_no "### (Gutenprint for use with UNIX spooling systems, such as CUPS, lpr and LPRng)? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        COMMON_PACKAGES+=('printer-driver-gutenprint')
     fi
 fi
 
@@ -638,6 +651,12 @@ info ""
 info "    Photobooth can be accessed at:"
 info "        $URL"
 info ""
+if [ "$SETUP_CUPS" = true ]; then
+    info "    In order to use the print function,"
+    info "    you'll have to setup your printer inside CUPS:"
+    info "        http://localhost:631"
+    info ""
+fi
 info "###"
 info "### Have fun with your Photobooth, but first restart your device!"
 
