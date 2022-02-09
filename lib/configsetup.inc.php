@@ -79,6 +79,7 @@ $configsetup = [
             'options' => [
                 'de' => 'DE',
                 'en' => 'EN',
+                'fr' => 'FR',
                 'it' => 'IT',
             ],
             'value' => $config['ui']['language'],

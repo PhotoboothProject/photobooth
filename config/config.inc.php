@@ -7,7 +7,7 @@
 $config = array();
 
 // G E N E R A L
-// possible language values: de, en, it
+// possible language values: de, en, fr, it
 $config['ui']['language'] = 'en';
 $config['adminpanel']['view'] = 'basic';
 $config['dev']['enabled'] = true;
