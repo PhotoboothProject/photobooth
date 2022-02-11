@@ -59,7 +59,7 @@ if [[ $REPLY =~ ^[1]$ ]]; then
     info ""
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-        info "Installing gphoto2 webcam service."
+        info "### Installing gphoto2 webcam service."
         cp 'ffmpeg-webcam.service' '/etc/systemd/system/ffmpeg-webcam.service'
         cp 'ffmpeg-webcam.sh' '/usr/ffmpeg-webcam.sh'
         chmod +x '/usr/ffmpeg-webcam.sh'
@@ -68,7 +68,7 @@ if [[ $REPLY =~ ^[1]$ ]]; then
         info "gphoto2 webcam service installed and running..."
     fi
 elif [[ $REPLY =~ ^[2]$ ]]; then
-    info "Stopping and removing gphoto2 webcam service."
+    info "### Stopping and removing gphoto2 webcam service."
     systemctl stop ffmpeg-webcam.service
     systemctl disable ffmpeg-webcam.service
     rm '/usr/ffmpeg-webcam.sh'

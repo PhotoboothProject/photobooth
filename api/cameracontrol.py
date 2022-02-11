@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import signal
 import sys
 import time
@@ -10,6 +12,33 @@ import gphoto2 as gp
 
 
 class CameraControl:
+    def __init__(self, args):
+        self.running = True
+        self.args = args
+        self.showVideo = True
+        self.chroma = {}
+        self.camera = None
+        self.socket = None
+        self.ffmpeg = None
+
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+        self.connect_to_camera()
+
+        if args.imgpath is not None:
+            try:
+                self.capture_image(args.imgpath)
+                if args.chroma_sensitivity is not None and args.chroma_sensitivity > 0:
+                    self.handle_chroma_params(args)
+                    self.chroma_key_image(args.imgpath)
+                sys.exit(0)
+            except gp.GPhoto2Error as e:
+                print('An error occured: %s' % e)
+                sys.exit(1)
+        else:
+            self.pipe_video_to_ffmpeg_and_wait_for_commands()
+
     def connect_to_camera(self):
         try:
             self.camera = gp.Camera()
@@ -86,6 +115,7 @@ class CameraControl:
         if args.exit:
             self.socket.send_string('Exiting service!')
             self.exit_gracefully()
+        self.handle_chroma_params(args)
         if args.device != self.args.device:
             self.args.device = args.device
             self.ffmpeg_open()
@@ -97,6 +127,10 @@ class CameraControl:
         if args.imgpath is not None:
             try:
                 self.capture_image(args.imgpath)
+                print('chroma')
+                if args.chroma_sensitivity is not None and args.chroma_sensitivity > 0:
+                    print('do chroma')
+                    self.chroma_key_image(args.imgpath)
                 self.socket.send_string('Image captured')
                 if self.args.bsm:
                     self.disable_video()
@@ -115,44 +149,59 @@ class CameraControl:
             except gp.GPhoto2Error:
                 self.socket.send_string('failure')
 
-    def exit_gracefully(self, *args):
-        print('Exiting...')
-        if self.camera:
-            self.disable_video()
-            self.camera.exit()
-            print('Closed camera connection')
-        sys.exit(0)
-
-    def __init__(self, args):
-        self.args = args
-        self.showVideo = True
-        self.camera = None
-        self.socket = None
-        self.ffmpeg = None
-
-        signal.signal(signal.SIGINT, self.exit_gracefully)
-        signal.signal(signal.SIGTERM, self.exit_gracefully)
-
-        self.connect_to_camera()
-
-        if self.args.imgpath is not None:
-            try:
-                self.capture_image(self.args.imgpath)
-            except gp.GPhoto2Error as e:
-                print('An error occured: %s' % e)
-                sys.exit(1)
-        else:
-            self.pipe_video_to_ffmpeg_and_wait_for_commands()
-
     def ffmpeg_open(self):
-        self.ffmpeg = Popen(
-            ['ffmpeg', '-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p', '-f', 'v4l2', self.args.device],
-            stdin=PIPE)
+        input_chroma = []
+        filters = []
+        if self.chroma.get('active', False):
+            filters, input_chroma = self.get_chroma_ffmpeg_params()
+        input_gphoto = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
+        ffmpeg_output = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
+        self.ffmpeg = Popen(['ffmpeg', *input_chroma, *input_gphoto, *filters, *ffmpeg_output], stdin=PIPE)
+
+    def handle_chroma_params(self, args):
+        chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
+        chroma_image = args.chroma_image or self.chroma.get('image')
+        chroma_sensitivity = float(args.chroma_sensitivity or self.chroma.get('sensitivity', 0.0))
+        if chroma_sensitivity < 0.0 or chroma_sensitivity > 1.0:
+            chroma_sensitivity = 0.0
+        chroma_blend = float(args.chroma_blend or self.chroma.get('blend', 0.0))
+        if chroma_blend < 0.0:
+            chroma_blend = 0.0
+        elif chroma_blend > 1.0:
+            chroma_blend = 1.0
+        chroma_active = chroma_sensitivity != 0.0 and chroma_image is not None
+        print('chromakeying active: %s' % chroma_active)
+        self.chroma = {
+            'active': chroma_active,
+            'image': chroma_image,
+            'color': chroma_color,
+            'sensitivity': str(chroma_sensitivity),
+            'blend': str(chroma_blend)
+        }
+
+    def get_chroma_ffmpeg_params(self):
+        input_chroma = ['-i', self.chroma['image']]
+        filters = ['-filter_complex', '[0:v][1:v]scale2ref[i][v];' +
+                   '[v]colorkey=%s:%s:%s:[ck];[i][ck]overlay' %
+                   (self.chroma['color'], self.chroma['sensitivity'], self.chroma['blend'])]
+        return filters, input_chroma
+
+    def chroma_key_image(self, path):
+        input_chroma = []
+        filters = []
+        if self.chroma.get('active', False):
+            filters, input_chroma = self.get_chroma_ffmpeg_params()
+        input_gphoto = ['-i', path]
+        tmp_path = "%s-chroma.jpg" % path
+        ffmpeg_output = [tmp_path]
+        Popen(['ffmpeg', *input_chroma, *input_gphoto, *filters, *ffmpeg_output]).wait(5)
+        Popen(['mv', tmp_path, path, '-f']).wait(1)
 
     def pipe_video_to_ffmpeg_and_wait_for_commands(self):
         context = zmq.Context()
         self.socket = context.socket(zmq.REP)
         self.socket.bind('tcp://*:5555')
+        self.handle_chroma_params(self.args)
         self.ffmpeg_open()
         try:
             while True:
@@ -176,6 +225,16 @@ class CameraControl:
         except KeyboardInterrupt:
             self.exit_gracefully()
 
+    def exit_gracefully(self, *_):
+        if self.running:
+            self.running = False
+            print('Exiting...')
+            if self.camera:
+                self.disable_video()
+                self.camera.exit()
+                print('Closed camera connection')
+            sys.exit(0)
+
 
 class MessageSender:
     def __init__(self, message):
@@ -193,6 +252,8 @@ class MessageSender:
         except zmq.Again:
             print('Message receival not confirmed')
             sys.exit(1)
+        except KeyboardInterrupt:
+            print('Interrupted!')
 
 
 def is_already_running():
@@ -215,9 +276,18 @@ def main():
                         help='CONFIGENTRY=CONFIGVALUE analog to gphoto2 cli. Not tested for all config entries!')
     parser.add_argument('-c', '--capture-image-and-download', default=None, type=str, dest='imgpath',
                         help='capture an image and download it to the computer. If it stays stored on the camera as \
-                        well depends on the camera config.')
+                        well depends on the camera config')
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
-    image and wait for message to start preview again')
+                        image and wait for message to start preview again')
+    parser.add_argument('--chromaImage', type=str, help='chroma key background (full path)', dest='chroma_image')
+    parser.add_argument('--chromaColor', type=str,
+                        help='chroma key color (color name or format like "0xFFFFFF" for white)', dest='chroma_color')
+    parser.add_argument('--chromaSensitivity', type=float,
+                        help='chroma key sensitivity (value from 0.01 to 1.0 or 0.0 to disable). \
+                             If this is set to a value distinct from 0.0 on capture immage command chroma keying using \
+                             ffmpeg is applied on the image and only this modified image is stored on the pc.',
+                        dest='chroma_sensitivity')
+    parser.add_argument('--chromaBlend', type=float, help='chroma key blend (0.0 to 1.0)', dest='chroma_blend')
     parser.add_argument('--exit', action='store_true', help='exit the service')
 
     args = parser.parse_args()

@@ -27,8 +27,10 @@ function takePicture($filename) {
             imagedestroy($im);
         }
     } else {
-        $dir = dirname($filename);
-        chdir($dir); //gphoto must be executed in a dir with write permission
+        //gphoto must be executed in a dir with write permission for other commands we stay in the api dir
+        if (substr($config['take_picture']['cmd'], 0, strlen('gphoto')) === 'gphoto') {
+            chdir(dirname($filename));
+        }
         $cmd = sprintf($config['take_picture']['cmd'], $filename);
         $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
