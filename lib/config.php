@@ -158,6 +158,14 @@ if (!isset($config['textoncollage']['font'])) {
     $config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
 }
 
+if (!isset($config['print']['frame'])) {
+    $config['print']['frame'] = 'resources/img/frames/frame.png';
+}
+
+if (!isset($config['textonprint']['font'])) {
+    $config['textonprint']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+}
+
 if (!isset($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
