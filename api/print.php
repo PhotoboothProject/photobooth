@@ -23,7 +23,6 @@ $filename = $_GET['filename'];
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
 $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
-$print_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['print']['frame']);
 $quality = 100;
 $status = false;
 
@@ -109,7 +108,7 @@ if (!file_exists($filename_print)) {
         }
 
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            $source = applyFrame($source, $print_frame);
+            $source = applyFrame($source, $config['print']['frame']);
         }
 
         list($qrWidth, $qrHeight) = getimagesize($filename_codes);
@@ -145,7 +144,7 @@ if (!file_exists($filename_print)) {
         $source = applyQR($source, $filename_codes, $x, $y);
     } else {
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            $source = applyFrame($source, $print_frame);
+            $source = applyFrame($source, $config['print']['frame']);
         }
     }
 

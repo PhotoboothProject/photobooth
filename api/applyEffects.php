@@ -106,10 +106,10 @@ foreach ($srcImages as $image) {
 
     if ($_POST['style'] === 'collage' && $file != $image) {
         $editSingleCollage = true;
-        $picture_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']);
+        $picture_frame = $config['collage']['frame'];
     } else {
         $editSingleCollage = false;
-        $picture_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['picture']['frame']);
+        $picture_frame = $config['picture']['frame'];
     }
 
     if ($_POST['style'] !== 'collage' || $editSingleCollage) {
@@ -162,7 +162,7 @@ foreach ($srcImages as $image) {
         imagedestroy($chromaCopyResource);
     }
 
-    if ($config['textonpicture']['enabled'] && testFile($config['textonpicture']['font']) && $_POST['style'] !== 'collage') {
+    if ($config['textonpicture']['enabled'] && testFile($fontpath) && $_POST['style'] !== 'collage') {
         $imageResource = applyText($imageResource, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
         $imageModified = true;
     }

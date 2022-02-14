@@ -5,6 +5,7 @@ require_once __DIR__ . '/helper.php';
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
 $os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
+$basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 
 $cmds = [
     'windows' => [
@@ -142,28 +143,54 @@ if ($config['dev']['enabled']) {
     error_reporting(E_ALL);
 }
 
-if (!isset($config['picture']['frame'])) {
-    $config['picture']['frame'] = 'resources/img/frames/frame.png';
+if (file_exists($my_config_file) && !is_writable($my_config_file)) {
+    die('Abort. Can not write config/my.config.inc.php.');
+} elseif (!file_exists($my_config_file) && !is_writable(__DIR__ . '/../config/')) {
+    die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
-if (!isset($config['textonpicture']['font'])) {
-    $config['textonpicture']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+foreach ($config['folders'] as $key => $folder) {
+    if ($folder === 'data' || $folder === 'archives' || $folder === 'config') {
+        $path = $basepath . DIRECTORY_SEPARATOR . $folder;
+    } else {
+        $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
+        $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
+    }
+
+    if (!file_exists($path)) {
+        if (!mkdir($path, 0755, true)) {
+            die("Abort. Could not create $folder.");
+        }
+    } elseif (!is_writable($path)) {
+        die("Abort. The folder $folder is not writable.");
+    }
+
+    $path = realpath($path);
+    $config['foldersAbs'][$key] = $path;
 }
 
-if (!isset($config['collage']['frame'])) {
-    $config['collage']['frame'] = 'resources/img/frames/frame.png';
+if (!isset($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
+    $config['picture']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 }
 
-if (!isset($config['textoncollage']['font'])) {
-    $config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+if (!isset($config['textonpicture']['font']) || !testFile($config['textonpicture']['font'])) {
+    $config['textonpicture']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 }
 
-if (!isset($config['print']['frame'])) {
-    $config['print']['frame'] = 'resources/img/frames/frame.png';
+if (!isset($config['collage']['frame']) || !testFile($config['collage']['frame'])) {
+    $config['collage']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 }
 
-if (!isset($config['textonprint']['font'])) {
-    $config['textonprint']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+if (!isset($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
+    $config['textoncollage']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+}
+
+if (!isset($config['print']['frame']) || !testFile($config['print']['frame'])) {
+    $config['print']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+}
+
+if (!isset($config['textonprint']['font']) || !testFile($config['textonprint']['font'])) {
+    $config['textonprint']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 }
 
 if (!isset($config['collage']['limit'])) {
@@ -188,34 +215,6 @@ if (!isset($config['webserver']['ip'])) {
 
 if (!isset($config['qr']['url'])) {
     $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
-}
-
-if (file_exists($my_config_file) && !is_writable($my_config_file)) {
-    die('Abort. Can not write config/my.config.inc.php.');
-} elseif (!file_exists($my_config_file) && !is_writable(__DIR__ . '/../config/')) {
-    die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
-}
-
-$basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
-
-foreach ($config['folders'] as $key => $folder) {
-    if ($folder === 'data' || $folder === 'archives' || $folder === 'config') {
-        $path = $basepath . DIRECTORY_SEPARATOR . $folder;
-    } else {
-        $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
-        $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
-    }
-
-    if (!file_exists($path)) {
-        if (!mkdir($path, 0755, true)) {
-            die("Abort. Could not create $folder.");
-        }
-    } elseif (!is_writable($path)) {
-        die("Abort. The folder $folder is not writable.");
-    }
-
-    $path = realpath($path);
-    $config['foldersAbs'][$key] = $path;
 }
 
 $config['folders']['lang'] = getrootpath('../resources/lang');

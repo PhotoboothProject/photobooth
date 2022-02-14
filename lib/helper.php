@@ -55,8 +55,7 @@ function getPhotoboothUrl() {
 }
 
 function testFile($file) {
-    $realPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $file);
-    if (is_dir($realPath)) {
+    if (is_dir($file)) {
         $ErrorData = [
             'error' => $file . ' is a path! Frames need to be PNG, Fonts need to be ttf!',
         ];
@@ -64,7 +63,7 @@ function testFile($file) {
         return false;
     }
 
-    if (!file_exists($realPath)) {
+    if (!file_exists($file)) {
         $ErrorData = [
             'error' => $file . ' does not exist!',
         ];

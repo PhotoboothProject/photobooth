@@ -35,7 +35,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     $quality = 100;
     $image_filter = false;
     $imageModified = false;
-    $frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . COLLAGE_FRAME);
     if (!empty($filter) && $filter !== 'plain') {
         $image_filter = $filter;
     }
@@ -140,7 +139,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    $tempSubImage = applyFrame($tempSubImage, $frame);
+                    $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
                 }
 
                 // copy image to background
@@ -180,7 +179,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $heightNew = imagesy($tempSubImage);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    $tempSubImage = applyFrame($tempSubImage, $frame);
+                    $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
                 }
 
                 // copy image to background
@@ -209,7 +208,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    $tempSubImage = applyFrame($tempSubImage, $frame);
+                    $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
                 }
 
                 $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
@@ -279,7 +278,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                     $height = imagesy($tempSubImage);
 
                     if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                        $tempSubImage = applyFrame($tempSubImage, $frame);
+                        $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
                     }
 
                     // Rotate image
@@ -330,7 +329,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $heightNew = imagesy($tempSubImage);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    $tempSubImage = applyFrame($tempSubImage, $frame);
+                    $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
                 }
 
                 // copy image to background
@@ -402,7 +401,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $tempSubImage = resizeCropImage($widthNew, $heightNew, $tempSubImage);
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    $tempSubImage = applyFrame($tempSubImage, $frame);
+                    $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
                 }
 
                 // copy image to background
@@ -445,7 +444,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
 
                 if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    $tempSubImage = applyFrame($tempSubImage, $frame);
+                    $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
                 }
 
                 if ($i == 0) {
@@ -472,7 +471,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     }
 
     if (COLLAGE_TAKE_FRAME === 'once' && testFile(COLLAGE_FRAME)) {
-        $my_collage = applyFrame($my_collage, $frame);
+        $my_collage = applyFrame($my_collage, COLLAGE_FRAME);
     }
 
     if (TEXTONCOLLAGE_ENABLED === 'enabled' && testFile(TEXTONCOLLAGE_FONT)) {
