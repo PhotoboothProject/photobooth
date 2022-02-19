@@ -493,13 +493,13 @@ There are a couple of flags you need to change from the example command below:
  - keep or change the ip address `10.10.10.10`. Remember what you change it to.
 
 ```
-sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
+sudo bash setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
 --ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
 ```
 If you run into any errors setting up your hotspot we can remove all the settings and try it again. The first time I ran this I ran into an error, I reset it using the command below, then reinstalled it. It went smoothly the second time:
 
 ```
-sudo ./setup-network.sh --clean
+sudo bash setup-network.sh --clean
 ```
 
 <hr>
