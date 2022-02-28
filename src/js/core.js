@@ -1,6 +1,23 @@
 /* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools */
 
 const photoBooth = (function () {
+    const PhotoStyle = {
+            PHOTO: 'photo',
+            COLLAGE: 'collage',
+            CHROMA: 'chroma'
+        },
+        CameraDisplayMode = {
+            INIT: 1,
+            BACKGROUND: 2,
+            COUNTDOWN: 3
+        },
+        PreviewMode = {
+            NONE: 'none',
+            DEVICE: 'device_cam',
+            URL: 'url',
+            GPHOTO: 'gphoto'
+        };
+
     const api = {},
         loader = $('#loader'),
         startPage = $('#start'),
@@ -51,23 +68,6 @@ const photoBooth = (function () {
         timeToLive = config.picture.time_to_live * 1000,
         continuousCollageTime = config.collage.continuous_time * 1000,
         retryTimeout = config.picture.retry_timeout * 1000;
-
-    const PhotoStyle = {
-            PHOTO: 'photo',
-            COLLAGE: 'collage',
-            CHROMA: 'chroma'
-        },
-        CameraDisplayMode = {
-            INIT: 1,
-            BACKGROUND: 2,
-            COUNTDOWN: 3
-        },
-        PreviewMode = {
-            NONE: 'none',
-            DEVICE: 'device_cam',
-            URL: 'url',
-            GPHOTO: 'gphoto'
-        };
 
     let timeOut,
         isPrinting = false,
