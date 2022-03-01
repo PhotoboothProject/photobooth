@@ -420,10 +420,7 @@
   "manual:qr:qr_enabled": "Si activé, un bouton QR code est visible sur l'écran de résultat et dans la galerie. L'utilisateur peut télécharger une image en scannant le QR Code. Si vous accédez à Photobooth via \"localhost\", \"127.0.0.1\" ou si vous avez installé Photobooth dans un sous-dossier, veuillez définir l'adresse IP du serveur web Photobooth pour que le QR Code fonctionne. <p>Exemple si Photobooth est accessible directement : <code>192.168.0.50</code>.</p><p>Exemple si Photobooth est installé dans un sous-dossier : <code>192.168.0.50/photobooth</code>.</p>",
   "manual:qr:qr_text": "Définissez votre propre texte d'aide qui sera visible sous le QR Code.",
   "manual:qr:qr_url": "Définissez une URL à pointer via le code QR.",
-  "manual:remotebuzzer:remotebuzzer_collagebutton": [
-    "153 / 2000",
-    "Pour le photomontage, connectez le bouton matériel au GPIO20. Mettez le GPIO à la terre pour déclencher. Si activé, appuyez longuement sur le bouton PHOTO pour ne pas déclencher le photomontage."
-  ],
+  "manual:remotebuzzer:remotebuzzer_collagebutton": "Pour le photomontage, connectez le bouton matériel au GPIO20. Mettez le GPIO à la terre pour déclencher. Si activé, appuyez longuement sur le bouton PHOTO pour ne pas déclencher le photomontage.",
   "manual:remotebuzzer:remotebuzzer_collagetime": "Si le bouton PHOTO est appuyé moins d'une seconde, la prise d'une photo est déclenchée. S'il est appuyé plus d'une seconde, un photomontage est déclenché. Ne fonctionne que si le photomontage est activé dans les paramètres d'administrateur et que le bouton de photomontage est désactivé.",
   "manual:remotebuzzer:remotebuzzer_debounce": "Délai d'attente pour les boutons matériels [ms]",
   "manual:remotebuzzer:remotebuzzer_enable_standalonegallery": "Contrôle si l'encodeur rotatif est actif sur la visualisation de la galerie.",

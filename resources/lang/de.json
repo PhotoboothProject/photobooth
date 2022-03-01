@@ -305,7 +305,6 @@
   "manual:general:download_thumbs": "Wenn aktiviert, werden Thumbnails beim Download verwendet (falls vorhanden) statt dem Bild in voller Größe.",
   "manual:general:picture_preview_before_processing": "Wenn diese Option aktiviert ist, werden Bilder vorgeladen und während der Filterverarbeitung angezeigt.",
   "manual:general:picture_retry_on_error": "Legen Sie fest, wie oft das System im Falle eines Fehlers versucht ein Bild aufzunehmen. 0 = deaktiviert.",
-  "manual:general:picture_retry_timeout": "Legen Sie eine Zeit fest, nach der die Aufnahme erneut versucht wird. \"Bildaufnahme neu versuchen\" muss auf einen Wert > 0 gesetzt werden.",
   "manual:general:picture_thumb_size": "Thumbnail-Größe auswählen: XS = max 360px, S = max 540px, M = max 900px, L = max 1080px, XL = max 1260px",
   "manual:general:picture_time_to_live": "Wählen Sie eine Zeit zwischen 1 und 90 Sekunden. Ihr Bild ist nach der Aufnahme für diese Zeit auf dem Ergebnisbildschirm sichtbar.",
   "manual:general:start_screen_subtitle": "Geben Sie den auf der Startseite sichtbaren Untertitel ein.",
