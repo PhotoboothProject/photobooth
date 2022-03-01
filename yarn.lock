@@ -956,14 +956,14 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@prettier/plugin-php@^0.17.6":
-  version "0.17.6"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.17.6.tgz#49e2cb091da89d525842412d2de20fc3ca3d1a20"
-  integrity sha512-Nxkq+Gl8bGbutRV7e3/p5d+Bcftn75oH61RT8xzk44T5ET7fVP50pUdaOdvt704GSNr6wwmfBW8MhBz5IKt+fA==
+"@prettier/plugin-php@^0.18.2":
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.18.2.tgz#1fa0615ff97b79d1599afb0b3290aa9f4cb4f357"
+  integrity sha512-fORCsRO/qY708Wx+guvcQLNvbJo4c2SAwstIvPiZgFCCCHCBD4rT393qGUvqaRxbktWOvXjm5yGqtcBHsQhQDA==
   dependencies:
     linguist-languages "^7.5.1"
     mem "^8.0.0"
-    php-parser "https://github.com/glayzzle/php-parser#27abcb2337ac6450c068ef064982dfabf77916a5"
+    php-parser "3.1.0-beta.4"
 
 "@socket.io/base64-arraybuffer@~1.0.2":
   version "1.0.2"
@@ -3657,9 +3657,10 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-"php-parser@https://github.com/glayzzle/php-parser#27abcb2337ac6450c068ef064982dfabf77916a5":
-  version "3.0.2"
-  resolved "https://github.com/glayzzle/php-parser#27abcb2337ac6450c068ef064982dfabf77916a5"
+php-parser@3.1.0-beta.4:
+  version "3.1.0-beta.4"
+  resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.0-beta.4.tgz#a56e3c90e0371e41fb9c1a09f4459b5adad2b03b"
+  integrity sha512-fLW5tSV8PK0Kizn+Wx1LrhJIFW5eYME4RXoHwIIXfArTBRs7RQJhoU016rXJTPQZIKAXo93ddVyojVvCOETxiA==
 
 picocolors@^1.0.0:
   version "1.0.0"
