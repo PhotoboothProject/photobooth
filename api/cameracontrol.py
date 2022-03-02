@@ -58,9 +58,9 @@ class CameraControl:
     def capture_image(self, path):
         print('Capturing image')
         self.print_config('capturetarget')
+        file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
         # refresh images on camera
         self.camera.wait_for_event(1000)
-        file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
         print('Camera file path: {0}/{1}'.format(file_path.folder, file_path.name))
         file_jpg = str(file_path.name).replace('.CR2', '.JPG')
         print('Copying image to', path)
@@ -127,9 +127,7 @@ class CameraControl:
         if args.imgpath is not None:
             try:
                 self.capture_image(args.imgpath)
-                print('chroma')
                 if args.chroma_sensitivity is not None and args.chroma_sensitivity > 0:
-                    print('do chroma')
                     self.chroma_key_image(args.imgpath)
                 self.socket.send_string('Image captured')
                 if self.args.bsm:
