@@ -85,7 +85,9 @@ $imagelist = array_reverse($images);
 		<div class="center">
 			<figure>
 				<img src="<?=$filename_photo?>" alt="<?=$image?>" />
-				<figcaption><?=$date?></figcaption>
+                <?php if ($config['gallery']['figcaption']): ?>
+                <figcaption><?=$date?></figcaption>
+                <?php endif; ?>
 			</figure>
 		</div>
 		<?php } ?>

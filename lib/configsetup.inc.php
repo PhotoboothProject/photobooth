@@ -877,6 +877,12 @@ $configsetup = [
             'name' => 'gallery[bottom_bar]',
             'value' => $config['gallery']['bottom_bar'],
         ],
+        'gallery_figcaption' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'gallery[figcaption]',
+            'value' => $config['gallery']['figcaption'],
+        ],
         'pswp_clickToCloseNonZoomable' => [
             'view' => 'expert',
             'type' => 'checkbox',

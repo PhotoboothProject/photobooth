@@ -40,7 +40,7 @@ $config['ui']['show_fork'] = true;
 $config['ui']['skip_welcome'] = false;
 $config['event']['enabled'] = true;
 $config['event']['textLeft'] = 'We';
-// possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o', 
+// possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o',
 //                               'fa-heart', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
 $config['event']['symbol'] = 'fa-heart-o';
 $config['event']['textRight'] = 'OpenSource';
@@ -137,6 +137,7 @@ $config['gallery']['db_check_time'] = '10';
 $config['gallery']['allow_delete'] = true;
 $config['gallery']['scrollbar'] = false;
 $config['gallery']['bottom_bar'] = true;
+$config['gallery']['figcaption'] = true;
 $config['pswp']['clickToCloseNonZoomable'] = false;
 $config['pswp']['closeOnScroll'] = false;
 $config['pswp']['closeOnOutsideClick'] = false;

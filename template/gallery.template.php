@@ -39,7 +39,9 @@
 				data-med="<?=$filename_thumb?>" data-med-size="<?=$imageinfoThumb[0]?>x<?=$imageinfoThumb[1]?>">
 				<figure>
 					<img src="<?=$filename_thumb?>" alt="<?=$image?>" />
-					<figcaption><?=$date?></figcaption>
+                    <?php if ($config['gallery']['figcaption']): ?>
+                    <figcaption><?=$date?></figcaption>
+                    <?php endif; ?>
 				</figure>
 			</a>
 	<?php } ?>
