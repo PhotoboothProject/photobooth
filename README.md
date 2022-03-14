@@ -107,6 +107,8 @@ If you're having trouble or questions please take a look at our
 [FAQ](https://github.com/andi34/photobooth/wiki#faq---frequently-asked-questions)
 before opening a new issue.
 
+For local testing and development, the docker setup can be used with `docker-compose up --build`.
+
 ### :mag: Changelog
 
 Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).

@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  photobooth:
+    build: .
+    volumes:
+      - ./:/app
+      - /app/resources/css/
+      - /app/resources/js/
+      - /app/vendor/
+    ports:
+      - "8080:80"
