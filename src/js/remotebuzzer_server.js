@@ -43,8 +43,9 @@ fs.writeFile(pidFilename, PID, function (err) {
     log('PID file created [', pidFilename, ']');
 });
 
-/* START WEBSOCKET SERVER */
-log('Server starting on http://' + config.webserver.ip + ':' + config.remotebuzzer.port);
+/* START HTTP & WEBSOCKET SERVER */
+const baseUrl = 'http://' + config.webserver.ip + ':' + config.remotebuzzer.port;
+log('Server starting on ' + baseUrl);
 
 function photoboothAction(type) {
     switch (type) {
@@ -102,7 +103,53 @@ function photoboothAction(type) {
     }
 }
 
-const ioServer = require('socket.io')(config.remotebuzzer.port, {
+/* CONFIGURE HTTP ENDPOINTS */
+const requestListener = function(req, res) {
+    function sendText(content, contentType) {
+        res.setHeader("Content-Type", contentType || "text/plain");
+        res.writeHead(200);
+        res.end(content);
+    }
+
+    switch (req.url) {
+        case '/':
+            log('http: GET /');
+            sendText(`<h1>Trigger Endpoints</h1>
+            <ul>
+                <li>Trigger photo: <a href="${baseUrl}/commands/start-picture" target="_blank">${baseUrl}/commands/start-picture</a></li>
+                <li>Trigger collage: <a href="${baseUrl}/commands/start-collage" target="_blank">${baseUrl}/commands/start-collage</a></li>
+            </ul>`, 'text/html');
+            break;
+        case '/commands/start-picture':
+            log('http: GET /commands/start-picture');
+            if (triggerArmed) {
+                photoboothAction('picture');
+                sendText('TAKE PHOTO TRIGGERED');
+            } else {
+                sendText('TAKE PHOTO ALREADY TRIGGERED');
+            }
+
+            break;
+        case '/commands/start-collage':
+            log('http: GET /commands/start-collage');
+            if (triggerArmed) {
+                photoboothAction('collage');
+                sendText('TAKE COLLAGE TRIGGERED');
+            } else {
+                sendText('TAKE COLLAGE ALREADY TRIGGERED');
+            }
+
+            break;
+        default:
+            res.writeHead(404);
+            res.end();
+    }
+};
+
+const http = require('http').Server(requestListener);
+
+/* CONFIGURE WEBSOCKET SERVER */
+const ioServer = require('socket.io')(http, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST']
@@ -157,7 +204,9 @@ ioServer.on('connection', function (client) {
 });
 
 /* STARTUP COMPLETED */
-log('socket.io server started');
+http.listen(config.remotebuzzer.port, () => {
+    log('socket.io server started');
+});
 
 /*
  ** GPIO HANDLING

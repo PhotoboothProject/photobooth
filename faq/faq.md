@@ -259,9 +259,7 @@ The following elements are currently not supported and not accessible through ro
 - Full Screen Mode button: Looks like modern browser only allow to change to full screen mode upon user gesture. It seems not possible to change to full-screen using Javascript.
 - Photoswipe download button: Not needed for Rotary Control. (well, if you can come up with a decent use-case, let us know).
 
-**************
-Other Remote Trigger (experimental)
-**************
+#### Remote trigger using Socket.io (experimental)
 The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
 
 - Channel:  `photobooth-socket`
@@ -269,6 +267,29 @@ The trigger server controls and coordinates sending commands via socket.io to th
 - Response: `completed`  will be emitted to the client, once photobooth finished the task
 
 This functionality is experimental and largely untested. Not sure if there is a use-case but if you have one, happy to learn about it. Currently this does not support rotary encoder use but could be if needed.
+
+#### Remote trigger using simple web requests
+*Note: This feature depends on the experimental Socket.io implementation and needs option `Hardware Button` - `Enable Hardware Buttons` to be active.*
+
+Simple `GET` requests can be used to trigger single pictures or collages. Those endpoints can be found under `http://[Photobooth IP]:[Hardware Button Server Port]` where:
+- `[Photobooth IP]` needs to match the configured value under `General` - `IP address of the Photobooth web server` and
+- `[Hardware Button Server Port]` the value from `Hardware Button` - `Enable Hardware Buttons`
+
+The available endpoints are:
+- `[Base Url]/` - Simple help page with all available endpoints
+- `[Base Url]/commands/start-picture` - Triggers a single picture
+- `[Base Url]/commands/start-collage` - Triggers a collage
+
+These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/) (untested).
+
+**Installation steps for myStrom WiFi Button**
+- Be sure to connect the button to the same network as the photobooth
+- The button can be configured using the following commands
+  ```sh
+  curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-picture
+
+  curl --location -g --request POST http://[Button IP]/api/v1/action/long --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-collage
+  ```
 
 <hr>
 
