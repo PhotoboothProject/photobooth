@@ -104,9 +104,9 @@ function photoboothAction(type) {
 }
 
 /* CONFIGURE HTTP ENDPOINTS */
-const requestListener = function(req, res) {
+const requestListener = function (req, res) {
     function sendText(content, contentType) {
-        res.setHeader("Content-Type", contentType || "text/plain");
+        res.setHeader('Content-Type', contentType || 'text/plain');
         res.writeHead(200);
         res.end(content);
     }
@@ -114,11 +114,14 @@ const requestListener = function(req, res) {
     switch (req.url) {
         case '/':
             log('http: GET /');
-            sendText(`<h1>Trigger Endpoints</h1>
+            sendText(
+                `<h1>Trigger Endpoints</h1>
             <ul>
                 <li>Trigger photo: <a href="${baseUrl}/commands/start-picture" target="_blank">${baseUrl}/commands/start-picture</a></li>
                 <li>Trigger collage: <a href="${baseUrl}/commands/start-collage" target="_blank">${baseUrl}/commands/start-collage</a></li>
-            </ul>`, 'text/html');
+            </ul>`,
+                'text/html'
+            );
             break;
         case '/commands/start-picture':
             log('http: GET /commands/start-picture');
@@ -146,10 +149,11 @@ const requestListener = function(req, res) {
     }
 };
 
-const http = require('http').Server(requestListener);
+const http = require('http');
+const server = new http.Server(requestListener);
 
 /* CONFIGURE WEBSOCKET SERVER */
-const ioServer = require('socket.io')(http, {
+const ioServer = require('socket.io')(server, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST']
@@ -204,7 +208,7 @@ ioServer.on('connection', function (client) {
 });
 
 /* STARTUP COMPLETED */
-http.listen(config.remotebuzzer.port, () => {
+server.listen(config.remotebuzzer.port, () => {
     log('socket.io server started');
 });
 
