@@ -1321,7 +1321,7 @@ const photoBooth = (function () {
         } else {
             photoboothTools.console.logDev('Taking picture already in progress!');
         }
-    }
+    };
 
     $(document).on('keyup', function (ev) {
         if (triggerPic[0] || triggerCollage[0]) {
