@@ -1308,7 +1308,7 @@ const photoBooth = (function () {
     api.handleButtonPressWhileTakingPic = function () {
         if (nextCollageNumber > 0) {
             const btnCollageNext = $('#btnCollageNext');
-            const btnCollageProcess = $('#processPhoto');
+            const btnCollageProcess = $('#btnCollageProcess');
             if (btnCollageNext.length) {
                 photoboothTools.console.logDev('Next collage image triggered by keypress.');
                 btnCollageNext.trigger('click');
