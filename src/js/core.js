@@ -1327,7 +1327,7 @@ const photoBooth = (function () {
         if (triggerPic[0] || triggerCollage[0]) {
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (takingPic) {
-                    api.handleButtonPressWhileTakingPic()
+                    api.handleButtonPressWhileTakingPic();
                 } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled && config.collage.only) {
@@ -1343,7 +1343,7 @@ const photoBooth = (function () {
 
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
                 if (takingPic) {
-                    api.handleButtonPressWhileTakingPic()
+                    api.handleButtonPressWhileTakingPic();
                 } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled) {
