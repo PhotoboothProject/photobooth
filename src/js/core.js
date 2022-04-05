@@ -1307,10 +1307,14 @@ const photoBooth = (function () {
 
     api.handleButtonPressWhileTakingPic = function () {
         if (nextCollageNumber > 0) {
-            const btnCollageNext = $('#btnCollageNext')
+            const btnCollageNext = $('#btnCollageNext');
+            const btnCollageProcess = $('#processPhoto');
             if (btnCollageNext.length) {
                 photoboothTools.console.logDev('Next collage image triggered by keypress.');
-                btnCollageNext.trigger('click')
+                btnCollageNext.trigger('click');
+            } else if (btnCollageProcess.length) {
+                photoboothTools.console.logDev('Processing collage triggered by keypress.');
+                btnCollageProcess.trigger('click');
             } else {
                 photoboothTools.console.logDev('Taking picture already in progress!');
             }
