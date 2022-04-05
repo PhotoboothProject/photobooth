@@ -1192,7 +1192,7 @@ const photoBooth = (function () {
         api.toggleMailDialog(img);
     });
 
-    $('#send-mail-form').on('submit', function (e) {
+    mailSendForm.on('submit', function (e) {
         e.preventDefault();
 
         const form = $(this);
@@ -1244,7 +1244,7 @@ const photoBooth = (function () {
         }
     });
 
-    $('.qrbtn').on('click', function (e) {
+    qrBtn.on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -1305,11 +1305,25 @@ const photoBooth = (function () {
         $('.newcollage').blur();
     });
 
+    api.handleButtonPressWhileTakingPic = function () {
+        if (nextCollageNumber > 0) {
+            const btnCollageNext = $('#btnCollageNext')
+            if (btnCollageNext.length) {
+                photoboothTools.console.logDev('Next collage image triggered by keypress.');
+                btnCollageNext.trigger('click')
+            } else {
+                photoboothTools.console.logDev('Taking picture already in progress!');
+            }
+        } else {
+            photoboothTools.console.logDev('Taking picture already in progress!');
+        }
+    }
+
     $(document).on('keyup', function (ev) {
         if (triggerPic[0] || triggerCollage[0]) {
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (takingPic) {
-                    photoboothTools.console.logDev('Taking picture already in progress!');
+                    api.handleButtonPressWhileTakingPic()
                 } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled && config.collage.only) {
@@ -1325,7 +1339,7 @@ const photoBooth = (function () {
 
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
                 if (takingPic) {
-                    photoboothTools.console.logDev('Taking picture already in progress!');
+                    api.handleButtonPressWhileTakingPic()
                 } else {
                     $('.closeGallery').trigger('click');
                     if (config.collage.enabled) {
