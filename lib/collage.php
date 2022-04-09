@@ -411,7 +411,7 @@ function addPicture($my_collage, $filename, $pictureOptions, $useNewDimensions =
     $degrees = $pictureOptions[4];
 
     $tempSubImage = imagecreatefromjpeg($filename);
-    if (!$useNewDimensions) {
+    if ($useNewDimensions) {
         $tempSubImage = resizeCropImage($width, $height, $tempSubImage);
     } else {
         $tempSubImage = resizeCropImage($height, $width, $tempSubImage);
@@ -423,8 +423,7 @@ function addPicture($my_collage, $filename, $pictureOptions, $useNewDimensions =
 
     if ($degrees != 0) {
         $bg_color_hex = hexdec(substr(COLLAGE_BACKGROUND_COLOR, 1));
-        $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
-//        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, COLLAGE_BACKGROUND_COLOR);
+        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, $bg_color_hex);
     }
 
     if ($useNewDimensions) {
