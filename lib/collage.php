@@ -422,8 +422,7 @@ function addPicture($my_collage, $filename, $pictureOptions)
     }
 
     if ($degrees != 0) {
-        $bg_color_hex = hexdec(substr(COLLAGE_BACKGROUND_COLOR, 1));
-        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, $bg_color_hex);
+        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, COLLAGE_BACKGROUND_COLOR);
         if (abs($degrees) != 90) {
             $width = imagesx($tempSubImage);
             $height = imagesy($tempSubImage);
