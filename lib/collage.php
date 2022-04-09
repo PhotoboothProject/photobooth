@@ -106,8 +106,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         } else {
             $landscape = false;
             $imageResource = imagerotate($imageResource, 90, $bg_color_hex);
-            $width = imagesx($imageResource);
-            $height = imagesy($imageResource);
             $imageModified = true;
         }
 
@@ -118,18 +116,19 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         imagedestroy($imageResource);
     }
 
+    $width = 1800;
+    $height = 1200;
+    $my_collage = imagecreatetruecolor($width, $height);
+    $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+    imagefill($my_collage, 0, 0, $background);
+    if ($landscape == false) {
+        $rotate_after_creation = true;
+    }
+
     switch (COLLAGE_LAYOUT) {
         // old 2x2 are now named 2+2 as 2x means images are duplicated
         case '2x2':
         case '2+2':
-            $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-            imagecolortransparent($my_collage, $background);
-
-            if ($landscape == false) {
-                $rotate_after_creation = true;
-            }
-
             $positions = [[0, 0], [$width / 2, 0], [0, $height / 2], [$width / 2, $height / 2]];
 
             for ($i = 0; $i < 4; $i++) {
@@ -153,16 +152,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             break;
         case '2x2-2':
         case '2+2-2':
-            // TODO create a new image for every collage type. 1800x1200 is 300dpi for 6x4 - less than the quality of my printer. add an option for higher quality collages?
-            $width = 1800;
-            $height = 1200;
-            $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-            imagefill($my_collage, 0, 0, $background);
-
-            if ($landscape == false) {
-                $rotate_after_creation = true;
-            }
             $heightp = 469;
             $widthp = $heightp * 1.5;
             $pictureOptions = [
@@ -177,15 +166,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             }
             break;
         case '1+3':
-            $width = 1800;
-            $height = 1200;
-            $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-            imagefill($my_collage, 0, 0, $background);
-
-            if ($landscape == false) {
-                $rotate_after_creation = true;
-            }
             $heightNewBig = 520;
             $widthNewBig = $heightNewBig * 1.5;
             $heightNewSmall = 360;
@@ -203,16 +183,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             break;
         case '1+3-2':
         case '3+1':
-            $width = 1800;
-            $height = 1200;
-            $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-            imagefill($my_collage, 0, 0, $background);
-
-            if ($landscape == false) {
-                $rotate_after_creation = true;
-            }
-
             // TODO was done on a per picture basis
             list($picWidth, $picHeight) = getimagesize($editImages[0]);
             $widthNewBig = $picWidth * 0.65;
@@ -243,15 +213,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             }
             break;
         case '1+2':
-            $width = 1800;
-            $height = 1200;
-            $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-            imagefill($my_collage, 0, 0, $background);
-
-            if ($landscape == false) {
-                $rotate_after_creation = true;
-            }
             $heightNewBig = 626;
             $widthNewBig = $heightNewBig * 1.5;
             $heightNewSmall = 422;
@@ -267,13 +228,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             }
             break;
         case '2x4':
-            $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-            imagefill($my_collage, 0, 0, $background);
-
-            if ($landscape) {
-                $rotate_after_creation = true;
-            }
             $degrees = 90;
             $images_rotated = [];
             for ($i = 0; $i < 4; $i++) {
@@ -323,15 +277,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             drawDashedLine($my_collage, 50, $height / 2, $width - 50, $height / 2, $dashedline_color);
             break;
         case '2x4-2':
-            $width = 1800;
-            $height = 1200;
-            $my_collage = imagecreatetruecolor($width, $height);
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-            imagefill($my_collage, 0, 0, $background);
-
-            if ($landscape) {
-                $rotate_after_creation = true;
-            }
             $widthNew = 321;
             $heightNew = $widthNew * 1.5;
             $pictureOptions = [
@@ -346,8 +291,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             ];
 
             for ($i = 0; $i < 4; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], false);
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i+4], false);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i+4]);
             }
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             drawDashedLine($my_collage, 50, 600, 1750, 600, $dashedline_color);
