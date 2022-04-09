@@ -347,7 +347,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
 
             for ($i = 0; $i < 4; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i], false);
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 4], false);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i+4], false);
             }
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             drawDashedLine($my_collage, 50, 600, 1750, 600, $dashedline_color);
@@ -422,7 +422,9 @@ function addPicture($my_collage, $filename, $pictureOptions, $useNewDimensions =
     }
 
     if ($degrees != 0) {
-        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, COLLAGE_BACKGROUND_COLOR);
+        $bg_color_hex = hexdec(substr(COLLAGE_BACKGROUND_COLOR, 1));
+        $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
+//        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, COLLAGE_BACKGROUND_COLOR);
     }
 
     if ($useNewDimensions) {
