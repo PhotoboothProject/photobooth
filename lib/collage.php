@@ -106,6 +106,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         } else {
             $landscape = false;
             $imageResource = imagerotate($imageResource, 90, $bg_color_hex);
+            $width = imagesx($imageResource);
+            $height = imagesy($imageResource);
             $imageModified = true;
         }
 
@@ -116,9 +118,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         imagedestroy($imageResource);
     }
 
-    $width = 1800;
-    $height = 1200;
-    $my_collage = imagecreatetruecolor($width, $height);
+    $my_collage = imagecreatetruecolor(1800, 1200);
     $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
     imagefill($my_collage, 0, 0, $background);
     if ($landscape == false) {
@@ -129,6 +129,11 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         // old 2x2 are now named 2+2 as 2x means images are duplicated
         case '2x2':
         case '2+2':
+            // colage size defined by image size
+            $my_collage = imagecreatetruecolor($width, $height);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+            imagecolortransparent($my_collage, $background);
+
             $positions = [[0, 0], [$width / 2, 0], [0, $height / 2], [$width / 2, $height / 2]];
 
             for ($i = 0; $i < 4; $i++) {
@@ -228,6 +233,15 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             }
             break;
         case '2x4':
+            // colage size defined by image size
+            $my_collage = imagecreatetruecolor($width, $height);
+            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+            imagefill($my_collage, 0, 0, $background);
+
+            if ($landscape) {
+                $rotate_after_creation = true;
+            }
+
             $degrees = 90;
             $images_rotated = [];
             for ($i = 0; $i < 4; $i++) {
@@ -277,6 +291,10 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             drawDashedLine($my_collage, 50, $height / 2, $width - 50, $height / 2, $dashedline_color);
             break;
         case '2x4-2':
+            if ($landscape) {
+                $rotate_after_creation = true;
+            }
+
             $widthNew = 321;
             $heightNew = $widthNew * 1.5;
             $pictureOptions = [
