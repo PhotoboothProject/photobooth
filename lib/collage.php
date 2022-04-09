@@ -402,7 +402,7 @@ function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color)
     imageline($my_collage, $x1, $y1, $x2, $y2, IMG_COLOR_STYLED);
 }
 
-function addPicture($my_collage, $filename, $pictureOptions, $useNewDimensions = true)
+function addPicture($my_collage, $filename, $pictureOptions)
 {
     $dX = $pictureOptions[0];
     $dY = $pictureOptions[1];
@@ -411,10 +411,10 @@ function addPicture($my_collage, $filename, $pictureOptions, $useNewDimensions =
     $degrees = $pictureOptions[4];
 
     $tempSubImage = imagecreatefromjpeg($filename);
-    if ($useNewDimensions) {
-        $tempSubImage = resizeCropImage($width, $height, $tempSubImage);
-    } else {
+    if (abs($degrees) == 90) {
         $tempSubImage = resizeCropImage($height, $width, $tempSubImage);
+    } else {
+        $tempSubImage = resizeCropImage($width, $height, $tempSubImage);
     }
 
     if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
@@ -424,12 +424,12 @@ function addPicture($my_collage, $filename, $pictureOptions, $useNewDimensions =
     if ($degrees != 0) {
         $bg_color_hex = hexdec(substr(COLLAGE_BACKGROUND_COLOR, 1));
         $tempSubImage = rotateResizeImage($tempSubImage, $degrees, $bg_color_hex);
+        if (abs($degrees) != 90) {
+            $width = imagesx($tempSubImage);
+            $height = imagesy($tempSubImage);
+        }
     }
 
-    if ($useNewDimensions) {
-        $width = imagesx($tempSubImage);
-        $height = imagesy($tempSubImage);
-    }
     imagecopy($my_collage, $tempSubImage, $dX, $dY, 0, 0, $width, $height);
     imagedestroy($tempSubImage);
 }
