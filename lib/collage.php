@@ -189,6 +189,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         case '1+3-2':
         case '3+1':
             // TODO was done on a per picture basis
+            // FIXME these two styles are broken: bigger images are cut off
             list($picWidth, $picHeight) = getimagesize($editImages[0]);
             $widthNewBig = $picWidth * 0.65;
             $heightNewBig = $picHeight * 0.65;
