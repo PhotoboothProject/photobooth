@@ -213,7 +213,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
                 $rotate_after_creation = true;
             }
 
-            list($picWidth, $picHeight) = getimagesize($editImages[$i]);
+            // TODO was done on a per picture basis
+            list($picWidth, $picHeight) = getimagesize($editImages[0]);
             $widthNewBig = $picWidth * 0.65;
             $heightNewBig = $picHeight * 0.65;
             $widthNewSmall = $picWidth * 0.4;
@@ -405,8 +406,8 @@ function addPicture($filename, $pictureOptions, $my_collage)
 {
     $dX = $pictureOptions[0];
     $dY = $pictureOptions[1];
-    $height = $pictureOptions[2];
-    $width = $pictureOptions[3];
+    $width = $pictureOptions[2];
+    $height = $pictureOptions[3];
     $degrees = $pictureOptions[4];
 
     $tempSubImage = imagecreatefromjpeg($filename);
