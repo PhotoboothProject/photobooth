@@ -173,7 +173,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             ];
 
             for ($i = 0; $i < 4; $i++) {
-                addPicture($editImages[$i], $pictureOptions, $my_collage);
+                addPicture($editImages[$i], $pictureOptions[$i], $my_collage);
             }
             break;
         case '1+3':
