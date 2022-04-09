@@ -346,7 +346,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
 
             for ($i = 0; $i < 4; $i++) {
                 addPicture($editImages[$i], $pictureOptions[$i], $my_collage);
-                addPicture($editImages[$i + 4], $pictureOptions[$i + 4], $my_collage);
+                addPicture($editImages[$i], $pictureOptions[$i + 4], $my_collage);
             }
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             drawDashedLine($my_collage, 50, 600, 1750, 600, $dashedline_color);
