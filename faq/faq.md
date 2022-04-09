@@ -63,6 +63,11 @@ Open `http://localhost/admin` in your Webbrowser and change the configuration fo
 
 <hr>
 
+### How can I test my current collage settings?
+Open `http://localhost/test/collage.php` in your Webbrowser and a you can find a collage that is created with your current settings.
+
+<hr>
+
 ### How to change the look of my Photobooth?
 Photobooth can be easylie styled for your personal needs via admin panel, open [localhost/admin](http://localhost/admin) in your browser and take a look at the `User Interface` options.  
 To use a private custom index you need to create the following files:
