@@ -135,6 +135,8 @@ const photoBooth = (function () {
         startPage.addClass('open');
         if (usesBackgroundPreview) {
             api.startVideo(CameraDisplayMode.BACKGROUND);
+        } else if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.gphoto_bsm) {
+            api.startVideo(CameraDisplayMode.INIT);
         }
 
         initRemoteBuzzerFromDOM();
