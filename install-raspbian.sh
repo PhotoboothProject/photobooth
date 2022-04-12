@@ -596,7 +596,7 @@ if [ "$RUNNING_ON_PI" = true ]; then
     print_spaces
 
     echo -e "\033[0;33m### You probably like to start the browser on every start."
-    ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " "N"
+    ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         KIOSK_MODE=true
