@@ -32,11 +32,6 @@ else
     WEBSERVER=apache
 fi
 
-if [ "silent" = "$2" ]; then
-    SILENT_INSTALL=true
-    info "Performing silent install"
-fi
-
 function info {
     echo -e "\033[0;36m${1}\033[0m"
 }
@@ -44,6 +39,12 @@ function info {
 function error {
     echo -e "\033[0;31m${1}\033[0m"
 }
+
+if [ "silent" = "$2" ]; then
+    SILENT_INSTALL=true
+    info "Performing silent install"
+fi
+
 
 print_spaces() {
     echo ""
