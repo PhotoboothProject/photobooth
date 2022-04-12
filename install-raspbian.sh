@@ -563,7 +563,7 @@ then
     print_spaces
 
     echo -e "\033[0;33m### By default CUPS can only be accessed via localhost."
-    ask_yes_no "### You like to allow remote access to CUPS over IP from all devices inside your network? [y/N] " "Y"
+    ask_yes_no "### You like to allow remote access to CUPS over IP from all devices inside your network? [y/N] " "N"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
