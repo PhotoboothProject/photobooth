@@ -1,0 +1,41 @@
+#!/bin/bash
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+BOLD='\e[1m'
+NC='\033[0m'
+
+IP=`hostname -I | awk '{print $1}'`
+printf "                    @@@@@@@@@@@@@@@@@@@\n"
+printf "                   @@.               .@@\n"
+printf "     %@@@@@@.     @@     @@@@@@@@@     @@\n"
+printf "    @@@    @@*   @@.                   .@@\n"
+printf "  &@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&\n"
+printf "@@@%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%@@@\n"
+printf "@@                                                       @@\n"
+printf "@@                     @@@@@@@@@@@@@.        *@@  @@@@@  @@\n"
+printf "@@                  @@@@           @@@@                  @@\n"
+printf "@@@@@@@@@@@@@@@@@@@@@    #@@@@@@@#    @@@@@@@@@@@@@@@@@@@@@\n"
+printf "@@              @@@   @@@@(     (@@@@   @@@              @@\n"
+printf "@@             &@@  .@@%           %@@.  @@&             @@\n"
+printf "@@             @@   @@               @@   @@             @@\n"
+printf "@@            %@@  @@*               /@@  @@%            @@\n"
+printf "@@            @@%  @@                 @@  %@@            @@\n"
+printf "@@            *@@  @@&               &@@  @@*            @@\n"
+printf "@@             @@   @@*             *@@   @@             @@\n"
+printf "@@              @@   @@@           @@@   @@              @@\n"
+printf "@@%%%%%%%%%%%%%%%@@%   @@@@@&%&@@@@@   %@@%%%%%%%%%%%%%%%@@\n"
+printf "@@@@@@@@@@@@@@@@@@@@@@     *&@&*     @@@@@@@@@@@@@@@@@@@@@@\n"
+printf "@@                  ,@@@@&       &@@@@,                  @@\n"
+printf "@@                      (@@@@@@@@@(                      @@\n"
+printf "@@                                                       @@\n"
+printf "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n"
+
+
+printf "\nTo access the photobooth browse to ${BLUE}http://${IP}${NC} from another device on your network."
+
+printf "\n${BOLD}* Documentation:    ${NC}${GREEN}https://github.com/andi34/photobooth/wiki${NC}"
+printf "\n${BOLD}* Website / Source: ${NC}${GREEN}https://github.com/andi34/photobooth${NC}"
+
+printf "\n\n"
