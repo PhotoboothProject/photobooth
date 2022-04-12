@@ -13,6 +13,10 @@ export TARGET_UBUNTU_VERSION="focal"
 # See https://wiki.ubuntu.com/Kernel/LTSEnablementStack for details
 export TARGET_KERNEL_PACKAGE="linux-generic"
 
+# The Ubuntu Mirror URL. It's better to change for faster download.
+# More mirrors see: https://launchpad.net/ubuntu/+archivemirrors
+export TARGET_UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+
 # The file (no extension) of the ISO containing the generated disk image,
 # the volume id, and the hostname of the live environment are set from this name.
 export TARGET_NAME="photobooth"
@@ -100,4 +104,4 @@ END
 
 # Used to version the configuration.  If breaking changes occur, manual
 # updates to this file from the default may be necessary.
-export CONFIG_FILE_VERSION="0.3"
+export CONFIG_FILE_VERSION="0.4"
