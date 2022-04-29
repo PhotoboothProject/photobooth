@@ -151,7 +151,8 @@ if ($data['type'] == 'config') {
         $newConfig['get_request']['processed'] = false;
     }
 
-    if ($newConfig['collage']['layout'] === '1+2') {
+    $collageLayout = $newConfig['collage']['layout'];
+    if ($collageLayout === '1+2' || $collageLayout == '2+1') {
         $newConfig['collage']['limit'] = 3;
     } else {
         $newConfig['collage']['limit'] = 4;
