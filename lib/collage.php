@@ -29,8 +29,7 @@ define('TEXTONCOLLAGE_FONT_COLOR', $config['textoncollage']['font_color']);
 define('TEXTONCOLLAGE_FONT_SIZE', $config['textoncollage']['font_size']);
 define('TEXTONCOLLAGE_LINESPACE', $config['textoncollage']['linespace']);
 
-function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
-{
+function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     $editImages = [];
     $rotate_after_creation = false;
     $quality = 100;
@@ -159,12 +158,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         case '2+2-2':
             $heightp = 469;
             $widthp = $heightp * 1.5;
-            $pictureOptions = [
-                [170, 111, $widthp, $heightp, 0],
-                [925, 111, $widthp, $heightp, 0],
-                [170, 625, $widthp, $heightp, 0],
-                [925, 625, $widthp, $heightp, 0]
-            ];
+            $pictureOptions = [[170, 111, $widthp, $heightp, 0], [925, 111, $widthp, $heightp, 0], [170, 625, $widthp, $heightp, 0], [925, 625, $widthp, $heightp, 0]];
 
             for ($i = 0; $i < 4; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
@@ -179,7 +173,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
                 [950, 71, $widthNewBig, $heightNewBig, 0],
                 [80, 749, $widthNewSmall, $heightNewSmall, 0],
                 [637, 749, $widthNewSmall, $heightNewSmall, 0],
-                [1195, 749, $widthNewSmall, $heightNewSmall, 0]
+                [1195, 749, $widthNewSmall, $heightNewSmall, 0],
             ];
 
             for ($i = 0; $i < 4; $i++) {
@@ -199,7 +193,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
                     [60, 60, $widthNewBig, $heightNewBig, 0],
                     [60, 730, $widthNewSmall, $heightNewSmall, 0],
                     [640, 730, $widthNewSmall, $heightNewSmall, 0],
-                    [1220, 730, $widthNewSmall, $heightNewSmall, 0]
+                    [1220, 730, $widthNewSmall, $heightNewSmall, 0],
                 ];
                 $positions = [[60, 60], [60, 730], [640, 730], [1220, 730]];
             } else {
@@ -208,7 +202,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
                     [60, 60, $widthNewSmall, $heightNewSmall, 0],
                     [640, 60, $widthNewSmall, $heightNewSmall, 0],
                     [1220, 60, $widthNewSmall, $heightNewSmall, 0],
-                    [60, 505, $widthNewBig, $heightNewBig, 0]
+                    [60, 505, $widthNewBig, $heightNewBig, 0],
                 ];
                 $positions = [[60, 60], [640, 60], [1220, 60], [60, 505]];
             }
@@ -222,11 +216,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
             $widthNewBig = $heightNewBig * 1.5;
             $heightNewSmall = 422;
             $widthNewSmall = $heightNewSmall * 1.5;
-            $pictureOptions = [
-                [40, 65, $widthNewBig, $heightNewBig, 11],
-                [1125, 133, $widthNewSmall, $heightNewSmall, 0],
-                [1125, 634, $widthNewSmall, $heightNewSmall, 0],
-            ];
+            $pictureOptions = [[40, 65, $widthNewBig, $heightNewBig, 11], [1125, 133, $widthNewSmall, $heightNewSmall, 0], [1125, 634, $widthNewSmall, $heightNewSmall, 0]];
 
             for ($i = 0; $i < 3; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
@@ -235,11 +225,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
         case '2+1':
             $widthNew = 675;
             $heightNew = $widthNew / 1.5;
-            $pictureOptions = [
-                [210, 120, $widthNew, $heightNew, 0],
-                [915, 120, $widthNew, $heightNew, 0],
-                [210, 600, $widthNew, $heightNew, 0],
-            ];
+            $pictureOptions = [[210, 120, $widthNew, $heightNew, 0], [915, 120, $widthNew, $heightNew, 0], [210, 600, $widthNew, $heightNew, 0]];
 
             for ($i = 0; $i < 3; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
@@ -323,7 +309,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
 
             for ($i = 0; $i < 4; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i+4]);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 4]);
             }
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             drawDashedLine($my_collage, 50, 600, 1750, 600, $dashedline_color);
@@ -370,16 +356,22 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain')
     return true;
 }
 
-function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color)
-{
-    $dashed_style = array($dashedline_color, $dashedline_color, $dashedline_color, $dashedline_color,
-        IMG_COLOR_TRANSPARENT, IMG_COLOR_TRANSPARENT, IMG_COLOR_TRANSPARENT, IMG_COLOR_TRANSPARENT);
+function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color) {
+    $dashed_style = [
+        $dashedline_color,
+        $dashedline_color,
+        $dashedline_color,
+        $dashedline_color,
+        IMG_COLOR_TRANSPARENT,
+        IMG_COLOR_TRANSPARENT,
+        IMG_COLOR_TRANSPARENT,
+        IMG_COLOR_TRANSPARENT,
+    ];
     imagesetstyle($my_collage, $dashed_style);
     imageline($my_collage, $x1, $y1, $x2, $y2, IMG_COLOR_STYLED);
 }
 
-function addPicture($my_collage, $filename, $pictureOptions)
-{
+function addPicture($my_collage, $filename, $pictureOptions) {
     $dX = $pictureOptions[0];
     $dY = $pictureOptions[1];
     $width = $pictureOptions[2];
