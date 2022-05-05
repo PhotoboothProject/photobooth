@@ -560,6 +560,7 @@ const photoBooth = (function () {
                         }
                     } else {
                         // collage with interruption
+                        idVideoView.hide();
                         if (result.current + 1 < result.limit) {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
