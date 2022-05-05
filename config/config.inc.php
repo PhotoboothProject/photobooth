@@ -155,6 +155,7 @@ $config['pswp']['bgOpacity'] = 1;
 // possible preview_mode values: none, device_cam, url, gphoto
 $config['preview']['mode'] = 'none';
 $config['preview']['gphoto_bsm'] = true;
+$config['preview']['stop_time'] = '2';
 $config['preview']['camTakesPic'] = false;
 $config['preview']['flipHorizontal'] = true;
 // possible rotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'

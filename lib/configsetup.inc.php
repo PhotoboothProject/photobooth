@@ -976,6 +976,16 @@ $configsetup = [
             'name' => 'preview[gphoto_bsm]',
             'value' => $config['preview']['gphoto_bsm'],
         ],
+        'preview_stop_time' => [
+            'type' => 'range',
+            'placeholder' => $defaultConfig['preview']['stop_time'],
+            'name' => 'preview[stop_time]',
+            'value' => $config['preview']['stop_time'],
+            'range_min' => 0,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
         'preview_camTakesPic' => [
             'type' => 'checkbox',
             'name' => 'preview[camTakesPic]',
