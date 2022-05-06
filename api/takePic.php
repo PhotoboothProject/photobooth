@@ -62,6 +62,8 @@ function takePicture($filename) {
     }
 }
 
+$random = md5(time()) . '.jpg';
+
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $name = $_POST['file'];
 } elseif ($config['picture']['naming'] === 'numbered') {
@@ -76,7 +78,7 @@ if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))
 } elseif ($config['picture']['naming'] === 'dateformatted') {
     $name = date('Ymd_His') . '.jpg';
 } else {
-    $name = md5(time()) . '.jpg';
+    $name = $random;
 }
 
 if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))) {
@@ -86,6 +88,11 @@ if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_matc
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+$filename_random = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $random;
+
+if (file_exists($filename_tmp)) {
+    rename($filename_tmp, $filename_random);
+}
 
 if (!isset($_POST['style'])) {
     $errormsg = basename($_SERVER['PHP_SELF']) . ': No style provided';
