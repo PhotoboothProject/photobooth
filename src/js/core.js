@@ -523,11 +523,11 @@ const photoBooth = (function () {
 
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
-                    const picdate = Date.now;
+                    const picdate = Date.now().toString();
                     loading.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
                     preloadImage.onload = () => {
                         loaderImage.css({
-                            'background-image': `url(${imageUrl}?filter=${imgFilter})`
+                            'background-image': `url(${imageUrl}?filter=${imgFilter}&v=${picdate})`
                         });
                         loaderImage.attr('data-img', picdate);
                     };
