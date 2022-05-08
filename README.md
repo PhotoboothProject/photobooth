@@ -93,8 +93,8 @@ _(The full changelog can be found inside [the Photobooth Wiki](https://github.co
 
 ## :gear: Prerequisites
 
-- gphoto2 installed, if used on a Raspberry for DSLR control
-- digiCamControl, if used unter Windows for DSLR control
+- gphoto2, if used on a Raspberry for DSLR control
+- digiCamControl, if used on Windows for DSLR control
 - Apache, NGINX or Lighttpd
 
 ## :wrench: Installation & Troubleshooting
