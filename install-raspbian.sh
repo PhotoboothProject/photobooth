@@ -27,8 +27,23 @@ NEEDED_NODE_VERSION="v12.22.(4 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
+COMMON_PACKAGES=(
+    'curl'
+    'gphoto2'
+    'libimage-exiftool-perl'
+    'nodejs'
+    'php-gd'
+    'php-zip'
+    'rsync'
+    'udisks2'
+)
+
 function info {
     echo -e "\033[0;36m${1}\033[0m"
+}
+
+function warn {
+    echo -e "\033[0;33m${1}\033[0m"
 }
 
 function error {
@@ -82,16 +97,10 @@ function ask_yes_no {
 }
 
 function no_raspberry {
-    info "WARNING: This script is intended to run on a Raspberry Pi."
-    info "Running the script on other devices running Debian / a Debian based distribution is possible, but PI specific features will be missing!"
-    ask_yes_no "Do you want to continue? (y/n)" "Y"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        RUNNING_ON_PI=false
-        print_spaces
-        return
-    fi
-    exit ${1}
+    warn "WARNING: This script is intended to run on a Raspberry Pi."
+    warn "Running the script on other devices running Debian / a Debian based distribution is possible, but Raspberry Pi specific features will be missing!"
+    RUNNING_ON_PI=false
+    print_spaces
 }
 
 view_help() {
@@ -148,32 +157,6 @@ do
 done
 print_spaces
 
-if [ $UID != 0 ]; then
-    error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
-    exit 1
-fi
-
-if [ ! -f /proc/device-tree/model ]; then
-    no_raspberry 2
-else
-    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
-
-    if [[ $PI_MODEL != Raspberry* ]]; then
-        no_raspberry 3
-    fi
-fi
-
-COMMON_PACKAGES=(
-    'curl'
-    'gphoto2'
-    'libimage-exiftool-perl'
-    'nodejs'
-    'php-gd'
-    'php-zip'
-    'rsync'
-    'udisks2'
-)
-
 check_username() {
     info "[Info]      Checking if user $USERNAME exists..."
     if id "$USERNAME" &>/dev/null; then
@@ -197,8 +180,8 @@ check_nodejs() {
             if [[ -n "$micro" && "$micro" -ge "4" ]]; then
                 info "[Info]      Node.js matches our requirements!"
             elif [[ -n "$micro" ]]; then
-                error "[WARN]      Node.js needs to be updated, micro version not matching our requirements!"
-                error "[WARN]      Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+                warn "[WARN]      Node.js needs to be updated, micro version not matching our requirements!"
+                warn "[WARN]      Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
                 NODEJS_NEEDS_UPDATE=true
                 if [ "$NODEJS_CHECKED" = true ]; then
                     error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
@@ -211,8 +194,8 @@ check_nodejs() {
                 exit 1
             fi
         elif [[ -n "$minor" ]]; then
-            error "[WARN]      Node.js needs to be updated, minor version not matching our requirements!"
-            error "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+            warn "[WARN]      Node.js needs to be updated, minor version not matching our requirements!"
+            warn "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
             NODEJS_NEEDS_UPDATE=true
             if [ "$NODEJS_CHECKED" = true ]; then
                 error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
@@ -225,8 +208,8 @@ check_nodejs() {
             exit 1
         fi
     elif [[ -n "$major" ]]; then
-        error "[WARN]      Node.js needs to be updated, major version not matching our requirements!"
-        error "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+        warn "[WARN]      Node.js needs to be updated, major version not matching our requirements!"
+        warn "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
         if [ "$NODEJS_CHECKED" = true ]; then
             error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
             exit 1
@@ -545,6 +528,27 @@ cups_setup() {
         /etc/init.d/cups restart
     fi
 }
+
+############################################################
+#                                                          #
+# General checks before the installation process can start #
+#                                                          #
+############################################################
+
+if [ $UID != 0 ]; then
+    error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
+    exit 1
+fi
+
+if [ ! -f /proc/device-tree/model ]; then
+    no_raspberry 2
+else
+    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
+
+    if [[ $PI_MODEL != Raspberry* ]]; then
+        no_raspberry 3
+    fi
+fi
 
 ############################################################
 #                                                          #
