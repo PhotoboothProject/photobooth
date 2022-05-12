@@ -5,9 +5,10 @@ set -e
 
 # Show all commands
 # set -x
-
-RUNNING_ON_PI=true
+USERNAME=''
+WEBSERVER="apache"
 SILENT_INSTALL=false
+RUNNING_ON_PI=true
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
 
@@ -26,12 +27,6 @@ NEEDED_NODE_VERSION="v12.22.(4 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
-if [ ! -z $1 ]; then
-    WEBSERVER=$1
-else
-    WEBSERVER=apache
-fi
-
 function info {
     echo -e "\033[0;36m${1}\033[0m"
 }
@@ -40,64 +35,11 @@ function error {
     echo -e "\033[0;31m${1}\033[0m"
 }
 
-if [ "silent" = "$2" ]; then
-    SILENT_INSTALL=true
-    info "Performing silent install"
-fi
-
-
 print_spaces() {
     echo ""
     info "###########################################################"
     echo ""
 }
-
-#Param 1: Question / Param 2: Default / silent answer
-function ask_yes_no {
-    if [ "$SILENT_INSTALL" = false ]; then
-        read -p "${1}: " -n 1 -r
-    else
-        REPLY=${2}
-    fi
-}
-
-function no_raspberry {
-    info "WARNING: This script is intended to run on a Raspberry Pi."
-    info "Running the script on other devices running Debian / a Debian based distribution is possible, but PI specific features will be missing!"
-    ask_yes_no "Do you want to continue? (y/n)" "Y"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        RUNNING_ON_PI=false
-        return
-    fi
-    exit ${1}
-}
-
-if [ $UID != 0 ]; then
-    error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
-    exit 1
-fi
-
-if [ ! -f /proc/device-tree/model ]; then
-    no_raspberry 2
-else
-    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
-
-    if [[ $PI_MODEL != Raspberry* ]]; then
-        no_raspberry 3
-    fi
-fi
-
-COMMON_PACKAGES=(
-    'curl'
-    'gphoto2'
-    'libimage-exiftool-perl'
-    'nodejs'
-    'php-gd'
-    'php-zip'
-    'rsync'
-    'udisks2'
-)
 
 print_logo() {
 echo "
@@ -128,6 +70,119 @@ echo "
 @@                                                       @@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 "
+}
+
+#Param 1: Question / Param 2: Default / silent answer
+function ask_yes_no {
+    if [ "$SILENT_INSTALL" = false ]; then
+        read -p "${1}: " -n 1 -r
+    else
+        REPLY=${2}
+    fi
+}
+
+function no_raspberry {
+    info "WARNING: This script is intended to run on a Raspberry Pi."
+    info "Running the script on other devices running Debian / a Debian based distribution is possible, but PI specific features will be missing!"
+    ask_yes_no "Do you want to continue? (y/n)" "Y"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        RUNNING_ON_PI=false
+        print_spaces
+        return
+    fi
+    exit ${1}
+}
+
+view_help() {
+    cat << EOF
+Usage: sudo bash install-raspbian.sh -u [-hsS]
+
+    -h,  -help,      --help        Display help.
+
+    -u,  -username,  --username    Enter your OS username you like to use Photobooth
+                                   on (Raspberry Pi only)
+
+    -s,  -silent,    --silent      Run silent installation.
+
+    -S,  -Server,    --Server      Enter the webserver to use [apache, nginx, lighttpd].
+                                   Apache is used by default.
+EOF
+}
+
+print_logo
+print_spaces
+info "### The Photobooth installer for your Raspberry Pi."
+print_spaces
+info "################## Passed options #########################"
+echo ""
+options=$(getopt -l "help,username::,silent,webserver::" -o "hu::sw::" -a -- "$@")
+eval set -- "$options"
+
+while true
+do
+    case $1 in
+        -h|--help)
+            view_help
+            exit 0
+            ;;
+        -u|--username)
+            shift
+            USERNAME=$1
+            info "### Username:  $1"
+            ;;
+        -s|--silent)
+            SILENT_INSTALL=true
+            info "### Silent installtion starting..."
+            ;;
+        -w|--webserver)
+            shift
+            WEBSERVER=$1
+            info "### Webserver: $1"
+            ;;
+        --)
+        shift
+        break;;
+    esac
+    shift
+done
+print_spaces
+
+if [ $UID != 0 ]; then
+    error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
+    exit 1
+fi
+
+if [ ! -f /proc/device-tree/model ]; then
+    no_raspberry 2
+else
+    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
+
+    if [[ $PI_MODEL != Raspberry* ]]; then
+        no_raspberry 3
+    fi
+fi
+
+COMMON_PACKAGES=(
+    'curl'
+    'gphoto2'
+    'libimage-exiftool-perl'
+    'nodejs'
+    'php-gd'
+    'php-zip'
+    'rsync'
+    'udisks2'
+)
+
+check_username() {
+    info "[Info]      Checking if user $USERNAME exists..."
+    if id "$USERNAME" &>/dev/null; then
+        info "[Info]      User $USERNAME found. Installation process continues."
+    else
+        error "ERROR: An valid OS username is needed! Please re-run the installer."
+        view_help
+        exit
+    fi
 }
 
 check_nodejs() {
@@ -436,15 +491,15 @@ EOF
         if [ "$USB_SYNC" = true ]; then
             info "### Disabling automount for pi user"
 
-            mkdir -p /home/pi/.config/pcmanfm/LXDE-pi/
-            cat >> /home/pi/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+            mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
+            cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
 mount_on_startup=0
 mount_removable=0
 autorun=0
 EOF
 
-            chown -R pi:pi /home/pi/.config/pcmanfm
+            chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/pcmanfm
 
             info "### Adding polkit rule so www-data can (un)mount drives"
 
@@ -497,9 +552,16 @@ cups_setup() {
 #                                                          #
 ############################################################
 
-print_logo
-
-info "### The Photobooth installer for your Raspberry Pi."
+if [ "$RUNNING_ON_PI" = true ]; then
+    if [ ! -z $USERNAME ]; then
+        check_username
+    else
+        error "ERROR: An valid OS username is needed! Please re-run the installer."
+        view_help
+        exit
+    fi
+    print_spaces
+fi
 
 echo -e "\033[0;33m### Choose your Photobooth version."
 echo -e "    Note: Installation via git will take more time"
