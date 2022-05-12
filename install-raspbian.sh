@@ -384,7 +384,7 @@ start_install() {
         git clone https://github.com/andi34/photobooth $INSTALLFOLDER
         cd $INSTALLFOLDERPATH
 
-        info "### We are installing last development version via git."
+        info "### We are installing Photobooth via git."
         git fetch origin $BRANCH
         git checkout origin/$BRANCH
 
