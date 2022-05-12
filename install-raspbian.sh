@@ -114,7 +114,7 @@ Usage: sudo bash install-raspbian.sh -u [-hsS]
 
     -s,  -silent,    --silent      Run silent installation.
 
-    -S,  -Server,    --Server      Enter the webserver to use [apache, nginx, lighttpd].
+    -w,  -webserver, --webserver   Enter the webserver to use [apache, nginx, lighttpd].
                                    Apache is used by default.
 EOF
 }
