@@ -30,6 +30,7 @@ jobs:
           cp photobooth/image_builder/raspberry/custom-pi-config pi-gen/config
           cp -R photobooth/image_builder/raspberry/stage-photobooth pi-gen/stage-photobooth
           chmod +x pi-gen/stage-photobooth/00-install-photobooth/00-run.sh
+          chmod +x pi-gen/stage-photobooth/01-disable-usercreation/00-run.sh
           chmod +x pi-gen/stage-photobooth/prerun.sh
           cp photobooth/install-raspbian.sh pi-gen/stage-photobooth/00-install-photobooth/files/
           chmod +x pi-gen/stage-photobooth/00-install-photobooth/files/install-raspbian.sh
