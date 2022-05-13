@@ -7,6 +7,7 @@ USERNAME=''
 WEBSERVER="apache"
 SILENT_INSTALL=false
 RUNNING_ON_PI=true
+FORCE_RASPBERRY_PI=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
 
@@ -103,24 +104,27 @@ function no_raspberry {
 
 view_help() {
     cat << EOF
-Usage: sudo bash install-raspbian.sh -u [-bhsVw]
+Usage: sudo bash install-raspbian.sh -u [-bhrsVw]
 
-    -b,  -branch,    --branch      Enter the Photobooth branch (version) you like to install.
-                                   Available branches: stable3 , dev, package
-                                   By default, latest development verison (dev) will be installed.
-                                   package will install latest Release from zip.
+    -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
+                                    Available branches: stable3 , dev, package
+                                    By default, latest development verison (dev) will be installed.
+                                    package will install latest Release from zip.
 
-    -h,  -help,      --help        Display help.
+    -h,  -help,       --help        Display help.
 
-    -s,  -silent,    --silent      Run silent installation.
+    -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
+                                    Note: only to use on Raspberry Pi OS!
+
+    -s,  -silent,     --silent      Run silent installation.
     
-    -u,  -username,  --username    Enter your OS username you like to use Photobooth
-                                   on (Raspberry Pi only)
+    -u,  -username,   --username    Enter your OS username you like to use Photobooth
+                                    on (Raspberry Pi only)
 
-    -V,  -verbose,   --verbose     Run script in verbose mode.
+    -V,  -verbose,    --verbose     Run script in verbose mode.
 
-    -w,  -webserver, --webserver   Enter the webserver to use [apache, nginx, lighttpd].
-                                   Apache is used by default.
+    -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx, lighttpd].
+                                    Apache is used by default.
 EOF
 }
 
@@ -130,7 +134,7 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,branch::,username::,silent,verbose,webserver::" -o "b::hu::sVw::" -a -- "$@")
+options=$(getopt -l "help,branch::,username::,raspberry,silent,verbose,webserver::" -o "b::hu::rsVw::" -a -- "$@")
 eval set -- "$options"
 
 while true
@@ -159,11 +163,15 @@ do
         -u|--username)
             shift
             USERNAME=$1
-            info "### Username:  $1"
+            info "### Username: $1"
             ;;
         -s|--silent)
             SILENT_INSTALL=true
             info "### Silent installtion starting..."
+            ;;
+        -r|--raspberry)
+            FORCE_RASPBERRY_PI=true
+            info "### Skipping Pi detection and add specific adjustments..."
             ;;
         -V|--verbose)
             set -xv
@@ -572,13 +580,15 @@ if [ $UID != 0 ]; then
     exit 1
 fi
 
-if [ ! -f /proc/device-tree/model ]; then
-    no_raspberry 2
-else
-    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
+if [ "$FORCE_RASPBERRY_PI" = false ]; then
+    if [ ! -f /proc/device-tree/model ]; then
+        no_raspberry 2
+    else
+        PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
 
-    if [[ $PI_MODEL != Raspberry* ]]; then
-        no_raspberry 3
+        if [[ $PI_MODEL != Raspberry* ]]; then
+            no_raspberry 3
+        fi
     fi
 fi
 
