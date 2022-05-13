@@ -103,14 +103,19 @@ function no_raspberry {
 
 view_help() {
     cat << EOF
-Usage: sudo bash install-raspbian.sh -u [-hsS]
+Usage: sudo bash install-raspbian.sh -u [-bhsVw]
+
+    -b,  -branch,    --branch      Enter the Photobooth branch (version) you like to install.
+                                   Available branches: stable3 , dev, package
+                                   By default, latest development verison (dev) will be installed.
+                                   package will install latest Release from zip.
 
     -h,  -help,      --help        Display help.
 
+    -s,  -silent,    --silent      Run silent installation.
+    
     -u,  -username,  --username    Enter your OS username you like to use Photobooth
                                    on (Raspberry Pi only)
-
-    -s,  -silent,    --silent      Run silent installation.
 
     -V,  -verbose,   --verbose     Run script in verbose mode.
 
@@ -125,12 +130,28 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,username::,silent,verbose,webserver::" -o "hu::sVw::" -a -- "$@")
+options=$(getopt -l "help,branch::,username::,silent,verbose,webserver::" -o "b::hu::sVw::" -a -- "$@")
 eval set -- "$options"
 
 while true
 do
     case $1 in
+        -b|--branch)
+            shift
+            if [ "$1" == "dev" ] || [ "$1" == "stable3" ]; then
+                BRANCH=$1
+            elif [ "$1" == "package" ]; then
+                BRANCH="stable3"
+                GIT_INSTALL=false
+                NEEDS_NODEJS_CHECK=false
+                COMMON_PACKAGES+=('jq')
+            else
+                BRANCH="dev"
+                warn "[WARN]      Invalid branch / version!"
+                warn "[WARN]      Falling back to defaults. Installing latest development branch from git."
+            fi
+            info "### Photobooth version / branch:  $1"
+            ;;
         -h|--help)
             view_help
             exit 0
@@ -265,7 +286,14 @@ common_software() {
     else
         apache_webserver
     fi
-
+    
+    if [ $GIT_INSTALL = true ]; then
+        COMMON_PACKAGES+=(
+            'git'
+            'yarn'
+        )
+    fi
+    
     info "### Installing common software..."
     for package in "${COMMON_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
@@ -570,45 +598,6 @@ if [ "$RUNNING_ON_PI" = true ]; then
     fi
     print_spaces
 fi
-
-echo -e "\033[0;33m### Choose your Photobooth version."
-echo -e "    Note: Installation via git will take more time"
-echo -e "    and is recommended for brave users."
-echo -e "    "
-echo -e "    Versions available: "
-echo -e "    1 Install latest stable Release (git)"
-echo -e "    2 Install latest development version (git)"
-echo -e "    3 Install latest stable Release (package)"
-ask_yes_no "Please enter your choice" "1"
-echo -e "\033[0m"
-if [[ $REPLY =~ ^[1]$ ]]; then
-    info "### We are installing last stable Release via git."
-    BRANCH="stable3"
-    GIT_INSTALL=true
-    COMMON_PACKAGES+=(
-        'git'
-        'yarn'
-    )
-elif [[ $REPLY =~ ^[2]$ ]]; then
-    info "### We are installing last development version via git."
-    BRANCH="dev"
-    GIT_INSTALL=true
-    COMMON_PACKAGES+=(
-        'git'
-        'yarn'
-    )
-else
-    if [[ ! $REPLY =~ ^[3]$ ]]; then
-        info "### Invalid choice!"
-    fi
-    info "### We are installing latest stable Release from package."
-    BRANCH="stable3"
-    GIT_INSTALL=false
-    NEEDS_NODEJS_CHECK=false
-    COMMON_PACKAGES+=('jq')
-fi
-
-print_spaces
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
