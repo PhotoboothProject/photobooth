@@ -24,7 +24,7 @@ sed -i "s/^#PrintLastLog yes.*/PrintLastLog no/" ${ROOTFS_DIR}/etc/ssh/sshd_conf
 on_chroot << EOF
 echo '---> call photobooth install script'
 cd /home/photobooth
-./install-raspbian.sh -s -u="photobooth"
+./install-raspbian.sh -u="photobooth" -rs
 EOF
 
 rm "${ROOTFS_DIR}"/home/photobooth/install-raspbian.sh
