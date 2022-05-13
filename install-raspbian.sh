@@ -3,8 +3,6 @@
 # Stop on the first sign of trouble
 set -e
 
-# Show all commands
-# set -x
 USERNAME=''
 WEBSERVER="apache"
 SILENT_INSTALL=false
@@ -114,6 +112,8 @@ Usage: sudo bash install-raspbian.sh -u [-hsS]
 
     -s,  -silent,    --silent      Run silent installation.
 
+    -V,  -verbose,   --verbose     Run script in verbose mode.
+
     -w,  -webserver, --webserver   Enter the webserver to use [apache, nginx, lighttpd].
                                    Apache is used by default.
 EOF
@@ -125,7 +125,7 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,username::,silent,webserver::" -o "hu::sw::" -a -- "$@")
+options=$(getopt -l "help,username::,silent,verbose,webserver::" -o "hu::sVw::" -a -- "$@")
 eval set -- "$options"
 
 while true
@@ -143,6 +143,10 @@ do
         -s|--silent)
             SILENT_INSTALL=true
             info "### Silent installtion starting..."
+            ;;
+        -V|--verbose)
+            set -xv
+            info "### Set xtrace and verbose mode."
             ;;
         -w|--webserver)
             shift
