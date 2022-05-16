@@ -558,7 +558,7 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 
 # Hide mousecursor
 @unclutter -idle 3
-# Photobooth Ende
+# Photobooth End
 
 EOF
 }
