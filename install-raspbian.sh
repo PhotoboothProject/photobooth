@@ -541,7 +541,11 @@ EOF
 kioskbooth_desktop() {
     info "### We are installing Photobooth in Kiosk Mode for"
     info "### Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
+
+    sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+# Photobooth
 # turn off display power management system
 @xset -dpms
 # turn off screen blanking
@@ -554,6 +558,7 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 
 # Hide mousecursor
 @unclutter -idle 3
+# Photobooth Ende
 
 EOF
 }
