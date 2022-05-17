@@ -1157,6 +1157,12 @@ $configsetup = [
             'range_step' => 250,
             'unit' => 'milliseconds',
         ],
+        'print_no_rotate' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'print[no_rotate]',
+            'value' => $config['print']['no_rotate'],
+        ],
         'print_key' => [
             'view' => 'expert',
             'type' => 'input',

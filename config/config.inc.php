@@ -188,6 +188,7 @@ $config['print']['from_chromakeying'] = false;
 $config['print']['auto'] = false;
 $config['print']['auto_delay'] = '1000';
 $config['print']['time'] = '5000';
+$config['print']['no_rotate'] = false;
 $config['print']['key'] = null;
 $config['print']['qrcode'] = false;
 $config['print']['qrSize'] = '4';
