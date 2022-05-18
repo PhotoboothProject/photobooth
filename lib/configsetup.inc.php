@@ -703,6 +703,20 @@ $configsetup = [
             'name' => 'collage[frame]',
             'value' => htmlentities($config['collage']['frame']),
         ],
+        'collage_placeholder' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['collage']['placeholder'],
+            'name' => 'collage[placeholder]',
+            'value' => htmlentities($config['collage']['placeholder']),
+        ],
+        'collage_placeholderpath' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['collage']['placeholderpath'],
+            'name' => 'collage[placeholderpath]',
+            'value' => htmlentities($config['collage']['placeholderpath']),
+        ],
         'textoncollage_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',

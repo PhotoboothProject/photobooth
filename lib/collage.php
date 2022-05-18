@@ -11,8 +11,12 @@ define('COLLAGE_LAYOUT', $config['collage']['layout']);
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', $config['collage']['frame']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
+// If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
+define('COLLAGE_PLACEHOLDER', is_int($config['collage']['placeholder']) ? $config['collage']['placeholder'] - 1 : null);
+define('COLLAGE_PLACEHOLDER_PATH', $config['collage']['placeholderpath']);
 define('COLLAGE_DASHEDLINE_COLOR', $config['collage']['dashedline_color']);
-define('COLLAGE_LIMIT', $config['collage']['limit']);
+// If a placholder image should be used, we need to increase the limit here in order to count the images correct
+define('COLLAGE_LIMIT', is_int($config['collage']['placeholder']) ? $config['collage']['limit'] + 1 : $config['collage']['limit']);
 define('PICTURE_FLIP', $config['picture']['flip']);
 define('PICTURE_ROTATION', $config['picture']['rotation']);
 define('PICTURE_POLAROID_EFFECT', $config['picture']['polaroid_effect'] === true ? 'enabled' : 'disabled');
@@ -50,16 +54,27 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         return false;
     }
 
-    for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-        if (!file_exists($srcImagePaths[$i])) {
-            $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $srcImagePaths[$i] . ' does not exist';
-            logErrorAndDie($errormsg);
-        }
+    // If there is a placeholder defined, we need to make sure that the image at the placeholder path exists.
+    if (is_int(COLLAGE_PLACEHOLDER) && !testFile(COLLAGE_PLACEHOLDER_PATH)) {
+        return false;
+    }
 
-        $singleimage = substr($srcImagePaths[$i], 0, -4);
-        $editfilename = $singleimage . '-edit.jpg';
-        copy($srcImagePaths[$i], $editfilename);
-        $editImages[] = $editfilename;
+    //Use offset to reflect image file numbering
+    $placeholderOffset = 0;
+    for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+        if (is_int(COLLAGE_PLACEHOLDER) && COLLAGE_PLACEHOLDER == $i) {
+            $editImages[] = COLLAGE_PLACEHOLDER_PATH;
+            $placeholderOffset = 1;
+        } else {
+            if (!file_exists($srcImagePaths[$i - $placeholderOffset])) {
+                $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $srcImagePaths[$i] . ' does not exist';
+                logErrorAndDie($errormsg);
+            }
+            $singleimage = substr($srcImagePaths[$i - $placeholderOffset], 0, -4);
+            $editfilename = $singleimage . '-edit.jpg';
+            copy($srcImagePaths[$i - $placeholderOffset], $editfilename);
+            $editImages[] = $editfilename;
+        }
     }
 
     for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
@@ -116,8 +131,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 
         imagedestroy($imageResource);
     }
-
-    $my_collage = imagecreatetruecolor(1800, 1200);
+    //Create Collage based on 300dpi 10x15cm
+    $my_collage = imagecreatetruecolor(1772, 1181);
     $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
     imagefill($my_collage, 0, 0, $background);
     if ($landscape == false) {
@@ -212,11 +227,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             }
             break;
         case '1+2':
-            $heightNewBig = 626;
+            $heightNewBig = 656; //626
             $widthNewBig = $heightNewBig * 1.5;
-            $heightNewSmall = 422;
+            $heightNewSmall = 482; //422
             $widthNewSmall = $heightNewSmall * 1.5;
-            $pictureOptions = [[40, 65, $widthNewBig, $heightNewBig, 11], [1125, 133, $widthNewSmall, $heightNewSmall, 0], [1125, 634, $widthNewSmall, $heightNewSmall, 0]];
+            //old options [[40, 65, $widthNewBig, $heightNewBig, 11], [1125, 133, $widthNewSmall, $heightNewSmall, 0], [1125, 634, $widthNewSmall, $heightNewSmall, 0]];
+            $pictureOptions = [[0, 65, $widthNewBig, $heightNewBig, 10], [984, 65, $widthNewSmall, $heightNewSmall, 0], [984, 634, $widthNewSmall, $heightNewSmall, 0]];
 
             for ($i = 0; $i < 3; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
