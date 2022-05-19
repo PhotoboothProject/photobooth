@@ -705,10 +705,16 @@ $configsetup = [
         ],
         'collage_placeholder' => [
             'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['collage']['placeholder'],
+            'type' => 'checkbox',
             'name' => 'collage[placeholder]',
-            'value' => htmlentities($config['collage']['placeholder']),
+            'value' => $config['collage']['placeholder'],
+        ],
+        'collage_placeholderposition' => [
+            'view' => 'expert',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['collage']['placeholderposition'],
+            'name' => 'collage[placeholderposition]',
+            'value' => $config['collage']['placeholderposition'],
         ],
         'collage_placeholderpath' => [
             'view' => 'expert',

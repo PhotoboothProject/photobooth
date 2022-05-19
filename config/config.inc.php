@@ -105,8 +105,9 @@ $config['collage']['background_color'] = '#ffffff';
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
 $config['collage']['frame'] = null;
-$config['collage']['placeholder'] = null;
-$config['collage']['placeholderpath'] = null;
+$config['collage']['placeholder'] = false;
+$config['collage']['placeholderposition'] = '1';
+$config['collage']['placeholderpath'] = 'resources/img/placeholder/01.jpg';
 $config['textoncollage']['enabled'] = true;
 $config['textoncollage']['line1'] = 'Photobooth';
 $config['textoncollage']['line2'] = '   we love';

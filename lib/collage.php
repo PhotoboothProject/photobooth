@@ -11,12 +11,13 @@ define('COLLAGE_LAYOUT', $config['collage']['layout']);
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', $config['collage']['frame']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
+define('COLLAGE_PLACEHOLDER', $config['collage']['placeholder']);
 // If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
-define('COLLAGE_PLACEHOLDER', is_int($config['collage']['placeholder']) ? $config['collage']['placeholder'] - 1 : null);
+define('COLLAGE_PLACEHOLDER_POSITION', (int) $config['collage']['placeholderposition'] - 1);
 define('COLLAGE_PLACEHOLDER_PATH', $config['collage']['placeholderpath']);
 define('COLLAGE_DASHEDLINE_COLOR', $config['collage']['dashedline_color']);
 // If a placholder image should be used, we need to increase the limit here in order to count the images correct
-define('COLLAGE_LIMIT', is_int($config['collage']['placeholder']) ? $config['collage']['limit'] + 1 : $config['collage']['limit']);
+define('COLLAGE_LIMIT', $config['collage']['placeholder'] ? $config['collage']['limit'] + 1 : $config['collage']['limit']);
 define('PICTURE_FLIP', $config['picture']['flip']);
 define('PICTURE_ROTATION', $config['picture']['rotation']);
 define('PICTURE_POLAROID_EFFECT', $config['picture']['polaroid_effect'] === true ? 'enabled' : 'disabled');
@@ -50,19 +51,24 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     // dashedline color on 2x4 collage layouts
     list($dashed_r, $dashed_g, $dashed_b) = sscanf(COLLAGE_DASHEDLINE_COLOR, '#%02x%02x%02x');
 
-    if (!is_array($srcImagePaths) || count($srcImagePaths) !== COLLAGE_LIMIT) {
+    if (!is_array($srcImagePaths)) {
+        return false;
+    }
+
+    // validate that there is the correct amount of images
+    if ((COLLAGE_PLACEHOLDER && count($srcImagePaths) !== COLLAGE_LIMIT - 1) || (!COLLAGE_PLACEHOLDER && count($srcImagePaths) !== COLLAGE_LIMIT)) {
         return false;
     }
 
     // If there is a placeholder defined, we need to make sure that the image at the placeholder path exists.
-    if (is_int(COLLAGE_PLACEHOLDER) && !testFile(COLLAGE_PLACEHOLDER_PATH)) {
+    if (COLLAGE_PLACEHOLDER && !testFile(COLLAGE_PLACEHOLDER_PATH)) {
         return false;
     }
 
     //Use offset to reflect image file numbering
     $placeholderOffset = 0;
     for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-        if (is_int(COLLAGE_PLACEHOLDER) && COLLAGE_PLACEHOLDER == $i) {
+        if (COLLAGE_PLACEHOLDER && COLLAGE_PLACEHOLDER_POSITION == $i) {
             $editImages[] = COLLAGE_PLACEHOLDER_PATH;
             $placeholderOffset = 1;
         } else {
@@ -365,8 +371,10 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     // Destroy the created collage in memory
     imagedestroy($my_collage);
 
-    foreach ($editImages as $tmp) {
-        unlink($tmp);
+    for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+        if (!COLLAGE_PLACEHOLDER || (COLLAGE_PLACEHOLDER && COLLAGE_PLACEHOLDER_POSITION != $i)) {
+            unlink($editImages[$i]);
+        }
     }
 
     return true;

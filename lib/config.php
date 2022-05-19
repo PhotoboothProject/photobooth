@@ -181,6 +181,10 @@ if (!isset($config['collage']['frame']) || !testFile($config['collage']['frame']
     $config['collage']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 }
 
+if (!isset($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
+    $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.png');
+}
+
 if (!isset($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
     $config['textoncollage']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 }

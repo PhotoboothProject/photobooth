@@ -158,13 +158,14 @@ if ($data['type'] == 'config') {
         $newConfig['collage']['limit'] = 4;
     }
 
-    //If there is a collage placeholder whithin the correct range (0 < placeholder <= collage limit), we need to decrease the collage limit by 1
-    $collagePlaceholder = $newConfig['collage']['placeholder'];
-    if (is_int($collagePlaceholder) && $collagePlaceholder > 0 && $collagePlaceholder <= $newConfig['collage']['limit']) {
-        $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
-    } else {
-        //Reset Placeholder, as it is out of Collage bounds
-        $newConfig['collage']['placeholder'] = null;
+    //If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
+    if ($newConfig['collage']['placeholder']) {
+        $collagePlaceholderPosition = (int) $newConfig['collage']['placeholderposition'];
+        if ($collagePlaceholderPosition > 0 && $collagePlaceholderPosition <= $newConfig['collage']['limit']) {
+            $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
+        } else {
+            $newConfig['collage']['placeholderposition'] = false;
+        }
     }
 
     $content = "<?php\n\$config = " . var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
