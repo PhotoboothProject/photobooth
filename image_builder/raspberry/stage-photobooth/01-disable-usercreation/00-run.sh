@@ -20,5 +20,13 @@ systemctl mask userconfig
 if [ -e /etc/xdg/autostart/piwiz.desktop ]; then
     rm -f /etc/xdg/autostart/piwiz.desktop
 fi
+if [ -e /etc/sudoers.d/010_wiz-nopasswd ]; then
+    rm /etc/sudoers.d/010_wiz-nopasswd
+fi
+if [ -e /etc/xdg/autostart/deluser.desktop ]; then
+    rm /etc/xdg/autostart/deluser.desktop
+fi
+userdel -r rpi-first-boot-wizard
+systemctl --quiet enable getty@tty1 --now --no-block
 EOF
 
