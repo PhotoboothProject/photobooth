@@ -1,8 +1,0 @@
-IMG_NAME=photobooth-pi
-RELEASE=bullseye
-DEPLOY_ZIP=1
-TARGET_HOSTNAME=photobooth-pi
-FIRST_USER_NAME=photobooth
-FIRST_USER_PASS=photobooth
-ENABLE_SSH=1
-STAGE_LIST="stage0 stage1 stage2 stage3 stage4 stage-photobooth"
