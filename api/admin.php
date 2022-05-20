@@ -152,7 +152,7 @@ if ($data['type'] == 'config') {
     }
 
     $collageLayout = $newConfig['collage']['layout'];
-    if ($collageLayout === '1+2' || $collageLayout == '2+1') {
+    if ($collageLayout === '1+2' || $collageLayout == '2+1' || $collageLayout == '2x3') {
         $newConfig['collage']['limit'] = 3;
     } else {
         $newConfig['collage']['limit'] = 4;

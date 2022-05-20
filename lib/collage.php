@@ -138,7 +138,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         imagedestroy($imageResource);
     }
     //Create Collage based on 300dpi 10x15cm - Scale collages with the height
-    $collage_height = 1181;
+    $collage_height = 1200;
     $collage_width = $collage_height * 1.5;
 
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);
@@ -300,10 +300,25 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             }
 
             break;
-        case '2+1': //TODO: Dynamic values for scaling
-            $widthNew = 675;
-            $heightNew = $widthNew / 1.5;
-            $pictureOptions = [[210, 120, $widthNew, $heightNew, 0], [915, 120, $widthNew, $heightNew, 0], [210, 600, $widthNew, $heightNew, 0]];
+        case '2+1':
+            $heightRatio = 0.375;
+
+            // Horizontal Ratio
+            $shortRatioY = 0.1;
+            $longRatioY = 0.525;
+
+            // Vertical Ratio
+            $shortRatioX = 0.1;
+            $longRatioX = 0.525;
+
+            $heightNew = $collage_height * $heightRatio;
+            $widthNew = $heightNew * 1.5;
+
+            $pictureOptions = [
+                [$collage_width * $shortRatioY, $collage_height * $shortRatioX, $widthNew, $heightNew, 0],
+                [$collage_width * $longRatioY, $collage_height * $shortRatioX, $widthNew, $heightNew, 0],
+                [$collage_width * $shortRatioY, $collage_height * $longRatioX, $widthNew, $heightNew, 0],
+            ];
 
             for ($i = 0; $i < 3; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
@@ -368,21 +383,44 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             drawDashedLine($my_collage, 50, $height / 2, $width - 50, $height / 2, $dashedline_color);
             break;
         case '2x4-2':
+        case '2x4-3':
             if ($landscape) {
                 $rotate_after_creation = true;
             }
 
-            $widthNew = 321;
-            $heightNew = $widthNew * 1.5;
+            if (COLLAGE_LAYOUT === '2x4-2') {
+                $widthNew = $collage_height * 0.2675;
+                $heightNew = $widthNew * 1.5;
+
+                $shortRatioY = 0.05333;
+                $longRatioY = 0.54333;
+
+                $img1RatioX = 0.03556;
+                $img2RatioX = 0.235;
+                $img3RatioX = 0.43611;
+                $img4RatioX = 0.63667;
+            } else {
+                $widthNew = $collage_height * 0.32;
+                $heightNew = $widthNew * 1.5;
+
+                $shortRatioY = 0.01;
+                $longRatioY = 0.51;
+
+                $img1RatioX = 0.04194;
+                $img2RatioX = 0.27621;
+                $img3RatioX = 0.51048;
+                $img4RatioX = 0.74475;
+            }
+
             $pictureOptions = [
-                [63, 64, $widthNew, $heightNew, 90],
-                [423, 64, $widthNew, $heightNew, 90],
-                [785, 64, $widthNew, $heightNew, 90],
-                [1146, 64, $widthNew, $heightNew, 90],
-                [63, 652, $widthNew, $heightNew, 90],
-                [423, 652, $widthNew, $heightNew, 90],
-                [785, 652, $widthNew, $heightNew, 90],
-                [1146, 652, $widthNew, $heightNew, 90],
+                [$collage_width * $img1RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img2RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img3RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img4RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img1RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img2RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img3RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img4RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
             ];
 
             for ($i = 0; $i < 4; $i++) {
@@ -390,7 +428,38 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 4]);
             }
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
-            drawDashedLine($my_collage, 50, 600, 1750, 600, $dashedline_color);
+            drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
+            break;
+        case '2x3':
+            if ($landscape) {
+                $rotate_after_creation = true;
+            }
+
+            $widthNew = $collage_height * 0.32;
+            $heightNew = $widthNew * 1.5;
+
+            $shortRatioY = 0.01;
+            $longRatioY = 0.51;
+
+            $img1RatioX = 0.04194;
+            $img2RatioX = 0.27621;
+            $img3RatioX = 0.51048;
+
+            $pictureOptions = [
+                [$collage_width * $img1RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img2RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img3RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img1RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img2RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+                [$collage_width * $img3RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+            ];
+
+            for ($i = 0; $i < 3; $i++) {
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 3]);
+            }
+            $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
+            drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
             break;
         default:
             $my_collage = imagecreatetruecolor($width, $height);
