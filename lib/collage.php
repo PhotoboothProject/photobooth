@@ -137,9 +137,10 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 
         imagedestroy($imageResource);
     }
-    //Create Collage based on 300dpi 10x15cm - Scale collages with these two values
-    $collage_width = 1772;
+    //Create Collage based on 300dpi 10x15cm - Scale collages with the height
     $collage_height = 1181;
+    $collage_width = $collage_height * 1.5;
+
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);
     $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
     imagefill($my_collage, 0, 0, $background);
@@ -178,6 +179,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             //If there is a need for Text/Frame, we could specify an additional horizontal offset. E.g. widthp * 0.08
             $horizontalOffset = $widthp * 0;
 
+            // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
             $pictureOptions = [
                 [$collage_width * $shortRatio + $horizontalOffset, $collage_height * $shortRatio, $widthp, $heightp, 0],
                 [$collage_width * $longRatio + $horizontalOffset, $collage_height * $shortRatio, $widthp, $heightp, 0],
@@ -188,66 +190,117 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
             }
+
             break;
         case '1+3':
-            $heightNewBig = 520;
+            //Specify Big/Small Height Ratios - values based on previos settings
+            $heightRatioBig = 0.4978;
+            $heightRatioSmall = 0.3052;
+
+            // Vertical Positions for big and small images
+            $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
+            $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
+            // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
+
+            // Horizontal Positions for small images
+            $shortRatioX = 0.0281; // shortRatioX, horizontal width ratio distance to the left picture
+            $mediumRatioX = 0.34736; // mediumRatioX, horizontal width ratio distance to the middle image. shortRatioX + heightRatioSmall + distance between pictures
+            $longRatioX = 0.66662; //longRatioX, horizontal width ratio distance to the right image. shortRatioX + 2x heightRatioSmall + 2x distance between pictures
+            // Horzontal distance between pictures = 0.5 x shortRatioX
+
+            // Horizontal position of big image
+            $ratioBigPictureX = 0.4741; // 1 - shortRatioX - heightRatioBig
+
+            $heightNewBig = $collage_height * $heightRatioBig;
             $widthNewBig = $heightNewBig * 1.5;
-            $heightNewSmall = 360;
+
+            $heightNewSmall = $collage_height * $heightRatioSmall;
             $widthNewSmall = $heightNewSmall * 1.5;
+
             $pictureOptions = [
-                [950, 71, $widthNewBig, $heightNewBig, 0],
-                [80, 749, $widthNewSmall, $heightNewSmall, 0],
-                [637, 749, $widthNewSmall, $heightNewSmall, 0],
-                [1195, 749, $widthNewSmall, $heightNewSmall, 0],
+                [$collage_width * $ratioBigPictureX, $collage_height * $shortRatioY, $widthNewBig, $heightNewBig, 0],
+                [$collage_width * $shortRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                [$collage_width * $mediumRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
             ];
 
             for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
             }
+
             break;
         case '1+3-2':
         case '3+1':
-            // FIXME these two styles are broken: bigger images are cut off
-            list($picWidth, $picHeight) = getimagesize($editImages[0]);
-            $widthNewBig = $picWidth * 0.65;
-            $heightNewBig = $picHeight * 0.65;
-            $widthNewSmall = $picWidth * 0.4;
-            $heightNewSmall = $picHeight * 0.4;
+            //Specify Big/Small Height Ratios - values based on previos settings
+            $heightRatioBig = 0.4978;
+            $heightRatioSmall = 0.3052;
+
             if (COLLAGE_LAYOUT === '1+3-2') {
-                $pictureOptions = [
-                    [60, 60, $widthNewBig, $heightNewBig, 0],
-                    [60, 730, $widthNewSmall, $heightNewSmall, 0],
-                    [640, 730, $widthNewSmall, $heightNewSmall, 0],
-                    [1220, 730, $widthNewSmall, $heightNewSmall, 0],
-                ];
-                $positions = [[60, 60], [60, 730], [640, 730], [1220, 730]];
+                // Vertical Positions for big and small images
+                $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
+                $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
+                // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
             } else {
-                // 3+1 Layout
-                $pictureOptions = [
-                    [60, 60, $widthNewSmall, $heightNewSmall, 0],
-                    [640, 60, $widthNewSmall, $heightNewSmall, 0],
-                    [1220, 60, $widthNewSmall, $heightNewSmall, 0],
-                    [60, 505, $widthNewBig, $heightNewBig, 0],
-                ];
-                $positions = [[60, 60], [640, 60], [1220, 60], [60, 505]];
+                // Switch vertical Positions for big and small images
+                $shortRatioY = 0.4252; // shortRatioY,  = heightRatioSmall + shortRatioY + distance between the images.
+                $longRatioY = 0.08; // longRatio = vertical distance until the top left corner of the image
+                // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
             }
 
-            for ($i = 0; $i < 4; $i++) {
+            // Horizontal Positions for small images
+            $shortRatioX = 0.0281; // shortRatioX, horizontal width ratio distance to the left picture
+            $mediumRatioX = 0.34736; // mediumRatioX, horizontal width ratio distance to the middle image. shortRatioX + heightRatioSmall + distance between pictures
+            $longRatioX = 0.66662; //longRatioX, horizontal width ratio distance to the right image. shortRatioX + 2x heightRatioSmall + 2x distance between pictures
+            // Horzontal distance between pictures = 0.5 x shortRatioX
+
+            // Horizontal position of big image
+            $ratioBigPictureX = 0.0281; // shortRatioX
+
+            $heightNewBig = $collage_height * $heightRatioBig;
+            $widthNewBig = $heightNewBig * 1.5;
+
+            $heightNewSmall = $collage_height * $heightRatioSmall;
+            $widthNewSmall = $heightNewSmall * 1.5;
+
+            $pictureOptions = [
+                [$collage_width * $ratioBigPictureX, $collage_height * $shortRatioY, $widthNewBig, $heightNewBig, 0],
+                [$collage_width * $shortRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                [$collage_width * $mediumRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+            ];
+
+            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
             }
+
             break;
         case '1+2':
-            $heightNewBig = 656;
+            //Specify Big/Small Height Ratios - values based on previos settings
+            $heightRatioBig = 0.55546; // based on previous value / height
+            $heightRatioSmall = 0.40812;
+
+            $shortRatioY = 0.055;
+            $longRatioX = 0.555;
+            $longRatioY = 0.5368;
+
+            $heightNewBig = $collage_height * $heightRatioBig;
             $widthNewBig = $heightNewBig * 1.5;
-            $heightNewSmall = 482;
+
+            $heightNewSmall = $collage_height * $heightRatioSmall;
             $widthNewSmall = $heightNewSmall * 1.5;
-            $pictureOptions = [[0, 65, $widthNewBig, $heightNewBig, 10], [984, 65, $widthNewSmall, $heightNewSmall, 0], [984, 634, $widthNewSmall, $heightNewSmall, 0]];
+
+            $pictureOptions = [
+                [0, $collage_height * $shortRatioY, $widthNewBig, $heightNewBig, 10],
+                [$collage_width * $longRatioX, $collage_height * $shortRatioY, $widthNewSmall, $heightNewSmall, 0],
+                [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+            ];
 
             for ($i = 0; $i < 3; $i++) {
                 addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
             }
+
             break;
-        case '2+1':
+        case '2+1': //TODO: Dynamic values for scaling
             $widthNew = 675;
             $heightNew = $widthNew / 1.5;
             $pictureOptions = [[210, 120, $widthNew, $heightNew, 0], [915, 120, $widthNew, $heightNew, 0], [210, 600, $widthNew, $heightNew, 0]];
