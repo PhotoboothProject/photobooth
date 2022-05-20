@@ -8,6 +8,7 @@ require_once __DIR__ . '/filter.php';
 require_once __DIR__ . '/polaroid.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
+define('COLLAGE_RESOLUTION', $config['collage']['resolution']);
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', $config['collage']['frame']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
@@ -137,8 +138,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 
         imagedestroy($imageResource);
     }
-    //Create Collage based on 300dpi 10x15cm - Scale collages with the height
-    $collage_height = 1200;
+    //Create Collage based on 300dpi 4x6in - Scale collages with the height
+    $collage_height = 4 * COLLAGE_RESOLUTION;
     $collage_width = $collage_height * 1.5;
 
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);

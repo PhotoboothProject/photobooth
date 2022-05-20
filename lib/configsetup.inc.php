@@ -659,6 +659,19 @@ $configsetup = [
             ],
             'value' => $config['collage']['layout'],
         ],
+        'collage_resolution' => [
+            'view' => 'expert',
+            'type' => 'select',
+            'name' => 'collage[resolution]',
+            'placeholder' => $defaultConfig['collage']['resolution'],
+            'options' => [
+                '300' => '300 dpi',
+                '400' => '400 dpi',
+                '600' => '600 dpi',
+                '150' => '150 dpi',
+            ],
+            'value' => $config['collage']['resolution'],
+        ],
         'collage_dashedline_color' => [
             'view' => 'advanced',
             'type' => 'color',
