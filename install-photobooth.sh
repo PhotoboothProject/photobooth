@@ -104,7 +104,7 @@ function no_raspberry {
 
 view_help() {
     cat << EOF
-Usage: sudo bash install-raspbian.sh -u [-bhrsVw]
+Usage: sudo bash install-photobooth.sh -u [-bhrsVw]
 
     -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
                                     Available branches: stable3 , dev, package

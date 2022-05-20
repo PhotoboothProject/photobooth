@@ -168,7 +168,7 @@ Troubleshooting / Debugging:
          gpio=16,17,20,21,22,26,27=pu
 ```
 
-    - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as
+    - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
 
 ```
      cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
@@ -571,8 +571,8 @@ sudo bash setup-network.sh --clean
 
 This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick. Currently works on Raspberry PI OS only.
 
-Use the `install-raspbian.sh` script to get the operating system setup in place.  
-**Note:** If you have declined the question to enable the USB sync file backup while running the `install-raspbian.sh` you need to run the following commands to get the operating system setup done:
+Use the `install-photobooth.sh` script to get the operating system setup in place.  
+**Note:** If you have declined the question to enable the USB sync file backup while running the `install-photobooth.sh` you need to run the following commands to get the operating system setup done:
 ```
 wget https://raw.githubusercontent.com/andi34/photobooth/dev/enable-usb-sync.sh
 sudo bash enable-usb-sync.sh
