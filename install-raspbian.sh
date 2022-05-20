@@ -522,7 +522,7 @@ mount_removable=0
 autorun=0
 EOF
 
-            chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/pcmanfm
+            chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
 
             info "### Adding polkit rule so www-data can (un)mount drives"
 
