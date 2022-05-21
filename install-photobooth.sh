@@ -490,9 +490,13 @@ EOF
 
     if [ "$RUNNING_ON_PI" = true ]; then
         info "### Adding photobooth shortcut to Desktop"
+        if [ ! -d "/home/$USERNAME/Desktop" ]; then
+            mkdir -p /home/$USERNAME/Desktop
+            chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+        fi
         cp -p $INSTALLFOLDERPATH/photobooth.desktop /home/$USERNAME/Desktop/
         chmod +x /home/$USERNAME/Desktop/photobooth.desktop
-        chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+        chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
 
         info "### Remote Buzzer Feature"
         info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
