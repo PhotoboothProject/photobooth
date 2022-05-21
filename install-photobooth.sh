@@ -489,6 +489,11 @@ www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 
     if [ "$RUNNING_ON_PI" = true ]; then
+        info "### Adding photobooth shortcut to Desktop"
+        cp -p $INSTALLFOLDERPATH/photobooth.desktop /home/$USERNAME/Desktop/
+        chmod +x /home/$USERNAME/Desktop/photobooth.desktop
+        chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+
         info "### Remote Buzzer Feature"
         info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
         usermod -a -G gpio www-data
@@ -539,9 +544,6 @@ EOF
 }
 
 kioskbooth_desktop() {
-    info "### We are installing Photobooth in Kiosk Mode for"
-    info "### Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
-
     sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
 
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
@@ -554,7 +556,7 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 @xset s off
 
 # Run Chromium in kiosk mode
-@chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
+# @chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
 
 # Hide mousecursor
 @unclutter -idle 3
@@ -669,8 +671,8 @@ if [ "$RUNNING_ON_PI" = true ]; then
 
     print_spaces
 
-    echo -e "\033[0;33m### You probably like to start the browser on every start."
-    ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " "Y"
+    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
+    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         KIOSK_MODE=true
