@@ -560,7 +560,7 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 @xset s off
 
 # Run Chromium in kiosk mode
-# @chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
+# @chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled --use-gl=egl
 
 # Hide mousecursor
 @unclutter -idle 3
