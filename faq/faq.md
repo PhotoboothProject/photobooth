@@ -356,11 +356,6 @@ If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.
 
 <hr>
 
-### How to disable the blank screen on Raspberry Pi (Raspbian)?
-You can follow the instructions [here](https://www.geeks3d.com/hacklab/20160108/how-to-disable-the-blank-screen-on-raspberry-pi-raspbian/) to disable the blank screen.
-
-<hr>
-
 ### How to use a live stream as background at countdown?
 There's different ways depending on your needs and personal setup:
 
