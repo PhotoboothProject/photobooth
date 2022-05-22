@@ -20,7 +20,7 @@ HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
 CUPS_REMOTE_ANY=false
-
+CHROMIUM_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
 # Node.js v12.22.(4 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
 NEEDED_NODE_VERSION="v12.22.(4 or newer)"
@@ -447,6 +447,12 @@ start_install() {
 }
 
 chromium_shortcut() {
+
+    if [ "$RUNNING_ON_PI" = true ]; then
+        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS --use-gl=egl"
+    else
+        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS"
+    fi
     cat > ${1} <<EOF
 [Desktop Entry]
 Version=1.3
@@ -456,9 +462,9 @@ Name=Photobooth
 EOF
 
     if [ "$INSTALLFOLDER" == "photobooth" ]; then
-        echo "Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1/photobooth --touch-events=enabled --use-gl=egl" >> ${1}
+        echo "Exec=chromium-browser --kiosk http://127.0.0.1/photobooth $CHROMIUM_FLAGS" >> ${1}
     else
-        echo "Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled --use-gl=egl" >> ${1}
+        echo "Exec=chromium-browser --kiosk http://127.0.0.1 $CHROMIUM_FLAGS" >> ${1}
     fi
     echo "Icon=$INSTALLFOLDERPATH/resources/img/favicon-96x96.png" >> ${1}
     echo "StartupNotify=false" >> ${1}
