@@ -16,6 +16,7 @@ GIT_INSTALL=true
 SUBFOLDER=true
 PI_CAMERA=false
 KIOSK_MODE=false
+HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
 CUPS_REMOTE_ANY=false
@@ -445,6 +446,26 @@ start_install() {
     fi
 }
 
+chromium_shortcut() {
+    cat > ${1} <<EOF
+[Desktop Entry]
+Version=1.3
+Terminal=false
+Type=Application
+Name=Photobooth
+EOF
+
+    if [ "$INSTALLFOLDER" == "photobooth" ]; then
+        echo "Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1/photobooth --touch-events=enabled --use-gl=egl" >> ${1}
+    else
+        echo "Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled --use-gl=egl" >> ${1}
+    fi
+    echo "Icon=$INSTALLFOLDERPATH/resources/img/favicon-96x96.png" >> ${1}
+    echo "StartupNotify=false" >> ${1}
+    echo "Terminal=false" >> ${1}
+}
+
+
 pi_camera() {
     cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
@@ -494,7 +515,8 @@ EOF
             mkdir -p /home/$USERNAME/Desktop
             chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
         fi
-        cp -p $INSTALLFOLDERPATH/photobooth.desktop /home/$USERNAME/Desktop/
+
+        chromium_shortcut "/home/$USERNAME/Desktop/photobooth.desktop"
         chmod +x /home/$USERNAME/Desktop/photobooth.desktop
         chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
 
@@ -548,7 +570,12 @@ EOF
 }
 
 kioskbooth_desktop() {
-    sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+    if [ "$KIOSK_MODE" = true ]; then
+        chromium_shortcut "/etc/xdg/autostart/photobooth.desktop"
+    fi
+
+    if [ "$HIDE_MOUSE" = true ]; then
+        sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
 
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth
@@ -559,14 +586,12 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # turn off screen saver
 @xset s off
 
-# Run Chromium in kiosk mode
-# @chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled --use-gl=egl
-
 # Hide mousecursor
 @unclutter -idle 3
 # Photobooth End
 
 EOF
+fi
 }
 
 cups_setup() {
@@ -664,23 +689,35 @@ fi
 
 print_spaces
 
+if [ -d "/etc/xdg/autostart" ]; then
+    echo -e "\033[0;33m### You probably like to start the browser on every start."
+    ask_yes_no "### Open Chromium in Kiosk Mode at every boot? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        KIOSK_MODE=true
+    fi
+
+    print_spaces
+fi
+
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
+    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
+    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        HIDE_MOUSE=true
+        COMMON_PACKAGES+=('unclutter')
+    fi
+
+    print_spaces
+
     echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
     ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "N"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         PI_CAMERA=true
-    fi
-
-    print_spaces
-
-    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
-    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        KIOSK_MODE=true
-        COMMON_PACKAGES+=('unclutter')
     fi
 
     print_spaces
@@ -714,7 +751,7 @@ if [ "$PI_CAMERA" = true ]; then
     pi_camera
 fi
 general_permissions
-if [ "$KIOSK_MODE" = true ]; then
+if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
     kioskbooth_desktop
 fi
 if [ "$SETUP_CUPS" = true ]; then
