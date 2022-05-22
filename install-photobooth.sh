@@ -21,6 +21,8 @@ USB_SYNC=false
 SETUP_CUPS=false
 CUPS_REMOTE_ANY=false
 CHROMIUM_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
+AUTOSTART_FILE=""
+
 # Node.js v12.22.(4 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
 NEEDED_NODE_VERSION="v12.22.(4 or newer)"
@@ -453,22 +455,20 @@ chromium_shortcut() {
     else
         CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS"
     fi
-    cat > ${1} <<EOF
-[Desktop Entry]
-Version=1.3
-Terminal=false
-Type=Application
-Name=Photobooth
-EOF
 
+    echo "[Desktop Entry]" > "$AUTOSTART_FILE"
+    echo "Version=1.3" >> "$AUTOSTART_FILE"
+    echo "Terminal=false" >> "$AUTOSTART_FILE"
+    echo "Type=Application" >> "$AUTOSTART_FILE"
+    echo "Name=Photobooth" >> "$AUTOSTART_FILE"
     if [ "$INSTALLFOLDER" == "photobooth" ]; then
-        echo "Exec=chromium-browser --kiosk http://127.0.0.1/photobooth $CHROMIUM_FLAGS" >> ${1}
+        echo "Exec=chromium-browser --kiosk http://127.0.0.1/photobooth $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
     else
-        echo "Exec=chromium-browser --kiosk http://127.0.0.1 $CHROMIUM_FLAGS" >> ${1}
+        echo "Exec=chromium-browser --kiosk http://127.0.0.1 $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
     fi
-    echo "Icon=$INSTALLFOLDERPATH/resources/img/favicon-96x96.png" >> ${1}
-    echo "StartupNotify=false" >> ${1}
-    echo "Terminal=false" >> ${1}
+    echo "Icon=$INSTALLFOLDERPATH/resources/img/favicon-96x96.png" >> "$AUTOSTART_FILE"
+    echo "StartupNotify=false" >> "$AUTOSTART_FILE"
+    echo "Terminal=false" >> "$AUTOSTART_FILE"
 }
 
 
@@ -521,8 +521,8 @@ EOF
             mkdir -p /home/$USERNAME/Desktop
             chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
         fi
-
-        chromium_shortcut "/home/$USERNAME/Desktop/photobooth.desktop"
+        AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
+        chromium_shortcut
         chmod +x /home/$USERNAME/Desktop/photobooth.desktop
         chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
 
@@ -577,7 +577,8 @@ EOF
 
 kioskbooth_desktop() {
     if [ "$KIOSK_MODE" = true ]; then
-        chromium_shortcut "/etc/xdg/autostart/photobooth.desktop"
+        AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
+        chromium_shortcut
     fi
 
     if [ "$HIDE_MOUSE" = true ]; then
