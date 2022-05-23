@@ -717,6 +717,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     SETUP_CUPS=true
     COMMON_PACKAGES+=('cups')
+    info "### We will install CUPS if not installed already."
     print_spaces
 
     echo -e "\033[0;33m### By default CUPS can only be accessed via localhost."
@@ -725,6 +726,9 @@ then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         CUPS_REMOTE_ANY=true
+        info "### We will allow remote access to CUPS over IP from all devices inside your network."
+    else
+        info "### We won't allow remote access to CUPS over IP from all devices inside your network."
     fi
 
     print_spaces
@@ -736,6 +740,9 @@ then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         COMMON_PACKAGES+=('printer-driver-gutenprint')
+        info "### We will install Gutenprint drivers if not installed already."
+    else
+        info "### We won't install Gutenprint drivers if not installed already."
     fi
 fi
 
@@ -748,6 +755,9 @@ if [ -d "/etc/xdg/autostart" ]; then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         KIOSK_MODE=true
+        info "### We will open Chromium in Kiosk Mode at every boot."
+    else
+        info "### We won't open Chromium in Kiosk Mode at every boot."
     fi
 
     print_spaces
@@ -761,6 +771,9 @@ if [ "$RUNNING_ON_PI" = true ]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         HIDE_MOUSE=true
         COMMON_PACKAGES+=('unclutter')
+        info "### We will hide the mouse cursor on every start and disable the screen saver."
+    else
+        info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
     fi
 
     print_spaces
@@ -770,16 +783,23 @@ if [ "$RUNNING_ON_PI" = true ]; then
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         PI_CAMERA=true
+        info "### We will generate a personal configuration with all needed"
+        info "    changes to use a Raspberry Pi (HQ) Camera to take pictures."
+    else
+        info "### We won't generate a personal configuration file to use a Raspberry Pi (HQ) Camera to take pictures."
     fi
 
     print_spaces
 
     echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
-    echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"
-    ask_yes_no "### Would you like to enable the USB sync file backup? [y/N] " "Y"
+    echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first."
+    ask_yes_no "### Would you like to setup Raspberry Pi OS to use the USB sync file backup? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         USB_SYNC=true
+        info "### We will setup Raspberry Pi OS to be able to use the USB sync file backup."
+    else
+        info "### We won't setup Raspberry Pi OS to use the USB sync file backup."
     fi
 
     print_spaces
@@ -793,8 +813,10 @@ fi
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         GPHOTO_PREVIEW=true
+        info "### We will install a service to set up a virtual webcam for gphoto2."
     else
         GPHOTO_PREVIEW=false
+        info "### We won't install a service to set up a virtual webcam for gphoto2."
     fi
 
 ############################################################
