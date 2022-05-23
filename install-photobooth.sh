@@ -10,6 +10,7 @@ RUNNING_ON_PI=true
 FORCE_RASPBERRY_PI=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
+PHOTOBOOTH_LOG="/var/www/$DATE-photobooth.log"
 
 BRANCH="dev"
 GIT_INSTALL=true
@@ -34,14 +35,17 @@ COMMON_PACKAGES=()
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
+    echo "${1}" >> "$PHOTOBOOTH_LOG"
 }
 
 function warn {
     echo -e "\033[0;33m${1}\033[0m"
+    echo "WARN: ${1}" >> "$PHOTOBOOTH_LOG"
 }
 
 function error {
     echo -e "\033[0;31m${1}\033[0m"
+    echo "ERROR: ${1}" >> "$PHOTOBOOTH_LOG"
 }
 
 print_spaces() {
