@@ -10,7 +10,10 @@ RUNNING_ON_PI=true
 FORCE_RASPBERRY_PI=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
-PHOTOBOOTH_LOG="/var/www/$DATE-photobooth.log"
+if [ ! -d "/tmp/photobooth" ]; then
+    mkdir -p "/tmp/photobooth"
+fi
+PHOTOBOOTH_LOG="/tmp/photobooth/$DATE-photobooth.log"
 
 BRANCH="dev"
 GIT_INSTALL=true
