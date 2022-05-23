@@ -446,8 +446,8 @@ general_setup() {
         info "$INSTALLFOLDERPATH not found."
     fi
 
-    if [ "$INSTALLFOLDER" == "photobooth" ]; then
-        URL="http://$IPADDRESS/photobooth"
+    if [ "$SUBFOLDER" = true ]; then
+        URL="http://$IPADDRESS/$INSTALLFOLDER"
     else
         URL="http://$IPADDRESS"
     fi
@@ -494,8 +494,8 @@ chromium_shortcut() {
     echo "Terminal=false" >> "$AUTOSTART_FILE"
     echo "Type=Application" >> "$AUTOSTART_FILE"
     echo "Name=Photobooth" >> "$AUTOSTART_FILE"
-    if [ "$INSTALLFOLDER" == "photobooth" ]; then
-        echo "Exec=chromium-browser --kiosk http://127.0.0.1/photobooth $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
+    if [ "$SUBFOLDER" = true ]; then
+        echo "Exec=chromium-browser --kiosk http://127.0.0.1/$INSTALLFOLDER $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
     else
         echo "Exec=chromium-browser --kiosk http://127.0.0.1 $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
     fi
@@ -708,7 +708,7 @@ if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
     info "### We will install Photobooth into /var/www/html."
     SUBFOLDER=false
 else
-    info "### We will install Photobooth into /var/www/html/photobooth."
+    info "### We will install Photobooth into /var/www/html/$INSTALLFOLDER."
 fi
 
 print_spaces
