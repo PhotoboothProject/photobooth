@@ -19,6 +19,7 @@ KIOSK_MODE=false
 HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
+GPHOTO_PREVIEW=true
 CUPS_REMOTE_ANY=false
 CHROMIUM_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
 AUTOSTART_FILE=""
@@ -29,16 +30,7 @@ NEEDED_NODE_VERSION="v12.22.(4 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
-COMMON_PACKAGES=(
-    'curl'
-    'gphoto2'
-    'libimage-exiftool-perl'
-    'nodejs'
-    'php-gd'
-    'php-zip'
-    'rsync'
-    'udisks2'
-)
+COMMON_PACKAGES=()
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
@@ -321,7 +313,31 @@ common_software() {
             'yarn'
         )
     fi
-    
+
+    # All required packages independend of Raspberry Pi.
+    # Note: raspberrypi-kernel-header are needed before v4l2loopback-dkms
+    if [ "$RUNNING_ON_PI" = true ]; then
+        COMMON_PACKAGES+=('raspberrypi-kernel-headers')
+    fi
+
+    COMMON_PACKAGES+=(
+        'curl'
+        'ffmpeg'
+        'gphoto2'
+        'libimage-exiftool-perl'
+        'nodejs'
+        'php-gd'
+        'php-zip'
+        'python3'
+        'python3-gphoto2'
+        'python3-psutil'
+        'python3-zmq'
+        'rsync'
+        'udisks2'
+        'v4l2loopback-dkms'
+        'v4l-utils'
+    )
+
     info "### Installing common software..."
     for package in "${COMMON_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
@@ -629,6 +645,21 @@ cups_setup() {
     fi
 }
 
+gphoto_preview() {
+    if [ -d "/etc/systemd/system" ] && [ -d "/usr" ]; then
+        cd /etc/systemd/system/
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.service
+        cd /usr/
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.sh
+        chmod +x ffmpeg-webcam.sh
+        systemctl start ffmpeg-webcam.service
+        systemctl enable ffmpeg-webcam.service
+        cd $INSTALLFOLDERPATH
+    else
+        warn "WARNING: Couldn't install gphoto2 Webcam Service! Skipping!"
+    fi
+}
+
 ############################################################
 #                                                          #
 # General checks before the installation process can start #
@@ -753,9 +784,21 @@ if [ "$RUNNING_ON_PI" = true ]; then
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         USB_SYNC=true
     fi
+
+    print_spaces
 fi
 # Pi specific setup end
 
+    echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
+    echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
+    echo -e "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
+    ask_yes_no "### If unsure, type N. [y/N] " "N"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        GPHOTO_PREVIEW=true
+    else
+        GPHOTO_PREVIEW=false
+    fi
 
 ############################################################
 #                                                          #
@@ -780,6 +823,10 @@ if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
 fi
 if [ "$SETUP_CUPS" = true ]; then
     cups_setup
+fi
+
+if [ "$GPHOTO_PREVIEW" = true ]; then
+    gphoto_preview
 fi
 
 print_logo
