@@ -530,10 +530,10 @@ general_permissions() {
         chown www-data:www-data "/var/www/.yarnrc"
     fi
 
-    if [ -d "/var/www/.cache/yarn" ]; then
-        info "### Cache folder for yarn found."
-        info "### Fixing permissions on yarns cache folder."
-        chown -R www-data:www-data "/var/www/.cache/yarn/"
+    if [ -d "/var/www/.cache" ]; then
+        info "### Cache folder found."
+        info "### Fixing permissions on cache folder."
+        chown -R www-data:www-data "/var/www/.cache"
     fi
 
     if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
