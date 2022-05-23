@@ -647,14 +647,11 @@ cups_setup() {
 
 gphoto_preview() {
     if [ -d "/etc/systemd/system" ] && [ -d "/usr" ]; then
-        cd /etc/systemd/system/
-        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.service
-        cd /usr/
-        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.sh
-        chmod +x ffmpeg-webcam.sh
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.service -O "/etc/systemd/system/ffmpeg-webcam.service"
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.sh -O "/usr/ffmpeg-webcam.sh"
+        chmod +x "/usr/ffmpeg-webcam.sh"
         systemctl start ffmpeg-webcam.service
         systemctl enable ffmpeg-webcam.service
-        cd $INSTALLFOLDERPATH
     else
         warn "WARNING: Couldn't install gphoto2 Webcam Service! Skipping!"
     fi
