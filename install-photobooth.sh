@@ -106,11 +106,12 @@ function no_raspberry {
 }
 
 view_help() {
+    SCRIP=$(basename $0)
     cat << EOF
-Usage: sudo bash install-photobooth.sh -u [-bhrsVw]
+Usage: sudo bash $SCRIPT -u=<YourUsername> [-b=<stable3:dev:package> -hrsV -w=<apache:nginx:lighttpd]
 
     -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
-                                    Available branches: stable3 , dev, package
+                                    Available branches: stable3, dev, package
                                     By default, latest development verison (dev) will be installed.
                                     package will install latest Release from zip.
 
@@ -119,7 +120,17 @@ Usage: sudo bash install-photobooth.sh -u [-bhrsVw]
     -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
                                     Note: only to use on Raspberry Pi OS!
 
-    -s,  -silent,     --silent      Run silent installation.
+    -s,  -silent,     --silent      Run silent installation:
+                                    - Uses Apache Webserver
+                                    - installs Photobooth into /var/www/html
+                                    - installs latest Photobooth development version via git
+                                    - installs CUPS
+                                    - deny remote access to CUPS over IP from all devices inside
+                                      your network (automatic image building failes to enable
+                                      because cups can't be configured while in chroot env) 
+                                    - installs a collection of free-software printer drivers (Gutenprint)
+                                    - disables screen saver and hide the mouse cursor (Raspberry Pi only)
+                                    - adds config for USB sync file backup (Raspberry Pi only)
     
     -u,  -username,   --username    Enter your OS username you like to use Photobooth
                                     on (Raspberry Pi only)
@@ -128,6 +139,12 @@ Usage: sudo bash install-photobooth.sh -u [-bhrsVw]
 
     -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx, lighttpd].
                                     Apache is used by default.
+
+Example to install Photobooth on a Raspberry Pi getting asked for enabled options:
+sudo bash $SCRIPT -u="photobooth"
+
+Options can be combined. Example for a silent installation on a Raspberry Pi:
+sudo bash $SCRIPT -u="photobooth" -s
 EOF
 }
 
