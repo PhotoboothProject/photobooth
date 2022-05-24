@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGES=(
+COMMON_PACKAGES=(
     'gphoto2'
     'ffmpeg'
     'v4l2loopback-dkms'
