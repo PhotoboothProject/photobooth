@@ -5,6 +5,7 @@ const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
 const PID = process.pid;
 let rotaryClkPin, rotaryDtPin;
+let cnt = 0;
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
@@ -525,9 +526,14 @@ const watchRotaryClk = function watchRotaryClk(err, gpioValue) {
     }
 
     if (gpioValue) {
-        if (rotaryDtPin) {
+        if (rotaryClkPin) {
             /* rotation */
-            photoboothAction('rotary-cw');
+            if (cnt < -3) {
+                photoboothAction('rotary-cw');
+                cnt = 0;
+            } else {
+                cnt--;
+            }
         } else {
             rotaryClkPin = true;
         }
@@ -548,9 +554,14 @@ const watchRotaryDt = function watchRotaryDt(err, gpioValue) {
     }
 
     if (gpioValue) {
-        if (rotaryClkPin) {
+        if (rotaryDtPin) {
             /* rotation */
-            photoboothAction('rotary-ccw');
+            if (cnt > 3) {
+                photoboothAction('rotary-ccw');
+                cnt = 0;
+            } else {
+                cnt++;
+            }
         } else {
             rotaryDtPin = true;
         }
