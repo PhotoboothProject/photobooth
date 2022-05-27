@@ -356,7 +356,21 @@ common_software() {
                 echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
                 apt update
             fi
-            apt install -y ${package}
+            if [[ ${package} == "gphoto2" ]]; then
+                info "            Installing latest stable release."
+                wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
+                wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
+                chmod +x gphoto2-updater.sh
+                ./gphoto2-updater.sh --stable
+                if [ -f "gphoto2-updater.sh" ]; then
+                    rm gphoto2-updater.sh
+                fi
+                if [ -f ".env" ]; then
+                    rm .env
+                fi
+            else
+                apt install -y ${package}
+            fi
         fi
     done
 
