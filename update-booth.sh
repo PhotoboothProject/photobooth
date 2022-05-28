@@ -113,7 +113,7 @@ if [[ ! $skip == true ]]; then
 		if [[ ${server} == "nginx" || ${server} == "lighttpd" ]]; then
 		    info "[NOTE]      You're using ${server} as your Webserver."
 		    info "[NOTE]      For a no-hassle-setup Apache2 Webserver is recommend!"
-		    if [ $(dpkg-query -W -f='${Status}' ${server} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+		    if [ $(dpkg-query -W -f='${Status}' "php-fpm" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
 		        info "[Package]   php-fpm installed already"
 		    else
 		        info "[Package Install]  Installing missing common package: ${server}"
