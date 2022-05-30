@@ -320,6 +320,7 @@ $config['ui']['decore_lines'] = true;
 $config['ui']['rounded_corners'] = false;
 $config['colors']['primary'] = '#0a6071';
 $config['colors']['secondary'] = '#214852';
+$config['colors']['highlight'] = '#C0C0C0';
 $config['colors']['font'] = '#79bad9';
 $config['colors']['button_font'] = '#ffffff';
 $config['colors']['start_font'] = '#ffffff';

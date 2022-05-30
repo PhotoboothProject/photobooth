@@ -3,7 +3,7 @@
   height: 5em;
   border-radius: 50%;
   border: 2px solid $borderColor;
-  background: radial-gradient(grey, $mainColor, $hoverColor);
+  background: radial-gradient($highlightColor, $mainColor, $hoverColor);
   display: inline-block;
   color: $buttonFontColor;
   text-decoration: none;

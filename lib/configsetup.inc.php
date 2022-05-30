@@ -1921,6 +1921,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['colors']['secondary'],
             'value' => $config['colors']['secondary'],
         ],
+        'colors_highlight' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[highlight]',
+            'placeholder' => $defaultConfig['colors']['highlight'],
+            'value' => $config['colors']['highlight'],
+        ],
         'colors_font' => [
             'view' => 'expert',
             'type' => 'color',
