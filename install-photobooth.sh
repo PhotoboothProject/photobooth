@@ -431,7 +431,8 @@ lighttpd_webserver() {
         info "### Enable PHP for Lighttpd"
         cp ${php_conf} ${php_conf}.bak
 
-        cat > ${php_conf} <<EOF
+        if [ -e "/var/run/php/php7.3-fpm.sock" ]; then
+            cat > ${php_conf} <<EOF
 # -*- depends: fastcgi -*-
 # /usr/share/doc/lighttpd/fastcgi.txt.gz
 # http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
@@ -444,6 +445,23 @@ fastcgi.server += ( ".php" =>
 	))
 )
 EOF
+        fi
+
+        if [ -e "/var/run/php/php7.4-fpm.sock" ]; then
+            cat > ${php_conf} <<EOF
+# -*- depends: fastcgi -*-
+# /usr/share/doc/lighttpd/fastcgi.txt.gz
+# http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
+
+## Start an FastCGI server for php (needs the php5-cgi package)
+fastcgi.server += ( ".php" =>
+	((
+		"socket" => "/var/run/php/php7.4-fpm.sock",
+		"broken-scriptfilename" => "enable"
+	))
+)
+EOF
+        fi
 
         service lighttpd force-reload
     else
