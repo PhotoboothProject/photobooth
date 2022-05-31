@@ -34,7 +34,26 @@ NEEDED_NODE_VERSION="v12.22.(4 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
-COMMON_PACKAGES=()
+COMMON_PACKAGES=(
+        'curl'
+        'ffmpeg'
+        'gphoto2'
+        'libimage-exiftool-perl'
+        'nodejs'
+        'php-gd'
+        'php-zip'
+        'python3'
+        'python3-gphoto2'
+        'python3-psutil'
+        'python3-zmq'
+        'rsync'
+        'udisks2'
+        'v4l2loopback-dkms'
+        'v4l-utils'
+)
+
+EXTRA_PACKAGES=()
+INSTALL_PACKAGES=()
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
@@ -167,7 +186,7 @@ do
                 BRANCH="stable3"
                 GIT_INSTALL=false
                 NEEDS_NODEJS_CHECK=false
-                COMMON_PACKAGES+=('jq')
+                EXTRA_PACKAGES+=('jq')
             else
                 BRANCH="dev"
                 warn "[WARN]      Invalid branch / version!"
@@ -315,7 +334,7 @@ common_software() {
     fi
     
     if [ $GIT_INSTALL = true ]; then
-        COMMON_PACKAGES+=(
+        EXTRA_PACKAGES+=(
             'git'
             'yarn'
         )
@@ -324,29 +343,16 @@ common_software() {
     # All required packages independend of Raspberry Pi.
     # Note: raspberrypi-kernel-header are needed before v4l2loopback-dkms
     if [ "$RUNNING_ON_PI" = true ]; then
-        COMMON_PACKAGES+=('raspberrypi-kernel-headers')
+        EXTRA_PACKAGES+=('raspberrypi-kernel-headers')
     fi
 
-    COMMON_PACKAGES+=(
-        'curl'
-        'ffmpeg'
-        'gphoto2'
-        'libimage-exiftool-perl'
-        'nodejs'
-        'php-gd'
-        'php-zip'
-        'python3'
-        'python3-gphoto2'
-        'python3-psutil'
-        'python3-zmq'
-        'rsync'
-        'udisks2'
-        'v4l2loopback-dkms'
-        'v4l-utils'
-    )
+    if [ "${#EXTRA_PACKAGES[@]}" -gt 0 ]; then
+        INSTALL_PACKAGES+=("${EXTRA_PACKAGES[@]}")
+    fi
+    INSTALL_PACKAGES+=("${COMMON_PACKAGES[@]}")
 
     info "### Installing common software..."
-    for package in "${COMMON_PACKAGES[@]}"; do
+    for package in "${INSTALL_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Package]   ${package} installed already"
         else
@@ -737,7 +743,7 @@ echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     SETUP_CUPS=true
-    COMMON_PACKAGES+=('cups')
+    EXTRA_PACKAGES+=('cups')
     info "### We will install CUPS if not installed already."
     print_spaces
 
@@ -760,7 +766,7 @@ then
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-        COMMON_PACKAGES+=('printer-driver-gutenprint')
+        EXTRA_PACKAGES+=('printer-driver-gutenprint')
         info "### We will install Gutenprint drivers if not installed already."
     else
         info "### We won't install Gutenprint drivers if not installed already."
@@ -791,7 +797,7 @@ if [ "$RUNNING_ON_PI" = true ]; then
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         HIDE_MOUSE=true
-        COMMON_PACKAGES+=('unclutter')
+        EXTRA_PACKAGES+=('unclutter')
         info "### We will hide the mouse cursor on every start and disable the screen saver."
     else
         info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
