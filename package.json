@@ -65,7 +65,7 @@
     "onoff": "^6.0.3",
     "sass": "^1.51.0",
     "selectize": "^0.12.6",
-    "socket.io": "^4.5.0",
+    "socket.io": "^4.5.1",
     "socket.io-client": "^4.5.0",
     "waypoints": "^4.0.1",
     "whatwg-fetch": "^3.6.2"
