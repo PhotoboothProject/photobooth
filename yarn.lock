@@ -1030,14 +1030,14 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@prettier/plugin-php@^0.18.4":
-  version "0.18.4"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.18.4.tgz#d376a8126580955e02294a0d0de64cfef8a91bf7"
-  integrity sha512-phnY20asLUpCSDXjCUN7FKGaZZTf1C+PSpTzGMOJ/UfIyD24sYJXCT8qqbcpp7rWI6ZsCsJiZcVnNmLFThx78Q==
+"@prettier/plugin-php@^0.18.7":
+  version "0.18.7"
+  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.18.7.tgz#16934daa2cd55dd3d928c2ea952c383d1907ca79"
+  integrity sha512-Fz38XU4e4dxtGkpoxcNJBug0UOjdPMOAbAzsQWkh3suHW/qyRtRv3LaQVtdLghdRSrbLhTV59TS2+9Wv1sEmrg==
   dependencies:
     linguist-languages "^7.5.1"
     mem "^8.0.0"
-    php-parser "3.1.0-beta.5"
+    php-parser "3.1.0-beta.9"
 
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.0"
@@ -3667,10 +3667,10 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-php-parser@3.1.0-beta.5:
-  version "3.1.0-beta.5"
-  resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.0-beta.5.tgz#81fd04ede37f3796ba2585b985831caffd62ba50"
-  integrity sha512-3F3+yThjD7wn0sMuIG5iMQqutmH+RJUAbEyPW5S/greTp5ZArkpEweylQh+do22q9UJlJT1PrLN/AwnzDUti6Q==
+php-parser@3.1.0-beta.9:
+  version "3.1.0-beta.9"
+  resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.0-beta.9.tgz#f7a57c01d8483cb1401c516b797c610d2e91823f"
+  integrity sha512-cGVXw3IRbA5zwO3nnp3yKQhCsF4kZqodunlzaqK/xw9AhXhBazpmkxcazv//b430IVVYrt0UzH5kc0JMGg9t3A==
 
 picocolors@^1.0.0:
   version "1.0.0"
