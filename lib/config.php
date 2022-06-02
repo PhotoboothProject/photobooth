@@ -182,7 +182,7 @@ if (!isset($config['collage']['frame']) || !testFile($config['collage']['frame']
 }
 
 if (!isset($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
-    $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.png');
+    $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.jpg');
 }
 
 if (!isset($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
