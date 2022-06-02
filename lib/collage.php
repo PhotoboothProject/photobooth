@@ -8,7 +8,7 @@ require_once __DIR__ . '/filter.php';
 require_once __DIR__ . '/polaroid.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
-define('COLLAGE_RESOLUTION', $config['collage']['resolution']);
+define('COLLAGE_RESOLUTION', (int) substr($config['collage']['resolution'], 0, -3));
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', $config['collage']['frame']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
