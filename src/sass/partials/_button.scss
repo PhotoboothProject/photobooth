@@ -1,3 +1,4 @@
+.gal-action-btn,
 .btn {
   padding: 20px 40px;
   border: 0 none;
@@ -37,6 +38,15 @@
   &:hover,
   &.focused {
     background: $hoverColor;
+  }
+}
+
+.gal-action-btn {
+  background: $hoverColor;
+  &:active,
+  &:focus,
+  &:hover {
+    opacity: 0.6;
   }
 }
 

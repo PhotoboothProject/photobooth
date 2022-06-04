@@ -19,6 +19,8 @@ if ($config['database']['enabled']) {
 }
 
 $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
+
+$GALLERY_FOOTER = false;
 ?>
 <!DOCTYPE html>
 <html>

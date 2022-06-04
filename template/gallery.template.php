@@ -48,5 +48,31 @@
 				<?php endforeach; ?>
 				<?php endif; ?>
 		</div>
+        <?php if($GALLERY_FOOTER === true): ?>
+        <div class="gallery__footer">
+            <div class="buttongroup">
+                <?php if($config['button']['show_cups']): ?>
+                <a id="cups-button" class="gal-action-btn cups-button rotaryfocus" href="#" target="newwin"><i class="fa fa-print" aria-hidden="true"></i> <span>CUPS</span></a>
+                <?php endif; ?>
+
+                <?php if ($config['button']['force_buzzer']): ?>
+                    <div id="useBuzzer">
+                        <span data-i18n="use_button"></span>
+                    </div>
+                <?php else: ?>
+                    <?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
+                    <a href="#" class="gal-action-btn takePic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+                    <?php endif; ?>
+
+                    <?php if ($config['collage']['enabled']): ?>
+                    <a href="#" class="gal-action-btn takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php if($config['button']['show_fs']): ?>
+                <a href="#" id="fs-button" class="gal-action-btn fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
 	</div>
 </div>

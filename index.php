@@ -40,6 +40,7 @@ if (
         $btnClass2 = '';
         $galleryIcon = 'fa-th';
     }
+    $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();

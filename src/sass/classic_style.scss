@@ -463,6 +463,14 @@ hr.small {
   }
 }
 
+.buttongroup {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
 .gallery__close:active,
 .gallery__close:hover,
 .gallery__close:focus,

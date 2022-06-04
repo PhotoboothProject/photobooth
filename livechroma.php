@@ -18,13 +18,14 @@ if (
     }
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 
-    if ($config['ui']['style'] === 'modern') {
-        $btnClass1 = 'round-btn';
-        $btnClass2 = 'round-btn';
-    } else {
+    if ($config['ui']['style'] === 'classic') {
         $btnClass1 = 'btn btn--small btn--flex';
         $btnClass2 = 'btn';
+    } else {
+        $btnClass1 = 'round-btn';
+        $btnClass2 = 'round-btn';
     }
+    $GALLERY_FOOTER = false;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
