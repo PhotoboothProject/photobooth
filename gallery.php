@@ -48,7 +48,7 @@ $GALLERY_FOOTER = false;
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
-	<link rel="stylesheet" href="resources/css/classic_style.css" />
+	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
 	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
