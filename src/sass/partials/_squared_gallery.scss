@@ -1,0 +1,54 @@
+.gallery {
+  &__header {
+    background: none;
+    > a {
+      top: 13px;
+      border-radius: 15%;
+      border: 2px solid $galleryButtonColor;
+      background: none;
+      > .fa {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  &__body {
+    img {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 7px rgb(27, 27, 27);
+    }
+    figcaption {
+      background-color: unset;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 7px rgb(27, 27, 27);
+    }
+  }
+}
+.pswp__button--close {
+  border-radius: 15%;
+}
+
+.gal-action-btn,
+.round-btn {
+  border: none;
+  border-radius: 15%;
+  margin: unset;
+  flex: none;
+  span {
+    display: block;
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .fa {
+    top: 35%;
+  }
+}

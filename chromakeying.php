@@ -5,12 +5,12 @@ if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
-if ($config['ui']['style'] === 'modern') {
-	$btnClass1 = 'round-btn';
-	$btnClass2 = 'round-btn';
-} else {
+if ($config['ui']['style'] === 'classic') {
 	$btnClass1 = 'btn btn--flex';
 	$btnClass2 = 'btn';
+} else {
+	$btnClass1 = 'round-btn';
+	$btnClass2 = 'round-btn';
 }
 
 $filename = $_GET['filename'];

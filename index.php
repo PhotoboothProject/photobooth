@@ -31,14 +31,14 @@ if (
 
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 
-    if ($config['ui']['style'] === 'modern') {
-        $btnClass1 = 'round-btn';
-        $btnClass2 = 'round-btn';
-        $galleryIcon = 'fa-picture-o';
-    } else {
+    if ($config['ui']['style'] === 'classic') {
         $btnClass1 = 'btn';
         $btnClass2 = '';
         $galleryIcon = 'fa-th';
+    } else {
+        $btnClass1 = 'round-btn';
+        $btnClass2 = 'round-btn';
+        $galleryIcon = 'fa-picture-o';
     }
     $GALLERY_FOOTER = true;
 } else {

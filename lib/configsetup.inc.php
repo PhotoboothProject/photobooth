@@ -1841,6 +1841,7 @@ $configsetup = [
             'options' => [
                 'classic' => 'classic',
                 'modern' => 'modern',
+                'modern_squared' => 'squared',
                 'custom' => 'custom',
             ],
             'value' => $config['ui']['style'],
