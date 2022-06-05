@@ -1,0 +1,21 @@
+@import 'classic_admin';
+
+a.adminnavlistelement,
+div.setting_section,
+.setting_section_heading,
+.save-btn,
+.adminpanel-setting-btn,
+.selectize-control.multi .selectize-input {
+  border-radius: 10px;
+}
+
+.settinginput {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.settinginput.color {
+  width: 30%;
+  display: block;
+  border-radius: 5px;
+}

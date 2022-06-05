@@ -120,6 +120,9 @@ if ($data['type'] == 'config') {
             if (!file_exists('../resources/css/custom_style.css')) {
                 copy('../resources/css/modern_style.css', '../resources/css/custom_style.css');
             }
+            if (!file_exists('../resources/css/custom_admin.css')) {
+                copy('../resources/css/modern_admin.css', '../resources/css/custom_admin.css');
+            }
             if (!file_exists('../resources/css/custom_chromakeying.css')) {
                 copy('../resources/css/modern_chromakeying.css', '../resources/css/custom_chromakeying.css');
             }
