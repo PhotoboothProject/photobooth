@@ -1,0 +1,53 @@
+.gallery {
+  &__header {
+    background: none;
+    > a {
+      top: 13px;
+      border-radius: 10%;
+      border: 2px solid $galleryButtonColor;
+      background: none;
+      > .fa {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  &__body {
+    img {
+      border: 2px solid $galleryButtonColor;
+      border-radius: 8px;
+    }
+    figcaption {
+      background-color: unset;
+      border: 2px solid $galleryButtonColor;
+      border-radius: 8px;
+      margin-top: 6px;
+    }
+  }
+}
+
+a.gallery__reload,
+a.gallery__close {
+  border: 2px solid $galleryButtonColor;
+  border-radius: 50%;
+  background: radial-gradient(grey, $mainColor, $hoverColor);
+}
+
+.pswp__button--close {
+  border-radius: 50%;
+}
+
+.gallerybtn {
+  border-radius: 50%;
+  left: 1em;
+  margin: auto;
+}
+
+.closebtn {
+  border-radius: 50%;
+  right: 1em;
+  margin: auto;
+}
