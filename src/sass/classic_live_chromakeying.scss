@@ -1,4 +1,5 @@
 @import 'classic_chromakeying';
+@import 'partials/video_preview';
 @import 'partials/email';
 @import 'partials/gallery';
 @import 'partials/modal';
@@ -124,47 +125,6 @@
     color: $cheeseColor;
     font-size: 5em;
   }
-}
-
-#video--view {
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-#video--preview {
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-#ipcam--view {
-  background-image: none;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  transform: rotate($previewRotation);
-
-  &.streaming {
-    background-image: $urlBackground;
-  }
-}
-
-.flip-horizontal {
-  transform: scaleX(-1);
-  filter: FlipH;
 }
 
 #counter {

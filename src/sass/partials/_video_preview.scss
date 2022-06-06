@@ -1,0 +1,41 @@
+#video--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#video--preview {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#ipcam--view {
+  background-image: none;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transform: rotate($previewRotation);
+
+  &.streaming {
+    background-image: $urlBackground;
+  }
+}
+
+.flip-horizontal {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+}
