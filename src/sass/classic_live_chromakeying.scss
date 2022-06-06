@@ -3,6 +3,7 @@
 @import 'partials/gallery';
 @import 'partials/modal';
 @import 'partials/scrollbar';
+@import 'partials/shutter_animation';
 @import 'vendor/photoswipe';
 
 .home {
@@ -123,31 +124,6 @@
     color: $cheeseColor;
     font-size: 5em;
   }
-}
-
-#blocker {
-  position: absolute;
-  display: none;
-  width: 100%;
-  height: 100%;
-  z-index: 1499;
-  background-color: #ffffff;
-  opacity: 0;
-}
-
-#aperture {
-  box-sizing: content-box;
-  display: none;
-  width: 150%;
-  padding-bottom: 150%;
-  height: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1500;
-  transform: translate(-50%, -50%);
-  border: solid 2000px #000000;
-  border-radius: 50%;
 }
 
 #video--view {
