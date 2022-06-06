@@ -287,7 +287,7 @@ function saveImageHandler(ev) {
         saveImage(() => {
             setTimeout(function () {
                 photoboothTools.modal.close('#save_mesg');
-                $('#save-btn').blur();
+                $('#save-chroma-btn').blur();
             }, 2000);
         });
     }, 1000);
@@ -314,7 +314,7 @@ $(document).on('keyup', function (ev) {
 });
 
 $(document).ready(function () {
-    $('#save-btn').on('click', saveImageHandler);
+    $('#save-chroma-btn').on('click', saveImageHandler);
     $('#print-btn').on('click', printImageHandler);
     $('#close-btn').on('click', closeHandler);
 

@@ -142,7 +142,7 @@ if (
 <form  autocomplete="off">
 
         <div class="admincontent" id="admincontentpage">
-                    <button class="save-btn" id="save-btn">
+                    <button class="save-admin-btn" id="save-admin-btn">
                      <span class="save"><span data-i18n="save"></span></span>
                      <span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>
                      <span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>

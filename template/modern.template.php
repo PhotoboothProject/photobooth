@@ -51,7 +51,7 @@
 							<?php endif; ?>
 							<div class="rotarygroup">
 							<?php if($config['button']['show_cups']): ?>
-							<a id="cups-button" class="round-btn cups-button rotaryfocus" href="#" target="newwin"><i class="fa fa-print" aria-hidden="true"></i> <span>CUPS</span></a>
+							<a id="cups-button" class="<?php echo $btnClass; ?> cups-button rotaryfocus" href="#" target="newwin"><i class="fa fa-print" aria-hidden="true"></i> <span>CUPS</span></a>
 							<?php endif; ?>
 
 							<?php if ($config['button']['force_buzzer']): ?>
@@ -60,19 +60,19 @@
 								</div>
 							<?php else: ?>
 								<?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
-								<a href="#" class="round-btn takePic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+								<a href="#" class="<?php echo $btnClass; ?> takePic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 								<?php endif; ?>
 
 								<?php if ($config['collage']['enabled']): ?>
-								<a href="#" class="round-btn takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
+								<a href="#" class="<?php echo $btnClass; ?> takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
 								<?php endif; ?>
 							<?php endif; ?>
 
 							<?php if ($config['gallery']['enabled']): ?>
-							<a href="#" class="round-btn gallery-button rotaryfocus"><i class="fa fa-picture-o"></i> <span data-i18n="gallery"></span></a>
+							<a href="#" class="<?php echo $btnClass; ?> gallery-button rotaryfocus"><i class="fa fa-picture-o"></i> <span data-i18n="gallery"></span></a>
 							<?php endif; ?>
 							<?php if($config['button']['show_fs']): ?>
-							<a href="#" id="fs-button" class="round-btn fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
+							<a href="#" id="fs-button" class="<?php echo $btnClass; ?> fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
 							<?php endif; ?>
 							</div>
 						</div>

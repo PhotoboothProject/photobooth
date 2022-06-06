@@ -46,7 +46,7 @@ $(function () {
         }
     });
 
-    $('#save-btn').on('click', function (e) {
+    $('#save-admin-btn').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
         elem.addClass('saving');

@@ -33,26 +33,6 @@
   border-radius: 15%;
 }
 
-.gal-action-btn,
-.round-btn {
-  border: 2px solid $fontColor;
-  border-radius: 15%;
-  margin: unset;
-  flex: none;
-  span {
-    display: block;
-    position: absolute;
-    bottom: 10%;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .fa {
-    top: 35%;
-  }
-}
-
 .gallerybtn {
   left: 1em;
   margin: auto;

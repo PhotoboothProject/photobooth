@@ -1,15 +1,69 @@
-.gal-action-btn,
 .btn {
-  padding: 20px 40px;
-  border: 0 none;
+  font-size: 1em;
+  text-decoration: none;
+  text-align: center;
+  color: $buttonFontColor;
   background: $mainColor;
   display: inline-block;
-  color: $buttonFontColor;
-  text-decoration: none;
   margin: auto;
   width: 12.5em;
-  text-align: center;
-  font-size: 1em;
+  z-index: 10;
+
+  &--classic {
+    padding: 20px 40px;
+    border: 0 none;
+  }
+
+  &--modern {
+    width: 5em;
+    height: 5em;
+    border: 2px solid $borderColor;
+    border-radius: 50%;
+    background: radial-gradient($highlightColor, $mainColor, $hoverColor);
+    position: relative;
+
+    span {
+      display: none;
+    }
+    .fa {
+      font-size: 2em;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &--modern_squared {
+    width: 5em;
+    height: 5em;
+    border: 2px solid $fontColor;
+    border-radius: 15%;
+    background: radial-gradient($highlightColor, $mainColor, $hoverColor);
+    position: relative;
+    margin: unset;
+    flex: none;
+    span {
+      display: block;
+      position: absolute;
+      bottom: 10%;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .fa {
+      font-size: 2em;
+      margin: 0;
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  }
 
   &--small {
     padding: 12px 40px;
@@ -41,75 +95,204 @@
   }
 }
 
-.gal-action-btn {
-  background: $hoverColor;
-  &:active,
-  &:focus,
-  &:hover {
-    opacity: 0.6;
+#start {
+  .startInner {
+    .btn {
+      margin-top: 3px;
+    }
+    .btn--classic {
+      width: auto;
+      margin-top: 3px;
+      width: 80%;
+    }
+
+    @media (max-width: 1024px) {
+      .btn {
+        &.btn--classic {
+          font-size: 0.8em;
+          margin-top: 1px;
+          width: 80%;
+        }
+      }
+    }
   }
-}
-
-.btn.save-btn,
-.btn.install-btn {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  -webkit-transition: background-color 0.2s linear;
-  -moz-transition: background-color 0.2s linear;
-  -o-transition: background-color 0.2s linear;
-  -ms-transition: background-color 0.2s linear;
-  transition: background-color 0.2s linear;
-
-  i {
-    display: none;
-  }
-
-  &:active,
-  &:focus {
-    outline: none;
-  }
-
-  span {
-    display: none;
-
-    &.sv {
-      display: inline;
+  .fs-button {
+    &.btn--modern,
+    &.btn--modern_squared {
+      position: relative;
+      top: auto;
+      bottom: 0px;
+      left: 0px;
+    }
+    &.btn--classic {
+      position: fixed;
+      top: 5rem;
+      left: 0;
     }
   }
 
-  &.error span.sv,
-  &.success span.sv,
-  &.saving span.sv {
-    display: none;
+  .cups-button {
+    &.btn--modern,
+    &.btn--modern_squared {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: auto;
+      margin: 20px;
+    }
+    &.btn--classic {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
   }
+}
 
-  &.saving i {
+.gallery-button {
+  z-index: 100;
+  &.btn--modern,
+  &.btn--modern_squared {
+    position: relative;
+    top: auto;
+    bottom: 0px;
+    left: auto;
+  }
+  &.btn--classic {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+}
+
+.homebtn {
+  &.btn--modern,
+  &.btn--modern_squared {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: auto;
+    margin: 20px;
+  }
+  &.btn--classic {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 0.875em;
+    width: 130px;
+  }
+}
+
+.resultInner {
+  .btn--modern,
+  .btn--modern_squared {
     display: inline-block;
   }
-
-  &.error {
-    background-color: #d93939 !important;
-
-    span.er {
-      display: inline;
-    }
-  }
-
-  &.success {
-    background-color: #81d939 !important;
-
-    span.su {
-      display: inline;
+  .btn--classic {
+    width: auto;
+    padding: 20px 0;
+    text-align: center;
+    flex-grow: 1;
+    max-width: 250px;
+    margin: initial;
+    &.gallery-button {
+      position: fixed;
+      left: 0;
+      top: 0;
+      font-size: 0.875em;
+      width: 130px;
     }
   }
 }
 
-@media screen and (max-width: 1024px) {
+.loading {
+  .btn {
+    font-size: 0.4em;
+  }
+}
+
+.sidenav {
+  .closebtn {
+    width: 1.625em;
+    height: 1.625em;
+    margin: 0.3em;
+    background: radial-gradient(grey, $mainColor, $hoverColor);
+    color: $buttonFontColor;
+    .fa {
+      font-size: 0.8em;
+    }
+  }
+}
+
+.btn--modern,
+.btn--modern_squared,
+.gallery__close,
+.gal-action-btn {
+  &:active,
+  &:focus,
+  &:hover,
+  &.focused {
+    opacity: 0.6 !important;
+  }
+}
+
+.btn--classic.gal-action-btn {
+  background: $hoverColor;
+}
+
+.triggerPic,
+.triggerCollage,
+.closeGallery {
+  padding: 0;
+  margin: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.buttongroup {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.mail-form-input.btn--modern,
+.mail-form-input.btn--modern_squared,
+.dependencies-btn.btn--modern,
+.dependencies-btn.btn--modern_squared {
+  border: 2px solid $fontColor;
+  border-radius: 10px;
+  color: $buttonFontColor;
+  background: $mainColor;
+}
+
+@media (orientation: portrait) {
+  .btn--modern,
+  .btn--modern_squared {
+    width: 4em;
+    height: 4em;
+  }
+  .btn--modrn_squared {
+    span {
+      font-size: 1em;
+    }
+    .fa {
+      font-size: 1.5em;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
   .takePic,
   .takeCollage {
-    padding: 10px 10px;
+    &.btn--classic {
+      padding: 10px 10px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .takePic {
+    bottom: auto;
   }
 }

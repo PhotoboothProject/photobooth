@@ -5,14 +5,7 @@ if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
-if ($config['ui']['style'] === 'classic') {
-	$btnClass1 = 'btn btn--flex';
-	$btnClass2 = 'btn';
-} else {
-	$btnClass1 = 'round-btn';
-	$btnClass2 = 'round-btn';
-}
-
+$btnClass = 'btn btn--' . $config['ui']['style'];
 $filename = $_GET['filename'];
 $keyingimage = $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
 
@@ -81,18 +74,18 @@ if (file_exists($keyingimage)) {
 		</div>
 
 		<div class="chroma-control-bar">
-			<a class="<?php echo $btnClass1; ?> rotaryfocus" id="save-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
+			<a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
 
 			<?php if ($config['print']['from_chromakeying']): ?>
-				<a class="<?php echo $btnClass1; ?> rotaryfocus" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+				<a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="<?php echo $btnClass1; ?> rotaryfocus" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">
 			<h1 style="color: red;" data-i18n="keyingerror"></h1>
-			<a class="<?php echo $btnClass2; ?>" href="./"><span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass; ?>" href="./"><span data-i18n="close"></span></a>
 		</div>
 	<?php endif; ?>
 
