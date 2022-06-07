@@ -66,11 +66,11 @@ if (
 	<div class="rotarygroup" id="start">
 		<div class="top-bar">
 			<?php if (!$config['live_keying']['enabled']): ?>
-			<a href="index.php" class="<?php echo $btnClass; ?> closebtn rotaryfocus"><i class="fa fa-times"></i></a>
+			<a href="index.php" class="<?php echo $btnClass; ?> livechroma-close-btn rotaryfocus"><i class="fa fa-times"></i></a>
 			<?php endif; ?>
 
 			<?php if ($config['gallery']['enabled']): ?>
-			<a href="#" class="<?php echo $btnClass ?> gallerybtn rotaryfocus"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+			<a href="#" class="<?php echo $btnClass ?> livechroma-gallery-btn rotaryfocus"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
 		</div>
@@ -117,11 +117,11 @@ if (
 		</div>
 
 		<div class="chroma-control-bar">
-			<a href="#" class="<?php echo $btnClass; ?> takeChroma rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> takeChroma livechroma rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 			<?php if ($config['picture']['allow_delete']): ?>
-			<a href="#" class="<?php echo $btnClass; ?> deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 			<?php endif; ?>
-			<a href="#" class="reloadPage <?php echo $btnClass; ?> rotaryfocus"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
+			<a href="#" class="reloadPage <?php echo $btnClass; ?> livechroma rotaryfocus"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
 		</div>
 	</div>
 	<div class="rotarygroup">

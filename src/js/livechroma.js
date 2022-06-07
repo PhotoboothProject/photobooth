@@ -323,14 +323,14 @@ $('.reloadPage').on('click', function (e) {
 });
 
 // Open Gallery Button
-$('.gallerybtn').on('click', function (e) {
+$('.livechroma-gallery-btn').on('click', function (e) {
     e.preventDefault();
 
     photoBooth.openGallery($(this));
 });
 
 // Close Button
-$('.closebtn').on('click', function () {
+$('.livechroma-close-btn').on('click', function () {
     location.assign('./index.php');
 });
 

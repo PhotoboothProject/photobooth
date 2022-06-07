@@ -8,32 +8,6 @@
 @import 'partials/shutter_animation';
 @import 'vendor/photoswipe';
 
-.home {
-  position: fixed;
-  top: 1em;
-  right: 0;
-  z-index: 10;
-}
-
-.deletebtn {
-  display: inline-block;
-  visibility: hidden;
-}
-
-.gallerybtn {
-  position: fixed;
-  top: 1em;
-  left: 0;
-  z-index: 10;
-}
-
-.closebtn {
-  position: fixed;
-  top: 1em;
-  right: 0;
-  z-index: 10;
-}
-
 .top-bar {
   display: inline-block;
   width: 100%;
@@ -102,21 +76,6 @@
     &.initial {
       width: 950px;
     }
-  }
-
-  .takeChroma,
-  .reloadPage,
-  .deletebtn {
-    margin: 0.5em;
-    display: block;
-  }
-
-  .home,
-  .gallerybtn,
-  .closebtn {
-    position: relative;
-    top: 0;
-    max-width: 150px;
   }
 
   .top-bar {
