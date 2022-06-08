@@ -231,31 +231,10 @@
   }
 }
 
-.error {
-  p {
-    color: red;
-  }
-}
-
 .stages {
   display: none;
   height: 100%;
   width: 100%;
-}
-
-hr {
-  display: block;
-  height: 0.1em;
-  border: 0;
-  border-top: 0.1em solid $startFontColor;
-  margin: 1em 0;
-  padding: 0;
-}
-
-hr.small {
-  width: 50%;
-  display: block;
-  margin: auto;
 }
 
 #start {
