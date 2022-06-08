@@ -51,10 +51,6 @@
         <?php if($GALLERY_FOOTER === true): ?>
         <div class="gallery__footer">
             <div class="buttongroup">
-                <?php if($config['button']['show_cups']): ?>
-                <a id="cups-button" class="gal-action-btn cups-button rotaryfocus" href="#" target="newwin"><i class="fa fa-print" aria-hidden="true"></i> <span>CUPS</span></a>
-                <?php endif; ?>
-
                 <?php if ($config['button']['force_buzzer']): ?>
                     <div id="useBuzzer">
                         <span data-i18n="use_button"></span>
