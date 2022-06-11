@@ -979,7 +979,7 @@ const photoBooth = (function () {
     api.startCountdown = function (start, element, cb) {
         let count = 0;
         let current = start;
-        const stop = start > config.preview.stop_time ? start - config.preview.stop_time : start;
+        const stop = start > parseInt(config.preview.stop_time, 10) ? start - parseInt(config.preview.stop_time, 10) : start;
 
         function timerFunction() {
             element.text(Number(current) + Number(config.picture.cntdwn_offset));
