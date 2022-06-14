@@ -547,8 +547,9 @@ If you would like to allow your guests to download their images without connecti
 
 The default setting is to call your wifi hotspot *Photobooth* as this is built into the Photobooth prompt for guests to download images via QR code.
 
-First head over to the hotspot directory to run the installer:
+First, make sure `iptables` package is installed, after that head over to the hotspot directory to run the installer:
 ```
+sudo apt-get install iptables
 cd /var/www/html/vendor/rpihotspot
 ```
 There are a couple of flags you need to change from the example command below:
