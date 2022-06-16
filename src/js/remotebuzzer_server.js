@@ -235,7 +235,7 @@ function gpioSanity(gpioconfig) {
     }
 }
 
-if (config.remotebuzzer.usegpio) {
+if (!config.remotebuzzer.usenogpio) {
     gpioSanity(config.remotebuzzer.picturegpio);
     gpioSanity(config.remotebuzzer.collagegpio);
     gpioSanity(config.remotebuzzer.shutdowngpio);
@@ -588,7 +588,7 @@ const watchRotaryBtn = function watchRotaryBtn(err, gpioValue) {
 
 /* INIT ONOFF LIBRARY AND LINK CALLBACK FUNCTIONS */
 const Gpio = require('onoff').Gpio;
-if (config.remotebuzzer.usegpio) {
+if (!config.remotebuzzer.usenogpio) {
     /* ROTARY ENCODER MODE */
     if (config.remotebuzzer.userotary) {
         /* ROTARY ENCODER MODE */

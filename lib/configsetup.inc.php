@@ -1545,11 +1545,11 @@ $configsetup = [
             'name' => 'remotebuzzer[userotary]',
             'value' => $config['remotebuzzer']['userotary'],
         ],
-        'remotebuzzer_usegpio' => [
+        'remotebuzzer_usenogpio' => [
             'view' => 'advanced',
-            'type' => 'hidden',
-            'name' => 'remotebuzzer[usegpio]',
-            'value' => $config['remotebuzzer']['usegpio'],
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[usenogpio]',
+            'value' => $config['remotebuzzer']['usenogpio'],
         ],
         'remotebuzzer_picturebutton' => [
             'view' => 'advanced',

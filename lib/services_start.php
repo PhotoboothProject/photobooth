@@ -15,7 +15,7 @@ function processIsRunning($pName, $pidFile) {
     return count($output) - 1 ? true : false; // true if process is active
 }
 
-if ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary']) {
+if ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio']) {
     $connection = @fsockopen('127.0.0.1', $config['remotebuzzer']['port']);
 
     if (!is_resource($connection)) {
