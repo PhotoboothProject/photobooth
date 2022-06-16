@@ -1146,23 +1146,13 @@ const photoBooth = (function () {
 
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
-        if (config.remotebuzzer.usesoftbtn) {
-            remoteBuzzerClient.startPicture();
-        } else {
-            api.thrill(PhotoStyle.PHOTO);
-        }
+        api.thrill(PhotoStyle.PHOTO);
         $('.newpic').blur();
     });
 
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
-
-        if (config.remotebuzzer.usesoftbtn) {
-            remoteBuzzerClient.startCollage();
-        } else {
-            api.thrill(PhotoStyle.COLLAGE);
-        }
-
+        api.thrill(PhotoStyle.COLLAGE);
         $('.newcollage').blur();
     });
 
@@ -1286,25 +1276,13 @@ const photoBooth = (function () {
     // Fake buttons
     triggerPic.on('click', function (e) {
         e.preventDefault();
-
-        if (config.remotebuzzer.usehid) {
-            remoteBuzzerClient.startPicture();
-        } else {
-            api.thrill(PhotoStyle.PHOTO);
-        }
-
+        api.thrill(PhotoStyle.PHOTO);
         $('.newpic').blur();
     });
 
     triggerCollage.on('click', function (e) {
         e.preventDefault();
-
-        if (config.remotebuzzer.usehid) {
-            remoteBuzzerClient.startCollage();
-        } else {
-            api.thrill(PhotoStyle.COLLAGE);
-        }
-
+        api.thrill(PhotoStyle.COLLAGE);
         $('.newcollage').blur();
     });
 

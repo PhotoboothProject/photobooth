@@ -1545,18 +1545,6 @@ $configsetup = [
             'name' => 'remotebuzzer[userotary]',
             'value' => $config['remotebuzzer']['userotary'],
         ],
-        'remotebuzzer_usehid' => [
-            'view' => 'advanced',
-            'type' => 'hidden',
-            'name' => 'remotebuzzer[usehid]',
-            'value' => $config['remotebuzzer']['usehid'],
-        ],
-        'remotebuzzer_usesoftbtn' => [
-            'view' => 'advanced',
-            'type' => 'hidden',
-            'name' => 'remotebuzzer[usesoftbtn]',
-            'value' => $config['remotebuzzer']['usesoftbtn'],
-        ],
         'remotebuzzer_usegpio' => [
             'view' => 'advanced',
             'type' => 'hidden',

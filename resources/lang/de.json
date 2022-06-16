@@ -565,7 +565,6 @@
   "remotebuzzer:remotebuzzer_shutdownholdtime": "Sekunden um das Herunterfahren einzuleiten",
   "remotebuzzer:remotebuzzer_usebuttons": "Hardware-Tasten aktivieren",
   "remotebuzzer:remotebuzzer_usegpio": "GPIO für Remotebuzzer verwenden",
-  "remotebuzzer:remotebuzzer_usesoftbtn": "Software-Tasten aktivieren",
   "reset": "Zurücksetzen",
   "reset:reset_button": "Konfiguration zurücksetzen",
   "reset:reset_remove_config": "Persönliche Konfiguration löschen (my.config.inc.php)",

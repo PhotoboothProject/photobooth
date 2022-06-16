@@ -10,9 +10,7 @@ function initRemoteBuzzerFromDOM() {
     photoboothTools.console.logDev(
         'Remote Buzzer client:',
         config.remotebuzzer.usebuttons ||
-            config.remotebuzzer.userotary ||
-            config.remotebuzzer.usehid ||
-            config.remotebuzzer.usesoftbtn
+            config.remotebuzzer.userotary
             ? 'enabled'
             : 'disabled'
     );
@@ -28,9 +26,7 @@ function initRemoteBuzzerFromDOM() {
         api.enabled = function () {
             return (
                 config.remotebuzzer.usebuttons ||
-                config.remotebuzzer.userotary ||
-                config.remotebuzzer.usehid ||
-                config.remotebuzzer.usesoftbtn
+                config.remotebuzzer.userotary
             );
         };
 
@@ -184,7 +180,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.enabled = function () {
             return (
-                (config.remotebuzzer.usebuttons || config.remotebuzzer.usehid || config.remotebuzzer.usesoftbtn) &&
+                config.remotebuzzer.usebuttons &&
                 typeof onStandaloneGalleryView === 'undefined' &&
                 typeof onLiveChromaKeyingView === 'undefined'
             );
