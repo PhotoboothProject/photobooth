@@ -46,7 +46,7 @@ Usage: sudo bash $SCRIPT -u=<YourUsername> [-hsV]
 
     -h,  -help,       --help        Display help.
 
-    -s,  -silent,     --silent      Run silent installation, reboots the system once done.
+    -s,  -silent,     --silent      Run silent installation.
 
     -u,  -username,   --username    Enter your OS username you're using Photobooth from.
 
@@ -126,10 +126,12 @@ ResultActive=yes
 EOF
 
 echo -e "\033[0;33m"
-ask_yes_no "### Do you like to reboot now? [y/N] " "y"
+ask_yes_no "### You need to reboot your device. Do you like to reboot now? [y/N] " "N"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     info "### Your device will reboot now."
     shutdown -r now
+else
+    info "### Done. Please reboot your device."
 fi
