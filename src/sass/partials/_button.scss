@@ -65,18 +65,6 @@
     }
   }
 
-  &--small {
-    padding: 12px 40px;
-  }
-
-  &--tiny {
-    padding: 3px 6px;
-  }
-
-  &--flex {
-    width: auto;
-  }
-
   &--login {
     padding: 12px 18px;
     width: 50%;
@@ -92,6 +80,20 @@
   &:hover,
   &.focused {
     background: $hoverColor;
+  }
+}
+
+.btn--classic {
+  &.btn--small {
+    padding: 12px 40px;
+  }
+
+  &.btn--tiny {
+    padding: 3px 6px;
+  }
+
+  &.btn--flex {
+    width: auto;
   }
 }
 
