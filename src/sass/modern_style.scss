@@ -15,6 +15,35 @@ body {
     position: relative;
     background: none;
   }
+
+  .fs-button {
+    position: relative;
+    top: auto;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  .cups-button {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: auto;
+  }
+}
+
+.gallery-button {
+  position: relative;
+  top: auto;
+  bottom: 0px;
+  left: auto;
+}
+
+.homebtn {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: auto;
+  margin: 20px;
 }
 
 .resultInner {

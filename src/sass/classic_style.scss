@@ -162,6 +162,39 @@
       }
     }
   }
+  .fs-button {
+    position: fixed;
+    top: 5.5rem;
+    left: 5px;
+  }
+
+  .cups-button {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+  }
+}
+
+.gallery-button {
+  position: fixed;
+  top: 5px;
+  left: 5px;
+}
+
+.homebtn {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+}
+
+.resultInner {
+  .homebtn,
+  .gallery-button {
+    &.btn--classic {
+      font-size: 0.875em;
+      width: 130px;
+    }
+  }
 }
 
 .sliderImages {

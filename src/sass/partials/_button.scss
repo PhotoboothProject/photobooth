@@ -105,7 +105,6 @@
     .btn--classic {
       width: auto;
       margin-top: 3px;
-      width: 80%;
     }
 
     @media (max-width: 1024px) {
@@ -118,52 +117,11 @@
       }
     }
   }
-  .fs-button {
-    &.btn--modern,
-    &.btn--modern_squared {
-      position: relative;
-      top: auto;
-      bottom: 0px;
-      left: 0px;
-    }
-    &.btn--classic {
-      position: fixed;
-      top: 5rem;
-      left: 0;
-    }
-  }
-
-  .cups-button {
-    &.btn--modern,
-    &.btn--modern_squared {
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: auto;
-      margin: 20px;
-    }
-    &.btn--classic {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-    }
-  }
 }
 
-.gallery-button {
+.gallery-button,
+.homebtn {
   z-index: 100;
-  &.btn--modern,
-  &.btn--modern_squared {
-    position: relative;
-    top: auto;
-    bottom: 0px;
-    left: auto;
-  }
-  &.btn--classic {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
 }
 
 .livechroma-gallery-btn {
@@ -257,24 +215,6 @@
   }
 }
 
-.homebtn {
-  &.btn--modern,
-  &.btn--modern_squared {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: auto;
-    margin: 20px;
-  }
-  &.btn--classic {
-    position: absolute;
-    right: 0;
-    top: 0;
-    font-size: 0.875em;
-    width: 130px;
-  }
-}
-
 .resultInner {
   .btn--modern,
   .btn--modern_squared {
@@ -287,13 +227,6 @@
     flex-grow: 1;
     max-width: 250px;
     margin: initial;
-    &.gallery-button {
-      position: fixed;
-      left: 0;
-      top: 0;
-      font-size: 0.875em;
-      width: 130px;
-    }
   }
 }
 

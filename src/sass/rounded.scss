@@ -5,16 +5,6 @@
     border: 0 none;
     border-radius: 10px;
   }
-  .cups-button {
-    position: absolute;
-    left: 5px;
-    bottom: 5px;
-  }
-}
-
-.homebtn {
-  right: 5px;
-  top: 5px;
 }
 
 .resultInner {
@@ -46,8 +36,6 @@
 
 .gallery-button,
 .fs-button {
-  margin-top: 5px;
-  margin-left: 5px;
   &.round-btn {
     margin-top: auto;
     margin-left: auto;
