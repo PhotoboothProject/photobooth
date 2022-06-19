@@ -59,9 +59,9 @@ if (
 	</div>
 
 	<div>
-		<a href="./" class="btn btn--<?php echo $config['ui']['style']; ?> dependencies-btn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+		<a href="./" class="btn btn--<?php echo $config['ui']['button']; ?> dependencies-btn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
 
-		<a href="admin" class="btn btn--<?php echo $config['ui']['style']; ?> dependencies-btn"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
+		<a href="admin" class="btn btn--<?php echo $config['ui']['button']; ?> dependencies-btn"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

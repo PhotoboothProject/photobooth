@@ -1846,6 +1846,19 @@ $configsetup = [
             ],
             'value' => $config['ui']['style'],
         ],
+        'ui_button' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'ui[button]',
+            'placeholder' => $defaultConfig['ui']['button'],
+            'options' => [
+                'classic' => 'classic',
+                'modern' => 'modern',
+                'modern_squared' => 'squared',
+                'custom' => 'custom',
+            ],
+            'value' => $config['ui']['button'],
+        ],
         'ui_shutter_animation' => [
             'view' => 'basic',
             'type' => 'checkbox',

@@ -36,7 +36,7 @@ if (
     } else {
         $galleryIcon = 'fa-picture-o';
     }
-    $btnClass = 'btn btn--' . $config['ui']['style'];
+    $btnClass = 'btn btn--' . $config['ui']['button'];
     $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);

@@ -5,7 +5,7 @@ if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
-$btnClass = 'btn btn--' . $config['ui']['style'];
+$btnClass = 'btn btn--' . $config['ui']['button'];
 $filename = $_GET['filename'];
 $keyingimage = $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
 

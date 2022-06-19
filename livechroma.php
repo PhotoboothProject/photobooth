@@ -18,7 +18,7 @@ if (
     }
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 
-    $btnClass = 'btn btn--' . $config['ui']['style'] . ' livechroma-btn';
+    $btnClass = 'btn btn--' . $config['ui']['button'] . ' livechroma-btn';
     $GALLERY_FOOTER = false;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
