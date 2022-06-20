@@ -14,6 +14,9 @@ if (
     header('location: ../login');
     exit();
 }
+
+$btnShape = 'shape--' . $config['ui']['button'];
+$uiShape = 'shape--' . $config['ui']['style'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -34,9 +37,9 @@ if (
         <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
         <link rel="stylesheet" type="text/css" href="../resources/css/<?php echo $config['ui']['style']; ?>_admin.css">
-	<?php if (is_file("../private/overrides.css")): ?>
-	<link rel="stylesheet" href="../private/overrides.css" />
-	<?php endif; ?>
+        <?php if (is_file("../private/overrides.css")): ?>
+        <link rel="stylesheet" href="../private/overrides.css" />
+        <?php endif; ?>
 </head>
 <body>
 <!-- NavBar content -->
@@ -130,7 +133,7 @@ if (
                         */
                         
         
-                        echo '<li><a class="'.isElementHidden('adminnavlistelement',$fields).'" href="#'.$section.'" id="nav-'.$section.'"><div><span data-i18n="'.$section.'">'.$section.'</span></div></a></li>';
+                        echo '<li><a class="'.isElementHidden('adminnavlistelement ',$fields). $btnShape . ' noborder" href="#'.$section.'" id="nav-'.$section.'"><div><span data-i18n="'.$section.'">'.$section.'</span></div></a></li>';
         
                 }
         
@@ -142,7 +145,7 @@ if (
 <form  autocomplete="off">
 
         <div class="admincontent" id="admincontentpage">
-                    <button class="save-admin-btn" id="save-admin-btn">
+                    <button class="save-admin-btn <?php echo $btnShape; ?>" id="save-admin-btn">
                      <span class="save"><span data-i18n="save"></span></span>
                      <span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>
                      <span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>
@@ -160,10 +163,10 @@ if (
                         html_src_indent($indent++);
         
                         echo '<!-- SECTION '.$section.'-->';
-                        echo '<div class="'.isElementHidden('setting_section',$fields).'" id="'.$section.'">';
+                        echo '<div class="'.isElementHidden('setting_section ',$fields). $uiShape . ' noborder" id="'.$section.'">';
         
                         html_src_indent($indent);
-                        echo '<h1 class="setting_section_heading"> <span data-i18n="'.$section.'">'.$section.'</span></h1>';
+                        echo '<h1 class="setting_section_heading '. $uiShape . ' noborder"> <span data-i18n="'.$section.'">'.$section.'</span></h1>';
         
                         $col = 0;
                         foreach($fields as $key => $setting)
@@ -189,7 +192,7 @@ if (
                                                 echo '<div class="tooltip">';
                                                 echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
                                                 echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
-                                                echo '<input class="settinginput" type="'.($setting['type'] === 'number' ? 'number' : 'text').'" name="'.$setting['name'].'" value="'.$setting['value'].'" placeholder="'.$setting['placeholder'].'"/>';
+                                                echo '<input class="settinginput ' . $uiShape . '-s noborder" type="'.($setting['type'] === 'number' ? 'number' : 'text').'" name="'.$setting['name'].'" value="'.$setting['value'].'" placeholder="'.$setting['placeholder'].'"/>';
                                                 break;
                                         case 'range':
                                                 echo '<div class="tooltip">';
@@ -201,7 +204,7 @@ if (
                                                 break;
                                         case 'color':
                                                 echo '<label class="settinglabel" data-i18n="'.$i18ntag.'"> '.$i18ntag.'</label>';
-                                                echo '<input class="settinginput color" type="color" name="'.$setting['name'].'" value="'.$setting['value'].'" placeholder="'.$setting['placeholder'].'"/>';
+                                                echo '<input class="settinginput color ' . $uiShape . '-s noborder" type="color" name="'.$setting['name'].'" value="'.$setting['value'].'" placeholder="'.$setting['placeholder'].'"/>';
                                                 break;
                                         case 'hidden':
                                                 echo '<input type="hidden" name="'.$setting['name'].'" value="'.$setting['value'].'"/>';
@@ -210,7 +213,7 @@ if (
                                                 echo '<div class="tooltip"><label class="settinglabel"><span data-i18n="'.$i18ntag.'">'.$i18ntag.'</span></label>';
                                                 echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';                                      
                                                 echo '<label class="toggle settinginput"> <input type="checkbox" '.(($setting['value'] == 'true')?' checked="checked"':'').' name="'.$setting['name'].'" value="true"/>';
-                                                echo '<span class="slider">';
+                                                echo '<span class="slider ' . $btnShape . ' noborder">';
                                                 if ($setting['value'] == 'true')
                                                 {
                                                         echo '<label class="toggleTextON" data-i18n="adminpanel_toggletextON"></label><label class="toggleTextOFF hidden" data-i18n="adminpanel_toggletextOFF"></label>';
@@ -225,7 +228,7 @@ if (
                                                 echo '<div class="tooltip">';
                                                 echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
                                                 echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';                                      
-                                                echo '<select class="settinginput'.($setting['type'] === 'multi-select' ? ' multi-select' : '');
+                                                echo '<select class="settinginput ' . $uiShape . '-s noborder ' .($setting['type'] === 'multi-select' ? ' multi-select' : '');
                                                 echo '" name="'.$setting['name'] . ($setting['type'] === 'multi-select' ? '[]' : '');
                                                 echo '"' . ($setting['type'] === 'multi-select' ? ' multiple="multiple"' : '') . '>';
                                                         foreach($setting['options'] as $val => $option) {
@@ -241,7 +244,7 @@ if (
                                              echo '<div class="tooltip">';
                                              echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
                                              echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
-                                             echo '<div><button class="adminpanel-setting-btn" id="'.$setting['value'].'">';
+                                             echo '<div><button class="adminpanel-setting-btn '. $btnShape .'" id="'.$setting['value'].'">';
                                              switch ($key) {
                                                     case 'reset_button':
                                                          echo '<span class="save"><span data-i18n="reset"></span></span>';

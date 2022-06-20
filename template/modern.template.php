@@ -1,6 +1,6 @@
 		<!-- Start Page -->
-		<div class="stages" id="start">
-			<div class="startInner">
+		<div class="stages <?php echo $uiShape; ?> noborder" id="start">
+			<div class="startInner <?php echo $uiShape; ?> noborder">
 				<div class="divaussen">
 					<div class="divinnen">
             					<div class="divinnen2">

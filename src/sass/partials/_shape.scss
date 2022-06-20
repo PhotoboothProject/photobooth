@@ -1,0 +1,25 @@
+.shape--classic_rounded {
+  border: 0 none;
+  border-radius: 10px;
+}
+
+.shape--modern {
+  border: 1px solid $borderColor;
+  border-radius: 10px;
+}
+
+.shape--modern_squared {
+  border: 2px solid $borderColor;
+  border-radius: 10px;
+}
+
+.shape--modern,
+.shape--modern_squared {
+  &.noborder {
+    border: 0 none;
+  }
+
+  &-s {
+    border-radius: 5px;
+  }
+}

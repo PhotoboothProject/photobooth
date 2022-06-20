@@ -23,7 +23,7 @@
                 <!--  Controls are self-explanatory. Order can be changed. -->
 
                 <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close rotaryfocus" title="Close (Esc)"><i class="fa fa-times"></i></button>
+                <button class="<?php echo $btnClass; ?> pswp__button pswp__button--close rotaryfocus" title="Close (Esc)"><i class="fa fa-times"></i></button>
                 <button class="pswp__button pswp__button--share rotaryfocus" title="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
                 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
                 <button class="pswp__button pswp__button--zoom rotaryfocus" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
@@ -41,9 +41,9 @@
                 <button type="button" class="pswp__button pswp__button--qrcode rotaryfocus" title="QR Code"><i class="fa fa-qrcode"></i></button>
                 <?php endif; ?>
 
-		<?php if ($config['download']['enabled'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev']['enabled'])): ?>
-		<!-- <button type="button" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></button> -->
-		<a href="" download="" class="pswp__button pswp__button--custom-download rotaryfocus" title="Download"><i class="fa fa-download"></i></a>
+                <?php if ($config['download']['enabled'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev']['enabled'])): ?>
+                <!-- <button type="button" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></button> -->
+                <a href="" download="" class="pswp__button pswp__button--custom-download rotaryfocus" title="Download"><i class="fa fa-download"></i></a>
                 <?php endif; ?>
 
                 <?php if ($config['keying']['enabled']): ?>
@@ -84,7 +84,5 @@
             </div>
         </div>
     </div>
-    <div class="pswp__qr">
-
-    </div>
+    <div class="pswp__qr <?php echo $uiShape; ?>"></div>
 </div>

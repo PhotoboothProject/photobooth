@@ -5,7 +5,6 @@ if (empty($_GET['filename'])) {
     die('No or invalid file provided');
 }
 
-$btnClass = 'btn btn--' . $config['ui']['button'];
 $filename = $_GET['filename'];
 $keyingimage = $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
 
@@ -24,6 +23,10 @@ if (file_exists($keyingimage)) {
     $keying_possible = false;
     $mainimage = 'resources/img/bg.jpg';
 }
+
+$btnClass = 'btn btn--' . $config['ui']['button'];
+$btnShape = 'shape--' . $config['ui']['button'];
+$uiShape = 'shape--' . $config['ui']['style'];
 ?>
 <!doctype html>
 <html>
@@ -47,9 +50,6 @@ if (file_exists($keyingimage)) {
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css" />
-		<?php if ($config['ui']['rounded_corners']): ?>
-		<link rel="stylesheet" href="resources/css/rounded.css" />
-		<?php endif; ?>
 		<?php if (is_file("private/overrides.css")): ?>
 		<link rel="stylesheet" href="private/overrides.css" />
 		<?php endif; ?>
@@ -57,8 +57,8 @@ if (file_exists($keyingimage)) {
 <body data-main-image="<?=$mainimage?>">
 	<div class="chromawrapper rotarygroup">
 	<?php if ($keying_possible): ?>
-		<div class="canvasWrapper initial">
-			<canvas id="mainCanvas"></canvas>
+		<div class="canvasWrapper <?php echo $uiShape; ?> noborder initial">
+			<canvas class="<?php echo $uiShape; ?>" id="mainCanvas"></canvas>
 		</div>
 
 		<div style="padding-top:10px;text-align:center;">
@@ -67,7 +67,7 @@ if (file_exists($keyingimage)) {
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="'.$dir.$value.'" class="backgroundPreview '. $uiShape .' rotaryfocus" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>

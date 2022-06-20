@@ -1,5 +1,4 @@
 @import 'classic_style';
-@import 'partials/modern_gallery';
 
 html,
 body {
@@ -25,8 +24,8 @@ body {
 
   .cups-button {
     position: fixed;
-    left: 0;
-    top: 0;
+    left: 5px;
+    top: 5px;
     bottom: auto;
   }
 }
@@ -34,7 +33,7 @@ body {
 .gallery-button {
   position: relative;
   top: auto;
-  bottom: 0px;
+  bottom: 0;
   left: auto;
 }
 
@@ -79,10 +78,6 @@ body {
   bottom: 0;
   right: 0;
   padding: 10px;
-}
-
-.send-mail {
-  border-radius: 10px;
 }
 
 @media (orientation: portrait) {

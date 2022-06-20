@@ -29,14 +29,15 @@
   }
 
   &__header {
-    height: 100px;
+    height: auto;
+    max-height: 100px;
     width: 100%;
     background: $mainColor;
 
     > a {
       position: absolute;
       right: 30px;
-      top: 24px;
+      top: 13px;
       color: $galleryButtonColor;
       font-size: 1.875em;
       width: 50px;
@@ -49,7 +50,8 @@
 
   &__footer {
     width: 100%;
-    height: 100px;
+    height: auto;
+    max-height: 100px;
     align-self: flex-end;
     bottom: 0;
     margin-top: auto;
@@ -76,19 +78,44 @@
     img {
       max-width: 100%;
       list-style: none;
-      border: 1px solid $borderColor;
       display: block;
     }
 
     figure {
       margin: 0;
+      border: 1px solid $borderColor;
+      background-color: $hoverColor;
     }
   }
 
+  img {
+    border: none;
+  }
+
   figcaption {
-    background-color: $hoverColor;
+    border: none;
     text-align: center;
     color: $fontColor;
+  }
+}
+
+.gallery__reload,
+.gallery__close,
+.pswp__button--close {
+  width: 2em;
+  height: 2em;
+  line-height: 1em;
+  span {
+    display: none;
+  }
+  .fa {
+    font-size: 1em;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
   }
 }
 

@@ -19,6 +19,9 @@ if (
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 
     $btnClass = 'btn btn--' . $config['ui']['button'] . ' livechroma-btn';
+    $btnShape = 'shape--' . $config['ui']['button'];
+    $uiShape = 'shape--' . $config['ui']['style'];
+
     $GALLERY_FOOTER = false;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
@@ -52,9 +55,6 @@ if (
 		<?php if ($config['gallery']['bottom_bar']): ?>
 		<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 		<?php endif; ?>
-		<?php if ($config['ui']['rounded_corners']): ?>
-		<link rel="stylesheet" href="resources/css/rounded.css" />
-		<?php endif; ?>
 		<?php if (is_file("private/overrides.css")): ?>
 		<link rel="stylesheet" href="private/overrides.css" />
 		<?php endif; ?>
@@ -75,11 +75,11 @@ if (
 
 		</div>
 
-		<div class="canvasWrapper initial">
-			<canvas id="mainCanvas"></canvas>
+		<div class="canvasWrapper <?php echo $uiShape; ?> noborder initial">
+			<canvas class="<?php echo $uiShape; ?> noborder" id="mainCanvas"></canvas>
 		</div>
 
-		<div class="chromaNote">
+		<div class="chromaNote <?php echo $uiShape ?>">
 			<span data-i18n="chromaInfoBefore"></span>
 		</div>
 
@@ -104,13 +104,13 @@ if (
 		<!-- Result Page -->
 		<div class="stages" id="result"></div>
 
-		<div class="backgrounds"> 
+		<div class="backgrounds <?php echo $uiShape ?>">
 			<?php
 				$dir = $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="'.$dir.$value.'" class="' . $uiShape . ' backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
@@ -121,7 +121,7 @@ if (
 			<?php if ($config['picture']['allow_delete']): ?>
 			<a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 			<?php endif; ?>
-			<a href="#" class="reloadPage <?php echo $btnClass; ?> livechroma rotaryfocus"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> reloadPage livechroma rotaryfocus"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
 		</div>
 	</div>
 	<div class="rotarygroup">

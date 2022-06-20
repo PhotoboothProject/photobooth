@@ -37,6 +37,8 @@ if (
         $galleryIcon = 'fa-picture-o';
     }
     $btnClass = 'btn btn--' . $config['ui']['button'];
+    $btnShape = 'shape--' . $config['ui']['button'];
+    $uiShape = 'shape--' . $config['ui']['style'];
     $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
@@ -73,9 +75,6 @@ if (
 	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
-	<?php if ($config['ui']['rounded_corners'] && $config['ui']['style'] === 'classic'): ?>
-	<link rel="stylesheet" href="resources/css/rounded.css" />
-	<?php endif; ?>
 	<?php if (is_file("private/overrides.css")): ?>
 	<link rel="stylesheet" href="private/overrides.css" />
 	<?php endif; ?>
@@ -91,7 +90,7 @@ if (
 		<!-- image Filter Pane -->
 		<?php if ($config['filters']['enabled']): ?>
 		<div id="mySidenav" class="dragscroll sidenav rotarygroup">
-			<a href="#" class="closebtn <?php echo $btnClass; ?> rotaryfocus"><i class="fa fa-times"></i></a>
+			<a href="#" class="<?php echo $btnClass; ?> closebtn rotaryfocus"><i class="fa fa-times"></i></a>
 
 			<?php foreach(AVAILABLE_FILTERS as $filter => $name): ?>
 				<?php if (!in_array($filter, $config['filters']['disabled'])): ?>

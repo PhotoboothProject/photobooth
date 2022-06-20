@@ -9,7 +9,8 @@
   width: 12.5em;
   z-index: 10;
 
-  &--classic {
+  &--classic,
+  &--classic_rounded {
     padding: 20px 40px;
     border: 0 none;
   }
@@ -70,11 +71,6 @@
     width: 50%;
   }
 
-  &--submit {
-    font-size: 0.75em;
-    white-space: normal;
-  }
-
   &:active,
   &:focus,
   &:hover,
@@ -83,7 +79,8 @@
   }
 }
 
-.btn--classic {
+.btn--classic,
+.btn--classic_rounded {
   &.btn--small {
     padding: 12px 40px;
   }
@@ -102,14 +99,16 @@
     .btn {
       margin-top: 3px;
     }
-    .btn--classic {
+    .btn--classic,
+    .btn--classic_rounded {
       width: auto;
       margin-top: 3px;
     }
 
     @media (max-width: 1024px) {
       .btn {
-        &.btn--classic {
+        &.btn--classic,
+        &.btn--classic_rounded {
           font-size: 0.8em;
           margin-top: 1px;
           width: 80%;
@@ -124,20 +123,35 @@
   z-index: 100;
 }
 
+.fs-button,
+.takeChroma,
+.reloadPage {
+  &.btn--modern_squared {
+    span {
+      font-size: 0.6em;
+    }
+  }
+}
+
 .livechroma-gallery-btn {
   position: fixed;
   top: 1em;
-  left: 0;
+  left: 1em;
 
-  &.btn--classic {
+  &.btn--classic,
+  &.btn--classic_rounded {
     width: auto;
     padding: 12px 40px;
   }
 
-  &.btn--modern,
-  &.btn--modern_squared {
+  &.btn--modern {
     margin: 10px;
   }
+
+  &.btn--modern_squared {
+    margin: auto;
+  }
+
   @media (max-width: 1280px) and (orientation: landscape) {
     position: relative;
     top: 0;
@@ -148,15 +162,22 @@
 .livechroma-close-btn {
   position: fixed;
   top: 1em;
-  right: 0;
+  right: 1em;
 
-  &.btn--classic {
+  &.btn--classic,
+  &.btn--classic_rounded {
     width: auto;
     padding: 12px 40px;
   }
 
   &.btn--modern {
     margin: 10px;
+  }
+
+  @media (max-width: 1280px) and (orientation: landscape) {
+    position: relative;
+    top: 0;
+    max-width: 150px;
   }
 
   &.btn--modern_squared {
@@ -185,7 +206,8 @@
   }
 
   @media (max-width: 1280px) and (orientation: landscape) {
-    &.btn--classic {
+    &.btn--classic,
+    &.btn--classic_rounded {
       &.takeChroma,
       &.reloadPage,
       &.deletebtn {
@@ -206,7 +228,8 @@
 }
 
 .chroma-control-bar {
-  .btn--classic {
+  .btn--classic,
+  .btn--classic_rounded {
     &#save-chroma-btn,
     &#print-btn,
     &#close-btn {
@@ -220,7 +243,8 @@
   .btn--modern_squared {
     display: inline-block;
   }
-  .btn--classic {
+  .btn--classic,
+  .btn--classic_rounded {
     width: auto;
     padding: 20px 0;
     text-align: center;
@@ -261,7 +285,8 @@
   }
 }
 
-.btn--classic.gal-action-btn {
+.btn--classic.gal-action-btn,
+.btn--classic_rounded.gal-action-btn {
   background: $hoverColor;
 }
 
@@ -311,7 +336,8 @@
 @media (max-width: 1024px) {
   .takePic,
   .takeCollage {
-    &.btn--classic {
+    &.btn--classic,
+    &.btn--classic_rounded {
       padding: 10px 10px;
     }
   }

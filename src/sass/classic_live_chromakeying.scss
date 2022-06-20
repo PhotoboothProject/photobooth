@@ -7,6 +7,7 @@
 @import 'partials/scrollbar';
 @import 'partials/shutter_animation';
 @import 'vendor/photoswipe';
+@import 'partials/shape';
 
 .top-bar {
   display: inline-block;
@@ -18,7 +19,7 @@
   color: #ff0000;
   padding-bottom: 10px;
   background-color: $mainColor;
-  border: 4px solid $borderColor;
+  border: 2px solid $borderColor;
   width: 1000px;
   text-align: center;
   display: inline-block;
@@ -70,12 +71,9 @@
     position: absolute;
     top: 40px;
     right: 0;
+    width: 80%;
     max-width: 950px;
     max-height: 100%;
-    border: 4px solid $borderColor;
-    &.initial {
-      width: 950px;
-    }
   }
 
   .top-bar {
@@ -103,7 +101,6 @@
     width: 250px;
     height: 400px;
     overflow-y: auto;
-    border: 2px solid $borderColor;
     img {
       display: block;
       margin-left: auto;

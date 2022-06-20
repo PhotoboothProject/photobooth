@@ -2,6 +2,7 @@
 @import 'partials/fonts';
 @import 'partials/basic';
 @import 'partials/button';
+@import 'partials/shape';
 @import 'partials/scrollbar';
 
 html,
@@ -36,6 +37,4 @@ body {
 .security-advice {
   color: #000000;
   background-color: #ffff00;
-  border: 3px #000000;
-  border-radius: 25px;
 }

@@ -392,7 +392,6 @@
   "manual:userinterface:button_show_fs": "Se abilitata, verrà aggiunto alla schermata iniziale un pulsante per attivare o disattivare la modalità schermo intero.",
   "manual:userinterface:ui_decore_lines": "Se abilitata, le linee decorate saranno visibili alla pagina iniziale.",
   "manual:userinterface:ui_font_size": "Inserisci la dimensione predefinita del carattere usata per l'interfaccia Photobooth.",
-  "manual:userinterface:ui_rounded_corners": "Se abilitata, l'interfaccia utente di Photobooth utilizza bordi arrotondati lisci.",
   "manual:userinterface:ui_style": "Scegli uno stile di pagina iniziale. Per usare lo stile personalizzato, crea e usa \"/template/custom.template.php\" e \"/resources/css/custom_style.css\", se uno di questi file non è leggibile, sarà utilizzato il tema predefinito.",
   "milliseconds": "millisecondi",
   "newCollage": "Nuovo Collage",
@@ -518,7 +517,6 @@
   "userinterface:colors_start_font": "Colore carattere schermata iniziale",
   "userinterface:ui_decore_lines": "Mostra linee decorative",
   "userinterface:ui_font_size": "Grandezza carattere di default",
-  "userinterface:ui_rounded_corners": "Spigoli arrotondati",
   "userinterface:ui_style": "Stile",
   "using_latest_version": "Stai usando l'ultima versione di photobooth."
 }

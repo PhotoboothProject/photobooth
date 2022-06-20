@@ -17,6 +17,9 @@ if (
     exit();
 }
 
+$uiShape = 'shape--' . $config['ui']['style'];
+$btnShape = 'shape--' . $config['ui']['button'];
+$btnClass = 'btn ' . $btnShape;
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,9 +47,6 @@ if (
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
 	<link rel="stylesheet" href="resources/css/update.css" />
-	<?php if ($config['ui']['rounded_corners'] && $config['ui']['style'] === 'classic'): ?>
-	<link rel="stylesheet" href="resources/css/rounded.css" />
-	<?php endif; ?>
 	<?php if (is_file("private/overrides.css")): ?>
 	<link rel="stylesheet" href="private/overrides.css" />
 	<?php endif; ?>
@@ -54,21 +54,21 @@ if (
 
 <body class="updatewrapper">
 
-	<div class="white-box" id="white-box">
+	<div class="white-box <?php echo $uiShape; ?>" id="white-box">
 		<h2><?=$config['ui']['branding']?> Updater (experimental)</h2>
 		<p><span data-i18n="os_check"></span></p>
 	</div>
 
-	<a href="#" class="gitCommit btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_git_commit"></span></a>
+	<a href="#" class="gitCommit <?php echo $btnClass; ?>"><i class="fa fa-play-circle"></i> <span data-i18n="update_git_commit"></span></a>
 
-	<a href="#" class="updateDev btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_dev"></span></a>
+	<a href="#" class="updateDev <?php echo $btnClass; ?>"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_dev"></span></a>
 
-	<a href="#" class="updateStable btn btn--submit"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_stable"></span></a>
+	<a href="#" class="updateStable <?php echo $btnClass; ?>"><i class="fa fa-play-circle"></i> <span data-i18n="update_to_stable"></span></a>
 
 	<div>
-		<a href="./" class="btn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+		<a href="./" class="btn <?php echo $btnShape; ?>"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
 
-		<a href="admin" class="btn"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
+		<a href="admin" class="btn <?php echo $btnShape; ?>"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

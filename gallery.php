@@ -20,6 +20,10 @@ if ($config['database']['enabled']) {
 
 $imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
 
+$btnShape = 'shape--' . $config['ui']['button'];
+$uiShape = 'shape--' . $config['ui']['style'];
+$btnClass = 'btn btn--' . $config['ui']['button'];
+
 $GALLERY_FOOTER = false;
 ?>
 <!DOCTYPE html>
@@ -51,9 +55,6 @@ $GALLERY_FOOTER = false;
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
 	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
-	<?php endif; ?>
-	<?php if ($config['ui']['rounded_corners']): ?>
-	<link rel="stylesheet" href="resources/css/rounded.css" />
 	<?php endif; ?>
 	<?php if (is_file("private/overrides.css")): ?>
 	<link rel="stylesheet" href="private/overrides.css" />

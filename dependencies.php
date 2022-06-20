@@ -16,6 +16,10 @@ if (
     header('location: login');
     exit();
 }
+
+$btnClass = 'btn btn--' . $config['ui']['button'] . ' dependencies-btn';
+$btnShape = 'shape--' . $config['ui']['button'];
+$uiShape = 'shape--' . $config['ui']['style'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,9 +47,6 @@ if (
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
 	<link rel="stylesheet" href="resources/css/update.css" />
-	<?php if ($config['ui']['rounded_corners'] && $config['ui']['style'] === 'classic'): ?>
-	<link rel="stylesheet" href="resources/css/rounded.css" />
-	<?php endif; ?>
 	<?php if (is_file("private/overrides.css")): ?>
 	<link rel="stylesheet" href="private/overrides.css" />
 	<?php endif; ?>
@@ -53,15 +54,15 @@ if (
 
 <body class="updatewrapper">
 
-	<div class="white-box" id="white-box">
+	<div class="white-box <?php echo $uiShape; ?>" id="white-box">
 		<h2><?=$config['ui']['branding']?> dependencies check</h2>
 		<p><span data-i18n="os_check"></span></p>
 	</div>
 
 	<div>
-		<a href="./" class="btn btn--<?php echo $config['ui']['button']; ?> dependencies-btn"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+		<a href="./" class="<?php echo $btnClass; ?>"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
 
-		<a href="admin" class="btn btn--<?php echo $config['ui']['button']; ?> dependencies-btn"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
+		<a href="admin" class="<?php echo $btnClass; ?>"><i class="fa fa-cog"></i> <span data-i18n="admin_panel"></span></a>
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

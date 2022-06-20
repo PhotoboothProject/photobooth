@@ -1,6 +1,7 @@
 @import 'modules/theme';
 @import 'partials/basic';
 @import 'partials/button_animated';
+@import 'partials/shape';
 
 body {
   display: block;
@@ -282,7 +283,6 @@ div.setting_element {
   width: 2.9em;
   height: 1.4em;
   background-color: rgba(195, 46, 4, 0.6);
-  border-radius: 1em;
   transition: all 0.3s ease-in-out;
 }
 
@@ -295,9 +295,9 @@ div.setting_element {
   left: 0.1em;
   bottom: 0.1em;
   background-color: white;
-  border-radius: 50%;
   transition: all 0.3s ease-in-out;
 }
+
 .toggle input:checked + .slider {
   background-color: rgba(90, 153, 00, 0.8); /* green */
 }
@@ -320,6 +320,26 @@ div.setting_element {
   left: 4.5em;
 }
 
+.shape--classic_rounded,
+.shape--modern,
+.shape--modern_squared {
+  &.slider,
+  &.toggle {
+    border-radius: 5px;
+  }
+
+  &.slider::-webkit-slider-thumb,
+  &.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 1em;
+  }
+
+  &.slider:before,
+  &.toggle:before {
+    border-radius: 50%;
+  }
+}
 /********************************************
 * Adjust style of selectize lib for our needs - multiselects only
 ********************************************/

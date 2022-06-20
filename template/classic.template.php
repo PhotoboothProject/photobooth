@@ -1,10 +1,10 @@
 		<!-- Start Page -->
-		<div class="stages rotarygroup" id="start">
+		<div class="stages <?php echo $uiShape; ?> rotarygroup noborder" id="start">
 			<?php if ($config['gallery']['enabled']): ?>
 			<a class="<?php echo $btnClass; ?> gallery-button rotaryfocus" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
-			<div class="startInner">
+			<div class="startInner <?php echo $uiShape; ?> noborder">
 				<?php if ($config['event']['enabled']): ?>
 				<div class="names">
 					<?php if ($config['ui']['decore_lines']): ?>

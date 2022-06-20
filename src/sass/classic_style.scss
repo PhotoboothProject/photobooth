@@ -4,6 +4,7 @@
 @import 'partials/button';
 @import 'partials/countdown';
 @import 'partials/email';
+@import 'vendor/photoswipe';
 @import 'partials/gallery';
 @import 'partials/sidenav';
 @import 'partials/scrollbar';
@@ -11,7 +12,7 @@
 @import 'partials/modal';
 @import 'partials/ribbon';
 @import 'partials/video_preview';
-@import 'vendor/photoswipe';
+@import 'partials/shape';
 
 #wrapper {
   display: none;
@@ -117,6 +118,11 @@
     text-align: center;
     padding: 3rem;
 
+    &.shape--classic_rounded {
+      border: 0 none;
+      border-radius: 10px;
+    }
+
     .names {
       margin-top: 2rem;
       margin-bottom: 5rem;
@@ -162,10 +168,15 @@
       }
     }
   }
+
   .fs-button {
     position: fixed;
     top: 5.5rem;
     left: 5px;
+    &.btn--classic_rounded {
+      margin-top: auto;
+      margin-left: auto;
+    }
   }
 
   .cups-button {
@@ -179,6 +190,10 @@
   position: fixed;
   top: 5px;
   left: 5px;
+  &.btn--classic_rounded {
+    margin-top: auto;
+    margin-left: auto;
+  }
 }
 
 .homebtn {
@@ -187,12 +202,25 @@
   right: 5px;
 }
 
+.btn,
+.gal-action-btn {
+  &.btn--classic_rounded {
+    border-radius: 10px;
+  }
+}
+
 .resultInner {
   .homebtn,
   .gallery-button {
-    &.btn--classic {
+    &.btn--classic,
+    &.btn--classic_rounded {
       font-size: 0.875em;
       width: 130px;
+    }
+  }
+  .btn {
+    &.btn--classic_rounded {
+      margin-left: 2px;
     }
   }
 }
@@ -260,4 +288,15 @@
 
 .pswp-rotary-focus {
   background: $mainColor !important;
+}
+
+button {
+  &.btn--classic {
+    border: 1px solid $borderColor;
+  }
+
+  &.btn--classic_rounded {
+    border: 2px solid $borderColor;
+    border-radius: 10px;
+  }
 }

@@ -1,7 +1,20 @@
 @import 'modern_style';
-@import 'partials/squared_gallery';
+
 .divinnen2 {
   left: 0;
   margin-left: auto;
   margin-right: auto;
+}
+
+.gallery {
+  &__body {
+    figure {
+      &.shape--modern_squared {
+        background-color: unset;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0 7px rgb(27, 27, 27);
+      }
+    }
+  }
 }
