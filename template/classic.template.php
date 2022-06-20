@@ -75,7 +75,7 @@
 			<?php endif; ?>
 
 			<?php if($config['button']['show_cups']): ?>
-				<a id="cups-button" class="<?php echo $btnClass; ?>  cups-button rotaryfocus" href="#" target="newwin"><span>CUPS</span></a>
+				<a id="cups-button" class="<?php echo $btnClass; ?>  cups-button rotaryfocus" href="#" target="newwin"><i class="fa fa-print" aria-hidden="true"></i> <span>CUPS</span></a>
 			<?php endif; ?>
 			<?php if($config['button']['show_fs']): ?>
 				<a href="#" id="fs-button" class="<?php echo $btnClass; ?> btn--small fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
