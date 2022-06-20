@@ -25,10 +25,7 @@
 }
 
 .gallery {
-  &__close {
-    border-radius: 5px;
-  }
-
+  &__close,
   &__reload {
     border-radius: 5px;
   }
@@ -43,27 +40,18 @@
 }
 
 .admin-panel,
-.manual-panel {
+.manual-panel,
+.login-panel {
   border: 0 none;
   border-radius: 10px;
 }
 
 .panel {
-  .panel-heading {
+  .panel-heading,
+  .panel-body {
     margin-top: 2px;
     border-radius: 5px;
   }
-
-  .panel-body {
-    margin-top: 1px;
-    border-radius: 5px;
-  }
-}
-
-.login-panel {
-  border: 0 none;
-  border-radius: 10px;
-}
 
 button {
   border: 2px solid $borderColor;
@@ -81,12 +69,7 @@ button {
   border-radius: 5px;
 }
 
-.slider::-webkit-slider-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-}
-
+.slider::-webkit-slider-thumb,
 .slider::-moz-range-thumb {
   width: 20px;
   height: 20px;

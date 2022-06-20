@@ -202,11 +202,7 @@ div.setting_element {
 }
 /* On screens that are less than 700px wide, make the sidebar hidden */
 @media screen and (max-width: 700px) {
-  .adminsidebar {
-    display: none;
-    padding-top: 5em;
-  }
-
+  .adminsidebar,
   #adminsidebar {
     display: none;
     padding-top: 5em;
