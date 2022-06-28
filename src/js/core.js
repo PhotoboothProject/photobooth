@@ -961,7 +961,7 @@ const photoBooth = (function () {
 
     api.resetMailForm = function () {
         mailSendForm.trigger('reset');
-        mailMessageForm.html('');
+        mailMessageForm.empty();
     };
 
     api.getRequest = function (photoStyle) {
@@ -1190,9 +1190,10 @@ const photoBooth = (function () {
         e.preventDefault();
 
         const form = $(this);
+        const submitButton = form.find('.btn');
 
         mailMessageForm.empty();
-        form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
+        submitButton.html('<i class="fa fa-spinner fa-spin"></i>');
 
         $.ajax({
             url: 'api/sendPic.php',
@@ -1201,6 +1202,8 @@ const photoBooth = (function () {
             dataType: 'json',
             cache: false,
             success: function (result) {
+                submitButton.empty();
+                submitButton.hide();
                 if (result.success) {
                     if (result.saved) {
                         mailMessageForm
@@ -1225,6 +1228,11 @@ const photoBooth = (function () {
                     .html('<span style="color: red;">' + photoboothTools.getTranslation('mailError') + '</span>');
             }
         });
+
+        setTimeout(function () {
+            submitButton.show();
+            submitButton.html('<span>' + photoboothTools.getTranslation('send') + '</span>');
+        }, 5000);
     });
 
     $('#send-mail-close').on('click', function () {
