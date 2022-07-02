@@ -124,9 +124,8 @@ function no_raspberry {
 }
 
 view_help() {
-    SCRIP=$(basename $0)
     cat << EOF
-Usage: sudo bash $SCRIPT -u=<YourUsername> [-b=<stable3:dev:package> -hrsV -w=<apache:nginx:lighttpd]
+Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:package> -hrsV -w=<apache:nginx:lighttpd]
 
     -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
                                     Available branches: stable3, dev, package
@@ -159,10 +158,10 @@ Usage: sudo bash $SCRIPT -u=<YourUsername> [-b=<stable3:dev:package> -hrsV -w=<a
                                     Apache is used by default.
 
 Example to install Photobooth on a Raspberry Pi getting asked for enabled options:
-sudo bash $SCRIPT -u="photobooth"
+sudo bash install-photobooth.sh -u="photobooth"
 
 Options can be combined. Example for a silent installation on a Raspberry Pi:
-sudo bash $SCRIPT -u="photobooth" -s
+sudo bash install-photobooth.sh -u="photobooth" -s
 EOF
 }
 
