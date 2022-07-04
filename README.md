@@ -182,3 +182,4 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [mhellmeier](https://github.com/mhellmeier)
 - [Uwe Pieper](https://github.com/up-87)
 - [s-dinda](https://github.com/s-dinda)
+- [Moarqi](https://github.com/Moarqi)
