@@ -1,5 +1,6 @@
 {
   "abort": "Abort",
+  "add": "Add",
   "admin_panel": "Admin panel",
   "adminpanel_back": "Back",
   "adminpanel_toggletextOFF": "Off",
@@ -171,6 +172,7 @@
   "githead": "Latest changes",
   "home": "Home",
   "insertMail": "Enter your e-mail address to receive the photo.",
+  "insertMailToDB": "Enter your e-mail address to add it into a database. A link to all pictures will be send to you in the next few days.",
   "jpeg_quality": "JPEG quality",
   "jpeg_quality:jpeg_quality_chroma": "JPEG quality chroma-keying:",
   "jpeg_quality:jpeg_quality_image": "JPEG quality images (-1 to disable):",
