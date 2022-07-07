@@ -1231,7 +1231,11 @@ const photoBooth = (function () {
 
         setTimeout(function () {
             submitButton.show();
-            submitButton.html('<span>' + photoboothTools.getTranslation('send') + '</span>');
+            if (config.mail.send_all_later) {
+                submitButton.html('<span>' + photoboothTools.getTranslation('add') + '</span>');
+            } else {
+                submitButton.html('<span>' + photoboothTools.getTranslation('send') + '</span>');
+            }
         }, 5000);
     });
 
