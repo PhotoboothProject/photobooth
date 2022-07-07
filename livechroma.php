@@ -91,7 +91,7 @@ if (
 
 				<div id="ipcam--view"></div>
 
-				<video id="video--view" autoplay playsinline></video>
+				<video id="video--view" class="<?php echo $config['preview']['flip']; ?>" autoplay playsinline></video>
 
 				<div id="counter">
 					<canvas id="video--sensor"></canvas>

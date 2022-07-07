@@ -163,7 +163,8 @@ $config['preview']['mode'] = 'none';
 $config['preview']['gphoto_bsm'] = true;
 $config['preview']['stop_time'] = '2';
 $config['preview']['camTakesPic'] = false;
-$config['preview']['flipHorizontal'] = true;
+// possibile flip values: off, flip-horizontal, flip-vertical
+$config['preview']['flip'] = 'off';
 // possible rotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
 $config['preview']['rotation'] = '0deg';
 $config['preview']['url'] = null;

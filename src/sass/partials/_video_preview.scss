@@ -39,3 +39,9 @@
   transform: scaleX(-1);
   filter: FlipH;
 }
+
+.flip-vertical {
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: FlipV;
+}

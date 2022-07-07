@@ -112,14 +112,6 @@ const photoBooth = (function () {
         sendMail.hide();
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
-        if (config.preview.flipHorizontal) {
-            if (!idVideoView.hasClass('flip-horizontal')) {
-                idVideoView.addClass('flip-horizontal');
-            }
-            if (!idVideoPreview.hasClass('flip-horizontal')) {
-                idVideoPreview.addClass('flip-horizontal');
-            }
-        }
         idVideoView.hide();
         idVideoPreview.hide();
         idVideoSensor.hide();

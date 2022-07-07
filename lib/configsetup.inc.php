@@ -1032,10 +1032,16 @@ $configsetup = [
             'name' => 'preview[camTakesPic]',
             'value' => $config['preview']['camTakesPic'],
         ],
-        'preview_flipHorizontal' => [
-            'type' => 'checkbox',
-            'name' => 'preview[flipHorizontal]',
-            'value' => $config['preview']['flipHorizontal'],
+        'preview_flip' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'preview[flip]',
+            'placeholder' => $defaultConfig['preview']['flip'],
+            'options' => [
+                'off' => 'off',
+                'flip-horizontal' => 'horizontal',
+                'flip-vertical' => 'vertical',
+            ],
         ],
         'preview_rotation' => [
             'type' => 'select',
