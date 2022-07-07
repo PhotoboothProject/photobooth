@@ -10,8 +10,8 @@
 			<input id="mail-form-image" type="hidden" name="image" value="">
 
 			<?php if ($config['mail']['send_all_later']): ?>
-				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
-				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
+				<input type="checkbox" id="mail-form-send-link" name="send-link" checked="checked" value="yes" style="opacity: 0">
+				<label data-i18n="sendAllMail" for="mail-form-send-link" style="opacity: 0"></label>
 				<button class="mail-form-input btn rotaryfocus" name="submit" type="submit" value="Send"><span data-i18n="add"></span></button>
 			<?php else: ?>
 				<button class="mail-form-input btn rotaryfocus" name="submit" type="submit" value="Send"><span data-i18n="send"></span></button>
