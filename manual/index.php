@@ -63,7 +63,7 @@ $btnClass = 'btn ' . $btnShape;
 						if($i == 0){
 							$open = ' open init';
 						}
-						echo '<div class="panel'.$open. ' ' .$uiShape.'"';
+						echo '<div class="panel'.$open.'"';
 						switch ($fields['view'])
 						{
 							case 'expert':
