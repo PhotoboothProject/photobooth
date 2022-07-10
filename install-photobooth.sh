@@ -304,9 +304,9 @@ update_nodejs() {
     fi
 
     if [ "$RUNNING_ON_PI" = true ]; then
-        info "[Package]   Installing Node.js v12.22.8"
+        info "[Package]   Installing Node.js v12.22.12"
         wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
-        node-install -v 12.22.8
+        node-install -v 12.22.12
         NODEJS_CHECKED=true
         check_nodejs
     else
