@@ -48,7 +48,7 @@
 				<?php endforeach; ?>
 				<?php endif; ?>
 		</div>
-        <?php if($GALLERY_FOOTER === true): ?>
+        <?php if($GALLERY_FOOTER === true && $config['gallery']['action_footer'] === true): ?>
         <div class="gallery__footer">
             <div class="buttongroup">
                 <?php if ($config['button']['force_buzzer']): ?>
