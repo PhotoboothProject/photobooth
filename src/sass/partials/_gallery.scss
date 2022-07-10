@@ -58,7 +58,7 @@
     display: flex;
     justify-content: center;
     background: $mainColor;
-    box-shadow: 0 0 15px rgb(40, 40, 40);
+    box-shadow: 0 0 1em $highlightColor;
   }
 
   &__body {
@@ -70,7 +70,7 @@
     a {
       display: block;
       width: 33.333333333333%;
-      padding: 3px;
+      padding: 0.5em;
       max-width: 500px;
       text-decoration: none;
     }

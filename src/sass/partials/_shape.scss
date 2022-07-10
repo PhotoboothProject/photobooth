@@ -9,7 +9,8 @@
 }
 
 .shape--modern_squared {
-  border: 2px solid $borderColor;
+  border: 0 none;
+  box-shadow: 0 0 0.5em $highlightColor;
   border-radius: 10px;
 }
 
@@ -17,6 +18,7 @@
 .shape--modern_squared {
   &.noborder {
     border: 0 none;
+    box-shadow: unset;
   }
 
   &-s {

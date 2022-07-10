@@ -40,11 +40,11 @@
   &--modern_squared {
     width: 5em;
     height: 5em;
-    border: 2px solid $fontColor;
+    box-shadow: 0 0 0.5em $highlightColor;
     border-radius: 15%;
-    background: radial-gradient($highlightColor, $mainColor, $hoverColor);
+    background: $mainColor;
     position: relative;
-    margin: unset;
+    margin: 5px;
     flex: none;
     span {
       display: block;
