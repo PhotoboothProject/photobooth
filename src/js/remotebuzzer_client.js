@@ -176,8 +176,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.enabled = function () {
             return (
-                config.remotebuzzer.usebuttons &&
-                !config.remotebuzzer.usenogpio &&
+                (config.remotebuzzer.usebuttons || config.remotebuzzer.usenogpio) &&
                 typeof onStandaloneGalleryView === 'undefined' &&
                 typeof onLiveChromaKeyingView === 'undefined'
             );
