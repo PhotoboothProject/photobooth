@@ -35,7 +35,6 @@ NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
 COMMON_PACKAGES=(
-        'curl'
         'ffmpeg'
         'gphoto2'
         'libimage-exiftool-perl'
@@ -53,7 +52,10 @@ COMMON_PACKAGES=(
 )
 
 EXTRA_PACKAGES=()
-INSTALL_PACKAGES=()
+
+INSTALL_PACKAGES=(
+        'curl'
+)
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
