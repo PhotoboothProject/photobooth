@@ -1,4 +1,4 @@
-FROM webdevops/php-nginx
+FROM webdevops/php-apache
 
 # Update and install dependencies
 RUN apt update
