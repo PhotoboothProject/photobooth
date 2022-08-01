@@ -996,14 +996,14 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@prettier/plugin-php@^0.18.8":
-  version "0.18.8"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.18.8.tgz#097e23fdfbe77454513f680dcdc74ea88a63fbf3"
-  integrity sha512-DX4c0kldCqtcySa7qq5qbbqa1wt1r1zt8PRZ3kAu1Te3dilqFYmozrk8ptUfvG49pmMHEv/uMLj2bxqOH0GFqQ==
+"@prettier/plugin-php@^0.18.9":
+  version "0.18.9"
+  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.18.9.tgz#7482d26942a0a92d750f4bc2b4e832756245fa09"
+  integrity sha512-d1uE9v3JsQ9uBLWlssZhO02RLI8u8jRBFPCO5ud4VbveCpSZbDRnGpSuK3IqSWHdM/OnuySz0yWr5M9/9mINvw==
   dependencies:
-    linguist-languages "^7.5.1"
+    linguist-languages "^7.21.0"
     mem "^8.0.0"
-    php-parser "3.1.0-beta.10"
+    php-parser "3.1.0-beta.11"
 
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.0"
@@ -3112,10 +3112,10 @@ liftoff@^3.1.0:
     rechoir "^0.6.2"
     resolve "^1.1.7"
 
-linguist-languages@^7.5.1:
-  version "7.11.1"
-  resolved "https://registry.yarnpkg.com/linguist-languages/-/linguist-languages-7.11.1.tgz#69938a526bb6090c2fc173d0e440693bb0667818"
-  integrity sha512-+cRUk+1WTbydcdzipXQER2iilX+wMrb1LPkbkGuDP/IcGPJRDmOZH6Olf1iH6sHlHwPnJYiNJH39YsFCVZxvUQ==
+linguist-languages@^7.21.0:
+  version "7.21.0"
+  resolved "https://registry.yarnpkg.com/linguist-languages/-/linguist-languages-7.21.0.tgz#da0184f622367cb092f1f8ba435937a85534f675"
+  integrity sha512-KrWJJbFOvlDhjlt5OhUipVlXg+plUfRurICAyij1ZVxQcqPt/zeReb9KiUVdGUwwhS/2KS9h3TbyfYLA5MDlxQ==
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -3658,10 +3658,10 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-php-parser@3.1.0-beta.10:
-  version "3.1.0-beta.10"
-  resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.0-beta.10.tgz#17de01d34c96305f9595b2d2613c7be9c5061a60"
-  integrity sha512-XsvaqkfRrwPEBNsOaQ7zMN26l0BDKdXoAwxWNlCe18LqnK27I1n9+0KnqbLBBpxSoAzYhY+uuuzzvD2imjkc3Q==
+php-parser@3.1.0-beta.11:
+  version "3.1.0-beta.11"
+  resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.0-beta.11.tgz#8ac532a3f61028df8411c6624ccd48fe8a494d58"
+  integrity sha512-aKhWHXun6FKa0MX+GcJtEoLPSWuGQTiEkNgckVjT95OAnKG33c+zsDQEpXx4R74PQ030YZLNq9XV7odKapbOsg==
 
 picocolors@^1.0.0:
   version "1.0.0"
