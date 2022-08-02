@@ -526,7 +526,12 @@ const watchRotaryClk = function watchRotaryClk(err, gpioValue) {
     }
 
     if (gpioValue) {
-        if (rotaryClkPin) {
+        if (rotaryDtPin) {
+            /* rotation */
+            if (cnt > 0) {
+                /*delete click count for opposite direction */
+                cnt = 0;
+            }
             /* rotation */
             if (cnt < -3) {
                 photoboothAction('rotary-cw');
@@ -554,7 +559,12 @@ const watchRotaryDt = function watchRotaryDt(err, gpioValue) {
     }
 
     if (gpioValue) {
-        if (rotaryDtPin) {
+        if (rotaryClkPin) {
+            /* rotation */
+            if (cnt < 0) {
+                /*delete click count for opposite direction */
+                cnt = 0;
+            }
             /* rotation */
             if (cnt > 3) {
                 photoboothAction('rotary-ccw');
