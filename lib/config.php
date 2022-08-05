@@ -202,15 +202,15 @@ if (!isset($config['collage']['limit'])) {
 }
 
 if (!isset($config['background']['defaults'])) {
-    $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
+    $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
 if (!isset($config['background']['admin'])) {
-    $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
+    $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
 if (!isset($config['background']['chroma'])) {
-    $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
+    $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
 if (!isset($config['webserver']['ip'])) {
