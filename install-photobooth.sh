@@ -25,7 +25,10 @@ USB_SYNC=false
 SETUP_CUPS=false
 GPHOTO_PREVIEW=true
 CUPS_REMOTE_ANY=false
-CHROMIUM_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
+WEBBROWSER="unknown"
+KIOSK_FLAG="--kiosk http://127.0.0.1"
+CHROME_FLAGS=false
+CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
 AUTOSTART_FILE=""
 
 # Node.js v12.22.(4 or newer) is needed on installation via git
@@ -527,12 +530,15 @@ start_install() {
     fi
 }
 
-chromium_shortcut() {
-
-    if [ "$RUNNING_ON_PI" = true ]; then
-        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS --use-gl=egl"
+browser_shortcut() {
+    if [ "$CHROME_FLAGS" = true ]; then
+        if [ "$RUNNING_ON_PI" = true ]; then
+            EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS --use-gl=egl"
+        else
+            EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS"
+        fi
     else
-        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS"
+        EXTRA_FLAGS=""
     fi
 
     echo "[Desktop Entry]" > "$AUTOSTART_FILE"
@@ -541,9 +547,9 @@ chromium_shortcut() {
     echo "Type=Application" >> "$AUTOSTART_FILE"
     echo "Name=Photobooth" >> "$AUTOSTART_FILE"
     if [ "$SUBFOLDER" = true ]; then
-        echo "Exec=chromium-browser --kiosk http://127.0.0.1/$INSTALLFOLDER $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
+        echo "Exec=$WEBBROWSER $KIOSK_FLAG/$INSTALLFOLDER $EXTRA_FLAGS" >> "$AUTOSTART_FILE"
     else
-        echo "Exec=chromium-browser --kiosk http://127.0.0.1 $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
+        echo "Exec=$WEBBROWSER $KIOSK_FLAG $EXTRA_FLAGS" >> "$AUTOSTART_FILE"
     fi
     echo "Icon=$INSTALLFOLDERPATH/resources/img/favicon-96x96.png" >> "$AUTOSTART_FILE"
     echo "StartupNotify=false" >> "$AUTOSTART_FILE"
@@ -601,7 +607,7 @@ EOF
             chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
         fi
         AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
-        chromium_shortcut
+        browser_shortcut
         chmod +x /home/$USERNAME/Desktop/photobooth.desktop
         chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
 
@@ -657,7 +663,7 @@ EOF
 kioskbooth_desktop() {
     if [ "$KIOSK_MODE" = true ]; then
         AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
-        chromium_shortcut
+        browser_shortcut
     fi
 
     if [ "$HIDE_MOUSE" = true ]; then
@@ -795,17 +801,38 @@ fi
 print_spaces
 
 if [ -d "/etc/xdg/autostart" ]; then
-    echo -e "\033[0;33m### You probably like to start the browser on every start."
-    ask_yes_no "### Open Chromium in Kiosk Mode at every boot? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        KIOSK_MODE=true
-        info "### We will open Chromium in Kiosk Mode at every boot."
+
+    if [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="chromium-browser"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-beta" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome-beta"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="firefox"
+        CHROME_FLAGS=false
     else
-        info "### We won't open Chromium in Kiosk Mode at every boot."
+        WEBBROWSER="unknown"
+        CHROME_FLAGS=false
     fi
 
+    if [ "$WEBBROWSER" != "unknown" ]; then
+        echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
+        ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
+        echo -e "\033[0m"
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            KIOSK_MODE=true
+            info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
+        else
+            info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
+        fi
+    else
+        warn "### No supported webbrowser found!"
+    fi
     print_spaces
 fi
 
