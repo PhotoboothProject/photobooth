@@ -30,6 +30,7 @@ KIOSK_FLAG="--kiosk http://127.0.0.1"
 CHROME_FLAGS=false
 CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
+DESKTOP_OS=true
 
 # Node.js v12.22.(4 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
@@ -231,6 +232,10 @@ do
     shift
 done
 print_spaces
+
+if [ $(dpkg-query -W -f='${Status}' "lxde" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+    DESKTOP_OS=true
+fi
 
 check_username() {
     info "[Info]      Checking if user $USERNAME exists..."
@@ -631,7 +636,7 @@ EOF
         fi
 
         if [ "$USB_SYNC" = true ]; then
-            if [ $(dpkg-query -W -f='${Status}' "lxde" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+            if [ "$DESKTOP_OS" = true ]; then
                 info "### Disabling automount for user $USERNAME"
 
                 mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
@@ -840,18 +845,20 @@ fi
 
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
-    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
-    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        HIDE_MOUSE=true
-        EXTRA_PACKAGES+=('unclutter')
-        info "### We will hide the mouse cursor on every start and disable the screen saver."
-    else
-        info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
-    fi
+    if [ "$DESKTOP_OS" = true ]; then
+        echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
+        ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
+        echo -e "\033[0m"
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            HIDE_MOUSE=true
+            EXTRA_PACKAGES+=('unclutter')
+            info "### We will hide the mouse cursor on every start and disable the screen saver."
+        else
+            info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
+        fi
 
-    print_spaces
+        print_spaces
+    fi
 
     echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
     ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "N"
