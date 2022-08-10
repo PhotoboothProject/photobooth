@@ -28,7 +28,7 @@ CUPS_REMOTE_ANY=false
 WEBBROWSER="unknown"
 KIOSK_FLAG="--kiosk http://127.0.0.1"
 CHROME_FLAGS=false
-CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
+CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
 
 # Node.js v12.22.(4 or newer) is needed on installation via git
