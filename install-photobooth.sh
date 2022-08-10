@@ -596,15 +596,17 @@ www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 
     if [ "$RUNNING_ON_PI" = true ]; then
-        info "### Adding photobooth shortcut to Desktop"
-        if [ ! -d "/home/$USERNAME/Desktop" ]; then
-            mkdir -p /home/$USERNAME/Desktop
-            chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+        if [ "$WEBBROWSER" != "unknown" ]; then
+            info "### Adding photobooth shortcut to Desktop"
+            if [ ! -d "/home/$USERNAME/Desktop" ]; then
+                mkdir -p /home/$USERNAME/Desktop
+                chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+            fi
+            AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
+            browser_shortcut
+            chmod +x /home/$USERNAME/Desktop/photobooth.desktop
+            chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
         fi
-        AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
-        browser_shortcut
-        chmod +x /home/$USERNAME/Desktop/photobooth.desktop
-        chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
 
         info "### Remote Buzzer Feature"
         info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
