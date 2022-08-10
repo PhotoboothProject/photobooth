@@ -15,13 +15,13 @@ $config['dev']['demo_images'] = false;
 $config['dev']['advanced_log'] = false;
 $config['start_screen']['title'] = 'Photobooth';
 $config['start_screen']['title_visible'] = true;
-$config['start_screen']['subtitle'] = NULL;
+$config['start_screen']['subtitle'] = '';
 $config['start_screen']['subtitle_visible'] = true;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
 $config['picture']['thumb_size'] = '540px';
 $config['dev']['error_messages'] = true;
 $config['dev']['reload_on_error'] = true;
-$config['webserver']['ip'] = NULL;
+$config['webserver']['ip'] = '';
 $config['webserver']['ssid'] = 'Photobooth';
 $config['download']['enabled'] = true;
 $config['download']['thumbs'] = false;
@@ -63,10 +63,10 @@ $config['filters']['enabled'] = true;
 $config['filters']['defaults'] = 'plain';
 $config['filters']['disabled'] = array();
 $config['picture']['take_frame'] = false;
-$config['picture']['frame'] = null;
+$config['picture']['frame'] = '';
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
-$config['picture']['key'] = null;
+$config['picture']['key'] = '';
 // possible naming values: 'dateformatted', 'random'
 $config['picture']['naming'] = 'dateformatted';
 // permissions example values: '0644' (rw-r--r--), '0666' (rw-rw-rw-), '0600' (rw-------)
@@ -81,7 +81,7 @@ $config['textonpicture']['line3'] = 'line 3';
 $config['textonpicture']['locationx'] = '80';
 $config['textonpicture']['locationy'] = '80';
 $config['textonpicture']['rotation'] = '0';
-$config['textonpicture']['font'] = null;
+$config['textonpicture']['font'] = '';
 $config['textonpicture']['font_color'] = '#ffffff';
 $config['textonpicture']['font_size'] = '80';
 $config['textonpicture']['linespace'] = '90';
@@ -102,11 +102,11 @@ $config['collage']['dashedline_color'] = '#000000';
 $config['collage']['keep_single_images'] = false;
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code
-$config['collage']['key'] = null;
+$config['collage']['key'] = '';
 $config['collage']['background_color'] = '#ffffff';
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
-$config['collage']['frame'] = null;
+$config['collage']['frame'] = '';
 $config['collage']['placeholder'] = false;
 $config['collage']['placeholderposition'] = '1';
 $config['collage']['placeholderpath'] = 'resources/img/placeholder/01.jpg';
@@ -117,12 +117,12 @@ $config['textoncollage']['line3'] = 'OpenSource';
 $config['textoncollage']['locationx'] = '1470';
 $config['textoncollage']['locationy'] = '250';
 $config['textoncollage']['rotation'] = '0';
-$config['textoncollage']['font'] = null;
+$config['textoncollage']['font'] = '';
 $config['textoncollage']['font_color'] = '#000000';
 $config['textoncollage']['font_size'] = '50';
 $config['textoncollage']['linespace'] = '90';
 // DO NOT CHANGE limit here
-$config['collage']['limit'] = NULL;
+$config['collage']['limit'] = '';
 
 
 // G A L L E R Y
@@ -167,7 +167,7 @@ $config['preview']['camTakesPic'] = false;
 $config['preview']['flip'] = 'off';
 // possible rotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
 $config['preview']['rotation'] = '0deg';
-$config['preview']['url'] = null;
+$config['preview']['url'] = '';
 $config['preview']['videoWidth'] = '1280';
 $config['preview']['videoHeight'] = '720';
 // possible camera_mode values: "user", "environment"
@@ -196,13 +196,13 @@ $config['print']['auto'] = false;
 $config['print']['auto_delay'] = '1000';
 $config['print']['time'] = '5000';
 $config['print']['no_rotate'] = false;
-$config['print']['key'] = null;
+$config['print']['key'] = '';
 $config['print']['qrcode'] = false;
 $config['print']['qrSize'] = '4';
 $config['print']['qrPosition'] = 'bottomRight';
 $config['print']['qrOffset'] = 10;
 $config['print']['print_frame'] = false;
-$config['print']['frame'] = null;
+$config['print']['frame'] = '';
 $config['print']['crop'] = false;
 $config['print']['crop_width'] = '1000';
 $config['print']['crop_height'] = '500';
@@ -213,7 +213,7 @@ $config['textonprint']['line3'] = 'line 3';
 $config['textonprint']['locationx'] = '2250';
 $config['textonprint']['locationy'] = '1050';
 $config['textonprint']['rotation'] = '40';
-$config['textonprint']['font'] = null;
+$config['textonprint']['font'] = '';
 $config['textonprint']['font_color'] = '#ffffff';
 $config['textonprint']['font_size'] = '100';
 $config['textonprint']['linespace'] = '100';
@@ -222,10 +222,10 @@ $config['textonprint']['linespace'] = '100';
 // Q R  -  C O D E
 $config['qr']['enabled'] = true;
 $config['qr']['ecLevel'] = 'QR_ECLEVEL_M';
-$config['qr']['url'] = NULL;
+$config['qr']['url'] = '';
 $config['qr']['append_filename'] = true;
 $config['qr']['custom_text'] = false;
-$config['qr']['text'] = NULL;
+$config['qr']['text'] = '';
 
 
 // E -  M A I L
@@ -234,9 +234,9 @@ $config['qr']['text'] = NULL;
 // If send_all_later is enabled, a checkbox to save the current mail address for later in {mail_file}.txt is visible
 $config['mail']['enabled'] = false;
 $config['mail']['send_all_later'] = false;
-$config['mail']['subject'] = null; 	// if empty, default translation is used
-$config['mail']['text'] = null;		// if empty, default translation is used
-$config['mail']['alt_text'] = null;		// if empty, default translation is used
+$config['mail']['subject'] = ''; 	// if empty, default translation is used
+$config['mail']['text'] = '';		// if empty, default translation is used
+$config['mail']['alt_text'] = '';		// if empty, default translation is used
 $config['mail']['is_html'] = false;
 $config['mail']['host'] = 'smtp.example.com';
 $config['mail']['username'] = 'photobooth@example.com';
@@ -287,7 +287,7 @@ $config['synctodrive']['interval'] = 300;
 // G E T  R E Q U E S T
 $config['get_request']['countdown'] = false;
 $config['get_request']['processed'] = false;
-$config['get_request']['server'] = NULL;
+$config['get_request']['server'] = '';
 $config['get_request']['picture'] = 'CNTDWNPHOTO';
 $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
 
@@ -295,7 +295,7 @@ $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
 // A U T H E N T I C A T I O N
 $config['login']['enabled'] = false;
 $config['login']['username'] = 'Photo';
-$config['login']['password'] = NULL;
+$config['login']['password'] = '';
 $config['protect']['admin'] = true;
 $config['protect']['localhost_admin'] = true;
 $config['protect']['update'] = true;
@@ -320,9 +320,9 @@ $config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#ffffff';
 $config['colors']['background_countdown'] = '#2e2e2e';
 $config['colors']['cheese'] = '#ffffff';
-$config['background']['defaults'] = null;
-$config['background']['admin'] = null;
-$config['background']['chroma'] = null;
+$config['background']['defaults'] = '';
+$config['background']['admin'] = '';
+$config['background']['chroma'] = '';
 $config['ui']['decore_lines'] = true;
 $config['ui']['rounded_corners'] = false;
 $config['colors']['primary'] = '#2e2e2e';
@@ -345,19 +345,19 @@ $config['jpeg_quality']['thumb'] = 60;
 
 
 // C O M M A N D S
-$config['take_picture']['cmd'] = null;
-$config['take_picture']['msg'] = null;
-$config['print']['cmd'] = null;
-$config['print']['msg'] = null;
-$config['exiftool']['cmd'] = null;
-$config['exiftool']['msg'] = null;
-$config['preview']['cmd'] = null;
-$config['preview']['killcmd'] = null;
-$config['nodebin']['cmd'] = null;
-$config['pre_photo']['cmd'] = null;
-$config['post_photo']['cmd'] = null;
-$config['reboot']['cmd'] = null;
-$config['shutdown']['cmd'] = null;
+$config['take_picture']['cmd'] = '';
+$config['take_picture']['msg'] = '';
+$config['print']['cmd'] = '';
+$config['print']['msg'] = '';
+$config['exiftool']['cmd'] = '';
+$config['exiftool']['msg'] = '';
+$config['preview']['cmd'] = '';
+$config['preview']['killcmd'] = '';
+$config['nodebin']['cmd'] = '';
+$config['pre_photo']['cmd'] = '';
+$config['post_photo']['cmd'] = '';
+$config['reboot']['cmd'] = '';
+$config['shutdown']['cmd'] = '';
 
 // F O L D E R S
 $config['folders']['config'] = 'config';
