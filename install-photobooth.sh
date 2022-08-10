@@ -3,22 +3,30 @@
 # Stop on the first sign of trouble
 set -e
 
-# Show all commands
-# set -x
-
-RUNNING_ON_PI=true
+USERNAME=''
+WEBSERVER="apache"
 SILENT_INSTALL=false
+RUNNING_ON_PI=true
+FORCE_RASPBERRY_PI=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
+if [ ! -d "/tmp/photobooth" ]; then
+    mkdir -p "/tmp/photobooth"
+fi
+PHOTOBOOTH_LOG="/tmp/photobooth/$DATE-photobooth.log"
 
 BRANCH="dev"
 GIT_INSTALL=true
 SUBFOLDER=true
 PI_CAMERA=false
 KIOSK_MODE=false
+HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
+GPHOTO_PREVIEW=true
 CUPS_REMOTE_ANY=false
+CHROMIUM_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
+AUTOSTART_FILE=""
 
 # Node.js v12.22.(4 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
@@ -26,78 +34,49 @@ NEEDED_NODE_VERSION="v12.22.(4 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
-if [ ! -z $1 ]; then
-    WEBSERVER=$1
-else
-    WEBSERVER=apache
-fi
+COMMON_PACKAGES=(
+        'ffmpeg'
+        'gphoto2'
+        'libimage-exiftool-perl'
+        'nodejs'
+        'php-gd'
+        'php-zip'
+        'python3'
+        'python3-gphoto2'
+        'python3-psutil'
+        'python3-zmq'
+        'rsync'
+        'udisks2'
+        'v4l2loopback-dkms'
+        'v4l-utils'
+)
+
+EXTRA_PACKAGES=()
+
+INSTALL_PACKAGES=(
+        'curl'
+)
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
+    echo "${1}" >> "$PHOTOBOOTH_LOG"
+}
+
+function warn {
+    echo -e "\033[0;33m${1}\033[0m"
+    echo "WARN: ${1}" >> "$PHOTOBOOTH_LOG"
 }
 
 function error {
     echo -e "\033[0;31m${1}\033[0m"
+    echo "ERROR: ${1}" >> "$PHOTOBOOTH_LOG"
 }
-
-if [ "silent" = "$2" ]; then
-    SILENT_INSTALL=true
-    info "Performing silent install"
-fi
-
 
 print_spaces() {
     echo ""
     info "###########################################################"
     echo ""
 }
-
-#Param 1: Question / Param 2: Default / silent answer
-function ask_yes_no {
-    if [ "$SILENT_INSTALL" = false ]; then
-        read -p "${1}: " -n 1 -r
-    else
-        REPLY=${2}
-    fi
-}
-
-function no_raspberry {
-    info "WARNING: This script is intended to run on a Raspberry Pi."
-    info "Running the script on other devices running Debian / a Debian based distribution is possible, but PI specific features will be missing!"
-    ask_yes_no "Do you want to continue? (y/n)" "Y"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        RUNNING_ON_PI=false
-        return
-    fi
-    exit ${1}
-}
-
-if [ $UID != 0 ]; then
-    error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
-    exit 1
-fi
-
-if [ ! -f /proc/device-tree/model ]; then
-    no_raspberry 2
-else
-    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
-
-    if [[ $PI_MODEL != Raspberry* ]]; then
-        no_raspberry 3
-    fi
-fi
-
-COMMON_PACKAGES=(
-    'curl'
-    'gphoto2'
-    'libimage-exiftool-perl'
-    'nodejs'
-    'php-gd'
-    'php-zip'
-    'rsync'
-    'udisks2'
-)
 
 print_logo() {
 echo "
@@ -130,6 +109,137 @@ echo "
 "
 }
 
+#Param 1: Question / Param 2: Default / silent answer
+function ask_yes_no {
+    if [ "$SILENT_INSTALL" = false ]; then
+        read -p "${1}: " -n 1 -r
+    else
+        REPLY=${2}
+    fi
+}
+
+function no_raspberry {
+    warn "WARNING: This script is intended to run on a Raspberry Pi."
+    warn "Running the script on other devices running Debian / a Debian based distribution is possible, but Raspberry Pi specific features will be missing!"
+    RUNNING_ON_PI=false
+    print_spaces
+}
+
+view_help() {
+    cat << EOF
+Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:package> -hrsV -w=<apache:nginx:lighttpd]
+
+    -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
+                                    Available branches: stable3, dev, package
+                                    By default, latest development verison (dev) will be installed.
+                                    package will install latest Release from zip.
+
+    -h,  -help,       --help        Display help.
+
+    -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
+                                    Note: only to use on Raspberry Pi OS!
+
+    -s,  -silent,     --silent      Run silent installation:
+                                    - Uses Apache Webserver
+                                    - installs Photobooth into /var/www/html
+                                    - installs latest Photobooth development version via git
+                                    - installs CUPS
+                                    - deny remote access to CUPS over IP from all devices inside
+                                      your network (automatic image building failes to enable
+                                      because cups can't be configured while in chroot env) 
+                                    - installs a collection of free-software printer drivers (Gutenprint)
+                                    - disables screen saver and hide the mouse cursor (Raspberry Pi only)
+                                    - adds config for USB sync file backup (Raspberry Pi only)
+    
+    -u,  -username,   --username    Enter your OS username you like to use Photobooth
+                                    on (Raspberry Pi only)
+
+    -V,  -verbose,    --verbose     Run script in verbose mode.
+
+    -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx, lighttpd].
+                                    Apache is used by default.
+
+Example to install Photobooth on a Raspberry Pi getting asked for enabled options:
+sudo bash install-photobooth.sh -u="photobooth"
+
+Options can be combined. Example for a silent installation on a Raspberry Pi:
+sudo bash install-photobooth.sh -u="photobooth" -s
+EOF
+}
+
+print_logo
+print_spaces
+info "### The Photobooth installer for your Raspberry Pi."
+print_spaces
+info "################## Passed options #########################"
+echo ""
+options=$(getopt -l "help,branch::,username::,raspberry,silent,verbose,webserver::" -o "b::hu::rsVw::" -a -- "$@")
+eval set -- "$options"
+
+while true
+do
+    case $1 in
+        -b|--branch)
+            shift
+            if [ "$1" == "dev" ] || [ "$1" == "stable3" ]; then
+                BRANCH=$1
+            elif [ "$1" == "package" ]; then
+                BRANCH="stable3"
+                GIT_INSTALL=false
+                NEEDS_NODEJS_CHECK=false
+                EXTRA_PACKAGES+=('jq')
+            else
+                BRANCH="dev"
+                warn "[WARN]      Invalid branch / version!"
+                warn "[WARN]      Falling back to defaults. Installing latest development branch from git."
+            fi
+            info "### Photobooth version / branch:  $1"
+            ;;
+        -h|--help)
+            view_help
+            exit 0
+            ;;
+        -u|--username)
+            shift
+            USERNAME=$1
+            info "### Username: $1"
+            ;;
+        -s|--silent)
+            SILENT_INSTALL=true
+            info "### Silent installtion starting..."
+            ;;
+        -r|--raspberry)
+            FORCE_RASPBERRY_PI=true
+            info "### Skipping Pi detection and add specific adjustments..."
+            ;;
+        -V|--verbose)
+            set -xv
+            info "### Set xtrace and verbose mode."
+            ;;
+        -w|--webserver)
+            shift
+            WEBSERVER=$1
+            info "### Webserver: $1"
+            ;;
+        --)
+        shift
+        break;;
+    esac
+    shift
+done
+print_spaces
+
+check_username() {
+    info "[Info]      Checking if user $USERNAME exists..."
+    if id "$USERNAME" &>/dev/null; then
+        info "[Info]      User $USERNAME found. Installation process continues."
+    else
+        error "ERROR: An valid OS username is needed! Please re-run the installer."
+        view_help
+        exit
+    fi
+}
+
 check_nodejs() {
     NODE_VERSION=$(node -v || echo "0")
     IFS=. VER=(${NODE_VERSION##*v})
@@ -142,8 +252,8 @@ check_nodejs() {
             if [[ -n "$micro" && "$micro" -ge "4" ]]; then
                 info "[Info]      Node.js matches our requirements!"
             elif [[ -n "$micro" ]]; then
-                error "[WARN]      Node.js needs to be updated, micro version not matching our requirements!"
-                error "[WARN]      Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+                warn "[WARN]      Node.js needs to be updated, micro version not matching our requirements!"
+                warn "[WARN]      Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
                 NODEJS_NEEDS_UPDATE=true
                 if [ "$NODEJS_CHECKED" = true ]; then
                     error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
@@ -156,8 +266,8 @@ check_nodejs() {
                 exit 1
             fi
         elif [[ -n "$minor" ]]; then
-            error "[WARN]      Node.js needs to be updated, minor version not matching our requirements!"
-            error "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+            warn "[WARN]      Node.js needs to be updated, minor version not matching our requirements!"
+            warn "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
             NODEJS_NEEDS_UPDATE=true
             if [ "$NODEJS_CHECKED" = true ]; then
                 error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
@@ -170,8 +280,8 @@ check_nodejs() {
             exit 1
         fi
     elif [[ -n "$major" ]]; then
-        error "[WARN]      Node.js needs to be updated, major version not matching our requirements!"
-        error "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
+        warn "[WARN]      Node.js needs to be updated, major version not matching our requirements!"
+        warn "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
         if [ "$NODEJS_CHECKED" = true ]; then
             error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
             exit 1
@@ -196,9 +306,9 @@ update_nodejs() {
     fi
 
     if [ "$RUNNING_ON_PI" = true ]; then
-        info "[Package]   Installing Node.js v12.22.8"
+        info "[Package]   Installing Node.js v12.22.12"
         wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
-        node-install -v 12.22.8
+        node-install -v 12.22.12
         NODEJS_CHECKED=true
         check_nodejs
     else
@@ -223,9 +333,27 @@ common_software() {
     else
         apache_webserver
     fi
+    
+    if [ $GIT_INSTALL = true ]; then
+        EXTRA_PACKAGES+=(
+            'git'
+            'yarn'
+        )
+    fi
+
+    # All required packages independend of Raspberry Pi.
+    # Note: raspberrypi-kernel-header are needed before v4l2loopback-dkms
+    if [ "$RUNNING_ON_PI" = true ]; then
+        EXTRA_PACKAGES+=('raspberrypi-kernel-headers')
+    fi
+
+    if [ "${#EXTRA_PACKAGES[@]}" -gt 0 ]; then
+        INSTALL_PACKAGES+=("${EXTRA_PACKAGES[@]}")
+    fi
+    INSTALL_PACKAGES+=("${COMMON_PACKAGES[@]}")
 
     info "### Installing common software..."
-    for package in "${COMMON_PACKAGES[@]}"; do
+    for package in "${INSTALL_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Package]   ${package} installed already"
         else
@@ -235,7 +363,21 @@ common_software() {
                 echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
                 apt update
             fi
-            apt install -y ${package}
+            if [[ ${package} == "gphoto2" ]]; then
+                info "            Installing latest stable release."
+                wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
+                wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
+                chmod +x gphoto2-updater.sh
+                ./gphoto2-updater.sh --stable
+                if [ -f "gphoto2-updater.sh" ]; then
+                    rm gphoto2-updater.sh
+                fi
+                if [ -f ".env" ]; then
+                    rm .env
+                fi
+            else
+                apt install -y ${package}
+            fi
         fi
     done
 
@@ -290,7 +432,8 @@ lighttpd_webserver() {
         info "### Enable PHP for Lighttpd"
         cp ${php_conf} ${php_conf}.bak
 
-        cat > ${php_conf} <<EOF
+        if [ -e "/var/run/php/php7.3-fpm.sock" ]; then
+            cat > ${php_conf} <<EOF
 # -*- depends: fastcgi -*-
 # /usr/share/doc/lighttpd/fastcgi.txt.gz
 # http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
@@ -303,6 +446,23 @@ fastcgi.server += ( ".php" =>
 	))
 )
 EOF
+        fi
+
+        if [ -e "/var/run/php/php7.4-fpm.sock" ]; then
+            cat > ${php_conf} <<EOF
+# -*- depends: fastcgi -*-
+# /usr/share/doc/lighttpd/fastcgi.txt.gz
+# http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
+
+## Start an FastCGI server for php (needs the php5-cgi package)
+fastcgi.server += ( ".php" =>
+	((
+		"socket" => "/var/run/php/php7.4-fpm.sock",
+		"broken-scriptfilename" => "enable"
+	))
+)
+EOF
+        fi
 
         service lighttpd force-reload
     else
@@ -332,8 +492,8 @@ general_setup() {
         info "$INSTALLFOLDERPATH not found."
     fi
 
-    if [ "$INSTALLFOLDER" == "photobooth" ]; then
-        URL="http://$IPADDRESS/photobooth"
+    if [ "$SUBFOLDER" = true ]; then
+        URL="http://$IPADDRESS/$INSTALLFOLDER"
     else
         URL="http://$IPADDRESS"
     fi
@@ -346,7 +506,7 @@ start_install() {
         git clone https://github.com/andi34/photobooth $INSTALLFOLDER
         cd $INSTALLFOLDERPATH
 
-        info "### We are installing last development version via git."
+        info "### We are installing Photobooth via git."
         git fetch origin $BRANCH
         git checkout origin/$BRANCH
 
@@ -366,6 +526,30 @@ start_install() {
         cd $INSTALLFOLDERPATH
     fi
 }
+
+chromium_shortcut() {
+
+    if [ "$RUNNING_ON_PI" = true ]; then
+        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS --use-gl=egl"
+    else
+        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS"
+    fi
+
+    echo "[Desktop Entry]" > "$AUTOSTART_FILE"
+    echo "Version=1.3" >> "$AUTOSTART_FILE"
+    echo "Terminal=false" >> "$AUTOSTART_FILE"
+    echo "Type=Application" >> "$AUTOSTART_FILE"
+    echo "Name=Photobooth" >> "$AUTOSTART_FILE"
+    if [ "$SUBFOLDER" = true ]; then
+        echo "Exec=chromium-browser --kiosk http://127.0.0.1/$INSTALLFOLDER $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
+    else
+        echo "Exec=chromium-browser --kiosk http://127.0.0.1 $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
+    fi
+    echo "Icon=$INSTALLFOLDERPATH/resources/img/favicon-96x96.png" >> "$AUTOSTART_FILE"
+    echo "StartupNotify=false" >> "$AUTOSTART_FILE"
+    echo "Terminal=false" >> "$AUTOSTART_FILE"
+}
+
 
 pi_camera() {
     cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
@@ -392,10 +576,10 @@ general_permissions() {
         chown www-data:www-data "/var/www/.yarnrc"
     fi
 
-    if [ -d "/var/www/.cache/yarn" ]; then
-        info "### Cache folder for yarn found."
-        info "### Fixing permissions on yarns cache folder."
-        chown -R www-data:www-data "/var/www/.cache/yarn/"
+    if [ -d "/var/www/.cache" ]; then
+        info "### Cache folder found."
+        info "### Fixing permissions on cache folder."
+        chown -R www-data:www-data "/var/www/.cache"
     fi
 
     if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
@@ -411,6 +595,16 @@ www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 
     if [ "$RUNNING_ON_PI" = true ]; then
+        info "### Adding photobooth shortcut to Desktop"
+        if [ ! -d "/home/$USERNAME/Desktop" ]; then
+            mkdir -p /home/$USERNAME/Desktop
+            chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+        fi
+        AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
+        chromium_shortcut
+        chmod +x /home/$USERNAME/Desktop/photobooth.desktop
+        chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+
         info "### Remote Buzzer Feature"
         info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
         usermod -a -G gpio www-data
@@ -436,15 +630,15 @@ EOF
         if [ "$USB_SYNC" = true ]; then
             info "### Disabling automount for pi user"
 
-            mkdir -p /home/pi/.config/pcmanfm/LXDE-pi/
-            cat >> /home/pi/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+            mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
+            cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
 mount_on_startup=0
 mount_removable=0
 autorun=0
 EOF
 
-            chown -R pi:pi /home/pi/.config/pcmanfm
+            chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
 
             info "### Adding polkit rule so www-data can (un)mount drives"
 
@@ -461,9 +655,16 @@ EOF
 }
 
 kioskbooth_desktop() {
-    info "### We are installing Photobooth in Kiosk Mode for"
-    info "### Raspberry Pi OS with desktop / Raspberry Pi OS with desktop and recommended software"
+    if [ "$KIOSK_MODE" = true ]; then
+        AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
+        chromium_shortcut
+    fi
+
+    if [ "$HIDE_MOUSE" = true ]; then
+        sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+# Photobooth
 # turn off display power management system
 @xset -dpms
 # turn off screen blanking
@@ -471,13 +672,12 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # turn off screen saver
 @xset s off
 
-# Run Chromium in kiosk mode
-@chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
-
 # Hide mousecursor
 @unclutter -idle 3
+# Photobooth End
 
 EOF
+fi
 }
 
 cups_setup() {
@@ -491,54 +691,57 @@ cups_setup() {
     fi
 }
 
+gphoto_preview() {
+    if [ -d "/etc/systemd/system" ] && [ -d "/usr" ]; then
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.service -O "/etc/systemd/system/ffmpeg-webcam.service"
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.sh -O "/usr/ffmpeg-webcam.sh"
+        chmod +x "/usr/ffmpeg-webcam.sh"
+        systemctl start ffmpeg-webcam.service
+        systemctl enable ffmpeg-webcam.service
+    else
+        warn "WARNING: Couldn't install gphoto2 Webcam Service! Skipping!"
+    fi
+}
+
+############################################################
+#                                                          #
+# General checks before the installation process can start #
+#                                                          #
+############################################################
+
+if [ $UID != 0 ]; then
+    error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
+    exit 1
+fi
+
+if [ "$FORCE_RASPBERRY_PI" = false ]; then
+    if [ ! -f /proc/device-tree/model ]; then
+        no_raspberry 2
+    else
+        PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
+
+        if [[ $PI_MODEL != Raspberry* ]]; then
+            no_raspberry 3
+        fi
+    fi
+fi
+
 ############################################################
 #                                                          #
 # Ask all questions before installing Photobooth           #
 #                                                          #
 ############################################################
 
-print_logo
-
-info "### The Photobooth installer for your Raspberry Pi."
-
-echo -e "\033[0;33m### Choose your Photobooth version."
-echo -e "    Note: Installation via git will take more time"
-echo -e "    and is recommended for brave users."
-echo -e "    "
-echo -e "    Versions available: "
-echo -e "    1 Install latest stable Release (git)"
-echo -e "    2 Install latest development version (git)"
-echo -e "    3 Install latest stable Release (package)"
-ask_yes_no "Please enter your choice" "1"
-echo -e "\033[0m"
-if [[ $REPLY =~ ^[1]$ ]]; then
-    info "### We are installing last stable Release via git."
-    BRANCH="stable3"
-    GIT_INSTALL=true
-    COMMON_PACKAGES+=(
-        'git'
-        'yarn'
-    )
-elif [[ $REPLY =~ ^[2]$ ]]; then
-    info "### We are installing last development version via git."
-    BRANCH="dev"
-    GIT_INSTALL=true
-    COMMON_PACKAGES+=(
-        'git'
-        'yarn'
-    )
-else
-    if [[ ! $REPLY =~ ^[3]$ ]]; then
-        info "### Invalid choice!"
+if [ "$RUNNING_ON_PI" = true ]; then
+    if [ ! -z $USERNAME ]; then
+        check_username
+    else
+        error "ERROR: An valid OS username is needed! Please re-run the installer."
+        view_help
+        exit
     fi
-    info "### We are installing latest stable Release from package."
-    BRANCH="stable3"
-    GIT_INSTALL=false
-    NEEDS_NODEJS_CHECK=false
-    COMMON_PACKAGES+=('jq')
+    print_spaces
 fi
-
-print_spaces
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
@@ -548,7 +751,7 @@ if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
     info "### We will install Photobooth into /var/www/html."
     SUBFOLDER=false
 else
-    info "### We will install Photobooth into /var/www/html/photobooth."
+    info "### We will install Photobooth into /var/www/html/$INSTALLFOLDER."
 fi
 
 print_spaces
@@ -559,7 +762,8 @@ echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     SETUP_CUPS=true
-    COMMON_PACKAGES+=('cups')
+    EXTRA_PACKAGES+=('cups')
+    info "### We will install CUPS if not installed already."
     print_spaces
 
     echo -e "\033[0;33m### By default CUPS can only be accessed via localhost."
@@ -568,6 +772,9 @@ then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         CUPS_REMOTE_ANY=true
+        info "### We will allow remote access to CUPS over IP from all devices inside your network."
+    else
+        info "### We won't allow remote access to CUPS over IP from all devices inside your network."
     fi
 
     print_spaces
@@ -578,43 +785,85 @@ then
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-        COMMON_PACKAGES+=('printer-driver-gutenprint')
+        EXTRA_PACKAGES+=('printer-driver-gutenprint')
+        info "### We will install Gutenprint drivers if not installed already."
+    else
+        info "### We won't install Gutenprint drivers if not installed already."
     fi
 fi
 
 print_spaces
 
+if [ -d "/etc/xdg/autostart" ]; then
+    echo -e "\033[0;33m### You probably like to start the browser on every start."
+    ask_yes_no "### Open Chromium in Kiosk Mode at every boot? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        KIOSK_MODE=true
+        info "### We will open Chromium in Kiosk Mode at every boot."
+    else
+        info "### We won't open Chromium in Kiosk Mode at every boot."
+    fi
+
+    print_spaces
+fi
+
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
+    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
+    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        HIDE_MOUSE=true
+        EXTRA_PACKAGES+=('unclutter')
+        info "### We will hide the mouse cursor on every start and disable the screen saver."
+    else
+        info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
+    fi
+
+    print_spaces
+
     echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
     ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "N"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         PI_CAMERA=true
-    fi
-
-    print_spaces
-
-    echo -e "\033[0;33m### You probably like to start the browser on every start."
-    ask_yes_no "### Open Chromium in Kiosk Mode at every boot and hide the mouse cursor? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        KIOSK_MODE=true
-        COMMON_PACKAGES+=('unclutter')
+        info "### We will generate a personal configuration with all needed"
+        info "    changes to use a Raspberry Pi (HQ) Camera to take pictures."
+    else
+        info "### We won't generate a personal configuration file to use a Raspberry Pi (HQ) Camera to take pictures."
     fi
 
     print_spaces
 
     echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
-    echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first"
-    ask_yes_no "### Would you like to enable the USB sync file backup? [y/N] " "Y"
+    echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first."
+    ask_yes_no "### Would you like to setup Raspberry Pi OS to use the USB sync file backup? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         USB_SYNC=true
+        info "### We will setup Raspberry Pi OS to be able to use the USB sync file backup."
+    else
+        info "### We won't setup Raspberry Pi OS to use the USB sync file backup."
     fi
+
+    print_spaces
 fi
 # Pi specific setup end
 
+    echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
+    echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
+    echo -e "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
+    ask_yes_no "### If unsure, type N. [y/N] " "N"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        GPHOTO_PREVIEW=true
+        info "### We will install a service to set up a virtual webcam for gphoto2."
+    else
+        GPHOTO_PREVIEW=false
+        info "### We won't install a service to set up a virtual webcam for gphoto2."
+    fi
 
 ############################################################
 #                                                          #
@@ -634,11 +883,15 @@ if [ "$PI_CAMERA" = true ]; then
     pi_camera
 fi
 general_permissions
-if [ "$KIOSK_MODE" = true ]; then
+if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
     kioskbooth_desktop
 fi
 if [ "$SETUP_CUPS" = true ]; then
     cups_setup
+fi
+
+if [ "$GPHOTO_PREVIEW" = true ]; then
+    gphoto_preview
 fi
 
 print_logo

@@ -2,7 +2,7 @@
 	<div class="gallery__inner">
 		<div class="gallery__header">
 			<h1><span data-i18n="gallery"></span></h1>
-			<a href="#" class="gallery__close close_gal rotaryfocus"><i class="fa fa-times"></i></a>
+			<a href="#" class="<?php echo $btnClass; ?> gallery__close close_gal rotaryfocus"><i class="fa fa-times"></i></a>
 		</div>
 		<div class="gallery__body" id="galimages">
 			<?php if (empty($imagelist)): ?>
@@ -37,10 +37,10 @@
 
 			<a href="<?=$filename_photo?>" class="gallery__img rotaryfocus" data-size="<?=$imageinfo[0]?>x<?=$imageinfo[1]?>"
 				data-med="<?=$filename_thumb?>" data-med-size="<?=$imageinfoThumb[0]?>x<?=$imageinfoThumb[1]?>">
-				<figure>
-					<img src="<?=$filename_thumb?>" alt="<?=$image?>" />
+				<figure class="<?php echo $uiShape; ?>">
+					<img class="<?php echo $uiShape; ?>" src="<?=$filename_thumb?>" alt="<?=$image?>" />
                     <?php if ($config['gallery']['figcaption']): ?>
-                    <figcaption><?=$date?></figcaption>
+                    <figcaption class="<?php echo $uiShape; ?>"><?=$date?></figcaption>
                     <?php endif; ?>
 				</figure>
 			</a>
@@ -48,5 +48,24 @@
 				<?php endforeach; ?>
 				<?php endif; ?>
 		</div>
+        <?php if($GALLERY_FOOTER === true && $config['gallery']['action_footer'] === true): ?>
+        <div class="gallery__footer">
+            <div class="buttongroup">
+                <?php if ($config['button']['force_buzzer']): ?>
+                    <div id="useBuzzer">
+                        <span data-i18n="use_button"></span>
+                    </div>
+                <?php else: ?>
+                    <?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
+                    <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takePic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+                    <?php endif; ?>
+
+                    <?php if ($config['collage']['enabled']): ?>
+                    <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
 	</div>
 </div>

@@ -168,7 +168,7 @@ Troubleshooting / Debugging:
          gpio=16,17,20,21,22,26,27=pu
 ```
 
-    - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as
+    - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
 
 ```
      cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
@@ -299,35 +299,32 @@ These trigger URLs can be used for example with [myStrom WiFi Buttons](https://m
 <hr>
 
 ### How do I enable Kiosk Mode to automatically start Photobooth in full screen?
-Edit the LXDE Autostart Script:
+Add the autostart file:
 ```
-sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+sudo nano /etc/xdg/autostart/photobooth.desktop
 ```
-and add the following lines:
+now add the following lines:
 ```
-@xset s off
-@xset -dpms
-@xset s noblank
-@chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
+[Desktop Entry]
+Version=1.3
+Terminal=false
+Type=Application
+Name=Photobooth
+Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled --use-gl=egl
+Icon=/var/www/html/resources/img/favicon-96x96.png
+StartupNotify=false
+Terminal=false
 ```
-**NOTE:** If you're using QR-Code replace `http://localhost/` with your local IP-Adress (e.g. `http://192.168.4.1`), else QR-Code does not work.
+save the file.  
+
+
+**NOTE:**  
+If you have installed Photobooth inside a subdirectory (e.g. to `/var/www/html/photobooth`), make sure you adjust the kiosk url (e.g. to `http://127.0.0.1/photobooth`) and the Icon path (e.g. to `/var/www/html/photobooth/resources/img/favicon-96x96.png`).  
+The flag `--use-gl=egl` might only be needed on a Raspberry Pi to avoid a white browser window on the first start of kiosk mode! If you're facing issues while using Photobooth on a different device, please remove that flag.  
 
 <hr>
 
-#### Enable touch events
-If touch is not working on your Raspberry Pi make sure `--touch-events=enabled` was added to your Autostart Script.  
-Edit the LXDE Autostart Script again
-```
-sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
-```
-and add `--touch-events=enabled` for Chromium:
-```
-@chromium-browser --kiosk http://localhost/ --touch-events=enabled
-```
-
-<hr>
-
-#### How to hide the Mouse Cursor?
+#### How to hide the mouse cursor, disable screen blanking and screen saver?
 There are two options to hide the cursor. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
 
 **Solution A**
@@ -335,22 +332,27 @@ To hide the Mouse Cursor we'll use "unclutter":
 ```
 sudo apt-get install unclutter
 ```
-Edit the LXDE Autostart Script again:
+Edit the LXDE Autostart Script:
 ```
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 ```
-and add the following line (0 describes the time after which the cursor should be hidden):
+and add the following lines:
 ```
-@unclutter -idle 0
+# Photobooth
+# turn off display power management system
+@xset -dpms
+# turn off screen blanking
+@xset s noblank
+# turn off screen saver
+@xset s off
+
+# Hide mousecursor (3 describes the time after which the cursor should be hidden)
+@unclutter -idle 3
+# Photobooth End
 ```
 
 **Solution B**
 If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.conf` to hide the cursor permanently. Just add `xserver-command=X -nocursor` to the end of the file.
-
-<hr>
-
-### How to disable the blank screen on Raspberry Pi (Raspbian)?
-You can follow the instructions [here](https://www.geeks3d.com/hacklab/20160108/how-to-disable-the-blank-screen-on-raspberry-pi-raspbian/) to disable the blank screen.
 
 <hr>
 
@@ -545,8 +547,9 @@ If you would like to allow your guests to download their images without connecti
 
 The default setting is to call your wifi hotspot *Photobooth* as this is built into the Photobooth prompt for guests to download images via QR code.
 
-First head over to the hotspot directory to run the installer:
+First, make sure `iptables` package is installed, after that head over to the hotspot directory to run the installer:
 ```
+sudo apt-get install iptables
 cd /var/www/html/vendor/rpihotspot
 ```
 There are a couple of flags you need to change from the example command below:
@@ -571,8 +574,8 @@ sudo bash setup-network.sh --clean
 
 This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick. Currently works on Raspberry PI OS only.
 
-Use the `install-raspbian.sh` script to get the operating system setup in place.  
-**Note:** If you have declined the question to enable the USB sync file backup while running the `install-raspbian.sh` you need to run the following commands to get the operating system setup done:
+Use the `install-photobooth.sh` script to get the operating system setup in place.  
+**Note:** If you have declined the question to enable the USB sync file backup while running the `install-photobooth.sh` you need to run the following commands to get the operating system setup done:
 ```
 wget https://raw.githubusercontent.com/andi34/photobooth/dev/enable-usb-sync.sh
 sudo bash enable-usb-sync.sh

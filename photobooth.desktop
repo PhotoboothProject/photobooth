@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.2
-Terminal=false
-Type=Application
-Name=Photobooth
-Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
-Icon=/var/www/html/resources/img/favicon-96x96.png
-StartupNotify=false
-Terminal=false

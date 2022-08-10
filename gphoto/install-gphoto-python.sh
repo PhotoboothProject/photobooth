@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGES=(
+COMMON_PACKAGES=(
     'gphoto2'
     'ffmpeg'
     'v4l2loopback-dkms'
@@ -60,9 +60,9 @@ if [[ $REPLY =~ ^[1]$ ]]; then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         info "### Installing gphoto2 webcam service."
-        cp 'ffmpeg-webcam.service' '/etc/systemd/system/ffmpeg-webcam.service'
-        cp 'ffmpeg-webcam.sh' '/usr/ffmpeg-webcam.sh'
-        chmod +x '/usr/ffmpeg-webcam.sh'
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.service -O "/etc/systemd/system/ffmpeg-webcam.service"
+        wget https://raw.githubusercontent.com/andi34/photobooth/dev/gphoto/ffmpeg-webcam.sh -O "/usr/ffmpeg-webcam.sh"
+        chmod +x /usr/ffmpeg-webcam.sh
         systemctl start ffmpeg-webcam.service
         systemctl enable ffmpeg-webcam.service
         info "gphoto2 webcam service installed and running..."

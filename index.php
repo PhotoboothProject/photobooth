@@ -31,15 +31,15 @@ if (
 
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 
-    if ($config['ui']['style'] === 'modern') {
-        $btnClass1 = 'round-btn';
-        $btnClass2 = 'round-btn';
-        $galleryIcon = 'fa-picture-o';
-    } else {
-        $btnClass1 = 'btn';
-        $btnClass2 = '';
+    if ($config['ui']['style'] === 'classic') {
         $galleryIcon = 'fa-th';
+    } else {
+        $galleryIcon = 'fa-picture-o';
     }
+    $btnClass = 'btn btn--' . $config['ui']['button'];
+    $btnShape = 'shape--' . $config['ui']['button'];
+    $uiShape = 'shape--' . $config['ui']['style'];
+    $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
@@ -75,15 +75,12 @@ if (
 	<?php if ($config['gallery']['bottom_bar']): ?>
 	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 	<?php endif; ?>
-	<?php if ($config['ui']['rounded_corners'] && $config['ui']['style'] === 'classic'): ?>
-	<link rel="stylesheet" href="resources/css/rounded.css" />
-	<?php endif; ?>
 	<?php if (is_file("private/overrides.css")): ?>
 	<link rel="stylesheet" href="private/overrides.css" />
 	<?php endif; ?>
 </head>
 
-<video id="video--preview" autoplay playsinline></video>
+<video id="video--preview" class="<?php echo $config['preview']['flip']; ?>" autoplay playsinline></video>
 <body class="deselect">
 <div id="blocker"></div>
 <div id="aperture"></div>
@@ -93,7 +90,7 @@ if (
 		<!-- image Filter Pane -->
 		<?php if ($config['filters']['enabled']): ?>
 		<div id="mySidenav" class="dragscroll sidenav rotarygroup">
-			<a href="#" class="closebtn <?php echo $btnClass2; ?> rotaryfocus"><i class="fa fa-times"></i></a>
+			<a href="#" class="<?php echo $btnClass; ?> closebtn rotaryfocus"><i class="fa fa-times"></i></a>
 
 			<?php foreach(AVAILABLE_FILTERS as $filter => $name): ?>
 				<?php if (!in_array($filter, $config['filters']['disabled'])): ?>
@@ -114,7 +111,7 @@ if (
 
 				<div id="ipcam--view"></div>
 
-				<video id="video--view" autoplay></video>
+				<video id="video--view" class="<?php echo $config['preview']['flip']; ?>" autoplay></video>
 
 				<div id="counter">
 					<canvas id="video--sensor"></canvas>
@@ -128,44 +125,44 @@ if (
 		<!-- Result Page -->
 		<div class="stages rotarygroup" id="result">
 
-			<?php if ($config['button']['homescreen']): ?>
-			<a href="#" class="<?php echo $btnClass1; ?> homebtn rotaryfocus"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
-			<?php endif; ?>
-
 			<div class="resultInner hidden">
+				<?php if ($config['button']['homescreen']): ?>
+				<a href="#" class="<?php echo $btnClass; ?> homebtn rotaryfocus"><i class="fa fa-home"></i> <span data-i18n="home"></span></a>
+				<?php endif; ?>
+
 				<?php if ($config['gallery']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> gallery-button rotaryfocus" ><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
+				<a href="#" class="<?php echo $btnClass; ?> gallery-button rotaryfocus" ><i class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['qr']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> qrbtn rotaryfocus"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
+				<a href="#" class="<?php echo $btnClass; ?> qrbtn rotaryfocus"><i class="fa fa-qrcode"></i> <span data-i18n="qr"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['mail']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> mailbtn rotaryfocus"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
+				<a href="#" class="<?php echo $btnClass; ?> mailbtn rotaryfocus"><i class="fa fa-envelope"></i> <span data-i18n="mail"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['print']['from_result']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> printbtn rotaryfocus"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+				<a href="#" class="<?php echo $btnClass; ?> printbtn rotaryfocus"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
 				<?php endif; ?>
 
 				<?php if (!$config['button']['force_buzzer']): ?>
 					<?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
-					<a href="#" class="<?php echo $btnClass1; ?> newpic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
+					<a href="#" class="<?php echo $btnClass; ?> newpic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="newPhoto"></span></a>
 					<?php endif; ?>
 
 					<?php if ($config['collage']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass1; ?> newcollage rotaryfocus"><i class="fa fa-th-large"></i> <span
+					<a href="#" class="<?php echo $btnClass; ?> newcollage rotaryfocus"><i class="fa fa-th-large"></i> <span
 							data-i18n="newCollage"></span></a>
 					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php if ($config['filters']['enabled']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> imageFilter rotaryfocus"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
+				<a href="#" class="<?php echo $btnClass; ?> imageFilter rotaryfocus"><i class="fa fa-magic"></i> <span data-i18n="selectFilter"></span></a>
 				<?php endif; ?>
 
 				<?php if ($config['picture']['allow_delete']): ?>
-				<a href="#" class="<?php echo $btnClass1; ?> deletebtn <?php if ($config['delete']['no_request']){ echo 'rotaryfocus';} ?> "><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+				<a href="#" class="<?php echo $btnClass; ?> deletebtn <?php if ($config['delete']['no_request']){ echo 'rotaryfocus';} ?> "><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 				<?php endif; ?>
 			</div>
 
@@ -183,23 +180,7 @@ if (
 
 	<?php include('template/pswp.template.php'); ?>
 
-	<div class="send-mail">
-		<i class="fa fa-times" id="send-mail-close"></i>
-		<p data-i18n="insertMail"></p>
-		<form id="send-mail-form" style="margin: 0;">
-			<input class="mail-form-input" size="35" type="email" name="sendTo">
-			<input id="mail-form-image" type="hidden" name="image" value="">
-
-			<?php if ($config['mail']['send_all_later']): ?>
-				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
-				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
-			<?php endif; ?>
-
-			<button class="mail-form-input btn rotaryfocus" name="submit" type="submit" value="Send"><span data-i18n="send"></span></button>
-		</form>
-
-		<div id="mail-form-message" style="max-width: 75%"></div>
-	</div>
+	<?php include('template/send-mail.template.php'); ?>
 
 	<div class="modal" id="print_mesg">
 		<div class="modal__body"><span data-i18n="printing"></span></div>

@@ -120,6 +120,9 @@ if ($data['type'] == 'config') {
             if (!file_exists('../resources/css/custom_style.css')) {
                 copy('../resources/css/modern_style.css', '../resources/css/custom_style.css');
             }
+            if (!file_exists('../resources/css/custom_admin.css')) {
+                copy('../resources/css/modern_admin.css', '../resources/css/custom_admin.css');
+            }
             if (!file_exists('../resources/css/custom_chromakeying.css')) {
                 copy('../resources/css/modern_chromakeying.css', '../resources/css/custom_chromakeying.css');
             }
@@ -152,10 +155,20 @@ if ($data['type'] == 'config') {
     }
 
     $collageLayout = $newConfig['collage']['layout'];
-    if ($collageLayout === '1+2' || $collageLayout == '2+1') {
+    if ($collageLayout === '1+2' || $collageLayout == '2+1' || $collageLayout == '2x3') {
         $newConfig['collage']['limit'] = 3;
     } else {
         $newConfig['collage']['limit'] = 4;
+    }
+
+    //If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
+    if ($newConfig['collage']['placeholder']) {
+        $collagePlaceholderPosition = (int) $newConfig['collage']['placeholderposition'];
+        if ($collagePlaceholderPosition > 0 && $collagePlaceholderPosition <= $newConfig['collage']['limit']) {
+            $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
+        } else {
+            $newConfig['collage']['placeholderposition'] = false;
+        }
     }
 
     $content = "<?php\n\$config = " . var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';

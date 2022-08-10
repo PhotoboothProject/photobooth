@@ -1,6 +1,6 @@
 /* globals photoBooth photoboothTools */
 $(function () {
-    const reloadElement = $('<a class="gallery__reload rotaryfocus">');
+    const reloadElement = $('<a class="btn btn--' + config.ui.button + ' gallery__reload rotaryfocus">');
     reloadElement.append('<i class="fa fa-refresh"></i>');
     reloadElement.attr('href', '#');
     reloadElement.on('click', () => photoboothTools.reloadPage());

@@ -49,6 +49,10 @@
     &:hover {
       background: $hoverColor;
     }
+
+    &.btn--classic_rounded {
+      border-radius: 5px;
+    }
   }
 
   .activeSidenavBtn {

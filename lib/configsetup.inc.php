@@ -654,8 +654,23 @@ $configsetup = [
                 '2+1' => '2+1',
                 '2x4' => '2x4',
                 '2x4-2' => '2x4 (2)',
+                '2x4-3' => '2x4 (3)',
+                '2x3' => '2x3',
             ],
             'value' => $config['collage']['layout'],
+        ],
+        'collage_resolution' => [
+            'view' => 'expert',
+            'type' => 'select',
+            'name' => 'collage[resolution]',
+            'placeholder' => $defaultConfig['collage']['resolution'],
+            'options' => [
+                '150dpi' => '150 dpi',
+                '300dpi' => '300 dpi',
+                '400dpi' => '400 dpi',
+                '600dpi' => '600 dpi',
+            ],
+            'value' => $config['collage']['resolution'],
         ],
         'collage_dashedline_color' => [
             'view' => 'advanced',
@@ -702,6 +717,26 @@ $configsetup = [
             'placeholder' => $defaultConfig['collage']['frame'],
             'name' => 'collage[frame]',
             'value' => htmlentities($config['collage']['frame']),
+        ],
+        'collage_placeholder' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'collage[placeholder]',
+            'value' => $config['collage']['placeholder'],
+        ],
+        'collage_placeholderposition' => [
+            'view' => 'expert',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['collage']['placeholderposition'],
+            'name' => 'collage[placeholderposition]',
+            'value' => $config['collage']['placeholderposition'],
+        ],
+        'collage_placeholderpath' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['collage']['placeholderpath'],
+            'name' => 'collage[placeholderpath]',
+            'value' => htmlentities($config['collage']['placeholderpath']),
         ],
         'textoncollage_enabled' => [
             'view' => 'advanced',
@@ -884,6 +919,12 @@ $configsetup = [
             'name' => 'gallery[figcaption]',
             'value' => $config['gallery']['figcaption'],
         ],
+        'gallery_action_footer' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'gallery[action_footer]',
+            'value' => $config['gallery']['action_footer'],
+        ],
         'pswp_clickToCloseNonZoomable' => [
             'view' => 'expert',
             'type' => 'checkbox',
@@ -991,10 +1032,16 @@ $configsetup = [
             'name' => 'preview[camTakesPic]',
             'value' => $config['preview']['camTakesPic'],
         ],
-        'preview_flipHorizontal' => [
-            'type' => 'checkbox',
-            'name' => 'preview[flipHorizontal]',
-            'value' => $config['preview']['flipHorizontal'],
+        'preview_flip' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'preview[flip]',
+            'placeholder' => $defaultConfig['preview']['flip'],
+            'options' => [
+                'off' => 'off',
+                'flip-horizontal' => 'horizontal',
+                'flip-vertical' => 'vertical',
+            ],
         ],
         'preview_rotation' => [
             'type' => 'select',
@@ -1156,6 +1203,12 @@ $configsetup = [
             'range_max' => 20000,
             'range_step' => 250,
             'unit' => 'milliseconds',
+        ],
+        'print_no_rotate' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'print[no_rotate]',
+            'value' => $config['print']['no_rotate'],
         ],
         'print_key' => [
             'view' => 'expert',
@@ -1504,23 +1557,11 @@ $configsetup = [
             'name' => 'remotebuzzer[userotary]',
             'value' => $config['remotebuzzer']['userotary'],
         ],
-        'remotebuzzer_usehid' => [
+        'remotebuzzer_usenogpio' => [
             'view' => 'advanced',
-            'type' => 'hidden',
-            'name' => 'remotebuzzer[usehid]',
-            'value' => $config['remotebuzzer']['usehid'],
-        ],
-        'remotebuzzer_usesoftbtn' => [
-            'view' => 'advanced',
-            'type' => 'hidden',
-            'name' => 'remotebuzzer[usesoftbtn]',
-            'value' => $config['remotebuzzer']['usesoftbtn'],
-        ],
-        'remotebuzzer_usegpio' => [
-            'view' => 'advanced',
-            'type' => 'hidden',
-            'name' => 'remotebuzzer[usegpio]',
-            'value' => $config['remotebuzzer']['usegpio'],
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[usenogpio]',
+            'value' => $config['remotebuzzer']['usenogpio'],
         ],
         'remotebuzzer_picturebutton' => [
             'view' => 'advanced',
@@ -1811,10 +1852,26 @@ $configsetup = [
             'placeholder' => $defaultConfig['ui']['style'],
             'options' => [
                 'classic' => 'classic',
+                'classic_rounded' => 'classic rounded',
                 'modern' => 'modern',
+                'modern_squared' => 'squared',
                 'custom' => 'custom',
             ],
             'value' => $config['ui']['style'],
+        ],
+        'ui_button' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'ui[button]',
+            'placeholder' => $defaultConfig['ui']['button'],
+            'options' => [
+                'classic' => 'classic',
+                'classic_rounded' => 'classic rounded',
+                'modern' => 'modern',
+                'modern_squared' => 'squared',
+                'custom' => 'custom',
+            ],
+            'value' => $config['ui']['button'],
         ],
         'ui_shutter_animation' => [
             'view' => 'basic',
@@ -1895,12 +1952,6 @@ $configsetup = [
             'name' => 'ui[decore_lines]',
             'value' => $config['ui']['decore_lines'],
         ],
-        'ui_rounded_corners' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'ui[rounded_corners]',
-            'value' => $config['ui']['rounded_corners'],
-        ],
         'colors_primary' => [
             'view' => 'expert',
             'type' => 'color',
@@ -1914,6 +1965,13 @@ $configsetup = [
             'name' => 'colors[secondary]',
             'placeholder' => $defaultConfig['colors']['secondary'],
             'value' => $config['colors']['secondary'],
+        ],
+        'colors_highlight' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[highlight]',
+            'placeholder' => $defaultConfig['colors']['highlight'],
+            'value' => $config['colors']['highlight'],
         ],
         'colors_font' => [
             'view' => 'expert',

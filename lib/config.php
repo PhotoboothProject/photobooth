@@ -181,6 +181,10 @@ if (!isset($config['collage']['frame']) || !testFile($config['collage']['frame']
     $config['collage']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 }
 
+if (!isset($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
+    $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.jpg');
+}
+
 if (!isset($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
     $config['textoncollage']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 }
@@ -198,15 +202,15 @@ if (!isset($config['collage']['limit'])) {
 }
 
 if (!isset($config['background']['defaults'])) {
-    $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
+    $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
 if (!isset($config['background']['admin'])) {
-    $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
+    $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
 if (!isset($config['background']['chroma'])) {
-    $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
+    $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
 if (!isset($config['webserver']['ip'])) {

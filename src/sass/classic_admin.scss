@@ -1,8 +1,7 @@
 @import 'modules/theme';
 @import 'partials/basic';
-
-$error: #e74c3c;
-$success: #2ecc71;
+@import 'partials/button_animated';
+@import 'partials/shape';
 
 body {
   display: block;
@@ -204,11 +203,7 @@ div.setting_element {
 }
 /* On screens that are less than 700px wide, make the sidebar hidden */
 @media screen and (max-width: 700px) {
-  .adminsidebar {
-    display: none;
-    padding-top: 5em;
-  }
-
+  .adminsidebar,
   #adminsidebar {
     display: none;
     padding-top: 5em;
@@ -269,136 +264,6 @@ div.setting_element {
   visibility: visible;
 }
 
-/***************
-* SAVE button
-***************/
-
-.save-btn {
-  width: 15%;
-  max-width: 15em;
-  min-width: 6em;
-  height: 3em;
-  position: fixed;
-  right: 10px;
-  top: 0.5em;
-  z-index: 300;
-  background: $mainColor;
-  color: $buttonFontColor;
-  cursor: pointer;
-  transition: background 0.7s ease;
-
-  &:hover {
-    background: $hoverColor;
-  }
-
-  .saving,
-  .success,
-  .error {
-    display: none;
-  }
-
-  &.saving {
-    .saving {
-      display: inline-block;
-    }
-
-    .save,
-    .success,
-    .error {
-      display: none;
-    }
-  }
-
-  &.success {
-    background: $success;
-    .success {
-      display: inline-block;
-    }
-
-    .save,
-    .saving,
-    .error {
-      display: none;
-    }
-  }
-
-  &.error {
-    background: $error;
-    .error {
-      display: inline-block;
-    }
-
-    .save,
-    .saving,
-    .success {
-      display: none;
-    }
-  }
-}
-
-/*****************************
-* Embedded ADMIN PANEL button
-*****************************/
-
-.adminpanel-setting-btn {
-  cursor: pointer;
-  width: 10em;
-  height: 2.5em;
-  background: $mainColor;
-  color: $buttonFontColor;
-  transition: background 0.7s ease;
-  z-index: 300;
-  float: left;
-
-  &:hover {
-    background: $hoverColor;
-  }
-
-  .saving,
-  .success,
-  .error {
-    display: none;
-  }
-
-  &.saving {
-    .saving {
-      display: inline-block;
-    }
-
-    .save,
-    .success,
-    .error {
-      display: none;
-    }
-  }
-
-  &.success {
-    background: $success;
-    .success {
-      display: inline-block;
-    }
-
-    .save,
-    .saving,
-    .error {
-      display: none;
-    }
-  }
-
-  &.error {
-    background: $error;
-    .error {
-      display: inline-block;
-    }
-
-    .save,
-    .saving,
-    .success {
-      display: none;
-    }
-  }
-}
-
 /*****************
 * Toggle Button
 *****************/
@@ -418,7 +283,6 @@ div.setting_element {
   width: 2.9em;
   height: 1.4em;
   background-color: rgba(195, 46, 4, 0.6);
-  border-radius: 1em;
   transition: all 0.3s ease-in-out;
 }
 
@@ -431,9 +295,9 @@ div.setting_element {
   left: 0.1em;
   bottom: 0.1em;
   background-color: white;
-  border-radius: 50%;
   transition: all 0.3s ease-in-out;
 }
+
 .toggle input:checked + .slider {
   background-color: rgba(90, 153, 00, 0.8); /* green */
 }
@@ -456,6 +320,26 @@ div.setting_element {
   left: 4.5em;
 }
 
+.shape--classic_rounded,
+.shape--modern,
+.shape--modern_squared {
+  &.slider,
+  &.toggle {
+    border-radius: 5px;
+  }
+
+  &.slider::-webkit-slider-thumb,
+  &.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 1em;
+  }
+
+  &.slider:before,
+  &.toggle:before {
+    border-radius: 50%;
+  }
+}
 /********************************************
 * Adjust style of selectize lib for our needs - multiselects only
 ********************************************/

@@ -11,6 +11,7 @@ if ($config['database']['enabled']) {
 }
 $imagelist = array_reverse($images);
 
+$uiShape = 'shape--' . $config['ui']['style'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -84,9 +85,9 @@ $imagelist = array_reverse($images);
 		?>
 		<div class="center">
 			<figure>
-				<img src="<?=$filename_photo?>" alt="<?=$image?>" />
+				<img class="<?php echo $uiShape; ?>" src="<?=$filename_photo?>" alt="<?=$image?>" />
                 <?php if ($config['gallery']['figcaption']): ?>
-                <figcaption><?=$date?></figcaption>
+                <figcaption class="<?php echo $uiShape; ?>"><?=$date?></figcaption>
                 <?php endif; ?>
 			</figure>
 		</div>

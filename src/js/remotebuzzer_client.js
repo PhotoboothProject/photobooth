@@ -9,10 +9,7 @@ let buttonController;
 function initRemoteBuzzerFromDOM() {
     photoboothTools.console.logDev(
         'Remote Buzzer client:',
-        config.remotebuzzer.usebuttons ||
-            config.remotebuzzer.userotary ||
-            config.remotebuzzer.usehid ||
-            config.remotebuzzer.usesoftbtn
+        config.remotebuzzer.usebuttons || config.remotebuzzer.userotary || config.remotebuzzer.usenogpio
             ? 'enabled'
             : 'disabled'
     );
@@ -26,12 +23,7 @@ function initRemoteBuzzerFromDOM() {
         const api = {};
 
         api.enabled = function () {
-            return (
-                config.remotebuzzer.usebuttons ||
-                config.remotebuzzer.userotary ||
-                config.remotebuzzer.usehid ||
-                config.remotebuzzer.usesoftbtn
-            );
+            return config.remotebuzzer.usebuttons || config.remotebuzzer.userotary || config.remotebuzzer.usenogpio;
         };
 
         api.init = function () {
@@ -184,7 +176,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.enabled = function () {
             return (
-                (config.remotebuzzer.usebuttons || config.remotebuzzer.usehid || config.remotebuzzer.usesoftbtn) &&
+                (config.remotebuzzer.usebuttons || config.remotebuzzer.usenogpio) &&
                 typeof onStandaloneGalleryView === 'undefined' &&
                 typeof onLiveChromaKeyingView === 'undefined'
             );
@@ -240,6 +232,7 @@ function initRemoteBuzzerFromDOM() {
         api.enabled = function () {
             return (
                 config.remotebuzzer.userotary &&
+                !config.remotebuzzer.usenogpio &&
                 (typeof onStandaloneGalleryView === 'undefined' ? true : config.remotebuzzer.enable_standalonegallery)
             );
         };

@@ -3,6 +3,7 @@
 @import 'partials/button';
 @import 'partials/fonts';
 @import 'partials/toggle';
+@import 'partials/shape';
 
 $error: #e74c3c;
 $success: #2ecc71;
@@ -30,13 +31,17 @@ $success: #2ecc71;
   position: relative;
   max-width: 100%;
   color: $fontColor;
+  &.shape--classic_rounded {
+    border: 0 none;
+    border-radius: 10px;
+  }
 }
 
 .panel {
   .panel-heading {
     padding: 10px;
     cursor: pointer;
-    border: 1px solid $borderColor;
+
     .plus {
       display: inline-block;
     }
@@ -47,11 +52,31 @@ $success: #2ecc71;
     &:hover {
       background: $hoverPanelColor;
     }
+
+    &.shape--classic,
+    &.shape--classic_rounded {
+      border: 1px solid $borderColor;
+    }
+
+    &.shape--classic_rounded,
+    &.shape--modern,
+    &.shape--modern_squared {
+      margin: 5px;
+    }
   }
   .panel-body {
     display: none;
     padding: 20px;
-    border: 1px solid $borderColor;
+
+    &.shape--classic {
+      border: 1px solid $borderColor;
+    }
+
+    &.shape--classic_rounded,
+    &.shape--modern,
+    &.shape--modern_squared {
+      margin: 5px;
+    }
   }
 
   &.open {
@@ -70,6 +95,12 @@ $success: #2ecc71;
       display: block;
     }
   }
+
+  &.shape--modern,
+  &.shape--modern_squared {
+    border: unset;
+    border-radius: unset;
+  }
 }
 
 .form-row {
@@ -86,21 +117,11 @@ $success: #2ecc71;
   }
 }
 
-.faq-btn {
-  padding-top: 10px;
-  width: 100%;
-}
-
+.faq-btn,
 .wiki-btn {
-  cursor: pointer;
-  background: $mainColor;
-  color: $buttonFontColor;
+  padding: 20px 20px;
+  margin: 5px;
   width: 100%;
-  position: absolute;
-  padding: 20px;
-  bottom: 0;
-  left: 0;
-  right: 0;
   transition: background 0.7s ease;
 
   &:hover {

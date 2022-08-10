@@ -2,6 +2,7 @@
   // default values are specified in lib/config.php
   --primary-color: transparent;
   --secondary-color: transparent;
+  --highlight-color: transparent;
   --font-color: transparent;
   --button-font-color: transparent;
   --start-font-color: transparent;
@@ -23,6 +24,7 @@
 
 $mainColor: var(--primary-color);
 $hoverColor: var(--secondary-color);
+$highlightColor: var(--highlight-color);
 $fontColor: var(--font-color);
 $buttonFontColor: var(--button-font-color);
 $startFontColor: var(--start-font-color);

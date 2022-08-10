@@ -18,13 +18,11 @@ if (
     }
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 
-    if ($config['ui']['style'] === 'modern') {
-        $btnClass1 = 'round-btn';
-        $btnClass2 = 'round-btn';
-    } else {
-        $btnClass1 = 'btn btn--small btn--flex';
-        $btnClass2 = 'btn';
-    }
+    $btnClass = 'btn btn--' . $config['ui']['button'] . ' livechroma-btn';
+    $btnShape = 'shape--' . $config['ui']['button'];
+    $uiShape = 'shape--' . $config['ui']['style'];
+
+    $GALLERY_FOOTER = false;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
@@ -57,9 +55,6 @@ if (
 		<?php if ($config['gallery']['bottom_bar']): ?>
 		<link rel="stylesheet" href="resources/css/photoswipe-bottom.css" />
 		<?php endif; ?>
-		<?php if ($config['ui']['rounded_corners']): ?>
-		<link rel="stylesheet" href="resources/css/rounded.css" />
-		<?php endif; ?>
 		<?php if (is_file("private/overrides.css")): ?>
 		<link rel="stylesheet" href="private/overrides.css" />
 		<?php endif; ?>
@@ -71,20 +66,20 @@ if (
 	<div class="rotarygroup" id="start">
 		<div class="top-bar">
 			<?php if (!$config['live_keying']['enabled']): ?>
-			<a href="index.php" class="<?php echo $btnClass1; ?> closebtn rotaryfocus"><i class="fa fa-times"></i></a>
+			<a href="index.php" class="<?php echo $btnClass; ?> livechroma-close-btn rotaryfocus"><i class="fa fa-times"></i></a>
 			<?php endif; ?>
 
 			<?php if ($config['gallery']['enabled']): ?>
-			<a href="#" class="<?php echo $btnClass1 ?> gallerybtn rotaryfocus"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+			<a href="#" class="<?php echo $btnClass ?> livechroma-gallery-btn rotaryfocus"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
 		</div>
 
-		<div class="canvasWrapper initial">
-			<canvas id="mainCanvas"></canvas>
+		<div class="canvasWrapper <?php echo $uiShape; ?> noborder initial">
+			<canvas class="<?php echo $uiShape; ?> noborder" id="mainCanvas"></canvas>
 		</div>
 
-		<div class="chromaNote">
+		<div class="chromaNote <?php echo $uiShape ?>">
 			<span data-i18n="chromaInfoBefore"></span>
 		</div>
 
@@ -96,7 +91,7 @@ if (
 
 				<div id="ipcam--view"></div>
 
-				<video id="video--view" autoplay playsinline></video>
+				<video id="video--view" class="<?php echo $config['preview']['flip']; ?>" autoplay playsinline></video>
 
 				<div id="counter">
 					<canvas id="video--sensor"></canvas>
@@ -109,24 +104,24 @@ if (
 		<!-- Result Page -->
 		<div class="stages" id="result"></div>
 
-		<div class="backgrounds"> 
+		<div class="backgrounds <?php echo $uiShape ?>">
 			<?php
 				$dir = $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
+						echo '<img src="'.$dir.$value.'" class="' . $uiShape . ' backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
 					}
 				}
 			?>
 		</div>
 
 		<div class="chroma-control-bar">
-			<a href="#" class="<?php echo $btnClass2; ?> takeChroma rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> takeChroma livechroma rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 			<?php if ($config['picture']['allow_delete']): ?>
-			<a href="#" class="<?php echo $btnClass2; ?> deletebtn"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><i class="fa fa-trash"></i> <span data-i18n="delete"></span></a>
 			<?php endif; ?>
-			<a href="#" class="reloadPage <?php echo $btnClass2; ?> rotaryfocus"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> reloadPage livechroma rotaryfocus"><i class="fa fa-refresh"></i> <span data-i18n="reload"></span></a>
 		</div>
 	</div>
 	<div class="rotarygroup">
@@ -136,23 +131,7 @@ if (
 	</div>
 	<?php include('template/pswp.template.php'); ?>
 
-	<div class="send-mail">
-		<i class="fa fa-times" id="send-mail-close"></i>
-		<p data-i18n="insertMail"></p>
-		<form id="send-mail-form" style="margin: 0;">
-			<input class="mail-form-input" size="35" type="email" name="sendTo">
-			<input id="mail-form-image" type="hidden" name="image" value="">
-
-			<?php if ($config['mail']['send_all_later']): ?>
-				<input type="checkbox" id="mail-form-send-link" name="send-link" value="yes">
-				<label data-i18n="sendAllMail" for="mail-form-send-link"></label>
-			<?php endif; ?>
-
-			<button class="mail-form-input btn" name="submit" type="submit" value="Send"><span data-i18n="send"></span></button>
-		</form>
-
-		<div id="mail-form-message" style="max-width: 75%"></div>
-	</div>
+	<?php include('template/send-mail.template.php'); ?>
 
 	<div class="modal" id="print_mesg">
 		<div class="modal__body"><span data-i18n="printing"></span></div>

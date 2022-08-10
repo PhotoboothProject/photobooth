@@ -94,8 +94,10 @@ $config['collage']['only'] = false;
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;
 $config['collage']['continuous_time'] = '5';
-// possible layout values: '2+2', '2+2-2', '1+3', '1+3-2', '3+1', '1+2', '2+1', '2x4', '2x4-2'
+// possible layout values: '2+2', '2+2-2', '1+3', '1+3-2', '3+1', '1+2', '2+1', '2x4', '2x4-2', '2x4-3', '2x3'
 $config['collage']['layout'] = '2+2-2';
+// possible layout values: '150dpi', '300dpi', '400dpi', '600dpi'
+$config['collage']['resolution'] = '300dpi';
 $config['collage']['dashedline_color'] = '#000000';
 $config['collage']['keep_single_images'] = false;
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
@@ -105,6 +107,9 @@ $config['collage']['background_color'] = '#ffffff';
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
 $config['collage']['frame'] = null;
+$config['collage']['placeholder'] = false;
+$config['collage']['placeholderposition'] = '1';
+$config['collage']['placeholderpath'] = 'resources/img/placeholder/01.jpg';
 $config['textoncollage']['enabled'] = true;
 $config['textoncollage']['line1'] = 'Photobooth';
 $config['textoncollage']['line2'] = '   we love';
@@ -138,6 +143,7 @@ $config['gallery']['allow_delete'] = true;
 $config['gallery']['scrollbar'] = false;
 $config['gallery']['bottom_bar'] = true;
 $config['gallery']['figcaption'] = true;
+$config['gallery']['action_footer'] = true;
 $config['pswp']['clickToCloseNonZoomable'] = false;
 $config['pswp']['closeOnScroll'] = false;
 $config['pswp']['closeOnOutsideClick'] = false;
@@ -157,7 +163,8 @@ $config['preview']['mode'] = 'none';
 $config['preview']['gphoto_bsm'] = true;
 $config['preview']['stop_time'] = '2';
 $config['preview']['camTakesPic'] = false;
-$config['preview']['flipHorizontal'] = true;
+// possibile flip values: off, flip-horizontal, flip-vertical
+$config['preview']['flip'] = 'off';
 // possible rotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
 $config['preview']['rotation'] = '0deg';
 $config['preview']['url'] = null;
@@ -188,6 +195,7 @@ $config['print']['from_chromakeying'] = false;
 $config['print']['auto'] = false;
 $config['print']['auto_delay'] = '1000';
 $config['print']['time'] = '5000';
+$config['print']['no_rotate'] = false;
 $config['print']['key'] = null;
 $config['print']['qrcode'] = false;
 $config['print']['qrSize'] = '4';
@@ -251,9 +259,7 @@ $config['slideshow']['use_thumbs'] = false;
 $config['remotebuzzer']['usebuttons'] = false;
 $config['remotebuzzer']['userotary'] = false;
 $config['remotebuzzer']['enable_standalonegallery'] = false;
-$config['remotebuzzer']['usegpio'] = true;
-$config['remotebuzzer']['usehid'] = false;
-$config['remotebuzzer']['usesoftbtn'] = false;
+$config['remotebuzzer']['usenogpio'] = false;
 $config['remotebuzzer']['rotaryclkgpio'] = 27;
 $config['remotebuzzer']['rotarydtgpio'] = 17;
 $config['remotebuzzer']['rotarybtngpio'] = 22;
@@ -302,28 +308,31 @@ $config['protect']['localhost_manual'] = false;
 
 
 // U S E R   I N T E R F A C E
-// possible style values: "classic", "modern", "custom"
-$config['ui']['style'] = 'modern';
+// possible style values: "classic", "modern", "modern_squared", "custom"
+$config['ui']['style'] = 'modern_squared';
+// possible button values: "rounded", "modern", "modern_squared", "custom"
+$config['ui']['button'] = 'modern_squared';
 $config['ui']['shutter_animation'] = true;
 $config['button']['show_fs'] = false;
 $config['button']['homescreen'] = true;
 $config['ui']['result_buttons'] = true;
 $config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#ffffff';
-$config['colors']['background_countdown'] = '#214852';
+$config['colors']['background_countdown'] = '#2e2e2e';
 $config['colors']['cheese'] = '#ffffff';
 $config['background']['defaults'] = null;
 $config['background']['admin'] = null;
 $config['background']['chroma'] = null;
 $config['ui']['decore_lines'] = true;
 $config['ui']['rounded_corners'] = false;
-$config['colors']['primary'] = '#0a6071';
-$config['colors']['secondary'] = '#214852';
-$config['colors']['font'] = '#79bad9';
+$config['colors']['primary'] = '#2e2e2e';
+$config['colors']['secondary'] = '#212121';
+$config['colors']['highlight'] = '#C0C0C0';
+$config['colors']['font'] = '#c9c9c9';
 $config['colors']['button_font'] = '#ffffff';
 $config['colors']['start_font'] = '#ffffff';
-$config['colors']['panel'] = '#2d4157';
-$config['colors']['hover_panel'] = '#446781';
+$config['colors']['panel'] = '#212121';
+$config['colors']['hover_panel'] = '#2e2e2e';
 $config['colors']['border'] = '#eeeeee';
 $config['colors']['box'] = '#f8f9fc';
 $config['colors']['gallery_button'] = '#ffffff';

@@ -1,5 +1,4 @@
 @import 'classic_style';
-@import 'partials/modern_button';
 
 html,
 body {
@@ -14,10 +13,6 @@ body {
     width: 100%;
     position: relative;
     background: none;
-    .btn {
-      margin-top: 3px;
-      width: auto;
-    }
   }
 
   .fs-button {
@@ -27,32 +22,27 @@ body {
     left: 0px;
   }
 
-  .gallery-button {
-    position: relative;
-    top: auto;
-    bottom: 0px;
-    left: auto;
-  }
-
   .cups-button {
-    &.round-btn {
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: auto;
-      margin: 20px;
-    }
+    position: fixed;
+    left: 5px;
+    top: 5px;
+    bottom: auto;
   }
 }
 
+.gallery-button {
+  position: relative;
+  top: auto;
+  bottom: 0;
+  left: auto;
+}
+
 .homebtn {
-  &.round-btn {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: auto;
-    margin: 20px;
-  }
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: auto;
+  margin: 20px;
 }
 
 .resultInner {
@@ -68,45 +58,10 @@ body {
   transition: bottom 0.5s;
   z-index: 100;
   margin: 20px;
-  .round-btn {
-    display: inline-block;
-  }
   &.show {
     position: fixed;
     bottom: 0;
   }
-}
-
-.sidenav {
-  .closebtn {
-    width: 1.625em;
-    height: 1.625em;
-    margin: 0.3em;
-    background: radial-gradient(grey, $mainColor, $hoverColor);
-    color: $buttonFontColor;
-    .fa {
-      font-size: 0.8em;
-    }
-  }
-}
-
-.round-btn:active,
-.round-btn:focus,
-.round-btn:hover,
-.round-btn.focused,
-.gallery__close:active,
-.gallery__close:hover,
-.gallery__close:focus,
-.gallery__close.focused,
-.gallery__img:active > figure,
-.gallery__img:focus > figure,
-.gallery__img:hover > figure,
-.gallery__img.focused > figure,
-.gallery__img:active > img,
-.gallery__img:focus > img,
-.gallery__img:hover > img,
-.gallery__img.focused > img {
-  opacity: 0.6 !important;
 }
 
 .divaussen {
@@ -129,10 +84,6 @@ body {
   .divinnen2 {
     margin-left: auto;
     margin-right: auto;
-  }
-  .round-btn {
-    width: 4em;
-    height: 4em;
   }
 }
 

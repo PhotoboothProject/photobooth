@@ -112,14 +112,6 @@ const photoBooth = (function () {
         sendMail.hide();
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
-        if (config.preview.flipHorizontal) {
-            if (!idVideoView.hasClass('flip-horizontal')) {
-                idVideoView.addClass('flip-horizontal');
-            }
-            if (!idVideoPreview.hasClass('flip-horizontal')) {
-                idVideoPreview.addClass('flip-horizontal');
-            }
-        }
         idVideoView.hide();
         idVideoPreview.hide();
         idVideoSensor.hide();
@@ -961,7 +953,7 @@ const photoBooth = (function () {
 
     api.resetMailForm = function () {
         mailSendForm.trigger('reset');
-        mailMessageForm.html('');
+        mailMessageForm.empty();
     };
 
     api.getRequest = function (photoStyle) {
@@ -979,7 +971,8 @@ const photoBooth = (function () {
     api.startCountdown = function (start, element, cb) {
         let count = 0;
         let current = start;
-        const stop = start > config.preview.stop_time ? start - config.preview.stop_time : start;
+        const stop =
+            start > parseInt(config.preview.stop_time, 10) ? start - parseInt(config.preview.stop_time, 10) : start;
 
         function timerFunction() {
             element.text(Number(current) + Number(config.picture.cntdwn_offset));
@@ -1146,23 +1139,13 @@ const photoBooth = (function () {
 
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
-        if (config.remotebuzzer.usesoftbtn) {
-            remoteBuzzerClient.startPicture();
-        } else {
-            api.thrill(PhotoStyle.PHOTO);
-        }
+        api.thrill(PhotoStyle.PHOTO);
         $('.newpic').blur();
     });
 
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
-
-        if (config.remotebuzzer.usesoftbtn) {
-            remoteBuzzerClient.startCollage();
-        } else {
-            api.thrill(PhotoStyle.COLLAGE);
-        }
-
+        api.thrill(PhotoStyle.COLLAGE);
         $('.newcollage').blur();
     });
 
@@ -1199,9 +1182,10 @@ const photoBooth = (function () {
         e.preventDefault();
 
         const form = $(this);
+        const submitButton = form.find('.btn');
 
         mailMessageForm.empty();
-        form.find('.btn').html('<i class="fa fa-spinner fa-spin"></i>');
+        submitButton.html('<i class="fa fa-spinner fa-spin"></i>');
 
         $.ajax({
             url: 'api/sendPic.php',
@@ -1210,6 +1194,8 @@ const photoBooth = (function () {
             dataType: 'json',
             cache: false,
             success: function (result) {
+                submitButton.empty();
+                submitButton.hide();
                 if (result.success) {
                     if (result.saved) {
                         mailMessageForm
@@ -1234,6 +1220,15 @@ const photoBooth = (function () {
                     .html('<span style="color: red;">' + photoboothTools.getTranslation('mailError') + '</span>');
             }
         });
+
+        setTimeout(function () {
+            submitButton.show();
+            if (config.mail.send_all_later) {
+                submitButton.html('<span>' + photoboothTools.getTranslation('add') + '</span>');
+            } else {
+                submitButton.html('<span>' + photoboothTools.getTranslation('send') + '</span>');
+            }
+        }, 5000);
     });
 
     $('#send-mail-close').on('click', function () {
@@ -1286,25 +1281,13 @@ const photoBooth = (function () {
     // Fake buttons
     triggerPic.on('click', function (e) {
         e.preventDefault();
-
-        if (config.remotebuzzer.usehid) {
-            remoteBuzzerClient.startPicture();
-        } else {
-            api.thrill(PhotoStyle.PHOTO);
-        }
-
+        api.thrill(PhotoStyle.PHOTO);
         $('.newpic').blur();
     });
 
     triggerCollage.on('click', function (e) {
         e.preventDefault();
-
-        if (config.remotebuzzer.usehid) {
-            remoteBuzzerClient.startCollage();
-        } else {
-            api.thrill(PhotoStyle.COLLAGE);
-        }
-
+        api.thrill(PhotoStyle.COLLAGE);
         $('.newcollage').blur();
     });
 

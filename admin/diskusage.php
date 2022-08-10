@@ -16,6 +16,8 @@ if (
     exit();
 }
 
+$btnShape = 'shape--' . $config['ui']['button'];
+$uiShape = 'shape--' . $config['ui']['style'];
 ?>
 
 <!DOCTYPE html>
@@ -43,19 +45,16 @@ if (
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="../resources/css/login.css" />
-	<?php if ($config['ui']['rounded_corners']): ?>
-	<link rel="stylesheet" href="../resources/css/rounded.css" />
-	<?php endif; ?>
 	<?php if (is_file("../private/overrides.css")): ?>
 	<link rel="stylesheet" href="../private/overrides.css" />
 	<?php endif; ?>
 </head>
 
 <body class="loginbody">
-	<div class="login-panel">
+	<div class="login-panel <?php echo $uiShape; ?>">
 		<h2><?=$config['ui']['branding']?> <span data-i18n="disk_usage"></span></h2>
-		<a class="btn btn--tiny btn--flex back-to-admin" href="./"><i class="fa fa-arrow-left"></i></a>
-		<button class="download-zip-btn btn btn--tiny btn--flex">
+		<a class="btn btn--tiny btn--flex <?php echo $btnShape; ?> back-to-admin" href="./"><i class="fa fa-arrow-left"></i></a>
+		<button class="btn btn--tiny btn--flex <?php echo $btnShape; ?> download-zip-btn ">
 			<span data-i18n="download_zip"></span>
 		</button>
 		<hr>

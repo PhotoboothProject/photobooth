@@ -55,7 +55,7 @@ $line3text = $config['textonprint']['line3'];
 if (!file_exists($filename_print)) {
     // rotate image if needed
     list($width, $height) = getimagesize($filename_source);
-    if ($width > $height) {
+    if ($width > $height || $config['print']['no_rotate'] === true) {
         $image = imagecreatefromjpeg($filename_source);
         imagejpeg($image, $filename_print, $quality);
         imagedestroy($image);

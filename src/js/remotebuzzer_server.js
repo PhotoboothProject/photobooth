@@ -5,6 +5,7 @@ const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
 const PID = process.pid;
 let rotaryClkPin, rotaryDtPin;
+let cnt = 0;
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
@@ -234,7 +235,7 @@ function gpioSanity(gpioconfig) {
     }
 }
 
-if (config.remotebuzzer.usegpio) {
+if (!config.remotebuzzer.usenogpio) {
     gpioSanity(config.remotebuzzer.picturegpio);
     gpioSanity(config.remotebuzzer.collagegpio);
     gpioSanity(config.remotebuzzer.shutdowngpio);
@@ -527,7 +528,17 @@ const watchRotaryClk = function watchRotaryClk(err, gpioValue) {
     if (gpioValue) {
         if (rotaryDtPin) {
             /* rotation */
-            photoboothAction('rotary-cw');
+            if (cnt > 0) {
+                /*delete click count for opposite direction */
+                cnt = 0;
+            }
+            /* rotation */
+            if (cnt < -3) {
+                photoboothAction('rotary-cw');
+                cnt = 0;
+            } else {
+                cnt--;
+            }
         } else {
             rotaryClkPin = true;
         }
@@ -550,7 +561,17 @@ const watchRotaryDt = function watchRotaryDt(err, gpioValue) {
     if (gpioValue) {
         if (rotaryClkPin) {
             /* rotation */
-            photoboothAction('rotary-ccw');
+            if (cnt < 0) {
+                /*delete click count for opposite direction */
+                cnt = 0;
+            }
+            /* rotation */
+            if (cnt > 3) {
+                photoboothAction('rotary-ccw');
+                cnt = 0;
+            } else {
+                cnt++;
+            }
         } else {
             rotaryDtPin = true;
         }
@@ -577,7 +598,7 @@ const watchRotaryBtn = function watchRotaryBtn(err, gpioValue) {
 
 /* INIT ONOFF LIBRARY AND LINK CALLBACK FUNCTIONS */
 const Gpio = require('onoff').Gpio;
-if (config.remotebuzzer.usegpio) {
+if (!config.remotebuzzer.usenogpio) {
     /* ROTARY ENCODER MODE */
     if (config.remotebuzzer.userotary) {
         /* ROTARY ENCODER MODE */
