@@ -1042,6 +1042,7 @@ $configsetup = [
                 'flip-horizontal' => 'horizontal',
                 'flip-vertical' => 'vertical',
             ],
+            'value' => $config['preview']['flip'],
         ],
         'preview_rotation' => [
             'type' => 'select',
