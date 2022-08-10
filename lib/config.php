@@ -119,15 +119,15 @@ $defaultConfig = $config;
 if (file_exists($my_config_file)) {
     require_once $my_config_file;
 
-    if (!isset($config['mail']['subject'])) {
-        if (isset($config['ui']['language'])) {
+    if (empty($config['mail']['subject'])) {
+        if (!empty($config['ui']['language'])) {
             $config['mail']['subject'] = $mailTemplates[$config['ui']['language']]['mail']['subject'];
         } else {
             $config['mail']['subject'] = $mailTemplates[$defaultConfig['ui']['language']]['mail']['subject'];
         }
     }
-    if (!isset($config['mail']['text'])) {
-        if (isset($config['ui']['language'])) {
+    if (empty($config['mail']['text'])) {
+        if (!empty($config['ui']['language'])) {
             $config['mail']['text'] = $mailTemplates[$config['ui']['language']]['mail']['text'];
         } else {
             $config['mail']['text'] = $mailTemplates[$defaultConfig['ui']['language']]['mail']['text'];
@@ -169,55 +169,55 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = $path;
 }
 
-if (!isset($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
+if (empty($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
     $config['picture']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 }
 
-if (!isset($config['textonpicture']['font']) || !testFile($config['textonpicture']['font'])) {
+if (empty($config['textonpicture']['font']) || !testFile($config['textonpicture']['font'])) {
     $config['textonpicture']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 }
 
-if (!isset($config['collage']['frame']) || !testFile($config['collage']['frame'])) {
+if (empty($config['collage']['frame']) || !testFile($config['collage']['frame'])) {
     $config['collage']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 }
 
-if (!isset($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
+if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
     $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.jpg');
 }
 
-if (!isset($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
+if (empty($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
     $config['textoncollage']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 }
 
-if (!isset($config['print']['frame']) || !testFile($config['print']['frame'])) {
+if (empty($config['print']['frame']) || !testFile($config['print']['frame'])) {
     $config['print']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 }
 
-if (!isset($config['textonprint']['font']) || !testFile($config['textonprint']['font'])) {
+if (empty($config['textonprint']['font']) || !testFile($config['textonprint']['font'])) {
     $config['textonprint']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 }
 
-if (!isset($config['collage']['limit'])) {
+if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
-if (!isset($config['background']['defaults'])) {
+if (empty($config['background']['defaults'])) {
     $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
-if (!isset($config['background']['admin'])) {
+if (empty($config['background']['admin'])) {
     $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
-if (!isset($config['background']['chroma'])) {
+if (empty($config['background']['chroma'])) {
     $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
 }
 
-if (!isset($config['webserver']['ip'])) {
+if (empty($config['webserver']['ip'])) {
     $config['webserver']['ip'] = getPhotoboothIp();
 }
 
-if (!isset($config['qr']['url'])) {
+if (empty($config['qr']['url'])) {
     $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
 }
 
