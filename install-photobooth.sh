@@ -613,6 +613,8 @@ EOF
             browser_shortcut
             chmod +x /home/$USERNAME/Desktop/photobooth.desktop
             chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+        else
+            info "### Browser unknown or not installed. Can not add shortcut to Desktop."
         fi
 
         info "### Remote Buzzer Feature"
@@ -639,7 +641,7 @@ EOF
 
         if [ "$USB_SYNC" = true ]; then
             if [ "$DESKTOP_OS" = true ]; then
-                info "### Disabling automount for user $USERNAME"
+                info "### Disabling automount for user $USERNAME."
 
                 mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
                 cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
@@ -650,6 +652,8 @@ autorun=0
 EOF
 
                 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+            else
+                info "### lxde is not installed. Can not add automount config for user $USERNAME."
             fi
 
             info "### Adding polkit rule so www-data can (un)mount drives"
@@ -670,6 +674,8 @@ kioskbooth_desktop() {
     if [ "$KIOSK_MODE" = true ]; then
         AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
         browser_shortcut
+    else
+        info "### lxde is not installed. Can not setup Photobooth in KIOSK-Mode."
     fi
 
     if [ "$HIDE_MOUSE" = true ]; then
@@ -860,9 +866,10 @@ if [ "$RUNNING_ON_PI" = true ]; then
         else
             info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
         fi
-
-        print_spaces
+    else
+        info "### lxde is not installed. Can not hide the mouse cursor on every start."
     fi
+    print_spaces
 
     echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
     ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "N"
