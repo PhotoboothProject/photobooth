@@ -512,11 +512,11 @@ const photoBooth = (function () {
                     spinner.hide();
                     loading.empty();
                     idVideoSensor.hide();
+                    idVideoView.hide();
 
                     let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now().toString();
-                    loading.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
                     preloadImage.onload = () => {
                         loaderImage.css({
                             'background-image': `url(${imageUrl}?filter=${imgFilter}&v=${picdate})`
@@ -533,6 +533,7 @@ const photoBooth = (function () {
                     );
 
                     if (config.collage.continuous) {
+                        loading.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
                                 loaderImage.css('background-image', 'none');
@@ -552,7 +553,6 @@ const photoBooth = (function () {
                         }
                     } else {
                         // collage with interruption
-                        idVideoView.hide();
                         if (result.current + 1 < result.limit) {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
