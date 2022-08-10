@@ -104,10 +104,12 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/component-emitter');
     archive.directory('node_modules/component-inherit');
     archive.directory('node_modules/cookie');
+    archive.directory('node_modules/cors');
     archive.directory('node_modules/debug');
     archive.directory('node_modules/engine.io');
     archive.directory('node_modules/engine.io-client');
     archive.directory('node_modules/engine.io-parser');
+    archive.directory('node_modules/function-bind');
     archive.directory('node_modules/has-binary2');
     archive.directory('node_modules/has-cors');
     archive.directory('node_modules/indexof');
@@ -117,7 +119,9 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/ms');
     archive.directory('node_modules/nan');
     archive.directory('node_modules/negotiator');
+    archive.directory('node_modules/object.assign');
     archive.directory('node_modules/object-component');
+    archive.directory('node_modules/object-keys');
     archive.directory('node_modules/onoff');
     archive.directory('node_modules/parseqs');
     archive.directory('node_modules/parseuri');
@@ -128,6 +132,7 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/socket.io-parser');
     archive.directory('node_modules/to-array');
     archive.directory('node_modules/file-uri-to-path');
+    archive.directory('node_modules/vary');
     archive.directory('node_modules/waypoints');
     archive.directory('node_modules/ws');
     archive.directory('node_modules/xmlhttprequest-ssl');
