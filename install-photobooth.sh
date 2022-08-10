@@ -25,8 +25,12 @@ USB_SYNC=false
 SETUP_CUPS=false
 GPHOTO_PREVIEW=true
 CUPS_REMOTE_ANY=false
-CHROMIUM_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled"
+WEBBROWSER="unknown"
+KIOSK_FLAG="--kiosk http://127.0.0.1"
+CHROME_FLAGS=false
+CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
+DESKTOP_OS=true
 
 # Node.js v12.22.(4 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
@@ -228,6 +232,12 @@ do
     shift
 done
 print_spaces
+
+if [ $(dpkg-query -W -f='${Status}' "lxde" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+    DESKTOP_OS=true
+else
+    DESKTOP_OS=false
+fi
 
 check_username() {
     info "[Info]      Checking if user $USERNAME exists..."
@@ -478,10 +488,12 @@ general_setup() {
         cd /var/www/html/
         INSTALLFOLDER="photobooth"
         INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
+        URL="http://$IPADDRESS/$INSTALLFOLDER"
     else
         cd /var/www/
         INSTALLFOLDER="html"
         INSTALLFOLDERPATH="/var/www/html"
+        URL="http://$IPADDRESS"
     fi
 
     if [ -d "$INSTALLFOLDERPATH" ]; then
@@ -491,13 +503,6 @@ general_setup() {
     else
         info "$INSTALLFOLDERPATH not found."
     fi
-
-    if [ "$SUBFOLDER" = true ]; then
-        URL="http://$IPADDRESS/$INSTALLFOLDER"
-    else
-        URL="http://$IPADDRESS"
-    fi
-
 }
 
 start_install() {
@@ -527,12 +532,15 @@ start_install() {
     fi
 }
 
-chromium_shortcut() {
-
-    if [ "$RUNNING_ON_PI" = true ]; then
-        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS --use-gl=egl"
+browser_shortcut() {
+    if [ "$CHROME_FLAGS" = true ]; then
+        if [ "$RUNNING_ON_PI" = true ]; then
+            EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS --use-gl=egl"
+        else
+            EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS"
+        fi
     else
-        CHROMIUM_FLAGS="$CHROMIUM_DEFAULT_FLAGS"
+        EXTRA_FLAGS=""
     fi
 
     echo "[Desktop Entry]" > "$AUTOSTART_FILE"
@@ -541,9 +549,9 @@ chromium_shortcut() {
     echo "Type=Application" >> "$AUTOSTART_FILE"
     echo "Name=Photobooth" >> "$AUTOSTART_FILE"
     if [ "$SUBFOLDER" = true ]; then
-        echo "Exec=chromium-browser --kiosk http://127.0.0.1/$INSTALLFOLDER $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
+        echo "Exec=$WEBBROWSER $KIOSK_FLAG/$INSTALLFOLDER $EXTRA_FLAGS" >> "$AUTOSTART_FILE"
     else
-        echo "Exec=chromium-browser --kiosk http://127.0.0.1 $CHROMIUM_FLAGS" >> "$AUTOSTART_FILE"
+        echo "Exec=$WEBBROWSER $KIOSK_FLAG $EXTRA_FLAGS" >> "$AUTOSTART_FILE"
     fi
     echo "Icon=$INSTALLFOLDERPATH/resources/img/favicon-96x96.png" >> "$AUTOSTART_FILE"
     echo "StartupNotify=false" >> "$AUTOSTART_FILE"
@@ -595,15 +603,19 @@ www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 
     if [ "$RUNNING_ON_PI" = true ]; then
-        info "### Adding photobooth shortcut to Desktop"
-        if [ ! -d "/home/$USERNAME/Desktop" ]; then
-            mkdir -p /home/$USERNAME/Desktop
-            chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+        if [ "$WEBBROWSER" != "unknown" ]; then
+            info "### Adding photobooth shortcut to Desktop"
+            if [ ! -d "/home/$USERNAME/Desktop" ]; then
+                mkdir -p /home/$USERNAME/Desktop
+                chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+            fi
+            AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
+            browser_shortcut
+            chmod +x /home/$USERNAME/Desktop/photobooth.desktop
+            chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+        else
+            info "### Browser unknown or not installed. Can not add shortcut to Desktop."
         fi
-        AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
-        chromium_shortcut
-        chmod +x /home/$USERNAME/Desktop/photobooth.desktop
-        chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
 
         info "### Remote Buzzer Feature"
         info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
@@ -628,17 +640,21 @@ EOF
         fi
 
         if [ "$USB_SYNC" = true ]; then
-            info "### Disabling automount for pi user"
+            if [ "$DESKTOP_OS" = true ]; then
+                info "### Disabling automount for user $USERNAME."
 
-            mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
-            cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+                mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
+                cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
 mount_on_startup=0
 mount_removable=0
 autorun=0
 EOF
 
-            chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+                chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+            else
+                info "### lxde is not installed. Can not add automount config for user $USERNAME."
+            fi
 
             info "### Adding polkit rule so www-data can (un)mount drives"
 
@@ -657,11 +673,15 @@ EOF
 kioskbooth_desktop() {
     if [ "$KIOSK_MODE" = true ]; then
         AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
-        chromium_shortcut
+        browser_shortcut
+    else
+        info "### lxde is not installed. Can not setup Photobooth in KIOSK-Mode."
     fi
 
     if [ "$HIDE_MOUSE" = true ]; then
-        sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+        if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
+            sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+        fi
 
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth
@@ -795,33 +815,60 @@ fi
 print_spaces
 
 if [ -d "/etc/xdg/autostart" ]; then
-    echo -e "\033[0;33m### You probably like to start the browser on every start."
-    ask_yes_no "### Open Chromium in Kiosk Mode at every boot? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        KIOSK_MODE=true
-        info "### We will open Chromium in Kiosk Mode at every boot."
+
+    if [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="chromium-browser"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-stable" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome-stable"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-beta" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome-beta"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="firefox"
+        CHROME_FLAGS=false
     else
-        info "### We won't open Chromium in Kiosk Mode at every boot."
+        WEBBROWSER="unknown"
+        CHROME_FLAGS=false
     fi
 
+    if [ "$WEBBROWSER" != "unknown" ]; then
+        echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
+        ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
+        echo -e "\033[0m"
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            KIOSK_MODE=true
+            info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
+        else
+            info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
+        fi
+    else
+        warn "### No supported webbrowser found!"
+    fi
     print_spaces
 fi
 
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
-    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
-    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        HIDE_MOUSE=true
-        EXTRA_PACKAGES+=('unclutter')
-        info "### We will hide the mouse cursor on every start and disable the screen saver."
+    if [ "$DESKTOP_OS" = true ]; then
+        echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
+        ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
+        echo -e "\033[0m"
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            HIDE_MOUSE=true
+            EXTRA_PACKAGES+=('unclutter')
+            info "### We will hide the mouse cursor on every start and disable the screen saver."
+        else
+            info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
+        fi
     else
-        info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
+        info "### lxde is not installed. Can not hide the mouse cursor on every start."
     fi
-
     print_spaces
 
     echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
