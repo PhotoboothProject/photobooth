@@ -481,10 +481,12 @@ general_setup() {
         cd /var/www/html/
         INSTALLFOLDER="photobooth"
         INSTALLFOLDERPATH="/var/www/html/$INSTALLFOLDER"
+        URL="http://$IPADDRESS/$INSTALLFOLDER"
     else
         cd /var/www/
         INSTALLFOLDER="html"
         INSTALLFOLDERPATH="/var/www/html"
+        URL="http://$IPADDRESS"
     fi
 
     if [ -d "$INSTALLFOLDERPATH" ]; then
@@ -494,13 +496,6 @@ general_setup() {
     else
         info "$INSTALLFOLDERPATH not found."
     fi
-
-    if [ "$SUBFOLDER" = true ]; then
-        URL="http://$IPADDRESS/$INSTALLFOLDER"
-    else
-        URL="http://$IPADDRESS"
-    fi
-
 }
 
 start_install() {
