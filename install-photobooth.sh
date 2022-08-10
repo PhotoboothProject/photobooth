@@ -671,7 +671,9 @@ kioskbooth_desktop() {
     fi
 
     if [ "$HIDE_MOUSE" = true ]; then
-        sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+        if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
+            sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+        fi
 
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth
