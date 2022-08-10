@@ -631,17 +631,19 @@ EOF
         fi
 
         if [ "$USB_SYNC" = true ]; then
-            info "### Disabling automount for pi user"
+            if [ $(dpkg-query -W -f='${Status}' "lxde" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+                info "### Disabling automount for user $USERNAME"
 
-            mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
-            cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+                mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
+                cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
 mount_on_startup=0
 mount_removable=0
 autorun=0
 EOF
 
-            chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+                chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+            fi
 
             info "### Adding polkit rule so www-data can (un)mount drives"
 
