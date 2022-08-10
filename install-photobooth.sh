@@ -235,6 +235,8 @@ print_spaces
 
 if [ $(dpkg-query -W -f='${Status}' "lxde" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
     DESKTOP_OS=true
+else
+    DESKTOP_OS=false
 fi
 
 check_username() {
