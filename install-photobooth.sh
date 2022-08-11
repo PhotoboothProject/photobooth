@@ -31,6 +31,7 @@ CHROME_FLAGS=false
 CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
 DESKTOP_OS=true
+PHP_VERSION="7.4"
 
 # Node.js v12.22.(4 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
@@ -139,7 +140,9 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
                                     package will install latest Release from zip.
 
     -h,  -help,       --help        Display help.
-
+    
+    --php			    Choos the PHP version to install (Default = 7.4)
+    
     -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
                                     Note: only to use on Raspberry Pi OS!
 
@@ -203,6 +206,11 @@ do
             view_help
             exit 0
             ;;
+	--php)
+	    shift
+	    PHP_VERSION=$1
+	    info "### PHP Version: $1"
+	    ;;
         -u|--username)
             shift
             USERNAME=$1
@@ -335,7 +343,7 @@ common_software() {
     apt update
     apt dist-upgrade -y
 
-    info "### Photobooth needs some software to run."
+    info "### Photobooth needs some software to run."   
     if [ "$WEBSERVER" == "nginx" ]; then
         nginx_webserver
     elif [ "$WEBSERVER" == "lighttpd" ]; then
@@ -402,12 +410,11 @@ apache_webserver() {
 }
 
 nginx_webserver() {
-    php_version="7.4"
     nginx_site_conf="/etc/nginx/sites-enabled/default"
     nginx_conf="/etc/nginx/nginx.conf"
     
     info "### Installing NGINX Webserver..."
-    apt install -y nginx php${php_version} php${php_version}-fpm
+    apt install -y nginx php${PHP_VERSION} php${PHP_VERSION}-fpm
 
     
     
@@ -419,7 +426,7 @@ nginx_webserver() {
         sed -i '/include snippets\/fastcgi-php.conf/s/^\(\s*\)#/\1/g' "${nginx_site_conf}"
         sed -i '/fastcgi_pass unix:\/run\/php\//s/^\(\s*\)#/\1/g' "${nginx_site_conf}"
         sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_site_conf}"
-	sed -i "/fastcgi_pass unix:/s/php\([[:digit:]].*\)-fpm/php${php_version}-fpm/g" "${nginx_site_conf}"
+	sed -i "/fastcgi_pass unix:/s/php\([[:digit:]].*\)-fpm/php${PHP_VERSION}-fpm/g" "${nginx_site_conf}"
 	sed -i '/^include \/etc\/nginx\/sites-enabled\/\*;/a client_max_body_size 100M;' "${nginx_conf}"
 	
         info "### Testing NGINX config"
@@ -428,12 +435,12 @@ nginx_webserver() {
         info "### Restarting NGINX"
         systemctl reload-or-restart nginx
 	systemctl enable nginx
-	systemctl reload-or-restart php${php_version}-fpm
-	systemctl enable php${php_version}-fpm
+	systemctl reload-or-restart php${PHP_VERSION}-fpm
+	systemctl enable php${PHP_VERSION}-fpm
     else
         error "Can not find ${nginx_conf} !"
         info "Using Apache Webserver !"
-        apt remove -y nginx php-fpm
+        apt remove -y nginx php${PHP_VERSION}-fpm
         apache_webserver
 
     fi
@@ -441,18 +448,17 @@ nginx_webserver() {
 
 lighttpd_webserver() {
     info "### Installing Lighttpd Webserver..."
-    apt install -y lighttpd php-fpm
+    apt install -y lighttpd php${PHP_VERSION}-fpm
     lighttpd-enable-mod fastcgi
     lighttpd-enable-mod fastcgi-php
 
-    php_conf="/etc/lighttpd/conf-available/15-fastcgi-php.conf"
+    lighttpd_php_conf="/etc/lighttpd/conf-available/15-fastcgi-php.conf"
 
-    if [ -f "${php_conf}" ]; then
+    if [ -f "${lighttpd_php_conf}" ]; then
         info "### Enable PHP for Lighttpd"
         cp ${php_conf} ${php_conf}.bak
-
-        if [ -e "/var/run/php/php7.3-fpm.sock" ]; then
-            cat > ${php_conf} <<EOF
+	
+        cat > ${php_conf} <<EOF
 # -*- depends: fastcgi -*-
 # /usr/share/doc/lighttpd/fastcgi.txt.gz
 # http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
@@ -460,34 +466,20 @@ lighttpd_webserver() {
 ## Start an FastCGI server for php (needs the php5-cgi package)
 fastcgi.server += ( ".php" =>
 	((
-		"socket" => "/var/run/php/php7.3-fpm.sock",
+		"socket" => "/var/run/php/php${PHP_VERSION}-fpm.sock",
 		"broken-scriptfilename" => "enable"
 	))
 )
 EOF
-        fi
 
-        if [ -e "/var/run/php/php7.4-fpm.sock" ]; then
-            cat > ${php_conf} <<EOF
-# -*- depends: fastcgi -*-
-# /usr/share/doc/lighttpd/fastcgi.txt.gz
-# http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
-
-## Start an FastCGI server for php (needs the php5-cgi package)
-fastcgi.server += ( ".php" =>
-	((
-		"socket" => "/var/run/php/php7.4-fpm.sock",
-		"broken-scriptfilename" => "enable"
-	))
-)
-EOF
-        fi
-
-        service lighttpd force-reload
+	systemctl reload-or-restart lighttpd
+	systemctl enable lighttpd
+	systemctl reload-or-restart php${PHP_VERSION}-fpm.service
+	systemctl enable php${PHP_VERSION}-fpm.service
     else
         error "Can not find ${php_conf} !"
         info "Using Apache Webserver !"
-        apt remove -y lighttpd php-fpm
+        apt remove -y lighttpd php${PHP_VERSION}-fpm
         apache_webserver
     fi
 }
