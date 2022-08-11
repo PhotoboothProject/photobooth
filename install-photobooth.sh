@@ -402,25 +402,34 @@ apache_webserver() {
 }
 
 nginx_webserver() {
+    php_version="7.4"
+    nginx_site_conf="/etc/nginx/sites-enabled/default"
+    nginx_conf="/etc/nginx/nginx.conf"
+    
     info "### Installing NGINX Webserver..."
-    apt install -y nginx php-fpm
+    apt install -y nginx php${php_version} php${php_version}-fpm
 
-    nginx_conf="/etc/nginx/sites-enabled/default"
-
-    if [ -f "${nginx_conf}" ]; then
+    
+    
+    if [ -f "${nginx_site_conf}" ]; then
         info "### Enable PHP in NGINX"
         cp "${nginx_conf}" ~/nginx-default.bak
-        sed -i 's/^\(\s*\)index index\.html\(.*\)/\1index index\.php index\.html\2/g' "${nginx_conf}"
-        sed -i '/location ~ \\.php$ {/s/^\(\s*\)#/\1/g' "${nginx_conf}"
-        sed -i '/include snippets\/fastcgi-php.conf/s/^\(\s*\)#/\1/g' "${nginx_conf}"
-        sed -i '/fastcgi_pass unix:\/run\/php\//s/^\(\s*\)#/\1/g' "${nginx_conf}"
-        sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_conf}"
-
+        sed -i 's/^\(\s*\)index index\.html\(.*\)/\1index index\.php index\.html\2/g' "${nginx_site_conf}"
+        sed -i '/location ~ \\.php$ {/s/^\(\s*\)#/\1/g' "${nginx_site_conf}"
+        sed -i '/include snippets\/fastcgi-php.conf/s/^\(\s*\)#/\1/g' "${nginx_site_conf}"
+        sed -i '/fastcgi_pass unix:\/run\/php\//s/^\(\s*\)#/\1/g' "${nginx_site_conf}"
+        sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_site_conf}"
+	sed -i "/fastcgi_pass unix:/s/php\([[:digit:]].*\)-fpm/php${php_version}-fpm/g" "${nginx_site_conf}"
+	sed -i '/^include \/etc\/nginx\/sites-enabled\/\*;/a client_max_body_size 100M;' "${nginx_conf}"
+	
         info "### Testing NGINX config"
-        /usr/sbin/nginx -t -c /etc/nginx/nginx.conf
+        /usr/sbin/nginx -t -c ${nginx_conf}
 
         info "### Restarting NGINX"
-        systemctl reload nginx
+        systemctl reload-or-restart nginx
+	systemctl enable nginx
+	systemctl reload-or-restart php${php_version}-fpm
+	systemctl enable php${php_version}-fpm
     else
         error "Can not find ${nginx_conf} !"
         info "Using Apache Webserver !"
