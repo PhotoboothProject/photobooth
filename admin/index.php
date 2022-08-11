@@ -133,7 +133,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
                         */
                         
         
-                        echo '<li><a class="'.isElementHidden('adminnavlistelement ',$fields). $btnShape . ' noborder" href="#'.$section.'" id="nav-'.$section.'"><div><span data-i18n="'.$section.'">'.$section.'</span></div></a></li>';
+                        echo '<li><a class="'.isElementHidden('adminnavlistelement',$fields). ' ' . $btnShape . ' noborder" href="#'.$section.'" id="nav-'.$section.'"><div><span data-i18n="'.$section.'">'.$section.'</span></div></a></li>';
         
                 }
         
