@@ -163,7 +163,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
                         html_src_indent($indent++);
         
                         echo '<!-- SECTION '.$section.'-->';
-                        echo '<div class="'.isElementHidden('setting_section ',$fields). $uiShape . ' noborder" id="'.$section.'">';
+                        echo '<div class="'.isElementHidden('setting_section ',$fields). ' ' . $uiShape . ' noborder" id="'.$section.'">';
         
                         html_src_indent($indent);
                         echo '<h1 class="setting_section_heading '. $uiShape . ' noborder"> <span data-i18n="'.$section.'">'.$section.'</span></h1>';
