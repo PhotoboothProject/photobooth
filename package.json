@@ -35,11 +35,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andi34/photobooth.git"
+    "url": "git+https://github.com/PhotoboothProject/photobooth.git"
   },
-  "homepage": "http://andi34.github.io/photobooth",
+  "homepage": "https://github.com/PhotoboothProject/photobooth",
   "bugs": {
-    "url": "https://github.com/andi34/photobooth/issues"
+    "url": "https://github.com/PhotoboothProject/photobooth/issues"
   },
   "keywords": [
     "photobooth",

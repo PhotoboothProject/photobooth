@@ -1,12 +1,12 @@
 [submodule "vendor/PHPMailer"]
 	path = vendor/PHPMailer
 	url = https://github.com/PHPMailer/PHPMailer
-[submodule "vendor/PhotoSwipe"]
-	path = vendor/PhotoSwipe
-	url = https://github.com/andi34/PhotoSwipe
 [submodule "vendor/Seriously"]
 	path = vendor/Seriously
 	url = https://github.com/brianchirls/Seriously.js
+[submodule "vendor/PhotoSwipe"]
+	path = vendor/PhotoSwipe
+	url = https://github.com/PhotoboothProject/PhotoSwipe
 [submodule "vendor/phpqrcode"]
 	path = vendor/phpqrcode
-	url = https://github.com/andi34/phpqrcode
+	url = https://github.com/PhotoboothProject/phpqrcode

@@ -4,7 +4,7 @@
 
 #### Prerequisites checklist
 
-- [ ] I have read the [contributing guidelines](https://github.com/andi34/photobooth/blob/dev/CONTRIBUTING.md).
+- [ ] I have read the [contributing guidelines](https://github.com/PhotoboothProject/photobooth/blob/dev/CONTRIBUTING.md).
 
 #### What is the purpose of this pull request? (put an "x" next to an item)
 <!-- Example:

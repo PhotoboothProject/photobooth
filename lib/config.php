@@ -111,7 +111,7 @@ $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
 $config['dev']['logfile'] = 'error.log';
 
-$config['ui']['github'] = 'andi34';
+$config['ui']['github'] = 'PhotoboothProject';
 $config['ui']['branding'] = 'Photobooth';
 
 $defaultConfig = $config;
