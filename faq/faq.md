@@ -547,21 +547,26 @@ If you would like to allow your guests to download their images without connecti
 
 The default setting is to call your wifi hotspot *Photobooth* as this is built into the Photobooth prompt for guests to download images via QR code.
 
-First, make sure `iptables` package is installed, after that head over to the hotspot directory to run the installer:
+First, make sure `iptables` package is installed:
 ```
 sudo apt-get install iptables
-cd /var/www/html/vendor/rpihotspot
 ```
+
+Now download and run the rpihotspot installer:
+```
+https://raw.githubusercontent.com/idev1/rpihotspot/master/setup-network.sh
+chmod +x setup-network.sh
+sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
+--ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
+```
+
 There are a couple of flags you need to change from the example command below:
 
  - change `password` to your desired password, make it easy enough for guests to remember.
  - change `country code` from `CA` to your own localization.
  - keep or change the ip address `10.10.10.10`. Remember what you change it to.
 
-```
-sudo bash setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
---ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
-```
+
 If you run into any errors setting up your hotspot we can remove all the settings and try it again. The first time I ran this I ran into an error, I reset it using the command below, then reinstalled it. It went smoothly the second time:
 
 ```

@@ -1,9 +1,6 @@
 [submodule "vendor/PHPMailer"]
 	path = vendor/PHPMailer
 	url = https://github.com/PHPMailer/PHPMailer
-[submodule "vendor/rpihotspot"]
-	path = vendor/rpihotspot
-	url = https://github.com/andi34/rpihotspot
 [submodule "vendor/PhotoSwipe"]
 	path = vendor/PhotoSwipe
 	url = https://github.com/andi34/PhotoSwipe
