@@ -22,7 +22,7 @@ If you want to build the project, run `yarn build`.
 > pull requests from branches on your fork. To do this, run:
 >
 > ```
-> git remote add upstream https://github.com/andi34/photobooth.git
+> git remote add upstream https://github.com/PhotoboothProject/photobooth.git
 > git fetch upstream
 > git branch --set-upstream-to=upstream/dev dev
 > ```
@@ -45,7 +45,7 @@ Please make sure to run `yarn build` and `yarn eslint` before you commit your ch
 
 ## Help needed
 
-Please checkout the [open issues](https://github.com/andi34/photobooth/issues).
+Please checkout the [open issues](https://github.com/PhotoboothProject/photobooth/issues).
 
 Also, please watch the repo and respond to questions / bug reports / feature requests.  
 Thanks!

@@ -9,7 +9,7 @@ on:
 jobs:
   synchronize-with-crowdin:
     runs-on: ubuntu-latest
-    if: github.repository == 'andi34/photobooth'
+    if: github.repository == 'PhotoboothProject/photobooth'
 
     steps:
 

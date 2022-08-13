@@ -40,7 +40,7 @@ You've the possibility to add more parameters if needed (define ISO, exposure, w
 <hr>
 
 ### I've found a bug, how can I report?
-Please take a look at the issue page [here](https://github.com/andi34/photobooth/issues) , if your bug isn't mentioned already you can create a new issue. Please give informations detailed as possible to reproduce and analyse the problem.
+Please take a look at the issue page [here](https://github.com/PhotoboothProject/photobooth/issues) , if your bug isn't mentioned already you can create a new issue. Please give informations detailed as possible to reproduce and analyse the problem.
 
 <hr>
 
@@ -524,11 +524,11 @@ Now restart your Chromium browser.
 Photobooth joined Crowdin as localization manager, [join here](https://crowdin.com/project/photobooth) to translate Photobooth.  
 Crowdin gives a nice webinterface to make translating easy as possible. If there's different translations for a string, translator can use the vote function on suggested translations.  
 With Crowdin and your help translating we're able to get high-quality translations for all supported languages. Also it's easy to support a wider range of languages!  
-Your language is missing? Don't worry, create a [localization request here](https://github.com/andi34/photobooth/issues/new/choose) and we'll add it to the project.  
+Your language is missing? Don't worry, create a [localization request here](https://github.com/PhotoboothProject/photobooth/issues/new/choose) and we'll add it to the project.  
 
 **On v2.2.0 and older:**  
 Edit the language file inside `resources/lang/` with your favorite text editor.  
-Once you're done upload your changes and create a [pull request](https://github.com/andi34/photobooth/pulls).
+Once you're done upload your changes and create a [pull request](https://github.com/PhotoboothProject/photobooth/pulls).
 
 <hr>
 
@@ -582,7 +582,7 @@ This feature will automatically and in regular intervals copy (sync) new picture
 Use the `install-photobooth.sh` script to get the operating system setup in place.  
 **Note:** If you have declined the question to enable the USB sync file backup while running the `install-photobooth.sh` you need to run the following commands to get the operating system setup done:
 ```
-wget https://raw.githubusercontent.com/andi34/photobooth/dev/enable-usb-sync.sh
+wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/enable-usb-sync.sh
 sudo bash enable-usb-sync.sh
 
 ```
