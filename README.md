@@ -1,18 +1,26 @@
+
 # Photobooth v3
 
 A Photobooth web interface for Linux and Windows.
 
-Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).
+Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).  
+In 2019 Andreas Blaesius picked up the work and continued to work on the source.  
+With the help of the community Photobooth grew to a powerfull Photobooth software with a lot of features and possibilities.
 
-**This is my personal Photobooth fork with a lot of extras and improvements.**  
 _(The full changelog can be found inside [the Photobooth Wiki](https://github.com/PhotoboothProject/photobooth/wiki/changelog).)_
 
 [![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-blue.svg)](https://t.me/PhotoboothGroup)  
 
 [![Translate on Crowdin](https://img.shields.io/badge/Traslate%20on-Crowdin-green.svg)](https://crowdin.com/project/photobooth)  
 
+_Latest stable release:_  
 [![Lint](https://github.com/PhotoboothProject/photobooth/workflows/Lint/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3ALint)
 [![gulp-sass](https://github.com/PhotoboothProject/photobooth/workflows/gulp-sass/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3Agulp-sass)
+
+_Latest development version:_  
+[![Lint](https://github.com/PhotoboothProject/photobooth/workflows/Lint/badge.svg?branch=dev)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Adev+workflow%3ALint)
+[![gulp-sass](https://github.com/PhotoboothProject/photobooth/workflows/gulp-sass/badge.svg?branch=dev)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Adev+workflow%3Agulp-sass)
+
 
 ## :heart_eyes: Features
 
