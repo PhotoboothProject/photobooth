@@ -355,8 +355,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $new_width = imagesx($images_rotated[0]);
             $new_height = imagesy($images_rotated[0]);
 
-            $height_offset = ($height / 2 - $new_height) / 2;
-            $width_offset = ($width - $new_width * 4) / 5;
+            $height_offset = intval(($height / 2 - $new_height) / 2);
+            $width_offset = intval(($width - $new_width * 4) / 5);
 
             $positions_top = [
                 [$width_offset, $height_offset],
@@ -507,6 +507,11 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 }
 
 function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color) {
+    settype($x1, 'integer');
+    settype($x2, 'integer');
+    settype($y1, 'integer');
+    settype($y2, 'integer');
+
     $dashed_style = [
         $dashedline_color,
         $dashedline_color,
@@ -522,11 +527,11 @@ function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color) {
 }
 
 function addPicture($my_collage, $filename, $pictureOptions) {
-    $dX = $pictureOptions[0];
-    $dY = $pictureOptions[1];
-    $width = $pictureOptions[2];
-    $height = $pictureOptions[3];
-    $degrees = $pictureOptions[4];
+    $dX = intval($pictureOptions[0]);
+    $dY = intval($pictureOptions[1]);
+    $width = intval($pictureOptions[2]);
+    $height = intval($pictureOptions[3]);
+    $degrees = intval($pictureOptions[4]);
 
     $tempSubImage = imagecreatefromjpeg($filename);
     if (abs($degrees) == 90) {
@@ -542,8 +547,8 @@ function addPicture($my_collage, $filename, $pictureOptions) {
     if ($degrees != 0) {
         $tempSubImage = rotateResizeImage($tempSubImage, $degrees, COLLAGE_BACKGROUND_COLOR);
         if (abs($degrees) != 90) {
-            $width = imagesx($tempSubImage);
-            $height = imagesy($tempSubImage);
+            $width = intval(imagesx($tempSubImage));
+            $height = intval(imagesy($tempSubImage));
         }
     }
 
