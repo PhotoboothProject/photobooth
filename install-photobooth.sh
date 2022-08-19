@@ -887,6 +887,11 @@ start_update() {
         print_logo
         info "###"
         if [ ! -z $BACKUPBRANCH ]; then
+            if [ "$PATCH_SUCCESS" = true ]; then
+                info "### Your uncommited changes have been applied successfully!"
+            else
+                error "Uncommited changes couldn't be applied automatically!"
+            fi
             info "### Backup done to branch: $BACKUPBRANCH"
         fi
         info "###"
