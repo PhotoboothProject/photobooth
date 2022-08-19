@@ -132,16 +132,16 @@ function no_raspberry {
 
 view_help() {
     cat << EOF
-Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:package> -hrsV -w=<apache:nginx:lighttpd]
+Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:package> -hprsV -w=<apache:nginx:lighttpd]
+
+    -h,  -help,       --help        Display help.
 
     -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
                                     Available branches: stable3, dev, package
                                     By default, latest development verison (dev) will be installed.
                                     package will install latest Release from zip.
 
-    -h,  -help,       --help        Display help.
-    
-    --php			    Choos the PHP version to install (Default = 7.4)
+    -p,  -php,        --php         Choos the PHP version to install (Default = 7.4)
     
     -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
                                     Note: only to use on Raspberry Pi OS!
@@ -180,12 +180,16 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,branch::,username::,raspberry,silent,verbose,webserver::" -o "b::hu::rsVw::" -a -- "$@")
+options=$(getopt -l "help,branch::,php::,username::,raspberry,silent,verbose,webserver::" -o "hb::p::u::rsVw::" -a -- "$@")
 eval set -- "$options"
 
 while true
 do
     case $1 in
+        -h|--help)
+            view_help
+            exit 0
+            ;;
         -b|--branch)
             shift
             if [ "$1" == "dev" ] || [ "$1" == "stable3" ]; then
@@ -202,15 +206,11 @@ do
             fi
             info "### Photobooth version / branch:  $1"
             ;;
-        -h|--help)
-            view_help
-            exit 0
+        -p|--php)
+            shift
+            PHP_VERSION=$1
+            info "### PHP Version: $1"
             ;;
-	--php)
-	    shift
-	    PHP_VERSION=$1
-	    info "### PHP Version: $1"
-	    ;;
         -u|--username)
             shift
             USERNAME=$1
