@@ -567,6 +567,19 @@ start_git_install() {
 
     git submodule update --init
 
+    if [ -f "0001-backup-changes.patch" ]; then
+        info "### Trying to apply your local changes again..."
+        git am --whitespace=nowarn "0001-backup-changes.patch" && PATCH_SUCCESS=true || PATCH_SUCCESS=false
+        if [ "$PATCH_SUCCESS" = true ]; then
+            info "### Changes applied successfully!"
+        else
+            error "ERROR: can not apply your local changes automatically!"
+            git am --abort
+        fi
+
+        rm 0001-backup-changes.patch
+    fi
+
     info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
     yarn install
     yarn build
@@ -809,10 +822,11 @@ commit_git_changes() {
     if [ -z "$(git status --porcelain)" ]; then
         info "### Nothing to commit."
     else
-        echo -e "\033[0;33m### Uncommited changes detected. Continue update?"
-        echo -e "### NOTE: If typing y, your changes will be commited and"
-        echo -e "          will be kept inside a local branch ($BACKUPBRANCH)."
-        ask_yes_no "          Your changes can be applied manually after update. [y/N] " "N"
+        echo -e "\033[0;33m### Uncommited changes detected. Continue update? [y/N]"
+        echo -e "### NOTE: If typing y, your changes will be commited and will be kept"
+        echo -e "          inside a local branch ($BACKUPBRANCH)."
+        echo -e "          We will try to apply these changes after update. If applying fails,"
+        ask_yes_no "          your changes can be applied manually after update." "N"
         echo -e "\033[0m"
         if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
             info "### We will commit your changes and keep them inside a local backup branch."
@@ -835,6 +849,7 @@ commit_git_changes() {
             git commit -a -m "backup changes"
             git checkout -b $BACKUPBRANCH
             info "### Backup done to branch: $BACKUPBRANCH"
+            git format-patch -1
         else
             error "ERROR: uncommited changes detected. Please commit your changes."
             exit
