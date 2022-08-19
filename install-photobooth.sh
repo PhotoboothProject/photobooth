@@ -16,7 +16,7 @@ fi
 PHOTOBOOTH_LOG="/tmp/photobooth/$DATE-photobooth.log"
 
 BRANCH="dev"
-GIT_INSTALL=true
+GIT_INSTALL=false
 SUBFOLDER=true
 PI_CAMERA=false
 KIOSK_MODE=false
@@ -32,6 +32,22 @@ CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Trans
 AUTOSTART_FILE=""
 DESKTOP_OS=true
 PHP_VERSION="7.4"
+
+# Update
+RUN_UPDATE=false
+BACKUPBRANCH=""
+PHOTOBOOTH_FOUND=false
+PHOTOBOOTH_PATH=(
+        '/var/www/html'
+        '/var/www/html/photobooth'
+)
+PHOTOBOOTH_SUBMODULES=(
+        'vendor/PHPMailer'
+        'vendor/phpqrcode'
+        'vendor/PhotoSwipe'
+        'vendor/rpihotspot'
+        'vendor/Seriously'
+)
 
 # Node.js v12.22.(4 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
@@ -157,6 +173,8 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
                                     - installs a collection of free-software printer drivers (Gutenprint)
                                     - disables screen saver and hide the mouse cursor (Raspberry Pi only)
                                     - adds config for USB sync file backup (Raspberry Pi only)
+
+    -U,  -update,     --update      Try updating Photobooth via git.
     
     -u,  -username,   --username    Enter your OS username you like to use Photobooth
                                     on (Raspberry Pi only)
@@ -180,7 +198,7 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,branch::,php::,username::,raspberry,silent,verbose,webserver::" -o "hb::p::u::rsVw::" -a -- "$@")
+options=$(getopt -l "help,branch::,php::,update,username::,raspberry,silent,verbose,webserver::" -o "hb::p::Uu::rsVw::" -a -- "$@")
 eval set -- "$options"
 
 while true
@@ -194,6 +212,7 @@ do
             shift
             if [ "$1" == "dev" ] || [ "$1" == "stable3" ]; then
                 BRANCH=$1
+                GIT_INSTALL=true
             elif [ "$1" == "package" ]; then
                 BRANCH="stable3"
                 GIT_INSTALL=false
@@ -210,6 +229,10 @@ do
             shift
             PHP_VERSION=$1
             info "### PHP Version: $1"
+            ;;
+        -U|--update)
+            RUN_UPDATE=true
+            info "### Trying to update Photobooth..."
             ;;
         -u|--username)
             shift
@@ -343,13 +366,15 @@ common_software() {
     apt update
     apt upgrade -y
 
-    info "### Photobooth needs some software to run."
-    if [ "$WEBSERVER" == "nginx" ]; then
-        nginx_webserver
-    elif [ "$WEBSERVER" == "lighttpd" ]; then
-        lighttpd_webserver
-    else
-        apache_webserver
+    if [ "$RUN_UPDATE" = false ]; then
+        info "### Photobooth needs some software to run."
+        if [ "$WEBSERVER" == "nginx" ]; then
+            nginx_webserver
+        elif [ "$WEBSERVER" == "lighttpd" ]; then
+            lighttpd_webserver
+        else
+            apache_webserver
+        fi
     fi
 
     if [ $GIT_INSTALL = true ]; then
@@ -505,24 +530,55 @@ general_setup() {
     fi
 }
 
+add_git_remote() {
+    cd $INSTALLFOLDERPATH/
+    info "### Checking needed remote information..."
+    if git config remote.photoboothproject.url > /dev/null; then
+        info "### photoboothproject remote exist already"
+        if git config remote.origin.url == "git@github.com:andi34/photobooth" || git config remote.origin.url == "https://github.com/andi34/photobooth.git"; then
+            info "origin remote is andi34"
+        fi
+    else
+        info "### Adding photoboothproject remote..."
+        git remote add photoboothproject https://github.com/PhotoboothProject/photobooth.git
+    fi
+}
+
+check_git_install() {
+    cd $INSTALLFOLDERPATH
+    info "### Checking for git Installation"
+    if [ "$(git rev-parse --is-inside-work-tree)" = true ]; then
+        info "### Photobooth installed via git."
+        GIT_INSTALL=true
+        add_git_remote
+
+        info "### Ignoring filemode changes."
+        git config core.fileMode false
+    else
+        warn "WARN: Not a git Installation."
+    fi
+}
+
+start_git_install() {
+    cd $INSTALLFOLDERPATH
+    info "### We are installing/updating Photobooth via git."
+    git fetch photoboothproject $BRANCH
+    git checkout photoboothproject/$BRANCH
+
+    git submodule update --init
+
+    info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
+    yarn install
+    yarn build
+}
+
 start_install() {
     info "### Now we are going to install Photobooth."
     if [ $GIT_INSTALL = true ]; then
         git clone https://github.com/PhotoboothProject/photobooth $INSTALLFOLDER
         cd $INSTALLFOLDERPATH
-
-        info "### Ignoring filemode changes."
-        git config core.fileMode false
-
-        info "### We are installing Photobooth via git."
-        git fetch origin $BRANCH
-        git checkout origin/$BRANCH
-
-        git submodule update --init
-
-        info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
-        yarn install
-        yarn build
+        add_git_remote
+        start_git_install
     else
         info "### We are downloading the latest release and extracting it to $INSTALLFOLDERPATH."
         curl -s https://api.github.com/repos/PhotoboothProject/photobooth/releases/latest |
@@ -722,6 +778,101 @@ gphoto_preview() {
     fi
 }
 
+fix_git_modules() {
+    cd $INSTALLFOLDERPATH
+
+    git config --global --add safe.directory $INSTALLFOLDERPATH
+
+    for submodule in "${PHOTOBOOTH_SUBMODULES[@]}"; do
+        if [ -d "${INSTALLFOLDERPATH}/${submodule}" ]; then
+            if grep -q ${submodule} "./.gitmodules"; then
+                info "### Adding global safe.directory: ${INSTALLFOLDERPATH}/${submodule}"
+                git config --global --add safe.directory ${INSTALLFOLDERPATH}/${submodule}
+            else
+              warn "### ${INSTALLFOLDERPATH}/${submodule} does not belong to our modules anymore."
+              rm -rf  ${INSTALLFOLDERPATH}/${submodule}
+            fi
+        fi
+    done 
+
+    git submodule foreach --recursive git reset --hard
+    git submodule deinit -f .
+    git submodule update --init --recursive
+}
+
+commit_git_changes() {
+    cd $INSTALLFOLDERPATH
+
+    fix_git_modules
+
+    if [ -z "$(git status --porcelain)" ]; then
+        info "### Nothing to commit."
+    else
+        if [ -z "$(git config user.name)" ]; then
+            warn "WARN: git user.name not set!"
+            info "### Setting git user.name."
+            $(git config user.name Photobooth)
+        fi
+
+        if [ -z "$(git config user.email)" ]; then
+            warn "WARN: git user.email not set!"
+            info "### Setting git user.email."
+            $(git config user.email Photobooth@localhost)
+        fi
+
+        echo "git user.name: $(git config user.name)"
+        echo "git user.email: $(git config user.email)"
+
+        git add --all
+        git commit -a -m "backup changes" 
+        BACKUPBRANCH="backup-$DATE"
+        git checkout -b $BACKUPBRANCH
+        info "### Backup done to branch: $BACKUPBRANCH"
+    fi
+}
+
+detect_photobooth_install() {
+    for path in "${PHOTOBOOTH_PATH[@]}"; do
+        info "### Checking for install at ${path}"
+        if [ "$PHOTOBOOTH_FOUND" = false ]; then
+            if [ -d "${path}" ]; then
+                if [ -f "${path}/lib/configsetup.inc.php" ]; then
+                    PHOTOBOOTH_FOUND=true
+                    INSTALLFOLDERPATH="${path}"
+                    info "### Photobooth installation found in path ${path}."
+                fi
+            fi
+        fi
+    done 
+}
+
+start_update() {
+    detect_photobooth_install
+    if [ "$PHOTOBOOTH_FOUND" = true ]; then
+        check_git_install
+    fi
+    if [ "$GIT_INSTALL" = true ]; then
+        common_software
+        commit_git_changes
+        start_git_install
+        general_permissions
+        fix_git_modules
+        print_spaces
+        print_logo
+        info "###"
+        if [ ! -z $BACKUPBRANCH ]; then
+            info "### Backup done to branch: $BACKUPBRANCH"
+        fi
+        info "###"
+        info "### Update completed!"
+        info "###"
+        info "### Have fun with your Photobooth!"
+    else
+         error "ERROR: Can not Update!"
+    fi
+    exit
+}
+
 ############################################################
 #                                                          #
 # General checks before the installation process can start #
@@ -754,6 +905,16 @@ else
     error "ERROR: No internet connection!"
     error "       Please connect to the internet and rerun the installer."
     exit 1
+fi
+
+############################################################
+#                                                          #
+# Try updating Photobooth                                  #
+#                                                          #
+############################################################
+
+if [ "$RUN_UPDATE" = true ]; then
+    start_update
 fi
 
 ############################################################
