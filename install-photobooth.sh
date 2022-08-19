@@ -573,6 +573,73 @@ pi_camera() {
 EOF
 }
 
+raspberry_permission() {
+    if [ "$WEBBROWSER" != "unknown" ]; then
+        info "### Adding photobooth shortcut to Desktop"
+        if [ ! -d "/home/$USERNAME/Desktop" ]; then
+            mkdir -p /home/$USERNAME/Desktop
+            chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+        fi
+        AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
+        browser_shortcut
+        chmod +x /home/$USERNAME/Desktop/photobooth.desktop
+        chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+    else
+        info "### Browser unknown or not installed. Can not add shortcut to Desktop."
+    fi
+
+    info "### Remote Buzzer Feature"
+    info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
+    usermod -a -G gpio www-data
+    # remove old artifacts from node-rpio library, if there was
+    if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
+        info "### Remotebuzzer switched from node-rpio to onoff library. We detected an old remotebuzzer installation and will remove artifacts"
+        rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
+        sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+    fi
+    # add configuration required for onoff library
+    sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
+cat >> /boot/config.txt  << EOF
+# Photobooth
+gpio=16,17,20,21,22,26,27=pu
+# Photobooth End
+EOF
+
+    # update artifacts in user configuration from old remotebuzzer implementation
+    if [ -f "$INSTALLFOLDERPATH/config/my.config.inc.php" ]; then
+        sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' $INSTALLFOLDERPATH/config/my.config.inc.php
+    fi
+
+    if [ "$USB_SYNC" = true ]; then
+        if [ "$DESKTOP_OS" = true ]; then
+            info "### Disabling automount for user $USERNAME."
+
+            mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
+            cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+[volume]
+mount_on_startup=0
+mount_removable=0
+autorun=0
+EOF
+
+            chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+        else
+            info "### lxde is not installed. Can not add automount config for user $USERNAME."
+        fi
+
+        info "### Adding polkit rule so www-data can (un)mount drives"
+
+        cat >> /etc/polkit-1/localauthority/50-local.d/udisks2.pkla <<EOF
+[Allow www-data to mount drives with udisks2]
+Identity=unix-user:www-data
+Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+    fi
+}
+
 general_permissions() {
     info "### Setting permissions."
     chown -R www-data:www-data $INSTALLFOLDERPATH/
@@ -602,73 +669,6 @@ general_permissions() {
 # Photobooth buttons for www-data to shutdown or reboot the system from admin panel or via remotebuzzer
 www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
-
-    if [ "$RUNNING_ON_PI" = true ]; then
-        if [ "$WEBBROWSER" != "unknown" ]; then
-            info "### Adding photobooth shortcut to Desktop"
-            if [ ! -d "/home/$USERNAME/Desktop" ]; then
-                mkdir -p /home/$USERNAME/Desktop
-                chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
-            fi
-            AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
-            browser_shortcut
-            chmod +x /home/$USERNAME/Desktop/photobooth.desktop
-            chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
-        else
-            info "### Browser unknown or not installed. Can not add shortcut to Desktop."
-        fi
-
-        info "### Remote Buzzer Feature"
-        info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
-        usermod -a -G gpio www-data
-        # remove old artifacts from node-rpio library, if there was
-        if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
-            info "### Remotebuzzer switched from node-rpio to onoff library. We detected an old remotebuzzer installation and will remove artifacts"
-            rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
-            sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
-        fi
-        # add configuration required for onoff library
-        sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
-cat >> /boot/config.txt  << EOF
-# Photobooth
-gpio=16,17,20,21,22,26,27=pu
-# Photobooth End
-EOF
-
-        # update artifacts in user configuration from old remotebuzzer implementation
-        if [ -f "$INSTALLFOLDERPATH/config/my.config.inc.php" ]; then
-            sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' $INSTALLFOLDERPATH/config/my.config.inc.php
-        fi
-
-        if [ "$USB_SYNC" = true ]; then
-            if [ "$DESKTOP_OS" = true ]; then
-                info "### Disabling automount for user $USERNAME."
-
-                mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
-                cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
-[volume]
-mount_on_startup=0
-mount_removable=0
-autorun=0
-EOF
-
-                chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
-            else
-                info "### lxde is not installed. Can not add automount config for user $USERNAME."
-            fi
-
-            info "### Adding polkit rule so www-data can (un)mount drives"
-
-            cat >> /etc/polkit-1/localauthority/50-local.d/udisks2.pkla <<EOF
-[Allow www-data to mount drives with udisks2]
-Identity=unix-user:www-data
-Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
-ResultAny=yes
-ResultInactive=yes
-ResultActive=yes
-EOF
-        fi
-    fi
 }
 
 kioskbooth_desktop() {
@@ -931,6 +931,9 @@ if [ "$PI_CAMERA" = true ]; then
     pi_camera
 fi
 general_permissions
+if [ "$RUNNING_ON_PI" = true ]; then
+raspberry_permission
+fi
 if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
     kioskbooth_desktop
 fi
