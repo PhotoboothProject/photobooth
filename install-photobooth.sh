@@ -801,6 +801,7 @@ fix_git_modules() {
 }
 
 commit_git_changes() {
+    BACKUPBRANCH="backup-$DATE"
     cd $INSTALLFOLDERPATH
 
     fix_git_modules
@@ -808,26 +809,36 @@ commit_git_changes() {
     if [ -z "$(git status --porcelain)" ]; then
         info "### Nothing to commit."
     else
-        if [ -z "$(git config user.name)" ]; then
-            warn "WARN: git user.name not set!"
-            info "### Setting git user.name."
-            $(git config user.name Photobooth)
+        echo -e "\033[0;33m### Uncommited changes detected. Continue update?"
+        echo -e "### NOTE: If typing y, your changes will be commited and"
+        echo -e "          will be kept inside a local branch ($BACKUPBRANCH)."
+        ask_yes_no "          Your changes can be applied manually after update. [y/N] " "N"
+        echo -e "\033[0m"
+        if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
+            info "### We will commit your changes and keep them inside a local backup branch."
+            if [ -z "$(git config user.name)" ]; then
+                warn "WARN: git user.name not set!"
+                info "### Setting git user.name."
+                $(git config user.name Photobooth)
+            fi
+
+            if [ -z "$(git config user.email)" ]; then
+                warn "WARN: git user.email not set!"
+                info "### Setting git user.email."
+                $(git config user.email Photobooth@localhost)
+            fi
+
+            echo "git user.name: $(git config user.name)"
+            echo "git user.email: $(git config user.email)"
+
+            git add --all
+            git commit -a -m "backup changes"
+            git checkout -b $BACKUPBRANCH
+            info "### Backup done to branch: $BACKUPBRANCH"
+        else
+            error "ERROR: uncommited changes detected. Please commit your changes."
+            exit
         fi
-
-        if [ -z "$(git config user.email)" ]; then
-            warn "WARN: git user.email not set!"
-            info "### Setting git user.email."
-            $(git config user.email Photobooth@localhost)
-        fi
-
-        echo "git user.name: $(git config user.name)"
-        echo "git user.email: $(git config user.email)"
-
-        git add --all
-        git commit -a -m "backup changes" 
-        BACKUPBRANCH="backup-$DATE"
-        git checkout -b $BACKUPBRANCH
-        info "### Backup done to branch: $BACKUPBRANCH"
     fi
 }
 
