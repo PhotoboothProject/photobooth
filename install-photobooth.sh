@@ -426,23 +426,22 @@ nginx_webserver() {
         sed -i '/include snippets\/fastcgi-php.conf/s/^\(\s*\)#/\1/g' "${nginx_site_conf}"
         sed -i '/fastcgi_pass unix:\/run\/php\//s/^\(\s*\)#/\1/g' "${nginx_site_conf}"
         sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_site_conf}"
-	sed -i "/fastcgi_pass unix:/s/php\([[:digit:]].*\)-fpm/php${PHP_VERSION}-fpm/g" "${nginx_site_conf}"
-	sed -i '/^include \/etc\/nginx\/sites-enabled\/\*;/a client_max_body_size 100M;' "${nginx_conf}"
+        sed -i "/fastcgi_pass unix:/s/php\([[:digit:]].*\)-fpm/php${PHP_VERSION}-fpm/g" "${nginx_site_conf}"
+        sed -i '/^include \/etc\/nginx\/sites-enabled\/\*;/a client_max_body_size 100M;' "${nginx_conf}"
 	
         info "### Testing NGINX config"
         /usr/sbin/nginx -t -c ${nginx_conf}
 
         info "### Restarting NGINX"
         systemctl reload-or-restart nginx
-	systemctl enable nginx
-	systemctl reload-or-restart php${PHP_VERSION}-fpm
-	systemctl enable php${PHP_VERSION}-fpm
+        systemctl enable nginx
+        systemctl reload-or-restart php${PHP_VERSION}-fpm
+        systemctl enable php${PHP_VERSION}-fpm
     else
         error "Can not find ${nginx_conf} !"
         info "Using Apache Webserver !"
         apt remove -y nginx php${PHP_VERSION}-fpm
         apache_webserver
-
     fi
 }
 
@@ -472,10 +471,10 @@ fastcgi.server += ( ".php" =>
 )
 EOF
 
-	systemctl reload-or-restart lighttpd
-	systemctl enable lighttpd
-	systemctl reload-or-restart php${PHP_VERSION}-fpm.service
-	systemctl enable php${PHP_VERSION}-fpm.service
+        systemctl reload-or-restart lighttpd
+        systemctl enable lighttpd
+        systemctl reload-or-restart php${PHP_VERSION}-fpm.service
+        systemctl enable php${PHP_VERSION}-fpm.service
     else
         error "Can not find ${php_conf} !"
         info "Using Apache Webserver !"
