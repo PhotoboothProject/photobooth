@@ -645,17 +645,13 @@ general_permissions() {
     gpasswd -a www-data plugdev
     gpasswd -a www-data video
 
-    if [ -f "/var/www/.yarnrc" ]; then
-        info "### .yarnrc exists."
-        info "### Fixing permissions on .yarnrc"
-        chown www-data:www-data "/var/www/.yarnrc"
-    fi
+    touch "/var/www/.yarnrc"
+    info "### Fixing permissions on .yarnrc"
+    chown www-data:www-data "/var/www/.yarnrc"
 
-    if [ -d "/var/www/.cache" ]; then
-        info "### Cache folder found."
-        info "### Fixing permissions on cache folder."
-        chown -R www-data:www-data "/var/www/.cache"
-    fi
+    info "### Fixing permissions on cache folder."
+    mkdir -p "/var/www/.cache"
+    chown -R www-data:www-data "/var/www/.cache"
 
     if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
         info "### Disabling camera automount."
