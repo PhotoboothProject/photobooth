@@ -897,6 +897,9 @@ start_update() {
         info "###"
         info "### Update completed!"
         info "###"
+        info "### Please clear your Browser Cache to"
+        info "### avoid graphical issues."
+        info "###"
         info "### Have fun with your Photobooth!"
     else
          error "ERROR: Can not Update!"
