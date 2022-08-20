@@ -1810,13 +1810,13 @@ $configsetup = [
         ],
         'protect_update' => [
             'view' => 'advanced',
-            'type' => 'checkbox',
+            'type' => 'hidden',
             'name' => 'protect[update]',
             'value' => $config['protect']['update'],
         ],
         'protect_localhost_update' => [
             'view' => 'expert',
-            'type' => 'checkbox',
+            'type' => 'hidden',
             'name' => 'protect[localhost_update]',
             'value' => $config['protect']['localhost_update'],
         ],
@@ -2286,7 +2286,7 @@ $configsetup = [
         ],
         'updater_button' => [
             'view' => 'basic',
-            'type' => 'button',
+            'type' => 'hidden',
             'placeholder' => 'updater',
             'name' => 'UPDATERBUTTON',
             'value' => 'updater-btn',
