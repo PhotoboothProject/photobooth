@@ -745,6 +745,17 @@ if [ "$FORCE_RASPBERRY_PI" = false ]; then
     fi
 fi
 
+info "### Checking internet connection..."
+ping -c 1 -q google.com >&/dev/null
+
+if [ $? -eq 0 ]; then
+    info "    connected!"
+else
+    error "ERROR: No internet connection!"
+    error "       Please connect to the internet and rerun the installer."
+    exit 1
+fi
+
 ############################################################
 #                                                          #
 # Ask all questions before installing Photobooth           #
