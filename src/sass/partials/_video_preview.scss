@@ -41,6 +41,10 @@
   background-repeat: no-repeat;
   transform: rotate($previewRotation);
 
+  &.cover {
+    background-size: cover;
+  }
+
   &.streaming {
     background-image: $urlBackground;
   }
