@@ -511,6 +511,9 @@ start_install() {
         git clone https://github.com/andi34/photobooth $INSTALLFOLDER
         cd $INSTALLFOLDERPATH
 
+        info "### Ignoring filemode changes."
+        git config core.fileMode false
+
         info "### We are installing Photobooth via git."
         git fetch origin $BRANCH
         git checkout origin/$BRANCH
