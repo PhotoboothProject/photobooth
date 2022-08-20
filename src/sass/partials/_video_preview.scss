@@ -22,6 +22,12 @@
   &.scale-down {
     object-fit: scale-down;
   }
+  &.flip-horizontal {
+    transform: translate(-50%, -50%) scalex(-1);
+  }
+  &.flip-vertical {
+    transform: translate(-50%, -50%) scaleY(-1);
+  }
 }
 
 #ipcam--view {
