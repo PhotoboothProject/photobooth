@@ -1,6 +1,5 @@
 #video--view,
-#video--preview,
-#ipcam--view {
+#video--preview {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -31,8 +30,13 @@
 }
 
 #ipcam--view {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
   background-image: none;
-  background-size: cover;
+  background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
   transform: rotate($previewRotation);
