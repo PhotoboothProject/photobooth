@@ -1032,6 +1032,20 @@ $configsetup = [
             'name' => 'preview[camTakesPic]',
             'value' => $config['preview']['camTakesPic'],
         ],
+        'preview_style' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'preview[style]',
+            'placeholder' => $defaultConfig['preview']['style'],
+            'options' => [
+                'fill' => 'fill',
+                'contain' => 'contain',
+                'cover' => 'cover',
+                'none' => 'none',
+                'scale-down' => 'scale-down',
+            ],
+            'value' => $config['preview']['style'],
+        ],
         'preview_flip' => [
             'view' => 'advanced',
             'type' => 'select',

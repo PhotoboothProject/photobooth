@@ -89,9 +89,9 @@ if (
 					<i class="fa fa-cog fa-spin"></i>
 				</div>
 
-				<div id="ipcam--view"></div>
+				<div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
 
-				<video id="video--view" class="<?php echo $config['preview']['flip']; ?>" autoplay playsinline></video>
+				<video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" autoplay playsinline></video>
 
 				<div id="counter">
 					<canvas id="video--sensor"></canvas>
