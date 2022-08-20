@@ -341,9 +341,9 @@ update_nodejs() {
 common_software() {
     info "### First we update your system. That's not worth mentioning."
     apt update
-    apt dist-upgrade -y
+    apt upgrade -y
 
-    info "### Photobooth needs some software to run."   
+    info "### Photobooth needs some software to run."
     if [ "$WEBSERVER" == "nginx" ]; then
         nginx_webserver
     elif [ "$WEBSERVER" == "lighttpd" ]; then
@@ -351,7 +351,7 @@ common_software() {
     else
         apache_webserver
     fi
-    
+
     if [ $GIT_INSTALL = true ]; then
         EXTRA_PACKAGES+=(
             'git'
