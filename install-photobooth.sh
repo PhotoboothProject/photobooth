@@ -852,7 +852,11 @@ commit_git_changes() {
             info "### Backup done to branch: $BACKUPBRANCH"
             git format-patch -1
         else
-            error "ERROR: uncommited changes detected. Please commit your changes."
+            error "ERROR: Uncommited changes detected. Please commit your changes."
+            if [ "$SILENT_INSTALL" = true ]; then
+                info "### You can also rerun the installer without silent mode to update anyway."
+                info "### We will try to apply your changes again after update."
+            fi
             exit
         fi
     fi
