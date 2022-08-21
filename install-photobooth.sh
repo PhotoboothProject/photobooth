@@ -814,7 +814,6 @@ fix_git_modules() {
 }
 
 commit_git_changes() {
-    BACKUPBRANCH="backup-$DATE"
     cd $INSTALLFOLDERPATH
 
     fix_git_modules
@@ -822,6 +821,8 @@ commit_git_changes() {
     if [ -z "$(git status --porcelain)" ]; then
         info "### Nothing to commit."
     else
+        BACKUPBRANCH="backup-$DATE"
+
         echo -e "\033[0;33m### Uncommited changes detected. Continue update? [y/N]"
         echo -e "### NOTE: If typing y, your changes will be commited and will be kept"
         echo -e "          inside a local branch ($BACKUPBRANCH)."
