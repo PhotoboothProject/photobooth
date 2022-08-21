@@ -10,7 +10,7 @@ switch ($mode) {
         $cmd = sprintf($config['pre_photo']['cmd']);
         break;
     case 'post-command':
-        $cmd = sprintf($config['post_photo']['cmd']);
+        $cmd = sprintf($config['post_photo']['cmd'], $_POST['filename']);
         break;
     case 'reboot':
         $cmd = 'sudo ' . sprintf($config['reboot']['cmd']);
