@@ -135,7 +135,7 @@ const photoBooth = (function () {
         rotaryController.focusSet('#start');
 
         if (config.ui.shutter_cheese_img != '') {
-            blocker.css('background-image', 'url(' + config.ui.shutter_cheese_img + ')')
+            blocker.css('background-image', 'url(' + config.ui.shutter_cheese_img + ')');
         }
     };
 
@@ -170,14 +170,11 @@ const photoBooth = (function () {
         getMedia
             .call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
+                idVideoView.show();
+                videoView.srcObject = stream;
                 if (mode === CameraDisplayMode.BACKGROUND) {
-                    idVideoPreview.show();
-                    videoPreview.srcObject = stream;
                     wrapper.css('background-image', 'none');
                     wrapper.css('background-color', 'transparent');
-                } else {
-                    idVideoView.show();
-                    videoView.srcObject = stream;
                 }
                 api.stream = stream;
             })
