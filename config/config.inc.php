@@ -314,6 +314,7 @@ $config['ui']['style'] = 'modern_squared';
 // possible button values: "rounded", "modern", "modern_squared", "custom"
 $config['ui']['button'] = 'modern_squared';
 $config['ui']['shutter_animation'] = true;
+$config['ui']['ui_shutter_cheese_img'] = '';
 $config['button']['show_fs'] = false;
 $config['button']['homescreen'] = true;
 $config['ui']['result_buttons'] = true;
