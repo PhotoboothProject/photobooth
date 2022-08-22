@@ -1898,7 +1898,7 @@ $configsetup = [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['ui']['shutter_cheese_img'],
-            'name' => 'ui[shutter_cheese]',
+            'name' => 'ui[shutter_cheese_img]',
             'value' => htmlentities($config['ui']['shutter_cheese_img']),
         ],
         'button_show_fs' => [
