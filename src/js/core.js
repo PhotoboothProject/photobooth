@@ -170,11 +170,14 @@ const photoBooth = (function () {
         getMedia
             .call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
-                idVideoView.show();
-                videoView.srcObject = stream;
                 if (mode === CameraDisplayMode.BACKGROUND) {
+                    idVideoPreview.show();
+                    videoPreview.srcObject = stream;
                     wrapper.css('background-image', 'none');
                     wrapper.css('background-color', 'transparent');
+                } else {
+                    idVideoView.show();
+                    videoView.srcObject = stream;
                 }
                 api.stream = stream;
             })
