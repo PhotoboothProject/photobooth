@@ -113,6 +113,7 @@ $config['dev']['logfile'] = 'error.log';
 
 $config['ui']['github'] = 'PhotoboothProject';
 $config['ui']['branding'] = 'Photobooth';
+$config['ui']['shutter_cheese_img'] = '/resources/img/cheese/camera_up.png';
 
 $defaultConfig = $config;
 
