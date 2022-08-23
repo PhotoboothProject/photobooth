@@ -33,7 +33,9 @@ if ($_POST['play'] === 'true') {
     die($LogString);
 } elseif ($_POST['play'] === 'false') {
     $killcmd = sprintf($config['preview']['killcmd']);
-    exec($killcmd);
+    if ($killcmd != '') {
+        exec($killcmd);
+    }
 
     $LogData = [
         'isRunning' => isRunning($_POST['pid']),
