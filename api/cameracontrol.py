@@ -254,13 +254,12 @@ class MessageSender:
             print('Interrupted!')
 
 
-def is_already_running():
-    instances = 0
+def get_running_pid():
     for p in psutil.process_iter(['name', 'cmdline']):
         if p.name() == 'python3':
             if p.cmdline()[1].endswith('cameracontrol.py'):
-                instances += 1
-    return instances > 1
+                return p.pid
+    return -1
 
 
 def main():
@@ -289,10 +288,12 @@ def main():
     parser.add_argument('--exit', action='store_true', help='exit the service')
 
     args = parser.parse_args()
-    if not is_already_running():
-        CameraControl(args)
-    else:
+    pid = get_running_pid()
+    if pid > 0:
         MessageSender(vars(args))
+        print(pid)
+    else:
+        CameraControl(args)
 
 
 if __name__ == '__main__':
