@@ -1896,10 +1896,18 @@ $configsetup = [
         ],
         'ui_shutter_cheese_img' => [
             'view' => 'advanced',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['ui']['shutter_cheese_img'],
+            'type' => 'select',
             'name' => 'ui[shutter_cheese_img]',
-            'value' => htmlentities($config['ui']['shutter_cheese_img']),
+            'placeholder' => $defaultConfig['ui']['shutter_cheese_img'],
+            'options' => [
+                '' => 'none',
+                '/resources/img/cheese/camera_up.png' => 'top',
+                '/resources/img/cheese/camera_down.png' => 'bottom',
+                '/resources/img/cheese/camera_left.png' => 'left',
+                '/resources/img/cheese/camera_right.png' => 'right',
+                '/private/cheese.png' => '/private/cheese.png',
+            ],
+            'value' => $config['ui']['shutter_cheese_img'],
         ],
         'button_show_fs' => [
             'view' => 'basic',
