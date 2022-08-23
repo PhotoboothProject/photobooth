@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 
-import signal
-import sys
-import time
-import psutil
-import zmq
-import argparse
+import os, signal, sys, time, psutil, zmq, argparse
 from argparse import Namespace
 from subprocess import Popen, PIPE
 import gphoto2 as gp
@@ -256,9 +251,8 @@ class MessageSender:
 
 def get_running_pid():
     for p in psutil.process_iter(['name', 'cmdline']):
-        if p.name() == 'python3':
-            if p.cmdline()[1].endswith('cameracontrol.py'):
-                return p.pid
+        if p.name() == 'python3' and p.cmdline()[1].endswith('cameracontrol.py') and p.pid != os.getpid():
+            return p.pid
     return -1
 
 
