@@ -158,7 +158,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
                                     package will install latest Release from zip.
 
     -p,  -php,        --php         Choos the PHP version to install (Default = 7.4)
-    
+
     -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
                                     Note: only to use on Raspberry Pi OS!
 
@@ -169,13 +169,13 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
                                     - installs CUPS
                                     - deny remote access to CUPS over IP from all devices inside
                                       your network (automatic image building failes to enable
-                                      because cups can't be configured while in chroot env) 
+                                      because cups can't be configured while in chroot env)
                                     - installs a collection of free-software printer drivers (Gutenprint)
                                     - disables screen saver and hide the mouse cursor (Raspberry Pi only)
                                     - adds config for USB sync file backup (Raspberry Pi only)
 
-    -U,  -update,     --update      Try updating Photobooth via git.
-    
+         -update,     --update      Try updating Photobooth via git.
+
     -u,  -username,   --username    Enter your OS username you like to use Photobooth
                                     on (Raspberry Pi only)
 
@@ -437,12 +437,12 @@ apache_webserver() {
 nginx_webserver() {
     nginx_site_conf="/etc/nginx/sites-enabled/default"
     nginx_conf="/etc/nginx/nginx.conf"
-    
+
     info "### Installing NGINX Webserver..."
     apt install -y nginx php${PHP_VERSION} php${PHP_VERSION}-fpm
 
-    
-    
+
+
     if [ -f "${nginx_site_conf}" ]; then
         info "### Enable PHP in NGINX"
         cp "${nginx_conf}" ~/nginx-default.bak
@@ -453,7 +453,7 @@ nginx_webserver() {
         sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' "${nginx_site_conf}"
         sed -i "/fastcgi_pass unix:/s/php\([[:digit:]].*\)-fpm/php${PHP_VERSION}-fpm/g" "${nginx_site_conf}"
         sed -i '/^include \/etc\/nginx\/sites-enabled\/\*;/a client_max_body_size 100M;' "${nginx_conf}"
-	
+
         info "### Testing NGINX config"
         /usr/sbin/nginx -t -c ${nginx_conf}
 
@@ -481,7 +481,7 @@ lighttpd_webserver() {
     if [ -f "${lighttpd_php_conf}" ]; then
         info "### Enable PHP for Lighttpd"
         cp ${php_conf} ${php_conf}.bak
-	
+
         cat > ${php_conf} <<EOF
 # -*- depends: fastcgi -*-
 # /usr/share/doc/lighttpd/fastcgi.txt.gz
@@ -806,7 +806,7 @@ fix_git_modules() {
               rm -rf  ${INSTALLFOLDERPATH}/${submodule}
             fi
         fi
-    done 
+    done
 
     git submodule foreach --recursive git reset --hard
     git submodule deinit -f .
@@ -874,7 +874,7 @@ detect_photobooth_install() {
                 fi
             fi
         fi
-    done 
+    done
 }
 
 start_update() {
