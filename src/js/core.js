@@ -154,7 +154,7 @@ const photoBooth = (function () {
         }
     };
 
-    api.changeVideoMode = function(mode) {
+    api.changeVideoMode = function (mode) {
         if (mode === CameraDisplayMode.BACKGROUND) {
             idVideoView.css('z-index', 0);
             wrapper.css('background-image', 'none');
@@ -312,7 +312,7 @@ const photoBooth = (function () {
                 .post('api/takeVideo.php', dataVideo)
                 .done(function (result) {
                     photoboothTools.console.log('Stop webcam', result);
-                    api.stopVideo()
+                    api.stopVideo();
                 })
                 .fail(function (xhr, status, result) {
                     photoboothTools.console.log('Could not stop webcam', result);
@@ -994,7 +994,11 @@ const photoBooth = (function () {
                 element.empty();
                 cb();
             }
-            if (config.preview.killcmd && config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.camTakesPic && count === stop) {
+            if (config.preview.killcmd &&
+                config.preview.mode === PreviewMode.GPHOTO.valueOf() &&
+                !config.preview.camTakesPic &&
+                count === stop
+            ) {
                 api.stopPreviewVideo();
             }
             count++;
