@@ -72,7 +72,7 @@ COMMON_PACKAGES=(
         'v4l-utils'
 )
 
-EXTRA_PACKAGES=('curl'))
+EXTRA_PACKAGES=('curl')
 
 INSTALL_PACKAGES=()
 
