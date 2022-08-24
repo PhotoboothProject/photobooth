@@ -987,10 +987,10 @@ const photoBooth = (function () {
                 element.empty();
                 cb();
             }
-            count++;
             if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.camTakesPic && count === stop) {
                 api.stopPreviewVideo();
             }
+            count++;
         }
 
         timerFunction();
