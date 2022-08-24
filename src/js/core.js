@@ -47,7 +47,6 @@ const photoBooth = (function () {
         blocker = $('#blocker'),
         aperture = $('#aperture'),
         idVideoView = $('#video--view'),
-        idVideoPreview = $('#video--preview'),
         idVideoSensor = $('#video--sensor'),
         webcamConstraints = {
             audio: false,
@@ -58,7 +57,6 @@ const photoBooth = (function () {
             }
         },
         videoView = idVideoView.get(0),
-        videoPreview = idVideoPreview.get(0),
         videoSensor = document.querySelector('#video--sensor'),
         usesBackgroundPreview =
             config.preview.asBackground &&
@@ -113,7 +111,7 @@ const photoBooth = (function () {
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
         idVideoView.hide();
-        idVideoPreview.hide();
+        idVideoView.css('z-index', 0);
         idVideoSensor.hide();
         ipcamView.hide();
     };
@@ -156,41 +154,51 @@ const photoBooth = (function () {
         }
     };
 
-    api.getAndDisplayMedia = function (mode, retry = 0) {
-        const getMedia =
-            navigator.mediaDevices.getUserMedia ||
-            navigator.mediaDevices.webkitGetUserMedia ||
-            navigator.mediaDevices.mozGetUserMedia ||
-            false;
-
-        if (!getMedia) {
-            return;
+    api.changeVideoMode = function(mode) {
+        if (mode === CameraDisplayMode.BACKGROUND) {
+            idVideoView.css('z-index', 0);
+            wrapper.css('background-image', 'none');
+            wrapper.css('background-color', 'transparent');
+        } else {
+            wrapper.css('background-color', config.colors.panel);
+            loader.css('background-color', 'transparent');
+            idVideoView.css('z-index', 99);
         }
+        idVideoView.show();
+    };
 
-        getMedia
-            .call(navigator.mediaDevices, webcamConstraints)
-            .then(function (stream) {
-                if (mode === CameraDisplayMode.BACKGROUND) {
-                    idVideoPreview.show();
-                    videoPreview.srcObject = stream;
-                    wrapper.css('background-image', 'none');
-                    wrapper.css('background-color', 'transparent');
-                } else {
-                    idVideoView.show();
+    api.getAndDisplayMedia = function (mode, retry = 0) {
+        if (api.stream) {
+            api.changeVideoMode(mode);
+        } else {
+            const getMedia =
+                navigator.mediaDevices.getUserMedia ||
+                navigator.mediaDevices.webkitGetUserMedia ||
+                navigator.mediaDevices.mozGetUserMedia ||
+                false;
+
+            if (!getMedia) {
+                return;
+            }
+
+            getMedia
+                .call(navigator.mediaDevices, webcamConstraints)
+                .then(function (stream) {
+                    api.stream = stream;
                     videoView.srcObject = stream;
-                }
-                api.stream = stream;
-            })
-            .catch(function (error) {
-                photoboothTools.console.log('Could not get user media: ', error);
-                if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && retry < 3) {
-                    photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
-                    retry += 1;
-                    setTimeout(function () {
-                        api.getAndDisplayMedia(mode, retry);
-                    }, retryTimeout);
-                }
-            });
+                    api.changeVideoMode(mode);
+                })
+                .catch(function (error) {
+                    photoboothTools.console.log('Could not get user media: ', error);
+                    if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && retry < 3) {
+                        photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
+                        retry += 1;
+                        setTimeout(function () {
+                            api.getAndDisplayMedia(mode, retry);
+                        }, retryTimeout);
+                    }
+                });
+        }
     };
 
     api.startWebcam = function () {
@@ -210,11 +218,6 @@ const photoBooth = (function () {
     };
 
     api.startVideo = function (mode, retry = 0) {
-        if (usesBackgroundPreview) {
-            api.stopVideo(CameraDisplayMode.BACKGROUND);
-            wrapper.css('background-color', config.colors.panel);
-        }
-
         if (config.preview.mode != PreviewMode.URL.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
                 return;
@@ -278,7 +281,7 @@ const photoBooth = (function () {
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
             if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
-                api.stopVideo(CameraDisplayMode.COUNTDOWN);
+                api.stopVideo();
             } else if (config.preview.mode === PreviewMode.GPHOTO.valueOf()) {
                 api.stopPreviewVideo();
             }
@@ -288,15 +291,14 @@ const photoBooth = (function () {
         }
     };
 
-    api.stopVideo = function (mode) {
+    api.stopVideo = function () {
+        wrapper.css('background-color', config.colors.panel);
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
         if (api.stream) {
             api.stream.getTracks()[0].stop();
-            if (mode === CameraDisplayMode.BACKGROUND) {
-                idVideoPreview.hide();
-            } else {
-                idVideoView.hide();
-            }
         }
+        idVideoView.hide();
     };
 
     api.stopPreviewVideo = function () {
@@ -310,8 +312,7 @@ const photoBooth = (function () {
                 .post('api/takeVideo.php', dataVideo)
                 .done(function (result) {
                     photoboothTools.console.log('Stop webcam', result);
-                    api.stream.getTracks()[0].stop();
-                    idVideoView.hide();
+                    api.stopVideo()
                 })
                 .fail(function (xhr, status, result) {
                     photoboothTools.console.log('Could not stop webcam', result);
@@ -993,7 +994,7 @@ const photoBooth = (function () {
                 element.empty();
                 cb();
             }
-            if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.camTakesPic && count === stop) {
+            if (config.preview.killcmd && config.preview.mode === PreviewMode.GPHOTO.valueOf() && !config.preview.camTakesPic && count === stop) {
                 api.stopPreviewVideo();
             }
             count++;

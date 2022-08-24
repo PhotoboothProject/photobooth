@@ -81,7 +81,7 @@ if (
 </head>
 
 <body class="deselect">
-<video id="video--preview" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
+<video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
        autoplay playsinline></video>
 <div id="blocker"></div>
 <div id="aperture"></div>
@@ -112,10 +112,6 @@ if (
             </div>
 
             <div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
-
-            <video id="video--view"
-                   class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-                   autoplay></video>
 
             <div id="counter">
                 <canvas id="video--sensor"></canvas>
