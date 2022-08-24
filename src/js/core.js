@@ -994,7 +994,8 @@ const photoBooth = (function () {
                 element.empty();
                 cb();
             }
-            if (config.preview.killcmd &&
+            if (
+                config.preview.killcmd &&
                 config.preview.mode === PreviewMode.GPHOTO.valueOf() &&
                 !config.preview.camTakesPic &&
                 count === stop
