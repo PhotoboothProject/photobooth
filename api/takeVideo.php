@@ -38,7 +38,7 @@ if ($_POST['play'] === 'true') {
     }
 
     $LogData = [
-        'isRunning' => isRunning($_POST[')pid']),
+        'isRunning' => isRunning($_POST['pid']),
         'pid' => intval($_POST['pid']),
         'php' => basename($_SERVER['PHP_SELF']),
     ];
