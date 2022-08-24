@@ -72,11 +72,9 @@ COMMON_PACKAGES=(
         'v4l-utils'
 )
 
-EXTRA_PACKAGES=()
+EXTRA_PACKAGES=('curl'))
 
-INSTALL_PACKAGES=(
-        'curl'
-)
+INSTALL_PACKAGES=()
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
@@ -390,9 +388,7 @@ common_software() {
         EXTRA_PACKAGES+=('raspberrypi-kernel-headers')
     fi
 
-    if [ "${#EXTRA_PACKAGES[@]}" -gt 0 ]; then
-        INSTALL_PACKAGES+=("${EXTRA_PACKAGES[@]}")
-    fi
+    INSTALL_PACKAGES+=("${EXTRA_PACKAGES[@]}")
     INSTALL_PACKAGES+=("${COMMON_PACKAGES[@]}")
 
     info "### Installing common software..."
