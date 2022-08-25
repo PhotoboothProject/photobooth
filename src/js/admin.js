@@ -1,6 +1,6 @@
 /* globals photoboothTools */
 $(function () {
-    const shellCommand = function ($mode, $filename='') {
+    const shellCommand = function ($mode, $filename = '') {
         const command = {
             mode: $mode,
             filename: $filename

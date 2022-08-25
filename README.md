@@ -192,3 +192,5 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [s-dinda](https://github.com/s-dinda)
 - [Moarqi](https://github.com/Moarqi)
 - [kreativmonkey](https://github.com/kreativmonkey)
+- [Khaos66](https://github.com/Khaos66)
+
