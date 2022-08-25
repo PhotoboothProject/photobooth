@@ -353,7 +353,7 @@ const photoBooth = (function () {
         }
     };
 
-    api.shellCommand = function ($mode, $filename='') {
+    api.shellCommand = function ($mode, $filename = '') {
         command = {
             mode: $mode,
             filename: $filename
