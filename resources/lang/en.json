@@ -613,7 +613,7 @@
   "slideshow": "Standalone Slideshow",
   "slideshow:slideshow_pictureTime": "Milliseconds an image is displayed at standalone slideshow",
   "slideshow:slideshow_randomPicture": "Show random pictures",
-  "slideshow:slideshow_refreshTime": "Refresh standalone slideshow afert X seconds",
+  "slideshow:slideshow_refreshTime": "Refresh standalone slideshow after X seconds",
   "slideshow:slideshow_use_thumbs": "Use thumbnails for slideshow",
   "success": "Successful!",
   "synctodrive": "Sync pictures to USB stick",
