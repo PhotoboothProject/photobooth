@@ -102,9 +102,15 @@ Once you're done upload your changes and create a [pull request](https://github.
 
 ---
 
+### How can I test my current photo settings?
+
+Open [http://localhost/test/photo.php](http://localhost/test/photo.php) in your Webbrowser and a you can find a photo that is created with your current settings.
+
+---
+
 ### How can I test my current collage settings?
 
-Open `http://localhost/test/collage.php` in your Webbrowser and a you can find a collage that is created with your current settings.
+Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in your Webbrowser and a you can find a collage that is created with your current settings.
 
 ---
 
