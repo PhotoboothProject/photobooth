@@ -109,6 +109,7 @@ if ($data['type'] == 'config') {
         if (
             !is_readable('../template/custom.template.php') &&
             !is_readable('../resources/css/custom_style.css') &&
+            !is_readable('../resources/css/custom_admin.css') &&
             !is_readable('../resources/css/custom_chromakeying.css') &&
             !is_readable('../resources/css/custom_live_chromakeying.css')
         ) {
