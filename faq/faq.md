@@ -48,7 +48,9 @@ Please take a look at the issue page [here](https://github.com/PhotoboothProject
 On v1.9.0 and older:
 It could be your local `config.json` file doesn't match latest source. This file is generated if you've used the admin panel to change your config.
 Remove the file and try again!
-`sudo rm /var/www/html/admin/config.json`
+```sh
+sudo rm /var/www/html/admin/config.json
+```
 
 <hr>
 
@@ -74,9 +76,11 @@ To use a private custom index you need to create the following files:
 
 - `resources/css/custom_style.css`
   - Optional: `src/sass/custom_style.scss` (`yarn build` will create the `resources/css/custom_style.css` out of it)
+- `resources/css/custom_admin.css`
+  - Optional: `src/sass/custom_admin.scss` (`yarn build` will create the `resources/css/custom_admin.css` out of it)
 - `resources/css/custom_chromakeying.css`
   - Optional: `src/sass/custom_chromakeying.scss` (`yarn build` will create the `resources/css/custom_chromakeying.css` out of it)
-- `resources/css/custom_live_chromakeying`
+- `resources/css/custom_live_chromakeying.css`
   - Optional: `src/sass/custom_live_chromakeying.scss` (`yarn build` will create the `resources/css/custom_live_chromakeying.css` out of it)
 - `template/custom.template.php`
 
@@ -91,15 +95,15 @@ If you have e.g. private backgrounds (maybe files without a usable license) you 
 
 ### How to keep pictures on my Camera using gphoto2?
 Add `--keep` (or `--keep-raw` to keep only the raw version on camera) option for gphoto2 via admin panel:
-```
+```sh
 gphoto2 --capture-image-and-download --keep --filename=%s
 ```
 On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use `--set-config capturetarget=X` option for gphoto2 (replace "X" with the target of your choice):
-```
+```sh
 gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s
 ```
 To know which capturetarget needs to be defined you need to run:
-```
+```sh
 gphoto2 --get-config capturetarget
 ```
 Example:
@@ -165,15 +169,15 @@ Troubleshooting / Debugging:
     - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
 
 ```
-         gpio=16,17,20,21,22,26,27=pu
+gpio=16,17,20,21,22,26,27=pu
 ```
 
     - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
 
-```
-     cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
-     www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
-     EOF
+```sh
+cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
+www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
+EOF
 ```
 
 As of Photobooth v3, hardware button support is fully integrated into Photobooth. Therefore the `button.py` script has been removed from the distribution. In case you are using this script and for continued backward compatibility please do not activate the Remote Buzzer Hardware Button feature in the admin GUI. Please note that continued backward compatibility is not guaranteed and in case of issues please switch to the integrated functionality.
@@ -290,17 +294,18 @@ These trigger URLs can be used for example with [myStrom WiFi Buttons](https://m
 **Installation steps for myStrom WiFi Button**
 - Be sure to connect the button to the same network as the photobooth
 - The button can be configured using the following commands
-  ```sh
-  curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-picture
 
-  curl --location -g --request POST http://[Button IP]/api/v1/action/long --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-collage
-  ```
+```sh
+curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-picture
+
+curl --location -g --request POST http://[Button IP]/api/v1/action/long --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-collage
+```
 
 <hr>
 
 ### How do I enable Kiosk Mode to automatically start Photobooth in full screen?
 Add the autostart file:
-```
+```sh
 sudo nano /etc/xdg/autostart/photobooth.desktop
 ```
 now add the following lines:
@@ -329,11 +334,11 @@ There are two options to hide the cursor. The first approach allows you to show 
 
 **Solution A**
 To hide the Mouse Cursor we'll use "unclutter":
-```
+```sh
 sudo apt-get install unclutter
 ```
 Edit the LXDE Autostart Script:
-```
+```sh
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 ```
 and add the following lines:
@@ -426,7 +431,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
 
     To use a Raspberry Pi Camera module Motion is required, but you won't be able to use the Raspberry Pi Camera 
     for preview at countdown!
-    ```
+    ```sh
     sudo apt-get install -y motion
     ```
     /etc/motion/motion.conf needs to be changed to your needs (e.g. starting on boot, using videoX, resolution 
@@ -445,8 +450,8 @@ The computer terminates the connection to the camera just to reconnect immediate
 The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed using several programming languages. Because of this we can have a python script that handles both preview and taking pictures without terminating the connection to the camera in between.
 
 To try using `gphoto-python` first execute `install-gphoto-python.sh` from the Photobooth installation subdirectory `gphoto`.
-```
-bash gphoto/install-gphoto-python.sh
+```sh
+sudo bash gphoto/install-gphoto-python.sh
 ```
 After that just change your commands to use the python script. For Live preview use:
 ```
@@ -548,12 +553,12 @@ If you would like to allow your guests to download their images without connecti
 The default setting is to call your wifi hotspot *Photobooth* as this is built into the Photobooth prompt for guests to download images via QR code.
 
 First, make sure `iptables` package is installed:
-```
+```sh
 sudo apt-get install iptables
 ```
 
 Now download and run the rpihotspot installer:
-```
+```sh
 wget https://raw.githubusercontent.com/idev1/rpihotspot/master/setup-network.sh
 chmod +x setup-network.sh
 sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
@@ -569,7 +574,7 @@ There are a couple of flags you need to change from the example command below:
 
 If you run into any errors setting up your hotspot we can remove all the settings and try it again. The first time I ran this I ran into an error, I reset it using the command below, then reinstalled it. It went smoothly the second time:
 
-```
+```sh
 sudo bash setup-network.sh --clean
 ```
 
@@ -581,7 +586,7 @@ This feature will automatically and in regular intervals copy (sync) new picture
 
 Use the `install-photobooth.sh` script to get the operating system setup in place.  
 **Note:** If you have declined the question to enable the USB sync file backup while running the `install-photobooth.sh` you need to run the following commands to get the operating system setup done:
-```
+```sh
 wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/enable-usb-sync.sh
 sudo bash enable-usb-sync.sh
 
@@ -640,7 +645,7 @@ xinput set-prop 6 --type=float 136 0.3478260869565217 0 0 0.55555555555556 0 0 0
 
 Now unfortunately the settings are only valid for the current session. So create the following desktop startup file with your own values:
 
-```
+```sh
 nano ~/.config/autostart/touch.desktop
 ```
 
@@ -670,7 +675,7 @@ and enter/adjust the @chromium-browser entries as followed (adjust the value _19
 
 By default the CUPS webinterface can only be accessed via [http://localhost:631](http://localhost:631) from your local machine.  
 To remote access CUPS from other clients you need to run the following commands:
-```
+```sh
 sudo cupsctl --remote-any
 sudo /etc/init.d/cups restart
 ```
