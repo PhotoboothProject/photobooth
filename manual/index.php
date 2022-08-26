@@ -134,7 +134,7 @@ $btnClass = 'btn ' . $btnShape;
 			</br>
 			<div>
 				<a href="faq.php" class="<?php echo $btnClass; ?> faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
-				<a href="https://github.com/<?=$config['ui']['github']?>/photobooth/wiki" class="<?php echo $btnClass; ?> wiki-btn"><span data-i18n="show_wiki"></span></a>
+				<a href="https://photoboothproject.github.io" class="<?php echo $btnClass; ?> wiki-btn"><span data-i18n="show_wiki"></span></a>
 			</div>
 			</form>
 		</div>

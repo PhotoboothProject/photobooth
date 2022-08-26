@@ -9,7 +9,7 @@ body:
       1. Please speak English, this is the language all maintainers can speak and write.
       2. Please ask questions or configuration/deploy problems in our Telegram group (https://t.me/PhotoboothGroup).
       3. Please take a moment to check that your bug hasn't already been reported.
-      4. Make sure it's not mentioned in the [FAQ](https://github.com/PhotoboothProject/photobooth/blob/wiki/FAQ.md).
+      4. Make sure it's not mentioned in the [FAQ](https://photoboothproject.github.io/FAQ).
       5. Please give all relevant information below for bug reports, because incomplete details will be handled as an invalid report!
 
 - type: textarea

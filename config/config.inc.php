@@ -157,7 +157,7 @@ $config['pswp']['bgOpacity'] = 1;
 
 
 // P R E V I E W
-// Please read https://github.com/PhotoboothProject/photobooth/wiki/FAQ#how-to-use-a-live-stream-as-background-at-countdown
+// Please read https://photoboothproject.github.io/FAQ#how-to-use-a-live-stream-as-background-at-countdown
 // possible preview_mode values: none, device_cam, url, gphoto
 $config['preview']['mode'] = 'none';
 $config['preview']['gphoto_bsm'] = true;
@@ -230,7 +230,7 @@ $config['qr']['text'] = '';
 
 
 // E -  M A I L
-// Please read https://github.com/PhotoboothProject/photobooth/wiki/FAQ#ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem
+// Please read https://photoboothproject.github.io/FAQ#ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem
 //
 // If send_all_later is enabled, a checkbox to save the current mail address for later in {mail_file}.txt is visible
 $config['mail']['enabled'] = false;
