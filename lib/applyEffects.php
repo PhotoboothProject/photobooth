@@ -1,7 +1,6 @@
 <?php
 
-function getCollageFiles($collage, $filename_tmp, $file, array $srcImages)
-{
+function getCollageFiles($collage, $filename_tmp, $file, array $srcImages) {
     $collageBasename = substr($filename_tmp, 0, -4);
     $singleImageBase = substr($file, 0, -4);
 
@@ -13,11 +12,10 @@ function getCollageFiles($collage, $filename_tmp, $file, array $srcImages)
             $srcImages[] = $singleImageBase . '-' . $i . '.jpg';
         }
     }
-    return array($collageSrcImagePaths, $srcImages);
+    return [$collageSrcImagePaths, $srcImages];
 }
 
-function editSingleImage($config, $imageResource, $image_filter, $editSingleCollage, $picture_frame, $isCollage)
-{
+function editSingleImage($config, $imageResource, $image_filter, $editSingleCollage, $picture_frame, $isCollage) {
     $imageModified = false;
     // Only jpg/jpeg are supported
     if (!$imageResource) {
@@ -60,11 +58,10 @@ function editSingleImage($config, $imageResource, $image_filter, $editSingleColl
         $imageResource = rotateResizeImage($imageResource, $config['picture']['rotation']);
         $imageModified = true;
     }
-    return array($imageResource, $imageModified);
+    return [$imageResource, $imageModified];
 }
 
-function addTextToImage($configText, $imageResource, $imageModified, $isCollage)
-{
+function addTextToImage($configText, $imageResource, $imageModified, $isCollage) {
     $fontpath = $configText['font'];
     if ($configText['enabled'] && testFile($fontpath) && !$isCollage) {
         $fontcolor = $configText['font_color'];
@@ -79,11 +76,10 @@ function addTextToImage($configText, $imageResource, $imageModified, $isCollage)
         $imageResource = applyText($imageResource, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
         $imageModified = true;
     }
-    return array($imageResource, $imageModified);
+    return [$imageResource, $imageModified];
 }
 
-function compressImage($config, $imageModified, $imageResource, $filename_tmp, $filename_photo)
-{
+function compressImage($config, $imageModified, $imageResource, $filename_tmp, $filename_photo) {
     if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
         imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
         // preserve jpeg meta data
