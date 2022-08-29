@@ -215,7 +215,6 @@ do
                 BRANCH="stable3"
                 GIT_INSTALL=false
                 NEEDS_NODEJS_CHECK=false
-                EXTRA_PACKAGES+=('jq')
             else
                 BRANCH="dev"
                 warn "[WARN]      Invalid branch / version!"
@@ -380,18 +379,28 @@ common_software() {
             'git'
             'yarn'
         )
+    else
+        EXTRA_PACKAGES+=(
+            'jq'
+        )
     fi
 
-    # All required packages independend of Raspberry Pi.
     # Note: raspberrypi-kernel-header are needed before v4l2loopback-dkms
     if [ "$RUNNING_ON_PI" = true ]; then
         EXTRA_PACKAGES+=('raspberrypi-kernel-headers')
     fi
 
+    # Additional packages
     INSTALL_PACKAGES+=("${EXTRA_PACKAGES[@]}")
+
+    # All required packages independend of Raspberry Pi.
     INSTALL_PACKAGES+=("${COMMON_PACKAGES[@]}")
 
-    info "### Installing common software..."
+    info "### Installing common software:"
+    for package in "${INSTALL_PACKAGES[@]}"; do
+        info "[Required]  ${package}"
+    done
+
     for package in "${INSTALL_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Package]   ${package} installed already"
@@ -436,8 +445,6 @@ nginx_webserver() {
 
     info "### Installing NGINX Webserver..."
     apt install -y nginx php${PHP_VERSION} php${PHP_VERSION}-fpm
-
-
 
     if [ -f "${nginx_site_conf}" ]; then
         info "### Enable PHP in NGINX"
