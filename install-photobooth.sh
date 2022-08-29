@@ -397,8 +397,8 @@ common_software() {
     INSTALL_PACKAGES+=("${COMMON_PACKAGES[@]}")
 
     info "### Installing common software:"
-    for package in "${INSTALL_PACKAGES[@]}"; do
-        info "[Required]  ${package}"
+    for required in "${INSTALL_PACKAGES[@]}"; do
+        info "[Required]  ${required}"
     done
 
     for package in "${INSTALL_PACKAGES[@]}"; do
