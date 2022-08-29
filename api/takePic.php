@@ -101,6 +101,12 @@ if (!isset($_POST['style'])) {
 
 if ($_POST['style'] === 'photo') {
     takePicture($filename_tmp);
+
+    $LogData = [
+        'success' => 'image',
+        'file' => $file,
+        'php' => basename($_SERVER['PHP_SELF']),
+    ];
 } elseif ($_POST['style'] === 'collage') {
     if (!is_numeric($_POST['collageNumber'])) {
         $errormsg = basename($_SERVER['PHP_SELF']) . ': No or invalid collage number provided';
@@ -130,34 +136,20 @@ if ($_POST['style'] === 'photo') {
         'limit' => $config['collage']['limit'],
         'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
-        logError($LogData);
-    }
-    die($LogString);
 } elseif ($_POST['style'] === 'chroma') {
     takePicture($filename_tmp);
+
     $LogData = [
         'success' => 'chroma',
         'file' => $file,
         'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
-        logError($LogData);
-    }
-    die($LogString);
 } else {
     $errormsg = basename($_SERVER['PHP_SELF']) . ': Invalid photo style provided';
     logErrorAndDie($errormsg);
 }
 
 // send imagename to frontend
-$LogData = [
-    'success' => 'image',
-    'file' => $file,
-    'php' => basename($_SERVER['PHP_SELF']),
-];
 $LogString = json_encode($LogData);
 if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
     logError($LogData);
