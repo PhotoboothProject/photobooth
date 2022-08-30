@@ -145,11 +145,17 @@ class CameraControl:
     def ffmpeg_open(self):
         input_chroma = []
         filters = []
+        save_video = []
         if self.chroma.get('active', False):
             filters, input_chroma = self.get_chroma_ffmpeg_params()
         input_gphoto = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
         ffmpeg_output = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
-        self.ffmpeg = Popen(['ffmpeg', *input_chroma, *input_gphoto, *filters, *ffmpeg_output], stdin=PIPE)
+        # TODO handle params for video recording dynamically
+        #  convert video (see cameraboom.sh)?
+        #  get still frames for collage
+        #  https://trac.ffmpeg.org/wiki/Create%20a%20thumbnail%20image%20every%20X%20seconds%20of%20the%20video
+        save_video = ['-filter:v', 'fps=10', '-t', '3', 'test.mp4']
+        self.ffmpeg = Popen(['ffmpeg', *input_chroma, *input_gphoto, *filters, *ffmpeg_output, *save_video], stdin=PIPE)
 
     def handle_chroma_params(self, args):
         chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
@@ -275,8 +281,9 @@ def main():
                         help='chroma key color (color name or format like "0xFFFFFF" for white)', dest='chroma_color')
     parser.add_argument('--chromaSensitivity', type=float,
                         help='chroma key sensitivity (value from 0.01 to 1.0 or 0.0 to disable). \
-                             If this is set to a value distinct from 0.0 on capture immage command chroma keying using \
-                             ffmpeg is applied on the image and only this modified image is stored on the pc.',
+                             If this is set to a value distinct from 0.0 on capture image command chroma keying using \
+                             ffmpeg is applied on the image and only this modified image is stored on the pc. \
+                             If this is set on a preview command you get actual live chroma keying.',
                         dest='chroma_sensitivity')
     parser.add_argument('--chromaBlend', type=float, help='chroma key blend (0.0 to 1.0)', dest='chroma_blend')
     parser.add_argument('--exit', action='store_true', help='exit the service')
