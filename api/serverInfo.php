@@ -56,8 +56,8 @@ switch ($content) {
 function dumpfile($file, $devModeRequired) {
     global $config;
 
-    if ($devModeRequired !== null && $config['dev']['enabled'] !== $devModeRequired) {
-        return 'INFO: Dev mode is ' . ($config['dev']['enabled'] ? 'enabled - please disable' : 'disabled - please enable') . ' to see logs';
+    if ($devModeRequired !== null && $devModeRequired && $config['dev']['loglevel'] < 1) {
+        return 'INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.';
     }
 
     if (!file_exists($file)) {

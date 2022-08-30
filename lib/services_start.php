@@ -19,7 +19,7 @@ if ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'
     $connection = @fsockopen('127.0.0.1', $config['remotebuzzer']['port']);
 
     if (!is_resource($connection)) {
-        if ($config['dev']['enabled']) {
+        if ($config['dev']['loglevel'] > 0) {
             $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['remotebuzzer']['logfile'];
         } else {
             $logfile = '/dev/null';
@@ -36,7 +36,7 @@ if ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'
 }
 
 if ($config['synctodrive']['enabled']) {
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
         $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['synctodrive']['logfile'];
     } else {
         $logfile = '/dev/null';

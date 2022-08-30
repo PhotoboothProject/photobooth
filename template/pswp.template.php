@@ -41,7 +41,7 @@
                 <button type="button" class="pswp__button pswp__button--qrcode rotaryfocus" title="QR Code"><i class="fa fa-qrcode"></i></button>
                 <?php endif; ?>
 
-                <?php if ($config['download']['enabled'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'] || $config['dev']['enabled'])): ?>
+                <?php if ($config['download']['enabled'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'])): ?>
                 <!-- <button type="button" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></button> -->
                 <a href="" download="" class="pswp__button pswp__button--custom-download rotaryfocus" title="Download"><i class="fa fa-download"></i></a>
                 <?php endif; ?>

@@ -18,7 +18,7 @@ if (empty($_POST['sendTo']) || !PHPMailer::validateAddress($_POST['sendTo'])) {
         'php' => basename($_SERVER['PHP_SELF']),
     ];
     $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
         logError($LogData);
     }
     die($LogString);
@@ -52,7 +52,7 @@ if (empty($_POST['image'])) {
         'php' => basename($_SERVER['PHP_SELF']),
     ];
     $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
         logError($LogData);
     }
     die($LogString);
@@ -66,7 +66,7 @@ if (!isImageInDB($postImage)) {
         'php' => basename($_SERVER['PHP_SELF']),
     ];
     $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
         logError($LogData);
     }
     die($LogString);
@@ -92,7 +92,7 @@ if (!$mail->addAddress($_POST['sendTo'])) {
         'php' => basename($_SERVER['PHP_SELF']),
     ];
     $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
         logError($LogData);
     }
     die($LogString);
@@ -124,7 +124,7 @@ if (!$mail->addAttachment($path . $postImage)) {
         'php' => basename($_SERVER['PHP_SELF']),
     ];
     $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
         logError($LogData);
     }
     die($LogString);
@@ -144,7 +144,7 @@ $LogData = [
     'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);
-if ($config['dev']['enabled']) {
+if ($config['dev']['loglevel'] > 0) {
     logError($LogData);
 }
 die($LogString);

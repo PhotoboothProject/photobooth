@@ -238,7 +238,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.init = function () {
-            if (config.dev.enabled && typeof onStandaloneGalleryView !== 'undefined') {
+            if (config.dev.loglevel > 0 && typeof onStandaloneGalleryView !== 'undefined') {
                 photoboothTools.console.log(
                     'Rotary Controller is ',
                     config.remotebuzzer.enable_standalonegallery ? 'enabled' : 'disabled',

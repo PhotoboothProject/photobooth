@@ -64,8 +64,6 @@
   "gallery_no_image": "Galeria jest nadal pusta. Zrób kilka zdjęć!",
   "general": "Ogólne",
   "general:database_file": "Nazwa pliku bazy danych",
-  "general:dev_enabled": "Tryb Deweloperski",
-  "general:dev_error_messages": "Pokaż komunikaty błędów",
   "general:dev_reload_on_error": "Automatycznie przeładuj fotobudkę po błędzie",
   "general:download_enabled": "Zezwól na pobieranie",
   "general:download_thumbs": "Użyj miniatur do pobrania",

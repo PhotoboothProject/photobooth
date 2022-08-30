@@ -138,7 +138,7 @@ $LogData = [
     'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);
-if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+if ($config['dev']['loglevel'] > 1) {
     logError($LogData);
 }
 echo $LogString;
