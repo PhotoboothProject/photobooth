@@ -92,7 +92,7 @@ const updater = (function () {
                         }
                     } else if ($mode === 'commit') {
                         $('.gitCommit').hide();
-                        if (config.dev.enabled) {
+                        if (config.dev.loglevel > 0) {
                             // eslint-disable-next-line
                             result.output.forEach(function (item, index, array) {
                                 $('.white-box').append($('<p>').text(item));
@@ -103,7 +103,7 @@ const updater = (function () {
                         $('.updateDev').show();
                         $('.updateStable').show();
                     } else if ($mode === 'update-dev' || $mode === 'update-stable') {
-                        if (config.dev.enabled) {
+                        if (config.dev.loglevel > 0) {
                             // eslint-disable-next-line
                             result.output.forEach(function (item, index, array) {
                                 $('.white-box').append($('<p>').text(item));

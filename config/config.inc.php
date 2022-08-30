@@ -10,16 +10,14 @@ $config = array();
 // possible language values: de, en, fr, it
 $config['ui']['language'] = 'en';
 $config['adminpanel']['view'] = 'basic';
-$config['dev']['enabled'] = true;
+$config['dev']['loglevel'] = '1';
 $config['dev']['demo_images'] = false;
-$config['dev']['advanced_log'] = false;
 $config['start_screen']['title'] = 'Photobooth';
 $config['start_screen']['title_visible'] = true;
 $config['start_screen']['subtitle'] = '';
 $config['start_screen']['subtitle_visible'] = true;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
 $config['picture']['thumb_size'] = '540px';
-$config['dev']['error_messages'] = true;
 $config['dev']['reload_on_error'] = true;
 $config['webserver']['ip'] = '';
 $config['webserver']['ssid'] = 'Photobooth';

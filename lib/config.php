@@ -137,7 +137,7 @@ if (file_exists($my_config_file)) {
     $config = array_deep_merge($defaultConfig, $config);
 }
 
-if ($config['dev']['enabled']) {
+if ($config['dev']['loglevel'] > 0) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);

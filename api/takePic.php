@@ -156,7 +156,7 @@ switch ($_POST['style']) {
 
 // send imagename to frontend
 $LogString = json_encode($LogData);
-if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+if ($config['dev']['loglevel'] > 1) {
     logError($LogData);
 }
 die($LogString);

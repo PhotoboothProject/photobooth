@@ -663,7 +663,7 @@ const photoBooth = (function () {
             loader.addClass('error');
             loading.append($('<p>').text(photoboothTools.getTranslation('error')));
             photoboothTools.console.log('An error occurred:', data.error);
-            if (config.dev.error_messages) {
+            if (config.dev.loglevel > 1) {
                 loading.append($('<p class="text-muted">').text(data.error));
             }
             takingPic = false;
@@ -1381,7 +1381,7 @@ const photoBooth = (function () {
     });
 
     // Disable Right-Click
-    if (!config.dev.enabled) {
+    if (config.dev.loglevel > 0) {
         $(this).on('contextmenu', function (e) {
             e.preventDefault();
         });

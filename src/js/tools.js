@@ -5,11 +5,11 @@ const photoboothTools = (function () {
 
     api.console = {
         log: function (...content) {
-            console.log('[', new Date().toISOString(), ']:', content);
+            console.log('[', new Date().toISOString(), ']: ' + content);
         },
         logDev: function (...content) {
-            if (config.dev.enabled) {
-                console.log('[', new Date().toISOString(), ']:', content);
+            if (config.dev.loglevel > 0) {
+                console.log('[', new Date().toISOString(), ']: ' + content);
             }
         }
     };
@@ -58,5 +58,5 @@ const photoboothTools = (function () {
 
 // Init on domready
 $(function () {
-    photoboothTools.console.log('Dev mode:', config.dev.enabled ? 'enabled' : 'disabled');
+    photoboothTools.console.log('Loglevel: ' + config.dev.loglevel);
 });

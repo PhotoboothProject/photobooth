@@ -5,7 +5,7 @@ const translator = new Translator({
     detectLanguage: false,
     registerGlobally: 'i18n',
     filesLocation: config.folders.lang,
-    debug: config.dev.enabled
+    debug: config.dev.loglevel > 0
 });
 
 translator.fetch('en').then(() => {

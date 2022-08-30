@@ -109,23 +109,21 @@ $configsetup = [
             'name' => 'adminpanel[view_default]',
             'value' => $config['adminpanel']['view_default'],
         ],
-        'dev_enabled' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'dev[enabled]',
-            'value' => $config['dev']['enabled'],
-        ],
         'dev_demo_images' => [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'dev[demo_images]',
             'value' => $config['dev']['demo_images'],
         ],
-        'dev_advanced_log' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'dev[advanced_log]',
-            'value' => $config['dev']['advanced_log'],
+        'dev_loglevel' => [
+            'type' => 'range',
+            'placeholder' => $defaultConfig['dev']['loglevel'],
+            'name' => 'dev[loglevel]',
+            'value' => $config['dev']['loglevel'],
+            'range_min' => 0,
+            'range_max' => 2,
+            'range_step' => 1,
+            'unit' => 'empty',
         ],
         'dev_logfile' => [
             'view' => 'expert',
@@ -175,12 +173,6 @@ $configsetup = [
                 '1260px' => 'XL',
             ],
             'value' => $config['picture']['thumb_size'],
-        ],
-        'dev_error_messages' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'dev[error_messages]',
-            'value' => $config['dev']['error_messages'],
         ],
         'dev_reload_on_error' => [
             'view' => 'expert',

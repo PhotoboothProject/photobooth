@@ -45,8 +45,6 @@
   "gallery:gallery_show_date": "Εμφάνιση ημερομηνίας στην γκαλερί κάτω από τη φωτογραφία (λειτουργεί μόνο εάν οι φωτογραφίες ονομάζονται με ημερομηνία)",
   "gallery_no_image": "Η γκαλερί είναι ακόμα κενή. Κάντε μερικές φωτογραφίες!",
   "general": "γενικά",
-  "general:dev_enabled": "Λειτουργία ανάπτυξης",
-  "general:dev_error_messages": "Εμφάνιση μηνυμάτων σφάλματος",
   "general:download_enabled": "Επιτρέψτε τη λήψη",
   "general:start_screen_subtitle": "Αρχική οθόνη (υπότιτλος)",
   "general:start_screen_title": "Αρχική οθόνη (τίτλος)",
