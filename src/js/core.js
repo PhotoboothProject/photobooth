@@ -419,7 +419,12 @@ const photoBooth = (function () {
         loader.addClass('open');
 
         if (config.get_request.countdown) {
-            api.getRequest(photoStyle);
+            const getMode =
+                photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
+                    ? config.get_request.picture
+                    : config.get_request.collage;
+            const getUrl = config.get_request.server + '/' + getMode;
+            photoboothTools.getRequest(getUrl);
         }
 
         api.startCountdown(
@@ -740,10 +745,7 @@ const photoBooth = (function () {
 
                 if (config.get_request.processed) {
                     const getUrl = config.get_request.server + '/' + photoStyle;
-                    const request = new XMLHttpRequest();
-                    photoboothTools.console.log('Sending GET request to: ' + getUrl);
-                    request.open('GET', getUrl);
-                    request.send();
+                    photoboothTools.getRequest(getUrl);
                 }
 
                 if (data.error) {
@@ -984,18 +986,6 @@ const photoBooth = (function () {
     api.resetMailForm = function () {
         mailSendForm.trigger('reset');
         mailMessageForm.empty();
-    };
-
-    api.getRequest = function (photoStyle) {
-        const getMode =
-            photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
-                ? config.get_request.picture
-                : config.get_request.collage;
-        const getUrl = config.get_request.server + '/' + getMode;
-        const request = new XMLHttpRequest();
-        photoboothTools.console.log('Sending GET request to: ' + getUrl);
-        request.open('GET', getUrl);
-        request.send();
     };
 
     api.startCountdown = function (start, element, cb) {

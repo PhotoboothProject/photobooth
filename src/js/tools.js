@@ -53,6 +53,13 @@ const photoboothTools = (function () {
         window.location.reload();
     };
 
+    api.getRequest = function (url) {
+        const request = new XMLHttpRequest();
+        api.console.log('Sending GET request to: ' + url);
+        request.open('GET', url);
+        request.send();
+    };
+
     return api;
 })();
 
