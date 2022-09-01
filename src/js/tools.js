@@ -58,6 +58,20 @@ const photoboothTools = (function () {
         api.console.log('Sending GET request to: ' + url);
         request.open('GET', url);
         request.send();
+
+        request.onload = function () {
+            if (request.status === 200) {
+                // parse JSON data
+                const responseData = JSON.parse(request.responseText);
+                api.console.log(responseData);
+            } else if (request.status === 404) {
+                api.console.log('No records found');
+            }
+        };
+
+        request.onerror = function () {
+            api.console.log('Network error occurred');
+        };
     };
 
     return api;
