@@ -297,6 +297,7 @@ const photoBooth = (function () {
         loader.css('background-color', config.colors.panel);
         if (api.stream) {
             api.stream.getTracks()[0].stop();
+            api.stream = null;
         }
         idVideoView.hide();
     };
