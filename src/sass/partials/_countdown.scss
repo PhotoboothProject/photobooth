@@ -47,14 +47,14 @@
   left: 50%;
   transform: translate(-50%, -50%);
   backface-visibility: hidden;
-  font-size: 12em;
+  font-size: 16em;
   opacity: 0.2;
 }
 
 #counter.tick {
-  font-size: 1em;
+  font-size: 0em;
   opacity: 1;
-  transition: font-size 0.75s, opacity 0.75s;
+  transition: font-size 1s, opacity 1s;
 }
 
 .cheese {
