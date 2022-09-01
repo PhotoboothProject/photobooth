@@ -167,37 +167,43 @@ const photoBooth = (function () {
         idVideoView.show();
     };
 
-    api.getAndDisplayMedia = function (mode, retry = 0) {
+    api.initializeMedia = function (cb = () => {}, retry = 0) {
+        const getMedia =
+            navigator.mediaDevices.getUserMedia ||
+            navigator.mediaDevices.webkitGetUserMedia ||
+            navigator.mediaDevices.mozGetUserMedia ||
+            false;
+
+        if (!getMedia) {
+            return;
+        }
+
+        getMedia
+            .call(navigator.mediaDevices, webcamConstraints)
+            .then(function (stream) {
+                api.stream = stream;
+                videoView.srcObject = stream;
+                cb();
+            })
+            .catch(function (error) {
+                photoboothTools.console.log('Could not get user media: ', error);
+                if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && retry < 3) {
+                    photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
+                    retry += 1;
+                    setTimeout(function () {
+                        api.getAndDisplayMedia(cb, retry);
+                    }, retryTimeout);
+                }
+            });
+    };
+
+    api.getAndDisplayMedia = function (mode) {
         if (api.stream) {
             api.changeVideoMode(mode);
         } else {
-            const getMedia =
-                navigator.mediaDevices.getUserMedia ||
-                navigator.mediaDevices.webkitGetUserMedia ||
-                navigator.mediaDevices.mozGetUserMedia ||
-                false;
-
-            if (!getMedia) {
-                return;
-            }
-
-            getMedia
-                .call(navigator.mediaDevices, webcamConstraints)
-                .then(function (stream) {
-                    api.stream = stream;
-                    videoView.srcObject = stream;
-                    api.changeVideoMode(mode);
-                })
-                .catch(function (error) {
-                    photoboothTools.console.log('Could not get user media: ', error);
-                    if (config.preview.mode === PreviewMode.GPHOTO.valueOf() && retry < 3) {
-                        photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
-                        retry += 1;
-                        setTimeout(function () {
-                            api.getAndDisplayMedia(mode, retry);
-                        }, retryTimeout);
-                    }
-                });
+            api.initializeMedia(() => {
+                api.changeVideoMode(mode)
+            })
         }
     };
 
@@ -539,6 +545,11 @@ const photoBooth = (function () {
                     photoboothTools.console.logDev(
                         'Taken collage photo number: ' + (result.current + 1) + ' / ' + result.limit
                     );
+
+                    // if there is a next shot initialize preview video at this point to have a smoother transition to it
+                    if (result.current + 1 < result.limit) {
+                        api.initializeMedia()
+                    }
 
                     if (config.collage.continuous) {
                         loading.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
