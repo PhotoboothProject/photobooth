@@ -66,6 +66,8 @@ const photoboothTools = (function () {
                 api.console.log(responseData);
             } else if (request.status === 404) {
                 api.console.log('No records found');
+            } else {
+                api.console.log('Unhandled request status: ' + request.status);
             }
         };
 
