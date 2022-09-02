@@ -202,8 +202,8 @@ const photoBooth = (function () {
             api.changeVideoMode(mode);
         } else {
             api.initializeMedia(() => {
-                api.changeVideoMode(mode)
-            })
+                api.changeVideoMode(mode);
+            });
         }
     };
 
@@ -548,7 +548,7 @@ const photoBooth = (function () {
 
                     // if there is a next shot initialize preview video at this point to have a smoother transition to it
                     if (result.current + 1 < result.limit) {
-                        api.initializeMedia()
+                        api.initializeMedia();
                     }
 
                     if (config.collage.continuous) {
