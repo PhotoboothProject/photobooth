@@ -37,14 +37,6 @@ body {
   left: auto;
 }
 
-.homebtn {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: auto;
-  margin: 20px;
-}
-
 .resultInner {
   display: block;
   width: auto;
@@ -61,6 +53,13 @@ body {
   &.show {
     position: fixed;
     bottom: 0;
+    .homebtn {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: auto;
+      margin: 20px;
+    }
   }
 }
 
