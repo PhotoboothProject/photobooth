@@ -45,6 +45,12 @@
 
   &.show {
     bottom: 0;
+    .homebtn {
+      position: fixed;
+      top: 5px;
+      right: 5px;
+      bottom: auto;
+    }
   }
 }
 
@@ -194,12 +200,6 @@
     margin-top: auto;
     margin-left: auto;
   }
-}
-
-.homebtn {
-  position: fixed;
-  top: 5px;
-  right: 5px;
 }
 
 .btn,
