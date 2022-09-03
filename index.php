@@ -132,7 +132,7 @@ if (
             <?php endif; ?>
 
             <?php if ($config['gallery']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> gallery-button rotaryfocus"><i
+                <a href="#" class="<?php echo $btnClass; ?> gallerybtn rotaryfocus"><i
                             class="fa <?php echo $galleryIcon; ?>"></i> <span data-i18n="gallery"></span></a>
             <?php endif; ?>
 
