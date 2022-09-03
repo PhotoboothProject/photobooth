@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import os, signal, sys, time, psutil, zmq, argparse
+import os, signal, sys, time, psutil, zmq, argparse, subprocess
+from threading import Thread
 from argparse import Namespace
 from subprocess import Popen, PIPE
 import gphoto2 as gp
@@ -105,16 +106,20 @@ class CameraControl:
         self.set_config('viewfinder', 0)
         print('Video disabled')
 
-    def handle_message(self, msg):
-        args = Namespace(**msg)
+    def handle_message(self, message):
+        args = Namespace(**message)
         if args.exit:
             self.socket.send_string('Exiting service!')
             self.exit_gracefully()
         self.handle_chroma_params(args)
+        self.handle_video_params(args)
         if args.device != self.args.device:
             self.args.device = args.device
             self.ffmpeg_open()
             print('Video output device changed')
+        elif self.args.video_path is not None:
+            self.ffmpeg_open()
+            print('Changing ffmpeg config to save video')
         if args.config is not None and args.config != self.args.config:
             self.args.config = args.config
             self.connect_to_camera()
@@ -143,19 +148,48 @@ class CameraControl:
                 self.socket.send_string('failure')
 
     def ffmpeg_open(self):
+        input_stream = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
+        ffmpeg_output = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
         input_chroma = []
         filters = []
         save_video = []
         if self.chroma.get('active', False):
             filters, input_chroma = self.get_chroma_ffmpeg_params()
-        input_gphoto = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
-        ffmpeg_output = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
-        # TODO handle params for video recording dynamically
-        #  convert video (see cameraboom.sh)?
-        #  get still frames for collage
-        #  https://trac.ffmpeg.org/wiki/Create%20a%20thumbnail%20image%20every%20X%20seconds%20of%20the%20video
-        save_video = ['-filter:v', 'fps=10', '-t', '3', 'test.mp4']
-        self.ffmpeg = Popen(['ffmpeg', *input_chroma, *input_gphoto, *filters, *ffmpeg_output, *save_video], stdin=PIPE)
+        if self.args.video_path is not None:
+            temp_video_path = self.args.video_path + '.temp.mp4'
+            # TODO video only gets finished when stream ends
+            save_video = ['-filter:v', 'fps=' + str(self.args.video_fps), temp_video_path, '-t',
+                          str(self.args.video_length)]
+            # input_stream = ['-t', str(self.args.video_length)]
+            # if self.args.video_frames > 0:
+            #     image_fps = self.args.video_frames / self.args.video_length
+            #     save_video = ['-vf', 'fps=' + str(image_fps), 'img%03d.jpg']
+            #     # TODO save X shots self.args.video_frames
+        self.ffmpeg = Popen(['ffmpeg', *input_chroma, *input_stream, *filters, *ffmpeg_output, *save_video], stdin=PIPE)
+
+    def handle_saved_video(self, video_path):
+        print('handle saved video')
+
+        temp_video_path = video_path + '.temp.mp4'
+
+        # cfilter = []
+        # conversion = []
+        # if self.args.video_effects == 'boomerang':
+        #     end_frame = self.args.video_length * self.args.video_fps - 1
+        #     cfilter = ['[0]trim=start_frame=1:end_frame=' + end_frame + ',setpts=PTS-STARTPTS,reverse[r];[0]' +
+        #                '[r]concat=n=2:v=1:a=0 ']
+        # if video_path.endswith('.gif'):
+        #     cfilter = ['split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse']
+        #     conversion = ['-loop', '0']
+        #
+        # commands = ['ffmpeg', '-i', temp_video_path, '-filter_complex', '"' + ','.join(cfilter) + '"', *conversion,
+        #             video_path]
+        # print(commands)
+        # if subprocess.run(commands).returncode == 0:
+        #     print('Video conversion successful')
+        #     os.remove(self.args.video_path + '.temp.mp4')
+        # else:
+        #     print('Video conversion failed')
 
     def handle_chroma_params(self, args):
         chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
@@ -177,6 +211,13 @@ class CameraControl:
             'sensitivity': str(chroma_sensitivity),
             'blend': str(chroma_blend)
         }
+
+    def handle_video_params(self, args):
+        self.args.video_path = args.video_path
+        self.args.video_frames = args.video_frames
+        self.args.video_length = args.video_length
+        self.args.video_fps = args.video_fps
+        self.args.video_effects = args.video_effects
 
     def get_chroma_ffmpeg_params(self):
         input_chroma = ['-i', self.chroma['image']]
@@ -221,6 +262,12 @@ class CameraControl:
                     time.sleep(1)
                     print('Not connected to camera. Trying to reconnect...')
                     self.connect_to_camera()
+                except BrokenPipeError:
+                    print('Broken pipe, video recording finished')
+                    video_path = self.args.video_path
+                    self.args.video_path = None
+                    Thread(self.handle_saved_video(video_path))
+                    self.ffmpeg_open()
         except KeyboardInterrupt:
             self.exit_gracefully()
 
@@ -266,16 +313,31 @@ def main():
     parser = argparse.ArgumentParser(description='Simple Camera Control script using libgphoto2 through \
     python-gphoto2.', epilog='If you don\'t want images to be stored on the camera make sure that capturetarget \
     is set to internal ram (might be device dependent but it\'s 0 for Canon cameras. Additionally you should \
-    configure your camera to capture only jpeg images.', allow_abbrev=False)
+    configure your camera to capture only jpeg images. For RAW+JPEG: this is possible for Canon cameras \
+    (CR2 raw files) other RAW file extensions would need to be added as required. The RAW file stays on the camera.',
+                                     allow_abbrev=False)
     parser.add_argument('-d', '--device', nargs='?', default='/dev/video0',
                         help='virtual device the ffmpeg stream is sent to')
     parser.add_argument('-s', '--set-config', action='append', default=None, dest='config',
                         help='CONFIGENTRY=CONFIGVALUE analog to gphoto2 cli. Not tested for all config entries!')
     parser.add_argument('-c', '--capture-image-and-download', default=None, type=str, dest='imgpath',
                         help='capture an image and download it to the computer. If it stays stored on the camera as \
-                        well depends on the camera config')
+                        well depends on the camera config. If this param is set while the service is not already \
+                        running the application will take a single image and exit after that. Chroma params are used \
+                        for that image, but no video will be created')
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
-                        image and wait for message to start preview again')
+                        image and wait for message to start preview again', dest='bsm')
+    parser.add_argument('-v', '--video', default=None, type=str, dest='video_path',
+                        help='save the next part of the preview as a video file (mp4 or gif)')
+    parser.add_argument('--vframes', default=4, type=int, help='saves shots from the video in an equidistant time',
+                        dest='video_frames')
+    parser.add_argument('--vlen', default=3, type=int, help='duration of the video',
+                        dest='video_length')
+    parser.add_argument('--vfps', default=10, type=int, help='fps of the video',
+                        dest='video_fps')
+    parser.add_argument('--veffect', action='store_true', help='apply effect to video (currently only "boomerang" \
+                        which about doubles the duration)',
+                        dest='video_effects')
     parser.add_argument('--chromaImage', type=str, help='chroma key background (full path)', dest='chroma_image')
     parser.add_argument('--chromaColor', type=str,
                         help='chroma key color (color name or format like "0xFFFFFF" for white)', dest='chroma_color')
