@@ -1,10 +1,47 @@
 @import 'classic_style';
 
+// Override parts from partials/_basic.scss
 html,
 body {
   height: 100%;
   background: #ffffff;
   margin: 0px;
+}
+
+hr,
+hr.small {
+  display: none;
+}
+
+// Override parts from classic_style.scss
+.resultInner {
+  display: block;
+  position: fixed;
+  left: auto;
+
+  width: auto;
+  max-width: 90%;
+  top: auto;
+  margin: 20px;
+
+  &.show {
+    position: fixed;
+    bottom: 0;
+
+    .homebtn {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: auto;
+      margin: 20px;
+    }
+    .gallerybtn {
+      position: relative;
+      top: auto;
+      bottom: 0;
+      left: auto;
+    }
+  }
 }
 
 #start {
@@ -37,36 +74,11 @@ body {
   }
 }
 
-.resultInner {
-  display: block;
-  position: fixed;
-  left: auto;
-
-  width: auto;
-  max-width: 90%;
-  top: auto;
-  margin: 20px;
-
-  &.show {
-    position: fixed;
-    bottom: 0;
-
-    .homebtn {
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: auto;
-      margin: 20px;
-    }
-    .gallerybtn {
-      position: relative;
-      top: auto;
-      bottom: 0;
-      left: auto;
-    }
-  }
+.pswp-rotary-focus {
+  background: radial-gradient(grey, $mainColor, $hoverColor) !important;
 }
 
+// Own style parts
 .divaussen {
   height: 100%;
   position: relative;
@@ -88,17 +100,4 @@ body {
     margin-left: auto;
     margin-right: auto;
   }
-}
-
-.transparenz {
-  opacity: 0.4;
-}
-
-hr,
-hr.small {
-  display: none;
-}
-
-.pswp-rotary-focus {
-  background: radial-gradient(grey, $mainColor, $hoverColor) !important;
 }
