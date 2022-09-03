@@ -113,7 +113,7 @@ if ($data['type'] == 'config') {
             !is_readable('../resources/css/custom_chromakeying.css') &&
             !is_readable('../resources/css/custom_live_chromakeying.css')
         ) {
-            $newConfig['ui']['style'] = 'default';
+            $newConfig['ui']['style'] = 'modern_squared';
         } else {
             if (!file_exists('../template/custom.template.php')) {
                 copy('../template/modern.template.php', '../template/custom.template.php');
