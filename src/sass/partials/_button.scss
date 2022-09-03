@@ -326,6 +326,15 @@
       font-size: 1.5em;
     }
   }
+  .newpic,
+  .newcollage,
+  .imageFilter {
+    &.btn--modern_squared {
+      span {
+        font-size: 0.6em;
+      }
+    }
+  }
 }
 
 @media (max-width: 1024px) {
