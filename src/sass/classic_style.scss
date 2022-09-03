@@ -43,13 +43,39 @@
   transition: bottom 0.5s;
   z-index: 100;
 
+  .homebtn,
+  .gallerybtn {
+    &.btn--classic,
+    &.btn--classic_rounded {
+      font-size: 0.875em;
+      width: 130px;
+    }
+  }
+
+  .btn {
+    &.btn--classic_rounded {
+      margin-left: 2px;
+    }
+  }
+
   &.show {
     bottom: 0;
+
     .homebtn {
       position: fixed;
       top: 5px;
       right: 5px;
       bottom: auto;
+    }
+
+    .gallerybtn {
+      position: fixed;
+      top: 5px;
+      left: 5px;
+      &.btn--classic_rounded {
+        margin-top: auto;
+        margin-left: auto;
+      }
     }
   }
 }
@@ -175,6 +201,16 @@
     }
   }
 
+  .gallery-button {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    &.btn--classic_rounded {
+      margin-top: auto;
+      margin-left: auto;
+    }
+  }
+
   .fs-button {
     position: fixed;
     top: 5.5rem;
@@ -192,36 +228,10 @@
   }
 }
 
-.gallery-button {
-  position: fixed;
-  top: 5px;
-  left: 5px;
-  &.btn--classic_rounded {
-    margin-top: auto;
-    margin-left: auto;
-  }
-}
-
 .btn,
 .gal-action-btn {
   &.btn--classic_rounded {
     border-radius: 10px;
-  }
-}
-
-.resultInner {
-  .homebtn,
-  .gallery-button {
-    &.btn--classic,
-    &.btn--classic_rounded {
-      font-size: 0.875em;
-      width: 130px;
-    }
-  }
-  .btn {
-    &.btn--classic_rounded {
-      margin-left: 2px;
-    }
   }
 }
 
@@ -231,10 +241,6 @@
   top: 0;
   z-index: 1000000;
   background: #000;
-}
-
-.owl-carousel.owl-loaded {
-  display: none;
 }
 
 .overlay {

@@ -15,11 +15,18 @@ body {
     background: none;
   }
 
+  .gallery-button {
+    position: relative;
+    top: auto;
+    bottom: 0;
+    left: auto;
+  }
+
   .fs-button {
     position: relative;
     top: auto;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
   }
 
   .cups-button {
@@ -30,35 +37,33 @@ body {
   }
 }
 
-.gallery-button {
-  position: relative;
-  top: auto;
-  bottom: 0;
-  left: auto;
-}
-
 .resultInner {
   display: block;
+  position: fixed;
+  bottom: -15em;
+  left: auto;
+
   width: auto;
   max-width: 90%;
-  position: fixed;
-  right: 0;
-  left: auto;
-  bottom: -15em;
   top: auto;
-  justify-content: center;
-  transition: bottom 0.5s;
-  z-index: 100;
   margin: 20px;
+
   &.show {
     position: fixed;
     bottom: 0;
+
     .homebtn {
       position: fixed;
       left: 0;
       top: 0;
       bottom: auto;
       margin: 20px;
+    }
+    .gallerybtn {
+      position: relative;
+      top: auto;
+      bottom: 0;
+      left: auto;
     }
   }
 }
