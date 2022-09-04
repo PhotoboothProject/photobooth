@@ -575,12 +575,13 @@ start_git_install() {
         git am --whitespace=nowarn "0001-backup-changes.patch" && PATCH_SUCCESS=true || PATCH_SUCCESS=false
         if [ "$PATCH_SUCCESS" = true ]; then
             info "### Changes applied successfully!"
+            git reset --soft HEAD^
         else
             error "ERROR: can not apply your local changes automatically!"
             git am --abort
         fi
 
-        rm 0001-backup-changes.patch
+        mv 0001-backup-changes.patch $INSTALLFOLDERPATH/private/$DATE-backup-changes.patch
     fi
 
     info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
@@ -898,7 +899,7 @@ start_update() {
             if [ "$PATCH_SUCCESS" = true ]; then
                 info "### Your uncommited changes have been applied successfully!"
             else
-                error "Uncommited changes couldn't be applied automatically!"
+                error "### Uncommited changes couldn't be applied automatically!"
             fi
             info "### Backup done to branch: $BACKUPBRANCH"
         fi
