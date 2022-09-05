@@ -420,7 +420,7 @@ const photoBooth = (function () {
             api.getRequest(photoStyle);
         }
 
-        api.startCountdown(nextCollageNumber ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
+        api.startCountdown(photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
             if (
                 (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
                     config.preview.mode === PreviewMode.GPHOTO.valueOf()) &&
