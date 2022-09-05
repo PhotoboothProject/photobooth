@@ -168,10 +168,12 @@ const photoBooth = (function () {
     };
 
     api.initializeMedia = function (cb = () => {}, retry = 0) {
-        if (config.preview.mode !== PreviewMode.URL.valueOf()) {
-            if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
-                return;
-            }
+        if (
+            !navigator.mediaDevices ||
+            config.preview.mode === PreviewMode.NONE.valueOf() ||
+            config.preview.mode === PreviewMode.URL.valueOf()
+        ) {
+            return;
         }
         const getMedia =
             navigator.mediaDevices.getUserMedia ||
