@@ -420,28 +420,32 @@ const photoBooth = (function () {
             api.getRequest(photoStyle);
         }
 
-        api.startCountdown(photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time, counter, () => {
-            if (
-                (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
-                    config.preview.mode === PreviewMode.GPHOTO.valueOf()) &&
-                config.preview.camTakesPic &&
-                !api.stream &&
-                !config.dev.demo_images
-            ) {
-                api.errorPic({
-                    error: 'No preview by device cam available!'
-                });
-            } else {
-                if (config.picture.no_cheese) {
-                    photoboothTools.console.log('Cheese is disabled.');
+        api.startCountdown(
+            photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time,
+            counter,
+            () => {
+                if (
+                    (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+                        config.preview.mode === PreviewMode.GPHOTO.valueOf()) &&
+                    config.preview.camTakesPic &&
+                    !api.stream &&
+                    !config.dev.demo_images
+                ) {
+                    api.errorPic({
+                        error: 'No preview by device cam available!'
+                    });
                 } else {
-                    api.cheese(photoStyle);
+                    if (config.picture.no_cheese) {
+                        photoboothTools.console.log('Cheese is disabled.');
+                    } else {
+                        api.cheese(photoStyle);
+                    }
+                    setTimeout(() => {
+                        api.takePic(photoStyle, retry);
+                    }, cheeseTime);
                 }
-                setTimeout(() => {
-                    api.takePic(photoStyle, retry);
-                }, cheeseTime);
             }
-        });
+        );
     };
 
     api.cheese = function (photoStyle) {
