@@ -174,15 +174,16 @@ class CameraControl:
         else:
             cfilter = []
             conversion = []
-            if self.args.video_effects == 'boomerang':
-                end_frame = self.args.video_length * self.args.video_fps - 1
-                cfilter = ['[0]trim=start_frame=1:end_frame=' + end_frame + ',setpts=PTS-STARTPTS,reverse[r];[0]' +
-                           '[r]concat=n=2:v=1:a=0 ']
+            if self.args.video_effects is not None:
+                if self.args.video_effects == 'boomerang':
+                    end_frame = self.args.video_length * self.args.video_fps - 1
+                    cfilter = ['[0]trim=start_frame=1:end_frame=%s,setpts=PTS-STARTPTS,reverse[r];'
+                               '[0][r]concat=n=2:v=1:a=0' % str(end_frame)]
             if video_path.endswith('.gif'):
                 cfilter = ['split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse']
                 conversion = ['-loop', '0']
 
-            commands = ['ffmpeg', '-i', temp_video_path, '-filter_complex', '"' + ','.join(cfilter) + '"', *conversion,
+            commands = ['ffmpeg', '-i', temp_video_path, '-filter_complex', '"%s"' % ','.join(cfilter), *conversion,
                         video_path]
             print(commands)
             if subprocess.run(commands).returncode == 0:
@@ -263,7 +264,7 @@ class CameraControl:
                     print('Not connected to camera. Trying to reconnect...')
                     self.connect_to_camera()
                 except BrokenPipeError:
-                    print('Broken pipe (most likely because video recording finished)')
+                    print('Broken pipe: check if video recording finished, restart ffmpeg')
                     video_path = self.args.video_path
                     self.args.video_path = None
                     Thread(self.handle_saved_video(video_path))
@@ -335,7 +336,7 @@ def main():
                         dest='video_length')
     parser.add_argument('--vfps', default=10, type=int, help='fps of the video',
                         dest='video_fps')
-    parser.add_argument('--veffect', action='store_true', help='apply effect to video (currently only "boomerang" \
+    parser.add_argument('--veffect', default=None, type=str, help='apply effect to video (currently only "boomerang" \
                         which about doubles the duration)',
                         dest='video_effects')
     parser.add_argument('--chromaImage', type=str, help='chroma key background (full path)', dest='chroma_image')
