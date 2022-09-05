@@ -191,7 +191,7 @@ const photoBooth = (function () {
                     photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
                     retry += 1;
                     setTimeout(function () {
-                        api.getAndDisplayMedia(cb, retry);
+                        api.initializeMedia(cb, retry);
                     }, retryTimeout);
                 }
             });
