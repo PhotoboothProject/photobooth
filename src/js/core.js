@@ -132,7 +132,7 @@ const photoBooth = (function () {
         initRemoteBuzzerFromDOM();
         rotaryController.focusSet('#start');
 
-        if (config.ui.shutter_cheese_img != '') {
+        if (config.ui.shutter_cheese_img !== '') {
             blocker.css('background-image', 'url(' + config.ui.shutter_cheese_img + ')');
         }
     };
@@ -168,6 +168,11 @@ const photoBooth = (function () {
     };
 
     api.initializeMedia = function (cb = () => {}, retry = 0) {
+        if (config.preview.mode !== PreviewMode.URL.valueOf()) {
+            if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
+                return;
+            }
+        }
         const getMedia =
             navigator.mediaDevices.getUserMedia ||
             navigator.mediaDevices.webkitGetUserMedia ||
@@ -224,7 +229,7 @@ const photoBooth = (function () {
     };
 
     api.startVideo = function (mode, retry = 0) {
-        if (config.preview.mode != PreviewMode.URL.valueOf()) {
+        if (config.preview.mode !== PreviewMode.URL.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
                 return;
             }
@@ -441,7 +446,7 @@ const photoBooth = (function () {
 
     api.cheese = function (photoStyle) {
         cheese.empty();
-        if (config.ui.shutter_cheese_img != '') {
+        if (config.ui.shutter_cheese_img !== '') {
             api.shutter.start();
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
             cheese.text(photoboothTools.getTranslation('cheese'));
