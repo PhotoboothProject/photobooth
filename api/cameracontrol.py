@@ -7,6 +7,8 @@ from subprocess import Popen, PIPE
 import gphoto2 as gp
 
 
+TEMP_VIDEO_FILE_APPENDIX = '.temp.mp4'
+
 class CameraControl:
     def __init__(self, args):
         self.running = True
@@ -148,48 +150,46 @@ class CameraControl:
                 self.socket.send_string('failure')
 
     def ffmpeg_open(self):
-        input_stream = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
-        ffmpeg_output = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
-        input_chroma = []
+        input = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
+        stream = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
+        pre_input = []
         filters = []
-        save_video = []
+        file_output = []
         if self.chroma.get('active', False):
-            filters, input_chroma = self.get_chroma_ffmpeg_params()
+            filters, pre_input = self.get_chroma_ffmpeg_params()
         if self.args.video_path is not None:
-            temp_video_path = self.args.video_path + '.temp.mp4'
-            # TODO video only gets finished when stream ends
-            save_video = ['-filter:v', 'fps=' + str(self.args.video_fps), temp_video_path, '-t',
-                          str(self.args.video_length)]
-            # input_stream = ['-t', str(self.args.video_length)]
+            temp_video_path = self.args.video_path + TEMP_VIDEO_FILE_APPENDIX
+            pre_input = ['-t', str(self.args.video_length)]
+            file_output = ['-filter:v', 'fps=' + str(self.args.video_fps), temp_video_path]
             # if self.args.video_frames > 0:
             #     image_fps = self.args.video_frames / self.args.video_length
-            #     save_video = ['-vf', 'fps=' + str(image_fps), 'img%03d.jpg']
+            #     file_output = ['-vf', 'fps=' + str(image_fps), 'img%03d.jpg']
             #     # TODO save X shots self.args.video_frames
-        self.ffmpeg = Popen(['ffmpeg', *input_chroma, *input_stream, *filters, *ffmpeg_output, *save_video], stdin=PIPE)
+        self.ffmpeg = Popen(['ffmpeg', *pre_input, *input, *filters, *stream, *file_output], stdin=PIPE)
 
     def handle_saved_video(self, video_path):
-        print('handle saved video')
+        temp_video_path = video_path + TEMP_VIDEO_FILE_APPENDIX
+        if not os.path.exists(temp_video_path):
+            print('Temp video file does not exist')
+        else:
+            cfilter = []
+            conversion = []
+            if self.args.video_effects == 'boomerang':
+                end_frame = self.args.video_length * self.args.video_fps - 1
+                cfilter = ['[0]trim=start_frame=1:end_frame=' + end_frame + ',setpts=PTS-STARTPTS,reverse[r];[0]' +
+                           '[r]concat=n=2:v=1:a=0 ']
+            if video_path.endswith('.gif'):
+                cfilter = ['split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse']
+                conversion = ['-loop', '0']
 
-        temp_video_path = video_path + '.temp.mp4'
-
-        # cfilter = []
-        # conversion = []
-        # if self.args.video_effects == 'boomerang':
-        #     end_frame = self.args.video_length * self.args.video_fps - 1
-        #     cfilter = ['[0]trim=start_frame=1:end_frame=' + end_frame + ',setpts=PTS-STARTPTS,reverse[r];[0]' +
-        #                '[r]concat=n=2:v=1:a=0 ']
-        # if video_path.endswith('.gif'):
-        #     cfilter = ['split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse']
-        #     conversion = ['-loop', '0']
-        #
-        # commands = ['ffmpeg', '-i', temp_video_path, '-filter_complex', '"' + ','.join(cfilter) + '"', *conversion,
-        #             video_path]
-        # print(commands)
-        # if subprocess.run(commands).returncode == 0:
-        #     print('Video conversion successful')
-        #     os.remove(self.args.video_path + '.temp.mp4')
-        # else:
-        #     print('Video conversion failed')
+            commands = ['ffmpeg', '-i', temp_video_path, '-filter_complex', '"' + ','.join(cfilter) + '"', *conversion,
+                        video_path]
+            print(commands)
+            if subprocess.run(commands).returncode == 0:
+                print('Video conversion successful')
+                os.remove(temp_video_path)
+            else:
+                print('Video conversion failed')
 
     def handle_chroma_params(self, args):
         chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
@@ -263,7 +263,7 @@ class CameraControl:
                     print('Not connected to camera. Trying to reconnect...')
                     self.connect_to_camera()
                 except BrokenPipeError:
-                    print('Broken pipe, video recording finished')
+                    print('Broken pipe (most likely because video recording finished)')
                     video_path = self.args.video_path
                     self.args.video_path = None
                     Thread(self.handle_saved_video(video_path))
