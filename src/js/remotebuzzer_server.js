@@ -33,7 +33,7 @@ let stdout = execSync(cmd).toString();
 const config = JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
 
 /* WRITE PROCESS PID FILE */
-const pidFilename = config.foldersRoot.tmp + '/remotebuzzer_server.pid';
+const pidFilename = config.foldersJS.tmp + '/remotebuzzer_server.pid';
 const fs = require('fs');
 
 fs.writeFile(pidFilename, PID, function (err) {
