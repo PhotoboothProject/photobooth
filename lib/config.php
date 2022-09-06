@@ -4,7 +4,6 @@ require_once __DIR__ . '/helper.php';
 
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
-$os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
 $basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 
 $cmds = [
@@ -201,16 +200,25 @@ if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
+if (isSubfolderInstall()) {
+    $bg_url = getrootpath('../resources/img/bg_stone.jpg');
+    if ($os == 'windows') {
+        $bg_url = fixSeperator($bg_url);
+    }
+} else {
+    $bg_url = '/resources/img/bg_stone.jpg';
+}
+
 if (empty($config['background']['defaults'])) {
-    $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
+    $config['background']['defaults'] = 'url(' . $bg_url . ')';
 }
 
 if (empty($config['background']['admin'])) {
-    $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
+    $config['background']['admin'] = 'url(' . $bg_url . ')';
 }
 
 if (empty($config['background']['chroma'])) {
-    $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_stone.jpg') . ')';
+    $config['background']['chroma'] = 'url(' . $bg_url . ')';
 }
 
 if (empty($config['webserver']['ip'])) {
