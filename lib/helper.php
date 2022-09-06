@@ -1,15 +1,48 @@
 <?php
 require_once __DIR__ . '/log.php';
+$os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
+
+function isSubfolderInstall() {
+    global $os;
+    $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+
+    if ($os == 'linux') {
+        $server_path = $_SERVER['DOCUMENT_ROOT'];
+    } else {
+        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
+        $server_path = str_replace('/', '\\', $tmp_path);
+    }
+
+    if ($path == $server_path) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 function getrootpath($relative_path) {
+    global $os;
     $realpath = realpath($relative_path);
-    $rootpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $realpath);
+
+    if ($os == 'linux') {
+        $server_path = $_SERVER['DOCUMENT_ROOT'];
+    } else {
+        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
+        $server_path = str_replace('/', '\\', $tmp_path);
+    }
+    $rootpath = str_replace($server_path, '', $realpath);
 
     return $rootpath;
 }
 
+function fixSeperator($fix_path) {
+    $fixedPath = str_replace('\\', '/', $fix_path);
+    return $fixedPath;
+}
+
 function getPhotoboothIp() {
-    $os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
+    global $os;
+
     if ($os == 'linux') {
         $get_ip = shell_exec('hostname -I | cut -d " " -f 1');
 
@@ -26,28 +59,46 @@ function getPhotoboothIp() {
 }
 
 function getPhotoboothFolder() {
+    global $os;
     $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-    if ($path == $_SERVER['DOCUMENT_ROOT']) {
+
+    if ($os == 'linux') {
+        $server_path = $_SERVER['DOCUMENT_ROOT'];
+    } else {
+        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
+        $server_path = str_replace('/', '\\', $tmp_path);
+    }
+
+    if ($path == $server_path) {
         return false;
     } else {
-        $folder = str_replace($_SERVER['DOCUMENT_ROOT'], '', $path);
+        $folder = str_replace($server_path, '', $path);
         return $folder;
     }
 }
 
 function getPhotoboothUrl() {
+    global $os;
+
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
         $protocol = 'https';
     } else {
         $protocol = 'http';
     }
 
+    if ($os == 'linux') {
+        $server_path = $_SERVER['DOCUMENT_ROOT'];
+    } else {
+        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
+        $server_path = str_replace('/', '\\', $tmp_path);
+    }
+
     $ip = getPhotoboothIp();
     $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-    if ($path == $_SERVER['DOCUMENT_ROOT']) {
+    if ($path == $server_path) {
         $url = $protocol . '://' . $ip;
     } else {
-        $folder = str_replace($_SERVER['DOCUMENT_ROOT'], '', $path);
+        $folder = str_replace($server_path, '', $path);
         $url = $protocol . '://' . $ip . $folder;
     }
 
