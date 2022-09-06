@@ -171,12 +171,13 @@ class CameraControl:
                 print('Video recording stopped: file or temp file already exist')
             else:
                 pre_input = ['-t', str(self.args.video_length)]
-                file_output = ['-filter:v', 'fps=' + str(self.args.video_fps), temp_video_path]
-                # if self.args.video_frames > 0:
-                #     image_fps = self.args.video_frames / self.args.video_length
-                #     file_output = ['-vf', 'fps=' + str(image_fps), 'img%03d.jpg']
-                #     # TODO save X shots self.args.video_frames
-        self.ffmpeg = Popen(['ffmpeg', *pre_input, *input, *filters, *stream, *file_output], stdin=PIPE)
+                file_output = ['-vf', 'fps=' + str(self.args.video_fps), temp_video_path]
+                if self.args.video_frames > 0:
+                    image_fps = self.args.video_frames / self.args.video_length
+                    file_output.extend(['-vf', 'fps=' + str(image_fps), self.args.video_path + '-%02d.jpg'])
+        commands = ['ffmpeg', *pre_input, *input, *filters, *stream, *file_output]
+        print(commands)
+        self.ffmpeg = Popen(commands, stdin=PIPE)
 
     def handle_chroma_params(self, args):
         chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
@@ -354,7 +355,7 @@ def main():
                         help='save the next part of the preview as a video file (mp4 or gif)')
     parser.add_argument('--vframes', default=4, type=int, help='saves shots from the video in an equidistant time',
                         dest='video_frames')
-    parser.add_argument('--vlen', default=3, type=int, help='duration of the video',
+    parser.add_argument('--vlen', default=3, type=int, help='duration of the video in seconds',
                         dest='video_length')
     parser.add_argument('--vfps', default=10, type=int, help='fps of the video',
                         dest='video_fps')
