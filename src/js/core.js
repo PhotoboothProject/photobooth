@@ -1191,7 +1191,7 @@ const photoBooth = (function () {
         rotaryController.focusSet('#result');
     });
 
-    $('.gallery-button').on('click', function (e) {
+    $('.gallery-button, .gallerybtn').on('click', function (e) {
         e.preventDefault();
 
         api.closeNav();
