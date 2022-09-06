@@ -544,7 +544,7 @@ const photoBooth = (function () {
                     idVideoSensor.hide();
                     idVideoView.hide();
 
-                    let imageUrl = config.foldersRoot.tmp + '/' + result.collage_file;
+                    let imageUrl = config.foldersJS.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now().toString();
                     preloadImage.onload = () => {
@@ -710,7 +710,7 @@ const photoBooth = (function () {
 
     api.processPic = function (photoStyle, result) {
         startTime = new Date().getTime();
-        const tempImageUrl = config.foldersRoot.tmp + '/' + result.file;
+        const tempImageUrl = config.foldersJS.tmp + '/' + result.file;
 
         spinner.show();
         loading.text(
@@ -769,14 +769,14 @@ const photoBooth = (function () {
             api.addImage(filename);
         }
         const imageUrl = config.live_keying.show_all
-            ? config.foldersRoot.images + '/' + filename
-            : config.foldersRoot.keying + '/' + filename;
+            ? config.foldersJS.images + '/' + filename
+            : config.foldersJS.keying + '/' + filename;
         const preloadImage = new Image();
 
         preloadImage.onload = function () {
             $('body').attr('data-main-image', filename);
-            photoboothTools.console.log('Chroma image: ' + config.foldersRoot.keying + '/' + filename);
-            const chromaimage = config.foldersRoot.keying + '/' + filename;
+            photoboothTools.console.log('Chroma image: ' + config.foldersJS.keying + '/' + filename);
+            const chromaimage = config.foldersJS.keying + '/' + filename;
 
             loader.hide();
             api.chromaimage = filename;
@@ -868,7 +868,7 @@ const photoBooth = (function () {
 
         api.addImage(filename);
 
-        const imageUrl = config.foldersRoot.images + '/' + filename;
+        const imageUrl = config.foldersJS.images + '/' + filename;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
@@ -931,16 +931,16 @@ const photoBooth = (function () {
             }
         };
 
-        bigImg.src = config.foldersRoot.images + '/' + imageName;
-        thumbImg.src = config.foldersRoot.thumbs + '/' + imageName;
+        bigImg.src = config.foldersJS.images + '/' + imageName;
+        thumbImg.src = config.foldersJS.thumbs + '/' + imageName;
 
         function allLoaded() {
             const linkElement = $('<a>').html(thumbImg);
 
             linkElement.attr('class', 'gallery__img rotaryfocus');
             linkElement.attr('data-size', bigSize);
-            linkElement.attr('href', config.foldersRoot.images + '/' + imageName);
-            linkElement.attr('data-med', config.foldersRoot.thumbs + '/' + imageName);
+            linkElement.attr('href', config.foldersJS.images + '/' + imageName);
+            linkElement.attr('data-med', config.foldersJS.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);
 
             if (config.gallery.newest_first) {
