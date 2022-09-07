@@ -16,7 +16,7 @@ fi
 PHOTOBOOTH_LOG="/tmp/photobooth/$DATE-photobooth.log"
 
 BRANCH="dev"
-GIT_INSTALL=false
+GIT_INSTALL=true
 SUBFOLDER=true
 PI_CAMERA=false
 KIOSK_MODE=false
@@ -230,6 +230,7 @@ do
             ;;
         --update)
             RUN_UPDATE=true
+            GIT_INSTALL=false
             info "### Trying to update Photobooth..."
             ;;
         -u|--username)
