@@ -2,15 +2,21 @@
 require_once __DIR__ . '/log.php';
 $os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
 
-function isSubfolderInstall() {
+function getPhotoboothPath() {
     global $os;
-    $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 
     if ($os == 'linux') {
         $server_path = $_SERVER['DOCUMENT_ROOT'];
     } else {
         $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
+
+    return $server_path;
+}
+
+function isSubfolderInstall() {
+    $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+    $server_path = getPhotoboothPath();
 
     if ($path == $server_path) {
         return false;
@@ -20,14 +26,8 @@ function isSubfolderInstall() {
 }
 
 function getrootpath($relative_path) {
-    global $os;
     $realpath = realpath($relative_path);
-
-    if ($os == 'linux') {
-        $server_path = $_SERVER['DOCUMENT_ROOT'];
-    } else {
-        $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
-    }
+    $server_path = getPhotoboothPath();
     $rootpath = str_replace($server_path, '', $realpath);
 
     return $rootpath;
@@ -57,14 +57,8 @@ function getPhotoboothIp() {
 }
 
 function getPhotoboothFolder() {
-    global $os;
     $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-
-    if ($os == 'linux') {
-        $server_path = $_SERVER['DOCUMENT_ROOT'];
-    } else {
-        $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
-    }
+    $server_path = getPhotoboothPath();
 
     if ($path == $server_path) {
         return false;
@@ -75,20 +69,13 @@ function getPhotoboothFolder() {
 }
 
 function getPhotoboothUrl() {
-    global $os;
-
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
         $protocol = 'https';
     } else {
         $protocol = 'http';
     }
 
-    if ($os == 'linux') {
-        $server_path = $_SERVER['DOCUMENT_ROOT'];
-    } else {
-        $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
-    }
-
+    $server_path = getPhotoboothPath();
     $ip = getPhotoboothIp();
     $path = getrootpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
     if ($path == $server_path) {
