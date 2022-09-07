@@ -9,8 +9,7 @@ function isSubfolderInstall() {
     if ($os == 'linux') {
         $server_path = $_SERVER['DOCUMENT_ROOT'];
     } else {
-        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
-        $server_path = str_replace('/', '\\', $tmp_path);
+        $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
 
     if ($path == $server_path) {
@@ -27,8 +26,7 @@ function getrootpath($relative_path) {
     if ($os == 'linux') {
         $server_path = $_SERVER['DOCUMENT_ROOT'];
     } else {
-        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
-        $server_path = str_replace('/', '\\', $tmp_path);
+        $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
     $rootpath = str_replace($server_path, '', $realpath);
 
@@ -65,8 +63,7 @@ function getPhotoboothFolder() {
     if ($os == 'linux') {
         $server_path = $_SERVER['DOCUMENT_ROOT'];
     } else {
-        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
-        $server_path = str_replace('/', '\\', $tmp_path);
+        $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
 
     if ($path == $server_path) {
@@ -89,8 +86,7 @@ function getPhotoboothUrl() {
     if ($os == 'linux') {
         $server_path = $_SERVER['DOCUMENT_ROOT'];
     } else {
-        $tmp_path = $_SERVER['DOCUMENT_ROOT'];
-        $server_path = str_replace('/', '\\', $tmp_path);
+        $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
 
     $ip = getPhotoboothIp();
