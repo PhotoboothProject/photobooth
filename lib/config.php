@@ -203,10 +203,8 @@ if (empty($config['collage']['limit'])) {
 }
 
 if (isSubfolderInstall()) {
-    $bg_url = getrootpath('../resources/img/bg_stone.jpg');
-    if ($os == 'windows') {
-        $bg_url = fixSeperator($bg_url);
-    }
+    $bg_root = getrootpath('../resources/img/bg_stone.jpg');
+    $bg_url = fixSeperator($bg_root);
 } else {
     $bg_url = '/resources/img/bg_stone.jpg';
 }
