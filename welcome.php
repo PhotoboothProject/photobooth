@@ -61,7 +61,7 @@ $btnClass = 'btn ' . $btnShape;
 		<i>All files and folders inside this path belong to the Webserver user "www-data".</i><p>
 		<p><b>Images can be found at:</b> <?=$config['foldersAbs']['images']?></p>
 		<p><b>Databases are placed at:</b> <?=$config['foldersAbs']['data']?></p>
-		<p><b>Add your own files (e.g. background images, frames, overrides.css) inside:</b> <?=$PHOTOBOOTH_HOME . "/private"?><br>
+		<p><b>Add your own files (e.g. background images, frames, overrides.css) inside:</b> <?=$PHOTOBOOTH_HOME . DIRECTORY_SEPARATOR . "private"?><br>
 		<i>All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i></p>
 		<p>You can change the settings and look of Photobooth using the Admin panel at <a href="admin" target="_blank" rel="noopener noreferrer"><?=$URL;?>/admin</a>.<br>
 		A standalone gallery can be found at <a href="gallery.php" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery.php</a>.<br>

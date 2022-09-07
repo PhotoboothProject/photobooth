@@ -102,6 +102,7 @@ function getPhotoboothUrl() {
         $url = $protocol . '://' . $ip . $folder;
     }
 
+    $url = str_replace('\\', '/', $url);
     return $url;
 }
 
