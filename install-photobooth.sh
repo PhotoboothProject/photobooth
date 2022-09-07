@@ -217,6 +217,7 @@ do
                 NEEDS_NODEJS_CHECK=false
             else
                 BRANCH="dev"
+                GIT_INSTALL=true
                 warn "[WARN]      Invalid branch / version!"
                 warn "[WARN]      Falling back to defaults. Installing latest development branch from git."
             fi
