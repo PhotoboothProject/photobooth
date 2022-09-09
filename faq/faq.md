@@ -116,19 +116,24 @@ Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in y
 
 ### How can setup a custom collage design?
 
-In the collage settings you can select the layout `collage.json`. This references a file with the given name in the photobooth's `private` folder.
-The file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height and rotation (in that order) of one image.
-For calculation of the values the variables x and y get converted to the images width and height respectively, additionally math operations +, -, *, / and () can be used to calculate values.
-The following example should look exactly like the 1+2 layout (most layouts will be quite a bit easier):
+In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file has to be created manually.
+
+Content of the file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height and rotation (in that order) of one image.
+For calculation of the values the variables x and y get converted to the width and height of the collage respectively, additionally math operations +, -, *, / and () can be used to calculate values.
+The following example should look exactly like the 1+2 layout (this layout looks more complicated than it is due to the decimal places).
 ```
 [
-["0", "y * 0.055", "1.5 * y * 0.55546", "y * 0.55546", "10"],
-["x * 0.555", "y * 0.055", "1.5 * y * 0.40812", "y * 0.40812", "0"],
-["x * 0.555", "y * 0.5368", "1.5 * y * 0.40812", "y * 0.40812", "0"]
+[ "0",                     "y * 0.055",           "1.5 * y * 0.55546",   "y * 0.55546",   "10"       ],
+[ "x * 0.555",             "y * 0.055",           "1.5 * y * 0.40812",   "y * 0.40812",   "0"        ],
+[ "x * 0.555",             "y * 0.5368",          "1.5 * y * 0.40812",   "y * 0.40812",   "0"        ]
 ]
 ```
-Please note that if the number of rows in a collage design was changed the admin page has to be saved again to calculate the correct number of photos to be taken.
-Other value changes can be checked on the collage test page immediatly with a simple reload.
+```
+[ "horizontal position",   "vertical position",   "width",               "height",        "rotation" ]
+```
+Please note that if the number of images in a collage design was changed the admin page has to be saved again to calculate the correct number of photos to be used for a collage.
+Other value changes can be checked on the collage test page immediatly with a simple reload - so it's quite easy to configure a layout with the help of [http://localhost/test/collage.php](http://localhost/test/collage.php).
+The file `collage.json` needs to be a well-formed json array and something like a missing quotation or a trailing comma can be enough to make a design fail.
 
 ---
 
