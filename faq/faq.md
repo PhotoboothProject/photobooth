@@ -114,6 +114,23 @@ Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in y
 
 ---
 
+### How can setup a custom collage design?
+
+In the collage settings you can select the layout `collage.json`. This references a file with the given name in the photobooth's `private` folder.
+The file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height and rotation (in that order) of one image.
+For calculation of the values the variables x and y get converted to the images width and height respectively, additionally math operations +, -, *, / and () can be used to calculate values.
+The following example should look exactly like the 1+2 layout (most layouts will be quite a bit easier):
+```
+[
+[0, y * 0.055, 1.5 * y * 0.55546, y * 0.55546, 10],
+[x * 0.555, y * 0.555, 1.5 * y * 0.40812, y * 0.40812, 0],
+[x * 0.555, y * 0.5368, 1.5 * y * 0.40812, y * 0.40812, 0],
+]
+```
+Please note that if you change the number of rows in your collage design you have to visit the admin page and save again to calculate the correct number of photos to be taken.
+
+---
+
 ### How to change the look of my Photobooth?
 
 Photobooth can be easylie styled for your personal needs via admin panel, open [localhost/admin](http://localhost/admin) in your browser and take a look at the `User Interface` options.
