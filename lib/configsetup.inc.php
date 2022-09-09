@@ -648,7 +648,7 @@ $configsetup = [
                 '2x4-2' => '2x4 (2)',
                 '2x4-3' => '2x4 (3)',
                 '2x3' => '2x3',
-                'collage.json' => 'collage.json',
+                'collage.json' => 'private/collage.json',
             ],
             'value' => $config['collage']['layout'],
         ],
