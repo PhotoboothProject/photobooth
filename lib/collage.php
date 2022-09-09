@@ -463,7 +463,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
             break;
         case 'collage.json':
-            $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private/collage.json';
+            $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'collage.json';
             if (!file_exists($collageConfigFilePath)) {
                 return false;
             }
