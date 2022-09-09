@@ -173,6 +173,9 @@ class CameraControl:
                 pre_input = ['-t', str(self.args.video_length)]
                 file_output = ['-vf', 'fps=' + str(self.args.video_fps), temp_video_path]
                 if self.args.video_frames > 0:
+                    # 99 images should be more than enough
+                    if self.args.video_frames > 99:
+                        self.args.video_frames = 99
                     image_fps = self.args.video_frames / self.args.video_length
                     file_output.extend(['-vf', 'fps=' + str(image_fps), self.args.video_path + '-%02d.jpg'])
         commands = ['ffmpeg', *pre_input, *input, *filters, *stream, *file_output]

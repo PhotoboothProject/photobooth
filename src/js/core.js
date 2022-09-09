@@ -245,6 +245,7 @@ const photoBooth = (function () {
 
         loader.addClass('open');
 
+        // TODO different for video?
         if (config.get_request.countdown) {
             const getMode =
                 photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
@@ -506,6 +507,35 @@ const photoBooth = (function () {
                 } else {
                     api.errorPic(result);
                 }
+            });
+    };
+
+    api.callTakeVideoApi = function (data) {
+        // TODO maybe some other kind of animation (film strip?)
+        // while recording. End of recording gets no message back but whe know the requested duration
+        startTime = new Date().getTime();
+        jQuery
+            .post('api/takeVideo.php', data)
+            .done(function (result) {
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.log('Took ' + data.style, result);
+                photoboothTools.console.logDev('Taking & converting video took ' + totalTime + 'ms');
+                cheese.empty();
+
+                imgFilter = config.filters.defaults;
+                $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
+                $('#' + imgFilter).addClass('activeSidenavBtn');
+
+                if (result.error) {
+                    api.errorPic(result);
+                } else {
+                    currentCollageFile = '';
+                    nextCollageNumber = 0;
+                }
+            })
+            .fail(function (xhr, status, result) {
+                api.errorPic(result);
             });
     };
 

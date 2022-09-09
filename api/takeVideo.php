@@ -2,42 +2,111 @@
 header('Content-Type: application/json');
 
 require_once '../lib/config.php';
+require_once '../lib/db.php';
 require_once '../lib/log.php';
+require_once '../lib/applyEffects.php';
 
-function isRunning($pid) {
-    try {
-        $result = shell_exec(sprintf('ps %d', $pid));
+// TODO
+function takeVideo($filename) {
+    global $config;
+    $cmd = sprintf($config['take_video']['cmd'], $filename);
+    $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
-        if (count(preg_split("/\n/", $result)) > 2) {
-            return true;
+    exec($cmd, $output, $returnValue);
+
+    if ($returnValue) {
+        $ErrorData = [
+            'error' => 'Take picture command returned an error code',
+            'cmd' => $cmd,
+            'returnValue' => $returnValue,
+            'output' => $output,
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        $ErrorString = json_encode($ErrorData);
+        logError($ErrorData);
+        die($ErrorString);
+    }
+
+    $i = 0;
+    $processingTime = 30;
+    while ($i < $processingTime) {
+        if (file_exists($filename)) {
+            break;
+        } else {
+            $i++;
+            sleep(1);
         }
-    } catch (Exception $e) {
     }
 
-    return false;
-}
-
-if ($_POST['play'] === 'true') {
-    $cmd = sprintf($config['preview']['cmd']);
-    $pid = exec($cmd, $out);
-    sleep(3);
-    $LogData = [
-        'isRunning' => isRunning($pid),
-        'pid' => $pid - 1,
-        'php' => basename($_SERVER['PHP_SELF']),
-    ];
-} elseif ($_POST['play'] === 'false') {
-    $killcmd = sprintf($config['preview']['killcmd']);
-    if ($killcmd != '') {
-        exec($killcmd);
+    if (!file_exists($filename)) {
+        $ErrorData = [
+            'error' => 'File was not created',
+            'cmd' => $cmd,
+            'returnValue' => $returnValue,
+            'output' => $output,
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        $ErrorString = json_encode($ErrorData);
+        logError($ErrorData);
+        die($ErrorString);
     }
 
-    $LogData = [
-        'isRunning' => isRunning($_POST['pid']),
-        'pid' => intval($_POST['pid']),
-        'php' => basename($_SERVER['PHP_SELF']),
-    ];
+    // insert movie and images into database
+    if ($config['database']['enabled']) {
+        appendImageToDB($filename);
+        for ($i = 1; $i < 99; $i++) {
+            $imageFilename = sprintf('%s-%02d.jpg', $filename, $i);
+            if (file_exists($imageFilename)) {
+                appendImageToDB($imageFilename);
+            } else {
+                break;
+            }
+        }
+    }
+
 }
+
+$random = md5(time()) . '.mp4';
+
+if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4|gif)$/', $_POST['file'])) {
+    $name = $_POST['file'];
+} elseif ($config['picture']['naming'] === 'numbered') {
+    if ($config['database']['enabled']) {
+        $images = getImagesFromDB();
+    } else {
+        $images = getImagesFromDirectory($config['foldersAbs']['images']);
+    }
+    $img_number = count($images);
+    $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
+    $name = $files . '.mp4';
+} elseif ($config['picture']['naming'] === 'dateformatted') {
+    $name = date('Ymd_His') . '.mp4';
+} else {
+    $name = $random;
+}
+
+if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4|gif)$/', $_POST['file']))) {
+    $file = $name;
+} else {
+    $file = $config['database']['file'] . '_' . $name;
+}
+
+$filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+$filename_random = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $random;
+
+if (file_exists($filename_tmp)) {
+    rename($filename_tmp, $filename_random);
+}
+
+takeVideo($filename_tmp);
+
+$LogData = [
+    'success' => 'image',
+    'file' => $file,
+    'php' => basename($_SERVER['PHP_SELF']),
+];
+
+// send imagename to frontend
 $LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 1) {
     logError($LogData);
