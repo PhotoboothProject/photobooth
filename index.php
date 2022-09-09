@@ -178,7 +178,7 @@ if (
 
         <?php if ($config['qr']['enabled']): ?>
             <div id="qrCode" class="modal">
-                <div class="modal__body"></div>
+                <div class="modal__body <?php echo $uiShape; ?>"></div>
             </div>
         <?php endif; ?>
     </div>
