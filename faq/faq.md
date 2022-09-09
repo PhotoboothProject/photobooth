@@ -122,12 +122,13 @@ For calculation of the values the variables x and y get converted to the images 
 The following example should look exactly like the 1+2 layout (most layouts will be quite a bit easier):
 ```
 [
-[0, y * 0.055, 1.5 * y * 0.55546, y * 0.55546, 10],
-[x * 0.555, y * 0.555, 1.5 * y * 0.40812, y * 0.40812, 0],
-[x * 0.555, y * 0.5368, 1.5 * y * 0.40812, y * 0.40812, 0],
+["0", "y * 0.055", "1.5 * y * 0.55546", "y * 0.55546", "10"],
+["x * 0.555", "y * 0.055", "1.5 * y * 0.40812", "y * 0.40812", "0"],
+["x * 0.555", "y * 0.5368", "1.5 * y * 0.40812", "y * 0.40812", "0"]
 ]
 ```
-Please note that if you change the number of rows in your collage design you have to visit the admin page and save again to calculate the correct number of photos to be taken.
+Please note that if the number of rows in a collage design was changed the admin page has to be saved again to calculate the correct number of photos to be taken.
+Other value changes can be checked on the collage test page immediatly with a simple reload.
 
 ---
 

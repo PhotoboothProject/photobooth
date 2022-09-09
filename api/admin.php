@@ -161,10 +161,10 @@ if ($data['type'] == 'config') {
         $newConfig['collage']['limit'] = 3;
     } else if ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
         $collageConfig = json_decode(file_get_contents($collageConfigFilePath), true);
-        if (!is_array($collageConfig) || count($collageConfig) != COLLAGE_LIMIT) {
-            $newConfig['collage']['limit'] = 4;
-        } else {
+        if (is_array($collageConfig)) {
             $newConfig['collage']['limit'] = count($collageConfig);
+        } else {
+            $newConfig['collage']['limit'] = 4;
         }
     } else {
         $newConfig['collage']['limit'] = 4;
