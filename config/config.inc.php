@@ -92,7 +92,7 @@ $config['collage']['only'] = false;
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;
 $config['collage']['continuous_time'] = '5';
-// possible layout values: '2+2', '2+2-2', '1+3', '1+3-2', '3+1', '1+2', '2+1', '2x4', '2x4-2', '2x4-3', '2x3'
+// possible layout values: '2+2', '2+2-2', '1+3', '1+3-2', '3+1', '1+2', '2+1', '2x4', '2x4-2', '2x4-3', '2x3', 'collage.json'
 $config['collage']['layout'] = '2+2-2';
 // possible layout values: '150dpi', '300dpi', '400dpi', '600dpi'
 $config['collage']['resolution'] = '300dpi';

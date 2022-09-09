@@ -462,6 +462,34 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
             break;
+        case 'collage.json':
+            $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private/collage.json';
+            if (!file_exists($collageConfigFilePath)) {
+                return false;
+            }
+            $collageConfig = json_decode(file_get_contents($collageConfigFilePath), true);
+            if (!is_array($collageConfig) || count($collageConfig) != COLLAGE_LIMIT) {
+                return false;
+            }
+            // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
+            $pictureOptions = [];
+            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+                $imgConfig = $collageConfig[$i];
+                if (!is_array($imgConfig) || count($imgConfig) !== 5) {
+                    return false;
+                }
+                $singlePictureOptions = [];
+                for ($j = 0; $j < 5; $j++) {
+                    $value = str_replace(array('x', 'y'), array($collage_width, $collage_height), $imgConfig[$j]);
+                    $singlePictureOptions[] = doMath($value);
+                }
+                $pictureOptions[] = $singlePictureOptions;
+            }
+
+            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+            }
+            break;
         default:
             $my_collage = imagecreatetruecolor($width, $height);
             break;
@@ -504,6 +532,13 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     }
 
     return true;
+}
+
+function doMath($string): int {
+    $o = 0;
+    // eval is evil. To mitigate any attacks the allowed characters are limited to numbers and math symbols
+    eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');
+    return $o;
 }
 
 function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color) {
