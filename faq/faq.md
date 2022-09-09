@@ -533,10 +533,11 @@ The computer terminates the connection to the camera just to reconnect immediate
 
 The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed using several programming languages. Because of this we can have a python script that handles both preview and taking pictures without terminating the connection to the camera in between.
 
-To try using `gphoto-python` first execute `install-gphoto-python.sh` from the Photobooth installation subdirectory `gphoto`.
+To try using `gphoto-python` first execute `install-gphoto-python.sh`.
 
 ```sh
-sudo bash gphoto/install-gphoto-python.sh
+wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/gphoto/install-gphoto-python.sh
+sudo bash install-gphoto-python.sh
 ```
 
 After that just change your commands to use the python script. For Live preview use:
@@ -553,23 +554,40 @@ python3 cameracontrol.py --capture-image-and-download %s
 
 There's no need for a command to end the live preview. So just empty that field.
 
+If you want to use the DSLR view as background video disable the _Battery saving mode on gphoto2 live preview_ setting of Photobooth, which is enabled by default.
+
 As you possibly noticed the params of the script are designed to be similar to the ones of `gphoto2 CLI` but with some shortcuts like `-c` for `--capture-image-and-download`. If you want to know more check out the help of the script by running:
 
+```sh
+python3 /var/www/html/api/cameracontrol.py --help
 ```
-python3 cameracontrol.py --help
+
+or on subfolder installation of Photobooth
+
+```sh
+python3 /var/www/html/photobooth/api/cameracontrol.py --help
 ```
 
 If you want to keep your images on the camera you need to use the same `capturetarget` config as when you were using `gphoto CLI` (see "How to keep pictures on my Camera using gphoto2?"). Set the config on the preview command like this:
 
-```
+```sh
 python3 cameracontrol.py --set-config capturetarget=1
 ```
 
-If you don't want to use the DSLR view as background video enable the respective setting of Photobooth and add `--bsm` to the preview command. The preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting for the next photo.
+If you don't want to use the DSLR view as background video enable the _Battery saving mode on gphoto2 live preview_ setting of Photobooth and add `--bsm` to the preview command.
+
+```sh
+python3 cameracontrol.py --bsm
+```
+
+The preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting for the next photo.
+
 
 If you get errors from Photobooth and want to get more information try to run the preview command manually. The script is in Photobooth's `api` folder. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
 
-Finally if you just run `venv/bin/python3 cameracontrol.py --capture-image-and-download %s` as take picture command without having a preview started it only takes a picture without starting any kind of preview and ends the script immediately after the picture. In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` for all DSLR connection handling in the future.
+Finally if you just run `venv/bin/python3 cameracontrol.py --capture-image-and-download %s` as take picture command without having a preview started it only takes a picture without starting any kind of preview and ends the script immediately after the picture.
+
+In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` for all DSLR connection handling in the future.
 
 But by now this was not tested with distinct setups and different cameras... so feel free to give feedback!
 
