@@ -151,7 +151,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
     -h,  -help,       --help        Display help.
 
     -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
-                                    Available branches: stable3, dev, package
+                                    Available branches: dev (default), stable4, stable3, package
                                     By default, latest development verison (dev) will be installed.
                                     package will install latest Release from zip.
 
@@ -208,11 +208,11 @@ do
             ;;
         -b|--branch)
             shift
-            if [ "$1" == "dev" ] || [ "$1" == "stable3" ]; then
+            if [ "$1" == "dev" ] || [ "$1" == "stable3" ] || [ "$1" == "stable4" ]; then
                 BRANCH=$1
                 GIT_INSTALL=true
             elif [ "$1" == "package" ]; then
-                BRANCH="stable3"
+                BRANCH="stable4"
                 GIT_INSTALL=false
                 NEEDS_NODEJS_CHECK=false
             else

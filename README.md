@@ -1,5 +1,5 @@
 
-# Photobooth v3
+# Photobooth v4
 
 A Photobooth web interface for Linux and Windows.
 
