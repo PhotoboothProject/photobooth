@@ -1,4 +1,6 @@
 <?php
+define('SERVER_OS', DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux');
+
 require_once __DIR__ . '/arrayDeepMerge.php';
 require_once __DIR__ . '/helper.php';
 
@@ -92,17 +94,17 @@ $mailTemplates = [
 
 require_once $default_config_file;
 
-$config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
-$config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
-$config['print']['cmd'] = $cmds[$os]['print']['cmd'];
-$config['print']['msg'] = $cmds[$os]['print']['msg'];
-$config['exiftool']['cmd'] = $cmds[$os]['exiftool']['cmd'];
-$config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
-$config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
-$config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
-$config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
-$config['reboot']['cmd'] = $cmds[$os]['reboot']['cmd'];
-$config['shutdown']['cmd'] = $cmds[$os]['shutdown']['cmd'];
+$config['take_picture']['cmd'] = $cmds[SERVER_OS]['take_picture']['cmd'];
+$config['take_picture']['msg'] = $cmds[SERVER_OS]['take_picture']['msg'];
+$config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
+$config['print']['msg'] = $cmds[SERVER_OS]['print']['msg'];
+$config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];
+$config['exiftool']['msg'] = $cmds[SERVER_OS]['exiftool']['msg'];
+$config['preview']['cmd'] = $cmds[SERVER_OS]['preview']['cmd'];
+$config['preview']['killcmd'] = $cmds[SERVER_OS]['preview']['killcmd'];
+$config['nodebin']['cmd'] = $cmds[SERVER_OS]['nodebin']['cmd'];
+$config['reboot']['cmd'] = $cmds[SERVER_OS]['reboot']['cmd'];
+$config['shutdown']['cmd'] = $cmds[SERVER_OS]['shutdown']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';
 
