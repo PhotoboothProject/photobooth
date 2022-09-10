@@ -157,7 +157,7 @@ if ($data['type'] == 'config') {
     $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private/collage.json';
     if ($collageLayout === '1+2' || $collageLayout == '2+1' || $collageLayout == '2x3') {
         $newConfig['collage']['limit'] = 3;
-    } else if ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
+    } elseif ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
         $collageConfig = json_decode(file_get_contents($collageConfigFilePath), true);
         if (is_array($collageConfig)) {
             $newConfig['collage']['limit'] = count($collageConfig);

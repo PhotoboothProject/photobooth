@@ -480,7 +480,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 }
                 $singlePictureOptions = [];
                 for ($j = 0; $j < 5; $j++) {
-                    $value = str_replace(array('x', 'y'), array($collage_width, $collage_height), $imgConfig[$j]);
+                    $value = str_replace(['x', 'y'], [$collage_width, $collage_height], $imgConfig[$j]);
                     $singlePictureOptions[] = doMath($value);
                 }
                 $pictureOptions[] = $singlePictureOptions;
