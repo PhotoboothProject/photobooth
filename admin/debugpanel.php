@@ -14,6 +14,10 @@ if (
     header('location: ../login');
     exit();
 }
+
+$uiShape = 'shape--' . $config['ui']['style'];
+$btnShape = 'shape--' . $config['ui']['button'];
+$btnClass = 'adminnavlistelement ' . $btnShape . ' noborder';
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,10 +42,10 @@ if (
         <link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
-        <link rel="stylesheet" type="text/css" href="../resources/css/admin.css">
-	<?php if (is_file("../private/overrides.css")): ?>
-	<link rel="stylesheet" href="../private/overrides.css" />
-	<?php endif; ?>
+        <link rel="stylesheet" type="text/css" href="../resources/css/<?php echo $config['ui']['style']; ?>_admin.css">
+        <?php if (is_file("../private/overrides.css")): ?>
+        <link rel="stylesheet" href="../private/overrides.css" />
+        <?php endif; ?>
 </head>
 <body>
 <!-- NavBar content -->
@@ -89,13 +93,13 @@ if (
                 echo '<ul class="adminnavlist" id="navlist">';
                 html_src_indent(++$indent);
 
-                echo '<li><a class="adminnavlistelement" href="#myconfig" id="nav-myconfig"><div><span data-i18n="myconfig">myconfig</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#remotebuzzerlog" id="nav-remotebuzzerlog"><div><span data-i18n="remotebuzzer">remotebuzzer</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#synctodrivelog" id="nav-synctodrivelog"><div><span data-i18n="synctodrive">synctodrive</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#devlog" id="nav-devlog"><div><span data-i18n="devlog">devlog</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#serverprocesses" id="nav-serverprocesses"><div><span data-i18n="serverprocesses">serverprocesses</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#bootconfig" id="nav-bootconfig"><div><span data-i18n="bootconfig">bootconfig</span></div></a></li>';
-                echo '<li><a class="adminnavlistelement" href="#githead" id="nav-githead"><div><span data-i18n="githead">githead</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#myconfig" id="nav-myconfig"><div><span data-i18n="myconfig">myconfig</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#remotebuzzerlog" id="nav-remotebuzzerlog"><div><span data-i18n="remotebuzzer">remotebuzzer</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#synctodrivelog" id="nav-synctodrivelog"><div><span data-i18n="synctodrive">synctodrive</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#devlog" id="nav-devlog"><div><span data-i18n="devlog">devlog</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#serverprocesses" id="nav-serverprocesses"><div><span data-i18n="serverprocesses">serverprocesses</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#bootconfig" id="nav-bootconfig"><div><span data-i18n="bootconfig">bootconfig</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#githead" id="nav-githead"><div><span data-i18n="githead">githead</span></div></a></li>';
         
                 html_src_indent(--$indent);
                 echo '</ul>';
@@ -104,7 +108,7 @@ if (
 <!-- Settings page content -->
 <form  autocomplete="off">
 <div class="admincontent" id="admincontentpage">
-	<div class="debugcontent"> 
+	<div class="debugcontent <?php echo $uiShape; ?>">
 	</div>
 </div>
         <script src="../node_modules/whatwg-fetch/dist/fetch.umd.js"></script>

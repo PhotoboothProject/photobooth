@@ -15,6 +15,11 @@ if (
     exit();
 }
 
+
+$btnShape = 'shape--' . $config['ui']['button'];
+$uiShape = 'shape--' . $config['ui']['style'];
+$btnClass = 'btn ' . $btnShape;
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,15 +41,12 @@ if (
 	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../resources/css/manual.css" />
-	<?php if ($config['ui']['rounded_corners']): ?>
-	<link rel="stylesheet" type="text/css" href="../resources/css/rounded.css" />
-	<?php endif; ?>
 	<?php if (is_file("../private/overrides.css")): ?>
 	<link rel="stylesheet" href="../private/overrides.css" />
 	<?php endif; ?>
 </head>
 <body class="manualwrapper">
-	<div class="manual-panel">
+	<div class="manual-panel <?php echo $uiShape; ?>">
 		<h2><?=$config['ui']['branding']?> Manual</h2>
 		<h3><a class="back-to-pb" href="../">Photobooth</a></h3>
 
@@ -76,10 +78,10 @@ if (
 							     break;
 						};
 						echo '>';
-								echo '<div class="panel-heading">';
+								echo '<div class="panel-heading '.$uiShape.'">';
 									echo '<h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span></h3>';
 								echo '</div>';
-								echo '<div class="panel-body">';
+								echo '<div class="panel-body '.$uiShape.'">';
 
 								foreach($fields as $key => $field) {
 									if ($key == 'platform' || $key == 'view') {
@@ -130,9 +132,11 @@ if (
 					}
 				?>
 			</br>
-			<a href="faq.php" class="btn faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
+			<div>
+				<a href="faq.php" class="<?php echo $btnClass; ?> faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
+				<a href="https://photoboothproject.github.io" class="<?php echo $btnClass; ?> wiki-btn"><span data-i18n="show_wiki"></span></a>
+			</div>
 			</form>
-			<a href="https://github.com/<?=$config['ui']['github']?>/photobooth/wiki" class="btn wiki-btn"><span data-i18n="show_wiki"></span></a>
 		</div>
 	</div>
 

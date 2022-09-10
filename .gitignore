@@ -27,3 +27,11 @@ vendor/simple-translator/
 *.patch
 .skip_welcome
 .vscode
+venv/
+
+# ignore some IDE and OS files
+*.iml
+*.ipr
+*.iws
+.idea/
+**/.DS_Store

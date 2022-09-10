@@ -5,11 +5,6 @@ set -e
 
 SILENT_INSTALL=false
 
-if [ "silent" = "$1" ]; then
-    SILENT_INSTALL=true
-    info "Performing silent install"
-fi
-
 function info {
     echo -e "\033[0;36m${1}\033[0m"
 }
@@ -44,17 +39,81 @@ if [[ $PI_MODEL != Raspberry* ]]; then
     exit 3
 fi
 
+view_help() {
+    SCRIP=$(basename $0)
+    cat << EOF
+Usage: sudo bash $SCRIPT -u=<YourUsername> [-hsV]
 
-info "### Disabling automount for pi user"
-mkdir -p /home/pi/.config/pcmanfm/LXDE-pi/
-cat >> /home/pi/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+    -h,  -help,       --help        Display help.
+
+    -s,  -silent,     --silent      Run silent installation.
+
+    -u,  -username,   --username    Enter your OS username you're using Photobooth from.
+
+    -V,  -verbose,    --verbose     Run script in verbose mode.
+EOF
+}
+
+check_username() {
+    info "[Info]      Checking if user $USERNAME exists..."
+    if id "$USERNAME" &>/dev/null; then
+        info "[Info]      User $USERNAME found. Installation process continues."
+    else
+        error "ERROR: An valid OS username is needed! Please re-run the installer."
+        view_help
+        exit
+    fi
+}
+
+options=$(getopt -l "help,username::,silent,verbose" -o "hu::sV" -a -- "$@")
+eval set -- "$options"
+
+while true
+do
+    case $1 in
+        -h|--help)
+            view_help
+            exit 0
+            ;;
+        -u|--username)
+            shift
+            USERNAME=$1
+            info "### Username: $1"
+            ;;
+        -s|--silent)
+            SILENT_INSTALL=true
+            info "### Silent installation starting..."
+            ;;
+        -V|--verbose)
+            set -xv
+            info "### Set xtrace and verbose mode."
+            ;;
+        --)
+        shift
+        break;;
+    esac
+    shift
+done
+
+
+if [ ! -z $USERNAME ]; then
+    check_username
+else
+    error "ERROR: An valid OS username is needed! Please re-run the installer."
+    view_help
+    exit
+fi
+
+info "### Disabling automount for user $USERNAME"
+mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
+
+cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
 mount_on_startup=0
 mount_removable=0
 autorun=0
 EOF
-
-chown -R pi:pi /home/pi/.config/pcmanfm
+chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
 
 info "### Adding polkit rule so www-data can (un)mount drives"
 cat >> /etc/polkit-1/localauthority/50-local.d/udisks2.pkla <<EOF
@@ -67,10 +126,12 @@ ResultActive=yes
 EOF
 
 echo -e "\033[0;33m"
-ask_yes_no "### Do you like to reboot now? [y/N] " "y"
+ask_yes_no "### You need to reboot your device. Do you like to reboot now? [y/N] " "N"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     info "### Your device will reboot now."
     shutdown -r now
+else
+    info "### Done. Please reboot your device."
 fi

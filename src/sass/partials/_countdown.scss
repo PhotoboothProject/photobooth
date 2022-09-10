@@ -1,0 +1,86 @@
+#loader {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center center;
+  color: $countdownColor;
+  z-index: 100;
+  text-align: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+
+  &.showBackgroundImage {
+    &:after {
+      opacity: 0.5;
+    }
+  }
+
+  &.open {
+    display: flex;
+  }
+
+  .spinner {
+    color: $cheeseColor;
+    font-size: 5em;
+  }
+}
+
+#counter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 80vh;
+  opacity: 0.1;
+}
+
+#counter.tick {
+  font-size: 0;
+  opacity: 1;
+  transition: font-size 1s, opacity 1s;
+}
+
+.cheese {
+  position: absolute;
+  color: $cheeseColor;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  font-size: 3em;
+}
+
+.loading {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0;
+  z-index: 102;
+  font-size: 3.125em;
+  text-align: center;
+  width: 100%;
+
+  p {
+    margin: 0 0 0.2em;
+  }
+
+  @media (max-width: 767px) {
+    bottom: 0.5em;
+  }
+}

@@ -5,11 +5,11 @@ const photoboothTools = (function () {
 
     api.console = {
         log: function (...content) {
-            console.log('[', new Date().toISOString(), ']:', content);
+            console.log('[', new Date().toISOString(), ']: ' + content);
         },
         logDev: function (...content) {
-            if (config.dev.enabled) {
-                console.log('[', new Date().toISOString(), ']:', content);
+            if (config.dev.loglevel > 0) {
+                console.log('[', new Date().toISOString(), ']: ' + content);
             }
         }
     };
@@ -53,10 +53,33 @@ const photoboothTools = (function () {
         window.location.reload();
     };
 
+    api.getRequest = function (url) {
+        const request = new XMLHttpRequest();
+        api.console.log('Sending GET request to: ' + url);
+        request.open('GET', url);
+        request.send();
+
+        request.onload = function () {
+            if (request.status === 200) {
+                // parse JSON data
+                const responseData = JSON.parse(request.responseText);
+                api.console.log(responseData);
+            } else if (request.status === 404) {
+                api.console.log('No records found');
+            } else {
+                api.console.log('Unhandled request status: ' + request.status);
+            }
+        };
+
+        request.onerror = function () {
+            api.console.log('Network error occurred');
+        };
+    };
+
     return api;
 })();
 
 // Init on domready
 $(function () {
-    photoboothTools.console.log('Dev mode:', config.dev.enabled ? 'enabled' : 'disabled');
+    photoboothTools.console.log('Loglevel: ' + config.dev.loglevel);
 });

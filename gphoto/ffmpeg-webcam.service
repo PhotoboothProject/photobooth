@@ -1,0 +1,9 @@
+[Unit]
+Description=Setup a ffmpeg webcam
+
+[Service]
+Type=oneshot
+ExecStart=/usr/ffmpeg-webcam.sh
+
+[Install]
+WantedBy=multi-user.target

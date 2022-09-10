@@ -1,103 +1,190 @@
 # FAQ - Frequently asked questions
 
 ### Is my Camera supported?
+
 Some DSLR and Compact Cameras are not supported by this project. Please check for your specific model [here](http://gphoto.org/proj/libgphoto2/support.php).
 
-<hr>
+---
 
 ### Is Pi Camera supported?
+
 Yes it is.
 
 Enable camera support using the `raspi-config` program you will have used when you first set up your Raspberry Pi.
 
-`sudo raspi-config`
+```sh
+sudo raspi-config
+```
 
 Use the cursor keys to select and open Interfacing Options, and then select Camera and follow the prompt to enable the camera.
 
-Now you need to allow the webserver to use `raspistill` / `libcamera-still`. You need add the webserver user to video group and reboot once:  
-```
+Now you need to allow the webserver to use `raspistill` / `libcamera-still`. You need add the webserver user to video group and reboot once:
+
+```sh
 sudo gpasswd -a www-data video
 reboot
 ```
+
 Once done you need to adjust the configuration. Open the admin panel in your browser [localhost/admin](http://localhost/admin) and make the following changes:
 
-**"Take picture command on Pi OS based on bullseye":**   
+**"Take picture command on Pi OS based on bullseye":**
+
 `libcamera-still -n -o %s -q 100 -t 1 | echo Done`
 
-**"Take picture command on Pi OS based on buster":**   
+**"Take picture command on Pi OS based on buster":**
+
 `raspistill -n -o %s -q 100 -t 1 | echo Done`
 
 
-**"Success message for take picture":**  
+**"Success message for take picture":**
+
 `Done`
 
 Pi Camera works with these config changes (also works together with preview at countdown if enabled).
+
 Raspistill / libcamera-still does not give any feedback after the picture was taken, workaround for that with "echo".
+
 (Thanks to Andreas Maier for that information)
 
 You've the possibility to add more parameters if needed (define ISO, exposure, white balance etc.). Type `raspistill -?` / `libcamera-still -?`in your terminal to get information about possible parameters / settings.
 
-<hr>
+---
 
 ### I've found a bug, how can I report?
-Please take a look at the issue page [here](https://github.com/andi34/photobooth/issues) , if your bug isn't mentioned already you can create a new issue. Please give informations detailed as possible to reproduce and analyse the problem.
 
-<hr>
+Please take a look at the issue page [here](https://github.com/PhotoboothProject/photobooth/issues), if your bug isn't mentioned already you can create a new issue. Please give informations detailed as possible to reproduce and analyse the problem.
+
+---
 
 ### I've a white page after updating to latest Source, how can I solve this?
+
 On v1.9.0 and older:
+
 It could be your local `config.json` file doesn't match latest source. This file is generated if you've used the admin panel to change your config.
 Remove the file and try again!
-`sudo rm /var/www/html/admin/config.json`
 
-<hr>
+```sh
+sudo rm /var/www/html/admin/config.json
+```
+
+---
 
 ### How do I change the configuration?
+
 Open `http://localhost/admin` in your Webbrowser and change the configuration for your personal needs.
 Changed options are stored inside `config/my.config.inc.php` to prevent sharing personal data on Github by accident and to make an update of Photobooth easier.
 
-<hr>
+---
 
 ### How to change the language?
+
 Open `http://localhost/admin` in your Webbrowser and change the configuration for your personal needs.
 
-<hr>
+---
+
+### How to update or add translations?
+
+#### On v2.3.0 and newer:
+
+Photobooth joined Crowdin as localization manager, [join here](https://crowdin.com/project/photobooth) to translate Photobooth.
+
+Crowdin gives a nice webinterface to make translating easy as possible. If there's different translations for a string, translator can use the vote function on suggested translations.
+
+With Crowdin and your help translating we're able to get high-quality translations for all supported languages. Also it's easy to support a wider range of languages!
+
+Your language is missing? Don't worry, create a [localization request here](https://github.com/PhotoboothProject/photobooth/issues/new/choose) and we'll add it to the project.
+
+#### On v2.2.0 and older:
+
+Edit the language file inside `resources/lang/` with your favorite text editor.
+
+Once you're done upload your changes and create a [pull request](https://github.com/PhotoboothProject/photobooth/pulls).
+
+---
+
+### How can I test my current photo settings?
+
+Open [http://localhost/test/photo.php](http://localhost/test/photo.php) in your Webbrowser and a you can find a photo that is created with your current settings.
+
+---
+
+### How can I test my current collage settings?
+
+Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in your Webbrowser and a you can find a collage that is created with your current settings.
+
+---
+
+### How can setup a custom collage design?
+
+In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file has to be created manually.
+
+Content of the file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height and rotation (in that order) of one image.
+For calculation of the values the variables x and y get converted to the width and height of the collage respectively, additionally math operations +, -, *, / and () can be used to calculate values.
+The following example should look exactly like the 1+2 layout (this layout looks more complicated than it is due to the decimal places).
+```
+[
+[ "0",                     "y * 0.055",           "1.5 * y * 0.55546",   "y * 0.55546",   "10"       ],
+[ "x * 0.555",             "y * 0.055",           "1.5 * y * 0.40812",   "y * 0.40812",   "0"        ],
+[ "x * 0.555",             "y * 0.5368",          "1.5 * y * 0.40812",   "y * 0.40812",   "0"        ]
+]
+```
+```
+[ "horizontal position",   "vertical position",   "width",               "height",        "rotation" ]
+```
+Please note that if the number of images in a collage design was changed the admin page has to be saved again to calculate the correct number of photos to be used for a collage.
+Other value changes can be checked on the collage test page immediatly with a simple reload - so it's quite easy to configure a layout with the help of [http://localhost/test/collage.php](http://localhost/test/collage.php).
+The file `collage.json` needs to be a well-formed json array and something like a missing quotation or a trailing comma can be enough to make a design fail.
+
+---
 
 ### How to change the look of my Photobooth?
-Photobooth can be easylie styled for your personal needs via admin panel, open [localhost/admin](http://localhost/admin) in your browser and take a look at the `User Interface` options.  
+
+Photobooth can be easylie styled for your personal needs via admin panel, open [localhost/admin](http://localhost/admin) in your browser and take a look at the `User Interface` options.
+
 To use a private custom index you need to create the following files:
 
 - `resources/css/custom_style.css`
   - Optional: `src/sass/custom_style.scss` (`yarn build` will create the `resources/css/custom_style.css` out of it)
+- `resources/css/custom_admin.css`
+  - Optional: `src/sass/custom_admin.scss` (`yarn build` will create the `resources/css/custom_admin.css` out of it)
 - `resources/css/custom_chromakeying.css`
   - Optional: `src/sass/custom_chromakeying.scss` (`yarn build` will create the `resources/css/custom_chromakeying.css` out of it)
-- `resources/css/custom_live_chromakeying`
+- `resources/css/custom_live_chromakeying.css`
   - Optional: `src/sass/custom_live_chromakeying.scss` (`yarn build` will create the `resources/css/custom_live_chromakeying.css` out of it)
 - `template/custom.template.php`
 
-At least one of these custom style files need to exist! If other custom style files are missing a copy of the modern style file will be used.   
-Once you've created needed files you will be able to use the selection `custom` from the `"Styling"` option.  
+At least one of these custom style files need to exist! If other custom style files are missing a copy of the modern style file will be used.
 
-**Please note**: the custom style and template will not be tracked by git to avoid sharing by accident!  
+Once you've created needed files you will be able to use the selection `custom` from the `"Styling"` option.
 
-If you have e.g. private backgrounds (maybe files without a usable license) you can create a folder called `private` inside the root of your Photbooth source. This folder (and subfolders) will not be tracked by git to avoid sharing by accident!  
+**Please note**: the custom style and template will not be tracked by git to avoid sharing by accident!
 
-<hr>
+If you have e.g. private backgrounds (maybe files without a usable license) you can create a folder called `private` inside the root of your Photbooth source. This folder (and subfolders) will not be tracked by git to avoid sharing by accident!
+
+---
 
 ### How to keep pictures on my Camera using gphoto2?
+
 Add `--keep` (or `--keep-raw` to keep only the raw version on camera) option for gphoto2 via admin panel:
-```
+
+```sh
 gphoto2 --capture-image-and-download --keep --filename=%s
 ```
+
 On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use `--set-config capturetarget=X` option for gphoto2 (replace "X" with the target of your choice):
-```
+
+```sh
 gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s
 ```
+
 To know which capturetarget needs to be defined you need to run:
-```
+
+```sh
 gphoto2 --get-config capturetarget
 ```
+
 Example:
+
 ```
 pi@raspberrypi:~ $ gphoto2 --get-config capturetarget
 Label: Capture Target
@@ -108,35 +195,45 @@ Choice: 0 Internal RAM
 Choice: 1 Memory card
 ```
 
-<hr>
+---
 
 ### Cromakeying is saving without finishing saving
+
 Checking the browser console you'll see a `413 Request Entity Too Large` error. To fix that you'll have to update your nginx.conf
 
 Follow the steps mentioned here: [How to Fix NGINX 413 Request Entity Too Large Error](https://datanextsolutions.com/blog/how-to-fix-nginx-413-request-entity-too-large-error/)
 
-<hr>
+---
 
 ### Can I use Hardware Button to take a Picture?
-Yes, there's different ways!  
+
+Yes, there's different ways!
 
 #### Key code using connected HID devices
-An HID device connected to your hardware can trigger different actions on your device. The HID device must be connected to the device you're accessing Photobooth from!  
-For example use <a href="https://keycode.info" target="_blank">https://keycode.info</a> to find out the key id of the button you like to use.  
+
+An HID device connected to your hardware can trigger different actions on your device. The HID device must be connected to the device you're accessing Photobooth from!
+
+For example use <a href="https://keycode.info" target="_blank">https://keycode.info</a> to find out the key id of the button you like to use.
 
 - Related configuration:
+
   **PICTURE section**:
+
   - Key code which triggers a picture: **define**
 
   **COLLAGE section**:
+
   - Key code which triggers a collage: **define**
 
   **PRINT section**:
+
   - Key code which triggers printing: **define**
 
 #### Remotebuzzer Hardware Button feature using GPIO connected hardware (Raspberry Pi only)
-The **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins. This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.  
-Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!  
+
+The **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins. This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.
+
+Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!
 
 The Hardware Button functionality supports two separate modes of operation (select via admin panel):
 
@@ -147,36 +244,32 @@ Both buttons and rotary encoder controls can be combined.
 
 Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
 
-Troubleshooting / Debugging:
+##### Troubleshooting / Debugging
 
-- **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
-- Having trouble?
-  - Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
-  - Reload the Photobooth homepage
-  - Check the browser developer console for error logs
-  - Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
-  - If there is no errors logged but hardware buttons still do not trigger:
-    - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
-    - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting. 
+**Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
 
-```
-         gpio=16,17,20,21,22,26,27=pu
-```
-
-    - For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-raspian.sh` script or can be manually added as
-
-```
-     cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
-     www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
-     EOF
-```
+Having trouble?
+- Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
+- Reload the Photobooth homepage
+- Check the browser developer console for error logs
+- Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
+- If there is no errors logged but hardware buttons still do not trigger:
+  - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
+  - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
+    ```
+    gpio=16,17,20,21,22,26,27=pu
+    ```
+- For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
+    ```sh
+    cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
+    www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
+    EOF
+    ```
 
 As of Photobooth v3, hardware button support is fully integrated into Photobooth. Therefore the `button.py` script has been removed from the distribution. In case you are using this script and for continued backward compatibility please do not activate the Remote Buzzer Hardware Button feature in the admin GUI. Please note that continued backward compatibility is not guaranteed and in case of issues please switch to the integrated functionality.
 
+##### Button Support
 
-******************
-**Button Support**
-******************
 The server supports up to four connected hardware buttons for the following functionalities:
 
 1) **Picture Button**
@@ -185,7 +278,7 @@ The server supports up to four connected hardware buttons for the following func
 - Short button press (default <= 2 sec) will trigger a single picture in Photobooth
 - Long button press (default > 2 sec) will trigger a collage in Photobooth
 
-Note:
+**Note:**
 
  -  If collage is configured with interruption, next button presses will trigger the next collage pictures. 
  -  If collage is disabled in the admin settings, long button press also triggers a single picture
@@ -196,7 +289,7 @@ Note:
 - Defaults to GPIO20
 - Button press will trigger a collage in Photobooth.
 
-Note:
+**Note:**
 
 - If collage is configured with interruption, next button presses will trigger the next collage pictures. 
 - If collage is disabled in the admin settings (Collage section), this button will do nothing.
@@ -206,7 +299,7 @@ Note:
 - Defaults to GPIO16
 - This button will initate a safe system shutdown and halt (`shutdown -h now`).
 
-Note:
+**Note:**
 
 - Hold the button for a defined time to initiate the shut down (defaults to 5 seconds). This can be adjusted in the admin settings.
 - The shutdown button will only trigger if there is currently no action in progress in Photobooth (picture, collage). 
@@ -231,10 +324,8 @@ Print       ---   GPIO 26
 All         ---   GND
 ```
 
+##### Rotary Encoder
 
-******************
-**Rotary Encoder**
-******************
 A rotary encoder (i.e. [KY-040](https://sensorkit.en.joy-it.net/index.php?title=KY-040_Rotary_encoder)) is connected to the GPIOs. Turning the rotary left / right will navigate through the currently visible set of buttons on the screen. Button press on the rotary will activate the currently highlighted button in Photobooth.
 
 The wiring layout is
@@ -250,7 +341,7 @@ BTN  ---   GPIO 22
 GND  ---   GND
 ```
 
-Known limitations:
+##### Known limitations:
 
 - Delete Picture: in order to be able to access the Delete button through rotary control, please activate admin setting General -> "Delete images without confirm request"
 
@@ -259,79 +350,118 @@ The following elements are currently not supported and not accessible through ro
 - Full Screen Mode button: Looks like modern browser only allow to change to full screen mode upon user gesture. It seems not possible to change to full-screen using Javascript.
 - Photoswipe download button: Not needed for Rotary Control. (well, if you can come up with a decent use-case, let us know).
 
-**************
-Other Remote Trigger (experimental)
-**************
+#### Remote trigger using Socket.io (experimental)
+
 The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
 
 - Channel:  `photobooth-socket`
 - Commands: `start-picture`, `start-collage`
-- Response: `completed`  will be emitted to the client, once photobooth finished the task
+- Response: `completed` will be emitted to the client, once photobooth finished the task
 
 This functionality is experimental and largely untested. Not sure if there is a use-case but if you have one, happy to learn about it. Currently this does not support rotary encoder use but could be if needed.
 
-<hr>
+#### Remote trigger using simple web requests
+
+*Note: This feature depends on the experimental Socket.io implementation and needs option `Hardware Button` - `Enable Hardware Buttons` to be active.*
+
+Simple `GET` requests can be used to trigger single pictures or collages. Those endpoints can be found under `http://[Photobooth IP]:[Hardware Button Server Port]` where:
+- `[Photobooth IP]` needs to match the configured value under `General` - `IP address of the Photobooth web server` and
+- `[Hardware Button Server Port]` the value from `Hardware Button` - `Enable Hardware Buttons`
+
+The available endpoints are:
+- `[Base Url]/` - Simple help page with all available endpoints
+- `[Base Url]/commands/start-picture` - Triggers a single picture
+- `[Base Url]/commands/start-collage` - Triggers a collage
+
+These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/) (untested).
+
+##### Installation steps for myStrom WiFi Button
+- Be sure to connect the button to the same network as the photobooth
+- The button can be configured using the following commands
+
+    ```sh
+    curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-picture
+
+    curl --location -g --request POST http://[Button IP]/api/v1/action/long --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-collage
+    ```
+
+---
 
 ### How do I enable Kiosk Mode to automatically start Photobooth in full screen?
-Edit the LXDE Autostart Script:
-```
-sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
-```
-and add the following lines:
-```
-@xset s off
-@xset -dpms
-@xset s noblank
-@chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled
-```
-**NOTE:** If you're using QR-Code replace `http://localhost/` with your local IP-Adress (e.g. `http://192.168.4.1`), else QR-Code does not work.
 
-<hr>
+Add the autostart file:
 
-#### Enable touch events
-If touch is not working on your Raspberry Pi make sure `--touch-events=enabled` was added to your Autostart Script.  
-Edit the LXDE Autostart Script again
-```
-sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
-```
-and add `--touch-events=enabled` for Chromium:
-```
-@chromium-browser --kiosk http://localhost/ --touch-events=enabled
+```sh
+sudo nano /etc/xdg/autostart/photobooth.desktop
 ```
 
-<hr>
+now add the following lines:
 
-#### How to hide the Mouse Cursor?
+```
+[Desktop Entry]
+Version=1.3
+Terminal=false
+Type=Application
+Name=Photobooth
+Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled --use-gl=egl
+Icon=/var/www/html/resources/img/favicon-96x96.png
+StartupNotify=false
+Terminal=false
+```
+save the file.
+
+**NOTE:**
+
+If you have installed Photobooth inside a subdirectory (e.g. to `/var/www/html/photobooth`), make sure you adjust the kiosk url (e.g. to `http://127.0.0.1/photobooth`) and the Icon path (e.g. to `/var/www/html/photobooth/resources/img/favicon-96x96.png`).
+
+The flag `--use-gl=egl` might only be needed on a Raspberry Pi to avoid a white browser window on the first start of kiosk mode! If you're facing issues while using Photobooth on a different device, please remove that flag.
+
+---
+
+#### How to hide the mouse cursor, disable screen blanking and screen saver?
+
 There are two options to hide the cursor. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
 
-**Solution A**
+##### Solution A
 To hide the Mouse Cursor we'll use "unclutter":
-```
+
+```sh
 sudo apt-get install unclutter
 ```
-Edit the LXDE Autostart Script again:
-```
+
+Edit the LXDE Autostart Script:
+
+```sh
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 ```
-and add the following line (0 describes the time after which the cursor should be hidden):
+
+and add the following lines:
+
 ```
-@unclutter -idle 0
+# Photobooth
+# turn off display power management system
+@xset -dpms
+# turn off screen blanking
+@xset s noblank
+# turn off screen saver
+@xset s off
+
+# Hide mousecursor (3 describes the time after which the cursor should be hidden)
+@unclutter -idle 3
+# Photobooth End
 ```
 
-**Solution B**
+#####:Solution B
 If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.conf` to hide the cursor permanently. Just add `xserver-command=X -nocursor` to the end of the file.
 
-<hr>
-
-### How to disable the blank screen on Raspberry Pi (Raspbian)?
-You can follow the instructions [here](https://www.geeks3d.com/hacklab/20160108/how-to-disable-the-blank-screen-on-raspberry-pi-raspbian/) to disable the blank screen.
-
-<hr>
+---
 
 ### How to use a live stream as background at countdown?
+
 There's different ways depending on your needs and personal setup:
 
 #### Preview _"from device cam"_
+
 If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".
 
 - Admin panel config "Preview mode": `from device cam`
@@ -345,7 +475,9 @@ If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camer
 - Admin panel config *"Device cam takes picture"* can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still.
 
 #### Preview _"from URL"_
-If you like to have the same preview independent of the device you access Photobooth from:  
+
+If you like to have the same preview independent of the device you access Photobooth from:
+
 Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
 
 - Admin panel config *"Preview mode"*: `from URL`
@@ -358,12 +490,14 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 - Requires Photobooth v2.2.1 or later!
 
 #### Preview _"from gohoto2"_
+
 A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
 
 - Liveview **must** be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
-- install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms -y`
+- install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms v4l-utils -y`
 - create a virtual webcam `sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"`
-  - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:  
+  - `/dev/video0` is used by default, you can use `v4l2-ctl --list-devices` to check which `/dev/*` is the correct one:
+
     If it doesn't match the default setup you need to adjust the `Command to generate a live preview` inside the admin panel!
 - Give permissions to /dev/video* `sudo gpasswd -a www-data video` (this was done automatically if you used the installation script) and reboot once
 - Admin panel config *"Preview mode"*: `from gphoto2`
@@ -381,9 +515,10 @@ A preview can also be done using the video mode of your DSLR (Linux only), but o
 - Make sure the countdown is long enough to start the preview and free gphoto2 at the end of the countdown to be able to take a picture (2 seconds before the countdown ends).
   - For best user experience the countdown should be set at least to 8 seconds.
 
-<hr>
+---
 
 ### Can I use a live stream as background?
+
 Yes you can. There's different ways depending on your needs and personal setup:
 
 1. On Photobooth v2.4.0 and newer you can use the option "Use stream from device cam as background" inside admin panel.
@@ -391,27 +526,98 @@ Yes you can. There's different ways depending on your needs and personal setup:
 
 2. You need to change the background URL path via config or admin panel. Replace `url(../img/bg.jpg)` with your IP-Adress and port (if needed) as URL.
     Example:
-    ```
+
+    ```sh
     -   url(../img/bg.jpg)
     +   url(http://127.0.0.1:8081)
     ```
 
     To use a Raspberry Pi Camera module Motion is required, but you won't be able to use the Raspberry Pi Camera 
     for preview at countdown!
-    ```
+
+    ```sh
     sudo apt-get install -y motion
     ```
-    /etc/motion/motion.conf needs to be changed to your needs (e.g. starting on boot, using videoX, resolution 
-    etc.).
-    If you're accessing Photobooth from an external device (e.g. Tablet or Mobile Phone) replace `127.0.0.1` 
-    with your IP-Adress.
+
+    _/etc/motion/motion.conf_ needs to be changed to your needs (e.g. starting on boot, using videoX, resolution, etc.).
+
+    If you're accessing Photobooth from an external device (e.g. Tablet or Mobile Phone) replace `127.0.0.1` with your IP-Adress.
 
     For reference:
-    https://github.com/andreknieriem/photobooth/pull/20
+    [https://github.com/andreknieriem/photobooth/pull/20](https://github.com/andreknieriem/photobooth/pull/20)
 
-<hr>
+---
+
+### How to get better performance using gphoto2 as preview?
+
+By now the DSLR handling of Photobooth on Linux was done exclusively using `gphoto2 CLI` (command line interface). When taking pictures while using preview video from the same camera one command has to be stopped and another one is run after that.
+
+The computer terminates the connection to the camera just to reconnect immediately. Because of that there was an ugly video gap and the noises of the camera could be irritating as stopping the video sounded very similar to taking a picture. But most cameras can shoot quickly from live-view...
+
+The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed using several programming languages. Because of this we can have a python script that handles both preview and taking pictures without terminating the connection to the camera in between.
+
+To try using `gphoto-python` first execute `install-gphoto-python.sh`.
+
+```sh
+wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/gphoto/install-gphoto-python.sh
+sudo bash install-gphoto-python.sh
+```
+
+After that just change your commands to use the python script. For Live preview use:
+
+```
+python3 cameracontrol.py
+```
+
+And for the take picture command:
+
+```
+python3 cameracontrol.py --capture-image-and-download %s
+```
+
+There's no need for a command to end the live preview. So just empty that field.
+
+If you want to use the DSLR view as background video disable the _Battery saving mode on gphoto2 live preview_ setting of Photobooth, which is enabled by default.
+
+As you possibly noticed the params of the script are designed to be similar to the ones of `gphoto2 CLI` but with some shortcuts like `-c` for `--capture-image-and-download`. If you want to know more check out the help of the script by running:
+
+```sh
+python3 /var/www/html/api/cameracontrol.py --help
+```
+
+or on subfolder installation of Photobooth
+
+```sh
+python3 /var/www/html/photobooth/api/cameracontrol.py --help
+```
+
+If you want to keep your images on the camera you need to use the same `capturetarget` config as when you were using `gphoto CLI` (see "How to keep pictures on my Camera using gphoto2?"). Set the config on the preview command like this:
+
+```sh
+python3 cameracontrol.py --set-config capturetarget=1
+```
+
+If you don't want to use the DSLR view as background video enable the _Battery saving mode on gphoto2 live preview_ setting of Photobooth and add `--bsm` to the preview command.
+
+```sh
+python3 cameracontrol.py --bsm
+```
+
+The preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting for the next photo.
+
+
+If you get errors from Photobooth and want to get more information try to run the preview command manually. The script is in Photobooth's `api` folder. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
+
+Finally if you just run `venv/bin/python3 cameracontrol.py --capture-image-and-download %s` as take picture command without having a preview started it only takes a picture without starting any kind of preview and ends the script immediately after the picture.
+
+In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` for all DSLR connection handling in the future.
+
+But by now this was not tested with distinct setups and different cameras... so feel free to give feedback!
+
+---
 
 ### I've trouble setting up E-Mail config. How do I solve my problem?
+
 If connection fails some help can be found [here](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
 
 - Should be obvious but the photobooth must be connected to WIFI/internet to send photos live.
@@ -440,117 +646,129 @@ Tested working setup:
   - Port: `587`
   - Security: `TLS`
 
-<hr>
+---
 
 ### How to only open the gallery to avoid people taking pictures?
+
 Open [http://localhost/gallery.php](http://localhost/gallery.php) in your browser (you can replace `localhost` with your IP adress).
 
-<hr>
+---
 
 ### Chromakeying isn't working if I access the Photobooth page on my Raspberry Pi, but it works if I access Photobooth from an external device (e.g. mobile phone or tablet). How can I solve the problem?
+
 Open `chrome://flags` in your browser.
+
 Look for *"Accelerated 2D canvas"* and change it to `"disabled"`.
+
 Now restart your Chromium browser.
 
-<hr>
-
-### How to update or add translations?
-**On v2.3.0 and newer:**  
-Photobooth joined Crowdin as localization manager, [join here](https://crowdin.com/project/photobooth) to translate Photobooth.  
-Crowdin gives a nice webinterface to make translating easy as possible. If there's different translations for a string, translator can use the vote function on suggested translations.  
-With Crowdin and your help translating we're able to get high-quality translations for all supported languages. Also it's easy to support a wider range of languages!  
-Your language is missing? Don't worry, create a [localization request here](https://github.com/andi34/photobooth/issues/new/choose) and we'll add it to the project.  
-
-**On v2.2.0 and older:**  
-Edit the language file inside `resources/lang/` with your favorite text editor.  
-Once you're done upload your changes and create a [pull request](https://github.com/andi34/photobooth/pulls).
-
-<hr>
+---
 
 ### How to ajust the ```php.ini``` file?
+
 Open [http://localhost/phpinfo.php](http://localhost/phpinfo.php) in your browser.
-Take a look for "Loaded Configuration File", you need  sudo rights to edit the file.
+
+Take a look for "Loaded Configuration File", you need _sudo_ rights to edit the file.
+
 Page will look like this:
+
 <details><summary>CLICK ME</summary>
-<img src="../resources/img/faq/php-ini.png">
+<img src="../resources/img/faq/php-ini.png" alt="php.ini Screenshot">
 </details>
 
-<hr>
+---
 
 ### Turn Photobooth into a WIFI hotspot
+
 If you would like to allow your guests to download their images without connecting to your private WIFI or when there is no other WIFI around, you can turn your Raspberry Pi into setup an access point and WiFi client/station network on the single WiFi chip of the Raspberry Pi.
 
 The default setting is to call your wifi hotspot *Photobooth* as this is built into the Photobooth prompt for guests to download images via QR code.
 
-First head over to the hotspot directory to run the installer:
+First, make sure `iptables` package is installed:
+
+```sh
+sudo apt-get install iptables
 ```
-cd /var/www/html/vendor/rpihotspot
+
+Now download and run the rpihotspot installer:
+
+```sh
+wget https://raw.githubusercontent.com/idev1/rpihotspot/master/setup-network.sh
+chmod +x setup-network.sh
+sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
+--ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
 ```
+
 There are a couple of flags you need to change from the example command below:
 
  - change `password` to your desired password, make it easy enough for guests to remember.
  - change `country code` from `CA` to your own localization.
  - keep or change the ip address `10.10.10.10`. Remember what you change it to.
 
-```
-sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
---ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
-```
+
 If you run into any errors setting up your hotspot we can remove all the settings and try it again. The first time I ran this I ran into an error, I reset it using the command below, then reinstalled it. It went smoothly the second time:
 
-```
-sudo ./setup-network.sh --clean
+```sh
+sudo bash setup-network.sh --clean
 ```
 
-<hr>
+---
 
 ### Automatic picture syncing to USB stick
 
 This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick. Currently works on Raspberry PI OS only.
 
-Use the `install-raspbian.sh` script to get the operating system setup in place.  
-**Note:** If you have declined the question to enable the USB sync file backup while running the `install-raspbian.sh` you need to run the following commands to get the operating system setup done:
-```
-wget https://raw.githubusercontent.com/andi34/photobooth/dev/enable-usb-sync.sh
-sudo bash enable-usb-sync.sh
+Use the `install-photobooth.sh` script to get the operating system setup in place.
 
+**Note:** If you have declined the question to enable the USB sync file backup while running the `install-photobooth.sh` you need to run the following commands to get the operating system setup done:
+
+```sh
+wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/enable-usb-sync.sh
+sudo bash enable-usb-sync.sh
 ```
 
 The target USB device is selected through the admin panel.
 
 A USB drive / stick can be identified either by the USB stick label (e.g. `photobooth`), the operating system specific USB device name (e.g. `/dev/sda1`) or the USB device system subsystem name (e.g. `sda`). The preferred method would be the USB stick label (for use of a single USB stick) or the very specific USB device name, for different USB stick use. The default config will look for a drive with the label photobooth. The script only supports one single USB stick connected at a time
 
-Pictures will be synced to the USB stick matched by the pattern, as long as it is  mounted (aka USB stick is plugged in)
+Pictures will be synced to the USB stick matched by the pattern, as long as it is mounted (aka USB stick is plugged in)
 
 Debugging: Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
 
-<hr>
+---
 
 ### Raspberry Touchpanel DSI simultaneously with HDMI
 
 When using a touchscreen on DSI and an HDMI screen simultaneously, the touch input is offset. This is because both monitors are recognized as one screen.
 
 The remedy is the following:
+
 ```
 xinput list
 ```
+
 remember the device id=[X] of the touchscreen.
+
 ```
 xinput list-props "Device Name" 
 ```
+
 Get the ID in brackets (Y) of Coordinate Transformation Matrix
 
 ```
 xinput set-prop [X] --type=float [Y] c0 0 c1 0 c2 c3 0 0 1
 ```
 
-adjust the coding c0 0 c1 0 c2 c3 0 0 1 with your own data.  
+adjust the coding c0 0 c1 0 c2 c3 0 0 1 with your own data.
+
 You can get the values of your screens with the following command:
 
 ```
 xrandr | grep \* # xrandr uses "*" 
 ```
+
 to identify the screen being used
+
 ```
 c0 = touch_area_width / total_width
 (width of touch screen divided by width of both screens)
@@ -559,6 +777,7 @@ c2 = touch_area_height / total_height
 c1 = touch_area_x_offset / total_width
 c3 = touch_area_y_offset / total_height
 ```
+
 and execute the above command again with your own coding!
 
 Example:
@@ -569,9 +788,11 @@ xinput set-prop 6 --type=float 136 0.3478260869565217 0 0 0.55555555555556 0 0 0
 
 Now unfortunately the settings are only valid for the current session. So create the following desktop startup file with your own values:
 
-```
+```sh
 nano ~/.config/autostart/touch.desktop
 ```
+
+Example:
 
 ```
 [Desktop Entry]
@@ -584,22 +805,27 @@ Terminal=false
 ```
 
 If you want to use the touchscreen as photobooth and the second monitor for the standalone slideshow for example, open the autostart file:
-```
+
+```sh
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 ```
+
 and enter/adjust the @chromium-browser entries as followed (adjust the value _1920_ to your own resolution and URL if necessary):
+
 ```
 @chromium-browser --new-window --start-fullscreen --kiosk http://localhost --window-position=1920,0 --user-data-dir=Default
 @chromium-browser --new-window --start-fullscreen --kiosk http://localhost/slideshow/ --window-position=0,0 --user-data-dir='Profile 1'
 ```
 
-<hr>
+---
 
 ### How to administer CUPS remotely using the web interface?
 
-By default the CUPS webinterface can only be accessed via [http://localhost:631](http://localhost:631) from your local machine.  
+By default the CUPS webinterface can only be accessed via [http://localhost:631](http://localhost:631) from your local machine.
+
 To remote access CUPS from other clients you need to run the following commands:
-```
+
+```sh
 sudo cupsctl --remote-any
 sudo /etc/init.d/cups restart
 ```

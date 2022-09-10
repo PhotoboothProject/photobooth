@@ -4,8 +4,6 @@ header('Content-Type: application/json');
 require_once '../lib/config.php';
 require_once '../lib/db.php';
 
-$os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
-
 $data = $_POST;
 if (!isset($data['type'])) {
     echo json_encode('error');
@@ -109,16 +107,20 @@ if ($data['type'] == 'config') {
         if (
             !is_readable('../template/custom.template.php') &&
             !is_readable('../resources/css/custom_style.css') &&
+            !is_readable('../resources/css/custom_admin.css') &&
             !is_readable('../resources/css/custom_chromakeying.css') &&
             !is_readable('../resources/css/custom_live_chromakeying.css')
         ) {
-            $newConfig['ui']['style'] = 'default';
+            $newConfig['ui']['style'] = 'modern_squared';
         } else {
             if (!file_exists('../template/custom.template.php')) {
                 copy('../template/modern.template.php', '../template/custom.template.php');
             }
             if (!file_exists('../resources/css/custom_style.css')) {
                 copy('../resources/css/modern_style.css', '../resources/css/custom_style.css');
+            }
+            if (!file_exists('../resources/css/custom_admin.css')) {
+                copy('../resources/css/modern_admin.css', '../resources/css/custom_admin.css');
             }
             if (!file_exists('../resources/css/custom_chromakeying.css')) {
                 copy('../resources/css/modern_chromakeying.css', '../resources/css/custom_chromakeying.css');
@@ -129,7 +131,7 @@ if ($data['type'] == 'config') {
         }
     }
 
-    if ($os === 'windows') {
+    if (SERVER_OS === 'windows') {
         $newConfig['remotebuzzer']['enabled'] = false;
         $newConfig['synctodrive']['enabled'] = false;
     }
@@ -151,10 +153,29 @@ if ($data['type'] == 'config') {
         $newConfig['get_request']['processed'] = false;
     }
 
-    if ($newConfig['collage']['layout'] === '1+2') {
+    $collageLayout = $newConfig['collage']['layout'];
+    $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private/collage.json';
+    if ($collageLayout === '1+2' || $collageLayout == '2+1' || $collageLayout == '2x3') {
         $newConfig['collage']['limit'] = 3;
+    } elseif ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
+        $collageConfig = json_decode(file_get_contents($collageConfigFilePath), true);
+        if (is_array($collageConfig)) {
+            $newConfig['collage']['limit'] = count($collageConfig);
+        } else {
+            $newConfig['collage']['limit'] = 4;
+        }
     } else {
         $newConfig['collage']['limit'] = 4;
+    }
+
+    //If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
+    if ($newConfig['collage']['placeholder']) {
+        $collagePlaceholderPosition = (int) $newConfig['collage']['placeholderposition'];
+        if ($collagePlaceholderPosition > 0 && $collagePlaceholderPosition <= $newConfig['collage']['limit']) {
+            $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
+        } else {
+            $newConfig['collage']['placeholderposition'] = false;
+        }
     }
 
     $content = "<?php\n\$config = " . var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';

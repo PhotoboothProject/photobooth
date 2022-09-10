@@ -10,7 +10,7 @@ function killProcessIfActive($pName, $pidFile, $logfileName, $killSig) {
 
     if (count($pids) > 1) {
         foreach ($pids as $procPID) {
-            if ($config['dev']['enabled']) {
+            if ($config['dev']['loglevel'] > 0) {
                 $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $logfileName;
                 $fp = fopen($logfile, 'a'); //opens file in append mode.
                 fwrite($fp, 'Service Control [ config ]: Photobooth config has changed, killed processes by name ' . $pName . ' -> PID ' . $procPID . "\n");

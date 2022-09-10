@@ -57,20 +57,16 @@ if (isset($success)) {
         'command' => $cmd,
         'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
-        logError($LogData);
-    }
-    echo $LogString;
 } else {
     $LogData = [
         'success' => 'false',
         'command' => $cmd,
         'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
-        logError($LogData);
-    }
-    echo $LogString;
 }
+
+$LogString = json_encode($LogData);
+if ($config['dev']['loglevel'] > 1) {
+    logError($LogData);
+}
+echo $LogString;

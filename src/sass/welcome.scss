@@ -2,6 +2,7 @@
 @import 'partials/fonts';
 @import 'partials/basic';
 @import 'partials/button';
+@import 'partials/shape';
 @import 'partials/scrollbar';
 
 html,
@@ -31,4 +32,9 @@ body {
   a:active {
     text-decoration: underline;
   }
+}
+
+.security-advice {
+  color: #000000;
+  background-color: #ffff00;
 }

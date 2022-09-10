@@ -1,8 +1,9 @@
 /* globals photoboothTools */
 $(function () {
-    const shellCommand = function ($mode) {
+    const shellCommand = function ($mode, $filename = '') {
         const command = {
-            mode: $mode
+            mode: $mode,
+            filename: $filename
         };
 
         photoboothTools.console.log('Run' + $mode);
@@ -46,7 +47,7 @@ $(function () {
         }
     });
 
-    $('#save-btn').on('click', function (e) {
+    $('#save-admin-btn').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
         elem.addClass('saving');
@@ -161,6 +162,13 @@ $(function () {
     $('#debugpanel-btn').on('click', function (ev) {
         ev.preventDefault();
         window.open('debugpanel.php');
+
+        return false;
+    });
+
+    $('#translate-btn').on('click', function (ev) {
+        ev.preventDefault();
+        window.open('https://crowdin.com/project/photobooth');
 
         return false;
     });

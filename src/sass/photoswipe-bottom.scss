@@ -15,14 +15,10 @@
 }
 
 .pswp__button--close {
-  top: 24px;
+  top: 13px;
   right: 30px;
   left: auto;
   position: fixed;
-  width: calc(2 * 1em);
-  height: calc(2 * 1em);
-  line-height: calc(1 * 1em);
-  border: 2px solid $galleryButtonColor;
 }
 
 .pswp__top-bar {

@@ -26,23 +26,20 @@ if ($_POST['play'] === 'true') {
         'pid' => $pid - 1,
         'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
-        logError($LogData);
-    }
-    die($LogString);
 } elseif ($_POST['play'] === 'false') {
     $killcmd = sprintf($config['preview']['killcmd']);
-    exec($killcmd);
+    if ($killcmd != '') {
+        exec($killcmd);
+    }
 
     $LogData = [
         'isRunning' => isRunning($_POST['pid']),
-        'pid' => $_POST['pid'],
+        'pid' => intval($_POST['pid']),
         'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
-        logError($LogData);
-    }
-    die($LogString);
 }
+$LogString = json_encode($LogData);
+if ($config['dev']['loglevel'] > 1) {
+    logError($LogData);
+}
+die($LogString);

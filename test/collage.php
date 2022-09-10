@@ -12,15 +12,12 @@ $demoImages = [
 ];
 
 $name = date('Ymd_His') . '.jpg';
-$i = 0;
-foreach ($demoImages as $image) {
-    if ($i < $config['collage']['limit']) {
-        copy($demoFolder . DIRECTORY_SEPARATOR . $image, $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $i++ . '_' . $name);
-    }
-}
 $collageSrcImagePaths = [];
-for ($j = 0; $j < $config['collage']['limit']; $j++) {
-    $collageSrcImagePaths[] = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $j . '_' . $name;
+for ($i = 0; $i < $config['collage']['limit']; $i++) {
+    $image = $demoImages[$i];
+    $path = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $i . '_' . $name;
+    copy($demoFolder . DIRECTORY_SEPARATOR . $image, $path);
+    $collageSrcImagePaths[] = $path;
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;

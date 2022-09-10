@@ -3,6 +3,7 @@
 @import 'partials/button';
 @import 'partials/fonts';
 @import 'partials/modal';
+@import 'partials/shape';
 
 .chromawrapper {
   display: block;
@@ -24,7 +25,6 @@
   display: inline-block;
   max-width: 100%;
   background-color: green;
-  border: 4px solid $borderColor;
   &.initial {
     width: 1000px;
   }

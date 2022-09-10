@@ -8,6 +8,7 @@ require_once '../lib/polaroid.php';
 require_once '../lib/resize.php';
 require_once '../lib/collage.php';
 require_once '../lib/applyText.php';
+require_once '../lib/applyEffects.php';
 require_once '../lib/log.php';
 
 if (!extension_loaded('gd')) {
@@ -21,22 +22,6 @@ if (empty($_POST['file'])) {
 }
 
 $file = $_POST['file'];
-
-$picture_permissions = $config['picture']['permissions'];
-$thumb_size = substr($config['picture']['thumb_size'], 0, -2);
-$chroma_size = substr($config['keying']['size'], 0, -2);
-
-// text on picture variables
-$fontpath = $config['textonpicture']['font'];
-$fontcolor = $config['textonpicture']['font_color'];
-$fontsize = $config['textonpicture']['font_size'];
-$fontlocx = $config['textonpicture']['locationx'];
-$fontlocy = $config['textonpicture']['locationy'];
-$linespacing = $config['textonpicture']['linespace'];
-$fontrot = $config['textonpicture']['rotation'];
-$line1text = $config['textonpicture']['line1'];
-$line2text = $config['textonpicture']['line2'];
-$line3text = $config['textonpicture']['line3'];
 
 $quality = 100;
 $imageModified = false;
@@ -71,19 +56,8 @@ $srcImages[] = $file;
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 
-// Process Collage
 if ($_POST['style'] === 'collage') {
-    $collageBasename = substr($filename_tmp, 0, -4);
-    $singleImageBase = substr($file, 0, -4);
-
-    $collageSrcImagePaths = [];
-
-    for ($i = 0; $i < $config['collage']['limit']; $i++) {
-        $collageSrcImagePaths[] = $collageBasename . '-' . $i . '.jpg';
-        if ($config['collage']['keep_single_images']) {
-            $srcImages[] = $singleImageBase . '-' . $i . '.jpg';
-        }
-    }
+    list($collageSrcImagePaths, $srcImages) = getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
 
     if (!createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
         $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
@@ -106,97 +80,34 @@ foreach ($srcImages as $image) {
 
     if ($_POST['style'] === 'collage' && $file != $image) {
         $editSingleCollage = true;
-        $picture_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['collage']['frame']);
+        $picture_frame = $config['collage']['frame'];
     } else {
         $editSingleCollage = false;
-        $picture_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['picture']['frame']);
+        $picture_frame = $config['picture']['frame'];
     }
 
     if ($_POST['style'] !== 'collage' || $editSingleCollage) {
-        // Only jpg/jpeg are supported
-        if (!$imageResource) {
-            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not read jpeg file. Are you taking raws?';
-            logErrorAndDie($errormsg);
-        }
-
-        if ($config['picture']['flip'] !== 'off') {
-            if ($config['picture']['flip'] === 'horizontal') {
-                imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-            } elseif ($config['picture']['flip'] === 'vertical') {
-                imageflip($imageResource, IMG_FLIP_VERTICAL);
-            } elseif ($config['picture']['flip'] === 'both') {
-                imageflip($imageResource, IMG_FLIP_BOTH);
-            }
-            $imageModified = true;
-        }
-
-        // apply filter
-        if ($image_filter) {
-            applyFilter($image_filter, $imageResource);
-            $imageModified = true;
-        }
-
-        if ($config['picture']['polaroid_effect'] && $_POST['style'] !== 'collage') {
-            $polaroid_rotation = $config['picture']['polaroid_rotation'];
-            $imageResource = effectPolaroid($imageResource, $polaroid_rotation, 200, 200, 200);
-            $imageModified = true;
-        }
-
-        if (
-            ($config['picture']['take_frame'] && $_POST['style'] !== 'collage' && testFile($config['picture']['frame'])) ||
-            ($editSingleCollage && $config['collage']['take_frame'] === 'always' && testFile($config['collage']['frame']))
-        ) {
-            $imageResource = applyFrame($imageResource, $picture_frame);
-            $imageModified = true;
-        }
-
-        if ($config['picture']['rotation'] !== '0') {
-            $imageResource = rotateResizeImage($imageResource, $config['picture']['rotation']);
-            $imageModified = true;
-        }
+        list($imageResource, $imageModified) = editSingleImage($config, $imageResource, $image_filter, $editSingleCollage, $picture_frame, $_POST['style'] == 'collage');
     }
 
     if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
+        $chroma_size = substr($config['keying']['size'], 0, -2);
         $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
         imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality']['chroma']);
         imagedestroy($chromaCopyResource);
     }
 
-    if ($config['textonpicture']['enabled'] && testFile($config['textonpicture']['font']) && $_POST['style'] !== 'collage') {
-        $imageResource = applyText($imageResource, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
-        $imageModified = true;
-    }
+    $configText = $config['textonpicture'];
+    list($imageResource, $imageModified) = addTextToImage($configText, $imageResource, $imageModified, $_POST['style'] == 'collage');
 
     // image scale, create thumbnail
+    $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
     $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
 
     imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality']['thumb']);
     imagedestroy($thumbResource);
 
-    if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
-        imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image']);
-        // preserve jpeg meta data
-        if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
-            $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
-            $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
-
-            exec($cmd, $output, $returnValue);
-
-            if ($returnValue) {
-                $ErrorData = [
-                    'error' => 'exiftool returned with an error code',
-                    'cmd' => $cmd,
-                    'returnValue' => $returnValue,
-                    'output' => $output,
-                ];
-                $ErrorString = json_encode($ErrorData);
-                logError($ErrorData);
-                die($ErrorString);
-            }
-        }
-    } else {
-        copy($filename_tmp, $filename_photo);
-    }
+    compressImage($config, $imageModified, $imageResource, $filename_tmp, $filename_photo);
 
     if (!$config['picture']['keep_original']) {
         unlink($filename_tmp);
@@ -212,6 +123,7 @@ foreach ($srcImages as $image) {
     }
 
     // Change permissions
+    $picture_permissions = $config['picture']['permissions'];
     chmod($filename_photo, octdec($picture_permissions));
 }
 
@@ -226,7 +138,7 @@ $LogData = [
     'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);
-if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+if ($config['dev']['loglevel'] > 1) {
     logError($LogData);
 }
 echo $LogString;

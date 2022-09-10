@@ -1,35 +1,13 @@
 @import 'classic_chromakeying';
+@import 'partials/countdown';
+@import 'partials/video_preview';
 @import 'partials/email';
 @import 'partials/gallery';
 @import 'partials/modal';
 @import 'partials/scrollbar';
+@import 'partials/shutter_animation';
 @import 'vendor/photoswipe';
-
-.home {
-  position: fixed;
-  top: 1em;
-  right: 0;
-  z-index: 10;
-}
-
-.deletebtn {
-  display: inline-block;
-  visibility: hidden;
-}
-
-.gallerybtn {
-  position: fixed;
-  top: 1em;
-  left: 0;
-  z-index: 10;
-}
-
-.closebtn {
-  position: fixed;
-  top: 1em;
-  right: 0;
-  z-index: 10;
-}
+@import 'partials/shape';
 
 .top-bar {
   display: inline-block;
@@ -41,7 +19,7 @@
   color: #ff0000;
   padding-bottom: 10px;
   background-color: $mainColor;
-  border: 4px solid $borderColor;
+  border: 2px solid $borderColor;
   width: 1000px;
   text-align: center;
   display: inline-block;
@@ -82,116 +60,6 @@
   text-align: center;
 }
 
-#loader {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background-size: cover;
-  background-position: center center;
-  color: $countdownColor;
-  z-index: 100;
-  text-align: center;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    opacity: 1;
-    transition: opacity 0.5s;
-  }
-
-  &.showBackgroundImage {
-    &:after {
-      opacity: 0.5;
-    }
-  }
-
-  &.open {
-    display: flex;
-  }
-
-  .spinner {
-    color: $cheeseColor;
-    font-size: 5em;
-  }
-}
-
-#video--view {
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-#video--preview {
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-#ipcam--view {
-  background-image: none;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  transform: rotate($previewRotation);
-
-  &.streaming {
-    background-image: $urlBackground;
-  }
-}
-
-.flip-horizontal {
-  transform: scaleX(-1);
-  filter: FlipH;
-}
-
-#counter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  backface-visibility: hidden;
-  font-size: 12em;
-  opacity: 0.2;
-}
-
-#counter.tick {
-  font-size: 1em;
-  opacity: 1;
-  transition: font-size 0.75s, opacity 0.75s;
-}
-
-.cheese {
-  position: absolute;
-  color: $cheeseColor;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  backface-visibility: hidden;
-  font-size: 3em;
-}
-
 @media (max-width: 1280px) and (orientation: landscape) {
   .chromawrapper {
     padding: 0;
@@ -203,27 +71,9 @@
     position: absolute;
     top: 40px;
     right: 0;
+    width: 80%;
     max-width: 950px;
     max-height: 100%;
-    border: 4px solid $borderColor;
-    &.initial {
-      width: 950px;
-    }
-  }
-
-  .takeChroma,
-  .reloadPage,
-  .deletebtn {
-    margin: 0.5em;
-    display: block;
-  }
-
-  .home,
-  .gallerybtn,
-  .closebtn {
-    position: relative;
-    top: 0;
-    max-width: 150px;
   }
 
   .top-bar {
@@ -251,7 +101,6 @@
     width: 250px;
     height: 400px;
     overflow-y: auto;
-    border: 2px solid $borderColor;
     img {
       display: block;
       margin-left: auto;

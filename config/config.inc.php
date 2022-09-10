@@ -7,21 +7,19 @@
 $config = array();
 
 // G E N E R A L
-// possible language values: de, el, en, es, fr, pl, it
+// possible language values: de, en, fr, it
 $config['ui']['language'] = 'en';
 $config['adminpanel']['view'] = 'basic';
-$config['dev']['enabled'] = true;
+$config['dev']['loglevel'] = '1';
 $config['dev']['demo_images'] = false;
-$config['dev']['advanced_log'] = false;
 $config['start_screen']['title'] = 'Photobooth';
 $config['start_screen']['title_visible'] = true;
-$config['start_screen']['subtitle'] = NULL;
+$config['start_screen']['subtitle'] = '';
 $config['start_screen']['subtitle_visible'] = true;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
 $config['picture']['thumb_size'] = '540px';
-$config['dev']['error_messages'] = true;
 $config['dev']['reload_on_error'] = true;
-$config['webserver']['ip'] = NULL;
+$config['webserver']['ip'] = '';
 $config['webserver']['ssid'] = 'Photobooth';
 $config['download']['enabled'] = true;
 $config['download']['thumbs'] = false;
@@ -40,7 +38,7 @@ $config['ui']['show_fork'] = true;
 $config['ui']['skip_welcome'] = false;
 $config['event']['enabled'] = true;
 $config['event']['textLeft'] = 'We';
-// possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o', 
+// possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o',
 //                               'fa-heart', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
 $config['event']['symbol'] = 'fa-heart-o';
 $config['event']['textRight'] = 'OpenSource';
@@ -63,10 +61,10 @@ $config['filters']['enabled'] = true;
 $config['filters']['defaults'] = 'plain';
 $config['filters']['disabled'] = array();
 $config['picture']['take_frame'] = false;
-$config['picture']['frame'] = 'resources/img/frames/frame.png';
+$config['picture']['frame'] = '';
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
-$config['picture']['key'] = null;
+$config['picture']['key'] = '';
 // possible naming values: 'dateformatted', 'random'
 $config['picture']['naming'] = 'dateformatted';
 // permissions example values: '0644' (rw-r--r--), '0666' (rw-rw-rw-), '0600' (rw-------)
@@ -81,7 +79,7 @@ $config['textonpicture']['line3'] = 'line 3';
 $config['textonpicture']['locationx'] = '80';
 $config['textonpicture']['locationy'] = '80';
 $config['textonpicture']['rotation'] = '0';
-$config['textonpicture']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+$config['textonpicture']['font'] = '';
 $config['textonpicture']['font_color'] = '#ffffff';
 $config['textonpicture']['font_size'] = '80';
 $config['textonpicture']['linespace'] = '90';
@@ -94,17 +92,22 @@ $config['collage']['only'] = false;
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;
 $config['collage']['continuous_time'] = '5';
-// possible layout values: '2x2', '2x2-2', '2x4', '2x4-2', '1+3', '1+3-2', '3+1', '1+2'
-$config['collage']['layout'] = '2x2-2';
+// possible layout values: '2+2', '2+2-2', '1+3', '1+3-2', '3+1', '1+2', '2+1', '2x4', '2x4-2', '2x4-3', '2x3', 'collage.json'
+$config['collage']['layout'] = '2+2-2';
+// possible layout values: '150dpi', '300dpi', '400dpi', '600dpi'
+$config['collage']['resolution'] = '300dpi';
 $config['collage']['dashedline_color'] = '#000000';
 $config['collage']['keep_single_images'] = false;
 // specify key id (e.g. 13 is the enter key) to use that key to take a collage (collage key)
 // use for example https://keycode.info to get the key code
-$config['collage']['key'] = null;
+$config['collage']['key'] = '';
 $config['collage']['background_color'] = '#ffffff';
 // possible take_frame values: 'off', 'always', 'once'
 $config['collage']['take_frame'] = 'off';
-$config['collage']['frame'] = 'resources/img/frames/frame.png';
+$config['collage']['frame'] = '';
+$config['collage']['placeholder'] = false;
+$config['collage']['placeholderposition'] = '1';
+$config['collage']['placeholderpath'] = '';
 $config['textoncollage']['enabled'] = true;
 $config['textoncollage']['line1'] = 'Photobooth';
 $config['textoncollage']['line2'] = '   we love';
@@ -112,12 +115,12 @@ $config['textoncollage']['line3'] = 'OpenSource';
 $config['textoncollage']['locationx'] = '1470';
 $config['textoncollage']['locationy'] = '250';
 $config['textoncollage']['rotation'] = '0';
-$config['textoncollage']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+$config['textoncollage']['font'] = '';
 $config['textoncollage']['font_color'] = '#000000';
 $config['textoncollage']['font_size'] = '50';
 $config['textoncollage']['linespace'] = '90';
 // DO NOT CHANGE limit here
-$config['collage']['limit'] = NULL;
+$config['collage']['limit'] = '';
 
 
 // G A L L E R Y
@@ -137,6 +140,8 @@ $config['gallery']['db_check_time'] = '10';
 $config['gallery']['allow_delete'] = true;
 $config['gallery']['scrollbar'] = false;
 $config['gallery']['bottom_bar'] = true;
+$config['gallery']['figcaption'] = true;
+$config['gallery']['action_footer'] = true;
 $config['pswp']['clickToCloseNonZoomable'] = false;
 $config['pswp']['closeOnScroll'] = false;
 $config['pswp']['closeOnOutsideClick'] = false;
@@ -150,15 +155,18 @@ $config['pswp']['bgOpacity'] = 1;
 
 
 // P R E V I E W
-// Please read https://github.com/andi34/photobooth/wiki/FAQ#how-to-use-a-live-stream-as-background-at-countdown
+// Please read https://photoboothproject.github.io/FAQ#how-to-use-a-live-stream-as-background-at-countdown
 // possible preview_mode values: none, device_cam, url, gphoto
 $config['preview']['mode'] = 'none';
 $config['preview']['gphoto_bsm'] = true;
+$config['preview']['stop_time'] = '2';
 $config['preview']['camTakesPic'] = false;
-$config['preview']['flipHorizontal'] = true;
+$config['preview']['style'] = 'scale-down';
+// possibile flip values: off, flip-horizontal, flip-vertical
+$config['preview']['flip'] = 'off';
 // possible rotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
 $config['preview']['rotation'] = '0deg';
-$config['preview']['url'] = null;
+$config['preview']['url'] = '';
 $config['preview']['videoWidth'] = '1280';
 $config['preview']['videoHeight'] = '720';
 // possible camera_mode values: "user", "environment"
@@ -186,10 +194,14 @@ $config['print']['from_chromakeying'] = false;
 $config['print']['auto'] = false;
 $config['print']['auto_delay'] = '1000';
 $config['print']['time'] = '5000';
-$config['print']['key'] = null;
+$config['print']['no_rotate'] = false;
+$config['print']['key'] = '';
 $config['print']['qrcode'] = false;
+$config['print']['qrSize'] = '4';
+$config['print']['qrPosition'] = 'bottomRight';
+$config['print']['qrOffset'] = 10;
 $config['print']['print_frame'] = false;
-$config['print']['frame'] = 'resources/img/frames/frame.png';
+$config['print']['frame'] = '';
 $config['print']['crop'] = false;
 $config['print']['crop_width'] = '1000';
 $config['print']['crop_height'] = '500';
@@ -200,7 +212,7 @@ $config['textonprint']['line3'] = 'line 3';
 $config['textonprint']['locationx'] = '2250';
 $config['textonprint']['locationy'] = '1050';
 $config['textonprint']['rotation'] = '40';
-$config['textonprint']['font'] = 'resources/fonts/GreatVibes-Regular.ttf';
+$config['textonprint']['font'] = '';
 $config['textonprint']['font_color'] = '#ffffff';
 $config['textonprint']['font_size'] = '100';
 $config['textonprint']['linespace'] = '100';
@@ -208,21 +220,22 @@ $config['textonprint']['linespace'] = '100';
 
 // Q R  -  C O D E
 $config['qr']['enabled'] = true;
-$config['qr']['url'] = NULL;
+$config['qr']['ecLevel'] = 'QR_ECLEVEL_M';
+$config['qr']['url'] = '';
 $config['qr']['append_filename'] = true;
 $config['qr']['custom_text'] = false;
-$config['qr']['text'] = NULL;
+$config['qr']['text'] = '';
 
 
 // E -  M A I L
-// Please read https://github.com/andi34/photobooth/wiki/FAQ#ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem
+// Please read https://photoboothproject.github.io/FAQ#ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem
 //
 // If send_all_later is enabled, a checkbox to save the current mail address for later in {mail_file}.txt is visible
 $config['mail']['enabled'] = false;
 $config['mail']['send_all_later'] = false;
-$config['mail']['subject'] = null; 	// if empty, default translation is used
-$config['mail']['text'] = null;		// if empty, default translation is used
-$config['mail']['alt_text'] = null;		// if empty, default translation is used
+$config['mail']['subject'] = ''; 	// if empty, default translation is used
+$config['mail']['text'] = '';		// if empty, default translation is used
+$config['mail']['alt_text'] = '';		// if empty, default translation is used
 $config['mail']['is_html'] = false;
 $config['mail']['host'] = 'smtp.example.com';
 $config['mail']['username'] = 'photobooth@example.com';
@@ -245,9 +258,7 @@ $config['slideshow']['use_thumbs'] = false;
 $config['remotebuzzer']['usebuttons'] = false;
 $config['remotebuzzer']['userotary'] = false;
 $config['remotebuzzer']['enable_standalonegallery'] = false;
-$config['remotebuzzer']['usegpio'] = true;
-$config['remotebuzzer']['usehid'] = false;
-$config['remotebuzzer']['usesoftbtn'] = false;
+$config['remotebuzzer']['usenogpio'] = false;
 $config['remotebuzzer']['rotaryclkgpio'] = 27;
 $config['remotebuzzer']['rotarydtgpio'] = 17;
 $config['remotebuzzer']['rotarybtngpio'] = 22;
@@ -275,7 +286,7 @@ $config['synctodrive']['interval'] = 300;
 // G E T  R E Q U E S T
 $config['get_request']['countdown'] = false;
 $config['get_request']['processed'] = false;
-$config['get_request']['server'] = NULL;
+$config['get_request']['server'] = '';
 $config['get_request']['picture'] = 'CNTDWNPHOTO';
 $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
 
@@ -283,7 +294,7 @@ $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
 // A U T H E N T I C A T I O N
 $config['login']['enabled'] = false;
 $config['login']['username'] = 'Photo';
-$config['login']['password'] = NULL;
+$config['login']['password'] = '';
 $config['protect']['admin'] = true;
 $config['protect']['localhost_admin'] = true;
 $config['protect']['update'] = true;
@@ -296,27 +307,33 @@ $config['protect']['localhost_manual'] = false;
 
 
 // U S E R   I N T E R F A C E
-// possible style values: "classic", "modern", "custom"
-$config['ui']['style'] = 'modern';
+// possible style values: "classic", "modern", "modern_squared", "custom"
+$config['ui']['style'] = 'modern_squared';
+// possible button values: "rounded", "modern", "modern_squared", "custom"
+$config['ui']['button'] = 'modern_squared';
+$config['ui']['shutter_animation'] = true;
+// possible image values: "none", "top", "bottom", "left", "right", "/private/cheese.png"
+$config['ui']['shutter_cheese_img'] = 'none';
 $config['button']['show_fs'] = false;
 $config['button']['homescreen'] = true;
 $config['ui']['result_buttons'] = true;
 $config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#ffffff';
-$config['colors']['background_countdown'] = '#214852';
+$config['colors']['background_countdown'] = '#2e2e2e';
 $config['colors']['cheese'] = '#ffffff';
-$config['background']['defaults'] = null;
-$config['background']['admin'] = null;
-$config['background']['chroma'] = null;
+$config['background']['defaults'] = '';
+$config['background']['admin'] = '';
+$config['background']['chroma'] = '';
 $config['ui']['decore_lines'] = true;
 $config['ui']['rounded_corners'] = false;
-$config['colors']['primary'] = '#0a6071';
-$config['colors']['secondary'] = '#214852';
-$config['colors']['font'] = '#79bad9';
+$config['colors']['primary'] = '#2e2e2e';
+$config['colors']['secondary'] = '#212121';
+$config['colors']['highlight'] = '#C0C0C0';
+$config['colors']['font'] = '#c9c9c9';
 $config['colors']['button_font'] = '#ffffff';
 $config['colors']['start_font'] = '#ffffff';
-$config['colors']['panel'] = '#2d4157';
-$config['colors']['hover_panel'] = '#446781';
+$config['colors']['panel'] = '#212121';
+$config['colors']['hover_panel'] = '#2e2e2e';
 $config['colors']['border'] = '#eeeeee';
 $config['colors']['box'] = '#f8f9fc';
 $config['colors']['gallery_button'] = '#ffffff';
@@ -329,19 +346,19 @@ $config['jpeg_quality']['thumb'] = 60;
 
 
 // C O M M A N D S
-$config['take_picture']['cmd'] = null;
-$config['take_picture']['msg'] = null;
-$config['print']['cmd'] = null;
-$config['print']['msg'] = null;
-$config['exiftool']['cmd'] = null;
-$config['exiftool']['msg'] = null;
-$config['preview']['cmd'] = null;
-$config['preview']['killcmd'] = null;
-$config['nodebin']['cmd'] = null;
-$config['pre_photo']['cmd'] = null;
-$config['post_photo']['cmd'] = null;
-$config['reboot']['cmd'] = null;
-$config['shutdown']['cmd'] = null;
+$config['take_picture']['cmd'] = '';
+$config['take_picture']['msg'] = '';
+$config['print']['cmd'] = '';
+$config['print']['msg'] = '';
+$config['exiftool']['cmd'] = '';
+$config['exiftool']['msg'] = '';
+$config['preview']['cmd'] = '';
+$config['preview']['killcmd'] = '';
+$config['nodebin']['cmd'] = '';
+$config['pre_photo']['cmd'] = '';
+$config['post_photo']['cmd'] = '';
+$config['reboot']['cmd'] = '';
+$config['shutdown']['cmd'] = '';
 
 // F O L D E R S
 $config['folders']['config'] = 'config';

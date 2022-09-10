@@ -5,6 +5,7 @@ const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
 const PID = process.pid;
 let rotaryClkPin, rotaryDtPin;
+let cnt = 0;
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
@@ -32,7 +33,7 @@ let stdout = execSync(cmd).toString();
 const config = JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
 
 /* WRITE PROCESS PID FILE */
-const pidFilename = config.foldersRoot.tmp + '/remotebuzzer_server.pid';
+const pidFilename = config.foldersJS.tmp + '/remotebuzzer_server.pid';
 const fs = require('fs');
 
 fs.writeFile(pidFilename, PID, function (err) {
@@ -43,8 +44,9 @@ fs.writeFile(pidFilename, PID, function (err) {
     log('PID file created [', pidFilename, ']');
 });
 
-/* START WEBSOCKET SERVER */
-log('Server starting on http://' + config.webserver.ip + ':' + config.remotebuzzer.port);
+/* START HTTP & WEBSOCKET SERVER */
+const baseUrl = 'http://' + config.webserver.ip + ':' + config.remotebuzzer.port;
+log('Server starting on ' + baseUrl);
 
 function photoboothAction(type) {
     switch (type) {
@@ -102,7 +104,57 @@ function photoboothAction(type) {
     }
 }
 
-const ioServer = require('socket.io')(config.remotebuzzer.port, {
+/* CONFIGURE HTTP ENDPOINTS */
+const requestListener = function (req, res) {
+    function sendText(content, contentType) {
+        res.setHeader('Content-Type', contentType || 'text/plain');
+        res.writeHead(200);
+        res.end(content);
+    }
+
+    switch (req.url) {
+        case '/':
+            log('http: GET /');
+            sendText(
+                `<h1>Trigger Endpoints</h1>
+            <ul>
+                <li>Trigger photo: <a href="${baseUrl}/commands/start-picture" target="_blank">${baseUrl}/commands/start-picture</a></li>
+                <li>Trigger collage: <a href="${baseUrl}/commands/start-collage" target="_blank">${baseUrl}/commands/start-collage</a></li>
+            </ul>`,
+                'text/html'
+            );
+            break;
+        case '/commands/start-picture':
+            log('http: GET /commands/start-picture');
+            if (triggerArmed) {
+                photoboothAction('picture');
+                sendText('TAKE PHOTO TRIGGERED');
+            } else {
+                sendText('TAKE PHOTO ALREADY TRIGGERED');
+            }
+
+            break;
+        case '/commands/start-collage':
+            log('http: GET /commands/start-collage');
+            if (triggerArmed) {
+                photoboothAction('collage');
+                sendText('TAKE COLLAGE TRIGGERED');
+            } else {
+                sendText('TAKE COLLAGE ALREADY TRIGGERED');
+            }
+
+            break;
+        default:
+            res.writeHead(404);
+            res.end();
+    }
+};
+
+const http = require('http');
+const server = new http.Server(requestListener);
+
+/* CONFIGURE WEBSOCKET SERVER */
+const ioServer = require('socket.io')(server, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST']
@@ -157,7 +209,9 @@ ioServer.on('connection', function (client) {
 });
 
 /* STARTUP COMPLETED */
-log('socket.io server started');
+server.listen(config.remotebuzzer.port, () => {
+    log('socket.io server started');
+});
 
 /*
  ** GPIO HANDLING
@@ -181,7 +235,7 @@ function gpioSanity(gpioconfig) {
     }
 }
 
-if (config.remotebuzzer.usegpio) {
+if (!config.remotebuzzer.usenogpio) {
     gpioSanity(config.remotebuzzer.picturegpio);
     gpioSanity(config.remotebuzzer.collagegpio);
     gpioSanity(config.remotebuzzer.shutdowngpio);
@@ -474,7 +528,17 @@ const watchRotaryClk = function watchRotaryClk(err, gpioValue) {
     if (gpioValue) {
         if (rotaryDtPin) {
             /* rotation */
-            photoboothAction('rotary-cw');
+            if (cnt > 0) {
+                /*delete click count for opposite direction */
+                cnt = 0;
+            }
+            /* rotation */
+            if (cnt < -3) {
+                photoboothAction('rotary-cw');
+                cnt = 0;
+            } else {
+                cnt--;
+            }
         } else {
             rotaryClkPin = true;
         }
@@ -497,7 +561,17 @@ const watchRotaryDt = function watchRotaryDt(err, gpioValue) {
     if (gpioValue) {
         if (rotaryClkPin) {
             /* rotation */
-            photoboothAction('rotary-ccw');
+            if (cnt < 0) {
+                /*delete click count for opposite direction */
+                cnt = 0;
+            }
+            /* rotation */
+            if (cnt > 3) {
+                photoboothAction('rotary-ccw');
+                cnt = 0;
+            } else {
+                cnt++;
+            }
         } else {
             rotaryDtPin = true;
         }
@@ -524,7 +598,7 @@ const watchRotaryBtn = function watchRotaryBtn(err, gpioValue) {
 
 /* INIT ONOFF LIBRARY AND LINK CALLBACK FUNCTIONS */
 const Gpio = require('onoff').Gpio;
-if (config.remotebuzzer.usegpio) {
+if (!config.remotebuzzer.usenogpio) {
     /* ROTARY ENCODER MODE */
     if (config.remotebuzzer.userotary) {
         /* ROTARY ENCODER MODE */

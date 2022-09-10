@@ -11,14 +11,22 @@ WEBSERVER=(
 
 COMMON_PACKAGES=(
     'git'
+    'curl'
+    'yarn'
+    'ffmpeg'
     'gphoto2'
     'libimage-exiftool-perl'
     'nodejs'
     'php-gd'
     'php-zip'
-    'yarn'
+    'python3'
+    'python3-gphoto2'
+    'python3-psutil'
+    'python3-zmq'
     'rsync'
     'udisks2'
+    'v4l2loopback-dkms'
+    'v4l-utils'
 )
 
 MISSING_PACKAGES=()

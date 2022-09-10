@@ -1,0 +1,31 @@
+name: Crowdin Translation Upload
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'resources/lang/en.json'
+  workflow_dispatch:
+
+jobs:
+  synchronize-with-crowdin:
+    runs-on: ubuntu-latest
+    if: github.repository == 'PhotoboothProject/photobooth'
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: crowdin action
+      uses: crowdin/github-action@1.4.6
+      with:
+        upload_sources: true
+        upload_translations: false
+        push_translations: false
+        download_translations: false
+        config: 'crowdin/config.yml'
+      env:
+        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

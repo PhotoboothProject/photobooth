@@ -2,13 +2,17 @@
 @import 'partials/fonts';
 @import 'partials/basic';
 @import 'partials/button';
+@import 'partials/countdown';
 @import 'partials/email';
+@import 'vendor/photoswipe';
 @import 'partials/gallery';
 @import 'partials/sidenav';
 @import 'partials/scrollbar';
+@import 'partials/shutter_animation';
 @import 'partials/modal';
 @import 'partials/ribbon';
-@import 'vendor/photoswipe';
+@import 'partials/video_preview';
+@import 'partials/shape';
 
 #wrapper {
   display: none;
@@ -32,105 +36,48 @@
 .resultInner {
   display: flex;
   position: absolute;
-  bottom: -64px;
+  bottom: -15em;
   left: 0;
   right: 0;
   justify-content: center;
   transition: bottom 0.5s;
   z-index: 100;
 
-  &.show {
-    bottom: 0;
+  .homebtn,
+  .gallerybtn {
+    &.btn--classic,
+    &.btn--classic_rounded {
+      font-size: 0.875em;
+      width: 130px;
+    }
   }
 
   .btn {
-    width: auto;
-    padding: 20px 0;
-    text-align: center;
-    flex-grow: 1;
-    max-width: 250px;
-    margin: initial;
-  }
-  @media (max-width: 576px) {
-    span {
-      display: none;
+    &.btn--classic_rounded {
+      margin-left: 2px;
     }
   }
-}
 
-#counter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  backface-visibility: hidden;
-  font-size: 12em;
-  opacity: 0.2;
-}
-
-#counter.tick {
-  font-size: 1em;
-  opacity: 1;
-  transition: font-size 0.75s, opacity 0.75s;
-}
-
-.cheese {
-  position: absolute;
-  color: $cheeseColor;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  backface-visibility: hidden;
-  font-size: 3em;
-}
-
-#loader {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background-size: cover;
-  background-position: center center;
-  color: $countdownColor;
-  z-index: 100;
-  text-align: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
+  &.show {
     bottom: 0;
-    left: 0;
-    z-index: -1;
-    opacity: 1;
-    transition: opacity 0.5s;
-  }
 
-  &.showBackgroundImage {
-    &:after {
-      opacity: 0.5;
+    .homebtn {
+      position: fixed;
+      top: 5px;
+      right: 5px;
+      bottom: auto;
+    }
+
+    .gallerybtn {
+      position: fixed;
+      top: 5px;
+      left: 5px;
+      &.btn--classic_rounded {
+        margin-top: auto;
+        margin-left: auto;
+      }
     }
   }
-
-  &.open {
-    display: flex;
-  }
-
-  .spinner {
-    color: $cheeseColor;
-    font-size: 5em;
-  }
-}
-
-.homebtn {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 0.875em;
-  width: 130px;
 }
 
 .qr {
@@ -159,6 +106,10 @@
     width: 100%;
     height: auto;
   }
+
+  .fa {
+    float: right;
+  }
 }
 
 .spacer {
@@ -184,53 +135,10 @@
   }
 }
 
-.loading {
-  position: absolute;
-  bottom: 1.5em;
-  left: 0;
-  z-index: 102;
-  font-size: 3.125em;
-  text-align: center;
-  width: 100%;
-
-  p {
-    margin: 0 0 0.2em;
-  }
-
-  .btn {
-    font-size: 0.4em;
-  }
-
-  @media (max-width: 767px) {
-    bottom: 0.5em;
-  }
-}
-
-.error {
-  p {
-    color: red;
-  }
-}
-
 .stages {
   display: none;
   height: 100%;
   width: 100%;
-}
-
-hr {
-  display: block;
-  height: 0.1em;
-  border: 0;
-  border-top: 0.1em solid $startFontColor;
-  margin: 1em 0;
-  padding: 0;
-}
-
-hr.small {
-  width: 50%;
-  display: block;
-  margin: auto;
 }
 
 #start {
@@ -240,38 +148,20 @@ hr.small {
     justify-content: center;
   }
 
-  .fs-button {
-    position: fixed;
-    top: 5rem;
-    left: 0;
-  }
-
-  .gallery-button {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-
-  .cups-button {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-  }
-
   .startInner {
     background: rgba(0, 0, 0, 0.5);
     color: $startFontColor;
     text-align: center;
     padding: 3rem;
 
+    &.shape--classic_rounded {
+      border: 0 none;
+      border-radius: 10px;
+    }
+
     .names {
       margin-top: 2rem;
       margin-bottom: 5rem;
-    }
-
-    .btn {
-      margin-top: 3px;
-      width: 80%;
     }
 
     @media (max-width: 1024px) {
@@ -280,12 +170,6 @@ hr.small {
       .names {
         margin-top: 1rem;
         margin-bottom: 2rem;
-      }
-
-      .btn {
-        font-size: 0.8em;
-        margin-top: 1px;
-        width: 80%;
       }
 
       p,
@@ -320,6 +204,39 @@ hr.small {
       }
     }
   }
+
+  .gallery-button {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    &.btn--classic_rounded {
+      margin-top: auto;
+      margin-left: auto;
+    }
+  }
+
+  .fs-button {
+    position: fixed;
+    top: 5.5rem;
+    left: 5px;
+    &.btn--classic_rounded {
+      margin-top: auto;
+      margin-left: auto;
+    }
+  }
+
+  .cups-button {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+  }
+}
+
+.btn,
+.gal-action-btn {
+  &.btn--classic_rounded {
+    border-radius: 10px;
+  }
 }
 
 .sliderImages {
@@ -328,10 +245,6 @@ hr.small {
   top: 0;
   z-index: 1000000;
   background: #000;
-}
-
-.owl-carousel.owl-loaded {
-  display: none;
 }
 
 .overlay {
@@ -358,48 +271,6 @@ hr.small {
   color: #fff;
 }
 
-#video--view {
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-#video--preview {
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-#ipcam--view {
-  background-image: none;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  top: 0;
-  left: 0;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  transform: rotate($previewRotation);
-
-  &.streaming {
-    background-image: $urlBackground;
-  }
-}
-
-.flip-horizontal {
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-  filter: FlipH;
-}
-
 .chroma-control-bar {
   margin-top: 12px;
   text-align: center;
@@ -411,49 +282,31 @@ hr.small {
   }
 }
 
-.triggerPic,
-.triggerCollage,
-.closeGallery {
-  padding: 0;
-  margin: 0;
-  width: 1px;
-  height: 1px;
-}
-
 #useBuzzer {
   font-size: 1.75em;
   margin-top: 1em;
   margin-bottom: 0.5em;
-}
 
-@media (max-width: 1024px) {
-  #useBuzzer {
+  @media (max-width: 1024px) {
     font-size: 1.25em;
   }
 }
 
-@media (max-width: 767px) {
-  .takePic {
-    bottom: auto;
-  }
-}
-
-.gallery__close:active,
-.gallery__close:hover,
-.gallery__close:focus,
-.gallery__close.focused,
-.gallery__img:active > figure,
-.gallery__img:focus > figure,
-.gallery__img:hover > figure,
-.gallery__img.focused > figure,
-.gallery__img:active > img,
-.gallery__img:focus > img,
-.gallery__img:hover > img,
-.gallery__img.focused > img,
 .rotaryfocus.focused {
   opacity: 0.6;
 }
 
 .pswp-rotary-focus {
   background: $mainColor !important;
+}
+
+button {
+  &.btn--classic {
+    border: 1px solid $borderColor;
+  }
+
+  &.btn--classic_rounded {
+    border: 2px solid $borderColor;
+    border-radius: 10px;
+  }
 }

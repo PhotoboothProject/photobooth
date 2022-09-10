@@ -29,7 +29,7 @@ $LogData = [
     'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);
-if ($config['dev']['enabled']) {
+if ($config['dev']['loglevel'] > 0) {
     logError($LogData);
 }
 die($LogString);

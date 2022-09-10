@@ -12,7 +12,7 @@ function takePicture($filename) {
         $demoFolder = __DIR__ . '/../resources/img/demo/';
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $filename);
-    } elseif ($config['preview']['mode'] === 'device_cam' && $config['preview']['camTakesPic']) {
+    } elseif (($config['preview']['mode'] === 'device_cam' || $config['preview']['mode'] === 'gphoto') && $config['preview']['camTakesPic']) {
         $data = $_POST['canvasimg'];
         list($type, $data) = explode(';', $data);
         list(, $data) = explode(',', $data);
@@ -27,8 +27,10 @@ function takePicture($filename) {
             imagedestroy($im);
         }
     } else {
-        $dir = dirname($filename);
-        chdir($dir); //gphoto must be executed in a dir with write permission
+        //gphoto must be executed in a dir with write permission for other commands we stay in the api dir
+        if (substr($config['take_picture']['cmd'], 0, strlen('gphoto')) === 'gphoto') {
+            chdir(dirname($filename));
+        }
         $cmd = sprintf($config['take_picture']['cmd'], $filename);
         $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
@@ -36,7 +38,7 @@ function takePicture($filename) {
 
         if ($returnValue) {
             $ErrorData = [
-                'error' => 'Gphoto returned with an error code',
+                'error' => 'Take picture command returned an error code',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => $output,
@@ -60,6 +62,8 @@ function takePicture($filename) {
     }
 }
 
+$random = md5(time()) . '.jpg';
+
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $name = $_POST['file'];
 } elseif ($config['picture']['naming'] === 'numbered') {
@@ -74,7 +78,7 @@ if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))
 } elseif ($config['picture']['naming'] === 'dateformatted') {
     $name = date('Ymd_His') . '.jpg';
 } else {
-    $name = md5(time()) . '.jpg';
+    $name = $random;
 }
 
 if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))) {
@@ -84,73 +88,75 @@ if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_matc
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+$filename_random = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $random;
+
+if (file_exists($filename_tmp)) {
+    rename($filename_tmp, $filename_random);
+}
 
 if (!isset($_POST['style'])) {
     $errormsg = basename($_SERVER['PHP_SELF']) . ': No style provided';
     logErrorAndDie($errormsg);
 }
 
-if ($_POST['style'] === 'photo') {
-    takePicture($filename_tmp);
-} elseif ($_POST['style'] === 'collage') {
-    if (!is_numeric($_POST['collageNumber'])) {
-        $errormsg = basename($_SERVER['PHP_SELF']) . ': No or invalid collage number provided';
+switch ($_POST['style']) {
+    case 'photo':
+        takePicture($filename_tmp);
+
+        $LogData = [
+            'success' => 'image',
+            'file' => $file,
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        break;
+    case 'collage':
+        if (!is_numeric($_POST['collageNumber'])) {
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': No or invalid collage number provided';
+            logErrorAndDie($errormsg);
+        }
+
+        $number = $_POST['collageNumber'] + 0;
+
+        if ($number > $config['collage']['limit']) {
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': Collage consists only of ' . $config['collage']['limit'] . ' pictures';
+            logErrorAndDie($errormsg);
+        }
+
+        $basecollage = substr($file, 0, -4);
+        $collage_name = $basecollage . '-' . $number . '.jpg';
+
+        $basename = substr($filename_tmp, 0, -4);
+        $filename = $basename . '-' . $number . '.jpg';
+
+        takePicture($filename);
+
+        $LogData = [
+            'success' => 'collage',
+            'file' => $file,
+            'collage_file' => $collage_name,
+            'current' => $number,
+            'limit' => $config['collage']['limit'],
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        break;
+    case 'chroma':
+        takePicture($filename_tmp);
+
+        $LogData = [
+            'success' => 'chroma',
+            'file' => $file,
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        break;
+    default:
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': Invalid photo style provided';
         logErrorAndDie($errormsg);
-    }
-
-    $number = $_POST['collageNumber'] + 0;
-
-    if ($number > $config['collage']['limit']) {
-        $errormsg = basename($_SERVER['PHP_SELF']) . ': Collage consists only of ' . $config['collage']['limit'] . ' pictures';
-        logErrorAndDie($errormsg);
-    }
-
-    $basecollage = substr($file, 0, -4);
-    $collage_name = $basecollage . '-' . $number . '.jpg';
-
-    $basename = substr($filename_tmp, 0, -4);
-    $filename = $basename . '-' . $number . '.jpg';
-
-    takePicture($filename);
-
-    $LogData = [
-        'success' => 'collage',
-        'file' => $file,
-        'collage_file' => $collage_name,
-        'current' => $number,
-        'limit' => $config['collage']['limit'],
-        'php' => basename($_SERVER['PHP_SELF']),
-    ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
-        logError($LogData);
-    }
-    die($LogString);
-} elseif ($_POST['style'] === 'chroma') {
-    takePicture($filename_tmp);
-    $LogData = [
-        'success' => 'chroma',
-        'file' => $file,
-        'php' => basename($_SERVER['PHP_SELF']),
-    ];
-    $LogString = json_encode($LogData);
-    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
-        logError($LogData);
-    }
-    die($LogString);
-} else {
-    $errormsg = basename($_SERVER['PHP_SELF']) . ': Invalid photo style provided';
-    logErrorAndDie($errormsg);
+        break;
 }
 
 // send imagename to frontend
-$LogData = [
-    'success' => 'image',
-    'file' => $file,
-    'php' => basename($_SERVER['PHP_SELF']),
-];
 $LogString = json_encode($LogData);
-if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+if ($config['dev']['loglevel'] > 1) {
     logError($LogData);
 }
 die($LogString);

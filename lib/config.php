@@ -1,10 +1,12 @@
 <?php
+define('SERVER_OS', DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux');
+
 require_once __DIR__ . '/arrayDeepMerge.php';
 require_once __DIR__ . '/helper.php';
 
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
-$os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
+$basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 
 $cmds = [
     'windows' => [
@@ -92,17 +94,17 @@ $mailTemplates = [
 
 require_once $default_config_file;
 
-$config['take_picture']['cmd'] = $cmds[$os]['take_picture']['cmd'];
-$config['take_picture']['msg'] = $cmds[$os]['take_picture']['msg'];
-$config['print']['cmd'] = $cmds[$os]['print']['cmd'];
-$config['print']['msg'] = $cmds[$os]['print']['msg'];
-$config['exiftool']['cmd'] = $cmds[$os]['exiftool']['cmd'];
-$config['exiftool']['msg'] = $cmds[$os]['exiftool']['msg'];
-$config['preview']['cmd'] = $cmds[$os]['preview']['cmd'];
-$config['preview']['killcmd'] = $cmds[$os]['preview']['killcmd'];
-$config['nodebin']['cmd'] = $cmds[$os]['nodebin']['cmd'];
-$config['reboot']['cmd'] = $cmds[$os]['reboot']['cmd'];
-$config['shutdown']['cmd'] = $cmds[$os]['shutdown']['cmd'];
+$config['take_picture']['cmd'] = $cmds[SERVER_OS]['take_picture']['cmd'];
+$config['take_picture']['msg'] = $cmds[SERVER_OS]['take_picture']['msg'];
+$config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
+$config['print']['msg'] = $cmds[SERVER_OS]['print']['msg'];
+$config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];
+$config['exiftool']['msg'] = $cmds[SERVER_OS]['exiftool']['msg'];
+$config['preview']['cmd'] = $cmds[SERVER_OS]['preview']['cmd'];
+$config['preview']['killcmd'] = $cmds[SERVER_OS]['preview']['killcmd'];
+$config['nodebin']['cmd'] = $cmds[SERVER_OS]['nodebin']['cmd'];
+$config['reboot']['cmd'] = $cmds[SERVER_OS]['reboot']['cmd'];
+$config['shutdown']['cmd'] = $cmds[SERVER_OS]['shutdown']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';
 
@@ -110,7 +112,7 @@ $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
 $config['dev']['logfile'] = 'error.log';
 
-$config['ui']['github'] = 'andi34';
+$config['ui']['github'] = 'PhotoboothProject';
 $config['ui']['branding'] = 'Photobooth';
 
 $defaultConfig = $config;
@@ -118,15 +120,15 @@ $defaultConfig = $config;
 if (file_exists($my_config_file)) {
     require_once $my_config_file;
 
-    if (!isset($config['mail']['subject'])) {
-        if (isset($config['ui']['language'])) {
+    if (empty($config['mail']['subject'])) {
+        if (!empty($config['ui']['language'])) {
             $config['mail']['subject'] = $mailTemplates[$config['ui']['language']]['mail']['subject'];
         } else {
             $config['mail']['subject'] = $mailTemplates[$defaultConfig['ui']['language']]['mail']['subject'];
         }
     }
-    if (!isset($config['mail']['text'])) {
-        if (isset($config['ui']['language'])) {
+    if (empty($config['mail']['text'])) {
+        if (!empty($config['ui']['language'])) {
             $config['mail']['text'] = $mailTemplates[$config['ui']['language']]['mail']['text'];
         } else {
             $config['mail']['text'] = $mailTemplates[$defaultConfig['ui']['language']]['mail']['text'];
@@ -136,34 +138,10 @@ if (file_exists($my_config_file)) {
     $config = array_deep_merge($defaultConfig, $config);
 }
 
-if ($config['dev']['enabled']) {
+if ($config['dev']['loglevel'] > 0) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
-}
-
-if (!isset($config['collage']['limit'])) {
-    $config['collage']['limit'] = 4;
-}
-
-if (!isset($config['background']['defaults'])) {
-    $config['background']['defaults'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
-}
-
-if (!isset($config['background']['admin'])) {
-    $config['background']['admin'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
-}
-
-if (!isset($config['background']['chroma'])) {
-    $config['background']['chroma'] = 'url(' . getrootpath('../resources/img/bg_bluegray.jpg') . ')';
-}
-
-if (!isset($config['webserver']['ip'])) {
-    $config['webserver']['ip'] = getPhotoboothIp();
-}
-
-if (!isset($config['qr']['url'])) {
-    $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
 }
 
 if (file_exists($my_config_file) && !is_writable($my_config_file)) {
@@ -172,14 +150,14 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
-$basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
-
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config') {
         $path = $basepath . DIRECTORY_SEPARATOR . $folder;
     } else {
         $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
         $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
+
+        $config['foldersJS'][$key] = str_replace('\\', '/', $config['foldersRoot'][$key]);
     }
 
     if (!file_exists($path)) {
@@ -192,6 +170,65 @@ foreach ($config['folders'] as $key => $folder) {
 
     $path = realpath($path);
     $config['foldersAbs'][$key] = $path;
+}
+
+if (empty($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
+    $config['picture']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+}
+
+if (empty($config['textonpicture']['font']) || !testFile($config['textonpicture']['font'])) {
+    $config['textonpicture']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+}
+
+if (empty($config['collage']['frame']) || !testFile($config['collage']['frame'])) {
+    $config['collage']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+}
+
+if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
+    $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.jpg');
+}
+
+if (empty($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
+    $config['textoncollage']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+}
+
+if (empty($config['print']['frame']) || !testFile($config['print']['frame'])) {
+    $config['print']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+}
+
+if (empty($config['textonprint']['font']) || !testFile($config['textonprint']['font'])) {
+    $config['textonprint']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+}
+
+if (empty($config['collage']['limit'])) {
+    $config['collage']['limit'] = 4;
+}
+
+if (isSubfolderInstall()) {
+    $bg_root = getrootpath('../resources/img/bg_stone.jpg');
+    $bg_url = fixSeperator($bg_root);
+} else {
+    $bg_url = '/resources/img/bg_stone.jpg';
+}
+
+if (empty($config['background']['defaults'])) {
+    $config['background']['defaults'] = 'url(' . $bg_url . ')';
+}
+
+if (empty($config['background']['admin'])) {
+    $config['background']['admin'] = 'url(' . $bg_url . ')';
+}
+
+if (empty($config['background']['chroma'])) {
+    $config['background']['chroma'] = 'url(' . $bg_url . ')';
+}
+
+if (empty($config['webserver']['ip'])) {
+    $config['webserver']['ip'] = getPhotoboothIp();
+}
+
+if (empty($config['qr']['url'])) {
+    $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
 }
 
 $config['folders']['lang'] = getrootpath('../resources/lang');

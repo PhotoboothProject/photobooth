@@ -1,35 +1,74 @@
 .btn {
-  padding: 20px 40px;
-  border: 0 none;
+  font-size: 1em;
+  text-decoration: none;
+  text-align: center;
+  color: $buttonFontColor;
   background: $mainColor;
   display: inline-block;
-  color: $buttonFontColor;
-  text-decoration: none;
   margin: auto;
-  width: 200px;
-  text-align: center;
-  font-size: 1em;
+  width: 12.5em;
+  z-index: 10;
 
-  &--small {
-    padding: 12px 40px;
+  &--classic,
+  &--classic_rounded {
+    padding: 20px 40px;
+    border: 0 none;
   }
 
-  &--tiny {
-    padding: 3px 6px;
+  &--modern {
+    width: 5em;
+    height: 5em;
+    border: 2px solid $borderColor;
+    border-radius: 50%;
+    background: radial-gradient($highlightColor, $mainColor, $hoverColor);
+    position: relative;
+
+    span {
+      display: none;
+    }
+    .fa {
+      font-size: 2em;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
   }
 
-  &--flex {
-    width: auto;
+  &--modern_squared {
+    width: 5em;
+    height: 5em;
+    box-shadow: 0 0 0.5em $highlightColor;
+    border-radius: 15%;
+    background: $mainColor;
+    position: relative;
+    margin: 5px;
+    flex: none;
+    span {
+      display: block;
+      position: absolute;
+      bottom: 10%;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .fa {
+      font-size: 2em;
+      margin: 0;
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
   }
 
   &--login {
     padding: 12px 18px;
     width: 50%;
-  }
-
-  &--submit {
-    font-size: 0.75em;
-    white-space: normal;
   }
 
   &:active,
@@ -40,66 +79,276 @@
   }
 }
 
-.btn.save-btn,
-.btn.install-btn {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  -webkit-transition: background-color 0.2s linear;
-  -moz-transition: background-color 0.2s linear;
-  -o-transition: background-color 0.2s linear;
-  -ms-transition: background-color 0.2s linear;
-  transition: background-color 0.2s linear;
-
-  i {
-    display: none;
+.btn--classic,
+.btn--classic_rounded {
+  &.btn--small {
+    padding: 12px 40px;
   }
 
-  &:active,
-  &:focus {
-    outline: none;
+  &.btn--tiny {
+    padding: 3px 6px;
   }
 
-  span {
-    display: none;
+  &.btn--flex {
+    width: auto;
+  }
+}
 
-    &.sv {
-      display: inline;
+#start {
+  .startInner {
+    .btn {
+      margin-top: 3px;
     }
-  }
-
-  &.error span.sv,
-  &.success span.sv,
-  &.saving span.sv {
-    display: none;
-  }
-
-  &.saving i {
-    display: inline-block;
-  }
-
-  &.error {
-    background-color: #d93939 !important;
-
-    span.er {
-      display: inline;
+    .btn--classic,
+    .btn--classic_rounded {
+      width: auto;
+      margin-top: 3px;
     }
-  }
 
-  &.success {
-    background-color: #81d939 !important;
-
-    span.su {
-      display: inline;
+    @media (max-width: 1024px) {
+      .btn {
+        &.btn--classic,
+        &.btn--classic_rounded {
+          font-size: 0.8em;
+          margin-top: 1px;
+          width: 80%;
+        }
+      }
     }
   }
 }
 
-@media screen and (max-width: 1024px) {
+.fs-button,
+.takeChroma,
+.reloadPage {
+  &.btn--modern_squared {
+    span {
+      font-size: 0.6em;
+    }
+  }
+}
+
+.livechroma-gallery-btn {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+
+  &.btn--classic,
+  &.btn--classic_rounded {
+    width: auto;
+    padding: 12px 40px;
+  }
+
+  &.btn--modern {
+    margin: 10px;
+  }
+
+  &.btn--modern_squared {
+    margin: auto;
+  }
+
+  @media (max-width: 1280px) and (orientation: landscape) {
+    position: relative;
+    top: 0;
+    max-width: 150px;
+  }
+}
+
+.livechroma-close-btn {
+  position: fixed;
+  top: 1em;
+  right: 1em;
+
+  &.btn--classic,
+  &.btn--classic_rounded {
+    width: auto;
+    padding: 12px 40px;
+  }
+
+  &.btn--modern {
+    margin: 10px;
+  }
+
+  @media (max-width: 1280px) and (orientation: landscape) {
+    position: relative;
+    top: 0;
+    max-width: 150px;
+  }
+
+  &.btn--modern_squared {
+    margin: auto;
+    text-align: center;
+    span {
+      display: none;
+      bottom: unset;
+    }
+    .fa {
+      font-size: 2em;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.livechroma {
+  &.deletebtn {
+    display: inline-block;
+    visibility: hidden;
+  }
+
+  @media (max-width: 1280px) and (orientation: landscape) {
+    &.btn--classic,
+    &.btn--classic_rounded {
+      &.takeChroma,
+      &.reloadPage,
+      &.deletebtn {
+        margin: 0.5em;
+        display: block;
+      }
+    }
+    &.btn--modern,
+    &.btn--modern_squared {
+      &.takeChroma,
+      &.reloadPage,
+      &.deletebtn {
+        margin: auto;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.chroma-control-bar {
+  .btn--classic,
+  .btn--classic_rounded {
+    &#save-chroma-btn,
+    &#print-btn,
+    &#close-btn {
+      width: auto;
+    }
+  }
+}
+
+.resultInner {
+  .btn--modern,
+  .btn--modern_squared {
+    display: inline-block;
+  }
+  .btn--classic,
+  .btn--classic_rounded {
+    width: auto;
+    padding: 20px 0;
+    text-align: center;
+    flex-grow: 1;
+    max-width: 250px;
+    margin: initial;
+  }
+}
+
+.loading {
+  .btn {
+    font-size: 0.4em;
+  }
+}
+
+.sidenav {
+  .closebtn {
+    width: 1.625em;
+    height: 1.625em;
+    margin: 0.3em;
+    background: radial-gradient(grey, $mainColor, $hoverColor);
+    color: $buttonFontColor;
+    .fa {
+      font-size: 0.8em;
+    }
+  }
+}
+
+.btn--modern,
+.btn--modern_squared,
+.gallery__close,
+.gal-action-btn {
+  &:active,
+  &:focus,
+  &:hover,
+  &.focused {
+    opacity: 0.6 !important;
+  }
+}
+
+.btn--classic.gal-action-btn,
+.btn--classic_rounded.gal-action-btn {
+  background: $hoverColor;
+}
+
+.triggerPic,
+.triggerCollage,
+.closeGallery {
+  padding: 0;
+  margin: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.buttongroup {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.mail-form-input.btn--modern,
+.mail-form-input.btn--modern_squared,
+.dependencies-btn.btn--modern,
+.dependencies-btn.btn--modern_squared {
+  border: 2px solid $fontColor;
+  border-radius: 10px;
+  color: $buttonFontColor;
+  background: $mainColor;
+}
+
+@media (orientation: portrait) {
+  .btn--modern,
+  .btn--modern_squared {
+    width: 4em;
+    height: 4em;
+  }
+  .btn--modern_squared {
+    span {
+      font-size: 1em;
+    }
+    .fa {
+      font-size: 1.5em;
+    }
+  }
+  .newpic,
+  .newcollage,
+  .imageFilter {
+    &.btn--modern_squared {
+      span {
+        font-size: 0.6em;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
   .takePic,
   .takeCollage {
-    padding: 10px 10px;
+    &.btn--classic,
+    &.btn--classic_rounded {
+      padding: 10px 10px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .takePic {
+    bottom: auto;
   }
 }

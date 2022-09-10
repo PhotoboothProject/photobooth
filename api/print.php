@@ -8,6 +8,12 @@ require_once '../lib/applyFrame.php';
 require_once '../lib/applyText.php';
 require_once '../lib/log.php';
 
+function applyQR($sourceResource, $qrPath, $x, $y) {
+    $qr = imagecreatefrompng($qrPath);
+    imagecopy($sourceResource, $qr, $x, $y, 0, 0, imagesx($qr), imagesy($qr));
+    return $sourceResource;
+}
+
 if (empty($_GET['filename'])) {
     $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided!';
     logErrorAndDie($errormsg);
@@ -17,7 +23,6 @@ $filename = $_GET['filename'];
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
 $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
-$print_frame = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $config['print']['frame']);
 $quality = 100;
 $status = false;
 
@@ -50,15 +55,17 @@ $line3text = $config['textonprint']['line3'];
 if (!file_exists($filename_print)) {
     // rotate image if needed
     list($width, $height) = getimagesize($filename_source);
-    if ($width > $height) {
+    if ($width > $height || $config['print']['no_rotate'] === true) {
         $image = imagecreatefromjpeg($filename_source);
         imagejpeg($image, $filename_print, $quality);
-        imagedestroy($image); // Destroy the created collage in memory
+        imagedestroy($image);
+        $rotateQr = false;
     } else {
         $image = imagecreatefromjpeg($filename_source);
-        $resultRotated = imagerotate($image, 90, 0); // Rotate image
+        $resultRotated = imagerotate($image, 90, 0);
         imagejpeg($resultRotated, $filename_print, $quality);
-        imagedestroy($image); // Destroy the created collage in memory
+        imagedestroy($image);
+        $rotateQr = true;
         // re-define width & height after rotation
         list($width, $height) = getimagesize($filename_print);
     }
@@ -74,30 +81,70 @@ if (!file_exists($filename_print)) {
                 $url = $config['qr']['url'];
             }
             include '../vendor/phpqrcode/lib/full/qrlib.php';
-            QRcode::png($url, $filename_codes, QR_ECLEVEL_H, 10);
+            switch ($config['qr']['ecLevel']) {
+                case 'QR_ECLEVEL_L':
+                    $ecLevel = QR_ECLEVEL_L;
+                    break;
+                case 'QR_ECLEVEL_M':
+                    $ecLevel = QR_ECLEVEL_M;
+                    break;
+                case 'QR_ECLEVEL_Q':
+                    $ecLevel = QR_ECLEVEL_Q;
+                    break;
+                case 'QR_ECLEVEL_H':
+                    $ecLevel = QR_ECLEVEL_H;
+                    break;
+                default:
+                    $ecLevel = QR_ECLEVEL_M;
+                    break;
+            }
+            QRcode::png($url, $filename_codes, $ecLevel, $config['print']['qrSize']);
+            if ($rotateQr) {
+                $image = imagecreatefrompng($filename_codes);
+                $resultRotated = imagerotate($image, 90, 0);
+                imagepng($resultRotated, $filename_codes, 0);
+                imagedestroy($image);
+            }
         }
-
-        // merge source and code
-        $newwidth = $width + $height / 2;
-        $newheight = $height;
 
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            $source = applyFrame($source, $print_frame);
+            $source = applyFrame($source, $config['print']['frame']);
         }
 
-        $code = imagecreatefrompng($filename_codes);
-        $print = imagecreatetruecolor($newwidth, $newheight);
+        list($qrWidth, $qrHeight) = getimagesize($filename_codes);
 
-        imagefill($print, 0, 0, imagecolorallocate($print, 255, 255, 255));
-        imagecopy($print, $source, 0, 0, 0, 0, $width, $height);
-        imagecopyresized($print, $code, $width, 0, 0, 0, $height / 2, $height / 2, imagesx($code), imagesy($code));
-        imagejpeg($print, $filename_print, $quality);
-        imagedestroy($code);
-        imagedestroy($source);
-        imagedestroy($print);
+        if (is_numeric($config['print']['qrOffset'])) {
+            $offset = $config['print']['qrOffset'];
+        } else {
+            $offset = 10;
+        }
+
+        switch ($config['print']['qrPosition']) {
+            case 'topLeft':
+                $x = $offset;
+                $y = $offset;
+                break;
+            case 'topRight':
+                $x = $width - ($qrWidth + $offset);
+                $y = $offset;
+                break;
+            case 'bottomRight':
+                $x = $width - ($qrWidth + $offset);
+                $y = $height - ($qrHeight + $offset);
+                break;
+            case 'bottomLeft':
+                $x = $offset;
+                $y = $height - ($qrHeight + $offset);
+                break;
+            default:
+                $x = $width - ($qrWidth + $offset);
+                $y = $height - ($qrHeight + $offset);
+                break;
+        }
+        $source = applyQR($source, $filename_codes, $x, $y);
     } else {
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            $source = applyFrame($source, $print_frame);
+            $source = applyFrame($source, $config['print']['frame']);
         }
     }
 
@@ -112,6 +159,7 @@ if (!file_exists($filename_print)) {
     }
 
     imagejpeg($source, $filename_print, $quality);
+    imagedestroy($source);
 }
 
 // print image
@@ -128,7 +176,7 @@ $LogData = [
     'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);
-if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+if ($config['dev']['loglevel'] > 1) {
     logError($LogData);
 }
 die($LogString);

@@ -295,7 +295,7 @@ $(document).on('keyup', function (ev) {
         } else if (!takingPic) {
             $('.closeGallery').trigger('click');
             $('.takeChroma').trigger('click');
-        } else if (config.dev.enabled && takingPic) {
+        } else if (config.dev.loglevel > 0 && takingPic) {
             photoboothTools.console.log('Taking photo already in progress!');
         }
     }
@@ -309,7 +309,7 @@ $(document).on('keyup', function (ev) {
             $('.closeGallery').trigger('click');
             photoboothTools.console.logDev('Collage key pressed. Not possible on live chroma, triggering photo now.');
             $('.takeChroma').trigger('click');
-        } else if (config.dev.enabled && takingPic) {
+        } else if (config.dev.loglevel > 0 && takingPic) {
             photoboothTools.console.log('Taking photo already in progress!');
         }
     }
@@ -323,14 +323,14 @@ $('.reloadPage').on('click', function (e) {
 });
 
 // Open Gallery Button
-$('.gallerybtn').on('click', function (e) {
+$('.livechroma-gallery-btn').on('click', function (e) {
     e.preventDefault();
 
     photoBooth.openGallery($(this));
 });
 
 // Close Button
-$('.closebtn').on('click', function () {
+$('.livechroma-close-btn').on('click', function () {
     location.assign('./index.php');
 });
 

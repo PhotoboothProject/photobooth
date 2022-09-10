@@ -10,7 +10,7 @@ switch ($mode) {
         $cmd = sprintf($config['pre_photo']['cmd']);
         break;
     case 'post-command':
-        $cmd = sprintf($config['post_photo']['cmd']);
+        $cmd = sprintf($config['post_photo']['cmd'], $_POST['filename']);
         break;
     case 'reboot':
         $cmd = 'sudo ' . sprintf($config['reboot']['cmd']);
@@ -47,7 +47,7 @@ if (isset($success)) {
         'php' => basename($_SERVER['PHP_SELF']),
     ];
     $LogString = json_encode($LogData);
-    if ($config['dev']['enabled'] && $config['dev']['advanced_log']) {
+    if ($config['dev']['loglevel'] > 1) {
         logError($LogData);
     }
     echo $LogString;
@@ -58,7 +58,7 @@ if (isset($success)) {
         'php' => basename($_SERVER['PHP_SELF']),
     ];
     $LogString = json_encode($LogData);
-    if ($config['dev']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
         logError($LogData);
     }
     echo $LogString;

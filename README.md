@@ -1,18 +1,28 @@
-# Photobooth v3
+
+# Photobooth v4
 
 A Photobooth web interface for Linux and Windows.
 
-Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).
+Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).  
+In 2019 Andreas Blaesius picked up the work and continued to work on the source.  
+With the help of the community Photobooth grew to a powerfull Photobooth software with a lot of features and possibilities.
 
-**This is my personal Photobooth fork with a lot of extras and improvements.**  
-_(The full changelog can be found inside [the Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).)_
+_(The full changelog can be found on [https://photoboothproject.github.io](https://photoboothproject.github.io).)_
 
 [![Chat on Telegram](https://img.shields.io/badge/Chat%20on-Telegram-blue.svg)](https://t.me/PhotoboothGroup)  
 
 [![Translate on Crowdin](https://img.shields.io/badge/Traslate%20on-Crowdin-green.svg)](https://crowdin.com/project/photobooth)  
 
-[![Lint](https://github.com/andi34/photobooth/workflows/Lint/badge.svg?branch=stable3)](https://github.com/andi34/photobooth/actions?query=branch%3Astable3+workflow%3ALint)
-[![gulp-sass](https://github.com/andi34/photobooth/workflows/gulp-sass/badge.svg?branch=stable3)](https://github.com/andi34/photobooth/actions?query=branch%3Astable3+workflow%3Agulp-sass)
+_Latest stable release:_  
+[![Lint](https://github.com/PhotoboothProject/photobooth/workflows/Lint/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3ALint)
+[![gulp-sass](https://github.com/PhotoboothProject/photobooth/workflows/gulp-sass/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3Agulp-sass)
+[![Build](https://github.com/PhotoboothProject/photobooth/workflows/Build/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3ABuild)
+
+_Latest development version:_  
+[![Lint](https://github.com/PhotoboothProject/photobooth/workflows/Lint/badge.svg?branch=dev)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Adev+workflow%3ALint)
+[![gulp-sass](https://github.com/PhotoboothProject/photobooth/workflows/gulp-sass/badge.svg?branch=dev)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Adev+workflow%3Agulp-sass)
+[![Build](https://github.com/PhotoboothProject/photobooth/workflows/Build/badge.svg?branch=dev)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Adev+workflow%3ABuild)
+
 
 ## :heart_eyes: Features
 
@@ -23,7 +33,7 @@ _(The full changelog can be found inside [the Photobooth Wiki](https://github.co
     to take pictures.
 - Images are processed with GD.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
-- Updated [PhotoSwipe Gallery](https://github.com/andi34/PhotoSwipe)
+- Updated [PhotoSwipe Gallery](https://github.com/PhotoboothProject/PhotoSwipe)
 - Standalone Gallery ([localhost/gallery.php](http://localhost/gallery.php)).
 - Slideshow via Gallery or standalone Gallery at [localhost/slideshow](http://localhost/slideshow).
 - Access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php).
@@ -89,27 +99,36 @@ _(The full changelog can be found inside [the Photobooth Wiki](https://github.co
 
 ## :camera: Screenshots
 
-![](https://raw.githubusercontent.com/wiki/andi34/photobooth/resources/img/start.png)
+![](https://raw.githubusercontent.com/PhotoboothProject/PhotoboothProject.github.io/master/resources/img/start.png)
 
 ## :gear: Prerequisites
 
-- gphoto2 installed, if used on a Raspberry for DSLR control
-- digiCamControl, if used unter Windows for DSLR control
+- gphoto2, if used on a Raspberry for DSLR control
+- digiCamControl, if used on Windows for DSLR control
 - Apache, NGINX or Lighttpd
 
 ## :wrench: Installation & Troubleshooting
 
-Please follow the installation instructions in our
-[Photobooth-Wiki](https://github.com/andi34/photobooth/wiki) to setup
+Please follow the installation instructions
+[here](https://photoboothproject.github.io/INSTALL) to setup
 Photobooth.
 
 If you're having trouble or questions please take a look at our
-[FAQ](https://github.com/andi34/photobooth/wiki#faq---frequently-asked-questions)
+[FAQ](https://photoboothproject.github.io/FAQ_MENU)
 before opening a new issue.
+
+For local testing and development, the docker setup can be used with `docker-compose up --build`.
 
 ### :mag: Changelog
 
-Please take a look at the changelog in our [Photobooth Wiki](https://github.com/andi34/photobooth/wiki/changelog).
+Please take a look at the changelog available on [https://photoboothproject.github.io](https://photoboothproject.github.io).
+
+### :warning: Security advice
+
+Photobooth is not hardened against any kind of *targeted* attacks.
+It uses user defined commands for tasks like taking photos and is allowed to replace its own files for easy updating.
+Because of this it's not advised to operate Photobooth in an untrusted network and 
+**you should absolutely not make Photobooth accessible through the internet without heavy modifications!**
 
 ### :copyright: License
 
@@ -172,3 +191,8 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [DIY89](https://github.com/DIY89)
 - [mhellmeier](https://github.com/mhellmeier)
 - [Uwe Pieper](https://github.com/up-87)
+- [s-dinda](https://github.com/s-dinda)
+- [Moarqi](https://github.com/Moarqi)
+- [kreativmonkey](https://github.com/kreativmonkey)
+- [Khaos66](https://github.com/Khaos66)
+
