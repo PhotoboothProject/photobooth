@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - dev
-      - stable3
+      - stable4
     paths:
       - '**.scss'
   pull_request:
     branches:
       - dev
-      - stable3
+      - stable4
     paths:
       - '**.scss'
   workflow_dispatch:
