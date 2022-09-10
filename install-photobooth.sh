@@ -26,7 +26,7 @@ SETUP_CUPS=false
 GPHOTO_PREVIEW=true
 CUPS_REMOTE_ANY=false
 WEBBROWSER="unknown"
-KIOSK_FLAG="--kiosk http://127.0.0.1"
+KIOSK_FLAG="--kiosk http://localhost"
 CHROME_FLAGS=false
 CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""

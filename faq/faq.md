@@ -231,6 +231,9 @@ For example use <a href="https://keycode.info" target="_blank">https://keycode.i
 
 #### Remotebuzzer Hardware Button feature using GPIO connected hardware (Raspberry Pi only)
 
+**Important:** Works if you access Photobooth via [http://localhost](http://localhost) or [http://your-ip-adress](#), but accessing via the loopback IP (127.0.0.1) does not work!
+
+
 The **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins. This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.
 
 Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!
@@ -403,7 +406,7 @@ Version=1.3
 Terminal=false
 Type=Application
 Name=Photobooth
-Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://127.0.0.1 --touch-events=enabled --use-gl=egl
+Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://localhost --touch-events=enabled --use-gl=egl
 Icon=/var/www/html/resources/img/favicon-96x96.png
 StartupNotify=false
 Terminal=false
@@ -412,7 +415,7 @@ save the file.
 
 **NOTE:**
 
-If you have installed Photobooth inside a subdirectory (e.g. to `/var/www/html/photobooth`), make sure you adjust the kiosk url (e.g. to `http://127.0.0.1/photobooth`) and the Icon path (e.g. to `/var/www/html/photobooth/resources/img/favicon-96x96.png`).
+If you have installed Photobooth inside a subdirectory (e.g. to `/var/www/html/photobooth`), make sure you adjust the kiosk url (e.g. to `http://localhost/photobooth`) and the Icon path (e.g. to `/var/www/html/photobooth/resources/img/favicon-96x96.png`).
 
 The flag `--use-gl=egl` might only be needed on a Raspberry Pi to avoid a white browser window on the first start of kiosk mode! If you're facing issues while using Photobooth on a different device, please remove that flag.
 
