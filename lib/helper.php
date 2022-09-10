@@ -1,11 +1,8 @@
 <?php
 require_once __DIR__ . '/log.php';
-$os = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
 
 function getPhotoboothPath() {
-    global $os;
-
-    if ($os == 'linux') {
+    if (SERVER_OS == 'linux') {
         $server_path = $_SERVER['DOCUMENT_ROOT'];
     } else {
         $server_path = str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
@@ -39,9 +36,7 @@ function fixSeperator($fix_path) {
 }
 
 function getPhotoboothIp() {
-    global $os;
-
-    if ($os == 'linux') {
+    if (SERVER_OS == 'linux') {
         $get_ip = shell_exec('hostname -I | cut -d " " -f 1');
 
         if (!$get_ip) {
