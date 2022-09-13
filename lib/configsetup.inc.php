@@ -836,6 +836,15 @@ $configsetup = [
             'value' => $config['collage']['limit'],
         ],
     ],
+    'video' => [
+        'view' => 'advanced',
+        'video_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'video[enabled]',
+            'value' => $config['video']['enabled'],
+        ],
+    ],
     'gallery' => [
         'view' => 'basic',
         'gallery_enabled' => [
@@ -1783,6 +1792,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['get_request']['collage'],
             'name' => 'get_request[collage]',
             'value' => htmlentities($config['get_request']['collage'] ?? ''),
+        ],
+        'get_request_video' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['get_request']['video'],
+            'name' => 'get_request[video]',
+            'value' => htmlentities($config['get_request']['video'] ?? ''),
         ],
     ],
     'authentication' => [

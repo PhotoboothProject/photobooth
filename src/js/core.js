@@ -4,7 +4,8 @@ const photoBooth = (function () {
     const PhotoStyle = {
             PHOTO: 'photo',
             COLLAGE: 'collage',
-            CHROMA: 'chroma'
+            CHROMA: 'chroma',
+            VIDEO: 'video'
         },
         CameraDisplayMode = {
             INIT: 1,
@@ -245,12 +246,19 @@ const photoBooth = (function () {
 
         loader.addClass('open');
 
-        // TODO different for video?
         if (config.get_request.countdown) {
-            const getMode =
-                photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
-                    ? config.get_request.picture
-                    : config.get_request.collage;
+            let getMode;
+            switch (photoStyle) {
+                case PhotoStyle.PHOTO:
+                    getMode = config.get_request.picture;
+                    break;
+                case PhotoStyle.COLLAGE:
+                    getMode = config.get_request.collage;
+                    break;
+                case PhotoStyle.VIDEO:
+                    getMode = config.get_request.video;
+                    break;
+            }
             const getUrl = config.get_request.server + '/' + getMode;
             photoboothTools.getRequest(getUrl);
         }
@@ -299,27 +307,37 @@ const photoBooth = (function () {
     api.takePic = function (photoStyle, retry) {
         remoteBuzzerClient.inProgress(true);
 
-        api.stopPreviewAndCaptureFromVideo();
-
-        const data = {
-            filter: imgFilter,
-            style: photoStyle.valueOf(),
-            canvasimg: videoSensor.toDataURL('image/jpeg')
-        };
-
-        if (photoStyle === PhotoStyle.COLLAGE) {
-            data.file = currentCollageFile;
-            data.collageNumber = api.nextCollageNumber;
-        }
-
-        if (photoStyle === PhotoStyle.CHROMA) {
-            data.file = chromaFile;
-        }
-
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
 
-        api.callTakePicApi(data, retry);
+        if (photoStyle === PhotoStyle.VIDEO) {
+            const data = {
+                filter: imgFilter,
+                style: photoStyle.valueOf()
+            };
+
+            api.callTakeVideoApi(data, retry);
+
+        } else {
+            api.stopPreviewAndCaptureFromVideo();
+
+            const data = {
+                filter: imgFilter,
+                style: photoStyle.valueOf(),
+                canvasimg: videoSensor.toDataURL('image/jpeg')
+            };
+
+            if (photoStyle === PhotoStyle.COLLAGE) {
+                data.file = currentCollageFile;
+                data.collageNumber = api.nextCollageNumber;
+            }
+
+            if (photoStyle === PhotoStyle.CHROMA) {
+                data.file = chromaFile;
+            }
+
+            api.callTakePicApi(data, retry);
+        }
     };
 
     api.retryTakePic = function (photoStyle, retry) {
@@ -1030,6 +1048,11 @@ const photoBooth = (function () {
         e.preventDefault();
         api.thrill(PhotoStyle.COLLAGE);
         $('.newcollage').blur();
+    });
+
+    $('.takeVideo').on('click', function (e) {
+        e.preventDefault();
+        api.thrill(PhotoStyle.VIDEO);
     });
 
     $('#mySidenav .closebtn').on('click', function (e) {

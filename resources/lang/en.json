@@ -625,6 +625,7 @@
   "synctodrive:synctodrive_interval": "Autmated syncing interval",
   "synctodrive:synctodrive_target": "USB device identifier",
   "takeCollage": "Collage",
+  "takeVideo": "Video",
   "takePhoto": "Picture",
   "telegram": "Community @ Telegram",
   "test_update_available": "There is a test update available.",

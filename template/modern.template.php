@@ -63,9 +63,13 @@
 								<a href="#" class="<?php echo $btnClass; ?> takePic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
 								<?php endif; ?>
 
-								<?php if ($config['collage']['enabled']): ?>
-								<a href="#" class="<?php echo $btnClass; ?> takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
-								<?php endif; ?>
+                                <?php if ($config['collage']['enabled']): ?>
+                                    <a href="#" class="<?php echo $btnClass; ?> takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
+                                <?php endif; ?>
+
+                                <?php if ($config['video']['enabled']): ?>
+                                    <a href="#" class="<?php echo $btnClass; ?> takeVideo rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeVideo"></span></a>
+                                <?php endif; ?>
 							<?php endif; ?>
 
 							<?php if ($config['gallery']['enabled']): ?>

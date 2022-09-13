@@ -5,8 +5,9 @@ require_once '../lib/config.php';
 require_once '../lib/db.php';
 require_once '../lib/log.php';
 require_once '../lib/applyEffects.php';
+require_once '../lib/collage.php';
+require_once '../lib/collageConfig.php';
 
-// TODO
 function takeVideo($filename) {
     global $config;
     $cmd = sprintf($config['take_video']['cmd'], $filename);
@@ -51,19 +52,39 @@ function takeVideo($filename) {
         die($ErrorString);
     }
 
-    // insert movie and images into database
+    // insert movie into database (does that even make sense? does the db support that?)
     if ($config['database']['enabled']) {
         appendImageToDB($filename);
-        for ($i = 1; $i < 99; $i++) {
-            $imageFilename = sprintf('%s-%02d.jpg', $filename, $i);
-            if (file_exists($imageFilename)) {
-                appendImageToDB($imageFilename);
-            } else {
-                break;
+    }
+    $images = [];
+    for ($i = 1; $i < 99; $i++) {
+        $imageFilename = sprintf('%s-%02d.jpg', $filename, $i);
+        if (file_exists($imageFilename)) {
+            // insert shots from movie to database
+            if ($config['database']['enabled']) {
+                appendImageToDB($filename);
             }
+            $images[] = $imageFilename;
+        } else {
+            break;
         }
     }
-
+    // If there are 4 images create a cuttable collage
+    if (count($images) === 4) {
+        $collageFilename = sprintf('%s-collage.jpg', $filename);
+        $collageConfig = new CollageConfig();
+        $collageConfig->collageLayout = '2x4-3';
+        $collageConfig->collageTakeFrame = 'off';
+        $collageConfig->collagePlaceholder = false;
+        if (!createCollage($images, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
+            logErrorAndDie($errormsg);
+        }
+        if ($config['database']['enabled']) {
+            appendImageToDB($collageFilename);
+        }
+    }
+    // todo show video as result? but print collage? show qr for this / specific mode only?
 }
 
 $random = md5(time()) . '.mp4';
