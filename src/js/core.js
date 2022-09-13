@@ -283,7 +283,11 @@ const photoBooth = (function () {
                         api.cheese(photoStyle);
                     }
                     setTimeout(() => {
-                        api.takePic(photoStyle, retry);
+                        if (photoStyle === PhotoStyle.VIDEO) {
+                            api.takeVideo(retry);
+                        } else {
+                            api.takePic(photoStyle, retry);
+                        }
                     }, cheeseTime);
                 }
             }
@@ -292,7 +296,10 @@ const photoBooth = (function () {
 
     api.cheese = function (photoStyle) {
         cheese.empty();
-        if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
+        if (photoStyle !== PhotoStyle.VIDEO) {
+            // TODO animated frame or sth?
+            cheese.text("temporary video cheese :)");
+        } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             api.shutter.start();
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
             cheese.text(photoboothTools.getTranslation('cheese'));
@@ -304,40 +311,43 @@ const photoBooth = (function () {
         }
     };
 
-    api.takePic = function (photoStyle, retry) {
+    api.takeVideo = function (retry) {
         remoteBuzzerClient.inProgress(true);
 
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
+        const data = {
+            filter: imgFilter,
+            style: photoStyle.valueOf(),
+            canvasimg: videoSensor.toDataURL('image/jpeg')
+        };
+        api.callTakeVideoApi(data, retry);
+    };
 
-        if (photoStyle === PhotoStyle.VIDEO) {
-            const data = {
-                filter: imgFilter,
-                style: photoStyle.valueOf()
-            };
+    api.takePic = function (photoStyle, retry) {
+        remoteBuzzerClient.inProgress(true);
 
-            api.callTakeVideoApi(data, retry);
+        api.stopPreviewAndCaptureFromVideo();
 
-        } else {
-            api.stopPreviewAndCaptureFromVideo();
+        const data = {
+            filter: imgFilter,
+            style: photoStyle.valueOf(),
+            canvasimg: videoSensor.toDataURL('image/jpeg')
+        };
 
-            const data = {
-                filter: imgFilter,
-                style: photoStyle.valueOf(),
-                canvasimg: videoSensor.toDataURL('image/jpeg')
-            };
-
-            if (photoStyle === PhotoStyle.COLLAGE) {
-                data.file = currentCollageFile;
-                data.collageNumber = api.nextCollageNumber;
-            }
-
-            if (photoStyle === PhotoStyle.CHROMA) {
-                data.file = chromaFile;
-            }
-
-            api.callTakePicApi(data, retry);
+        if (photoStyle === PhotoStyle.COLLAGE) {
+            data.file = currentCollageFile;
+            data.collageNumber = api.nextCollageNumber;
         }
+
+        if (photoStyle === PhotoStyle.CHROMA) {
+            data.file = chromaFile;
+        }
+
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
+
+        api.callTakePicApi(data, retry);
     };
 
     api.retryTakePic = function (photoStyle, retry) {

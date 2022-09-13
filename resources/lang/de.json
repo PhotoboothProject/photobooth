@@ -60,6 +60,7 @@
   "collage:textoncollage_locationx": "X-Koordinaten",
   "collage:textoncollage_locationy": "Y-Koordinaten",
   "collage:textoncollage_rotation": "Textdrehung",
+  "video:video_enabled": "Kurzvideos erlauben",
   "commands": "Befehle",
   "commands:exiftool_cmd": "EXIFtool-Befehl",
   "commands:exiftool_msg": "Erfolgsnachricht für das beibehalten der EXIF-Daten",
