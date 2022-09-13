@@ -22,8 +22,11 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
         // create new image with old dimensions
         $new = imagecreatetruecolor($old_width, $old_height);
 
+        // color background as defined
+        $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
+        imagefill($new, 0, 0, $background);
+
         // rotate the image
-        imagealphablending($image , true);
         $background = imagecolorallocatealpha($image, $bg_r, $bg_g, $bg_b, $bg_a);
         $image = imagerotate($image, $rotation, $background);
 
