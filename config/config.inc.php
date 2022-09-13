@@ -108,6 +108,7 @@ $config['collage']['frame'] = '';
 $config['collage']['placeholder'] = false;
 $config['collage']['placeholderposition'] = '1';
 $config['collage']['placeholderpath'] = '';
+$config['collage']['background'] = '';
 $config['textoncollage']['enabled'] = true;
 $config['textoncollage']['line1'] = 'Photobooth';
 $config['textoncollage']['line2'] = '   we love';
