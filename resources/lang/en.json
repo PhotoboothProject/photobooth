@@ -69,6 +69,7 @@
   "commands:pre_photo_cmd": "Pre-photo script / command",
   "commands:preview_cmd": "Command to generate a live preview",
   "commands:preview_killcmd": "Command to kill live preview",
+  "commands:take_video": "Command to take a video",
   "commands:print_cmd": "Print command",
   "commands:print_msg": "Success message for print",
   "commands:reboot_cmd": "Reboot command",

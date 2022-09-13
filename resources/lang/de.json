@@ -69,6 +69,7 @@
   "commands:pre_photo_cmd": "Skript / Befehl vor Bildaufnahme",
   "commands:preview_cmd": "Befehl um eine Live-Vorschau zu erzeugen",
   "commands:preview_killcmd": "Befehl zum Beenden der Live-Vorschau",
+  "commands:take_video": "Befehl zur Videoaufnahme",
   "commands:print_cmd": "Befehl zum Drucken",
   "commands:print_msg": "Erfolgsnachricht fürs Drucken",
   "commands:reboot_cmd": "Neustart-Befehl",

@@ -85,6 +85,7 @@ function takeVideo($filename) {
         }
     }
     // todo show video as result? but print collage? show qr for this / specific mode only?
+    // todo show some kind of result screen. move images to folder, adding to gallery completely failed (maybe because of the folder)
 }
 
 $random = md5(time()) . '.mp4';
