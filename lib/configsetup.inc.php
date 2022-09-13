@@ -2201,6 +2201,13 @@ $configsetup = [
             'name' => 'preview[killcmd]',
             'value' => htmlentities($config['preview']['killcmd'] ?? ''),
         ],
+        'take_video_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['take_video']['cmd'],
+            'name' => 'take_video[cmd]',
+            'value' => htmlentities($config['take_video']['cmd'] ?? ''),
+        ],
         'nodebin_cmd' => [
             'view' => 'expert',
             'type' => 'input',
