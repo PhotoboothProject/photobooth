@@ -296,9 +296,9 @@ const photoBooth = (function () {
 
     api.cheese = function (photoStyle) {
         cheese.empty();
-        if (photoStyle !== PhotoStyle.VIDEO) {
+        if (photoStyle === PhotoStyle.VIDEO) {
             // TODO animated frame or sth?
-            cheese.text("temporary video cheese :)");
+            cheese.text('temporary video cheese :)');
         } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             api.shutter.start();
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
