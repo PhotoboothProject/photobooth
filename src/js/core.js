@@ -316,11 +316,7 @@ const photoBooth = (function () {
 
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
-        const data = {
-            filter: imgFilter,
-            style: photoStyle.valueOf(),
-            canvasimg: videoSensor.toDataURL('image/jpeg')
-        };
+        const data = {};
         api.callTakeVideoApi(data, retry);
     };
 

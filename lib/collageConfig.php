@@ -3,14 +3,14 @@
 require_once __DIR__ . '/config.php';
 
 define('COLLAGE_LAYOUT', $config['collage']['layout']);
-define('COLLAGE_RESOLUTION', (int)substr($config['collage']['resolution'], 0, -3));
+define('COLLAGE_RESOLUTION', (int) substr($config['collage']['resolution'], 0, -3));
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', $config['collage']['frame']);
 define('COLLAGE_BACKGROUND', $config['collage']['background']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_PLACEHOLDER', $config['collage']['placeholder']);
 // If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
-define('COLLAGE_PLACEHOLDER_POSITION', (int)$config['collage']['placeholderposition'] - 1);
+define('COLLAGE_PLACEHOLDER_POSITION', (int) $config['collage']['placeholderposition'] - 1);
 define('COLLAGE_PLACEHOLDER_PATH', $config['collage']['placeholderpath']);
 define('COLLAGE_DASHEDLINE_COLOR', $config['collage']['dashedline_color']);
 // If a placholder image should be used, we need to increase the limit here in order to count the images correct
@@ -86,8 +86,7 @@ class CollageConfig {
         $textOnCollageFontColor = TEXTONCOLLAGE_FONT_COLOR,
         $textOnCollageFontSize = TEXTONCOLLAGE_FONT_SIZE,
         $textOnCollageLinespace = TEXTONCOLLAGE_LINESPACE
-    )
-    {
+    ) {
         $this->collageLayout = $collageLayout;
         $this->collageResolution = $collageResolution;
         $this->collageBackgroundColor = $collageBackgroundColor;
