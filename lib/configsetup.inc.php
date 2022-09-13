@@ -711,6 +711,13 @@ $configsetup = [
             'name' => 'collage[frame]',
             'value' => htmlentities($config['collage']['frame'] ?? ''),
         ],
+        'collage_background' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['collage']['background'],
+            'name' => 'collage[background]',
+            'value' => htmlentities($config['collage']['background'] ?? ''),
+        ],
         'collage_placeholder' => [
             'view' => 'expert',
             'type' => 'checkbox',

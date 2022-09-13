@@ -5,14 +5,16 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
         return false;
     }
 
-    list($bg_r, $bg_g, $bg_b) = sscanf($bg_color, '#%02x%02x%02x');
-    $bg_color_hex = hexdec(substr($bg_color, 1));
-
-    // simple rotate if possible and ignore changed dimensions
+    // simple rotate if possible and ignore changed dimensions (doesn't need to care about background color)
     $simple_rotate = [-180, -90, 0, 180, 90, 360];
     if (in_array($rotation, $simple_rotate)) {
-        $new = imagerotate($image, $rotation, $bg_color_hex);
+        $new = imagerotate($image, $rotation, 0);
     } else {
+        if (strlen($bg_color) === 7) {
+            $bg_color .= '00';
+        }
+        list($bg_r, $bg_g, $bg_b, $bg_a) = sscanf($bg_color, '#%02x%02x%02x%02x');
+
         // get old dimensions
         $old_width = imagesx($image);
         $old_height = imagesy($image);
@@ -20,12 +22,10 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
         // create new image with old dimensions
         $new = imagecreatetruecolor($old_width, $old_height);
 
-        // color background as defined
-        $background = imagecolorallocate($new, $bg_r, $bg_g, $bg_b);
-        imagefill($new, 0, 0, $background);
-
         // rotate the image
-        $image = imagerotate($image, $rotation, $bg_color_hex);
+        imagealphablending($image , true);
+        $background = imagecolorallocatealpha($image, $bg_r, $bg_g, $bg_b, $bg_a);
+        $image = imagerotate($image, $rotation, $background);
 
         // make sure width and/or height fits into old dimensions
         $image = resizeImage($image, $old_width, $old_height);
