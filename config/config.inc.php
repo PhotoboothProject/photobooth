@@ -125,6 +125,10 @@ $config['textoncollage']['linespace'] = '90';
 $config['collage']['limit'] = '';
 
 
+// V I D E O
+$config['video']['enabled'] = false;
+
+
 // G A L L E R Y
 $config['gallery']['enabled'] = true;
 $config['gallery']['newest_first'] = true;
@@ -291,6 +295,7 @@ $config['get_request']['processed'] = false;
 $config['get_request']['server'] = '';
 $config['get_request']['picture'] = 'CNTDWNPHOTO';
 $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
+$config['get_request']['video'] = 'CNTDWNVIDEO';
 
 
 // A U T H E N T I C A T I O N
