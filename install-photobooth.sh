@@ -35,7 +35,7 @@ PHP_VERSION="7.4"
 
 # Update
 RUN_UPDATE=false
-BACKUPBRANCH=""
+BACKUPBRANCH="backup-$DATE"
 PHOTOBOOTH_FOUND=false
 PHOTOBOOTH_PATH=(
         '/var/www/html'
@@ -821,14 +821,27 @@ fix_git_modules() {
 
 commit_git_changes() {
     cd $INSTALLFOLDERPATH
-
+    CHANGES_DETECTED=false
     fix_git_modules
+
+    if [ -z "$(git config user.name)" ]; then
+        warn "WARN: git user.name not set!"
+        info "### Setting git user.name."
+        $(git config user.name Photobooth)
+    fi
+
+    if [ -z "$(git config user.email)" ]; then
+        warn "WARN: git user.email not set!"
+        info "### Setting git user.email."
+        $(git config user.email Photobooth@localhost)
+    fi
+
+    echo "git user.name: $(git config user.name)"
+    echo "git user.email: $(git config user.email)"
 
     if [ -z "$(git status --porcelain)" ]; then
         info "### Nothing to commit."
     else
-        BACKUPBRANCH="backup-$DATE"
-
         echo -e "\033[0;33m### Uncommited changes detected. Continue update? [y/N]"
         echo -e "### NOTE: If typing y, your changes will be commited and will be kept"
         echo -e "          inside a local branch ($BACKUPBRANCH)."
@@ -837,25 +850,9 @@ commit_git_changes() {
         echo -e "\033[0m"
         if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
             info "### We will commit your changes and keep them inside a local backup branch."
-            if [ -z "$(git config user.name)" ]; then
-                warn "WARN: git user.name not set!"
-                info "### Setting git user.name."
-                $(git config user.name Photobooth)
-            fi
-
-            if [ -z "$(git config user.email)" ]; then
-                warn "WARN: git user.email not set!"
-                info "### Setting git user.email."
-                $(git config user.email Photobooth@localhost)
-            fi
-
-            echo "git user.name: $(git config user.name)"
-            echo "git user.email: $(git config user.email)"
-
+            CHANGES_DETECTED=true
             git add --all
             git commit -a -m "backup changes"
-            git checkout -b $BACKUPBRANCH
-            info "### Backup done to branch: $BACKUPBRANCH"
             git format-patch -1
         else
             error "ERROR: Uncommited changes detected. Please commit your changes."
@@ -866,6 +863,9 @@ commit_git_changes() {
             exit
         fi
     fi
+
+    git checkout -b $BACKUPBRANCH
+    info "### Backup done to branch: $BACKUPBRANCH"
 }
 
 detect_photobooth_install() {
@@ -897,14 +897,14 @@ start_update() {
         print_spaces
         print_logo
         info "###"
-        if [ ! -z $BACKUPBRANCH ]; then
+        if [ "$CHANGES_DETECTED" = true ]; then
             if [ "$PATCH_SUCCESS" = true ]; then
                 info "### Your uncommited changes have been applied successfully!"
             else
                 error "### Uncommited changes couldn't be applied automatically!"
             fi
-            info "### Backup done to branch: $BACKUPBRANCH"
         fi
+        info "### Backup done to branch: $BACKUPBRANCH"
         info "###"
         info "### Update completed!"
         info "###"
