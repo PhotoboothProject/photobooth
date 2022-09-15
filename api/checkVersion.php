@@ -17,10 +17,7 @@ $context = stream_context_create($options);
 $content = file_get_contents($url, false, $context);
 $data = json_decode($content, true);
 $remoteVersion = substr($data['tag_name'], 1);
-
-$packageContent = file_get_contents('../package.json');
-$package = json_decode($packageContent, true);
-$localVersion = $package['version'];
+$localVersion = $config['photobooth']['version'];
 
 $LogData = [
     'updateAvailable' => $remoteVersion !== $localVersion,
