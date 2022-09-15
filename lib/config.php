@@ -232,3 +232,4 @@ if (empty($config['qr']['url'])) {
 }
 
 $config['folders']['lang'] = getrootpath('../resources/lang');
+$config['photobooth']['version'] = getPhotoboothVersion();

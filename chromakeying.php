@@ -49,9 +49,9 @@ $uiShape = 'shape--' . $config['ui']['style'];
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css" />
+		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>" />
 		<?php if (is_file("private/overrides.css")): ?>
-		<link rel="stylesheet" href="private/overrides.css" />
+		<link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
 		<?php endif; ?>
 	</head>
 <body data-main-image="<?=$mainimage?>">
