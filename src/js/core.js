@@ -132,7 +132,7 @@ const photoBooth = (function () {
         initRemoteBuzzerFromDOM();
         rotaryController.focusSet('#start');
 
-        if (config.ui.shutter_cheese_img !== '') {
+        if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             blocker.css('background-image', 'url(' + config.ui.shutter_cheese_img + ')');
         }
     };
@@ -457,7 +457,7 @@ const photoBooth = (function () {
 
     api.cheese = function (photoStyle) {
         cheese.empty();
-        if (config.ui.shutter_cheese_img !== '') {
+        if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             api.shutter.start();
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
             cheese.text(photoboothTools.getTranslation('cheese'));
@@ -496,7 +496,7 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = function (data, retry = 0) {
-        if (config.ui.shutter_animation) {
+        if (config.ui.shutter_animation && config.ui.shutter_cheese_img === '') {
             api.shutter.start();
         }
         startTime = new Date().getTime();
