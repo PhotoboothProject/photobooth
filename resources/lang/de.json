@@ -251,6 +251,7 @@
   "manual:collage:textoncollage_locationx": "X-Koordinaten des Textes beim Hinzufügen von Text auf die Collage.",
   "manual:collage:textoncollage_locationy": "Y-Koordinaten des Textes beim Hinzufügen von Text auf die Collage.",
   "manual:collage:textoncollage_rotation": "Geben Sie einen Wert ein, der als Gradzahl verwendet wird, um die der Text auf der Collage gedreht wird.",
+  "manual:video:video_enabled": "Aufnahme eines einfachen Videos erlauben, das auch zu einer Collage verarbeitet werden kann.",
   "manual:commands:exiftool_cmd": "EXIFtool-Befehlszeile, die nach dem Aufnehmen eines Bildes ausgeführt wird. Die Option \"EXIF-Daten beibehalten\" muss aktiviert sein.",
   "manual:commands:exiftool_msg": "Aus der EXIFtool-Befehlszeile zurückgegebene Nachricht.",
   "manual:commands:nodebin_cmd": "Pfad zum Node.js Binary - Beispiel <code>/usr/bin/node</code>",

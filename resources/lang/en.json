@@ -251,6 +251,7 @@
   "manual:collage:textoncollage_locationx": "X-Coordinates of the text while adding text to your collage.",
   "manual:collage:textoncollage_locationy": "Y-Coordinates of the text while adding text to your collage.",
   "manual:collage:textoncollage_rotation": "Enter a value which is used as degrees the text on your collage gets rotated.",
+  "manual:video:video_enabled": "Enable taking a short video that can be processed to a simple collage.",
   "manual:commands:exiftool_cmd": "EXIFtool command line which is executed after taking a picture if \"Preserve EXIF data\" is enabled.",
   "manual:commands:exiftool_msg": "Message returned from EXIFtool commandline.",
   "manual:commands:nodebin_cmd": "Path to executable for node.js - example <code>/usr/bin/node</code>",

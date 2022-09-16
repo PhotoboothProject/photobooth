@@ -65,7 +65,7 @@
 					<?php endif; ?>
 
 					<?php if ($config['video']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass; ?> takeVideo rotaryfocus"><i class="fa fa-th-large"></i> <span
+					<a href="#" class="<?php echo $btnClass; ?> takeVideo rotaryfocus"><i class="fa fa-film"></i> <span
 							data-i18n="takeVideo"></span></a>
 					<?php endif; ?>
 
