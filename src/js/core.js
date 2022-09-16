@@ -551,6 +551,8 @@ const photoBooth = (function () {
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
                 $('#' + imgFilter).addClass('activeSidenavBtn');
 
+                // TODO check if file exists and display file
+
                 if (result.error) {
                     api.errorPic(result);
                 } else {

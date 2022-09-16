@@ -29,13 +29,13 @@ function takeVideo($filename) {
     }
 
     $i = 0;
-    $processingTime = 30;
+    $processingTime = 300;
     while ($i < $processingTime) {
         if (file_exists($filename)) {
             break;
         } else {
             $i++;
-            sleep(1);
+            sleep(0.1);
         }
     }
 
@@ -48,29 +48,26 @@ function takeVideo($filename) {
             'php' => basename($_SERVER['PHP_SELF']),
         ];
         $ErrorString = json_encode($ErrorData);
+        if (preg_match('/^[a-z0-9_]+\.(mp4|gif)$/', $filename)) {
+            // remove all files that were created - filenames all start with the videos name
+            exec('rm -f ' . $filename . '*');
+        }
         logError($ErrorData);
         die($ErrorString);
     }
 
-    // insert movie into database (does that even make sense? does the db support that?)
-    if ($config['database']['enabled']) {
-        appendImageToDB($filename);
-    }
+    $moveFiles[] = $filename;
     $images = [];
     for ($i = 1; $i < 99; $i++) {
         $imageFilename = sprintf('%s-%02d.jpg', $filename, $i);
         if (file_exists($imageFilename)) {
-            // insert shots from movie to database
-            if ($config['database']['enabled']) {
-                appendImageToDB($filename);
-            }
             $images[] = $imageFilename;
         } else {
             break;
         }
     }
-    // If there are 4 images create a cuttable collage
-    if (count($images) === 4) {
+    // If there are 4 images create a cuttable collage (more flexibility to come one day)
+    if ($config['video']['collage'] && count($images) === 4) {
         $collageFilename = sprintf('%s-collage.jpg', $filename);
         $collageConfig = new CollageConfig();
         $collageConfig->collageLayout = '2x4-3';
@@ -80,8 +77,14 @@ function takeVideo($filename) {
             $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
             logErrorAndDie($errormsg);
         }
+    }
+
+    $dataFolder = $config['folders']['data'] . DIRECTORY_SEPARATOR;
+    foreach ($moveFiles as $file) {
+        $newFile = $dataFolder . basename($file);
+        rename($file, $newFile);
         if ($config['database']['enabled']) {
-            appendImageToDB($collageFilename);
+            appendImageToDB($newFile);
         }
     }
     // todo show video as result? but print collage? show qr for this / specific mode only?

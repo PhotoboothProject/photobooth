@@ -127,6 +127,7 @@ $config['collage']['limit'] = '';
 
 // V I D E O
 $config['video']['enabled'] = false;
+$config['video']['collage'] = false;
 
 
 // G A L L E R Y

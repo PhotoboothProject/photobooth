@@ -844,6 +844,12 @@ $configsetup = [
             'name' => 'video[enabled]',
             'value' => $config['video']['enabled'],
         ],
+        'video_collage' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'video[collage]',
+            'value' => $config['video']['collage'],
+        ],
     ],
     'gallery' => [
         'view' => 'basic',
