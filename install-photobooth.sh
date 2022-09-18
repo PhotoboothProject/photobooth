@@ -667,6 +667,11 @@ browser_desktop_shortcut() {
     fi
 }
 
+browser_autostart() {
+    AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
+    browser_shortcut
+}
+
 ask_kiosk_mode() {
     echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
     ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
@@ -788,18 +793,10 @@ www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 }
 
-kioskbooth_desktop() {
-    if [ "$KIOSK_MODE" = true ]; then
-        AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
-        browser_shortcut
-    else
-        info "### lxde is not installed. Can not setup Photobooth in KIOSK-Mode."
+hide_mouse() {
+    if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
+        sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
     fi
-
-    if [ "$HIDE_MOUSE" = true ]; then
-        if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
-            sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
-        fi
 
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth
@@ -815,7 +812,6 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth End
 
 EOF
-fi
 }
 
 cups_setup() {
@@ -1005,23 +1001,24 @@ if [ "$RUN_UPDATE" = true ]; then
                 info "### lxde is not installed. Can not hide the mouse cursor on every start."
             fi
             print_spaces
-
-            if [ "$WEBBROWSER" != "unknown" ]; then
-                browser_desktop_shortcut
-            else
-                info "### Browser unknown or not installed. Can not add shortcut to Desktop."
-            fi
         fi
 # Pi specific setup end
-
-        if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
-            kioskbooth_desktop
-        fi
         common_software
         commit_git_changes
         start_git_install
         general_permissions
         fix_git_modules
+        if [ "$WEBBROWSER" != "unknown" ]; then
+            browser_desktop_shortcut
+            if [ "$KIOSK_MODE" = true ]; then
+                browser_autostart
+            fi
+        else
+            info "### Browser unknown or not installed. Can not add shortcut to Desktop."
+        fi
+        fi [ "$HIDE_MOUSE" = true ] ; then
+            hide_mouse
+        fi
         print_spaces
         print_logo
         info "###"
@@ -1188,16 +1185,18 @@ if [ "$RUNNING_ON_PI" = true ]; then
 fi
 if [ "$WEBBROWSER" != "unknown" ]; then
     browser_desktop_shortcut
+    if [ "$KIOSK_MODE" = true ]; then
+        browser_autostart
+    fi
 else
     info "### Browser unknown or not installed. Can not add shortcut to Desktop."
 fi
-if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
-    kioskbooth_desktop
+fi [ "$HIDE_MOUSE" = true ] ; then
+    hide_mouse
 fi
 if [ "$SETUP_CUPS" = true ]; then
     cups_setup
 fi
-
 if [ "$GPHOTO_PREVIEW" = true ]; then
     gphoto_preview
 fi
