@@ -72,13 +72,13 @@ $btnClass = 'btn ' . $btnShape;
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="api/config.php"></script>
-	<script type="text/javascript" src="resources/js/tools.js"></script>
-	<script type="text/javascript" src="resources/js/theme.js"></script>
-	<script type="text/javascript" src="resources/js/update.js"></script>
+	<script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/update.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="resources/js/i18n.js"></script>
+	<script type="text/javascript" src="resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 </body>
 </html>
