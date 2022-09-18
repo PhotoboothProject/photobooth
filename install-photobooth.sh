@@ -700,19 +700,6 @@ ask_hide_mouse() {
     fi
 }
 
-pi_camera() {
-    cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
-<?php
-\$config = array (
-  'take_picture' =>
-  array (
-    'cmd' => 'libcamera-still -n -o %s -q 100 -t 1 | echo "Done"',
-    'msg' => 'Done',
-  ),
-);
-EOF
-}
-
 raspberry_permission() {
     info "### Remote Buzzer Feature"
     info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
@@ -1117,19 +1104,6 @@ if [ "$RUNNING_ON_PI" = true ]; then
     fi
     print_spaces
 
-    echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
-    ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "N"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        PI_CAMERA=true
-        info "### We will generate a personal configuration with all needed"
-        info "    changes to use a Raspberry Pi (HQ) Camera to take pictures."
-    else
-        info "### We won't generate a personal configuration file to use a Raspberry Pi (HQ) Camera to take pictures."
-    fi
-
-    print_spaces
-
     echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
     echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first."
     ask_yes_no "### Would you like to setup Raspberry Pi OS to use the USB sync file backup? [y/N] " "Y"
@@ -1173,9 +1147,6 @@ print_spaces
 common_software
 general_setup
 start_install
-if [ "$PI_CAMERA" = true ]; then
-    pi_camera
-fi
 general_permissions
 if [ "$RUNNING_ON_PI" = true ]; then
     raspberry_permission
