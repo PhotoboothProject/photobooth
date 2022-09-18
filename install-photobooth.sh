@@ -723,10 +723,9 @@ EOF
         sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' $INSTALLFOLDERPATH/config/my.config.inc.php
     fi
 
-    if [ "$USB_SYNC" = true ]; then
-        if [ "$DESKTOP_OS" = true ]; then
+    if [ "$RUN_UPDATE" = false ]; then
+        if [ "$USB_SYNC" = true ] && [ "$DESKTOP_OS" = true ]; then
             info "### Disabling automount for user $USERNAME."
-
             mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
             cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
@@ -990,6 +989,9 @@ if [ "$RUN_UPDATE" = true ]; then
         commit_git_changes
         start_git_install
         general_permissions
+        if [ "$RUNNING_ON_PI" = true ]; then
+            raspberry_permission
+        fi
         fix_git_modules
         if [ "$WEBBROWSER" != "unknown" ]; then
             browser_desktop_shortcut
