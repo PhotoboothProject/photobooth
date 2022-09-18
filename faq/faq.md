@@ -484,7 +484,7 @@ If you like to have the same preview independent of the device you access Photob
 Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
 
 - Admin panel config *"Preview mode"*: `from URL`
-- Admin panel config *"Preview-URL"* example (add needed IP address instead): `url(http://127.0.0.1:8081)`
+- Admin panel config *"Preview-URL"* example (add needed IP address instead): `url(http://192.168.0.2:8081)`
 
 **Note**
 
@@ -494,7 +494,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 
 #### Preview _"from gohoto2"_
 
-A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost):
+A preview can also be done using the video mode of your DSLR (Linux only), but only works if you access Photobooth via [http://localhost](http://localhost):
 
 - Liveview **must** be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
 - install all dependencies `sudo apt install ffmpeg v4l2loopback-dkms v4l-utils -y`
@@ -508,7 +508,7 @@ A preview can also be done using the video mode of your DSLR (Linux only), but o
 **Note**
 
 - Requires Photobooth v2.11.0 or later!
-- You need to access Photobooth directly via [http://localhost](http://localhost) or [http://127.0.0.1](http://localhost), you won't be able to see the preview on a different device (e.g. Tablet)
+- You need to access Photobooth directly via [http://localhost](http://localhost), you won't be able to see the preview on a different device (e.g. Tablet)
 - There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Battery saving mode on gphoto2 live preview` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
 - Sometimes Chromium doesn't detect the V4l2 camera launch from php: you need to run `sudo gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0` from terminal first and load Chromium a first time with a webpage asking for the camera.
 - Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. ` sudo rmmod bcm2835-isp`.
@@ -532,7 +532,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
 
     ```sh
     -   url(../img/bg.jpg)
-    +   url(http://127.0.0.1:8081)
+    +   url(http://192.168.0.2:8081)
     ```
 
     To use a Raspberry Pi Camera module Motion is required, but you won't be able to use the Raspberry Pi Camera 
