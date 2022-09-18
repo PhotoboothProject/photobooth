@@ -766,10 +766,8 @@ general_permissions() {
     mkdir -p "/var/www/.cache"
     chown -R www-data:www-data "/var/www/.cache"
 
-    if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
-        info "### Disabling camera automount."
-        chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
-    fi
+    info "### Disabling camera automount."
+    chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor || true
 
     # Add configuration required for www-data to be able to initiate system shutdown / reboot
     info "### Note: In order for the shutdown and reboot button to work we install /etc/sudoers.d/020_www-data-shutdown"
