@@ -610,6 +610,28 @@ start_install() {
     fi
 }
 
+detect_browser() {
+    if [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="chromium-browser"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-stable" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome-stable"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-beta" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome-beta"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="firefox"
+        CHROME_FLAGS=false
+    else
+        WEBBROWSER="unknown"
+        CHROME_FLAGS=false
+    fi
+}
+
 browser_shortcut() {
     if [ "$CHROME_FLAGS" = true ]; then
         if [ "$RUNNING_ON_PI" = true ]; then
@@ -1034,25 +1056,7 @@ print_spaces
 
 if [ -d "/etc/xdg/autostart" ]; then
 
-    if [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="chromium-browser"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "google-chrome" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="google-chrome"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-stable" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="google-chrome-stable"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-beta" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="google-chrome-beta"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="firefox"
-        CHROME_FLAGS=false
-    else
-        WEBBROWSER="unknown"
-        CHROME_FLAGS=false
-    fi
+    detect_browser
 
     if [ "$WEBBROWSER" != "unknown" ]; then
         echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
