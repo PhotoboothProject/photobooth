@@ -163,7 +163,7 @@ foreach ($config['folders'] as $key => $folder) {
         $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
         $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
 
-        $config['foldersJS'][$key] = str_replace('\\', '/', $config['foldersRoot'][$key]);
+        $config['foldersJS'][$key] = str_replace('\\', '/', getrootpath($path));
     }
 
     if (!file_exists($path)) {
