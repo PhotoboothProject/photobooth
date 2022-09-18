@@ -659,15 +659,13 @@ browser_shortcut() {
 }
 
 browser_desktop_shortcut() {
-    info "### Adding photobooth shortcut to Desktop"
-    if [ ! -d "/home/$USERNAME/Desktop" ]; then
-        mkdir -p /home/$USERNAME/Desktop
-        chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+    if [ -d "/home/$USERNAME/Desktop" ] && [ ! -z $USERNAME ]; then
+        info "### Adding photobooth shortcut to Desktop"
+        AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
+        browser_shortcut
+        chmod +x /home/$USERNAME/Desktop/photobooth.desktop
+        chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
     fi
-    AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
-    browser_shortcut
-    chmod +x /home/$USERNAME/Desktop/photobooth.desktop
-    chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
 }
 
 ask_kiosk_mode() {
@@ -712,12 +710,6 @@ EOF
 }
 
 raspberry_permission() {
-    if [ "$WEBBROWSER" != "unknown" ]; then
-        browser_desktop_shortcut
-    else
-        info "### Browser unknown or not installed. Can not add shortcut to Desktop."
-    fi
-
     info "### Remote Buzzer Feature"
     info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
     usermod -a -G gpio www-data
@@ -1166,7 +1158,12 @@ if [ "$PI_CAMERA" = true ]; then
 fi
 general_permissions
 if [ "$RUNNING_ON_PI" = true ]; then
-raspberry_permission
+    raspberry_permission
+fi
+if [ "$WEBBROWSER" != "unknown" ]; then
+    browser_desktop_shortcut
+else
+    info "### Browser unknown or not installed. Can not add shortcut to Desktop."
 fi
 if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
     kioskbooth_desktop
