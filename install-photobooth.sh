@@ -1001,7 +1001,7 @@ if [ "$RUN_UPDATE" = true ]; then
         else
             info "### Browser unknown or not installed. Can not add shortcut to Desktop."
         fi
-        fi [ "$HIDE_MOUSE" = true ] ; then
+        if [ "$HIDE_MOUSE" = true ] ; then
             hide_mouse
         fi
         print_spaces
@@ -1161,7 +1161,7 @@ if [ "$WEBBROWSER" != "unknown" ]; then
 else
     info "### Browser unknown or not installed. Can not add shortcut to Desktop."
 fi
-fi [ "$HIDE_MOUSE" = true ] ; then
+if [ "$HIDE_MOUSE" = true ] ; then
     hide_mouse
 fi
 if [ "$SETUP_CUPS" = true ]; then
