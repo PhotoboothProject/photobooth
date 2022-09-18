@@ -978,10 +978,45 @@ fi
 
 if [ "$RUN_UPDATE" = true ]; then
     detect_photobooth_install
+
     if [ "$PHOTOBOOTH_FOUND" = true ]; then
         check_git_install
+    else
+        error "ERROR: Photobooth installation not found!"
+        exit
     fi
+
     if [ "$GIT_INSTALL" = true ]; then
+        detect_browser
+        if [ -d "/etc/xdg/autostart" ]; then
+            if [ "$WEBBROWSER" != "unknown" ]; then
+                ask_kiosk_mode
+            else
+                warn "### No supported webbrowser found!"
+            fi
+            print_spaces
+        fi
+
+# Pi specific setup start
+        if [ "$RUNNING_ON_PI" = true ]; then
+            if [ "$DESKTOP_OS" = true ]; then
+                ask_hide_mouse
+            else
+                info "### lxde is not installed. Can not hide the mouse cursor on every start."
+            fi
+            print_spaces
+
+            if [ "$WEBBROWSER" != "unknown" ]; then
+                browser_desktop_shortcut
+            else
+                info "### Browser unknown or not installed. Can not add shortcut to Desktop."
+            fi
+        fi
+# Pi specific setup end
+
+        if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
+            kioskbooth_desktop
+        fi
         common_software
         commit_git_changes
         start_git_install
@@ -1070,10 +1105,8 @@ fi
 
 print_spaces
 
+detect_browser
 if [ -d "/etc/xdg/autostart" ]; then
-
-    detect_browser
-
     if [ "$WEBBROWSER" != "unknown" ]; then
         ask_kiosk_mode
     else
