@@ -172,16 +172,19 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = $path;
 }
 
+$default_font = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+$default_frame = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+
 if (empty($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
-    $config['picture']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+    $config['picture']['frame'] = $default_frame;
 }
 
 if (empty($config['textonpicture']['font']) || !testFile($config['textonpicture']['font'])) {
-    $config['textonpicture']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+    $config['textonpicture']['font'] = $default_font;
 }
 
 if (empty($config['collage']['frame']) || !testFile($config['collage']['frame'])) {
-    $config['collage']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+    $config['collage']['frame'] = $default_frame;
 }
 
 if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
@@ -189,15 +192,15 @@ if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']
 }
 
 if (empty($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
-    $config['textoncollage']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+    $config['textoncollage']['font'] = $default_font;
 }
 
 if (empty($config['print']['frame']) || !testFile($config['print']['frame'])) {
-    $config['print']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+    $config['print']['frame'] = $default_frame;
 }
 
 if (empty($config['textonprint']['font']) || !testFile($config['textonprint']['font'])) {
-    $config['textonprint']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+    $config['textonprint']['font'] = $default_font;
 }
 
 if (empty($config['collage']['limit'])) {
