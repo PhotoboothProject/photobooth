@@ -927,43 +927,6 @@ detect_photobooth_install() {
     done
 }
 
-start_update() {
-    detect_photobooth_install
-    if [ "$PHOTOBOOTH_FOUND" = true ]; then
-        check_git_install
-    fi
-    if [ "$GIT_INSTALL" = true ]; then
-        common_software
-        commit_git_changes
-        start_git_install
-        general_permissions
-        fix_git_modules
-        print_spaces
-        print_logo
-        info "###"
-        if [ "$CHANGES_DETECTED" = true ]; then
-            if [ "$PATCH_SUCCESS" = true ]; then
-                info "### Your uncommited changes have been applied successfully!"
-            else
-                error "### Uncommited changes couldn't be applied automatically!"
-            fi
-        fi
-        info "### Backup done to branch: $BACKUPBRANCH"
-        info "###"
-        info "### Update completed!"
-        info "###"
-        info "### Please clear your Browser Cache to"
-        info "### avoid graphical issues."
-        info "###"
-        info "### Have fun with your Photobooth!"
-
-        cat $PHOTOBOOTH_TMP_LOG >> $INSTALLFOLDERPATH/private/install.log
-    else
-         error "ERROR: Can not Update!"
-    fi
-    exit
-}
-
 ############################################################
 #                                                          #
 # General checks before the installation process can start #
@@ -1014,7 +977,40 @@ fi
 ############################################################
 
 if [ "$RUN_UPDATE" = true ]; then
-    start_update
+    detect_photobooth_install
+    if [ "$PHOTOBOOTH_FOUND" = true ]; then
+        check_git_install
+    fi
+    if [ "$GIT_INSTALL" = true ]; then
+        common_software
+        commit_git_changes
+        start_git_install
+        general_permissions
+        fix_git_modules
+        print_spaces
+        print_logo
+        info "###"
+        if [ "$CHANGES_DETECTED" = true ]; then
+            if [ "$PATCH_SUCCESS" = true ]; then
+                info "### Your uncommited changes have been applied successfully!"
+            else
+                error "### Uncommited changes couldn't be applied automatically!"
+            fi
+        fi
+        info "### Backup done to branch: $BACKUPBRANCH"
+        info "###"
+        info "### Update completed!"
+        info "###"
+        info "### Please clear your Browser Cache to"
+        info "### avoid graphical issues."
+        info "###"
+        info "### Have fun with your Photobooth!"
+
+        cat $PHOTOBOOTH_TMP_LOG >> $INSTALLFOLDERPATH/private/install.log
+    else
+         error "ERROR: Can not Update!"
+    fi
+    exit
 fi
 
 ############################################################
