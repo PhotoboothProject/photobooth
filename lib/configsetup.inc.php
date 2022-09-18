@@ -2254,6 +2254,13 @@ $configsetup = [
             'name' => 'folders[archives]',
             'value' => $config['folders']['archives'],
         ],
+        'folders_private' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['folders']['private'],
+            'name' => 'folders[private]',
+            'value' => $config['folders']['private'],
+        ],
         'folders_config' => [
             'view' => 'expert',
             'type' => 'hidden',
