@@ -658,6 +658,18 @@ browser_shortcut() {
     echo "Terminal=false" >> "$AUTOSTART_FILE"
 }
 
+browser_desktop_shortcut() {
+    info "### Adding photobooth shortcut to Desktop"
+    if [ ! -d "/home/$USERNAME/Desktop" ]; then
+        mkdir -p /home/$USERNAME/Desktop
+        chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
+    fi
+    AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
+    browser_shortcut
+    chmod +x /home/$USERNAME/Desktop/photobooth.desktop
+    chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+}
+
 ask_kiosk_mode() {
     echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
     ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
@@ -701,15 +713,7 @@ EOF
 
 raspberry_permission() {
     if [ "$WEBBROWSER" != "unknown" ]; then
-        info "### Adding photobooth shortcut to Desktop"
-        if [ ! -d "/home/$USERNAME/Desktop" ]; then
-            mkdir -p /home/$USERNAME/Desktop
-            chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
-        fi
-        AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
-        browser_shortcut
-        chmod +x /home/$USERNAME/Desktop/photobooth.desktop
-        chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
+        browser_desktop_shortcut
     else
         info "### Browser unknown or not installed. Can not add shortcut to Desktop."
     fi
