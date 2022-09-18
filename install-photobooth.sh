@@ -658,6 +658,19 @@ browser_shortcut() {
     echo "Terminal=false" >> "$AUTOSTART_FILE"
 }
 
+ask_kiosk_mode() {
+    echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
+    ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        KIOSK_MODE=true
+        info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
+    else
+        KIOSK_MODE=false
+        info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
+    fi
+}
 
 pi_camera() {
     cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
@@ -1059,16 +1072,7 @@ if [ -d "/etc/xdg/autostart" ]; then
     detect_browser
 
     if [ "$WEBBROWSER" != "unknown" ]; then
-        echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
-        ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
-        echo -e "\033[0m"
-        if [[ $REPLY =~ ^[Yy]$ ]]
-        then
-            KIOSK_MODE=true
-            info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
-        else
-            info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
-        fi
+        ask_kiosk_mode
     else
         warn "### No supported webbrowser found!"
     fi
