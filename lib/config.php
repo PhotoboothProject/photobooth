@@ -151,7 +151,7 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
 }
 
 foreach ($config['folders'] as $key => $folder) {
-    if ($folder === 'data' || $folder === 'archives' || $folder === 'config') {
+    if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
         $path = $basepath . DIRECTORY_SEPARATOR . $folder;
     } else {
         $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
