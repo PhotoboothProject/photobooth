@@ -984,24 +984,20 @@ if [ "$RUN_UPDATE" = true ]; then
 
     if [ "$GIT_INSTALL" = true ]; then
         detect_browser
-        if [ -d "/etc/xdg/autostart" ]; then
-            if [ "$WEBBROWSER" != "unknown" ]; then
-                ask_kiosk_mode
-            else
-                warn "### No supported webbrowser found!"
-            fi
-            print_spaces
+        if [ -d "/etc/xdg/autostart" ] && [ "$WEBBROWSER" != "unknown" ]; then
+            ask_kiosk_mode
+        else
+            warn "### No supported webbrowser found!"
         fi
+        print_spaces
 
 # Pi specific setup start
-        if [ "$RUNNING_ON_PI" = true ]; then
-            if [ "$DESKTOP_OS" = true ]; then
-                ask_hide_mouse
-            else
-                info "### lxde is not installed. Can not hide the mouse cursor on every start."
-            fi
-            print_spaces
+        if [ "$RUNNING_ON_PI" = true ] && [ "$DESKTOP_OS" = true ]; then
+            ask_hide_mouse
+        else
+            info "### lxde is not installed. Can not hide the mouse cursor on every start."
         fi
+        print_spaces
 # Pi specific setup end
         common_software
         commit_git_changes
@@ -1142,6 +1138,7 @@ if [ "$RUNNING_ON_PI" = true ]; then
         USB_SYNC=true
         info "### We will setup Raspberry Pi OS to be able to use the USB sync file backup."
     else
+        USB_SYNC=false
         info "### We won't setup Raspberry Pi OS to use the USB sync file backup."
     fi
 
