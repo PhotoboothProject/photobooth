@@ -150,6 +150,12 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
+if (empty($config['ui']['folders_lang'])) {
+    $config['ui']['folders_lang'] = getrootpath('../resources/lang');
+}
+
+$config['ui']['folders_lang'] = fixSeperator($config['ui']['folders_lang']);
+
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
         $path = $basepath . DIRECTORY_SEPARATOR . $folder;
@@ -234,5 +240,4 @@ if (empty($config['qr']['url'])) {
     $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
 }
 
-$config['folders']['lang'] = getrootpath('../resources/lang');
 $config['photobooth']['version'] = getPhotoboothVersion();

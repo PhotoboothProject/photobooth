@@ -84,6 +84,13 @@ $configsetup = [
             ],
             'value' => $config['ui']['language'],
         ],
+        'ui_folders_lang' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['ui']['folders_lang'],
+            'name' => 'ui[folders_lang]',
+            'value' => $config['ui']['folders_lang'],
+        ],
         'translate' => [
             'view' => 'basic',
             'type' => 'button',
