@@ -672,6 +672,20 @@ ask_kiosk_mode() {
     fi
 }
 
+ask_hide_mouse() {
+    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
+    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        HIDE_MOUSE=true
+        EXTRA_PACKAGES+=('unclutter')
+        info "### We will hide the mouse cursor on every start and disable the screen saver."
+    else
+        HIDE_MOUSE=false
+        info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
+    fi
+}
+
 pi_camera() {
     cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
@@ -1082,16 +1096,7 @@ fi
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
     if [ "$DESKTOP_OS" = true ]; then
-        echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
-        ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
-        echo -e "\033[0m"
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            HIDE_MOUSE=true
-            EXTRA_PACKAGES+=('unclutter')
-            info "### We will hide the mouse cursor on every start and disable the screen saver."
-        else
-            info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
-        fi
+        ask_hide_mouse
     else
         info "### lxde is not installed. Can not hide the mouse cursor on every start."
     fi
