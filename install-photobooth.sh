@@ -174,8 +174,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
 
          -update,     --update      Try updating Photobooth via git.
 
-    -u,  -username,   --username    Enter your OS username you like to use Photobooth
-                                    on (Raspberry Pi only)
+    -u,  -username,   --username    Always required. Enter your OS username you like to use Photobooth on.
 
     -V,  -verbose,    --verbose     Run script in verbose mode.
 
@@ -976,6 +975,15 @@ if [ $UID != 0 ]; then
     exit 1
 fi
 
+if [ ! -z $USERNAME ]; then
+    check_username
+else
+    error "ERROR: An valid OS username is needed! Please re-run the installer."
+    view_help
+    exit
+fi
+print_spaces
+
 if [ "$FORCE_RASPBERRY_PI" = false ]; then
     if [ ! -f /proc/device-tree/model ]; then
         no_raspberry 2
@@ -1014,17 +1022,6 @@ fi
 # Ask all questions before installing Photobooth           #
 #                                                          #
 ############################################################
-
-if [ "$RUNNING_ON_PI" = true ]; then
-    if [ ! -z $USERNAME ]; then
-        check_username
-    else
-        error "ERROR: An valid OS username is needed! Please re-run the installer."
-        view_help
-        exit
-    fi
-    print_spaces
-fi
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
