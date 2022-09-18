@@ -83,7 +83,7 @@ $btnClass = 'btn ' . $btnShape;
 
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="api/config.php"></script>
-	<script type="text/javascript" src="resources/js/theme.js"></script>
+	<script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 </body>
 </html>
