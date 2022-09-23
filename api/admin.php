@@ -94,13 +94,23 @@ if ($data['type'] == 'config') {
             }
         } else {
             $newConfig['login']['enabled'] = false;
+            $LogData = [
+                'error' => 'Password not set. Login disabled.',
+                'php' => basename($_SERVER['PHP_SELF']),
+            ];
+            logError($LogData);
         }
     } else {
         $newConfig['login']['password'] = null;
     }
 
-    if ($newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
+    if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
         $newConfig['preview']['camTakesPic'] = false;
+        $LogData = [
+            'error' => 'Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.',
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        logError($LogData);
     }
 
     if ($newConfig['ui']['style'] === 'custom') {
@@ -112,6 +122,11 @@ if ($data['type'] == 'config') {
             !is_readable('../resources/css/custom_live_chromakeying.css')
         ) {
             $newConfig['ui']['style'] = 'modern_squared';
+            $LogData = [
+                'error' => 'No custom style resources found. Falling back to modern squared style.',
+                'php' => basename($_SERVER['PHP_SELF']),
+            ];
+            logError($LogData);
         } else {
             if (!file_exists('../template/custom.template.php')) {
                 copy('../template/modern.template.php', '../template/custom.template.php');
@@ -132,8 +147,15 @@ if ($data['type'] == 'config') {
     }
 
     if (SERVER_OS === 'windows') {
-        $newConfig['remotebuzzer']['enabled'] = false;
-        $newConfig['synctodrive']['enabled'] = false;
+        if (!empty($newConfig['remotebuzzer']['enabled']) || !empty($newConfig['synctodrive']['enabled'])) {
+            $newConfig['remotebuzzer']['enabled'] = false;
+            $newConfig['synctodrive']['enabled'] = false;
+            $LogData = [
+                'error' => 'Remotebuzzer and Sync pictures to USB stick unsupported on Windows.',
+                'php' => basename($_SERVER['PHP_SELF']),
+            ];
+            logError($LogData);
+        }
     }
 
     if (isset($newConfig['database']['file']) && empty($newConfig['database']['file'])) {
@@ -148,9 +170,16 @@ if ($data['type'] == 'config') {
         $newConfig['remotebuzzer']['port'] = 14711;
     }
 
-    if (isset($newConfig['get_request']['server']) && empty($newConfig['get_request']['server'])) {
-        $newConfig['get_request']['countdown'] = false;
-        $newConfig['get_request']['processed'] = false;
+    if ($newConfig['get_request']['countdown'] || $newConfig['get_request']['processed']) {
+        if (isset($newConfig['get_request']['server']) && empty($newConfig['get_request']['server'])) {
+            $newConfig['get_request']['countdown'] = false;
+            $newConfig['get_request']['processed'] = false;
+            $LogData = [
+                'error' => 'No GET request server entered. Disabled GET request options.',
+                'php' => basename($_SERVER['PHP_SELF']),
+            ];
+            logError($LogData);
+        }
     }
 
     $collageLayout = $newConfig['collage']['layout'];
