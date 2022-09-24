@@ -174,6 +174,7 @@ $config['preview']['videoHeight'] = '720';
 // possible camera_mode values: "user", "environment"
 $config['preview']['camera_mode'] = 'user';
 $config['preview']['asBackground'] = false;
+$config['preview']['showFrame'] = false;
 
 
 // K E Y I N G

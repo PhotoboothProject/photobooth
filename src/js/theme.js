@@ -20,6 +20,8 @@ style.setProperty('--background-chroma', config.background.chroma);
 style.setProperty('--background-url', config.preview.url);
 style.setProperty('--fontSize', config.ui.font_size);
 style.setProperty('--preview-rotation', config.preview.rotation);
+style.setProperty('--picture-frame', config.picture.htmlframe);
+style.setProperty('--collage-frame', config.collage.htmlframe);
 
 $(function () {
     $('#wrapper').show();

@@ -226,6 +226,16 @@ if (empty($config['background']['chroma'])) {
     $config['background']['chroma'] = 'url(' . $bg_url . ')';
 }
 
+if (!empty($config['picture']['frame'])) {
+    $pf_root = getrootpath($config['picture']['frame']);
+    $config['picture']['htmlframe'] = fixSeperator($pf_root);
+}
+
+if (!empty($config['collage']['frame'])) {
+    $cf_root = getrootpath($config['collage']['frame']);
+    $config['collage']['htmlframe'] = fixSeperator($cf_root);
+}
+
 if (empty($config['webserver']['ip'])) {
     $config['webserver']['ip'] = getPhotoboothIp();
 }
