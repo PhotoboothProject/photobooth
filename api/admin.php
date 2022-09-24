@@ -22,16 +22,20 @@ if ($data['type'] == 'reset') {
         $LogData[] = ['remove_images' => 'Removing images'];
         // empty folders
         foreach ($config['foldersAbs'] as $folder) {
-            if (is_dir($folder)) {
-                $files = glob($folder . '/*.jpg');
-                foreach ($files as $file) {
-                    // iterate files
-                    if (is_file($file)) {
-                        // delete file
-                        unlink($file);
-                        $LogData[] = [$file => 'deleted'];
+            if ($folder != $config['foldersAbs']['archives'] && $folder != $config['foldersAbs']['private']) {
+                if (is_dir($folder)) {
+                    $files = glob($folder . '/*.jpg');
+                    foreach ($files as $file) {
+                        // iterate files
+                        if (is_file($file)) {
+                            // delete file
+                            unlink($file);
+                            $LogData[] = [$file => 'deleted'];
+                        }
                     }
                 }
+            } else {
+                $LogData[] = [$folder => 'skipped'];
             }
         }
     }
