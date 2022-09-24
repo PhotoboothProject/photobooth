@@ -9,74 +9,8 @@ $LogData = [
 ];
 
 $data = $_POST;
-if (!isset($data['type'])) {
-    $LogData[] = ['type' => 'ERROR: Unknown action.'];
-    logError($LogData);
-    die(json_encode('error'));
-}
 
-if ($data['type'] == 'reset') {
-    $LogData[] = ['reset' => 'Resetting Photobooth'];
-
-    if ($config['reset']['remove_images']) {
-        $LogData[] = ['remove_images' => 'Removing images'];
-        // empty folders
-        foreach ($config['foldersAbs'] as $folder) {
-            if ($folder != $config['foldersAbs']['archives'] && $folder != $config['foldersAbs']['private']) {
-                if (is_dir($folder)) {
-                    $files = glob($folder . '/*.jpg');
-                    foreach ($files as $file) {
-                        // iterate files
-                        if (is_file($file)) {
-                            // delete file
-                            unlink($file);
-                            $LogData[] = [$file => 'deleted'];
-                        }
-                    }
-                }
-            } else {
-                $LogData[] = [$folder => 'skipped'];
-            }
-        }
-    }
-
-    if ($config['reset']['remove_mailtxt']) {
-        if (is_file(MAIL_FILE)) {
-            unlink(MAIL_FILE); // delete file
-            $LogData[] = [MAIL_FILE => 'deleted'];
-        }
-    }
-
-    if ($config['reset']['remove_config']) {
-        // delete personal config
-        if (is_file('../config/my.config.inc.php')) {
-            unlink('../config/my.config.inc.php');
-            $LogData[] = ['my.config.inc.php' => 'deleted'];
-        }
-    }
-
-    $logFiles = glob($config['foldersAbs']['tmp'] . '/*.log');
-    foreach ($logFiles as $logFile) {
-        // iterate files
-        if (is_file($logFile)) {
-            // delete file
-            unlink($logFile);
-            $LogData[] = [$logFile => 'deleted'];
-        }
-    }
-
-    // delete db.txt
-    if (is_file(DB_FILE)) {
-        // delete file
-        unlink(DB_FILE);
-        $LogData[] = [DB_FILE => 'deleted'];
-    }
-
-    logError($LogData);
-    die(json_encode('success'));
-}
-
-if ($data['type'] == 'config') {
+if (isset($data['type'])) {
     $newConfig = [];
     $LogData[] = ['config' => 'Saving Photobooth configuration'];
 
@@ -226,12 +160,73 @@ if ($data['type'] == 'config') {
         clearCache($my_config_file);
         $LogData[] = ['config' => 'New config saved'];
 
+        if ($data['type'] == 'reset') {
+            $LogData[] = ['reset' => 'Resetting Photobooth'];
+
+            if ($newConfig['reset']['remove_images']) {
+                $LogData[] = ['remove_images' => 'Removing images'];
+                // empty folders
+                foreach ($config['foldersAbs'] as $folder) {
+                    if ($folder != $config['foldersAbs']['archives'] && $folder != $config['foldersAbs']['private']) {
+                        if (is_dir($folder)) {
+                            $files = glob($folder . '/*.jpg');
+                            foreach ($files as $file) {
+                                // iterate files
+                                if (is_file($file)) {
+                                    // delete file
+                                    unlink($file);
+                                    $LogData[] = [$file => 'deleted'];
+                                }
+                            }
+                        }
+                    } else {
+                        $LogData[] = [$folder => 'skipped'];
+                    }
+                }
+            }
+
+            if ($newConfig['reset']['remove_mailtxt']) {
+                if (is_file(MAIL_FILE)) {
+                    unlink(MAIL_FILE); // delete file
+                    $LogData[] = [MAIL_FILE => 'deleted'];
+                }
+            }
+
+            if ($newConfig['reset']['remove_config']) {
+                // delete personal config
+                if (is_file('../config/my.config.inc.php')) {
+                    unlink('../config/my.config.inc.php');
+                    $LogData[] = ['my.config.inc.php' => 'deleted'];
+                }
+            }
+
+            $logFiles = glob($config['foldersAbs']['tmp'] . '/*.log');
+            foreach ($logFiles as $logFile) {
+                // iterate files
+                if (is_file($logFile)) {
+                    // delete file
+                    unlink($logFile);
+                    $LogData[] = [$logFile => 'deleted'];
+                }
+            }
+
+            // delete db.txt
+            if (is_file(DB_FILE)) {
+                // delete file
+                unlink(DB_FILE);
+                $LogData[] = [DB_FILE => 'deleted'];
+            }
+        }
         echo json_encode('success');
     } else {
         $LogData[] = ['config' => 'ERROR: Config can not be saved!'];
 
         echo json_encode('error');
     }
+} else {
+    $LogData[] = ['type' => 'ERROR: Unknown action.'];
+    logError($LogData);
+    die(json_encode('error'));
 }
 logError($LogData);
 
