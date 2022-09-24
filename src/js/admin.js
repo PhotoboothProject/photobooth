@@ -22,7 +22,7 @@ $(function () {
         e.preventDefault();
         const msg = photoboothTools.getTranslation('really_delete');
         const really = confirm(msg);
-        const data = {type: 'reset'};
+        const data = 'type=reset&' + $('form').serialize();
         const elem = $(this);
         elem.addClass('saving');
         if (really) {
