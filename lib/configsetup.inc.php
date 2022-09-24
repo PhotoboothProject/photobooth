@@ -1109,6 +1109,11 @@ $configsetup = [
             'name' => 'preview[asBackground]',
             'value' => $config['preview']['asBackground'],
         ],
+        'preview_showFrame' => [
+            'type' => 'checkbox',
+            'name' => 'preview[showFrame]',
+            'value' => $config['preview']['showFrame'],
+        ],
     ],
     'keying' => [
         'view' => 'advanced',

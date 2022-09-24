@@ -22,7 +22,7 @@ const photoboothPreview = (function () {
         },
         api = {};
 
-    let pid, video, loader, wrapper, url;
+    let pid, video, loader, wrapper, url, pictureFrame, collageFrame;
 
     api.changeVideoMode = function (mode) {
         if (mode === CameraDisplayMode.BACKGROUND) {
@@ -190,6 +190,8 @@ const photoboothPreview = (function () {
             api.stream = null;
         }
         video.hide();
+        pictureFrame.hide();
+        collageFrame.hide();
     };
 
     api.stopPreviewVideo = function () {
@@ -215,12 +217,16 @@ const photoboothPreview = (function () {
         videoSelector = '#video--view',
         loaderSelector = '#loader',
         wrapperSelector = '#wrapper',
-        urlSelector = '#ipcam--view'
+        urlSelector = '#ipcam--view',
+        pictureFrameSelector = '#picture--frame',
+        collageFrameSelector = '#collage--frame'
     ) {
         video = $(videoSelector);
         loader = $(loaderSelector);
         wrapper = $(wrapperSelector);
         url = $(urlSelector);
+        pictureFrame = $(pictureFrameSelector);
+        collageFrame = $(collageFrameSelector);
     };
 
     api.init = function () {

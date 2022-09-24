@@ -20,6 +20,8 @@
   --background-url: none;
   --fontSize: 16px;
   --preview-rotation: 0deg;
+  --picture-frame: none;
+  --collage-frame: none;
 }
 
 $mainColor: var(--primary-color);
@@ -42,3 +44,5 @@ $chromaBackground: var(--background-chroma);
 $urlBackground: var(--background-url);
 $fontSize: var(--fontSize);
 $previewRotation: var(--preview-rotation);
+$pictureFrame: var(--picture-frame);
+$collageFrame: var(--collage-frame);
