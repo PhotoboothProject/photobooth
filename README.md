@@ -195,4 +195,4 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [Moarqi](https://github.com/Moarqi)
 - [kreativmonkey](https://github.com/kreativmonkey)
 - [Khaos66](https://github.com/Khaos66)
-
+- [DJ DT-Sommer](https://dt-sommer.jimdofree.com)
