@@ -1019,15 +1019,15 @@ $configsetup = [
             'options' => [
                 'none' => 'None',
                 'device_cam' => 'from device cam',
+                'start_stop_device_cam' => 'from device cam with start- and stop command',
                 'url' => 'from URL',
-                'gphoto' => 'from gphoto2',
             ],
             'value' => $config['preview']['mode'],
         ],
-        'preview_gphoto_bsm' => [
+        'preview_bsm' => [
             'type' => 'checkbox',
-            'name' => 'preview[gphoto_bsm]',
-            'value' => $config['preview']['gphoto_bsm'],
+            'name' => 'preview[bsm]',
+            'value' => $config['preview']['bsm'],
         ],
         'preview_stop_time' => [
             'type' => 'range',
