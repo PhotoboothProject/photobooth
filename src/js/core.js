@@ -292,7 +292,11 @@ const photoBooth = (function () {
             if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
                 api.stopVideo();
             } else if (config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf()) {
-                api.stopPreviewVideo();
+                if (config.preview.killcmd) {
+                    api.stopPreviewVideo();
+                } else {
+                    api.stopVideo();
+                }
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             ipcamView.removeClass('streaming');
