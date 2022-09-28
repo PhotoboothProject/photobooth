@@ -454,7 +454,7 @@ and add the following lines:
 # Photobooth End
 ```
 
-#####:Solution B
+##### Solution B
 If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.conf` to hide the cursor permanently. Just add `xserver-command=X -nocursor` to the end of the file.
 
 ---
@@ -477,36 +477,50 @@ If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camer
   - [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
 - Admin panel config *"Device cam takes picture"* can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still.
 
-#### Preview _"device cam with start- and stop command"_
+#### Preview from DSLR
 
 By now the DSLR handling of Photobooth on Linux was done exclusively using `gphoto2 CLI` (command line interface). When taking pictures while using preview video from the same camera one command has to be stopped and another one is run after that.
 
-The computer terminates the connection to the camera just to reconnect immediately. Because of that there was an ugly video gap and the noises of the camera could be irritating as stopping the video sounded very similar to taking a picture. But most cameras can shoot quickly from live-view...
+The computer terminates the connection to the camera just to reconnect immediately. Because of that there was an ugly video gap and the noises of the camera could be irritating as stopping the video sounded very similar to taking a picture. But most cameras can shoot quickly from live-view.
 
 The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed using several programming languages. Because of this we can have a python script that handles both preview and taking pictures without terminating the connection to the camera in between.
 
-To try using `gphoto-python`, first execute `install-gphoto-python.sh` if you have not already installed "a service to set up a virtual webcam that gphoto2 can stream video to" while using the Photobooth installer:
+**From Photobooth v4.1.0 a preview from DSLR depends on the _"Preview from device cam"_ config**
+
+To use `gphoto-python`, first execute the `install-gphoto-python.sh` if you have not already installed "a service to set up a virtual webcam that gphoto2 can stream video to" while using the Photobooth installer on initial installation:
 
 ```sh
 wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/gphoto/install-gphoto-python.sh
 sudo bash install-gphoto-python.sh
 ```
 
-After that just change your commands to use the python script. For Live preview use:
+Change your Photobooth configuration:
 
+- _"Live Preview_": _"Preview Mode"_: _"from device cam"_
+- _"Live Preview_": _"Execute start command for preview on take picture/collage"_:
+  - if **enabled**:
+    _"Commands"_: _"Command to generate a live preview"_: `python3 cameracontrol.py --bsm`
+  - if **disabled**:
+    _"Commands"_: _"Command to generate a live preview"_: `python3 cameracontrol.py`
+- _"Commands"_: _"Take picture command"_: `python3 cameracontrol.py --capture-image-and-download %s`
+
+
+**Further information**:
+
+The _"Command to generate a live preview"_ is only executed if the _"Preview Mode"_ is set to _"from device cam"_.
+ 
+There's no need to define the _"Command to kill live preview"_ while using the _cameracontrol.py_, so just empty that field. The _"Command to kill live preview"_ is only executed if defined.
+
+If you want to use the DSLR view as background video, enable _"Use stream for live preview as background"_ and disable the _"Execute start command for preview on take picture/collage"_ setting of Photobooth, which is enabled by default.
+
+
+If you don't want to use the DSLR view as background video enable the _Execute start command for preview on take picture/collage_ setting of Photobooth and make sure `--bsm` was added to the preview command.
+
+```sh
+python3 cameracontrol.py --bsm
 ```
-python3 cameracontrol.py
-```
+If _Execute start command for preview on take picture/collage_ is enabled, the preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting for the next photo.
 
-And for the take picture command:
-
-```
-python3 cameracontrol.py --capture-image-and-download %s
-```
-
-There's no need for a command to end the live preview. So just empty that field.
-
-If you want to use the DSLR view as background video disable the _Execute start command for preview on take picture/collage_ setting of Photobooth, which is enabled by default.
 
 As you possibly noticed the params of the script are designed to be similar to the ones of `gphoto2 CLI` but with some shortcuts like `-c` for `--capture-image-and-download`. If you want to know more check out the help of the script by running:
 
@@ -526,14 +540,6 @@ If you want to keep your images on the camera you need to use the same `capturet
 python3 cameracontrol.py --set-config capturetarget=1
 ```
 
-If you don't want to use the DSLR view as background video enable the _Execute start command for preview on take picture/collage_ setting of Photobooth and add `--bsm` to the preview command.
-
-```sh
-python3 cameracontrol.py --bsm
-```
-
-The preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting for the next photo.
-
 
 If you get errors from Photobooth and want to get more information try to run the preview command manually. The script is in Photobooth's `api` folder. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
 
@@ -545,10 +551,9 @@ In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` f
 **Note**
 
 - Liveview **must** be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
-- Give permissions to /dev/video* `sudo gpasswd -a www-data video` (this was done automatically if you used the installation script) and reboot once
-- Admin panel config *"Preview mode"*: `from device cam with start- and stop command`
-- Requires Photobooth v4.0.0 or later!
-- You need to access Photobooth directly via [http://localhost](http://localhost), you won't be able to see the preview on a different device (e.g. Tablet)
+- Give permissions to /dev/video*: `sudo gpasswd -a www-data video` (this was done automatically if you used the installation script) and reboot once.
+- Requires Photobooth v4.1.0 or later! (Instructions for older versions have been removed from the FAQ, but an FAQ with instructions matching your installed Photobooth version can always be found at [http://localhost/faq](http://localhost/faq)).
+- You need to access Photobooth directly via [http://localhost](http://localhost), you won't be able to see the preview on a different device (e.g. Tablet).
 - There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Execute start command for preview on take picture/collage` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
 - Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. `sudo rmmod bcm2835-isp`.
 - Make sure the countdown is long enough to start the preview, for best user experience the countdown should be set at least to 8 seconds.
@@ -814,4 +819,3 @@ To remote access CUPS from other clients you need to run the following commands:
 sudo cupsctl --remote-any
 sudo /etc/init.d/cups restart
 ```
-
