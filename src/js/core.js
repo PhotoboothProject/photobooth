@@ -14,7 +14,6 @@ const photoBooth = (function () {
         PreviewMode = {
             NONE: 'none',
             DEVICE: 'device_cam',
-            START_STOP_DEVICE: 'start_stop_device_cam',
             URL: 'url'
         };
 
@@ -60,8 +59,8 @@ const photoBooth = (function () {
         videoSensor = document.querySelector('#video--sensor'),
         usesBackgroundPreview =
             config.preview.asBackground &&
-            (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
-                (config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf() && !config.preview.bsm)),
+            config.preview.mode === PreviewMode.DEVICE.valueOf() &&
+            ((config.preview.cmd && !config.preview.bsm) || !config.preview.cmd),
         cheeseTime = config.picture.no_cheese ? 0 : config.picture.cheese_time,
         timeToLive = config.picture.time_to_live * 1000,
         continuousCollageTime = config.collage.continuous_time * 1000,
@@ -125,7 +124,7 @@ const photoBooth = (function () {
         startPage.addClass('open');
         if (usesBackgroundPreview) {
             api.startVideo(CameraDisplayMode.BACKGROUND);
-        } else if (config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf() && !config.preview.bsm) {
+        } else if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
             api.startVideo(CameraDisplayMode.INIT);
         }
 
@@ -194,7 +193,7 @@ const photoBooth = (function () {
             })
             .catch(function (error) {
                 photoboothTools.console.log('Could not get user media: ', error);
-                if (config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf() && retry < 3) {
+                if (config.preview.cmd && retry < 3) {
                     photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
                     retry += 1;
                     setTimeout(function () {
@@ -242,7 +241,7 @@ const photoBooth = (function () {
                 api.startWebcam();
                 break;
             case CameraDisplayMode.BACKGROUND:
-                if (config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf() && !config.preview.bsm) {
+                if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
                     api.startWebcam();
                 }
                 api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
@@ -254,11 +253,10 @@ const photoBooth = (function () {
                         break;
                     case PreviewMode.DEVICE.valueOf():
                         photoboothTools.console.logDev('Preview at countdown from device cam.');
-                        api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
-                        break;
-                    case PreviewMode.START_STOP_DEVICE.valueOf():
-                        photoboothTools.console.logDev('Preview at countdown from gphoto.');
-                        if (config.preview.bsm || (!config.preview.bsm && retry > 0) || nextCollageNumber > 0) {
+                        if (
+                            config.preview.cmd &&
+                            (config.preview.bsm || (!config.preview.bsm && retry > 0) || nextCollageNumber > 0)
+                        ) {
                             api.startWebcam();
                         }
                         api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
@@ -280,18 +278,13 @@ const photoBooth = (function () {
     };
 
     api.stopPreviewAndCaptureFromVideo = function () {
-        if (
-            config.preview.mode === PreviewMode.DEVICE.valueOf() ||
-            config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf()
-        ) {
+        if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
             if (config.preview.camTakesPic && !config.dev.demo_images) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
             if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
-                api.stopVideo();
-            } else if (config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf()) {
                 if (config.preview.killcmd) {
                     api.stopPreviewVideo();
                 } else {
@@ -432,8 +425,7 @@ const photoBooth = (function () {
             counter,
             () => {
                 if (
-                    (config.preview.mode === PreviewMode.DEVICE.valueOf() ||
-                        config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf()) &&
+                    config.preview.mode === PreviewMode.DEVICE.valueOf() &&
                     config.preview.camTakesPic &&
                     !api.stream &&
                     !config.dev.demo_images
@@ -904,7 +896,7 @@ const photoBooth = (function () {
 
         api.resetTimeOut();
 
-        if (config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf() && !config.preview.bsm) {
+        if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
             api.startVideo(CameraDisplayMode.INIT);
         }
     };
@@ -1009,7 +1001,7 @@ const photoBooth = (function () {
             }
             if (
                 config.preview.killcmd &&
-                config.preview.mode === PreviewMode.START_STOP_DEVICE.valueOf() &&
+                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
                 !config.preview.camTakesPic &&
                 count === stop
             ) {

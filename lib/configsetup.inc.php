@@ -1019,7 +1019,6 @@ $configsetup = [
             'options' => [
                 'none' => 'None',
                 'device_cam' => 'from device cam',
-                'start_stop_device_cam' => 'from device cam with start- and stop command',
                 'url' => 'from URL',
             ],
             'value' => $config['preview']['mode'],
@@ -2175,7 +2174,7 @@ $configsetup = [
         'preview_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['preview']['cmd'],
+            'placeholder' => 'python3 cameracontrol.py --bsm',
             'name' => 'preview[cmd]',
             'value' => htmlentities($config['preview']['cmd'] ?? ''),
         ],

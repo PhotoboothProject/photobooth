@@ -22,10 +22,6 @@ $cmds = [
             'cmd' => '',
             'msg' => '',
         ],
-        'preview' => [
-            'cmd' => '',
-            'killcmd' => '',
-        ],
         'nodebin' => [
             'cmd' => '',
         ],
@@ -48,10 +44,6 @@ $cmds = [
         'exiftool' => [
             'cmd' => 'exiftool -overwrite_original -TagsFromFile %s %s',
             'msg' => '',
-        ],
-        'preview' => [
-            'cmd' => 'python3 cameracontrol.py --bsm',
-            'killcmd' => '',
         ],
         'nodebin' => [
             'cmd' => '/usr/bin/node',
@@ -100,8 +92,6 @@ $config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
 $config['print']['msg'] = $cmds[SERVER_OS]['print']['msg'];
 $config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];
 $config['exiftool']['msg'] = $cmds[SERVER_OS]['exiftool']['msg'];
-$config['preview']['cmd'] = $cmds[SERVER_OS]['preview']['cmd'];
-$config['preview']['killcmd'] = $cmds[SERVER_OS]['preview']['killcmd'];
 $config['nodebin']['cmd'] = $cmds[SERVER_OS]['nodebin']['cmd'];
 $config['reboot']['cmd'] = $cmds[SERVER_OS]['reboot']['cmd'];
 $config['shutdown']['cmd'] = $cmds[SERVER_OS]['shutdown']['cmd'];
@@ -176,6 +166,10 @@ foreach ($config['folders'] as $key => $folder) {
 
     $path = realpath($path);
     $config['foldersAbs'][$key] = $path;
+}
+
+if ($config['preview']['mode'] === 'gphoto') {
+    $config['preview']['mode'] = 'device_cam';
 }
 
 $default_font = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
