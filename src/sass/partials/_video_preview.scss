@@ -1,4 +1,6 @@
-#video--view {
+#video--view,
+#picture--frame,
+#collage--frame {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate($previewRotation);
@@ -27,6 +29,15 @@
     transform: translate(-50%, -50%) rotate($previewRotation) scaleY(-1);
   }
   z-index: 0;
+}
+
+#picture--frame,
+#collage--frame {
+  display: none;
+  z-index: 100;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 #ipcam--view {
@@ -60,26 +71,4 @@
   -webkit-transform: scaleY(-1);
   transform: scaleY(-1);
   filter: FlipV;
-}
-
-#picture--frame,
-#collage--frame {
-  display: none;
-  object-fit: contain;
-  z-index: 100;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate($previewRotation);
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  &.flip-horizontal {
-    transform: translate(-50%, -50%) rotate($previewRotation) scalex(-1);
-  }
-  &.flip-vertical {
-    transform: translate(-50%, -50%) rotate($previewRotation) scaleY(-1);
-  }
 }
