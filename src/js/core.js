@@ -1266,6 +1266,14 @@ const photoBooth = (function () {
         });
     }
 
+    idVideoView.on('loadedmetadata', function (ev) {
+        let videoEl = ev.target;
+        pictureFrame.css('width', videoEl.videoWidth);
+        pictureFrame.css('height', videoEl.videoHeight);
+        collageFrame.css('width', videoEl.videoWidth);
+        collageFrame.css('height', videoEl.videoHeight);
+    });
+
     return api;
 })();
 
