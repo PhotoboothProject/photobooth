@@ -38,9 +38,9 @@ $btnClass = 'btn ' . $btnShape;
 
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="resources/css/welcome.css" />
+	<link rel="stylesheet" href="resources/css/welcome.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("private/overrides.css")): ?>
-	<link rel="stylesheet" href="private/overrides.css" />
+	<link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php endif; ?>
 </head>
 
@@ -83,7 +83,7 @@ $btnClass = 'btn ' . $btnShape;
 
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="api/config.php"></script>
-	<script type="text/javascript" src="resources/js/theme.js"></script>
+	<script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 </body>
 </html>

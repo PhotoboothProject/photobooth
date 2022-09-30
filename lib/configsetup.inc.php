@@ -84,6 +84,13 @@ $configsetup = [
             ],
             'value' => $config['ui']['language'],
         ],
+        'ui_folders_lang' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['ui']['folders_lang'],
+            'name' => 'ui[folders_lang]',
+            'value' => $config['ui']['folders_lang'],
+        ],
         'translate' => [
             'view' => 'basic',
             'type' => 'button',
@@ -110,12 +117,13 @@ $configsetup = [
             'value' => $config['adminpanel']['view_default'],
         ],
         'dev_demo_images' => [
-            'view' => 'expert',
+            'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'dev[demo_images]',
             'value' => $config['dev']['demo_images'],
         ],
         'dev_loglevel' => [
+            'view' => 'basic',
             'type' => 'range',
             'placeholder' => $defaultConfig['dev']['loglevel'],
             'name' => 'dev[loglevel]',
@@ -132,30 +140,34 @@ $configsetup = [
             'value' => $config['dev']['logfile'],
         ],
         'dev_debugpanel' => [
-            'view' => 'expert',
+            'view' => 'basic',
             'type' => 'button',
             'placeholder' => 'dev_debugpanel',
             'name' => 'DEBUGPANEL',
             'value' => 'debugpanel-btn',
         ],
         'start_screen_title' => [
+            'view' => 'basic',
             'type' => 'input',
             'placeholder' => $defaultConfig['start_screen']['title'],
             'name' => 'start_screen[title]',
             'value' => htmlentities($config['start_screen']['title'] ?? ''),
         ],
         'start_screen_title_visible' => [
+            'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'start_screen[title_visible]',
             'value' => $config['start_screen']['title_visible'],
         ],
         'start_screen_subtitle' => [
+            'view' => 'basic',
             'type' => 'input',
             'placeholder' => $defaultConfig['start_screen']['subtitle'],
             'name' => 'start_screen[subtitle]',
             'value' => htmlentities($config['start_screen']['subtitle'] ?? ''),
         ],
         'start_screen_subtitle_visible' => [
+            'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'start_screen[subtitle_visible]',
             'value' => $config['start_screen']['subtitle_visible'],
@@ -711,6 +723,13 @@ $configsetup = [
             'name' => 'collage[frame]',
             'value' => htmlentities($config['collage']['frame'] ?? ''),
         ],
+        'collage_background' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['collage']['background'],
+            'name' => 'collage[background]',
+            'value' => htmlentities($config['collage']['background'] ?? ''),
+        ],
         'collage_placeholder' => [
             'view' => 'expert',
             'type' => 'checkbox',
@@ -1001,14 +1020,13 @@ $configsetup = [
                 'none' => 'None',
                 'device_cam' => 'from device cam',
                 'url' => 'from URL',
-                'gphoto' => 'from gphoto2',
             ],
             'value' => $config['preview']['mode'],
         ],
-        'preview_gphoto_bsm' => [
+        'preview_bsm' => [
             'type' => 'checkbox',
-            'name' => 'preview[gphoto_bsm]',
-            'value' => $config['preview']['gphoto_bsm'],
+            'name' => 'preview[bsm]',
+            'value' => $config['preview']['bsm'],
         ],
         'preview_stop_time' => [
             'type' => 'range',
@@ -2156,7 +2174,7 @@ $configsetup = [
         'preview_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['preview']['cmd'],
+            'placeholder' => 'python3 cameracontrol.py --bsm',
             'name' => 'preview[cmd]',
             'value' => htmlentities($config['preview']['cmd'] ?? ''),
         ],
@@ -2246,6 +2264,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['folders']['archives'],
             'name' => 'folders[archives]',
             'value' => $config['folders']['archives'],
+        ],
+        'folders_private' => [
+            'view' => 'expert',
+            'type' => 'hidden',
+            'placeholder' => $defaultConfig['folders']['private'],
+            'name' => 'folders[private]',
+            'value' => $config['folders']['private'],
         ],
         'folders_config' => [
             'view' => 'expert',

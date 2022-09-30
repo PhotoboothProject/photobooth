@@ -49,9 +49,9 @@ $uiShape = 'shape--' . $config['ui']['style'];
 
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
-		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css" />
+		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>" />
 		<?php if (is_file("private/overrides.css")): ?>
-		<link rel="stylesheet" href="private/overrides.css" />
+		<link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
 		<?php endif; ?>
 	</head>
 <body data-main-image="<?=$mainimage?>">
@@ -97,7 +97,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		</div>
 	</div>
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
-	<script type="text/javascript" src="api/config.php"></script>
+	<script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<?php if ($config['keying']['variant'] === 'marvinj'): ?>
 	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
@@ -105,12 +105,12 @@ $uiShape = 'shape--' . $config['ui']['style'];
 	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
 	<script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
 	<?php endif; ?>
-	<script type="text/javascript" src="resources/js/tools.js"></script>
-	<script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
-	<script type="text/javascript" src="resources/js/chromakeying.js"></script>
-	<script type="text/javascript" src="resources/js/theme.js"></script>
+	<script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/chromakeying.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="resources/js/i18n.js"></script>
+	<script type="text/javascript" src="resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 	<?php require_once('lib/services_start.php'); ?>
 </body>

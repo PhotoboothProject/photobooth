@@ -14,9 +14,9 @@ _(The full changelog can be found on [https://photoboothproject.github.io](https
 [![Translate on Crowdin](https://img.shields.io/badge/Traslate%20on-Crowdin-green.svg)](https://crowdin.com/project/photobooth)  
 
 _Latest stable release:_  
-[![Lint](https://github.com/PhotoboothProject/photobooth/workflows/Lint/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3ALint)
-[![gulp-sass](https://github.com/PhotoboothProject/photobooth/workflows/gulp-sass/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3Agulp-sass)
-[![Build](https://github.com/PhotoboothProject/photobooth/workflows/Build/badge.svg?branch=stable3)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable3+workflow%3ABuild)
+[![Lint](https://github.com/PhotoboothProject/photobooth/workflows/Lint/badge.svg?branch=stable4)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable4+workflow%3ALint)
+[![gulp-sass](https://github.com/PhotoboothProject/photobooth/workflows/gulp-sass/badge.svg?branch=stable4)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable4+workflow%3Agulp-sass)
+[![Build](https://github.com/PhotoboothProject/photobooth/workflows/Build/badge.svg?branch=stable4)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Astable4+workflow%3ABuild)
 
 _Latest development version:_  
 [![Lint](https://github.com/PhotoboothProject/photobooth/workflows/Lint/badge.svg?branch=dev)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Adev+workflow%3ALint)
@@ -195,4 +195,4 @@ If you like my work and like to keep me motivated you can buy me a coconut water
 - [Moarqi](https://github.com/Moarqi)
 - [kreativmonkey](https://github.com/kreativmonkey)
 - [Khaos66](https://github.com/Khaos66)
-
+- [DJ DT-Sommer](https://dt-sommer.jimdofree.com)

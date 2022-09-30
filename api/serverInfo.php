@@ -32,6 +32,10 @@ switch ($content) {
         echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['dev']['logfile'], null);
         break;
 
+    case 'nav-installlog':
+        echo dumpfile($config['foldersAbs']['private'] . '/install.log', null);
+        break;
+
     case 'nav-githead':
         $get_head = shell_exec('git rev-parse --is-inside-work-tree 2>/dev/null && git log --format="%h %s" -n 20 || false');
         $file_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'HEAD';

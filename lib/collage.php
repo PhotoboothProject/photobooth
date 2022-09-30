@@ -11,6 +11,7 @@ define('COLLAGE_LAYOUT', $config['collage']['layout']);
 define('COLLAGE_RESOLUTION', (int) substr($config['collage']['resolution'], 0, -3));
 define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
 define('COLLAGE_FRAME', $config['collage']['frame']);
+define('COLLAGE_BACKGROUND', $config['collage']['background']);
 define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
 define('COLLAGE_PLACEHOLDER', $config['collage']['placeholder']);
 // If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
@@ -143,8 +144,15 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     $collage_width = $collage_height * 1.5;
 
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);
-    $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
-    imagefill($my_collage, 0, 0, $background);
+    if (testFile(COLLAGE_BACKGROUND)) {
+        $backgroundImage = imagecreatefrompng(COLLAGE_BACKGROUND);
+        $backgroundImage = resizePngImage($backgroundImage, $collage_width, $collage_height);
+        imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
+    } else {
+        $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+        imagefill($my_collage, 0, 0, $background);
+    }
+
     if ($landscape == false) {
         $rotate_after_creation = true;
     }
@@ -580,7 +588,11 @@ function addPicture($my_collage, $filename, $pictureOptions) {
     }
 
     if ($degrees != 0) {
-        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, COLLAGE_BACKGROUND_COLOR);
+        $backgroundColor = COLLAGE_BACKGROUND_COLOR;
+        if (testFile(COLLAGE_BACKGROUND)) {
+            $backgroundColor = '#0000007f';
+        }
+        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, $backgroundColor);
         if (abs($degrees) != 90) {
             $width = intval(imagesx($tempSubImage));
             $height = intval(imagesy($tempSubImage));

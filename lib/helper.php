@@ -102,3 +102,9 @@ function testFile($file) {
     }
     return true;
 }
+
+function getPhotoboothVersion() {
+    $packageContent = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'package.json');
+    $package = json_decode($packageContent, true);
+    return $package['version'];
+}

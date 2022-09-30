@@ -51,12 +51,12 @@ if (
     <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css"/>
     <link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css"/>
     <link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css"/>
-    <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_live_chromakeying.css"/>
+    <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_live_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php if ($config['gallery']['bottom_bar']): ?>
-        <link rel="stylesheet" href="resources/css/photoswipe-bottom.css"/>
+        <link rel="stylesheet" href="resources/css/photoswipe-bottom.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php endif; ?>
     <?php if (is_file("private/overrides.css")): ?>
-        <link rel="stylesheet" href="private/overrides.css"/>
+        <link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php endif; ?>
 </head>
 
@@ -145,24 +145,24 @@ if (
         </div>
 
         <script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
-        <script type="text/javascript" src="api/config.php"></script>
+        <script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
         <script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
-        <script type="text/javascript" src="resources/js/tools.js"></script>
-        <script type="text/javascript" src="resources/js/photoinit.js"></script>
-        <script type="text/javascript" src="resources/js/core.js"></script>
+        <script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/photoinit.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <?php if ($config['keying']['variant'] === 'marvinj'): ?>
             <script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
         <?php else: ?>
             <script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
             <script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
         <?php endif; ?>
-        <script type="text/javascript" src="resources/js/livechroma.js"></script>
-        <script type="text/javascript" src="resources/js/remotebuzzer_client.js"></script>
-        <script type="text/javascript" src="resources/js/theme.js"></script>
+        <script type="text/javascript" src="resources/js/livechroma.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-        <script type="text/javascript" src="resources/js/i18n.js"></script>
+        <script type="text/javascript" src="resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
         <?php require_once('lib/services_start.php'); ?>
 

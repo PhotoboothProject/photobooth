@@ -9,6 +9,7 @@ $config = array();
 // G E N E R A L
 // possible language values: de, en, fr, it
 $config['ui']['language'] = 'en';
+$config['ui']['folders_lang'] = '';
 $config['adminpanel']['view'] = 'basic';
 $config['dev']['loglevel'] = '1';
 $config['dev']['demo_images'] = false;
@@ -108,6 +109,7 @@ $config['collage']['frame'] = '';
 $config['collage']['placeholder'] = false;
 $config['collage']['placeholderposition'] = '1';
 $config['collage']['placeholderpath'] = '';
+$config['collage']['background'] = '';
 $config['textoncollage']['enabled'] = true;
 $config['textoncollage']['line1'] = 'Photobooth';
 $config['textoncollage']['line2'] = '   we love';
@@ -156,9 +158,9 @@ $config['pswp']['bgOpacity'] = 1;
 
 // P R E V I E W
 // Please read https://photoboothproject.github.io/FAQ#how-to-use-a-live-stream-as-background-at-countdown
-// possible preview_mode values: none, device_cam, url, gphoto
+// possible preview_mode values: none, device_cam, url
 $config['preview']['mode'] = 'none';
-$config['preview']['gphoto_bsm'] = true;
+$config['preview']['bsm'] = true;
 $config['preview']['stop_time'] = '2';
 $config['preview']['camTakesPic'] = false;
 $config['preview']['style'] = 'scale-down';
@@ -370,7 +372,7 @@ $config['folders']['qrcodes'] = 'qrcodes';
 $config['folders']['thumbs'] = 'thumbs';
 $config['folders']['tmp'] = 'tmp';
 $config['folders']['archives'] = 'archives';
-
+$config['folders']['private'] = 'private';
 
 // R E S E T
 $config['reset']['remove_images'] = true;

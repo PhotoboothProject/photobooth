@@ -13,7 +13,7 @@ IPADDRESS=$(hostname -I | cut -d " " -f 1)
 if [ ! -d "/tmp/photobooth" ]; then
     mkdir -p "/tmp/photobooth"
 fi
-PHOTOBOOTH_LOG="/tmp/photobooth/$DATE-photobooth.log"
+PHOTOBOOTH_TMP_LOG="/tmp/photobooth/$DATE-photobooth.log"
 
 BRANCH="dev"
 GIT_INSTALL=true
@@ -26,7 +26,7 @@ SETUP_CUPS=false
 GPHOTO_PREVIEW=true
 CUPS_REMOTE_ANY=false
 WEBBROWSER="unknown"
-KIOSK_FLAG="--kiosk http://127.0.0.1"
+KIOSK_FLAG="--kiosk http://localhost"
 CHROME_FLAGS=false
 CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
@@ -35,7 +35,7 @@ PHP_VERSION="7.4"
 
 # Update
 RUN_UPDATE=false
-BACKUPBRANCH=""
+BACKUPBRANCH="backup-$DATE"
 PHOTOBOOTH_FOUND=false
 PHOTOBOOTH_PATH=(
         '/var/www/html'
@@ -78,17 +78,17 @@ INSTALL_PACKAGES=()
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
-    echo "${1}" >> "$PHOTOBOOTH_LOG"
+    echo "${1}" >> "$PHOTOBOOTH_TMP_LOG"
 }
 
 function warn {
     echo -e "\033[0;33m${1}\033[0m"
-    echo "WARN: ${1}" >> "$PHOTOBOOTH_LOG"
+    echo "WARN: ${1}" >> "$PHOTOBOOTH_TMP_LOG"
 }
 
 function error {
     echo -e "\033[0;31m${1}\033[0m"
-    echo "ERROR: ${1}" >> "$PHOTOBOOTH_LOG"
+    echo "ERROR: ${1}" >> "$PHOTOBOOTH_TMP_LOG"
 }
 
 print_spaces() {
@@ -174,8 +174,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
 
          -update,     --update      Try updating Photobooth via git.
 
-    -u,  -username,   --username    Enter your OS username you like to use Photobooth
-                                    on (Raspberry Pi only)
+    -u,  -username,   --username    Always required. Enter your OS username you like to use Photobooth on.
 
     -V,  -verbose,    --verbose     Run script in verbose mode.
 
@@ -610,6 +609,28 @@ start_install() {
     fi
 }
 
+detect_browser() {
+    if [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="chromium-browser"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-stable" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome-stable"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-beta" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="google-chrome-beta"
+        CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="firefox"
+        CHROME_FLAGS=false
+    else
+        WEBBROWSER="unknown"
+        CHROME_FLAGS=false
+    fi
+}
+
 browser_shortcut() {
     if [ "$CHROME_FLAGS" = true ]; then
         if [ "$RUNNING_ON_PI" = true ]; then
@@ -636,35 +657,50 @@ browser_shortcut() {
     echo "Terminal=false" >> "$AUTOSTART_FILE"
 }
 
-
-pi_camera() {
-    cat > $INSTALLFOLDERPATH/config/my.config.inc.php << EOF
-<?php
-\$config = array (
-  'take_picture' =>
-  array (
-    'cmd' => 'libcamera-still -n -o %s -q 100 -t 1 | echo "Done"',
-    'msg' => 'Done',
-  ),
-);
-EOF
-}
-
-raspberry_permission() {
-    if [ "$WEBBROWSER" != "unknown" ]; then
+browser_desktop_shortcut() {
+    if [ -d "/home/$USERNAME/Desktop" ] && [ ! -z $USERNAME ]; then
         info "### Adding photobooth shortcut to Desktop"
-        if [ ! -d "/home/$USERNAME/Desktop" ]; then
-            mkdir -p /home/$USERNAME/Desktop
-            chown -R $USERNAME:$USERNAME /home/$USERNAME/Desktop
-        fi
         AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
         browser_shortcut
         chmod +x /home/$USERNAME/Desktop/photobooth.desktop
         chown $USERNAME:$USERNAME /home/$USERNAME/Desktop/photobooth.desktop
-    else
-        info "### Browser unknown or not installed. Can not add shortcut to Desktop."
     fi
+}
 
+browser_autostart() {
+    AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
+    browser_shortcut
+}
+
+ask_kiosk_mode() {
+    echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
+    ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        KIOSK_MODE=true
+        info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
+    else
+        KIOSK_MODE=false
+        info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
+    fi
+}
+
+ask_hide_mouse() {
+    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
+    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        HIDE_MOUSE=true
+        EXTRA_PACKAGES+=('unclutter')
+        info "### We will hide the mouse cursor on every start and disable the screen saver."
+    else
+        HIDE_MOUSE=false
+        info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
+    fi
+}
+
+raspberry_permission() {
     info "### Remote Buzzer Feature"
     info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
     usermod -a -G gpio www-data
@@ -687,10 +723,9 @@ EOF
         sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' $INSTALLFOLDERPATH/config/my.config.inc.php
     fi
 
-    if [ "$USB_SYNC" = true ]; then
-        if [ "$DESKTOP_OS" = true ]; then
+    if [ "$RUN_UPDATE" = false ]; then
+        if [ "$USB_SYNC" = true ] && [ "$DESKTOP_OS" = true ]; then
             info "### Disabling automount for user $USERNAME."
-
             mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
             cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
@@ -731,10 +766,8 @@ general_permissions() {
     mkdir -p "/var/www/.cache"
     chown -R www-data:www-data "/var/www/.cache"
 
-    if [ -f "/usr/lib/gvfs/gvfs-gphoto2-volume-monitor" ]; then
-        info "### Disabling camera automount."
-        chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
-    fi
+    info "### Disabling camera automount."
+    chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor || true
 
     # Add configuration required for www-data to be able to initiate system shutdown / reboot
     info "### Note: In order for the shutdown and reboot button to work we install /etc/sudoers.d/020_www-data-shutdown"
@@ -744,18 +777,10 @@ www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
 }
 
-kioskbooth_desktop() {
-    if [ "$KIOSK_MODE" = true ]; then
-        AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
-        browser_shortcut
-    else
-        info "### lxde is not installed. Can not setup Photobooth in KIOSK-Mode."
+hide_mouse() {
+    if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
+        sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
     fi
-
-    if [ "$HIDE_MOUSE" = true ]; then
-        if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
-            sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
-        fi
 
 cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth
@@ -771,7 +796,6 @@ cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth End
 
 EOF
-fi
 }
 
 cups_setup() {
@@ -821,14 +845,27 @@ fix_git_modules() {
 
 commit_git_changes() {
     cd $INSTALLFOLDERPATH
-
+    CHANGES_DETECTED=false
     fix_git_modules
+
+    if [ -z "$(git config user.name)" ]; then
+        warn "WARN: git user.name not set!"
+        info "### Setting git user.name."
+        $(git config user.name Photobooth)
+    fi
+
+    if [ -z "$(git config user.email)" ]; then
+        warn "WARN: git user.email not set!"
+        info "### Setting git user.email."
+        $(git config user.email Photobooth@localhost)
+    fi
+
+    echo "git user.name: $(git config user.name)"
+    echo "git user.email: $(git config user.email)"
 
     if [ -z "$(git status --porcelain)" ]; then
         info "### Nothing to commit."
     else
-        BACKUPBRANCH="backup-$DATE"
-
         echo -e "\033[0;33m### Uncommited changes detected. Continue update? [y/N]"
         echo -e "### NOTE: If typing y, your changes will be commited and will be kept"
         echo -e "          inside a local branch ($BACKUPBRANCH)."
@@ -837,25 +874,9 @@ commit_git_changes() {
         echo -e "\033[0m"
         if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
             info "### We will commit your changes and keep them inside a local backup branch."
-            if [ -z "$(git config user.name)" ]; then
-                warn "WARN: git user.name not set!"
-                info "### Setting git user.name."
-                $(git config user.name Photobooth)
-            fi
-
-            if [ -z "$(git config user.email)" ]; then
-                warn "WARN: git user.email not set!"
-                info "### Setting git user.email."
-                $(git config user.email Photobooth@localhost)
-            fi
-
-            echo "git user.name: $(git config user.name)"
-            echo "git user.email: $(git config user.email)"
-
+            CHANGES_DETECTED=true
             git add --all
             git commit -a -m "backup changes"
-            git checkout -b $BACKUPBRANCH
-            info "### Backup done to branch: $BACKUPBRANCH"
             git format-patch -1
         else
             error "ERROR: Uncommited changes detected. Please commit your changes."
@@ -866,6 +887,9 @@ commit_git_changes() {
             exit
         fi
     fi
+
+    git checkout -b $BACKUPBRANCH
+    info "### Backup done to branch: $BACKUPBRANCH"
 }
 
 detect_photobooth_install() {
@@ -883,41 +907,6 @@ detect_photobooth_install() {
     done
 }
 
-start_update() {
-    detect_photobooth_install
-    if [ "$PHOTOBOOTH_FOUND" = true ]; then
-        check_git_install
-    fi
-    if [ "$GIT_INSTALL" = true ]; then
-        common_software
-        commit_git_changes
-        start_git_install
-        general_permissions
-        fix_git_modules
-        print_spaces
-        print_logo
-        info "###"
-        if [ ! -z $BACKUPBRANCH ]; then
-            if [ "$PATCH_SUCCESS" = true ]; then
-                info "### Your uncommited changes have been applied successfully!"
-            else
-                error "### Uncommited changes couldn't be applied automatically!"
-            fi
-            info "### Backup done to branch: $BACKUPBRANCH"
-        fi
-        info "###"
-        info "### Update completed!"
-        info "###"
-        info "### Please clear your Browser Cache to"
-        info "### avoid graphical issues."
-        info "###"
-        info "### Have fun with your Photobooth!"
-    else
-         error "ERROR: Can not Update!"
-    fi
-    exit
-}
-
 ############################################################
 #                                                          #
 # General checks before the installation process can start #
@@ -928,6 +917,15 @@ if [ $UID != 0 ]; then
     error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
 fi
+
+if [ ! -z $USERNAME ]; then
+    check_username
+else
+    error "ERROR: An valid OS username is needed! Please re-run the installer."
+    view_help
+    exit
+fi
+print_spaces
 
 if [ "$FORCE_RASPBERRY_PI" = false ]; then
     if [ ! -f /proc/device-tree/model ]; then
@@ -959,7 +957,75 @@ fi
 ############################################################
 
 if [ "$RUN_UPDATE" = true ]; then
-    start_update
+    detect_photobooth_install
+
+    if [ "$PHOTOBOOTH_FOUND" = true ]; then
+        check_git_install
+    else
+        error "ERROR: Photobooth installation not found!"
+        exit
+    fi
+
+    if [ "$GIT_INSTALL" = true ]; then
+        detect_browser
+        if [ -d "/etc/xdg/autostart" ] && [ "$WEBBROWSER" != "unknown" ]; then
+            ask_kiosk_mode
+        else
+            warn "### No supported webbrowser found!"
+        fi
+        print_spaces
+
+# Pi specific setup start
+        if [ "$RUNNING_ON_PI" = true ] && [ "$DESKTOP_OS" = true ]; then
+            ask_hide_mouse
+        else
+            info "### lxde is not installed. Can not hide the mouse cursor on every start."
+        fi
+        print_spaces
+# Pi specific setup end
+        common_software
+        commit_git_changes
+        start_git_install
+        general_permissions
+        if [ "$RUNNING_ON_PI" = true ]; then
+            raspberry_permission
+        fi
+        fix_git_modules
+        if [ "$WEBBROWSER" != "unknown" ]; then
+            browser_desktop_shortcut
+            if [ "$KIOSK_MODE" = true ]; then
+                browser_autostart
+            fi
+        else
+            info "### Browser unknown or not installed. Can not add shortcut to Desktop."
+        fi
+        if [ "$HIDE_MOUSE" = true ] ; then
+            hide_mouse
+        fi
+        print_spaces
+        print_logo
+        info "###"
+        if [ "$CHANGES_DETECTED" = true ]; then
+            if [ "$PATCH_SUCCESS" = true ]; then
+                info "### Your uncommited changes have been applied successfully!"
+            else
+                error "### Uncommited changes couldn't be applied automatically!"
+            fi
+        fi
+        info "### Backup done to branch: $BACKUPBRANCH"
+        info "###"
+        info "### Update completed!"
+        info "###"
+        info "### Please clear your Browser Cache to"
+        info "### avoid graphical issues."
+        info "###"
+        info "### Have fun with your Photobooth!"
+
+        cat $PHOTOBOOTH_TMP_LOG >> $INSTALLFOLDERPATH/private/install.log
+    else
+         error "ERROR: Can not Update!"
+    fi
+    exit
 fi
 
 ############################################################
@@ -967,17 +1033,6 @@ fi
 # Ask all questions before installing Photobooth           #
 #                                                          #
 ############################################################
-
-if [ "$RUNNING_ON_PI" = true ]; then
-    if [ ! -z $USERNAME ]; then
-        check_username
-    else
-        error "ERROR: An valid OS username is needed! Please re-run the installer."
-        view_help
-        exit
-    fi
-    print_spaces
-fi
 
 echo -e "\033[0;33m### Is Photobooth the only website on this system?"
 echo -e "### NOTE: If typing y, the whole /var/www/html folder will be renamed"
@@ -1030,39 +1085,10 @@ fi
 
 print_spaces
 
+detect_browser
 if [ -d "/etc/xdg/autostart" ]; then
-
-    if [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="chromium-browser"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "google-chrome" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="google-chrome"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-stable" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="google-chrome-stable"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "google-chrome-beta" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="google-chrome-beta"
-        CHROME_FLAGS=true
-    elif [ $(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        WEBBROWSER="firefox"
-        CHROME_FLAGS=false
-    else
-        WEBBROWSER="unknown"
-        CHROME_FLAGS=false
-    fi
-
     if [ "$WEBBROWSER" != "unknown" ]; then
-        echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
-        ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
-        echo -e "\033[0m"
-        if [[ $REPLY =~ ^[Yy]$ ]]
-        then
-            KIOSK_MODE=true
-            info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
-        else
-            info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
-        fi
+        ask_kiosk_mode
     else
         warn "### No supported webbrowser found!"
     fi
@@ -1072,32 +1098,10 @@ fi
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
     if [ "$DESKTOP_OS" = true ]; then
-        echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
-        ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
-        echo -e "\033[0m"
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            HIDE_MOUSE=true
-            EXTRA_PACKAGES+=('unclutter')
-            info "### We will hide the mouse cursor on every start and disable the screen saver."
-        else
-            info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
-        fi
+        ask_hide_mouse
     else
         info "### lxde is not installed. Can not hide the mouse cursor on every start."
     fi
-    print_spaces
-
-    echo -e "\033[0;33m### Do you like to use a Raspberry Pi (HQ) Camera to take pictures?"
-    ask_yes_no "### If yes, this will generate a personal configuration with all needed changes. [y/N] " "N"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        PI_CAMERA=true
-        info "### We will generate a personal configuration with all needed"
-        info "    changes to use a Raspberry Pi (HQ) Camera to take pictures."
-    else
-        info "### We won't generate a personal configuration file to use a Raspberry Pi (HQ) Camera to take pictures."
-    fi
-
     print_spaces
 
     echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
@@ -1108,6 +1112,7 @@ if [ "$RUNNING_ON_PI" = true ]; then
         USB_SYNC=true
         info "### We will setup Raspberry Pi OS to be able to use the USB sync file backup."
     else
+        USB_SYNC=false
         info "### We won't setup Raspberry Pi OS to use the USB sync file backup."
     fi
 
@@ -1142,20 +1147,24 @@ print_spaces
 common_software
 general_setup
 start_install
-if [ "$PI_CAMERA" = true ]; then
-    pi_camera
-fi
 general_permissions
 if [ "$RUNNING_ON_PI" = true ]; then
-raspberry_permission
+    raspberry_permission
 fi
-if [ "$KIOSK_MODE" = true ] || [ "$HIDE_MOUSE" = true ] ; then
-    kioskbooth_desktop
+if [ "$WEBBROWSER" != "unknown" ]; then
+    browser_desktop_shortcut
+    if [ "$KIOSK_MODE" = true ]; then
+        browser_autostart
+    fi
+else
+    info "### Browser unknown or not installed. Can not add shortcut to Desktop."
+fi
+if [ "$HIDE_MOUSE" = true ] ; then
+    hide_mouse
 fi
 if [ "$SETUP_CUPS" = true ]; then
     cups_setup
 fi
-
 if [ "$GPHOTO_PREVIEW" = true ]; then
     gphoto_preview
 fi
@@ -1179,6 +1188,8 @@ if [ "$SETUP_CUPS" = true ]; then
 fi
 info "###"
 info "### Have fun with your Photobooth, but first restart your device!"
+
+cat $PHOTOBOOTH_TMP_LOG >> $INSTALLFOLDERPATH/private/install.log
 
 echo -e "\033[0;33m"
 ask_yes_no "### Do you like to reboot now? [y/N] " "N"

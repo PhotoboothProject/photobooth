@@ -44,9 +44,9 @@ $uiShape = 'shape--' . $config['ui']['style'];
 
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="../resources/css/login.css" />
+	<link rel="stylesheet" href="../resources/css/login.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("../private/overrides.css")): ?>
-	<link rel="stylesheet" href="../private/overrides.css" />
+	<link rel="stylesheet" href="../private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php endif; ?>
 </head>
 
@@ -81,14 +81,14 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		<div class="modal__body" id="save_mesg_text"><span data-i18n="saving"></span></div>
 	</div>
 
-	<script type="text/javascript" src="../api/config.php"></script>
+	<script type="text/javascript" src="../api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="../resources/js/tools.js"></script>
-	<script type="text/javascript" src="../resources/js/adminshortcut.js"></script>
-	<script type="text/javascript" src="../resources/js/diskusage.js"></script>
-	<script type="text/javascript" src="../resources/js/theme.js"></script>
+	<script type="text/javascript" src="../resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="../resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="../resources/js/diskusage.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="../resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="module" src="../resources/js/i18n.js"></script>
+	<script type="module" src="../resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 </body>
 </html>

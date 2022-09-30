@@ -22,10 +22,6 @@ $cmds = [
             'cmd' => '',
             'msg' => '',
         ],
-        'preview' => [
-            'cmd' => '',
-            'killcmd' => '',
-        ],
         'nodebin' => [
             'cmd' => '',
         ],
@@ -48,10 +44,6 @@ $cmds = [
         'exiftool' => [
             'cmd' => 'exiftool -overwrite_original -TagsFromFile %s %s',
             'msg' => '',
-        ],
-        'preview' => [
-            'cmd' => 'gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0 > /dev/null 2>&1 & echo $!',
-            'killcmd' => 'killall gphoto2 && sleep 1',
         ],
         'nodebin' => [
             'cmd' => '/usr/bin/node',
@@ -100,8 +92,6 @@ $config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
 $config['print']['msg'] = $cmds[SERVER_OS]['print']['msg'];
 $config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];
 $config['exiftool']['msg'] = $cmds[SERVER_OS]['exiftool']['msg'];
-$config['preview']['cmd'] = $cmds[SERVER_OS]['preview']['cmd'];
-$config['preview']['killcmd'] = $cmds[SERVER_OS]['preview']['killcmd'];
 $config['nodebin']['cmd'] = $cmds[SERVER_OS]['nodebin']['cmd'];
 $config['reboot']['cmd'] = $cmds[SERVER_OS]['reboot']['cmd'];
 $config['shutdown']['cmd'] = $cmds[SERVER_OS]['shutdown']['cmd'];
@@ -150,14 +140,20 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
     die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
+if (empty($config['ui']['folders_lang'])) {
+    $config['ui']['folders_lang'] = getrootpath('../resources/lang');
+}
+
+$config['ui']['folders_lang'] = fixSeperator($config['ui']['folders_lang']);
+
 foreach ($config['folders'] as $key => $folder) {
-    if ($folder === 'data' || $folder === 'archives' || $folder === 'config') {
+    if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
         $path = $basepath . DIRECTORY_SEPARATOR . $folder;
     } else {
         $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
         $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
 
-        $config['foldersJS'][$key] = str_replace('\\', '/', $config['foldersRoot'][$key]);
+        $config['foldersJS'][$key] = str_replace('\\', '/', getrootpath($path));
     }
 
     if (!file_exists($path)) {
@@ -172,16 +168,23 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = $path;
 }
 
+if ($config['preview']['mode'] === 'gphoto') {
+    $config['preview']['mode'] = 'device_cam';
+}
+
+$default_font = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+$default_frame = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+
 if (empty($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
-    $config['picture']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+    $config['picture']['frame'] = $default_frame;
 }
 
 if (empty($config['textonpicture']['font']) || !testFile($config['textonpicture']['font'])) {
-    $config['textonpicture']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+    $config['textonpicture']['font'] = $default_font;
 }
 
 if (empty($config['collage']['frame']) || !testFile($config['collage']['frame'])) {
-    $config['collage']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+    $config['collage']['frame'] = $default_frame;
 }
 
 if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
@@ -189,15 +192,15 @@ if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']
 }
 
 if (empty($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
-    $config['textoncollage']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+    $config['textoncollage']['font'] = $default_font;
 }
 
 if (empty($config['print']['frame']) || !testFile($config['print']['frame'])) {
-    $config['print']['frame'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+    $config['print']['frame'] = $default_frame;
 }
 
 if (empty($config['textonprint']['font']) || !testFile($config['textonprint']['font'])) {
-    $config['textonprint']['font'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
+    $config['textonprint']['font'] = $default_font;
 }
 
 if (empty($config['collage']['limit'])) {
@@ -231,4 +234,4 @@ if (empty($config['qr']['url'])) {
     $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
 }
 
-$config['folders']['lang'] = getrootpath('../resources/lang');
+$config['photobooth']['version'] = getPhotoboothVersion();

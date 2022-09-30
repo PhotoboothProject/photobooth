@@ -1,6 +1,6 @@
 {
   "name": "photobooth",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "engines": {
     "node": "12.22"
@@ -65,8 +65,8 @@
     "onoff": "^6.0.3",
     "sass": "^1.54.8",
     "selectize": "^0.12.6",
-    "socket.io": "^4.5.1",
-    "socket.io-client": "^4.5.1",
+    "socket.io": "^4.5.2",
+    "socket.io-client": "^4.5.2",
     "waypoints": "^4.0.1",
     "whatwg-fetch": "^3.6.2"
   },
