@@ -1123,14 +1123,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@prettier/plugin-php@^0.18.9":
-  version "0.18.9"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.18.9.tgz#7482d26942a0a92d750f4bc2b4e832756245fa09"
-  integrity sha512-d1uE9v3JsQ9uBLWlssZhO02RLI8u8jRBFPCO5ud4VbveCpSZbDRnGpSuK3IqSWHdM/OnuySz0yWr5M9/9mINvw==
+"@prettier/plugin-php@^0.19.1":
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.19.1.tgz#23b4ca6bbd05f1dc607a5f90877cfc2354b5294c"
+  integrity sha512-faoQX6QF4JZ0xJT+FRkMU7JnUTqVFRSwz7oKYuKgjY6u8VHSURlRXVkP4UyXxsTPAGjVJpNh7JseKkpK1DZziw==
   dependencies:
     linguist-languages "^7.21.0"
     mem "^8.0.0"
-    php-parser "3.1.0-beta.11"
+    php-parser "^3.1.1"
 
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.0"
@@ -3856,10 +3856,10 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
-php-parser@3.1.0-beta.11:
-  version "3.1.0-beta.11"
-  resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.0-beta.11.tgz#8ac532a3f61028df8411c6624ccd48fe8a494d58"
-  integrity sha512-aKhWHXun6FKa0MX+GcJtEoLPSWuGQTiEkNgckVjT95OAnKG33c+zsDQEpXx4R74PQ030YZLNq9XV7odKapbOsg==
+php-parser@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.1.tgz#203905e9c7d69851306968334e39458268c99336"
+  integrity sha512-HUxWIWpJoGhnSVzM6nPI1O2RePd7eJKzJoL3VZr6/KUUdcHKBex2Cp7p6pWOV1WxgKI/oYgRPMywwLCP789OYA==
 
 picocolors@^1.0.0:
   version "1.0.0"
