@@ -1028,7 +1028,7 @@ if [ "$RUN_UPDATE" = true ]; then
         info "###"
         info "### Have fun with your Photobooth!"
 
-        cat ${PHOTOBOOTH_TMP_LOG} >> ${PHOTOBOOTH_LOG} || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
+        cat "${PHOTOBOOTH_TMP_LOG}" >> "${PHOTOBOOTH_LOG}" || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
     else
          error "ERROR: Can not Update!"
     fi
@@ -1196,7 +1196,7 @@ fi
 info "###"
 info "### Have fun with your Photobooth, but first restart your device!"
 
-cat ${PHOTOBOOTH_TMP_LOG} >> ${PHOTOBOOTH_LOG} || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
+cat "${PHOTOBOOTH_TMP_LOG}" >> "${PHOTOBOOTH_LOG}" || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
 
 echo -e "\033[0;33m"
 ask_yes_no "### Do you like to reboot now? [y/N] " "N"
