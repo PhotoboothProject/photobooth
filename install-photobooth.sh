@@ -13,7 +13,7 @@ IPADDRESS=$(hostname -I | cut -d " " -f 1)
 if [ ! -d "/tmp/photobooth" ]; then
     mkdir -p "/tmp/photobooth"
 fi
-PHOTOBOOTH_TMP_LOG="/tmp/photobooth/$DATE-photobooth.log"
+PHOTOBOOTH_TMP_LOG="/tmp/photobooth/$DATE-photobooth"
 
 BRANCH="dev"
 GIT_INSTALL=true
@@ -532,6 +532,8 @@ general_setup() {
     else
         info "$INSTALLFOLDERPATH not found."
     fi
+
+    PHOTOBOOTH_LOG="$INSTALLFOLDERPATH/private/install.log"
 }
 
 add_git_remote() {
@@ -901,6 +903,7 @@ detect_photobooth_install() {
                     PHOTOBOOTH_FOUND=true
                     INSTALLFOLDERPATH="${path}"
                     info "### Photobooth installation found in path ${path}."
+                    PHOTOBOOTH_LOG="$INSTALLFOLDERPATH/private/install.log"
                 fi
             fi
         fi
@@ -1025,7 +1028,7 @@ if [ "$RUN_UPDATE" = true ]; then
         info "###"
         info "### Have fun with your Photobooth!"
 
-        cat ${PHOTOBOOTH_TMP_LOG} >> $INSTALLFOLDERPATH/private/install.log || warn "WARN: failed to add log to $INSTALLFOLDERPATH/private/install.log"
+        cat ${PHOTOBOOTH_TMP_LOG} >> ${PHOTOBOOTH_LOG} || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
     else
          error "ERROR: Can not Update!"
     fi
@@ -1193,7 +1196,7 @@ fi
 info "###"
 info "### Have fun with your Photobooth, but first restart your device!"
 
-cat ${PHOTOBOOTH_TMP_LOG} >> "$INSTALLFOLDERPATH/private/install.log" || warn "WARN: failed to add log to $INSTALLFOLDERPATH/private/install.log"
+cat ${PHOTOBOOTH_TMP_LOG} >> ${PHOTOBOOTH_LOG} || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
 
 echo -e "\033[0;33m"
 ask_yes_no "### Do you like to reboot now? [y/N] " "N"
