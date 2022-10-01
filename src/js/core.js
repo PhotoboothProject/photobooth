@@ -1267,11 +1267,17 @@ const photoBooth = (function () {
     }
 
     idVideoView.on('loadedmetadata', function (ev) {
-        let videoEl = ev.target;
-        pictureFrame.css('width', videoEl.videoWidth);
-        pictureFrame.css('height', videoEl.videoHeight);
-        collageFrame.css('width', videoEl.videoWidth);
-        collageFrame.css('height', videoEl.videoHeight);
+        const videoEl = ev.target;
+        let newWidth = videoEl.offsetWidth;
+        let newHeight = videoEl.offsetHeight;
+        if (config.preview.style === PreviewStyle.SCALE_DOWN) {
+            newWidth = videoEl.videoWidth;
+            newHeight = videoEl.videoHeight;
+        }
+        pictureFrame.css('width', newWidth);
+        pictureFrame.css('height', newHeight);
+        collageFrame.css('width', newWidth);
+        collageFrame.css('height', newHeight);
     });
 
     return api;
