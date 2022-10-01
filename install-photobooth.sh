@@ -78,17 +78,17 @@ INSTALL_PACKAGES=()
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
-    echo "${1}" >> "$PHOTOBOOTH_TMP_LOG"
+    echo "${1}" >> "${PHOTOBOOTH_TMP_LOG}"
 }
 
 function warn {
     echo -e "\033[0;33m${1}\033[0m"
-    echo "WARN: ${1}" >> "$PHOTOBOOTH_TMP_LOG"
+    echo "WARN: ${1}" >> "${PHOTOBOOTH_TMP_LOG}"
 }
 
 function error {
     echo -e "\033[0;31m${1}\033[0m"
-    echo "ERROR: ${1}" >> "$PHOTOBOOTH_TMP_LOG"
+    echo "ERROR: ${1}" >> "${PHOTOBOOTH_TMP_LOG}"
 }
 
 print_spaces() {
@@ -1021,7 +1021,7 @@ if [ "$RUN_UPDATE" = true ]; then
         info "###"
         info "### Have fun with your Photobooth!"
 
-        cat $PHOTOBOOTH_TMP_LOG >> $INSTALLFOLDERPATH/private/install.log
+        cat ${PHOTOBOOTH_TMP_LOG} >> $INSTALLFOLDERPATH/private/install.log || warn "WARN: failed to add log to $INSTALLFOLDERPATH/private/install.log"
     else
          error "ERROR: Can not Update!"
     fi
@@ -1189,7 +1189,7 @@ fi
 info "###"
 info "### Have fun with your Photobooth, but first restart your device!"
 
-cat $PHOTOBOOTH_TMP_LOG >> $INSTALLFOLDERPATH/private/install.log
+cat ${PHOTOBOOTH_TMP_LOG} >> "$INSTALLFOLDERPATH/private/install.log" || warn "WARN: failed to add log to $INSTALLFOLDERPATH/private/install.log"
 
 echo -e "\033[0;33m"
 ask_yes_no "### Do you like to reboot now? [y/N] " "N"
