@@ -940,14 +940,18 @@ if [ "$FORCE_RASPBERRY_PI" = false ]; then
 fi
 
 info "### Checking internet connection..."
-ping -c 1 -q google.com >&/dev/null
+if [ $(dpkg-query -W -f='${Status}' "iputils-ping" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+    ping -c 1 -q google.com >&/dev/null
 
-if [ $? -eq 0 ]; then
-    info "    connected!"
+    if [ $? -eq 0 ]; then
+        info "    connected!"
+    else
+        error "ERROR: No internet connection!"
+        error "       Please connect to the internet and rerun the installer."
+        exit 1
+    fi
 else
-    error "ERROR: No internet connection!"
-    error "       Please connect to the internet and rerun the installer."
-    exit 1
+    warn "Can not check Internet connection, iputils-ping missing!"
 fi
 
 ############################################################
