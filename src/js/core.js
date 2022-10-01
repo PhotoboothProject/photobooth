@@ -17,6 +17,13 @@ const photoBooth = (function () {
             DEVICE: 'device_cam',
             URL: 'url'
         },
+        PreviewStyle = {
+            FILL: 'fill',
+            CONTAIN: 'contain',
+            COVER: 'cover',
+            NONE: 'none',
+            SCALE_DOWN: 'scale-down'
+        },
         CollageFrameMode = {
             OFF: 'off',
             ALWAYS: 'always',
@@ -257,7 +264,11 @@ const photoBooth = (function () {
 
         photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry);
 
-        if (config.preview.mode !== PreviewMode.NONE && config.preview.showFrame) {
+        if (
+            config.preview.mode !== PreviewMode.NONE &&
+            (config.preview.style === PreviewStyle.CONTAIN || config.preview.style === PreviewStyle.SCALE_DOWN) &&
+            config.preview.showFrame
+        ) {
             if (photoStyle === PhotoStyle.PHOTO && config.picture.take_frame) {
                 pictureFrame.show();
             } else if (photoStyle === PhotoStyle.COLLAGE && config.collage.take_frame === CollageFrameMode.ALWAYS) {
