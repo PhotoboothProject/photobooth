@@ -124,17 +124,33 @@ if (!file_exists($filename_print)) {
                 $x = $offset;
                 $y = $offset;
                 break;
+            case 'top':
+                $x = ($width - $qrWidth) / 2;
+                $y = $offset;
+                break;
             case 'topRight':
                 $x = $width - ($qrWidth + $offset);
                 $y = $offset;
+                break;
+            case 'right':
+                $x = $width - $qrWidth - $offset;
+                $y = ($height - $qrHeight) / 2;
                 break;
             case 'bottomRight':
                 $x = $width - ($qrWidth + $offset);
                 $y = $height - ($qrHeight + $offset);
                 break;
+            case 'bottom':
+                $x = ($width - $qrWidth) / 2;
+                $y = $height - $qrHeight - $offset;
+                break;
             case 'bottomLeft':
                 $x = $offset;
                 $y = $height - ($qrHeight + $offset);
+                break;
+            case 'left':
+                $x = $offset;
+                $y = ($height - $qrHeight) / 2;
                 break;
             default:
                 $x = $width - ($qrWidth + $offset);
