@@ -541,7 +541,7 @@ $configsetup = [
             'value' => htmlentities($config['textonpicture']['line2'] ?? ''),
         ],
         'textonpicture_line3' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonpicture']['line3'],
             'name' => 'textonpicture[line3]',
@@ -771,7 +771,7 @@ $configsetup = [
             'value' => htmlentities($config['textoncollage']['line2'] ?? ''),
         ],
         'textoncollage_line3' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textoncollage']['line3'],
             'name' => 'textoncollage[line3]',
@@ -1334,7 +1334,7 @@ $configsetup = [
             'value' => htmlentities($config['textonprint']['line2'] ?? ''),
         ],
         'textonprint_line3' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonprint']['line3'],
             'name' => 'textonprint[line3]',
