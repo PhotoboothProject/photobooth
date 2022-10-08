@@ -202,6 +202,7 @@ $config['print']['qrcode'] = false;
 $config['print']['qrSize'] = '4';
 $config['print']['qrPosition'] = 'bottomRight';
 $config['print']['qrOffset'] = 10;
+$config['print']['qrMargin'] = '4';
 $config['print']['print_frame'] = false;
 $config['print']['frame'] = '';
 $config['print']['crop'] = false;

@@ -98,7 +98,7 @@ if (!file_exists($filename_print)) {
                     $ecLevel = QR_ECLEVEL_M;
                     break;
             }
-            QRcode::png($url, $filename_codes, $ecLevel, $config['print']['qrSize'], 0);
+            QRcode::png($url, $filename_codes, $ecLevel, $config['print']['qrSize'], $config['print']['qrMargin']);
             if ($rotateQr) {
                 $image = imagecreatefrompng($filename_codes);
                 $resultRotated = imagerotate($image, 90, 0);

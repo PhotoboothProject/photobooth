@@ -1284,6 +1284,17 @@ $configsetup = [
             'name' => 'print[qrOffset]',
             'value' => $config['print']['qrOffset'],
         ],
+        'print_qrMargin' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['print']['qrMargin'],
+            'name' => 'print[qrMargin]',
+            'value' => $config['print']['qrMargin'],
+            'range_min' => 0,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'empty',
+        ],
         'print_print_frame' => [
             'view' => 'expert',
             'type' => 'checkbox',
