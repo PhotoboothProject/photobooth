@@ -661,6 +661,9 @@ const photoBooth = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
+                if (config.ui.shutter_animation) {
+                    api.shutter.stop();
+                }
                 if (retry < 3) {
                     retry += 1;
                     photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
