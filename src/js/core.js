@@ -664,6 +664,8 @@ const photoBooth = (function () {
                 if (config.ui.shutter_animation) {
                     api.shutter.stop();
                 }
+                cheese.empty();
+
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
                     photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
                     api.retryTakePic(data.style, retry);
