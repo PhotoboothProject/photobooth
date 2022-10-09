@@ -487,6 +487,18 @@ const photoBooth = (function () {
         api.callTakePicApi(data, retry);
     };
 
+    api.retryTakePic = function (photoStyle, retry) {
+        retry += 1;
+        loading.append(
+            $('<p class="text-muted">').text(
+                photoboothTools.getTranslation('retry_message') + ' ' + retry + '/' + config.picture.retry_on_error
+            )
+        );
+        setTimeout(() => {
+            api.thrill(photoStyle, retry);
+        }, retryTimeout);
+    };
+
     api.callTakePicApi = function (data, retry = 0) {
         if (config.ui.shutter_animation && config.ui.shutter_cheese_img === '') {
             api.shutter.start();
@@ -510,20 +522,8 @@ const photoBooth = (function () {
 
                 if (result.error) {
                     if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                        photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
-                        retry += 1;
-                        loading.append(
-                            $('<p class="text-muted">').text(
-                                photoboothTools.getTranslation('retry_message') +
-                                    ' ' +
-                                    retry +
-                                    '/' +
-                                    config.picture.retry_on_error
-                            )
-                        );
-                        setTimeout(() => {
-                            api.thrill(data.style, retry);
-                        }, retryTimeout);
+                        photoboothTools.console.logDev('Error while taking picture. Retrying. Retry: ' + retry);
+                        api.retryTakePic(data.style, retry);
                     } else {
                         api.errorPic(result);
                     }
@@ -664,12 +664,9 @@ const photoBooth = (function () {
                 if (config.ui.shutter_animation) {
                     api.shutter.stop();
                 }
-                if (retry < 3) {
-                    retry += 1;
+                if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
                     photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
-                    setTimeout(function () {
-                        api.callTakePicApi(data, retry);
-                    }, retry * 250);
+                    api.retryTakePic(data.style, retry);
                 } else {
                     api.errorPic(result);
                 }
