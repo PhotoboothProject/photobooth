@@ -12,7 +12,7 @@ function takePicture($filename) {
         $demoFolder = __DIR__ . '/../resources/img/demo/';
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $filename);
-    } elseif (($config['preview']['mode'] === 'device_cam' || $config['preview']['mode'] === 'gphoto') && $config['preview']['camTakesPic']) {
+    } elseif ($config['preview']['mode'] === 'device_cam' && $config['preview']['camTakesPic']) {
         $data = $_POST['canvasimg'];
         list($type, $data) = explode(';', $data);
         list(, $data) = explode(',', $data);
