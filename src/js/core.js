@@ -193,12 +193,14 @@ const photoBooth = (function () {
             })
             .catch(function (error) {
                 photoboothTools.console.log('Could not get user media: ', error);
-                if (config.preview.cmd && retry < 3) {
+                if (retry < 3) {
                     photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
                     retry += 1;
                     setTimeout(function () {
                         api.initializeMedia(cb, retry);
-                    }, retryTimeout);
+                    }, 1000);
+                } else {
+                    photoboothTools.console.logDev('Unable to get user media. Failed retries: ' + retry);
                 }
             });
     };
