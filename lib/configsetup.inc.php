@@ -1018,8 +1018,8 @@ $configsetup = [
             'placeholder' => $defaultConfig['preview']['mode'],
             'options' => [
                 'none' => 'None',
-                'device_cam' => 'from device cam',
-                'url' => 'from URL',
+                'device_cam' => 'from device cam (no remote preview)',
+                'url' => 'from URL (remote preview)',
             ],
             'value' => $config['preview']['mode'],
         ],
