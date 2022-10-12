@@ -20,9 +20,18 @@ function takePicture($filename) {
 
         file_put_contents($filename, $data);
 
-        if ($config['preview']['flipHorizontal']) {
+        if ($config['preview']['flip'] != 'off') {
             $im = imagecreatefromjpeg($filename);
-            imageflip($im, IMG_FLIP_HORIZONTAL);
+            switch ($config['preview']['flip']) {
+                case 'flip-horizontal':
+                    imageflip($im, IMG_FLIP_HORIZONTAL);
+                    break;
+                case 'flip-vertical':
+                    imageflip($im, IMG_FLIP_VERTICAL);
+                    break;
+                default:
+                    break;
+            }
             imagejpeg($im, $filename);
             imagedestroy($im);
         }
