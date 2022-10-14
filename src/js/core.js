@@ -250,9 +250,6 @@ const photoBooth = (function () {
                 break;
             case CameraDisplayMode.COUNTDOWN:
                 switch (config.preview.mode) {
-                    case PreviewMode.NONE.valueOf():
-                        photoboothTools.console.logDev('Preview at countdown disabled.');
-                        break;
                     case PreviewMode.DEVICE.valueOf():
                         photoboothTools.console.logDev('Preview at countdown from device cam.');
                         if (
