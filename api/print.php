@@ -105,6 +105,22 @@ if (!file_exists($filename_print)) {
                 imagepng($resultRotated, $filename_codes, 0);
                 imagedestroy($image);
             }
+            $tocolor = imagecreatefrompng($filename_codes);
+            $qrwidth = imagesx($tocolor);
+            $qrheight = imagesy($tocolor);
+            $selected = imagecolorallocate($tocolor, 226, 183, 127);
+
+            for($xpos=0; $xpos<$qrwidth; $xpos++) {
+                for($ypos=0; $ypos<$qrheight; $ypos++) {
+                    $currentcolor = imagecolorat($tocolor, $xpos, $ypos);
+                    $parts = imagecolorsforindex($tocolor, $currentcolor);
+
+                    if($parts['red'] == 255 && $parts['green'] == 255 && $parts['blue'] == 255) {
+                        imagesetpixel($tocolor, $xpos, $ypos, $selected);
+                    }
+                }
+            }
+            imagepng($tocolor, $filename_codes, 0);
         }
 
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
