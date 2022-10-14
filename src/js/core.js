@@ -283,12 +283,11 @@ const photoBooth = (function () {
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
-            if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
-                if (config.preview.killcmd) {
-                    api.stopPreviewVideo();
-                } else {
-                    api.stopVideo();
-                }
+
+            if (config.preview.killcmd) {
+                api.stopPreviewVideo();
+            } else {
+                api.stopVideo();
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             ipcamView.removeClass('streaming');
