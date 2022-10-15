@@ -522,7 +522,7 @@
   "power:reboot_button": "Reboot",
   "power:shutdown_button": "Shutdown",
   "preview": "Live preview",
-  "preview:preview_asBackground": "Use stream for live preview as background",
+  "preview:preview_asBackground": "Use preview from device cam as background",
   "preview:preview_bsm": "Execute start command for preview on take picture/collage",
   "preview:preview_camTakesPic": "Device cam takes picture",
   "preview:preview_camera_mode": "Camera facing mode",
