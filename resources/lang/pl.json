@@ -165,7 +165,6 @@
   "manual:pictures:picture_polaroid_effect": "Jeśli opcja jest włączona, efekt polaroidowy zostanie zastosowany do zdjęcia po jego wykonaniu.",
   "manual:pictures:picture_polaroid_rotation": "Wprowadź wartość, która ustawi stopnie obrotu obrazu po jego wykonaniu z efektem polaroid.",
   "manual:pictures:picture_rotation": "Wprowadź wartość, która ustawi stopnie obrotu obrazu po jego wykonaniu.",
-  "manual:preview:preview_asBackground": "Jeśli włączone, jako tło na ekranie początkowym używany jest strumień z kamery urządzenia.",
   "manual:print:button_show_cups": "Pokaż przycisk na stronie startowej, aby łatwo uzyskać dostęp do CUPS (Common Unix Printing System).",
   "manual:print:print_auto": "Jeśli włączone, zdjęcie zostanie wydrukowane natychmiast po wykonaniu.",
   "manual:print:print_auto_delay": "Wprowadź w milisekundach, opóźnienie automatycznego wydruku zdjęcia.",
