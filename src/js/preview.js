@@ -22,11 +22,7 @@ const photoboothPreview = (function () {
         },
         api = {};
 
-    let pid,
-        video,
-        loader,
-        wrapper,
-        url;
+    let pid, video, loader, wrapper, url;
 
     api.changeVideoMode = function (mode) {
         if (mode === CameraDisplayMode.BACKGROUND) {
@@ -84,7 +80,7 @@ const photoboothPreview = (function () {
         if (api.stream) {
             api.changeVideoMode(mode);
         } else {
-            api.initializeMedia( () => {
+            api.initializeMedia(() => {
                 api.changeVideoMode(mode);
             });
         }
@@ -106,10 +102,7 @@ const photoboothPreview = (function () {
             });
     };
 
-    api.startVideo = function (
-        mode,
-        retry = 0
-    ) {
+    api.startVideo = function (mode, retry = 0) {
         if (config.preview.mode !== PreviewMode.URL.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
                 return;
@@ -228,7 +221,7 @@ const photoboothPreview = (function () {
         loader = $(loaderSelector);
         wrapper = $(wrapperSelector);
         url = $(urlSelector);
-    }
+    };
 
     api.init = function () {
         api.setElements();
