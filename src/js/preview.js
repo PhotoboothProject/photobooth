@@ -24,12 +24,7 @@ const photoboothPreview = (function () {
 
     let pid;
 
-    api.changeVideoMode = function (
-        mode,
-        videoSelector = '#video--view',
-        loaderSelector = '#loader',
-        wrapperSelector = '#wrapper'
-    ) {
+    api.changeVideoMode = function (mode, videoSelector, loaderSelector, wrapperSelector) {
         if (mode === CameraDisplayMode.BACKGROUND) {
             $(videoSelector).css('z-index', 0);
             $(wrapperSelector).css('background-image', 'none');
@@ -42,7 +37,7 @@ const photoboothPreview = (function () {
         $(videoSelector).show();
     };
 
-    api.initializeMedia = function (cb = () => {}, retry = 0, videoSelector = '#video--view') {
+    api.initializeMedia = function (videoSelector, loaderSelector, wrapperSelector, cb = () => {}, retry = 0) {
         if (
             !navigator.mediaDevices ||
             config.preview.mode === PreviewMode.NONE.valueOf() ||
@@ -73,7 +68,7 @@ const photoboothPreview = (function () {
                     photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
                     retry += 1;
                     setTimeout(function () {
-                        api.initializeMedia(cb, retry);
+                        api.initializeMedia(videoSelector, loaderSelector, wrapperSelector, cb, retry);
                     }, 1000);
                 } else {
                     photoboothTools.console.logDev('Unable to get user media. Failed retries: ' + retry);
@@ -81,12 +76,12 @@ const photoboothPreview = (function () {
             });
     };
 
-    api.getAndDisplayMedia = function (mode) {
+    api.getAndDisplayMedia = function (mode, videoSelector, loaderSelector, wrapperSelector) {
         if (api.stream) {
-            api.changeVideoMode(mode);
+            api.changeVideoMode(mode, videoSelector, loaderSelector, wrapperSelector);
         } else {
-            api.initializeMedia(() => {
-                api.changeVideoMode(mode);
+            api.initializeMedia(videoSelector, loaderSelector, wrapperSelector, () => {
+                api.changeVideoMode(mode, videoSelector, loaderSelector, wrapperSelector);
             });
         }
     };
@@ -107,7 +102,14 @@ const photoboothPreview = (function () {
             });
     };
 
-    api.startVideo = function (mode, retry = 0, urlSelector = '#ipcam--view') {
+    api.startVideo = function (
+        mode,
+        retry = 0,
+        videoSelector = '#video--view',
+        loaderSelector = '#loader',
+        wrapperSelector = '#wrapper',
+        urlSelector = '#ipcam--view'
+    ) {
         if (config.preview.mode !== PreviewMode.URL.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
                 return;
@@ -122,7 +124,7 @@ const photoboothPreview = (function () {
                 if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
                     api.startWebcam();
                 }
-                api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
+                api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND, videoSelector, loaderSelector, wrapperSelector);
                 break;
             case CameraDisplayMode.COUNTDOWN:
                 switch (config.preview.mode) {
@@ -136,7 +138,12 @@ const photoboothPreview = (function () {
                         ) {
                             api.startWebcam();
                         }
-                        api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
+                        api.getAndDisplayMedia(
+                            CameraDisplayMode.COUNTDOWN,
+                            videoSelector,
+                            loaderSelector,
+                            wrapperSelector
+                        );
                         break;
                     case PreviewMode.URL.valueOf():
                         photoboothTools.console.logDev('Preview at countdown from URL.');
@@ -155,7 +162,7 @@ const photoboothPreview = (function () {
                         if (config.preview.cmd) {
                             api.startWebcam();
                         }
-                        api.getAndDisplayMedia(CameraDisplayMode.Test);
+                        api.getAndDisplayMedia(CameraDisplayMode.Test, videoSelector, loaderSelector, wrapperSelector);
                         break;
                     case PreviewMode.URL.valueOf():
                         photoboothTools.console.logDev('Preview from URL.');
@@ -173,12 +180,17 @@ const photoboothPreview = (function () {
         }
     };
 
-    api.stopPreview = function (urlSelector = '#ipcam--view') {
+    api.stopPreview = function (
+        videoSelector = '#video--view',
+        loaderSelector = '#loader',
+        wrapperSelector = '#wrapper',
+        urlSelector = '#ipcam--view'
+    ) {
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
             if (config.preview.killcmd) {
-                api.stopPreviewVideo();
+                api.stopPreviewVideo(videoSelector, loaderSelector, wrapperSelector);
             } else {
-                api.stopVideo();
+                api.stopVideo(videoSelector, loaderSelector, wrapperSelector);
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             $(urlSelector).removeClass('streaming');
@@ -186,11 +198,7 @@ const photoboothPreview = (function () {
         }
     };
 
-    api.stopVideo = function (
-        videoSelector = '#video--view',
-        loaderSelector = '#loader',
-        wrapperSelector = '#wrapper'
-    ) {
+    api.stopVideo = function (videoSelector, loaderSelector, wrapperSelector) {
         $(wrapperSelector).css('background-color', config.colors.panel);
         $(loaderSelector).css('background', config.colors.panel);
         $(loaderSelector).css('background-color', config.colors.panel);
@@ -201,7 +209,7 @@ const photoboothPreview = (function () {
         $(videoSelector).hide();
     };
 
-    api.stopPreviewVideo = function () {
+    api.stopPreviewVideo = function (videoSelector, loaderSelector, wrapperSelector) {
         if (api.stream) {
             const dataVideo = {
                 play: 'false',
@@ -212,7 +220,7 @@ const photoboothPreview = (function () {
                 .post('api/takeVideo.php', dataVideo)
                 .done(function (result) {
                     photoboothTools.console.log('Stop webcam', result);
-                    api.stopVideo();
+                    api.stopVideo(videoSelector, loaderSelector, wrapperSelector);
                 })
                 .fail(function (xhr, status, result) {
                     photoboothTools.console.log('Could not stop webcam', result);
