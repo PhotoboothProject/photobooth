@@ -127,7 +127,7 @@ const photoboothPreview = (function () {
                             config.preview.cmd &&
                             (config.preview.bsm ||
                                 (!config.preview.bsm && retry > 0) ||
-                                photoBooth.nextCollageNumber > 0)
+                                (typeof photoBooth !== 'undefined' && photoBooth.nextCollageNumber > 0))
                         ) {
                             api.startWebcam();
                         }
