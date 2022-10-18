@@ -151,6 +151,7 @@ if (
         <script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
         <script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="resources/js/photoinit.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <?php if ($config['keying']['variant'] === 'marvinj'): ?>
             <script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
