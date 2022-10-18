@@ -136,20 +136,20 @@ const photoBooth = (function () {
         }
     };
 
-    api.openNav = function () {
-        mySideNav.addClass('sidenav--open');
-        rotaryController.focusSet('#mySidenav');
-    };
-
-    api.closeNav = function () {
-        mySideNav.removeClass('sidenav--open');
-    };
-
-    api.toggleNav = function () {
-        mySideNav.toggleClass('sidenav--open');
-
-        if (mySideNav.hasClass('sidenav--open')) {
+    api.navbar = {
+        open: function () {
+            mySideNav.addClass('sidenav--open');
             rotaryController.focusSet('#mySidenav');
+        },
+        close: function () {
+            mySideNav.removeClass('sidenav--open');
+        },
+        toggle: function () {
+            mySideNav.toggleClass('sidenav--open');
+
+            if (mySideNav.hasClass('sidenav--open')) {
+                rotaryController.focusSet('#mySidenav');
+            }
         }
     };
 
@@ -378,7 +378,7 @@ const photoBooth = (function () {
     };
 
     api.thrill = function (photoStyle, retry = 0) {
-        api.closeNav();
+        api.navbar.close();
         api.reset();
         api.closeGallery();
         api.showResultInner(false);
@@ -1137,7 +1137,7 @@ const photoBooth = (function () {
 
     $('.imageFilter').on('click', function (e) {
         e.preventDefault();
-        api.toggleNav();
+        api.navbar.toggle();
     });
 
     $('.sidenav > div').on('click', function () {
@@ -1169,14 +1169,14 @@ const photoBooth = (function () {
     $('#mySidenav .closebtn').on('click', function (e) {
         e.preventDefault();
 
-        api.closeNav();
+        api.navbar.close();
         rotaryController.focusSet('#result');
     });
 
     $('.gallery-button, .gallerybtn').on('click', function (e) {
         e.preventDefault();
 
-        api.closeNav();
+        api.navbar.close();
         api.openGallery($(this));
     });
 
