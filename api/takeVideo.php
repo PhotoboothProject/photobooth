@@ -17,7 +17,7 @@ function takeVideo($filename) {
 
     if ($returnValue) {
         $ErrorData = [
-            'error' => 'Take picture command returned an error code',
+            'error' => 'Take video command returned an error code',
             'cmd' => $cmd,
             'returnValue' => $returnValue,
             'output' => $output,
@@ -56,6 +56,7 @@ function takeVideo($filename) {
         die($ErrorString);
     }
 
+    // TODO only add video to database if we add code to display the video in PhotoSwipe Gallery
     $moveFiles[] = $filename;
     $images = [];
     for ($i = 1; $i < 99; $i++) {
@@ -66,7 +67,7 @@ function takeVideo($filename) {
             break;
         }
     }
-    // If there are 4 images create a cuttable collage (more flexibility to come one day)
+    // If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
     if ($config['video']['collage'] && count($images) === 4) {
         $collageFilename = sprintf('%s-collage.jpg', $filename);
         $collageConfig = new CollageConfig();
@@ -87,8 +88,8 @@ function takeVideo($filename) {
             appendImageToDB($newFile);
         }
     }
-    // todo show video as result? but print collage? show qr for this / specific mode only?
-    // todo show some kind of result screen. move images to folder, adding to gallery completely failed (maybe because of the folder)
+    // TODO show video as result? but print collage? show qr for this / specific mode only?
+    // TODO show some kind of result screen. move images to folder, adding to gallery completely failed (maybe because of the folder)
 }
 
 $random = md5(time()) . '.mp4';
