@@ -145,8 +145,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);
     if (testFile(COLLAGE_BACKGROUND)) {
-        $backgroundImage = imagecreatefrompng(COLLAGE_BACKGROUND);
-        $backgroundImage = resizePngImage($backgroundImage, $collage_width, $collage_height);
+        $backgroundImage = imagecreatefromstring(file_get_contents(COLLAGE_BACKGROUND));
+        $backgroundImage = resizeImage($backgroundImage, $collage_width, $collage_height);
         imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
     } else {
         $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
