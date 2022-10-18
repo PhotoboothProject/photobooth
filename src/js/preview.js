@@ -22,22 +22,26 @@ const photoboothPreview = (function () {
         },
         api = {};
 
-    let pid;
+    let pid,
+        video,
+        loader,
+        wrapper,
+        url;
 
-    api.changeVideoMode = function (mode, videoSelector, loaderSelector, wrapperSelector) {
+    api.changeVideoMode = function (mode) {
         if (mode === CameraDisplayMode.BACKGROUND) {
-            $(videoSelector).css('z-index', 0);
-            $(wrapperSelector).css('background-image', 'none');
-            $(wrapperSelector).css('background-color', 'transparent');
+            video.css('z-index', 0);
+            wrapper.css('background-image', 'none');
+            wrapper.css('background-color', 'transparent');
         } else {
-            $(wrapperSelector).css('background-color', config.colors.panel);
-            $(loaderSelector).css('background-color', 'transparent');
-            $(videoSelector).css('z-index', 99);
+            wrapper.css('background-color', config.colors.panel);
+            loader.css('background-color', 'transparent');
+            video.css('z-index', 99);
         }
-        $(videoSelector).show();
+        video.show();
     };
 
-    api.initializeMedia = function (videoSelector, loaderSelector, wrapperSelector, cb = () => {}, retry = 0) {
+    api.initializeMedia = function (cb = () => {}, retry = 0) {
         if (
             !navigator.mediaDevices ||
             config.preview.mode === PreviewMode.NONE.valueOf() ||
@@ -59,7 +63,7 @@ const photoboothPreview = (function () {
             .call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
                 api.stream = stream;
-                $(videoSelector).get(0).srcObject = stream;
+                video.get(0).srcObject = stream;
                 cb();
             })
             .catch(function (error) {
@@ -68,7 +72,7 @@ const photoboothPreview = (function () {
                     photoboothTools.console.logDev('Getting user media failed. Retrying. Retry: ' + retry);
                     retry += 1;
                     setTimeout(function () {
-                        api.initializeMedia(videoSelector, loaderSelector, wrapperSelector, cb, retry);
+                        api.initializeMedia(cb, retry);
                     }, 1000);
                 } else {
                     photoboothTools.console.logDev('Unable to get user media. Failed retries: ' + retry);
@@ -76,12 +80,12 @@ const photoboothPreview = (function () {
             });
     };
 
-    api.getAndDisplayMedia = function (mode, videoSelector, loaderSelector, wrapperSelector) {
+    api.getAndDisplayMedia = function (mode) {
         if (api.stream) {
-            api.changeVideoMode(mode, videoSelector, loaderSelector, wrapperSelector);
+            api.changeVideoMode(mode);
         } else {
-            api.initializeMedia(videoSelector, loaderSelector, wrapperSelector, () => {
-                api.changeVideoMode(mode, videoSelector, loaderSelector, wrapperSelector);
+            api.initializeMedia( () => {
+                api.changeVideoMode(mode);
             });
         }
     };
@@ -104,11 +108,7 @@ const photoboothPreview = (function () {
 
     api.startVideo = function (
         mode,
-        retry = 0,
-        videoSelector = '#video--view',
-        loaderSelector = '#loader',
-        wrapperSelector = '#wrapper',
-        urlSelector = '#ipcam--view'
+        retry = 0
     ) {
         if (config.preview.mode !== PreviewMode.URL.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
@@ -124,7 +124,7 @@ const photoboothPreview = (function () {
                 if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
                     api.startWebcam();
                 }
-                api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND, videoSelector, loaderSelector, wrapperSelector);
+                api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
                 break;
             case CameraDisplayMode.COUNTDOWN:
                 switch (config.preview.mode) {
@@ -138,17 +138,12 @@ const photoboothPreview = (function () {
                         ) {
                             api.startWebcam();
                         }
-                        api.getAndDisplayMedia(
-                            CameraDisplayMode.COUNTDOWN,
-                            videoSelector,
-                            loaderSelector,
-                            wrapperSelector
-                        );
+                        api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
                         break;
                     case PreviewMode.URL.valueOf():
                         photoboothTools.console.logDev('Preview at countdown from URL.');
-                        $(urlSelector).show();
-                        $(urlSelector).addClass('streaming');
+                        url.show();
+                        url.addClass('streaming');
                         break;
                     default:
                         photoboothTools.console.log('Call for unexpected preview mode.');
@@ -162,12 +157,12 @@ const photoboothPreview = (function () {
                         if (config.preview.cmd) {
                             api.startWebcam();
                         }
-                        api.getAndDisplayMedia(CameraDisplayMode.Test, videoSelector, loaderSelector, wrapperSelector);
+                        api.getAndDisplayMedia(CameraDisplayMode.Test);
                         break;
                     case PreviewMode.URL.valueOf():
                         photoboothTools.console.logDev('Preview from URL.');
-                        $(urlSelector).show();
-                        $(urlSelector).addClass('streaming');
+                        url.show();
+                        url.addClass('streaming');
                         break;
                     default:
                         photoboothTools.console.log('Call for unexpected preview mode.');
@@ -180,36 +175,31 @@ const photoboothPreview = (function () {
         }
     };
 
-    api.stopPreview = function (
-        videoSelector = '#video--view',
-        loaderSelector = '#loader',
-        wrapperSelector = '#wrapper',
-        urlSelector = '#ipcam--view'
-    ) {
+    api.stopPreview = function () {
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
             if (config.preview.killcmd) {
-                api.stopPreviewVideo(videoSelector, loaderSelector, wrapperSelector);
+                api.stopPreviewVideo();
             } else {
-                api.stopVideo(videoSelector, loaderSelector, wrapperSelector);
+                api.stopVideo();
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            $(urlSelector).removeClass('streaming');
-            $(urlSelector).hide();
+            url.removeClass('streaming');
+            url.hide();
         }
     };
 
-    api.stopVideo = function (videoSelector, loaderSelector, wrapperSelector) {
-        $(wrapperSelector).css('background-color', config.colors.panel);
-        $(loaderSelector).css('background', config.colors.panel);
-        $(loaderSelector).css('background-color', config.colors.panel);
+    api.stopVideo = function () {
+        wrapper.css('background-color', config.colors.panel);
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
         if (api.stream) {
             api.stream.getTracks()[0].stop();
             api.stream = null;
         }
-        $(videoSelector).hide();
+        video.hide();
     };
 
-    api.stopPreviewVideo = function (videoSelector, loaderSelector, wrapperSelector) {
+    api.stopPreviewVideo = function () {
         if (api.stream) {
             const dataVideo = {
                 play: 'false',
@@ -220,7 +210,7 @@ const photoboothPreview = (function () {
                 .post('api/takeVideo.php', dataVideo)
                 .done(function (result) {
                     photoboothTools.console.log('Stop webcam', result);
-                    api.stopVideo(videoSelector, loaderSelector, wrapperSelector);
+                    api.stopVideo();
                 })
                 .fail(function (xhr, status, result) {
                     photoboothTools.console.log('Could not stop webcam', result);
@@ -228,7 +218,21 @@ const photoboothPreview = (function () {
         }
     };
 
-    api.init = function () {};
+    api.setElements = function (
+        videoSelector = '#video--view',
+        loaderSelector = '#loader',
+        wrapperSelector = '#wrapper',
+        urlSelector = '#ipcam--view'
+    ) {
+        video = $(videoSelector);
+        loader = $(loaderSelector);
+        wrapper = $(wrapperSelector);
+        url = $(urlSelector);
+    }
+
+    api.init = function () {
+        api.setElements();
+    };
 
     return api;
 })();
