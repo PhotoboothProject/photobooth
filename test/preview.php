@@ -59,6 +59,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="../resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="../resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="../resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="../resources/js/test_preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 <script type="text/javascript" src="../resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
