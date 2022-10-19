@@ -2,6 +2,9 @@
   "name": "photobooth",
   "version": "4.2.0",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
+  "engines" : { 
+    "node" : ">=12.22.0"
+  },
   "scripts": {
     "build": "npm-run-all --serial format build:faq build:gulp build:head clean:skipwelcome",
     "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.php --footer faq/footer.html && mv manual/faq.html manual/faq.php",
