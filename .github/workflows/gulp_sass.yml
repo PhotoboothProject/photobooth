@@ -17,7 +17,6 @@ on:
 
 jobs:
   build:
-build:
     strategy:
       matrix:
         version: [12, 14, 16]
