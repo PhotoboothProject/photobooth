@@ -35,7 +35,7 @@ function takeVideo($filename) {
             break;
         } else {
             $i++;
-            sleep(0.1);
+            usleep(100000);
         }
     }
 
@@ -47,16 +47,13 @@ function takeVideo($filename) {
             'output' => $output,
             'php' => basename($_SERVER['PHP_SELF']),
         ];
+        // remove all files that were created - all filenames start with the videos name
+        exec('rm -f ' . $filename . '*');
         $ErrorString = json_encode($ErrorData);
-        if (preg_match('/^[a-z0-9_]+\.(mp4|gif)$/', $filename)) {
-            // remove all files that were created - filenames all start with the videos name
-            exec('rm -f ' . $filename . '*');
-        }
         logError($ErrorData);
         die($ErrorString);
     }
 
-    // TODO only add video to database if we add code to display the video in PhotoSwipe Gallery
     $moveFiles[] = $filename;
     $images = [];
     for ($i = 1; $i < 99; $i++) {
@@ -78,15 +75,40 @@ function takeVideo($filename) {
             $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
             logErrorAndDie($errormsg);
         }
+        $moveFiles[] = $collageFilename;
     }
 
-    $dataFolder = $config['folders']['data'] . DIRECTORY_SEPARATOR;
+    $imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
+    $thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
     foreach ($moveFiles as $file) {
-        $newFile = $dataFolder . basename($file);
+        $newFile = $imageFolder . basename($file);
         rename($file, $newFile);
         if ($config['database']['enabled']) {
-            appendImageToDB($newFile);
+            // TODO fix thumbnail for collage?
+            // TODO only add video to database if we add code to display the video in PhotoSwipe Gallery
+            appendImageToDB(basename($newFile));
         }
+        $picture_permissions = $config['picture']['permissions'];
+        chmod($newFile, octdec($picture_permissions));
+    }
+    // TODO delete single collage images ($images) if they are not to be retained
+    foreach ($images as $file) {
+        $imageResource = imagecreatefromjpeg($file);
+        $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+        $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
+        imagejpeg($thumbResource, $thumbsFolder . basename($file), $config['jpeg_quality']['thumb']);
+        imagedestroy($thumbResource);
+        $newFile = $imageFolder . basename($file);
+        compressImage($config, false, $imageResource, $file, $newFile);
+        if (!$config['picture']['keep_original']) {
+            unlink($file);
+        }
+        imagedestroy($imageResource);
+        if ($config['database']['enabled']) {
+            appendImageToDB(basename($newFile));
+        }
+        $picture_permissions = $config['picture']['permissions'];
+        chmod($newFile, octdec($picture_permissions));
     }
     // TODO show video as result? but print collage? show qr for this / specific mode only?
     // TODO show some kind of result screen. move images to folder, adding to gallery completely failed (maybe because of the folder)
