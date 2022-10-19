@@ -13,16 +13,20 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [12, 14, 16]
+        os: [ubuntu-latest, macos-11]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository and submodules
         uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Use Node v12
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '12'
+          node-version: ${{ matrix.node }}
       - name: Install modules
         run: yarn install
       - name: Build
@@ -33,22 +37,7 @@ jobs:
         run: yarn pack:build
       - name: Publish zip
         uses: actions/upload-artifact@v2
-        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+        if: ${{ matrix.node }} === '12' && ${{ matrix.os }} === 'ubuntu-latest' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         with:
           name: photobooth
           path: archives/photobooth-*.zip
-  buildmacos:
-    runs-on: macos-11
-    steps:
-      - name: Checkout repository and submodules
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: Use Node v12
-        uses: actions/setup-node@v2
-        with:
-          node-version: '12'
-      - name: Install modules
-        run: yarn install
-      - name: Build
-        run: yarn build
