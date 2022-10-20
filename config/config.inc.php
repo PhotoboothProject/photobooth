@@ -128,6 +128,8 @@ $config['collage']['limit'] = '';
 // V I D E O
 $config['video']['enabled'] = false;
 $config['video']['collage'] = false;
+$config['video']['effects'] = 'none';
+$config['video']['gif'] = false;
 
 
 // G A L L E R Y
