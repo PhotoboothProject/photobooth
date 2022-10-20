@@ -590,9 +590,6 @@ const photoBooth = (function () {
                 if (result.error) {
                     api.errorPic(result);
                 } else {
-                    currentCollageFile = '';
-                    nextCollageNumber = 0;
-
                     api.processVideo(result);
                 }
             })
