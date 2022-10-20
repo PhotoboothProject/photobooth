@@ -15,7 +15,6 @@ if (!file_exists($filename_tmp)) {
     logErrorAndDie($errormsg);
 }
 
-
 $cfilter = [];
 $additional_params = '';
 if ($config['video']['effects'] !== 'None') {
@@ -26,8 +25,8 @@ if ($config['video']['effects'] !== 'None') {
         $frame_second_to_last = intval($frames) - 1;
         logError($frame_second_to_last);
 
-        $cfilter[] = "[0]trim=start_frame=1:end_frame=$frame_second_to_last,\
-        setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
+        $cfilter[] = "[0]trim=start_frame=1:end_frame=$frame_second_to_last," .
+            "setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
     }
 }
 
@@ -40,7 +39,7 @@ if ($config['video']['gif']) {
 
 $filter_complex = '';
 if (count($cfilter) > 0) {
-    $filter_complex = '-filter_complex ' . implode(',', $cfilter);
+    $filter_complex = '-filter_complex "' . implode(',', $cfilter) . '"';
 }
 
 $cmd = "ffmpeg -i $filename_tmp $filter_complex $additional_params $filename_photo";

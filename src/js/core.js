@@ -534,7 +534,7 @@ const photoBooth = (function () {
             });
     };
 
-    api.processVideo = function(result) {
+    api.processVideo = function (result) {
         startTime = new Date().getTime();
 
         spinner.show();
