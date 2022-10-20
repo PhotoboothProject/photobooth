@@ -41,7 +41,7 @@ $cmds = [
             'msg' => 'New file is in location',
         ],
         'take_video' => [
-            'cmd' => 'python3 cameracontrol.py -v %s --vframes 4 --veffect boomerang',
+            'cmd' => 'python3 cameracontrol.py -v %s --vlen 3 --vframes 4',
         ],
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',

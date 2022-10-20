@@ -10,7 +10,6 @@ import time
 import zmq
 from argparse import Namespace
 from subprocess import Popen, PIPE
-from threading import Thread
 
 import gphoto2 as gp
 
@@ -208,7 +207,6 @@ class CameraControl:
         self.args.video_frames = args.video_frames
         self.args.video_length = args.video_length
         self.args.video_fps = args.video_fps
-        self.args.video_effects = args.video_effects
 
     def get_chroma_ffmpeg_params(self):
         input_chroma = ['-i', self.chroma['image']]
@@ -257,8 +255,10 @@ class CameraControl:
                     self.connect_to_camera()
                 except BrokenPipeError:
                     print('Broken pipe: check if video recording finished, restart ffmpeg')
-                    Thread(target=VideoConverter(self.args.video_path, self.args.video_effects, self.args.video_length,
-                                                 self.args.video_fps).convert).start()
+                    if self.args.video_path is not None:
+                        temp_video_path = self.args.video_path + TEMP_VIDEO_FILE_APPENDIX
+                        if os.path.exists(temp_video_path):
+                            os.rename(temp_video_path, self.args.video_path)
                     self.args.video_path = None
                     self.ffmpeg_open()
         except KeyboardInterrupt:
@@ -273,40 +273,6 @@ class CameraControl:
                 self.camera.exit()
                 print('Closed camera connection')
             sys.exit(0)
-
-
-class VideoConverter:
-    def __init__(self, video_path, video_effects=None, video_length=3, video_fps=10):
-        self.video_path = video_path
-        self.video_effects = video_effects
-        self.video_length = video_length
-        self.video_fps = video_fps
-
-    def convert(self):
-        video_path = self.video_path
-        temp_video_path = video_path + TEMP_VIDEO_FILE_APPENDIX
-        if not os.path.exists(temp_video_path):
-            print('Temp video file does not exist')
-        else:
-            cfilter = []
-            conversion = []
-            if self.video_effects is not None:
-                if self.video_effects == 'boomerang':
-                    end_frame = self.video_length * self.video_fps - 1
-                    cfilter.append('[0]trim=start_frame=1:end_frame=%s,setpts=PTS-STARTPTS,reverse[r];'
-                                   '[0][r]concat=n=2:v=1:a=0' % str(end_frame))
-            if video_path.endswith('.gif'):
-                cfilter.append('split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse')
-                conversion = ['-loop', '0']
-
-            commands = ['ffmpeg', '-i', temp_video_path, '-filter_complex', ','.join(cfilter), *conversion,
-                        video_path]
-            print(commands)
-            if subprocess.run(commands).returncode == 0:
-                print('Video conversion successful')
-                os.remove(temp_video_path)
-            else:
-                print('Video conversion failed')
 
 
 class MessageSender:
@@ -355,16 +321,13 @@ def main():
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
                         image and wait for message to start preview again', dest='bsm')
     parser.add_argument('-v', '--video', default=None, type=str, dest='video_path',
-                        help='save the next part of the preview as a video file (mp4 or gif)')
+                        help='save the next part of the preview as a video file')
     parser.add_argument('--vframes', default=4, type=int, help='saves shots from the video in an equidistant time',
                         dest='video_frames')
     parser.add_argument('--vlen', default=3, type=int, help='duration of the video in seconds',
                         dest='video_length')
     parser.add_argument('--vfps', default=10, type=int, help='fps of the video',
                         dest='video_fps')
-    parser.add_argument('--veffect', default=None, type=str, help='apply effect to video (currently only "boomerang" \
-                        which about doubles the duration)',
-                        dest='video_effects')
     parser.add_argument('--chromaImage', type=str, help='chroma key background (full path)', dest='chroma_image')
     parser.add_argument('--chromaColor', type=str,
                         help='chroma key color (color name or format like "0xFFFFFF" for white)', dest='chroma_color')

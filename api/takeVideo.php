@@ -54,7 +54,6 @@ function takeVideo($filename) {
         die($ErrorString);
     }
 
-    $moveFiles[] = $filename;
     $images = [];
     for ($i = 1; $i < 99; $i++) {
         $imageFilename = sprintf('%s-%02d.jpg', $filename, $i);
@@ -64,6 +63,10 @@ function takeVideo($filename) {
             break;
         }
     }
+
+    $imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
+    $thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
+
     // If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
     if ($config['video']['collage'] && count($images) === 4) {
         $collageFilename = sprintf('%s-collage.jpg', $filename);
@@ -75,23 +78,9 @@ function takeVideo($filename) {
             $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
             logErrorAndDie($errormsg);
         }
-        $moveFiles[] = $collageFilename;
+        $images[] = $collageFilename;
     }
 
-    $imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
-    $thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
-    foreach ($moveFiles as $file) {
-        $newFile = $imageFolder . basename($file);
-        rename($file, $newFile);
-        if ($config['database']['enabled']) {
-            // TODO fix thumbnail for collage?
-            // TODO only add video to database if we add code to display the video in PhotoSwipe Gallery
-            appendImageToDB(basename($newFile));
-        }
-        $picture_permissions = $config['picture']['permissions'];
-        chmod($newFile, octdec($picture_permissions));
-    }
-    // TODO delete single collage images ($images) if they are not to be retained
     foreach ($images as $file) {
         $imageResource = imagecreatefromjpeg($file);
         $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
@@ -110,13 +99,11 @@ function takeVideo($filename) {
         $picture_permissions = $config['picture']['permissions'];
         chmod($newFile, octdec($picture_permissions));
     }
-    // TODO show video as result? but print collage? show qr for this / specific mode only?
-    // TODO show some kind of result screen. move images to folder, adding to gallery completely failed (maybe because of the folder)
 }
 
 $random = md5(time()) . '.mp4';
 
-if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4|gif)$/', $_POST['file'])) {
+if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file'])) {
     $name = $_POST['file'];
 } elseif ($config['picture']['naming'] === 'numbered') {
     if ($config['database']['enabled']) {
@@ -133,7 +120,7 @@ if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4|gif)$/', $_POST['fi
     $name = $random;
 }
 
-if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4|gif)$/', $_POST['file']))) {
+if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file']))) {
     $file = $name;
 } else {
     $file = $config['database']['file'] . '_' . $name;

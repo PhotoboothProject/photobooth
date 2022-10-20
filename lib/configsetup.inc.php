@@ -839,16 +839,33 @@ $configsetup = [
     'video' => [
         'view' => 'advanced',
         'video_enabled' => [
-            'view' => 'basic',
+            'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'video[enabled]',
             'value' => $config['video']['enabled'],
         ],
         'video_collage' => [
-            'view' => 'basic',
+            'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'video[collage]',
             'value' => $config['video']['collage'],
+        ],
+        'video_effects' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'video[effects]',
+            'placeholder' => $defaultConfig['video']['effects'],
+            'options' => [
+                'none' => 'None',
+                'boomerang' => 'Boomerang',
+            ],
+            'value' => $config['video']['effects'],
+        ],
+        'video_gif' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[gif]',
+            'value' => $config['video']['gif'],
         ],
     ],
     'gallery' => [

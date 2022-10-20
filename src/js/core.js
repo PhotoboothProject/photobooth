@@ -534,6 +534,42 @@ const photoBooth = (function () {
             });
     };
 
+    api.processVideo = function(result) {
+        startTime = new Date().getTime();
+
+        spinner.show();
+        loading.text(photoboothTools.getTranslation('busyVideo'));
+
+        $.ajax({
+            method: 'POST',
+            url: 'api/applyVideoEffects.php',
+            data: {
+                file: result.file
+            },
+            success: (data) => {
+                photoboothTools.console.log('video processed', data);
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.logDev('Processing video took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Video:', data.file);
+
+                if (config.get_request.processed) {
+                    const getUrl = config.get_request.server + '/video';
+                    photoboothTools.getRequest(getUrl);
+                }
+
+                if (data.error) {
+                    api.errorPic(data);
+                }
+            },
+            error: (jqXHR, textStatus) => {
+                api.errorPic({
+                    error: 'Request failed: ' + textStatus
+                });
+            }
+        });
+    };
+
     api.callTakeVideoApi = function (data) {
         // TODO maybe some other kind of animation (film strip?)
         // while recording. End of recording gets no message back but whe know the requested duration
@@ -551,13 +587,13 @@ const photoBooth = (function () {
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
                 $('#' + imgFilter).addClass('activeSidenavBtn');
 
-                // TODO check if file exists and display file
-
                 if (result.error) {
                     api.errorPic(result);
                 } else {
                     currentCollageFile = '';
                     nextCollageNumber = 0;
+
+                    api.processVideo(result);
                 }
             })
             .fail(function (xhr, status, result) {
