@@ -10,10 +10,7 @@ RUNNING_ON_PI=true
 FORCE_RASPBERRY_PI=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
-if [ ! -d "/tmp/photobooth" ]; then
-    mkdir -p "/tmp/photobooth"
-fi
-PHOTOBOOTH_TMP_LOG="/tmp/photobooth/$DATE-photobooth"
+PHOTOBOOTH_TMP_LOG="/tmp/$DATE-photobooth.txt"
 
 BRANCH="dev"
 GIT_INSTALL=true
