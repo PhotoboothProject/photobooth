@@ -39,7 +39,7 @@ const photoBooth = (function () {
         qrCodeModal = $('#qrCode'),
         counter = $('#counter'),
         resultInner = $('.resultInner'),
-        resultVideo = $('.resultVideo'),
+        resultVideo = $('#resultVideo'),
         spinner = $('.spinner'),
         sendMail = $('.send-mail'),
         mailMessageForm = $('#mail-form-message'),
@@ -682,14 +682,15 @@ const photoBooth = (function () {
                     // render the result for the collage image and overlay the video over the image
                     api.renderPic(data.file + '-collage.jpg', data.images);
                     let source = document.createElement('source');
+                    let file = config.foldersJS.images + '/' + data.file;
                     if (data.file.split('.').pop() === 'gif') {
-                        source.setAttribute('img', data.file);
+                        source.setAttribute('img', file);
                     } else {
-                        source.setAttribute('src', data.file);
+                        source.setAttribute('src', file);
                         source.setAttribute('type', 'video/mp4');
                     }
-                    resultVideo.appendChild(source);
-                    resultVideo.play();
+                    resultVideo.append(source);
+                    resultVideo.get(0).play();
                     resultVideo.show();
                 }
             },
