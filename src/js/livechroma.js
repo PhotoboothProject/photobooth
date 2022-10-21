@@ -8,7 +8,6 @@ let seriously;
 let target;
 let chroma;
 let seriouslyimage;
-let takingPic = false;
 let needsReload = false;
 
 function greenToTransparency(imageIn, imageOut) {
@@ -193,7 +192,7 @@ function saveImage(cb) {
             imgData: dataURL
         },
         function (data) {
-            takingPic = false;
+            photoBooth.takingPic = false;
             needsReload = true;
             if ($('.chroma-control-bar').is(':hidden')) {
                 $('.chroma-control-bar').show();
@@ -266,7 +265,6 @@ $('.backgroundPreview').on('click', function () {
 // Take Chroma Button
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
-    takingPic = true;
     const chromaInfo = photoboothTools.getTranslation('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
@@ -292,10 +290,10 @@ $(document).on('keyup', function (ev) {
             photoboothTools.console.log('Please choose a background first!');
         } else if (needsReload) {
             photoboothTools.console.log('Please reload the page to take a new Picture!');
-        } else if (!takingPic) {
+        } else if (!photoBooth.takingPic) {
             $('.closeGallery').trigger('click');
             $('.takeChroma').trigger('click');
-        } else if (config.dev.loglevel > 0 && takingPic) {
+        } else if (config.dev.loglevel > 0 && photoBooth.takingPic) {
             photoboothTools.console.log('Taking photo already in progress!');
         }
     }
@@ -305,11 +303,11 @@ $(document).on('keyup', function (ev) {
             photoboothTools.console.log('Please choose a background first!');
         } else if (needsReload) {
             photoboothTools.console.log('Please reload the page to take a new Picture!');
-        } else if (!takingPic) {
+        } else if (!photoBooth.takingPic) {
             $('.closeGallery').trigger('click');
             photoboothTools.console.logDev('Collage key pressed. Not possible on live chroma, triggering photo now.');
             $('.takeChroma').trigger('click');
-        } else if (config.dev.loglevel > 0 && takingPic) {
+        } else if (config.dev.loglevel > 0 && photoBooth.takingPic) {
             photoboothTools.console.log('Taking photo already in progress!');
         }
     }
