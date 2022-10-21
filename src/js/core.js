@@ -60,7 +60,6 @@ const photoBooth = (function () {
 
     let timeOut,
         isPrinting = false,
-        takingPic = false,
         chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
@@ -69,6 +68,7 @@ const photoBooth = (function () {
         endTime,
         totalTime;
 
+    api.takingPic = false;
     api.nextCollageNumber = 0;
 
     api.isTimeOutPending = function () {
@@ -80,7 +80,7 @@ const photoBooth = (function () {
 
         photoboothTools.console.log('Timeout for auto reload cleared.');
 
-        if (!takingPic) {
+        if (!api.takingPic) {
             photoboothTools.console.logDev('Timeout for auto reload set to', timeToLive, ' milliseconds.');
             timeOut = setTimeout(function () {
                 photoboothTools.reloadPage();
@@ -214,14 +214,19 @@ const photoBooth = (function () {
     };
 
     api.thrill = function (photoStyle, retry = 0) {
+        if (api.takingPic) {
+            photoboothTools.console.logDev('Taking picture in progress already!');
+
+            return;
+        }
         api.navbar.close();
         api.reset();
         api.closeGallery();
         api.showResultInner(false);
 
         remoteBuzzerClient.inProgress(true);
-        takingPic = true;
-        photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
+        api.takingPic = true;
+        photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
 
         if (api.isTimeOutPending()) {
             api.resetTimeOut();
@@ -522,9 +527,9 @@ const photoBooth = (function () {
             if (config.dev.loglevel > 1) {
                 loading.append($('<p class="text-muted">').text(data.error));
             }
-            takingPic = false;
+            api.takingPic = false;
             remoteBuzzerClient.inProgress(false);
-            photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
+            photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
             if (config.dev.reload_on_error) {
                 loading.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
                 setTimeout(function () {
@@ -613,9 +618,9 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
-        takingPic = false;
+        api.takingPic = false;
         remoteBuzzerClient.inProgress(false);
-        photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
+        photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
 
         api.resetTimeOut();
     };
@@ -726,9 +731,9 @@ const photoBooth = (function () {
             api.shellCommand('post-command', filename);
         }
 
-        takingPic = false;
+        api.takingPic = false;
         remoteBuzzerClient.inProgress(false);
-        photoboothTools.console.logDev('Taking picture in progress: ' + takingPic);
+        photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
 
         api.resetTimeOut();
 
@@ -1165,7 +1170,7 @@ const photoBooth = (function () {
     $(document).on('keyup', function (ev) {
         if (triggerPic[0] || triggerCollage[0]) {
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
-                if (takingPic) {
+                if (api.takingPic) {
                     api.handleButtonPressWhileTakingPic();
                 } else {
                     $('.closeGallery').trigger('click');
@@ -1181,7 +1186,7 @@ const photoBooth = (function () {
             }
 
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
-                if (takingPic) {
+                if (api.takingPic) {
                     api.handleButtonPressWhileTakingPic();
                 } else {
                     $('.closeGallery').trigger('click');
