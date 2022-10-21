@@ -39,6 +39,7 @@ const photoBooth = (function () {
         qrCodeModal = $('#qrCode'),
         counter = $('#counter'),
         resultInner = $('.resultInner'),
+        resultVideo = $('.resultVideo'),
         spinner = $('.spinner'),
         sendMail = $('.send-mail'),
         mailMessageForm = $('#mail-form-message'),
@@ -678,8 +679,18 @@ const photoBooth = (function () {
                 if (data.error) {
                     api.errorPic(data);
                 } else {
-                    // TODO temporary show collage instead of video
+                    // render the result for the collage image and overlay the video over the image
                     api.renderPic(data.file + '-collage.jpg', data.images);
+                    let source = document.createElement('source');
+                    if (data.file.split('.').pop() === 'gif') {
+                        source.setAttribute('img', data.file);
+                    } else {
+                        source.setAttribute('src', data.file);
+                        source.setAttribute('type', 'video/mp4');
+                    }
+                    resultVideo.appendChild(source);
+                    resultVideo.play();
+                    resultVideo.show();
                 }
             },
             error: (jqXHR, textStatus) => {

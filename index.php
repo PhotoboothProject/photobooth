@@ -126,6 +126,11 @@ if (
     <div class="stages rotarygroup" id="result">
 
         <div class="resultInner hidden">
+            <?php if ($config['video']['enabled']): ?>
+                <video id="resultVideo" autoplay loop muted>
+                </video>
+            <?php endif; ?>
+
             <?php if ($config['button']['homescreen']): ?>
                 <a href="#" class="<?php echo $btnClass; ?> homebtn rotaryfocus"><i class="fa fa-home"></i> <span
                             data-i18n="home"></span></a>
@@ -161,6 +166,11 @@ if (
                     <a href="#" class="<?php echo $btnClass; ?> newcollage rotaryfocus"><i class="fa fa-th-large"></i>
                         <span
                                 data-i18n="newCollage"></span></a>
+                <?php endif; ?>
+
+                <?php if ($config['video']['enabled']): ?>
+                    <a href="#" class="<?php echo $btnClass; ?> takeVideo rotaryfocus"><i class="fa fa-film"></i> <span
+                                data-i18n="takeVideo"></span></a>
                 <?php endif; ?>
             <?php endif; ?>
 
