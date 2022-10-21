@@ -33,7 +33,7 @@ for ($i = 1; $i < 99; $i++) {
 
 // If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
 if ($config['video']['collage'] && count($images) === 4) {
-    $collageFilename = sprintf('%s-collage.jpg', $file);
+    $collageFilename = sprintf('%s-collage.jpg', $image);
     $collageConfig = new CollageConfig();
     $collageConfig->collageLayout = '2x4-3';
     $collageConfig->collageTakeFrame = 'off';
@@ -45,16 +45,16 @@ if ($config['video']['collage'] && count($images) === 4) {
     $images[] = $collageFilename;
 }
 
-foreach ($images as $file) {
-    $imageResource = imagecreatefromjpeg($file);
+foreach ($images as $image) {
+    $imageResource = imagecreatefromjpeg($image);
     $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
     $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
-    imagejpeg($thumbResource, $thumbsFolder . basename($file), $config['jpeg_quality']['thumb']);
+    imagejpeg($thumbResource, $thumbsFolder . basename($image), $config['jpeg_quality']['thumb']);
     imagedestroy($thumbResource);
-    $newFile = $imageFolder . basename($file);
-    compressImage($config, false, $imageResource, $file, $newFile);
+    $newFile = $imageFolder . basename($image);
+    compressImage($config, false, $imageResource, $image, $newFile);
     if (!$config['picture']['keep_original']) {
-        unlink($file);
+        unlink($image);
     }
     imagedestroy($imageResource);
     if ($config['database']['enabled']) {
