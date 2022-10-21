@@ -263,16 +263,13 @@ const photoBooth = (function () {
             photoboothTools.getRequest(getUrl);
         }
 
+        cntdwn_time = config.picture.cntdwn_time;
         switch (photoStyle) {
             case PhotoStyle.COLLAGE:
                 cntdwn_time = config.collage.cntdwn_time;
                 break;
             case PhotoStyle.VIDEO:
                 cntdwn_time = config.video.cntdwn_time;
-                break;
-            case PhotoStyle.PHOTO:
-            default:
-                cntdwn_time = config.picture.cntdwn_time;
                 break;
         }
 
