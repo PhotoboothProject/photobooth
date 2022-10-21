@@ -4,6 +4,9 @@ header('Content-Type: application/json');
 require_once '../lib/db.php';
 require_once '../lib/config.php';
 require_once '../lib/log.php';
+require_once '../lib/applyEffects.php';
+require_once '../lib/collageConfig.php';
+require_once '../lib/collage.php';
 
 $file = $_POST['file'];
 $tmpFolder = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR;

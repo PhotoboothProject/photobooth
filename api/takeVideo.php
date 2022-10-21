@@ -4,9 +4,6 @@ header('Content-Type: application/json');
 require_once '../lib/config.php';
 require_once '../lib/db.php';
 require_once '../lib/log.php';
-require_once '../lib/applyEffects.php';
-require_once '../lib/collage.php';
-require_once '../lib/collageConfig.php';
 
 function takeVideo($filename) {
     global $config;
@@ -90,7 +87,7 @@ if (file_exists($filename_tmp)) {
 takeVideo($filename_tmp);
 
 $LogData = [
-    'success' => 'image',
+    'success' => 'video',
     'file' => $file,
     'php' => basename($_SERVER['PHP_SELF']),
 ];
