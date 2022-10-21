@@ -65,8 +65,8 @@ $picture_permissions = $config['picture']['permissions'];
 chmod($filename_photo, octdec($picture_permissions));
 
 $images = [$file];
-foreach (glob("$filename_tmp*") as $filename) {
-    $images[] = $filename;
+foreach (glob("$filename_photo*") as $filename) {
+    $images[] = basename($filename);
 }
 
 $LogData = [

@@ -546,7 +546,7 @@ const photoBooth = (function () {
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('Took ' + data.style, result);
-                photoboothTools.console.logDev('Taking & converting video took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Taking video took ' + totalTime + 'ms');
                 cheese.empty();
 
                 imgFilter = config.filters.defaults;
