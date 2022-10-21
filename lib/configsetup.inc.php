@@ -844,6 +844,17 @@ $configsetup = [
             'name' => 'video[enabled]',
             'value' => $config['video']['enabled'],
         ],
+        'video_cntdwn_time' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'name' => 'video[cntdwn_time]',
+            'placeholder' => $defaultConfig['video']['cntdwn_time'],
+            'value' => $config['video']['cntdwn_time'],
+            'range_min' => 1,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
         'video_collage' => [
             'view' => 'advanced',
             'type' => 'checkbox',

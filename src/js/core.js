@@ -263,8 +263,21 @@ const photoBooth = (function () {
             photoboothTools.getRequest(getUrl);
         }
 
+        switch (photoStyle) {
+            case PhotoStyle.COLLAGE:
+                cntdwn_time = config.collage.cntdwn_time;
+                break;
+            case PhotoStyle.VIDEO:
+                cntdwn_time = config.video.cntdwn_time;
+                break;
+            case PhotoStyle.PHOTO:
+            default:
+                cntdwn_time = config.picture.cntdwn_time;
+                break;
+        }
+
         api.startCountdown(
-            photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time,
+            cntdwn_time,
             counter,
             () => {
                 if (
@@ -314,8 +327,8 @@ const photoBooth = (function () {
     api.takeVideo = function (retry) {
         remoteBuzzerClient.inProgress(true);
 
-        loader.css('background', config.colors.panel);
-        loader.css('background-color', config.colors.panel);
+        // loader.css('background', config.colors.panel);
+        // loader.css('background-color', config.colors.panel);
         const data = {};
         api.callTakeVideoApi(data, retry);
     };

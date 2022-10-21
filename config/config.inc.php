@@ -127,6 +127,7 @@ $config['collage']['limit'] = '';
 
 // V I D E O
 $config['video']['enabled'] = false;
+$config['video']['cntdwn_time'] = '3';
 $config['video']['collage'] = false;
 $config['video']['effects'] = 'none';
 $config['video']['gif'] = false;

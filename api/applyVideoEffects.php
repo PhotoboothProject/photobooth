@@ -25,8 +25,7 @@ if ($config['video']['effects'] !== 'None') {
         $frame_second_to_last = intval($frames) - 1;
         logError($frame_second_to_last);
 
-        $cfilter[] = "[0]trim=start_frame=1:end_frame=$frame_second_to_last," .
-            "setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
+        $cfilter[] = "[0]trim=start_frame=1:end_frame=$frame_second_to_last,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
     }
 }
 
