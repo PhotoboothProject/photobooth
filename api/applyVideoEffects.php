@@ -82,7 +82,7 @@ if ($config['video']['gif']) {
     $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
     $additional_params .= '-loop 0';
     $info = pathinfo($filename_photo);
-    $filename_photo = $info['filename'] . '.gif';
+    $filename_photo = $imageFolder . $info['filename'] . '.gif';
 }
 
 $filter_complex = '';
