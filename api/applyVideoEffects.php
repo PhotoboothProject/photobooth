@@ -79,7 +79,7 @@ if ($config['video']['effects'] !== 'None') {
 }
 
 if ($config['video']['gif']) {
-    $cfilter[] = ',split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
+    $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
     $additional_params .= '-loop 0';
     $info = pathinfo($filename_photo);
     $filename_photo = $info['filename'] . '.gif';
