@@ -264,7 +264,7 @@
   "manual:video:video_collage": "Wenn die Konfiguration während der Videoaufnahme 4 Bilder speichert, daraus eine Collage erstellen.",
   "manual:video:video_effects": "Video-Effect der auf das Video angewendet werden soll.",
   "manual:video:video_gif": "Video zu animiertem gif umwandeln. (Längere Bearbeitungszeit, größere Datei, schlechtere Qualität)",
-  "manual:video:video_qr": "QR-Code für Video aktivieren obwohl er global deaktiviert ist.",
+  "manual:video:video_qr": "QR-Code für Video anzeigen.",
   "manual:commands:exiftool_cmd": "EXIFtool-Befehlszeile, die nach dem Aufnehmen eines Bildes ausgeführt wird. Die Option \"EXIF-Daten beibehalten\" muss aktiviert sein.",
   "manual:commands:exiftool_msg": "Aus der EXIFtool-Befehlszeile zurückgegebene Nachricht.",
   "manual:commands:nodebin_cmd": "Pfad zum Node.js Binary - Beispiel <code>/usr/bin/node</code>",
