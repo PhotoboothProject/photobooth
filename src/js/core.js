@@ -263,7 +263,7 @@ const photoBooth = (function () {
             photoboothTools.getRequest(getUrl);
         }
 
-        cntdwn_time = config.picture.cntdwn_time;
+        let cntdwn_time = config.picture.cntdwn_time;
         switch (photoStyle) {
             case PhotoStyle.COLLAGE:
                 cntdwn_time = config.collage.cntdwn_time;
@@ -273,10 +273,7 @@ const photoBooth = (function () {
                 break;
         }
 
-        api.startCountdown(
-            cntdwn_time,
-            counter,
-            () => {
+        api.startCountdown(cntdwn_time, counter,() => {
                 if (
                     config.preview.mode === PreviewMode.DEVICE.valueOf() &&
                     config.preview.camTakesPic &&
