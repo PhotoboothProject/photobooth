@@ -885,6 +885,12 @@ $configsetup = [
             'name' => 'video[gif]',
             'value' => $config['video']['gif'],
         ],
+        'video_qr' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[qr]',
+            'value' => $config['video']['qr'],
+        ],
     ],
     'gallery' => [
         'view' => 'basic',

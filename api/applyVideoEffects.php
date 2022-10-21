@@ -64,8 +64,14 @@ if ($config['database']['enabled']) {
 $picture_permissions = $config['picture']['permissions'];
 chmod($filename_photo, octdec($picture_permissions));
 
+$images = [$file];
+foreach (glob("$filename_tmp*") as $filename) {
+    $images[] = $filename;
+}
+
 $LogData = [
     'file' => $file,
+    'images' => $images,
     'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);

@@ -132,6 +132,7 @@ $config['video']['cheese'] = 'Show your moves!';
 $config['video']['collage'] = false;
 $config['video']['effects'] = 'none';
 $config['video']['gif'] = false;
+$config['video']['qr'] = true;
 
 
 // G A L L E R Y

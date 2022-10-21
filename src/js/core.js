@@ -273,38 +273,36 @@ const photoBooth = (function () {
                 break;
         }
 
-        api.startCountdown(cntdwn_time, counter,() => {
-                if (
-                    config.preview.mode === PreviewMode.DEVICE.valueOf() &&
-                    config.preview.camTakesPic &&
-                    !photoboothPreview.stream &&
-                    !config.dev.demo_images
-                ) {
-                    api.errorPic({
-                        error: 'No preview by device cam available!'
-                    });
+        api.startCountdown(cntdwn_time, counter, () => {
+            if (
+                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
+                config.preview.camTakesPic &&
+                !photoboothPreview.stream &&
+                !config.dev.demo_images
+            ) {
+                api.errorPic({
+                    error: 'No preview by device cam available!'
+                });
+            } else {
+                if (config.picture.no_cheese) {
+                    photoboothTools.console.log('Cheese is disabled.');
                 } else {
-                    if (config.picture.no_cheese) {
-                        photoboothTools.console.log('Cheese is disabled.');
-                    } else {
-                        api.cheese(photoStyle);
-                    }
-                    setTimeout(() => {
-                        if (photoStyle === PhotoStyle.VIDEO) {
-                            api.takeVideo(retry);
-                        } else {
-                            api.takePic(photoStyle, retry);
-                        }
-                    }, cheeseTime);
+                    api.cheese(photoStyle);
                 }
+                setTimeout(() => {
+                    if (photoStyle === PhotoStyle.VIDEO) {
+                        api.takeVideo(retry);
+                    } else {
+                        api.takePic(photoStyle, retry);
+                    }
+                }, cheeseTime);
             }
-        );
+        });
     };
 
     api.cheese = function (photoStyle) {
         cheese.empty();
         if (photoStyle === PhotoStyle.VIDEO) {
-            // TODO animated frame or sth?
             cheese.text(config.video.cheese);
         } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             api.shutter.start();
@@ -538,44 +536,6 @@ const photoBooth = (function () {
             });
     };
 
-    api.processVideo = function (result) {
-        startTime = new Date().getTime();
-
-        loader.css('background', config.colors.panel);
-        loader.css('background-color', config.colors.panel);
-        spinner.show();
-        loading.text(photoboothTools.getTranslation('busyVideo'));
-
-        $.ajax({
-            method: 'POST',
-            url: 'api/applyVideoEffects.php',
-            data: {
-                file: result.file
-            },
-            success: (data) => {
-                photoboothTools.console.log('video processed', data);
-                endTime = new Date().getTime();
-                totalTime = endTime - startTime;
-                photoboothTools.console.logDev('Processing video took ' + totalTime + 'ms');
-                photoboothTools.console.logDev('Video:', data.file);
-
-                if (config.get_request.processed) {
-                    const getUrl = config.get_request.server + '/video';
-                    photoboothTools.getRequest(getUrl);
-                }
-
-                if (data.error) {
-                    api.errorPic(data);
-                }
-            },
-            error: (jqXHR, textStatus) => {
-                api.errorPic({
-                    error: 'Request failed: ' + textStatus
-                });
-            }
-        });
-    };
-
     api.callTakeVideoApi = function (data) {
         // TODO maybe some other kind of animation (film strip?)
         // while recording. End of recording gets no message back but whe know the requested duration
@@ -675,6 +635,46 @@ const photoBooth = (function () {
                     api.errorPic(data);
                 } else if (photoStyle === PhotoStyle.CHROMA) {
                     api.renderChroma(data.file);
+                } else {
+                    api.renderPic(data.file, data.images);
+                }
+            },
+            error: (jqXHR, textStatus) => {
+                api.errorPic({
+                    error: 'Request failed: ' + textStatus
+                });
+            }
+        });
+    };
+
+    api.processVideo = function (result) {
+        startTime = new Date().getTime();
+
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
+        spinner.show();
+        loading.text(photoboothTools.getTranslation('busyVideo'));
+
+        $.ajax({
+            method: 'POST',
+            url: 'api/applyVideoEffects.php',
+            data: {
+                file: result.file
+            },
+            success: (data) => {
+                photoboothTools.console.log('video processed', data);
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.logDev('Processing video took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Video:', data.file);
+
+                if (config.get_request.processed) {
+                    const getUrl = config.get_request.server + '/video';
+                    photoboothTools.getRequest(getUrl);
+                }
+
+                if (data.error) {
+                    api.errorPic(data);
                 } else {
                     api.renderPic(data.file, data.images);
                 }
