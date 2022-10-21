@@ -265,6 +265,13 @@ $('.backgroundPreview').on('click', function () {
 // Take Chroma Button
 $('.takeChroma, .newchroma').on('click', function (e) {
     e.preventDefault();
+
+    if (photoBooth.takingPic) {
+        photoboothTools.console.logDev('Taking picture in progress already!');
+
+        return;
+    }
+
     const chromaInfo = photoboothTools.getTranslation('chromaInfoAfter');
 
     photoBooth.thrill('chroma');
