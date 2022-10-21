@@ -679,6 +679,9 @@ const photoBooth = (function () {
                 if (data.error) {
                     api.errorPic(data);
                 } else {
+                    // TODO this workaround only works if a collage file exists
+                    // TODO if no collage file exists this needs to be handled differently and printing needs to be disabled
+                    // TODO add always visible qr code (if option is set) as there's not a lot else to do with the video
                     // render the result for the collage image and overlay the video over the image
                     api.renderPic(data.file + '-collage.jpg', data.images);
                     let source = document.createElement('source');

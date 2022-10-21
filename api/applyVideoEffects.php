@@ -6,13 +6,59 @@ require_once '../lib/config.php';
 require_once '../lib/log.php';
 
 $file = $_POST['file'];
-$filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
-$filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
-$filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
+$tmpFolder = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR;
+$imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
+$thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
+$filename_tmp = $tmpFolder . $file;
+$filename_photo = $imageFolder . $file;
+$filename_thumb = $thumbsFolder . $file;
 
 if (!file_exists($filename_tmp)) {
     $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $filename_tmp . ' does not exist';
     logErrorAndDie($errormsg);
+}
+
+$images = [];
+for ($i = 1; $i < 99; $i++) {
+    $imageFilename = sprintf('%s-%02d.jpg', $filename_tmp, $i);
+    if (file_exists($imageFilename)) {
+        $images[] = $imageFilename;
+    } else {
+        break;
+    }
+}
+
+// If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
+if ($config['video']['collage'] && count($images) === 4) {
+    $collageFilename = sprintf('%s-collage.jpg', $file);
+    $collageConfig = new CollageConfig();
+    $collageConfig->collageLayout = '2x4-3';
+    $collageConfig->collageTakeFrame = 'off';
+    $collageConfig->collagePlaceholder = false;
+    if (!createCollage($images, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
+        logErrorAndDie($errormsg);
+    }
+    $images[] = $collageFilename;
+}
+
+foreach ($images as $file) {
+    $imageResource = imagecreatefromjpeg($file);
+    $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+    $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
+    imagejpeg($thumbResource, $thumbsFolder . basename($file), $config['jpeg_quality']['thumb']);
+    imagedestroy($thumbResource);
+    $newFile = $imageFolder . basename($file);
+    compressImage($config, false, $imageResource, $file, $newFile);
+    if (!$config['picture']['keep_original']) {
+        unlink($file);
+    }
+    imagedestroy($imageResource);
+    if ($config['database']['enabled']) {
+        appendImageToDB(basename($newFile));
+    }
+    $picture_permissions = $config['picture']['permissions'];
+    chmod($newFile, octdec($picture_permissions));
 }
 
 $cfilter = [];
