@@ -650,6 +650,8 @@ const photoBooth = (function () {
     api.processVideo = function (result) {
         startTime = new Date().getTime();
 
+        idVideoSensor.hide();
+        idVideoView.hide();
         loader.css('background', config.colors.panel);
         loader.css('background-color', config.colors.panel);
         spinner.show();
@@ -676,7 +678,8 @@ const photoBooth = (function () {
                 if (data.error) {
                     api.errorPic(data);
                 } else {
-                    api.renderPic(data.file, data.images);
+                    // TODO temporary show collage instead of video
+                    api.renderPic(data.file + '-collage.jpg', data.images);
                 }
             },
             error: (jqXHR, textStatus) => {

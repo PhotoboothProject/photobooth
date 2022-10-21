@@ -57,14 +57,14 @@ if ($returnValue != 0) {
 
 // insert into database
 if ($config['database']['enabled']) {
-    appendImageToDB($filename_photo);
+    appendImageToDB($file);
 }
 
 // Change permissions
 $picture_permissions = $config['picture']['permissions'];
 chmod($filename_photo, octdec($picture_permissions));
 
-$images = [$file];
+$images = [];
 foreach (glob("$filename_photo*") as $filename) {
     $images[] = basename($filename);
 }
