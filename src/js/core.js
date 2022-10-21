@@ -305,7 +305,7 @@ const photoBooth = (function () {
         cheese.empty();
         if (photoStyle === PhotoStyle.VIDEO) {
             // TODO animated frame or sth?
-            cheese.text('temporary video cheese :)');
+            cheese.text(config.video.cheese);
         } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             api.shutter.start();
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
@@ -320,9 +320,6 @@ const photoBooth = (function () {
 
     api.takeVideo = function (retry) {
         remoteBuzzerClient.inProgress(true);
-
-        // loader.css('background', config.colors.panel);
-        // loader.css('background-color', config.colors.panel);
         const data = {};
         api.callTakeVideoApi(data, retry);
     };
@@ -544,6 +541,8 @@ const photoBooth = (function () {
     api.processVideo = function (result) {
         startTime = new Date().getTime();
 
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
         spinner.show();
         loading.text(photoboothTools.getTranslation('busyVideo'));
 

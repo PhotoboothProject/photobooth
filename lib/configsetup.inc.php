@@ -855,6 +855,13 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'seconds',
         ],
+        'video_cheese' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['video']['cheese'],
+            'name' => 'video[cheese]',
+            'value' => htmlentities($config['video']['cheese'] ?? ''),
+        ],
         'video_collage' => [
             'view' => 'advanced',
             'type' => 'checkbox',
