@@ -33,7 +33,7 @@ for ($i = 1; $i < 99; $i++) {
 
 // If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
 if ($config['video']['collage'] && count($images) === 4) {
-    $collageFilename = sprintf('%s-collage.jpg', $image);
+    $collageFilename = sprintf('%s-collage.jpg', $file);
     $collageConfig = new CollageConfig();
     $collageConfig->collageLayout = '2x4-3';
     $collageConfig->collageTakeFrame = 'off';
@@ -92,6 +92,9 @@ if (count($cfilter) > 0) {
 
 $cmd = "ffmpeg -i $filename_tmp $filter_complex $additional_params $filename_photo";
 exec($cmd, $output, $returnValue);
+if (!$config['picture']['keep_original']) {
+    unlink($filename_tmp);
+}
 
 if ($returnValue != 0) {
     $ErrorData = [
