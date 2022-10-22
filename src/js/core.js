@@ -1274,7 +1274,7 @@ const photoBooth = (function () {
             newWidth = videoEl.videoWidth;
             newHeight = videoEl.videoHeight;
         }
-        if(newWidth !== 0 && newHeight !== 0) {
+        if (newWidth !== 0 && newHeight !== 0) {
             pictureFrame.css('width', newWidth);
             pictureFrame.css('height', newHeight);
             collageFrame.css('width', newWidth);

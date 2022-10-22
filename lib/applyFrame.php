@@ -13,7 +13,7 @@ function applyFrame($sourceResource, $framePath) {
     $dst_x = 0;
     $dst_y = 0;
 
-    if($pic_height == $frame_height) {
+    if ($pic_height == $frame_height) {
         $dst_x = ($pic_width - $frame_width) / 2;
     } else {
         $dst_y = ($pic_height - $frame_height) / 2;
