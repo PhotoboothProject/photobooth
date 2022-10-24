@@ -254,12 +254,14 @@ class CameraControl:
                     print('Not connected to camera. Trying to reconnect...')
                     self.connect_to_camera()
                 except BrokenPipeError:
-                    print('Broken pipe: check if video recording finished, restart ffmpeg')
+                    print('Broken pipe: check if video recording finished, restart camera connection & ffmpeg')
                     if self.args.video_path is not None:
                         temp_video_path = self.args.video_path + TEMP_VIDEO_FILE_APPENDIX
                         if os.path.exists(temp_video_path):
                             os.rename(temp_video_path, self.args.video_path)
                     self.args.video_path = None
+                    self.camera.exit()
+                    self.connect_to_camera()
                     self.ffmpeg_open()
         except KeyboardInterrupt:
             self.exit_gracefully()
