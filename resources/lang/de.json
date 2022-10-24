@@ -556,6 +556,7 @@
   "print:textonprint_locationy": "Y-Koordinaten",
   "print:textonprint_rotation": "Text-Rotation",
   "printing": "Druckauftrag gestartet! Bitte warten...",
+  "no_printing": "Dateityp kann nicht gedruckt werden.",
   "processPhoto": "Collage verarbeiten",
   "qr": "QR-Code",
   "qr:qr_append_filename": "Dateiname an die URL anhängen",

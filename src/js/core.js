@@ -679,14 +679,15 @@ const photoBooth = (function () {
                 if (data.error) {
                     api.errorPic(data);
                 } else {
-                    // TODO this workaround only works if a collage file exists
-                    // TODO if no collage file exists this needs to be handled differently and printing needs to be disabled
                     // TODO add always visible qr code (if option is set) as there's not a lot else to do with the video
-                    // render the result for the collage image and overlay the video over the image
-                    api.renderPic(data.file + '-collage.jpg', data.images);
+                    // if collage exists: render the result for the collage image and overlay the video over the image
+                    let collage = data.file + '-collage.jpg';
+                    let filename = data.images.includes(collage) ? collage : data.file;
+                    api.renderPic(filename, data.images);
                     let source = document.createElement('source');
                     let file = config.foldersJS.images + '/' + data.file;
                     if (data.file.split('.').pop() === 'gif') {
+                        // TODO gif is not yet properly displayed
                         source.setAttribute('img', file);
                     } else {
                         source.setAttribute('src', file);
@@ -962,8 +963,38 @@ const photoBooth = (function () {
         timerFunction();
     };
 
+    api.getFileExtension = function (filename) {
+        let parts = filename.split('.');
+        return parts[parts.length - 1];
+    }
+
+    api.resetPrintMessage = function (cb, to) {
+        setTimeout(function () {
+            photoboothTools.modal.close('#print_mesg');
+            printMesg.empty();
+            printMesg.html(
+                '<div class="modal__body"><span>' +
+                photoboothTools.getTranslation('printing') +
+                '</span></div>'
+            );
+            cb();
+            isPrinting = false;
+            remoteBuzzerClient.inProgress(false);
+        }, to);
+    }
+
     api.printImage = function (imageSrc, cb) {
-        if (isPrinting) {
+        let extension = api.getFileExtension(imageSrc);
+        if (extension === 'mp4' || extension === 'gif') {
+            photoboothTools.console.log('An error occurred: attempt to print non printable file',);
+            printMesg.empty();
+            printMesg.html(
+                '<div class="modal__body"><span style="color:red">' +
+                photoboothTools.getTranslation('no_printing') +
+                '</span></div>'
+            );
+            api.resetPrintMessage(cb, 5000);
+        } else if (isPrinting) {
             photoboothTools.console.log('Printing in progress: ' + isPrinting);
         } else {
             photoboothTools.modal.open('#print_mesg');
@@ -988,21 +1019,7 @@ const photoBooth = (function () {
                                 '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
                             );
                         }
-
-                        setTimeout(function () {
-                            photoboothTools.modal.close('#print_mesg');
-                            if (data.error) {
-                                printMesg.empty();
-                                printMesg.html(
-                                    '<div class="modal__body"><span>' +
-                                        photoboothTools.getTranslation('printing') +
-                                        '</span></div>'
-                                );
-                            }
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, config.print.time);
+                        api.resetPrintMessage(cb, config.print.time);
                     },
                     error: (jqXHR, textStatus) => {
                         photoboothTools.console.log('An error occurred: ', textStatus);
@@ -1012,19 +1029,7 @@ const photoBooth = (function () {
                                 photoboothTools.getTranslation('error') +
                                 '</span></div>'
                         );
-
-                        setTimeout(function () {
-                            photoboothTools.modal.close('#print_mesg');
-                            printMesg.empty();
-                            printMesg.html(
-                                '<div class="modal__body"><span>' +
-                                    photoboothTools.getTranslation('printing') +
-                                    '</span></div>'
-                            );
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, 5000);
+                        api.resetPrintMessage(cb, 5000);
                     }
                 });
             }, 1000);

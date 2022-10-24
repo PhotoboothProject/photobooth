@@ -583,6 +583,7 @@
   "print:textonprint_locationy": "Y Coordinate",
   "print:textonprint_rotation": "Text rotation",
   "printing": "Started printing! Please wait...",
+  "no_printing": "File type can't be printed.",
   "processPhoto": "Process Collage",
   "qr": "QR Code",
   "qr:qr_append_filename": "Append filename to URL",
