@@ -445,8 +445,8 @@ const photoBooth = (function () {
                         if (result.current + 1 < result.limit) {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
-                                    photoboothTools.getTranslation('nextPhoto') +
-                                    '</a>'
+                                        photoboothTools.getTranslation('nextPhoto') +
+                                        '</a>'
                             )
                                 .appendTo('.loading')
                                 .click((ev) => {
@@ -463,8 +463,8 @@ const photoBooth = (function () {
                         } else {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageProcess">' +
-                                    photoboothTools.getTranslation('processPhoto') +
-                                    '</a>'
+                                        photoboothTools.getTranslation('processPhoto') +
+                                        '</a>'
                             )
                                 .appendTo('.loading')
                                 .click((ev) => {
@@ -485,8 +485,8 @@ const photoBooth = (function () {
 
                         $(
                             '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
-                                photoboothTools.getTranslation('retakePhoto') +
-                                '</a>'
+                                    photoboothTools.getTranslation('retakePhoto') +
+                                    '</a>'
                         )
                             .appendTo('.loading')
                             .click((ev) => {
@@ -997,8 +997,8 @@ const photoBooth = (function () {
             printMesg.empty();
             printMesg.html(
                 '<div class="modal__body"><span style="color:red">' +
-                    photoboothTools.getTranslation('no_printing') +
-                    '</span></div>'
+                        photoboothTools.getTranslation('no_printing') +
+                        '</span></div>'
             );
             api.resetPrintMessage(cb, 5000);
         } else if (isPrinting) {
@@ -1033,8 +1033,8 @@ const photoBooth = (function () {
                         printMesg.empty();
                         printMesg.html(
                             '<div class="modal__body"><span style="color:red">' +
-                                photoboothTools.getTranslation('error') +
-                                '</span></div>'
+                                    photoboothTools.getTranslation('error') +
+                                    '</span></div>'
                         );
                         api.resetPrintMessage(cb, 5000);
                     }
