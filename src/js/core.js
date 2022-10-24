@@ -445,8 +445,8 @@ const photoBooth = (function () {
                         if (result.current + 1 < result.limit) {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
-                                photoboothTools.getTranslation('nextPhoto') +
-                                '</a>'
+                                    photoboothTools.getTranslation('nextPhoto') +
+                                    '</a>'
                             )
                                 .appendTo('.loading')
                                 .click((ev) => {
@@ -463,8 +463,8 @@ const photoBooth = (function () {
                         } else {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageProcess">' +
-                                photoboothTools.getTranslation('processPhoto') +
-                                '</a>'
+                                    photoboothTools.getTranslation('processPhoto') +
+                                    '</a>'
                             )
                                 .appendTo('.loading')
                                 .click((ev) => {
@@ -485,8 +485,8 @@ const photoBooth = (function () {
 
                         $(
                             '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
-                            photoboothTools.getTranslation('retakePhoto') +
-                            '</a>'
+                                photoboothTools.getTranslation('retakePhoto') +
+                                '</a>'
                         )
                             .appendTo('.loading')
                             .click((ev) => {
@@ -814,16 +814,15 @@ const photoBooth = (function () {
             api.addImage(filename);
         }
 
-        const imageUrl = config.foldersJS.images + '/' + filename;
+        const imageUrl = api.isVideoFile(filename) ? 'api/qrcode.php?filename=' + filename
+            : config.foldersJS.images + '/' + filename;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
-            if (!api.isVideoFile(filename)) {
-                resultPage.css({
-                    'background-image': `url(${imageUrl}?filter=${imgFilter})`
-                });
-                resultPage.attr('data-img', filename);
-            }
+            resultPage.css({
+                'background-image': `url(${imageUrl}?filter=${imgFilter})`
+            });
+            resultPage.attr('data-img', filename);
 
             startPage.hide();
             resultPage.show();
@@ -998,8 +997,8 @@ const photoBooth = (function () {
             printMesg.empty();
             printMesg.html(
                 '<div class="modal__body"><span style="color:red">' +
-                photoboothTools.getTranslation('no_printing') +
-                '</span></div>'
+                    photoboothTools.getTranslation('no_printing') +
+                    '</span></div>'
             );
             api.resetPrintMessage(cb, 5000);
         } else if (isPrinting) {
@@ -1034,8 +1033,8 @@ const photoBooth = (function () {
                         printMesg.empty();
                         printMesg.html(
                             '<div class="modal__body"><span style="color:red">' +
-                            photoboothTools.getTranslation('error') +
-                            '</span></div>'
+                                photoboothTools.getTranslation('error') +
+                                '</span></div>'
                         );
                         api.resetPrintMessage(cb, 5000);
                     }
