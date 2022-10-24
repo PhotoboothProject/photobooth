@@ -42,6 +42,15 @@
   min-height: 100%;
 }
 
+#resultVideoQR {
+  display: none;
+  position: fixed;
+  right: 5px;
+  bottom: 50px;
+  min-width: 15%;
+  max-height: 50%;
+}
+
 .resultInner {
   display: flex;
   position: absolute;

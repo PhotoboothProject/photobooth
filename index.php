@@ -127,6 +127,9 @@ if (
 
         <div class="resultInner hidden">
             <?php if ($config['video']['enabled']): ?>
+                <?php if ($config['video']['qr']): ?>
+                    <img src="" id="resultVideoQR" alt="video qr code">
+                <?php endif; ?>
                 <video id="resultVideo" autoplay loop muted>
                 </video>
             <?php endif; ?>

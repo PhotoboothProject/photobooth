@@ -40,6 +40,7 @@ const photoBooth = (function () {
         counter = $('#counter'),
         resultInner = $('.resultInner'),
         resultVideo = $('#resultVideo'),
+        resultVideoQR = $('#resultVideoQR'),
         spinner = $('.spinner'),
         sendMail = $('.send-mail'),
         mailMessageForm = $('#mail-form-message'),
@@ -696,6 +697,10 @@ const photoBooth = (function () {
                     resultVideo.append(source);
                     resultVideo.get(0).play();
                     resultVideo.show();
+                    if (config.video.qr) {
+                        resultVideoQR.source = 'api/qrcode.php?filename=' + source;
+                        resultVideoQR.show();
+                    }
                 }
             },
             error: (jqXHR, textStatus) => {
