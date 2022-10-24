@@ -698,7 +698,7 @@ const photoBooth = (function () {
                     resultVideo.get(0).play();
                     resultVideo.show();
                     if (config.video.qr) {
-                        resultVideoQR.source = 'api/qrcode.php?filename=' + source;
+                        resultVideoQR.attr('src', 'api/qrcode.php?filename=' + source);
                         resultVideoQR.show();
                     }
                 }
