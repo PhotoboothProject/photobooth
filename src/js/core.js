@@ -680,7 +680,6 @@ const photoBooth = (function () {
                 if (data.error) {
                     api.errorPic(data);
                 } else {
-                    // TODO add always visible qr code (if option is set) as there's not a lot else to do with the video
                     // if collage exists: render the result for the collage image and overlay the video over the image
                     let collage = data.file + '-collage.jpg';
                     let filename = data.images.includes(collage) ? collage : data.file;
@@ -698,7 +697,7 @@ const photoBooth = (function () {
                     resultVideo.get(0).play();
                     resultVideo.show();
                     if (config.video.qr) {
-                        resultVideoQR.attr('src', 'api/qrcode.php?filename=' + source);
+                        resultVideoQR.attr('src', 'api/qrcode.php?filename=' + filename);
                         resultVideoQR.show();
                     }
                 }
@@ -819,6 +818,7 @@ const photoBooth = (function () {
             api.addImage(filename);
         }
 
+        // if image is a video render the qr code as image (video should be displayed over this)
         const imageUrl = api.isVideoFile(filename)
             ? 'api/qrcode.php?filename=' + filename
             : config.foldersJS.images + '/' + filename;
