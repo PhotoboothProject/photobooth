@@ -808,7 +808,11 @@ const photoBooth = (function () {
                 photoboothTools.reloadPage();
             });
 
-        api.addImage(filename);
+        // TODO for now we don't have a gallery preview for videos - gallery doesn't support videos and the given
+        //  method has issues because a thumbnail with the same filename is expected
+        if (!api.isVideoFile(filename)) {
+            api.addImage(filename);
+        }
 
         const imageUrl = config.foldersJS.images + '/' + filename;
 

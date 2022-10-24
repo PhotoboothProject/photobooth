@@ -90,16 +90,8 @@ if (count($cfilter) > 0) {
     $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
 }
 
-$videoThump = $filenameTmp . '.jpg';
-$cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenamePhoto -frames:v 1 $videoThump";
+$cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenamePhoto";
 exec($cmd, $output, $returnValue);
-
-$imageResource = imagecreatefromjpeg($videoThump);
-$thumbSize = substr($config['picture']['thumb_size'], 0, -2);
-$thumbResource = resizeImage($imageResource, $thumbSize, $thumbSize);
-imagejpeg($thumbResource, $thumbsFolder . basename($videoThump), $config['jpeg_quality']['thumb']);
-imagedestroy($thumbResource);
-unlink($videoThump);
 
 if (!$config['picture']['keep_original']) {
     unlink($filenameTmp);
