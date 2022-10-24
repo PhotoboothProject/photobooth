@@ -260,9 +260,11 @@ class CameraControl:
                         if os.path.exists(temp_video_path):
                             print('Video recording successful')
                             os.rename(temp_video_path, self.args.video_path)
+                            self.args.video_path = None
                         else:
-                            print('Video recording failed')
-                        self.args.video_path = None
+                            print('Video recording failed. Restart camera connection and retry.')
+                            self.camera.exit()
+                            self.connect_to_camera()
                     else:
                         print('No video recording. Restart camera connection')
                         self.camera.exit()
