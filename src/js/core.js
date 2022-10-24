@@ -963,6 +963,11 @@ const photoBooth = (function () {
         timerFunction();
     };
 
+    api.isVideoFile = function (filename) {
+        let extension = api.getFileExtension(filename);
+        return extension === 'mp4' || extension === 'gif';
+    }
+
     api.getFileExtension = function (filename) {
         let parts = filename.split('.');
         return parts[parts.length - 1];
@@ -984,8 +989,7 @@ const photoBooth = (function () {
     }
 
     api.printImage = function (imageSrc, cb) {
-        let extension = api.getFileExtension(imageSrc);
-        if (extension === 'mp4' || extension === 'gif') {
+        if (api.isVideoFile(imageSrc)) {
             photoboothTools.console.log('An error occurred: attempt to print non printable file',);
             printMesg.empty();
             printMesg.html(

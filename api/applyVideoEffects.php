@@ -12,18 +12,18 @@ $file = $_POST['file'];
 $tmpFolder = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR;
 $imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
 $thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
-$filename_tmp = $tmpFolder . $file;
-$filename_photo = $imageFolder . $file;
-$filename_thumb = $thumbsFolder . $file;
+$filenameTmp = $tmpFolder . $file;
+$filenamePhoto = $imageFolder . $file;
+$filenameThumb = $thumbsFolder . $file;
 
-if (!file_exists($filename_tmp)) {
-    $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $filename_tmp . ' does not exist';
+if (!file_exists($filenameTmp)) {
+    $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $filenameTmp . ' does not exist';
     logErrorAndDie($errormsg);
 }
 
 $images = [];
 for ($i = 1; $i < 99; $i++) {
-    $imageFilename = sprintf('%s-%02d.jpg', $filename_tmp, $i);
+    $imageFilename = sprintf('%s-%02d.jpg', $filenameTmp, $i);
     if (file_exists($imageFilename)) {
         $images[] = $imageFilename;
     } else {
@@ -47,8 +47,8 @@ if ($config['video']['collage'] && count($images) === 4) {
 
 foreach ($images as $image) {
     $imageResource = imagecreatefromjpeg($image);
-    $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
-    $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
+    $thumbSize = substr($config['picture']['thumb_size'], 0, -2);
+    $thumbResource = resizeImage($imageResource, $thumbSize, $thumbSize);
     imagejpeg($thumbResource, $thumbsFolder . basename($image), $config['jpeg_quality']['thumb']);
     imagedestroy($thumbResource);
     $newFile = $imageFolder . basename($image);
@@ -65,35 +65,44 @@ foreach ($images as $image) {
 }
 
 $cfilter = [];
-$additional_params = '';
+$additionalParams = '';
 if ($config['video']['effects'] !== 'None') {
     if ($config['video']['effects'] === 'boomerang') {
         // get second to last frame to prevent frame duplication
         $frames = shell_exec("ffprobe -v error -select_streams v:0 -count_packets \
-    -show_entries stream=nb_read_packets -of csv=p=0 $filename_tmp");
-        $frame_second_to_last = intval($frames) - 1;
-        logError($frame_second_to_last);
+    -show_entries stream=nb_read_packets -of csv=p=0 $filenameTmp");
+        $secondToLastFrame = intval($frames) - 1;
+        logError($secondToLastFrame);
 
-        $cfilter[] = "[0]trim=start_frame=1:end_frame=$frame_second_to_last,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
+        $cfilter[] = "[0]trim=start_frame=1:end_frame=$secondToLastFrame,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
     }
 }
 
 if ($config['video']['gif']) {
     $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
-    $additional_params .= '-loop 0';
-    $info = pathinfo($filename_photo);
-    $filename_photo = $imageFolder . $info['filename'] . '.gif';
+    $additionalParams .= '-loop 0';
+    $info = pathinfo($filenamePhoto);
+    $filenamePhoto = $imageFolder . $info['filename'] . '.gif';
 }
 
-$filter_complex = '';
+$filterComplex = '';
 if (count($cfilter) > 0) {
-    $filter_complex = '-filter_complex "' . implode(',', $cfilter) . '"';
+    $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
 }
 
-$cmd = "ffmpeg -i $filename_tmp $filter_complex $additional_params $filename_photo";
+$videoThump = $filenameTmp . '.jpg';
+$cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenamePhoto -frames:v 1 $videoThump";
 exec($cmd, $output, $returnValue);
+
+$imageResource = imagecreatefromjpeg($videoThump);
+$thumbSize = substr($config['picture']['thumb_size'], 0, -2);
+$thumbResource = resizeImage($imageResource, $thumbSize, $thumbSize);
+imagejpeg($thumbResource, $thumbsFolder . basename($videoThump), $config['jpeg_quality']['thumb']);
+imagedestroy($thumbResource);
+unlink($videoThump);
+
 if (!$config['picture']['keep_original']) {
-    unlink($filename_tmp);
+    unlink($filenameTmp);
 }
 
 if ($returnValue != 0) {
@@ -114,10 +123,10 @@ if ($config['database']['enabled']) {
 
 // Change permissions
 $picture_permissions = $config['picture']['permissions'];
-chmod($filename_photo, octdec($picture_permissions));
+chmod($filenamePhoto, octdec($picture_permissions));
 
 $images = [];
-foreach (glob("$filename_photo*") as $filename) {
+foreach (glob("$filenamePhoto*") as $filename) {
     $images[] = basename($filename);
 }
 
