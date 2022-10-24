@@ -966,36 +966,34 @@ const photoBooth = (function () {
     api.isVideoFile = function (filename) {
         let extension = api.getFileExtension(filename);
         return extension === 'mp4' || extension === 'gif';
-    }
+    };
 
     api.getFileExtension = function (filename) {
         let parts = filename.split('.');
         return parts[parts.length - 1];
-    }
+    };
 
     api.resetPrintMessage = function (cb, to) {
         setTimeout(function () {
             photoboothTools.modal.close('#print_mesg');
             printMesg.empty();
             printMesg.html(
-                '<div class="modal__body"><span>' +
-                photoboothTools.getTranslation('printing') +
-                '</span></div>'
+                '<div class="modal__body"><span>' + photoboothTools.getTranslation('printing') + '</span></div>'
             );
             cb();
             isPrinting = false;
             remoteBuzzerClient.inProgress(false);
         }, to);
-    }
+    };
 
     api.printImage = function (imageSrc, cb) {
         if (api.isVideoFile(imageSrc)) {
-            photoboothTools.console.log('An error occurred: attempt to print non printable file',);
+            photoboothTools.console.log('An error occurred: attempt to print non printable file');
             printMesg.empty();
             printMesg.html(
                 '<div class="modal__body"><span style="color:red">' +
-                photoboothTools.getTranslation('no_printing') +
-                '</span></div>'
+                    photoboothTools.getTranslation('no_printing') +
+                    '</span></div>'
             );
             api.resetPrintMessage(cb, 5000);
         } else if (isPrinting) {
