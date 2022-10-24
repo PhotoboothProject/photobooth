@@ -415,12 +415,8 @@ common_software() {
                 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
                 chmod +x gphoto2-updater.sh
                 ./gphoto2-updater.sh --stable
-                if [ -f "gphoto2-updater.sh" ]; then
-                    rm gphoto2-updater.sh
-                fi
-                if [ -f ".env" ]; then
-                    rm .env
-                fi
+                rm gphoto2-updater.sh
+                rm .env
             else
                 apt install -y ${package}
             fi
