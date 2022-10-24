@@ -445,8 +445,8 @@ const photoBooth = (function () {
                         if (result.current + 1 < result.limit) {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
-                                        photoboothTools.getTranslation('nextPhoto') +
-                                        '</a>'
+                                    photoboothTools.getTranslation('nextPhoto') +
+                                    '</a>'
                             )
                                 .appendTo('.loading')
                                 .click((ev) => {
@@ -463,8 +463,8 @@ const photoBooth = (function () {
                         } else {
                             $(
                                 '<a class="btn rotaryfocus" href="#" id="btnCollageProcess">' +
-                                        photoboothTools.getTranslation('processPhoto') +
-                                        '</a>'
+                                    photoboothTools.getTranslation('processPhoto') +
+                                    '</a>'
                             )
                                 .appendTo('.loading')
                                 .click((ev) => {
@@ -485,8 +485,8 @@ const photoBooth = (function () {
 
                         $(
                             '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
-                                    photoboothTools.getTranslation('retakePhoto') +
-                                    '</a>'
+                                photoboothTools.getTranslation('retakePhoto') +
+                                '</a>'
                         )
                             .appendTo('.loading')
                             .click((ev) => {
@@ -814,7 +814,8 @@ const photoBooth = (function () {
             api.addImage(filename);
         }
 
-        const imageUrl = api.isVideoFile(filename) ? 'api/qrcode.php?filename=' + filename
+        const imageUrl = api.isVideoFile(filename)
+            ? 'api/qrcode.php?filename=' + filename
             : config.foldersJS.images + '/' + filename;
 
         const preloadImage = new Image();
@@ -993,12 +994,13 @@ const photoBooth = (function () {
 
     api.printImage = function (imageSrc, cb) {
         if (api.isVideoFile(imageSrc)) {
+            photoboothTools.modal.open('#print_mesg');
             photoboothTools.console.log('An error occurred: attempt to print non printable file');
             printMesg.empty();
             printMesg.html(
                 '<div class="modal__body"><span style="color:red">' +
-                        photoboothTools.getTranslation('no_printing') +
-                        '</span></div>'
+                    photoboothTools.getTranslation('no_printing') +
+                    '</span></div>'
             );
             api.resetPrintMessage(cb, 5000);
         } else if (isPrinting) {
@@ -1033,8 +1035,8 @@ const photoBooth = (function () {
                         printMesg.empty();
                         printMesg.html(
                             '<div class="modal__body"><span style="color:red">' +
-                                    photoboothTools.getTranslation('error') +
-                                    '</span></div>'
+                                photoboothTools.getTranslation('error') +
+                                '</span></div>'
                         );
                         api.resetPrintMessage(cb, 5000);
                     }
