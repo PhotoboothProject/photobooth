@@ -80,11 +80,11 @@ if ($config['video']['effects'] !== 'None') {
 
 if ($config['video']['gif']) {
     $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
-    $additionalParams .= '-loop 0';
+    $additionalParams .= ' -loop 0 ';
     $info = pathinfo($filenameOutput);
     $filenameOutput = $imageFolder . $info['filename'] . '.gif';
 } else {
-    $filenameOutput = '-format h264 ' . $filenameOutput;
+    $additionalParams = ' -format h264';
 }
 
 $filterComplex = '';
