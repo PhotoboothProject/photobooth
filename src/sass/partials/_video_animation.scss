@@ -1,0 +1,89 @@
+#videoAnimation {
+  height: 360px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1500;
+}
+
+#videoAnimation ul {
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+#videoAnimation ul > li {
+  display: block;
+  color: #000;
+  width: 25px;
+  height: 25px;
+  border: 10px solid black;
+}
+
+#videoAnimation .right {
+  display: block;
+  margin: auto;
+  right: 0px;
+  position: absolute;
+}
+
+#videoAnimation .left {
+  display: block;
+  margin: auto;
+  left: 0;
+  position: absolute;
+}
+
+#videoAnimation .middle {
+  height: 360px;
+  background-color: #999;
+  position: absolute;
+  left: 45px;
+  right: 45px;
+  animation: flicker 0.1s infinite;
+  -webkit-animation: flicker 0.1s infinite;
+  -moz-animation: flicker 0.1s infinite;
+}
+
+#videoAnimation li {
+  position: relative;
+  animation: scroll 1s linear infinite;
+  -webkit-animation: scroll 1s linear infinite;
+  -moz-animation: scroll 1s linear infinite;
+}
+
+@keyframes flicker {
+  0% {
+    background-color: #999;
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+
+@-webkit-keyframes flicker /* Safari and Chrome */ {
+  0% {
+    background-color: #999;
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -400px;
+  }
+}
+
+@-webkit-keyframes scroll /* Safari and Chrome */ {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -400px;
+  }
+}

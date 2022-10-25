@@ -85,6 +85,15 @@ if (
        autoplay playsinline></video>
 <div id="blocker"></div>
 <div id="aperture"></div>
+<?php if ($config['video']['enabled'] && $config['video']['animation'] !== 'none'): ?>
+    <div id="videoAnimation">
+        <ul class="left"></ul>
+        <?php if ($config['video']['animation'] === 'reelflicker'): ?>
+            <ul class="middle"></ul>
+        <?php endif; ?>
+        <ul class="right"></ul>
+    </div>
+<?php endif; ?>
 <div id="wrapper">
     <?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
 

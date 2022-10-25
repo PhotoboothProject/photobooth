@@ -131,6 +131,7 @@ $config['video']['cntdwn_time'] = '3';
 $config['video']['cheese'] = 'Show your moves!';
 $config['video']['collage'] = false;
 $config['video']['effects'] = 'none';
+$config['video']['animation'] = 'none';
 $config['video']['gif'] = false;
 $config['video']['qr'] = true;
 
