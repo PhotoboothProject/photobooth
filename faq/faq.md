@@ -654,7 +654,7 @@ Now restart your Chromium browser.
 
 ---
 
-### How to ajust the ```php.ini``` file?
+### How to adjust the ```php.ini``` file?
 
 Open [http://localhost/phpinfo.php](http://localhost/phpinfo.php) in your browser.
 
