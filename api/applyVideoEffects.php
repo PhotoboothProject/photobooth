@@ -13,7 +13,7 @@ $tmpFolder = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR;
 $imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
 $thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
 $filenameTmp = $tmpFolder . $file;
-$filenamePhoto = $imageFolder . $file;
+$filenameOutput = $imageFolder . $file;
 $filenameThumb = $thumbsFolder . $file;
 
 if (!file_exists($filenameTmp)) {
@@ -81,8 +81,10 @@ if ($config['video']['effects'] !== 'None') {
 if ($config['video']['gif']) {
     $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
     $additionalParams .= '-loop 0';
-    $info = pathinfo($filenamePhoto);
-    $filenamePhoto = $imageFolder . $info['filename'] . '.gif';
+    $info = pathinfo($filenameOutput);
+    $filenameOutput = $imageFolder . $info['filename'] . '.gif';
+} else {
+    $filenameOutput = '-formats h264' . $filenameOutput;
 }
 
 $filterComplex = '';
@@ -90,7 +92,7 @@ if (count($cfilter) > 0) {
     $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
 }
 
-$cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenamePhoto";
+$cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenameOutput";
 exec($cmd, $output, $returnValue);
 
 if (!$config['picture']['keep_original']) {
@@ -116,10 +118,10 @@ if ($config['database']['enabled']) {
 
 // Change permissions
 $picture_permissions = $config['picture']['permissions'];
-chmod($filenamePhoto, octdec($picture_permissions));
+chmod($filenameOutput, octdec($picture_permissions));
 
 $images = [];
-foreach (glob("$filenamePhoto*") as $filename) {
+foreach (glob("$filenameOutput*") as $filename) {
     $images[] = basename($filename);
 }
 
