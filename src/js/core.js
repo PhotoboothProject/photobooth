@@ -824,10 +824,7 @@ const photoBooth = (function () {
                 photoboothTools.reloadPage();
             });
 
-        /*
-        TODO gallery doesn't support videos
-         and the given method has issues because a thumbnail with the same filename is expected
-         */
+        // gallery doesn't support videos atm
         if (!api.isVideoFile(filename)) {
             api.addImage(filename);
         }
