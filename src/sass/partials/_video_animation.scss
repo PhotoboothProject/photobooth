@@ -15,24 +15,24 @@
 #videoAnimation ul > li {
   display: block;
   color: #000;
+  background-color: #fff;
   width: 25px;
   height: 25px;
   border: 10px solid black;
 }
 
-#videoAnimation .right,
-#videoAnimation .right {
+#videoAnimation .right{
   display: block;
   margin: auto;
+  right: 0;
   position: absolute;
 }
 
-#videoAnimation .left {
+#videoAnimation .left{
+  display: block;
+  margin: auto;
   left: 0;
-}
-
-#videoAnimation .right {
-  right: 0;
+  position: absolute;
 }
 
 #videoAnimation .middle {

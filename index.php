@@ -88,7 +88,7 @@ if (
 <?php if ($config['video']['enabled'] && $config['video']['animation'] !== 'none'): ?>
     <div id="videoAnimation">
         <ul class="left">
-            <?php for ($i = 1; $i <= 40; $i++) {
+            <?php for ($i = 1; $i <= 50; $i++) {
                 print('<li class="reel-item"></li>');
             } ?>
         </ul>
@@ -96,7 +96,7 @@ if (
             <ul class="middle"></ul>
         <?php endif; ?>
         <ul class="right">
-            <?php for ($i = 1; $i <= 40; $i++) {
+            <?php for ($i = 1; $i <= 50; $i++) {
                 print('<li class="reel-item"></li>');
             } ?>
         </ul>
