@@ -1,5 +1,5 @@
 #videoAnimation {
-  height: 360px;
+  height: 100%;
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -20,23 +20,23 @@
   border: 10px solid black;
 }
 
+#videoAnimation .right,
 #videoAnimation .right {
   display: block;
   margin: auto;
-  right: 0px;
   position: absolute;
 }
 
 #videoAnimation .left {
-  display: block;
-  margin: auto;
   left: 0;
-  position: absolute;
+}
+
+#videoAnimation .right {
+  right: 0;
 }
 
 #videoAnimation .middle {
-  height: 360px;
-  background-color: #999;
+  height: 100%;
   position: absolute;
   left: 45px;
   right: 45px;
@@ -54,19 +54,27 @@
 
 @keyframes flicker {
   0% {
-    background-color: #999;
+    0% {
+      background-color: rgba(153, 153, 153, 0.2);
+    }
   }
   100% {
-    background-color: #fff;
+    100% {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
   }
 }
 
 @-webkit-keyframes flicker /* Safari and Chrome */ {
   0% {
-    background-color: #999;
+    0% {
+      background-color: rgba(153, 153, 153, 0.2);
+    }
   }
   100% {
-    background-color: #fff;
+    100% {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
   }
 }
 

@@ -87,11 +87,19 @@ if (
 <div id="aperture"></div>
 <?php if ($config['video']['enabled'] && $config['video']['animation'] !== 'none'): ?>
     <div id="videoAnimation">
-        <ul class="left"></ul>
+        <ul class="left">
+            <?php for ($i = 1; $i <= 40; $i++) {
+                print('<li class="reel-item"></li>');
+            } ?>
+        </ul>
         <?php if ($config['video']['animation'] === 'reelflicker'): ?>
             <ul class="middle"></ul>
         <?php endif; ?>
-        <ul class="right"></ul>
+        <ul class="right">
+            <?php for ($i = 1; $i <= 40; $i++) {
+                print('<li class="reel-item"></li>');
+            } ?>
+        </ul>
     </div>
 <?php endif; ?>
 <div id="wrapper">
