@@ -32,6 +32,7 @@ for ($i = 1; $i < 99; $i++) {
 }
 
 // If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
+$collageFilename = '';
 if ($config['video']['collage'] && count($images) === 4) {
     $collageFilename = sprintf('%s-collage.jpg', $file);
     $collageConfig = new CollageConfig();
@@ -64,61 +65,75 @@ foreach ($images as $image) {
     chmod($newFile, octdec($picture_permissions));
 }
 
-$cfilter = [];
-$additionalParams = '';
-if ($config['video']['effects'] !== 'None') {
-    if ($config['video']['effects'] === 'boomerang') {
-        // get second to last frame to prevent frame duplication
-        $frames = shell_exec("ffprobe -v error -select_streams v:0 -count_packets \
-    -show_entries stream=nb_read_packets -of csv=p=0 $filenameTmp");
-        $secondToLastFrame = intval($frames) - 1;
-        logError($secondToLastFrame);
-
-        $cfilter[] = "[0]trim=start_frame=1:end_frame=$secondToLastFrame,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
+if ($config['video']['collage_only']) {
+    if ($collageFilename === '' || !file_exists($imageFolder . $collageFilename)) {
+        $ErrorData = [
+            'error' => 'Configured to save only Collage but collage file does not exist: ' . $collageFilename,
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        logErrorAndDie($ErrorData);
     }
-}
-
-if ($config['video']['gif']) {
-    $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
-    $additionalParams .= ' -loop 0 ';
-    $info = pathinfo($filenameOutput);
-    $filenameOutput = $imageFolder . $info['filename'] . '.gif';
+    if (!$config['picture']['keep_original']) {
+        unlink($filenameTmp);
+    }
+    $file = $collageFilename;
 } else {
-    $additionalParams = ' -vcodec libx264 -pix_fmt yuv420p';
+    $cfilter = [];
+    $additionalParams = '';
+    if ($config['video']['effects'] !== 'None') {
+        if ($config['video']['effects'] === 'boomerang') {
+            // get second to last frame to prevent frame duplication
+            $frames = shell_exec("ffprobe -v error -select_streams v:0 -count_packets \
+    -show_entries stream=nb_read_packets -of csv=p=0 $filenameTmp");
+            $secondToLastFrame = intval($frames) - 1;
+            logError($secondToLastFrame);
+
+            $cfilter[] = "[0]trim=start_frame=1:end_frame=$secondToLastFrame,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
+        }
+    }
+
+    if ($config['video']['gif']) {
+        $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
+        $additionalParams .= ' -loop 0 ';
+        $info = pathinfo($filenameOutput);
+        $filenameOutput = $imageFolder . $info['filename'] . '.gif';
+    } else {
+        $additionalParams = ' -vcodec libx264 -pix_fmt yuv420p';
+    }
+
+    $filterComplex = '';
+    if (count($cfilter) > 0) {
+        $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
+    }
+
+    $cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenameOutput";
+    exec($cmd, $output, $returnValue);
+
+    if (!$config['picture']['keep_original']) {
+        unlink($filenameTmp);
+    }
+
+    if ($returnValue != 0) {
+        $ErrorData = [
+            'error' => 'Take picture command returned an error code',
+            'cmd' => $cmd,
+            'returnValue' => $returnValue,
+            'output' => json_encode($output),
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        logErrorAndDie($ErrorData);
+    }
+
+    /* TODO gallery doesn't support videos atm
+    // insert into database
+    if ($config['database']['enabled']) {
+        appendImageToDB($file);
+    }*/
+
+    // Change permissions
+    $picture_permissions = $config['picture']['permissions'];
+    chmod($filenameOutput, octdec($picture_permissions));
 }
-
-$filterComplex = '';
-if (count($cfilter) > 0) {
-    $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
-}
-
-$cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenameOutput";
-exec($cmd, $output, $returnValue);
-
-if (!$config['picture']['keep_original']) {
-    unlink($filenameTmp);
-}
-
-if ($returnValue != 0) {
-    $ErrorData = [
-        'error' => 'Take picture command returned an error code',
-        'cmd' => $cmd,
-        'returnValue' => $returnValue,
-        'output' => json_encode($output),
-        'php' => basename($_SERVER['PHP_SELF']),
-    ];
-    logErrorAndDie($ErrorData);
-}
-
-/* TODO gallery doesn't support videos atm
-// insert into database
-if ($config['database']['enabled']) {
-    appendImageToDB($file);
-}*/
-
-// Change permissions
-$picture_permissions = $config['picture']['permissions'];
-chmod($filenameOutput, octdec($picture_permissions));
 
 $images = [];
 foreach (glob("$filenameOutput*") as $filename) {

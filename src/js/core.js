@@ -690,21 +690,22 @@ const photoBooth = (function () {
                     let collage = data.file + '-collage.jpg';
                     let filename = data.images.includes(collage) ? collage : data.file;
                     api.renderPic(filename, data.images);
-                    let source = document.createElement('source');
                     let file = config.foldersJS.images + '/' + data.file;
-                    if (data.file.split('.').pop() === 'gif') {
-                        // TODO gif is not yet properly displayed
-                        source.setAttribute('img', file);
-                    } else {
-                        source.setAttribute('src', file);
-                        source.setAttribute('type', 'video/mp4');
-                    }
-                    resultVideo.append(source);
-                    resultVideo.get(0).play();
-                    resultVideo.show();
-                    if (config.video.qr) {
-                        resultVideoQR.attr('src', 'api/qrcode.php?filename=' + data.file);
-                        resultVideoQR.show();
+                    if (!config.video.collage_only) {
+                        if (config.video.gif) {
+                            resultVideo.attr('src', file);
+                        } else {
+                            let source = document.createElement('source');
+                            source.setAttribute('src', file);
+                            source.setAttribute('type', 'video/mp4');
+                            resultVideo.append(source);
+                            resultVideo.get(0).play();
+                        }
+                        resultVideo.show();
+                        if (config.video.qr) {
+                            resultVideoQR.attr('src', 'api/qrcode.php?filename=' + data.file);
+                            resultVideoQR.show();
+                        }
                     }
                 }
             },

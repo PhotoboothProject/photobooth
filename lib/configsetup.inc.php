@@ -868,6 +868,12 @@ $configsetup = [
             'name' => 'video[collage]',
             'value' => $config['video']['collage'],
         ],
+        'video_collage_only' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[collage_only]',
+            'value' => $config['video']['collage_only'],
+        ],
         'video_effects' => [
             'view' => 'advanced',
             'type' => 'select',

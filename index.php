@@ -144,8 +144,12 @@ if (
                 <?php if ($config['video']['qr']): ?>
                     <img src="" id="resultVideoQR" alt="video qr code">
                 <?php endif; ?>
-                <video id="resultVideo" autoplay loop muted>
-                </video>
+                <?php if ($config['video']['gif']) { ?>
+                    <img id="resultVideo" src="" alt="result gif">
+                <?php } else { ?>
+                    <video id="resultVideo" autoplay loop muted>
+                    </video>
+                <?php } ?>
             <?php endif; ?>
 
             <?php if ($config['button']['homescreen']): ?>
