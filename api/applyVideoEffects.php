@@ -84,7 +84,7 @@ if ($config['video']['gif']) {
     $info = pathinfo($filenameOutput);
     $filenameOutput = $imageFolder . $info['filename'] . '.gif';
 } else {
-    $additionalParams = ' -vcodec libx264';
+    $additionalParams = ' -vcodec libx264 -pix_fmt yuv420p';
 }
 
 $filterComplex = '';
