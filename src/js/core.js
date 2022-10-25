@@ -252,31 +252,36 @@ const photoBooth = (function () {
         if (config.get_request.countdown) {
             let getMode;
             switch (photoStyle) {
-                case PhotoStyle.PHOTO:
-                    getMode = config.get_request.picture;
-                    break;
                 case PhotoStyle.COLLAGE:
                     getMode = config.get_request.collage;
                     break;
                 case PhotoStyle.VIDEO:
                     getMode = config.get_request.video;
                     break;
+                case PhotoStyle.PHOTO:
+                default:
+                    getMode = config.get_request.picture;
+                    break;
             }
             const getUrl = config.get_request.server + '/' + getMode;
             photoboothTools.getRequest(getUrl);
         }
 
-        let cntdwn_time = config.picture.cntdwn_time;
+        let countdownTime;
         switch (photoStyle) {
             case PhotoStyle.COLLAGE:
-                cntdwn_time = config.collage.cntdwn_time;
+                countdownTime = config.collage.cntdwn_time;
                 break;
             case PhotoStyle.VIDEO:
-                cntdwn_time = config.video.cntdwn_time;
+                countdownTime = config.video.cntdwn_time;
+                break;
+            case PhotoStyle.PHOTO:
+            default:
+                countdownTime = config.picture.cntdwn_time;
                 break;
         }
 
-        api.startCountdown(cntdwn_time, counter, () => {
+        api.startCountdown(countdownTime, counter, () => {
             if (
                 config.preview.mode === PreviewMode.DEVICE.valueOf() &&
                 config.preview.camTakesPic &&
@@ -687,15 +692,15 @@ const photoBooth = (function () {
                     api.errorPic(data);
                 } else {
                     // if collage exists: render the result for the collage image and overlay the video over the image
-                    let collage = data.file + '-collage.jpg';
-                    let filename = data.images.includes(collage) ? collage : data.file;
+                    const collage = data.file + '-collage.jpg';
+                    const filename = data.images.includes(collage) ? collage : data.file;
                     api.renderPic(filename, data.images);
-                    let file = config.foldersJS.images + '/' + data.file;
+                    const file = config.foldersJS.images + '/' + data.file;
                     if (!config.video.collage_only) {
                         if (config.video.gif) {
                             resultVideo.attr('src', file);
                         } else {
-                            let source = document.createElement('source');
+                            const source = document.createElement('source');
                             source.setAttribute('src', file);
                             source.setAttribute('type', 'video/mp4');
                             resultVideo.append(source);
@@ -819,8 +824,8 @@ const photoBooth = (function () {
                 photoboothTools.reloadPage();
             });
 
-        // TODO gallery doesn't support videos
-        //  and the given method has issues because a thumbnail with the same filename is expected
+        /* TODO gallery doesn't support videos
+            and the given method has issues because a thumbnail with the same filename is expected */
         if (!api.isVideoFile(filename)) {
             api.addImage(filename);
         }
