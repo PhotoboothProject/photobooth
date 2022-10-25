@@ -703,7 +703,7 @@ const photoBooth = (function () {
                     resultVideo.get(0).play();
                     resultVideo.show();
                     if (config.video.qr) {
-                        resultVideoQR.attr('src', 'api/qrcode.php?filename=' + filename);
+                        resultVideoQR.attr('src', 'api/qrcode.php?filename=' + data.file);
                         resultVideoQR.show();
                     }
                 }
