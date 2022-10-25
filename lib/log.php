@@ -6,7 +6,10 @@ function logError($data) {
     $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['dev']['logfile'];
 
     $file_data = date('c') . ":\n" . print_r($data, true) . "\n";
-    file_put_contents($logfile, $file_data, FILE_APPEND);
+    if (is_file($logfile)) {
+        $file_data .= file_get_contents($logfile);
+    }
+    file_put_contents($logfile, $file_data);
 }
 
 function logErrorAndDie($errormsg) {
