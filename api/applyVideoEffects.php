@@ -105,7 +105,8 @@ if ($config['video']['collage_only']) {
         $cfilter[] = 'split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse';
         $additionalParams .= ' -loop 0 ';
         $info = pathinfo($filenameOutput);
-        $filenameOutput = $imageFolder . $info['filename'] . '.gif';
+        $file = $info['filename'] . '.gif';
+        $filenameOutput = $imageFolder . $file;
     } else {
         $additionalParams = ' -vcodec libx264 -pix_fmt yuv420p';
     }

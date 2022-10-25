@@ -855,6 +855,12 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'seconds',
         ],
+        'video_animation' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[animation]',
+            'value' => $config['video']['animation'],
+        ],
         'video_cheese' => [
             'view' => 'advanced',
             'type' => 'input',
@@ -890,12 +896,6 @@ $configsetup = [
                 'boomerang' => 'Boomerang',
             ],
             'value' => $config['video']['effects'],
-        ],
-        'video_animation' => [
-            'view' => 'advanced',
-            'type' => 'checkbox',
-            'name' => 'video[animation]',
-            'value' => $config['video']['animation'],
         ],
         'video_gif' => [
             'view' => 'advanced',
