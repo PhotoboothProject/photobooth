@@ -84,7 +84,7 @@ if ($config['video']['gif']) {
     $info = pathinfo($filenameOutput);
     $filenameOutput = $imageFolder . $info['filename'] . '.gif';
 } else {
-    $filenameOutput = '-formats h264 ' . $filenameOutput;
+    $filenameOutput = '-format h264 ' . $filenameOutput;
 }
 
 $filterComplex = '';
