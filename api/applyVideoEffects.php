@@ -21,11 +21,11 @@ if (!file_exists($filenameTmp)) {
     logErrorAndDie($errormsg);
 }
 
-$images = [];
+$frames = [];
 for ($i = 1; $i < 99; $i++) {
-    $imageFilename = sprintf('%s-%02d.jpg', $filenameTmp, $i);
-    if (file_exists($imageFilename)) {
-        $images[] = $imageFilename;
+    $frameFilename = sprintf('%s-%02d.jpg', $filenameTmp, $i);
+    if (file_exists($frameFilename)) {
+        $frames[] = $frameFilename;
     } else {
         break;
     }
@@ -33,17 +33,26 @@ for ($i = 1; $i < 99; $i++) {
 
 // If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
 $collageFilename = '';
-if ($config['video']['collage'] && count($images) === 4) {
+$images = [];
+if ($config['video']['collage'] && count($frames) === 4) {
     $collageFilename = sprintf('%s-collage.jpg', $file);
     $collageConfig = new CollageConfig();
     $collageConfig->collageLayout = '2x4-3';
     $collageConfig->collageTakeFrame = 'off';
     $collageConfig->collagePlaceholder = false;
-    if (!createCollage($images, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
+    if (!createCollage($frames, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
         $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not create collage';
         logErrorAndDie($errormsg);
     }
     $images[] = $collageFilename;
+}
+
+if (!$config['video']['collage_keep_images']) {
+    foreach ($frames as $frame) {
+        unlink($frame);
+    }
+} else {
+    $images = array_merge($images, $frames);
 }
 
 foreach ($images as $image) {

@@ -130,6 +130,7 @@ $config['video']['enabled'] = false;
 $config['video']['cntdwn_time'] = '3';
 $config['video']['cheese'] = 'Show your moves!';
 $config['video']['collage'] = false;
+$config['video']['collage_keep_images'] = false;
 $config['video']['collage_only'] = false;
 $config['video']['effects'] = 'none';
 $config['video']['animation'] = true;

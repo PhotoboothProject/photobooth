@@ -868,6 +868,12 @@ $configsetup = [
             'name' => 'video[collage]',
             'value' => $config['video']['collage'],
         ],
+        'video_collage_keep_images' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[collage_keep_images]',
+            'value' => $config['video']['collage_keep_images'],
+        ],
         'video_collage_only' => [
             'view' => 'advanced',
             'type' => 'checkbox',
