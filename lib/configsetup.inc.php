@@ -881,15 +881,9 @@ $configsetup = [
         ],
         'video_animation' => [
             'view' => 'advanced',
-            'type' => 'select',
+            'type' => 'checkbox',
             'name' => 'video[animation]',
-            'placeholder' => $defaultConfig['video']['animation'],
-            'options' => [
-                'none' => 'None',
-                'reel' => 'Movie Reel',
-                'reelflicker' => 'Movie Reel + Flicker',
-            ],
-            'value' => $config['video']['effects'],
+            'value' => $config['video']['animation'],
         ],
         'video_gif' => [
             'view' => 'advanced',

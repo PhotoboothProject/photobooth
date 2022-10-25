@@ -85,16 +85,13 @@ if (
        autoplay playsinline></video>
 <div id="blocker"></div>
 <div id="aperture"></div>
-<?php if ($config['video']['enabled'] && $config['video']['animation'] !== 'none'): ?>
+<?php if ($config['video']['enabled'] && $config['video']['animation']): ?>
     <div id="videoAnimation">
         <ul class="left">
             <?php for ($i = 1; $i <= 50; $i++) {
                 print('<li class="reel-item"></li>');
             } ?>
         </ul>
-        <?php if ($config['video']['animation'] === 'reelflicker'): ?>
-            <ul class="middle"></ul>
-        <?php endif; ?>
         <ul class="right">
             <?php for ($i = 1; $i <= 50; $i++) {
                 print('<li class="reel-item"></li>');

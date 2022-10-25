@@ -264,7 +264,7 @@
   "manual:video:video_cheese": "Geben Sie eine Cheese-Nachricht für den Video-Start an.",
   "manual:video:video_collage": "Wenn die Konfiguration während der Videoaufnahme 4 Bilder speichert, daraus eine Collage erstellen.",
   "manual:video:video_effects": "Video-Effect der auf das Video angewendet werden soll.",
-  "manual:video:video_animation": "Animation, die während der Aufnahme des Videos abgespielt wird.",
+  "manual:video:video_animation": "Eine Animation während der Aufnahme des Videos abgespielen.",
   "manual:video:video_gif": "Video zu animiertem gif umwandeln. (Längere Bearbeitungszeit, größere Datei, schlechtere Qualität)",
   "manual:video:video_qr": "QR-Code für Video anzeigen.",
   "manual:commands:exiftool_cmd": "EXIFtool-Befehlszeile, die nach dem Aufnehmen eines Bildes ausgeführt wird. Die Option \"EXIF-Daten beibehalten\" muss aktiviert sein.",

@@ -1,4 +1,5 @@
 #videoAnimation {
+  display: none;
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -25,28 +26,18 @@
   border: 10px solid black;
 }
 
-#videoAnimation .right{
+#videoAnimation .right {
   display: block;
   margin: auto;
   right: 0;
   position: absolute;
 }
 
-#videoAnimation .left{
+#videoAnimation .left {
   display: block;
   margin: auto;
   left: 0;
   position: absolute;
-}
-
-#videoAnimation .middle {
-  height: 100%;
-  position: absolute;
-  left: 45px;
-  right: 45px;
-  animation: va-flicker 0.1s infinite;
-  -webkit-animation: va-flicker 0.1s infinite;
-  -moz-animation: va-flicker 0.1s infinite;
 }
 
 #videoAnimation li {
@@ -54,32 +45,6 @@
   animation: va-scroll 1s linear infinite;
   -webkit-animation: va-scroll 1s linear infinite;
   -moz-animation: va-scroll 1s linear infinite;
-}
-
-@keyframes va-flicker {
-  0% {
-    0% {
-      background-color: rgba(153, 153, 153, 0.2);
-    }
-  }
-  100% {
-    100% {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
-}
-
-@-webkit-keyframes va-flicker /* Safari and Chrome */ {
-  0% {
-    0% {
-      background-color: rgba(153, 153, 153, 0.2);
-    }
-  }
-  100% {
-    100% {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
 }
 
 @keyframes va-scroll {

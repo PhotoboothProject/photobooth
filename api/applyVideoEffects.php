@@ -108,10 +108,11 @@ if ($returnValue != 0) {
     logErrorAndDie($ErrorData);
 }
 
+/* TODO gallery doesn't support videos atm
 // insert into database
 if ($config['database']['enabled']) {
     appendImageToDB($file);
-}
+}*/
 
 // Change permissions
 $picture_permissions = $config['picture']['permissions'];

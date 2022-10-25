@@ -39,6 +39,7 @@ const photoBooth = (function () {
         qrCodeModal = $('#qrCode'),
         counter = $('#counter'),
         resultInner = $('.resultInner'),
+        videoAnimation = $('#videoAnimation'),
         resultVideo = $('#resultVideo'),
         resultVideoQR = $('#resultVideoQR'),
         spinner = $('.spinner'),
@@ -539,12 +540,17 @@ const photoBooth = (function () {
     };
 
     api.callTakeVideoApi = function (data) {
-        // TODO maybe some other kind of animation (film strip?)
+        if (config.video.animation) {
+            videoAnimation.show();
+        }
         // while recording. End of recording gets no message back but whe know the requested duration
         startTime = new Date().getTime();
         jQuery
             .post('api/takeVideo.php', data)
             .done(function (result) {
+                if (config.video.animation) {
+                    videoAnimation.hide();
+                }
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('Took ' + data.style, result);
@@ -812,8 +818,8 @@ const photoBooth = (function () {
                 photoboothTools.reloadPage();
             });
 
-        // TODO for now we don't have a gallery preview for videos - gallery doesn't support videos and the given
-        //  method has issues because a thumbnail with the same filename is expected
+        // TODO gallery doesn't support videos
+        //  and the given method has issues because a thumbnail with the same filename is expected
         if (!api.isVideoFile(filename)) {
             api.addImage(filename);
         }

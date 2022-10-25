@@ -264,7 +264,7 @@
   "manual:video:video_cheese": "Set the cheese message for video recording.",
   "manual:video:video_collage": "If the video command saves 4 images from the video, create a collage from these.",
   "manual:video:video_effects": "Video effect that should be applied on the video.",
-  "manual:video:video_animation": "Animation that is played while the video is recording.",
+  "manual:video:video_animation": "Play an Animation that while the video is recording.",
   "manual:video:video_gif": "Convert video to an animated gif. (Longer rendering time, larger file, worse quality)",
   "manual:video:video_qr": "Show QR code for video on screen.",
   "manual:commands:exiftool_cmd": "EXIFtool command line which is executed after taking a picture if \"Preserve EXIF data\" is enabled.",
