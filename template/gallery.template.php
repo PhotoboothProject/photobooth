@@ -63,6 +63,10 @@
                     <?php if ($config['collage']['enabled']): ?>
                     <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span data-i18n="takeCollage"></span></a>
                     <?php endif; ?>
+
+                    <?php if ($config['video']['enabled']): ?>
+                    <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takeVideo rotaryfocus"><i class="fa fa-film"></i> <span data-i18n="takeVideo"></span></a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>
