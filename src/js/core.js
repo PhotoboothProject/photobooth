@@ -987,11 +987,13 @@ const photoBooth = (function () {
 
     api.isVideoFile = function (filename) {
         const extension = api.getFileExtension(filename);
+
         return extension === 'mp4' || extension === 'gif';
     };
 
     api.getFileExtension = function (filename) {
         const parts = filename.split('.');
+
         return parts[parts.length - 1];
     };
 
