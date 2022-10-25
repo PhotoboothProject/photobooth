@@ -824,8 +824,10 @@ const photoBooth = (function () {
                 photoboothTools.reloadPage();
             });
 
-        /* TODO gallery doesn't support videos
-            and the given method has issues because a thumbnail with the same filename is expected */
+        /*
+        TODO gallery doesn't support videos
+         and the given method has issues because a thumbnail with the same filename is expected
+         */
         if (!api.isVideoFile(filename)) {
             api.addImage(filename);
         }
@@ -987,12 +989,12 @@ const photoBooth = (function () {
     };
 
     api.isVideoFile = function (filename) {
-        let extension = api.getFileExtension(filename);
+        const extension = api.getFileExtension(filename);
         return extension === 'mp4' || extension === 'gif';
     };
 
     api.getFileExtension = function (filename) {
-        let parts = filename.split('.');
+        const parts = filename.split('.');
         return parts[parts.length - 1];
     };
 
