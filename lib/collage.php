@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/collageConfig.php';
 require_once __DIR__ . '/log.php';
 require_once __DIR__ . '/resize.php';
 require_once __DIR__ . '/applyFrame.php';
@@ -7,36 +8,10 @@ require_once __DIR__ . '/applyText.php';
 require_once __DIR__ . '/filter.php';
 require_once __DIR__ . '/polaroid.php';
 
-define('COLLAGE_LAYOUT', $config['collage']['layout']);
-define('COLLAGE_RESOLUTION', (int) substr($config['collage']['resolution'], 0, -3));
-define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
-define('COLLAGE_FRAME', $config['collage']['frame']);
-define('COLLAGE_BACKGROUND', $config['collage']['background']);
-define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
-define('COLLAGE_PLACEHOLDER', $config['collage']['placeholder']);
-// If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
-define('COLLAGE_PLACEHOLDER_POSITION', (int) $config['collage']['placeholderposition'] - 1);
-define('COLLAGE_PLACEHOLDER_PATH', $config['collage']['placeholderpath']);
-define('COLLAGE_DASHEDLINE_COLOR', $config['collage']['dashedline_color']);
-// If a placholder image should be used, we need to increase the limit here in order to count the images correct
-define('COLLAGE_LIMIT', $config['collage']['placeholder'] ? $config['collage']['limit'] + 1 : $config['collage']['limit']);
-define('PICTURE_FLIP', $config['picture']['flip']);
-define('PICTURE_ROTATION', $config['picture']['rotation']);
-define('PICTURE_POLAROID_EFFECT', $config['picture']['polaroid_effect'] === true ? 'enabled' : 'disabled');
-define('PICTURE_POLAROID_ROTATION', $config['picture']['polaroid_rotation']);
-define('TEXTONCOLLAGE_ENABLED', $config['textoncollage']['enabled'] === true ? 'enabled' : 'disabled');
-define('TEXTONCOLLAGE_LINE1', $config['textoncollage']['line1']);
-define('TEXTONCOLLAGE_LINE2', $config['textoncollage']['line2']);
-define('TEXTONCOLLAGE_LINE3', $config['textoncollage']['line3']);
-define('TEXTONCOLLAGE_LOCATIONX', $config['textoncollage']['locationx']);
-define('TEXTONCOLLAGE_LOCATIONY', $config['textoncollage']['locationy']);
-define('TEXTONCOLLAGE_ROTATION', $config['textoncollage']['rotation']);
-define('TEXTONCOLLAGE_FONT', $config['textoncollage']['font']);
-define('TEXTONCOLLAGE_FONT_COLOR', $config['textoncollage']['font_color']);
-define('TEXTONCOLLAGE_FONT_SIZE', $config['textoncollage']['font_size']);
-define('TEXTONCOLLAGE_LINESPACE', $config['textoncollage']['linespace']);
-
-function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
+function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null) {
+    if (is_null($c)) {
+        $c = new CollageConfig();
+    }
     $editImages = [];
     $rotate_after_creation = false;
     $quality = 100;
@@ -47,31 +22,31 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     }
 
     // colors for background and while rotating jpeg images
-    list($bg_r, $bg_g, $bg_b) = sscanf(COLLAGE_BACKGROUND_COLOR, '#%02x%02x%02x');
-    $bg_color_hex = hexdec(substr(COLLAGE_BACKGROUND_COLOR, 1));
+    list($bg_r, $bg_g, $bg_b) = sscanf($c->collageBackgroundColor, '#%02x%02x%02x');
+    $bg_color_hex = hexdec(substr($c->collageBackgroundColor, 1));
 
     // dashedline color on 2x4 collage layouts
-    list($dashed_r, $dashed_g, $dashed_b) = sscanf(COLLAGE_DASHEDLINE_COLOR, '#%02x%02x%02x');
+    list($dashed_r, $dashed_g, $dashed_b) = sscanf($c->collageDashedLineColor, '#%02x%02x%02x');
 
     if (!is_array($srcImagePaths)) {
         return false;
     }
 
     // validate that there is the correct amount of images
-    if ((COLLAGE_PLACEHOLDER && count($srcImagePaths) !== COLLAGE_LIMIT - 1) || (!COLLAGE_PLACEHOLDER && count($srcImagePaths) !== COLLAGE_LIMIT)) {
+    if (($c->collagePlaceholder && count($srcImagePaths) !== $c->collageLimit - 1) || (!$c->collagePlaceholder && count($srcImagePaths) !== $c->collageLimit)) {
         return false;
     }
 
     // If there is a placeholder defined, we need to make sure that the image at the placeholder path exists.
-    if (COLLAGE_PLACEHOLDER && !testFile(COLLAGE_PLACEHOLDER_PATH)) {
+    if ($c->collagePlaceholder && !testFile($c->collagePlaceholderPath)) {
         return false;
     }
 
     //Use offset to reflect image file numbering
     $placeholderOffset = 0;
-    for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-        if (COLLAGE_PLACEHOLDER && COLLAGE_PLACEHOLDER_POSITION == $i) {
-            $editImages[] = COLLAGE_PLACEHOLDER_PATH;
+    for ($i = 0; $i < $c->collageLimit; $i++) {
+        if ($c->collagePlaceholder && $c->collagePlaceholderPosition == $i) {
+            $editImages[] = $c->collagePlaceholderPath;
             $placeholderOffset = 1;
         } else {
             if (!file_exists($srcImagePaths[$i - $placeholderOffset])) {
@@ -85,7 +60,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         }
     }
 
-    for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
+    for ($i = 0; $i < $c->collageLimit; $i++) {
         $imageResource = imagecreatefromjpeg($editImages[$i]);
         // Only jpg/jpeg are supported
         if (!$imageResource) {
@@ -93,12 +68,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             logErrorAndDie($errormsg);
         }
 
-        if (PICTURE_FLIP !== 'off') {
-            if (PICTURE_FLIP === 'horizontal') {
+        if ($c->pictureFlip !== 'off') {
+            if ($c->pictureFlip === 'horizontal') {
                 imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-            } elseif (PICTURE_FLIP === 'vertical') {
+            } elseif ($c->pictureFlip === 'vertical') {
                 imageflip($imageResource, IMG_FLIP_VERTICAL);
-            } elseif (PICTURE_FLIP === 'both') {
+            } elseif ($c->pictureFlip === 'both') {
                 imageflip($imageResource, IMG_FLIP_BOTH);
             }
             $imageModified = true;
@@ -110,13 +85,13 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $imageModified = true;
         }
 
-        if (PICTURE_ROTATION !== '0') {
-            $imageResource = rotateResizeImage($imageResource, PICTURE_ROTATION, COLLAGE_BACKGROUND_COLOR);
+        if ($c->pictureRotation !== '0') {
+            $imageResource = rotateResizeImage($imageResource, $c->pictureRotation, $c->collageBackgroundColor);
             $imageModified = true;
         }
 
-        if (PICTURE_POLAROID_EFFECT === 'enabled') {
-            $imageResource = effectPolaroid($imageResource, PICTURE_POLAROID_ROTATION, 200, 200, 200);
+        if ($c->picturePolaroidEffect === 'enabled') {
+            $imageResource = effectPolaroid($imageResource, $c->picturePolaroidRotation, 200, 200, 200);
             $imageModified = true;
         }
 
@@ -140,12 +115,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         imagedestroy($imageResource);
     }
     //Create Collage based on 300dpi 4x6in - Scale collages with the height
-    $collage_height = 4 * COLLAGE_RESOLUTION;
+    $collage_height = 4 * $c->collageResolution;
     $collage_width = $collage_height * 1.5;
 
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);
-    if (testFile(COLLAGE_BACKGROUND)) {
-        $backgroundImage = imagecreatefromstring(file_get_contents(COLLAGE_BACKGROUND));
+    if (testFile($c->collageBackground)) {
+        $backgroundImage = imagecreatefromstring(file_get_contents($c->collageBackground));
         $backgroundImage = resizeImage($backgroundImage, $collage_width, $collage_height);
         imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
     } else {
@@ -157,7 +132,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
         $rotate_after_creation = true;
     }
 
-    switch (COLLAGE_LAYOUT) {
+    switch ($c->collageLayout) {
         // old 2x2 are now named 2+2 as 2x means images are duplicated
         case '2x2':
         case '2+2':
@@ -169,8 +144,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 [$collage_width / 2, $collage_height / 2, $collage_width / 2, $collage_height / 2, 0],
             ];
 
-            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+            for ($i = 0; $i < $c->collageLimit; $i++) {
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
             }
 
             break;
@@ -196,8 +171,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 [$collage_width * $longRatio + $horizontalOffset, $collage_height * $longRatio, $widthp, $heightp, 0],
             ];
 
-            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+            for ($i = 0; $i < $c->collageLimit; $i++) {
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
             }
 
             break;
@@ -233,8 +208,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
             ];
 
-            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+            for ($i = 0; $i < $c->collageLimit; $i++) {
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
             }
 
             break;
@@ -244,7 +219,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             $heightRatioBig = 0.4978;
             $heightRatioSmall = 0.3052;
 
-            if (COLLAGE_LAYOUT === '1+3-2') {
+            if ($c->collageLayout === '1+3-2') {
                 // Vertical Positions for big and small images
                 $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
                 $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
@@ -278,8 +253,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
             ];
 
-            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+            for ($i = 0; $i < $c->collageLimit; $i++) {
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
             }
 
             break;
@@ -305,7 +280,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             ];
 
             for ($i = 0; $i < 3; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
             }
 
             break;
@@ -330,7 +305,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             ];
 
             for ($i = 0; $i < 3; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
             }
             break;
         case '2x4':
@@ -352,8 +327,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
 
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
 
-                if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-                    $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
+                if ($c->collageTakeFrame === 'always' && testFile($c->collageFrame)) {
+                    $tempSubImage = applyFrame($tempSubImage, $c->collageFrame);
                 }
 
                 $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
@@ -397,7 +372,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $rotate_after_creation = true;
             }
 
-            if (COLLAGE_LAYOUT === '2x4-2') {
+            if ($c->collageLayout === '2x4-2') {
                 $widthNew = $collage_height * 0.2675;
                 $heightNew = $widthNew * 1.5;
 
@@ -433,8 +408,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             ];
 
             for ($i = 0; $i < 4; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 4]);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 4], $c);
             }
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
@@ -464,25 +439,25 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
             ];
 
             for ($i = 0; $i < 3; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 3]);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 3], $c);
             }
             $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
             drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
             break;
-        case 'collage.json':
-            $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'collage.json';
+        default:
+            $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . $c->collageLayout;
             if (!file_exists($collageConfigFilePath)) {
-                return false;
+                $my_collage = imagecreatetruecolor($width, $height);
             }
-            $collageConfig = json_decode(file_get_contents($collageConfigFilePath), true);
-            if (!is_array($collageConfig) || count($collageConfig) != COLLAGE_LIMIT) {
+            $layoutConfig = json_decode(file_get_contents($collageConfigFilePath), true);
+            if (!is_array($layoutConfig) || count($layoutConfig) != $c->collageLimit) {
                 return false;
             }
             // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
             $pictureOptions = [];
-            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-                $imgConfig = $collageConfig[$i];
+            for ($i = 0; $i < $c->collageLimit; $i++) {
+                $imgConfig = $layoutConfig[$i];
                 if (!is_array($imgConfig) || count($imgConfig) !== 5) {
                     return false;
                 }
@@ -494,32 +469,29 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
                 $pictureOptions[] = $singlePictureOptions;
             }
 
-            for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i]);
+            for ($i = 0; $i < $c->collageLimit; $i++) {
+                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
             }
             break;
-        default:
-            $my_collage = imagecreatetruecolor($width, $height);
-            break;
     }
 
-    if (COLLAGE_TAKE_FRAME === 'once' && testFile(COLLAGE_FRAME)) {
-        $my_collage = applyFrame($my_collage, COLLAGE_FRAME);
+    if ($c->collageTakeFrame === 'once' && testFile($c->collageFrame)) {
+        $my_collage = applyFrame($my_collage, $c->collageFrame);
     }
 
-    if (TEXTONCOLLAGE_ENABLED === 'enabled' && testFile(TEXTONCOLLAGE_FONT)) {
+    if ($c->textOnCollageEnabled === 'enabled' && testFile($c->textOnCollageFont)) {
         $my_collage = applyText(
             $my_collage,
-            TEXTONCOLLAGE_FONT_SIZE,
-            TEXTONCOLLAGE_ROTATION,
-            TEXTONCOLLAGE_LOCATIONX,
-            TEXTONCOLLAGE_LOCATIONY,
-            TEXTONCOLLAGE_FONT_COLOR,
-            TEXTONCOLLAGE_FONT,
-            TEXTONCOLLAGE_LINE1,
-            TEXTONCOLLAGE_LINE2,
-            TEXTONCOLLAGE_LINE3,
-            TEXTONCOLLAGE_LINESPACE
+            $c->textOnCollageFontSize,
+            $c->textOnCollageRotation,
+            $c->textOnCollageLocationX,
+            $c->textOnCollageLocationY,
+            $c->textOnCollageFontColor,
+            $c->textOnCollageFont,
+            $c->textOnCollageLine1,
+            $c->textOnCollageLine2,
+            $c->textOnCollageLine3,
+            $c->textOnCollageLinespace
         );
     }
 
@@ -533,8 +505,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain') {
     // Destroy the created collage in memory
     imagedestroy($my_collage);
 
-    for ($i = 0; $i < COLLAGE_LIMIT; $i++) {
-        if (!COLLAGE_PLACEHOLDER || (COLLAGE_PLACEHOLDER && COLLAGE_PLACEHOLDER_POSITION != $i)) {
+    for ($i = 0; $i < $c->collageLimit; $i++) {
+        if (!$c->collagePlaceholder || ($c->collagePlaceholder && $c->collagePlaceholderPosition != $i)) {
             unlink($editImages[$i]);
         }
     }
@@ -569,7 +541,7 @@ function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color) {
     imageline($my_collage, $x1, $y1, $x2, $y2, IMG_COLOR_STYLED);
 }
 
-function addPicture($my_collage, $filename, $pictureOptions) {
+function addPicture($my_collage, $filename, $pictureOptions, CollageConfig $c) {
     $dX = intval($pictureOptions[0]);
     $dY = intval($pictureOptions[1]);
     $width = intval($pictureOptions[2]);
@@ -583,13 +555,13 @@ function addPicture($my_collage, $filename, $pictureOptions) {
         $tempSubImage = resizeCropImage($width, $height, $tempSubImage);
     }
 
-    if (COLLAGE_TAKE_FRAME === 'always' && testFile(COLLAGE_FRAME)) {
-        $tempSubImage = applyFrame($tempSubImage, COLLAGE_FRAME);
+    if ($c->collageTakeFrame === 'always' && testFile($c->collageFrame)) {
+        $tempSubImage = applyFrame($tempSubImage, $c->collageFrame);
     }
 
     if ($degrees != 0) {
-        $backgroundColor = COLLAGE_BACKGROUND_COLOR;
-        if (testFile(COLLAGE_BACKGROUND)) {
+        $backgroundColor = $c->collageBackgroundColor;
+        if (testFile($c->collageBackground)) {
             $backgroundColor = '#0000007f';
         }
         $tempSubImage = rotateResizeImage($tempSubImage, $degrees, $backgroundColor);
