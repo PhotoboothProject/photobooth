@@ -80,7 +80,7 @@ function initRemoteBuzzerFromDOM() {
 
                 ioClient.on('connect_error', function () {
                     photoboothTools.console.log(
-                        'ERROR: remotebuzzer_client unable to connect to webserver ip - please ensure remotebuzzer_server is running on Photobooth server. Use Photobooth dev mode to create log file for debugging'
+                        'ERROR: remotebuzzer_client unable to connect to webserver ip - please ensure remotebuzzer_server is running on Photobooth server. Set Photobooth loglevel to 1 (or above) to create log file for debugging.'
                     );
                 });
 
