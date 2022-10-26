@@ -10,10 +10,6 @@ function logError($data) {
         $file_data .= file_get_contents($logfile);
     }
     file_put_contents($logfile, $file_data);
-
-    //$fp = fopen($logfile, 'a'); //opens file in append mode.
-    //fwrite($fp, date('c') . ":\n\t" . $message . "\n");
-    //fclose($fp);
 }
 
 function logErrorAndDie($errormsg) {
