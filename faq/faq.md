@@ -252,7 +252,7 @@ Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs 
 **Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
 
 Having trouble?
-- Switch Photobooth to DEV mode. (admin screen -> expert view -> general section)
+- Set Photobooth Log Level to 1. (admin screen -> general section)
 - Reload the Photobooth homepage
 - Check the browser developer console for error logs
 - Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
