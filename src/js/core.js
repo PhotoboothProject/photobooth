@@ -1047,6 +1047,15 @@ const photoBooth = (function () {
         return parts[parts.length - 1];
     };
 
+    api.resetPrintErrorMessage = function (cb, to) {
+        setTimeout(function () {
+            photoboothTools.modalMesg.reset('#modal_mesg');
+            cb();
+            isPrinting = false;
+            remoteBuzzerClient.inProgress(false);
+        }, to);
+    };
+
     api.printImage = function (imageSrc, cb) {
         if (api.isVideoFile(imageSrc)) {
             photoboothTools.console.log('ERROR: An error occurred: attempt to print non printable file.');
@@ -1075,30 +1084,21 @@ const photoBooth = (function () {
                         photoboothTools.console.log('ERROR: An error occurred: ', data.error);
                         photoboothTools.modal.close('#print_mesg');
                         photoboothTools.modalMesg.showError('#modal_mesg', data.error);
-                    }
-
-                    setTimeout(function () {
-                        if (data.error) {
-                            photoboothTools.modalMesg.reset('#modal_mesg');
-                        } else {
+                        api.resetPrintErrorMessage(cb, config.print.time);
+                    } else {
+                        setTimeout(function () {
                             photoboothTools.modal.close('#print_mesg');
-                        }
-                        cb();
-                        isPrinting = false;
-                        remoteBuzzerClient.inProgress(false);
-                    }, config.print.time);
+                            cb();
+                            isPrinting = false;
+                            remoteBuzzerClient.inProgress(false);
+                        }, config.print.time);
+                    }
                 },
                 error: (jqXHR, textStatus) => {
                     photoboothTools.console.log('ERROR: An error occurred: ', textStatus);
                     photoboothTools.modal.close('#print_mesg');
                     photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
-
-                    setTimeout(function () {
-                        photoboothTools.modalMesg.reset('#modal_mesg');
-                        cb();
-                        isPrinting = false;
-                        remoteBuzzerClient.inProgress(false);
-                    }, notificationTimeout);
+                    api.resetPrintErrorMessage(cb, notificationTimeout);
                 }
             });
         }
