@@ -9,6 +9,7 @@
 @import 'partials/sidenav';
 @import 'partials/scrollbar';
 @import 'partials/shutter_animation';
+@import 'partials/video_animation';
 @import 'partials/modal';
 @import 'partials/ribbon';
 @import 'partials/video_preview';
@@ -31,6 +32,25 @@
   background: center center no-repeat;
   background-size: contain;
   z-index: 2;
+}
+
+#resultVideo {
+  display: none;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+#resultVideoQR {
+  display: none;
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  min-width: 15%;
+  max-height: 30%;
+  z-index: 150;
 }
 
 .resultInner {
