@@ -92,7 +92,7 @@ const photoboothPreview = (function () {
         };
 
         jQuery
-            .post('api/takeVideo.php', dataVideo)
+            .post('api/previewCamera.php', dataVideo)
             .done(function (result) {
                 photoboothTools.console.log('Start webcam', result);
                 pid = result.pid;
@@ -200,7 +200,7 @@ const photoboothPreview = (function () {
             };
 
             jQuery
-                .post('api/takeVideo.php', dataVideo)
+                .post('api/previewCamera.php', dataVideo)
                 .done(function (result) {
                     photoboothTools.console.log('Stop webcam', result);
                     api.stopVideo();
