@@ -327,6 +327,7 @@ const photoBooth = (function () {
     };
 
     api.retryTakePic = function (photoStyle, retry) {
+        api.takingPic = false;
         retry += 1;
         loading.append(
             $('<p class="text-muted">').text(
@@ -393,9 +394,9 @@ const photoBooth = (function () {
                         'Taken collage photo number: ' + (result.current + 1) + ' / ' + result.limit
                     );
 
-                    // if there is a next shot initialize preview video at this point to have a smoother transition to it
                     if (result.current + 1 < result.limit) {
                         photoboothPreview.initializeMedia();
+                        api.takingPic = false;
                     }
 
                     if (config.collage.continuous) {
