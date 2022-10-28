@@ -79,7 +79,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             },
 
             focus: true,
-            clickToCloseNonZoomable: config.pswp.clickToCloseNonZoomablefalse,
+            clickToCloseNonZoomable: config.pswp.clickToCloseNonZoomable,
             closeOnScroll: config.pswp.closeOnScroll,
             closeOnOutsideClick: config.pswp.closeOnOutsideClick,
             preventSwiping: config.pswp.preventSwiping,
