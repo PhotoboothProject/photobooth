@@ -12,5 +12,5 @@ function showPassword() {
 
 $('.password-toggle').on('click', function () {
     showPassword();
-    $('.password-toggle').toggleClass('fa-eye fa-eye-slash');
+    $('.password-toggle').toggleClass(config.icons_class.password_toggle);
 });

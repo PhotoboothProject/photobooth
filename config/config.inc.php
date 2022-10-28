@@ -343,6 +343,53 @@ $config['colors']['box'] = '#f8f9fc';
 $config['colors']['gallery_button'] = '#ffffff';
 
 
+// I C O N S
+$config['icons']['admin_back'] = '<i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i>';
+$config['icons']['admin_back_short'] = '<i class="fa fa-arrow-left"></i>';
+$config['icons']['admin_menutoggle'] = '<i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"></i>';
+$config['icons']['admin_save'] = '<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>';
+$config['icons']['admin_save_success'] = '<i class="fa fa-check"></i>';
+$config['icons']['admin_save_error'] = '<i class="fa fa-times"></i>';
+$config['icons']['admin_signout'] = '<i class="fa fa-sign-out fa-3x" id="admintopnavbarlogout"></i>';
+$config['icons']['admin'] = '<i class="fa fa-cog"></i>';
+$config['icons']['home'] = '<i class="fa fa-home"></i>';
+$config['icons']['gallery'] = '<i class="fa fa-picture-o"></i>';
+$config['icons']['dependencies'] = '<i class="fa fa-list-ul"></i>';
+$config['icons']['update'] = '<i class="fa fa-tasks"></i>';
+$config['icons']['slideshow'] = '<i class="fa fa-play"></i>';
+$config['icons']['livechroma'] = '<i class="fa fa-paint-brush"></i>';
+$config['icons']['faq'] = '<i class="fa fa-question-circle" aria-hidden="true"></i>';
+$config['icons']['manual'] = '<i class="fa fa-info-circle" aria-hidden="true"></i>';
+$config['icons']['telegram'] = '<i class="fa fa-telegram" aria-hidden="true"></i>';
+$config['icons']['cups'] = '<i class="fa fa-print" aria-hidden="true"></i>';
+$config['icons']['take_picture'] = '<i class="fa fa-camera"></i>';
+$config['icons']['take_collage'] = '<i class="fa fa-th-large"></i>';
+$config['icons']['close'] = '<i class="fa fa-times"></i>';
+$config['icons']['refresh'] = '<i class="fa fa-refresh"></i>';
+$config['icons']['delete'] = '<i class="fa fa-trash"></i>';
+$config['icons']['print'] = '<i class="fa fa-print"></i>';
+$config['icons']['save'] = '<i class="fa fa-floppy-o"></i>';
+$config['icons']['download'] = '<i class="fa fa-download"></i>';
+$config['icons']['qr'] = '<i class="fa fa-qrcode"></i>';
+$config['icons']['mail'] = '<i class="fa fa-envelope"></i>';
+$config['icons']['mail_close'] = '<i class="fa fa-times" id="send-mail-close"></i>';
+$config['icons']['mail_submit'] = '<i class="fa fa-spinner fa-spin"></i>';
+$config['icons']['filter'] = '<i class="fa fa-magic"></i>';
+$config['icons']['chroma'] = '<i class="fa fa-paint-brush"></i>';
+$config['icons']['fullscreen'] = '<i class="fa fa-arrows-alt"></i>';
+$config['icons']['share'] = '<i class="fa fa-share-alt" aria-hidden="true"></i>';
+$config['icons']['zoom'] = '<i class="fa fa-search-plus" aria-hidden="true"></i>';
+$config['icons']['logout'] = '<i class="fa fa-sign-out"></i>';
+$config['icons']['date'] = '<i class="fa fa-clock-o"></i>';
+$config['icons']['spinner'] = '<i class="fa fa-cog fa-spin"></i>';
+$config['icons']['update_git'] = '<i class="fa fa-play-circle"></i>';
+$config['icons_class']['close'] = 'fa fa-times';
+$config['icons_class']['password_visibility'] = 'fa fa-eye';
+$config['icons_class']['password_toggle'] = 'fa-eye fa-eye-slash';
+$config['icons_class']['slideshow_play'] = 'fa fa-play';
+$config['icons_class']['slideshow_toggle'] = 'fa-play fa-pause';
+
+
 // J P E G   Q U A L I T Y
 $config['jpeg_quality']['image'] = 100;
 $config['jpeg_quality']['chroma'] = 100;

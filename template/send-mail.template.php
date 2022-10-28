@@ -1,5 +1,5 @@
 	<div class="<?php echo $uiShape; ?> send-mail">
-		<i class="fa fa-times" id="send-mail-close"></i>
+		<?php echo $config['icons']['mail_close'] ?>
 		<?php if ($config['mail']['send_all_later']): ?>
 		    <p data-i18n="insertMailToDB"></p>
 		<?php else: ?>

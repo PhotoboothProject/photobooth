@@ -23,39 +23,40 @@
                 <!--  Controls are self-explanatory. Order can be changed. -->
 
                 <div class="pswp__counter"></div>
-                <button class="<?php echo $btnClass; ?> pswp__button pswp__button--close fa fa-times rotaryfocus" title="Close (Esc)"></button>
-                <button class="pswp__button pswp__button--share rotaryfocus" title="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
-                <button class="pswp__button pswp__button--zoom rotaryfocus" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+
+                <button class="<?php echo $btnClass; ?> pswp__button pswp__button--close <?php echo $config['icons_class']['close']; ?> rotaryfocus" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share rotaryfocus" title="Share"><?php echo $config['icons']['share']; ?></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"><?php echo $config['icons']['fullscreen']; ?></button>
+                <button class="pswp__button pswp__button--zoom rotaryfocus" title="Zoom in/out"><?php echo $config['icons']['zoop']; ?></button>
 
                 <!-- custom buttons: -->
                 <?php if ($config['mail']['enabled']): ?>
-                <button type="button" class="pswp__button pswp__button--mail rotaryfocus" title="Send Email"><i class="fa fa-envelope"></i></button>
+                <button type="button" class="pswp__button pswp__button--mail rotaryfocus" title="Send Email"><?php echo $config['icons']['mail']; ?></button>
                 <?php endif; ?>
 
                 <?php if ($config['print']['from_gallery']): ?>
-                <button type="button" class="pswp__button pswp__button--print rotaryfocus" title="Print"><i class="fa fa-print"></i></button>
+                <button type="button" class="pswp__button pswp__button--print rotaryfocus" title="Print"><?php echo $config['icons']['print']; ?></button>
                 <?php endif; ?>
 
                 <?php if ($config['qr']['enabled']): ?>
-                <button type="button" class="pswp__button pswp__button--qrcode rotaryfocus" title="QR Code"><i class="fa fa-qrcode"></i></button>
+                <button type="button" class="pswp__button pswp__button--qrcode rotaryfocus" title="QR Code"><?php echo $config['icons']['qr']; ?></button>
                 <?php endif; ?>
 
                 <?php if ($config['download']['enabled'] && ($_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR'])): ?>
-                <!-- <button type="button" class="pswp__button pswp__button--download" title="Download"><i class="fa fa-download"></i></button> -->
-                <a href="" download="" class="pswp__button pswp__button--custom-download rotaryfocus" title="Download"><i class="fa fa-download"></i></a>
+                <!-- <button type="button" class="pswp__button pswp__button--download" title="Download"><?php echo $config['icons']['download']; ?></button> -->
+                <a href="" download="" class="pswp__button pswp__button--custom-download rotaryfocus" title="Download"><?php echo $config['icons']['download']; ?></a>
                 <?php endif; ?>
 
                 <?php if ($config['keying']['enabled']): ?>
-                <button type="button" class="pswp__button pswp__button--print-chroma-keying rotaryfocus" title="Chroma Key"><i class="fa fa-paint-brush"></i></button>
+                <button type="button" class="pswp__button pswp__button--print-chroma-keying rotaryfocus" title="Chroma Key"><?php echo $config['icons']['chroma']; ?></button>
                 <?php endif; ?>
 
                 <?php if ($config['gallery']['use_slideshow']): ?>
-                <button type="button" class="pswp__button pswp__button--playpause fa fa-play rotaryfocus" title="Play Slideshow"></button>
+                <button type="button" class="pswp__button pswp__button--playpause <?php echo $config['icons_class']['slideshow_play']; ?> rotaryfocus" title="Play Slideshow"></button>
                 <?php endif; ?>
 
                 <?php if ($config['gallery']['allow_delete']): ?>
-                <button type="button" class="pswp__button pswp__button--delete <?php if ($config['delete']['no_request']){ echo 'rotaryfocus';} ?> " title="Delete"><i class="fa fa-trash"></i></button>
+                <button type="button" class="pswp__button pswp__button--delete <?php if ($config['delete']['no_request']){ echo 'rotaryfocus';} ?> " title="Delete"><?php echo $config['icons']['delete']; ?></button>
                 <?php endif; ?>
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
