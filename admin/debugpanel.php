@@ -67,14 +67,14 @@ $btnClass = 'adminnavlistelement ' . $btnShape . ' noborder';
                 html_src_indent($indent++);
                 echo '<div class="admintopnavbar">';
                 html_src_indent($indent);
-                echo '<i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i>';
+                echo $config['icons']['admin_back'];
                 if(isset($_SESSION['auth']) && $_SESSION['auth'] === true)
                 {
                         html_src_indent($indent);
-                        echo '<i class="fa fa-sign-out fa-3x" id="admintopnavbarlogout"></i>';
+                        echo $config['icons']['admin_signout'];
                 }
                 html_src_indent($indent);
-                echo '<i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"></i>';
+                echo $config['icons']['admin_menutoggle'];
                 html_src_indent($indent);
                 echo '<i class="setting_section_heading"><span data-i18n="debugpanel">Debug Panel</span></i>';
                 html_src_indent(--$indent);

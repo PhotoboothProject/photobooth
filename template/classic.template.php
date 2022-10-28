@@ -1,7 +1,7 @@
 		<!-- Start Page -->
 		<div class="stages <?php echo $uiShape; ?> rotarygroup noborder" id="start">
 			<?php if ($config['gallery']['enabled']): ?>
-			<a class="<?php echo $btnClass; ?> gallery-button rotaryfocus" href="#"><i class="fa fa-th"></i> <span data-i18n="gallery"></span></a>
+			<a class="<?php echo $btnClass; ?> gallery-button rotaryfocus" href="#"><?php echo $config['icons']['gallery']; ?> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 
 			<div class="startInner <?php echo $uiShape; ?> noborder">
@@ -56,11 +56,11 @@
 				</div>
 				<?php else: ?>
 					<?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
-					<a href="#" class="<?php echo $btnClass; ?> takePic rotaryfocus"><i class="fa fa-camera"></i> <span data-i18n="takePhoto"></span></a>
+					<a href="#" class="<?php echo $btnClass; ?> takePic rotaryfocus"><?php echo $config['icons']['take_picture']; ?> <span data-i18n="takePhoto"></span></a>
 					<?php endif; ?>
 
 					<?php if ($config['collage']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass; ?> takeCollage rotaryfocus"><i class="fa fa-th-large"></i> <span
+					<a href="#" class="<?php echo $btnClass; ?> takeCollage rotaryfocus"><?php echo $config['icons']['take_collage']; ?> <span
 							data-i18n="takeCollage"></span></a>
 					<?php endif; ?>
 
@@ -75,9 +75,9 @@
 			<?php endif; ?>
 
 			<?php if($config['button']['show_cups']): ?>
-				<a id="cups-button" class="<?php echo $btnClass; ?>  cups-button rotaryfocus" href="#" target="newwin"><i class="fa fa-print" aria-hidden="true"></i> <span>CUPS</span></a>
+				<a id="cups-button" class="<?php echo $btnClass; ?>  cups-button rotaryfocus" href="#" target="newwin"><?php echo $config['icons']['cups']; ?> <span>CUPS</span></a>
 			<?php endif; ?>
 			<?php if($config['button']['show_fs']): ?>
-				<a href="#" id="fs-button" class="<?php echo $btnClass; ?> btn--small fs-button"><i class="fa fa-arrows-alt"></i> <span data-i18n="toggleFullscreen"></span></a>
+				<a href="#" id="fs-button" class="<?php echo $btnClass; ?> btn--small fs-button"><?php echo $config['icons']['fullscreen']; ?> <span data-i18n="toggleFullscreen"></span></a>
 			<?php endif; ?>
 		</div>

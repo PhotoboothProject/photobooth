@@ -100,14 +100,14 @@ $uiShape = 'shape--' . $config['ui']['style'];
                 html_src_indent($indent++);
                 echo '<div class="admintopnavbar">';
                 html_src_indent($indent);
-                echo '<i class="fa fa-long-arrow-left fa-3x" id="admintopnavbarback"></i>';
+                echo $config['icons']['admin_back'];
                 if(isset($_SESSION['auth']) && $_SESSION['auth'] === true)
                 {
                         html_src_indent($indent);
-                        echo '     <i class="fa fa-sign-out fa-3x" id="admintopnavbarlogout"></i>';
+                        echo '     ' . $config['icons']['admin_signout'];
                 }
                 html_src_indent($indent);
-                echo '     <i class="fa fa-bars fa-3x" id="admintopnavbarmenutoggle"></i>';
+                echo '     ' . $config['icons']['admin_menutoggle'];
                 html_src_indent(--$indent);
                 echo '</div>';
 
@@ -147,9 +147,9 @@ $uiShape = 'shape--' . $config['ui']['style'];
         <div class="admincontent" id="admincontentpage">
                     <button class="save-admin-btn <?php echo $btnShape; ?>" id="save-admin-btn">
                      <span class="save"><span data-i18n="save"></span></span>
-                     <span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>
-                     <span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>
-                     <span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>
+                     <span class="saving"><?php echo $config['icons']['admin_save']; ?><span data-i18n="saving"></span></span>
+                     <span class="success"><?php echo $config['icons']['admin_save_success']; ?><span data-i18n="success"></span></span>
+                     <span class="error"><?php echo $config['icons']['admin_save_error']; ?><span data-i18n="saveerror"></span></span>
              </button>
         <?php
         
@@ -248,15 +248,15 @@ $uiShape = 'shape--' . $config['ui']['style'];
                                              switch ($key) {
                                                     case 'reset_button':
                                                          echo '<span class="save"><span data-i18n="reset"></span></span>';
-                                                         echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="saving"></span></span>';
-                                                         echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
-                                                         echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
+                                                         echo '<span class="saving">' . $config['icons']['admin_save'] . '<span data-i18n="saving"></span></span>';
+                                                         echo '<span class="success">' . $config['icons']['admin_save_success'] . '<span data-i18n="success"></span></span>';
+                                                         echo '<span class="error">' . $config['icons']['admin_save_error'] . '<span data-i18n="saveerror"></span></span>';
                                                          break;
                                                     case 'database_rebuild':
                                                     case 'check_version':
-                                                         echo '<span class="saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i><span data-i18n="busy"></span></span>';
-                                                         echo '<span class="success"><i class="fa fa-check"></i><span data-i18n="success"></span></span>';
-                                                         echo '<span class="error"><i class="fa fa-times"></i><span data-i18n="saveerror"></span></span>';
+                                                         echo '<span class="saving">' . $config['icons']['admin_save'] . '<span data-i18n="busy"></span></span>';
+                                                         echo '<span class="success">' . $config['icons']['admin_save_success'] . '<span data-i18n="success"></span></span>';
+                                                         echo '<span class="error">' . $config['icons']['admin_save_error'] . '<span data-i18n="saveerror"></span></span>';
                                                          echo '<span class="text" data-i18n="'.$setting['placeholder'].'"></span>';
                                                          break;
                                                     default:

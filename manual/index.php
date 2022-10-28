@@ -133,7 +133,7 @@ $btnClass = 'btn ' . $btnShape;
 				?>
 			</br>
 			<div>
-				<a href="faq.php" class="<?php echo $btnClass; ?> faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="fa fa-question-circle" aria-hidden="true"></i></a></br>
+				<a href="faq.php" class="<?php echo $btnClass; ?> faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <?php echo $config['icons']['faq']; ?></a></br>
 				<a href="https://photoboothproject.github.io" class="<?php echo $btnClass; ?> wiki-btn"><span data-i18n="show_wiki"></span></a>
 			</div>
 			</form>

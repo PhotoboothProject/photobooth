@@ -639,7 +639,7 @@ const photoBooth = (function () {
 
                 photoboothTools.modal.close('#qrCode');
             })
-            .append($('<i>').addClass('fa fa-times'))
+            .append(config.icons.close)
             .css('float', 'right')
             .appendTo(body);
         $('<img src="api/qrcode.php?filename=' + filename + '" alt="qr code"/>')
@@ -1044,7 +1044,7 @@ const photoBooth = (function () {
         const submitButton = form.find('.btn');
 
         mailMessageForm.empty();
-        submitButton.html('<i class="fa fa-spinner fa-spin"></i>');
+        submitButton.html(config.icons.mail_submit);
 
         $.ajax({
             url: 'api/sendPic.php',

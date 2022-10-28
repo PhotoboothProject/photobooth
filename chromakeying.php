@@ -74,13 +74,13 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		</div>
 
 		<div class="chroma-control-bar">
-			<a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#"><i class="fa fa-floppy-o"></i> <span data-i18n="save"></span></a>
+			<a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#"><?php echo $config['icons']['save']; ?> <span data-i18n="save"></span></a>
 
 			<?php if ($config['print']['from_chromakeying']): ?>
-				<a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#"><i class="fa fa-print"></i> <span data-i18n="print"></span></a>
+				<a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#"><?php echo $config['icons']['print']; ?> <span data-i18n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#"><i class="fa fa-times"></i> <span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#"><?php echo $config['icons']['close']; ?> <span data-i18n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">

@@ -68,7 +68,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 			}
 			$dateObject = DateTime::createFromFormat('Ymd_His', substr($name, 0, strlen($name) - 4));
 			if ($dateObject) {
-				$date = '<i class="fa fa-clock-o"></i> ' . $dateObject->format($config['gallery']['date_format']);
+				$date = $config['icons']['date'] . ' ' . $dateObject->format($config['gallery']['date_format']);
 			}
 		}
 

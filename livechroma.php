@@ -67,12 +67,11 @@ if (
     <div class="rotarygroup" id="start">
         <div class="top-bar">
             <?php if (!$config['live_keying']['enabled']): ?>
-                <a href="index.php" class="<?php echo $btnClass; ?> livechroma-close-btn rotaryfocus"><i
-                            class="fa fa-times"></i></a>
+                <a href="index.php" class="<?php echo $btnClass; ?> livechroma-close-btn rotaryfocus"><?php echo $config['icons']['close']; ?></a>
             <?php endif; ?>
 
             <?php if ($config['gallery']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass ?> livechroma-gallery-btn rotaryfocus"><i class="fa fa-th"></i>
+                <a href="#" class="<?php echo $btnClass ?> livechroma-gallery-btn rotaryfocus"><?php echo $config['icons']['gallery']; ?>
                     <span data-i18n="gallery"></span></a>
             <?php endif; ?>
         </div>
@@ -88,7 +87,7 @@ if (
         <div class="stages" id="loader">
             <div class="loaderInner">
                 <div class="spinner">
-                    <i class="fa fa-cog fa-spin"></i>
+                    <?php echo $config['icons']['spinner']; ?>
                 </div>
 
                 <div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
@@ -121,13 +120,13 @@ if (
         </div>
 
         <div class="chroma-control-bar">
-            <a href="#" class="<?php echo $btnClass; ?> takeChroma livechroma rotaryfocus"><i class="fa fa-camera"></i>
+            <a href="#" class="<?php echo $btnClass; ?> takeChroma livechroma rotaryfocus"><?php echo $config['icons']['take_picture']; ?>
                 <span data-i18n="takePhoto"></span></a>
             <?php if ($config['picture']['allow_delete']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><i class="fa fa-trash"></i> <span
+                <a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><?php echo $config['icons']['delete']; ?> <span
                             data-i18n="delete"></span></a>
             <?php endif; ?>
-            <a href="#" class="<?php echo $btnClass; ?> reloadPage livechroma rotaryfocus"><i class="fa fa-refresh"></i>
+            <a href="#" class="<?php echo $btnClass; ?> reloadPage livechroma rotaryfocus"><?php echo $config['icons']['refresh']; ?>
                 <span data-i18n="reload"></span></a>
         </div>
     </div>
