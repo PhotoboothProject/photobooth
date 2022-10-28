@@ -23,7 +23,7 @@
                 <!--  Controls are self-explanatory. Order can be changed. -->
 
                 <div class="pswp__counter"></div>
-                <button class="<?php echo $btnClass; ?> pswp__button pswp__button--close rotaryfocus" title="Close (Esc)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="<?php echo $btnClass; ?> pswp__button pswp__button--close fa fa-times rotaryfocus" title="Close (Esc)"></button>
                 <button class="pswp__button pswp__button--share rotaryfocus" title="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
                 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
                 <button class="pswp__button pswp__button--zoom rotaryfocus" title="Zoom in/out"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
