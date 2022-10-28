@@ -30,6 +30,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
+	<link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
 	<link rel="stylesheet" href="resources/css/trigger.css" />
 	<?php if (is_file("private/overrides.css")): ?>
