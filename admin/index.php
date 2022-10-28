@@ -35,6 +35,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 
         <link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="../node_modules/material-icons/iconfont/material-icons.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
         <link rel="stylesheet" type="text/css" href="../resources/css/<?php echo $config['ui']['style']; ?>_admin.css?v=<?php echo $config['photobooth']['version']; ?>">
         <?php if (is_file("../private/overrides.css")): ?>
