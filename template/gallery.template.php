@@ -2,7 +2,7 @@
 	<div class="gallery__inner">
 		<div class="gallery__header">
 			<h1><span data-i18n="gallery"></span></h1>
-			<a href="#" class="<?php echo $btnClass; ?> gallery__close close_gal rotaryfocus"><?php echo $config['icons']['close']; ?></a>
+			<a href="#" class="<?php echo $btnClass; ?> gallery__close close_gal rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
 		</div>
 		<div class="gallery__body" id="galimages">
 			<?php if (empty($imagelist)): ?>
@@ -20,7 +20,7 @@
                 }
                 $dateObject = DateTime::createFromFormat('Ymd_His', substr($name, 0, strlen($name) - 4));
                 if ($dateObject) {
-                    $date = $config['icons']['date'] . ' ' . $dateObject->format($config['gallery']['date_format']);
+                    $date = '<i class="' . $config['icons']['date'] . '"></i> ' . $dateObject->format($config['gallery']['date_format']);
                 }
             }
 
@@ -57,11 +57,11 @@
                     </div>
                 <?php else: ?>
                     <?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
-                    <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takePic rotaryfocus"><?php echo $config['icons']['take_picture']; ?> <span data-i18n="takePhoto"></span></a>
+                    <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takePic rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i> <span data-i18n="takePhoto"></span></a>
                     <?php endif; ?>
 
                     <?php if ($config['collage']['enabled']): ?>
-                    <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takeCollage rotaryfocus"><?php echo $config['icons']['take_collage']; ?> <span data-i18n="takeCollage"></span></a>
+                    <a href="#" class="<?php echo $btnClass; ?> gal-action-btn takeCollage rotaryfocus"><i class="<?php echo $config['icons']['take_collage']; ?>"></i> <span data-i18n="takeCollage"></span></a>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

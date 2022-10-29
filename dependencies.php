@@ -46,6 +46,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
+	<link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<link rel="stylesheet" href="resources/css/update.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("private/overrides.css")): ?>
@@ -61,9 +62,9 @@ $uiShape = 'shape--' . $config['ui']['style'];
 	</div>
 
 	<div>
-		<a href="./" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['home']; ?> <span data-i18n="home"></span></a>
+		<a href="./" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['home']; ?>"></i> <span data-i18n="home"></span></a>
 
-		<a href="admin" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['admin']; ?> <span data-i18n="admin_panel"></span></a>
+		<a href="admin" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['admin']; ?>"></i> <span data-i18n="admin_panel"></span></a>
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

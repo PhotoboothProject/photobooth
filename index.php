@@ -65,6 +65,7 @@ if (
     <link rel="stylesheet" href="node_modules/normalize.css/normalize.css"/>
     <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css"/>
     <link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
+    <link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
     <link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css"/>
     <link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css"/>
     <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>"/>
@@ -87,7 +88,7 @@ if (
     <!-- image Filter Pane -->
     <?php if ($config['filters']['enabled']): ?>
         <div id="mySidenav" class="dragscroll sidenav rotarygroup">
-            <a href="#" class="<?php echo $btnClass; ?> closebtn rotaryfocus"><?php echo $config['icons']['close']; ?></a>
+            <a href="#" class="<?php echo $btnClass; ?> closebtn rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
 
             <?php foreach (AVAILABLE_FILTERS as $filter => $name): ?>
                 <?php if (!in_array($filter, $config['filters']['disabled'])): ?>
@@ -104,7 +105,7 @@ if (
     <div class="stages" id="loader">
         <div class="loaderInner">
             <div class="spinner">
-                <?php echo $config['icons']['spinner']; ?>
+                <i class="<?php echo $config['icons']['spinner']; ?>"></i>
             </div>
 
             <div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
@@ -123,51 +124,51 @@ if (
 
         <div class="resultInner hidden">
             <?php if ($config['button']['homescreen']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> homebtn rotaryfocus"><?php echo $config['icons']['home']; ?> <span
+                <a href="#" class="<?php echo $btnClass; ?> homebtn rotaryfocus"><i class="<?php echo $config['icons']['home']; ?>"></i> <span
                             data-i18n="home"></span></a>
             <?php endif; ?>
 
             <?php if ($config['gallery']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> gallerybtn rotaryfocus"><?php echo $config['icons']['gallery']; ?> <span data-i18n="gallery"></span></a>
+                <a href="#" class="<?php echo $btnClass; ?> gallerybtn rotaryfocus"><i class="<?php echo $config['icons']['gallery']; ?>"></i> <span data-i18n="gallery"></span></a>
             <?php endif; ?>
 
             <?php if ($config['qr']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> qrbtn rotaryfocus"><?php echo $config['icons']['qr']; ?> <span
+                <a href="#" class="<?php echo $btnClass; ?> qrbtn rotaryfocus"><i class="<?php echo $config['icons']['qr']; ?>"></i> <span
                             data-i18n="qr"></span></a>
             <?php endif; ?>
 
             <?php if ($config['mail']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> mailbtn rotaryfocus"><?php echo $config['icons']['mail']; ?> <span
+                <a href="#" class="<?php echo $btnClass; ?> mailbtn rotaryfocus"><i class="<?php echo $config['icons']['mail']; ?>"></i> <span
                             data-i18n="mail"></span></a>
             <?php endif; ?>
 
             <?php if ($config['print']['from_result']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> printbtn rotaryfocus"><?php echo $config['icons']['print']; ?> <span
+                <a href="#" class="<?php echo $btnClass; ?> printbtn rotaryfocus"><i class="<?php echo $config['icons']['print']; ?>"></i> <span
                             data-i18n="print"></span></a>
             <?php endif; ?>
 
             <?php if (!$config['button']['force_buzzer']): ?>
                 <?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
-                    <a href="#" class="<?php echo $btnClass; ?> newpic rotaryfocus"><?php echo $config['icons']['take_picture']; ?> <span
+                    <a href="#" class="<?php echo $btnClass; ?> newpic rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i> <span
                                 data-i18n="newPhoto"></span></a>
                 <?php endif; ?>
 
                 <?php if ($config['collage']['enabled']): ?>
-                    <a href="#" class="<?php echo $btnClass; ?> newcollage rotaryfocus"><?php echo $config['icons']['take_collage']; ?>
+                    <a href="#" class="<?php echo $btnClass; ?> newcollage rotaryfocus"><i class="<?php echo $config['icons']['take_collage']; ?>"></i>
                         <span
                                 data-i18n="newCollage"></span></a>
                 <?php endif; ?>
             <?php endif; ?>
 
             <?php if ($config['filters']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> imageFilter rotaryfocus"><?php echo $config['icons']['filter']; ?> <span
+                <a href="#" class="<?php echo $btnClass; ?> imageFilter rotaryfocus"><i class="<?php echo $config['icons']['filter']; ?>"></i> <span
                             data-i18n="selectFilter"></span></a>
             <?php endif; ?>
 
             <?php if ($config['picture']['allow_delete']): ?>
                 <a href="#" class="<?php echo $btnClass; ?> deletebtn <?php if ($config['delete']['no_request']) {
                     echo 'rotaryfocus';
-                } ?> "><?php echo $config['icons']['delete']; ?> <span data-i18n="delete"></span></a>
+                } ?> "><i class="<?php echo $config['icons']['delete']; ?>"></i> <span data-i18n="delete"></span></a>
             <?php endif; ?>
         </div>
 

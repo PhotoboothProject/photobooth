@@ -41,6 +41,7 @@ $btnClass = 'btn ' . $btnShape;
 	<link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/material-icons/iconfont/material-icons.css">
+	<link rel="stylesheet" type="text/css" href="../node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" type="text/css" href="../resources/css/manual.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("../private/overrides.css")): ?>
 	<link rel="stylesheet" href="../private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
@@ -134,7 +135,7 @@ $btnClass = 'btn ' . $btnShape;
 				?>
 			</br>
 			<div>
-				<a href="faq.php" class="<?php echo $btnClass; ?> faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <?php echo $config['icons']['faq']; ?></a></br>
+				<a href="faq.php" class="<?php echo $btnClass; ?> faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="<?php echo $config['icons']['faq']; ?>"></i></a></br>
 				<a href="https://photoboothproject.github.io" class="<?php echo $btnClass; ?> wiki-btn"><span data-i18n="show_wiki"></span></a>
 			</div>
 			</form>

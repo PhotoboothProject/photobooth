@@ -40,6 +40,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="../node_modules/material-icons/iconfont/material-icons.css">
+	<link rel="stylesheet" href="../node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" href="../resources/css/slideshow.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("../private/overrides.css")): ?>
 	<link rel="stylesheet" href="../private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
@@ -69,7 +70,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 			}
 			$dateObject = DateTime::createFromFormat('Ymd_His', substr($name, 0, strlen($name) - 4));
 			if ($dateObject) {
-				$date = $config['icons']['date'] . ' ' . $dateObject->format($config['gallery']['date_format']);
+				$date = '<i class="' . $config['icons']['date'] . '"></i> ' . $dateObject->format($config['gallery']['date_format']);
 			}
 		}
 

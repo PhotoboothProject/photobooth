@@ -45,6 +45,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/material-icons/iconfont/material-icons.css">
+	<link rel="stylesheet" type="text/css" href="../node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" href="../resources/css/login.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("../private/overrides.css")): ?>
 	<link rel="stylesheet" href="../private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
@@ -54,7 +55,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 <body class="loginbody">
 	<div class="login-panel <?php echo $uiShape; ?>">
 		<h2><?=$config['ui']['branding']?> <span data-i18n="disk_usage"></span></h2>
-		<a class="btn btn--tiny btn--flex <?php echo $btnShape; ?> back-to-admin" href="./"><?php echo $config['icons']['admin_back_short'] ?></a>
+		<a class="btn btn--tiny btn--flex <?php echo $btnShape; ?> back-to-admin" href="./"><i class="<?php echo $config['icons']['admin_back_short'] ?>"></i></a>
 		<button class="btn btn--tiny btn--flex <?php echo $btnShape; ?> download-zip-btn ">
 			<span data-i18n="download_zip"></span>
 		</button>
