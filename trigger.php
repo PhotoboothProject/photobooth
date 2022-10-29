@@ -31,6 +31,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
+	<link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
 	<link rel="stylesheet" href="resources/css/trigger.css" />
 	<?php if (is_file("private/overrides.css")): ?>
@@ -43,11 +44,11 @@ $uiShape = 'shape--' . $config['ui']['style'];
     <div id="wrapper">
 		<div class="buttonbar">
 			<?php if (!$config['collage']['only']): ?>
-			<a href="#" class="<?php echo $btnClass; ?> remotePicture" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/start-picture');"><?php echo $config['icons']['take_picture'] ?> <span data-i18n="takePhoto"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> remotePicture" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/start-picture');"><i class="<?php echo $config['icons']['take_picture'] ?>"></i> <span data-i18n="takePhoto"></span></a>
 			<?php endif; ?>
 
 			<?php if ($config['collage']['enabled']): ?>
-			<a href="#" class="<?php echo $btnClass; ?> remoteCollage" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/start-collage');"><?php echo $config['icons']['take_collage'] ?> <span data-i18n="takeCollage"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> remoteCollage" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/start-collage');"><i class="<?php echo $config['icons']['take_collage'] ?>"></i> <span data-i18n="takeCollage"></span></a>
 			<?php endif; ?>
 		</div>
 	</div>

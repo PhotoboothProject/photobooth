@@ -2365,40 +2365,33 @@ $configsetup = [
             'placeholder' => htmlentities($defaultConfig['icons']['update_git'] ?? ''),
             'value' => htmlentities($config['icons']['update_git'] ?? ''),
         ],
-        'icons_class_close' => [
+        'icons_password_visibility' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'icons_class[close]',
-            'placeholder' => $defaultConfig['icons_class']['close'],
-            'value' => $config['icons_class']['close'],
+            'name' => 'icons[password_visibility]',
+            'placeholder' => $defaultConfig['icons']['password_visibility'],
+            'value' => $config['icons']['password_visibility'],
         ],
-        'icons_class_password_visibility' => [
+        'icons_password_toggle' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'icons_class[password_visibility]',
-            'placeholder' => $defaultConfig['icons_class']['password_visibility'],
-            'value' => $config['icons_class']['password_visibility'],
+            'name' => 'icons[password_toggle]',
+            'placeholder' => $defaultConfig['icons']['password_toggle'],
+            'value' => $config['icons']['password_toggle'],
         ],
-        'icons_class_password_toggle' => [
+        'icons_slideshow_play' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'icons_class[password_toggle]',
-            'placeholder' => $defaultConfig['icons_class']['password_toggle'],
-            'value' => $config['icons_class']['password_toggle'],
+            'name' => 'icons[slideshow_play]',
+            'placeholder' => $defaultConfig['icons']['slideshow_play'],
+            'value' => $config['icons']['slideshow_play'],
         ],
-        'icons_class_slideshow_play' => [
+        'icons_slideshow_toggle' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'icons_class[slideshow_play]',
-            'placeholder' => $defaultConfig['icons_class']['slideshow_play'],
-            'value' => $config['icons_class']['slideshow_play'],
-        ],
-        'icons_class_slideshow_toggle' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'name' => 'icons_class[slideshow_toggle]',
-            'placeholder' => $defaultConfig['icons_class']['slideshow_toggle'],
-            'value' => $config['icons_class']['slideshow_toggle'],
+            'name' => 'icons[slideshow_toggle]',
+            'placeholder' => $defaultConfig['icons']['slideshow_toggle'],
+            'value' => $config['icons']['slideshow_toggle'],
         ],
         'ui_branding' => [
             'view' => 'expert',

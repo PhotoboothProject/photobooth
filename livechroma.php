@@ -50,6 +50,7 @@ if (
     <link rel="stylesheet" href="node_modules/normalize.css/normalize.css"/>
     <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css"/>
     <link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
+    <link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
     <link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css"/>
     <link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css"/>
     <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_live_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>"/>
@@ -68,11 +69,11 @@ if (
     <div class="rotarygroup" id="start">
         <div class="top-bar">
             <?php if (!$config['live_keying']['enabled']): ?>
-                <a href="index.php" class="<?php echo $btnClass; ?> livechroma-close-btn rotaryfocus"><?php echo $config['icons']['close']; ?></a>
+                <a href="index.php" class="<?php echo $btnClass; ?> livechroma-close-btn rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
             <?php endif; ?>
 
             <?php if ($config['gallery']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass ?> livechroma-gallery-btn rotaryfocus"><?php echo $config['icons']['gallery']; ?>
+                <a href="#" class="<?php echo $btnClass ?> livechroma-gallery-btn rotaryfocus"><i class="<?php echo $config['icons']['gallery']; ?>"></i>
                     <span data-i18n="gallery"></span></a>
             <?php endif; ?>
         </div>
@@ -88,7 +89,7 @@ if (
         <div class="stages" id="loader">
             <div class="loaderInner">
                 <div class="spinner">
-                    <?php echo $config['icons']['spinner']; ?>
+                    <i class="<?php echo $config['icons']['spinner']; ?>"></i>
                 </div>
 
                 <div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
@@ -121,13 +122,13 @@ if (
         </div>
 
         <div class="chroma-control-bar">
-            <a href="#" class="<?php echo $btnClass; ?> takeChroma livechroma rotaryfocus"><?php echo $config['icons']['take_picture']; ?>
+            <a href="#" class="<?php echo $btnClass; ?> takeChroma livechroma rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i>
                 <span data-i18n="takePhoto"></span></a>
             <?php if ($config['picture']['allow_delete']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><?php echo $config['icons']['delete']; ?> <span
+                <a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><i class="<?php echo $config['icons']['delete']; ?>"></i> <span
                             data-i18n="delete"></span></a>
             <?php endif; ?>
-            <a href="#" class="<?php echo $btnClass; ?> reloadPage livechroma rotaryfocus"><?php echo $config['icons']['refresh']; ?>
+            <a href="#" class="<?php echo $btnClass; ?> reloadPage livechroma rotaryfocus"><i class="<?php echo $config['icons']['refresh']; ?>"></i>
                 <span data-i18n="reload"></span></a>
         </div>
     </div>

@@ -47,6 +47,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 	<link rel="stylesheet" href="../node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="../node_modules/material-icons/iconfont/material-icons.css">
+	<link rel="stylesheet" href="../node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" href="../resources/css/login.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("../private/overrides.css")): ?>
 	<link rel="stylesheet" href="../private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
@@ -73,28 +74,28 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		<hr>
 		<?php endif; ?>
 		<?php if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-		<p><a href="../admin" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['admin']; ?> <span data-i18n="admin_panel"></span></a></p>
-		<p><a href="../dependencies.php" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['dependencies']; ?> <span data-i18n="dependencies_check"></span></a></p>
+		<p><a href="../admin" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['admin']; ?>"></i> <span data-i18n="admin_panel"></span></a></p>
+		<p><a href="../dependencies.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['dependencies']; ?>"></i> <span data-i18n="dependencies_check"></span></a></p>
 		<?php endif; ?>
 		<?php if(!$config['protect']['update'] || (!$config['protect']['localhost_update'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-		<p><a href="../update.php" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['update']; ?> <span data-i18n="updater"></span></a></p>
+		<p><a href="../update.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['update']; ?>"></i> <span data-i18n="updater"></span></a></p>
 		<?php endif; ?>
-		<p><a href="../gallery.php" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['gallery']; ?> <span data-i18n="gallery"></span></a></p>
-		<p><a href="../slideshow" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['slideshow']; ?> <span data-i18n="slideshow"></span></a></p>
+		<p><a href="../gallery.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['gallery']; ?>"></i> <span data-i18n="gallery"></span></a></p>
+		<p><a href="../slideshow" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['slideshow']; ?>"></i> <span data-i18n="slideshow"></span></a></p>
 		<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-		<p><a href="../livechroma.php" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['livechroma']; ?> <span data-i18n="livechroma"></span></a></p>
+		<p><a href="../livechroma.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['livechroma']; ?>"></i> <span data-i18n="livechroma"></span></a></p>
 		<?php endif; ?>
 		<?php if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-		<p><a href="../manual/faq.php" class="<?php echo $btnClass; ?>" title="FAQ" target="newwin"><?php echo $config['icons']['faq']; ?> <span data-i18n="show_faq"></span></a></p>
-		<p><a href="../manual" class="<?php echo $btnClass; ?>" title="Manual" target="newwin"><?php echo $config['icons']['manual']; ?> <span data-i18n="show_manual"></span></a></p>
-		<p><a href="https://t.me/PhotoboothGroup" class="<?php echo $btnClass; ?>" title="Telegram" target="newwin"><?php echo $config['icons']['telegram']; ?> <span data-i18n="telegram"></span></a></p>
+		<p><a href="../manual/faq.php" class="<?php echo $btnClass; ?>" title="FAQ" target="newwin"><i class="<?php echo $config['icons']['faq']; ?>"></i> <span data-i18n="show_faq"></span></a></p>
+		<p><a href="../manual" class="<?php echo $btnClass; ?>" title="Manual" target="newwin"><i class="<?php echo $config['icons']['manual']; ?>"></i> <span data-i18n="show_manual"></span></a></p>
+		<p><a href="https://t.me/PhotoboothGroup" class="<?php echo $btnClass; ?>" title="Telegram" target="newwin"><i class="<?php echo $config['icons']['telegram']; ?>"></i> <span data-i18n="telegram"></span></a></p>
 		<?php endif; ?>
-		<p><a href="./" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['refresh']; ?> <span data-i18n="reload"></span></a></p>
+		<p><a href="./" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['refresh']; ?>"></i> <span data-i18n="reload"></span></a></p>
 		<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-		<p><a href="../" class="<?php echo $btnClass; ?>" ><?php echo $config['icons']['close']; ?> <span data-i18n="close"></span></a></p>
+		<p><a href="../" class="<?php echo $btnClass; ?>" ><i class="<?php echo $config['icons']['close']; ?>"></i> <span data-i18n="close"></span></a></p>
 		<?php endif; ?>
 		<?php if(isset($_SESSION['auth']) && $_SESSION['auth'] === true): ?>
-		<p><a href="logout.php" class="<?php echo $btnClass; ?>"><?php echo $config['icons']['logout']; ?> <span data-i18n="logout"></span></a></p>
+		<p><a href="logout.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['logout']; ?>"></i> <span data-i18n="logout"></span></a></p>
 		<?php endif; ?>
 	</div>
 

@@ -50,6 +50,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
+		<link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
 		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>" />
 		<?php if (is_file("private/overrides.css")): ?>
 		<link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
@@ -75,13 +76,13 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		</div>
 
 		<div class="chroma-control-bar">
-			<a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#"><?php echo $config['icons']['save']; ?> <span data-i18n="save"></span></a>
+			<a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#"><i class="<?php echo $config['icons']['save']; ?>"></i> <span data-i18n="save"></span></a>
 
 			<?php if ($config['print']['from_chromakeying']): ?>
-				<a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#"><?php echo $config['icons']['print']; ?> <span data-i18n="print"></span></a>
+				<a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#"><i class="<?php echo $config['icons']['print']; ?>"></i> <span data-i18n="print"></span></a>
 			<?php endif; ?>
 
-			<a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#"><?php echo $config['icons']['close']; ?> <span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#"><i class="<?php echo $config['icons']['close']; ?>"></i> <span data-i18n="close"></span></a>
 		</div>
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">

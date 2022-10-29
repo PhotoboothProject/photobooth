@@ -36,6 +36,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
         <link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/material-icons/iconfont/material-icons.css">
+        <link rel="stylesheet" type="text/css" href="../node_modules/material-icons/css/material-icons.css">
         <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
         <link rel="stylesheet" type="text/css" href="../resources/css/<?php echo $config['ui']['style']; ?>_admin.css?v=<?php echo $config['photobooth']['version']; ?>">
         <?php if (is_file("../private/overrides.css")): ?>
@@ -101,14 +102,14 @@ $uiShape = 'shape--' . $config['ui']['style'];
                 html_src_indent($indent++);
                 echo '<div class="admintopnavbar">';
                 html_src_indent($indent);
-                echo $config['icons']['admin_back'];
+                echo '<i class="' . $config['icons']['admin_back'] . '" id="admintopnavbarback"></i>';
                 if(isset($_SESSION['auth']) && $_SESSION['auth'] === true)
                 {
                         html_src_indent($indent);
-                        echo '     ' . $config['icons']['admin_signout'];
+                        echo '     <i class="' . $config['icons']['admin_signout'] . '" id="admintopnavbarlogout"></i>';
                 }
                 html_src_indent($indent);
-                echo '     ' . $config['icons']['admin_menutoggle'];
+                echo '     <i class="' . $config['icons']['admin_menutoggle'] . '" id="admintopnavbarmenutoggle"></i>';
                 html_src_indent(--$indent);
                 echo '</div>';
 
@@ -146,11 +147,11 @@ $uiShape = 'shape--' . $config['ui']['style'];
 <form  autocomplete="off">
 
         <div class="admincontent" id="admincontentpage">
-                    <button class="save-admin-btn <?php echo $btnShape; ?>" id="save-admin-btn">
+             <button class="save-admin-btn <?php echo $btnShape; ?>" id="save-admin-btn">
                      <span class="save"><span data-i18n="save"></span></span>
-                     <span class="saving"><?php echo $config['icons']['admin_save']; ?><span data-i18n="saving"></span></span>
-                     <span class="success"><?php echo $config['icons']['admin_save_success']; ?><span data-i18n="success"></span></span>
-                     <span class="error"><?php echo $config['icons']['admin_save_error']; ?><span data-i18n="saveerror"></span></span>
+                     <span class="saving"><i class="<?php echo $config['icons']['admin_save']; ?>"></i><span data-i18n="saving"></span></span>
+                     <span class="success"><i class="<?php echo $config['icons']['admin_save_success']; ?>"></i><span data-i18n="success"></span></span>
+                     <span class="error"><i class="<?php echo $config['icons']['admin_save_error']; ?>"></i><span data-i18n="saveerror"></span></span>
              </button>
         <?php
         
@@ -249,15 +250,15 @@ $uiShape = 'shape--' . $config['ui']['style'];
                                              switch ($key) {
                                                     case 'reset_button':
                                                          echo '<span class="save"><span data-i18n="reset"></span></span>';
-                                                         echo '<span class="saving">' . $config['icons']['admin_save'] . '<span data-i18n="saving"></span></span>';
-                                                         echo '<span class="success">' . $config['icons']['admin_save_success'] . '<span data-i18n="success"></span></span>';
-                                                         echo '<span class="error">' . $config['icons']['admin_save_error'] . '<span data-i18n="saveerror"></span></span>';
+                                                         echo '<span class="saving"><i class="' . $config['icons']['admin_save'] . '"></i><span data-i18n="saving"></span></span>';
+                                                         echo '<span class="success"><i class="' . $config['icons']['admin_save_success'] . '"></i><span data-i18n="success"></span></span>';
+                                                         echo '<span class="error"><i class="' . $config['icons']['admin_save_error'] . '"></i><span data-i18n="saveerror"></span></span>';
                                                          break;
                                                     case 'database_rebuild':
                                                     case 'check_version':
-                                                         echo '<span class="saving">' . $config['icons']['admin_save'] . '<span data-i18n="busy"></span></span>';
-                                                         echo '<span class="success">' . $config['icons']['admin_save_success'] . '<span data-i18n="success"></span></span>';
-                                                         echo '<span class="error">' . $config['icons']['admin_save_error'] . '<span data-i18n="saveerror"></span></span>';
+                                                         echo '<span class="saving"><i class="' . $config['icons']['admin_save'] . '"></i><span data-i18n="busy"></span></span>';
+                                                         echo '<span class="success"><i class="' . $config['icons']['admin_save_success'] . '"></i><span data-i18n="success"></span></span>';
+                                                         echo '<span class="error"><i class="' . $config['icons']['admin_save_error'] . '"></i><span data-i18n="saveerror"></span></span>';
                                                          echo '<span class="text" data-i18n="'.$setting['placeholder'].'"></span>';
                                                          break;
                                                     default:

@@ -46,6 +46,7 @@ $btnClass = 'btn ' . $btnShape;
 	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
+	<link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<link rel="stylesheet" href="resources/css/update.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php if (is_file("private/overrides.css")): ?>
@@ -60,16 +61,16 @@ $btnClass = 'btn ' . $btnShape;
 		<p><span data-i18n="os_check"></span></p>
 	</div>
 
-	<a href="#" class="gitCommit <?php echo $btnClass; ?>"><?php echo $config['icons']['update_git'] ?> <span data-i18n="update_git_commit"></span></a>
+	<a href="#" class="gitCommit <?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['update_git'] ?>"></i> <span data-i18n="update_git_commit"></span></a>
 
-	<a href="#" class="updateDev <?php echo $btnClass; ?>"><?php echo $config['icons']['update_git'] ?> <span data-i18n="update_to_dev"></span></a>
+	<a href="#" class="updateDev <?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['update_git'] ?>"></i> <span data-i18n="update_to_dev"></span></a>
 
-	<a href="#" class="updateStable <?php echo $btnClass; ?>"><?php echo $config['icons']['update_git'] ?> <span data-i18n="update_to_stable"></span></a>
+	<a href="#" class="updateStable <?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['update_git'] ?>"></i> <span data-i18n="update_to_stable"></span></a>
 
 	<div>
-		<a href="./" class="btn <?php echo $btnShape; ?>"><?php echo $config['icons']['home'] ?> <span data-i18n="home"></span></a>
+		<a href="./" class="btn <?php echo $btnShape; ?>"><i class="<?php echo $config['icons']['home'] ?>"></i> <span data-i18n="home"></span></a>
 
-		<a href="admin" class="btn <?php echo $btnShape; ?>"><?php echo $config['icons']['admin'] ?> <span data-i18n="admin_panel"></span></a>
+		<a href="admin" class="btn <?php echo $btnShape; ?>"><i class="<?php echo $config['icons']['admin'] ?>"></i> <span data-i18n="admin_panel"></span></a>
 	</div>
 
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
