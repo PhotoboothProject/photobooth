@@ -50,6 +50,9 @@ div.admincontent {
   z-index: 15;
   top: 0;
   background-color: $panelColor;
+  .material-icons {
+    font-size: 3em;
+  }
 }
 
 .admintopnavbar > i {
