@@ -66,7 +66,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 			</br>
 			<input type="password" name="password" id="password" autocomplete="on" required>
 			<span toggle="#password" class="password-toggle <?php echo $config['icons']['password_visibility']; ?>"></span>
-			<p><input type="submit" name="submit" value="Login" class="btn btn--tiny btn--flex"></p>
+			<p><input type="submit" name="submit" value="Login" class="btn btn--tiny btn--flex <?php echo $uiShape; ?>"></p>
 			<?php if ($error !== false) {
 				echo '<p style="color: red;"><span data-i18n="login_invalid"></span></p>';
 			} ?>
