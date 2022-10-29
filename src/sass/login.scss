@@ -46,6 +46,9 @@ input[type='password'] {
   margin-top: 5px;
   position: relative;
   z-index: 2;
+  &.material-icons {
+    margin-top: -5px;
+  }
 }
 
 .back-to-admin {
