@@ -316,6 +316,10 @@
   background: $mainColor;
 }
 
+.material-icons {
+  transform: translate(0, 20%);
+}
+
 @media (orientation: portrait) {
   .btn--modern,
   .btn--modern_squared {
