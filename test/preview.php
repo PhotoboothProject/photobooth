@@ -39,7 +39,12 @@ $uiShape = 'shape--' . $config['ui']['style'];
 </head>
 
 <body>
-
+    <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture'][
+    'htmlframe'
+]; ?>" alt="pictureFrame" />
+    <img id="collage--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['collage'][
+    'htmlframe'
+]; ?>" alt="collageFrame" />
     <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
        autoplay playsinline></video>
 
@@ -53,6 +58,9 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		<div class="buttonbar">
 			<a href="#" class="<?php echo $btnClass; ?> startPreview"><span data-i18n="startPreview"></span></a>
 			<a href="#" class="<?php echo $btnClass; ?> stopPreview"><span data-i18n="stopPreview"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> showPictureFrame"><span data-i18n="showPictureFrame"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> showCollageFrame"><span data-i18n="showCollageFrame"></span></a>
+			<a href="#" class="<?php echo $btnClass; ?> hideFrame"><span data-i18n="hideFrame"></span></a>
         </div>
     </div>
 
