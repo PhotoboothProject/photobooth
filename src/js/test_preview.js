@@ -67,24 +67,28 @@ const photoboothPreviewTest = (function () {
 
     $('.showPictureFrame').on('click', function (e) {
         e.preventDefault();
+        photoboothTools.console.log('Showing picture frame over the preview...');
         pictureFrame.show();
         $('.hideFrame').show();
     });
 
     $('.showCollageFrame').on('click', function (e) {
         e.preventDefault();
+        photoboothTools.console.log('Showing collage frame over the preview...');
         collageFrame.show();
         $('.hideFrame').show();
     });
 
     $('.hideFrame').on('click', function (e) {
         e.preventDefault();
+        photoboothTools.console.log('Hiding frames...');
         collageFrame.hide();
         pictureFrame.hide();
         $('.hideFrame').hide();
     });
 
     idVideoView.on('loadedmetadata', function (ev) {
+        photoboothTools.console.log(ev);
         const videoEl = ev.target;
         let newWidth = videoEl.offsetWidth;
         let newHeight = videoEl.offsetHeight;
