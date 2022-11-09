@@ -14,9 +14,9 @@ function applyFrame($sourceResource, $framePath) {
     $dst_y = 0;
 
     if ($pic_height == $frame_height) {
-        $dst_x = ($pic_width - $frame_width) / 2;
+        $dst_x = intval(($pic_width - $frame_width) / 2);
     } else {
-        $dst_y = ($pic_height - $frame_height) / 2;
+        $dst_y = intval(($pic_height - $frame_height) / 2);
     }
 
     imagecopy($sourceResource, $frame, $dst_x, $dst_y, 0, 0, $frame_width, $frame_height);
