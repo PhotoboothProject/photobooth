@@ -5,11 +5,7 @@ require_once '../../lib/config.php';
 require_once '../../lib/db.php';
 require_once '../../lib/resize.php';
 
-if ($config['picture']['naming'] === 'dateformatted') {
-    $name = date('Ymd_His') . '.jpg';
-} else {
-    $name = md5(microtime()) . '.jpg';
-}
+$name = Image::create_new_filename($config['picture']['naming']);
 
 if ($config['database']['file'] === 'db') {
     $file = $name;
