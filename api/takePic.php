@@ -72,14 +72,12 @@ function takePicture($filename) {
     }
 }
 
-$random = md5(microtime()) . '.jpg';
+$random = Image::create_new_filename('random');
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $name = $_POST['file'];
-} elseif ($config['picture']['naming'] === 'dateformatted') {
-    $name = date('Ymd_His') . '.jpg';
 } else {
-    $name = $random;
+    $name = Image::create_new_filename($config['picture']['naming']);
 }
 
 if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))) {

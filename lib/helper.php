@@ -70,6 +70,32 @@ class Helper {
     }
 }
 
+class Image {
+    public $newFilename;
+
+    public static function create_new_filename($naming = 'random', $ext = '.jpg') {
+        if ($naming === 'dateformatted') {
+            $name = date('Ymd_His') . $ext;
+        } else {
+            $name = md5(microtime()) . $ext;
+        }
+        return $name;
+    }
+
+    function set_new_filename($naming) {
+        $this->newFilename = $this->create_new_filename($naming);
+    }
+
+    function get_new_filename() {
+        return $this->newFilename;
+    }
+
+    function set_and_get_new_filename($naming) {
+        $this->set_new_filename($naming);
+        return $this->newFilename;
+    }
+}
+
 function testFile($file) {
     if (is_dir($file)) {
         $ErrorData = [
