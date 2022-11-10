@@ -5,12 +5,10 @@ require_once '../../lib/config.php';
 require_once '../../lib/db.php';
 require_once '../../lib/resize.php';
 
-$name = Image::create_new_filename($config['picture']['naming']);
+$file = Image::create_new_filename($config['picture']['naming']);
 
-if ($config['database']['file'] === 'db') {
-    $file = $name;
-} else {
-    $file = $config['database']['file'] . '_' . $name;
+if ($config['database']['file'] != 'db') {
+    $file = $config['database']['file'] . '_' . $file;
 }
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
