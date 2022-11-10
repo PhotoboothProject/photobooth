@@ -75,15 +75,12 @@ function takePicture($filename) {
 $random = Image::create_new_filename('random');
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
-    $name = $_POST['file'];
+    $file = $_POST['file'];
 } else {
-    $name = Image::create_new_filename($config['picture']['naming']);
-}
-
-if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']))) {
-    $file = $name;
-} else {
-    $file = $config['database']['file'] . '_' . $name;
+    $file = Image::create_new_filename($config['picture']['naming']);
+    if ($config['database']['file'] != 'db') {
+        $file = $config['database']['file'] . '_' . $file;
+    }
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
