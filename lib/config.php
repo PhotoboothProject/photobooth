@@ -132,10 +132,10 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
 }
 
 if (empty($config['ui']['folders_lang'])) {
-    $config['ui']['folders_lang'] = getrootpath('../resources/lang');
+    $config['ui']['folders_lang'] = Helper::get_rootpath('../resources/lang');
 }
 
-$config['ui']['folders_lang'] = fixSeperator($config['ui']['folders_lang']);
+$config['ui']['folders_lang'] = Helper::fix_seperator($config['ui']['folders_lang']);
 
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
@@ -144,7 +144,7 @@ foreach ($config['folders'] as $key => $folder) {
         $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
         $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
 
-        $config['foldersJS'][$key] = str_replace('\\', '/', getrootpath($path));
+        $config['foldersJS'][$key] = Helper::fix_seperator(Helper::get_rootpath($path));
     }
 
     if (!file_exists($path)) {
@@ -203,9 +203,8 @@ if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
-if (isSubfolderInstall()) {
-    $bg_root = getrootpath('../resources/img/bg_stone.jpg');
-    $bg_url = fixSeperator($bg_root);
+if (Photobooth::detect_subfolder_install()) {
+    $bg_url = Helper::fix_seperator(Helper::get_rootpath('../resources/img/bg_stone.jpg'));
 } else {
     $bg_url = '/resources/img/bg_stone.jpg';
 }
@@ -223,21 +222,21 @@ if (empty($config['background']['chroma'])) {
 }
 
 if (!empty($config['picture']['frame'])) {
-    $pf_root = getrootpath($config['picture']['frame']);
-    $config['picture']['htmlframe'] = fixSeperator($pf_root);
+    $pf_root = Helper::get_rootpath($config['picture']['frame']);
+    $config['picture']['htmlframe'] = Helper::fix_seperator($pf_root);
 }
 
 if (!empty($config['collage']['frame'])) {
-    $cf_root = getrootpath($config['collage']['frame']);
-    $config['collage']['htmlframe'] = fixSeperator($cf_root);
+    $cf_root = Helper::get_rootpath($config['collage']['frame']);
+    $config['collage']['htmlframe'] = Helper::fix_seperator($cf_root);
 }
 
 if (empty($config['webserver']['ip'])) {
-    $config['webserver']['ip'] = getPhotoboothIp();
+    $config['webserver']['ip'] = Photobooth::get_ip();
 }
 
 if (empty($config['qr']['url'])) {
-    $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
+    $config['qr']['url'] = Photobooth::get_url() . '/api/download.php?image=';
 }
 
-$config['photobooth']['version'] = getPhotoboothVersion();
+$config['photobooth']['version'] = Photobooth::get_photobooth_version();

@@ -7,7 +7,7 @@ if (!is_file('.skip_welcome')) {
 }
 
 
-$URL = getPhotoboothUrl();
+$URL = Photobooth::get_url();
 $PHOTOBOOTH_HOME = getcwd();
 
 $uiShape = 'shape--' . $config['ui']['style'];
