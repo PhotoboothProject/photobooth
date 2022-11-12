@@ -79,20 +79,6 @@ $(function () {
         return false;
     });
 
-    $('#updater-btn').on('click', function (e) {
-        e.preventDefault();
-        location.assign('../update.php');
-
-        return false;
-    });
-
-    $('#dependencies-btn').on('click', function (e) {
-        e.preventDefault();
-        location.assign('../dependencies.php');
-
-        return false;
-    });
-
     $('#databaserebuild-btn').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);

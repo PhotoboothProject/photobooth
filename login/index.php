@@ -75,10 +75,6 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		<?php endif; ?>
 		<?php if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 		<p><a href="../admin" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['admin']; ?>"></i> <span data-i18n="admin_panel"></span></a></p>
-		<p><a href="../dependencies.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['dependencies']; ?>"></i> <span data-i18n="dependencies_check"></span></a></p>
-		<?php endif; ?>
-		<?php if(!$config['protect']['update'] || (!$config['protect']['localhost_update'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-		<p><a href="../update.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['update']; ?>"></i> <span data-i18n="updater"></span></a></p>
 		<?php endif; ?>
 		<p><a href="../gallery.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['gallery']; ?>"></i> <span data-i18n="gallery"></span></a></p>
 		<p><a href="../slideshow" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['slideshow']; ?>"></i> <span data-i18n="slideshow"></span></a></p>
