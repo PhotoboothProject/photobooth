@@ -753,6 +753,10 @@ general_permissions() {
     gpasswd -a www-data plugdev
     gpasswd -a www-data video
 
+    info "### Permissions for the private folder"
+    chmod g+s $INSTALLFOLDERPATH/private
+    setfacl -m u:$USERNAME:rwx $INSTALLFOLDERPATH/private
+
     touch "/var/www/.yarnrc"
     info "### Fixing permissions on .yarnrc"
     chown www-data:www-data "/var/www/.yarnrc"
