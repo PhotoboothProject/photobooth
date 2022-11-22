@@ -17,7 +17,7 @@ if ($config['picture']['naming'] === 'numbered') {
 } elseif ($config['picture']['naming'] === 'dateformatted') {
     $name = date('Ymd_His') . '.jpg';
 } else {
-    $name = md5(time()) . '.jpg';
+    $name = md5(microtime()) . '.jpg';
 }
 
 if ($config['database']['file'] === 'db') {

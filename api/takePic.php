@@ -71,7 +71,7 @@ function takePicture($filename) {
     }
 }
 
-$random = md5(time()) . '.jpg';
+$random = md5(microtime()) . '.jpg';
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $name = $_POST['file'];
