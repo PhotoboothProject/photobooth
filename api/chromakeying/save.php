@@ -5,16 +5,7 @@ require_once '../../lib/config.php';
 require_once '../../lib/db.php';
 require_once '../../lib/resize.php';
 
-if ($config['picture']['naming'] === 'numbered') {
-    if ($config['database']['enabled']) {
-        $images = getImagesFromDB();
-    } else {
-        $images = getImagesFromDirectory($config['foldersAbs']['images']);
-    }
-    $img_number = count($images);
-    $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
-    $name = $files . '.jpg';
-} elseif ($config['picture']['naming'] === 'dateformatted') {
+if ($config['picture']['naming'] === 'dateformatted') {
     $name = date('Ymd_His') . '.jpg';
 } else {
     $name = md5(microtime()) . '.jpg';
