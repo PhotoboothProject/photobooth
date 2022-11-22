@@ -75,15 +75,6 @@ $random = md5(microtime()) . '.jpg';
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $name = $_POST['file'];
-} elseif ($config['picture']['naming'] === 'numbered') {
-    if ($config['database']['enabled']) {
-        $images = getImagesFromDB();
-    } else {
-        $images = getImagesFromDirectory($config['foldersAbs']['images']);
-    }
-    $img_number = count($images);
-    $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
-    $name = $files . '.jpg';
 } elseif ($config['picture']['naming'] === 'dateformatted') {
     $name = date('Ymd_His') . '.jpg';
 } else {
