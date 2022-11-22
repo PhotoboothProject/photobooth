@@ -608,6 +608,9 @@ detect_browser() {
     if [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
         WEBBROWSER="chromium-browser"
         CHROME_FLAGS=true
+    elif [ $(dpkg-query -W -f='${Status}' "chromium" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="chromium"
+        CHROME_FLAGS=true
     elif [ $(dpkg-query -W -f='${Status}' "google-chrome" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
         WEBBROWSER="google-chrome"
         CHROME_FLAGS=true
