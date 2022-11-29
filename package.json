@@ -1,6 +1,6 @@
 {
   "name": "photobooth",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A Photobooth webinterface for Raspberry Pi and Windows",
   "engines": {
     "node": ">=12.22.0"
