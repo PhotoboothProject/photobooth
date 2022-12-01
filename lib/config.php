@@ -172,6 +172,11 @@ if ($config['preview']['mode'] === 'gphoto') {
     $config['preview']['mode'] = 'device_cam';
 }
 
+// Preview need to be stopped before we can take an image
+if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $config['picture']['cntdwn_offset']) {
+    $config['preview']['stop_time'] = $config['picture']['cntdwn_offset'] + 1;
+}
+
 $default_font = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
 $default_frame = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
 

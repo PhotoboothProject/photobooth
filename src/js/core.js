@@ -291,25 +291,32 @@ const photoBooth = (function () {
             photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time,
             counter,
             () => {
-                if (
-                    config.preview.mode === PreviewMode.DEVICE.valueOf() &&
-                    config.preview.camTakesPic &&
-                    !photoboothPreview.stream &&
-                    !config.dev.demo_images
-                ) {
-                    api.errorPic({
-                        error: 'No preview by device cam available!'
-                    });
+                if (config.picture.no_cheese) {
+                    photoboothTools.console.log('Cheese is disabled.');
                 } else {
-                    if (config.picture.no_cheese) {
-                        photoboothTools.console.log('Cheese is disabled.');
-                    } else {
-                        api.cheese(photoStyle);
-                    }
-                    api.takePic(photoStyle, retry);
+                    api.cheese(photoStyle);
                 }
             }
         );
+
+        const triggerCnt =
+            (photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time) -
+            config.picture.cntdwn_offset;
+        photoboothTools.console.log('Capture image in ' + triggerCnt + ' seconds.');
+        setTimeout(() => {
+            if (
+                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
+                config.preview.camTakesPic &&
+                !photoboothPreview.stream &&
+                !config.dev.demo_images
+            ) {
+                api.errorPic({
+                    error: 'No preview by device cam available!'
+                });
+            } else {
+                api.takePic(photoStyle, retry);
+            }
+        }, triggerCnt * 1000);
     };
 
     api.cheese = function (photoStyle) {
@@ -860,8 +867,10 @@ const photoBooth = (function () {
         const stop =
             start > parseInt(config.preview.stop_time, 10) ? start - parseInt(config.preview.stop_time, 10) : start;
 
+        photoboothTools.console.log('Countdown started. Set to ' + current + ' seconds.');
+
         function timerFunction() {
-            element.text(Number(current) + Number(config.picture.cntdwn_offset));
+            element.text(Number(current));
             current--;
 
             element.removeClass('tick');
