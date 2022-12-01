@@ -306,9 +306,7 @@ const photoBooth = (function () {
                     } else {
                         api.cheese(photoStyle);
                     }
-                    setTimeout(() => {
-                        api.takePic(photoStyle, retry);
-                    }, cheeseTime);
+                    api.takePic(photoStyle, retry);
                 }
             }
         );
@@ -326,6 +324,9 @@ const photoBooth = (function () {
                 .text(`${api.nextCollageNumber + 1} / ${config.collage.limit}`)
                 .appendTo('.cheese');
         }
+        setTimeout(() => {
+            cheese.empty();
+        }, cheeseTime);
     };
 
     api.takePic = function (photoStyle, retry) {
@@ -382,7 +383,6 @@ const photoBooth = (function () {
                 if (config.ui.shutter_animation) {
                     api.shutter.stop();
                 }
-                cheese.empty();
 
                 imgFilter = config.filters.defaults;
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
