@@ -180,6 +180,9 @@ const photoBooth = (function () {
     api.shutter = {
         start: function () {
             blocker.fadeTo(500, 1);
+            setTimeout(() => {
+                api.shutter.stop();
+            }, 500);
         },
         stop: function () {
             aperture.show();
@@ -387,10 +390,6 @@ const photoBooth = (function () {
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('Took ' + data.style, result);
                 photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
-                if (config.ui.shutter_animation) {
-                    api.shutter.stop();
-                }
-
                 imgFilter = config.filters.defaults;
                 $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
                 $('#' + imgFilter).addClass('activeSidenavBtn');
@@ -538,9 +537,6 @@ const photoBooth = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                if (config.ui.shutter_animation) {
-                    api.shutter.stop();
-                }
                 cheese.empty();
 
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
