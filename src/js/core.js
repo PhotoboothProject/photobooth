@@ -182,7 +182,7 @@ const photoBooth = (function () {
             blocker.fadeTo(500, 1);
             setTimeout(() => {
                 api.shutter.stop();
-            }, 500);
+            }, config.picture.no_cheese ? 500 : cheeseTime);
         },
         stop: function () {
             aperture.show();
@@ -325,7 +325,7 @@ const photoBooth = (function () {
     api.cheese = function (photoStyle) {
         cheese.empty();
         if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
-            api.shutter.start();
+            return;
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
             cheese.text(photoboothTools.getTranslation('cheese'));
         } else {
