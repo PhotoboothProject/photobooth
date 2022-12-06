@@ -180,9 +180,12 @@ const photoBooth = (function () {
     api.shutter = {
         start: function () {
             blocker.fadeTo(500, 1);
-            setTimeout(() => {
-                api.shutter.stop();
-            }, config.picture.no_cheese ? 500 : cheeseTime);
+            setTimeout(
+                () => {
+                    api.shutter.stop();
+                },
+                config.picture.no_cheese ? 500 : cheeseTime
+            );
         },
         stop: function () {
             aperture.show();
