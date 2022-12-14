@@ -430,7 +430,7 @@ common_software() {
 
 apache_webserver() {
     info "### Installing Apache Webserver..."
-    apt install -y libapache2-mod-php
+    apt install -y apache2 libapache2-mod-php
 }
 
 nginx_webserver() {
