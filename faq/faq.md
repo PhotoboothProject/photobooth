@@ -558,6 +558,39 @@ In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` f
 - Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. `sudo rmmod bcm2835-isp`.
 - Make sure the countdown is long enough to start the preview, for best user experience the countdown should be set at least to 8 seconds.
 
+**Troubleshooting**
+
+In some cases, the v4l2loopback doesn't seem to be working after an update and breaking the preview from DSLR.
+
+Run `v4l2-ctl --list-devices` from your terminal to see if everything is fine.
+
+If it works you get the following output:
+
+```
+GPhoto2 Webcam (platform:v4l2loopback-000):
+        /dev/video0
+```
+
+If it doesn't work:
+
+```
+Cannot open device /dev/video0, exiting
+```
+
+If it doesn't work, you might need to compile the v4l2loopback Module yourself by running the following commands:
+
+```sh
+curl -LO https://github.com/umlaeute/v4l2loopback/archive/refs/tags/v0.12.7.tar.gz
+tar xzf v0.12.7.tar.gz && cd v4l2loopback-0.12.7
+make && sudo make install
+sudo depmod -a
+sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
+```
+
+Now again check if everything is fine (`v4l2-ctl --list-devices`).
+If you're still having trouble feel free to join us at Telegram to get further support.
+
+
 #### Preview _"from URL"_
 
 If you like to have the same preview independent of the device you access Photobooth from:
