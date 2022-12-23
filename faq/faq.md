@@ -588,6 +588,7 @@ sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
 ```
 
 Now again check if everything is fine (`v4l2-ctl --list-devices`).
+
 If you're still having trouble feel free to join us at Telegram to get further support.
 
 
