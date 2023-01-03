@@ -736,17 +736,6 @@ EOF
         else
             info "### lxde is not installed. Can not add automount config for user $USERNAME."
         fi
-
-        info "### Adding polkit rule so www-data can (un)mount drives"
-
-        cat > /etc/polkit-1/localauthority/50-local.d/photobooth.pkla <<EOF
-[Allow www-data to mount drives with udisks2]
-Identity=unix-user:www-data
-Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
-ResultAny=yes
-ResultInactive=yes
-ResultActive=yes
-EOF
     fi
 }
 
@@ -773,6 +762,19 @@ general_permissions() {
 # Photobooth buttons for www-data to shutdown or reboot the system from admin panel or via remotebuzzer
 www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
+
+    if [ "$RUN_UPDATE" = false ] && [ "$USB_SYNC" = true ]; then
+        info "### Adding polkit rule so www-data can (un)mount drives"
+
+        cat > /etc/polkit-1/localauthority/50-local.d/photobooth.pkla <<EOF
+[Allow www-data to mount drives with udisks2]
+Identity=unix-user:www-data
+Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+    fi
 }
 
 hide_mouse() {
@@ -1106,22 +1108,29 @@ if [ "$RUNNING_ON_PI" = true ]; then
         info "### lxde is not installed. Can not hide the mouse cursor on every start."
     fi
     print_spaces
-
-    echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
-    echo -e "### The actual configuration will be done in the admin panel but we need to setup Raspberry Pi OS first."
-    ask_yes_no "### Would you like to setup Raspberry Pi OS to use the USB sync file backup? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        USB_SYNC=true
-        info "### We will setup Raspberry Pi OS to be able to use the USB sync file backup."
-    else
-        USB_SYNC=false
-        info "### We won't setup Raspberry Pi OS to use the USB sync file backup."
-    fi
-
-    print_spaces
 fi
 # Pi specific setup end
+
+    if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
+        echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
+        echo -e "### The actual configuration will be done in the admin panel but we need to setup your OS first."
+        ask_yes_no "### Would you like to setup your OS to use the USB sync file backup? [y/N] " "Y"
+        echo -e "\033[0m"
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            USB_SYNC=true
+            info "### We will setup your OS to be able to use the USB sync file backup."
+            info "### Note: automount can only be avoided on Pi OS."
+        else
+            USB_SYNC=false
+            info "### We won't setup your OS to use the USB sync file backup."
+        fi
+
+        print_spaces
+
+    else
+        info "### /etc/polkit-1/localauthority/50-local.d not found!"
+        info "### Can not setup your OS to use the USB sync file backup."
+    fi
 
     echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
     echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
