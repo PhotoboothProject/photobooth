@@ -739,7 +739,7 @@ EOF
 
         info "### Adding polkit rule so www-data can (un)mount drives"
 
-        cat >> /etc/polkit-1/localauthority/50-local.d/udisks2.pkla <<EOF
+        cat > /etc/polkit-1/localauthority/50-local.d/photobooth.pkla <<EOF
 [Allow www-data to mount drives with udisks2]
 Identity=unix-user:www-data
 Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
