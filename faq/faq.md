@@ -748,7 +748,7 @@ Use the `install-photobooth.sh` script to get the operating system setup in plac
 
 ```sh
 wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/enable-usb-sync.sh
-sudo bash enable-usb-sync.sh
+sudo bash enable-usb-sync.sh -username='<YourUsername>'
 ```
 
 The target USB device is selected through the admin panel.
