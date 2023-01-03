@@ -853,3 +853,169 @@ To remote access CUPS from other clients you need to run the following commands:
 sudo cupsctl --remote-any
 sudo /etc/init.d/cups restart
 ```
+
+### I get the error message "Something went wrong." while taking a picure, what can i do?
+
+There's different reasons if you get the error "Something went wrong. Please try it again. Photobooth reloads automatically." while taking an image.
+
+First of all, please set the **Loglevel** to **2** via admin panel (GENERAL section, [http://localhost/admin](http://localhost/admin)) and try again. You'll still see the error message, but we make sure to log enough information to see what's wrong.
+
+Now open the Debug panel ([http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)) and check the Photobooth log for error messages. You should see something like this:
+
+```
+2023-01-03T08:34:37+01:00:
+Array
+(
+    [error] => Take picture command returned an error code
+    [cmd] => gphoto2 --capture-image-and-download --filename=/var/www/html/data/tmp/20230103_083437.jpg 2>&1
+    [returnValue] => 1
+    [output] => Array
+        (
+            [0] =>
+            [1] => *** Error ***
+            [2] => Could not detect any camera
+            [3] => *** Error (-105: 'Unknown model') ***
+            [4] =>
+            [5] => For debugging messages, please use the --debug option.
+            [6] => Debugging messages may help finding a solution to your problem.
+            [7] => If you intend to send any error or debug messages to the gphoto
+            [8] => developer mailing list , please run
+            [9] => gphoto2 as follows:
+            [10] =>
+            [11] =>     env LANG=C gphoto2 --debug --debug-logfile=my-logfile.txt --capture-image-and-download --filename=/var/www/html/testa/data/tmp/20230103_083437.jpg
+            [12] =>
+            [13] => Please make sure there is sufficient quoting around the arguments.
+            [14] => 
+        )
+
+    [php] => takePic.php
+)
+```
+
+Most of the time the error messages are self explained (in our case no camera was detected, the cable wasn't plugged in), if you're still having trouble you can check the following information about possible known problems.
+
+
+#### GPhoto2 troubleshooting
+
+Please note, that GPhoto2 is an own software we can use to take images via Photobooth. The full documentation can be found at [http://www.gphoto.org/doc/](http://www.gphoto.org/doc/).
+
+**Here are some general known problems you should know about:**
+
+Make sure "Image capture" is supported by GPhoto2 for your camera ([http://gphoto.org/proj/libgphoto2/support.php](http://gphoto.org/proj/libgphoto2/support.php))
+
+Try another camera mode.
+- Sometimes not every camera mode is supported by GPhoto2.
+
+Make sure your camera is set to "JPEG/JPG only", Photobooth isn't able to use RAW images.
+- Reducing the image quality on your camera can have a positive effect to the performance - especially on low end hardware like a Raspberry Pi.
+
+Disable the auto-focus.
+- GPhoto2 won't be able to take a picture if your camera can't find a focus.
+
+Turn off the WiFi of your camera (if available).
+- There might be issues on the connection if WiFi is turned on on your camera.
+
+Make sure a SD-Card is inserted into the camera.
+- GPhoto2 sometimes has trouble to trigger an image if no SD-Card is inserted.
+
+Make sure pictures aren't taken into the RAM of the camera.
+- Sometimes we need to define the Capturetarget to the memory card manually. To find out the right capturetarget type the following into your terminal and press enter:
+
+```
+gphoto2 --get-config capturetarget
+```
+
+  Your output will look like this:
+
+```
+pi@raspberrypi:~ $ gphoto2 --get-config capturetarget
+Label: Capture Target
+Readonly: 0
+Type: RADIO
+Current: Internal RAM
+Choice: 0 Internal RAM
+Choice: 1 Memory card   <--- !!!
+```
+
+  Adjust your take picture command via adminpanel accordingly:
+
+```
+gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
+```
+
+
+#### Hardware issues
+
+Enough power on the USB port?
+
+Defect USB cable?
+
+
+#### Permission problem
+
+It's easy to check if there's an issue with the permissions. The Photobooth installer takes care about needed permissions and shouldn't be a thing.
+
+Sometimes permission can be wrong after an update.
+
+Open your terminal and try to take an image:
+
+```
+gphoto2 --capture-image-and-download --filename=test.jpg
+```
+
+Everything works?
+
+- **No**: Please again read previous information.
+- **Yes**: let's test further!
+
+Now try to take an image as "www-data" User:
+
+```
+cd /var/www/html
+sudo -u www-data -s
+gphoto2 --capture-image-and-download --filename=test.jpg
+```
+
+Everything working?
+
+- **Yes**: Check your Photobooth configuration for issues. Maybe reset the config to restore the default settings.
+- **No**: It looks like there's an issue with the permissions! But we can fix that!
+
+Set the ownership for Photobooth to the "www-data" User:
+
+```
+sudo chown -R www-data:www-data /var/www/
+```
+
+Also make sure the "www-data" User is able to access the USB device (reboot required!):
+```
+sudo gpasswd -a www-data plugdev
+reboot
+```
+
+Everything working?
+
+- **No**: The camera might be claimed by a different process. The gvfs-gphoto2-volume-monitor is known to cause trouble and shouldn't be executed.  
+  The Photobooth installer should take care about it, but maybe something went wrong and we should change it manually (reboot required!):
+
+```
+sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+reboot
+```
+
+Does it work?
+
+- **No**: Sorry, we're am almost out of ideas! Please check the special notes below and feel free to contact us at [Telegram](https://t.me/PhotoboothGroup) if you still have issues.
+
+
+#### Special notes
+
+##### Canon EOS 1300D
+
+To capture an image gphoto2 might need some time. Add `–wait-event=300ms` to the take picture CMD. Your take picture CMD should look like this:
+
+```
+gphoto2 –wait-event=300ms –capture-image-and-download –filename=%s
+```
+
+Source: [https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochzeiten-und-geburtstage/#comment-1211](https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochzeiten-und-geburtstage/#comment-1211)
