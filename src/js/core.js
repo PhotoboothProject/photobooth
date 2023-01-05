@@ -382,7 +382,7 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = function (data, retry = 0) {
-        if (config.ui.shutter_animation && config.ui.shutter_cheese_img === '') {
+        if (config.ui.shutter_animation) {
             api.shutter.start();
         }
         startTime = new Date().getTime();
