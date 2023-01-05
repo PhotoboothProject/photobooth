@@ -75,7 +75,7 @@ hr.small {
 }
 
 .pswp-rotary-focus {
-  background: radial-gradient(grey, $mainColor, $hoverColor) !important;
+  background: radial-gradient($hoverColor, $mainColor, $secondaryColor) !important;
 }
 
 // Own style parts
