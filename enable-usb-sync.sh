@@ -22,21 +22,25 @@ function ask_yes_no {
     fi
 }
 
+function no_raspberry {
+    warn "WARNING: This script is intended to run on a Raspberry Pi."
+    warn "Running the script on other devices running Debian / a Debian based distribution is possible, but Raspberry Pi specific features will be missing!"
+    RUNNING_ON_PI=false
+}
+
 if [ $UID != 0 ]; then
     error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
 fi
 
 if [ ! -f /proc/device-tree/model ]; then
-    error "ERROR: This installer is only intended to run on a Raspberry Pi."
-    exit 2
-fi
+    no_raspberry 2
+else
+    PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
 
-PI_MODEL=$(tr -d '\0' </proc/device-tree/model)
-
-if [[ $PI_MODEL != Raspberry* ]]; then
-    error "ERROR: This installer is only intended to run on a Raspberry Pi."
-    exit 3
+    if [[ $PI_MODEL != Raspberry* ]]; then
+        no_raspberry 3
+    fi
 fi
 
 view_help() {
@@ -115,7 +119,8 @@ EOF
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
 
 info "### Adding polkit rule so www-data can (un)mount drives"
-cat > /etc/polkit-1/localauthority/50-local.d/photobooth.pkla <<EOF
+if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
+    cat > /etc/polkit-1/localauthority/50-local.d/photobooth.pkla <<EOF
 [Allow www-data to mount drives with udisks2]
 Identity=unix-user:www-data
 Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
@@ -123,6 +128,10 @@ ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
 EOF
+else
+    info "### /etc/polkit-1/localauthority/50-local.d not found!"
+    info "### Can not setup your OS to use the USB sync file backup."
+fi
 
 echo -e "\033[0;33m"
 ask_yes_no "### You need to reboot your device. Do you like to reboot now? [y/N] " "N"
