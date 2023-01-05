@@ -20,7 +20,7 @@
     height: 5em;
     border: 2px solid $borderColor;
     border-radius: 50%;
-    background: radial-gradient($highlightColor, $mainColor, $hoverColor);
+    background: radial-gradient($hoverColor, $mainColor, $secondaryColor);
     position: relative;
 
     span {
@@ -263,7 +263,7 @@
     width: 1.625em;
     height: 1.625em;
     margin: 0.3em;
-    background: radial-gradient(grey, $mainColor, $hoverColor);
+    background: radial-gradient($hoverColor, $mainColor, $secondaryColor);
     color: $buttonFontColor;
     .fa,
     .material-icons {
@@ -286,7 +286,7 @@
 
 .btn--classic.gal-action-btn,
 .btn--classic_rounded.gal-action-btn {
-  background: $hoverColor;
+  background: $secondaryColor;
 }
 
 .triggerPic,
