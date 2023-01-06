@@ -512,7 +512,11 @@ const photoBooth = (function () {
                                 loaderImage.css('background-image', 'none');
                                 imageUrl = '';
                                 loaderImage.css('display', 'none');
-                                api.deleteImage(result.collage_file, () => {});
+                                api.deleteImage(result.collage_file, () => {
+                                    setTimeout(function () {
+                                        photoboothTools.reloadPage();
+                                    }, 5000);
+                                });
                                 api.nextCollageNumber = result.current;
                                 api.thrill(PhotoStyle.COLLAGE);
                             });
@@ -718,18 +722,15 @@ const photoBooth = (function () {
                     files.forEach(function (file, index, array) {
                         photoboothTools.console.logDev('Index:', index);
                         photoboothTools.console.logDev('Array:', array);
-                        api.deleteImage(file, (data) => {
-                            if (!data.success) {
-                                setTimeout(function () {
-                                    photoboothTools.reloadPage();
-                                }, 5000);
-                            }
+                        api.deleteImage(file, () => {
+                            setTimeout(function () {
+                                photoboothTools.reloadPage();
+                            }, 5000);
                         });
                     });
                 } else {
                     deleteBtn.blur();
                 }
-                photoboothTools.reloadPage();
             });
 
         api.addImage(filename);
@@ -968,15 +969,52 @@ const photoBooth = (function () {
             success: (data) => {
                 if (data.success) {
                     photoboothTools.console.log('Deleted ' + data.file);
+
+                    printMesg.empty();
+                    printMesg.html(
+                        '<div class="modal__body"><span style="color:green">' +
+                            data.file +
+                            ' ' +
+                            photoboothTools.getTranslation('deleted_successfully') +
+                            '</span></div>'
+                    );
                 } else {
                     photoboothTools.console.log('Error while deleting ' + data.file);
                     photoboothTools.console.log('Failed: ' + data.failed);
+                    printMesg.empty();
+                    printMesg.html(
+                        '<div class="modal__body"><span style="color:red">' +
+                            photoboothTools.getTranslation('error') +
+                            '</span></div>'
+                    );
                 }
+                photoboothTools.modal.open('#print_mesg');
+
+                setTimeout(function () {
+                    photoboothTools.modal.close('#print_mesg');
+                    printMesg.empty();
+                    printMesg.html(
+                        '<div class="modal__body"><span>' + photoboothTools.getTranslation('printing') + '</span></div>'
+                    );
+                }, 4000);
                 cb(data);
             },
             error: (jqXHR, textStatus) => {
                 photoboothTools.console.log('Error while deleting image: ', textStatus);
+                printMesg.empty();
+                printMesg.html(
+                    '<div class="modal__body"><span style="color:red">' +
+                        photoboothTools.getTranslation('error') +
+                        '</span></div>'
+                );
+                photoboothTools.modal.open('#print_mesg');
+
                 setTimeout(function () {
+                    photoboothTools.modal.close('#print_mesg');
+                    printMesg.empty();
+                    printMesg.html(
+                        '<div class="modal__body"><span>' + photoboothTools.getTranslation('printing') + '</span></div>'
+                    );
                     photoboothTools.reloadPage();
                 }, 5000);
             }
