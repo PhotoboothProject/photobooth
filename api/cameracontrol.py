@@ -52,7 +52,8 @@ class CameraControl:
 
     def capture_image(self, path):
         print('Capturing image')
-        self.print_config('capturetarget')
+        # capturetarget does not exist on Sony Cameras
+        # self.print_config('capturetarget')
         file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
         # refresh images on camera
         self.camera.wait_for_event(1000)
