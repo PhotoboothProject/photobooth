@@ -10,30 +10,31 @@ if (empty($_POST['file'])) {
     logErrorAndDie($errormsg);
 }
 
+$images = [];
+$unavailableImages = [];
+$failedImages = [];
 $file = $_POST['file'];
-$filePath = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
-$filePathThumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
-$filePathKeying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
-$filePathTmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
-
-if (!unlink($filePath) || !unlink($filePathThumb)) {
-    $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not delete file';
-    logErrorAndDie($errormsg);
-}
-
-if (is_readable($filePathKeying)) {
-    if (!unlink($filePathKeying)) {
-        $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not delete keying file';
-        logErrorAndDie($errormsg);
-    }
-}
+$success = true;
+$images = [
+    $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file,
+    $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file,
+    $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file,
+];
 
 if (!$config['picture']['keep_original']) {
-    if (is_readable($filePathTmp)) {
-        if (!unlink($filePathTmp)) {
-            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not delete tmp file';
-            logErrorAndDie($errormsg);
+    $images[] = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+}
+
+foreach ($images as $image) {
+    if (is_readable($image)) {
+        if (!unlink($image)) {
+            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not delete ' . $image;
+            logError($errormsg);
+            $success = false;
+            $failedImages[] = $image;
         }
+    } else {
+        $unavailableImages[] = $image;
     }
 }
 
@@ -41,6 +42,14 @@ if ($config['database']['enabled']) {
     deleteImageFromDB($file);
 }
 
-echo json_encode([
-    'success' => true,
-]);
+$LogData = [
+    'success' => $success,
+    'file' => $file,
+    'unavailable' => $unavailableImages,
+    'failed' => $failedImages,
+];
+$LogString = json_encode($LogData);
+if (!$success || $config['dev']['loglevel'] > 1) {
+    logError($LogData);
+}
+echo $LogString;
