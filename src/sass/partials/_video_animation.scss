@@ -1,0 +1,66 @@
+#videoAnimation {
+  display: none;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1500;
+}
+
+#videoAnimation * {
+  box-sizing: content-box;
+}
+
+#videoAnimation ul {
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+#videoAnimation ul > li {
+  display: block;
+  color: #000;
+  background-color: #fff;
+  width: 25px;
+  height: 25px;
+  border: 10px solid black;
+}
+
+#videoAnimation .right {
+  display: block;
+  margin: auto;
+  right: 0;
+  position: absolute;
+}
+
+#videoAnimation .left {
+  display: block;
+  margin: auto;
+  left: 0;
+  position: absolute;
+}
+
+#videoAnimation li {
+  position: relative;
+  animation: va-scroll 1s linear infinite;
+  -webkit-animation: va-scroll 1s linear infinite;
+  -moz-animation: va-scroll 1s linear infinite;
+}
+
+@keyframes va-scroll {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -400px;
+  }
+}
+
+@-webkit-keyframes va-scroll /* Safari and Chrome */ {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -400px;
+  }
+}

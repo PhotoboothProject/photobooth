@@ -4,7 +4,8 @@ const photoBooth = (function () {
     const PhotoStyle = {
             PHOTO: 'photo',
             COLLAGE: 'collage',
-            CHROMA: 'chroma'
+            CHROMA: 'chroma',
+            VIDEO: 'video'
         },
         CameraDisplayMode = {
             INIT: 1,
@@ -50,6 +51,9 @@ const photoBooth = (function () {
         qrCodeModal = $('#qrCode'),
         counter = $('#counter'),
         resultInner = $('.resultInner'),
+        videoAnimation = $('#videoAnimation'),
+        resultVideo = $('#resultVideo'),
+        resultVideoQR = $('#resultVideoQR'),
         spinner = $('.spinner'),
         sendMail = $('.send-mail'),
         mailMessageForm = $('#mail-form-message'),
@@ -285,29 +289,46 @@ const photoBooth = (function () {
         loader.addClass('open');
 
         if (config.get_request.countdown) {
-            const getMode =
-                photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
-                    ? config.get_request.picture
-                    : config.get_request.collage;
+            let getMode;
+            switch (photoStyle) {
+                case PhotoStyle.COLLAGE:
+                    getMode = config.get_request.collage;
+                    break;
+                case PhotoStyle.VIDEO:
+                    getMode = config.get_request.video;
+                    break;
+                case PhotoStyle.PHOTO:
+                default:
+                    getMode = config.get_request.picture;
+                    break;
+            }
             const getUrl = config.get_request.server + '/' + getMode;
             photoboothTools.getRequest(getUrl);
         }
 
-        api.startCountdown(
-            photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time,
-            counter,
-            () => {
-                if (config.picture.no_cheese) {
-                    photoboothTools.console.log('Cheese is disabled.');
-                } else {
-                    api.cheese(photoStyle);
-                }
-            }
-        );
+        let countdownTime;
+        switch (photoStyle) {
+            case PhotoStyle.COLLAGE:
+                countdownTime = config.collage.cntdwn_time;
+                break;
+            case PhotoStyle.VIDEO:
+                countdownTime = config.video.cntdwn_time;
+                break;
+            case PhotoStyle.PHOTO:
+            default:
+                countdownTime = config.picture.cntdwn_time;
+                break;
+        }
 
-        const triggerCnt =
-            (photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time) -
-            config.picture.cntdwn_offset;
+        api.startCountdown(countdownTime, counter, () => {
+            if (config.picture.no_cheese) {
+                photoboothTools.console.log('Cheese is disabled.');
+            } else {
+                api.cheese(photoStyle);
+            }
+        });
+
+        const triggerCnt = countdownTime - config.picture.cntdwn_offset;
         photoboothTools.console.log('Capture image in ' + triggerCnt + ' seconds.');
         setTimeout(() => {
             if (
@@ -319,6 +340,8 @@ const photoBooth = (function () {
                 api.errorPic({
                     error: 'No preview by device cam available!'
                 });
+            } else if (photoStyle === PhotoStyle.VIDEO) {
+                api.takeVideo(retry);
             } else {
                 api.takePic(photoStyle, retry);
             }
@@ -327,7 +350,9 @@ const photoBooth = (function () {
 
     api.cheese = function (photoStyle) {
         cheese.empty();
-        if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
+        if (photoStyle === PhotoStyle.VIDEO) {
+            cheese.text(config.video.cheese);
+        } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             return;
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
             cheese.text(photoboothTools.getTranslation('cheese'));
@@ -340,6 +365,12 @@ const photoBooth = (function () {
         setTimeout(() => {
             cheese.empty();
         }, cheeseTime);
+    };
+
+    api.takeVideo = function (retry) {
+        remoteBuzzerClient.inProgress(true);
+        const data = {};
+        api.callTakeVideoApi(data, retry);
     };
 
     api.takePic = function (photoStyle, retry) {
@@ -551,6 +582,38 @@ const photoBooth = (function () {
             });
     };
 
+    api.callTakeVideoApi = function (data) {
+        if (config.video.animation) {
+            videoAnimation.show();
+        }
+        startTime = new Date().getTime();
+        jQuery
+            .post('api/takeVideo.php', data)
+            .done(function (result) {
+                if (config.video.animation) {
+                    videoAnimation.hide();
+                }
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.log('Took ' + data.style, result);
+                photoboothTools.console.logDev('Taking video took ' + totalTime + 'ms');
+                cheese.empty();
+
+                imgFilter = config.filters.defaults;
+                $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
+                $('#' + imgFilter).addClass('activeSidenavBtn');
+
+                if (result.error) {
+                    api.errorPic(result);
+                } else {
+                    api.processVideo(result);
+                }
+            })
+            .fail(function (xhr, status, result) {
+                api.errorPic(result);
+            });
+    };
+
     api.errorPic = function (data) {
         setTimeout(function () {
             spinner.hide();
@@ -560,6 +623,9 @@ const photoBooth = (function () {
             idVideoSensor.hide();
             collageFrame.hide();
             pictureFrame.hide();
+            if (config.video.animation) {
+                videoAnimation.hide();
+            }
             loader.addClass('error');
             loading.append($('<p>').text(photoboothTools.getTranslation('error')));
             photoboothTools.console.log('An error occurred:', data.error);
@@ -626,6 +692,68 @@ const photoBooth = (function () {
                     api.renderChroma(data.file);
                 } else {
                     api.renderPic(data.file, data.images);
+                }
+            },
+            error: (jqXHR, textStatus) => {
+                api.errorPic({
+                    error: 'Request failed: ' + textStatus
+                });
+            }
+        });
+    };
+
+    api.processVideo = function (result) {
+        startTime = new Date().getTime();
+
+        idVideoSensor.hide();
+        idVideoView.hide();
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
+        spinner.show();
+        loading.text(photoboothTools.getTranslation('busyVideo'));
+
+        $.ajax({
+            method: 'POST',
+            url: 'api/applyVideoEffects.php',
+            data: {
+                file: result.file
+            },
+            success: (data) => {
+                photoboothTools.console.log('video processed', data);
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.logDev('Processing video took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Video:', data.file);
+
+                if (config.get_request.processed) {
+                    const getUrl = config.get_request.server + '/video';
+                    photoboothTools.getRequest(getUrl);
+                }
+
+                if (data.error) {
+                    api.errorPic(data);
+                } else {
+                    // if collage exists: render the result for the collage image and overlay the video over the image
+                    const collage = data.file + '-collage.jpg';
+                    const filename = data.images.includes(collage) ? collage : data.file;
+                    api.renderPic(filename, data.images);
+                    const file = config.foldersJS.images + '/' + data.file;
+                    if (!config.video.collage_only) {
+                        if (config.video.gif) {
+                            resultVideo.attr('src', file);
+                        } else {
+                            const source = document.createElement('source');
+                            source.setAttribute('src', file);
+                            source.setAttribute('type', 'video/mp4');
+                            resultVideo.append(source);
+                            resultVideo.get(0).play();
+                        }
+                        resultVideo.show();
+                        if (config.video.qr) {
+                            resultVideoQR.attr('src', 'api/qrcode.php?filename=' + data.file);
+                            resultVideoQR.show();
+                        }
+                    }
                 }
             },
             error: (jqXHR, textStatus) => {
@@ -738,9 +866,15 @@ const photoBooth = (function () {
                 photoboothTools.reloadPage();
             });
 
-        api.addImage(filename);
+        // gallery doesn't support videos atm
+        if (!api.isVideoFile(filename)) {
+            api.addImage(filename);
+        }
 
-        const imageUrl = config.foldersJS.images + '/' + filename;
+        // if image is a video render the qr code as image (video should be displayed over this)
+        const imageUrl = api.isVideoFile(filename)
+            ? 'api/qrcode.php?filename=' + filename
+            : config.foldersJS.images + '/' + filename;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
@@ -895,8 +1029,43 @@ const photoBooth = (function () {
         timerFunction();
     };
 
+    api.isVideoFile = function (filename) {
+        const extension = api.getFileExtension(filename);
+
+        return extension === 'mp4' || extension === 'gif';
+    };
+
+    api.getFileExtension = function (filename) {
+        const parts = filename.split('.');
+
+        return parts[parts.length - 1];
+    };
+
+    api.resetPrintMessage = function (cb, to) {
+        setTimeout(function () {
+            photoboothTools.modal.close('#print_mesg');
+            printMesg.empty();
+            printMesg.html(
+                '<div class="modal__body"><span>' + photoboothTools.getTranslation('printing') + '</span></div>'
+            );
+            cb();
+            isPrinting = false;
+            remoteBuzzerClient.inProgress(false);
+        }, to);
+    };
+
     api.printImage = function (imageSrc, cb) {
-        if (isPrinting) {
+        if (api.isVideoFile(imageSrc)) {
+            photoboothTools.modal.open('#print_mesg');
+            photoboothTools.console.log('An error occurred: attempt to print non printable file');
+            printMesg.empty();
+            printMesg.html(
+                '<div class="modal__body"><span style="color:red">' +
+                    photoboothTools.getTranslation('no_printing') +
+                    '</span></div>'
+            );
+            api.resetPrintMessage(cb, 5000);
+        } else if (isPrinting) {
             photoboothTools.console.log('Printing in progress: ' + isPrinting);
         } else {
             photoboothTools.modal.open('#print_mesg');
@@ -921,21 +1090,7 @@ const photoBooth = (function () {
                                 '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
                             );
                         }
-
-                        setTimeout(function () {
-                            photoboothTools.modal.close('#print_mesg');
-                            if (data.error) {
-                                printMesg.empty();
-                                printMesg.html(
-                                    '<div class="modal__body"><span>' +
-                                        photoboothTools.getTranslation('printing') +
-                                        '</span></div>'
-                                );
-                            }
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, config.print.time);
+                        api.resetPrintMessage(cb, config.print.time);
                     },
                     error: (jqXHR, textStatus) => {
                         photoboothTools.console.log('An error occurred: ', textStatus);
@@ -945,19 +1100,7 @@ const photoBooth = (function () {
                                 photoboothTools.getTranslation('error') +
                                 '</span></div>'
                         );
-
-                        setTimeout(function () {
-                            photoboothTools.modal.close('#print_mesg');
-                            printMesg.empty();
-                            printMesg.html(
-                                '<div class="modal__body"><span>' +
-                                    photoboothTools.getTranslation('printing') +
-                                    '</span></div>'
-                            );
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, 5000);
+                        api.resetPrintMessage(cb, 5000);
                     }
                 });
             }, 1000);
@@ -1046,6 +1189,11 @@ const photoBooth = (function () {
         e.preventDefault();
         api.thrill(PhotoStyle.COLLAGE);
         $('.newcollage').blur();
+    });
+
+    $('.takeVideo').on('click', function (e) {
+        e.preventDefault();
+        api.thrill(PhotoStyle.VIDEO);
     });
 
     $('#mySidenav .closebtn').on('click', function (e) {

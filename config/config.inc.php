@@ -125,6 +125,19 @@ $config['textoncollage']['linespace'] = '90';
 $config['collage']['limit'] = '';
 
 
+// V I D E O
+$config['video']['enabled'] = false;
+$config['video']['cntdwn_time'] = '3';
+$config['video']['cheese'] = 'Show your moves!';
+$config['video']['collage'] = false;
+$config['video']['collage_keep_images'] = false;
+$config['video']['collage_only'] = false;
+$config['video']['effects'] = 'none';
+$config['video']['animation'] = true;
+$config['video']['gif'] = false;
+$config['video']['qr'] = true;
+
+
 // G A L L E R Y
 $config['gallery']['enabled'] = true;
 $config['gallery']['newest_first'] = true;
@@ -294,6 +307,7 @@ $config['get_request']['processed'] = false;
 $config['get_request']['server'] = '';
 $config['get_request']['picture'] = 'CNTDWNPHOTO';
 $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
+$config['get_request']['video'] = 'CNTDWNVIDEO';
 
 
 // A U T H E N T I C A T I O N
@@ -363,6 +377,7 @@ $config['icons']['telegram'] = 'fa fa-telegram';
 $config['icons']['cups'] = 'fa fa-print';
 $config['icons']['take_picture'] = 'fa fa-camera';
 $config['icons']['take_collage'] = 'fa fa-th-large';
+$config['icons']['take_video'] = 'fa fa-video';
 $config['icons']['close'] = 'fa fa-times';
 $config['icons']['refresh'] = 'fa fa-refresh';
 $config['icons']['delete'] = 'fa fa-trash';

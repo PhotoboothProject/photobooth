@@ -14,6 +14,9 @@ $cmds = [
             'cmd' => 'digicamcontrol\CameraControlCmd.exe /capture /filename %s',
             'msg' => 'Photo transfer done.',
         ],
+        'take_video' => [
+            'cmd' => '',
+        ],
         'print' => [
             'cmd' => 'mspaint /pt %s',
             'msg' => '',
@@ -36,6 +39,9 @@ $cmds = [
         'take_picture' => [
             'cmd' => 'gphoto2 --capture-image-and-download --filename=%s',
             'msg' => 'New file is in location',
+        ],
+        'take_video' => [
+            'cmd' => 'python3 cameracontrol.py -v %s --vlen 3 --vframes 4',
         ],
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',
@@ -88,6 +94,7 @@ require_once $default_config_file;
 
 $config['take_picture']['cmd'] = $cmds[SERVER_OS]['take_picture']['cmd'];
 $config['take_picture']['msg'] = $cmds[SERVER_OS]['take_picture']['msg'];
+$config['take_video']['cmd'] = $cmds[SERVER_OS]['take_video']['cmd'];
 $config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
 $config['print']['msg'] = $cmds[SERVER_OS]['print']['msg'];
 $config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];

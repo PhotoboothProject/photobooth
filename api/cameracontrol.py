@@ -1,9 +1,19 @@
 #!/usr/bin/env python
 
-import os, signal, sys, time, psutil, zmq, argparse
+import argparse
+import os
+import psutil
+import signal
+import subprocess
+import sys
+import time
+import zmq
 from argparse import Namespace
 from subprocess import Popen, PIPE
+
 import gphoto2 as gp
+
+TEMP_VIDEO_FILE_APPENDIX = '.temp.mp4'
 
 
 class CameraControl:
@@ -106,16 +116,20 @@ class CameraControl:
         self.set_config('viewfinder', 0)
         print('Video disabled')
 
-    def handle_message(self, msg):
-        args = Namespace(**msg)
+    def handle_message(self, message):
+        args = Namespace(**message)
         if args.exit:
             self.socket.send_string('Exiting service!')
             self.exit_gracefully()
         self.handle_chroma_params(args)
+        self.handle_video_params(args)
         if args.device != self.args.device:
             self.args.device = args.device
             self.ffmpeg_open()
             print('Video output device changed')
+        elif self.args.video_path is not None:
+            self.ffmpeg_open()
+            print('Changing ffmpeg config to save video')
         if args.config is not None and args.config != self.args.config:
             self.args.config = args.config
             self.connect_to_camera()
@@ -144,13 +158,29 @@ class CameraControl:
                 self.socket.send_string('failure')
 
     def ffmpeg_open(self):
-        input_chroma = []
+        input = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
+        stream = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
+        pre_input = []
         filters = []
+        file_output = []
         if self.chroma.get('active', False):
-            filters, input_chroma = self.get_chroma_ffmpeg_params()
-        input_gphoto = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
-        ffmpeg_output = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
-        self.ffmpeg = Popen(['ffmpeg', *input_chroma, *input_gphoto, *filters, *ffmpeg_output], stdin=PIPE)
+            filters, pre_input = self.get_chroma_ffmpeg_params()
+        if self.args.video_path is not None:
+            temp_video_path = self.args.video_path + TEMP_VIDEO_FILE_APPENDIX
+            if os.path.exists(self.args.video_path) or os.path.exists(temp_video_path):
+                print('Video recording stopped: file or temp file already exist')
+            else:
+                pre_input = ['-t', str(self.args.video_length)]
+                file_output = ['-vf', 'fps=' + str(self.args.video_fps), temp_video_path]
+                if self.args.video_frames > 0:
+                    # 99 images should be more than enough
+                    if self.args.video_frames > 99:
+                        self.args.video_frames = 99
+                    image_fps = self.args.video_frames / self.args.video_length
+                    file_output.extend(['-vf', 'fps=' + str(image_fps), self.args.video_path + '-%02d.jpg'])
+        commands = ['ffmpeg', *pre_input, *input, *filters, *stream, *file_output]
+        print(commands)
+        self.ffmpeg = Popen(commands, stdin=PIPE)
 
     def handle_chroma_params(self, args):
         chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
@@ -173,6 +203,12 @@ class CameraControl:
             'blend': str(chroma_blend)
         }
 
+    def handle_video_params(self, args):
+        self.args.video_path = args.video_path
+        self.args.video_frames = args.video_frames
+        self.args.video_length = args.video_length
+        self.args.video_fps = args.video_fps
+
     def get_chroma_ffmpeg_params(self):
         input_chroma = ['-i', self.chroma['image']]
         filters = ['-filter_complex', '[0:v][1:v]scale2ref[i][v];' +
@@ -187,9 +223,11 @@ class CameraControl:
             filters, input_chroma = self.get_chroma_ffmpeg_params()
         input_gphoto = ['-i', path]
         tmp_path = "%s-chroma.jpg" % path
-        ffmpeg_output = [tmp_path]
-        Popen(['ffmpeg', *input_chroma, *input_gphoto, *filters, *ffmpeg_output]).wait(5)
-        Popen(['mv', tmp_path, path, '-f']).wait(1)
+        if subprocess.run(['ffmpeg', *input_chroma, *input_gphoto, *filters, tmp_path]).returncode != 0:
+            print('Chroma keying failed')
+            return
+        if subprocess.run(['mv', tmp_path, path, '-f']).returncode != 0:
+            print('Failed to rename temporary file to file filename')
 
     def pipe_video_to_ffmpeg_and_wait_for_commands(self):
         context = zmq.Context()
@@ -216,6 +254,23 @@ class CameraControl:
                     time.sleep(1)
                     print('Not connected to camera. Trying to reconnect...')
                     self.connect_to_camera()
+                except BrokenPipeError:
+                    print('Broken pipe: check if video recording finished, restart ffmpeg')
+                    if self.args.video_path is not None:
+                        temp_video_path = self.args.video_path + TEMP_VIDEO_FILE_APPENDIX
+                        if os.path.exists(temp_video_path):
+                            print('Video recording successful')
+                            os.rename(temp_video_path, self.args.video_path)
+                            self.args.video_path = None
+                        else:
+                            print('Video recording failed. Restart camera connection and retry.')
+                            self.camera.exit()
+                            self.connect_to_camera()
+                    else:
+                        print('No video recording. Restart camera connection')
+                        self.camera.exit()
+                        self.connect_to_camera()
+                    self.ffmpeg_open()
         except KeyboardInterrupt:
             self.exit_gracefully()
 
@@ -261,23 +316,36 @@ def main():
     parser = argparse.ArgumentParser(description='Simple Camera Control script using libgphoto2 through \
     python-gphoto2.', epilog='If you don\'t want images to be stored on the camera make sure that capturetarget \
     is set to internal ram (might be device dependent but it\'s 0 for Canon cameras. Additionally you should \
-    configure your camera to capture only jpeg images.', allow_abbrev=False)
+    configure your camera to capture only jpeg images. For RAW+JPEG: this is possible for Canon cameras \
+    (CR2 raw files) other RAW file extensions would need to be added as required. The RAW file stays on the camera.',
+                                     allow_abbrev=False)
     parser.add_argument('-d', '--device', nargs='?', default='/dev/video0',
                         help='virtual device the ffmpeg stream is sent to')
     parser.add_argument('-s', '--set-config', action='append', default=None, dest='config',
                         help='CONFIGENTRY=CONFIGVALUE analog to gphoto2 cli. Not tested for all config entries!')
     parser.add_argument('-c', '--capture-image-and-download', default=None, type=str, dest='imgpath',
                         help='capture an image and download it to the computer. If it stays stored on the camera as \
-                        well depends on the camera config')
+                        well depends on the camera config. If this param is set while the service is not already \
+                        running the application will take a single image and exit after that. Chroma params are used \
+                        for that image, but no video will be created')
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
-                        image and wait for message to start preview again')
+                        image and wait for message to start preview again', dest='bsm')
+    parser.add_argument('-v', '--video', default=None, type=str, dest='video_path',
+                        help='save the next part of the preview as a video file')
+    parser.add_argument('--vframes', default=4, type=int, help='saves shots from the video in an equidistant time',
+                        dest='video_frames')
+    parser.add_argument('--vlen', default=3, type=int, help='duration of the video in seconds',
+                        dest='video_length')
+    parser.add_argument('--vfps', default=10, type=int, help='fps of the video',
+                        dest='video_fps')
     parser.add_argument('--chromaImage', type=str, help='chroma key background (full path)', dest='chroma_image')
     parser.add_argument('--chromaColor', type=str,
                         help='chroma key color (color name or format like "0xFFFFFF" for white)', dest='chroma_color')
     parser.add_argument('--chromaSensitivity', type=float,
                         help='chroma key sensitivity (value from 0.01 to 1.0 or 0.0 to disable). \
-                             If this is set to a value distinct from 0.0 on capture immage command chroma keying using \
-                             ffmpeg is applied on the image and only this modified image is stored on the pc.',
+                             If this is set to a value distinct from 0.0 on capture image command chroma keying using \
+                             ffmpeg is applied on the image and only this modified image is stored on the pc. \
+                             If this is set on a preview command you get actual live chroma keying.',
                         dest='chroma_sensitivity')
     parser.add_argument('--chromaBlend', type=float, help='chroma key blend (0.0 to 1.0)', dest='chroma_blend')
     parser.add_argument('--exit', action='store_true', help='exit the service')

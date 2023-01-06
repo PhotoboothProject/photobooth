@@ -829,6 +829,80 @@ $configsetup = [
             'value' => $config['collage']['limit'],
         ],
     ],
+    'video' => [
+        'view' => 'advanced',
+        'video_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[enabled]',
+            'value' => $config['video']['enabled'],
+        ],
+        'video_cntdwn_time' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'name' => 'video[cntdwn_time]',
+            'placeholder' => $defaultConfig['video']['cntdwn_time'],
+            'value' => $config['video']['cntdwn_time'],
+            'range_min' => 1,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
+        'video_animation' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[animation]',
+            'value' => $config['video']['animation'],
+        ],
+        'video_cheese' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['video']['cheese'],
+            'name' => 'video[cheese]',
+            'value' => htmlentities($config['video']['cheese'] ?? ''),
+        ],
+        'video_collage' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[collage]',
+            'value' => $config['video']['collage'],
+        ],
+        'video_collage_keep_images' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[collage_keep_images]',
+            'value' => $config['video']['collage_keep_images'],
+        ],
+        'video_collage_only' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[collage_only]',
+            'value' => $config['video']['collage_only'],
+        ],
+        'video_effects' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'video[effects]',
+            'placeholder' => $defaultConfig['video']['effects'],
+            'options' => [
+                'none' => 'None',
+                'boomerang' => 'Boomerang',
+            ],
+            'value' => $config['video']['effects'],
+        ],
+        'video_gif' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[gif]',
+            'value' => $config['video']['gif'],
+        ],
+        'video_qr' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'video[qr]',
+            'value' => $config['video']['qr'],
+        ],
+    ],
     'gallery' => [
         'view' => 'basic',
         'gallery_enabled' => [
@@ -1804,6 +1878,13 @@ $configsetup = [
             'name' => 'get_request[collage]',
             'value' => htmlentities($config['get_request']['collage'] ?? ''),
         ],
+        'get_request_video' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['get_request']['video'],
+            'name' => 'get_request[video]',
+            'value' => htmlentities($config['get_request']['video'] ?? ''),
+        ],
     ],
     'authentication' => [
         'view' => 'basic',
@@ -2218,6 +2299,13 @@ $configsetup = [
             'placeholder' => htmlentities($defaultConfig['icons']['take_collage'] ?? ''),
             'value' => htmlentities($config['icons']['take_collage'] ?? ''),
         ],
+        'icons_take_video' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'icons[take_video]',
+            'placeholder' => htmlentities($defaultConfig['icons']['take_video'] ?? ''),
+            'value' => htmlentities($config['icons']['take_video'] ?? ''),
+        ],
         'icons_close' => [
             'view' => 'expert',
             'type' => 'input',
@@ -2493,6 +2581,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['preview']['killcmd'],
             'name' => 'preview[killcmd]',
             'value' => htmlentities($config['preview']['killcmd'] ?? ''),
+        ],
+        'take_video_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['take_video']['cmd'],
+            'name' => 'take_video[cmd]',
+            'value' => htmlentities($config['take_video']['cmd'] ?? ''),
         ],
         'nodebin_cmd' => [
             'view' => 'expert',

@@ -84,6 +84,20 @@ if (
        autoplay playsinline></video>
 <div id="blocker"></div>
 <div id="aperture"></div>
+<?php if ($config['video']['enabled'] && $config['video']['animation']): ?>
+    <div id="videoAnimation">
+        <ul class="left">
+            <?php for ($i = 1; $i <= 50; $i++) {
+                print('<li class="reel-item"></li>');
+            } ?>
+        </ul>
+        <ul class="right">
+            <?php for ($i = 1; $i <= 50; $i++) {
+                print('<li class="reel-item"></li>');
+            } ?>
+        </ul>
+    </div>
+<?php endif; ?>
 <div id="wrapper">
     <?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
 
@@ -125,6 +139,18 @@ if (
     <div class="stages rotarygroup" id="result">
 
         <div class="resultInner hidden">
+            <?php if ($config['video']['enabled']): ?>
+                <?php if ($config['video']['qr']): ?>
+                    <img src="" id="resultVideoQR" alt="video qr code">
+                <?php endif; ?>
+                <?php if ($config['video']['gif']) { ?>
+                    <img id="resultVideo" src="" alt="result gif">
+                <?php } else { ?>
+                    <video id="resultVideo" autoplay loop muted>
+                    </video>
+                <?php } ?>
+            <?php endif; ?>
+
             <?php if ($config['button']['homescreen']): ?>
                 <a href="#" class="<?php echo $btnClass; ?> homebtn rotaryfocus"><i class="<?php echo $config['icons']['home']; ?>"></i> <span
                             data-i18n="home"></span></a>
@@ -159,6 +185,11 @@ if (
                     <a href="#" class="<?php echo $btnClass; ?> newcollage rotaryfocus"><i class="<?php echo $config['icons']['take_collage']; ?>"></i>
                         <span
                                 data-i18n="newCollage"></span></a>
+                <?php endif; ?>
+
+                <?php if ($config['video']['enabled']): ?>
+                    <a href="#" class="<?php echo $btnClass; ?> newVideo rotaryfocus"><i class="<?php echo $config['icons']['take_video']; ?>"></i> <span
+                                data-i18n="newVideo"></span></a>
                 <?php endif; ?>
             <?php endif; ?>
 
