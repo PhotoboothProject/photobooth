@@ -512,7 +512,7 @@ const photoBooth = (function () {
                                 loaderImage.css('background-image', 'none');
                                 imageUrl = '';
                                 loaderImage.css('display', 'none');
-                                api.deleteTmpImage(result.collage_file);
+                                api.deleteImage(result.collage_file, () => {});
                                 api.nextCollageNumber = result.current;
                                 api.thrill(PhotoStyle.COLLAGE);
                             });
@@ -719,13 +719,7 @@ const photoBooth = (function () {
                         photoboothTools.console.logDev('Index:', index);
                         photoboothTools.console.logDev('Array:', array);
                         api.deleteImage(file, (data) => {
-                            if (data.success) {
-                                photoboothTools.console.log('Deleted ' + file);
-                            } else {
-                                photoboothTools.console.log('Error while deleting ' + file);
-                                if (data.error) {
-                                    photoboothTools.console.log('Error: ' + data.error);
-                                }
+                            if (!data.success) {
                                 setTimeout(function () {
                                     photoboothTools.reloadPage();
                                 }, 5000);
@@ -972,31 +966,13 @@ const photoBooth = (function () {
                 file: imageName
             },
             success: (data) => {
-                if (data.error) {
-                    photoboothTools.console.log('Error while deleting image!');
+                if (data.success) {
+                    photoboothTools.console.log('Deleted ' + data.file);
+                } else {
+                    photoboothTools.console.log('Error while deleting ' + data.file);
+                    photoboothTools.console.log('Failed: ' + data.failed);
                 }
                 cb(data);
-            },
-            error: (jqXHR, textStatus) => {
-                photoboothTools.console.log('Error while deleting image: ', textStatus);
-                setTimeout(function () {
-                    photoboothTools.reloadPage();
-                }, 5000);
-            }
-        });
-    };
-
-    api.deleteTmpImage = function (imageName) {
-        $.ajax({
-            url: 'api/deleteTmpPhoto.php',
-            method: 'POST',
-            data: {
-                file: imageName
-            },
-            success: (data) => {
-                if (data.error) {
-                    photoboothTools.console.log('Error while deleting image!');
-                }
             },
             error: (jqXHR, textStatus) => {
                 photoboothTools.console.log('Error while deleting image: ', textStatus);
