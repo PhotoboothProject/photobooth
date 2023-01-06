@@ -38,9 +38,11 @@
       position: absolute;
       right: 30px;
       top: 13px;
+      color: $galleryButtonColor;
       font-size: 1.875em;
       width: 50px;
       height: 50px;
+      background: $secondaryColor;
       text-align: center;
       line-height: 50px;
     }
