@@ -5,16 +5,10 @@ require_once '../../lib/config.php';
 require_once '../../lib/db.php';
 require_once '../../lib/resize.php';
 
-if ($config['picture']['naming'] === 'dateformatted') {
-    $name = date('Ymd_His') . '.jpg';
-} else {
-    $name = md5(microtime()) . '.jpg';
-}
+$file = Image::create_new_filename($config['picture']['naming']);
 
-if ($config['database']['file'] === 'db') {
-    $file = $name;
-} else {
-    $file = $config['database']['file'] . '_' . $name;
+if ($config['database']['file'] != 'db') {
+    $file = $config['database']['file'] . '_' . $file;
 }
 
 $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
