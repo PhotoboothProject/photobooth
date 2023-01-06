@@ -722,12 +722,11 @@ const photoBooth = (function () {
                     files.forEach(function (file, index, array) {
                         photoboothTools.console.logDev('Index:', index);
                         photoboothTools.console.logDev('Array:', array);
-                        api.deleteImage(file, () => {
-                            setTimeout(function () {
-                                photoboothTools.reloadPage();
-                            }, 5000);
-                        });
+                        api.deleteImage(file, () => {});
                     });
+                    setTimeout(function () {
+                        photoboothTools.reloadPage();
+                    }, 5000);
                 } else {
                     deleteBtn.blur();
                 }
