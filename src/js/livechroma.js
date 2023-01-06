@@ -210,27 +210,13 @@ function saveImage(cb) {
                         const really = config.delete.no_request ? true : confirm(data.filename + ' ' + msg);
                         if (really) {
                             photoBooth.deleteImage(data.filename, (result) => {
-                                if (result.success) {
-                                    if (config.live_keying.show_all) {
-                                        photoBooth.deleteImage(photoBooth.chromaimage, (response) => {
-                                            if (response.success) {
-                                                setTimeout(function () {
-                                                    photoboothTools.reloadPage();
-                                                }, 1000);
-                                            } else {
-                                                photoboothTools.console.log('Error while deleting image');
-                                                setTimeout(function () {
-                                                    photoboothTools.reloadPage();
-                                                }, 5000);
-                                            }
-                                        });
-                                    } else {
+                                if (result.success && config.live_keying.show_all) {
+                                    photoBooth.deleteImage(photoBooth.chromaimage, () => {
                                         setTimeout(function () {
                                             photoboothTools.reloadPage();
-                                        }, 1000);
-                                    }
+                                        }, 5000);
+                                    });
                                 } else {
-                                    photoboothTools.console.log('Error while deleting image');
                                     setTimeout(function () {
                                         photoboothTools.reloadPage();
                                     }, 5000);
