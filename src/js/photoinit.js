@@ -207,32 +207,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         const msg = photoboothTools.getTranslation('really_delete_image');
         const really = config.delete.no_request ? true : confirm(img + ' ' + msg);
         if (really) {
-            $.ajax({
-                url: 'api/deletePhoto.php',
-                method: 'POST',
-                data: {
-                    file: img
-                },
-                success: (data) => {
-                    if (data.success) {
-                        photoboothTools.console.log('Deleted ' + img);
-                        photoboothTools.reloadPage();
-                    } else {
-                        photoboothTools.console.log('Error while deleting ' + img);
-                        if (data.error) {
-                            photoboothTools.console.log(data.error);
-                        }
-                        setTimeout(function () {
-                            photoboothTools.reloadPage();
-                        }, 5000);
-                    }
-                },
-                error: (jqXHR, textStatus) => {
-                    photoboothTools.console.log('Error while deleting image: ', textStatus);
-                    setTimeout(function () {
-                        photoboothTools.reloadPage();
-                    }, 5000);
-                }
+            photoBooth.deleteImage(img, () => {
+                setTimeout(function () {
+                    photoboothTools.reloadPage();
+                }, 5000);
             });
         }
     });
