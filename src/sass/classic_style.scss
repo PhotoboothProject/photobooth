@@ -149,6 +149,27 @@
     justify-content: center;
   }
 
+  .logo_bottom_left {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+  }
+  .logo_bottom_right {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+  }
+  .logo_top_left {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  .logo_top_right {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+
   .startInner {
     background: rgba(0, 0, 0, 0.5);
     color: $startFontColor;

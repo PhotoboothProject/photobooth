@@ -3,7 +3,12 @@
 			<div class="startInner <?php echo $uiShape; ?> noborder">
 				<div class="divaussen">
 					<div class="divinnen">
-            					<div class="divinnen2">
+						<?php if ($config['logo']['enabled']): ?>
+							<div class="logo_<?=$config['logo']['position']?>">
+								<img src=<?=$config['logo']['path']?> alt="logo">
+							</div>
+						<?php endif; ?>
+            			<div class="divinnen2">
 							<?php if ($config['event']['enabled']): ?>
 							<div class="names">
 								<?php if ($config['ui']['decore_lines']): ?>

@@ -360,6 +360,31 @@ $configsetup = [
             'name' => 'button[force_buzzer]',
             'value' => $config['button']['force_buzzer'],
         ],
+        'logo_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'logo[enabled]',
+            'value' => $config['logo']['enabled'],
+        ],
+        'logo_path' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => 'Logo path',
+            'name' => 'logo[path]',
+            'value' => htmlentities($config['logo']['path'] ?? ''),
+        ],
+        'logo_position' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'logo[position]',
+            'options' => [
+                'top_right' => 'Top Right',
+                'top_left' => 'Top Left',
+                'bottom_right' => 'Bottom Right',
+                'bottom_left' => 'Bottom Left',
+            ],
+            'value' => $config['logo']['position'],
+        ],
     ],
     'pictures' => [
         'view' => 'basic',
