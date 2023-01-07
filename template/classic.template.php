@@ -3,7 +3,11 @@
 			<?php if ($config['gallery']['enabled']): ?>
 			<a class="<?php echo $btnClass; ?> gallery-button rotaryfocus" href="#"><i class="<?php echo $config['icons']['gallery']; ?>"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
-
+			<?php if ($config['logo']['enabled']): ?>
+				<div class="logo_<?=$config['logo']['position']?>">
+					<img src=<?=$config['logo']['path']?> alt="logo">
+				</div>
+			<?php endif; ?>
 			<div class="startInner <?php echo $uiShape; ?> noborder">
 				<?php if ($config['event']['enabled']): ?>
 				<div class="names">

@@ -37,6 +37,10 @@ $config['database']['file'] = 'db';
 // F R O N T P A G E
 $config['ui']['show_fork'] = true;
 $config['ui']['skip_welcome'] = false;
+$config['logo']['enabled'] = false;
+$config['logo']['path'] = 'private/logo.png';
+// possible logo position values: 'top_right', 'top_left', 'bottom_right', 'bottom_left'
+$config['logo']['position'] = 'bottom_right';
 $config['event']['enabled'] = true;
 $config['event']['textLeft'] = 'We';
 // possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o',
