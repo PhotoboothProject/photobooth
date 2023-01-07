@@ -8,7 +8,7 @@
 								<img src=<?=$config['logo']['path']?> alt="logo">
 							</div>
 						<?php endif; ?>
-            			<div class="divinnen2">
+						<div class="divinnen2">
 							<?php if ($config['event']['enabled']): ?>
 							<div class="names">
 								<?php if ($config['ui']['decore_lines']): ?>
