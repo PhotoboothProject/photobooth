@@ -154,6 +154,13 @@ if (isset($data['type'])) {
         }
     }
 
+    if ($newConfig['logo']['enabled']) {
+        if (empty($newConfig['logo']['path']) && !file_exists($newConfig['logo']['path'])) {
+            $newConfig['logo']['enabled'] = false;
+            $LogData[] = ['logo' => 'Logo file path does not exist or is empty. Logo disabled'];
+        }
+    }
+
     $content = "<?php\n\$config = " . var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
 
     if (file_put_contents($my_config_file, $content)) {
