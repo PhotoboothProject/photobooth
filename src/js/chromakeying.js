@@ -200,21 +200,15 @@ function printImage(filename, cb) {
 
                     if (data.error) {
                         photoboothTools.console.log('An error occurred: ', data.error);
-                        photoboothTools.modal.empty('#print_mesg');
-                        $('#print_mesg').html(
-                            '<div class="modal__body"><span style="color:red">' + data.error + '</span></div>'
-                        );
+                        photoboothTools.modal.close('#print_mesg');
+                        photoboothTools.modalMesg.showError('#modal_mesg', data.error);
                     }
 
                     setTimeout(function () {
-                        photoboothTools.modal.close('#print_mesg');
                         if (data.error) {
-                            photoboothTools.modal.empty('#print_mesg');
-                            $('#print_mesg').html(
-                                '<div class="modal__body"><span>' +
-                                    photoboothTools.getTranslation('printing') +
-                                    '</span></div>'
-                            );
+                            photoboothTools.modalMesg.reset('#modal_mesg');
+                        } else {
+                            photoboothTools.modal.close('#print_mesg');
                         }
                         cb();
                         isPrinting = false;
@@ -222,19 +216,11 @@ function printImage(filename, cb) {
                 },
                 error: (jqXHR, textStatus) => {
                     photoboothTools.console.log('An error occurred: ', textStatus);
-                    photoboothTools.modal.empty('#print_mesg');
-                    $('#print_mesg').html(
-                        '<div class="modal__body"><span style="color:red">' + errormsg + '</span></div>'
-                    );
+                    photoboothTools.modal.close('#print_mesg');
+                    photoboothTools.modalMesg.showError('#modal_mesg', errormsg);
 
                     setTimeout(function () {
-                        photoboothTools.modal.close('#print_mesg');
-                        photoboothTools.modal.empty('#print_mesg');
-                        $('#print_mesg').html(
-                            '<div class="modal__body"><span>' +
-                                photoboothTools.getTranslation('printing') +
-                                '</span></div>'
-                        );
+                        photoboothTools.modalMesg.reset('#modal_mesg');
                         cb();
                         isPrinting = false;
                     }, 5000);
