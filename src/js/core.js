@@ -69,7 +69,8 @@ const photoBooth = (function () {
         cheeseTime = config.picture.no_cheese ? 0 : config.picture.cheese_time,
         timeToLive = config.picture.time_to_live * 1000,
         continuousCollageTime = config.collage.continuous_time * 1000,
-        retryTimeout = config.picture.retry_timeout * 1000;
+        retryTimeout = config.picture.retry_timeout * 1000,
+        notificationTimeout = config.ui.notification_timeout * 1000;
 
     let timeOut,
         isPrinting = false,
@@ -514,7 +515,7 @@ const photoBooth = (function () {
                                 api.deleteImage(result.collage_file, () => {
                                     setTimeout(function () {
                                         photoboothTools.reloadPage();
-                                    }, 5000);
+                                    }, notificationTimeout);
                                 });
                                 api.nextCollageNumber = result.current;
                                 api.thrill(PhotoStyle.COLLAGE);
@@ -576,7 +577,7 @@ const photoBooth = (function () {
                 loading.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
                 setTimeout(function () {
                     photoboothTools.reloadPage();
-                }, 5000);
+                }, notificationTimeout);
             } else {
                 loading.append($('<a class="btn" href="./">').text(photoboothTools.getTranslation('reload')));
             }
@@ -725,7 +726,7 @@ const photoBooth = (function () {
                     });
                     setTimeout(function () {
                         photoboothTools.reloadPage();
-                    }, 5000);
+                    }, notificationTimeout);
                 } else {
                     deleteBtn.blur();
                 }
@@ -934,7 +935,7 @@ const photoBooth = (function () {
                             cb();
                             isPrinting = false;
                             remoteBuzzerClient.inProgress(false);
-                        }, 5000);
+                        }, notificationTimeout);
                     }
                 });
             }, 1000);
@@ -959,10 +960,9 @@ const photoBooth = (function () {
                     photoboothTools.console.log('Failed: ' + data.failed);
                     photoboothTools.modalMesg.showError('#modal_mesg', errorMsg);
                 }
-
                 setTimeout(function () {
                     photoboothTools.modalMesg.reset('#modal_mesg');
-                }, 4000);
+                }, notificationTimeout);
                 cb(data);
             },
             error: (jqXHR, textStatus) => {
@@ -972,7 +972,7 @@ const photoBooth = (function () {
                 setTimeout(function () {
                     photoboothTools.modalMesg.reset('#modal_mesg');
                     photoboothTools.reloadPage();
-                }, 5000);
+                }, notificationTimeout);
             }
         });
     };
@@ -1097,7 +1097,7 @@ const photoBooth = (function () {
             } else {
                 submitButton.html('<span>' + photoboothTools.getTranslation('send') + '</span>');
             }
-        }, 5000);
+        }, notificationTimeout);
     });
 
     $('#send-mail-close').on('click', function () {

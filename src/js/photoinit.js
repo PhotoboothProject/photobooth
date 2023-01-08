@@ -210,7 +210,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             photoBooth.deleteImage(img, () => {
                 setTimeout(function () {
                     photoboothTools.reloadPage();
-                }, 5000);
+                }, config.ui.notification_timeout * 1000);
             });
         }
     });
