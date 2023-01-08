@@ -158,6 +158,8 @@ if (isset($data['type'])) {
         if (empty($newConfig['logo']['path']) && !file_exists('..' . DIRECTORY_SEPARATOR . $newConfig['logo']['path'])) {
             $newConfig['logo']['enabled'] = false;
             $LogData[] = ['logo' => 'Logo file path does not exist or is empty. Logo disabled'];
+        } else {
+            $newConfig['logo']['path'] = fixSeperator($newConfig['logo']['path']);
         }
     }
 
