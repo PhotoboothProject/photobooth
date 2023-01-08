@@ -76,6 +76,8 @@ $GALLERY_FOOTER = false;
 		<div class="modal__body"><span data-i18n="printing"></span></div>
 	</div>
 
+	<div class="modal" id="modal_mesg"></div>
+
 	<div id="adminsettings">
 		<div style="position:absolute; bottom:0; right:0;">
 			<img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
