@@ -246,6 +246,17 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'multiplied',
         ],
+        'ui_notification_timeout' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['ui']['notification_timeout'],
+            'name' => 'ui[notification_timeout]',
+            'value' => $config['ui']['notification_timeout'],
+            'range_min' => 1,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'seconds',
+        ],
         'picture_retry_timeout' => [
             'view' => 'expert',
             'type' => 'range',
