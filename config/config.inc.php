@@ -29,6 +29,7 @@ $config['picture']['time_to_live'] = '90';
 $config['picture']['preview_before_processing'] = false;
 $config['picture']['retry_on_error'] = '0';
 $config['picture']['retry_timeout'] = '2';
+$config['ui']['notification_timeout'] = '5';
 $config['delete']['no_request'] = false;
 $config['database']['enabled'] = true;
 $config['database']['file'] = 'db';

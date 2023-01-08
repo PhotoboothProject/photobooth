@@ -9,6 +9,7 @@ let target;
 let chroma;
 let seriouslyimage;
 let needsReload = false;
+const notificationTimeout = config.ui.notification_timeout * 1000;
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -214,12 +215,12 @@ function saveImage(cb) {
                                     photoBooth.deleteImage(photoBooth.chromaimage, () => {
                                         setTimeout(function () {
                                             photoboothTools.reloadPage();
-                                        }, 5000);
+                                        }, notificationTimeout);
                                     });
                                 } else {
                                     setTimeout(function () {
                                         photoboothTools.reloadPage();
-                                    }, 5000);
+                                    }, notificationTimeout);
                                 }
                             });
                         } else {
