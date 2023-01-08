@@ -369,7 +369,7 @@ $configsetup = [
         'logo_path' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => 'Logo path',
+            'placeholder' => $defaultConfig['logo']['enabled'],
             'name' => 'logo[path]',
             'value' => htmlentities($config['logo']['path'] ?? ''),
         ],
