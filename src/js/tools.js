@@ -49,6 +49,23 @@ const photoboothTools = (function () {
         }
     };
 
+    api.modalMesg = {
+        showSuccess: function (selector, successMsg) {
+            $(selector).empty();
+            $(selector).html('<div class="modal__body"><span style="color:green;">' + successMsg + '</span></div>');
+            api.modal.open($(selector));
+        },
+        showError: function (selector, errorMsg) {
+            $(selector).empty();
+            $(selector).html('<div class="modal__body"><span style="color:red;">' + errorMsg + '</span></div>');
+            api.modal.open($(selector));
+        },
+        reset: function (selector) {
+            api.modal.close($(selector));
+            $(selector).empty();
+        }
+    };
+
     api.reloadPage = function () {
         window.location.reload();
     };
