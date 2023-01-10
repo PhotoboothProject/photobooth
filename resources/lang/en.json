@@ -76,7 +76,7 @@
   "debugpanel:autorefresh": "Auto-Refresh",
   "degrees": "°",
   "delete": "Delete",
-  "deleted_successfully": "deleted successfully. Reloading automatically...",
+  "deleted_successfully": "deleted successfully.",
   "dev_debugpanel": "Debug panel",
   "devlog": "Photobooth log",
   "disk_usage": "Disk Usage",
