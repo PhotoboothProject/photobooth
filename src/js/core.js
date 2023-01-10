@@ -943,7 +943,8 @@ const photoBooth = (function () {
     };
 
     api.deleteImage = function (imageName, cb) {
-        const errorMsg = photoboothTools.getTranslation('error');
+        const errorMsg =
+            photoboothTools.getTranslation('error') + '</br>' + photoboothTools.getTranslation('auto_reload');
         $.ajax({
             url: 'api/deletePhoto.php',
             method: 'POST',
@@ -952,7 +953,12 @@ const photoBooth = (function () {
             },
             success: (data) => {
                 if (data.success) {
-                    const msg = data.file + ' ' + photoboothTools.getTranslation('deleted_successfully');
+                    const msg =
+                        data.file +
+                        ' ' +
+                        photoboothTools.getTranslation('deleted_successfully') +
+                        '</br>' +
+                        photoboothTools.getTranslation('auto_reload');
                     photoboothTools.console.log('Deleted ' + data.file);
                     photoboothTools.modalMesg.showSuccess('#modal_mesg', msg);
                 } else {
