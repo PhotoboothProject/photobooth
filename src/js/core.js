@@ -586,8 +586,6 @@ const photoBooth = (function () {
 
     api.processPic = function (photoStyle, result) {
         startTime = new Date().getTime();
-        const tempImageUrl = config.foldersJS.tmp + '/' + result.file;
-
         spinner.show();
         loading.text(
             photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
@@ -596,6 +594,7 @@ const photoBooth = (function () {
         );
 
         if (photoStyle === PhotoStyle.PHOTO && config.picture.preview_before_processing) {
+            const tempImageUrl = config.foldersJS.tmp + '/' + result.file;
             const preloadImage = new Image();
             preloadImage.onload = () => {
                 loader.css('background-image', `url(${tempImageUrl})`);
