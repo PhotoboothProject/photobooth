@@ -129,7 +129,9 @@ const photoBooth = (function () {
         startPage.addClass('open');
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
-        } else if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
+            photoboothTools.console.logDev('core: start video (BACKGROUND) from api.init.');
+        } else if (config.preview.cmd && !config.preview.bsm) {
+            photoboothTools.console.logDev('core: start video (INIT) from api.init.');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
 
@@ -161,17 +163,15 @@ const photoBooth = (function () {
     };
 
     api.stopPreviewAndCaptureFromVideo = function () {
-        if (config.preview.mode === PreviewMode.DEVICE.valueOf() || config.preview.mode === PreviewMode.URL.valueOf()) {
-            if (
-                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
-                config.preview.camTakesPic &&
-                !config.dev.demo_images
-            ) {
+        if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.camTakesPic) {
+            if (!config.dev.demo_images) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
             }
-
+        }
+        if (!config.preview.killcmd || config.preview.camTakesPic) {
+            photoboothTools.console.logDev('core: stopping preview from stopPreviewAndCaptureFromVideo.');
             photoboothPreview.stopPreview();
         }
     };
@@ -435,6 +435,7 @@ const photoBooth = (function () {
                     );
 
                     if (result.current + 1 < result.limit) {
+                        photoboothTools.console.logDev('core: initialize Media.');
                         photoboothPreview.initializeMedia();
                         api.takingPic = false;
                     }
@@ -776,7 +777,8 @@ const photoBooth = (function () {
 
         api.resetTimeOut();
 
-        if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
+        if (config.preview.cmd && !config.preview.bsm) {
+            photoboothTools.console.logDev('core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
     };
@@ -887,13 +889,14 @@ const photoBooth = (function () {
                 element.empty();
                 cb();
             }
-            if (
-                config.preview.killcmd &&
-                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
-                !config.preview.camTakesPic &&
-                count === stop
-            ) {
-                photoboothPreview.stopPreviewVideo();
+            if (config.preview.killcmd && count === stop) {
+                if (
+                    (config.preview.mode === PreviewMode.DEVICE.valueOf() && !config.preview.camTakesPic) ||
+                    config.preview.mode != PreviewMode.DEVICE.valueOf()
+                ) {
+                    photoboothTools.console.logDev('core: stop preview countdown.');
+                    photoboothPreview.stopPreview();
+                }
             }
             count++;
         }
