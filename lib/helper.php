@@ -68,6 +68,13 @@ class Helper {
     public static function fix_seperator($fix_path) {
         return str_replace('\\', '/', $fix_path);
     }
+
+    public static function set_absolute_path($path) {
+        if ($path[0] != '/') {
+            $path = '/' . $path;
+        }
+        return $path;
+    }
 }
 
 class Image {
