@@ -135,7 +135,7 @@ if (empty($config['ui']['folders_lang'])) {
     $config['ui']['folders_lang'] = Helper::get_rootpath('../resources/lang');
 }
 
-$config['ui']['folders_lang'] = Helper::fix_seperator($config['ui']['folders_lang']);
+$config['ui']['folders_lang'] = Helper::set_absolute_path(Helper::fix_seperator($config['ui']['folders_lang']));
 
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
@@ -204,7 +204,7 @@ if (empty($config['collage']['limit'])) {
 }
 
 if (Photobooth::detect_subfolder_install()) {
-    $bg_url = Helper::fix_seperator(Helper::get_rootpath('../resources/img/bg_stone.jpg'));
+    $bg_url = Helper::set_absolute_path(Helper::fix_seperator(Helper::get_rootpath('../resources/img/bg_stone.jpg')));
 } else {
     $bg_url = '/resources/img/bg_stone.jpg';
 }
@@ -223,12 +223,12 @@ if (empty($config['background']['chroma'])) {
 
 if (!empty($config['picture']['frame'])) {
     $pf_root = Helper::get_rootpath($config['picture']['frame']);
-    $config['picture']['htmlframe'] = Helper::fix_seperator($pf_root);
+    $config['picture']['htmlframe'] = Helper::set_absolute_path(Helper::fix_seperator($pf_root));
 }
 
 if (!empty($config['collage']['frame'])) {
     $cf_root = Helper::get_rootpath($config['collage']['frame']);
-    $config['collage']['htmlframe'] = Helper::fix_seperator($cf_root);
+    $config['collage']['htmlframe'] = Helper::set_absolute_path(Helper::fix_seperator($cf_root));
 }
 
 if (empty($config['webserver']['ip'])) {
