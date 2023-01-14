@@ -144,7 +144,7 @@ if (empty($config['ui']['folders_lang'])) {
     $config['ui']['folders_lang'] = getrootpath('../resources/lang');
 }
 
-$config['ui']['folders_lang'] = fixSeperator($config['ui']['folders_lang']);
+$config['ui']['folders_lang'] = '/' . fixSeperator($config['ui']['folders_lang']);
 
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
@@ -214,7 +214,7 @@ if (empty($config['collage']['limit'])) {
 
 if (isSubfolderInstall()) {
     $bg_root = getrootpath('../resources/img/bg_stone.jpg');
-    $bg_url = fixSeperator($bg_root);
+    $bg_url = '/' . fixSeperator($bg_root);
 } else {
     $bg_url = '/resources/img/bg_stone.jpg';
 }
