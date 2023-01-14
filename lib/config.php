@@ -132,16 +132,16 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
 }
 
 if (empty($config['ui']['folders_lang'])) {
-    $config['ui']['folders_lang'] = Helper::get_rootpath('../resources/lang');
+    $config['ui']['folders_lang'] = Helper::get_rootpath($basepath . 'resources/lang');
 }
 
 $config['ui']['folders_lang'] = Helper::set_absolute_path(Helper::fix_seperator($config['ui']['folders_lang']));
 
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
-        $path = $basepath . DIRECTORY_SEPARATOR . $folder;
+        $path = $basepath . $folder;
     } else {
-        $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
+        $path = $basepath . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
         $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
 
         $config['foldersJS'][$key] = Helper::fix_seperator(Helper::get_rootpath($path));
@@ -168,8 +168,8 @@ if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $
     $config['preview']['stop_time'] = $config['picture']['cntdwn_offset'] + 1;
 }
 
-$default_font = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
-$default_frame = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+$default_font = realpath($basepath . 'resources/fonts/GreatVibes-Regular.ttf');
+$default_frame = realpath($basepath . 'resources/img/frames/frame.png');
 
 if (empty($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
     $config['picture']['frame'] = $default_frame;
@@ -184,7 +184,7 @@ if (empty($config['collage']['frame']) || !testFile($config['collage']['frame'])
 }
 
 if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
-    $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.jpg');
+    $config['collage']['placeholderpath'] = realpath($basepath . 'resources/img/background/01.jpg');
 }
 
 if (empty($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
@@ -203,11 +203,7 @@ if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
-if (Photobooth::detect_subfolder_install()) {
-    $bg_url = Helper::set_absolute_path(Helper::fix_seperator(Helper::get_rootpath('../resources/img/bg_stone.jpg')));
-} else {
-    $bg_url = '/resources/img/bg_stone.jpg';
-}
+$bg_url = Helper::set_absolute_path(Helper::fix_seperator(Helper::get_rootpath($basepath . 'resources/img/bg_stone.jpg')));
 
 if (empty($config['background']['defaults'])) {
     $config['background']['defaults'] = 'url(' . $bg_url . ')';
