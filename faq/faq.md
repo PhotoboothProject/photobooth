@@ -1019,3 +1019,40 @@ gphoto2 –wait-event=300ms –capture-image-and-download –filename=%s
 ```
 
 Source: [https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochzeiten-und-geburtstage/#comment-1211](https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochzeiten-und-geburtstage/#comment-1211)
+
+### How to upload pictures to a remote server after picture has been taken?
+
+## Goal: 
+After a picture is taken with the photobox upload it automatically to a remote server.
+
+## Usecase: 
+You have a remote server (e.g. with your website on it) or another Raspberry Pi to which you’d like instantly synchronizing your taken pictures. Also you could upload the pictures to a remote server and make them available through the QR code over the internet. By this you would not require people to access a local Wifi to download the picture from your local device which is running your Photobox. 
+
+## How to:
+-	You should have a remote server with an SSH login. Know your username and password: (e.g.: [username.strato-hosting.eu]@ssh.strato.de)
+-	We will be using the Post-photo script / command of the Photobox which you can find in the admin panel in the section Commands. 
+-	The command is being executed after the picture has been taken and gets the picture’s name as an attribute.
+-	Command: 	
+```sh
+scp /var/www/html/photobooth/data/images/%s [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures_on_the_remote_host]
+```
+
+-	If we keep it like that the remote server would require the source server to type in a password each time a picture is being copied to the remote server. An SSH connection using a private/public SSH key needs to be established:
+
+1. Create a public/private key-pair for the www-data user on the source machine (why for that user? The www-data user is executing the Post-photo script/command in the background) – Do not enter a passphrase when prompted.
+```sh
+sudo -u www-data ssh-keygen -t rsa
+```
+2. Copy the public key to the remote (destination) server 
+```sh
+sudo -u www-data ssh-copy-id [username@remotehost]
+```
+3. You can now manually test whether the connection works. Try to copy anything to the remote server and change the file in the below example to a file that you actually have on your source machine. You shouldn’t be prompted with a password, but the copy and transfer should complete successfully just with the following command. If that is going to be successful, copying your pictures automatically should work now.
+```sh
+sudo -u www-data scp /var/www/html/photobooth/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
+```
+
+You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server. 
+
+
+
