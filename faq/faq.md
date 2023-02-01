@@ -1022,13 +1022,13 @@ Source: [https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochze
 
 ### How to upload pictures to a remote server after picture has been taken?
 
-## Goal: 
+#### Goal: 
 After a picture is taken with the photobox upload it automatically to a remote server.
 
-## Usecase: 
+#### Usecase: 
 You have a remote server (e.g. with your website on it) or another Raspberry Pi to which you’d like instantly synchronizing your taken pictures. Also you could upload the pictures to a remote server and make them available through the QR code over the internet. By this you would not require people to access a local Wifi to download the picture from your local device which is running your Photobox. 
 
-## How to:
+#### How to:
 -	You should have a remote server with an SSH login. Know your username and password: (e.g.: [username.strato-hosting.eu]@ssh.strato.de)
 -	We will be using the Post-photo script / command of the Photobox which you can find in the admin panel in the section Commands. 
 -	The command is being executed after the picture has been taken and gets the picture’s name as an attribute.
