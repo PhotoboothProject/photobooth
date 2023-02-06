@@ -26,22 +26,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.version }}
       - name: Install modules
         run: yarn install
       - name: Build
         run: yarn build
       - name: Get git status
         run: git status
-      - if: ${{ matrix.node }} === '12' && ${{ matrix.os }} === 'ubuntu-latest' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+      - if: ${{ matrix.version }} === '12' && ${{ matrix.os }} === 'ubuntu-latest' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         name: Pack zip
         run: yarn pack:build
-      - if: ${{ matrix.node }} === '12' && ${{ matrix.os }} === 'ubuntu-latest' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+      - if: ${{ matrix.version }} === '12' && ${{ matrix.os }} === 'ubuntu-latest' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         name: Publish zip
         uses: actions/upload-artifact@v2
         with:
           name: photobooth
           path: archives/photobooth-*.zip
-      - if: ${{ matrix.node }} === '12' && ${{ matrix.os }} === 'ubuntu-latest' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+      - if: ${{ matrix.version }} === '12' && ${{ matrix.os }} === 'ubuntu-latest' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         name: Remove archives folder
         run: rm -rf archives
