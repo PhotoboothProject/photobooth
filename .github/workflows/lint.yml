@@ -28,7 +28,7 @@ jobs:
       - name: use node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.version }}
       - name: Install modules
         run: yarn install
       - name: Lint
