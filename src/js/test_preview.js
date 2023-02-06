@@ -4,7 +4,7 @@ const photoboothPreviewTest = (function () {
             INIT: 1,
             BACKGROUND: 2,
             COUNTDOWN: 3,
-            TEST: 3
+            TEST: 4
         },
         PreviewStyle = {
             FILL: 'fill',
