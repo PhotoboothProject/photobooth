@@ -41,3 +41,5 @@ jobs:
         with:
           name: photobooth
           path: archives/photobooth-*.zip
+      - name: Remove archives folder
+        run: rm -rf archives
