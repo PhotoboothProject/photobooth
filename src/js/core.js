@@ -95,7 +95,7 @@ const photoBooth = (function () {
         photoboothTools.console.log('Timeout for auto reload cleared.');
 
         if (!api.takingPic) {
-            photoboothTools.console.logDev('Timeout for auto reload set to', timeToLive, ' milliseconds.');
+            photoboothTools.console.logDev('Timeout for auto reload set to' + timeToLive + ' milliseconds.');
             timeOut = setTimeout(function () {
                 photoboothTools.reloadPage();
             }, timeToLive);
@@ -266,7 +266,7 @@ const photoBooth = (function () {
             photoStyle = PhotoStyle.CHROMA;
         }
 
-        photoboothTools.console.log('PhotoStyle: ', photoStyle);
+        photoboothTools.console.log('PhotoStyle: ' + photoStyle);
 
         photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry);
 
@@ -320,6 +320,7 @@ const photoBooth = (function () {
                     error: 'No preview by device cam available!'
                 });
             } else {
+                photoboothTools.console.logDev('Capture image.');
                 api.takePic(photoStyle, retry);
             }
         }, triggerCnt * 1000);
@@ -376,6 +377,7 @@ const photoBooth = (function () {
                 photoboothTools.getTranslation('retry_message') + ' ' + retry + '/' + config.picture.retry_on_error
             )
         );
+        photoboothTools.console.logDev('Retry to capture image: ' + retry);
         setTimeout(() => {
             api.thrill(photoStyle, retry);
         }, retryTimeout);
@@ -398,8 +400,8 @@ const photoBooth = (function () {
                 $('#' + imgFilter).addClass('activeSidenavBtn');
 
                 if (result.error) {
+                    photoboothTools.console.logDev('Error while taking picture.');
                     if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                        photoboothTools.console.logDev('Error while taking picture. Retrying. Retry: ' + retry);
                         api.retryTakePic(data.style, retry);
                     } else {
                         api.errorPic(result);
