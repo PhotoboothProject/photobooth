@@ -516,11 +516,10 @@ const photoBooth = (function () {
                                 loaderImage.css('display', 'none');
                                 api.deleteImage(result.collage_file, () => {
                                     setTimeout(function () {
-                                        photoboothTools.reloadPage();
+                                        api.nextCollageNumber = result.current;
+                                        api.thrill(PhotoStyle.COLLAGE);
                                     }, notificationTimeout);
                                 });
-                                api.nextCollageNumber = result.current;
-                                api.thrill(PhotoStyle.COLLAGE);
                             });
 
                         loading
