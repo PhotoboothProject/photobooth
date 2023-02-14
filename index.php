@@ -29,7 +29,7 @@ if (
         $images = getImagesFromDirectory($config['foldersAbs']['images']);
     }
 
-    $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
+    $imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;
 
     $btnClass = 'btn btn--' . $config['ui']['button'];
     $btnShape = 'shape--' . $config['ui']['button'];

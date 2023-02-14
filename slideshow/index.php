@@ -9,7 +9,7 @@ if ($config['database']['enabled']) {
 } else {
 	$images = getImagesFromDirectory($config['foldersAbs']['images']);
 }
-$imagelist = array_reverse($images);
+$imagelist = !empty($images) ? array_reverse($images) : $images;
 
 $uiShape = 'shape--' . $config['ui']['style'];
 ?>
