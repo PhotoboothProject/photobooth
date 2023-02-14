@@ -18,7 +18,7 @@ if ($config['database']['enabled']) {
 	$images = getImagesFromDirectory($config['foldersAbs']['images']);
 }
 
-$imagelist = ($config['gallery']['newest_first'] === true) ? array_reverse($images) : $images;
+$imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;
 
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
