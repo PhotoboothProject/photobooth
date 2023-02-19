@@ -23,5 +23,7 @@
   "collage:collage_background_color": "Barva pozadí koláže",
   "collage:collage_cntdwn_time": "Časovač odpočítávání při pořizování koláže:",
   "collage:collage_enabled": "Povolit tvorbu koláže",
-  "collage:collage_frame": "Rámeček"
+  "collage:collage_frame": "Rámeček",
+  "hideFrame": "Skrýt rámečky",
+  "showPictureFrame": "Zobrazit rámeček obrázku"
 }
