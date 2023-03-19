@@ -786,6 +786,8 @@ const photoBooth = (function () {
         const bigImg = new Image();
         let thumbSize = '';
         let bigSize = '';
+        let bigSizeW = '';
+        let bigSizeH = '';
 
         let imgtoLoad = 2;
 
@@ -797,7 +799,9 @@ const photoBooth = (function () {
         };
 
         bigImg.onload = function () {
-            bigSize = this.width + 'x' + this.height;
+            bigSizeW = this.width;
+            bigSizeH = this.height;
+            bigSize = bigSizeW + 'x' + bigSizeH;
             if (--imgtoLoad === 0) {
                 allLoaded();
             }
@@ -811,6 +815,8 @@ const photoBooth = (function () {
 
             linkElement.attr('class', 'gallery__img rotaryfocus');
             linkElement.attr('data-size', bigSize);
+            linkElement.attr('data-pswp-width', bigSizeW);
+            linkElement.attr('data-pswp-height', bigSizeH);
             linkElement.attr('href', config.foldersJS.images + '/' + imageName);
             linkElement.attr('data-med', config.foldersJS.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);

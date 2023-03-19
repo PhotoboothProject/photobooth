@@ -39,7 +39,7 @@
                 $imageinfoThumb = getimagesize($filename_thumb);
             ?>
 
-			<a href="<?=$filename_photo?>" class="gallery__img rotaryfocus" data-size="<?=$imageinfo[0]?>x<?=$imageinfo[1]?>"
+			<a href="<?=$filename_photo?>" class="gallery__img rotaryfocus" data-size="<?=$imageinfo[0]?>x<?=$imageinfo[1]?>" data-pswp-width="<?=$imageinfo[0]?>" data-pswp-height="<?=$imageinfo[1]?>"
 				data-med="<?=$filename_thumb?>" data-med-size="<?=$imageinfoThumb[0]?>x<?=$imageinfoThumb[1]?>">
 				<figure class="<?php echo $uiShape; ?>">
 					<img class="<?php echo $uiShape; ?>" src="<?=$filename_thumb?>" alt="<?=$image?>" />

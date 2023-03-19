@@ -53,11 +53,7 @@ $GALLERY_FOOTER = false;
 	<link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
 	<link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
 	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
-	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/default-skin/default-skin.css" />
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>" />
-	<?php if ($config['gallery']['bottom_bar']): ?>
-	<link rel="stylesheet" href="resources/css/photoswipe-bottom.css?v=<?php echo $config['photobooth']['version']; ?>" />
-	<?php endif; ?>
 	<?php if (is_file("private/overrides.css")): ?>
 	<link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
 	<?php endif; ?>
@@ -67,8 +63,6 @@ $GALLERY_FOOTER = false;
 	<div id="wrapper">
 		<?php include('template/gallery.template.php'); ?>
 	</div>
-
-	<?php include('template/pswp.template.php'); ?>
 
 	<?php include('template/send-mail.template.php'); ?>
 
@@ -88,11 +82,11 @@ $GALLERY_FOOTER = false;
 	<script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe.min.js"></script>
-	<script type="text/javascript" src="vendor/PhotoSwipe/dist/photoswipe-ui-default.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/umd/photoswipe.umd.min.js"></script>
+	<script type="text/javascript" src="vendor/PhotoSwipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
 	<script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-	<script type="text/javascript" src="resources/js/photoinit.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
