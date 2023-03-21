@@ -171,8 +171,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         });
 
         const resetMailForm = function () {
-            $('.pswp__qr').removeClass('qr-active').fadeOut('fast');
-
+            photoboothTools.modal.close('#qrPswp');
             photoBooth.resetMailForm();
 
             $('.send-mail').removeClass('mail-active').fadeOut('fast');
@@ -220,37 +219,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        const pswpQR = $('.pswp__qr');
-
-        if (pswpQR.hasClass('qr-active')) {
-            pswpQR.removeClass('qr-active').fadeOut('fast');
-        } else {
-            pswpQR.empty();
-            const qrHelpText = config.qr.custom_text
-                ? config.qr.text
-                : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
-            let img = gallery.currItem.src;
-            img = img.split('\\').pop().split('/').pop();
-
-            $('<button>')
-                .on('click touchstart', function (ev) {
-                    ev.preventDefault();
-                    ev.stopPropagation();
-                    $('.pswp__qr').empty().removeClass('qr-active').fadeOut('fast');
-                })
-                .append('<i class="' + config.icons.close + '"></i>')
-                .css('float', 'right')
-                .appendTo(pswpQR);
-            $('<img>')
-                .attr('src', 'api/qrcode.php?filename=' + img)
-                .appendTo(pswpQR);
-            $('<p>')
-                .css('max-width', this.width + 'px')
-                .html(qrHelpText)
-                .appendTo(pswpQR);
-
-            pswpQR.addClass('qr-active').fadeIn('fast');
-        }
+        const image = gallery.currItem.src.split('\\').pop().split('/').pop();
+        photoBooth.showQr('#qrPswp', image);
+        photoboothTools.modal.toggle('#qrPswp');
     });
 
     // print in gallery
