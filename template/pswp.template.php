@@ -85,5 +85,4 @@
             </div>
         </div>
     </div>
-    <div class="pswp__qr <?php echo $uiShape; ?>"></div>
 </div>

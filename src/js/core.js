@@ -46,7 +46,6 @@ const photoBooth = (function () {
         printBtn = $('.printbtn'),
         deleteBtn = $('.deletebtn'),
         qrBtn = $('.qrbtn'),
-        qrCodeModal = $('#qrCode'),
         counter = $('#counter'),
         resultInner = $('.resultInner'),
         spinner = $('.spinner'),
@@ -668,18 +667,20 @@ const photoBooth = (function () {
         api.resetTimeOut();
     };
 
-    api.renderPic = function (filename, files) {
+    api.showQr = function (modal, filename) {
+        photoboothTools.modal.empty(modal);
+
         const qrHelpText = config.qr.custom_text
             ? config.qr.text
             : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
-        photoboothTools.modal.empty(qrCodeModal);
-        const body = qrCodeModal.find('.modal__body');
+        const body = $(modal).find('.modal__body');
+
         $('<button>')
             .on('click touchstart', function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                photoboothTools.modal.close('#qrCode');
+                photoboothTools.modal.close(modal);
             })
             .append('<i class="' + config.icons.close + '"></i>')
             .css('float', 'right')
@@ -692,6 +693,11 @@ const photoBooth = (function () {
                     .appendTo(body);
             })
             .appendTo(body);
+        $(modal).addClass('shape--' + config.ui.style);
+    };
+
+    api.renderPic = function (filename, files) {
+        api.showQr('#qrCode', filename);
 
         $(document).off('click touchstart', '.printbtn');
         $(document).on('click', '.printbtn', function (e) {
