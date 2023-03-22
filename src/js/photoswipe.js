@@ -75,6 +75,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 html: '<i class="' + config.icons.mail + '"></i>',
                 // eslint-disable-next-line no-unused-vars
                 onClick: (event, el, pswp) => {
+                    $('.pswp').append($('.send-mail'));
                     photoBooth.resetMailForm();
                     photoBooth.toggleMailDialog(pswp.currSlide.data.src.split('\\').pop().split('/').pop());
                 }
