@@ -29,7 +29,6 @@ $GALLERY_FOOTER = false;
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 	<meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
 	<meta name="theme-color" content="<?=$config['colors']['primary']?>">
-	<meta http-equiv="refresh" content= "<?=$config['slideshow']['refreshTime']?>">
 
 	<title><?=$config['ui']['branding']?> Slideshow</title>
 
