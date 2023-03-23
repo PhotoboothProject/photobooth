@@ -4,10 +4,13 @@
 // eslint-disable-next-line no-unused-vars
 let PhotoSwipeLightbox,
     ssRunning = false,
-    ssOnce = false;
+    ssOnce = false,
+    lastDBSize = -1;
 
 const ssDelay = config.slideshow.pictureTime,
-    ssButtonClass = '.pswp__button--playpause';
+    ssButtonClass = '.pswp__button--playpause',
+    interval = 1000 * config.slideshow.refreshTime,
+    ajaxurl = 'gallery.php?status';
 
 // eslint-disable-next-line no-unused-vars
 function initPhotoSlideFromDOM(gallerySelector) {
@@ -97,10 +100,10 @@ function initPhotoSlideFromDOM(gallerySelector) {
 
     gallery.on('afterInit', () => {
         // photoswipe fully initialized and opening transition is running (if available)
-            if ($('#galimages').children('a').length > 0) {
-                $('.pswp__button--playpause i:first').toggleClass(config.icons.slideshow_toggle);
-                setSlideshowState(ssButtonClass, !ssRunning);
-            }
+        if ($('#galimages').children('a').length > 0) {
+            $('.pswp__button--playpause i:first').toggleClass(config.icons.slideshow_toggle);
+            setSlideshowState(ssButtonClass, !ssRunning);
+        }
     });
 
     gallery.init();
@@ -137,4 +140,24 @@ $(function () {
     }
 
     $('#gallery').addClass('gallery--open');
+
+    function dbUpdated() {
+        photoboothTools.console.log('DB is updated - refreshing');
+        //location.reload(true); //Alternative
+        photoboothTools.reloadPage();
+    }
+
+    const checkForUpdates = function () {
+        $.getJSON({
+            url: ajaxurl,
+            success: function (result) {
+                const currentDBSize = result.dbsize;
+                if (lastDBSize != currentDBSize && lastDBSize != -1) {
+                    dbUpdated();
+                }
+                lastDBSize = currentDBSize;
+            }
+        });
+    };
+    setInterval(checkForUpdates, interval);
 });
