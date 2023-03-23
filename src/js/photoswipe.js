@@ -209,6 +209,12 @@ function initPhotoSwipeFromDOM(gallerySelector) {
     gallery.on('afterInit', () => {
         // photoswipe fully initialized and opening transition is running (if available)
         $('.pswp__button').addClass('rotaryfocus');
+        $('.pswp__button--close').empty();
+        $('.pswp__button--close').html('<i class="' + config.icons.close + '"></i>');
+        if (config.pswp.zoomEl) {
+            $('.pswp__button--zoom').empty();
+            $('.pswp__button--zoom').html('<i class="' + config.icons.zoom + '"></i>');
+        }
     });
     gallery.init();
     rotaryController.focusSet('.pswp');
