@@ -125,8 +125,6 @@ const photoBooth = (function () {
     api.init = function () {
         api.reset();
 
-        initPhotoSwipeFromDOM('#galimages');
-
         resultPage.hide();
         startPage.addClass('open');
         if (usesBackgroundPreview) {
@@ -137,6 +135,8 @@ const photoBooth = (function () {
 
         initRemoteBuzzerFromDOM();
         rotaryController.focusSet('#start');
+
+        initPhotoSwipeFromDOM('#galimages');
 
         if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             blocker.css('background-image', 'url(' + config.ui.shutter_cheese_img + ')');
