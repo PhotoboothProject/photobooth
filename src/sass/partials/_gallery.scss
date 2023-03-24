@@ -100,8 +100,7 @@
 }
 
 .gallery__reload,
-.gallery__close,
-.pswp__button--close {
+.gallery__close {
   width: 2em;
   height: 2em;
   line-height: 1em;
@@ -136,19 +135,5 @@
   /* For mobile phones: */
   .gallery__body a {
     width: 33.33333%;
-  }
-}
-
-@media (max-width: 800px) {
-  .pswp__button--arrow--left:before,
-  .pswp__button--arrow--right:before {
-    top: 50%;
-    position: fixed;
-  }
-  .pswp__button--arrow--left:before {
-    left: 5%;
-  }
-  .pswp__button--arrow--right:before {
-    right: 5%;
   }
 }
