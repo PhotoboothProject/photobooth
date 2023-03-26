@@ -45,7 +45,7 @@ function takePicture($filename) {
 
         exec($cmd, $output, $returnValue);
 
-        if ($returnValue) {
+        if ($returnValue && $config['dev']['loglevel'] > 1) {
             $ErrorData = [
                 'error' => 'Take picture command returned an error code',
                 'cmd' => $cmd,
