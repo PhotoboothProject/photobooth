@@ -55,8 +55,9 @@ function takePicture($filename) {
             ];
             $ErrorString = json_encode($ErrorData);
             logError($ErrorData);
-            die($ErrorString);
-        } elseif (!file_exists($filename)) {
+        }
+
+        if (!file_exists($filename)) {
             $ErrorData = [
                 'error' => 'File was not created',
                 'cmd' => $cmd,
