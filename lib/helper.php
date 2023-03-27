@@ -62,7 +62,7 @@ class Photobooth {
 
 class Helper {
     public static function get_rootpath($relative_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) {
-        return str_replace($_SERVER['DOCUMENT_ROOT'], '', realpath($relative_path));
+        return str_replace(Photobooth::get_web_root(), '', realpath($relative_path));
     }
 
     public static function fix_seperator($fix_path) {
