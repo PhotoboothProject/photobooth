@@ -173,7 +173,9 @@ const photoboothPreview = (function () {
             if (config.preview.killcmd) {
                 api.stopPreviewVideo();
             } else {
-                api.stopVideo();
+                setTimeout(() => {
+                    api.stopVideo();
+                }, config.picture.cntdwn_offset * 1000);
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             url.removeClass('streaming');
