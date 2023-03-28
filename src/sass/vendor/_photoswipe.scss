@@ -13,6 +13,9 @@
 .pswp__button--reload {
   color: $galleryButtonColor;
   background: transparent !important;
+  font-size: 1.625em;
+  width: calc(2.375 * 1em);
+  height: calc(1.375 * 1em);
 
   &:hover {
     opacity: 1;
@@ -28,4 +31,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+}
+
+.pswp__counter {
+  width: 56px;
+}
+
+.pswp__top-bar {
+  top: 13px;
+  padding-right: 30px;
 }
