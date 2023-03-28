@@ -22,7 +22,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         clickToCloseNonZoomable: config.pswp.clickToCloseNonZoomable,
         counter: config.pswp.counterEl,
         zoom: config.pswp.zoomEl,
-        tapAction: config.pswp.tapToToggleControls ? 'close' : false,
+        tapAction: config.pswp.tapToToggleControls ? 'toggle-controls' : false,
         bgClickAction: config.pswp.closeOnOutsideClick ? 'close' : false,
 
         wheelToZoom: true,
