@@ -84,6 +84,9 @@ $GALLERY_FOOTER = false;
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/umd/photoswipe.umd.min.js"></script>
 	<script type="text/javascript" src="vendor/PhotoSwipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
+	<script type="text/javascript">
+		onStandaloneGalleryView = true;
+	</script>
 	<script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
@@ -98,9 +101,5 @@ $GALLERY_FOOTER = false;
 	<script type="text/javascript" src="resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 	<?php require_once('lib/services_start.php'); ?>
-
-	<script type="text/javascript">
-		onStandaloneGalleryView = true;
-	</script>
 </body>
 </html>
