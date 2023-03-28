@@ -892,23 +892,11 @@ $configsetup = [
             'name' => 'gallery[pictureTime]',
             'value' => $config['gallery']['pictureTime'],
         ],
-        'pswp_animateTransitions' => [
-            'view' => 'advanced',
-            'type' => 'checkbox',
-            'name' => 'pswp[animateTransitions]',
-            'value' => $config['pswp']['animateTransitions'],
-        ],
         'pswp_counterEl' => [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'pswp[counterEl]',
             'value' => $config['pswp']['counterEl'],
-        ],
-        'pswp_history' => [
-            'view' => 'advanced',
-            'type' => 'checkbox',
-            'name' => 'pswp[history]',
-            'value' => $config['pswp']['history'],
         ],
         'gallery_show_date' => [
             'view' => 'advanced',
@@ -972,23 +960,11 @@ $configsetup = [
             'name' => 'pswp[clickToCloseNonZoomable]',
             'value' => $config['pswp']['clickToCloseNonZoomable'],
         ],
-        'pswp_closeOnScroll' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'pswp[closeOnScroll]',
-            'value' => $config['pswp']['closeOnScroll'],
-        ],
         'pswp_closeOnOutsideClick' => [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'pswp[closeOnOutsideClick]',
             'value' => $config['pswp']['closeOnOutsideClick'],
-        ],
-        'pswp_preventSwiping' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'pswp[preventSwiping]',
-            'value' => $config['pswp']['preventSwiping'],
         ],
         'pswp_pinchToClose' => [
             'view' => 'expert',
@@ -1013,12 +989,6 @@ $configsetup = [
             'type' => 'checkbox',
             'name' => 'pswp[zoomEl]',
             'value' => $config['pswp']['zoomEl'],
-        ],
-        'pswp_fullscreenEl' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'pswp[fullscreenEl]',
-            'value' => $config['pswp']['fullscreenEl'],
         ],
         'pswp_loop' => [
             'view' => 'expert',
