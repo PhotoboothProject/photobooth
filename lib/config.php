@@ -7,6 +7,7 @@ require_once __DIR__ . '/helper.php';
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
 $basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
+$rootpath = Helper::fix_seperator(Helper::get_rootpath($basepath));
 
 $cmds = [
     'windows' => [
@@ -132,7 +133,7 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
 }
 
 if (empty($config['ui']['folders_lang'])) {
-    $config['ui']['folders_lang'] = Helper::get_rootpath($basepath . 'resources/lang');
+    $config['ui']['folders_lang'] = $rootpath . '/resources/lang';
 }
 
 $config['ui']['folders_lang'] = Helper::set_absolute_path(Helper::fix_seperator($config['ui']['folders_lang']));
@@ -203,7 +204,7 @@ if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
-$bg_url = Helper::set_absolute_path(Helper::fix_seperator(Helper::get_rootpath($basepath . 'resources/img/bg_stone.jpg')));
+$bg_url = Helper::set_absolute_path($rootpath . '/resources/img/bg_stone.jpg');
 
 if (empty($config['background']['defaults'])) {
     $config['background']['defaults'] = 'url(' . $bg_url . ')';
