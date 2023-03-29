@@ -66,6 +66,27 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         // counter - 5, zoom button - 10, info - 15, close - 20.
         const orderNumber = [7, 8, 9, 11, 12, 13, 14];
 
+        if (config.pswp.caption) {
+            gallery.pswp.ui.registerElement({
+                name: 'custom-caption',
+                order: 6,
+                isButton: false,
+                appendTo: 'root',
+                html: 'Caption text',
+                // eslint-disable-next-line no-unused-vars
+                onInit: (el, pswp) => {
+                    gallery.pswp.on('change', () => {
+                        const currSlideElement = gallery.pswp.currSlide.data.element;
+                        let captionHTML = '';
+                        if (currSlideElement) {
+                            captionHTML = currSlideElement.querySelector('img').getAttribute('alt');
+                        }
+                        el.innerHTML = captionHTML || '';
+                    });
+                }
+            });
+        }
+
         if (config.mail.enabled) {
             gallery.pswp.ui.registerElement({
                 name: 'mail',

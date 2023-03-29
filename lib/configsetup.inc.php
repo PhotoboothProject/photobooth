@@ -954,6 +954,12 @@ $configsetup = [
             'name' => 'gallery[action_footer]',
             'value' => $config['gallery']['action_footer'],
         ],
+        'pswp_caption' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'pswp[caption]',
+            'value' => $config['pswp']['caption'],
+        ],
         'pswp_clickToCloseNonZoomable' => [
             'view' => 'expert',
             'type' => 'checkbox',
