@@ -148,13 +148,15 @@ $config['gallery']['figcaption'] = true;
 $config['gallery']['action_footer'] = true;
 $config['pswp']['caption'] = true;
 $config['pswp']['clickToCloseNonZoomable'] = false;
-$config['pswp']['closeOnOutsideClick'] = false;
 $config['pswp']['pinchToClose'] = true;
 $config['pswp']['closeOnVerticalDrag'] = true;
-$config['pswp']['tapToToggleControls'] = true;
 $config['pswp']['zoomEl'] = false;
 $config['pswp']['loop'] = true;
 $config['pswp']['bgOpacity'] = 1;
+$config['pswp']['imageClickAction'] = 'toggle-controls';
+$config['pswp']['tapAction'] = 'toggle-controls';
+$config['pswp']['doubleTapAction'] = 'zoom';
+$config['pswp']['bgClickAction'] = 'none';
 
 
 // P R E V I E W
