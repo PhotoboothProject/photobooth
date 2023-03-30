@@ -8,7 +8,11 @@ let PhotoSwipeLightbox,
     isPrinting = false;
 
 const ssDelay = config.gallery.pictureTime,
-    ssButtonClass = '.pswp__button--playpause';
+    ssButtonClass = '.pswp__button--playpause',
+    actionImageClick = config.pswp.imageClickAction === 'none' ? false : config.pswp.imageClickAction,
+    actionBgClick = config.pswp.bgClickAction === 'none' ? false : config.pswp.bgClickAction,
+    actionTap = config.pswp.tapAction === 'none' ? false : config.pswp.tapAction,
+    actionDoubleTap = config.pswp.doubleTapAction === 'none' ? false : config.pswp.doubleTapAction;
 
 // eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
@@ -22,8 +26,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         clickToCloseNonZoomable: config.pswp.clickToCloseNonZoomable,
         counter: config.pswp.counterEl,
         zoom: config.pswp.zoomEl,
-        tapAction: config.pswp.tapToToggleControls ? 'toggle-controls' : false,
-        bgClickAction: config.pswp.closeOnOutsideClick ? 'close' : false,
+        imageClickAction: actionImageClick,
+        bgClickAction: actionBgClick,
+        tapAction: actionTap,
+        doubleTapAction: actionDoubleTap,
 
         wheelToZoom: true,
         // eslint-disable-next-line object-property-newline
