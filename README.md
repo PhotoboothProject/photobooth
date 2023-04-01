@@ -33,9 +33,9 @@ _Latest development version:_
     to take pictures.
 - Images are processed with GD.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
-- Updated [PhotoSwipe Gallery](https://github.com/PhotoboothProject/PhotoSwipe)
-- Standalone Gallery ([localhost/gallery.php](http://localhost/gallery.php)).
-- Slideshow via Gallery or standalone Gallery at [localhost/slideshow](http://localhost/slideshow).
+- Gallery based on [PhotoSwipe v5](https://github.com/PhotoboothProject/PhotoSwipe)
+- Standalone Gallery based on PhotoSwipe v5 ([localhost/gallery.php](http://localhost/gallery.php)).
+- Standalone Slideshow based on PhotoSwipe v5 ([localhost/slideshow](http://localhost/slideshow)).
 - Access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php).
 - Offline manual with settings explained at [localhost/manual](http://localhost/manual).
 - Offline FAQ at [localhost/manual/faq.php](http://localhost/manual/faq.php).
@@ -47,31 +47,7 @@ _Latest development version:_
   - Hardware Button functionality, supports two separate modes of operation (select via admin panel):
     - **Button Mode**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
     - **Rotary Mode**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions.
-  - Gallery:
-    - Order pictures in gallery ascending oder descending by picture age.
-    - Hide the gallery.
-    - allow to adjust PhotoSwipe Gallery config via Adminpanel, also allow to use some PhotoSwipe functions and make more PhotoSwipe settings available (settings explained inside the manual):
-      - Mouse click on image should close the gallery (enable/disable)
-      - Close gallery if clicked outside of the image (enable/disable)
-      - Close picture on page scroll (enable/disable)
-      - Close gallery when dragging vertically and when image is not zoomed (enable/disable)
-      - Show image counter (enable/disable)
-      - Show PhotoSwipe fullscreen button (enable/disable)
-      - Show PhotoSwipe zoom button (enable/disable)
-      - PhotoSwipe history module (enable/disable)
-      - Pinch to close gallery (enable/disable)
-      - Toggle visibility of controls/buttons by tap (enable/disable)
-      - allow to adjust PhotoSwipe background opacity (0-1)
-      - Loop images (enable/disable)
-      - Slide transition effect (enable/disable)
-      - Swiping to change slides (enable/disable)
-    - gallery: button to delete an image, enable by default
-    - Choose thumbnail size:
-      - XS = max 360px
-      - S = max 540px
-      - M = max 900px
-      - L = max 1080px
-      - XL = max 1260px"
+  - Gallery: allow to adjust the look and feel (settings explained inside the manual).
   - Choose between date-formatted or random image names.
   - Choose an image filter after taking a picture.
   - QR-Code to allow downloading pictures from your Photobooth.
@@ -103,7 +79,7 @@ _Latest development version:_
 
 ## :gear: Prerequisites
 
-- gphoto2, if used on a Raspberry for DSLR control
+- gphoto2, if used on Linux for DSLR control
 - digiCamControl, if used on Windows for DSLR control
 - Apache, NGINX or Lighttpd
 
