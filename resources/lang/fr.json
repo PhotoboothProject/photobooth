@@ -60,6 +60,7 @@
   "commands:nodebin_cmd": "Chemin de l'exécutable de Node.js",
   "commands:post_photo_cmd": "Script / commande post-photo",
   "commands:pre_photo_cmd": "Script / commande pré-photo",
+  "commands:preview_bsm": "Exécuter la commande de démarrage pour la prévisualisation lors de la prise de photo/collage",
   "commands:preview_cmd": "Commande permettant de générer un aperçu en direct",
   "commands:preview_killcmd": "Commande pour quitter l'aperçu en direct",
   "commands:print_cmd": "Commande d'impression",

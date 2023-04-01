@@ -161,7 +161,6 @@ $config['pswp']['bgOpacity'] = 1;
 // Please read https://photoboothproject.github.io/FAQ#how-to-use-a-live-stream-as-background-at-countdown
 // possible preview_mode values: none, device_cam, url
 $config['preview']['mode'] = 'none';
-$config['preview']['bsm'] = true;
 $config['preview']['stop_time'] = '2';
 $config['preview']['camTakesPic'] = false;
 $config['preview']['style'] = 'scale-down';
@@ -405,6 +404,7 @@ $config['exiftool']['cmd'] = '';
 $config['exiftool']['msg'] = '';
 $config['preview']['cmd'] = '';
 $config['preview']['killcmd'] = '';
+$config['preview']['bsm'] = true;
 $config['nodebin']['cmd'] = '';
 $config['pre_photo']['cmd'] = '';
 $config['post_photo']['cmd'] = '';

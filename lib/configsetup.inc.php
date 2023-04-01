@@ -1027,11 +1027,6 @@ $configsetup = [
             ],
             'value' => $config['preview']['mode'],
         ],
-        'preview_bsm' => [
-            'type' => 'checkbox',
-            'name' => 'preview[bsm]',
-            'value' => $config['preview']['bsm'],
-        ],
         'preview_stop_time' => [
             'type' => 'range',
             'placeholder' => $defaultConfig['preview']['stop_time'],
@@ -2515,6 +2510,11 @@ $configsetup = [
             'placeholder' => $defaultConfig['preview']['killcmd'],
             'name' => 'preview[killcmd]',
             'value' => htmlentities($config['preview']['killcmd'] ?? ''),
+        ],
+        'preview_bsm' => [
+            'type' => 'checkbox',
+            'name' => 'preview[bsm]',
+            'value' => $config['preview']['bsm'],
         ],
         'nodebin_cmd' => [
             'view' => 'expert',
