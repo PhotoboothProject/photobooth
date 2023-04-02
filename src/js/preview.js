@@ -178,8 +178,10 @@ const photoboothPreview = (function () {
                 }, config.picture.cntdwn_offset * 1000);
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            url.removeClass('streaming');
-            url.hide();
+            setTimeout(() => {
+                url.removeClass('streaming');
+                url.hide();
+            }, config.picture.cntdwn_offset * 1000);
         }
     };
 
