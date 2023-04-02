@@ -69,7 +69,7 @@
 
     a {
       display: block;
-      width: 33.333333333333%;
+      width: 19%;
       padding: 0.5em;
       max-width: 500px;
       text-decoration: none;
@@ -130,6 +130,13 @@
 .gallery__img:hover > img,
 .gallery__img.focused > img {
   opacity: 0.6 !important;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .gallery__body a {
+    width: 33.33333%;
+  }
 }
 
 @media (max-width: 800px) {
