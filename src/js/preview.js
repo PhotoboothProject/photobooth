@@ -135,8 +135,10 @@ const photoboothPreview = (function () {
                         break;
                     case PreviewMode.URL.valueOf():
                         photoboothTools.console.logDev('Preview at countdown from URL.');
-                        url.show();
-                        url.addClass('streaming');
+                        setTimeout(function () {
+                            url.show();
+                            url.addClass('streaming');
+                        }, config.preview.url_delay);
                         break;
                     default:
                         photoboothTools.console.log('Call for unexpected preview mode.');
@@ -154,8 +156,10 @@ const photoboothPreview = (function () {
                         break;
                     case PreviewMode.URL.valueOf():
                         photoboothTools.console.logDev('Preview from URL.');
-                        url.show();
-                        url.addClass('streaming');
+                        setTimeout(function () {
+                            url.show();
+                            url.addClass('streaming');
+                        }, config.preview.url_delay);
                         break;
                     default:
                         photoboothTools.console.log('Call for unexpected preview mode.');

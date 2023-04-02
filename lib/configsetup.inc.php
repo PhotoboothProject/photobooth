@@ -1093,6 +1093,17 @@ $configsetup = [
             'placeholder' => 'url(http://localhost:8081)',
             'value' => htmlentities($config['preview']['url'] ?? ''),
         ],
+        'preview_url_delay' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['preview']['url_delay'],
+            'name' => 'preview[url_delay]',
+            'value' => $config['preview']['url_delay'],
+            'range_min' => 0,
+            'range_max' => 30000,
+            'range_step' => 250,
+            'unit' => 'milliseconds',
+        ],
         'preview_videoWidth' => [
             'type' => 'number',
             'name' => 'preview[videoWidth]',

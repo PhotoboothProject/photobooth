@@ -170,6 +170,7 @@ $config['preview']['flip'] = 'off';
 // possible rotation values: '0deg', '90deg', -90deg', '180deg', '45deg', '-45deg'
 $config['preview']['rotation'] = '0deg';
 $config['preview']['url'] = '';
+$config['preview']['url_delay'] = '1000';
 $config['preview']['videoWidth'] = '1280';
 $config['preview']['videoHeight'] = '720';
 // possible camera_mode values: "user", "environment"
