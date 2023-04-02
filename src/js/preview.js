@@ -88,7 +88,7 @@ const photoboothPreview = (function () {
 
     api.startWebcam = function () {
         const dataVideo = {
-            play: 'true'
+            play: 'start'
         };
 
         jQuery
@@ -208,7 +208,7 @@ const photoboothPreview = (function () {
 
     api.stopPreviewVideo = function () {
         const dataVideo = {
-            play: 'false',
+            play: 'stop',
             pid: pid
         };
 

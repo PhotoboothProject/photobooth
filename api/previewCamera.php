@@ -28,7 +28,7 @@ function isRunning($pid) {
     return false;
 }
 
-if ($_POST['play'] === 'true') {
+if ($_POST['play'] === 'start') {
     $cmd = sprintf($config['preview']['cmd']);
     if ($simpleExec) {
         exec($cmd);
