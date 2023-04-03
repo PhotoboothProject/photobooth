@@ -46,9 +46,9 @@ PHOTOBOOTH_SUBMODULES=(
         'vendor/Seriously'
 )
 
-# Node.js v16.20.(0 or newer) is needed on installation via git
+# Node.js v18.15.(0 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
-NEEDED_NODE_VERSION="v16.20.(0 or newer)"
+NEEDED_NODE_VERSION="v18.15.(0 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
@@ -283,8 +283,8 @@ check_nodejs() {
     minor=${VER[1]}
     micro=${VER[2]}
 
-    if [[ -n "$major" && "$major" -eq "16" ]]; then
-        if [[ -n "$minor" && "$minor" -eq "20" ]]; then
+    if [[ -n "$major" && "$major" -eq "18" ]]; then
+        if [[ -n "$minor" && "$minor" -eq "15" ]]; then
             if [[ -n "$micro" && "$micro" -ge "0" ]]; then
                 info "[Info]      Node.js matches our requirements!"
             elif [[ -n "$micro" ]]; then
@@ -342,14 +342,14 @@ update_nodejs() {
     fi
 
     if [ "$RUNNING_ON_PI" = true ]; then
-        info "[Package]   Installing Node.js v16.20.0"
+        info "[Package]   Installing Node.js v18.15.0"
         wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
-        node-install -v 16.20.0
+        node-install -v 18.15.0
         NODEJS_CHECKED=true
         check_nodejs
     else
-        info "[Package]   Installing latest Node.js v16"
-        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+        info "[Package]   Installing latest Node.js v18"
+        curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
         apt-get install -y nodejs
         NODEJS_CHECKED=true
         check_nodejs
