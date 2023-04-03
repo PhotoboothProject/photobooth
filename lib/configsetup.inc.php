@@ -107,7 +107,6 @@ $configsetup = [
                 'basic' => 'Basic View',
                 'advanced' => 'Advanced View',
                 'expert' => 'Expert View',
-                'experimental' => 'Experimental View',
             ],
             'value' => $config['adminpanel']['view'],
         ],
@@ -116,6 +115,12 @@ $configsetup = [
             'type' => 'hidden',
             'name' => 'adminpanel[view_default]',
             'value' => $config['adminpanel']['view_default'],
+        ],
+        'adminpanel_experimental_settings' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'adminpanel[experimental_settings]',
+            'value' => $config['adminpanel']['experimental_settings'],
         ],
         'dev_demo_images' => [
             'view' => 'basic',

@@ -11,6 +11,7 @@ $config = array();
 $config['ui']['language'] = 'en';
 $config['ui']['folders_lang'] = '';
 $config['adminpanel']['view'] = 'basic';
+$config['adminpanel']['experimental_settings'] = false;
 $config['dev']['loglevel'] = '1';
 $config['dev']['demo_images'] = false;
 $config['start_screen']['title'] = 'Photobooth';

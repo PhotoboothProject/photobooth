@@ -69,7 +69,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
                         switch ($setting['view'])
                         {
                                 case 'experimental':
-                                     if ($config['adminpanel']['view'] != 'experimental') { $element_class = 'hidden'; };
+                                     if (!$config['adminpanel']['experimental_settings']) { $element_class = 'hidden'; };
                                      break;
                                 case 'expert':
                                      if ($config['adminpanel']['view'] == 'advanced') { $element_class = 'hidden'; };
