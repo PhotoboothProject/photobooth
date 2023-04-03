@@ -86,19 +86,20 @@ const photoboothPreview = (function () {
         }
     };
 
-    api.startWebcam = function () {
+    api.runCmd = function (mode) {
         const dataVideo = {
-            play: 'start'
+            play: mode,
+            pid: pid
         };
 
         jQuery
             .post('api/previewCamera.php', dataVideo)
             .done(function (result) {
-                photoboothTools.console.log('Start webcam', result);
+                photoboothTools.console.log(dataVideo.mode + ' webcam', result);
                 pid = result.pid;
             })
             .fail(function (xhr, status, result) {
-                photoboothTools.console.log('Could not start webcam', result);
+                photoboothTools.console.log('Could not ' + dataVideo.mode + ' webcam', result);
             });
     };
 
@@ -112,12 +113,12 @@ const photoboothPreview = (function () {
         switch (mode) {
             case CameraDisplayMode.INIT:
                 photoboothTools.console.logDev('Running preview cmd (INIT).');
-                api.startWebcam();
+                api.runCmd('start');
                 break;
             case CameraDisplayMode.BACKGROUND:
                 if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
                     photoboothTools.console.logDev('Running preview cmd (BACKGROUND).');
-                    api.startWebcam();
+                    api.runCmd('start');
                 }
                 api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
                 break;
@@ -129,7 +130,7 @@ const photoboothPreview = (function () {
                         (typeof photoBooth !== 'undefined' && photoBooth.nextCollageNumber > 0)
                     ) {
                         photoboothTools.console.logDev('Running preview cmd (COUNTDOWN).');
-                        api.startWebcam();
+                        api.runCmd('start');
                     }
                 }
                 switch (config.preview.mode) {
@@ -152,7 +153,7 @@ const photoboothPreview = (function () {
             case CameraDisplayMode.Test:
                 if (config.preview.cmd) {
                     photoboothTools.console.logDev('Running preview cmd (TEST).');
-                    api.startWebcam();
+                    api.runCmd('start');
                 }
                 switch (config.preview.mode) {
                     case PreviewMode.DEVICE.valueOf():
@@ -179,7 +180,7 @@ const photoboothPreview = (function () {
 
     api.stopPreview = function () {
         if (config.preview.killcmd) {
-            api.stopPreviewVideo();
+            api.runCmd('stop');
         }
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
             setTimeout(function () {
@@ -204,22 +205,6 @@ const photoboothPreview = (function () {
         video.hide();
         pictureFrame.hide();
         collageFrame.hide();
-    };
-
-    api.stopPreviewVideo = function () {
-        const dataVideo = {
-            play: 'stop',
-            pid: pid
-        };
-
-        jQuery
-            .post('api/previewCamera.php', dataVideo)
-            .done(function (result) {
-                photoboothTools.console.log('Stop webcam', result);
-            })
-            .fail(function (xhr, status, result) {
-                photoboothTools.console.log('Could not stop webcam', result);
-            });
     };
 
     api.setElements = function (
