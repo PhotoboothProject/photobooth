@@ -173,12 +173,12 @@ const photoboothPreview = (function () {
             if (config.preview.killcmd) {
                 api.stopPreviewVideo();
             } else {
-                setTimeout(() => {
+                setTimeout(function () {
                     api.stopVideo();
                 }, config.picture.cntdwn_offset * 1000);
             }
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            setTimeout(() => {
+            setTimeout(function () {
                 url.removeClass('streaming');
                 url.hide();
             }, config.picture.cntdwn_offset * 1000);
