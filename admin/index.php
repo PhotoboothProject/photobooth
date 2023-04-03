@@ -61,39 +61,45 @@ $uiShape = 'shape--' . $config['ui']['style'];
                         /*
                         ** check for admin panel view settings
                         */
-        
+
                         if (empty($setting['view'])) {
                            $setting['view'] = $config['adminpanel']['view_default'];
                         };
-        
+
                         switch ($setting['view'])
                         {
+                                case 'experimental':
+                                     if ($config['adminpanel']['view'] != 'experimental') { $element_class = 'hidden'; };
+                                     break;
                                 case 'expert':
                                      if ($config['adminpanel']['view'] == 'advanced') { $element_class = 'hidden'; };
+                                     if ($config['adminpanel']['view'] == 'basic') { $element_class = 'hidden'; };
+                                     break;
                                 case 'advanced':
                                      if ($config['adminpanel']['view'] == 'basic') { $element_class = 'hidden'; };
+                                     break;
                                 case 'basic':
                                      break;
                         };
-                                
+
                         /*
                         ** check for  platform compatibility
                         */
                         if (isset($fields['platform']) && $fields['platform'] != 'all' && $fields['platform'] != $os) {
                            $setting['type'] = $element_class = 'hidden';
                         };
-        
+
                         /*
                         ** Check if actual setting type is hidden
                         */
                         if (isset($setting['type']) && $setting['type'] == 'hidden') {
                            $element_class = 'hidden';
                         };
-        
+
                         return $element_class;
                 }
-        
-        
+
+
                 $indent = 2;
 
                 /********************
@@ -124,21 +130,21 @@ $uiShape = 'shape--' . $config['ui']['style'];
                 echo '<ul class="adminnavlist" id="navlist">';
 
                 html_src_indent(++$indent);
-        
-        
+
+
                 foreach($configsetup as $section => $fields)
                 {
                         html_src_indent($indent);
-        
+
                         /*
                         ** check for admin panel view settings
                         */
-                        
-        
+
+
                         echo '<li><a class="'.isElementHidden('adminnavlistelement',$fields). ' ' . $btnShape . ' noborder" href="#'.$section.'" id="nav-'.$section.'"><div><span data-i18n="'.$section.'">'.$section.'</span></div></a></li>';
-        
+
                 }
-        
+
                 html_src_indent(--$indent);
                 echo '</ul>';
         ?>
@@ -154,40 +160,40 @@ $uiShape = 'shape--' . $config['ui']['style'];
                      <span class="error"><i class="<?php echo $config['icons']['admin_save_error']; ?>"></i><span data-i18n="saveerror"></span></span>
              </button>
         <?php
-        
+
                 /************************
                 * Create settings panel *
                 ************************/
-        
+
                 foreach($configsetup as $section => $fields)
                 {
                         html_src_indent($indent);
                         html_src_indent($indent++);
-        
+
                         echo '<!-- SECTION '.$section.'-->';
                         echo '<div class="'.isElementHidden('setting_section ',$fields). ' ' . $uiShape . ' noborder" id="'.$section.'">';
-        
+
                         html_src_indent($indent);
                         echo '<h1 class="setting_section_heading '. $uiShape . ' noborder"> <span data-i18n="'.$section.'">'.$section.'</span></h1>';
-        
+
                         $col = 0;
                         foreach($fields as $key => $setting)
                         {
                                 if (in_array($key,array("platform", "view"))) {
                                         continue;
                                 };
-        
+
                                 $i18ntag = $section.':'.$key;
-        
+
                                 html_src_indent($indent++);
-        
+
                                 echo '<!-- '.strtoupper($setting['type']).' '.strtoupper($setting['name']).' -->';
                                 echo '<div class="'.isElementHidden('setting_element', $setting).'" id="'.$i18ntag.'">';
-                                
+
                                 /************************************
                                 ** Populate setting elements by type
                                 ************************************/
-                                
+
                                 switch($setting['type']) {
                                         case 'input':
                                         case 'number':
@@ -213,7 +219,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
                                                 break;
                                         case 'checkbox':
                                                 echo '<div class="tooltip"><label class="settinglabel"><span data-i18n="'.$i18ntag.'">'.$i18ntag.'</span></label>';
-                                                echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';                                      
+                                                echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
                                                 echo '<label class="toggle settinginput"> <input type="checkbox" '.(($setting['value'] == 'true')?' checked="checked"':'').' name="'.$setting['name'].'" value="true"/>';
                                                 echo '<span class="slider ' . $btnShape . ' noborder">';
                                                 if ($setting['value'] == 'true')
@@ -229,7 +235,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
                                         case 'select':
                                                 echo '<div class="tooltip">';
                                                 echo '<label class="settinglabel" data-i18n="'.$i18ntag.'">'.$i18ntag.'</label>';
-                                                echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';                                      
+                                                echo '<span class="tooltiptext" data-i18n="manual:'.$i18ntag.'">manual:'.$i18ntag.'</span></div>';
                                                 echo '<select class="settinginput ' . $uiShape . '-s noborder ' .($setting['type'] === 'multi-select' ? ' multi-select' : '');
                                                 echo '" name="'.$setting['name'] . ($setting['type'] === 'multi-select' ? '[]' : '');
                                                 echo '"' . ($setting['type'] === 'multi-select' ? ' multiple="multiple"' : '') . '>';
@@ -278,13 +284,13 @@ $uiShape = 'shape--' . $config['ui']['style'];
 
                                              break;
                                 }
-        
+
                                 echo '</div>';
                                 --$indent;
                         }
-        
+
                         html_src_indent(--$indent);
-        
+
                         echo '</div>';
                 }
 ?>

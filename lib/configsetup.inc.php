@@ -107,6 +107,7 @@ $configsetup = [
                 'basic' => 'Basic View',
                 'advanced' => 'Advanced View',
                 'expert' => 'Expert View',
+                'experimental' => 'Experimental View',
             ],
             'value' => $config['adminpanel']['view'],
         ],
@@ -866,7 +867,7 @@ $configsetup = [
         ],
     ],
     'video' => [
-        'view' => 'advanced',
+        'view' => 'experimental',
         'video_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
@@ -874,7 +875,7 @@ $configsetup = [
             'value' => $config['video']['enabled'],
         ],
         'video_cntdwn_time' => [
-            'view' => 'basic',
+            'view' => 'advanced',
             'type' => 'range',
             'name' => 'video[cntdwn_time]',
             'placeholder' => $defaultConfig['video']['cntdwn_time'],
@@ -1945,7 +1946,7 @@ $configsetup = [
             'value' => htmlentities($config['get_request']['collage'] ?? ''),
         ],
         'get_request_video' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'input',
             'placeholder' => $defaultConfig['get_request']['video'],
             'name' => 'get_request[video]',
@@ -2366,7 +2367,7 @@ $configsetup = [
             'value' => htmlentities($config['icons']['take_collage'] ?? ''),
         ],
         'icons_take_video' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'input',
             'name' => 'icons[take_video]',
             'placeholder' => htmlentities($defaultConfig['icons']['take_video'] ?? ''),
@@ -2639,7 +2640,7 @@ $configsetup = [
             'value' => $config['preview']['bsm'],
         ],
         'take_video_cmd' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'input',
             'placeholder' => $defaultConfig['take_video']['cmd'],
             'name' => 'take_video[cmd]',
