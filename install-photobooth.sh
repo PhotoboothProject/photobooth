@@ -48,7 +48,7 @@ PHOTOBOOTH_SUBMODULES=(
 
 # Node.js v14.21.(3 or newer) is needed on installation via git
 NEEDS_NODEJS_CHECK=true
-NEEDED_NODE_VERSION="v14.21.(e or newer)"
+NEEDED_NODE_VERSION="v14.21.(3 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 
