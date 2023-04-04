@@ -7,8 +7,8 @@ let globalGalleryHandle;
 // eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
+        ssTimeOut,
         ssRunning = false,
-        ssOnce = false,
         isPrinting = false;
 
     const ssDelay = config.gallery.pictureTime,
@@ -160,9 +160,8 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 download: img
             });
 
-            if (ssRunning && ssOnce) {
-                ssOnce = false;
-                setTimeout(gotoNextSlide, ssDelay);
+            if (ssRunning) {
+                gotoNextSlide();
             }
         });
 
@@ -283,18 +282,18 @@ function initPhotoSwipeFromDOM(gallerySelector) {
     });
 
     function setSlideshowState(el, running) {
-        if (running) {
-            setTimeout(gotoNextSlide, ssDelay / 2.0);
-        }
         const title = running ? 'Pause Slideshow' : 'Play Slideshow';
         $(el).prop('title', title);
         ssRunning = running;
+        gotoNextSlide();
     }
 
     function gotoNextSlide() {
+        clearTimeout(ssTimeOut);
         if (ssRunning && Boolean(gallery)) {
-            ssOnce = true;
-            gallery.next();
+            ssTimeOut = setTimeout(function () {
+                gallery.next();
+            }, ssDelay);
         }
     }
 
