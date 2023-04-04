@@ -3,8 +3,8 @@
 
 // eslint-disable-next-line no-unused-vars
 let PhotoSwipeLightbox,
+    ssTimeOut,
     ssRunning = false,
-    ssOnce = false,
     isPrinting = false;
 
 const ssDelay = config.gallery.pictureTime,
@@ -52,9 +52,8 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         photoBooth.resetMailForm();
         $('.send-mail').removeClass('mail-active').fadeOut('fast');
         photoboothTools.modal.close('#qrPswp');
-        if (ssRunning && ssOnce) {
-            ssOnce = false;
-            setTimeout(gotoNextSlide, ssDelay);
+        if (ssRunning) {
+            gotoNextSlide();
         }
     });
 
@@ -251,21 +250,19 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
     /* slideshow management */
     function gotoNextSlide() {
-        const pswp = gallery.pswp;
+        clearTimeout(ssTimeOut);
         if (ssRunning && Boolean(gallery)) {
-            ssOnce = true;
-            // eslint-disable-next-line no-unused-vars
-            pswp.next();
+            ssTimeOut = setTimeout(function () {
+                gallery.pswp.next();
+            }, ssDelay);
         }
     }
 
     function setSlideshowState(el, running) {
-        if (running) {
-            setTimeout(gotoNextSlide, ssDelay / 2.0);
-        }
         const title = running ? 'Pause Slideshow' : 'Play Slideshow';
         $(el).prop('title', title);
         ssRunning = running;
+        gotoNextSlide();
     }
 
     // Close Gallery while Taking a Picture or Collage
