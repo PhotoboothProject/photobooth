@@ -497,7 +497,7 @@ sudo bash install-gphoto-python.sh
 Change your Photobooth configuration:
 
 - _"Live Preview_": _"Preview Mode"_: _"from device cam"_
-- _"Live Preview_": _"Execute start command for preview on take picture/collage"_:
+- _"Commands_": _"Execute start command for preview on take picture/collage"_:
   - if **enabled**:
     _"Commands"_: _"Command to generate a live preview"_: `python3 cameracontrol.py --bsm`
   - if **disabled**:
