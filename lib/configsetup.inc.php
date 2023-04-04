@@ -2560,6 +2560,12 @@ $configsetup = [
             'name' => 'preview[killcmd]',
             'value' => htmlentities($config['preview']['killcmd'] ?? ''),
         ],
+        'preview_simpleExec' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'preview[simpleExec]',
+            'value' => $config['preview']['simpleExec'],
+        ],
         'preview_bsm' => [
             'type' => 'checkbox',
             'name' => 'preview[bsm]',
