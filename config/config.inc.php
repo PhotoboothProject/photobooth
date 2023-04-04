@@ -404,6 +404,7 @@ $config['exiftool']['cmd'] = '';
 $config['exiftool']['msg'] = '';
 $config['preview']['cmd'] = '';
 $config['preview']['killcmd'] = '';
+$config['preview']['simpleExec'] = false;
 $config['preview']['bsm'] = true;
 $config['nodebin']['cmd'] = '';
 $config['pre_photo']['cmd'] = '';
