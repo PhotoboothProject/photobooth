@@ -3813,6 +3813,11 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
+photoswipe@^5.3.7:
+  version "5.3.7"
+  resolved "https://registry.yarnpkg.com/photoswipe/-/photoswipe-5.3.7.tgz#c67df67aaddb5705bcf8ff265bd2086f57805756"
+  integrity sha512-zsyLsTTLFrj0XR1m4/hO7qNooboFKUrDy+Zt5i2d6qjFPAtBjzaj/Xtydso4uxzcXpcqbTmyxDibb3BcSISseg==
+
 php-parser@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/php-parser/-/php-parser-3.1.3.tgz#7a2aac2eb88a5a6c5aa75e6170a256bee5a30e6b"
