@@ -235,7 +235,10 @@ function gpioSanity(gpioconfig) {
     }
 }
 
-if (!config.remotebuzzer.usenogpio) {
+const Gpio = require('onoff').Gpio;
+const useGpio = Gpio.accessible && !config.remotebuzzer.usenogpio;
+
+if (useGpio) {
     gpioSanity(config.remotebuzzer.picturegpio);
     gpioSanity(config.remotebuzzer.collagegpio);
     gpioSanity(config.remotebuzzer.shutdowngpio);
@@ -597,8 +600,7 @@ const watchRotaryBtn = function watchRotaryBtn(err, gpioValue) {
 };
 
 /* INIT ONOFF LIBRARY AND LINK CALLBACK FUNCTIONS */
-const Gpio = require('onoff').Gpio;
-if (!config.remotebuzzer.usenogpio) {
+if (useGpio) {
     /* ROTARY ENCODER MODE */
     if (config.remotebuzzer.userotary) {
         /* ROTARY ENCODER MODE */
@@ -672,5 +674,7 @@ if (!config.remotebuzzer.usenogpio) {
             log('Looking for Print Button on Raspberry GPIO', config.remotebuzzer.printgpio);
         }
     }
+} else if (config.remotebuzzer.usenogpio && !Gpio.accessible) {
+    log('GPIO enabled but GPIO not accessible!');
 }
 log('Initialization completed');
