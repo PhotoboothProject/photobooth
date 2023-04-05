@@ -52,7 +52,7 @@ $GALLERY_FOOTER = false;
 	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
 	<link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
-	<link rel="stylesheet" href="vendor/PhotoSwipe/dist/photoswipe.css" />
+	<link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css" />
 	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>" />
     <?php if ($config['gallery']['bottom_bar']): ?>
         <link rel="stylesheet" href="resources/css/photoswipe-bottom.css?v=<?php echo $config['photobooth']['version']; ?>"/>
@@ -85,8 +85,8 @@ $GALLERY_FOOTER = false;
 	<script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="vendor/PhotoSwipe/dist/umd/photoswipe.umd.min.js"></script>
-	<script type="text/javascript" src="vendor/PhotoSwipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
+	<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
+	<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
 	<script type="text/javascript">
 		onStandaloneGalleryView = true;
 	</script>

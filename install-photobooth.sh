@@ -41,7 +41,6 @@ PHOTOBOOTH_PATH=(
 PHOTOBOOTH_SUBMODULES=(
         'vendor/PHPMailer'
         'vendor/phpqrcode'
-        'vendor/PhotoSwipe'
         'vendor/rpihotspot'
         'vendor/Seriously'
 )

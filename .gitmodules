@@ -4,9 +4,6 @@
 [submodule "vendor/Seriously"]
 	path = vendor/Seriously
 	url = https://github.com/brianchirls/Seriously.js
-[submodule "vendor/PhotoSwipe"]
-	path = vendor/PhotoSwipe
-	url = https://github.com/PhotoboothProject/PhotoSwipe
 [submodule "vendor/phpqrcode"]
 	path = vendor/phpqrcode
 	url = https://github.com/PhotoboothProject/phpqrcode
