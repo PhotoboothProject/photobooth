@@ -2,8 +2,7 @@
 /* global photoBooth photoboothTools rotaryController */
 
 // eslint-disable-next-line no-unused-vars
-let PhotoSwipeLightbox,
-    ssTimeOut,
+let ssTimeOut,
     ssRunning = false,
     isPrinting = false;
 

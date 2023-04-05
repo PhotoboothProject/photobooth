@@ -2,8 +2,7 @@
 /* global photoboothTools */
 
 // eslint-disable-next-line no-unused-vars
-let PhotoSwipeLightbox,
-    ssTimeOut,
+let ssTimeOut,
     ssRunning = false,
     lastDBSize = -1;
 
