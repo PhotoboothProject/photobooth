@@ -77,6 +77,7 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/@andreasremdt/simple-translator/');
     archive.directory('node_modules/font-awesome/');
     archive.directory('node_modules/material-icons');
+    archive.directory('node_modules/photoswipe/');
     archive.file('node_modules/github-markdown-css/github-markdown.css');
     archive.file('node_modules/github-markdown-css/license');
     archive.file('node_modules/jquery/LICENSE.txt');
