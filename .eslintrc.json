@@ -14,7 +14,7 @@
         "SharedArrayBuffer": "readonly",
         "config": true,
         "PhotoSwipe": true,
-        "PhotoSwipeUI_Default": true
+        "PhotoSwipeLightbox": true
     },
     "parserOptions": {
         "ecmaVersion": 2018
