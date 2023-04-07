@@ -39,7 +39,10 @@ body {
   background-color: #ffff00;
 }
 
-#adminsettings > div > img {
+.logo_bottom_left img,
+.logo_bottom_right img,
+.logo_top_right img,
+.logo_top_left img {
   width: 100px;
   height: auto;
 }
