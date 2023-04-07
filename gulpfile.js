@@ -17,11 +17,7 @@ gulp.task("dev", function() {
     proxy: '127.0.0.1:3000'
   }); 
 
-  // gulp
-  //   .src('./src/sass/**/*.scss', gulp.series("sass"))
-  //   .on("change", browserSync.reload);
-
-  // gulp.watch("./src/sass/**/*.scss", ['sass']);
+  // watch css
   gulp
     .watch("./src/sass/**/*.scss", gulp.series("sass"))
     .on("change", browserSync.reload);
