@@ -18,3 +18,12 @@
     }
   }
 }
+
+
+#start .logo_bottom_left img,
+#start .logo_bottom_right img,
+#start .logo_top_right img,
+#start .logo_top_left img {
+  width: 100px !important;
+  height: auto;
+}
