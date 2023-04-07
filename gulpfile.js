@@ -27,8 +27,7 @@ gulp.task('sass', function () {
   return gulp
     .src('./src/sass/**/*.scss')
     .pipe(sass.sync().on('error', sass.logError))
-    .pipe(gulp.dest('./resources/css'))
-    .pipe(through.obj(sassSuccess));
+    .pipe(gulp.dest('./resources/css'));
 });
 
 gulp.task('js', function () {
@@ -46,19 +45,3 @@ gulp.task('watch', function () {
 gulp.task('default', gulp.parallel('sass', 'js'));
 
 
-
-// sassSuccess
-function sassSuccess(chunk, enc, cb) {
-  notifier.notify(
-    {
-      title: "Congratulations!!",
-      message: "SASS compiled",
-      icon: "icons/success.png"
-    },
-    function(err, response) {
-      // Response is response from notification
-    }
-  );
-
-  cb(null, chunk);
-}
