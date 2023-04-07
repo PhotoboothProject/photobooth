@@ -29,7 +29,8 @@
     "pack:build": "npm-run-all --serial eslint build pack:zip",
     "pack:zip": "node scripts/pack-build.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "dev": "gulp dev"
   },
   "author": "Andreas Blaesius <andi@unlegacy-android.org>",
   "license": "MIT",
@@ -58,6 +59,7 @@
     "github-markdown-css": "^5.2.0",
     "gulp": "^4.0.2",
     "gulp-sass": "^5.1.0",
+    "gulp-connect-php": "^1.0.3",
     "jquery": "^3.6.4",
     "marvinj": "^1.0.0",
     "material-icons": "^1.13.4",
@@ -73,6 +75,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
+    "browser-sync": "^2.29.1",
     "@babel/core": "^7.21.4",
     "@babel/preset-env": "^7.20.2",
     "@prettier/plugin-php": "^0.19.4",
