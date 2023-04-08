@@ -12,15 +12,12 @@ $cmds = [
     'windows' => [
         'take_picture' => [
             'cmd' => 'digicamcontrol\CameraControlCmd.exe /capture /filename %s',
-            'msg' => 'Photo transfer done.',
         ],
         'print' => [
             'cmd' => 'mspaint /pt %s',
-            'msg' => '',
         ],
         'exiftool' => [
             'cmd' => '',
-            'msg' => '',
         ],
         'nodebin' => [
             'cmd' => '',
@@ -35,15 +32,12 @@ $cmds = [
     'linux' => [
         'take_picture' => [
             'cmd' => 'gphoto2 --capture-image-and-download --filename=%s',
-            'msg' => 'New file is in location',
         ],
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',
-            'msg' => '',
         ],
         'exiftool' => [
             'cmd' => 'exiftool -overwrite_original -TagsFromFile %s %s',
-            'msg' => '',
         ],
         'nodebin' => [
             'cmd' => '/usr/bin/node',
@@ -87,11 +81,8 @@ $mailTemplates = [
 require_once $default_config_file;
 
 $config['take_picture']['cmd'] = $cmds[SERVER_OS]['take_picture']['cmd'];
-$config['take_picture']['msg'] = $cmds[SERVER_OS]['take_picture']['msg'];
 $config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
-$config['print']['msg'] = $cmds[SERVER_OS]['print']['msg'];
 $config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];
-$config['exiftool']['msg'] = $cmds[SERVER_OS]['exiftool']['msg'];
 $config['nodebin']['cmd'] = $cmds[SERVER_OS]['nodebin']['cmd'];
 $config['reboot']['cmd'] = $cmds[SERVER_OS]['reboot']['cmd'];
 $config['shutdown']['cmd'] = $cmds[SERVER_OS]['shutdown']['cmd'];
