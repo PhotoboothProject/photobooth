@@ -36,11 +36,7 @@ Once done you need to adjust the configuration. Open the admin panel in your bro
 `raspistill -n -o %s -q 100 -t 1 | echo Done`
 
 
-**"Success message for take picture":**
-
-`Done`
-
-Pi Camera works with these config changes (also works together with preview at countdown if enabled).
+Pi Camera works with these config change (also works together with preview at countdown if enabled).
 
 Raspistill / libcamera-still does not give any feedback after the picture was taken, workaround for that with "echo".
 
