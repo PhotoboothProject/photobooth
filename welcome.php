@@ -80,7 +80,7 @@ $btnClass = 'btn ' . $btnShape;
 		<b>you should absolutely not make Photobooth accessible through the internet without heavy modifications!</b></p>
 		<p></p>
 		<p>Thanks for the reading! Enjoy your Photobooth!</p>
-		<p><a href="<?=$URL;?>" class="btn btn--flex <?php echo $btnShape; ?>">Start Photobooth</a></p>
+		<p><a href="index.php" class="btn btn--flex <?php echo $btnShape; ?>">Start Photobooth</a></p>
 	</div>
 
 	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
