@@ -399,11 +399,8 @@ $config['jpeg_quality']['thumb'] = 60;
 
 // C O M M A N D S
 $config['take_picture']['cmd'] = '';
-$config['take_picture']['msg'] = '';
 $config['print']['cmd'] = '';
-$config['print']['msg'] = '';
 $config['exiftool']['cmd'] = '';
-$config['exiftool']['msg'] = '';
 $config['preview']['cmd'] = '';
 $config['preview']['killcmd'] = '';
 $config['preview']['simpleExec'] = false;
