@@ -24,6 +24,9 @@ gulp.task('dev', function() {
   gulp
     .watch('./**/*.php')
     .on('change', browserSync.reload);
+  gulp
+    .watch('./src/js/*.js', gulp.series('js'))
+    .on('change', browserSync.reload);
 });
 
 gulp.task('sass', function () {
