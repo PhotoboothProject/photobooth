@@ -1013,7 +1013,18 @@ if [ "$RUN_UPDATE" = true ]; then
             info "### Can not setup your OS to use the USB sync file backup."
         fi
         print_spaces
-        common_software
+        echo -e "\033[0;33m### While updating your system the v4l2loopback module might get broken (needed for preview from DSLR). "
+        echo -e "### Instructions to fix it can be found at https://photoboothproject.github.io/Update-Photobooth"
+        ask_yes_no "          Do you like to update your system and install/update needed software? [y/N] " "n"
+        echo -e "\033[0m"
+        if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
+            info "### We will update your system and install/update needed software."
+            common_software
+        else
+            info "### We won't update your system and won't install/update needed software"
+        fi
+
+        print_spaces
         commit_git_changes
         start_git_install
         general_permissions
