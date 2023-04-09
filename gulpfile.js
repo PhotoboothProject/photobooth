@@ -22,6 +22,9 @@ gulp.task("dev", function() {
     .watch("./src/sass/**/*.scss", gulp.series("sass"))
     .on("change", browserSync.reload);
   gulp
+    .watch("./src/js/**/*.js", gulp.series("js"))
+    .on("change", browserSync.reload);
+  gulp
     .watch("./**/*.php")
     .on("change", browserSync.reload);
 });
