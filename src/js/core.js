@@ -901,47 +901,45 @@ const photoBooth = (function () {
 
             remoteBuzzerClient.inProgress(true);
 
-            setTimeout(function () {
-                $.ajax({
-                    method: 'GET',
-                    url: 'api/print.php',
-                    data: {
-                        filename: imageSrc
-                    },
-                    success: (data) => {
-                        photoboothTools.console.log('Picture processed: ', data);
+            $.ajax({
+                method: 'GET',
+                url: 'api/print.php',
+                data: {
+                    filename: imageSrc
+                },
+                success: (data) => {
+                    photoboothTools.console.log('Picture processed: ', data);
 
-                        if (data.error) {
-                            photoboothTools.console.log('An error occurred: ', data.error);
-                            photoboothTools.modal.close('#print_mesg');
-                            photoboothTools.modalMesg.showError('#modal_mesg', data.error);
-                        }
-
-                        setTimeout(function () {
-                            if (data.error) {
-                                photoboothTools.modalMesg.reset('#modal_mesg');
-                            } else {
-                                photoboothTools.modal.close('#print_mesg');
-                            }
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, config.print.time);
-                    },
-                    error: (jqXHR, textStatus) => {
-                        photoboothTools.console.log('An error occurred: ', textStatus);
+                    if (data.error) {
+                        photoboothTools.console.log('An error occurred: ', data.error);
                         photoboothTools.modal.close('#print_mesg');
-                        photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
-
-                        setTimeout(function () {
-                            photoboothTools.modalMesg.reset('#modal_mesg');
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, notificationTimeout);
+                        photoboothTools.modalMesg.showError('#modal_mesg', data.error);
                     }
-                });
-            }, 1000);
+
+                    setTimeout(function () {
+                        if (data.error) {
+                            photoboothTools.modalMesg.reset('#modal_mesg');
+                        } else {
+                            photoboothTools.modal.close('#print_mesg');
+                        }
+                        cb();
+                        isPrinting = false;
+                        remoteBuzzerClient.inProgress(false);
+                    }, config.print.time);
+                },
+                error: (jqXHR, textStatus) => {
+                    photoboothTools.console.log('An error occurred: ', textStatus);
+                    photoboothTools.modal.close('#print_mesg');
+                    photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
+
+                    setTimeout(function () {
+                        photoboothTools.modalMesg.reset('#modal_mesg');
+                        cb();
+                        isPrinting = false;
+                        remoteBuzzerClient.inProgress(false);
+                    }, notificationTimeout);
+                }
+            });
         }
     };
 
