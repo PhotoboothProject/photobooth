@@ -1198,34 +1198,37 @@ const photoBooth = (function () {
 
     $(document).on('keyup', function (ev) {
         if (triggerPic[0] || triggerCollage[0]) {
+
+            // picture
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (api.takingPic) {
                     api.handleButtonPressWhileTakingPic();
                 } else {
-                    $('.closeGallery').trigger('click');
+                    api.closeGallery();
                     if (config.collage.enabled && config.collage.only) {
                         photoboothTools.console.logDev(
                             'Picture key pressed, but only collage allowed. Triggering collage now.'
                         );
-                        triggerCollage.trigger('click');
+                        api.thrill(PhotoStyle.COLLAGE);
                     } else {
-                        triggerPic.trigger('click');
+                        api.thrill(PhotoStyle.PHOTO);
                     }
                 }
             }
 
+            // collage
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
                 if (api.takingPic) {
                     api.handleButtonPressWhileTakingPic();
                 } else {
-                    $('.closeGallery').trigger('click');
+                    api.closeGallery();
                     if (config.collage.enabled) {
-                        triggerCollage.trigger('click');
+                        api.thrill(PhotoStyle.COLLAGE);
                     } else {
                         photoboothTools.console.logDev(
                             'Collage key pressed. Please enable collage in your config. Triggering photo now.'
                         );
-                        triggerPic.trigger('click');
+                        api.thrill(PhotoStyle.PHOTO);
                     }
                 }
             }
