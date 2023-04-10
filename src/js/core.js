@@ -877,16 +877,16 @@ const photoBooth = (function () {
 
             element.removeClass('tick');
 
+            if (count === stop && config.preview.killcmd && !config.preview.camTakesPic) {
+                photoboothTools.console.logDev('core: stopping preview at countdown.');
+                photoboothPreview.stopPreview();
+            }
             if (count < start) {
                 window.setTimeout(() => element.addClass('tick'), 50);
                 window.setTimeout(timerFunction, 1000);
             } else {
                 element.empty();
                 cb();
-            }
-            if (config.preview.killcmd && !config.preview.camTakesPic && count === stop) {
-                photoboothTools.console.logDev('core: stop preview countdown.');
-                photoboothPreview.stopPreview();
             }
             count++;
         }
