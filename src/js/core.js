@@ -164,7 +164,7 @@ const photoBooth = (function () {
 
     api.stopPreviewAndCaptureFromVideo = function () {
         if (config.preview.camTakesPic) {
-            if (!config.dev.demo_images) {
+            if (photoboothPreview.stream) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
                 videoSensor.getContext('2d').drawImage(videoView, 0, 0);
