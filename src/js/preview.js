@@ -25,6 +25,7 @@ const photoboothPreview = (function () {
     let pid, video, loader, wrapper, url, pictureFrame, collageFrame;
 
     api.changeVideoMode = function (mode) {
+        photoboothTools.console.logDev('Changing video mode: ' + mode);
         if (mode === CameraDisplayMode.BACKGROUND) {
             video.css('z-index', 0);
             wrapper.css('background-image', 'none');
@@ -38,11 +39,14 @@ const photoboothPreview = (function () {
     };
 
     api.initializeMedia = function (cb = () => {}, retry = 0) {
+        photoboothTools.console.logDev('Trying to initialize media');
         if (
             !navigator.mediaDevices ||
             config.preview.mode === PreviewMode.NONE.valueOf() ||
             config.preview.mode === PreviewMode.URL.valueOf()
         ) {
+            photoboothTools.console.logDev('No preview from device cam or no webcam available');
+
             return;
         }
         const getMedia =
@@ -52,12 +56,15 @@ const photoboothPreview = (function () {
             false;
 
         if (!getMedia) {
+            photoboothTools.console.logDev('Could not get media!');
+
             return;
         }
 
         getMedia
             .call(navigator.mediaDevices, webcamConstraints)
             .then(function (stream) {
+                photoboothTools.console.logDev('getMedia done!');
                 api.stream = stream;
                 video.get(0).srcObject = stream;
                 cb();
@@ -95,15 +102,17 @@ const photoboothPreview = (function () {
         jQuery
             .post('api/previewCamera.php', dataVideo)
             .done(function (result) {
-                photoboothTools.console.log(dataVideo.mode + ' webcam', result);
+                photoboothTools.console.log(dataVideo.play + ' webcam successfully.');
                 pid = result.pid;
             })
+            // eslint-disable-next-line no-unused-vars
             .fail(function (xhr, status, result) {
-                photoboothTools.console.log('Could not ' + dataVideo.mode + ' webcam', result);
+                photoboothTools.console.log('Failed to ' + dataVideo.play + ' webcam!');
             });
     };
 
     api.startVideo = function (mode, retry = 0) {
+        photoboothTools.console.log('startVideo mode: ' + mode);
         if (config.preview.mode !== PreviewMode.URL.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
                 return;
@@ -173,7 +182,7 @@ const photoboothPreview = (function () {
                 }
                 break;
             default:
-                photoboothTools.console.log('Call for unexpected video mode.');
+                photoboothTools.console.log('Call for unexpected video mode: ' + mode);
                 break;
         }
     };
