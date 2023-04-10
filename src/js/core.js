@@ -216,21 +216,21 @@ const photoBooth = (function () {
         }
     };
 
-    api.shellCommand = function ($mode, $filename = '') {
+    api.shellCommand = function (cmd, file = '') {
         command = {
-            mode: $mode,
-            filename: $filename
+            mode: cmd,
+            filename: file
         };
 
-        photoboothTools.console.log('Run', $mode);
+        photoboothTools.console.log('Run', cmd);
 
         jQuery
             .post('api/shellCommand.php', command)
             .done(function (result) {
-                photoboothTools.console.log($mode, 'result: ', result);
+                photoboothTools.console.log(cmd, 'result: ', result);
             })
             .fail(function (xhr, status, result) {
-                photoboothTools.console.log($mode, 'result: ', result);
+                photoboothTools.console.log(cmd, 'result: ', result);
             });
     };
 
