@@ -56,7 +56,7 @@ if (isset($data['type'])) {
 
     if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
         $newConfig['preview']['camTakesPic'] = false;
-        $LogData = [
+        $LogData[] = [
             'preview' => 'Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.',
         ];
     }
