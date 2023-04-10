@@ -142,21 +142,15 @@ const photoboothPreview = (function () {
                         api.runCmd('start');
                     }
                 }
-                switch (config.preview.mode) {
-                    case PreviewMode.DEVICE.valueOf():
-                        photoboothTools.console.logDev('Preview at countdown from device cam.');
-                        api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
-                        break;
-                    case PreviewMode.URL.valueOf():
-                        photoboothTools.console.logDev('Preview at countdown from URL.');
-                        setTimeout(function () {
-                            url.show();
-                            url.addClass('streaming');
-                        }, config.preview.url_delay);
-                        break;
-                    default:
-                        photoboothTools.console.log('Call for unexpected preview mode.');
-                        break;
+                if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
+                    photoboothTools.console.logDev('Preview at countdown from device cam.');
+                    api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
+                } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
+                    photoboothTools.console.logDev('Preview at countdown from URL.');
+                    setTimeout(function () {
+                        url.show();
+                        url.addClass('streaming');
+                    }, config.preview.url_delay);
                 }
                 break;
             case CameraDisplayMode.Test:
@@ -164,21 +158,15 @@ const photoboothPreview = (function () {
                     photoboothTools.console.logDev('Running preview cmd (TEST).');
                     api.runCmd('start');
                 }
-                switch (config.preview.mode) {
-                    case PreviewMode.DEVICE.valueOf():
-                        photoboothTools.console.logDev('Preview from device cam.');
-                        api.getAndDisplayMedia(CameraDisplayMode.Test);
-                        break;
-                    case PreviewMode.URL.valueOf():
-                        photoboothTools.console.logDev('Preview from URL.');
-                        setTimeout(function () {
-                            url.show();
-                            url.addClass('streaming');
-                        }, config.preview.url_delay);
-                        break;
-                    default:
-                        photoboothTools.console.log('Call for unexpected preview mode.');
-                        break;
+                if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
+                    photoboothTools.console.logDev('Preview from device cam.');
+                    api.getAndDisplayMedia(CameraDisplayMode.Test);
+                } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
+                    photoboothTools.console.logDev('Preview from URL.');
+                    setTimeout(function () {
+                        url.show();
+                        url.addClass('streaming');
+                    }, config.preview.url_delay);
                 }
                 break;
             default:
