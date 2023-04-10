@@ -45,11 +45,14 @@ PHOTOBOOTH_SUBMODULES=(
         'vendor/Seriously'
 )
 
-# Node.js v12.22.(4 or newer) is needed on installation via git
+# Node.js
 NEEDS_NODEJS_CHECK=true
-NEEDED_NODE_VERSION="v12.22.(4 or newer)"
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
+NODEJS_MAJOR="16"
+NODEJS_MINOR="19"
+NODEJS_MICRO="1"
+NEEDED_NODE_VERSION="v$NODEJS_MAJOR.$NODEJS_MINOR(.$NODEJS_MICRO or newer)"
 
 COMMON_PACKAGES=(
         'ffmpeg'
@@ -282,9 +285,9 @@ check_nodejs() {
     minor=${VER[1]}
     micro=${VER[2]}
 
-    if [[ -n "$major" && "$major" -eq "12" ]]; then
-        if [[ -n "$minor" && "$minor" -eq "22" ]]; then
-            if [[ -n "$micro" && "$micro" -ge "4" ]]; then
+    if [[ -n "$major" && "$major" -eq "$NODEJS_MAJOR" ]]; then
+        if [[ -n "$minor" && "$minor" -eq "$NODEJS_MINOR" ]]; then
+            if [[ -n "$micro" && "$micro" -ge "$NODEJS_MICRO" ]]; then
                 info "[Info]      Node.js matches our requirements!"
             elif [[ -n "$micro" ]]; then
                 warn "[WARN]      Node.js needs to be updated, micro version not matching our requirements!"
@@ -341,14 +344,14 @@ update_nodejs() {
     fi
 
     if [ "$RUNNING_ON_PI" = true ]; then
-        info "[Package]   Installing Node.js v12.22.12"
+        info "[Package]   Installing Node.js v$NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO"
         wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
-        node-install -v 12.22.12
+        node-install -v $NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO
         NODEJS_CHECKED=true
         check_nodejs
     else
-        info "[Package]   Installing latest Node.js v12"
-        curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+        info "[Package]   Installing latest Node.js v16"
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
         apt-get install -y nodejs
         NODEJS_CHECKED=true
         check_nodejs
@@ -1009,7 +1012,18 @@ if [ "$RUN_UPDATE" = true ]; then
             info "### Can not setup your OS to use the USB sync file backup."
         fi
         print_spaces
-        common_software
+        echo -e "\033[0;33m### While updating your system the v4l2loopback module might get broken (needed for preview from DSLR). "
+        echo -e "### Instructions to fix it can be found at https://photoboothproject.github.io/Update-Photobooth"
+        ask_yes_no "          Do you like to update your system and install/update needed software? [y/N] " "n"
+        echo -e "\033[0m"
+        if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
+            info "### We will update your system and install/update needed software."
+            common_software
+        else
+            info "### We won't update your system and won't install/update needed software"
+        fi
+
+        print_spaces
         commit_git_changes
         start_git_install
         general_permissions

@@ -674,7 +674,7 @@ if (useGpio) {
             log('Looking for Print Button on Raspberry GPIO', config.remotebuzzer.printgpio);
         }
     }
-} else if (config.remotebuzzer.usenogpio && !Gpio.accessible) {
+} else if (!config.remotebuzzer.usenogpio && !Gpio.accessible) {
     log('GPIO enabled but GPIO not accessible!');
 }
 log('Initialization completed');

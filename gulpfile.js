@@ -4,9 +4,9 @@ var gulp = require('gulp');
 var sass = require('gulp-sass')(require('sass'));
 var babel = require('gulp-babel');
 var php = require('gulp-connect-php');
-var browserSync = require("browser-sync").create();
+var browserSync = require('browser-sync').create();
 
-gulp.task("dev", function() {
+gulp.task('dev', function() {
   php.server({
     base:'./',
     port: 3000,
@@ -19,14 +19,14 @@ gulp.task("dev", function() {
 
   // watch
   gulp
-    .watch("./src/sass/**/*.scss", gulp.series("sass"))
-    .on("change", browserSync.reload);
+    .watch('./src/sass/**/*.scss', gulp.series('sass'))
+    .on('change', browserSync.reload);
   gulp
-    .watch("./src/js/**/*.js", gulp.series("js"))
-    .on("change", browserSync.reload);
+    .watch('./**/*.php')
+    .on('change', browserSync.reload);
   gulp
-    .watch("./**/*.php")
-    .on("change", browserSync.reload);
+    .watch('./src/js/*.js', gulp.series('js'))
+    .on('change', browserSync.reload);
 });
 
 gulp.task('sass', function () {
@@ -39,7 +39,7 @@ gulp.task('sass', function () {
 gulp.task('js', function () {
   return gulp
     .src('./src/js/**/*.js')
-    .pipe(babel({ presets: ['@babel/env'], ignore: [ "src/js/sync-to-drive.js", "src/js/remotebuzzer_server.js" ] }))
+    .pipe(babel({ presets: ['@babel/env'], ignore: [ 'src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js' ] }))
     .pipe(gulp.dest('./resources/js'));
 });
 

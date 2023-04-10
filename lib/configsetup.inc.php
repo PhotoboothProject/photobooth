@@ -2497,13 +2497,6 @@ $configsetup = [
             'name' => 'take_picture[cmd]',
             'value' => htmlentities($config['take_picture']['cmd'] ?? ''),
         ],
-        'take_picture_msg' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['take_picture']['msg'],
-            'name' => 'take_picture[msg]',
-            'value' => htmlentities($config['take_picture']['msg'] ?? ''),
-        ],
         'pre_photo_cmd' => [
             'view' => 'expert',
             'type' => 'input',
@@ -2525,26 +2518,12 @@ $configsetup = [
             'name' => 'print[cmd]',
             'value' => htmlentities($config['print']['cmd'] ?? ''),
         ],
-        'print_msg' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['print']['msg'],
-            'name' => 'print[msg]',
-            'value' => htmlentities($config['print']['msg'] ?? ''),
-        ],
         'exiftool_cmd' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => $defaultConfig['exiftool']['cmd'],
             'name' => 'exiftool[cmd]',
             'value' => htmlentities($config['exiftool']['cmd'] ?? ''),
-        ],
-        'exiftool_msg' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['exiftool']['msg'],
-            'name' => 'exiftool[msg]',
-            'value' => htmlentities($config['exiftool']['msg'] ?? ''),
         ],
         'preview_cmd' => [
             'view' => 'expert',
