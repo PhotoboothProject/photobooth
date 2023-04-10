@@ -163,7 +163,7 @@ const photoBooth = (function () {
     };
 
     api.stopPreviewAndCaptureFromVideo = function () {
-        if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.camTakesPic) {
+        if (config.preview.camTakesPic) {
             if (!config.dev.demo_images) {
                 videoSensor.width = videoView.videoWidth;
                 videoSensor.height = videoView.videoHeight;
@@ -309,12 +309,7 @@ const photoBooth = (function () {
             config.picture.cntdwn_offset;
         photoboothTools.console.log('Capture image in ' + triggerCnt + ' seconds.');
         setTimeout(() => {
-            if (
-                config.preview.mode === PreviewMode.DEVICE.valueOf() &&
-                config.preview.camTakesPic &&
-                !photoboothPreview.stream &&
-                !config.dev.demo_images
-            ) {
+            if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
                 api.errorPic({
                     error: 'No preview by device cam available!'
                 });
@@ -883,14 +878,9 @@ const photoBooth = (function () {
                 element.empty();
                 cb();
             }
-            if (config.preview.killcmd && count === stop) {
-                if (
-                    (config.preview.mode === PreviewMode.DEVICE.valueOf() && !config.preview.camTakesPic) ||
-                    config.preview.mode != PreviewMode.DEVICE.valueOf()
-                ) {
-                    photoboothTools.console.logDev('core: stop preview countdown.');
-                    photoboothPreview.stopPreview();
-                }
+            if (config.preview.killcmd && !config.preview.camTakesPic && count === stop) {
+                photoboothTools.console.logDev('core: stop preview countdown.');
+                photoboothPreview.stopPreview();
             }
             count++;
         }
