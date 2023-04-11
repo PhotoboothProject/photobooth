@@ -1,12 +1,16 @@
 [submodule "vendor/PHPMailer"]
 	path = vendor/PHPMailer
 	url = https://github.com/PHPMailer/PHPMailer
+    ignore = dirty
 [submodule "vendor/Seriously"]
 	path = vendor/Seriously
 	url = https://github.com/brianchirls/Seriously.js
+    ignore = dirty
 [submodule "vendor/PhotoSwipe"]
 	path = vendor/PhotoSwipe
 	url = https://github.com/PhotoboothProject/PhotoSwipe
+    ignore = dirty
 [submodule "vendor/phpqrcode"]
 	path = vendor/phpqrcode
 	url = https://github.com/PhotoboothProject/phpqrcode
+    ignore = dirty
