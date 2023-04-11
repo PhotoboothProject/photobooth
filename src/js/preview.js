@@ -153,14 +153,14 @@ const photoboothPreview = (function () {
                     }, config.preview.url_delay);
                 }
                 break;
-            case CameraDisplayMode.Test:
+            case CameraDisplayMode.TEST:
                 if (config.preview.cmd) {
                     photoboothTools.console.logDev('Running preview cmd (TEST).');
                     api.runCmd('start');
                 }
                 if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
                     photoboothTools.console.logDev('Preview from device cam.');
-                    api.getAndDisplayMedia(CameraDisplayMode.Test);
+                    api.getAndDisplayMedia(CameraDisplayMode.TEST);
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview from URL.');
                     setTimeout(function () {
