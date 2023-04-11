@@ -6,6 +6,11 @@ const photoboothPreviewTest = (function () {
             COUNTDOWN: 3,
             TEST: 4
         },
+        PreviewMode = {
+            NONE: 'none',
+            DEVICE: 'device_cam',
+            URL: 'url'
+        },
         PreviewStyle = {
             FILL: 'fill',
             CONTAIN: 'contain',
@@ -15,15 +20,17 @@ const photoboothPreviewTest = (function () {
         };
 
     const api = {},
-        ipcamView = $('#ipcam--view'),
-        idVideoView = $('#video--view'),
+        url = $('#ipcam--view'),
+        video = $('#video--view'),
         pictureFrame = $('#picture--frame'),
         collageFrame = $('#collage--frame');
 
+    let pid;
+
     api.init = function () {
-        idVideoView.hide();
-        idVideoView.css('z-index', 0);
-        ipcamView.hide();
+        video.hide();
+        video.css('z-index', 0);
+        url.hide();
         $('#no_preview').show();
         $('.stopPreview').hide();
         pictureFrame.hide();
@@ -31,11 +38,33 @@ const photoboothPreviewTest = (function () {
         $('.hideFrame').hide();
     };
 
+    api.runCmd = function (mode) {
+        const dataVideo = {
+            play: mode,
+            pid: pid
+        };
+
+        jQuery
+            .post('../api/previewCamera.php', dataVideo)
+            .done(function (result) {
+                photoboothTools.console.log(dataVideo.play + ' webcam successfully.');
+                pid = result.pid;
+            })
+            // eslint-disable-next-line no-unused-vars
+            .fail(function (xhr, status, result) {
+                photoboothTools.console.log('Failed to ' + dataVideo.play + ' webcam!');
+            });
+    };
+
     $('.startPreview').on('click', function (e) {
         e.preventDefault();
 
         photoboothTools.console.log('Starting preview...');
         $('.startPreview').hide();
+        if (config.preview.cmd) {
+            photoboothTools.console.logDev('Running preview cmd (TEST).');
+            api.runCmd('start');
+        }
         photoboothPreview.startVideo(CameraDisplayMode.TEST);
 
         setTimeout(() => {
@@ -55,7 +84,15 @@ const photoboothPreviewTest = (function () {
         $('.stopPreview').hide();
         collageFrame.hide();
         pictureFrame.hide();
-        photoboothPreview.stopPreview();
+        if (config.preview.killcmd) {
+            api.runCmd('stop');
+        }
+        if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
+            photoboothPreview.stopVideo();
+        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
+            url.removeClass('streaming');
+            url.hide();
+        }
 
         setTimeout(() => {
             if (photoboothPreview.stream) {
@@ -91,7 +128,7 @@ const photoboothPreviewTest = (function () {
         $('.hideFrame').hide();
     });
 
-    idVideoView.on('loadedmetadata', function (ev) {
+    video.on('loadedmetadata', function (ev) {
         const videoEl = ev.target;
         let newWidth = videoEl.offsetWidth;
         let newHeight = videoEl.offsetHeight;
