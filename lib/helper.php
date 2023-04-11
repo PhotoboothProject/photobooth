@@ -19,7 +19,7 @@ class Photobooth {
     }
 
     public static function server_os() {
-        return (DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win') ? 'windows' : 'linux';
+        return DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
     }
 
     public static function get_ip() {
