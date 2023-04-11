@@ -95,7 +95,7 @@ const photoboothPreviewTest = (function () {
         const videoEl = ev.target;
         let newWidth = videoEl.offsetWidth;
         let newHeight = videoEl.offsetHeight;
-        if (config.preview.style === PreviewStyle.SCALE_DOWN) {
+        if (config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) {
             newWidth = videoEl.videoWidth;
             newHeight = videoEl.videoHeight;
         }
