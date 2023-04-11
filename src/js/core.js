@@ -108,6 +108,7 @@ const photoBooth = (function () {
         loader.removeClass('error');
         loading.text('');
         spinner.hide();
+        resultPage.hide();
         photoboothTools.modal.empty('#qrCode');
         qrBtn.removeClass('active').attr('style', '');
         api.resetMailForm();
@@ -125,7 +126,6 @@ const photoBooth = (function () {
     api.init = function () {
         api.reset();
 
-        resultPage.hide();
         startPage.addClass('open');
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
