@@ -36,7 +36,7 @@ const config = JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf('
 const pidFilename = config.foldersJS.tmp + '/remotebuzzer_server.pid';
 const fs = require('fs');
 
-fs.writeFile(pidFilename, PID, function (err) {
+fs.writeFile(pidFilename, parseInt(PID, 10).toString(), function (err) {
     if (err) {
         throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
     }
