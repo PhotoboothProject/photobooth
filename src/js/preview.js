@@ -86,19 +86,20 @@ const photoboothPreview = (function () {
         }
     };
 
-    api.startWebcam = function () {
+    api.runCmd = function (mode) {
         const dataVideo = {
-            play: 'true'
+            play: mode,
+            pid: pid
         };
 
         jQuery
             .post('api/previewCamera.php', dataVideo)
             .done(function (result) {
-                photoboothTools.console.log('Start webcam', result);
+                photoboothTools.console.log(dataVideo.mode + ' webcam', result);
                 pid = result.pid;
             })
             .fail(function (xhr, status, result) {
-                photoboothTools.console.log('Could not start webcam', result);
+                photoboothTools.console.log('Could not ' + dataVideo.mode + ' webcam', result);
             });
     };
 
@@ -111,26 +112,30 @@ const photoboothPreview = (function () {
 
         switch (mode) {
             case CameraDisplayMode.INIT:
-                api.startWebcam();
+                photoboothTools.console.logDev('Running preview cmd (INIT).');
+                api.runCmd('start');
                 break;
             case CameraDisplayMode.BACKGROUND:
                 if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
-                    api.startWebcam();
+                    photoboothTools.console.logDev('Running preview cmd (BACKGROUND).');
+                    api.runCmd('start');
                 }
                 api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
                 break;
             case CameraDisplayMode.COUNTDOWN:
+                if (config.preview.cmd) {
+                    if (
+                        config.preview.bsm ||
+                        (!config.preview.bsm && retry > 0) ||
+                        (typeof photoBooth !== 'undefined' && photoBooth.nextCollageNumber > 0)
+                    ) {
+                        photoboothTools.console.logDev('Running preview cmd (COUNTDOWN).');
+                        api.runCmd('start');
+                    }
+                }
                 switch (config.preview.mode) {
                     case PreviewMode.DEVICE.valueOf():
                         photoboothTools.console.logDev('Preview at countdown from device cam.');
-                        if (
-                            config.preview.cmd &&
-                            (config.preview.bsm ||
-                                (!config.preview.bsm && retry > 0) ||
-                                (typeof photoBooth !== 'undefined' && photoBooth.nextCollageNumber > 0))
-                        ) {
-                            api.startWebcam();
-                        }
                         api.getAndDisplayMedia(CameraDisplayMode.COUNTDOWN);
                         break;
                     case PreviewMode.URL.valueOf():
@@ -146,12 +151,13 @@ const photoboothPreview = (function () {
                 }
                 break;
             case CameraDisplayMode.Test:
+                if (config.preview.cmd) {
+                    photoboothTools.console.logDev('Running preview cmd (TEST).');
+                    api.runCmd('start');
+                }
                 switch (config.preview.mode) {
                     case PreviewMode.DEVICE.valueOf():
                         photoboothTools.console.logDev('Preview from device cam.');
-                        if (config.preview.cmd) {
-                            api.startWebcam();
-                        }
                         api.getAndDisplayMedia(CameraDisplayMode.Test);
                         break;
                     case PreviewMode.URL.valueOf():
@@ -173,14 +179,13 @@ const photoboothPreview = (function () {
     };
 
     api.stopPreview = function () {
+        if (config.preview.killcmd) {
+            api.runCmd('stop');
+        }
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
-            if (config.preview.killcmd) {
-                api.stopPreviewVideo();
-            } else {
-                setTimeout(function () {
-                    api.stopVideo();
-                }, config.picture.cntdwn_offset * 1000);
-            }
+            setTimeout(function () {
+                api.stopVideo();
+            }, config.picture.cntdwn_offset * 1000);
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
             setTimeout(function () {
                 url.removeClass('streaming');
@@ -200,25 +205,6 @@ const photoboothPreview = (function () {
         video.hide();
         pictureFrame.hide();
         collageFrame.hide();
-    };
-
-    api.stopPreviewVideo = function () {
-        if (api.stream) {
-            const dataVideo = {
-                play: 'false',
-                pid: pid
-            };
-
-            jQuery
-                .post('api/previewCamera.php', dataVideo)
-                .done(function (result) {
-                    photoboothTools.console.log('Stop webcam', result);
-                    api.stopVideo();
-                })
-                .fail(function (xhr, status, result) {
-                    photoboothTools.console.log('Could not stop webcam', result);
-                });
-        }
     };
 
     api.setElements = function (
