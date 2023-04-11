@@ -270,13 +270,17 @@ const photoBooth = (function () {
         photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry);
 
         if (
-            config.preview.mode !== PreviewMode.NONE &&
-            (config.preview.style === PreviewStyle.CONTAIN || config.preview.style === PreviewStyle.SCALE_DOWN) &&
+            config.preview.mode !== PreviewMode.NONE.valueOf() &&
+            (config.preview.style === PreviewStyle.CONTAIN.valueOf() ||
+                config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) &&
             config.preview.showFrame
         ) {
             if (photoStyle === PhotoStyle.PHOTO && config.picture.take_frame) {
                 pictureFrame.show();
-            } else if (photoStyle === PhotoStyle.COLLAGE && config.collage.take_frame === CollageFrameMode.ALWAYS) {
+            } else if (
+                photoStyle === PhotoStyle.COLLAGE &&
+                config.collage.take_frame === CollageFrameMode.ALWAYS.valueOf()
+            ) {
                 collageFrame.show();
             }
         }
@@ -1259,7 +1263,7 @@ const photoBooth = (function () {
         const videoEl = ev.target;
         let newWidth = videoEl.offsetWidth;
         let newHeight = videoEl.offsetHeight;
-        if (config.preview.style === PreviewStyle.SCALE_DOWN) {
+        if (config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) {
             newWidth = videoEl.videoWidth;
             newHeight = videoEl.videoHeight;
         }
