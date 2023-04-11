@@ -154,10 +154,6 @@ const photoboothPreview = (function () {
                 }
                 break;
             case CameraDisplayMode.TEST:
-                if (config.preview.cmd) {
-                    photoboothTools.console.logDev('Running preview cmd (TEST).');
-                    api.runCmd('start');
-                }
                 if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
                     photoboothTools.console.logDev('Preview from device cam.');
                     api.getAndDisplayMedia(CameraDisplayMode.TEST);
