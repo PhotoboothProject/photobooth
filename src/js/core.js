@@ -1014,13 +1014,13 @@ const photoBooth = (function () {
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.PHOTO);
-        $('.newpic').blur();
+        $(this).blur();
     });
 
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.COLLAGE);
-        $('.newcollage').blur();
+        $(this).blur();
     });
 
     $('#mySidenav .closebtn').on('click', function (e) {
