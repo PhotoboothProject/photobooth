@@ -69,9 +69,6 @@
 					<?php endif; ?>
 
 				<?php endif; ?>
-				<button hidden class="closeGallery"></button>
-				<button hidden class="triggerPic"></button>
-				<button hidden class="triggerCollage"></button>
 			</div>
 
 			<?php if ($config['ui']['show_fork']): ?>
