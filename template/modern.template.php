@@ -76,9 +76,6 @@
 							<?php endif; ?>
 							</div>
 						</div>
-						<button hidden class="closeGallery"></button>
-						<button hidden class="triggerPic"></button>
-						<button hidden class="triggerCollage"></button>
 					</div>
 				</div>
 			</div>
