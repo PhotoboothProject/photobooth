@@ -41,8 +41,6 @@ const photoBooth = (function () {
         galimages = $('#galimages'),
         loading = $('.loading'),
         loaderImage = $('.loaderImage'),
-        triggerPic = $('.triggerPic'),
-        triggerCollage = $('.triggerCollage'),
         printBtn = $('.printbtn'),
         deleteBtn = $('.deletebtn'),
         qrBtn = $('.qrbtn'),
@@ -1154,19 +1152,6 @@ const photoBooth = (function () {
         $('#fs-button').blur();
     });
 
-    // Fake buttons
-    triggerPic.on('click', function (e) {
-        e.preventDefault();
-        api.thrill(PhotoStyle.PHOTO);
-        $('.newpic').blur();
-    });
-
-    triggerCollage.on('click', function (e) {
-        e.preventDefault();
-        api.thrill(PhotoStyle.COLLAGE);
-        $('.newcollage').blur();
-    });
-
     api.handleButtonPressWhileTakingPic = function () {
         if (api.nextCollageNumber > 0) {
             const btnCollageNext = $('#btnCollageNext');
@@ -1186,7 +1171,7 @@ const photoBooth = (function () {
     };
 
     $(document).on('keyup', function (ev) {
-        if (triggerPic[0] || triggerCollage[0]) {
+        if (typeof onStandaloneGalleryView === 'undefined' && typeof onLiveChromaKeyingView === 'undefined') {
             // picture
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
                 if (api.takingPic) {

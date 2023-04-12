@@ -241,16 +241,6 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         }
     });
 
-    // Close Gallery while Taking a Picture or Collage
-    $('.closeGallery').on('click', function (e) {
-        e.preventDefault();
-
-        if (gallery) {
-            photoboothTools.console.logDev('Closing Gallery');
-            gallery.close();
-        }
-    });
-
     // chroma keying print
     $('.pswp__button--print-chroma-keying').on('click touchstart', function (e) {
         e.preventDefault();

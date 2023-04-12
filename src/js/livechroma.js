@@ -285,8 +285,7 @@ $(document).on('keyup', function (ev) {
         } else if (needsReload) {
             photoboothTools.console.log('Please reload the page to take a new Picture!');
         } else if (!photoBooth.takingPic) {
-            $('.closeGallery').trigger('click');
-            $('.takeChroma').trigger('click');
+            photoBooth.thrill('chroma');
         } else if (config.dev.loglevel > 0 && photoBooth.takingPic) {
             photoboothTools.console.log('Taking photo already in progress!');
         }
@@ -298,9 +297,8 @@ $(document).on('keyup', function (ev) {
         } else if (needsReload) {
             photoboothTools.console.log('Please reload the page to take a new Picture!');
         } else if (!photoBooth.takingPic) {
-            $('.closeGallery').trigger('click');
             photoboothTools.console.logDev('Collage key pressed. Not possible on live chroma, triggering photo now.');
-            $('.takeChroma').trigger('click');
+            photoBooth.thrill('chroma');
         } else if (config.dev.loglevel > 0 && photoBooth.takingPic) {
             photoboothTools.console.log('Taking photo already in progress!');
         }
