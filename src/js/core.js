@@ -1225,10 +1225,7 @@ const photoBooth = (function () {
 
     $(document).on('click', function () {
         if (api.isTimeOutPending()) {
-            if (typeof onStandaloneGalleryView !== 'undefined') {
-                clearTimeout(timeOut);
-                photoboothTools.console.logDev('Standalone Gallery: Timeout for auto reload cleared.');
-            } else if (startPage.is(':visible')) {
+            if (typeof onStandaloneGalleryView !== 'undefined' || startPage.is(':visible')) {
                 clearTimeout(timeOut);
                 photoboothTools.console.logDev('Timeout for auto reload cleared.');
             } else {
