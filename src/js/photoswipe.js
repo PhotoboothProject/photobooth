@@ -264,16 +264,6 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gotoNextSlide();
     }
 
-    // Close Gallery while Taking a Picture or Collage
-    $('.closeGallery').on('click', (e) => {
-        e.preventDefault();
-
-        if (gallery) {
-            photoboothTools.console.logDev('Closing Gallery');
-            gallery.close();
-        }
-    });
-
     $(document).on('keyup', function (ev) {
         if (config.print.from_gallery && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
             if (isPrinting) {
