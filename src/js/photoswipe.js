@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth photoboothTools rotaryController */
+/* globals photoBooth photoboothTools rotaryController */
 
 // eslint-disable-next-line no-unused-vars
 let ssTimeOut,
@@ -245,7 +245,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         }
     });
     gallery.init();
-    rotaryController.focusSet('.pswp');
+    if (typeof rotaryController !== 'undefined') {
+        rotaryController.focusset('.pswp');
+    }
 
     /* slideshow management */
     function gotoNextSlide() {
