@@ -144,6 +144,7 @@ if (
         <div class="modal" id="print_mesg">
             <div class="modal__body"><span data-i18n="printing"></span></div>
         </div>
+        <div class="modal" id="modal_mesg"></div>
 
         <script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
         <script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>

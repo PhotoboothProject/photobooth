@@ -281,9 +281,20 @@ $('.takeChroma, .newchroma').on('click', function (e) {
 $(document).on('keyup', function (ev) {
     if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
         if (!backgroundImage) {
-            photoboothTools.console.log('Please choose a background first!');
+            photoboothTools.modalMesg.showError(
+                '#modal_mesg',
+                photoboothTools.getTranslation('chroma_needs_background')
+            );
+            setTimeout(function () {
+                photoboothTools.modalMesg.reset('#modal_mesg');
+            }, 1000);
+            photoboothTools.console.logDev('Please choose a background first!');
         } else if (needsReload) {
-            photoboothTools.console.log('Please reload the page to take a new Picture!');
+            photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('chroma_needs_reload'));
+            setTimeout(function () {
+                photoboothTools.modalMesg.reset('#modal_mesg');
+            }, 1000);
+            photoboothTools.console.logDev('Please reload the page to take a new Picture!');
         } else if (!photoBooth.takingPic) {
             photoBooth.thrill('chroma');
         } else if (config.dev.loglevel > 0 && photoBooth.takingPic) {
@@ -293,9 +304,20 @@ $(document).on('keyup', function (ev) {
 
     if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
         if (!backgroundImage) {
-            photoboothTools.console.log('Please choose a background first!');
+            photoboothTools.modalMesg.showError(
+                '#modal_mesg',
+                photoboothTools.getTranslation('chroma_needs_background')
+            );
+            setTimeout(function () {
+                photoboothTools.modalMesg.reset('#modal_mesg');
+            }, 1000);
+            photoboothTools.console.logDev('Please choose a background first!');
         } else if (needsReload) {
-            photoboothTools.console.log('Please reload the page to take a new Picture!');
+            photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('chroma_needs_reload'));
+            setTimeout(function () {
+                photoboothTools.modalMesg.reset('#modal_mesg');
+            }, 1000);
+            photoboothTools.console.logDev('Please reload the page to take a new Picture!');
         } else if (!photoBooth.takingPic) {
             photoboothTools.console.logDev('Collage key pressed. Not possible on live chroma, triggering photo now.');
             photoBooth.thrill('chroma');
