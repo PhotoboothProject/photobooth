@@ -8,11 +8,9 @@ let buttonController;
 // eslint-disable-next-line no-unused-vars
 function initRemoteBuzzerFromDOM() {
     photoboothTools.console.logDev(
-        'Remote buzzer server is ' + config.remotebuzzer.usebuttons ||
-            config.remotebuzzer.userotary ||
-            config.remotebuzzer.usenogpio
-            ? 'enabled.'
-            : 'disabled.'
+        config.remotebuzzer.usebuttons || config.remotebuzzer.userotary || config.remotebuzzer.usenogpio
+            ? 'Remote buzzer server is enabled.'
+            : 'Remote buzzer server is disabled.'
     );
 
     /*
