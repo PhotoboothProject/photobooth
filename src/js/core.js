@@ -1211,7 +1211,6 @@ const photoBooth = (function () {
                     photoboothTools.console.log('Printing already in progress!');
                 } else {
                     printBtn.trigger('click');
-                    printBtn.blur();
                 }
             }
         }
