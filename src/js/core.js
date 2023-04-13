@@ -127,9 +127,9 @@ const photoBooth = (function () {
         startPage.addClass('open');
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
-            photoboothTools.console.logDev('core: start video (BACKGROUND) from api.init.');
+            photoboothTools.console.logDev('Preview: core: start video (BACKGROUND) from api.init.');
         } else if (config.preview.cmd && !config.preview.bsm) {
-            photoboothTools.console.logDev('core: start video (INIT) from api.init.');
+            photoboothTools.console.logDev('Preview: core: start video (INIT) from api.init.');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
 
@@ -169,7 +169,7 @@ const photoBooth = (function () {
             }
         }
         if (!config.preview.killcmd || config.preview.camTakesPic) {
-            photoboothTools.console.logDev('core: stopping preview from stopPreviewAndCaptureFromVideo.');
+            photoboothTools.console.logDev('Preview: core: stopping preview from stopPreviewAndCaptureFromVideo.');
             photoboothPreview.stopPreview();
         }
     };
@@ -234,7 +234,7 @@ const photoBooth = (function () {
 
     api.thrill = function (photoStyle, retry = 0) {
         if (api.takingPic) {
-            photoboothTools.console.logDev('Taking picture in progress already!');
+            photoboothTools.console.logDev('ERROR: Taking picture in progress already!');
 
             return;
         }
@@ -545,7 +545,12 @@ const photoBooth = (function () {
                 cheese.empty();
 
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                    photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
+                    photoboothTools.console.logDev(
+                        'ERROR: Taking picture failed. Retrying. Retry: ' +
+                            retry +
+                            ' / ' +
+                            config.picture.retry_on_error
+                    );
                     api.retryTakePic(data.style, retry);
                 } else {
                     api.errorPic(result);
@@ -775,7 +780,7 @@ const photoBooth = (function () {
         api.resetTimeOut();
 
         if (config.preview.cmd && !config.preview.bsm) {
-            photoboothTools.console.logDev('core: start video from api.renderPic');
+            photoboothTools.console.logDev('Preview: core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
     };
@@ -880,7 +885,7 @@ const photoBooth = (function () {
             element.removeClass('tick');
 
             if (count === stop && config.preview.killcmd && !config.preview.camTakesPic) {
-                photoboothTools.console.logDev('core: stopping preview at countdown.');
+                photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
                 photoboothPreview.stopPreview();
             }
             if (count < start) {
@@ -915,7 +920,7 @@ const photoBooth = (function () {
                     photoboothTools.console.log('Picture processed: ', data);
 
                     if (data.error) {
-                        photoboothTools.console.log('An error occurred: ', data.error);
+                        photoboothTools.console.log('ERROR: An error occurred: ', data.error);
                         photoboothTools.modal.close('#print_mesg');
                         photoboothTools.modalMesg.showError('#modal_mesg', data.error);
                     }
@@ -932,7 +937,7 @@ const photoBooth = (function () {
                     }, config.print.time);
                 },
                 error: (jqXHR, textStatus) => {
-                    photoboothTools.console.log('An error occurred: ', textStatus);
+                    photoboothTools.console.log('ERROR: An error occurred: ', textStatus);
                     photoboothTools.modal.close('#print_mesg');
                     photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
 
