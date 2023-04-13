@@ -26,6 +26,8 @@
   "cheeseCollage": "Cheeeeeeeese Collageeeeeeeeeee!",
   "chromaInfoAfter": "Please reload the page to take a new Picture",
   "chromaInfoBefore": "Please choose a background to take a Picture",
+  "chroma_needs_background": "Please choose a background first!",
+  "chroma_needs_reload": "Please reload the page to take a new Picture!",
   "close": "Close",
   "collage": "Collage",
   "collage:collage_background": "Background",
