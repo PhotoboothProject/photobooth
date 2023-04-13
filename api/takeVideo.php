@@ -52,29 +52,15 @@ function takeVideo($filename) {
     }
 }
 
-$random = md5(time()) . '.mp4';
+$random = Image::create_new_filename('random', '.mp4');
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file'])) {
-    $name = $_POST['file'];
-} elseif ($config['picture']['naming'] === 'numbered') {
-    if ($config['database']['enabled']) {
-        $images = getImagesFromDB();
-    } else {
-        $images = getImagesFromDirectory($config['foldersAbs']['images']);
+    $file = $_POST['file'];
+} else {
+    $file = Image::create_new_filename($config['picture']['naming'], '.mp4');
+    if ($config['database']['file'] != 'db') {
+        $file = $config['database']['file'] . '_' . $file;
     }
-    $img_number = count($images);
-    $files = str_pad(++$img_number, 4, '0', STR_PAD_LEFT);
-    $name = $files . '.mp4';
-} elseif ($config['picture']['naming'] === 'dateformatted') {
-    $name = date('Ymd_His') . '.mp4';
-} else {
-    $name = $random;
-}
-
-if ($config['database']['file'] === 'db' || (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file']))) {
-    $file = $name;
-} else {
-    $file = $config['database']['file'] . '_' . $name;
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
