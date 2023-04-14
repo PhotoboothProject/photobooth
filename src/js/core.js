@@ -850,7 +850,9 @@ const photoBooth = (function () {
 
     api.closeGallery = function () {
         if (typeof globalGalleryHandle !== 'undefined') {
-            globalGalleryHandle.close();
+            if (globalGalleryHandle.pswp) {
+                globalGalleryHandle.pswp.close();
+            }
         }
 
         gallery.find('.gallery__inner').hide();
