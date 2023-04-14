@@ -19,6 +19,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
     const openPhotoSwipe = function (selector, galIndex) {
         const gallery = new PhotoSwipeLightbox({
+            mainClass: 'rotarygroup',
             gallery: selector,
             children: 'a',
             bgOpacity: config.pswp.bgOpacity,
