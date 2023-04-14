@@ -1,5 +1,5 @@
 /* exported rotaryController initRemoteBuzzerFromDOM remoteBuzzerClient */
-/* global photoBooth photoboothTools globalGalleryHandle io */
+/* global photoBooth photoboothTools io */
 
 let remoteBuzzerClient;
 let rotaryController;
@@ -274,8 +274,6 @@ function initRemoteBuzzerFromDOM() {
                     focusIndex = 0;
                 }
 
-                globalGalleryHandle.ui.setIdle(false);
-
                 $('.focused')
                     .removeClass('focused pswp-rotary-focus')
                     .parents('.pswp.pswp--open')
@@ -315,8 +313,6 @@ function initRemoteBuzzerFromDOM() {
                 const focusIndex = buttonList.index($('.focused'));
 
                 if (buttonList.eq(focusIndex - 1).exists()) {
-                    globalGalleryHandle.ui.setIdle(false);
-
                     $('.focused')
                         .removeClass('focused pswp-rotary-focus')
                         .parents('.pswp.pswp--open')
@@ -357,10 +353,6 @@ function initRemoteBuzzerFromDOM() {
                     $('#qrCode').click();
                 } else {
                     $('.focused').blur().trigger('click');
-
-                    if ($('.pswp.pswp--open').is(':visible')) {
-                        globalGalleryHandle.ui.setIdle(true);
-                    }
                 }
             }
         };
