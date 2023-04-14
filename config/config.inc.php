@@ -69,6 +69,11 @@ $config['filters']['defaults'] = 'plain';
 $config['filters']['disabled'] = array();
 $config['picture']['take_frame'] = false;
 $config['picture']['frame'] = '';
+$config['picture']['extend_by_frame'] = true;
+$config['picture']['frame_left_percentage'] = 10;
+$config['picture']['frame_right_percentage'] = 10;
+$config['picture']['frame_top_percentage'] = 5;
+$config['picture']['frame_bottom_percentage'] = 15;
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
 $config['picture']['key'] = '';
@@ -443,3 +448,4 @@ $config['folders']['private'] = 'private';
 $config['reset']['remove_images'] = true;
 $config['reset']['remove_mailtxt'] = false;
 $config['reset']['remove_config'] = false;
+
