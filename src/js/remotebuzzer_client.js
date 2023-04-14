@@ -351,6 +351,8 @@ function initRemoteBuzzerFromDOM() {
                 // click modal if open
                 if ($('#qrCode.modal.modal--show').exists()) {
                     $('#qrCode').click();
+                } else if ($('#qrPswp.modal.modal--show').exists()) {
+                    $('#qrPswp').click();
                 } else {
                     $('.focused').blur().trigger('click');
                 }
