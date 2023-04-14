@@ -280,10 +280,11 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
     $(gallerySelector).on('click', function (e) {
         e.preventDefault();
-
-        const element = $(e.target).closest('a');
-        const index = $(gallerySelector).find('>a').index(element);
-        globalGalleryHandle = openPhotoSwipe(gallerySelector, index);
+        if ($(gallerySelector).children('a').length > 0) {
+            const element = $(e.target).closest('a');
+            const index = $(gallerySelector).find('>a').index(element);
+            globalGalleryHandle = openPhotoSwipe(gallerySelector, index);
+        }
     });
 
     $(document).on('keyup', function (ev) {
