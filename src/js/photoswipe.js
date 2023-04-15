@@ -68,6 +68,11 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 setSlideshowState(ssButtonClass, false);
                 $('.pswp__button--playpause i:first').toggleClass(config.icons.slideshow_toggle);
             }
+            if (typeof rotaryController !== 'undefined') {
+                setTimeout(() => {
+                    rotaryController.focusSet('#gallery');
+                }, 300);
+            }
         });
 
         gallery.on('uiRegister', function () {
