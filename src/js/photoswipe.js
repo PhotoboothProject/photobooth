@@ -260,6 +260,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             if (!config.no_request) {
                 $('.pswp__button--delete').removeClass('rotaryfocus');
             }
+            if ($('.pswp').hasClass('pswp--touch')) {
+                $('.pswp__button--arrow--prev').removeClass('rotaryfocus');
+                $('.pswp__button--arrow--next').removeClass('rotaryfocus');
+            }
             $('.pswp__button--close').empty();
             $('.pswp__button--close').html('<i class="' + config.icons.close + '"></i>');
             if (config.pswp.zoomEl) {
