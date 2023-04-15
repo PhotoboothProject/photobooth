@@ -1,6 +1,7 @@
 /* VARIABLES */
 let collageInProgress = false,
     triggerArmed = true;
+
 const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
 const PID = process.pid;
@@ -306,6 +307,7 @@ if (useGpio) {
     gpioSanity(config.remotebuzzer.rotaryclkgpio);
     gpioSanity(config.remotebuzzer.rotarydtgpio);
     gpioSanity(config.remotebuzzer.rotarybtngpio);
+    gpioSanity(config.remotebuzzer.rebootgpio);
 }
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
@@ -545,6 +547,42 @@ const watchShutdownGPIO = function watchShutdownGPIO(err, gpioValue) {
     }
 };
 
+/* WATCH FUNCTION REBOOT BUTTON */
+const watchRebootGPIO = function watchRebootGPIO(err, gpioValue) {
+    if (err) {
+        throw err;
+    }
+
+    /* if there is some activity in progress ignore GPIO pin for now */
+    if (!triggerArmed || buttonActiveCheck(config.remotebuzzer.rebootgpio, gpioValue)) {
+        return;
+    }
+
+    if (gpioValue) {
+        /* Button released - raising flank detected */
+        const timeElapsed = buttonTimer();
+
+        if (timeElapsed) {
+            log('GPIO', config.remotebuzzer.rebootgpio, '- Reboot button released ', timeElapsed, ' [ms] ');
+
+            if (timeElapsed >= config.remotebuzzer.rebootholdtime * 1000) {
+                log('System reboot initiated - bye bye');
+                /*  Initiate system reboot */
+                cmd = 'sudo ' + config.reboot.cmd;
+                stdout = execSync(cmd);
+            }
+        } else {
+            /* Too long button press - timeout - reset server state machine */
+            log('GPIO', config.remotebuzzer.rebootgpio, '- too long button press - Reset server state machine');
+            photoboothAction('reset');
+            buttonActiveCheck(-1, -1);
+        }
+    } else {
+        /* Button pressed - falling flank detected (pull to ground) */
+        log('GPIO', config.remotebuzzer.rebootgpio, '- Reboot button pressed');
+    }
+};
+
 /* WATCH FUNCTION PRINT BUTTON */
 const watchPrintGPIO = function watchPrintGPIO(err, gpioValue) {
     if (err) {
@@ -705,6 +743,15 @@ if (useGpio) {
             log('Looking for Shutdown Button on Raspberry GPIO', config.remotebuzzer.shutdowngpio);
         }
 
+        /* REBOOT BUTTON */
+        if (config.remotebuzzer.rebootbutton) {
+            const rebootButton = new Gpio(config.remotebuzzer.rebootgpio, 'in', 'both', {
+                debounceTimeout: config.remotebuzzer.debounce
+            });
+            rebootButton.watch(watchRebootGPIO);
+            log('Looking for Reboot Button on Raspberry GPIO', config.remotebuzzer.rebootgpio);
+        }
+
         /* PRINT BUTTON */
         if (config.remotebuzzer.printbutton) {
             const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {
@@ -717,4 +764,5 @@ if (useGpio) {
 } else if (!config.remotebuzzer.usenogpio && !Gpio.accessible) {
     log('GPIO enabled but GPIO not accessible!');
 }
+
 log('Initialization completed');

@@ -281,6 +281,9 @@ $config['remotebuzzer']['shutdowngpio'] = 16;
 $config['remotebuzzer']['shutdownholdtime'] = '5';
 $config['remotebuzzer']['port'] = 14711;
 $config['remotebuzzer']['debounce'] = 30;
+$config['remotebuzzer']['rebootbutton'] = false;
+$config['remotebuzzer']['rebootgpio'] = 23;
+$config['remotebuzzer']['rebootholdtime'] = '5';
 
 
 // S Y N C  T O  U S B  S T I C K
