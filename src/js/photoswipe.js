@@ -248,15 +248,15 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 $('.pswp__button--zoom').empty();
                 $('.pswp__button--zoom').html('<i class="' + config.icons.zoom + '"></i>');
             }
+            if (typeof rotaryController !== 'undefined') {
+                rotaryController.focusSet('.pswp');
+            }
         });
         gallery.init();
         if ($(gallerySelector).children('a').length > 0) {
             gallery.loadAndOpen(galIndex, {
                 gallery: document.querySelector(gallerySelector)
             });
-        }
-        if (typeof rotaryController !== 'undefined') {
-            rotaryController.focusSet('.pswp');
         }
 
         /* slideshow management */
