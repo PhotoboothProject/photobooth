@@ -816,7 +816,7 @@ const photoBooth = (function () {
             .append('<i class="' + config.icons.close + '"></i>')
             .css('float', 'right')
             .appendTo(body);
-        $('<img src="api/qrcode.php?filename=' + filename + '" alt="qr code"/>')
+        $('<img src="api/qrcode.php?filename=' + filename + '" alt="qr code" style="max-width: 100%;"/>')
             .on('load', function () {
                 $('<p>')
                     .css('max-width', this.width + 'px')

@@ -1,7 +1,3 @@
-<div id="qrPswp" class="modal">
-	<div class="modal__body <?php echo $uiShape; ?>"></div>
-</div>
-
 <div id="gallery" class="gallery rotarygroup">
 	<div class="gallery__inner">
 		<div class="gallery__header">
