@@ -354,9 +354,9 @@ function initRemoteBuzzerFromDOM() {
             if (this.enabled()) {
                 // click modal if open
                 if ($('#qrCode.modal.modal--show').exists()) {
-                    $('#qrCode').click();
+                    photoboothTools.modal.close('#qrCode');
                 } else if ($('#qrPswp.modal.modal--show').exists()) {
-                    $('#qrPswp').click();
+                    photoboothTools.modal.close('#qrPswp');
                 } else {
                     $('.focused').blur().trigger('click');
 
