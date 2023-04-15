@@ -1126,7 +1126,6 @@ const photoBooth = (function () {
         e.stopPropagation();
 
         photoboothTools.modal.open('#qrCode');
-        rotaryController.focusSet('#qrCode');
     });
 
     $('.homebtn').on('click', function (e) {
