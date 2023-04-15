@@ -145,6 +145,16 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
             if (config.qr.enabled) {
                 gallery.pswp.ui.registerElement({
+                    name: 'qrPswp',
+                    className: 'modal',
+                    appendTo: 'root',
+                    // eslint-disable-next-line no-unused-vars
+                    onInit: (el, pswp) => {
+                        el.setAttribute('id', 'qrPswp');
+                    }
+                });
+
+                gallery.pswp.ui.registerElement({
                     name: 'qrcode',
                     ariaLabel: 'qrcode',
                     order: orderNumber.shift(),
@@ -243,6 +253,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
         gallery.on('afterInit', () => {
             // photoswipe fully initialized and opening transition is running (if available)
+            if (config.qr.enabled) {
+                $('#qrPswp').html('<div class="modal__body shape--' + config.ui.style + '"></div>');
+            }
             $('.pswp__button').addClass('rotaryfocus');
             if (!config.no_request) {
                 $('.pswp__button--delete').removeClass('rotaryfocus');
