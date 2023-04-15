@@ -178,3 +178,4 @@ Thanks for reading!
 - [DJ DT-Sommer](https://dt-sommer.jimdofree.com)
 - [ledsi](https://github.com/ledsi)
 - [vucubcaquix](https://github.com/vucubcaquix)
+- [Spike-78](https://github.com/Spike-78)

@@ -318,6 +318,22 @@ $config['remotebuzzer']['shutdowngpio'] = 16;
 $config['remotebuzzer']['shutdownholdtime'] = '5';
 $config['remotebuzzer']['port'] = 14711;
 $config['remotebuzzer']['debounce'] = 30;
+$config['remotebuzzer']['rebootbutton'] = false;
+$config['remotebuzzer']['rebootgpio'] = 23;
+$config['remotebuzzer']['rebootholdtime'] = '5';
+$config['remotebuzzer']['useleds'] = false;
+$config['remotebuzzer']['photolight'] = false;
+$config['remotebuzzer']['photolightgpio'] = 25;
+$config['remotebuzzer']['pictureled'] = false;
+$config['remotebuzzer']['pictureledgpio'] = 19;
+$config['remotebuzzer']['collageled'] = false;
+$config['remotebuzzer']['collageledgpio'] = 12;
+$config['remotebuzzer']['shutdownled'] = false;
+$config['remotebuzzer']['shutdownledgpio'] = 8;
+$config['remotebuzzer']['rebootled'] = false;
+$config['remotebuzzer']['rebootledgpio'] = 18;
+$config['remotebuzzer']['printled'] = false;
+$config['remotebuzzer']['printledgpio'] = 6;
 
 
 // S Y N C  T O  U S B  S T I C K

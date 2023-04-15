@@ -225,7 +225,7 @@ For example use <a href="https://keycode.info" target="_blank">https://keycode.i
 
   - Key code which triggers printing: **define**
 
-#### Remotebuzzer Hardware Button feature using GPIO connected hardware (Raspberry Pi only)
+#### Remotebuzzer Hardware Button & LED feature using GPIO connected hardware (Raspberry Pi only)
 
 **Important:** Works if you access Photobooth via [http://localhost](http://localhost) or [http://your-ip-adress](#), but accessing via the loopback IP (127.0.0.1) does not work!
 
@@ -241,7 +241,9 @@ The Hardware Button functionality supports two separate modes of operation (sele
 
 Both buttons and rotary encoder controls can be combined.
 
-Photobooth will watch GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
+Photobooth will watch Button GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
+
+For the **LED Support** GPIOs need to be set as OUTPUT.
 
 ##### Troubleshooting / Debugging
 
@@ -254,11 +256,15 @@ Having trouble?
 - Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php)
 - If there is no errors logged but hardware buttons still do not trigger:
   - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
-  - GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
+  - Button GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
     ```
-    gpio=16,17,20,21,22,26,27=pu
+    gpio=16,17,20,21,22,23,26,27=pu
     ```
-- For the Shutdown button to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
+  - LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
+    ```
+    gpio=6,8,12,18,19,25=op
+    ```
+- For the shutdown and reboot buttons to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
     ```sh
     cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
     www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
@@ -308,6 +314,11 @@ The server supports up to four connected hardware buttons for the following func
 - Defaults to GPIO26
 - This button will initiate a print of the current picture either from the results screen or the gallery.
 
+5) **Reboot Button**
+
+- Defaults to GPIO23
+- This button will initate a safe system shutdown and halt (`shutdown -r now`).
+
 
 After any button is triggered, all hardware button remain disabled until the action (picture / collage) completed. Once completed, the hardware buttons re-arms / are active again.
 
@@ -320,6 +331,7 @@ Picture     ---   GPIO 21
 Collage     ---   GPIO 20
 Shutdown    ---   GPIO 16
 Print       ---   GPIO 26
+Reboot      ---   GPIO 23
 All         ---   GND
 ```
 
@@ -338,6 +350,23 @@ DT   ---   GPIO 17
 BTN  ---   GPIO 22
 +    ---   3V3
 GND  ---   GND
+```
+
+##### LED Support
+
+LED's can be used to show the current status of remotebuzzer server actions.
+
+The wiring layout is
+
+```
+LED                   Raspberry
+
+Photolight      ---   GPIO 25
+Picture LED     ---   GPIO 19
+Collage LED     ---   GPIO 12
+Shutdown LED    ---   GPIO  8
+Reboot LED      ---   GPIO 18
+Print LED       ---   GPIO  6
 ```
 
 ##### Known limitations:
