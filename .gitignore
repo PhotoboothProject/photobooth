@@ -6,6 +6,7 @@ data/
 digicamcontrol/
 HEAD
 faq/faq.md.php
+manual/faq.*
 node_modules/
 package-lock.json
 private/*
