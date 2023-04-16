@@ -1,4 +1,4 @@
-var MarkdownIt = require('markdown-it')
+const MarkdownIt = require('markdown-it')
 const fs = require('fs');
 
 var md = new MarkdownIt();
