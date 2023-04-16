@@ -82,7 +82,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		<p><a href="../livechroma.php" class="<?php echo $btnClass; ?>"><i class="<?php echo $config['icons']['livechroma']; ?>"></i> <span data-i18n="livechroma"></span></a></p>
 		<?php endif; ?>
 		<?php if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-		<p><a href="../manual/faq.php" class="<?php echo $btnClass; ?>" title="FAQ" target="newwin"><i class="<?php echo $config['icons']['faq']; ?>"></i> <span data-i18n="show_faq"></span></a></p>
+		<p><a href="../faq" class="<?php echo $btnClass; ?>" title="FAQ" target="newwin"><i class="<?php echo $config['icons']['faq']; ?>"></i> <span data-i18n="show_faq"></span></a></p>
 		<p><a href="../manual" class="<?php echo $btnClass; ?>" title="Manual" target="newwin"><i class="<?php echo $config['icons']['manual']; ?>"></i> <span data-i18n="show_manual"></span></a></p>
 		<p><a href="https://t.me/PhotoboothGroup" class="<?php echo $btnClass; ?>" title="Telegram" target="newwin"><i class="<?php echo $config['icons']['telegram']; ?>"></i> <span data-i18n="telegram"></span></a></p>
 		<?php endif; ?>

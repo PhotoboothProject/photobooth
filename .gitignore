@@ -5,7 +5,7 @@ config/*
 data/
 digicamcontrol/
 HEAD
-manual/faq.*
+faq/faq.md.php
 node_modules/
 package-lock.json
 private/*
