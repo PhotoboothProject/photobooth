@@ -518,7 +518,7 @@ function doMath($expression): int {
     $o = 0;
     // eval is evil. To mitigate any attacks the allowed characters are limited to numbers and math symbols
     eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');
-    return $o;
+    return intval($o);
 }
 
 function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color) {
