@@ -257,7 +257,7 @@ server.listen(config.remotebuzzer.port, () => {
  */
 
 /* SANITY CHECKS */
-function gpioSanity(gpioconfig) {
+function gpioPuSanity(gpioconfig) {
     if (isNaN(gpioconfig)) {
         throw new Error(gpioconfig + ' is not a valid number');
     }
@@ -274,18 +274,41 @@ function gpioSanity(gpioconfig) {
     }
 }
 
+function gpioOpSanity(gpioconfig) {
+    if (isNaN(gpioconfig)) {
+        throw new Error(gpioconfig + ' is not a valid number');
+    }
+
+    if (gpioconfig < 1 || gpioconfig > 27) {
+        throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
+    }
+
+    cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" /boot/config.txt';
+    stdout = execSync(cmd).toString();
+
+    if (!stdout.split(',').find((el) => el == gpioconfig)) {
+        throw new Error('GPIO' + gpioconfig + ' is not configured as OUTPUT in /boot/config.txt - see FAQ for details');
+    }
+}
+
 const Gpio = require('onoff').Gpio;
 const useGpio = Gpio.accessible && !config.remotebuzzer.usenogpio;
 
 if (useGpio) {
-    gpioSanity(config.remotebuzzer.picturegpio);
-    gpioSanity(config.remotebuzzer.collagegpio);
-    gpioSanity(config.remotebuzzer.shutdowngpio);
-    gpioSanity(config.remotebuzzer.printgpio);
-    gpioSanity(config.remotebuzzer.rotaryclkgpio);
-    gpioSanity(config.remotebuzzer.rotarydtgpio);
-    gpioSanity(config.remotebuzzer.rotarybtngpio);
-    gpioSanity(config.remotebuzzer.rebootgpio);
+    gpioPuSanity(config.remotebuzzer.picturegpio);
+    gpioPuSanity(config.remotebuzzer.collagegpio);
+    gpioPuSanity(config.remotebuzzer.shutdowngpio);
+    gpioPuSanity(config.remotebuzzer.printgpio);
+    gpioPuSanity(config.remotebuzzer.rotaryclkgpio);
+    gpioPuSanity(config.remotebuzzer.rotarydtgpio);
+    gpioPuSanity(config.remotebuzzer.rotarybtngpio);
+    gpioPuSanity(config.remotebuzzer.rebootgpio);
+    gpioOpSanity(config.remotebuzzer.photolightgpio);
+    gpioOpSanity(config.remotebuzzer.pictureledgpio);
+    gpioOpSanity(config.remotebuzzer.collageledgpio);
+    gpioOpSanity(config.remotebuzzer.printledgpio);
+    gpioOpSanity(config.remotebuzzer.shutdownledgpio);
+    gpioOpSanity(config.remotebuzzer.rebootledgpio);
 }
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
