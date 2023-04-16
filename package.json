@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "npm-run-all --serial format build:faq build:gulp build:head clean:skipwelcome",
-    "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.php --footer faq/footer.html && mv manual/faq.html manual/faq.php",
+    "build:faq": "node scripts/faq.js",
     "build:gulp": "gulp",
     "build:head": "git log --format='%h %s' -n 20 > HEAD",
     "build:sass": "gulp sass",
@@ -55,7 +55,7 @@
   "dependencies": {
     "@andreasremdt/simple-translator": "^2.0.4",
     "font-awesome": "^4.7.0",
-    "gh-markdown-cli": "^0.2.0",
+    "markdown-it": "^13.0.1",
     "github-markdown-css": "^5.2.0",
     "gulp": "^4.0.2",
     "gulp-sass": "^5.1.0",
