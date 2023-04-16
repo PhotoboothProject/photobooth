@@ -1,5 +1,5 @@
 /* exported rotaryController initRemoteBuzzerFromDOM remoteBuzzerClient */
-/* global photoBooth photoboothTools globalGalleryHandle io */
+/* global photoBooth photoboothTools io */
 
 let remoteBuzzerClient;
 let rotaryController;
@@ -8,10 +8,9 @@ let buttonController;
 // eslint-disable-next-line no-unused-vars
 function initRemoteBuzzerFromDOM() {
     photoboothTools.console.logDev(
-        'Remote Buzzer client:',
         config.remotebuzzer.usebuttons || config.remotebuzzer.userotary || config.remotebuzzer.usenogpio
-            ? 'enabled'
-            : 'disabled'
+            ? 'Remote buzzer server is enabled.'
+            : 'Remote buzzer server is disabled.'
     );
 
     /*
@@ -80,13 +79,13 @@ function initRemoteBuzzerFromDOM() {
 
                 ioClient.on('connect_error', function () {
                     photoboothTools.console.log(
-                        'ERROR: remotebuzzer_client unable to connect to webserver ip - please ensure remotebuzzer_server is running on Photobooth server. Set Photobooth loglevel to 1 (or above) to create log file for debugging.'
+                        'ERROR: Remote buzzer client unable to connect to webserver ip - please ensure Remote buzzer server is running on Photobooth server. Set Photobooth loglevel to 1 (or above) to create log file for debugging.'
                     );
                 });
 
                 ioClient.on('connect', function () {
                     photoboothTools.console.logDev(
-                        'remotebuzzer_client successfully connected to Photobooth webserver ip'
+                        'Remote buzzer client successfully connected to Photobooth webserver ip.'
                     );
                 });
 
@@ -96,7 +95,7 @@ function initRemoteBuzzerFromDOM() {
                 rotaryController.focusSet('#start');
             } else {
                 photoboothTools.console.log(
-                    'ERROR: remotebuzzer_client unable to connect - webserver.ip not defined in photobooth config'
+                    'ERROR: Remote buzzer client unable to connect - webserver ip not defined in photobooth config!'
                 );
             }
         };
@@ -240,9 +239,9 @@ function initRemoteBuzzerFromDOM() {
         api.init = function () {
             if (config.dev.loglevel > 0 && typeof onStandaloneGalleryView !== 'undefined') {
                 photoboothTools.console.log(
-                    'Rotary Controller is ',
+                    'Rotary controller is ',
                     config.remotebuzzer.enable_standalonegallery ? 'enabled' : 'disabled',
-                    ' for standalone gallery view'
+                    ' for standalone gallery view.'
                 );
             }
         };
@@ -274,8 +273,6 @@ function initRemoteBuzzerFromDOM() {
                 } else if (buttonList.eq(0).exists()) {
                     focusIndex = 0;
                 }
-
-                globalGalleryHandle.ui.setIdle(false);
 
                 $('.focused')
                     .removeClass('focused pswp-rotary-focus')
@@ -316,8 +313,6 @@ function initRemoteBuzzerFromDOM() {
                 const focusIndex = buttonList.index($('.focused'));
 
                 if (buttonList.eq(focusIndex - 1).exists()) {
-                    globalGalleryHandle.ui.setIdle(false);
-
                     $('.focused')
                         .removeClass('focused pswp-rotary-focus')
                         .parents('.pswp.pswp--open')
@@ -355,13 +350,11 @@ function initRemoteBuzzerFromDOM() {
             if (this.enabled()) {
                 // click modal if open
                 if ($('#qrCode.modal.modal--show').exists()) {
-                    $('#qrCode').click();
+                    photoboothTools.modal.close('#qrCode');
+                } else if ($('#qrPswp.modal.modal--show').exists()) {
+                    photoboothTools.modal.close('#qrPswp');
                 } else {
                     $('.focused').blur().trigger('click');
-
-                    if ($('.pswp.pswp--open').is(':visible')) {
-                        globalGalleryHandle.ui.setIdle(true);
-                    }
                 }
             }
         };

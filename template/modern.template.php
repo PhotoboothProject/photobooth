@@ -71,6 +71,10 @@
 								<?php if ($config['collage']['enabled']): ?>
 								<a href="#" class="<?php echo $btnClass; ?> takeCollage rotaryfocus"><i class="<?php echo $config['icons']['take_collage']; ?>"></i> <span data-i18n="takeCollage"></span></a>
 								<?php endif; ?>
+
+								<?php if ($config['video']['enabled']): ?>
+								<a href="#" class="<?php echo $btnClass; ?> takeVideo rotaryfocus"><i class="<?php echo $config['icons']['take_video']; ?>"></i> <span data-i18n="takeVideo"></span></a>
+								<?php endif; ?>
 							<?php endif; ?>
 
 							<?php if ($config['gallery']['enabled']): ?>
@@ -81,9 +85,6 @@
 							<?php endif; ?>
 							</div>
 						</div>
-						<button hidden class="closeGallery"></button>
-						<button hidden class="triggerPic"></button>
-						<button hidden class="triggerCollage"></button>
 					</div>
 				</div>
 			</div>

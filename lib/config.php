@@ -7,11 +7,15 @@ require_once __DIR__ . '/helper.php';
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
 $basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
+$rootpath = Helper::fix_seperator(Helper::get_rootpath($basepath));
 
 $cmds = [
     'windows' => [
         'take_picture' => [
             'cmd' => 'digicamcontrol\CameraControlCmd.exe /capture /filename %s',
+        ],
+        'take_video' => [
+            'cmd' => '',
         ],
         'print' => [
             'cmd' => 'mspaint /pt %s',
@@ -32,6 +36,9 @@ $cmds = [
     'linux' => [
         'take_picture' => [
             'cmd' => 'gphoto2 --capture-image-and-download --filename=%s',
+        ],
+        'take_video' => [
+            'cmd' => 'python3 cameracontrol.py -v %s --vlen 3 --vframes 4',
         ],
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',
@@ -81,6 +88,7 @@ $mailTemplates = [
 require_once $default_config_file;
 
 $config['take_picture']['cmd'] = $cmds[SERVER_OS]['take_picture']['cmd'];
+$config['take_video']['cmd'] = $cmds[SERVER_OS]['take_video']['cmd'];
 $config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
 $config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];
 $config['nodebin']['cmd'] = $cmds[SERVER_OS]['nodebin']['cmd'];
@@ -132,19 +140,19 @@ if (file_exists($my_config_file) && !is_writable($my_config_file)) {
 }
 
 if (empty($config['ui']['folders_lang'])) {
-    $config['ui']['folders_lang'] = getrootpath('../resources/lang');
+    $config['ui']['folders_lang'] = $rootpath . '/resources/lang';
 }
 
-$config['ui']['folders_lang'] = fixSeperator($config['ui']['folders_lang']);
+$config['ui']['folders_lang'] = Helper::set_absolute_path(Helper::fix_seperator($config['ui']['folders_lang']));
 
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
-        $path = $basepath . DIRECTORY_SEPARATOR . $folder;
+        $path = $basepath . $folder;
     } else {
-        $path = $basepath . DIRECTORY_SEPARATOR . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
+        $path = $basepath . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
         $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
 
-        $config['foldersJS'][$key] = str_replace('\\', '/', getrootpath($path));
+        $config['foldersJS'][$key] = Helper::fix_seperator(Helper::get_rootpath($path));
     }
 
     if (!file_exists($path)) {
@@ -168,8 +176,8 @@ if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $
     $config['preview']['stop_time'] = $config['picture']['cntdwn_offset'] + 1;
 }
 
-$default_font = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/fonts/GreatVibes-Regular.ttf');
-$default_frame = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/frames/frame.png');
+$default_font = realpath($basepath . 'resources/fonts/GreatVibes-Regular.ttf');
+$default_frame = realpath($basepath . 'resources/img/frames/frame.png');
 
 if (empty($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
     $config['picture']['frame'] = $default_frame;
@@ -184,7 +192,7 @@ if (empty($config['collage']['frame']) || !testFile($config['collage']['frame'])
 }
 
 if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
-    $config['collage']['placeholderpath'] = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/img/background/01.jpg');
+    $config['collage']['placeholderpath'] = realpath($basepath . 'resources/img/background/01.jpg');
 }
 
 if (empty($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
@@ -203,12 +211,7 @@ if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
-if (isSubfolderInstall()) {
-    $bg_root = getrootpath('../resources/img/bg_stone.jpg');
-    $bg_url = fixSeperator($bg_root);
-} else {
-    $bg_url = '/resources/img/bg_stone.jpg';
-}
+$bg_url = Helper::set_absolute_path($rootpath . '/resources/img/bg_stone.jpg');
 
 if (empty($config['background']['defaults'])) {
     $config['background']['defaults'] = 'url(' . $bg_url . ')';
@@ -223,21 +226,21 @@ if (empty($config['background']['chroma'])) {
 }
 
 if (!empty($config['picture']['frame'])) {
-    $pf_root = getrootpath($config['picture']['frame']);
-    $config['picture']['htmlframe'] = fixSeperator($pf_root);
+    $pf_root = Helper::get_rootpath($config['picture']['frame']);
+    $config['picture']['htmlframe'] = Helper::set_absolute_path(Helper::fix_seperator($pf_root));
 }
 
 if (!empty($config['collage']['frame'])) {
-    $cf_root = getrootpath($config['collage']['frame']);
-    $config['collage']['htmlframe'] = fixSeperator($cf_root);
+    $cf_root = Helper::get_rootpath($config['collage']['frame']);
+    $config['collage']['htmlframe'] = Helper::set_absolute_path(Helper::fix_seperator($cf_root));
 }
 
 if (empty($config['webserver']['ip'])) {
-    $config['webserver']['ip'] = getPhotoboothIp();
+    $config['webserver']['ip'] = Photobooth::get_ip();
 }
 
 if (empty($config['qr']['url'])) {
-    $config['qr']['url'] = getPhotoboothUrl() . '/api/download.php?image=';
+    $config['qr']['url'] = Photobooth::get_url() . '/api/download.php?image=';
 }
 
-$config['photobooth']['version'] = getPhotoboothVersion();
+$config['photobooth']['version'] = Photobooth::get_photobooth_version();

@@ -20,6 +20,7 @@ src/sass/custom_style.scss
 stats
 template/custom.template.php
 trash
+vendor/PhotoSwipe/
 vendor/simple-translator/
 .sass-cache
 /.htaccess

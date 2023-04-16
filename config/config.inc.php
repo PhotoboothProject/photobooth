@@ -11,6 +11,7 @@ $config = array();
 $config['ui']['language'] = 'en';
 $config['ui']['folders_lang'] = '';
 $config['adminpanel']['view'] = 'basic';
+$config['adminpanel']['experimental_settings'] = false;
 $config['dev']['loglevel'] = '1';
 $config['dev']['demo_images'] = false;
 $config['start_screen']['title'] = 'Photobooth';
@@ -68,6 +69,11 @@ $config['filters']['defaults'] = 'plain';
 $config['filters']['disabled'] = array();
 $config['picture']['take_frame'] = false;
 $config['picture']['frame'] = '';
+$config['picture']['extend_by_frame'] = true;
+$config['picture']['frame_left_percentage'] = 10;
+$config['picture']['frame_right_percentage'] = 10;
+$config['picture']['frame_top_percentage'] = 5;
+$config['picture']['frame_bottom_percentage'] = 15;
 // specify key id (e.g. 13 is the enter key) to use that key to take a picture (picture key)
 // use for example https://keycode.info to get the key code
 $config['picture']['key'] = '';
@@ -128,6 +134,19 @@ $config['textoncollage']['font_size'] = '50';
 $config['textoncollage']['linespace'] = '90';
 // DO NOT CHANGE limit here
 $config['collage']['limit'] = '';
+
+
+// V I D E O
+$config['video']['enabled'] = false;
+$config['video']['cntdwn_time'] = '3';
+$config['video']['cheese'] = 'Show your moves!';
+$config['video']['collage'] = false;
+$config['video']['collage_keep_images'] = false;
+$config['video']['collage_only'] = false;
+$config['video']['effects'] = 'none';
+$config['video']['animation'] = true;
+$config['video']['gif'] = false;
+$config['video']['qr'] = true;
 
 
 // G A L L E R Y
@@ -297,6 +316,7 @@ $config['get_request']['processed'] = false;
 $config['get_request']['server'] = '';
 $config['get_request']['picture'] = 'CNTDWNPHOTO';
 $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
+$config['get_request']['video'] = 'CNTDWNVIDEO';
 
 
 // A U T H E N T I C A T I O N
@@ -366,6 +386,7 @@ $config['icons']['telegram'] = 'fa fa-telegram';
 $config['icons']['cups'] = 'fa fa-print';
 $config['icons']['take_picture'] = 'fa fa-camera';
 $config['icons']['take_collage'] = 'fa fa-th-large';
+$config['icons']['take_video'] = 'fa fa-video-camera';
 $config['icons']['close'] = 'fa fa-times';
 $config['icons']['refresh'] = 'fa fa-refresh';
 $config['icons']['delete'] = 'fa fa-trash';
@@ -427,3 +448,4 @@ $config['folders']['private'] = 'private';
 $config['reset']['remove_images'] = true;
 $config['reset']['remove_mailtxt'] = false;
 $config['reset']['remove_config'] = false;
+

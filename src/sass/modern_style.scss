@@ -97,3 +97,7 @@ hr.small {
     margin-right: auto;
   }
 }
+
+.pswp-rotary-focus {
+  background: radial-gradient($hoverColor, $mainColor, $secondaryColor) !important;
+}

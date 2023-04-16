@@ -289,15 +289,6 @@
   background: $secondaryColor;
 }
 
-.triggerPic,
-.triggerCollage,
-.closeGallery {
-  padding: 0;
-  margin: 0;
-  width: 1px;
-  height: 1px;
-}
-
 .buttongroup {
   display: flex;
   justify-content: center;
@@ -337,6 +328,7 @@
   }
   .newpic,
   .newcollage,
+  .newVideo,
   .imageFilter {
     &.btn--modern_squared {
       span {
@@ -348,7 +340,8 @@
 
 @media (max-width: 1024px) {
   .takePic,
-  .takeCollage {
+  .takeCollage,
+  .takeVideo {
     &.btn--classic,
     &.btn--classic_rounded {
       padding: 10px 10px;

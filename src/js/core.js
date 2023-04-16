@@ -4,7 +4,8 @@ const photoBooth = (function () {
     const PhotoStyle = {
             PHOTO: 'photo',
             COLLAGE: 'collage',
-            CHROMA: 'chroma'
+            CHROMA: 'chroma',
+            VIDEO: 'video'
         },
         CameraDisplayMode = {
             INIT: 1,
@@ -41,13 +42,14 @@ const photoBooth = (function () {
         galimages = $('#galimages'),
         loading = $('.loading'),
         loaderImage = $('.loaderImage'),
-        triggerPic = $('.triggerPic'),
-        triggerCollage = $('.triggerCollage'),
         printBtn = $('.printbtn'),
         deleteBtn = $('.deletebtn'),
         qrBtn = $('.qrbtn'),
         counter = $('#counter'),
         resultInner = $('.resultInner'),
+        videoAnimation = $('#videoAnimation'),
+        resultVideo = $('#resultVideo'),
+        resultVideoQR = $('#resultVideoQR'),
         spinner = $('.spinner'),
         sendMail = $('.send-mail'),
         mailMessageForm = $('#mail-form-message'),
@@ -108,6 +110,7 @@ const photoBooth = (function () {
         loader.removeClass('error');
         loading.text('');
         spinner.hide();
+        resultPage.hide();
         photoboothTools.modal.empty('#qrCode');
         qrBtn.removeClass('active').attr('style', '');
         api.resetMailForm();
@@ -125,13 +128,12 @@ const photoBooth = (function () {
     api.init = function () {
         api.reset();
 
-        resultPage.hide();
         startPage.addClass('open');
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
-            photoboothTools.console.logDev('core: start video (BACKGROUND) from api.init.');
+            photoboothTools.console.logDev('Preview: core: start video (BACKGROUND) from api.init.');
         } else if (config.preview.cmd && !config.preview.bsm) {
-            photoboothTools.console.logDev('core: start video (INIT) from api.init.');
+            photoboothTools.console.logDev('Preview: core: start video (INIT) from api.init.');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
 
@@ -171,7 +173,7 @@ const photoBooth = (function () {
             }
         }
         if (!config.preview.killcmd || config.preview.camTakesPic) {
-            photoboothTools.console.logDev('core: stopping preview from stopPreviewAndCaptureFromVideo.');
+            photoboothTools.console.logDev('Preview: core: stopping preview from stopPreviewAndCaptureFromVideo.');
             photoboothPreview.stopPreview();
         }
     };
@@ -216,27 +218,27 @@ const photoBooth = (function () {
         }
     };
 
-    api.shellCommand = function ($mode, $filename = '') {
+    api.shellCommand = function (cmd, file = '') {
         command = {
-            mode: $mode,
-            filename: $filename
+            mode: cmd,
+            filename: file
         };
 
-        photoboothTools.console.log('Run', $mode);
+        photoboothTools.console.log('Run', cmd);
 
         jQuery
             .post('api/shellCommand.php', command)
             .done(function (result) {
-                photoboothTools.console.log($mode, 'result: ', result);
+                photoboothTools.console.log(cmd, 'result: ', result);
             })
             .fail(function (xhr, status, result) {
-                photoboothTools.console.log($mode, 'result: ', result);
+                photoboothTools.console.log(cmd, 'result: ', result);
             });
     };
 
     api.thrill = function (photoStyle, retry = 0) {
         if (api.takingPic) {
-            photoboothTools.console.logDev('Taking picture in progress already!');
+            photoboothTools.console.logDev('ERROR: Taking picture in progress already!');
 
             return;
         }
@@ -270,13 +272,17 @@ const photoBooth = (function () {
         photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry);
 
         if (
-            config.preview.mode !== PreviewMode.NONE &&
-            (config.preview.style === PreviewStyle.CONTAIN || config.preview.style === PreviewStyle.SCALE_DOWN) &&
+            config.preview.mode !== PreviewMode.NONE.valueOf() &&
+            (config.preview.style === PreviewStyle.CONTAIN.valueOf() ||
+                config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) &&
             config.preview.showFrame
         ) {
             if (photoStyle === PhotoStyle.PHOTO && config.picture.take_frame) {
                 pictureFrame.show();
-            } else if (photoStyle === PhotoStyle.COLLAGE && config.collage.take_frame === CollageFrameMode.ALWAYS) {
+            } else if (
+                photoStyle === PhotoStyle.COLLAGE &&
+                config.collage.take_frame === CollageFrameMode.ALWAYS.valueOf()
+            ) {
                 collageFrame.show();
             }
         }
@@ -284,35 +290,54 @@ const photoBooth = (function () {
         loader.addClass('open');
 
         if (config.get_request.countdown) {
-            const getMode =
-                photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA
-                    ? config.get_request.picture
-                    : config.get_request.collage;
+            let getMode;
+            switch (photoStyle) {
+                case PhotoStyle.COLLAGE:
+                    getMode = config.get_request.collage;
+                    break;
+                case PhotoStyle.VIDEO:
+                    getMode = config.get_request.video;
+                    break;
+                case PhotoStyle.PHOTO:
+                default:
+                    getMode = config.get_request.picture;
+                    break;
+            }
             const getUrl = config.get_request.server + '/' + getMode;
             photoboothTools.getRequest(getUrl);
         }
 
-        api.startCountdown(
-            photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time,
-            counter,
-            () => {
-                if (config.picture.no_cheese) {
-                    photoboothTools.console.log('Cheese is disabled.');
-                } else {
-                    api.cheese(photoStyle);
-                }
-            }
-        );
+        let countdownTime;
+        switch (photoStyle) {
+            case PhotoStyle.COLLAGE:
+                countdownTime = config.collage.cntdwn_time;
+                break;
+            case PhotoStyle.VIDEO:
+                countdownTime = config.video.cntdwn_time;
+                break;
+            case PhotoStyle.PHOTO:
+            default:
+                countdownTime = config.picture.cntdwn_time;
+                break;
+        }
 
-        const triggerCnt =
-            (photoStyle === PhotoStyle.COLLAGE ? config.collage.cntdwn_time : config.picture.cntdwn_time) -
-            config.picture.cntdwn_offset;
+        api.startCountdown(countdownTime, counter, () => {
+            if (config.picture.no_cheese) {
+                photoboothTools.console.log('Cheese is disabled.');
+            } else {
+                api.cheese(photoStyle);
+            }
+        });
+
+        const triggerCnt = countdownTime - config.picture.cntdwn_offset;
         photoboothTools.console.log('Capture image in ' + triggerCnt + ' seconds.');
         setTimeout(() => {
             if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
                 api.errorPic({
                     error: 'No preview by device cam available!'
                 });
+            } else if (photoStyle === PhotoStyle.VIDEO) {
+                api.takeVideo(retry);
             } else {
                 photoboothTools.console.logDev('Capture image.');
                 api.takePic(photoStyle, retry);
@@ -322,7 +347,9 @@ const photoBooth = (function () {
 
     api.cheese = function (photoStyle) {
         cheese.empty();
-        if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
+        if (photoStyle === PhotoStyle.VIDEO) {
+            cheese.text(config.video.cheese);
+        } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             return;
         } else if (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CHROMA) {
             cheese.text(photoboothTools.getTranslation('cheese'));
@@ -335,6 +362,12 @@ const photoBooth = (function () {
         setTimeout(() => {
             cheese.empty();
         }, cheeseTime);
+    };
+
+    api.takeVideo = function (retry) {
+        remoteBuzzerClient.inProgress(true);
+        const data = {};
+        api.callTakeVideoApi(data, retry);
     };
 
     api.takePic = function (photoStyle, retry) {
@@ -543,11 +576,48 @@ const photoBooth = (function () {
                 cheese.empty();
 
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                    photoboothTools.console.logDev('Taking picture failed. Retrying. Retry: ' + retry);
+                    photoboothTools.console.logDev(
+                        'ERROR: Taking picture failed. Retrying. Retry: ' +
+                            retry +
+                            ' / ' +
+                            config.picture.retry_on_error
+                    );
                     api.retryTakePic(data.style, retry);
                 } else {
                     api.errorPic(result);
                 }
+            });
+    };
+
+    api.callTakeVideoApi = function (data) {
+        if (config.video.animation) {
+            videoAnimation.show();
+        }
+        startTime = new Date().getTime();
+        jQuery
+            .post('api/takeVideo.php', data)
+            .done(function (result) {
+                if (config.video.animation) {
+                    videoAnimation.hide();
+                }
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.log('Took ' + data.style, result);
+                photoboothTools.console.logDev('Taking video took ' + totalTime + 'ms');
+                cheese.empty();
+
+                imgFilter = config.filters.defaults;
+                $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
+                $('#' + imgFilter).addClass('activeSidenavBtn');
+
+                if (result.error) {
+                    api.errorPic(result);
+                } else {
+                    api.processVideo(result);
+                }
+            })
+            .fail(function (xhr, status, result) {
+                api.errorPic(result);
             });
     };
 
@@ -560,6 +630,9 @@ const photoBooth = (function () {
             idVideoSensor.hide();
             collageFrame.hide();
             pictureFrame.hide();
+            if (config.video.animation) {
+                videoAnimation.hide();
+            }
             loader.addClass('error');
             loading.append($('<p>').text(photoboothTools.getTranslation('error')));
             photoboothTools.console.log('An error occurred:', data.error);
@@ -635,6 +708,68 @@ const photoBooth = (function () {
         });
     };
 
+    api.processVideo = function (result) {
+        startTime = new Date().getTime();
+
+        idVideoSensor.hide();
+        idVideoView.hide();
+        loader.css('background', config.colors.panel);
+        loader.css('background-color', config.colors.panel);
+        spinner.show();
+        loading.text(photoboothTools.getTranslation('busyVideo'));
+
+        $.ajax({
+            method: 'POST',
+            url: 'api/applyVideoEffects.php',
+            data: {
+                file: result.file
+            },
+            success: (data) => {
+                photoboothTools.console.log('video processed', data);
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.logDev('Processing video took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Video:', data.file);
+
+                if (config.get_request.processed) {
+                    const getUrl = config.get_request.server + '/video';
+                    photoboothTools.getRequest(getUrl);
+                }
+
+                if (data.error) {
+                    api.errorPic(data);
+                } else {
+                    // if collage exists: render the result for the collage image and overlay the video over the image
+                    const collage = data.file + '-collage.jpg';
+                    const filename = data.images.includes(collage) ? collage : data.file;
+                    api.renderPic(filename, data.images);
+                    const file = config.foldersJS.images + '/' + data.file;
+                    if (!config.video.collage_only) {
+                        if (config.video.gif) {
+                            resultVideo.attr('src', file);
+                        } else {
+                            const source = document.createElement('source');
+                            source.setAttribute('src', file);
+                            source.setAttribute('type', 'video/mp4');
+                            resultVideo.append(source);
+                            resultVideo.get(0).play();
+                        }
+                        resultVideo.show();
+                        if (config.video.qr) {
+                            resultVideoQR.attr('src', 'api/qrcode.php?filename=' + data.file);
+                            resultVideoQR.show();
+                        }
+                    }
+                }
+            },
+            error: (jqXHR, textStatus) => {
+                api.errorPic({
+                    error: 'Request failed: ' + textStatus
+                });
+            }
+        });
+    };
+
     api.renderChroma = function (filename) {
         if (config.live_keying.show_all) {
             api.addImage(filename);
@@ -681,7 +816,7 @@ const photoBooth = (function () {
             .append('<i class="' + config.icons.close + '"></i>')
             .css('float', 'right')
             .appendTo(body);
-        $('<img src="api/qrcode.php?filename=' + filename + '" alt="qr code"/>')
+        $('<img src="api/qrcode.php?filename=' + filename + '" alt="qr code" style="max-width: 100%;"/>')
             .on('load', function () {
                 $('<p>')
                     .css('max-width', this.width + 'px')
@@ -734,9 +869,15 @@ const photoBooth = (function () {
                 }
             });
 
-        api.addImage(filename);
+        // gallery doesn't support videos atm
+        if (!api.isVideoFile(filename)) {
+            api.addImage(filename);
+        }
 
-        const imageUrl = config.foldersJS.images + '/' + filename;
+        // if image is a video render the qr code as image (video should be displayed over this)
+        const imageUrl = api.isVideoFile(filename)
+            ? 'api/qrcode.php?filename=' + filename
+            : config.foldersJS.images + '/' + filename;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
@@ -773,7 +914,7 @@ const photoBooth = (function () {
         api.resetTimeOut();
 
         if (config.preview.cmd && !config.preview.bsm) {
-            photoboothTools.console.logDev('core: start video from api.renderPic');
+            photoboothTools.console.logDev('Preview: core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
     };
@@ -843,7 +984,9 @@ const photoBooth = (function () {
 
     api.closeGallery = function () {
         if (typeof globalGalleryHandle !== 'undefined') {
-            globalGalleryHandle.close();
+            if (globalGalleryHandle.pswp) {
+                globalGalleryHandle.pswp.close();
+            }
         }
 
         gallery.find('.gallery__inner').hide();
@@ -878,7 +1021,7 @@ const photoBooth = (function () {
             element.removeClass('tick');
 
             if (count === stop && config.preview.killcmd && !config.preview.camTakesPic) {
-                photoboothTools.console.logDev('core: stopping preview at countdown.');
+                photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
                 photoboothPreview.stopPreview();
             }
             if (count < start) {
@@ -894,8 +1037,35 @@ const photoBooth = (function () {
         timerFunction();
     };
 
+    api.isVideoFile = function (filename) {
+        const extension = api.getFileExtension(filename);
+
+        return extension === 'mp4' || extension === 'gif';
+    };
+
+    api.getFileExtension = function (filename) {
+        const parts = filename.split('.');
+
+        return parts[parts.length - 1];
+    };
+
+    api.resetPrintErrorMessage = function (cb, to) {
+        setTimeout(function () {
+            photoboothTools.modalMesg.reset('#modal_mesg');
+            cb();
+            isPrinting = false;
+            remoteBuzzerClient.inProgress(false);
+        }, to);
+    };
+
     api.printImage = function (imageSrc, cb) {
-        if (isPrinting) {
+        if (api.isVideoFile(imageSrc)) {
+            photoboothTools.console.log('ERROR: An error occurred: attempt to print non printable file.');
+            photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('no_printing'));
+            setTimeout(function () {
+                photoboothTools.modalMesg.reset('#modal_mesg');
+            }, notificationTimeout);
+        } else if (isPrinting) {
             photoboothTools.console.log('Printing in progress: ' + isPrinting);
         } else {
             photoboothTools.modal.open('#print_mesg');
@@ -903,47 +1073,36 @@ const photoBooth = (function () {
 
             remoteBuzzerClient.inProgress(true);
 
-            setTimeout(function () {
-                $.ajax({
-                    method: 'GET',
-                    url: 'api/print.php',
-                    data: {
-                        filename: imageSrc
-                    },
-                    success: (data) => {
-                        photoboothTools.console.log('Picture processed: ', data);
+            $.ajax({
+                method: 'GET',
+                url: 'api/print.php',
+                data: {
+                    filename: imageSrc
+                },
+                success: (data) => {
+                    photoboothTools.console.log('Picture processed: ', data);
 
-                        if (data.error) {
-                            photoboothTools.console.log('An error occurred: ', data.error);
-                            photoboothTools.modal.close('#print_mesg');
-                            photoboothTools.modalMesg.showError('#modal_mesg', data.error);
-                        }
-
+                    if (data.error) {
+                        photoboothTools.console.log('ERROR: An error occurred: ', data.error);
+                        photoboothTools.modal.close('#print_mesg');
+                        photoboothTools.modalMesg.showError('#modal_mesg', data.error);
+                        api.resetPrintErrorMessage(cb, config.print.time);
+                    } else {
                         setTimeout(function () {
-                            if (data.error) {
-                                photoboothTools.modalMesg.reset('#modal_mesg');
-                            } else {
-                                photoboothTools.modal.close('#print_mesg');
-                            }
+                            photoboothTools.modal.close('#print_mesg');
                             cb();
                             isPrinting = false;
                             remoteBuzzerClient.inProgress(false);
                         }, config.print.time);
-                    },
-                    error: (jqXHR, textStatus) => {
-                        photoboothTools.console.log('An error occurred: ', textStatus);
-                        photoboothTools.modal.close('#print_mesg');
-                        photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
-
-                        setTimeout(function () {
-                            photoboothTools.modalMesg.reset('#modal_mesg');
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, notificationTimeout);
                     }
-                });
-            }, 1000);
+                },
+                error: (jqXHR, textStatus) => {
+                    photoboothTools.console.log('ERROR: An error occurred: ', textStatus);
+                    photoboothTools.modal.close('#print_mesg');
+                    photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
+                    api.resetPrintErrorMessage(cb, notificationTimeout);
+                }
+            });
         }
     };
 
@@ -1020,13 +1179,19 @@ const photoBooth = (function () {
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.PHOTO);
-        $('.newpic').blur();
+        $(this).blur();
     });
 
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.COLLAGE);
-        $('.newcollage').blur();
+        $(this).blur();
+    });
+
+    $('.takeVideo').on('click', function (e) {
+        e.preventDefault();
+        api.thrill(PhotoStyle.VIDEO);
+        $(this).blur();
     });
 
     $('#mySidenav .closebtn').on('click', function (e) {
@@ -1127,7 +1292,6 @@ const photoBooth = (function () {
         e.stopPropagation();
 
         photoboothTools.modal.open('#qrCode');
-        rotaryController.focusSet('#qrCode');
     });
 
     $('.homebtn').on('click', function (e) {
@@ -1158,19 +1322,6 @@ const photoBooth = (function () {
         $('#fs-button').blur();
     });
 
-    // Fake buttons
-    triggerPic.on('click', function (e) {
-        e.preventDefault();
-        api.thrill(PhotoStyle.PHOTO);
-        $('.newpic').blur();
-    });
-
-    triggerCollage.on('click', function (e) {
-        e.preventDefault();
-        api.thrill(PhotoStyle.COLLAGE);
-        $('.newcollage').blur();
-    });
-
     api.handleButtonPressWhileTakingPic = function () {
         if (api.nextCollageNumber > 0) {
             const btnCollageNext = $('#btnCollageNext');
@@ -1190,48 +1341,50 @@ const photoBooth = (function () {
     };
 
     $(document).on('keyup', function (ev) {
-        if (triggerPic[0] || triggerCollage[0]) {
+        if (typeof onStandaloneGalleryView === 'undefined' && typeof onLiveChromaKeyingView === 'undefined') {
+            if (
+                (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) ||
+                (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode)
+            ) {
+                if (api.takingPic) {
+                    api.handleButtonPressWhileTakingPic();
+
+                    return;
+                }
+                api.closeGallery();
+            } else if (config.print.from_result && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
+                if (isPrinting) {
+                    photoboothTools.console.log('Printing already in progress!');
+                } else {
+                    printBtn.trigger('click');
+                }
+
+                return;
+            } else {
+                return;
+            }
 
             // picture
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
-                if (api.takingPic) {
-                    api.handleButtonPressWhileTakingPic();
+                if (config.collage.enabled && config.collage.only) {
+                    photoboothTools.console.logDev(
+                        'Picture key pressed, but only collage allowed. Triggering collage now.'
+                    );
+                    api.thrill(PhotoStyle.COLLAGE);
                 } else {
-                    api.closeGallery();
-                    if (config.collage.enabled && config.collage.only) {
-                        photoboothTools.console.logDev(
-                            'Picture key pressed, but only collage allowed. Triggering collage now.'
-                        );
-                        api.thrill(PhotoStyle.COLLAGE);
-                    } else {
-                        api.thrill(PhotoStyle.PHOTO);
-                    }
+                    api.thrill(PhotoStyle.PHOTO);
                 }
             }
 
             // collage
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
-                if (api.takingPic) {
-                    api.handleButtonPressWhileTakingPic();
+                if (config.collage.enabled) {
+                    api.thrill(PhotoStyle.COLLAGE);
                 } else {
-                    api.closeGallery();
-                    if (config.collage.enabled) {
-                        api.thrill(PhotoStyle.COLLAGE);
-                    } else {
-                        photoboothTools.console.logDev(
-                            'Collage key pressed. Please enable collage in your config. Triggering photo now.'
-                        );
-                        api.thrill(PhotoStyle.PHOTO);
-                    }
-                }
-            }
-
-            if (config.print.from_result && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
-                if (isPrinting) {
-                    photoboothTools.console.log('Printing already in progress!');
-                } else {
-                    printBtn.trigger('click');
-                    printBtn.blur();
+                    photoboothTools.console.logDev(
+                        'Collage key pressed. Please enable collage in your config. Triggering photo now.'
+                    );
+                    api.thrill(PhotoStyle.PHOTO);
                 }
             }
         }
@@ -1239,10 +1392,7 @@ const photoBooth = (function () {
 
     $(document).on('click', function () {
         if (api.isTimeOutPending()) {
-            if (typeof onStandaloneGalleryView !== 'undefined') {
-                clearTimeout(timeOut);
-                photoboothTools.console.logDev('Standalone Gallery: Timeout for auto reload cleared.');
-            } else if (startPage.is(':visible')) {
+            if (typeof onStandaloneGalleryView !== 'undefined' || startPage.is(':visible')) {
                 clearTimeout(timeOut);
                 photoboothTools.console.logDev('Timeout for auto reload cleared.');
             } else {
@@ -1262,7 +1412,7 @@ const photoBooth = (function () {
         const videoEl = ev.target;
         let newWidth = videoEl.offsetWidth;
         let newHeight = videoEl.offsetHeight;
-        if (config.preview.style === PreviewStyle.SCALE_DOWN) {
+        if (config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) {
             newWidth = videoEl.videoWidth;
             newHeight = videoEl.videoHeight;
         }
