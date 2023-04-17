@@ -119,6 +119,13 @@ const requestListener = function (req, res) {
             <ul>
                 <li>Trigger photo: <a href="${baseUrl}/commands/start-picture" target="_blank">${baseUrl}/commands/start-picture</a></li>
                 <li>Trigger collage: <a href="${baseUrl}/commands/start-collage" target="_blank">${baseUrl}/commands/start-collage</a></li>
+                <li>Trigger print: <a href="${baseUrl}/commands/start-print" target="_blank">${baseUrl}/commands/start-print</a></li>
+            </ul>
+            <h1>Rotary Endpoints</h1>
+            <ul>
+                <li>Focus next: <a href="${baseUrl}/commands/rotary-cw" target="_blank">${baseUrl}/commands/rotary-cw</a></li>
+                <li>Focus previous: <a href="${baseUrl}/commands/rotary-ccw" target="_blank">${baseUrl}/commands/rotary-ccw</a></li>
+                <li>Click: <a href="${baseUrl}/commands/rotary-btn-press" target="_blank">${baseUrl}/commands/rotary-btn-press</a></li>
             </ul>`,
                 'text/html'
             );
@@ -141,6 +148,34 @@ const requestListener = function (req, res) {
             } else {
                 sendText('TAKE COLLAGE ALREADY TRIGGERED');
             }
+
+            break;
+        case '/commands/start-print':
+            log('http: GET /commands/start-print');
+            if (triggerArmed) {
+                photoboothAction('print');
+                sendText('PRINT TRIGGERED');
+            } else {
+                sendText('ALREADY TRIGGERED AN ACTION');
+            }
+
+            break;
+        case '/commands/rotary-cw':
+            log('http: GET /commands/rotary-cw');
+            photoboothAction('rotary-cw');
+            sendText('FOCUS NEXT ELEMENT');
+
+            break;
+        case '/commands/rotary-ccw':
+            log('http: GET /commands/rotary-ccw');
+            photoboothAction('rotary-ccw');
+            sendText('FOCUS PREVIOUS ELEMENT');
+
+            break;
+        case '/commands/rotary-btn-press':
+            log('http: GET /commands/rotary-btn-press');
+            photoboothAction('rotary-btn-press');
+            sendText('CLICK ELEMENT');
 
             break;
         default:
