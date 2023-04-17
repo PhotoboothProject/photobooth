@@ -231,7 +231,6 @@ function initRemoteBuzzerFromDOM() {
         api.enabled = function () {
             return (
                 config.remotebuzzer.userotary &&
-                !config.remotebuzzer.usenogpio &&
                 (typeof onStandaloneGalleryView === 'undefined' ? true : config.remotebuzzer.enable_standalonegallery)
             );
         };

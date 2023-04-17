@@ -383,10 +383,9 @@ The following elements are currently not supported and not accessible through ro
 The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
 
 - Channel:  `photobooth-socket`
-- Commands: `start-picture`, `start-collage`
+- Commands: `start-picture`, `start-collage`, `collage-next`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`
 - Response: `completed` will be emitted to the client, once photobooth finished the task
 
-This functionality is experimental and largely untested. Not sure if there is a use-case but if you have one, happy to learn about it. Currently this does not support rotary encoder use but could be if needed.
 
 #### Remote trigger using simple web requests
 
@@ -396,12 +395,17 @@ Simple `GET` requests can be used to trigger single pictures or collages. Those 
 - `[Photobooth IP]` needs to match the configured value under `General` - `IP address of the Photobooth web server` and
 - `[Hardware Button Server Port]` the value from `Hardware Button` - `Enable Hardware Buttons`
 
-The available endpoints are:
+The available endpoints, depending on enabled features and hardware button options, are:
 - `[Base Url]/` - Simple help page with all available endpoints
 - `[Base Url]/commands/start-picture` - Triggers a single picture
 - `[Base Url]/commands/start-collage` - Triggers a collage
+- `[Base Url]/commands/start-print` - Triggers print
+- `[Base Url]/commands/rotary-cw` - Focus next element
+- `[Base Url]/commands/rotary-ccw` - Focus previous element
+- `[Base Url]/commands/rotary-btn-press` - Triggers a click action
 
 These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/) (untested).
+
 
 ##### Installation steps for myStrom WiFi Button
 - Be sure to connect the button to the same network as the photobooth
