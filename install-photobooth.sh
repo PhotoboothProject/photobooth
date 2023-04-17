@@ -552,9 +552,6 @@ check_git_install() {
         info "### Photobooth installed via git."
         GIT_INSTALL=true
         add_git_remote
-
-        info "### Ignoring filemode changes."
-        git config core.fileMode false
     else
         warn "WARN: Not a git Installation."
     fi
@@ -563,6 +560,8 @@ check_git_install() {
 start_git_install() {
     cd $INSTALLFOLDERPATH
     info "### We are installing/updating Photobooth via git."
+    info "### Ignoring filemode changes on git."
+    git config core.fileMode false
     git fetch photoboothproject $BRANCH
     git checkout photoboothproject/$BRANCH
 
