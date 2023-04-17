@@ -378,6 +378,8 @@ The available endpoints, depending on enabled features and hardware button optio
 - `[Base Url]/commands/start-picture` - Triggers a single picture
 - `[Base Url]/commands/start-collage` - Triggers a collage
 - `[Base Url]/commands/start-print` - Triggers print
+- `[Base Url]/commands/reboot-now` - Triggers reboot command
+- `[Base Url]/commands/shutdown-now` - Triggers shutdown command
 - `[Base Url]/commands/rotary-cw` - Focus next element
 - `[Base Url]/commands/rotary-ccw` - Focus previous element
 - `[Base Url]/commands/rotary-btn-press` - Triggers a click action
