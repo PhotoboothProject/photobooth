@@ -115,9 +115,13 @@ All dependencies include their respective LICENSE files.
 
 ### :tada: Donation
 
-If you like my work and like to keep me motivated you can buy me a coconut water:
+If you like our work and consider a donation, we have to tell you that we don't accept any money. We're happy about every contribution to this project and strive to make it better every day. Just get in touch with us on [Telegram](https://t.me/PhotoboothGroup) to say thank you or help us find ways to improve.
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/andreasblaesius)
+If you still want to donate money to make us happy: consider a donation to an organization that cares about (kids having) cancer. Our lead developer Andreas had blood cancer in 2001 (when he was 12 years old) and he's happy to be still alive.
+
+One good choice of an organisation to donate to would be the [DKMS](https://www.dkms.de) (they also accept donations via [paypal](https://webforms.dkms.de/en/DE/moneydonation/paypal)), but any similar organisation would be fine, too.
+
+Thanks for reading!
 
 ### :mortar_board: Tutorial
 
