@@ -115,7 +115,7 @@ All dependencies include their respective LICENSE files.
 
 ### :tada: Donation
 
-If you like our work and consider a donation we have to tell that we actually don't accept money. We're happy about every contribution to this project to make it better every day. Get in touch with us on [Telegram](https://t.me/PhotoboothGroup).
+If you like our work and consider a donation we have to tell you that we actually don't accept money. We're happy about every contribution to this project to make it better every day. Get in touch with us on [Telegram](https://t.me/PhotoboothGroup).
 
 But there's also another way of donation to make us happy: donate to an organization who cares about (kids having) cancer. Our lead Developer Andreas had blood cancer in 2001 (when he was 12/13 years old) and he's happy being still alive.
 
