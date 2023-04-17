@@ -760,8 +760,10 @@ EOF
 general_permissions() {
     info "### Setting permissions."
     chown -R www-data:www-data $INSTALLFOLDERPATH/
+    chmod g+s "$INSTALLFOLDERPATH/private"
     gpasswd -a www-data plugdev
     gpasswd -a www-data video
+    gpasswd -a $USERNAME www-data
 
     touch "/var/www/.yarnrc"
     info "### Fixing permissions on .yarnrc"
