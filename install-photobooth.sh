@@ -771,6 +771,10 @@ general_permissions() {
     mkdir -p "/var/www/.cache"
     chown -R www-data:www-data "/var/www/.cache"
 
+    info "### Fixing permissions on yarn folder."
+    mkdir -p "/var/www/.yarn"
+    chown -R www-data:www-data "/var/www/.yarn"
+
     info "### Disabling camera automount."
     chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor || true
 
