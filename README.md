@@ -119,7 +119,7 @@ If you like our work and consider a donation we have to tell you that we actuall
 
 But there's also another way of donation to make us happy: donate to an organization who cares about (kids having) cancer. Our lead Developer Andreas had blood cancer in 2001 (when he was 12/13 years old) and he's happy being still alive.
 
-Another good choice of an organisation to donate to would be the [DKMS](https://www.dkms.de) (they also accept donations via paypal), but any other similar organisation will be good too.
+Another good choice of an organisation to donate to would be the [DKMS](https://www.dkms.de) (they also accept donations via [paypal](https://webforms.dkms.de/en/DE/moneydonation/paypal)), but any other similar organisation will be good too.
 
 Thanks for your reading!
 
