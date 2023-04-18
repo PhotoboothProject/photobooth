@@ -132,51 +132,79 @@ const requestListener = function (req, res) {
             break;
         case '/commands/start-picture':
             log('http: GET /commands/start-picture');
-            if (triggerArmed) {
-                photoboothAction('picture');
-                sendText('TAKE PHOTO TRIGGERED');
+            if (config.remotebuzzer.usebuttons && config.remotebuzzer.picturebutton) {
+                if (triggerArmed) {
+                    if (config.collage.enabled && config.collage.only) {
+                        photoboothAction('collage');
+                        sendText('TAKE PHOTO DISABLED, COLLAGE TRIGGERED');
+                    } else {
+                        photoboothAction('picture');
+                        sendText('TAKE PHOTO TRIGGERED');
+                    }
+                } else {
+                    sendText('ALREADY TRIGGERED AN ACTION');
+                }
             } else {
-                sendText('TAKE PHOTO ALREADY TRIGGERED');
+                sendText('Please enable Hardware Button support and Picture Button!');
             }
-
             break;
         case '/commands/start-collage':
             log('http: GET /commands/start-collage');
-            if (triggerArmed) {
-                photoboothAction('collage');
-                sendText('TAKE COLLAGE TRIGGERED');
+            if (config.remotebuzzer.usebuttons && config.remotebuzzer.collagebutton) {
+                if (triggerArmed) {
+                    if (config.collage.enabled) {
+                        photoboothAction('collage');
+                        sendText('TAKE COLLAGE TRIGGERED');
+                    } else {
+                        photoboothAction('picture');
+                        sendText('COLLAGE DISABLED. TAKE PICTURE TRIGGERED');
+                    }
+                } else {
+                    sendText('ALREADY TRIGGERED AN ACTION');
+                }
             } else {
-                sendText('TAKE COLLAGE ALREADY TRIGGERED');
+                sendText('Please enable Hardware Button support and Collage Button!');
             }
-
             break;
         case '/commands/start-print':
             log('http: GET /commands/start-print');
-            if (triggerArmed) {
-                photoboothAction('print');
-                sendText('PRINT TRIGGERED');
+            if (config.remotebuzzer.usebuttons && config.remotebuzzer.printbutton) {
+                if (triggerArmed) {
+                    photoboothAction('print');
+                    sendText('PRINT TRIGGERED');
+                } else {
+                    sendText('ALREADY TRIGGERED AN ACTION');
+                }
             } else {
-                sendText('ALREADY TRIGGERED AN ACTION');
+                sendText('Please enable Hardware Button support and Print Button!');
             }
-
             break;
         case '/commands/rotary-cw':
             log('http: GET /commands/rotary-cw');
-            photoboothAction('rotary-cw');
-            sendText('FOCUS NEXT ELEMENT');
-
+            if (config.remotebuzzer.userotary) {
+                photoboothAction('rotary-cw');
+                sendText('FOCUS NEXT ELEMENT');
+            } else {
+                sendText('Please enable rotary Controller support!');
+            }
             break;
         case '/commands/rotary-ccw':
             log('http: GET /commands/rotary-ccw');
-            photoboothAction('rotary-ccw');
-            sendText('FOCUS PREVIOUS ELEMENT');
-
+            if (config.remotebuzzer.userotary) {
+                photoboothAction('rotary-ccw');
+                sendText('FOCUS PREVIOUS ELEMENT');
+            } else {
+                sendText('Please enable rotary Controller support!');
+            }
             break;
         case '/commands/rotary-btn-press':
             log('http: GET /commands/rotary-btn-press');
-            photoboothAction('rotary-btn-press');
-            sendText('CLICK ELEMENT');
-
+            if (config.remotebuzzer.userotary) {
+                photoboothAction('rotary-btn-press');
+                sendText('CLICK ELEMENT');
+            } else {
+                sendText('Please enable rotary Controller support!');
+            }
             break;
         default:
             res.writeHead(404);
