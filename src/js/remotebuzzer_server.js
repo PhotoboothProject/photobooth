@@ -167,12 +167,11 @@ const requestListener = function (req, res) {
             log('http: GET /commands/start-picture');
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.picturebutton) {
                 if (triggerArmed) {
-                    if (config.collage.enabled && config.collage.only) {
-                        photoboothAction('collage');
-                        sendText('TAKE PHOTO DISABLED, COLLAGE TRIGGERED');
-                    } else {
+                    if (config.picture.enabled) {
                         photoboothAction('picture');
-                        sendText('TAKE PHOTO TRIGGERED');
+                        sendText('TAKE PHOTO TRIGGERED.');
+                    } else {
+                        sendText('PHOTO DISABLED.');
                     }
                 } else {
                     sendText('ALREADY TRIGGERED AN ACTION');
@@ -189,8 +188,7 @@ const requestListener = function (req, res) {
                         photoboothAction('collage');
                         sendText('TAKE COLLAGE TRIGGERED');
                     } else {
-                        photoboothAction('picture');
-                        sendText('COLLAGE DISABLED. TAKE PICTURE TRIGGERED');
+                        sendText('COLLAGE DISABLED.');
                     }
                 } else {
                     sendText('ALREADY TRIGGERED AN ACTION');
