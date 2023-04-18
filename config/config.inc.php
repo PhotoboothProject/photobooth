@@ -53,6 +53,7 @@ $config['button']['force_buzzer'] = false;
 
 
 // P I C T U R E S
+$config['picture']['enabled'] = true;
 // control countdown timer in seconds
 $config['picture']['cntdwn_time'] = '5';
 $config['picture']['cntdwn_offset'] = '0';
@@ -112,7 +113,6 @@ $config['icons']['take_custom'] = 'fa fa-paint-brush';
 
 // C O L L A G E
 $config['collage']['enabled'] = true;
-$config['collage']['only'] = false;
 // control countdown timer between collage pictures in seconds
 $config['collage']['cntdwn_time'] = '3';
 $config['collage']['continuous'] = true;

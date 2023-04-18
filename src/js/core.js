@@ -1383,13 +1383,12 @@ const photoBooth = (function () {
 
             // picture
             if (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) {
-                if (config.collage.enabled && config.collage.only) {
-                    photoboothTools.console.logDev(
-                        'Picture key pressed, but only collage allowed. Triggering collage now.'
-                    );
-                    api.thrill(PhotoStyle.COLLAGE);
-                } else {
+                if (config.picture.enabled) {
                     api.thrill(PhotoStyle.PHOTO);
+                } else {
+                    photoboothTools.console.logDev(
+                        'Picture key pressed, but taking pictures disabled. Please enable picture in your config.'
+                    );
                 }
             }
 
@@ -1399,21 +1398,19 @@ const photoBooth = (function () {
                     api.thrill(PhotoStyle.COLLAGE);
                 } else {
                     photoboothTools.console.logDev(
-                        'Collage key pressed. Please enable collage in your config. Triggering photo now.'
+                        'Collage key pressed, but Collage disabled. Please enable collage in your config.'
                     );
-                    api.thrill(PhotoStyle.PHOTO);
                 }
             }
 
             // custom
             if (config.custom.key && parseInt(config.custom.key, 10) === ev.keyCode) {
-                if (config.collage.enabled && config.collage.only) {
-                    photoboothTools.console.logDev(
-                        'Custom action key pressed, but only collage allowed. Triggering collage now.'
-                    );
-                    api.thrill(PhotoStyle.COLLAGE);
-                } else {
+                if (config.custom.enabled) {
                     api.thrill(PhotoStyle.CUSTOM);
+                } else {
+                    photoboothTools.console.logDev(
+                        'Custom key pressed, but custom action disabled. Please enable custom action in your config.'
+                    );
                 }
             }
         }
