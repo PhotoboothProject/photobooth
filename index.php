@@ -180,6 +180,11 @@ if (
                                 data-i18n="newPhoto"></span></a>
                 <?php endif; ?>
 
+                <?php if ($config['custom']['enabled']): ?>
+                    <a href="#" class="<?php echo $btnClass; ?> newcustom rotaryfocus"><i class="<?php echo $config['icons']['take_custom']; ?>"></i>
+                        <span><?php echo $config['custom']['btn_text']; ?></span></a>
+                <?php endif; ?>
+
                 <?php if ($config['collage']['enabled']): ?>
                     <a href="#" class="<?php echo $btnClass; ?> newcollage rotaryfocus"><i class="<?php echo $config['icons']['take_collage']; ?>"></i>
                         <span
