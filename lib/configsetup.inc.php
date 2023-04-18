@@ -1911,6 +1911,12 @@ $configsetup = [
             'name' => 'remotebuzzer[collagebutton]',
             'value' => $config['remotebuzzer']['collagebutton'],
         ],
+        'remotebuzzer_videobutton' => [
+            'view' => 'experimental',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[videobutton]',
+            'value' => $config['remotebuzzer']['videobutton'],
+        ],
         'remotebuzzer_printbutton' => [
             'view' => 'expert',
             'type' => 'checkbox',
@@ -1975,6 +1981,12 @@ $configsetup = [
             'name' => 'remotebuzzer[collageled]',
             'value' => $config['remotebuzzer']['collageled'],
         ],
+        'remotebuzzer_videoled' => [
+            'view' => 'experimental',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[videoled]',
+            'value' => $config['remotebuzzer']['videoled'],
+        ],
         'remotebuzzer_shutdownled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
@@ -2029,6 +2041,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['remotebuzzer']['collagegpio'],
             'name' => 'remotebuzzer[collagegpio]',
             'value' => $config['remotebuzzer']['collagegpio'],
+        ],
+        'remotebuzzer_videogpio' => [
+            'view' => 'experimental',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['remotebuzzer']['videogpio'],
+            'name' => 'remotebuzzer[videogpio]',
+            'value' => $config['remotebuzzer']['videogpio'],
         ],
         'remotebuzzer_printgpio' => [
             'view' => 'experimental',
@@ -2092,6 +2111,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['remotebuzzer']['collageledgpio'],
             'name' => 'remotebuzzer[collageledgpio]',
             'value' => $config['remotebuzzer']['collageledgpio'],
+        ],
+        'remotebuzzer_videoledgpio' => [
+            'view' => 'experimental',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['remotebuzzer']['videoledgpio'],
+            'name' => 'remotebuzzer[videoledgpio]',
+            'value' => $config['remotebuzzer']['videoledgpio'],
         ],
         'remotebuzzer_shutdownledgpio' => [
             'view' => 'experimental',

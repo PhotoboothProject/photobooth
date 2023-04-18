@@ -334,6 +334,10 @@ $config['remotebuzzer']['rebootled'] = false;
 $config['remotebuzzer']['rebootledgpio'] = 18;
 $config['remotebuzzer']['printled'] = false;
 $config['remotebuzzer']['printledgpio'] = 6;
+$config['remotebuzzer']['videobutton'] = false;
+$config['remotebuzzer']['videogpio'] = 9;
+$config['remotebuzzer']['videoled'] = false;
+$config['remotebuzzer']['videoledgpio'] = 7;
 
 
 // S Y N C  T O  U S B  S T I C K
