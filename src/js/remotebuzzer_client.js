@@ -47,6 +47,10 @@ function initRemoteBuzzerFromDOM() {
                             buttonController.takeCollage();
                             break;
 
+                        case 'start-video':
+                            buttonController.takeVideo();
+                            break;
+
                         case 'collage-next':
                             // Need to handle collage process in button handler
                             if (buttonController.waitingToProcessCollage) {
@@ -136,6 +140,12 @@ function initRemoteBuzzerFromDOM() {
             }
         };
 
+        api.startVideo = function () {
+            if (this.enabled()) {
+                this.emitToServer('start-video');
+            }
+        };
+
         api.emitToServer = function (cmd) {
             switch (cmd) {
                 case 'start-picture':
@@ -143,6 +153,9 @@ function initRemoteBuzzerFromDOM() {
                     break;
                 case 'start-collage':
                     ioClient.emit('photobooth-socket', 'start-collage');
+                    break;
+                case 'start-video':
+                    ioClient.emit('photobooth-socket', 'start-video');
                     break;
                 case 'in-progress':
                     ioClient.emit('photobooth-socket', 'in-progress');
@@ -185,6 +198,13 @@ function initRemoteBuzzerFromDOM() {
             if (this.enabled()) {
                 $('.resultInner').removeClass('show');
                 photoBooth.thrill('photo');
+            }
+        };
+
+        api.takeVideo = function () {
+            if (this.enabled() && config.video.enabled) {
+                $('.resultInner').removeClass('show');
+                photoBooth.thrill('video');
             }
         };
 

@@ -6,7 +6,8 @@ let collageInProgress = false,
     collageled,
     shutdownled,
     rebootled,
-    printled;
+    printled,
+    videoled;
 
 const API_DIR_NAME = 'api';
 const API_FILE_NAME = 'config.php';
@@ -69,6 +70,19 @@ function photoboothAction(type) {
             ioServer.emit('photobooth-socket', 'start-picture');
             break;
 
+        case 'video':
+            triggerArmed = false;
+            collageInProgress = false;
+            log('Photobooth trigger VIDEO : [ photobooth-socket ]  => [ All Clients ]: command [ video ]');
+            if (config.remotebuzzer.useleds && config.remotebuzzer.videoled) {
+                videoled.writeSync(1);
+            }
+            if (config.remotebuzzer.useleds && config.remotebuzzer.photolight) {
+                photolight.writeSync(1);
+            }
+            ioServer.emit('photobooth-socket', 'start-video');
+            break;
+
         case 'collage':
             triggerArmed = false;
             collageInProgress = true;
@@ -99,6 +113,9 @@ function photoboothAction(type) {
             }
             if (config.remotebuzzer.useleds && config.remotebuzzer.collageled) {
                 collageled.writeSync(0);
+            }
+            if (config.remotebuzzer.useleds && config.remotebuzzer.videoled) {
+                videoled.writeSync(0);
             }
             ioServer.emit('photobooth-socket', 'completed');
             break;
@@ -148,6 +165,7 @@ const requestListener = function (req, res) {
                 <li>Trigger photo: <a href="${baseUrl}/commands/start-picture" target="_blank">${baseUrl}/commands/start-picture</a></li>
                 <li>Trigger collage: <a href="${baseUrl}/commands/start-collage" target="_blank">${baseUrl}/commands/start-collage</a></li>
                 <li>Trigger print: <a href="${baseUrl}/commands/start-print" target="_blank">${baseUrl}/commands/start-print</a></li>
+                <li>Trigger video: <a href="${baseUrl}/commands/start-video" target="_blank">${baseUrl}/commands/start-video</a></li>
             </ul>
             <h1>Rotary Endpoints</h1>
             <ul>
@@ -208,6 +226,23 @@ const requestListener = function (req, res) {
                 }
             } else {
                 sendText('Please enable Hardware Button support and Print Button!');
+            }
+            break;
+        case '/commands/start-video':
+            log('http: GET /commands/start-video');
+            if (config.remotebuzzer.usebuttons && config.remotebuzzer.videobutton) {
+                if (triggerArmed) {
+                    if (config.video.enabled) {
+                        photoboothAction('video');
+                        sendText('TAKE VIDEO TRIGGERED');
+                    } else {
+                        sendText('VIDEO DISABLED.');
+                    }
+                } else {
+                    sendText('ALREADY TRIGGERED AN ACTION');
+                }
+            } else {
+                sendText('Please enable Hardware Button support and Video Button!');
             }
             break;
         case '/commands/rotary-cw':
@@ -313,6 +348,10 @@ ioServer.on('connection', function (client) {
                 photoboothAction('collage');
                 break;
 
+            case 'start-video':
+                photoboothAction('video');
+                break;
+
             case 'collage-wait-for-next':
                 triggerArmed = true;
                 break;
@@ -391,9 +430,11 @@ if (useGpio) {
     gpioPuSanity(config.remotebuzzer.rotarydtgpio);
     gpioPuSanity(config.remotebuzzer.rotarybtngpio);
     gpioPuSanity(config.remotebuzzer.rebootgpio);
+    gpioPuSanity(config.remotebuzzer.videogpio);
     gpioOpSanity(config.remotebuzzer.photolightgpio);
     gpioOpSanity(config.remotebuzzer.pictureledgpio);
     gpioOpSanity(config.remotebuzzer.collageledgpio);
+    gpioOpSanity(config.remotebuzzer.videoledgpio);
     gpioOpSanity(config.remotebuzzer.printledgpio);
     gpioOpSanity(config.remotebuzzer.shutdownledgpio);
     gpioOpSanity(config.remotebuzzer.rebootledgpio);
@@ -611,6 +652,47 @@ const watchCollageGPIO = function watchCollageGPIO(err, gpioValue) {
         log('GPIO', config.remotebuzzer.collagegpio, '- Collage button pressed');
         if (config.remotebuzzer.useleds && config.remotebuzzer.collageled) {
             collageled.writeSync(1);
+        }
+    }
+};
+
+/* WATCH FUNCTION VIDEO BUTTON */
+const watchVideoGPIO = function watchVideoGPIO(err, gpioValue) {
+    if (err) {
+        throw err;
+    }
+
+    /* if there is some activity in progress ignore GPIO pin for now */
+    if (!triggerArmed || buttonActiveCheck(config.remotebuzzer.videogpio, gpioValue)) {
+        return;
+    }
+
+    if (gpioValue) {
+        /* Button released - raising flank detected */
+        const timeElapsed = buttonTimer();
+
+        if (timeElapsed) {
+            log('GPIO', config.remotebuzzer.videogpio, '- Video button released ', timeElapsed, ' [ms] ');
+            if (config.remotebuzzer.useleds && config.remotebuzzer.videoled) {
+                videoled.writeSync(0);
+            }
+
+            /* Start Video */
+            photoboothAction('video');
+        } else {
+            /* Too long button press - timeout - reset server state machine */
+            log('GPIO', config.remotebuzzer.videogpio, '- too long button press - Reset server state machine');
+            photoboothAction('reset');
+            buttonActiveCheck(-1, -1);
+            if (config.remotebuzzer.useleds && config.remotebuzzer.videoled) {
+                videoled.writeSync(0);
+            }
+        }
+    } else {
+        /* Button pressed - falling flank detected (pull to ground) */
+        log('GPIO', config.remotebuzzer.videogpio, '- Video button pressed');
+        if (config.remotebuzzer.useleds && config.remotebuzzer.videoled) {
+            videoled.writeSync(1);
         }
     }
 };
@@ -865,6 +947,15 @@ if (useGpio) {
             log('Looking for Collage Button on Raspberry GPIO', config.remotebuzzer.collagegpio);
         }
 
+        /* VIDEO BUTTON */
+        if (config.remotebuzzer.videobutton) {
+            const videoButton = new Gpio(config.remotebuzzer.videogpio, 'in', 'both', {
+                debounceTimeout: config.remotebuzzer.debounce
+            });
+            videoButton.watch(watchVideoGPIO);
+            log('Looking for Video Button on Raspberry GPIO', config.remotebuzzer.videogpio);
+        }
+
         /* SHUTDOWN BUTTON */
         if (config.remotebuzzer.shutdownbutton) {
             const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {
@@ -910,6 +1001,12 @@ if (useGpio) {
             if (config.remotebuzzer.collageled) {
                 collageled = new Gpio(config.remotebuzzer.collageledgpio, 'out');
                 log('LED for Collage Button on Raspberry GPIO', config.remotebuzzer.collageledgpio);
+            }
+
+            /* LED VIDEO BUTTON */
+            if (config.remotebuzzer.videoled) {
+                videoled = new Gpio(config.remotebuzzer.videoledgpio, 'out');
+                log('LED for Video Button on Raspberry GPIO', config.remotebuzzer.videoledgpio);
             }
 
             /* LED SHUTDOWN BUTTON */
