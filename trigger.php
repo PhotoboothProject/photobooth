@@ -43,7 +43,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
 
     <div id="wrapper">
 		<div class="buttonbar">
-			<?php if (!$config['collage']['only']): ?>
+			<?php if ($config['picture']['enabled']): ?>
 			<a href="#" class="<?php echo $btnClass; ?> remotePicture" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/start-picture');"><i class="<?php echo $config['icons']['take_picture'] ?>"></i> <span data-i18n="takePhoto"></span></a>
 			<?php endif; ?>
 
