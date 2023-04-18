@@ -5,7 +5,7 @@ require_once '../lib/config.php';
 require_once '../lib/db.php';
 require_once '../lib/log.php';
 
-function takePicture($filename) {
+function takePicture($filename, $style) {
     global $config;
 
     if ($config['dev']['demo_images']) {
@@ -40,7 +40,11 @@ function takePicture($filename) {
         if (substr($config['take_picture']['cmd'], 0, strlen('gphoto')) === 'gphoto') {
             chdir(dirname($filename));
         }
-        $cmd = sprintf($config['take_picture']['cmd'], $filename);
+        if ($style === 'custom') {
+            $cmd = sprintf($config['take_custom']['cmd'], $filename);
+        } else {
+            $cmd = sprintf($config['take_picture']['cmd'], $filename);
+        }
         $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
         exec($cmd, $output, $returnValue);
@@ -97,7 +101,7 @@ if (!isset($_POST['style'])) {
 
 switch ($_POST['style']) {
     case 'photo':
-        takePicture($filename_tmp);
+        takePicture($filename_tmp, $_POST['style']);
 
         $LogData = [
             'success' => 'image',
@@ -124,7 +128,7 @@ switch ($_POST['style']) {
         $basename = substr($filename_tmp, 0, -4);
         $filename = $basename . '-' . $number . '.jpg';
 
-        takePicture($filename);
+        takePicture($filename, $_POST['style']);
 
         $LogData = [
             'success' => 'collage',
@@ -136,10 +140,19 @@ switch ($_POST['style']) {
         ];
         break;
     case 'chroma':
-        takePicture($filename_tmp);
+        takePicture($filename_tmp, $_POST['style']);
 
         $LogData = [
             'success' => 'chroma',
+            'file' => $file,
+            'php' => basename($_SERVER['PHP_SELF']),
+        ];
+        break;
+    case 'custom':
+        takePicture($filename_tmp, $_POST['style']);
+
+        $LogData = [
+            'success' => 'image',
             'file' => $file,
             'php' => basename($_SERVER['PHP_SELF']),
         ];

@@ -17,6 +17,9 @@ $cmds = [
         'take_video' => [
             'cmd' => '',
         ],
+        'take_custom' => [
+            'cmd' => '',
+        ],
         'print' => [
             'cmd' => 'mspaint /pt %s',
         ],
@@ -39,6 +42,10 @@ $cmds = [
         ],
         'take_video' => [
             'cmd' => 'python3 cameracontrol.py -v %s --vlen 3 --vframes 4',
+        ],
+        'take_custom' => [
+            'cmd' =>
+                'python3 cameracontrol.py --chromaImage=/var/www/html/resources/img/bg.jpg --chromaColor 00ff00 --chromaSensitivity 0.4 --chromaBlend 0.1 --capture-image-and-download --filename=%s',
         ],
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',

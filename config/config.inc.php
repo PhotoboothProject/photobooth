@@ -97,6 +97,19 @@ $config['textonpicture']['font_size'] = '80';
 $config['textonpicture']['linespace'] = '90';
 
 
+// C U S T O M
+$config['custom']['enabled'] = false;
+$config['take_custom']['cmd'] = '';
+// control countdown timer in seconds
+$config['custom']['cntdwn_time'] = '5';
+// specify key id (e.g. 13 is the enter key)
+// use for example https://keycode.info to get the key code
+$config['custom']['key'] = '';
+$config['custom']['btn_text'] = 'Custom';
+$config['get_request']['custom'] = 'CNTDWNCUSTOM';
+$config['icons']['take_custom'] = 'fa fa-paint-brush';
+
+
 // C O L L A G E
 $config['collage']['enabled'] = true;
 $config['collage']['only'] = false;
