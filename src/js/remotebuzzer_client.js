@@ -47,6 +47,10 @@ function initRemoteBuzzerFromDOM() {
                             buttonController.takeCollage();
                             break;
 
+                        case 'start-custom':
+                            buttonController.takeCustom();
+                            break;
+
                         case 'start-video':
                             buttonController.takeVideo();
                             break;
@@ -140,6 +144,12 @@ function initRemoteBuzzerFromDOM() {
             }
         };
 
+        api.startCustom = function () {
+            if (this.enabled()) {
+                this.emitToServer('start-custom');
+            }
+        };
+
         api.startVideo = function () {
             if (this.enabled()) {
                 this.emitToServer('start-video');
@@ -153,6 +163,9 @@ function initRemoteBuzzerFromDOM() {
                     break;
                 case 'start-collage':
                     ioClient.emit('photobooth-socket', 'start-collage');
+                    break;
+                case 'start-custom':
+                    ioClient.emit('photobooth-socket', 'start-custom');
                     break;
                 case 'start-video':
                     ioClient.emit('photobooth-socket', 'start-video');
@@ -198,6 +211,13 @@ function initRemoteBuzzerFromDOM() {
             if (this.enabled()) {
                 $('.resultInner').removeClass('show');
                 photoBooth.thrill('photo');
+            }
+        };
+
+        api.takeCustom = function () {
+            if (this.enabled() && config.custom.enabled) {
+                $('.resultInner').removeClass('show');
+                photoBooth.thrill('custom');
             }
         };
 

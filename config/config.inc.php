@@ -338,6 +338,10 @@ $config['remotebuzzer']['videobutton'] = false;
 $config['remotebuzzer']['videogpio'] = 9;
 $config['remotebuzzer']['videoled'] = false;
 $config['remotebuzzer']['videoledgpio'] = 7;
+$config['remotebuzzer']['custombutton'] = false;
+$config['remotebuzzer']['customgpio'] = 24;
+$config['remotebuzzer']['customled'] = false;
+$config['remotebuzzer']['customledgpio'] = 5;
 
 
 // S Y N C  T O  U S B  S T I C K

@@ -258,11 +258,11 @@ Having trouble?
   - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
   - Button GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
     ```
-    gpio=9,16,17,20,21,22,23,26,27=pu
+    gpio=9,16,17,20,21,22,23,24,26,27=pu
     ```
   - LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
     ```
-    gpio=6,7,8,12,18,19,25=op
+    gpio=5,6,7,8,12,18,19,25=op
     ```
 - For the shutdown and reboot buttons to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
     ```sh
@@ -324,6 +324,11 @@ The server supports up to four connected hardware buttons for the following func
 - Defaults to GPIO9
 - This button will initiate the recording of a short video.
 
+7) **Custom Button**
+
+- Defaults to GPIO24
+- Button press will trigger a single picture in Photobooth
+
 
 After any button is triggered, all hardware button remain disabled until the action (picture / collage) completed. Once completed, the hardware buttons re-arms / are active again.
 
@@ -334,6 +339,7 @@ Button            Raspberry
 
 Picture     ---   GPIO 21
 Collage     ---   GPIO 20
+Custom      ---   GPIO 24
 Video       ---   GPIO  9
 Shutdown    ---   GPIO 16
 Print       ---   GPIO 26
@@ -370,6 +376,7 @@ LED                   Raspberry
 Photolight      ---   GPIO 25
 Picture LED     ---   GPIO 19
 Collage LED     ---   GPIO 12
+Custom LED      ---   GPIO  5
 Video LED       ---   GPIO  7
 Shutdown LED    ---   GPIO  8
 Reboot LED      ---   GPIO 18
@@ -390,7 +397,7 @@ The following elements are currently not supported and not accessible through ro
 The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
 
 - Channel:  `photobooth-socket`
-- Commands: `start-picture`, `start-collage`, `collage-next`, `start-video`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`
+- Commands: `start-picture`, `start-collage`, `collage-next`, `start-custom`, `start-video`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`
 - Response: `completed` will be emitted to the client, once photobooth finished the task
 
 
@@ -406,6 +413,7 @@ The available endpoints, depending on enabled features and hardware button optio
 - `[Base Url]/` - Simple help page with all available endpoints
 - `[Base Url]/commands/start-picture` - Triggers a single picture
 - `[Base Url]/commands/start-collage` - Triggers a collage
+- `[Base Url]/commands/start-custom` - Triggers custom button action
 - `[Base Url]/commands/start-print` - Triggers print
 - `[Base Url]/commands/start-video` - Triggers a video capture
 - `[Base Url]/commands/reboot-now` - Triggers reboot command
