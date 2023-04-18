@@ -375,6 +375,12 @@ $configsetup = [
     'pictures' => [
         'view' => 'basic',
         'platform' => 'all',
+        'picture_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'picture[enabled]',
+            'value' => $config['picture']['enabled'],
+        ],
         'picture_cntdwn_time' => [
             'view' => 'basic',
             'type' => 'range',
@@ -612,12 +618,6 @@ $configsetup = [
             'type' => 'checkbox',
             'name' => 'collage[enabled]',
             'value' => $config['collage']['enabled'],
-        ],
-        'collage_only' => [
-            'view' => 'basic',
-            'type' => 'checkbox',
-            'name' => 'collage[only]',
-            'value' => $config['collage']['only'],
         ],
         'collage_cntdwn_time' => [
             'view' => 'basic',

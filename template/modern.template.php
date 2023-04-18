@@ -59,7 +59,7 @@
 									<span data-i18n="use_button"></span>
 								</div>
 							<?php else: ?>
-								<?php if (!($config['collage']['enabled'] && $config['collage']['only'])): ?>
+								<?php if ($config['picture']['enabled']): ?>
 								<a href="#" class="<?php echo $btnClass; ?> takePic rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i> <span data-i18n="takePhoto"></span></a>
 								<?php endif; ?>
 

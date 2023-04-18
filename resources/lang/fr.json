@@ -37,7 +37,7 @@
   "collage:collage_keep_single_images": "Ajouter les images individuellement du photomontage à la galerie",
   "collage:collage_key": "Code clé qui déclenche un photomontage",
   "collage:collage_layout": "Choisissez la mise en page du photomontage :",
-  "collage:collage_only": "Autoriser uniquement la prise de vue en photomontage",
+  "collage:collage_keep_single_images": "Ajouter les images individuellement des collages à la galerie",
   "collage:collage_placeholder": "Utiliser un espace réservé personnalisé",
   "collage:collage_placeholderpath": "Chemin d'aaccès de l'image de l'espace réservé",
   "collage:collage_placeholderposition": "Numéro du photomontage à remplacer",
