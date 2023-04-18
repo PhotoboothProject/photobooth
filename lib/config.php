@@ -243,4 +243,9 @@ if (empty($config['qr']['url'])) {
     $config['qr']['url'] = Photobooth::get_url() . '/api/download.php?image=';
 }
 
+$config['cheese_img'] = $config['ui']['shutter_cheese_img'];
+if (!empty($config['cheese_img'])) {
+    $config['cheese_img'] = Helper::set_absolute_path($rootpath . $config['ui']['shutter_cheese_img']);
+}
+
 $config['photobooth']['version'] = Photobooth::get_photobooth_version();
