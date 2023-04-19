@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-function applyFrame($sourceResource, $framePath) {
+function applyFrame($sourceResource, $framePath, $skipExtend = true) {
     global $config;
-    if ($config['picture']['extend_by_frame']) {
+    if ($config['picture']['extend_by_frame'] && !$skipExtend) {
         $frame_left_percentage = $config['picture']['frame_left_percentage'];
         $frame_right_percentage = $config['picture']['frame_right_percentage'];
         $frame_top_percentage = $config['picture']['frame_top_percentage'];

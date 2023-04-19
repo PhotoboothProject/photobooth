@@ -127,7 +127,7 @@ if (!file_exists($filename_print)) {
         }
 
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            $source = applyFrame($source, $config['print']['frame']);
+            $source = applyFrame($source, $config['print']['frame'], true);
         }
 
         list($qrWidth, $qrHeight) = getimagesize($filename_codes);
@@ -179,7 +179,7 @@ if (!file_exists($filename_print)) {
         $source = applyQR($source, $filename_codes, $x, $y);
     } else {
         if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            $source = applyFrame($source, $config['print']['frame']);
+            $source = applyFrame($source, $config['print']['frame'], true);
         }
     }
 
