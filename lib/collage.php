@@ -328,7 +328,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                 $tempSubImage = imagecreatefromjpeg($editImages[$i]);
 
                 if ($c->collageTakeFrame === 'always' && testFile($c->collageFrame)) {
-                    $tempSubImage = applyFrame($tempSubImage, $c->collageFrame);
+                    $tempSubImage = applyFrame($tempSubImage, $c->collageFrame, true);
                 }
 
                 $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
@@ -476,7 +476,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     }
 
     if ($c->collageTakeFrame === 'once' && testFile($c->collageFrame)) {
-        $my_collage = applyFrame($my_collage, $c->collageFrame);
+        $my_collage = applyFrame($my_collage, $c->collageFrame, true);
     }
 
     if ($c->textOnCollageEnabled === 'enabled' && testFile($c->textOnCollageFont)) {
@@ -556,7 +556,7 @@ function addPicture($my_collage, $filename, $pictureOptions, CollageConfig $c) {
     }
 
     if ($c->collageTakeFrame === 'always' && testFile($c->collageFrame)) {
-        $tempSubImage = applyFrame($tempSubImage, $c->collageFrame);
+        $tempSubImage = applyFrame($tempSubImage, $c->collageFrame, true);
     }
 
     if ($degrees != 0) {

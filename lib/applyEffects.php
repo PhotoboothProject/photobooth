@@ -50,7 +50,7 @@ function editSingleImage($config, $imageResource, $image_filter, $editSingleColl
         ($config['picture']['take_frame'] && !$isCollage && testFile($config['picture']['frame'])) ||
         ($editSingleCollage && $config['collage']['take_frame'] === 'always' && testFile($config['collage']['frame']))
     ) {
-        $imageResource = applyFrame($imageResource, $picture_frame);
+        $imageResource = applyFrame($imageResource, $picture_frame, $isCollage);
         $imageModified = true;
     }
 
