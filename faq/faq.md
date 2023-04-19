@@ -329,6 +329,11 @@ The server supports up to four connected hardware buttons for the following func
 - Defaults to GPIO24
 - Button press will trigger a single picture in Photobooth
 
+8) **Move2USB Button**
+
+- Defaults to GPIO10
+- This button will initiate the move of all Pictures to a USB-thumb.
+
 
 After any button is triggered, all hardware button remain disabled until the action (picture / collage) completed. Once completed, the hardware buttons re-arms / are active again.
 
@@ -344,6 +349,7 @@ Video       ---   GPIO  9
 Shutdown    ---   GPIO 16
 Print       ---   GPIO 26
 Reboot      ---   GPIO 23
+Move2USB    ---   GPIO 10
 All         ---   GND
 ```
 
@@ -381,6 +387,7 @@ Video LED       ---   GPIO  7
 Shutdown LED    ---   GPIO  8
 Reboot LED      ---   GPIO 18
 Print LED       ---   GPIO  6
+Move2USB LED    ---   GPIO 11
 ```
 
 ##### Known limitations:
@@ -397,7 +404,7 @@ The following elements are currently not supported and not accessible through ro
 The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
 
 - Channel:  `photobooth-socket`
-- Commands: `start-picture`, `start-collage`, `collage-next`, `start-custom`, `start-video`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`
+- Commands: `start-picture`, `start-collage`, `collage-next`, `start-custom`, `start-video`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`, `move2usb`
 - Response: `completed` will be emitted to the client, once photobooth finished the task
 
 
@@ -421,6 +428,7 @@ The available endpoints, depending on enabled features and hardware button optio
 - `[Base Url]/commands/rotary-cw` - Focus next element
 - `[Base Url]/commands/rotary-ccw` - Focus previous element
 - `[Base Url]/commands/rotary-btn-press` - Triggers a click action
+- `[Base Url]/commands/'start-move2usb` - Trigger picture move to USB
 
 These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/) (untested).
 

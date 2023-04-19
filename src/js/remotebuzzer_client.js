@@ -80,6 +80,10 @@ function initRemoteBuzzerFromDOM() {
                             rotaryController.click();
                             break;
 
+                        case 'start-move2usb':
+                            buttonController.move2usb();
+                            break;
+
                         default:
                             break;
                     }
@@ -156,6 +160,12 @@ function initRemoteBuzzerFromDOM() {
             }
         };
 
+        api.startMove2usb = function () {
+            if (this.enabled()) {
+                this.emitToServer('start-move2usb');
+            }
+        };
+
         api.emitToServer = function (cmd) {
             switch (cmd) {
                 case 'start-picture':
@@ -178,6 +188,9 @@ function initRemoteBuzzerFromDOM() {
                     break;
                 case 'collage-wait-for-next':
                     ioClient.emit('photobooth-socket', 'collage-wait-for-next');
+                    break;
+                case 'start-move2usb':
+                    ioClient.emit('photobooth-socket', 'start-move2usb');
                     break;
                 default:
                     break;
@@ -253,6 +266,13 @@ function initRemoteBuzzerFromDOM() {
                 $('.pswp__button--print').trigger('click');
             } else {
                 remoteBuzzerClient.emitToServer('completed');
+            }
+        };
+
+        api.move2usb = function () {
+            if (this.enabled()) {
+                $('.resultInner').removeClass('show');
+                photoBooth.thrill('move2usb');
             }
         };
 

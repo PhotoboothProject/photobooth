@@ -342,6 +342,10 @@ $config['remotebuzzer']['custombutton'] = false;
 $config['remotebuzzer']['customgpio'] = 24;
 $config['remotebuzzer']['customled'] = false;
 $config['remotebuzzer']['customledgpio'] = 5;
+$config['remotebuzzer']['move2usbbutton'] = false;
+$config['remotebuzzer']['move2usbgpio'] = 10;
+$config['remotebuzzer']['move2usbled'] = false;
+$config['remotebuzzer']['move2usbledgpio'] = 11;
 
 
 // S Y N C  T O  U S B  S T I C K

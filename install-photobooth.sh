@@ -714,9 +714,9 @@ raspberry_permission() {
 cat >> /boot/config.txt  << EOF
 # Photobooth
 #IN
-gpio=9,16,17,20,21,22,23,24,26,27=pu
+gpio=9,10,16,17,20,21,22,23,24,26,27=pu
 #OUT
-gpio=5,6,7,8,12,18,19,25=op
+gpio=5,6,7,8,11,12,18,19,25=op
 # Photobooth End
 EOF
 

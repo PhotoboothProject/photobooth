@@ -1946,6 +1946,12 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'seconds',
         ],
+        'remotebuzzer_move2usbbutton' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[move2usbbutton]',
+            'value' => $config['remotebuzzer']['move2usbbutton'],
+        ],
         'remotebuzzer_rebootbutton' => [
             'view' => 'expert',
             'type' => 'checkbox',
@@ -2016,6 +2022,12 @@ $configsetup = [
             'type' => 'checkbox',
             'name' => 'remotebuzzer[printled]',
             'value' => $config['remotebuzzer']['printled'],
+        ],
+        'remotebuzzer_move2usbled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[move2usbled]',
+            'value' => $config['remotebuzzer']['move2usbled'],
         ],
         'remotebuzzer_enable_standalonegallery' => [
             'view' => 'expert',
@@ -2089,6 +2101,13 @@ $configsetup = [
             'name' => 'remotebuzzer[rebootgpio]',
             'value' => $config['remotebuzzer']['rebootgpio'],
         ],
+        'remotebuzzer_move2usbgpio' => [
+            'view' => 'experimental',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['remotebuzzer']['move2usbgpio'],
+            'name' => 'remotebuzzer[move2usbgpio]',
+            'value' => $config['remotebuzzer']['move2usbgpio'],
+        ],
         'remotebuzzer_rotaryclkgpio' => [
             'view' => 'experimental',
             'type' => 'number',
@@ -2158,6 +2177,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['remotebuzzer']['rebootledgpio'],
             'name' => 'remotebuzzer[rebootledgpio]',
             'value' => $config['remotebuzzer']['rebootledgpio'],
+        ],
+        'remotebuzzer_move2usbledgpio' => [
+            'view' => 'experimental',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['remotebuzzer']['move2usbledgpio'],
+            'name' => 'remotebuzzer[move2usbledgpio]',
+            'value' => $config['remotebuzzer']['move2usbledgpio'],
         ],
         'remotebuzzer_printledgpio' => [
             'view' => 'experimental',
