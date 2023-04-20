@@ -208,7 +208,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.takePicture = function () {
-            if (this.enabled()) {
+            if (this.enabled() && config.picture.enabled) {
                 $('.resultInner').removeClass('show');
                 photoBooth.thrill('photo');
             }
