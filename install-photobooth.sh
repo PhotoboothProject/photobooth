@@ -287,23 +287,8 @@ check_nodejs() {
     micro=${VER[2]}
 
     if [[ -n "$major" && "$major" -eq "$NODEJS_MAJOR" ]]; then
-        if [[ -n "$minor" && "$minor" -eq "$NODEJS_MINOR" ]]; then
-            if [[ -n "$micro" && "$micro" -ge "$NODEJS_MICRO" ]]; then
-                info "[Info]      Node.js matches our requirements!"
-            elif [[ -n "$micro" ]]; then
-                warn "[WARN]      Node.js needs to be updated, micro version not matching our requirements!"
-                warn "[WARN]      Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
-                NODEJS_NEEDS_UPDATE=true
-                if [ "$NODEJS_CHECKED" = true ]; then
-                    error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
-                    exit 1
-                else
-                    update_nodejs
-                fi
-            else
-                error "[ERROR]     Unable to handle Node.js version string (micro)"
-                exit 1
-            fi
+        if [[ -n "$minor" && "$minor" -ge "$NODEJS_MINOR" ]]; then
+            info "[Info]      Node.js matches our requirements!"
         elif [[ -n "$minor" ]]; then
             warn "[WARN]      Node.js needs to be updated, minor version not matching our requirements!"
             warn "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
