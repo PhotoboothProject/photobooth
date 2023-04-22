@@ -136,7 +136,7 @@ const startSync = ({dataAbsPath, drive}) => {
                     '-b',
                     `--backup-dir=${path.join(drive.mountpoint, 'deleted')}`,
                     '--ignore-existing',
-                    '--include=\'*.jpg\'',
+                    '--include=\'*.\'{jpg,chk,gif,mp4}',
                     '--include=\'*/\'',
                     '--exclude=\'*\'',
                     '--prune-empty-dirs',
@@ -158,7 +158,7 @@ const startSync = ({dataAbsPath, drive}) => {
 
     try {
         rsyncSemaphore = spawn(cmd, {
-            shell: true,
+            shell: '/bin/bash',
             stdio: 'ignore'
         });
     } catch (err) {
