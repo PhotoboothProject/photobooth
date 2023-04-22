@@ -178,7 +178,7 @@ const startSync = ({dataAbsPath, drive}) => {
 
 const writePIDFile = (filename) => {
     try {
-        fs.writeFileSync(filename, PID, {flag: 'w'});
+        fs.writeFileSync(filename, parseInt(PID, 10).toString(), {flag: 'w'});
         log(`PID file created [${filename}]`);
     } catch (err) {
         throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
