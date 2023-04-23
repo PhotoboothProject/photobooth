@@ -194,6 +194,15 @@ if (isset($data['type'])) {
                 }
             }
 
+            if ($newConfig['reset']['remove_print_log']) {
+                // delete print log
+                $printlog = $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.log';
+                if (is_file($printlog)) {
+                    unlink('$printlog');
+                    $LogData[] = ['print.log' => 'deleted'];
+                }
+            }
+
             if ($newConfig['reset']['remove_mailtxt']) {
                 if (is_file(MAIL_FILE)) {
                     unlink(MAIL_FILE); // delete file
