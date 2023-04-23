@@ -19,9 +19,11 @@ if (empty($_GET['filename'])) {
     logErrorAndDie($errormsg);
 }
 
+$random = Image::create_new_filename('random');
 $filename = $_GET['filename'];
+$uniquename = substr($filename, 0, -4) . '-' . $random;
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
-$filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $filename;
+$filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $uniquename;
 $filename_codes = $config['foldersAbs']['qrcodes'] . DIRECTORY_SEPARATOR . $filename;
 $quality = 100;
 $status = false;
