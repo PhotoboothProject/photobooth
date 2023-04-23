@@ -461,4 +461,5 @@ $config['folders']['private'] = 'private';
 $config['reset']['remove_images'] = true;
 $config['reset']['remove_mailtxt'] = false;
 $config['reset']['remove_config'] = false;
+$config['reset']['remove_print_log'] = false;
 

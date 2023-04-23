@@ -216,4 +216,15 @@ $LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 1) {
     logError($LogData);
 }
+
+$csvData = [];
+$logfile = $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.log';
+$csvData[] = date('Y-m-d');
+$csvData[] = date('H:i:s');
+$csvData[] = $filename;
+$csvData[] = $uniquename;
+$handle = fopen($logfile, 'a');
+fputcsv($handle, $csvData);
+fclose($handle);
+
 die($LogString);
