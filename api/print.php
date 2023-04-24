@@ -218,12 +218,11 @@ if ($config['dev']['loglevel'] > 1) {
 }
 
 $csvData = [];
-$logfile = $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.log';
 $csvData[] = date('Y-m-d');
 $csvData[] = date('H:i:s');
 $csvData[] = $filename;
 $csvData[] = $uniquename;
-$handle = fopen($logfile, 'a');
+$handle = fopen(PRINT_DB, 'a');
 fputcsv($handle, $csvData);
 fclose($handle);
 

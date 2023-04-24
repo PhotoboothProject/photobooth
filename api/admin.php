@@ -194,12 +194,11 @@ if (isset($data['type'])) {
                 }
             }
 
-            if ($newConfig['reset']['remove_print_log']) {
-                // delete print log
-                $printlog = $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.log';
-                if (is_file($printlog)) {
-                    unlink('$printlog');
-                    $LogData[] = ['print.log' => 'deleted'];
+            if ($newConfig['reset']['remove_print_db']) {
+                // delete print database
+                if (is_file(PRINT_DB)) {
+                    unlink(PRINT_DB);
+                    $LogData[] = ['printed.csv' => 'deleted'];
                 }
             }
 
