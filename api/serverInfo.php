@@ -59,6 +59,7 @@ switch ($content) {
         } elseif (!read_csv(PRINT_DB, $resp)) {
             echo 'Can\'t read print database.' . "\r\n";
         } else {
+            echo '<h2 class="center">Print database</h2>' . "\r\n";
             echo '<table style="width:90%; margin-left: auto; margin-right: auto;">' . "\r\n";
             echo '    <thead>' . "\r\n";
             echo '        <tr>' . "\r\n";
