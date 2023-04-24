@@ -52,6 +52,43 @@ switch ($content) {
         }
         break;
 
+    case 'nav-printdb':
+        $printlog = $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.log';
+        $resp = [];
+        if (!file_exists($printlog)) {
+            echo 'No database found.' . "\r\n";
+        } elseif (!read_csv($printlog, $resp)) {
+            echo 'Can\'t read CSV.' . "\r\n";
+        } else {
+            echo '<table style="width:90%; margin-left: auto; margin-right: auto;">' . "\r\n";
+            echo '    <thead>' . "\r\n";
+            echo '        <tr>' . "\r\n";
+            echo '            <th>Number</th>' . "\r\n";
+            echo '            <th>Date</th>' . "\r\n";
+            echo '            <th>Time</th>' . "\r\n";
+            echo '            <th>Image</th>' . "\r\n";
+            echo '            <th>Unique name</th>' . "\r\n";
+            echo '        </tr>' . "\r\n";
+            echo '    </thead>' . "\r\n";
+            echo '    <tbody>' . "\r\n";
+
+            $count = 0;
+            $data = [];
+            foreach ($resp as $row_number => $data) {
+                $count++;
+                echo '        <tr>' . "\r\n";
+                echo '            <td class="end">' . $count . '</td>' . "\r\n";
+                echo '            <td class="center">' . $data[0] . '</td>' . "\r\n";
+                echo '            <td class="center">' . $data[1] . '</td>' . "\r\n";
+                echo '            <td class="center">' . $data[2] . '</td>' . "\r\n";
+                echo '            <td class="center">' . $data[3] . '</td>' . "\r\n";
+                echo '        </tr>' . "\r\n";
+            }
+            echo '    </tbody>' . "\r\n";
+            echo '</table>' . "\r\n";
+        }
+        break;
+
     default:
         echo 'Unknown debug panel parameter';
         break;
@@ -71,6 +108,20 @@ function dumpfile($file, $devModeRequired) {
     } else {
         return file_get_contents($file);
     }
+}
+
+function read_csv(string $path_to_csv_file, array &$result): bool {
+    $handle = fopen($path_to_csv_file, 'r');
+
+    if (!$handle) {
+        return false;
+    }
+
+    while (false !== ($data = fgetcsv($handle, null, ','))) {
+        $result[] = $data;
+    }
+
+    return true;
 }
 
 return true;

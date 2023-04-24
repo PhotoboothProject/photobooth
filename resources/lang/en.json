@@ -653,6 +653,7 @@
   "print:textonprint_locationx": "X Coordinate",
   "print:textonprint_locationy": "Y Coordinate",
   "print:textonprint_rotation": "Text rotation",
+  "printdb": "Print database",
   "printing": "Started printing! Please wait...",
   "processPhoto": "Process Collage",
   "qr": "QR Code",

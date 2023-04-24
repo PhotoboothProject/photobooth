@@ -101,6 +101,7 @@ $btnClass = 'adminnavlistelement ' . $btnShape . ' noborder';
                 echo '<li><a class="'. $btnClass .'" href="#devlog" id="nav-devlog"><div><span data-i18n="devlog">devlog</span></div></a></li>';
                 echo '<li><a class="'. $btnClass .'" href="#serverprocesses" id="nav-serverprocesses"><div><span data-i18n="serverprocesses">serverprocesses</span></div></a></li>';
                 echo '<li><a class="'. $btnClass .'" href="#bootconfig" id="nav-bootconfig"><div><span data-i18n="bootconfig">bootconfig</span></div></a></li>';
+                echo '<li><a class="'. $btnClass .'" href="#printdb" id="nav-printdb"><div><span data-i18n="printdb">printdb</span></div></a></li>';
                 echo '<li><a class="'. $btnClass .'" href="#installlog" id="nav-installlog"><div><span data-i18n="installlog">installlog</span></div></a></li>';
                 echo '<li><a class="'. $btnClass .'" href="#githead" id="nav-githead"><div><span data-i18n="githead">githead</span></div></a></li>';
         
