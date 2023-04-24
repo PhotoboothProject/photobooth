@@ -120,6 +120,20 @@ pre {
   white-space: pre-wrap;
 }
 
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+}
+.center {
+  text-align: center;
+}
+.end {
+  text-align: end;
+}
+
 /**************************
 * Settings Content Container
 **************************/
