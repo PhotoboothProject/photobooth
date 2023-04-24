@@ -2864,11 +2864,11 @@ $configsetup = [
             'name' => 'reset[remove_config]',
             'value' => $config['reset']['remove_config'],
         ],
-        'reset_remove_print_log' => [
+        'reset_remove_print_db' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'reset[remove_print_log]',
-            'value' => $config['reset']['remove_print_log'],
+            'name' => 'reset[remove_print_db]',
+            'value' => $config['reset']['remove_print_db'],
         ],
         'reset_button' => [
             'view' => 'basic',

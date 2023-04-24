@@ -53,12 +53,11 @@ switch ($content) {
         break;
 
     case 'nav-printdb':
-        $printlog = $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.log';
         $resp = [];
-        if (!file_exists($printlog)) {
+        if (!file_exists(PRINT_DB)) {
             echo 'No database found.' . "\r\n";
-        } elseif (!read_csv($printlog, $resp)) {
-            echo 'Can\'t read CSV.' . "\r\n";
+        } elseif (!read_csv(PRINT_DB, $resp)) {
+            echo 'Can\'t read print database.' . "\r\n";
         } else {
             echo '<table style="width:90%; margin-left: auto; margin-right: auto;">' . "\r\n";
             echo '    <thead>' . "\r\n";
