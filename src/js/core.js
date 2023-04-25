@@ -1096,7 +1096,12 @@ const photoBooth = (function () {
                         photoboothTools.modal.close('#print_mesg');
                         photoboothTools.modalMesg.showWarn(
                             '#modal_mesg',
-                            config.print.locking_msg + ' (' + data.count + ')'
+                            config.print.locking_msg +
+                                ' (' +
+                                photoboothTools.getTranslation('printed') +
+                                ' ' +
+                                data.count +
+                                ')'
                         );
                         api.resetPrintErrorMessage(cb, config.print.time);
                     } else if (data.error) {

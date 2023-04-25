@@ -204,6 +204,10 @@ if (isset($data['type'])) {
                     unlink(PRINT_LOCKFILE);
                     $LogData[] = ['print.lock' => 'deleted'];
                 }
+                if (is_file(PRINT_COUNTER)) {
+                    unlink(PRINT_COUNTER);
+                    $LogData[] = ['print.count' => 'deleted'];
+                }
             }
 
             if ($newConfig['reset']['remove_mailtxt']) {

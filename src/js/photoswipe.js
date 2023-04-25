@@ -79,6 +79,27 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             // counter - 5, zoom button - 10, info - 15, close - 20.
             const orderNumber = [7, 8, 9, 11, 12, 13, 14];
 
+            if (config.print.from_gallery) {
+                gallery.pswp.ui.registerElement({
+                    name: 'print-counter',
+                    order: 4,
+                    // eslint-disable-next-line no-unused-vars
+                    onInit: (el, pswp) => {
+                        $.ajax({
+                            url: 'api/getPrints.php',
+                            method: 'GET',
+                            success: (data) => {
+                                el.innerText = photoboothTools.getTranslation('printed') + ' ' + data.count;
+                            },
+                            // eslint-disable-next-line no-unused-vars
+                            error: (jqXHR, textStatus) => {
+                                el.innerText = photoboothTools.getTranslation('printed') + ' unknown';
+                            }
+                        });
+                    }
+                });
+            }
+
             if (config.pswp.caption) {
                 gallery.pswp.ui.registerElement({
                     name: 'custom-caption',

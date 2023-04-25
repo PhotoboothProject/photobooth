@@ -240,6 +240,7 @@ if ($config['print']['limit'] > 0) {
         fclose($f);
         $status = 'locking';
     }
+    file_put_contents(PRINT_COUNTER, $linecount);
 }
 
 $LogData = [
