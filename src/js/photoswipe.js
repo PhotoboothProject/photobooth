@@ -79,7 +79,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             // counter - 5, zoom button - 10, info - 15, close - 20.
             const orderNumber = [7, 8, 9, 11, 12, 13, 14];
 
-            if (config.print.from_gallery) {
+            if (config.print.from_gallery && config.print.limit > 0) {
                 gallery.pswp.ui.registerElement({
                     name: 'print-counter',
                     order: 4,
