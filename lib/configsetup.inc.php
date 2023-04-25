@@ -1479,6 +1479,13 @@ $configsetup = [
             'name' => 'print[limit]',
             'value' => $config['print']['limit'],
         ],
+        'print_locking_msg' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'print[locking_msg]',
+            'placeholder' => $defaultConfig['print']['locking_msg'],
+            'value' => $config['print']['locking_msg'],
+        ],
         'print_limit_msg' => [
             'view' => 'expert',
             'type' => 'input',

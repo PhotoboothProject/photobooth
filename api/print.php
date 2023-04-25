@@ -220,8 +220,8 @@ $handle = fopen(PRINT_DB, 'a');
 fputcsv($handle, $csvData);
 fclose($handle);
 
+$linecount = 0;
 if ($config['print']['limit'] > 0) {
-    $linecount = 0;
     $handle = fopen(PRINT_DB, 'r');
     while (!feof($handle)) {
         $line = fgets($handle, 4096);
@@ -244,6 +244,7 @@ if ($config['print']['limit'] > 0) {
 
 $LogData = [
     'status' => $status,
+    'count' => $linecount,
     'msg' => $cmd,
     'returnValue' => $returnValue,
     'output' => $output,

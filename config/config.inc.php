@@ -233,6 +233,7 @@ $config['print']['auto'] = false;
 $config['print']['auto_delay'] = '1000';
 $config['print']['time'] = '5000';
 $config['print']['limit'] = '0';
+$config['print']['locking_msg'] = 'Printing... Print limit reached, print will be locked.';
 $config['print']['limit_msg'] = 'Print locked.';
 $config['print']['no_rotate'] = false;
 $config['print']['key'] = '';
