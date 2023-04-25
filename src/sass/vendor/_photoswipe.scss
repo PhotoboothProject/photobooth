@@ -69,6 +69,13 @@
   align-self: center;
   padding: 4px 6px 5px;
   margin-right: 4px;
+}
+
+.pswp__button--print,
+.pswp__print-counter {
+  &.warning {
+    color: orange;
+  }
   &.error {
     color: red;
   }
