@@ -90,6 +90,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                             method: 'GET',
                             success: (data) => {
                                 el.innerText = photoboothTools.getTranslation('printed') + ' ' + data.count;
+                                if (data.locked) {
+                                    $('.pswp__print-counter').addClass('error');
+                                }
                             },
                             // eslint-disable-next-line no-unused-vars
                             error: (jqXHR, textStatus) => {
