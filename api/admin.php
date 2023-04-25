@@ -200,6 +200,10 @@ if (isset($data['type'])) {
                     unlink(PRINT_DB);
                     $LogData[] = ['printed.csv' => 'deleted'];
                 }
+                if (is_file(PRINT_LOCKFILE)) {
+                    unlink(PRINT_LOCKFILE);
+                    $LogData[] = ['print.lock' => 'deleted'];
+                }
             }
 
             if ($newConfig['reset']['remove_mailtxt']) {
