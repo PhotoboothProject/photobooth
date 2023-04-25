@@ -9,8 +9,15 @@ if (file_exists(PRINT_COUNTER)) {
     $count = 0;
 }
 
+if (file_exists(PRINT_LOCKFILE)) {
+    $locked = true;
+} else {
+    $locked = false;
+}
+
 $LogData = [
     'count' => $count,
+    'locked' => $locked,
     'php' => basename($_SERVER['PHP_SELF']),
 ];
 $LogString = json_encode($LogData);
