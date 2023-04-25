@@ -55,6 +55,11 @@ const photoboothTools = (function () {
             $(selector).html('<div class="modal__body"><span style="color:green;">' + successMsg + '</span></div>');
             api.modal.open($(selector));
         },
+        showWarn: function (selector, warnMsg) {
+            $(selector).empty();
+            $(selector).html('<div class="modal__body"><span style="color:orange;">' + warnMsg + '</span></div>');
+            api.modal.open($(selector));
+        },
         showError: function (selector, errorMsg) {
             $(selector).empty();
             $(selector).html('<div class="modal__body"><span style="color:red;">' + errorMsg + '</span></div>');
