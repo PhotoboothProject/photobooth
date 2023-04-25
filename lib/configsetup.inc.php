@@ -1472,6 +1472,27 @@ $configsetup = [
             'range_step' => 250,
             'unit' => 'milliseconds',
         ],
+        'print_limit' => [
+            'view' => 'expert',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['print']['limit'],
+            'name' => 'print[limit]',
+            'value' => $config['print']['limit'],
+        ],
+        'print_limit_msg' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'print[limit_msg]',
+            'placeholder' => $defaultConfig['print']['limit_msg'],
+            'value' => $config['print']['limit_msg'],
+        ],
+        'print_reset_lock' => [
+            'view' => 'expert',
+            'type' => 'button',
+            'placeholder' => 'reset_lock',
+            'name' => 'RESETPRINTLOCK',
+            'value' => 'reset-print-lock-btn',
+        ],
         'print_no_rotate' => [
             'view' => 'expert',
             'type' => 'checkbox',

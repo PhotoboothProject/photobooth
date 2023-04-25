@@ -99,6 +99,26 @@ $(function () {
         });
     });
 
+    $('#reset-print-lock-btn').on('click', function (e) {
+        e.preventDefault();
+        const elem = $(this);
+        $('#reset-print-lock-btn').children('.text').toggle();
+        elem.addClass('saving');
+
+        $.ajax({
+            url: '../api/unlockPrint.php',
+            success: function (resp) {
+                elem.removeClass('saving');
+                elem.addClass(resp);
+
+                setTimeout(function () {
+                    elem.removeClass('error success');
+                    $('#reset-print-lock-btn').children('.text').toggle();
+                }, 2000);
+            }
+        });
+    });
+
     $('#checkversion-btn').on('click', function (ev) {
         ev.preventDefault();
         const elem = $(this);

@@ -175,6 +175,7 @@ foreach ($config['folders'] as $key => $folder) {
 }
 
 define('PRINT_DB', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'printed.csv');
+define('PRINT_LOCKFILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.lock');
 
 if ($config['preview']['mode'] === 'gphoto') {
     $config['preview']['mode'] = 'device_cam';

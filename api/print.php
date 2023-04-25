@@ -19,6 +19,11 @@ if (empty($_GET['filename'])) {
     logErrorAndDie($errormsg);
 }
 
+if (file_exists(PRINT_LOCKFILE)) {
+    $errormsg = $config['print']['limit_msg'];
+    logErrorAndDie($errormsg);
+}
+
 $random = Image::create_new_filename('random');
 $filename = $_GET['filename'];
 $uniquename = substr($filename, 0, -4) . '-' . $random;
@@ -200,22 +205,11 @@ if (!file_exists($filename_print)) {
 }
 
 // print image
+$status = 'ok';
 $cmd = sprintf($config['print']['cmd'], $filename_print);
 $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
 exec($cmd, $output, $returnValue);
-
-$LogData = [
-    'status' => 'ok',
-    'msg' => $cmd,
-    'returnValue' => $returnValue,
-    'output' => $output,
-    'php' => basename($_SERVER['PHP_SELF']),
-];
-$LogString = json_encode($LogData);
-if ($config['dev']['loglevel'] > 1) {
-    logError($LogData);
-}
 
 $csvData = [];
 $csvData[] = date('Y-m-d');
@@ -225,5 +219,39 @@ $csvData[] = $uniquename;
 $handle = fopen(PRINT_DB, 'a');
 fputcsv($handle, $csvData);
 fclose($handle);
+
+if ($config['print']['limit'] > 0) {
+    $linecount = 0;
+    $handle = fopen(PRINT_DB, 'r');
+    while (!feof($handle)) {
+        $line = fgets($handle, 4096);
+        $linecount = $linecount + substr_count($line, PHP_EOL);
+    }
+    fclose($handle);
+
+    if ($linecount % $config['print']['limit'] == 0) {
+        $f = fopen(PRINT_LOCKFILE, 'w');
+        if (!$f) {
+            if ($config['dev']['loglevel'] > 1) {
+                $errormsg = basename($_SERVER['PHP_SELF']) . ': Error creating the file ' . PRINT_LOCKFILE;
+                logError($errormsg);
+            }
+        }
+        fclose($f);
+        $status = 'locking';
+    }
+}
+
+$LogData = [
+    'status' => $status,
+    'msg' => $cmd,
+    'returnValue' => $returnValue,
+    'output' => $output,
+    'php' => basename($_SERVER['PHP_SELF']),
+];
+$LogString = json_encode($LogData);
+if ($config['dev']['loglevel'] > 1) {
+    logError($LogData);
+}
 
 die($LogString);

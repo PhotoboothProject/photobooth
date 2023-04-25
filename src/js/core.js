@@ -1092,7 +1092,11 @@ const photoBooth = (function () {
                 success: (data) => {
                     photoboothTools.console.log('Picture processed: ', data);
 
-                    if (data.error) {
+                    if (data.status == 'locking') {
+                        photoboothTools.modal.close('#print_mesg');
+                        photoboothTools.modalMesg.showWarn('#modal_mesg', config.print.limit_msg);
+                        api.resetPrintErrorMessage(cb, config.print.time);
+                    } else if (data.error) {
                         photoboothTools.console.log('ERROR: An error occurred: ', data.error);
                         photoboothTools.modal.close('#print_mesg');
                         photoboothTools.modalMesg.showError('#modal_mesg', data.error);
