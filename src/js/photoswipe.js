@@ -92,11 +92,14 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                                 el.innerText = photoboothTools.getTranslation('printed') + ' ' + data.count;
                                 if (data.locked) {
                                     $('.pswp__print-counter').addClass('error');
+                                    $('.pswp__button--print').addClass('error');
                                 }
                             },
                             // eslint-disable-next-line no-unused-vars
                             error: (jqXHR, textStatus) => {
+                                $('.pswp__print-counter').addClass('warning');
                                 el.innerText = photoboothTools.getTranslation('printed') + ' unknown';
+                                $('.pswp__button--print').addClass('warning');
                             }
                         });
                     }

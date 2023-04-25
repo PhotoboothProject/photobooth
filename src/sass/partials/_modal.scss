@@ -43,3 +43,15 @@
     }
   }
 }
+
+.modal__body {
+  &.success {
+    color: green;
+  }
+  &.warning {
+    color: orange;
+  }
+  &.error {
+    color: red;
+  }
+}
