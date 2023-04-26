@@ -270,7 +270,26 @@ const photoBooth = (function () {
 
         photoboothTools.console.log('PhotoStyle: ' + photoStyle);
 
-        photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry);
+        let countdownTime;
+        switch (photoStyle) {
+            case PhotoStyle.COLLAGE:
+                countdownTime = config.collage.cntdwn_time;
+                break;
+            case PhotoStyle.VIDEO:
+                countdownTime = config.video.cntdwn_time;
+                break;
+            case PhotoStyle.CUSTOM:
+                countdownTime = config.custom.cntdwn_time;
+                break;
+            case PhotoStyle.PHOTO:
+            default:
+                countdownTime = config.picture.cntdwn_time;
+                break;
+        }
+
+        const maxGetMediaRetry = countdownTime - (config.picture.cntdwn_offset + 1);
+        console.log(maxGetMediaRetry);
+        photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry, maxGetMediaRetry);
 
         if (
             config.preview.mode !== PreviewMode.NONE.valueOf() &&
@@ -309,23 +328,6 @@ const photoBooth = (function () {
             }
             const getUrl = config.get_request.server + '/' + getMode;
             photoboothTools.getRequest(getUrl);
-        }
-
-        let countdownTime;
-        switch (photoStyle) {
-            case PhotoStyle.COLLAGE:
-                countdownTime = config.collage.cntdwn_time;
-                break;
-            case PhotoStyle.VIDEO:
-                countdownTime = config.video.cntdwn_time;
-                break;
-            case PhotoStyle.CUSTOM:
-                countdownTime = config.custom.cntdwn_time;
-                break;
-            case PhotoStyle.PHOTO:
-            default:
-                countdownTime = config.picture.cntdwn_time;
-                break;
         }
 
         api.startCountdown(countdownTime, counter, () => {
