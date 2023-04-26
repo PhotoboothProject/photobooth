@@ -22,7 +22,14 @@ const photoboothPreview = (function () {
         },
         api = {};
 
-    let pid, video, loader, wrapper, url, pictureFrame, collageFrame;
+    let pid,
+        video,
+        loader,
+        wrapper,
+        url,
+        pictureFrame,
+        collageFrame,
+        retryGetMedia = 3;
 
     api.changeVideoMode = function (mode) {
         photoboothTools.console.logDev('Preview: Changing video mode: ' + mode);
@@ -71,8 +78,10 @@ const photoboothPreview = (function () {
             })
             .catch(function (error) {
                 photoboothTools.console.log('ERROR: Preview: Could not get user media: ', error);
-                if (retry < 3) {
-                    photoboothTools.console.logDev('Preview: Retrying to get user media. Retry ' + retry + ' / 3');
+                if (retry < retryGetMedia) {
+                    photoboothTools.console.logDev(
+                        'Preview: Retrying to get user media. Retry ' + retry + ' / ' + retryGetMedia
+                    );
                     retry += 1;
                     setTimeout(function () {
                         api.initializeMedia(cb, retry);
@@ -113,7 +122,8 @@ const photoboothPreview = (function () {
             });
     };
 
-    api.startVideo = function (mode, retry = 0) {
+    api.startVideo = function (mode, retry = 0, maxGetMediaRetry = 3) {
+        retryGetMedia = maxGetMediaRetry;
         photoboothTools.console.log('Preview: startVideo mode: ' + mode);
         if (config.preview.mode !== PreviewMode.URL.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
