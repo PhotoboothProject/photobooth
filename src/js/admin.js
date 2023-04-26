@@ -87,6 +87,7 @@ $(function () {
 
         $.ajax({
             url: '../api/rebuildImageDB.php',
+            method: 'GET',
             success: function (resp) {
                 elem.removeClass('saving');
                 elem.addClass(resp);
@@ -107,6 +108,7 @@ $(function () {
 
         $.ajax({
             url: '../api/unlockPrint.php',
+            method: 'GET',
             success: function (resp) {
                 elem.removeClass('saving');
                 elem.addClass(resp);
