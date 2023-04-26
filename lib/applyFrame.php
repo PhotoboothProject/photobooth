@@ -9,8 +9,8 @@ function applyFrame($sourceResource, $framePath, $skipExtend = true) {
         $frame_top_percentage = $config['picture']['frame_top_percentage'];
         $frame_bottom_percentage = $config['picture']['frame_bottom_percentage'];
 
-        $new_width = imagesx($sourceResource) / (1 - 0.01 * ($frame_left_percentage + $frame_right_percentage));
-        $new_height = imagesy($sourceResource) / (1 - 0.01 * ($frame_top_percentage + $frame_bottom_percentage));
+        $new_width = intval(imagesx($sourceResource) / (1 - 0.01 * ($frame_left_percentage + $frame_right_percentage)));
+        $new_height = intval(imagesy($sourceResource) / (1 - 0.01 * ($frame_top_percentage + $frame_bottom_percentage)));
 
         $img = imagecreatetruecolor($new_width, $new_height);
         $white = imagecolorallocate($img, 255, 255, 255);
@@ -18,8 +18,8 @@ function applyFrame($sourceResource, $framePath, $skipExtend = true) {
         // We fill in the new white image
         imagefill($img, 0, 0, $white);
 
-        $image_pos_x = imagesx($img) * 0.01 * $frame_left_percentage;
-        $image_pos_y = imagesy($img) * 0.01 * $frame_top_percentage;
+        $image_pos_x = intval(imagesx($img) * 0.01 * $frame_left_percentage);
+        $image_pos_y = intval(imagesy($img) * 0.01 * $frame_top_percentage);
 
         // We copy the image to which we want to apply the frame in our new image.
         imagecopy($img, $sourceResource, $image_pos_x, $image_pos_y, 0, 0, imagesx($sourceResource), imagesy($sourceResource));
