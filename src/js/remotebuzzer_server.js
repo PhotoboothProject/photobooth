@@ -1460,6 +1460,12 @@ function move2usbAction() {
 
             return;
         }
+        if (!fs.existsSync(path.join(dataAbsPath, dbName + '.txt'))) {
+            cmd = path.join(dataAbsPath, dbName + '.txt');
+            log('Error: Database not found: ', cmd, ' - nothing to delete');
+
+            return;
+        }
 
         log('Deleting Database...');
 
