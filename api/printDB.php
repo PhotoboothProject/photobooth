@@ -3,9 +3,9 @@ header('Content-Type: application/json');
 
 require_once '../lib/printdb.php';
 
-$content = $_GET['action'];
+$action = $_GET['action'];
 
-switch ($content) {
+switch ($action) {
     case 'getPrintCount':
         $count = getPrintCountFromCounter();
         $locked = isPrintLocked();
@@ -26,10 +26,11 @@ switch ($content) {
 
     default:
         $LogData = [
-            'error' => $content . ' unknown.',
+            'error' => 'Action unknown.',
         ];
         break;
 }
 
+$LogData[] = ['action' => $action];
 $LogString = json_encode($LogData);
 die($LogString);
