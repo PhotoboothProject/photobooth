@@ -106,10 +106,15 @@ $(function () {
         elem.addClass('saving');
 
         $.ajax({
-            url: '../api/unlockPrint.php',
-            success: function (resp) {
+            method: 'GET',
+            url: '../api/printDB.php',
+            data: {
+                action: 'unlockPrint'
+            },
+            success: (data) => {
                 elem.removeClass('saving');
-                elem.addClass(resp);
+                const dataClass = data.success ? 'success' : 'error';
+                elem.addClass(dataClass);
 
                 setTimeout(function () {
                     elem.removeClass('error success');
