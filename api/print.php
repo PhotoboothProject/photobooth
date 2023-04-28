@@ -7,6 +7,7 @@ require_once '../lib/resize.php';
 require_once '../lib/applyFrame.php';
 require_once '../lib/applyText.php';
 require_once '../lib/log.php';
+require_once '../lib/printdb.php';
 
 function applyQR($sourceResource, $qrPath, $x, $y) {
     $qr = imagecreatefrompng($qrPath);
@@ -19,7 +20,7 @@ if (empty($_GET['filename'])) {
     logErrorAndDie($errormsg);
 }
 
-if (file_exists(PRINT_LOCKFILE)) {
+if (isPrintLocked()) {
     $errormsg = $config['print']['limit_msg'];
     logErrorAndDie($errormsg);
 }
@@ -211,34 +212,20 @@ $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
 exec($cmd, $output, $returnValue);
 
-$csvData = [];
-$csvData[] = date('Y-m-d');
-$csvData[] = date('H:i:s');
-$csvData[] = $filename;
-$csvData[] = $uniquename;
-$handle = fopen(PRINT_DB, 'a');
-fputcsv($handle, $csvData);
-fclose($handle);
+addToPrintDB($filename, $uniquename);
 
 $linecount = 0;
 if ($config['print']['limit'] > 0) {
-    $handle = fopen(PRINT_DB, 'r');
-    while (!feof($handle)) {
-        $line = fgets($handle, 4096);
-        $linecount = $linecount + substr_count($line, PHP_EOL);
-    }
-    fclose($handle);
-
+    $linecount = getPrintCountFromDB();
     if ($linecount % $config['print']['limit'] == 0) {
-        $f = fopen(PRINT_LOCKFILE, 'w');
-        if (!$f) {
+        if (lockPrint()) {
+            $status = 'locking';
+        } else {
             if ($config['dev']['loglevel'] > 1) {
                 $errormsg = basename($_SERVER['PHP_SELF']) . ': Error creating the file ' . PRINT_LOCKFILE;
                 logError($errormsg);
             }
         }
-        fclose($f);
-        $status = 'locking';
     }
     file_put_contents(PRINT_COUNTER, $linecount);
 }

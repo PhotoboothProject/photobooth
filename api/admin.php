@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 require_once '../lib/db.php';
+require_once '../lib/printdb.php';
 
 $LogData = [
     'php' => basename($_SERVER['PHP_SELF']),
@@ -196,16 +197,13 @@ if (isset($data['type'])) {
 
             if ($newConfig['reset']['remove_print_db']) {
                 // delete print database
-                if (is_file(PRINT_DB)) {
-                    unlink(PRINT_DB);
+                if (removePrintDB()) {
                     $LogData[] = ['printed.csv' => 'deleted'];
                 }
-                if (is_file(PRINT_LOCKFILE)) {
-                    unlink(PRINT_LOCKFILE);
+                if (unlockPrint()) {
                     $LogData[] = ['print.lock' => 'deleted'];
                 }
-                if (is_file(PRINT_COUNTER)) {
-                    unlink(PRINT_COUNTER);
+                if (removePrintCounter()) {
                     $LogData[] = ['print.count' => 'deleted'];
                 }
             }

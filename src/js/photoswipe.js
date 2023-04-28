@@ -86,8 +86,11 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     // eslint-disable-next-line no-unused-vars
                     onInit: (el, pswp) => {
                         $.ajax({
-                            url: 'api/getPrints.php',
                             method: 'GET',
+                            url: 'api/printDB.php',
+                            data: {
+                                action: 'getPrintCount'
+                            },
                             success: (data) => {
                                 el.innerText = photoboothTools.getTranslation('printed') + ' ' + data.count;
                                 if (data.locked) {
