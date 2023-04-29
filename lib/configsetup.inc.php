@@ -1948,9 +1948,15 @@ $configsetup = [
         ],
         'remotebuzzer_move2usbbutton' => [
             'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'remotebuzzer[move2usbbutton]',
-            'value' => $config['remotebuzzer']['move2usbbutton'],
+            'type' => 'select',
+            'name' => 'remotebuzzer[move2usb]',
+            'placeholder' => $defaultConfig['remotebuzzer']['move2usb'],
+            'options' => [
+                'disabled' => 'disabled',
+                'copy' => 'copy files to USB drive',
+                'move' => 'move files to USB drive',
+            ],
+            'value' => $config['remotebuzzer']['move2usb'],
         ],
         'remotebuzzer_rebootbutton' => [
             'view' => 'expert',

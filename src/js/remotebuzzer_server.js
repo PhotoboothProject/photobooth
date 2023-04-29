@@ -284,7 +284,7 @@ const requestListener = function (req, res) {
             break;
         case '/commands/start-move2usb':
             log('http: GET /commands/start-move2usb');
-            if (config.remotebuzzer.usebuttons && config.remotebuzzer.move2usbbutton) {
+            if (config.remotebuzzer.usebuttons && config.remotebuzzer.move2usb != 'disabled') {
                 if (triggerArmed) {
                     photoboothAction('move2usb');
                     sendText('MOVE2USB TRIGGERED');
@@ -1148,7 +1148,7 @@ if (useGpio) {
         }
 
         /* Move2USB BUTTON */
-        if (config.remotebuzzer.move2usbbutton) {
+        if (config.remotebuzzer.move2usb != 'disabled') {
             const move2usbButton = new Gpio(config.remotebuzzer.move2usbgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1508,19 +1508,19 @@ function move2usbAction() {
 
     unmountDrive();
 
-    if (copySucess) {
+    if (copySucess && config.remotebuzzer.move2usb == 'move') {
         deleteFiles({dataAbsPath: parsedConfig.dataAbsPath});
     } else {
-        log('[Warning] Sync was unsuccessful. No files will be deleted.');
+        log('[Info] move2USB mode "copy" or Sync unsuccessful. No files will be deleted.');
     }
 
-    if (copySucess) {
+    if (copySucess && config.remotebuzzer.move2usb == 'move') {
         deleteDatabase({
             dataAbsPath: parsedConfig.dataAbsPath,
             dbName: parsedConfig.dbName
         });
     } else {
-        log('[Warning] Sync was unsuccessful. Database will not be deleted.');
+        log('[Info] move2USB mode "copy" or Sync unsuccessful. Database will not be deleted.');
     }
 
     if (config.remotebuzzer.useleds && config.remotebuzzer.move2usbled) {
