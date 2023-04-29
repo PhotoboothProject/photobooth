@@ -395,22 +395,10 @@ ioServer.on('connection', function (client) {
         switch (data) {
             case 'completed':
                 photoboothAction('completed');
-                if (config.remotebuzzer.useleds && config.remotebuzzer.pictureled) {
-                    pictureled.writeSync(0);
-                }
-                if (config.remotebuzzer.useleds && config.remotebuzzer.photolight) {
-                    photolight.writeSync(0);
-                }
                 break;
 
             case 'in-progress':
                 triggerArmed = false;
-                if (config.remotebuzzer.useleds && config.remotebuzzer.pictureled && collageInProgress == false) {
-                    pictureled.writeSync(1);
-                }
-                if (config.remotebuzzer.useleds && config.remotebuzzer.photolight) {
-                    photolight.writeSync(1);
-                }
                 break;
 
             case 'start-picture':
