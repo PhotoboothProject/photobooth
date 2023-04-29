@@ -30,15 +30,17 @@ class Photobooth {
         return self::server_os() == 'linux' ? $_SERVER['DOCUMENT_ROOT'] : str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
 
-    public static function get_photobooth_version() {
-        $packageJson = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'package.json';
-        if (is_file($packageJson)) {
-            $packageContent = file_get_contents($packageJson);
-            $package = json_decode($packageContent, true);
-            return $package['version'];
-        } else {
-            return 'unknown';
+    public function get_photobooth_version() {
+        $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'package.json';
+        if (!is_file($packageJsonPath)) {
+            throw new Exception('Package file not found.');
         }
+        $packageContent = file_get_contents($packageJsonPath);
+        $package = json_decode($packageContent, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception('Error decoding package file: ' . json_last_error_msg());
+        }
+        return $package['version'] ?? 'unknown';
     }
 
     public function getLatestRelease() {
