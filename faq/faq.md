@@ -332,7 +332,8 @@ The server supports up to four connected hardware buttons for the following func
 8) **Move2USB Button**
 
 - Defaults to GPIO10
-- This button will initiate the move of all Pictures to a USB-thumb.
+- This button will initiate the copy/move of all pictures an videos (jpg, gif und mp4) to a USB-thumb.
+- In the admin panel you can choose between disabled, copy and move.
 
 
 After any button is triggered, all hardware button remain disabled until the action (picture / collage) completed. Once completed, the hardware buttons re-arms / are active again.
