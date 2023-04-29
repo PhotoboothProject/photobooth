@@ -1,113 +1,84 @@
 <?php
 header('Content-Type: application/json');
-
 ob_start();
 require_once 'config.php';
-$output = ob_end_clean();
+ob_end_clean();
 
-$content = $_GET['content'];
-
-switch ($content) {
-    case 'nav-remotebuzzerlog':
-        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile'], true);
-        break;
-
-    case 'nav-synctodrivelog':
-        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile'], true);
-        break;
-
-    case 'nav-myconfig':
-        print_r($config);
-        break;
-
-    case 'nav-serverprocesses':
-        echo shell_exec('/bin/ps -ef');
-        break;
-
-    case 'nav-bootconfig':
-        echo dumpfile('/boot/config.txt', null);
-        break;
-
-    case 'nav-devlog':
-        echo dumpfile($config['foldersAbs']['tmp'] . '/' . $config['dev']['logfile'], null);
-        break;
-
-    case 'nav-installlog':
-        echo dumpfile($config['foldersAbs']['private'] . '/install.log', null);
-        break;
-
-    case 'nav-githead':
-        $get_head = shell_exec('git rev-parse --is-inside-work-tree 2>/dev/null && git log --format="%h %s" -n 20 || false');
-        $file_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'HEAD';
-        $head_file = realpath($file_path);
-
-        if (is_file($head_file)) {
-            echo 'Latest commits:' . "\r\n";
-            echo dumpfile($head_file, null);
-        } elseif ($get_head) {
-            echo 'Latest commits:' . "\r\n";
-            echo $get_head;
-        } else {
-            echo 'Can not get latest commits of this Photobooth installation.';
-        }
-        break;
-
-    case 'nav-printdb':
-        $resp = [];
-        if (!file_exists(PRINT_DB)) {
-            echo 'No database found.' . "\r\n";
-        } elseif (!read_csv(PRINT_DB, $resp)) {
-            echo 'Can\'t read print database.' . "\r\n";
-        } else {
-            echo '<h2 class="center">Print database</h2>' . "\r\n";
-            echo '<table style="width:90%; margin-left: auto; margin-right: auto;">' . "\r\n";
-            echo '    <thead>' . "\r\n";
-            echo '        <tr>' . "\r\n";
-            echo '            <th>Number</th>' . "\r\n";
-            echo '            <th>Date</th>' . "\r\n";
-            echo '            <th>Time</th>' . "\r\n";
-            echo '            <th>Image</th>' . "\r\n";
-            echo '            <th>Unique name</th>' . "\r\n";
-            echo '        </tr>' . "\r\n";
-            echo '    </thead>' . "\r\n";
-            echo '    <tbody>' . "\r\n";
-
-            $count = 0;
-            $data = [];
-            foreach ($resp as $row_number => $data) {
-                $count++;
-                echo '        <tr>' . "\r\n";
-                echo '            <td class="end">' . $count . '</td>' . "\r\n";
-                echo '            <td class="center">' . $data[0] . '</td>' . "\r\n";
-                echo '            <td class="center">' . $data[1] . '</td>' . "\r\n";
-                echo '            <td class="center">' . $data[2] . '</td>' . "\r\n";
-                echo '            <td class="center">' . $data[3] . '</td>' . "\r\n";
-                echo '        </tr>' . "\r\n";
+function handleDebugPanel(string $content, array $config): string {
+    switch ($content) {
+        case 'nav-remotebuzzerlog':
+            return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile'], true);
+        case 'nav-synctodrivelog':
+            return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile'], true);
+        case 'nav-myconfig':
+            return json_encode($config);
+        case 'nav-serverprocesses':
+            return shell_exec('/bin/ps -ef');
+        case 'nav-bootconfig':
+            return readFileContents('/boot/config.txt');
+        case 'nav-devlog':
+            return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['dev']['logfile']);
+        case 'nav-installlog':
+            return readFileContents($config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'install.log');
+        case 'nav-githead':
+            return getLatestCommits();
+        case 'nav-printdb':
+            $result = [];
+            if (!file_exists(PRINT_DB)) {
+                return 'No database found.';
+            } elseif (!read_csv(PRINT_DB, $result)) {
+                return 'Can\'t read print database.';
+            } else {
+                $columns = [
+                    0 => 'Date',
+                    1 => 'Time',
+                    2 => 'Image',
+                    3 => 'Unique name',
+                ];
+                return generateTableHtml($columns, $result);
             }
-            echo '    </tbody>' . "\r\n";
-            echo '</table>' . "\r\n";
-        }
-        break;
-
-    default:
-        echo 'Unknown debug panel parameter';
-        break;
+        default:
+            http_response_code(400);
+            return json_encode(['error' => 'Unknown debug panel parameter']);
+    }
 }
 
-function dumpfile($file, $devModeRequired) {
-    global $config;
+function getLatestCommits(): string {
+    try {
+        $getHead = shell_exec('git rev-parse --is-inside-work-tree 2>/dev/null && git log --format="%h %s" -n 20 || false');
+        $headFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'HEAD';
+        if (is_file($headFilePath)) {
+            $result = 'Latest commits:' . "\r\n";
+            $result .= file_get_contents($headFilePath);
+        } elseif ($getHead) {
+            $result = 'Latest commits:' . "\r\n";
+            $result .= $getHead;
+        } else {
+            http_response_code(404);
+            return json_encode(['error' => 'Can not get latest commits']);
+        }
+        return $result;
+    } catch (Exception $e) {
+        http_response_code(500);
+        return json_encode(['error' => $e->getMessage()]);
+    }
+}
 
-    if ($devModeRequired !== null && $devModeRequired && $config['dev']['loglevel'] < 1) {
-        return 'INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.';
+function readFileContents(string $file, bool $devModeRequired = false): string {
+    global $config;
+    if ($devModeRequired && $config['dev']['loglevel'] < 1) {
+        throw new Exception('INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.');
     }
 
     if (!file_exists($file)) {
-        return 'INFO: File (' . $file . ') does not exist';
-    } elseif (!is_file($file)) {
-        return 'INFO: Path (' . $file . ') is not a file';
-    } else {
-        return file_get_contents($file);
+        throw new Exception('INFO: File (' . $file . ') does not exist');
     }
+
+    if (!is_file($file)) {
+        throw new Exception('INFO: Path (' . $file . ') is not a file');
+    }
+
+    return file_get_contents($file);
 }
 
 function read_csv(string $path_to_csv_file, array &$result): bool {
@@ -121,7 +92,44 @@ function read_csv(string $path_to_csv_file, array &$result): bool {
         $result[] = $data;
     }
 
+    if (count($result) === 0) {
+        $result[] = ['No data found in the file'];
+        return false;
+    }
+
     return true;
+}
+
+function generateTableHtml(array $columns, array $result): string {
+    $html = '<h2 class="center">Print database</h2>' . "\r\n";
+    $html .= '<table style="width:90%; margin-left: auto; margin-right: auto;">' . "\r\n";
+    $html .= '    <thead>' . "\r\n";
+    $html .= '        <tr>' . "\r\n";
+    foreach ($columns as $column) {
+        $html .= '            <th>' . htmlspecialchars($column) . '</th>' . "\r\n";
+    }
+    $html .= '        </tr>' . "\r\n";
+    $html .= '    </thead>' . "\r\n";
+    $count = 0;
+    $data = [];
+    $html .= '    <tbody>' . "\r\n";
+    foreach ($result as $row_number => $data) {
+        $count++;
+        $html .= '        <tr>' . "\r\n";
+        $html .= '            <td class="end">' . $count . '</td>' . "\r\n";
+        $html .= '            <td class="center">' . $data[0] . '</td>' . "\r\n";
+        $html .= '            <td class="center">' . $data[1] . '</td>' . "\r\n";
+        $html .= '            <td class="center">' . $data[2] . '</td>' . "\r\n";
+        $html .= '            <td class="center">' . $data[3] . '</td>' . "\r\n";
+        $html .= '        </tr>' . "\r\n";
+    }
+    $html .= '    </tbody>' . "\r\n";
+    $html .= '</table>' . "\r\n";
+    return $html;
+}
+
+if (!empty($_GET['content'])) {
+    echo handleDebugPanel($_GET['content'], $config);
 }
 
 return true;
