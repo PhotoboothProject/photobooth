@@ -152,12 +152,18 @@ function photoboothAction(type) {
             if (config.remotebuzzer.useleds && config.remotebuzzer.customled) {
                 customled.writeSync(0);
             }
+            if (config.remotebuzzer.useleds && config.remotebuzzer.printled) {
+                printled.writeSync(0);
+            }
             ioServer.emit('photobooth-socket', 'completed');
             break;
 
         case 'print':
             triggerArmed = false;
             log('Photobooth trigger PRINT : [ photobooth-socket ]  => [ All Clients ]: command [ print ]');
+            if (config.remotebuzzer.useleds && config.remotebuzzer.printled) {
+                printled.writeSync(1);
+            }
             ioServer.emit('photobooth-socket', 'print');
             break;
 
