@@ -85,15 +85,10 @@ class Photobooth {
     }
 
     public static function get_url() {
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-            $protocol = 'https';
-        } else {
-            $protocol = 'http';
-        }
-        if (self::detect_subfolder_install()) {
-            $url = $protocol . '://' . self::get_ip() . Helper::get_rootpath();
-        } else {
-            $url = $protocol . '://' . self::get_ip();
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
+        $url = $protocol . '://' . $this->serverIp;
+        if ($this->isSubfolderInstall) {
+            $url .= Helper::set_absolute_path(Helper::get_rootpath());
         }
         return Helper::fix_seperator($url);
     }
