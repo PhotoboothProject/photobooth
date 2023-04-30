@@ -39,7 +39,8 @@ foreach ($images as $image) {
 }
 
 if ($config['database']['enabled']) {
-    deleteImageFromDB($file);
+    $database = new DatabaseManager(DB_FILE, IMG_DIR);
+    $database->deleteFileFromDB($file);
 }
 
 $LogData = [

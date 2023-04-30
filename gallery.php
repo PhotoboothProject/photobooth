@@ -3,19 +3,21 @@
 require_once('lib/config.php');
 require_once('lib/db.php');
 
+$database = new DatabaseManager(DB_FILE, IMG_DIR);
+
 // Check if there is a request for the status of the database
 if (isset($_GET['status'])){
 	// Request for DB-Status,
 	// Currently reports back the DB-Size to give the Client the ability
 	// to detect changes
-	$resp = array('dbsize'=>getDBSize());
+	$resp = array('dbsize'=>$database->getDBSize());
 	exit(json_encode($resp));
 }
 
 if ($config['database']['enabled']) {
-	$images = getImagesFromDB();
+	$images = $database->getFilesFromDB();
 } else {
-	$images = getImagesFromDirectory($config['foldersAbs']['images']);
+	$images = $database->getFilesFromDirectory();
 }
 
 $imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;

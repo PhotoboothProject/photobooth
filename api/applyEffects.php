@@ -22,7 +22,7 @@ if (empty($_POST['file'])) {
 }
 
 $file = $_POST['file'];
-
+$database = new DatabaseManager(DB_FILE, IMG_DIR);
 $quality = 100;
 $imageModified = false;
 $image_filter = false;
@@ -118,7 +118,7 @@ foreach ($srcImages as $image) {
     // insert into database
     if ($config['database']['enabled']) {
         if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === true)) {
-            appendImageToDB($image);
+            $database->appendFileToDB($image);
         }
     }
 
