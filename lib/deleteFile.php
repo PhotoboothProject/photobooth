@@ -36,13 +36,18 @@ class FileDelete {
     public function deleteFiles() {
         foreach ($this->paths as $file) {
             $file = $file . DIRECTORY_SEPARATOR . $this->file;
-            if (is_readable($file)) {
-                if (!unlink($file)) {
-                    $this->success = false;
-                    $this->failedFiles[] = $file;
+            try {
+                if (is_readable($file)) {
+                    if (!unlink($file)) {
+                        $this->success = false;
+                        $this->failedFiles[] = $file;
+                    }
+                } else {
+                    $this->unavailableFiles[] = $file;
                 }
-            } else {
-                $this->unavailableFiles[] = $file;
+            } catch (Exception $e) {
+                $this->success = false;
+                $this->failedFiles[] = $file;
             }
         }
     }
