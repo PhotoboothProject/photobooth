@@ -9,6 +9,7 @@ require_once '../lib/collageConfig.php';
 require_once '../lib/collage.php';
 
 $file = $_POST['file'];
+$database = new DatabaseManager(DB_FILE, IMG_DIR);
 $tmpFolder = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR;
 $imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
 $thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
@@ -68,7 +69,7 @@ foreach ($images as $image) {
     }
     imagedestroy($imageResource);
     if ($config['database']['enabled']) {
-        appendImageToDB(basename($newFile));
+        $database->appendFileToDB(basename($newFile));
     }
     $picture_permissions = $config['picture']['permissions'];
     chmod($newFile, octdec($picture_permissions));
@@ -137,7 +138,7 @@ if ($config['video']['collage_only']) {
     /* TODO gallery doesn't support videos atm
     // insert into database
     if ($config['database']['enabled']) {
-        appendImageToDB($file);
+        $database->appendFileToDB($file);
     }*/
 
     // Change permissions

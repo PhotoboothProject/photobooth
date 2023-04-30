@@ -6,6 +6,7 @@ require_once '../../lib/db.php';
 require_once '../../lib/resize.php';
 
 $file = Image::create_new_filename($config['picture']['naming']);
+$database = new DatabaseManager(DB_FILE, IMG_DIR);
 
 if ($config['database']['file'] != 'db') {
     $file = $config['database']['file'] . '_' . $file;
@@ -34,7 +35,7 @@ imagedestroy($imageResource);
 
 // insert into database
 if ($config['database']['enabled']) {
-    appendImageToDB($file);
+    $database->appendFileToDB($file);
 }
 
 // Change permissions

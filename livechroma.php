@@ -11,10 +11,11 @@ if (
 ) {
     require_once 'lib/db.php';
 
+    $database = new DatabaseManager(DB_FILE, IMG_DIR);
     if ($config['database']['enabled']) {
-        $images = getImagesFromDB();
+	    $images = $database->getFilesFromDB();
     } else {
-        $images = getImagesFromDirectory($config['foldersAbs']['images']);
+	    $images = $database->getFilesFromDirectory();
     }
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 

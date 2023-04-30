@@ -59,7 +59,8 @@ if (empty($_POST['image'])) {
 }
 
 $postImage = basename($_POST['image']);
-if (!isImageInDB($postImage)) {
+$database = new DatabaseManager(DB_FILE, IMG_DIR);
+if (!$database->isFileInDB($postImage)) {
     $LogData = [
         'success' => false,
         'error' => 'Image not found in database',

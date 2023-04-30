@@ -3,10 +3,11 @@
 require_once('../lib/config.php');
 require_once('../lib/db.php');
 
+$database = new DatabaseManager(DB_FILE, IMG_DIR);
 if ($config['database']['enabled']) {
-	$images = getImagesFromDB();
+	$images = $database->getFilesFromDB();
 } else {
-	$images = getImagesFromDirectory($config['foldersAbs']['images']);
+	$images = $database->getFilesFromDirectory();
 }
 
 $imagelist = !empty($images) ? array_reverse($images) : $images;
