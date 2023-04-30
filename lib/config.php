@@ -4,6 +4,7 @@ define('SERVER_OS', DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 
 require_once __DIR__ . '/arrayDeepMerge.php';
 require_once __DIR__ . '/helper.php';
 
+$photobooth = new Photobooth();
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
 $basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
@@ -247,11 +248,11 @@ if (!empty($config['collage']['frame'])) {
 }
 
 if (empty($config['webserver']['ip'])) {
-    $config['webserver']['ip'] = Photobooth::get_ip();
+    $config['webserver']['ip'] = $photobooth->get_ip();
 }
 
 if (empty($config['qr']['url'])) {
-    $config['qr']['url'] = Photobooth::get_url() . '/api/download.php?image=';
+    $config['qr']['url'] = $photobooth->get_url() . '/api/download.php?image=';
 }
 
 $config['cheese_img'] = $config['ui']['shutter_cheese_img'];
@@ -259,4 +260,4 @@ if (!empty($config['cheese_img'])) {
     $config['cheese_img'] = Helper::set_absolute_path($rootpath . $config['ui']['shutter_cheese_img']);
 }
 
-$config['photobooth']['version'] = Photobooth::get_photobooth_version();
+$config['photobooth']['version'] = $photobooth->get_photobooth_version();
