@@ -138,9 +138,9 @@ class Photobooth {
      *
      * @return string The URL of the Photobooth installation.
      */
-    public static function get_url() {
+    public function get_url() {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
-        $url = $protocol . '://' . $this->serverIp;
+        $url = $protocol . '://' . $this->server_ip;
         if ($this->isSubfolderInstall) {
             $url .= Helper::set_absolute_path(Helper::get_rootpath());
         }
