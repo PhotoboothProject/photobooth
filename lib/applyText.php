@@ -8,18 +8,14 @@ function applyText($sourceResource, $fontSize, $fontRotation, $fontLocationX, $f
         imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $line1Text);
     }
     if (!empty($line2Text)) {
-        if ($fontRotation < 45 && $fontRotation > -45) {
-            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY + $lineSpacing, $color, $fontPath, $line2Text);
-        } else {
-            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX + $lineSpacing, $fontLocationY, $color, $fontPath, $line2Text);
-        }
+        $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $lineSpacing : $fontLocationY;
+        $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $lineSpacing;
+        imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $line2Text);
     }
     if (!empty($line3Text)) {
-        if ($fontRotation < 45 && $fontRotation > -45) {
-            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY + $lineSpacing * 2, $color, $fontPath, $line3Text);
-        } else {
-            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX + $lineSpacing * 2, $fontLocationY, $color, $fontPath, $line3Text);
-        }
+        $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $lineSpacing * 2 : $fontLocationY;
+        $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $lineSpacing * 2;
+        imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $line3Text);
     }
     return $sourceResource;
 }
