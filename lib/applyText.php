@@ -1,24 +1,24 @@
 <?php
 
-function applyText($sourceResource, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing) {
-    list($r, $g, $b) = sscanf($fontcolor, '#%02x%02x%02x');
+function applyText($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $fontColor, $fontPath, $line1Text, $line2Text, $line3Text, $lineSpacing) {
+    list($r, $g, $b) = sscanf($fontColor, '#%02x%02x%02x');
     $color = imagecolorallocate($sourceResource, $r, $g, $b);
 
-    if (!empty($line1text)) {
-        imagettftext($sourceResource, $fontsize, $fontrot, $fontlocx, $fontlocy, $color, $fontpath, $line1text);
+    if (!empty($line1Text)) {
+        imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $line1Text);
     }
-    if (!empty($line2text)) {
-        if ($fontrot < 45 && $fontrot > -45) {
-            imagettftext($sourceResource, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing, $color, $fontpath, $line2text);
+    if (!empty($line2Text)) {
+        if ($fontRotation < 45 && $fontRotation > -45) {
+            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY + $lineSpacing, $color, $fontPath, $line2Text);
         } else {
-            imagettftext($sourceResource, $fontsize, $fontrot, $fontlocx + $linespacing, $fontlocy, $color, $fontpath, $line2text);
+            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX + $lineSpacing, $fontLocationY, $color, $fontPath, $line2Text);
         }
     }
-    if (!empty($line3text)) {
-        if ($fontrot < 45 && $fontrot > -45) {
-            imagettftext($sourceResource, $fontsize, $fontrot, $fontlocx, $fontlocy + $linespacing * 2, $color, $fontpath, $line3text);
+    if (!empty($line3Text)) {
+        if ($fontRotation < 45 && $fontRotation > -45) {
+            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY + $lineSpacing * 2, $color, $fontPath, $line3Text);
         } else {
-            imagettftext($sourceResource, $fontsize, $fontrot, $fontlocx + $linespacing * 2, $fontlocy, $color, $fontpath, $line3text);
+            imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX + $lineSpacing * 2, $fontLocationY, $color, $fontPath, $line3Text);
         }
     }
     return $sourceResource;
