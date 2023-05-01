@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "browser-sync": "^2.29.1",
-    "@babel/core": "^7.21.4",
+    "@babel/core": "^7.21.5",
     "@babel/preset-env": "^7.20.2",
     "@prettier/plugin-php": "^0.19.4",
     "archiver": "^5.3.1",
