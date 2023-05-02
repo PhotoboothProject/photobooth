@@ -17,7 +17,10 @@ require_once '../../lib/image.php';
 require_once '../../lib/resize.php';
 
 $file = Image::create_new_filename($config['picture']['naming']);
-$database = new DatabaseManager(DB_FILE, IMG_DIR);
+
+$database = new DatabaseManager();
+$database->db_file = DB_FILE;
+$database->file_dir = IMG_DIR;
 
 if ($config['database']['file'] != 'db') {
     $file = $config['database']['file'] . '_' . $file;
@@ -60,7 +63,7 @@ try {
 
     // insert into database
     if ($config['database']['enabled']) {
-        if (!$database->appendFileToDB($file)) {
+        if (!$database->appendContentToDB($file)) {
             throw new Exception('Failed to add ' . $file . ' to database.');
         }
     }

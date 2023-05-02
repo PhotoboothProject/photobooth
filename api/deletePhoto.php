@@ -23,8 +23,10 @@ $delete->deleteFiles();
 $logData = $delete->getLogData();
 
 if ($config['database']['enabled']) {
-    $database = new DatabaseManager(DB_FILE, IMG_DIR);
-    $database->deleteFileFromDB($file);
+    $database = new DatabaseManager();
+    $database->db_file = DB_FILE;
+    $database->file_dir = IMG_DIR;
+    $database->deleteContentFromDB($file);
 }
 
 $logString = json_encode($logData);
