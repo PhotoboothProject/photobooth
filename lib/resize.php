@@ -124,8 +124,7 @@ function resizePngImage($image, $max_width, $max_height) {
 
         imagealphablending($new, false);
         imagesavealpha($new, true);
-        $new_image = imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
-        if (!$new_image) {
+        if (!imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
             throw new Exception('Cannot resize image.');
         }
     } catch (Exception $e) {
