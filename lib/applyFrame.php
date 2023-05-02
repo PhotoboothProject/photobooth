@@ -8,7 +8,9 @@ function applyFrame($sourceResource, $framePath) {
 
         $frame = imagecreatefrompng($framePath);
         $frame = resizePngImage($frame, $pic_width, $pic_height);
-
+        if (!$frame) {
+            throw new Exception('Cannot resize Frame.');
+        }
         $frame_width = imagesx($frame);
         $frame_height = imagesy($frame);
 
