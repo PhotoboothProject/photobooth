@@ -31,9 +31,20 @@ class DatabaseManager {
         if (!isset($this->db_file) || empty($this->db_file)) {
             throw new Exception('Database not defined.');
         }
-        // get data from database
-        if (file_exists($this->db_file)) {
-            return json_decode(file_get_contents($this->db_file));
+
+        try {
+            // get data from database
+            if (file_exists($this->db_file)) {
+                $data = file_get_contents($this->db_file);
+                if ($data === false) {
+                    throw new Exception('Failed to read file: ' . $this->db_file);
+                }
+                return json_decode($data);
+            } else {
+                throw new Exception('File not found: ' . $this->db_file);
+            }
+        } catch (Exception $e) {
+            return [];
         }
 
         return [];
