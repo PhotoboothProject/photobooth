@@ -55,15 +55,35 @@ class DatabaseManager {
      *
      * @return array The list of images from the images directory.
      */
-    public function getFilesFromDirectory() {
-        $dh = opendir($this->file_dir);
 
-        while (false !== ($filename = readdir($dh))) {
-            $files[] = $filename;
+    public function getFilesFromDirectory() {
+        // check if the directory is defined and non-empty
+        if (!isset($this->file_dir) || empty($this->file_dir)) {
+            throw new Exception('Directory not defined.');
         }
-        closedir($dh);
-        $images = preg_grep('/\.(jpg|jpeg|JPG|JPEG)$/i', $files);
-        return $images;
+
+        try {
+            // open the directory
+            $dh = opendir($this->file_dir);
+            if ($dh === false) {
+                throw new Exception('Failed to open directory: ' . $this->file_dir);
+            }
+
+            // read the files in the directory
+            while (false !== ($filename = readdir($dh))) {
+                $files[] = $filename;
+            }
+            closedir($dh);
+
+            // filter the files to include only images with .jpg or .jpeg extensions
+            $images = preg_grep('/\.(jpg|jpeg)$/i', $files);
+
+            return $images;
+        } catch (Exception $e) {
+            return [];
+        }
+
+        return [];
     }
 
     /**
