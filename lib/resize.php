@@ -114,9 +114,16 @@ function resizePngImage($image, $max_width, $max_height) {
         $new_width = ceil($scale * $old_width);
         $new_height = ceil($scale * $old_height);
         $new = imagecreatetruecolor($new_width, $new_height);
+        if (!$new) {
+            throw new Exception('Cannot create new image.');
+        }
+
         imagealphablending($new, false);
         imagesavealpha($new, true);
-        imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
+        $new_image = imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height);
+        if (!$new_image) {
+            throw new Exception('Cannot resize image.');
+        }
     } catch (Exception $e) {
         // Return unmodified resource
         return $image;
