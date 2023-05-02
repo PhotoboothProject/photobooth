@@ -72,7 +72,7 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
 function resizeImage($image, $max_width, $max_height) {
     try {
         if (!$image) {
-            throw new InvalidArgumentException('Invalid image resource');
+            throw new InvalidArgumentException('Invalid image resource.');
         }
 
         $old_width = imagesx($image);
@@ -83,11 +83,16 @@ function resizeImage($image, $max_width, $max_height) {
         $new_width = ceil($scale * $old_width);
         $new_height = ceil($scale * $old_height);
 
-        return imagescale($image, $new_width, $new_height, IMG_TRIANGLE);
+        $new_image = imagescale($image, $new_width, $new_height, IMG_TRIANGLE);
+        if (!$new_image) {
+            throw new Exception('Cannot resize image.');
+        }
     } catch (Exception $e) {
         // Return unmodified resource
         return $image;
     }
+
+    return $new_image;
 }
 
 function resizePngImage($image, $max_width, $max_height) {
