@@ -107,6 +107,9 @@ function resizePngImage($image, $max_width, $max_height) {
 
         $old_width = imagesx($image);
         $old_height = imagesy($image);
+        if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
+            throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+        }
         $scale = min($max_width / $old_width, $max_height / $old_height);
         $new_width = ceil($scale * $old_width);
         $new_height = ceil($scale * $old_height);
