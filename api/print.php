@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 require_once '../lib/db.php';
+require_once '../lib/image.php';
 require_once '../lib/resize.php';
 require_once '../lib/applyFrame.php';
 require_once '../lib/applyText.php';
