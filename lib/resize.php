@@ -62,6 +62,10 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
             }
         }
     } catch (Exception $e) {
+        // Try to clear cache
+        if (is_resource($new)) {
+            imagedestroy($new);
+        }
         // Return unmodified resource
         return $image;
     }
@@ -125,6 +129,10 @@ function resizePngImage($image, $max_width, $max_height) {
             throw new Exception('Cannot resize image.');
         }
     } catch (Exception $e) {
+        // Try to clear cache
+        if (is_resource($new)) {
+            imagedestroy($new);
+        }
         // Return unmodified resource
         return $image;
     }
@@ -143,8 +151,8 @@ function resizeCropImage($max_width, $max_height, $source_file, $quality = 100) 
         $new_height = intval(($old_width * $max_height) / $max_width);
         settype($max_width, 'integer');
         settype($max_height, 'integer');
-        $dst_img = imagecreatetruecolor(intval($max_width), intval($max_height));
-        if (!$dst_img) {
+        $new = imagecreatetruecolor(intval($max_width), intval($max_height));
+        if (!$new) {
             throw new Exception('Cannot create new image.');
         }
 
@@ -153,19 +161,23 @@ function resizeCropImage($max_width, $max_height, $source_file, $quality = 100) 
             //cut point by height
             $h_point = intval(($old_height - $new_height) / 2);
             //copy image
-            if (!imagecopyresampled($dst_img, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height)) {
+            if (!imagecopyresampled($new, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height)) {
                 throw new Exception('Cannot resize and crop image by height.');
             }
         } else {
             //cut point by width
             $w_point = intval(($old_width - $new_width) / 2);
-            if (!imagecopyresampled($dst_img, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height)) {
+            if (!imagecopyresampled($new, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height)) {
                 throw new Exception('Cannot resize and crop image by width.');
             }
         }
     } catch (Exception $e) {
+        // Try to clear cache
+        if (is_resource($new)) {
+            imagedestroy($new);
+        }
         // Return unmodified resource
         return $source_file;
     }
-    return $dst_img;
+    return $new;
 }
