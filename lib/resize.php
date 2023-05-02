@@ -10,6 +10,9 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
         $simple_rotate = [-180, -90, 0, 180, 90, 360];
         if (in_array($rotation, $simple_rotate)) {
             $new = imagerotate($image, $rotation, 0);
+            if (!$new) {
+                throw new Exception('Cannot rotate image.');
+            }
         } else {
             if (strlen($bg_color) === 7) {
                 $bg_color .= '00';
@@ -22,17 +25,28 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
 
             // create new image with old dimensions
             $new = imagecreatetruecolor($old_width, $old_height);
+            if (!$new) {
+                throw new Exception('Cannot create new image.');
+            }
 
             // color background as defined
             $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
-            imagefill($new, 0, 0, $background);
+            if (!imagefill($new, 0, 0, $background)) {
+                throw new Exception('Cannot fill image.');
+            }
 
             // rotate the image
             $background = imagecolorallocatealpha($image, $bg_r, $bg_g, $bg_b, $bg_a);
             $image = imagerotate($image, $rotation, $background);
+            if (!$image) {
+                throw new Exception('Cannot rotate image.');
+            }
 
             // make sure width and/or height fits into old dimensions
             $image = resizeImage($image, $old_width, $old_height);
+            if (!$image) {
+                throw new Exception('Cannot resize image.');
+            }
 
             // get new dimensions after rotate and resize
             $new_width = imagesx($image);
@@ -43,7 +57,9 @@ function rotateResizeImage($image, $rotation, $bg_color = '#ffffff') {
             $y = ($old_height - $new_height) / 2;
 
             // copy rotated image to new image with old dimensions
-            imagecopy($new, $image, $x, $y, 0, 0, $new_width, $new_height);
+            if (imagecopy($new, $image, $x, $y, 0, 0, $new_width, $new_height)) {
+                throw new Exception('Cannot copy rotated image to new image.');
+            }
         }
     } catch (Exception $e) {
         // Return unmodified resource
