@@ -14,10 +14,15 @@ function applyFrame($sourceResource, $framePath, $skipExtend = true) {
             $new_height = intval(imagesy($sourceResource) / (1 - 0.01 * ($frame_top_percentage + $frame_bottom_percentage)));
 
             $img = imagecreatetruecolor($new_width, $new_height);
+            if (!$img) {
+                throw new Exception('Cannot create new image.');
+            }
             $white = imagecolorallocate($img, 255, 255, 255);
 
             // We fill in the new white image
-            imagefill($img, 0, 0, $white);
+            if (!imagefill($img, 0, 0, $white)) {
+                throw new Exception('Cannot fill image.');
+            }
 
             $image_pos_x = intval(imagesx($img) * 0.01 * $frame_left_percentage);
             $image_pos_y = intval(imagesy($img) * 0.01 * $frame_top_percentage);
@@ -35,7 +40,9 @@ function applyFrame($sourceResource, $framePath, $skipExtend = true) {
 
         $frame = imagecreatefrompng($framePath);
         $frame = resizePngImage($frame, $pic_width, $pic_height);
-
+        if (!$frame) {
+            throw new Exception('Cannot resize Frame.');
+        }
         $frame_width = imagesx($frame);
         $frame_height = imagesy($frame);
 
