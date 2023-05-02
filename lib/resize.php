@@ -133,24 +133,28 @@ function resizePngImage($image, $max_width, $max_height) {
 
 // Resize and crop image by center
 function resizeCropImage($max_width, $max_height, $source_file, $quality = 100) {
-    $old_width = intval(imagesx($source_file));
-    $old_height = intval(imagesy($source_file));
-    $new_width = intval(($old_height * $max_width) / $max_height);
-    $new_height = intval(($old_width * $max_height) / $max_width);
-    settype($max_width, 'integer');
-    settype($max_height, 'integer');
-    $dst_img = imagecreatetruecolor(intval($max_width), intval($max_height));
-    //if the new width is greater than the actual width of the image, then the height is too large and the rest cut off, or vice versa
-    if ($new_width > $old_width) {
-        //cut point by height
-        $h_point = intval(($old_height - $new_height) / 2);
-        //copy image
-        imagecopyresampled($dst_img, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height);
-    } else {
-        //cut point by width
-        $w_point = intval(($old_width - $new_width) / 2);
-        imagecopyresampled($dst_img, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height);
+    try {
+        $old_width = intval(imagesx($source_file));
+        $old_height = intval(imagesy($source_file));
+        $new_width = intval(($old_height * $max_width) / $max_height);
+        $new_height = intval(($old_width * $max_height) / $max_width);
+        settype($max_width, 'integer');
+        settype($max_height, 'integer');
+        $dst_img = imagecreatetruecolor(intval($max_width), intval($max_height));
+        //if the new width is greater than the actual width of the image, then the height is too large and the rest cut off, or vice versa
+        if ($new_width > $old_width) {
+            //cut point by height
+            $h_point = intval(($old_height - $new_height) / 2);
+            //copy image
+            imagecopyresampled($dst_img, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height);
+        } else {
+            //cut point by width
+            $w_point = intval(($old_width - $new_width) / 2);
+            imagecopyresampled($dst_img, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height);
+        }
+    } catch (Exception $e) {
+        // Return unmodified resource
+        return $source_file;
     }
-
     return $dst_img;
 }
