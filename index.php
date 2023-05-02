@@ -23,11 +23,13 @@ if (
     require_once 'lib/db.php';
     require_once 'lib/filter.php';
 
-    $database = new DatabaseManager(DB_FILE, IMG_DIR);
+    $database = new DatabaseManager();
+    $database->db_file = DB_FILE;
+    $database->file_dir = IMG_DIR;
     if ($config['database']['enabled']) {
-	    $images = $database->getFilesFromDB();
+	$images = $database->getContentFromDB();
     } else {
-	    $images = $database->getFilesFromDirectory();
+	$images = $database->getFilesFromDirectory();
     }
     $imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;
 

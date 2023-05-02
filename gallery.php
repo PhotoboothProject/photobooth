@@ -3,7 +3,9 @@
 require_once('lib/config.php');
 require_once('lib/db.php');
 
-$database = new DatabaseManager(DB_FILE, IMG_DIR);
+$database = new DatabaseManager();
+$database->db_file = DB_FILE;
+$database->file_dir = IMG_DIR;
 
 // Check if there is a request for the status of the database
 if (isset($_GET['status'])){
@@ -15,7 +17,7 @@ if (isset($_GET['status'])){
 }
 
 if ($config['database']['enabled']) {
-	$images = $database->getFilesFromDB();
+	$images = $database->getContentFromDB();
 } else {
 	$images = $database->getFilesFromDirectory();
 }
