@@ -10,20 +10,28 @@ if ($image) {
         echo $image . ' does not exist.';
         exit();
     }
-    
-    $extension = pathinfo($path)['extension'];
-    if ($config['download']['thumbs'] && $extension !== 'mp4' && $extension !== 'gif') {
-        $thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
-        if (is_file($thumb)) {
-            $path = $thumb;
+
+    try {
+        $extension = pathinfo($path)['extension'];
+        if ($config['download']['thumbs'] && $extension !== 'mp4' && $extension !== 'gif') {
+            $thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+            if (is_file($thumb)) {
+                $path = $thumb;
+            }
+        }
+
+        header('Content-Type: application/octet-stream');
+        header('Content-Length: ' . filesize($path));
+        header('Content-Disposition: attachment; filename="photobooth-' . $image . '"');
+        echo file_get_contents($path);
+        exit();
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo 'Error downloading the file ' . $image;
+        if ($config['dev']['loglevel'] > 1) {
+            echo $e->getMessage();
         }
     }
-
-    header('Content-Type: application/octet-stream');
-    header('Content-Length: ' . filesize($path));
-    header('Content-Disposition: attachment; filename="photobooth-' . $image . '"');
-    echo file_get_contents($path);
-    exit();
 } else {
     http_response_code(400);
     echo 'No image defined.';
