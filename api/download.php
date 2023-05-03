@@ -13,7 +13,10 @@ if ($image) {
     
     $extension = pathinfo($path)['extension'];
     if ($config['download']['thumbs'] && $extension !== 'mp4' && $extension !== 'gif') {
-        $path = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+        $thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+        if (is_file($thumb)) {
+            $path = $thumb;
+        }
     }
 
     header('Content-Type: application/octet-stream');
