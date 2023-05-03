@@ -5,6 +5,12 @@ $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : fals
 if ($image) {
     $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $image;
 
+    if (!is_file($path)) {
+        http_response_code(404);
+        echo $image . ' does not exist.';
+        exit();
+    }
+    
     $extension = pathinfo($path)['extension'];
     if ($config['download']['thumbs'] && $extension !== 'mp4' && $extension !== 'gif') {
         $path = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
