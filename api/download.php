@@ -15,4 +15,7 @@ if ($image) {
     header('Content-Disposition: attachment; filename="photobooth-' . $image . '"');
     echo file_get_contents($path);
     exit();
+} else {
+    http_response_code(400);
+    echo 'No image defined.';
 }
