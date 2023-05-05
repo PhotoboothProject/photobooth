@@ -170,11 +170,6 @@ class Image {
                 throw new Exception('Missing parameters.');
             }
 
-            // Validate the GD resource
-            if (!$this->validateGdResource($sourceResource)) {
-                throw new Exception('Invalid GD resource.');
-            }
-
             // Save the image to disk
             if (!imagejpeg($sourceResource, $destination, $this->jpegQuality)) {
                 throw new Exception('Error saving image.');
