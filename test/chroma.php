@@ -53,11 +53,11 @@ $uiShape = 'shape--' . $config['ui']['style'];
             <a href="#" class="<?php echo $btnClass; ?> stopPreview"><span data-i18n="stopPreview"></span></a><br>
             <label for="chromaImage">Chroma Image:</label>
             <input id="chromaImage" type="text" value="/var/www/html/resources/img/bg.jpg"/>
-            <label for="chromaColor">Chroma Color:</label>
+            <label for="chromaColor">Color:</label>
             <input id="chromaColor" class="settinginput color noborder" type="color" value="#00ff00"/>'
-            <label for="chromaSensitivity">Chroma Sensitivity:</label>
+            <label for="chromaSensitivity">Sensitivity:</label>
             <input id="chromaSensitivity" type="number" value="0.4"/>
-            <label for="chromaBlend">Chroma Sensitivity:</label>
+            <label for="chromaBlend">Blend:</label>
             <input id="chromaBlend" type="number" value="0.1"/>
             <a href="#" class="<?php echo $btnClass; ?> setChroma">Set</a>
         </div>
