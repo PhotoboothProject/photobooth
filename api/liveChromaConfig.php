@@ -6,16 +6,16 @@ require_once '../lib/log.php';
 
 $cmd = 'python3 cameracontrol.py';
 if ($_POST['chromaImage']) {
-    $cmd .= '--chromaImage ' . escapeshellarg($_POST['chromaImage']);
+    $cmd .= ' --chromaImage ' . escapeshellarg($_POST['chromaImage']);
 }
 if ($_POST['chromaColor']) {
-    $cmd .= '--chromaColor ' . escapeshellarg($_POST['chromaColor']);
+    $cmd .= ' --chromaColor ' . escapeshellarg($_POST['chromaColor']);
 }
 if ($_POST['chromaSensitivity']) {
-    $cmd .= '--chromaSensitivity ' . escapeshellarg($_POST['chromaSensitivity']);
+    $cmd .= ' --chromaSensitivity ' . escapeshellarg($_POST['chromaSensitivity']);
 }
 if ($_POST['chromaBlend']) {
-    $cmd .= '--chromaBlend ' . escapeshellarg($_POST['chromaBlend']);
+    $cmd .= ' --chromaBlend ' . escapeshellarg($_POST['chromaBlend']);
 }
 exec($cmd);
 $LogData = [
