@@ -51,7 +51,14 @@ $uiShape = 'shape--' . $config['ui']['style'];
         </div>
 
         <div>
-
+            <label for="chromaImage">Chroma Image:</label>
+            <input id="chromaImage" type="text" value="/var/www/html/resources/img/bg.jpg"/>
+            <label for="chromaColor">Chroma Color:</label>
+            <input id="chromaColor" class="settinginput color noborder" type="color" value="#00ff00"/>'
+            <label for="chromaSensitivity">Chroma Sensitivity:</label>
+            <input id="chromaSensitivity" type="number" value="0.4"/>
+            <label for="chromaBlend">Chroma Sensitivity:</label>
+            <input id="chromaBlend" type="number" value="0.1"/>
         </div>
 
 		<div class="buttonbar">

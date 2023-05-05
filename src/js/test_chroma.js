@@ -26,7 +26,12 @@ const photoboothChromaTest = (function () {
 
         photoboothTools.console.log('Setting chroma values...');
 
-        api.runCmd('/var/www/html/resources/img/bg.jpg', '00ff00', 0.4, 0.5)
+        api.runCmd(
+            $('#chromaImage').val(),
+            $('#chromaColor').val().replace(/#/ug, ''),
+            $('#chromaSensitivity').val(),
+            $('#chromaBlend').val()
+        )
     });
 
     return api;
