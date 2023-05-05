@@ -1,4 +1,6 @@
+/* exported photoboothChromaTest */
 /* globals photoboothTools */
+
 const photoboothChromaTest = (function () {
     const api = {};
 
