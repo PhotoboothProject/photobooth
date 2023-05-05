@@ -28,10 +28,10 @@ const photoboothChromaTest = (function () {
 
         api.runCmd(
             $('#chromaImage').val(),
-            $('#chromaColor').val().replace(/#/ug, ''),
+            $('#chromaColor').val().replace(/#/gu, ''),
             $('#chromaSensitivity').val(),
             $('#chromaBlend').val()
-        )
+        );
     });
 
     return api;
