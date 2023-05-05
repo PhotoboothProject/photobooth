@@ -9,6 +9,7 @@ require_once '../lib/resize.php';
 require_once '../lib/collage.php';
 require_once '../lib/applyText.php';
 require_once '../lib/applyEffects.php';
+require_once '../lib/image.php';
 require_once '../lib/log.php';
 
 if (!extension_loaded('gd')) {
@@ -76,7 +77,13 @@ foreach ($srcImages as $image) {
         logErrorAndDie($errormsg);
     }
 
-    $imageResource = imagecreatefromjpeg($filename_tmp);
+    $imageHandler = new Image();
+
+    $imageResource = $imageHandler->createFromImage($filename_tmp);
+    if (!$imageResource) {
+        $errormsg = basename($_SERVER['PHP_SELF']) . ': Error here';
+        logErrorAndDie($errormsg);
+    }
 
     if ($_POST['style'] === 'collage' && $file != $image) {
         $editSingleCollage = true;
@@ -93,7 +100,8 @@ foreach ($srcImages as $image) {
     if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
         $chroma_size = substr($config['keying']['size'], 0, -2);
         $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
-        imagejpeg($chromaCopyResource, $filename_keying, $config['jpeg_quality']['chroma']);
+        $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
+        $imageHandler->saveJpeg($chromaCopyResource, $filename_keying);
         imagedestroy($chromaCopyResource);
     }
 
@@ -104,9 +112,11 @@ foreach ($srcImages as $image) {
     $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
     $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
 
-    imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality']['thumb']);
+    $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+    $imageHandler->saveJpeg($thumbResource, $filename_thumb);
     imagedestroy($thumbResource);
 
+    $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
     compressImage($config, $imageModified, $imageResource, $filename_tmp, $filename_photo);
 
     if (!$config['picture']['keep_original']) {
