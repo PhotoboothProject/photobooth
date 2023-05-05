@@ -48,7 +48,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
             <span data-i18n="no_preview"></span>
         </div>
 
-        <div style="z-index: 100">
+		<div class="buttonbar">
             <label for="chromaImage">Chroma Image:</label>
             <input id="chromaImage" type="text" value="/var/www/html/resources/img/bg.jpg"/>
             <label for="chromaColor">Chroma Color:</label>
@@ -57,10 +57,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
             <input id="chromaSensitivity" type="number" value="0.4"/>
             <label for="chromaBlend">Chroma Sensitivity:</label>
             <input id="chromaBlend" type="number" value="0.1"/>
-            <a href="#" class="<?php echo $btnClass; ?> setChroma">Set</a>
-        </div>
-
-		<div class="buttonbar">
+            <a href="#" class="<?php echo $btnClass; ?> setChroma">Set</a><br>
             <a href="#" class="<?php echo $btnClass; ?> startPreview"><span data-i18n="startPreview"></span></a>
 			<a href="#" class="<?php echo $btnClass; ?> stopPreview"><span data-i18n="stopPreview"></span></a>
         </div>
