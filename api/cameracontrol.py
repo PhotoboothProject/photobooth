@@ -123,17 +123,15 @@ class CameraControl:
             self.exit_gracefully()
         self.handle_chroma_params(args)
         self.handle_video_params(args)
-        if args.device != self.args.device:
-            self.args.device = args.device
-            self.ffmpeg_open()
-            print('Video output device changed')
-        elif self.args.video_path is not None:
-            self.ffmpeg_open()
-            print('Changing ffmpeg config to save video')
         if args.config is not None and args.config != self.args.config:
             self.args.config = args.config
             self.connect_to_camera()
             print('Applied updated config')
+        if args.device != self.args.device:
+            self.args.device = args.device
+            print('Video output device changed')
+        self.ffmpeg_open()
+        print('Updated video settings')
         if args.imgpath is not None:
             try:
                 self.capture_image(args.imgpath)
