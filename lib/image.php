@@ -304,64 +304,72 @@ class Image {
      * @throws Exception If the QR offset is not a numeric value.
      */
     public function applyQr($qrCode, $imageResource) {
-        if (is_numeric($this->qrOffset)) {
+        try {
+            if (!is_numeric($this->qrOffset)) {
+                throw new Exception('QR-Offset is not numeric.');
+            }
             $offset = $this->qrOffset;
-        } else {
-            throw new Exception('QR-Offset is not numeric.');
-        }
 
-        $width = imagesx($imageResource);
-        $height = imagesy($imageResource);
-        $qrWidth = imagesx($qrCode);
-        $qrHeight = imagesy($qrCode);
+            $width = imagesx($imageResource);
+            $height = imagesy($imageResource);
+            $qrWidth = imagesx($qrCode);
+            $qrHeight = imagesy($qrCode);
 
-        if ($width <= 0 || $height <= 0 || $qrWidth <= 0 || $qrHeight <= 0) {
-            throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
-        }
-        switch ($this->qrPosition) {
-            case 'topLeft':
-                $x = $offset;
-                $y = $offset;
-                break;
-            case 'top':
-                $x = ($width - $qrWidth) / 2;
-                $y = $offset;
-                break;
-            case 'topRight':
-                $x = $width - ($qrWidth + $offset);
-                $y = $offset;
-                break;
-            case 'right':
-                $x = $width - $qrWidth - $offset;
-                $y = ($height - $qrHeight) / 2;
-                break;
-            case 'bottomRight':
-                $x = $width - ($qrWidth + $offset);
-                $y = $height - ($qrHeight + $offset);
-                break;
-            case 'bottom':
-                $x = ($width - $qrWidth) / 2;
-                $y = $height - $qrHeight - $offset;
-                break;
-            case 'bottomLeft':
-                $x = $offset;
-                $y = $height - ($qrHeight + $offset);
-                break;
-            case 'left':
-                $x = $offset;
-                $y = ($height - $qrHeight) / 2;
-                break;
-            default:
-                $x = $width - ($qrWidth + $offset);
-                $y = $height - ($qrHeight + $offset);
-                break;
-        }
+            if ($width <= 0 || $height <= 0 || $qrWidth <= 0 || $qrHeight <= 0) {
+                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+            }
+            switch ($this->qrPosition) {
+                case 'topLeft':
+                    $x = $offset;
+                    $y = $offset;
+                    break;
+                case 'top':
+                    $x = ($width - $qrWidth) / 2;
+                    $y = $offset;
+                    break;
+                case 'topRight':
+                    $x = $width - ($qrWidth + $offset);
+                    $y = $offset;
+                    break;
+                case 'right':
+                    $x = $width - $qrWidth - $offset;
+                    $y = ($height - $qrHeight) / 2;
+                    break;
+                case 'bottomRight':
+                    $x = $width - ($qrWidth + $offset);
+                    $y = $height - ($qrHeight + $offset);
+                    break;
+                case 'bottom':
+                    $x = ($width - $qrWidth) / 2;
+                    $y = $height - $qrHeight - $offset;
+                    break;
+                case 'bottomLeft':
+                    $x = $offset;
+                    $y = $height - ($qrHeight + $offset);
+                    break;
+                case 'left':
+                    $x = $offset;
+                    $y = ($height - $qrHeight) / 2;
+                    break;
+                default:
+                    $x = $width - ($qrWidth + $offset);
+                    $y = $height - ($qrHeight + $offset);
+                    break;
+            }
 
-        imagecopy($imageResource, $qrCode, $x, $y, 0, 0, $qrWidth, $qrHeight);
-        // Try to clear cache
-        if (is_resource($qrCode)) {
-            imagedestroy($qrCode);
+            if (!imagecopy($imageResource, $qrCode, $x, $y, 0, 0, $qrWidth, $qrHeight)) {
+                throw new Exception('Can not apply QR Code onto image.');
+            }
+            // Try to clear cache
+            if (is_resource($qrCode)) {
+                imagedestroy($qrCode);
+            }
+            return $imageResource;
+        } catch (Exception $e) {
+            if (is_resource($qrCode)) {
+                imagedestroy($qrCode);
+            }
+            return $imageResource;
         }
-        return $imageResource;
     }
 }
