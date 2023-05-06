@@ -357,7 +357,7 @@ class Image {
                 break;
         }
 
-        imagecopy($imageResource, $qrCode, $x, $y, 0, 0, imagesx($qrCode), imagesy($qrCode));
+        imagecopy($imageResource, $qrCode, $x, $y, 0, 0, $qrWidth, $qrHeight);
         // Try to clear cache
         if (is_resource($qrCode)) {
             imagedestroy($qrCode);
