@@ -220,19 +220,15 @@ class Image {
             throw new Exception('QR-Size must be in range between 0 and 10.');
         }
 
-        $qrCode = QRcode::png($this->qrUrl, false, $this->qrEcLevel, $this->qrSize, $this->qrMargin);
-        if (!$qrCode) {
-            throw new Exception('Failed to create QR code.');
-        }
-
-        $qrCodeImage = imagecreatefrompng($qrCode);
+        $qrCode = QRcode::text($this->qrUrl, false, $this->qrEcLevel);
+        $qrCodeImage = QRimage::image($qrCode, $this->qrSize, $this->qrMargin);
         if (!$qrCodeImage) {
             throw new Exception('Failed to create image from QR code.');
         }
 
         if ($this->qrRotate) {
             if (!imagerotate($qrCodeImage, 90, 0)) {
-                throw new Exception('Unable to rotate QR-Code-Imagr.');
+                throw new Exception('Unable to rotate QR-Code-Image.');
             }
         }
         if ($this->qrColor != '#ffffff') {
@@ -319,8 +315,14 @@ class Image {
             throw new Exception('QR-Offset is not numeric.');
         }
 
-        list($qrWidth, $qrHeight) = getimagesize($qrCode);
+        $width = imagesx($imageResource);
+        $height = imagesy($imageResource);
+        $qrWidth = imagesx($qrCode);
+        $qrHeight = imagesy($qrCode);
 
+        if ($width <= 0 || $height <= 0 || $qrWidth <= 0 || $qrHeight <= 0) {
+            throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+        }
         switch ($this->qrPosition) {
             case 'topLeft':
                 $x = $offset;
