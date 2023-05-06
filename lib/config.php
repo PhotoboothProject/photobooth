@@ -21,7 +21,7 @@ $cmds = [
             'cmd' => '',
         ],
         'print' => [
-            'cmd' => 'mspaint /pt %s',
+            'cmd' => 'rundll32 C:\WINDOWS\system32\shimgvw.dll,ImageView_PrintTo %s Printer_Name',
         ],
         'exiftool' => [
             'cmd' => '',
