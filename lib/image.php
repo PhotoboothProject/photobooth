@@ -13,6 +13,62 @@ class Image {
 
     /**
      *
+     * Text to Image Difinitions
+     *
+     */
+
+    /**
+     * @var int Font size for the text
+     */
+    public $fontSize = 80;
+
+    /**
+     * @var int Rotation angle of the font
+     */
+    public $fontRotation = 0;
+
+    /**
+     * @var int X-coordinate of the starting position for the text
+     */
+    public $fontLocationX = 80;
+
+    /**
+     * @var int Y-coordinate of the starting position for the text
+     */
+    public $fontLocationY = 80;
+
+    /**
+     * @var string Color of the font in hexadecimal format (e.g., "#FF0000" for red)
+     */
+    public $fontColor = '#ffffff';
+
+    /**
+     * @var string File path to the TrueType font file to be used
+     */
+    public $fontPath = '';
+
+    /**
+     * @var string Text for the first line
+     */
+    public $textLine1 = '';
+
+    /**
+     * @var string Text for the second line
+     */
+    public $textLine2 = '';
+
+    /**
+     * @var string Text for the third line
+     */
+    public $textLine3 = '';
+
+    /**
+     * @var int Vertical spacing between lines of text
+     */
+    public $textLineSpacing = 90;
+
+    /**
+     *
      * QR Difinitions
      *
      */
@@ -180,6 +236,59 @@ class Image {
             // If there is an exception, return false
             return false;
         }
+    }
+
+    /**
+     * Apply text to the source image resource
+     *
+     * @param resource $sourceResource The source image resource to which text will be applied
+     * @return resource The modified source image resource with text applied
+     */
+    public function applyText($sourceResource) {
+        try {
+            $fontSize = $this->fontSize;
+            $fontRotation = $this->fontRotation;
+            $fontLocationX = $this->fontLocationX;
+            $fontLocationY = $this->fontLocationY;
+            $fontPath = $this->fontPath;
+            $textLineSpacing = $this->textLineSpacing;
+            // Convert hex color string to RGB values
+            list($r, $g, $b) = sscanf($this->fontColor, '#%02x%02x%02x');
+
+            // Allocate color and set font
+            $color = imagecolorallocate($sourceResource, $r, $g, $b);
+
+            // Add first line of text
+            if (!empty($this->textLine1)) {
+                if (imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $this->textLine1)) {
+                    throw new Exception('Could not add first line of text to resource.');
+                }
+            }
+
+            // Add second line of text
+            if (!empty($this->textLine2)) {
+                $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing : $fontLocationY;
+                $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing;
+                if (imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $this->textLine2)) {
+                    throw new Exception('Could not add second line of text to resource.');
+                }
+            }
+
+            // Add third line of text
+            if (!empty($this->textLine3)) {
+                $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing * 2 : $fontLocationY;
+                $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing * 2;
+                if (imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $this->textLine3)) {
+                    throw new Exception('Could not add third line of text to resource.');
+                }
+            }
+        } catch (Exception $e) {
+            // Return unmodified resource
+            return $sourceResource;
+        }
+
+        // Return resource with text applied
+        return $sourceResource;
     }
 
     /**
