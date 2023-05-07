@@ -43,18 +43,6 @@ if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
     logErrorAndDie($errormsg);
 }
 
-// text on print variables
-$fontpath = $config['textonprint']['font'];
-$fontcolor = $config['textonprint']['font_color'];
-$fontsize = $config['textonprint']['font_size'];
-$fontlocx = $config['textonprint']['locationx'];
-$fontlocy = $config['textonprint']['locationy'];
-$linespacing = $config['textonprint']['linespace'];
-$fontrot = $config['textonprint']['rotation'];
-$line1text = $config['textonprint']['line1'];
-$line2text = $config['textonprint']['line2'];
-$line3text = $config['textonprint']['line3'];
-
 if (!file_exists($filename_print)) {
     try {
         $source = $imageHandler->createFromImage($filename_source);
@@ -68,8 +56,10 @@ if (!file_exists($filename_print)) {
             $imageHandler->qrRotate = true;
         }
 
-        if ($config['print']['print_frame'] && testFile($config['print']['frame'])) {
-            $source = applyFrame($source, $config['print']['frame'], true);
+        if ($config['print']['print_frame']) {
+            $imageHandler->framePath = $config['print']['frame'];
+            $imageHandler->frameExtend = false;
+            $source = $imageHandler->applyFrame($source);
         }
 
         if ($config['print']['qrcode'] && $imageHandler->qrAvailable) {
@@ -96,14 +86,25 @@ if (!file_exists($filename_print)) {
             imagedestroy($qrCode);
         }
 
-        if ($config['textonprint']['enabled'] && testFile($config['textonprint']['font'])) {
-            $source = applyText($source, $fontsize, $fontrot, $fontlocx, $fontlocy, $fontcolor, $fontpath, $line1text, $line2text, $line3text, $linespacing);
+        if ($config['textonprint']['enabled']) {
+            $imageHandler->fontSize = $config['textonprint']['font_size'];
+            $imageHandler->fontRotation = $config['textonprint']['rotation'];
+            $imageHandler->fontLocationX = $config['textonprint']['locationx'];
+            $imageHandler->fontLocationY = $config['textonprint']['locationy'];
+            $imageHandler->fontColor = $config['textonprint']['font_color'];
+            $imageHandler->fontPath = $config['textonprint']['font'];
+            $imageHandler->textLine1 = $config['textonprint']['line1'];
+            $imageHandler->textLine1 = $config['textonprint']['line2'];
+            $imageHandler->textLine3 = $config['textonprint']['line3'];
+            $imageHandler->textLineSpacing = $config['textonprint']['linespace'];
+
+            $source = $imageHandler->applyText($source);
         }
 
         if ($config['print']['crop']) {
-            $crop_width = $config['print']['crop_width'];
-            $crop_height = $config['print']['crop_height'];
-            $source = resizeCropImage($crop_width, $crop_height, $source);
+            $imageHandler->resizeMaxWidth = $config['print']['crop_width'];
+            $imageHandler->resizeMaxHeight = $config['print']['crop_height'];
+            $source = $imageHandler->resizeCropImage($source);
         }
 
         $imageHandler->jpegQuality = 100;
