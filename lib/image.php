@@ -13,6 +13,32 @@ class Image {
 
     /**
      *
+     * Resize Image Difinitions
+     *
+     */
+
+    /**
+     * @var int The rotation angle for image resizing.
+     */
+    public $resizeRotation = 0;
+
+    /**
+     * @var string The background color in hexadecimal format (#RRGGBB) for image resizing.
+     */
+    public $resizeBgColor = '#ffffff';
+
+    /**
+     * @var int The maximum width for image resizing.
+     */
+    public $resizeMaxWidth = 0;
+
+    /**
+     * @var int The maximum height for image resizing.
+     */
+    public $resizeMaxHeight = 0;
+
+    /**
+     *
      * Text to Image Difinitions
      *
      */
@@ -291,6 +317,230 @@ class Image {
     }
 
     /**
+     * Rotate and resize an image.
+     *
+     * @param resource $image The image resource to be rotated and resized.
+     * @return resource The rotated and resized image resource, or the original image if an error occurs.
+     */
+    public function rotateResizeImage($image) {
+        try {
+            if (!$image) {
+                throw new InvalidArgumentException('Invalid image resource');
+            }
+
+            $rotation = $this->resizeRotation;
+
+            // simple rotate if possible and ignore changed dimensions (doesn't need to care about background color)
+            $simple_rotate = [-180, -90, 0, 180, 90, 360];
+            if (in_array($rotation, $simple_rotate)) {
+                $new = imagerotate($image, $rotation, 0);
+                if (!$new) {
+                    throw new Exception('Cannot rotate image.');
+                }
+            } else {
+                if (strlen($bg_color) === 7) {
+                    $bg_color .= '00';
+                }
+                list($bg_r, $bg_g, $bg_b, $bg_a) = sscanf($this->resizeBgColor, '#%02x%02x%02x%02x');
+
+                // get old dimensions
+                $old_width = imagesx($image);
+                $old_height = imagesy($image);
+
+                // create new image with old dimensions
+                $new = imagecreatetruecolor($old_width, $old_height);
+                if (!$new) {
+                    throw new Exception('Cannot create new image.');
+                }
+
+                // color background as defined
+                $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
+                if (!imagefill($new, 0, 0, $background)) {
+                    throw new Exception('Cannot fill image.');
+                }
+
+                // rotate the image
+                $background = imagecolorallocatealpha($image, $bg_r, $bg_g, $bg_b, $bg_a);
+                $image = imagerotate($image, $rotation, $background);
+                if (!$image) {
+                    throw new Exception('Cannot rotate image.');
+                }
+
+                // make sure width and/or height fits into old dimensions
+                $this->resizeMaxWidth = $old_width;
+                $this->resizeMaxHeight = $old_height;
+                $image = self::resizeImage($image);
+                if (!$image) {
+                    throw new Exception('Cannot resize image.');
+                }
+
+                // get new dimensions after rotate and resize
+                $new_width = imagesx($image);
+                $new_height = imagesy($image);
+
+                // center rotated image
+                $x = ($old_width - $new_width) / 2;
+                $y = ($old_height - $new_height) / 2;
+
+                // copy rotated image to new image with old dimensions
+                if (imagecopy($new, $image, $x, $y, 0, 0, $new_width, $new_height)) {
+                    throw new Exception('Cannot copy rotated image to new image.');
+                }
+            }
+        } catch (Exception $e) {
+            // Try to clear cache
+            if (is_resource($new)) {
+                imagedestroy($new);
+            }
+            // Return unmodified resource
+            return $image;
+        }
+
+        return $new;
+    }
+
+    /**
+     * Resize an image based on the maximum dimensions.
+     *
+     * @param resource $image The image resource to be resized.
+     * @return resource The resized image resource, or the original image if an error occurs.
+     */
+    public function resizeImage($image) {
+        try {
+            if (!$image) {
+                throw new InvalidArgumentException('Invalid image resource.');
+            }
+
+            $old_width = imagesx($image);
+            $old_height = imagesy($image);
+            $max_width = $this->resizeMaxWidth;
+            $max_height = $this->resizeMaxHeight;
+
+            if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
+                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+            }
+
+            $scale = min($max_width / $old_width, $max_height / $old_height);
+
+            $new_width = ceil($scale * $old_width);
+            $new_height = ceil($scale * $old_height);
+
+            $new_image = imagescale($image, $new_width, $new_height, IMG_TRIANGLE);
+            if (!$new_image) {
+                throw new Exception('Cannot resize image.');
+            }
+        } catch (Exception $e) {
+            // Return unmodified resource
+            return $image;
+        }
+
+        return $new_image;
+    }
+
+    /**
+     * Resize a PNG image based on the maximum dimensions.
+     *
+     * @param resource $image The image resource to be resized.
+     * @return resource The resized PNG image resource, or the original image if an error occurs.
+     */
+    public function resizePngImage($image) {
+        try {
+            if (!$image) {
+                throw new InvalidArgumentException('Invalid image resource.');
+            }
+
+            $old_width = imagesx($image);
+            $old_height = imagesy($image);
+            $max_width = $this->resizeMaxWidth;
+            $max_height = $this->resizeMaxHeight;
+
+            if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
+                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+            }
+
+            $scale = min($max_width / $old_width, $max_height / $old_height);
+            $new_width = ceil($scale * $old_width);
+            $new_height = ceil($scale * $old_height);
+
+            $new = imagecreatetruecolor($new_width, $new_height);
+            if (!$new) {
+                throw new Exception('Cannot create new image.');
+            }
+
+            imagealphablending($new, false);
+            imagesavealpha($new, true);
+
+            if (!imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
+                throw new Exception('Cannot resize image.');
+            }
+        } catch (Exception $e) {
+            // Try to clear cache
+            if (is_resource($new)) {
+                imagedestroy($new);
+            }
+            // Return unmodified resource
+            return $image;
+        }
+
+        return $new;
+    }
+
+    /**
+     * Resize and crop an image by center.
+     *
+     * @param resource $source_file The source image resource to be resized and cropped.
+     * @return resource The resized and cropped image resource, or the original image if an error occurs.
+     */
+    public function resizeCropImage($source_file) {
+        try {
+            $old_width = intval(imagesx($source_file));
+            $old_height = intval(imagesy($source_file));
+            $max_width = $this->resizeMaxWidth;
+            $max_height = $this->resizeMaxHeight;
+
+            if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
+                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+            }
+
+            $new_width = intval(($old_height * $max_width) / $max_height);
+            $new_height = intval(($old_width * $max_height) / $max_width);
+
+            settype($max_width, 'integer');
+            settype($max_height, 'integer');
+
+            $new = imagecreatetruecolor(intval($max_width), intval($max_height));
+            if (!$new) {
+                throw new Exception('Cannot create new image.');
+            }
+
+            // If the new width is greater than the actual width of the image, then the height is too large and the rest is cut off, or vice versa
+            if ($new_width > $old_width) {
+                // Cut point by height
+                $h_point = intval(($old_height - $new_height) / 2);
+                // Copy image
+                if (!imagecopyresampled($new, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height)) {
+                    throw new Exception('Cannot resize and crop image by height.');
+                }
+            } else {
+                // Cut point by width
+                $w_point = intval(($old_width - $new_width) / 2);
+                if (!imagecopyresampled($new, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height)) {
+                    throw new Exception('Cannot resize and crop image by width.');
+                }
+            }
+        } catch (Exception $e) {
+            // Try to clear cache
+            if (is_resource($new)) {
+                imagedestroy($new);
+            }
+            // Return unmodified resource
+            return $source_file;
+        }
+
+        return $new;
+    }
+
+    /**
      * Apply the frame to the source image resource
      *
      * @param resource $sourceResource The source image resource to which the frame will be applied
@@ -328,7 +578,9 @@ class Image {
             $pic_height = imagesy($img);
 
             $frame = self::createFromImage($this->framePath);
-            $frame = resizePngImage($frame, $pic_width, $pic_height);
+            $this->resizeMaxWidth = $pic_width;
+            $this->resizeMaxHeight = $pic_height;
+            $frame = self::resizePngImage($frame);
             if (!$frame) {
                 throw new Exception('Cannot resize Frame.');
             }
