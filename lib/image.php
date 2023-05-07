@@ -69,6 +69,42 @@ class Image {
 
     /**
      *
+     * Apply Frame to Image Difinitions
+     *
+     */
+
+    /**
+     * @var string File path to the frame image (PNG)
+     */
+    public $framePath = '';
+
+    /**
+     * @var bool Whether to extend the frame to fit the source image
+     */
+    public $frameExtend = false;
+
+    /**
+     * @var int The percentage of extension to the left side of the frame
+     */
+    public $frameExtendLeft = 0;
+
+    /**
+     * @var int The percentage of extension to the right side of the frame
+     */
+    public $frameExtendRight = 0;
+
+    /**
+     * @var int The percentage of extension to the bottom of the frame
+     */
+    public $frameExtendBottom = 0;
+
+    /**
+     * @var int The percentage of extension to the top of the frame
+     */
+    public $frameExtendTop = 0;
+
+    /**
+     *
      * QR Difinitions
      *
      */
@@ -236,6 +272,76 @@ class Image {
             // If there is an exception, return false
             return false;
         }
+    }
+
+    /**
+     * Apply the frame to the source image resource
+     *
+     * @param resource $sourceResource The source image resource to which the frame will be applied
+     * @return resource The modified source image resource with the frame applied
+     */
+    public function applyFrame($sourceResource) {
+        try {
+            if ($this->frameExtend) {
+                $new_width = intval(imagesx($sourceResource) / (1 - 0.01 * ($this->frameExtendLeft + $this->frameExtendRight)));
+                $new_height = intval(imagesy($sourceResource) / (1 - 0.01 * ($this->frameExtendTop + $this->frameExtendBottom)));
+
+                $img = imagecreatetruecolor($new_width, $new_height);
+                if (!$img) {
+                    throw new Exception('Cannot create new image.');
+                }
+                $white = imagecolorallocate($img, 255, 255, 255);
+
+                // We fill in the new white image
+                if (!imagefill($img, 0, 0, $white)) {
+                    throw new Exception('Cannot fill image.');
+                }
+
+                $image_pos_x = intval(imagesx($img) * 0.01 * $this->frameExtendLeft);
+                $image_pos_y = intval(imagesy($img) * 0.01 * $this->frameExtendTop);
+
+                // We copy the image to which we want to apply the frame in our new image.
+                if (!imagecopy($img, $sourceResource, $image_pos_x, $image_pos_y, 0, 0, imagesx($sourceResource), imagesy($sourceResource))) {
+                    throw new Exception('Error copying image to new frame.');
+                }
+            } else {
+                $img = $sourceResource;
+            }
+
+            $pic_width = imagesx($img);
+            $pic_height = imagesy($img);
+
+            $frame = self::createFromImage($this->framePath);
+            $frame = resizePngImage($frame, $pic_width, $pic_height);
+            if (!$frame) {
+                throw new Exception('Cannot resize Frame.');
+            }
+            $frame_width = imagesx($frame);
+            $frame_height = imagesy($frame);
+
+            $dst_x = 0;
+            $dst_y = 0;
+
+            if ($pic_height == $frame_height) {
+                $dst_x = intval(($pic_width - $frame_width) / 2);
+            } else {
+                $dst_y = intval(($pic_height - $frame_height) / 2);
+            }
+
+            if (!imagecopy($img, $frame, $dst_x, $dst_y, 0, 0, $frame_width, $frame_height)) {
+                throw new Exception('Error applying frame to image.');
+            }
+        } catch (Exception $e) {
+            // Clear cache
+            if (is_resource($img)) {
+                imagedestroy($img);
+            }
+            // Return unmodified resource
+            return $sourceResource;
+        }
+
+        // Return resource with text applied
+        return $img;
     }
 
     /**
