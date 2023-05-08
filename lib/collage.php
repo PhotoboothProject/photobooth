@@ -1,12 +1,8 @@
 <?php
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/collageConfig.php';
-require_once __DIR__ . '/log.php';
-require_once __DIR__ . '/resize.php';
-require_once __DIR__ . '/applyFrame.php';
-require_once __DIR__ . '/applyText.php';
 require_once __DIR__ . '/filter.php';
-require_once __DIR__ . '/polaroid.php';
+require_once __DIR__ . '/image.php';
 
 function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null) {
     if (is_null($c)) {
@@ -14,7 +10,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     }
     $editImages = [];
     $rotate_after_creation = false;
-    $quality = 100;
     $image_filter = false;
     $imageModified = false;
     if (!empty($filter) && $filter !== 'plain') {
@@ -60,8 +55,13 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
         }
     }
 
+    $imageHandler = new Image();
+    $imageHandler->jpegQuality = 100;
+    $imageHandler->framePath = $c->collageFrame;
+    $imageHandler->frameExtend = false;
+
     for ($i = 0; $i < $c->collageLimit; $i++) {
-        $imageResource = imagecreatefromjpeg($editImages[$i]);
+        $imageResource = $imageHandler->createFromImage($editImages[$i]);
         // Only jpg/jpeg are supported
         if (!$imageResource) {
             $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not read jpeg file. Are you taking raws?';
@@ -86,12 +86,15 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
         }
 
         if ($c->pictureRotation !== '0') {
-            $imageResource = rotateResizeImage($imageResource, $c->pictureRotation, $c->collageBackgroundColor);
+            $imageHandler->resizeRotation = $c->pictureRotation;
+            $imageHandler->resizeBgColor = $c->collageBackgroundColor;
+            $imageResource = $imageHandler->rotateResizeImage($imageResource);
             $imageModified = true;
         }
 
         if ($c->picturePolaroidEffect === 'enabled') {
-            $imageResource = effectPolaroid($imageResource, $c->picturePolaroidRotation, 200, 200, 200);
+            $imageHandler->polaroidRotation = $c->picturePolaroidRotation;
+            $imageResource = $imageHandler->effectPolaroid($imageResource);
             $imageModified = true;
         }
 
@@ -109,7 +112,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
         }
 
         if ($imageModified) {
-            imagejpeg($imageResource, $editImages[$i], $quality);
+            $imageHandler->saveJpeg($imageResource, $editImages[$i]);
         }
 
         imagedestroy($imageResource);
@@ -120,8 +123,10 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);
     if (testFile($c->collageBackground)) {
-        $backgroundImage = imagecreatefromstring(file_get_contents($c->collageBackground));
-        $backgroundImage = resizeImage($backgroundImage, $collage_width, $collage_height);
+        $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
+        $imageHandler->resizeMaxWidth = $collage_width;
+        $imageHandler->resizeMaxHeight = $collage_height;
+        $backgroundImage = $imageHandler->resizeImage($backgroundImage);
         imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
     } else {
         $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
@@ -131,6 +136,10 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     if ($landscape == false) {
         $rotate_after_creation = true;
     }
+
+    $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
+    $imageHandler->addPictureBgImage = $c->collageBackground;
+    $imageHandler->addPictureBgColor = $c->collageBackgroundColor;
 
     switch ($c->collageLayout) {
         // old 2x2 are now named 2+2 as 2x means images are duplicated
@@ -145,7 +154,14 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
 
             break;
@@ -172,7 +188,14 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
 
             break;
@@ -209,7 +232,14 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
 
             break;
@@ -254,7 +284,14 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
 
             break;
@@ -280,7 +317,14 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < 3; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
 
             break;
@@ -305,7 +349,14 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < 3; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
             break;
         case '2x4':
@@ -325,14 +376,16 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                     return false;
                 }
 
-                $tempSubImage = imagecreatefromjpeg($editImages[$i]);
+                $tempSubImage = $imageHandler->createFromImage($editImages[$i]);
 
-                if ($c->collageTakeFrame === 'always' && testFile($c->collageFrame)) {
-                    $tempSubImage = applyFrame($tempSubImage, $c->collageFrame, true);
+                if ($c->collageTakeFrame === 'always') {
+                    $tempSubImage = $imageHandler->applyFrame($tempSubImage);
                 }
 
                 $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
-                $images_rotated[] = resizeImage($tempSubImage, $height / 3.3, $width / 3.5);
+                $imageHandler->resizeMaxWidth = $height / 3.3;
+                $imageHandler->resizeMaxHeight = $width / 3.5;
+                $images_rotated[] = $imageHandler->resizeImage($tempSubImage);
             }
 
             $new_width = imagesx($images_rotated[0]);
@@ -363,8 +416,13 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             }
 
             imagescale($my_collage, $width, $height);
-            $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
-            drawDashedLine($my_collage, 50, $height / 2, $width - 50, $height / 2, $dashedline_color);
+            $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
+            $imageHandler->dashedLineStartX = 50;
+            $imageHandler->dashedLineStartY = $height / 2;
+            $imageHandler->dashedLineEndX = $width - 50;
+            $imageHandler->dashedLineEndY = $height / 2;
+            $imageHandler->drawDashedLine($my_collage);
+
             break;
         case '2x4-2':
         case '2x4-3':
@@ -408,11 +466,29 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < 4; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 4], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+
+                $imageHandler->addPictureX = $pictureOptions[$i + 4][0];
+                $imageHandler->addPictureY = $pictureOptions[$i + 4][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i + 4][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i + 4][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i + 4][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
-            $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
-            drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
+            $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
+            $imageHandler->dashedLineStartX = $collage_width * 0.03;
+            $imageHandler->dashedLineStartY = $collage_height / 2;
+            $imageHandler->dashedLineEndX = $collage_width * 0.97;
+            $imageHandler->dashedLineEndY = $collage_height / 2;
+            $imageHandler->drawDashedLine($my_collage);
+
             break;
         case '2x3':
             if ($landscape) {
@@ -439,11 +515,28 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             ];
 
             for ($i = 0; $i < 3; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i + 3], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+
+                $imageHandler->addPictureX = $pictureOptions[$i + 3][0];
+                $imageHandler->addPictureY = $pictureOptions[$i + 3][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i + 3][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i + 3][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i + 3][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
-            $dashedline_color = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
-            drawDashedLine($my_collage, $collage_width * 0.03, $collage_height / 2, $collage_width * 0.97, $collage_height / 2, $dashedline_color);
+            $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
+            $imageHandler->dashedLineStartX = $collage_width * 0.03;
+            $imageHandler->dashedLineStartY = $collage_height / 2;
+            $imageHandler->dashedLineEndX = $collage_width * 0.97;
+            $imageHandler->dashedLineEndY = $collage_height / 2;
+            $imageHandler->drawDashedLine($my_collage);
             break;
         default:
             $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . $c->collageLayout;
@@ -470,29 +563,34 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             }
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
-                addPicture($my_collage, $editImages[$i], $pictureOptions[$i], $c);
+                $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                $imageHandler->addPictureX = $pictureOptions[$i][0];
+                $imageHandler->addPictureY = $pictureOptions[$i][1];
+                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
+                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
+                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->addPicture($tmpImg, $my_collage);
+                imagedestroy($tmpImg);
             }
             break;
     }
 
-    if ($c->collageTakeFrame === 'once' && testFile($c->collageFrame)) {
-        $my_collage = applyFrame($my_collage, $c->collageFrame, true);
+    if ($c->collageTakeFrame === 'once') {
+        $my_collage = $imageHandler->applyFrame($my_collage, $c->collageFrame, true);
     }
 
-    if ($c->textOnCollageEnabled === 'enabled' && testFile($c->textOnCollageFont)) {
-        $my_collage = applyText(
-            $my_collage,
-            $c->textOnCollageFontSize,
-            $c->textOnCollageRotation,
-            $c->textOnCollageLocationX,
-            $c->textOnCollageLocationY,
-            $c->textOnCollageFontColor,
-            $c->textOnCollageFont,
-            $c->textOnCollageLine1,
-            $c->textOnCollageLine2,
-            $c->textOnCollageLine3,
-            $c->textOnCollageLinespace
-        );
+    if ($c->textOnCollageEnabled === 'enabled') {
+        $imageHandler->fontSize = $c->textOnCollageFontSize;
+        $imageHandler->fontRotation = $c->textOnCollageRotation;
+        $imageHandler->fontLocationX = $c->textOnCollageLocationX;
+        $imageHandler->fontLocationY = $c->textOnCollageLocationY;
+        $imageHandler->fontColor = $c->textOnCollageFontColor;
+        $imageHandler->fontPath = $c->textOnCollageFont;
+        $imageHandler->textLine1 = $c->textOnCollageLine1;
+        $imageHandler->textLine1 = $c->textOnCollageLine2;
+        $imageHandler->textLine3 = $c->textOnCollageLine3;
+        $imageHandler->textLineSpacing = $c->textOnCollageLinespace;
+        $my_collage = $imageHandler->applyText($my_collage);
     }
 
     // Rotate image if needed
@@ -501,7 +599,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     }
 
     // Transfer image to destImagePath with returns the image to core
-    imagejpeg($my_collage, $destImagePath, $quality);
+    $imageHandler->saveJpeg($my_collage, $destImagePath);
+
     // Destroy the created collage in memory
     imagedestroy($my_collage);
 
@@ -519,58 +618,4 @@ function doMath($expression): int {
     // eval is evil. To mitigate any attacks the allowed characters are limited to numbers and math symbols
     eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');
     return intval($o);
-}
-
-function drawDashedLine($my_collage, $x1, $y1, $x2, $y2, $dashedline_color) {
-    settype($x1, 'integer');
-    settype($x2, 'integer');
-    settype($y1, 'integer');
-    settype($y2, 'integer');
-
-    $dashed_style = [
-        $dashedline_color,
-        $dashedline_color,
-        $dashedline_color,
-        $dashedline_color,
-        IMG_COLOR_TRANSPARENT,
-        IMG_COLOR_TRANSPARENT,
-        IMG_COLOR_TRANSPARENT,
-        IMG_COLOR_TRANSPARENT,
-    ];
-    imagesetstyle($my_collage, $dashed_style);
-    imageline($my_collage, $x1, $y1, $x2, $y2, IMG_COLOR_STYLED);
-}
-
-function addPicture($my_collage, $filename, $pictureOptions, CollageConfig $c) {
-    $dX = intval($pictureOptions[0]);
-    $dY = intval($pictureOptions[1]);
-    $width = intval($pictureOptions[2]);
-    $height = intval($pictureOptions[3]);
-    $degrees = intval($pictureOptions[4]);
-
-    $tempSubImage = imagecreatefromjpeg($filename);
-    if (abs($degrees) == 90) {
-        $tempSubImage = resizeCropImage($height, $width, $tempSubImage);
-    } else {
-        $tempSubImage = resizeCropImage($width, $height, $tempSubImage);
-    }
-
-    if ($c->collageTakeFrame === 'always' && testFile($c->collageFrame)) {
-        $tempSubImage = applyFrame($tempSubImage, $c->collageFrame, true);
-    }
-
-    if ($degrees != 0) {
-        $backgroundColor = $c->collageBackgroundColor;
-        if (testFile($c->collageBackground)) {
-            $backgroundColor = '#0000007f';
-        }
-        $tempSubImage = rotateResizeImage($tempSubImage, $degrees, $backgroundColor);
-        if (abs($degrees) != 90) {
-            $width = intval(imagesx($tempSubImage));
-            $height = intval(imagesy($tempSubImage));
-        }
-    }
-
-    imagecopy($my_collage, $tempSubImage, $dX, $dY, 0, 0, $width, $height);
-    imagedestroy($tempSubImage);
 }
