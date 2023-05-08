@@ -4,10 +4,7 @@ header('Content-Type: application/json');
 require_once '../lib/db.php';
 require_once '../lib/config.php';
 require_once '../lib/filter.php';
-require_once '../lib/polaroid.php';
-require_once '../lib/resize.php';
 require_once '../lib/collage.php';
-require_once '../lib/applyText.php';
 require_once '../lib/applyEffects.php';
 require_once '../lib/image.php';
 require_once '../lib/log.php';
@@ -28,7 +25,6 @@ $database = new DatabaseManager();
 $database->db_file = DB_FILE;
 $database->file_dir = IMG_DIR;
 
-$quality = 100;
 $imageModified = false;
 $image_filter = false;
 
@@ -49,11 +45,9 @@ if (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
     $image_filter = $_POST['filter'];
 }
 
-// Check collage configuration
+$isCollage = false;
 if ($_POST['style'] === 'collage') {
-    if ($config['textoncollage']['enabled']) {
-        testFile($config['textoncollage']['font']);
-    }
+    $isCollage = true;
 }
 
 $srcImages = [];
@@ -61,7 +55,7 @@ $srcImages[] = $file;
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 
-if ($_POST['style'] === 'collage') {
+if ($isCollage) {
     list($collageSrcImagePaths, $srcImages) = getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
 
     if (!createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
@@ -89,45 +83,105 @@ foreach ($srcImages as $image) {
         logErrorAndDie($errormsg);
     }
 
-    if ($_POST['style'] === 'collage' && $file != $image) {
+    if ($isCollage && $file != $image) {
         $editSingleCollage = true;
-        $picture_frame = $config['collage']['frame'];
+        $imageHandler->framePath = $config['collage']['frame'];
     } else {
         $editSingleCollage = false;
-        $picture_frame = $config['picture']['frame'];
+        $imageHandler->framePath = $config['picture']['frame'];
     }
 
-    if ($_POST['style'] !== 'collage' || $editSingleCollage) {
-        list($imageResource, $imageModified) = editSingleImage($config, $imageResource, $image_filter, $editSingleCollage, $picture_frame, $_POST['style'] == 'collage');
-    }
+    if (!$isCollage || $editSingleCollage) {
+        if ($config['picture']['flip'] !== 'off') {
+            if ($config['picture']['flip'] === 'horizontal') {
+                imageflip($imageResource, IMG_FLIP_HORIZONTAL);
+            } elseif ($config['picture']['flip'] === 'vertical') {
+                imageflip($imageResource, IMG_FLIP_VERTICAL);
+            } elseif ($config['picture']['flip'] === 'both') {
+                imageflip($imageResource, IMG_FLIP_BOTH);
+            }
 
+            $imageModified = true;
+        }
+
+        // apply filter
+        if ($image_filter) {
+            applyFilter($image_filter, $imageResource);
+            $imageModified = true;
+        }
+
+        if ($config['picture']['polaroid_effect'] && !$isCollage) {
+            $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
+            $imageResource = $imageHandler->effectPolaroid($imageResource);
+            $imageModified = true;
+        }
+
+        if (($config['picture']['take_frame'] && !$isCollage) || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
+            if (!$isCollage) {
+                $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
+            } else {
+                $imageHandler->frameExtend = false;
+            }
+            $imageResource = $imageHandler->applyFrame($imageResource);
+            $imageModified = true;
+        }
+
+        if ($config['picture']['rotation'] !== '0') {
+            $imageHandler->resizeRotation = $config['picture']['rotation'];
+            $imageResource = $imageHandler->rotateResizeImage($imageResource);
+            $imageModified = true;
+        }
+    }
     if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
         $chroma_size = substr($config['keying']['size'], 0, -2);
-        $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
+        $imageHandler->resizeMaxWidth = $chroma_size;
+        $imageHandler->resizeMaxHeight = $chroma_size;
+        $chromaCopyResource = $imageHandler->resizeImage($imageResource);
         $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
         $imageHandler->saveJpeg($chromaCopyResource, $filename_keying);
         imagedestroy($chromaCopyResource);
     }
 
-    $configText = $config['textonpicture'];
-    list($imageResource, $imageModified) = addTextToImage($configText, $imageResource, $imageModified, $_POST['style'] == 'collage');
+    if (!$isCollage && $config['textonpicture']['enabled']) {
+        $imageHandler->fontSize = $config['textonpicture']['font_size'];
+        $imageHandler->fontRotation = $config['textonpicture']['rotation'];
+        $imageHandler->fontLocationX = $config['textonpicture']['locationx'];
+        $imageHandler->fontLocationY = $config['textonpicture']['locationy'];
+        $imageHandler->fontColor = $config['textonpicture']['font_color'];
+        $imageHandler->fontPath = $config['textonpicture']['font'];
+        $imageHandler->textLine1 = $config['textonpicture']['line1'];
+        $imageHandler->textLine1 = $config['textonpicture']['line2'];
+        $imageHandler->textLine3 = $config['textonpicture']['line3'];
+        $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
+        $imageResource = $imageHandler->applyText($imageResource);
+    }
 
     // image scale, create thumbnail
     $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
-    $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
+    $imageHandler->resizeMaxWidth = $thumb_size;
+    $imageHandler->resizeMaxHeight = $thumb_size;
+    $thumbResource = $imageHandler->resizeImage($imageResource);
 
     $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
     $imageHandler->saveJpeg($thumbResource, $filename_thumb);
     imagedestroy($thumbResource);
 
     $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
-    compressImage($config, $imageModified, $imageResource, $filename_tmp, $filename_photo);
+    if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
+        $imageHandler->saveJpeg($imageResource, $filename_photo);
+    } else {
+        copy($filename_tmp, $filename_photo);
+    }
+    imagedestroy($imageResource);
+
+    // preserve jpeg meta data
+    if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
+        addExifData($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+    }
 
     if (!$config['picture']['keep_original']) {
         unlink($filename_tmp);
     }
-
-    imagedestroy($imageResource);
 
     // insert into database
     if ($config['database']['enabled']) {
