@@ -196,14 +196,18 @@ if (isset($data['type'])) {
             }
 
             if ($newConfig['reset']['remove_print_db']) {
+                $printManager = new PrintManager();
+                $printManager->printDb = PRINT_DB;
+                $printManager->printLockFile = PRINT_LOCKFILE;
+                $printManager->printCounter = PRINT_COUNTER;
                 // delete print database
-                if (removePrintDB()) {
+                if ($printManager->removePrintDb()) {
                     $LogData[] = ['printed.csv' => 'deleted'];
                 }
-                if (unlockPrint()) {
+                if ($printManager->unlockPrint()) {
                     $LogData[] = ['print.lock' => 'deleted'];
                 }
-                if (removePrintCounter()) {
+                if ($printManager->removePrintCounter()) {
                     $LogData[] = ['print.count' => 'deleted'];
                 }
             }
