@@ -177,6 +177,37 @@ class Image {
 
     /**
      *
+     * Add dashed line Definitions
+     *
+     */
+
+    /**
+     * @var string Color of the dashed line.
+     */
+    public $dashedLineColor = '';
+
+    /**
+     * @var int X-coordinate of the starting point of the dashed line.
+     */
+    public $dashedLineStartX = 0;
+
+    /**
+     * @var int Y-coordinate of the starting point of the dashed line.
+     */
+    public $dashedLineStartY = 0;
+
+    /**
+     * @var int X-coordinate of the ending point of the dashed line.
+     */
+    public $dashedLineEndX = 0;
+
+    /**
+     * @var int Y-coordinate of the ending point of the dashed line.
+     */
+    public $dashedLineEndY = 0;
+
+    /**
+     *
      * QR Difinitions
      *
      */
@@ -762,6 +793,35 @@ class Image {
             }
         } catch (Exception $e) {
             throw $e;
+        }
+    }
+
+    /**
+     * Draw a dashed line on the specified image resource.
+     *
+     * @param resource $imageResource The image resource to draw the dashed line on.
+     * @return void
+     */
+    public function drawDashedLine($imageResource) {
+        try {
+            $dashedLine = [
+                $this->dashedLineColor,
+                $this->dashedLineColor,
+                $this->dashedLineColor,
+                $this->dashedLineColor,
+                IMG_COLOR_TRANSPARENT,
+                IMG_COLOR_TRANSPARENT,
+                IMG_COLOR_TRANSPARENT,
+                IMG_COLOR_TRANSPARENT,
+            ];
+            if (!imagesetstyle($imageResource, $dashedLine)) {
+                throw new Exception('Can\'t set the style for line drawing.');
+            }
+            if (!imageline($imageResource, $this->dashedLineStartX, $this->dashedLineStartY, $this->dashedLineEndX, $this->dashedLineEndY, IMG_COLOR_STYLED)) {
+                throw new Exception('Can\'t draw image line.');
+            }
+        } catch (Exception $e) {
+            return;
         }
     }
 
