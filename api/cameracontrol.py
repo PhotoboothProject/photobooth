@@ -146,7 +146,7 @@ class CameraControl:
         else:
             self.args.bsm = args.bsm
             try:
-                if not self.showVideo:
+                if not self.showVideo and not args.bsmx:
                     self.showVideo = True
                     self.connect_to_camera()
                     self.socket.send_string('Starting Video')
@@ -328,6 +328,8 @@ def main():
                         for that image, but no video will be created')
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
                         image and wait for message to start preview again', dest='bsm')
+    parser.add_argument('--bsmx', action='store_true', help='prevent cameracontrol.py from restarting the video \
+                        in bsm mode. Useful to just execute a command', dest='bsmx')
     parser.add_argument('-v', '--video', default=None, type=str, dest='video_path',
                         help='save the next part of the preview as a video file')
     parser.add_argument('--vframes', default=4, type=int, help='saves shots from the video in an equidistant time',
@@ -343,7 +345,7 @@ def main():
                         help='chroma key sensitivity (value from 0.01 to 1.0 or 0.0 to disable). \
                              If this is set to a value distinct from 0.0 on capture image command chroma keying using \
                              ffmpeg is applied on the image and only this modified image is stored on the pc. \
-                             If this is set on a preview command you get actual live chroma keying.',
+                             If this is set on a preview command you get actual live chroma keying',
                         dest='chroma_sensitivity')
     parser.add_argument('--chromaBlend', type=float, help='chroma key blend (0.0 to 1.0)', dest='chroma_blend')
     parser.add_argument('--exit', action='store_true', help='exit the service')
