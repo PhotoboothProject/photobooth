@@ -124,6 +124,7 @@ class CameraControl:
             self.exit_gracefully()
         self.handle_chroma_params(args)
         self.handle_video_params(args)
+        self.handle_bsm_timeout(args)
         if args.config is not None and args.config != self.args.config:
             self.args.config = args.config
             self.connect_to_camera()
@@ -145,11 +146,6 @@ class CameraControl:
                 print('An error occured: %s' % e)
                 self.socket.send_string('failure')
         else:
-            if args.bsm_timeOut > 0:
-                self.bsm_stopTime = datetime.now() + timedelta(minutes=args.bsm_timeOut)
-                print('Set bsm stop time to ', self.bsm_stopTime.strftime("%d.%m.%Y %H:%M:%S"))
-            else:
-                self.bsm_stopTime = None
             self.args.bsm = args.bsm
             try:
                 if not self.showVideo and not args.bsmx:
@@ -188,6 +184,13 @@ class CameraControl:
         commands = ['ffmpeg', *pre_input, *input, *filters, *stream, *file_output]
         print(commands)
         self.ffmpeg = Popen(commands, stdin=PIPE)
+
+    def handle_bsm_timeout(self, args):
+        if args.bsm_timeOut > 0:
+            self.bsm_stopTime = datetime.now() + timedelta(minutes=args.bsm_timeOut)
+            print('Set bsm stop time to ', self.bsm_stopTime.strftime("%d.%m.%Y %H:%M:%S"))
+        else:
+            self.bsm_stopTime = None
 
     def handle_chroma_params(self, args):
         chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
@@ -241,6 +244,7 @@ class CameraControl:
         self.socket = context.socket(zmq.REP)
         self.socket.bind('tcp://*:5555')
         self.handle_chroma_params(self.args)
+        self.handle_bsm_timeout(self.args)
         self.ffmpeg_open()
         try:
             while True:
