@@ -147,6 +147,7 @@ class CameraControl:
         else:
             if args.bsm_timeOut > 0:
                 self.bsm_stopTime = datetime.now() + timedelta(minutes=args.bsm_timeOut)
+                print('Set bsm stop time to ', self.bsm_stopTime.strftime("%d.%m.%Y %H:%M:%S"))
             else:
                 self.bsm_stopTime = None
             self.args.bsm = args.bsm
@@ -251,6 +252,7 @@ class CameraControl:
                     pass
                 try:
                     if self.bsm_stopTime is not None and datetime.now() > self.bsm_stopTime:
+                        print('Camera stopped because of bsm stop time')
                         self.disable_video()
                     if self.showVideo:
                         capture = self.camera.capture_preview()
