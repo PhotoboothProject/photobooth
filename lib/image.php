@@ -131,6 +131,52 @@ class Image {
 
     /**
      *
+     * Add picture to image source Difinitions
+     *
+     */
+
+    /**
+     * @var int The x-coordinate of the top-left corner of the picture to be added.
+     */
+    public $addPictureX = 0;
+
+    /**
+     * @var int The y-coordinate of the top-left corner of the picture to be added.
+     */
+    public $addPictureY = 0;
+
+    /**
+     * @var int The width of the picture to be added.
+     */
+    public $addPictureWidth = 0;
+
+    /**
+     * @var int The height of the picture to be added.
+     */
+    public $addPictureHeight = 0;
+
+    /**
+     * @var int The rotation angle of the picture to be added (in degrees).
+     */
+    public $addPictureRotation = 0;
+
+    /**
+     * @var bool A flag indicating whether to apply a frame to the picture to be added.
+     */
+    public $addPictureApplyFrame = false;
+
+    /**
+     * @var string The path to the background image to be used when rotating the picture to be added.
+     */
+    public $addPictureBgImage = '';
+
+    /**
+     * @var string The hexadecimal color code for the background color to be used when rotating the picture to be added.
+     */
+    public $addPictureBgColor = '#0000007f';
+
+    /**
+     *
      * QR Difinitions
      *
      */
@@ -663,6 +709,60 @@ class Image {
 
         // Return resource with text applied
         return $sourceResource;
+    }
+
+    /**
+     * Add a picture to the destination image resource.
+     *
+     * @param resource $imageResource The source image resource to be added.
+     * @param resource $destinationResource The destination image resource where the picture will be added.
+     */
+    public function addPicture($imageResource, $destinationResource) {
+        try {
+            $dX = intval($this->addPictureX);
+            $dY = intval($this->addPictureY);
+            $width = intval($this->addPictureWidth);
+            $height = intval($this->addPictureHeight);
+            $degrees = intval($this->addPictureRotation);
+
+            if ($width <= 0 || $height <= 0) {
+                throw new Exception('Invalid image dimensions or maximum dimensions.');
+            }
+
+            if (abs($degrees) == 90) {
+                $this->resizeMaxWidth = $height;
+                $this->resizeMaxHeight = $width;
+                $imageResource = self::resizeCropImage($imageResource);
+            } else {
+                $this->resizeMaxWidth = $width;
+                $this->resizeMaxHeight = $height;
+                $imageResource = self::resizeCropImage($imageResource);
+            }
+
+            if ($this->addPictureApplyFrame) {
+                $imageResource = self::applyFrame($imageResource);
+            }
+
+            if ($degrees != 0) {
+                $backgroundColor = $this->addPictureBgColor;
+                if (is_file($this->addPictureBgImage)) {
+                    $backgroundColor = '#0000007f';
+                }
+                $this->resizeBgColor = $backgroundColor;
+                $this->resizeRotation = $degrees;
+                $imageResource = self::rotateResizeImage($imageResource);
+                if (abs($degrees) != 90) {
+                    $width = intval(imagesx($imageResource));
+                    $height = intval(imagesy($imageResource));
+                }
+            }
+
+            if (!imagecopy($destinationResource, $imageResource, $dX, $dY, 0, 0, $width, $height)) {
+                throw new Exception('Can\'t add image to resource.');
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     /**
