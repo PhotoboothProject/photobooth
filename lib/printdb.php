@@ -25,18 +25,24 @@ class PrintManager {
      * @return bool True on success, false on failure.
      */
     public function addToPrintDb($filename, $uniquename) {
-        $csvData = [];
-        $csvData[] = date('Y-m-d');
-        $csvData[] = date('H:i:s');
-        $csvData[] = $filename;
-        $csvData[] = $uniquename;
-        $handle = fopen($this->printDb, 'a');
-        if (!$handle) {
+        try {
+            $csvData = [];
+            $csvData[] = date('Y-m-d');
+            $csvData[] = date('H:i:s');
+            $csvData[] = $filename;
+            $csvData[] = $uniquename;
+            $handle = fopen($this->printDb, 'a');
+            if (!$handle) {
+                throw new Exception('Failed to open print database.');
+            }
+            if (fputcsv($handle, $csvData) === false) {
+                throw new Exception('Failed to write to print database.');
+            }
+            fclose($handle);
+            return true;
+        } catch (Exception $e) {
             return false;
         }
-        fputcsv($handle, $csvData);
-        fclose($handle);
-        return true;
     }
 
     /**
@@ -45,20 +51,27 @@ class PrintManager {
      * @return int|bool The total count of prints on success, false on failure.
      */
     public function getPrintCountFromDB() {
-        if (file_exists($this->printDb) && is_readable($this->printDb)) {
-            $handle = fopen($this->printDb, 'r');
-            if (!$handle) {
-                return false;
+        try {
+            if (file_exists($this->printDb) && is_readable($this->printDb)) {
+                $handle = fopen($this->printDb, 'r');
+                if (!$handle) {
+                    throw new Exception('Failed to open print database.');
+                }
+                $linecount = 0;
+                while (!feof($handle)) {
+                    $line = fgets($handle, 4096);
+                    if ($line === false) {
+                        throw new Exception('Error reading print database.');
+                    }
+                    $linecount += substr_count($line, PHP_EOL);
+                }
+                fclose($handle);
+                return $linecount;
             }
-            $linecount = 0;
-            while (!feof($handle)) {
-                $line = fgets($handle, 4096);
-                $linecount = $linecount + substr_count($line, PHP_EOL);
-            }
-            fclose($handle);
-            return $linecount;
+            throw new Exception('Print database does not exist or is not readable.');
+        } catch (Exception $e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -67,10 +80,18 @@ class PrintManager {
      * @return string|bool The total count of prints on success, false on failure.
      */
     public function getPrintCountFromCounter() {
-        if (file_exists($this->printCounter)) {
-            return file_get_contents($this->printCounter);
+        try {
+            if (file_exists($this->printCounter)) {
+                $counterContent = file_get_contents($this->printCounter);
+                if ($counterContent === false) {
+                    throw new Exception('Failed to read print counter.');
+                }
+                return $counterContent;
+            }
+            return $this->getPrintCountFromDB();
+        } catch (Exception $e) {
+            return false;
         }
-        return $this->getPrintCountFromDB();
     }
 
     /**
@@ -88,12 +109,16 @@ class PrintManager {
      * @return bool True on success, false on failure.
      */
     public function lockPrint() {
-        $handle = fopen($this->printLockFile, 'w');
-        if (!$handle) {
+        try {
+            $handle = fopen($this->printLockFile, 'w');
+            if (!$handle) {
+                throw new Exception('Failed to lock print.');
+            }
+            fclose($handle);
+            return true;
+        } catch (Exception $e) {
             return false;
         }
-        fclose($handle);
-        return true;
     }
 
     /**
@@ -102,10 +127,14 @@ class PrintManager {
      * @return bool True on success, false on failure.
      */
     public function unlockPrint() {
-        if (file_exists($this->printLockFile) && unlink($this->printLockFile)) {
-            return true;
+        try {
+            if (file_exists($this->printLockFile) && unlink($this->printLockFile)) {
+                return true;
+            }
+            throw new Exception('Failed to unlock printing.');
+        } catch (Exception $e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -114,10 +143,14 @@ class PrintManager {
      * @return bool True on success, false on failure.
      */
     public function removePrintDb() {
-        if (file_exists($this->printDb) && unlink($this->printDb)) {
-            return true;
+        try {
+            if (file_exists($this->printDb) && unlink($this->printDb)) {
+                return true;
+            }
+            throw new Exception('Failed to remove print database.');
+        } catch (Exception $e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -126,10 +159,14 @@ class PrintManager {
      * @return bool True on success, false on failure.
      */
     public function removePrintCounter() {
-        if (file_exists($this->printCounter) && unlink($this->printCounter)) {
-            return true;
+        try {
+            if (file_exists($this->printCounter) && unlink($this->printCounter)) {
+                return true;
+            }
+            throw new Exception('Failed to remove print counter.');
+        } catch (Exception $e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -138,8 +175,12 @@ class PrintManager {
      * @return void
      */
     public function resetPrint() {
-        $this->removePrintDb();
-        $this->unlockPrint();
-        $this->removePrintCounter();
+        try {
+            $this->removePrintDb();
+            $this->unlockPrint();
+            $this->removePrintCounter();
+        } catch (Exception $e) {
+            return;
+        }
     }
 }
