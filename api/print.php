@@ -11,8 +11,12 @@ if (empty($_GET['filename'])) {
     $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided!';
     logErrorAndDie($errormsg);
 }
+$printManager = new PrintManager();
+$printManager->printDb = PRINT_DB;
+$printManager->printLockFile = PRINT_LOCKFILE;
+$printManager->printCounter = PRINT_COUNTER;
 
-if (isPrintLocked()) {
+if ($printManager->isPrintLocked()) {
     $errormsg = $config['print']['limit_msg'];
     logErrorAndDie($errormsg);
 }
@@ -121,13 +125,13 @@ $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
 exec($cmd, $output, $returnValue);
 
-addToPrintDB($filename, $uniquename);
+$printManager->addToPrintDb($filename, $uniquename);
 
 $linecount = 0;
 if ($config['print']['limit'] > 0) {
-    $linecount = getPrintCountFromDB();
+    $linecount = $printManager->getPrintCountFromDB();
     if ($linecount % $config['print']['limit'] == 0) {
-        if (lockPrint()) {
+        if ($printManager->lockPrint()) {
             $status = 'locking';
         } else {
             if ($config['dev']['loglevel'] > 1) {

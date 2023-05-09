@@ -15,12 +15,17 @@ if (!in_array($action, $validActions)) {
     die(json_encode($LogData));
 }
 
+$printManager = new PrintManager();
+$printManager->printDb = PRINT_DB;
+$printManager->printLockFile = PRINT_LOCKFILE;
+$printManager->printCounter = PRINT_COUNTER;
+
 try {
     // Perform action
     switch ($action) {
         case 'getPrintCount':
-            $count = getPrintCountFromCounter();
-            $locked = isPrintLocked();
+            $count = $printManager->getPrintCountFromCounter();
+            $locked = $printManager->isPrintLocked();
 
             $LogData = [
                 'count' => $count,
@@ -29,7 +34,7 @@ try {
             break;
 
         case 'unlockPrint':
-            $unlock = unlockPrint();
+            $unlock = $printManager->unlockPrint();
 
             $LogData = [
                 'success' => $unlock,
