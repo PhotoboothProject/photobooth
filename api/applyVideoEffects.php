@@ -7,6 +7,7 @@ require_once '../lib/log.php';
 require_once '../lib/applyEffects.php';
 require_once '../lib/collageConfig.php';
 require_once '../lib/collage.php';
+require_once '../lib/image.php';
 
 $file = $_POST['file'];
 
@@ -61,13 +62,28 @@ if (!$config['video']['collage_keep_images']) {
 }
 
 foreach ($images as $image) {
-    $imageResource = imagecreatefromjpeg($image);
-    $thumbSize = substr($config['picture']['thumb_size'], 0, -2);
-    $thumbResource = resizeImage($imageResource, $thumbSize, $thumbSize);
-    imagejpeg($thumbResource, $thumbsFolder . basename($image), $config['jpeg_quality']['thumb']);
+    $imageHandler = new Image();
+
+    $imageResource = $imageHandler->createFromImage($image);
+
+    $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+    $imageHandler->resizeMaxWidth = $thumb_size;
+    $imageHandler->resizeMaxHeight = $thumb_size;
+    $thumbResource = $imageHandler->resizeImage($imageResource);
+    $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+    $imageHandler->saveJpeg($thumbResource, $thumbsFolder . basename($image));
     imagedestroy($thumbResource);
+
     $newFile = $imageFolder . basename($image);
-    compressImage($config, false, $imageResource, $image, $newFile);
+
+    $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
+    if ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100) {
+        $imageHandler->saveJpeg($imageResource, $newFile);
+    } else {
+        copy($image, $newFile);
+    }
+    imagedestroy($imageResource);
+
     if (!$config['picture']['keep_original']) {
         unlink($image);
     }
