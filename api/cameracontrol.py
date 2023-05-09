@@ -10,6 +10,7 @@ import time
 import zmq
 from argparse import Namespace
 from subprocess import Popen, PIPE
+from datetime import datetime, timedelta
 
 import gphoto2 as gp
 
@@ -25,6 +26,7 @@ class CameraControl:
         self.camera = None
         self.socket = None
         self.ffmpeg = None
+        self.bsm_stopTime = None
 
         signal.signal(signal.SIGINT, self.exit_gracefully)
         signal.signal(signal.SIGTERM, self.exit_gracefully)
@@ -62,8 +64,6 @@ class CameraControl:
 
     def capture_image(self, path):
         print('Capturing image')
-        # capturetarget does not exist on Sony Cameras
-        # self.print_config('capturetarget')
         file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
         # refresh images on camera
         self.camera.wait_for_event(1000)
@@ -144,6 +144,11 @@ class CameraControl:
                 print('An error occured: %s' % e)
                 self.socket.send_string('failure')
         else:
+            if args.bsm_timeOut > 0:
+                # TODO change to minutes
+                self.bsm_stopTime = datetime.now() + timedelta(seconds=args.bsm_timeOut)
+            else:
+                self.bsm_stopTime = None
             self.args.bsm = args.bsm
             try:
                 if not self.showVideo and not args.bsmx:
@@ -151,7 +156,10 @@ class CameraControl:
                     self.connect_to_camera()
                     self.socket.send_string('Starting Video')
                 else:
-                    self.socket.send_string('Video already running')
+                    if args.bsmx:
+                        self.socket.send_string('Updated config. Video not starting because of option --bsmx')
+                    else:
+                        self.socket.send_string('Video already running')
             except gp.GPhoto2Error:
                 self.socket.send_string('failure')
 
@@ -242,6 +250,9 @@ class CameraControl:
                 except zmq.Again:
                     pass
                 try:
+                    if self.bsm_stopTime is not None and datetime.now() > self.bsm_stopTime:
+                        self.showVideo = False
+                        self.bsm_stopTime = None
                     if self.showVideo:
                         capture = self.camera.capture_preview()
                         img_bytes = memoryview(capture.get_data_and_size()).tobytes()
@@ -328,8 +339,10 @@ def main():
                         for that image, but no video will be created')
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
                         image and wait for message to start preview again', dest='bsm')
-    parser.add_argument('--bsmx', action='store_true', help='prevent cameracontrol.py from restarting the video \
-                        in bsm mode. Useful to just execute a command', dest='bsmx')
+    parser.add_argument('--bsmx', action='store_true', help='In bsm mode: prevent cameracontrol.py from restarting\
+                        the video. Useful to just execute a command', dest='bsmx')
+    parser.add_argument('--bsmtime', default=0, type=int, help='In bsm mode: keep preview active for the specified\
+                        time in minutes before ending the preview video. Set to 0 to disable', dest='bsm_timeOut')
     parser.add_argument('-v', '--video', default=None, type=str, dest='video_path',
                         help='save the next part of the preview as a video file')
     parser.add_argument('--vframes', default=4, type=int, help='saves shots from the video in an equidistant time',
