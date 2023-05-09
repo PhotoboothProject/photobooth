@@ -155,11 +155,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -189,11 +185,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -233,11 +225,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -285,11 +273,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -318,11 +302,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < 3; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -350,11 +330,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < 3; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -467,18 +443,16 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < 4; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
 
-                $imageHandler->addPictureX = $pictureOptions[$i + 4][0];
-                $imageHandler->addPictureY = $pictureOptions[$i + 4][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i + 4][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i + 4][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i + 4][4];
+                $imageHandler->setAddPictureOptions(
+                    $pictureOptions[$i + 4][0],
+                    $pictureOptions[$i + 4][1],
+                    $pictureOptions[$i + 4][2],
+                    $pictureOptions[$i + 4][3],
+                    $pictureOptions[$i + 4][4]
+                );
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -516,18 +490,16 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < 3; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
 
-                $imageHandler->addPictureX = $pictureOptions[$i + 3][0];
-                $imageHandler->addPictureY = $pictureOptions[$i + 3][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i + 3][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i + 3][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i + 3][4];
+                $imageHandler->setAddPictureOptions(
+                    $pictureOptions[$i + 3][0],
+                    $pictureOptions[$i + 3][1],
+                    $pictureOptions[$i + 3][2],
+                    $pictureOptions[$i + 3][3],
+                    $pictureOptions[$i + 3][4]
+                );
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
@@ -564,11 +536,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
 
             for ($i = 0; $i < $c->collageLimit; $i++) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->addPictureX = $pictureOptions[$i][0];
-                $imageHandler->addPictureY = $pictureOptions[$i][1];
-                $imageHandler->addPictureWidth = $pictureOptions[$i][2];
-                $imageHandler->addPictureHeight = $pictureOptions[$i][3];
-                $imageHandler->addPictureRotation = $pictureOptions[$i][4];
+                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }

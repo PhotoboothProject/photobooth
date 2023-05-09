@@ -743,6 +743,24 @@ class Image {
     }
 
     /**
+     * Set the picture options for adding a picture to image resource.
+     *
+     * @param int $x The X coordinate of the picture.
+     * @param int $y The Y coordinate of the picture.
+     * @param int $width The width of the picture.
+     * @param int $height The height of the picture.
+     * @param int $rotation The rotation angle of the picture.
+     * @return void
+     */
+    public function setAddPictureOptions($x, $y, $width, $height, $rotation) {
+        $this->addPictureX = $x;
+        $this->addPictureY = $y;
+        $this->addPictureWidth = $width;
+        $this->addPictureHeight = $height;
+        $this->addPictureRotation = $rotation;
+    }
+
+    /**
      * Add a picture to the destination image resource.
      *
      * @param resource $imageResource The source image resource to be added.
