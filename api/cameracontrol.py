@@ -112,6 +112,7 @@ class CameraControl:
             self.exit_gracefully()
 
     def disable_video(self):
+        self.bsm_stopTime = None
         self.showVideo = False
         self.set_config('viewfinder', 0)
         print('Video disabled')
@@ -145,8 +146,7 @@ class CameraControl:
                 self.socket.send_string('failure')
         else:
             if args.bsm_timeOut > 0:
-                # TODO change to minutes
-                self.bsm_stopTime = datetime.now() + timedelta(seconds=args.bsm_timeOut)
+                self.bsm_stopTime = datetime.now() + timedelta(minutes=args.bsm_timeOut)
             else:
                 self.bsm_stopTime = None
             self.args.bsm = args.bsm
@@ -251,8 +251,7 @@ class CameraControl:
                     pass
                 try:
                     if self.bsm_stopTime is not None and datetime.now() > self.bsm_stopTime:
-                        self.showVideo = False
-                        self.bsm_stopTime = None
+                        self.disable_video()
                     if self.showVideo:
                         capture = self.camera.capture_preview()
                         img_bytes = memoryview(capture.get_data_and_size()).tobytes()
