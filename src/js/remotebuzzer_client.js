@@ -115,7 +115,7 @@ function initRemoteBuzzerFromDOM() {
         api.inProgress = function (flag) {
             if (this.enabled()) {
                 if (flag) {
-                    this.emitToServer('in-progress');
+                    this.emitToServer('in-progress', flag);
                 } else {
                     this.emitToServer('completed');
                 }
@@ -166,7 +166,7 @@ function initRemoteBuzzerFromDOM() {
             }
         };
 
-        api.emitToServer = function (cmd) {
+        api.emitToServer = function (cmd, photoboothAction) {
             switch (cmd) {
                 case 'start-picture':
                     ioClient.emit('photobooth-socket', 'start-picture');
@@ -182,6 +182,9 @@ function initRemoteBuzzerFromDOM() {
                     break;
                 case 'in-progress':
                     ioClient.emit('photobooth-socket', 'in-progress');
+                    if (photoboothAction != 'in-progress') {
+                        ioClient.emit('photobooth-socket', photoboothAction);
+                    }
                     break;
                 case 'completed':
                     ioClient.emit('photobooth-socket', 'completed');

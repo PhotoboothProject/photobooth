@@ -248,7 +248,7 @@ const photoBooth = (function () {
         api.closeGallery();
         api.showResultInner(false);
 
-        remoteBuzzerClient.inProgress(true);
+        remoteBuzzerClient.inProgress(photoStyle);
         api.takingPic = true;
         photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
 
@@ -374,13 +374,13 @@ const photoBooth = (function () {
     };
 
     api.takeVideo = function (retry) {
-        remoteBuzzerClient.inProgress(true);
+        remoteBuzzerClient.inProgress('in-progress');
         const data = {};
         api.callTakeVideoApi(data, retry);
     };
 
     api.takePic = function (photoStyle, retry) {
-        remoteBuzzerClient.inProgress(true);
+        remoteBuzzerClient.inProgress('in-progress');
 
         api.stopPreviewAndCaptureFromVideo();
 
@@ -1083,7 +1083,7 @@ const photoBooth = (function () {
             photoboothTools.modal.open('#print_mesg');
             isPrinting = true;
 
-            remoteBuzzerClient.inProgress(true);
+            remoteBuzzerClient.inProgress('print');
 
             $.ajax({
                 method: 'GET',
