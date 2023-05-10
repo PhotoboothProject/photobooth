@@ -7,6 +7,16 @@ class Image {
     public $newFilename;
 
     /**
+     * @var int Error counter.
+     */
+    public $errorCount = 0;
+
+    /**
+     * @var array Array to store error messages.
+     */
+    public $errorLog = [];
+
+    /**
      * @var int $jpegQuality The quality of the saved jpeg image, from 0 (lowest) to 100 (highest). Default is 80.
      */
     public $jpegQuality = 80;
@@ -302,6 +312,14 @@ class Image {
     }
 
     /**
+     * Reset the error count and error log.
+     */
+    public function errorReset() {
+        $this->errorCount = 0;
+        $this->errorLog = [];
+    }
+
+    /**
      * Sets the new filename for the image using the specified naming convention.
      *
      * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
@@ -344,6 +362,9 @@ class Image {
             }
             return $resource;
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             return false;
         }
     }
@@ -389,6 +410,9 @@ class Image {
             return true;
         } catch (Exception $e) {
             // If there is an exception, return false
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             return false;
         }
     }
@@ -465,6 +489,9 @@ class Image {
                 }
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // Try to clear cache
             if (is_resource($new)) {
                 imagedestroy($new);
@@ -507,6 +534,9 @@ class Image {
                 throw new Exception('Cannot resize image.');
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // Return unmodified resource
             return $image;
         }
@@ -551,6 +581,9 @@ class Image {
                 throw new Exception('Cannot resize image.');
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // Try to clear cache
             if (is_resource($new)) {
                 imagedestroy($new);
@@ -606,6 +639,9 @@ class Image {
                 }
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // Try to clear cache
             if (is_resource($new)) {
                 imagedestroy($new);
@@ -677,6 +713,9 @@ class Image {
                 throw new Exception('Error applying frame to image.');
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // Clear cache
             if (is_resource($img)) {
                 imagedestroy($img);
@@ -734,6 +773,9 @@ class Image {
                 }
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // Return unmodified resource
             return $sourceResource;
         }
@@ -810,6 +852,8 @@ class Image {
                 throw new Exception('Can\'t add image to resource.');
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
             throw $e;
         }
     }
@@ -839,6 +883,8 @@ class Image {
                 throw new Exception('Can\'t draw image line.');
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
             return;
         }
     }
@@ -851,60 +897,66 @@ class Image {
      * @throws Exception If no URL for QR code generation is defined or if there are issues with image rotation.
      */
     public function createQr() {
-        if (!$this->qrAvailable) {
-            throw new Exception('QR library not available.');
-        }
-
-        if (empty($this->qrUrl)) {
-            throw new Exception('No URL for QR-Code generation defined.');
-        }
-
-        if (!is_numeric($this->qrSize)) {
-            throw new Exception('QR-Size is not numeric.');
-        }
-        if ($this->qrSize % 2 != 0) {
-            throw new Exception('QR-Size is not even.');
-        }
-        if ($this->qrSize < 2 || $this->qrSize > 10) {
-            throw new Exception('QR-Size must be 2, 4, 6, 8 or 10.');
-        }
-
-        if (!is_numeric($this->qrMargin)) {
-            throw new Exception('QR-Margin is not numeric.');
-        }
-        if ($this->qrMargin < 0 || $this->qrMargin > 10) {
-            throw new Exception('QR-Size must be in range between 0 and 10.');
-        }
-
-        $qrCode = QRcode::text($this->qrUrl, false, $this->qrEcLevel);
-        $qrCodeImage = QRimage::image($qrCode, $this->qrSize, $this->qrMargin);
-        if (!$qrCodeImage) {
-            throw new Exception('Failed to create image from QR code.');
-        }
-
-        if ($this->qrRotate) {
-            if (!imagerotate($qrCodeImage, 90, 0)) {
-                throw new Exception('Unable to rotate QR-Code-Image.');
+        try {
+            if (!$this->qrAvailable) {
+                throw new Exception('QR library not available.');
             }
-        }
-        if ($this->qrColor != '#ffffff') {
-            $qrwidth = imagesx($qrCodeImage);
-            $qrheight = imagesy($qrCodeImage);
-            list($r, $g, $b) = sscanf($this->qrColor, '#%02x%02x%02x');
-            $selected = imagecolorallocate($qrCodeImage, $r, $g, $b);
 
-            for ($xpos = 0; $xpos < $qrwidth; $xpos++) {
-                for ($ypos = 0; $ypos < $qrheight; $ypos++) {
-                    $currentcolor = imagecolorat($qrCodeImage, $xpos, $ypos);
-                    $parts = imagecolorsforindex($qrCodeImage, $currentcolor);
+            if (empty($this->qrUrl)) {
+                throw new Exception('No URL for QR-Code generation defined.');
+            }
 
-                    if ($parts['red'] == 255 && $parts['green'] == 255 && $parts['blue'] == 255) {
-                        imagesetpixel($qrCodeImage, $xpos, $ypos, $selected);
+            if (!is_numeric($this->qrSize)) {
+                throw new Exception('QR-Size is not numeric.');
+            }
+            if ($this->qrSize % 2 != 0) {
+                throw new Exception('QR-Size is not even.');
+            }
+            if ($this->qrSize < 2 || $this->qrSize > 10) {
+                throw new Exception('QR-Size must be 2, 4, 6, 8 or 10.');
+            }
+
+            if (!is_numeric($this->qrMargin)) {
+                throw new Exception('QR-Margin is not numeric.');
+            }
+            if ($this->qrMargin < 0 || $this->qrMargin > 10) {
+                throw new Exception('QR-Size must be in range between 0 and 10.');
+            }
+
+            $qrCode = QRcode::text($this->qrUrl, false, $this->qrEcLevel);
+            $qrCodeImage = QRimage::image($qrCode, $this->qrSize, $this->qrMargin);
+            if (!$qrCodeImage) {
+                throw new Exception('Failed to create image from QR code.');
+            }
+
+            if ($this->qrRotate) {
+                if (!imagerotate($qrCodeImage, 90, 0)) {
+                    throw new Exception('Unable to rotate QR-Code-Image.');
+                }
+            }
+            if ($this->qrColor != '#ffffff') {
+                $qrwidth = imagesx($qrCodeImage);
+                $qrheight = imagesy($qrCodeImage);
+                list($r, $g, $b) = sscanf($this->qrColor, '#%02x%02x%02x');
+                $selected = imagecolorallocate($qrCodeImage, $r, $g, $b);
+
+                for ($xpos = 0; $xpos < $qrwidth; $xpos++) {
+                    for ($ypos = 0; $ypos < $qrheight; $ypos++) {
+                        $currentcolor = imagecolorat($qrCodeImage, $xpos, $ypos);
+                        $parts = imagecolorsforindex($qrCodeImage, $currentcolor);
+
+                        if ($parts['red'] == 255 && $parts['green'] == 255 && $parts['blue'] == 255) {
+                            imagesetpixel($qrCodeImage, $xpos, $ypos, $selected);
+                        }
                     }
                 }
             }
+            return $qrCodeImage;
+        } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+            throw $e;
         }
-        return $qrCodeImage;
     }
 
     /**
@@ -920,6 +972,8 @@ class Image {
             // Display the QR code as a PNG image
             imagepng($qrCode);
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
             // If an exception is caught, display the error message
             echo $e->getMessage();
         }
@@ -949,6 +1003,9 @@ class Image {
             // Return true if the QR code was successfully saved
             return true;
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // If an exception is caught, return false
             return false;
         }
@@ -1027,6 +1084,9 @@ class Image {
             }
             return $imageResource;
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             if (is_resource($qrCode)) {
                 imagedestroy($qrCode);
             }
@@ -1100,6 +1160,9 @@ class Image {
                 throw new Exception('Cannot rotate image.');
             }
         } catch (Exception $e) {
+            $this->errorCount++;
+            $this->errorLog[] = $e->getMessage();
+
             // Clear cache
             imagedestroy($img);
             // Return unmodified resource
