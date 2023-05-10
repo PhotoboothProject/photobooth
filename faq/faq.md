@@ -510,6 +510,14 @@ There's no need to define the _"Command to kill live preview"_ while using the _
 If you want to use the DSLR view as background video, enable _"Use stream for live preview as background"_ and disable the _"Execute start command for preview on take picture/collage"_ setting of Photobooth, which is enabled by default.
 
 
+If you're worried about the sensor of your DSLR but still want to use background video you can use `--bsmtime`.
+
+```sh
+python3 cameracontrol.py --bsmtime 1
+```
+With the parameter `--bsmtime` you can define a number of minutes after which the camera preview ends. Please note the last image of the preview stays for a few seconds before the background turns to black. Additionally you should add `python3 cameracontrol.py` to the *pre-photo command* to restart the preview if it got disabled by the timeout. Restarting the preview takes a few seconds.
+
+
 If you don't want to use the DSLR view as background video enable the _Execute start command for preview on take picture/collage_ setting of Photobooth and make sure `--bsm` was added to the preview command.
 
 ```sh

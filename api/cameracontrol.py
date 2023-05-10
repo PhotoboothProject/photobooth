@@ -10,6 +10,7 @@ import time
 import zmq
 from argparse import Namespace
 from subprocess import Popen, PIPE
+from datetime import datetime, timedelta
 
 import gphoto2 as gp
 
@@ -25,6 +26,7 @@ class CameraControl:
         self.camera = None
         self.socket = None
         self.ffmpeg = None
+        self.bsm_stopTime = None
 
         signal.signal(signal.SIGINT, self.exit_gracefully)
         signal.signal(signal.SIGTERM, self.exit_gracefully)
@@ -62,8 +64,6 @@ class CameraControl:
 
     def capture_image(self, path):
         print('Capturing image')
-        # capturetarget does not exist on Sony Cameras
-        # self.print_config('capturetarget')
         file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
         # refresh images on camera
         self.camera.wait_for_event(1000)
@@ -112,6 +112,7 @@ class CameraControl:
             self.exit_gracefully()
 
     def disable_video(self):
+        self.bsm_stopTime = None
         self.showVideo = False
         self.set_config('viewfinder', 0)
         print('Video disabled')
@@ -123,6 +124,7 @@ class CameraControl:
             self.exit_gracefully()
         self.handle_chroma_params(args)
         self.handle_video_params(args)
+        self.handle_bsm_timeout(args)
         if args.config is not None and args.config != self.args.config:
             self.args.config = args.config
             self.connect_to_camera()
@@ -146,12 +148,15 @@ class CameraControl:
         else:
             self.args.bsm = args.bsm
             try:
-                if not self.showVideo:
+                if not self.showVideo and not args.bsmx:
                     self.showVideo = True
                     self.connect_to_camera()
                     self.socket.send_string('Starting Video')
                 else:
-                    self.socket.send_string('Video already running')
+                    if args.bsmx:
+                        self.socket.send_string('Updated config. Video not starting because of option --bsmx')
+                    else:
+                        self.socket.send_string('Video already running')
             except gp.GPhoto2Error:
                 self.socket.send_string('failure')
 
@@ -179,6 +184,13 @@ class CameraControl:
         commands = ['ffmpeg', *pre_input, *input, *filters, *stream, *file_output]
         print(commands)
         self.ffmpeg = Popen(commands, stdin=PIPE)
+
+    def handle_bsm_timeout(self, args):
+        if args.bsm_timeOut > 0:
+            self.bsm_stopTime = datetime.now() + timedelta(minutes=args.bsm_timeOut)
+            print('Set bsm stop time to ', self.bsm_stopTime.strftime("%d.%m.%Y %H:%M:%S"))
+        else:
+            self.bsm_stopTime = None
 
     def handle_chroma_params(self, args):
         chroma_color = args.chroma_color or self.chroma.get('color', '0xFFFFFF')
@@ -232,6 +244,7 @@ class CameraControl:
         self.socket = context.socket(zmq.REP)
         self.socket.bind('tcp://*:5555')
         self.handle_chroma_params(self.args)
+        self.handle_bsm_timeout(self.args)
         self.ffmpeg_open()
         try:
             while True:
@@ -242,6 +255,9 @@ class CameraControl:
                 except zmq.Again:
                     pass
                 try:
+                    if self.bsm_stopTime is not None and datetime.now() > self.bsm_stopTime:
+                        print('Camera stopped because of bsm stop time')
+                        self.disable_video()
                     if self.showVideo:
                         capture = self.camera.capture_preview()
                         img_bytes = memoryview(capture.get_data_and_size()).tobytes()
@@ -328,6 +344,10 @@ def main():
                         for that image, but no video will be created')
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
                         image and wait for message to start preview again', dest='bsm')
+    parser.add_argument('--bsmx', action='store_true', help='In bsm mode: prevent cameracontrol.py from restarting \
+                        the video. Useful to just execute a command', dest='bsmx')
+    parser.add_argument('--bsmtime', default=0, type=int, help='Keep preview active for the specified \
+                        time in minutes before ending the preview video. Set to 0 to disable', dest='bsm_timeOut')
     parser.add_argument('-v', '--video', default=None, type=str, dest='video_path',
                         help='save the next part of the preview as a video file')
     parser.add_argument('--vframes', default=4, type=int, help='saves shots from the video in an equidistant time',
@@ -343,7 +363,7 @@ def main():
                         help='chroma key sensitivity (value from 0.01 to 1.0 or 0.0 to disable). \
                              If this is set to a value distinct from 0.0 on capture image command chroma keying using \
                              ffmpeg is applied on the image and only this modified image is stored on the pc. \
-                             If this is set on a preview command you get actual live chroma keying.',
+                             If this is set on a preview command you get actual live chroma keying',
                         dest='chroma_sensitivity')
     parser.add_argument('--chromaBlend', type=float, help='chroma key blend (0.0 to 1.0)', dest='chroma_blend')
     parser.add_argument('--exit', action='store_true', help='exit the service')
