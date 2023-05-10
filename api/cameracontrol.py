@@ -344,9 +344,9 @@ def main():
                         for that image, but no video will be created')
     parser.add_argument('-b', '--bsm', action='store_true', help='start preview, but quit preview after taking an \
                         image and wait for message to start preview again', dest='bsm')
-    parser.add_argument('--bsmx', action='store_true', help='In bsm mode: prevent cameracontrol.py from restarting\
+    parser.add_argument('--bsmx', action='store_true', help='In bsm mode: prevent cameracontrol.py from restarting \
                         the video. Useful to just execute a command', dest='bsmx')
-    parser.add_argument('--bsmtime', default=0, type=int, help='In bsm mode: keep preview active for the specified\
+    parser.add_argument('--bsmtime', default=0, type=int, help='Keep preview active for the specified \
                         time in minutes before ending the preview video. Set to 0 to disable', dest='bsm_timeOut')
     parser.add_argument('-v', '--video', default=None, type=str, dest='video_path',
                         help='save the next part of the preview as a video file')
