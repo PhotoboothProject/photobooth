@@ -345,12 +345,12 @@ Button            Raspberry
 
 Picture     ---   GPIO 21
 Collage     ---   GPIO 20
-Custom      ---   GPIO 24
-Video       ---   GPIO  9
+Custom      ---   GPIO  5
+Video       ---   GPIO  7
 Shutdown    ---   GPIO 16
 Print       ---   GPIO 26
-Reboot      ---   GPIO 23
-Move2USB    ---   GPIO 10
+Reboot      ---   GPIO  8
+Move2USB    ---   GPIO  6
 All         ---   GND
 ```
 
@@ -383,11 +383,11 @@ LED                   Raspberry
 Photolight      ---   GPIO 25
 Picture LED     ---   GPIO 19
 Collage LED     ---   GPIO 12
-Custom LED      ---   GPIO  5
-Video LED       ---   GPIO  7
-Shutdown LED    ---   GPIO  8
+Custom LED      ---   GPIO 24
+Video LED       ---   GPIO  9
+Shutdown LED    ---   GPIO 23
 Reboot LED      ---   GPIO 18
-Print LED       ---   GPIO  6
+Print LED       ---   GPIO 10
 Move2USB LED    ---   GPIO 11
 ```
 
