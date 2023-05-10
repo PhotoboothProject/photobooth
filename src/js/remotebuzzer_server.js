@@ -425,6 +425,48 @@ ioServer.on('connection', function (client) {
                 triggerArmed = true;
                 break;
 
+            case 'photo':
+                if (config.remotebuzzer.useleds && config.remotebuzzer.photolight) {
+                    photolight.writeSync(1);
+                }
+                if (config.remotebuzzer.useleds && config.remotebuzzer.pictureled) {
+                    pictureled.writeSync(1);
+                }
+                break;
+
+            case 'collage':
+                if (config.remotebuzzer.useleds && config.remotebuzzer.photolight) {
+                    photolight.writeSync(1);
+                }
+                if (config.remotebuzzer.useleds && config.remotebuzzer.collageled) {
+                    collageled.writeSync(1);
+                }
+                break;
+
+            case 'custom':
+                if (config.remotebuzzer.useleds && config.remotebuzzer.photolight) {
+                    photolight.writeSync(1);
+                }
+                if (config.remotebuzzer.useleds && config.remotebuzzer.customled) {
+                    customled.writeSync(1);
+                }
+                break;
+
+            case 'video':
+                if (config.remotebuzzer.useleds && config.remotebuzzer.photolight) {
+                    photolight.writeSync(1);
+                }
+                if (config.remotebuzzer.useleds && config.remotebuzzer.videoled) {
+                    videoled.writeSync(1);
+                }
+                break;
+
+            case 'print':
+                if (config.remotebuzzer.useleds && config.remotebuzzer.printled) {
+                    printled.writeSync(1);
+                }
+                break;
+
             default:
                 log('Received unknown command [', data, '] - ignoring');
                 break;
