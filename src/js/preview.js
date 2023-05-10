@@ -95,6 +95,7 @@ const photoboothPreview = (function () {
     };
 
     api.getAndDisplayMedia = function (mode) {
+        console.log(api.stream)
         if (api.stream) {
             api.changeVideoMode(mode);
         } else {
