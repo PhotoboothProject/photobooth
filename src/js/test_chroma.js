@@ -1,6 +1,6 @@
-/* exported photoboothChromaTest */
 /* globals photoboothTools */
 
+// eslint-disable-next-line no-unused-vars
 const photoboothChromaTest = (function () {
     const api = {};
 
