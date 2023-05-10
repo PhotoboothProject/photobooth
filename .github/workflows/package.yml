@@ -1,0 +1,30 @@
+name: Build and upload package
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install modules
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Pack zip
+        run: yarn pack:build
+      - name: Publish zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: photobooth
+          path: archives/photobooth-*.zip
+      - name: Remove archives folder
+        run: rm -rf archives
