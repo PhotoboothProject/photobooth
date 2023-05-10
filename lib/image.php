@@ -17,6 +17,11 @@ class Image {
     public $errorLog = [];
 
     /**
+     * @var bool Indicate source image was modified.
+     */
+    public $imageModified = false;
+
+    /**
      * @var int $jpegQuality The quality of the saved jpeg image, from 0 (lowest) to 100 (highest). Default is 80.
      */
     public $jpegQuality = 80;
@@ -500,6 +505,7 @@ class Image {
             return $image;
         }
 
+        $this->imageModified = true;
         return $new;
     }
 
@@ -541,6 +547,7 @@ class Image {
             return $image;
         }
 
+        $this->imageModified = true;
         return $new_image;
     }
 
@@ -592,6 +599,7 @@ class Image {
             return $image;
         }
 
+        $this->imageModified = true;
         return $new;
     }
 
@@ -650,6 +658,7 @@ class Image {
             return $source_file;
         }
 
+        $this->imageModified = true;
         return $new;
     }
 
@@ -724,6 +733,7 @@ class Image {
             return $sourceResource;
         }
 
+        $this->imageModified = true;
         // Return resource with text applied
         return $img;
     }
@@ -780,6 +790,7 @@ class Image {
             return $sourceResource;
         }
 
+        $this->imageModified = true;
         // Return resource with text applied
         return $sourceResource;
     }
@@ -856,6 +867,7 @@ class Image {
             $this->errorLog[] = $e->getMessage();
             throw $e;
         }
+        $this->imageModified = true;
     }
 
     /**
@@ -887,6 +899,7 @@ class Image {
             $this->errorLog[] = $e->getMessage();
             return;
         }
+        $this->imageModified = true;
     }
 
     /**
@@ -1082,6 +1095,7 @@ class Image {
             if (is_resource($qrCode)) {
                 imagedestroy($qrCode);
             }
+            $this->imageModified = true;
             return $imageResource;
         } catch (Exception $e) {
             $this->errorCount++;
@@ -1168,6 +1182,7 @@ class Image {
             // Return unmodified resource
             return $resource;
         }
+        $this->imageModified = true;
         // We destroy the image we have been working with
         imagedestroy($img);
 
