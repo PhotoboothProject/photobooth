@@ -25,7 +25,6 @@ $database = new DatabaseManager();
 $database->db_file = DB_FILE;
 $database->file_dir = IMG_DIR;
 
-$imageModified = false;
 $image_filter = false;
 
 if (!isset($_POST['style'])) {
@@ -76,6 +75,7 @@ foreach ($srcImages as $image) {
     }
 
     $imageHandler = new Image();
+    $imageHandler->imageModified = false;
 
     $imageResource = $imageHandler->createFromImage($filename_tmp);
     if (!$imageResource) {
@@ -101,19 +101,18 @@ foreach ($srcImages as $image) {
                 imageflip($imageResource, IMG_FLIP_BOTH);
             }
 
-            $imageModified = true;
+            $imageHandler->imageModified = true;
         }
 
         // apply filter
         if ($image_filter) {
             applyFilter($image_filter, $imageResource);
-            $imageModified = true;
+            $imageHandler->imageModified = true;
         }
 
         if ($config['picture']['polaroid_effect'] && !$isCollage) {
             $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
             $imageResource = $imageHandler->effectPolaroid($imageResource);
-            $imageModified = true;
         }
 
         if (($config['picture']['take_frame'] && !$isCollage) || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
@@ -123,13 +122,11 @@ foreach ($srcImages as $image) {
                 $imageHandler->frameExtend = false;
             }
             $imageResource = $imageHandler->applyFrame($imageResource);
-            $imageModified = true;
         }
 
         if ($config['picture']['rotation'] !== '0') {
             $imageHandler->resizeRotation = $config['picture']['rotation'];
             $imageResource = $imageHandler->rotateResizeImage($imageResource);
-            $imageModified = true;
         }
     }
     if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
@@ -167,17 +164,16 @@ foreach ($srcImages as $image) {
     imagedestroy($thumbResource);
 
     $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
-    if ($imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
+    if ($imageHandler->imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
         $imageHandler->saveJpeg($imageResource, $filename_photo);
+        // preserve jpeg meta data
+        if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
+            addExifData($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+        }
     } else {
         copy($filename_tmp, $filename_photo);
     }
     imagedestroy($imageResource);
-
-    // preserve jpeg meta data
-    if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
-        addExifData($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
-    }
 
     if (!$config['picture']['keep_original']) {
         unlink($filename_tmp);
