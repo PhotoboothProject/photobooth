@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",
-    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-env": "^7.21.5",
     "@prettier/plugin-php": "^0.19.4",
     "archiver": "^5.3.1",
     "colors": "^1.4.0",
