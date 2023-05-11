@@ -3826,10 +3826,10 @@ matchdep@^2.0.0:
     resolve "^1.4.0"
     stack-trace "0.0.10"
 
-material-icons@^1.13.4:
-  version "1.13.4"
-  resolved "https://registry.yarnpkg.com/material-icons/-/material-icons-1.13.4.tgz#7d8d4a481d990741bfba5de2e35f33450ceda7c3"
-  integrity sha512-sGljRSo7fG6iK6QXM+LG7ZdMFZnRKaqdVCBO3l7nmweOUKQBkc3y3h2jU0HX+49kGET7/xIo8Ujq+4BG+7u7bw==
+material-icons@^1.13.6:
+  version "1.13.6"
+  resolved "https://registry.yarnpkg.com/material-icons/-/material-icons-1.13.6.tgz#ff1d63bfe58300bd3c3c3a790b33625fc862eac5"
+  integrity sha512-I9NjTMwdmq7QECY92ReLqbhWtUZmjlE0eX9UbIHFsSbT7wRp3aj/3ZbuHLFb9w96HG0S4pWbVQjwTQLxyfYyEg==
 
 mdurl@^1.0.1:
   version "1.0.1"
