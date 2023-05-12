@@ -312,7 +312,7 @@ class Image {
      * @param string $ext The file extension to use for the filename. Default is ".jpg".
      * @return string The new filename.
      */
-    public static function create_new_filename($naming = 'random', $ext = '.jpg') {
+    public static function createNewFilename($naming = 'random', $ext = '.jpg') {
         if ($naming === 'dateformatted') {
             $name = date('Ymd_His') . $ext;
         } else {
@@ -334,8 +334,8 @@ class Image {
      *
      * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
      */
-    public function set_new_filename($naming) {
-        $this->newFilename = $this->create_new_filename($naming);
+    public function setNewFilename($naming) {
+        $this->newFilename = $this->createNewFilename($naming);
     }
 
     /**
@@ -343,7 +343,7 @@ class Image {
      *
      * @return string The new filename.
      */
-    public function get_new_filename() {
+    public function getNewFilename() {
         return $this->newFilename;
     }
 
@@ -353,8 +353,8 @@ class Image {
      * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
      * @return string The new filename.
      */
-    public function set_and_get_new_filename($naming) {
-        $this->set_new_filename($naming);
+    public function setAndGetNewFilename($naming) {
+        $this->setNewFilename($naming);
         return $this->newFilename;
     }
 

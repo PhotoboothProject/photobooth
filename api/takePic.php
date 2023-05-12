@@ -77,12 +77,12 @@ function takePicture($filename, $style) {
     }
 }
 
-$random = Image::create_new_filename('random');
+$random = Image::createNewFilename('random');
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
     $file = $_POST['file'];
 } else {
-    $file = Image::create_new_filename($config['picture']['naming']);
+    $file = Image::createNewFilename($config['picture']['naming']);
     if ($config['database']['file'] != 'db') {
         $file = $config['database']['file'] . '_' . $file;
     }

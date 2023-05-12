@@ -23,7 +23,7 @@ if ($printManager->isPrintLocked()) {
 
 $imageHandler = new Image();
 $imageHandler->debugLevel = $config['dev']['loglevel'];
-$random = $imageHandler->create_new_filename('random');
+$random = $imageHandler->createNewFilename('random');
 $filename = $_GET['filename'];
 $uniquename = substr($filename, 0, -4) . '-' . $random;
 $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
