@@ -78,6 +78,7 @@ try {
         }
 
         $imageHandler = new Image();
+        $imageHandler->debugLevel = $config['dev']['loglevel'];
         $imageHandler->imageModified = false;
 
         $imageResource = $imageHandler->createFromImage($filename_tmp);
