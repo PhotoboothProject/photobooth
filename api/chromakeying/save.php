@@ -16,7 +16,7 @@ require_once '../../lib/db.php';
 require_once '../../lib/image.php';
 require_once '../../lib/resize.php';
 
-$file = Image::create_new_filename($config['picture']['naming']);
+$file = Image::createNewFilename($config['picture']['naming']);
 
 $database = new DatabaseManager();
 $database->db_file = DB_FILE;

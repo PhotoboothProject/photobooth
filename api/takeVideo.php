@@ -53,12 +53,12 @@ function takeVideo($filename) {
     }
 }
 
-$random = Image::create_new_filename('random', '.mp4');
+$random = Image::createNewFilename('random', '.mp4');
 
 if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file'])) {
     $file = $_POST['file'];
 } else {
-    $file = Image::create_new_filename($config['picture']['naming'], '.mp4');
+    $file = Image::createNewFilename($config['picture']['naming'], '.mp4');
     if ($config['database']['file'] != 'db') {
         $file = $config['database']['file'] . '_' . $file;
     }
