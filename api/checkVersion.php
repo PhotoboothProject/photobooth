@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 require_once '../lib/log.php';
-require_once '../lib/helper.php';
+require_once '../lib/photobooth.php';
 
 function getLogData($config) {
     try {
