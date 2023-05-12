@@ -256,6 +256,11 @@ try {
     if (is_resource($imageResource)) {
         imagedestroy($imageResource);
     }
+
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        logError($imageHandler->errorLog);
+    }
+
     $ErrorData = [
         'error' => $e->getMessage(),
     ];
@@ -271,6 +276,10 @@ $LogData = [
 ];
 $LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 1) {
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        logError($imageHandler->errorLog);
+    }
+
     logError($LogData);
 }
 echo $LogString;
