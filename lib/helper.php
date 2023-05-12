@@ -5,8 +5,8 @@ require_once __DIR__ . '/log.php';
  * The Photobooth class holds information about the server and Photobooth installation.
  */
 class Photobooth {
-    /** @var string $server_ip The IP address of the server. */
-    public $server_ip;
+    /** @var string $serverIp The IP address of the server. */
+    public $serverIp;
     /** @var string $os The operating system of the server. */
     public $os;
     /** @var string $webRoot The web root directory of the server. */
@@ -22,12 +22,12 @@ class Photobooth {
      * Photobooth constructor.
      */
     function __construct() {
-        $this->server_ip = $this->get_ip();
-        $this->os = $this->server_os();
-        $this->webRoot = $this->get_web_root();
-        $this->photoboothRoot = Helper::get_rootpath();
-        $this->isSubfolderInstall = $this->detect_subfolder_install();
-        $this->version = $this->get_photobooth_version();
+        $this->serverIp = $this->getIp();
+        $this->os = $this->serverOs();
+        $this->webRoot = $this->getWebRoot();
+        $this->photoboothRoot = Helper::getRootpath();
+        $this->isSubfolderInstall = $this->detectSubfolderInstall();
+        $this->version = $this->getPhotoboothVersion();
     }
 
     /**
@@ -35,7 +35,7 @@ class Photobooth {
      *
      * @return string The operating system of the server.
      */
-    public static function server_os() {
+    public static function serverOs() {
         return DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
     }
 
@@ -44,8 +44,8 @@ class Photobooth {
      *
      * @return string The IP address of the server.
      */
-    public static function get_ip() {
-        return self::server_os() == 'linux' ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
+    public static function getIp() {
+        return self::serverOs() == 'linux' ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
     }
 
     /**
@@ -53,8 +53,8 @@ class Photobooth {
      *
      * @return string The web root directory of the server.
      */
-    public static function get_web_root() {
-        return self::server_os() == 'linux' ? $_SERVER['DOCUMENT_ROOT'] : str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
+    public static function getWebRoot() {
+        return self::serverOs() == 'linux' ? $_SERVER['DOCUMENT_ROOT'] : str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
 
     /**
@@ -63,7 +63,7 @@ class Photobooth {
      * @return string The version number of the installed photobooth software, or "unknown" if the version cannot be determined.
      * @throws Exception If the package.json file cannot be found or cannot be decoded.
      */
-    public function get_photobooth_version() {
+    public function getPhotoboothVersion() {
         $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'package.json';
         if (!is_file($packageJsonPath)) {
             throw new Exception('Package file not found.');
@@ -115,7 +115,7 @@ class Photobooth {
     public function checkUpdate() {
         try {
             $remoteVersion = $this->getLatestRelease();
-            $localVersion = $this->get_photobooth_version();
+            $localVersion = $this->getPhotoboothVersion();
             $updateAvailable = $localVersion != $remoteVersion;
 
             return $updateAvailable;
@@ -129,8 +129,8 @@ class Photobooth {
      *
      * @return bool Whether the Photobooth installation is in a subfolder.
      */
-    public static function detect_subfolder_install() {
-        return empty(Helper::get_rootpath()) ? false : true;
+    public static function detectSubfolderInstall() {
+        return empty(Helper::getRootpath()) ? false : true;
     }
 
     /**
@@ -138,13 +138,13 @@ class Photobooth {
      *
      * @return string The URL of the Photobooth installation.
      */
-    public function get_url() {
+    public function getUrl() {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
-        $url = $protocol . '://' . $this->server_ip;
+        $url = $protocol . '://' . $this->serverIp;
         if ($this->isSubfolderInstall) {
-            $url .= Helper::set_absolute_path(Helper::get_rootpath());
+            $url .= Helper::setAbsolutePath(Helper::getRootpath());
         }
-        return Helper::fix_seperator($url);
+        return Helper::fixSeperator($url);
     }
 }
 
@@ -159,8 +159,8 @@ class Helper {
      *
      * @return string The relative path of the file or directory.
      */
-    public static function get_rootpath($relative_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) {
-        return str_replace(Photobooth::get_web_root(), '', realpath($relative_path));
+    public static function getRootpath($relative_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) {
+        return str_replace(Photobooth::getWebRoot(), '', realpath($relative_path));
     }
 
     /**
@@ -170,7 +170,7 @@ class Helper {
      *
      * @return string The fixed path.
      */
-    public static function fix_seperator($fix_path) {
+    public static function fixSeperator($fix_path) {
         return str_replace('\\', '/', $fix_path);
     }
 
@@ -181,7 +181,7 @@ class Helper {
      *
      * @return string The absolute path.
      */
-    public static function set_absolute_path($path) {
+    public static function setAbsolutePath($path) {
         if ($path[0] != '/') {
             $path = '/' . $path;
         }

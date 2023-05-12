@@ -8,7 +8,7 @@ $photobooth = new Photobooth();
 $default_config_file = __DIR__ . '/../config/config.inc.php';
 $my_config_file = __DIR__ . '/../config/my.config.inc.php';
 $basepath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
-$rootpath = Helper::fix_seperator(Helper::get_rootpath($basepath));
+$rootpath = Helper::fixSeperator(Helper::getRootpath($basepath));
 
 $cmds = [
     'windows' => [
@@ -151,7 +151,7 @@ if (empty($config['ui']['folders_lang'])) {
     $config['ui']['folders_lang'] = $rootpath . '/resources/lang';
 }
 
-$config['ui']['folders_lang'] = Helper::set_absolute_path(Helper::fix_seperator($config['ui']['folders_lang']));
+$config['ui']['folders_lang'] = Helper::setAbsolutePath(Helper::fixSeperator($config['ui']['folders_lang']));
 
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
@@ -160,7 +160,7 @@ foreach ($config['folders'] as $key => $folder) {
         $path = $basepath . $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
         $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
 
-        $config['foldersJS'][$key] = Helper::fix_seperator(Helper::get_rootpath($path));
+        $config['foldersJS'][$key] = Helper::fixSeperator(Helper::getRootpath($path));
     }
 
     if (!file_exists($path)) {
@@ -223,7 +223,7 @@ if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
-$bg_url = Helper::set_absolute_path($rootpath . '/resources/img/bg_stone.jpg');
+$bg_url = Helper::setAbsolutePath($rootpath . '/resources/img/bg_stone.jpg');
 
 if (empty($config['background']['defaults'])) {
     $config['background']['defaults'] = 'url(' . $bg_url . ')';
@@ -238,26 +238,26 @@ if (empty($config['background']['chroma'])) {
 }
 
 if (!empty($config['picture']['frame'])) {
-    $pf_root = Helper::get_rootpath($config['picture']['frame']);
-    $config['picture']['htmlframe'] = Helper::set_absolute_path(Helper::fix_seperator($pf_root));
+    $pf_root = Helper::getRootpath($config['picture']['frame']);
+    $config['picture']['htmlframe'] = Helper::setAbsolutePath(Helper::fixSeperator($pf_root));
 }
 
 if (!empty($config['collage']['frame'])) {
-    $cf_root = Helper::get_rootpath($config['collage']['frame']);
-    $config['collage']['htmlframe'] = Helper::set_absolute_path(Helper::fix_seperator($cf_root));
+    $cf_root = Helper::getRootpath($config['collage']['frame']);
+    $config['collage']['htmlframe'] = Helper::setAbsolutePath(Helper::fixSeperator($cf_root));
 }
 
 if (empty($config['webserver']['ip'])) {
-    $config['webserver']['ip'] = $photobooth->get_ip();
+    $config['webserver']['ip'] = $photobooth->getIp();
 }
 
 if (empty($config['qr']['url'])) {
-    $config['qr']['url'] = $photobooth->get_url() . '/api/download.php?image=';
+    $config['qr']['url'] = $photobooth->getUrl() . '/api/download.php?image=';
 }
 
 $config['cheese_img'] = $config['ui']['shutter_cheese_img'];
 if (!empty($config['cheese_img'])) {
-    $config['cheese_img'] = Helper::set_absolute_path($rootpath . $config['ui']['shutter_cheese_img']);
+    $config['cheese_img'] = Helper::setAbsolutePath($rootpath . $config['ui']['shutter_cheese_img']);
 }
 
-$config['photobooth']['version'] = $photobooth->get_photobooth_version();
+$config['photobooth']['version'] = $photobooth->version;

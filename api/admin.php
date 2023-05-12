@@ -160,7 +160,7 @@ if (isset($data['type'])) {
             $newConfig['logo']['enabled'] = false;
             $LogData[] = ['logo' => 'Logo file path does not exist or is empty. Logo disabled'];
         } else {
-            $newConfig['logo']['path'] = Helper::fix_seperator($newConfig['logo']['path']);
+            $newConfig['logo']['path'] = Helper::fixSeperator($newConfig['logo']['path']);
         }
     }
 
