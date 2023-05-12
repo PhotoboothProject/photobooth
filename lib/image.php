@@ -7,6 +7,11 @@ class Image {
     public $newFilename;
 
     /**
+     * @var int The debug level for error handling. Set to 0 avoid failing on error.
+     */
+    public $debugLevel = 0;
+
+    /**
      * @var int Error counter.
      */
     public $errorCount = 0;
@@ -501,6 +506,12 @@ class Image {
             if (is_resource($new)) {
                 imagedestroy($new);
             }
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
             // Return unmodified resource
             return $image;
         }
@@ -542,6 +553,11 @@ class Image {
         } catch (Exception $e) {
             $this->errorCount++;
             $this->errorLog[] = $e->getMessage();
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
 
             // Return unmodified resource
             return $image;
@@ -595,6 +611,12 @@ class Image {
             if (is_resource($new)) {
                 imagedestroy($new);
             }
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
             // Return unmodified resource
             return $image;
         }
@@ -654,6 +676,12 @@ class Image {
             if (is_resource($new)) {
                 imagedestroy($new);
             }
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
             // Return unmodified resource
             return $source_file;
         }
@@ -729,6 +757,12 @@ class Image {
             if (is_resource($img)) {
                 imagedestroy($img);
             }
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
             // Return unmodified resource
             return $sourceResource;
         }
@@ -785,6 +819,11 @@ class Image {
         } catch (Exception $e) {
             $this->errorCount++;
             $this->errorLog[] = $e->getMessage();
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
 
             // Return unmodified resource
             return $sourceResource;
@@ -897,6 +936,12 @@ class Image {
         } catch (Exception $e) {
             $this->errorCount++;
             $this->errorLog[] = $e->getMessage();
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
             return;
         }
         $this->imageModified = true;
@@ -1101,9 +1146,17 @@ class Image {
             $this->errorCount++;
             $this->errorLog[] = $e->getMessage();
 
+            // Try to clear cache
             if (is_resource($qrCode)) {
                 imagedestroy($qrCode);
             }
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
+            // return unmodified resource
             return $imageResource;
         }
     }
@@ -1177,8 +1230,16 @@ class Image {
             $this->errorCount++;
             $this->errorLog[] = $e->getMessage();
 
-            // Clear cache
-            imagedestroy($img);
+            // Try to clear cache
+            if (is_resource($img)) {
+                imagedestroy($img);
+            }
+
+            // Re-throw exception on loglevel > 1
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
             // Return unmodified resource
             return $resource;
         }
