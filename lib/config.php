@@ -3,6 +3,7 @@ define('SERVER_OS', DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 
 
 require_once __DIR__ . '/arrayDeepMerge.php';
 require_once __DIR__ . '/helper.php';
+require_once __DIR__ . '/photobooth.php';
 
 $photobooth = new Photobooth();
 $default_config_file = __DIR__ . '/../config/config.inc.php';
