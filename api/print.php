@@ -56,12 +56,18 @@ if (!file_exists($filename_print)) {
         } else {
             $source = imagerotate($source, 90, 0);
             $imageHandler->qrRotate = true;
+            if (!$source) {
+                throw new Exception('Can\'t rotate image resource.');
+            }
         }
 
         if ($config['print']['print_frame']) {
             $imageHandler->framePath = $config['print']['frame'];
             $imageHandler->frameExtend = false;
             $source = $imageHandler->applyFrame($source);
+            if (!$source) {
+                throw new Exception('Failed to apply frame to image resource.');
+            }
         }
 
         if ($config['print']['qrcode'] && $imageHandler->qrAvailable) {
@@ -101,19 +107,33 @@ if (!file_exists($filename_print)) {
             $imageHandler->textLineSpacing = $config['textonprint']['linespace'];
 
             $source = $imageHandler->applyText($source);
+            if (!$source) {
+                throw new Exception('Failed to apply text to image resource.');
+            }
         }
 
         if ($config['print']['crop']) {
             $imageHandler->resizeMaxWidth = $config['print']['crop_width'];
             $imageHandler->resizeMaxHeight = $config['print']['crop_height'];
             $source = $imageHandler->resizeCropImage($source);
+            if (!$source) {
+                throw new Exception('Failed to crop image resource.');
+            }
         }
 
         $imageHandler->jpegQuality = 100;
         if (!$imageHandler->saveJpeg($source, $filename_print)) {
             throw new Exception('Can\'t save print image.');
         }
+
+        // clear cache
+        imagedestroy($source);
     } catch (Exception $e) {
+        // Try to clear cache
+        if (is_resource($source)) {
+            imagedestroy($source);
+        }
+        // log error and die
         $errormsg = basename($_SERVER['PHP_SELF']) . ': ' . $e->getMessage();
         logErrorAndDie($errormsg);
     }
