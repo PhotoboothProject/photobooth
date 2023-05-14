@@ -11,7 +11,6 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     $editImages = [];
     $rotate_after_creation = false;
     $image_filter = false;
-    $imageModified = false;
     if (!empty($filter) && $filter !== 'plain') {
         $image_filter = $filter;
     }
@@ -76,26 +75,24 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             } elseif ($c->pictureFlip === 'both') {
                 imageflip($imageResource, IMG_FLIP_BOTH);
             }
-            $imageModified = true;
+            $imageHandler->imageModified = true;
         }
 
         // apply filter
         if ($image_filter) {
             applyFilter($image_filter, $imageResource);
-            $imageModified = true;
+            $imageHandler->imageModified = true;
         }
 
         if ($c->pictureRotation !== '0') {
             $imageHandler->resizeRotation = $c->pictureRotation;
             $imageHandler->resizeBgColor = $c->collageBackgroundColor;
             $imageResource = $imageHandler->rotateResizeImage($imageResource);
-            $imageModified = true;
         }
 
         if ($c->picturePolaroidEffect === 'enabled') {
             $imageHandler->polaroidRotation = $c->picturePolaroidRotation;
             $imageResource = $imageHandler->effectPolaroid($imageResource);
-            $imageModified = true;
         }
 
         $width = imagesx($imageResource);
@@ -108,11 +105,12 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             $imageResource = imagerotate($imageResource, 90, $bg_color_hex);
             $width = imagesx($imageResource);
             $height = imagesy($imageResource);
-            $imageModified = true;
+            $imageHandler->imageModified = true;
         }
 
-        if ($imageModified) {
+        if ($imageHandler->imageModified) {
             $imageHandler->saveJpeg($imageResource, $editImages[$i]);
+            $imageHandler->imageModified = false;
         }
 
         imagedestroy($imageResource);
