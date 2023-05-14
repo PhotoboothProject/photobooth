@@ -33,8 +33,7 @@ try {
     $image_filter = false;
 
     if (!isset($_POST['filter'])) {
-        logError('No filter provided! Using plain image filter!');
-        $image_filter = 'plain';
+        logError(['Warning' => 'No filter provided.']);
     } elseif (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
         $image_filter = $_POST['filter'];
     }
@@ -149,21 +148,16 @@ try {
             }
         }
         if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
-            try {
-                $chroma_size = substr($config['keying']['size'], 0, -2);
-                $imageHandler->resizeMaxWidth = $chroma_size;
-                $imageHandler->resizeMaxHeight = $chroma_size;
-                $chromaCopyResource = $imageHandler->resizeImage($imageResource);
-                $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
-                if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
-                    throw new Exception('Failed to save chroma image copy.');
-                }
+            $chroma_size = substr($config['keying']['size'], 0, -2);
+            $imageHandler->resizeMaxWidth = $chroma_size;
+            $imageHandler->resizeMaxHeight = $chroma_size;
+            $chromaCopyResource = $imageHandler->resizeImage($imageResource);
+            $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
+            if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
+                logError(['Warning' => 'Failed to save chroma image copy.']);
+            }
+            if (is_resource($chromaCopyResource)) {
                 imagedestroy($chromaCopyResource);
-            } catch (Exception $e) {
-                if (is_resource($chromaCopyResource)) {
-                    imagedestroy($chromaCopyResource);
-                }
-                logError('Warning: ' . $e->getMessage());
             }
         }
 
@@ -185,22 +179,17 @@ try {
         }
 
         // image scale, create thumbnail
-        try {
-            $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
-            $imageHandler->resizeMaxWidth = $thumb_size;
-            $imageHandler->resizeMaxHeight = $thumb_size;
-            $thumbResource = $imageHandler->resizeImage($imageResource);
+        $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+        $imageHandler->resizeMaxWidth = $thumb_size;
+        $imageHandler->resizeMaxHeight = $thumb_size;
+        $thumbResource = $imageHandler->resizeImage($imageResource);
 
-            $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
-            if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-                throw new Exception('Failed to create thumbnail.');
-            }
+        $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+        if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
+            logError(['Warning' => 'Failed to create thumbnail.']);
+        }
+        if (is_resource($thumbResource)) {
             imagedestroy($thumbResource);
-        } catch (Exception $e) {
-            if (is_resource($thumbResource)) {
-                imagedestroy($thumbResource);
-            }
-            logError('Warning: ' . $e->getMessage());
         }
 
         $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
@@ -219,37 +208,32 @@ try {
         }
         imagedestroy($imageResource);
 
-        try {
-            // insert into database
-            if ($config['database']['enabled']) {
-                if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === true)) {
-                    $database->appendContentToDB($image);
-                }
+        // insert into database
+        if ($config['database']['enabled']) {
+            if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === true)) {
+                $database->appendContentToDB($image);
             }
+        }
 
-            // Change permissions
-            $picture_permissions = $config['picture']['permissions'];
-            if (!chmod($filename_photo, octdec($picture_permissions))) {
-                throw new Exception('Failed to change picture permissions.');
-            }
+        // Change permissions
+        $picture_permissions = $config['picture']['permissions'];
+        if (!chmod($filename_photo, octdec($picture_permissions))) {
+            logError(['Warning' => 'Failed to change picture permissions.']);
+        }
 
-            if (!$config['picture']['keep_original']) {
-                if (!unlink($filename_tmp)) {
-                    throw new Exception('Failed to remove temporary photo.');
-                }
+        if (!$config['picture']['keep_original']) {
+            if (!unlink($filename_tmp)) {
+                logError(['Warning' => 'Failed to remove temporary photo.']);
             }
+        }
 
-            if ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === false) {
-                if (!unlink($filename_photo)) {
-                    throw new Exception('Failed to remove photo.');
-                }
-                if (!unlink($filename_thumb)) {
-                    throw new Exception('Failed to remove thumbnail.');
-                }
+        if ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === false) {
+            if (!unlink($filename_photo)) {
+                logError(['Warning' => 'Failed to remove photo.']);
             }
-        } catch (Exception $e) {
-            // Handle the exception
-            logError('Warning: ' . $e->getMessage());
+            if (!unlink($filename_thumb)) {
+                logError(['Warning' => 'Failed to remove thumbnail.']);
+            }
         }
     }
 } catch (Exception $e) {
