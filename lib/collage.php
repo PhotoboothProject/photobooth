@@ -23,17 +23,17 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     list($dashed_r, $dashed_g, $dashed_b) = sscanf($c->collageDashedLineColor, '#%02x%02x%02x');
 
     if (!is_array($srcImagePaths)) {
-        return false;
+        throw new Exception('Source image paths are not an array.');
     }
 
     // validate that there is the correct amount of images
     if (($c->collagePlaceholder && count($srcImagePaths) !== $c->collageLimit - 1) || (!$c->collagePlaceholder && count($srcImagePaths) !== $c->collageLimit)) {
-        return false;
+        throw new Exception('Invalid number of images.');
     }
 
     // If there is a placeholder defined, we need to make sure that the image at the placeholder path exists.
     if ($c->collagePlaceholder && !testFile($c->collagePlaceholderPath)) {
-        return false;
+        throw new Exception('Collage placeholder does not exist.');
     }
 
     //Use offset to reflect image file numbering
@@ -44,12 +44,13 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             $placeholderOffset = 1;
         } else {
             if (!file_exists($srcImagePaths[$i - $placeholderOffset])) {
-                $errormsg = basename($_SERVER['PHP_SELF']) . ': File ' . $srcImagePaths[$i] . ' does not exist';
-                logErrorAndDie($errormsg);
+                throw new Exception('The file ' . $srcImagePaths[$i] . ' does not exist.');
             }
             $singleimage = substr($srcImagePaths[$i - $placeholderOffset], 0, -4);
             $editfilename = $singleimage . '-edit.jpg';
-            copy($srcImagePaths[$i - $placeholderOffset], $editfilename);
+            if (!copy($srcImagePaths[$i - $placeholderOffset], $editfilename)) {
+                throw new Exception('Failed to copy image for editing.');
+            }
             $editImages[] = $editfilename;
         }
     }
@@ -63,8 +64,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
         $imageResource = $imageHandler->createFromImage($editImages[$i]);
         // Only jpg/jpeg are supported
         if (!$imageResource) {
-            $errormsg = basename($_SERVER['PHP_SELF']) . ': Could not read jpeg file. Are you taking raws?';
-            logErrorAndDie($errormsg);
+            throw new Exception('Failed to create image resource.');
         }
 
         if ($c->pictureFlip !== 'off') {
