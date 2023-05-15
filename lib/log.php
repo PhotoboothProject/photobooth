@@ -21,15 +21,36 @@ class DataLogger {
         if ($data === null) {
             $data = $this->getLogData();
         }
-        if (!empty($data)) {
-            $logFile = $this->logFile;
-            $fileData = date('c') . ":\n" . print_r($data, true) . "\n";
-            if (is_file($logFile)) {
-                $fileData .= file_get_contents($logFile);
+
+        $logFile = $this->logFile;
+        $fileData = date('Y-m-d H:i:s') . ':' . PHP_EOL;
+
+        foreach ($data as $entry) {
+            if (is_array($entry)) {
+                $formattedEntry = '';
+                foreach ($entry as $key => $value) {
+                    if (is_array($value)) {
+                        $formattedValue = implode(', ', $value);
+                    } elseif (is_bool($value)) {
+                        $formattedValue = $value ? 'true' : 'false';
+                    } else {
+                        $formattedValue = $value;
+                    }
+                    $formattedEntry .= "'$key' : $formattedValue, ";
+                }
+                $formattedEntry = rtrim($formattedEntry, ', ');
+                $fileData .= rtrim($formattedEntry) . PHP_EOL;
+            } else {
+                $fileData .= $entry . PHP_EOL;
             }
-            file_put_contents($logFile, $fileData);
-            $this->logData = [];
         }
+
+        if (is_file($logFile)) {
+            $fileData .= file_get_contents($logFile);
+        }
+
+        file_put_contents($logFile, $fileData);
+        $this->logData = [];
     }
 
     public function logErrorAndDie($errormsg) {
