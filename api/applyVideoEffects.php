@@ -69,7 +69,7 @@ try {
     if (!$config['video']['collage_keep_images']) {
         foreach ($frames as $frame) {
             if (!unlink($frame)) {
-                throw new Exception('Error while deleting ' . $frame);
+                logError(['Warning' => 'Error while deleting ' . $frame]);
             }
         }
     } else {
@@ -78,6 +78,7 @@ try {
 
     foreach ($images as $image) {
         $imageHandler = new Image();
+        $imageHandler->debugLevel = $config['dev']['loglevel'];
 
         $imageResource = $imageHandler->createFromImage($image);
         if (!$imageResource) {
@@ -89,7 +90,8 @@ try {
         $thumbResource = $imageHandler->resizeImage($imageResource);
         $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
         if (!$imageHandler->saveJpeg($thumbResource, $thumbsFolder . basename($image))) {
-            throw new Exception('Failed to create thumbnail.');
+            $imageHandler->errorCount++;
+            $imageHandler->errorLog[] = ['Warning' => 'Failed to create thumbnail.'];
         }
         imagedestroy($thumbResource);
 
@@ -109,7 +111,8 @@ try {
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($image)) {
-                throw new Exception('Failed to delete photo.');
+                $imageHandler->errorCount++;
+                $imageHandler->errorLog[] = ['Warning' => 'Failed to delete photo.'];
             }
         }
 
@@ -118,7 +121,8 @@ try {
         }
         $picture_permissions = $config['picture']['permissions'];
         if (!chmod($newFile, octdec($picture_permissions))) {
-            throw new Exception('Failed to change picture permissions.');
+            $imageHandler->errorCount++;
+            $imageHandler->errorLog[] = ['Warning' => 'Failed to change picture permissions.'];
         }
     }
 
@@ -128,7 +132,8 @@ try {
         }
         if (!$config['picture']['keep_original']) {
             if (!unlink($filenameTmp)) {
-                throw new Exception('Failed to remove temporary photo.');
+                $imageHandler->errorCount++;
+                $imageHandler->errorLog[] = ['Warning' => 'Failed to remove temporary photo.'];
             }
         }
         $file = $collageFilename;
@@ -167,7 +172,8 @@ try {
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($filenameTmp)) {
-                throw new Exception('Failed to remove temporary photo.');
+                $imageHandler->errorCount++;
+                $imageHandler->errorLog[] = ['Warning' => 'Failed to remove temporary photo.'];
             }
         }
 
@@ -191,11 +197,15 @@ try {
         // Change permissions
         $picture_permissions = $config['picture']['permissions'];
         if (!chmod($filenameOutput, octdec($picture_permissions))) {
-            throw new Exception('Failed to change picture permissions.');
+            $imageHandler->errorCount++;
+            $imageHandler->errorLog[] = ['Warning' => 'Failed to change picture permissions.'];
         }
     }
 } catch (Exception $e) {
     // Handle the exception
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        logError($imageHandler->errorLog);
+    }
     $ErrorData = [
         'error' => $e->getMessage(),
     ];
@@ -216,6 +226,10 @@ $LogData = [
 ];
 $LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 1) {
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        logError($imageHandler->errorLog);
+    }
+
     logError($LogData);
 }
 echo $LogString;
