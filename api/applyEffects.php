@@ -154,7 +154,8 @@ try {
             $chromaCopyResource = $imageHandler->resizeImage($imageResource);
             $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
             if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
-                logError(['Warning' => 'Failed to save chroma image copy.']);
+                $imageHandler->errorCount++;
+                $imageHandler->errorLog[] = ['Warning' => 'Failed to save chroma image copy.'];
             }
             if (is_resource($chromaCopyResource)) {
                 imagedestroy($chromaCopyResource);
@@ -186,7 +187,8 @@ try {
 
         $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
         if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-            logError(['Warning' => 'Failed to create thumbnail.']);
+            $imageHandler->errorCount++;
+            $imageHandler->errorLog[] = ['Warning' => 'Failed to create thumbnail.'];
         }
         if (is_resource($thumbResource)) {
             imagedestroy($thumbResource);
@@ -218,21 +220,25 @@ try {
         // Change permissions
         $picture_permissions = $config['picture']['permissions'];
         if (!chmod($filename_photo, octdec($picture_permissions))) {
-            logError(['Warning' => 'Failed to change picture permissions.']);
+            $imageHandler->errorCount++;
+            $imageHandler->errorLog[] = ['Warning' => 'Failed to change picture permissions.'];
         }
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($filename_tmp)) {
-                logError(['Warning' => 'Failed to remove temporary photo.']);
+                $imageHandler->errorCount++;
+                $imageHandler->errorLog[] = ['Warning' => 'Failed to remove temporary photo.'];
             }
         }
 
         if ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === false) {
             if (!unlink($filename_photo)) {
-                logError(['Warning' => 'Failed to remove photo.']);
+                $imageHandler->errorCount++;
+                $imageHandler->errorLog[] = ['Warning' => 'Failed to remove photo.'];
             }
             if (!unlink($filename_thumb)) {
-                logError(['Warning' => 'Failed to remove thumbnail.']);
+                $imageHandler->errorCount++;
+                $imageHandler->errorLog[] = ['Warning' => 'Failed to remove thumbnail.'];
             }
         }
     }
