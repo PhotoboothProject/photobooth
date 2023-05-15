@@ -14,9 +14,13 @@ if (!isset($_POST['imgData']) || empty($_POST['imgData'])) {
 require_once '../../lib/config.php';
 require_once '../../lib/db.php';
 require_once '../../lib/image.php';
-require_once '../../lib/resize.php';
+require_once '../../lib/log.php';
 
-$file = Image::createNewFilename($config['picture']['naming']);
+$imageHandler = new Image();
+$imageHandler->debugLevel = $config['dev']['loglevel'];
+$imageHandler->jpegQuality = $config['jpeg_quality']['image'];
+
+$file = $imageHandler->createNewFilename($config['picture']['naming']);
 
 $database = new DatabaseManager();
 $database->db_file = DB_FILE;
@@ -37,40 +41,51 @@ try {
     $img = str_replace('data:image/png;base64,', '', $img);
     $img = str_replace(' ', '+', $img);
     $data = base64_decode($img);
+
     $imageResource = imagecreatefromstring($data);
     if (!$imageResource) {
         throw new Exception('Failed to create image from data.');
     }
-    if (!imagejpeg($imageResource, $filename_photo, $config['jpeg_quality']['image'])) {
+    if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
         throw new Exception('Failed to save ' . $filename_photo);
     }
-    if (!copy($filename_photo, $filename_keying)) {
-        throw new Exception('Failed to save ' . $filename_keying);
+    if (!$imageHandler->saveJpeg($imageResource, $filename_keying)) {
+        $imageHandler->errorCount++;
+        $imageHandler->errorLog[] = ['Warning' => 'Failed to save chroma image copy.'];
     }
 
     // image scale, create thumbnail
-    $thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
-    if (!$thumbResource) {
-        throw new Exception('Failed to resize thumbnail.');
-    }
-    if (!imagejpeg($thumbResource, $filename_thumb, $config['jpeg_quality']['thumb'])) {
-        throw new Exception('Failed to save thumbnail.');
+    $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+    $imageHandler->resizeMaxWidth = $thumb_size;
+    $imageHandler->resizeMaxHeight = $thumb_size;
+    $thumbResource = $imageHandler->resizeImage($imageResource);
+
+    $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+    if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
+        $imageHandler->errorCount++;
+        $imageHandler->errorLog[] = ['Warning' => 'Failed to create thumbnail.'];
     }
 
     // clear cache
-    imagedestroy($thumbResource);
+    if (is_resource($thumbResource)) {
+        imagedestroy($thumbResource);
+    }
+
     imagedestroy($imageResource);
 
     // insert into database
     if ($config['database']['enabled']) {
         if (!$database->appendContentToDB($file)) {
-            throw new Exception('Failed to add ' . $file . ' to database.');
+            $imageHandler->errorCount++;
+            $imageHandler->errorLog[] = ['Warning' => 'Failed to add ' . $file . ' to database.'];
         }
     }
 
     // Change permissions
+    $picture_permissions = $config['picture']['permissions'];
     if (!chmod($filename_photo, octdec($picture_permissions))) {
-        throw new Exception('Failed to change file permissions.');
+        $imageHandler->errorCount++;
+        $imageHandler->errorLog[] = ['Warning' => 'Failed to change picture permissions.'];
     }
 } catch (Exception $e) {
     // Try to clear cache
@@ -80,20 +95,31 @@ try {
     if (is_resource($imageResource)) {
         imagedestroy($imageResource);
     }
-    $logData = [
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        logError($imageHandler->errorLog);
+    }
+    $ErrorData = [
         'success' => false,
         'error' => $e->getMessage(),
         'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $logString = json_encode($logData);
-    die($logString);
+    logError($ErrorData);
+    $ErrorString = json_encode($ErrorData);
+    die($ErrorString);
 }
 
 // send imagename to frontend
-$logData = [
+$LogData = [
     'success' => true,
     'filename' => $file,
     'php' => basename($_SERVER['PHP_SELF']),
 ];
-$logString = json_encode($logData);
-die($logString);
+if ($config['dev']['loglevel'] > 1) {
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        logError($imageHandler->errorLog);
+    }
+
+    logError($LogData);
+}
+$LogString = json_encode($LogData);
+die($LogString);
