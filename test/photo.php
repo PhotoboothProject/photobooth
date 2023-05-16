@@ -1,64 +1,90 @@
 <?php
 require_once '../lib/config.php';
 require_once '../lib/filter.php';
-require_once '../lib/polaroid.php';
-require_once '../lib/resize.php';
-require_once '../lib/applyText.php';
-require_once '../lib/applyFrame.php';
 require_once '../lib/applyEffects.php';
-
-$style = isset($_GET['style']) ? $_GET['style'] : null;
-$filter = isset($_GET['filter']) ? $_GET['filter'] : 'plain';
-$chromaEnabled = $config['keying']['enabled'] || $style === 'chroma';
+require_once '../lib/image.php';
 
 $demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
 $demoFolder = realpath($demoPath);
 $demoImage = 'adi-goldstein-Hli3R6LKibo-unsplash.jpg';
 
-$name = date('Ymd_His') . '.jpg';
-$filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $name;
-copy($demoFolder . DIRECTORY_SEPARATOR . $demoImage, $filename_tmp);
+$imageHandler = new Image();
+$imageHandler->debugLevel = $config['dev']['loglevel'];
+$imageHandler->imageModified = false;
 
-$out_file = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
-$out_fileRoot = $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
-$out_thumb_file = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_thumb_' . $name;
-$out_thumb_fileRoot = $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'result_thumb_' . $name;
-$out_keying_file = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_keying_' . $name;
-$out_keying_fileRoot = $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'result_keying_' . $name;
+$imageResource = $imageHandler->createFromImage($demoFolder . DIRECTORY_SEPARATOR . $demoImage);
+if (!$imageResource) {
+    throw new Exception('Error creating image resource.');
+}
+$imageHandler->framePath = $config['picture']['frame'];
 
-$picture_frame = $config['picture']['frame'];
-
-$imageResource = imagecreatefromjpeg($filename_tmp);
-list($imageResource, $imageModified) = editSingleImage($config, $imageResource, $filter, true, $picture_frame, false);
-if ($chromaEnabled) {
-    $chroma_size = substr($config['keying']['size'], 0, -2);
-    $chromaCopyResource = resizeImage($imageResource, $chroma_size, $chroma_size);
-    imagejpeg($chromaCopyResource, $out_keying_file, $config['jpeg_quality']['chroma']);
-    imagedestroy($chromaCopyResource);
+if ($config['picture']['flip'] !== 'off') {
+    try {
+        if ($config['picture']['flip'] === 'horizontal') {
+            imageflip($imageResource, IMG_FLIP_HORIZONTAL);
+        } elseif ($config['picture']['flip'] === 'vertical') {
+            imageflip($imageResource, IMG_FLIP_VERTICAL);
+        } elseif ($config['picture']['flip'] === 'both') {
+            imageflip($imageResource, IMG_FLIP_BOTH);
+        }
+        $imageHandler->imageModified = true;
+    } catch (Exception $e) {
+        throw new Exception('Error flipping image.');
+    }
 }
 
-$configText = $config['textonpicture'];
-list($imageResource, $imageModified) = addTextToImage($configText, $imageResource, $imageModified, false);
+// apply filter
+$image_filter = $config['filters']['defaults'];
+if ($image_filter) {
+    try {
+        applyFilter($image_filter, $imageResource);
+        $imageHandler->imageModified = true;
+    } catch (Exception $e) {
+        throw new Exception('Error applying image filter.');
+    }
+}
 
-$thumb_size = substr($config['picture']['thumb_size'], 0, -2);
-$thumbResource = resizeImage($imageResource, $thumb_size, $thumb_size);
+if ($config['picture']['polaroid_effect']) {
+    $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
+    $imageResource = $imageHandler->effectPolaroid($imageResource);
+    if (!$imageResource) {
+        throw new Exception('Error applying polaroid effect.');
+    }
+}
 
-imagejpeg($thumbResource, $out_thumb_file, $config['jpeg_quality']['thumb']);
-imagedestroy($thumbResource);
+if ($config['picture']['take_frame']) {
+    $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
+    $imageResource = $imageHandler->applyFrame($imageResource);
+    if (!$imageResource) {
+        throw new Exception('Error applying frame to image resource.');
+    }
+}
 
-compressImage($config, $imageModified, $imageResource, $filename_tmp, $out_file);
+if ($config['picture']['rotation'] !== '0') {
+    $imageHandler->resizeRotation = $config['picture']['rotation'];
+    $imageResource = $imageHandler->rotateResizeImage($imageResource);
+    if (!$imageResource) {
+        throw new Exception('Error resizing resource.');
+    }
+}
 
-unlink($filename_tmp);
-?>
-<html>
-<body style="width: 80%; height:80%; background-color: <?php echo $config['colors']['primary']; ?>">
-<div><p>Image</p></div>
-<img style="max-width: 100%;  max-height: 100%; " src="../<?php echo $out_fileRoot; ?>">
-<div><p>Thumbnail:</p></div>
-<img style="max-width: 100%;  max-height: 100%; " src="../<?php echo $out_thumb_fileRoot; ?>">
-<?php if ($chromaEnabled) { ?>
-    <div><p>Chroma:</p></div>
-    <img style="max-width: 100%;  max-height: 100%; " src="../<?php echo $out_keying_fileRoot; ?>">
-<?php } ?>
-</body>
-</html>
+if ($config['textonpicture']['enabled']) {
+    $imageHandler->fontSize = $config['textonpicture']['font_size'];
+    $imageHandler->fontRotation = $config['textonpicture']['rotation'];
+    $imageHandler->fontLocationX = $config['textonpicture']['locationx'];
+    $imageHandler->fontLocationY = $config['textonpicture']['locationy'];
+    $imageHandler->fontColor = $config['textonpicture']['font_color'];
+    $imageHandler->fontPath = $config['textonpicture']['font'];
+    $imageHandler->textLine1 = $config['textonpicture']['line1'];
+    $imageHandler->textLine1 = $config['textonpicture']['line2'];
+    $imageHandler->textLine3 = $config['textonpicture']['line3'];
+    $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
+    $imageResource = $imageHandler->applyText($imageResource);
+    if (!$imageResource) {
+        throw new Exception('Error applying text to image resource.');
+    }
+}
+
+header('Content-Type: image/jpeg');
+imagejpeg($imageResource);
+imagedestroy($imageResource);
