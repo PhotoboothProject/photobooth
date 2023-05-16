@@ -9,6 +9,8 @@ require_once '../lib/applyEffects.php';
 require_once '../lib/image.php';
 require_once '../lib/log.php';
 
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 try {
     if (!extension_loaded('gd')) {
         throw new Exception('GD library not loaded! Please enable GD!');
@@ -33,7 +35,7 @@ try {
     $image_filter = false;
 
     if (!isset($_POST['filter'])) {
-        logError(['Warning' => 'No filter provided.']);
+        $Logger->addLogData(['Warning' => 'No filter provided.']);
     } elseif (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
         $image_filter = $_POST['filter'];
     }
@@ -42,8 +44,10 @@ try {
     $ErrorData = [
         'error' => $e->getMessage(),
     ];
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
+
     $ErrorString = json_encode($ErrorData);
-    logError($ErrorData);
     die($ErrorString);
 }
 
@@ -247,30 +251,30 @@ try {
     if (is_resource($imageResource)) {
         imagedestroy($imageResource);
     }
-
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        logError($imageHandler->errorLog);
+        $Logger->addLogData($imageHandler->errorLog);
     }
-
     $ErrorData = [
         'error' => $e->getMessage(),
     ];
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
+
     $ErrorString = json_encode($ErrorData);
-    logError($ErrorData);
     die($ErrorString);
 }
 
 $LogData = [
     'file' => $file,
     'images' => $srcImages,
-    'php' => basename($_SERVER['PHP_SELF']),
 ];
-$LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 1) {
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        logError($imageHandler->errorLog);
+        $Logger->addLogData($imageHandler->errorLog);
     }
-
-    logError($LogData);
+    $Logger->addLogData($LogData);
+    $Logger->logToFile();
 }
+
+$LogString = json_encode($LogData);
 echo $LogString;
