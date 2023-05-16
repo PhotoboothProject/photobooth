@@ -5,15 +5,15 @@ require_once '../lib/config.php';
 require_once '../lib/db.php';
 require_once '../lib/printdb.php';
 
-$LogData = [
-    'php' => basename($_SERVER['PHP_SELF']),
-];
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 
 $data = $_POST;
 
 if (isset($data['type'])) {
     $newConfig = [];
-    $LogData[] = ['config' => 'Saving Photobooth configuration'];
+    $Logger->addLogData(['config' => 'Saving Photobooth configuration']);
 
     foreach ($config as $k => $conf) {
         if (is_array($conf)) {
@@ -49,7 +49,7 @@ if (isset($data['type'])) {
             }
         } else {
             $newConfig['login']['enabled'] = false;
-            $LogData[] = ['login' => 'Password not set. Login disabled.'];
+            $Logger->addLogData(['login' => 'Password not set. Login disabled.']);
         }
     } else {
         $newConfig['login']['password'] = null;
@@ -57,9 +57,7 @@ if (isset($data['type'])) {
 
     if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
         $newConfig['preview']['camTakesPic'] = false;
-        $LogData[] = [
-            'preview' => 'Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.',
-        ];
+        $Logger->addLogData(['preview' => 'Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.']);
     }
 
     if ($newConfig['ui']['style'] === 'custom') {
@@ -71,9 +69,7 @@ if (isset($data['type'])) {
             !is_readable('../resources/css/custom_live_chromakeying.css')
         ) {
             $newConfig['ui']['style'] = 'modern_squared';
-            $LogData[] = [
-                'ui' => 'No custom style resources found. Falling back to modern squared style.',
-            ];
+            $Logger->addLogData(['ui' => 'No custom style resources found. Falling back to modern squared style.']);
         } else {
             if (!file_exists('../template/custom.template.php')) {
                 copy('../template/modern.template.php', '../template/custom.template.php');
@@ -96,15 +92,11 @@ if (isset($data['type'])) {
     if (SERVER_OS === 'windows') {
         if (!empty($newConfig['remotebuzzer']['enabled'])) {
             $newConfig['remotebuzzer']['enabled'] = false;
-            $LogData[] = [
-                'remotebuzzer' => 'Remotebuzzer server unsupported on Windows.',
-            ];
+            $Logger->addLogData(['remotebuzzer' => 'Remotebuzzer server unsupported on Windows.']);
         }
         if (!empty($newConfig['synctodrive']['enabled'])) {
             $newConfig['synctodrive']['enabled'] = false;
-            $LogData[] = [
-                'synctodrive' => 'Sync pictures to USB stick unsupported on Windows.',
-            ];
+            $Logger->addLogData(['synctodrive' => 'Sync pictures to USB stick unsupported on Windows.']);
         }
     }
 
@@ -124,9 +116,7 @@ if (isset($data['type'])) {
         if (isset($newConfig['get_request']['server']) && empty($newConfig['get_request']['server'])) {
             $newConfig['get_request']['countdown'] = false;
             $newConfig['get_request']['processed'] = false;
-            $LogData[] = [
-                'get_request' => 'No GET request server entered. Disabled GET request options.',
-            ];
+            $Logger->addLogData(['get_request' => 'No GET request server entered. Disabled GET request options.']);
         }
     }
 
@@ -158,7 +148,7 @@ if (isset($data['type'])) {
     if ($newConfig['logo']['enabled']) {
         if (empty($newConfig['logo']['path']) && !file_exists('..' . DIRECTORY_SEPARATOR . $newConfig['logo']['path'])) {
             $newConfig['logo']['enabled'] = false;
-            $LogData[] = ['logo' => 'Logo file path does not exist or is empty. Logo disabled'];
+            $Logger->addLogData(['logo' => 'Logo file path does not exist or is empty. Logo disabled']);
         } else {
             $newConfig['logo']['path'] = Helper::fixSeperator($newConfig['logo']['path']);
         }
@@ -168,13 +158,12 @@ if (isset($data['type'])) {
 
     if (file_put_contents($my_config_file, $content)) {
         clearCache($my_config_file);
-        $LogData[] = ['config' => 'New config saved'];
+        $Logger->addLogData(['config' => 'New config saved']);
 
         if ($data['type'] == 'reset') {
-            $LogData[] = ['reset' => 'Resetting Photobooth'];
-
+            $Logger->addLogData(['reset' => 'Resetting Photobooth']);
             if ($newConfig['reset']['remove_images']) {
-                $LogData[] = ['remove_images' => 'Removing images'];
+                $Logger->addLogData(['remove_images' => 'Removing images']);
                 // empty folders
                 foreach ($config['foldersAbs'] as $folder) {
                     if ($folder != $config['foldersAbs']['archives'] && $folder != $config['foldersAbs']['private']) {
@@ -185,12 +174,12 @@ if (isset($data['type'])) {
                                 if (is_file($file)) {
                                     // delete file
                                     unlink($file);
-                                    $LogData[] = [$file => 'deleted'];
+                                    $Logger->addLogData([$file => 'deleted']);
                                 }
                             }
                         }
                     } else {
-                        $LogData[] = [$folder => 'skipped'];
+                        $Logger->addLogData([$folder => 'skipped']);
                     }
                 }
             }
@@ -202,20 +191,20 @@ if (isset($data['type'])) {
                 $printManager->printCounter = PRINT_COUNTER;
                 // delete print database
                 if ($printManager->removePrintDb()) {
-                    $LogData[] = ['printed.csv' => 'deleted'];
+                    $Logger->addLogData(['printed.csv' => 'deleted']);
                 }
                 if ($printManager->unlockPrint()) {
-                    $LogData[] = ['print.lock' => 'deleted'];
+                    $Logger->addLogData(['print.lock' => 'deleted']);
                 }
                 if ($printManager->removePrintCounter()) {
-                    $LogData[] = ['print.count' => 'deleted'];
+                    $Logger->addLogData(['print.count' => 'deleted']);
                 }
             }
 
             if ($newConfig['reset']['remove_mailtxt']) {
                 if (is_file(MAIL_FILE)) {
                     unlink(MAIL_FILE); // delete file
-                    $LogData[] = [MAIL_FILE => 'deleted'];
+                    $Logger->addLogData([MAIL_FILE => 'deleted']);
                 }
             }
 
@@ -223,7 +212,7 @@ if (isset($data['type'])) {
                 // delete personal config
                 if (is_file('../config/my.config.inc.php')) {
                     unlink('../config/my.config.inc.php');
-                    $LogData[] = ['my.config.inc.php' => 'deleted'];
+                    $Logger->addLogData(['my.config.inc.php' => 'deleted']);
                 }
             }
 
@@ -233,7 +222,7 @@ if (isset($data['type'])) {
                 if (is_file($logFile)) {
                     // delete file
                     unlink($logFile);
-                    $LogData[] = [$logFile => 'deleted'];
+                    $Logger->addLogData([$logFile => 'deleted']);
                 }
             }
 
@@ -241,21 +230,20 @@ if (isset($data['type'])) {
             if (is_file(DB_FILE)) {
                 // delete file
                 unlink(DB_FILE);
-                $LogData[] = [DB_FILE => 'deleted'];
+                $Logger->addLogData([DB_FILE => 'deleted']);
             }
         }
         echo json_encode('success');
     } else {
-        $LogData[] = ['config' => 'ERROR: Config can not be saved!'];
-
+        $Logger->addLogData(['config' => 'ERROR: Config can not be saved!']);
         echo json_encode('error');
     }
 } else {
-    $LogData[] = ['type' => 'ERROR: Unknown action.'];
-    logError($LogData);
+    $Logger->addLogData(['type' => 'ERROR: Unknown action.']);
+    $Logger->logToFile();
     die(json_encode('error'));
 }
-logError($LogData);
+$Logger->logToFile();
 
 /* Kill service daemons after config has changed */
 require_once '../lib/services_stop.php';
