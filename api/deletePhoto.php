@@ -7,9 +7,21 @@ require_once '../lib/config.php';
 require_once '../lib/log.php';
 require_once '../lib/deleteFile.php';
 
-if (empty($_POST['file'])) {
-    $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided';
-    logErrorAndDie($errormsg);
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+try {
+    if (empty($_POST['file'])) {
+        throw new Exception('No file provided');
+    }
+} catch (Exception $e) {
+    // Handle the exception
+    $ErrorData = [
+        'error' => $e->getMessage(),
+    ];
+
+    $Logger->logToFile($ErrorData);
+
+    $ErrorString = json_encode($ErrorData);
+    die($ErrorString);
 }
 
 $file = $_POST['file'];
@@ -18,6 +30,7 @@ $paths = [$config['foldersAbs']['images'], $config['foldersAbs']['thumbs'], $con
 if (!$config['picture']['keep_original']) {
     $paths[] = $config['foldersAbs']['tmp'];
 }
+
 $delete = new FileDelete($file, $paths);
 $delete->deleteFiles();
 $logData = $delete->getLogData();
@@ -29,9 +42,10 @@ if ($config['database']['enabled']) {
     $database->deleteContentFromDB($file);
 }
 
-$logString = json_encode($logData);
 if (!$logData['success'] || $config['dev']['loglevel'] > 1) {
-    logError($logData);
+    $Logger->addLogData($logData);
+    $Logger->logToFile();
 }
 
+$logString = json_encode($logData);
 echo $logString;
