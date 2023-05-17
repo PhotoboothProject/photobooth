@@ -9,6 +9,8 @@ require_once '../lib/collageConfig.php';
 require_once '../lib/collage.php';
 require_once '../lib/image.php';
 
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 try {
     if (empty($_POST['file'])) {
         throw new Exception('No file provided');
@@ -31,8 +33,10 @@ try {
     $ErrorData = [
         'error' => $e->getMessage(),
     ];
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
+
     $ErrorString = json_encode($ErrorData);
-    logError($ErrorData);
     die($ErrorString);
 }
 
@@ -69,7 +73,7 @@ try {
     if (!$config['video']['collage_keep_images']) {
         foreach ($frames as $frame) {
             if (!unlink($frame)) {
-                logError(['Warning' => 'Error while deleting ' . $frame]);
+                $Logger->addLogData(['Warning' => 'Error while deleting ' . $frame]);
             }
         }
     } else {
@@ -146,7 +150,7 @@ try {
                 $frames = shell_exec("ffprobe -v error -select_streams v:0 -count_packets \
         -show_entries stream=nb_read_packets -of csv=p=0 $filenameTmp");
                 $secondToLastFrame = intval($frames) - 1;
-                logError($secondToLastFrame);
+                $Logger->addLogData(['Info' => 'Seconds to last frame: ' . $secondToLastFrame]);
 
                 $cfilter[] = "[0]trim=start_frame=1:end_frame=$secondToLastFrame,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
             }
@@ -178,14 +182,21 @@ try {
         }
 
         if ($returnValue != 0) {
+            // Handle the exception
+            if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+                $Logger->addLogData($imageHandler->errorLog);
+            }
             $ErrorData = [
                 'error' => 'Take picture command returned an error code',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => json_encode($output),
-                'php' => basename($_SERVER['PHP_SELF']),
             ];
-            logErrorAndDie($ErrorData);
+            $Logger->addLogData($ErrorData);
+            $Logger->logToFile();
+
+            $ErrorString = json_encode($ErrorData);
+            die($ErrorString);
         }
 
         /* TODO gallery doesn't support videos atm
@@ -204,13 +215,15 @@ try {
 } catch (Exception $e) {
     // Handle the exception
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        logError($imageHandler->errorLog);
+        $Logger->addLogData($imageHandler->errorLog);
     }
     $ErrorData = [
         'error' => $e->getMessage(),
     ];
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
+
     $ErrorString = json_encode($ErrorData);
-    logError($ErrorData);
     die($ErrorString);
 }
 
@@ -222,14 +235,12 @@ foreach (glob("$filenameOutput*") as $filename) {
 $LogData = [
     'file' => $file,
     'images' => $images,
-    'php' => basename($_SERVER['PHP_SELF']),
 ];
-$LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 1) {
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        logError($imageHandler->errorLog);
+        $Logger->addLogData($imageHandler->errorLog);
     }
-
-    logError($LogData);
+    $Logger->logToFile();
 }
+$LogString = json_encode($LogData);
 echo $LogString;
