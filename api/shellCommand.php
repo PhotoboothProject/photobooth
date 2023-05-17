@@ -3,7 +3,24 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
 $mode = $_POST['mode'];
+
+if (empty($mode)) {
+    $LogData = [
+        'success' => 'false',
+        'mode' => 'No mode defined.',
+    ];
+    if ($config['dev']['loglevel'] > 0) {
+        $Logger->addLogData($LogData);
+        $Logger->logToFile();
+    }
+
+    $LogString = json_encode($LogData);
+    die($LogString);
+}
 
 switch ($mode) {
     case 'pre-command':
@@ -19,7 +36,17 @@ switch ($mode) {
         $cmd = 'sudo ' . sprintf($config['shutdown']['cmd']);
         break;
     default:
-        $cmd = 'echo "Error for mode ' . $mode . ' - command not defined in configuration"';
+        $LogData = [
+            'success' => 'false',
+            'mode' => 'Unknown mode ' . $mode,
+        ];
+        if ($config['dev']['loglevel'] > 0) {
+            $Logger->addLogData($LogData);
+            $Logger->logToFile();
+        }
+
+        $LogString = json_encode($LogData);
+        die($LogString);
         break;
 }
 
@@ -44,22 +71,22 @@ if (isset($success)) {
         'output' => $output,
         'retval' => $retval,
         'command' => $cmd,
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
     if ($config['dev']['loglevel'] > 1) {
-        logError($LogData);
+        $Logger->addLogData($LogData);
     }
-    echo $LogString;
 } else {
     $LogData = [
         'success' => 'false',
         'command' => $cmd,
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
     if ($config['dev']['loglevel'] > 0) {
-        logError($LogData);
+        $Logger->addLogData($LogData);
     }
-    echo $LogString;
 }
+if ($config['dev']['loglevel'] > 0) {
+    $Logger->logToFile();
+}
+
+$LogString = json_encode($LogData);
+echo $LogString;
