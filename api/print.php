@@ -7,42 +7,53 @@ require_once '../lib/printdb.php';
 require_once '../lib/image.php';
 require_once '../lib/log.php';
 
-if (empty($_GET['filename'])) {
-    $errormsg = basename($_SERVER['PHP_SELF']) . ': No file provided!';
-    logErrorAndDie($errormsg);
-}
-$printManager = new PrintManager();
-$printManager->printDb = PRINT_DB;
-$printManager->printLockFile = PRINT_LOCKFILE;
-$printManager->printCounter = PRINT_COUNTER;
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+try {
+    if (empty($_GET['filename'])) {
+        throw new Exception('No file provided!');
+    }
 
-if ($printManager->isPrintLocked()) {
-    $errormsg = $config['print']['limit_msg'];
-    logErrorAndDie($errormsg);
-}
+    $printManager = new PrintManager();
+    $printManager->printDb = PRINT_DB;
+    $printManager->printLockFile = PRINT_LOCKFILE;
+    $printManager->printCounter = PRINT_COUNTER;
 
-$imageHandler = new Image();
-$imageHandler->debugLevel = $config['dev']['loglevel'];
-$random = $imageHandler->createNewFilename('random');
-$filename = $_GET['filename'];
-$uniquename = substr($filename, 0, -4) . '-' . $random;
-$filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
-$filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $uniquename;
+    if ($printManager->isPrintLocked()) {
+        throw new Exception($config['print']['limit_msg']);
+    }
 
-$status = false;
+    $imageHandler = new Image();
+    $imageHandler->debugLevel = $config['dev']['loglevel'];
+    $random = $imageHandler->createNewFilename('random');
+    $filename = $_GET['filename'];
+    $uniquename = substr($filename, 0, -4) . '-' . $random;
+    $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
+    $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $uniquename;
 
-// exit with error if file does not exist
-if (!file_exists($filename_source)) {
-    $errormsg = "File $filename not found";
-    logErrorAndDie($errormsg);
-}
+    $status = false;
 
-// Only jpg/jpeg are supported
-$imginfo = getimagesize($filename_source);
-$mimetype = $imginfo['mime'];
-if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
-    $errormsg = basename($_SERVER['PHP_SELF']) . ': The source file type ' . $mimetype . ' is not supported';
-    logErrorAndDie($errormsg);
+    // exit with error if file does not exist
+    if (!file_exists($filename_source)) {
+        throw new Exception('File ' . $filename . ' not found.');
+    }
+
+    // Only jpg/jpeg are supported
+    $imginfo = getimagesize($filename_source);
+    $mimetype = $imginfo['mime'];
+    if ($mimetype != 'image/jpg' && $mimetype != 'image/jpeg') {
+        throw new Exception('The source file type ' . $mimetype . ' is not supported');
+    }
+} catch (Exception $e) {
+    // Handle the exception
+    $ErrorData = [
+        'error' => $e->getMessage(),
+    ];
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
+
+    $ErrorString = json_encode($ErrorData);
+    die($ErrorString);
 }
 
 if (!file_exists($filename_print)) {
@@ -134,8 +145,14 @@ if (!file_exists($filename_print)) {
             imagedestroy($source);
         }
         // log error and die
-        $errormsg = basename($_SERVER['PHP_SELF']) . ': ' . $e->getMessage();
-        logErrorAndDie($errormsg);
+        $ErrorData = [
+            'error' => $e->getMessage(),
+        ];
+        $Logger->addLogData($ErrorData);
+        $Logger->logToFile();
+
+        $ErrorString = json_encode($ErrorData);
+        die($ErrorString);
     }
 }
 
@@ -154,11 +171,8 @@ if ($config['print']['limit'] > 0) {
     if ($linecount % $config['print']['limit'] == 0) {
         if ($printManager->lockPrint()) {
             $status = 'locking';
-        } else {
-            if ($config['dev']['loglevel'] > 1) {
-                $errormsg = basename($_SERVER['PHP_SELF']) . ': Error creating the file ' . PRINT_LOCKFILE;
-                logError($errormsg);
-            }
+        } elseif ($config['dev']['loglevel'] > 1) {
+            $Logger->addLogData(['Warning' => 'Error creating the file ' . PRINT_LOCKFILE]);
         }
     }
     file_put_contents(PRINT_COUNTER, $linecount);
@@ -170,11 +184,14 @@ $LogData = [
     'msg' => $cmd,
     'returnValue' => $returnValue,
     'output' => $output,
-    'php' => basename($_SERVER['PHP_SELF']),
 ];
-$LogString = json_encode($LogData);
-if ($config['dev']['loglevel'] > 1) {
-    logError($LogData);
-}
 
+if ($config['dev']['loglevel'] > 1) {
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        $Logger->addLogData($imageHandler->errorLog);
+    }
+    $Logger->addLogData($LogData);
+    $Logger->logToFile();
+}
+$LogString = json_encode($LogData);
 die($LogString);
