@@ -4,9 +4,11 @@ header('Content-Type: application/json');
 require_once '../lib/config.php';
 require_once '../lib/log.php';
 
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 $simpleExec = $config['preview']['simpleExec'];
 
-function isRunning($pid) {
+function isRunning($pid, $Logger) {
     try {
         $result = shell_exec(sprintf('ps %d', $pid));
 
@@ -14,6 +16,8 @@ function isRunning($pid) {
             return true;
         }
     } catch (Exception $e) {
+        $ErrorData = ['exception' => $e->getMessage()];
+        $Logger->addLogData($ErrorData);
         return false;
     }
 
@@ -27,16 +31,14 @@ if ($_POST['play'] === 'start') {
         $LogData = [
             'isRunning' => true,
             'pid' => intval(1),
-            'php' => basename($_SERVER['PHP_SELF']),
         ];
     } else {
         $pid = exec($cmd, $out);
         sleep(3);
         $LogData = [
-            'isRunning' => isRunning($pid),
+            'isRunning' => isRunning($pid, $Logger),
             'pid' => $pid - 1,
             'cmd' => $cmd,
-            'php' => basename($_SERVER['PHP_SELF']),
         ];
     }
 } else {
@@ -60,19 +62,18 @@ if ($_POST['play'] === 'start') {
         $LogData = [
             'isRunning' => false,
             'pid' => intval(0),
-            'php' => basename($_SERVER['PHP_SELF']),
         ];
     } else {
         $LogData = [
-            'isRunning' => isRunning($_POST['pid']),
+            'isRunning' => isRunning($_POST['pid'], $Logger),
             'cmd' => $killcmd,
             'pid' => intval($_POST['pid']),
-            'php' => basename($_SERVER['PHP_SELF']),
         ];
     }
 }
-$LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 1) {
-    logError($LogData);
+    $Logger->addLogData($LogData);
+    $Logger->logToFile();
 }
+$LogString = json_encode($LogData);
 die($LogString);
