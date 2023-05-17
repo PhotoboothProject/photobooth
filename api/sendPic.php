@@ -11,16 +11,18 @@ require_once '../lib/config.php';
 require_once '../lib/db.php';
 require_once '../lib/log.php';
 
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 if (empty($_POST['sendTo']) || !PHPMailer::validateAddress($_POST['sendTo'])) {
     $LogData = [
         'success' => false,
         'error' => 'E-Mail address invalid',
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
     if ($config['dev']['loglevel'] > 0) {
-        logError($LogData);
+        $Logger->addLogData($LogData);
+        $Logger->logToFile();
     }
+    $LogString = json_encode($LogData);
     die($LogString);
 }
 
@@ -49,12 +51,12 @@ if (empty($_POST['image'])) {
     $LogData = [
         'success' => false,
         'error' => 'Image not defined',
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
     if ($config['dev']['loglevel'] > 0) {
-        logError($LogData);
+        $Logger->addLogData($LogData);
+        $Logger->logToFile();
     }
+    $LogString = json_encode($LogData);
     die($LogString);
 }
 
@@ -66,12 +68,12 @@ if (!$database->isInDB($postImage)) {
     $LogData = [
         'success' => false,
         'error' => 'Image not found in database',
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
     if ($config['dev']['loglevel'] > 0) {
-        logError($LogData);
+        $Logger->addLogData($LogData);
+        $Logger->logToFile();
     }
+    $LogString = json_encode($LogData);
     die($LogString);
 }
 
@@ -92,12 +94,12 @@ if (!$mail->addAddress($_POST['sendTo'])) {
     $LogData = [
         'success' => false,
         'error' => 'E-Mail address not valid / error',
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
     if ($config['dev']['loglevel'] > 0) {
-        logError($LogData);
+        $Logger->addLogData($LogData);
+        $Logger->logToFile();
     }
+    $LogString = json_encode($LogData);
     die($LogString);
 }
 
@@ -124,12 +126,12 @@ if (!$mail->addAttachment($path . $postImage)) {
     $LogData = [
         'success' => false,
         'error' => 'File error:' . $path . $postImage,
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    $LogString = json_encode($LogData);
     if ($config['dev']['loglevel'] > 0) {
-        logError($LogData);
+        $Logger->addLogData($LogData);
+        $Logger->logToFile();
     }
+    $LogString = json_encode($LogData);
     die($LogString);
 }
 
@@ -144,10 +146,10 @@ if ($mail->send()) {
 $LogData = [
     'success' => false,
     'error' => $mail->ErrorInfo,
-    'php' => basename($_SERVER['PHP_SELF']),
 ];
-$LogString = json_encode($LogData);
 if ($config['dev']['loglevel'] > 0) {
-    logError($LogData);
+    $Logger->addLogData($LogData);
+    $Logger->logToFile();
 }
+$LogString = json_encode($LogData);
 die($LogString);
