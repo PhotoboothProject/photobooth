@@ -14,14 +14,6 @@ function isRunning($pid) {
             return true;
         }
     } catch (Exception $e) {
-        $LogData = [
-            'exception' => $e->getMessage(),
-            'php' => basename($_SERVER['PHP_SELF']),
-        ];
-        $LogString = json_encode($LogData);
-        if ($config['dev']['loglevel'] > 1) {
-            logError($LogData);
-        }
         return false;
     }
 
