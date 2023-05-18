@@ -20,6 +20,9 @@ $imageHandler = new Image();
 $imageHandler->debugLevel = $config['dev']['loglevel'];
 $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
 
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
 $file = $imageHandler->createNewFilename($config['picture']['naming']);
 
 $database = new DatabaseManager();
@@ -96,14 +99,14 @@ try {
         imagedestroy($imageResource);
     }
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        logError($imageHandler->errorLog);
+        $Logger->addLogData($imageHandler->errorLog);
     }
     $ErrorData = [
         'success' => false,
         'error' => $e->getMessage(),
-        'php' => basename($_SERVER['PHP_SELF']),
     ];
-    logError($ErrorData);
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
     $ErrorString = json_encode($ErrorData);
     die($ErrorString);
 }
@@ -112,14 +115,13 @@ try {
 $LogData = [
     'success' => true,
     'filename' => $file,
-    'php' => basename($_SERVER['PHP_SELF']),
 ];
 if ($config['dev']['loglevel'] > 1) {
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        logError($imageHandler->errorLog);
+        $Logger->addLogData($imageHandler->errorLog);
     }
-
-    logError($LogData);
+    $Logger->addLogData($LogData);
+    $Logger->logToFile();
 }
 $LogString = json_encode($LogData);
 die($LogString);
