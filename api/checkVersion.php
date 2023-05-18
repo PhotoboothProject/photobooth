@@ -5,28 +5,31 @@ require_once '../lib/config.php';
 require_once '../lib/log.php';
 require_once '../lib/photobooth.php';
 
-function getLogData($config) {
+function getLogData($debugLevel) {
+    $Logger = new DataLogger(PHOTOBOOTH_LOG);
+    $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
     try {
         $photobooth = new Photobooth();
-
         $logData = [
             'update_available' => $photobooth->checkUpdate(),
             'current_version' => $photobooth->getPhotoboothVersion(),
             'available_version' => $photobooth->getLatestRelease(),
-            'php_script' => basename($_SERVER['PHP_SELF']),
         ];
 
-        if ($config['dev']['loglevel'] > 0) {
-            logError($logData);
+        if ($debugLevel > 0) {
+            $Logger->addLogData($LogData);
+            $Logger->logToFile();
         }
     } catch (Exception $e) {
-        logError($e->getMessage());
         $logData = ['error' => $e->getMessage()];
+        $Logger->addLogData($LogData);
+        $Logger->logToFile();
     }
 
     return $logData;
 }
 
-$logData = getLogData($config);
+$logData = getLogData($config['dev']['loglevel']);
 $logString = json_encode($logData);
 die($logString);
