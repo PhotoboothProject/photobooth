@@ -22,10 +22,13 @@ $LogData = [
     'cmd' => $cmd,
     'isRunning' => true,
     'pid' => intval(1),
-    'php' => basename($_SERVER['PHP_SELF']),
 ];
-$LogString = json_encode($LogData);
+
 if ($config['dev']['loglevel'] > 1) {
-    logError($LogData);
+    $Logger = new DataLogger(PHOTOBOOTH_LOG);
+    $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+    $Logger->addLogData($LogData);
+    $Logger->logToFile();
 }
+$LogString = json_encode($LogData);
 die($LogString);
