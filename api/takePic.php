@@ -3,170 +3,88 @@ header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 require_once '../lib/db.php';
-require_once '../lib/image.php';
-require_once '../lib/log.php';
+require_once '../lib/capture.php';
 
-function takePicture($filename, $style) {
-    global $config;
+$Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
+try {
+    if (!isset($_POST['style'])) {
+        throw new Exception('No style provided');
+    }
+
+    if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
+        $file = $_POST['file'];
+    } else {
+        $file = Image::createNewFilename($config['picture']['naming']);
+        if ($config['database']['file'] != 'db') {
+            $file = $config['database']['file'] . '_' . $file;
+        }
+    }
+
+    $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+    if (file_exists($filename_tmp)) {
+        $random = Image::createNewFilename('random');
+        $filename_random = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $random;
+        rename($filename_tmp, $filename_random);
+    }
+
+    $captureHandler = new PhotoboothCapture($Logger);
+    $captureHandler->debugLevel = $config['dev']['loglevel'];
+    $captureHandler->fileName = $file;
+    $captureHandler->tmpFile = $filename_tmp;
+
+    switch ($_POST['style']) {
+        case 'photo':
+            $captureHandler->style = 'image';
+            break;
+        case 'collage':
+            if (!is_numeric($_POST['collageNumber'])) {
+                throw new Exception('No or invalid collage number provided.');
+            }
+
+            $number = $_POST['collageNumber'] + 0;
+
+            if ($number > $config['collage']['limit']) {
+                throw new Exception('Collage consists only of ' . $config['collage']['limit'] . ' pictures');
+            }
+
+            $captureHandler->collageSubFile = substr($file, 0, -4) . '-' . $number . '.jpg';
+            $captureHandler->tmpFile = substr($filename_tmp, 0, -4) . '-' . $number . '.jpg';
+            $captureHandler->style = 'collage';
+            $captureHandler->collageNumber = $number;
+            $captureHandler->collageLimit = $config['collage']['limit'];
+            break;
+        case 'chroma':
+            $captureHandler->style = 'chroma';
+            break;
+        case 'custom':
+            $captureHandler->style = 'image';
+            break;
+        default:
+            throw new Exception('Invalid photo style provided.');
+            break;
+    }
 
     if ($config['dev']['demo_images']) {
-        $demoFolder = __DIR__ . '/../resources/img/demo/';
-        $devImg = array_diff(scandir($demoFolder), ['.', '..']);
-        copy($demoFolder . $devImg[array_rand($devImg)], $filename);
+        $captureHandler->captureDemo();
     } elseif ($config['preview']['mode'] === 'device_cam' && $config['preview']['camTakesPic']) {
-        $data = $_POST['canvasimg'];
-        list($type, $data) = explode(';', $data);
-        list(, $data) = explode(',', $data);
-        $data = base64_decode($data);
-
-        file_put_contents($filename, $data);
-
-        if ($config['preview']['flip'] != 'off') {
-            $im = imagecreatefromjpeg($filename);
-            switch ($config['preview']['flip']) {
-                case 'flip-horizontal':
-                    imageflip($im, IMG_FLIP_HORIZONTAL);
-                    break;
-                case 'flip-vertical':
-                    imageflip($im, IMG_FLIP_VERTICAL);
-                    break;
-                default:
-                    break;
-            }
-            imagejpeg($im, $filename);
-            imagedestroy($im);
-        }
+        $captureHandler->flipImage = $config['preview']['flip'];
+        $captureHandler->captureCanvas($_POST['canvasimg']);
     } else {
-        //gphoto must be executed in a dir with write permission for other commands we stay in the api dir
-        if (substr($config['take_picture']['cmd'], 0, strlen('gphoto')) === 'gphoto') {
-            chdir(dirname($filename));
-        }
         if ($style === 'custom') {
-            $cmd = sprintf($config['take_custom']['cmd'], $filename);
+            $captureHandler->captureCmd = $config['take_custom']['cmd'];
         } else {
-            $cmd = sprintf($config['take_picture']['cmd'], $filename);
+            $captureHandler->captureCmd = $config['take_picture']['cmd'];
         }
-        $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
-
-        exec($cmd, $output, $returnValue);
-
-        if ($returnValue && $config['dev']['loglevel'] > 1) {
-            $ErrorData = [
-                'error' => 'Take picture command returned an error code',
-                'cmd' => $cmd,
-                'returnValue' => $returnValue,
-                'output' => $output,
-                'php' => basename($_SERVER['PHP_SELF']),
-            ];
-            $ErrorString = json_encode($ErrorData);
-            logError($ErrorData);
-        }
-
-        if (!file_exists($filename)) {
-            $ErrorData = [
-                'error' => 'File was not created',
-                'cmd' => $cmd,
-                'returnValue' => $returnValue,
-                'output' => $output,
-                'php' => basename($_SERVER['PHP_SELF']),
-            ];
-            $ErrorString = json_encode($ErrorData);
-            logError($ErrorData);
-            die($ErrorString);
-        }
+        $captureHandler->captureWithCmd();
     }
+    // send image to frontend
+    $captureHandler->returnData();
+} catch (Exception $e) {
+    $ErrorData = ['error' => $e->getMessage()];
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
+    $ErrorString = json_encode($ErrorData);
+    die($ErrorString);
 }
-
-$random = Image::createNewFilename('random');
-
-if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
-    $file = $_POST['file'];
-} else {
-    $file = Image::createNewFilename($config['picture']['naming']);
-    if ($config['database']['file'] != 'db') {
-        $file = $config['database']['file'] . '_' . $file;
-    }
-}
-
-$filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
-$filename_random = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $random;
-
-if (file_exists($filename_tmp)) {
-    rename($filename_tmp, $filename_random);
-}
-
-if (!isset($_POST['style'])) {
-    $errormsg = basename($_SERVER['PHP_SELF']) . ': No style provided';
-    logErrorAndDie($errormsg);
-}
-
-switch ($_POST['style']) {
-    case 'photo':
-        takePicture($filename_tmp, $_POST['style']);
-
-        $LogData = [
-            'success' => 'image',
-            'file' => $file,
-            'php' => basename($_SERVER['PHP_SELF']),
-        ];
-        break;
-    case 'collage':
-        if (!is_numeric($_POST['collageNumber'])) {
-            $errormsg = basename($_SERVER['PHP_SELF']) . ': No or invalid collage number provided';
-            logErrorAndDie($errormsg);
-        }
-
-        $number = $_POST['collageNumber'] + 0;
-
-        if ($number > $config['collage']['limit']) {
-            $errormsg = basename($_SERVER['PHP_SELF']) . ': Collage consists only of ' . $config['collage']['limit'] . ' pictures';
-            logErrorAndDie($errormsg);
-        }
-
-        $basecollage = substr($file, 0, -4);
-        $collage_name = $basecollage . '-' . $number . '.jpg';
-
-        $basename = substr($filename_tmp, 0, -4);
-        $filename = $basename . '-' . $number . '.jpg';
-
-        takePicture($filename, $_POST['style']);
-
-        $LogData = [
-            'success' => 'collage',
-            'file' => $file,
-            'collage_file' => $collage_name,
-            'current' => $number,
-            'limit' => $config['collage']['limit'],
-            'php' => basename($_SERVER['PHP_SELF']),
-        ];
-        break;
-    case 'chroma':
-        takePicture($filename_tmp, $_POST['style']);
-
-        $LogData = [
-            'success' => 'chroma',
-            'file' => $file,
-            'php' => basename($_SERVER['PHP_SELF']),
-        ];
-        break;
-    case 'custom':
-        takePicture($filename_tmp, $_POST['style']);
-
-        $LogData = [
-            'success' => 'image',
-            'file' => $file,
-            'php' => basename($_SERVER['PHP_SELF']),
-        ];
-        break;
-    default:
-        $errormsg = basename($_SERVER['PHP_SELF']) . ': Invalid photo style provided';
-        logErrorAndDie($errormsg);
-        break;
-}
-
-// send imagename to frontend
-$LogString = json_encode($LogData);
-if ($config['dev']['loglevel'] > 1) {
-    logError($LogData);
-}
-die($LogString);
