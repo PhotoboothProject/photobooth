@@ -5,11 +5,11 @@ const photoboothTools = (function () {
 
     api.console = {
         log: function (...content) {
-            console.log('[', new Date().toISOString(), ']: ' + content);
+            console.log('[', new Date().toISOString(), ']: ' + JSON.stringify(content));
         },
         logDev: function (...content) {
             if (config.dev.loglevel > 0) {
-                console.log('[', new Date().toISOString(), ']: ' + content);
+                console.log('[', new Date().toISOString(), ']: ' + JSON.stringify(content));
             }
         }
     };
