@@ -299,7 +299,7 @@ class Image {
      */
     public function __construct() {
         if (file_exists('../vendor/phpqrcode/lib/full/qrlib.php')) {
-            include '../vendor/phpqrcode/lib/full/qrlib.php';
+            include_once '../vendor/phpqrcode/lib/full/qrlib.php';
             $this->qrEcLevel = QR_ECLEVEL_M;
             $this->qrAvailable = true;
         }
