@@ -248,10 +248,10 @@ try {
     }
 } catch (Exception $e) {
     // Handle the exception
-    if (is_resource($imageResource)) {
+    if (isset($imageResource) && is_resource($imageResource)) {
         imagedestroy($imageResource);
     }
-    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+    if (isset($imageHandler) && is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
         $Logger->addLogData($imageHandler->errorLog);
     }
     $ErrorData = [
