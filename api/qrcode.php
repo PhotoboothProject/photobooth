@@ -2,14 +2,9 @@
 require_once '../lib/config.php';
 require_once '../lib/helper.php';
 
-$filename = (isset($_GET['filename']) && $_GET['filename']) != '' ? $_GET['filename'] : false;
+$url = (isset($_GET['share_link']) && $_GET['share_link']) != '' ? $_GET['share_link'] : false;
 
-if ($filename || !$config['qr']['append_filename']) {
-    if ($config['qr']['append_filename']) {
-        $url = $config['qr']['url'] . $filename;
-    } else {
-        $url = $config['qr']['url'];
-    }
+if ($url || !$config['qr']['append_filename']) {
     try {
         include '../vendor/phpqrcode/lib/full/qrlib.php';
         switch ($config['qr']['ecLevel']) {
