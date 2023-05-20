@@ -425,7 +425,7 @@ const photoBooth = (function () {
         }
         startTime = new Date().getTime();
         jQuery
-            .post('api/takePic.php', data)
+            .post('api/capture.php', data)
             .done(function (result) {
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
@@ -604,7 +604,7 @@ const photoBooth = (function () {
         }
         startTime = new Date().getTime();
         jQuery
-            .post('api/takeVideo.php', data)
+            .post('api/capture.php', data)
             .done(function (result) {
                 if (config.video.animation) {
                     videoAnimation.hide();
