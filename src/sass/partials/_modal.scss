@@ -55,3 +55,40 @@
     color: red;
   }
 }
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  font-size: 10px;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    animation: bounce 2.0s infinite ease-in-out;
+    background-color: #ffffff;
+  }
+
+  &::after {
+    animation-delay: -1.0s;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(0.0);
+  } 
+  50% {
+    transform: translate(-50%, -50%) scale(1.0);
+  }
+}
