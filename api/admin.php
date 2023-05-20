@@ -94,6 +94,10 @@ if (isset($data['type'])) {
             $newConfig['synctodrive']['enabled'] = false;
             $Logger->addLogData(['synctodrive' => 'Sync pictures to USB stick unsupported on Windows.']);
         }
+        if (!empty($newConfig['nextcloud']['enabled'])) {
+            $newConfig['nextcloud']['enabled'] = false;
+            $Logger->addLogData(['nextcloud' => 'Nextcloud storage sync and Share API unsupported on Windows.']);
+        }
     }
 
     if (isset($newConfig['database']['file']) && empty($newConfig['database']['file'])) {
