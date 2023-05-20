@@ -61,6 +61,7 @@ include('../../admin/components/navItem.debug.php');
                                         echo getNavItemDebug('bootconfig');
                                         echo getNavItemDebug('printdb');
                                         echo getNavItemDebug('installlog');
+                                        echo getNavItemDebug('nccopyonmntlog');
                                         echo getNavItemDebug('githead');
                                     ?>
                             </ul>
