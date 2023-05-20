@@ -21,6 +21,8 @@ function handleDebugPanel(string $content, array $config): string {
             return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['dev']['logfile']);
         case 'nav-installlog':
             return readFileContents($config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'install.log');
+        case 'nav-nccopyonmntlog':
+            return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['nextcloud']['logfile'], true);
         case 'nav-githead':
             return getLatestCommits();
         case 'nav-printdb':
