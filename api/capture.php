@@ -13,10 +13,10 @@ try {
         throw new Exception('No style provided');
     }
 
-    if (!empty($_POST['file']) && preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file'])) {
+    if (!empty($_POST['file']) && (preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']) || preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file']))) {
         $file = $_POST['file'];
     } else {
-        $file = Image::createNewFilename($config['picture']['naming']);
+        $file = $_POST['style'] === 'video' ? Image::createNewFilename($config['picture']['naming'], '.mp4') : Image::createNewFilename($config['picture']['naming']);
         if ($config['database']['file'] != 'db') {
             $file = $config['database']['file'] . '_' . $file;
         }
@@ -24,7 +24,7 @@ try {
 
     $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
     if (file_exists($filename_tmp)) {
-        $random = Image::createNewFilename('random');
+        $random = $_POST['style'] === 'video' ? Image::createNewFilename('random', '.mp4') : Image::createNewFilename('random');
         $filename_random = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $random;
         rename($filename_tmp, $filename_random);
     }
@@ -61,18 +61,24 @@ try {
         case 'custom':
             $captureHandler->style = 'image';
             break;
+        case 'video':
+            $captureHandler->style = 'video';
+            break;
         default:
-            throw new Exception('Invalid photo style provided.');
+            throw new Exception('Invalid style provided.');
             break;
     }
 
-    if ($config['dev']['demo_images']) {
+    if ($_POST['style'] === 'video') {
+        $captureHandler->captureCmd = $config['take_video']['cmd'];
+        $captureHandler->captureWithCmd();
+    } elseif ($config['dev']['demo_images']) {
         $captureHandler->captureDemo();
     } elseif ($config['preview']['mode'] === 'device_cam' && $config['preview']['camTakesPic']) {
         $captureHandler->flipImage = $config['preview']['flip'];
         $captureHandler->captureCanvas($_POST['canvasimg']);
     } else {
-        if ($style === 'custom') {
+        if ($_POST['style'] === 'custom') {
             $captureHandler->captureCmd = $config['take_custom']['cmd'];
         } else {
             $captureHandler->captureCmd = $config['take_picture']['cmd'];

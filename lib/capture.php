@@ -83,14 +83,33 @@ class PhotoboothCapture {
 
         exec($cmd, $output, $returnValue);
 
-        if ($returnValue && $this->debugLevel > 1) {
+        if ($returnValue && ($this->debugLevel > 1 || $this->style === 'video')) {
             $ErrorData = [
-                'error' => 'Take picture command returned an error code',
+                'error' => 'Capture command returned an error code.',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => $output,
             ];
             $this->logger->addLogData($ErrorData);
+            if ($this->style === 'video') {
+                $this->logger->logToFile();
+                $ErrorString = json_encode($ErrorData);
+
+                die($ErrorString);
+            }
+        }
+
+        if ($this->style === 'video') {
+            $i = 0;
+            $processingTime = 300;
+            while ($i < $processingTime) {
+                if (file_exists($this->tmpFile)) {
+                    break;
+                } else {
+                    $i++;
+                    usleep(100000);
+                }
+            }
         }
 
         if (!file_exists($this->tmpFile)) {
@@ -100,6 +119,10 @@ class PhotoboothCapture {
                 'returnValue' => $returnValue,
                 'output' => $output,
             ];
+            if ($this->style === 'video') {
+                // remove all files that were created - all filenames start with the videos name
+                exec('rm -f ' . $this->tmpFile . '*');
+            }
             $this->logger->addLogData($ErrorData);
             $this->logger->logToFile();
             $ErrorString = json_encode($ErrorData);
