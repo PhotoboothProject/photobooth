@@ -108,6 +108,7 @@ $config['adminpanel']['view_default'] = 'expert';
 
 $config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
 $config['synctodrive']['logfile'] = 'synctodrive_server.log';
+$config['nextcloud']['logfile'] = 'nc_copy_on_mnt.log';
 $config['dev']['logfile'] = 'error.log';
 
 $config['ui']['github'] = 'PhotoboothProject';
