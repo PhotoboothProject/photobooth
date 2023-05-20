@@ -39,4 +39,6 @@ killProcessIfActive(
     15
 );
 
-?>
+killProcessIfActive('nc_copy_on_mnt', '..' . DIRECTORY_SEPARATOR . $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'nc_copy_on_mnt.pid', $config['nextcloud']['logfile'], 15);
+
+file_put_contents('../data/tmp/nc_copy_cache', '');

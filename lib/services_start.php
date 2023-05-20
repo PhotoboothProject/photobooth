@@ -52,4 +52,26 @@ if ($config['synctodrive']['enabled']) {
         proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/sync-to-drive.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     }
 }
+
+if ($config['nextcloud']['enabled']) {
+    if ($config['dev']['loglevel'] > 0) {
+        $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['nextcloud']['logfile'];
+    } else {
+        $logfile = '/dev/null';
+    }
+
+    if (processIsRunning('nc_copy_on_mnt.sh', $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'nc_copy_on_mnt.pid')) {
+        print "\t<!-- Nextcloud Copy On Mount --- server already active -->\n";
+    } else {
+        print "\t<!-- Nextcloud Copy On Mount --- starting server -->\n";
+        $command = sprintf(
+            '../scripts/nc_copy_on_mnt.sh "%s" "%s" "%s" 1>%s 2>&1 &',
+            $config['foldersAbs']['images'],
+            $config['nextcloud']['mnt'],
+            $config['foldersAbs']['tmp'],
+            $logfile
+        );
+        proc_open($command, [], $foo);
+    }
+}
 ?>
