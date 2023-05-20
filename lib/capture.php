@@ -2,19 +2,37 @@
 require_once __DIR__ . '/log.php';
 require_once __DIR__ . '/image.php';
 
+/**
+ * Class PhotoboothCapture
+ */
 class PhotoboothCapture {
+    /** @var string $style */
     public $style;
+    /** @var string $fileName */
     public $fileName;
+    /** @var string $tmpFile */
     public $tmpFile;
+    /** @var string $collageSubFile */
     public $collageSubFile;
+    /** @var int $collageNumber */
     public $collageNumber;
+    /** @var int $collageLimit */
     public $collageLimit;
+    /** @var string $demoFolder */
     public $demoFolder = __DIR__ . '/../resources/img/demo/';
+    /** @var string $flipImage */
     public $flipImage = 'off';
+    /** @var string $captureCmd */
     public $captureCmd;
+    /** @var DataLogger|null $logger */
     public $logger = null;
+    /** @var int $debugLevel */
     public $debugLevel = 1;
 
+    /**
+     * PhotoboothCapture constructor.
+     * @param DataLogger|null $logger
+     */
     public function __construct($logger = null) {
         if ($logger == null || !is_object($this->logger)) {
             $this->logger = new DataLogger(PHOTOBOOTH_LOG);
@@ -22,12 +40,19 @@ class PhotoboothCapture {
         }
     }
 
+    /**
+     * Capture a demo image.
+     */
     public function captureDemo() {
         $demoFolder = $this->demoFolder;
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $this->tmpFile);
     }
 
+    /**
+     * Capture an image from canvas data.
+     * @param string $data
+     */
     public function captureCanvas($data) {
         try {
             list($type, $data) = explode(';', $data);
@@ -73,6 +98,9 @@ class PhotoboothCapture {
         }
     }
 
+    /**
+     * Capture an image or video using a command.
+     */
     public function captureWithCmd() {
         //gphoto must be executed in a dir with write permission for other commands we stay in the api dir
         if (substr($this->captureCmd, 0, strlen('gphoto')) === 'gphoto') {
@@ -131,6 +159,9 @@ class PhotoboothCapture {
         }
     }
 
+    /**
+     * Return information about the successful capture process
+     */
     public function returnData() {
         if ($this->style === 'collage') {
             $LogData = [
