@@ -41,22 +41,3 @@ class Helper {
         return $path;
     }
 }
-
-function testFile($file) {
-    if (is_dir($file)) {
-        $ErrorData = [
-            'error' => $file . ' is a path! Frames need to be PNG, Fonts need to be ttf!',
-        ];
-        logError($ErrorData);
-        return false;
-    }
-
-    if (!file_exists($file)) {
-        $ErrorData = [
-            'error' => $file . ' does not exist!',
-        ];
-        logError($ErrorData);
-        return false;
-    }
-    return true;
-}

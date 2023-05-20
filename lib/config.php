@@ -193,31 +193,31 @@ if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $
 $default_font = realpath($basepath . 'resources/fonts/GreatVibes-Regular.ttf');
 $default_frame = realpath($basepath . 'resources/img/frames/frame.png');
 
-if (empty($config['picture']['frame']) || !testFile($config['picture']['frame'])) {
+if (empty($config['picture']['frame']) || !is_file($config['picture']['frame'])) {
     $config['picture']['frame'] = $default_frame;
 }
 
-if (empty($config['textonpicture']['font']) || !testFile($config['textonpicture']['font'])) {
+if (empty($config['textonpicture']['font']) || !is_file($config['textonpicture']['font'])) {
     $config['textonpicture']['font'] = $default_font;
 }
 
-if (empty($config['collage']['frame']) || !testFile($config['collage']['frame'])) {
+if (empty($config['collage']['frame']) || !is_file($config['collage']['frame'])) {
     $config['collage']['frame'] = $default_frame;
 }
 
-if (empty($config['collage']['placeholderpath']) || !testFile($config['collage']['placeholderpath'])) {
+if (empty($config['collage']['placeholderpath']) || !is_file($config['collage']['placeholderpath'])) {
     $config['collage']['placeholderpath'] = realpath($basepath . 'resources/img/background/01.jpg');
 }
 
-if (empty($config['textoncollage']['font']) || !testFile($config['textoncollage']['font'])) {
+if (empty($config['textoncollage']['font']) || !is_file($config['textoncollage']['font'])) {
     $config['textoncollage']['font'] = $default_font;
 }
 
-if (empty($config['print']['frame']) || !testFile($config['print']['frame'])) {
+if (empty($config['print']['frame']) || !is_file($config['print']['frame'])) {
     $config['print']['frame'] = $default_frame;
 }
 
-if (empty($config['textonprint']['font']) || !testFile($config['textonprint']['font'])) {
+if (empty($config['textonprint']['font']) || !is_file($config['textonprint']['font'])) {
     $config['textonprint']['font'] = $default_font;
 }
 
