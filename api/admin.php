@@ -146,7 +146,7 @@ if (isset($data['type'])) {
     }
 
     if ($newConfig['logo']['enabled']) {
-        if (empty($newConfig['logo']['path']) && !file_exists('..' . DIRECTORY_SEPARATOR . $newConfig['logo']['path'])) {
+        if (empty($newConfig['logo']['path']) || !file_exists('..' . DIRECTORY_SEPARATOR . $newConfig['logo']['path'])) {
             $newConfig['logo']['enabled'] = false;
             $Logger->addLogData(['logo' => 'Logo file path does not exist or is empty. Logo disabled']);
         } else {
