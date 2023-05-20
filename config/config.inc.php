@@ -482,6 +482,17 @@ $config['post_photo']['cmd'] = '';
 $config['reboot']['cmd'] = '';
 $config['shutdown']['cmd'] = '';
 
+// NEXTCLOUD
+$config['nextcloud']['enabled'] = false;
+$config['nextcloud']['fileshare'] = true;
+$config['nextcloud']['url'] = '';
+$config['nextcloud']['path'] = '';
+$config['nextcloud']['mnt'] = '/mnt/nextcloud';
+$config['nextcloud']['share'] = '';
+$config['nextcloud']['user'] = '';
+$config['nextcloud']['pass'] = '';
+
+
 // F O L D E R S
 $config['folders']['config'] = 'config';
 $config['folders']['data'] = 'data';
