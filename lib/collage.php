@@ -32,7 +32,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     }
 
     // If there is a placeholder defined, we need to make sure that the image at the placeholder path exists.
-    if ($c->collagePlaceholder && !testFile($c->collagePlaceholderPath)) {
+    if ($c->collagePlaceholder && !is_file($c->collagePlaceholderPath)) {
         throw new Exception('Collage placeholder does not exist.');
     }
 
@@ -120,7 +120,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     $collage_width = $collage_height * 1.5;
 
     $my_collage = imagecreatetruecolor($collage_width, $collage_height);
-    if (!empty($c->collageBackground) && testFile($c->collageBackground)) {
+    if (!empty($c->collageBackground) && is_file($c->collageBackground)) {
         $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
         $imageHandler->resizeMaxWidth = $collage_width;
         $imageHandler->resizeMaxHeight = $collage_height;
