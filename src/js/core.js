@@ -817,8 +817,6 @@ const photoBooth = (function () {
 
 		// Append the loading spinner
 		var spinner = $('<div>').addClass('spinner');
-		$('<div>').addClass('double-bounce1').appendTo(spinner);
-		$('<div>').addClass('double-bounce2').appendTo(spinner);
 		$(modal).find('.modal__body').append(spinner);
 
 		// Call the sharelink.php script to get the share_link
