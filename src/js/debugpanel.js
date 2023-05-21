@@ -2,7 +2,7 @@ $(function () {
     let autoRefreshActive = false;
 
     // Click on nav bar element populates content page
-    $('.debugNavItem').on('click', function () {
+    $('.debugNavItem').on('click', function (e) {
         e.preventDefault();
         $('.adminnavlistelement').removeClass('active');
         $(this).addClass('active');
