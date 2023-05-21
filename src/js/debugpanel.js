@@ -8,7 +8,7 @@ $(function () {
         $(this).addClass('active');
 
         $.ajax({
-            url: '../api/serverInfo.php',
+            url: '../../api/serverInfo.php',
             method: 'GET',
             dataType: 'text',
             data: {
