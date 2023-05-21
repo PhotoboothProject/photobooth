@@ -27,10 +27,14 @@ code {
 }
 
 .slideInRight {
-  animation: slideInRight .25s ease-in-out forwards;
+  animation: slideInRight 0.25s ease-in-out forwards;
 }
 
 @keyframes slideInRight {
-  0% {right: -250px;}
-  100% {right: 10px;}
+  0% {
+    right: -250px;
+  }
+  100% {
+    right: 10px;
+  }
 }
