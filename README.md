@@ -36,10 +36,10 @@ _Latest development version:_
 - Gallery based on [PhotoSwipe v5](https://github.com/PhotoboothProject/PhotoSwipe)
 - Standalone Gallery based on PhotoSwipe v5 ([localhost/gallery.php](http://localhost/gallery.php)).
 - Standalone Slideshow based on PhotoSwipe v5 ([localhost/slideshow](http://localhost/slideshow)).
-- Access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php).
+- Access login via [localhost/login](http://localhost/login) instead [localhost/login](http://localhost/login).
 - Offline manual with settings explained at [localhost/manual](http://localhost/manual).
-- Offline FAQ at [localhost/manual/faq.php](http://localhost/manual/faq.php).
-- Disk usage page, access via admin panel or directly at [localhost/admin/diskusage.php](http://localhost/admin/diskusage.php).
+- Offline FAQ at [localhost/manual/faq](http://localhost/manual/faq).
+- Disk usage page, access via admin panel or directly at [localhost/admin/diskusage](http://localhost/admin/diskusage).
 - Settings can be changed via Admin Panel at ([localhost/admin](http://localhost/admin)):
   - Multi-language support:
     - [Translate on Crowdin](https://crowdin.com/project/photobooth)

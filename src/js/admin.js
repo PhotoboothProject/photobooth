@@ -74,7 +74,7 @@ $(function () {
 
     $('#diskusage-btn').on('click', function (e) {
         e.preventDefault();
-        location.assign('diskusage.php');
+        location.assign('/admin/diskusage');
 
         return false;
     });
@@ -172,7 +172,7 @@ $(function () {
 
     $('#debugpanel-btn').on('click', function (ev) {
         ev.preventDefault();
-        window.open('debugpanel.php');
+        window.open('/admin/debug');
 
         return false;
     });
