@@ -1143,3 +1143,72 @@ For hassle-free (ssh/sftp-free) upload, you may want to use the integrated image
 - Same thing can be applied for collage_placeholderpath so a random holder image takes place.
 - You can specify a diffrent {FrameFolder} for collage frames if needed.
 
+### How can I have my photos coppied to Nextcloud and generate Nextcloud share links for the qrcodes?
+DISCLAIMER: The Photobooth project isn't built for security in mind and should not be exposed to the internet. This feature is no exception. While it requires a connection to a Nextcloud server, it's highly recommended to do so through a VPN such as WireGuard for security.
+
+#### Add packages
+```sh
+sudo apt-get install davfs2 inotify-tools
+```
+- davfs2 is need to mount your Nextcloud directory on the system.
+- inotify-tools gives us the inotifywait tool which is used to watch for new images and then copy them to the Nextcloud mount automatically.
+
+#### Add your Nextcloud details to /etc/davfs2/secrets:
+```sh
+echo "<https://example.nextcloud.com>/remote.php/dav/files/<nextcloud_username>/<path_to_nc_folder> <nextcloud_username> <nextcloud_password>" | sudo tee -a /etc/davfs2/secrets
+```
+- /etc/davfs2/secrets is used by davfs2 to athenticate you against the Nextcloud server.
+- Replace the information enclosed in "<>" your full Nextcloud WebDav URL can be found in the Files app under Files Settings-\>WebDAV on your Nextcloud instance.
+- **Note:** <path_to_nc_folder> is not provided by Nextcloud as described, this is folder path within your user you would like to mount.  
+
+#### Create a systemd service for the mount to persist across reboots:
+```sh
+sudo bash -c 'echo "[Unit]
+Description=Mount personal Nextcloud WebDAV
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+What=https://example.nextcloud.com/
+/remote.php/dav/files/<nextcloud_username>/<path to desired directory>
+Where=/mnt/nextcloud
+Options=noauto,user,uid=33,gid=33
+Type=davfs
+TimeoutSec=60
+
+[Install]
+WantedBy=remote-fs.target" > /etc/systemd/system/mnt-nextcloud.mount'
+```
+
+- A mount service is required to be named according to the directory that is being mounted in this case /mnt/nextloud, therefore this mount service fie must /etc/systemd/system/mnt-nextcloud.mount
+- As with previous add you own information in place of the "<>"
+
+** Enable the service: **
+```sh
+sudo systemctl enable mnt-nextcloud.mount
+sudo systemctl start mnt-nextcloud.mount
+```
+
+- This will ensure the /mnt/nextcloud is mounted at boot time.
+
+#### Using Photobooth with Nextcloud
+
+Photobooth is now set to save photos to your Nextcloud instance and generate shareable links for the images. Scanning the QR code of an image will lead to its shareable link. Note that generating the QR code might take a few seconds after taking the picture. The share links' generation will default to Photobooth's original functionality if the Nextcloud mount is not available.
+
+The following options are available in the Nextcloud section of the admin panel:
+
+1. Enable Nexcloud Storage and Share API: Toggles whether photos are saved to your Nextcloud instance and shareable links are generated for them. When enabled, the image data directory is monitored for new images and copies them to the Nextcloud mount directory.
+
+2. Enable ShareAPI for Image Specific QrCodes: Toggles whether a specific Nextcloud share URL is generated for each image. When enabled, scanning a QR code leads to that specific image's share URL.
+
+3. Nextcloud WebDAV url: Fill with the URL from your Nextcloud instance under Files -> Files Settings -> WebDAV.
+
+4. Path to Nextcloud folder: Specifies the path to the folder where images will be stored in Nextcloud.
+
+5. Path to Nextcloud Mount Directory: Specifies the mount point of the Nextcloud directory on the local system.
+
+6. Share URL for Nextcloud Folder: Specifies a share URL for the folder where images are stored on Nextcloud instance. This share URL will be used if Enable Nexcloud Storage and Share API is disabled or if a image specific share URL cannot be generaed
+
+7. Nextcloud User Name: The username for the Nextcloud account.
+
+8. Nextcloud Password: The password for the Nextcloud account.
