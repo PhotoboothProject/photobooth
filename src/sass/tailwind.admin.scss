@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: 'Dosis', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+@layer components {
+  .debugNavItem.isActive span.corner,
+  .navItem.isActive span.corner {
+    @apply flex;
+  }
+}
+
+code {
+  background: #eee;
+  padding: 3px 5px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.slideInRight {
+  animation: slideInRight .25s ease-in-out forwards;
+}
+
+@keyframes slideInRight {
+  0% {right: -250px;}
+  100% {right: 10px;}
+}
