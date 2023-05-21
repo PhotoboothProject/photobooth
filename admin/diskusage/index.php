@@ -10,7 +10,7 @@ if (
     (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
     !$config['protect']['admin']
 ) {
-    require_once '../../lib/diskusage.php';
+    require_once '../../lib/helper.php';
 } else {
     header('location: ../../login');
     exit();
@@ -67,16 +67,23 @@ if (
 				</div>
 				<?php
 					foreach ($config['foldersAbs'] as $key => $folder) {
-						$path = $config['foldersAbs'][$key];
-						$disk_used = foldersize($config['foldersAbs'][$key]);
+                        try {
+							$folderSize = Helper::getFolderSize($path);
+							$formattedSize = Helper::formatSize($folderSize);
+							$fileCount = Helper::getFileCount($path);
 
-						echo('<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">');
-						echo('<h3 class="font-bold"><span data-i18n="path"></span> ' . $folder . '</h3>');
-						echo('<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">'. format_size($disk_used) .'</span>');
-						echo('<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . get_filecount($path) .'</span>'); 
-						echo('</div>');
-						
-
+							echo('<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">');
+							echo('<h3 class="font-bold"><span data-i18n="path"></span> ' . $folder . '</h3>');
+							echo('<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">'. $formattedSize .'</span>');
+							echo('<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $fileCount .'</span>'); 
+							echo('</div>');
+						} catch (Exception $e) {
+							echo('<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">');
+							echo('<h3 class="font-bold"><span data-i18n="path"></span> ' . $folder . '</h3>');
+							echo('<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">'. $e->getMessage() .'</span>');
+							echo('<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $e->getMessage() .'</span>'); 
+							echo('</div>');
+						}
 					}
 				?>
 			</div>
