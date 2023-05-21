@@ -15,39 +15,16 @@ if (
     exit();
 }
 
-$btnShape = 'shape--' . $config['ui']['button'];
-$uiShape = 'shape--' . $config['ui']['style'];
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
-        <meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
-        <meta name="theme-color" content="<?=$config['colors']['primary']?>">
 
-        <!-- Favicon + Android/iPhone Icons -->
-        <link rel="apple-touch-icon" sizes="180x180" href="../resources/img/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="../resources/img/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="../resources/img/favicon-16x16.png">
-        <link rel="manifest" href="../resources/img/site.webmanifest">
-        <link rel="mask-icon" href="../resources/img/safari-pinned-tab.svg" color="#5bbad5">
 
-        <link rel="stylesheet" type="text/css" href="../node_modules/normalize.css/normalize.css">
-        <link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
-        <link rel="stylesheet" type="text/css" href="../node_modules/material-icons/iconfont/material-icons.css">
-        <link rel="stylesheet" type="text/css" href="../node_modules/material-icons/css/material-icons.css">
-        <link rel="stylesheet" type="text/css" href="../node_modules/selectize/dist/css/selectize.css">
-
-        <!-- tw admin -->
-        <link rel="stylesheet" href="../resources/css/tailwind.admin.css"/>
-</head> 
-<body>
-
-    <?php 
-        include("helper/index.php");
-        include("inputs/index.php");
-    ?>
+<?php 
+	$fileRoot = "../";
+	$pageTitle = "Adminpanel";
+    include("components/head.admin.php");
+    include("helper/index.php");
+    include("inputs/index.php"); 
+?>
 
     <div class="w-full h-full flex flex-col bg-brand-1">
         <div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">
@@ -55,7 +32,7 @@ $uiShape = 'shape--' . $config['ui']['style'];
             <!-- body -->
 			<div class="w-full h-full flex flex-1 flex-col md:flex-row mt-5 overflow-hidden">
                 <?php 
-                    $sidebarHeadline = "Adminpanel";
+                    $sidebarHeadline = $pageTitle;
                     include("components/sidebar.php"); 
                 ?>
 				<div class="flex flex-1 flex-col bg-content-1 rounded-xl ml-5 mr-5 mb-5 md:ml-0 overflow-hidden">
