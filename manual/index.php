@@ -6,7 +6,7 @@ require_once('../lib/config.php');
 // Login / Authentication check
 if (
     !$config['login']['enabled'] ||
-    (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (!$config['protect']['localhost_manual'] && isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['manual'])
 ) {
     require_once('../lib/configsetup.inc.php');
@@ -14,11 +14,6 @@ if (
     header('location: ../login');
     exit();
 }
-
-
-$btnShape = 'shape--' . $config['ui']['button'];
-$uiShape = 'shape--' . $config['ui']['style'];
-$btnClass = 'btn ' . $btnShape;
 
 ?>
 <!DOCTYPE html>
@@ -42,103 +37,118 @@ $btnClass = 'btn ' . $btnShape;
 	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" type="text/css" href="../node_modules/material-icons/iconfont/material-icons.css">
 	<link rel="stylesheet" type="text/css" href="../node_modules/material-icons/css/material-icons.css">
-	<link rel="stylesheet" type="text/css" href="../resources/css/manual.css?v=<?php echo $config['photobooth']['version']; ?>" />
-	<?php if (is_file("../private/overrides.css")): ?>
-	<link rel="stylesheet" href="../private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
-	<?php endif; ?>
+
+	<!-- tw admin -->
+	<link rel="stylesheet" href="../resources/css/tailwind.admin.css"/>
 </head>
-<body class="manualwrapper">
-	<div class="manual-panel <?php echo $uiShape; ?>">
-		<h2><?=$config['ui']['branding']?> Manual</h2>
-		<h3><a class="back-to-pb" href="../">Photobooth</a></h3>
 
-		<div class="accordion">
-			<form>
-				<?php
-					$i = 0;
-					foreach($configsetup as $panel => $fields) {
-						if (empty($fields['view'])) {
-						   $fields['view'] = 'basic';
-						};
+<body>
+	<?php 
+		include("../admin/helper/index.php");
+		include("../admin/inputs/index.php");
+	?>
+	<div class="w-full h-full flex flex-col bg-brand-1">
+		<div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">
 
-						$open = '';
-						if($i == 0){
-							$open = ' open init';
-						}
-						echo '<div class="panel'.$open.'"';
-						switch ($fields['view'])
-						{
-							case 'expert':
-							     if ($config['adminpanel']['view'] == 'advanced') {
-							     	echo ' style="display: none;"';
-							     };
-							case 'advanced':
-							     if ($config['adminpanel']['view'] == 'basic') { 
-    							     	echo ' style="display: none;"';
-							     };
-							case 'basic':
-							     break;
-						};
-						echo '>';
-								echo '<div class="panel-heading '.$uiShape.'">';
-									echo '<h3><span class="minus">-</span><span class="plus">+</span><span data-i18n="'.$panel.'">'.$panel.'</span></h3>';
-								echo '</div>';
-								echo '<div class="panel-body '.$uiShape.'">';
 
-								foreach($fields as $key => $field) {
-									if ($key == 'platform' || $key == 'view') {
-									   continue;
-									   };
-
-									if (! isset($field['view'])) {
-						   	   		   $field['view'] = 'basic';
-									   };
-
-									switch ($field['view'])
-									{
-										case 'expert':
-							     	     		     if ($config['adminpanel']['view'] == 'advanced') { $field['type'] = 'hidden'; };
-										case 'advanced':
-							     	     		     if ($config['adminpanel']['view'] == 'basic') { $field['type'] = 'hidden'; };
-										case 'basic':
-							     	     		     break;
-									};
-
-									switch($field['type']) {
-										case 'checkbox':
-											echo '<div class="form-row">';
-											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'">'.$panel.':'.$key.'</span></h4></p>';
-											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
-											echo '</div>';
-											break;
-										case 'multi-select':
-										case 'range':
-										case 'select':
-										case 'input':
-											echo '<div class="form-row">';
-											echo '<p><h4><span data-i18n="'.$panel.':'.$key.'"></span></h4></p>';
-											echo '<p><span data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</span></p><hr>';
-											echo '</div>';
-											break;
-										case 'color':
-										case 'hidden':
-											echo '<div class="form-row">';
-											echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
-											echo '</div>';
-											break;
-									}
-								}
-								echo '</div>';
-						echo '</div>';
-						$i++;
-					}
+			<!-- body -->
+			<div class="w-full h-full flex flex-1 flex-col md:flex-row mt-5 overflow-hidden">
+				<?php 
+					$sidebarHeadline = "Manual";
+					include("../admin/components/sidebar.php"); 
 				?>
-			</br>
-			<div>
-				<a href="faq.php" class="<?php echo $btnClass; ?> faq-btn" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="<?php echo $config['icons']['faq']; ?>"></i></a></br>
-				<a href="https://photoboothproject.github.io" class="<?php echo $btnClass; ?> wiki-btn"><span data-i18n="show_wiki"></span></a>
+				<div class="flex flex-1 flex-col bg-content-1 rounded-xl ml-5 mr-5 mb-5 md:ml-0 overflow-hidden">
+
+					<div class="w-full h-full flex flex-col" autocomplete="off">
+						<div class="adminContent w-full flex flex-1 flex-col py-5 overflow-x-hidden overflow-y-auto">
+							<form>
+								<?php
+									$i = 0;
+									foreach($configsetup as $panel => $fields) {
+										$panelHidden = "visible";
+										if (empty($fields['view'])) {
+											$fields['view'] = 'basic';
+										};
+										switch ($fields['view'])
+										{
+											case 'experimental':
+													if (!$config['adminpanel']['experimental_settings']) { $panelHidden = 'hidden'; };
+											case 'expert':
+													if ($config['adminpanel']['view'] == 'advanced') { $panelHidden = 'hidden'; };
+													if ($config['adminpanel']['view'] == 'basic') { $panelHidden = 'hidden'; };
+											case 'advanced':
+													if ($config['adminpanel']['view'] == 'basic') { $panelHidden = 'hidden'; };
+											case 'basic':
+													break;
+										};
+						
+										// headline
+										echo '<div id="'.$panel.'" class="adminSection '. $panelHidden .'">';
+											echo '<h2 class="text-brand-1 text-xl font-bold pt-4 px-4 lg:pt-8 lg:px-8 mb-4"> <span data-i18n="'.$panel.'">'.$panel.'</span></h2>';
+											echo '<div class="flex flex-col px-4 lg:px-8 py-2">';
+												echo '<div class="flex flex-col rounded-xl p-3 shadow-xl bg-white">';
+
+													foreach($fields as $key => $field) {
+														if ($key == 'platform' || $key == 'view') {
+														continue;
+														};
+
+														if (!isset($field['view'])) {
+															$field['view'] = 'basic';
+														};
+
+														switch ($field['view'])
+														{
+															case 'expert':
+																		if ($config['adminpanel']['view'] == 'advanced') { $field['type'] = 'hidden'; };
+															case 'advanced':
+																		if ($config['adminpanel']['view'] == 'basic') { $field['type'] = 'hidden'; };
+															case 'basic':
+																		break;
+														};
+
+														switch($field['type']) {
+															case 'checkbox':
+																echo '<div class="w-full max-w-3xl pb-3 mb-3 border-b border-solid border-gray-200">';
+																echo '<h3 class="text-brand-1 text-md font-bold mb-1"><span data-i18n="'.$panel.':'.$key.'">'.$panel.':'.$key.'</span></h3>';
+																echo '<p class="leading-8" data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</p>';
+																echo '</div>';
+																break;
+															case 'multi-select':
+															case 'range':
+															case 'select':
+															case 'input':
+																echo '<div class="w-full max-w-3xl pb-3 mb-3 border-b border-solid border-gray-200">';
+																echo '<h3 class="text-brand-1 text-md font-bold mb-1"><span data-i18n="'.$panel.':'.$key.'"></span></h3>';
+																echo '<p class="leading-8" data-i18n="manual:'.$panel.':'.$key.'">manual:'.$panel.':'.$key.'</p>';
+																echo '</div>';
+																break;
+															case 'color':
+															case 'hidden':
+																if(is_string($field['value'])) {
+																	echo '<input type="hidden" name="'.$field['name'].'" value="'.$field['value'].'"/>';
+																}
+																break;
+														} 
+													}
+												echo '</div>';
+											echo '</div>';
+										echo '</div>';
+										$i++;
+									}
+								?>
+								
+								<div class="py-4 px-4 lg:px-8">
+									<a href="/faq/" class="flex items-center hover:underline hover:text-brand-1 mb-2" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="ml-2 <?php echo $config['icons']['faq']; ?>"></i></a>
+									<a href="https://photoboothproject.github.io" target="_blank" class="flex items-center hover:underline hover:text-brand-1"><span data-i18n="show_wiki"></span></a>
+								</div>
+							</form>
+						</div>
+					</div>
+
+				</div>
 			</div>
-			</form>
+
 		</div>
 	</div>
 
@@ -149,6 +159,8 @@ $btnClass = 'btn ' . $btnShape;
 	<script type="text/javascript" src="../resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 	<script type="text/javascript" src="../resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+
+	<script type="text/javascript" src="../resources/js/main.admin.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 </body>
 </html>
