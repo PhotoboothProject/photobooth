@@ -657,7 +657,7 @@ const photoBooth = (function () {
                     photoboothTools.reloadPage();
                 }, notificationTimeout);
             } else {
-                loading.append($('<a class="btn" href="./">').text(photoboothTools.getTranslation('reload')));
+                loading.append($('<a class="btn" href="/">').text(photoboothTools.getTranslation('reload')));
             }
         }, 500);
     };
