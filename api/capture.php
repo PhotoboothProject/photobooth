@@ -86,7 +86,8 @@ try {
         $captureHandler->captureWithCmd();
     }
     // send image to frontend
-    $captureHandler->returnData();
+    $LogString = json_encode($captureHandler->returnData());
+    die($LogString);
 } catch (Exception $e) {
     $ErrorData = ['error' => $e->getMessage()];
     $Logger->addLogData($ErrorData);
