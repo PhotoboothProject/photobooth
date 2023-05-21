@@ -805,46 +805,47 @@ const photoBooth = (function () {
         api.resetTimeOut();
     };
 
-	api.showQr = function (modal, filename) {
-		photoboothTools.modal.empty(modal);
-		var qrHelpText = config.qr.custom_text ? config.qr.text : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
-		var body = $(modal).find('.modal__body');
-		$('<button>').on('click touchstart', function (ev) {
-			ev.preventDefault();
-			ev.stopPropagation();
-			photoboothTools.modal.close(modal);
-		}).append('<i class="' + config.icons.close + '"></i>').css('float', 'right').appendTo(body);
+    api.showQr = function (modal, filename) {
+        photoboothTools.modal.empty(modal);
+        const qrHelpText = config.qr.custom_text ? config.qr.text : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
+        const body = $(modal).find('.modal__body');
+        $('<button>').on('click touchstart', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            photoboothTools.modal.close(modal);
+        }).append('<i class="' + config.icons.close + '"></i>').css('float', 'right').appendTo(body);
 
-		// Append the loading spinner
-		var spinner = $('<div>').addClass('spinner');
-		$(modal).find('.modal__body').append(spinner);
+        // Append the loading spinner
+        const spinnerDiv = $('<div>').addClass('spinner');
+        $(modal).find('.modal__body').append(spinnerDiv);
 
-		// Call the sharelink.php script to get the share_link
-		$.ajax({
-			url: config.foldersJS.api + "/sharelink.php?filename=" + encodeURIComponent(filename),
-			type: 'GET',
-			success: function(share_link) {
-				if (share_link) {
-					// Create the img tag with the qrcode.php and the share_link parameter
-					$('<img src="' + config.foldersJS.api + '/qrcode.php?share_link=' + encodeURIComponent(share_link) + '" alt="qr code" style="max-width: 100%;"/>').on('load', function () {
-						$('<p>').css('max-width', this.width + 'px').html(qrHelpText).appendTo(body);
-					}).appendTo(body);
-					spinner.remove();
-				} else {
-					console.error("Error getting share link from sharelink.php");
-					spinner.remove();
-				}
-			},
-			error: function(xhr, status, error) {
-				console.log(xhr.responseText);
-				console.error("Error calling sharelink.php");
-				spinner.remove();
-			},
-			timeout: 90000 // sets timeout to 90 seconds
-		});
+        // Call the sharelink.php script to get the share_link
+        $.ajax({
+            url: config.foldersJS.api + '/sharelink.php?filename=' + encodeURIComponent(filename),
+            type: 'GET',
+            success: function(shareLink) {
+                if (shareLink) {
+                    // Create the img tag with the qrcode.php and the shareLink parameter
+                    $('<img src="' + config.foldersJS.api + '/qrcode.php?share_link=' + encodeURIComponent(shareLink) + '" alt="qr code" style="max-width: 100%;"/>').on('load', function () {
+                        $('<p>').css('max-width', this.width + 'px').html(qrHelpText).appendTo(body);
+                    }).appendTo(body);
+                    spinner.remove();
+                } else {
+                    console.error('Error getting share link from sharelink.php');
+                    spinner.remove();
+                }
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                console.error('Error calling sharelink.php');
+                spinner.remove();
+            },
+            // sets timeout to 90 seconds
+            timeout: 90000
+        });
 
-		$(modal).addClass('shape--' + config.ui.style);
-	};
+        $(modal).addClass('shape--' + config.ui.style);
+    };
 
     api.renderPic = function (filename, files) {
         api.filename = filename;
