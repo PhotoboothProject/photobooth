@@ -10,7 +10,7 @@ if (
     (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
     !$config['protect']['admin']
 ) {
-    require_once '../lib/diskusage.php';
+    require_once '../lib/helper.php';
 } else {
     header('location: ../login');
     exit();
@@ -63,12 +63,19 @@ $uiShape = 'shape--' . $config['ui']['style'];
 <?php
     foreach ($config['foldersAbs'] as $key => $folder) {
         $path = $config['foldersAbs'][$key];
-        $disk_used = foldersize($config['foldersAbs'][$key]);
+        try {
+            $folderSize = Helper::getFolderSize($path);
+            $formattedSize = Helper::formatSize($folderSize);
+            $fileCount = Helper::getFileCount($path);
 
-        echo('<h3><span data-i18n="path"></span> ' . $folder . '</h3>');
-        echo('<b><span data-i18n="foldersize"></span></b> ' . format_size($disk_used) . '<br>');
-        echo('<b><span data-i18n="filecount"></span></b> ' . get_filecount($path) . '<br><hr>');
-
+            echo('<h3><span data-i18n="path"></span> ' . $folder . '</h3>');
+            echo('<b><span data-i18n="foldersize"></span></b> ' . $formattedSize . '<br>');
+            echo('<b><span data-i18n="filecount"></span></b> ' . $fileCount . '<br><hr>');
+        } catch (Exception $e) {
+            echo('<h3><span data-i18n="path"></span> ' . $folder . '</h3>');
+            echo('<b><span data-i18n="foldersize"></span></b> ' . $e->getMessage() . '<br>');
+            echo('<b><span data-i18n="filecount"></span></b> ' . $e->getMessage() . '<br><hr>');
+        }
     }
 ?>
 	</div>
