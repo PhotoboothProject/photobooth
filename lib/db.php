@@ -69,7 +69,7 @@ function rebuildPictureDB() {
     }
 
     usort($output, function ($a, $b) {
-        return $a[0] > $b[0];
+        return strlen($a[0]) <=> strlen($b[0]);
     });
 
     if (file_put_contents(DB_FILE, json_encode(array_column($output, 1))) === 'false') {
