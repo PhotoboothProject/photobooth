@@ -178,7 +178,6 @@ class PhotoboothCapture {
             $this->logger->addLogData($LogData);
             $this->logger->logToFile();
         }
-        $LogString = json_encode($LogData);
-        die($LogString);
+        return $LogData;
     }
 }
