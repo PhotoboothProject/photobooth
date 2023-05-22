@@ -381,8 +381,8 @@ def main():
     args = parser.parse_args()
     pid = get_running_pid()
     if pid > 0:
+        print("Service running with pid %d" % pid)
         MessageSender(vars(args))
-        print(pid)
     else:
         CameraControl(args)
 
