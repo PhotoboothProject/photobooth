@@ -803,13 +803,19 @@ const photoBooth = (function () {
 
     api.showQr = function (modal, filename) {
         photoboothTools.modal.empty(modal);
-        const qrHelpText = config.qr.custom_text ? config.qr.text : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
+        const qrHelpText = config.qr.custom_text
+            ? config.qr.text
+            : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
         const body = $(modal).find('.modal__body');
-        $('<button>').on('click touchstart', function (ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            photoboothTools.modal.close(modal);
-        }).append('<i class="' + config.icons.close + '"></i>').css('float', 'right').appendTo(body);
+        $('<button>')
+            .on('click touchstart', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                photoboothTools.modal.close(modal);
+            })
+            .append('<i class="' + config.icons.close + '"></i>')
+            .css('float', 'right')
+            .appendTo(body);
 
         // Append the loading spinner
         const spinnerDiv = $('<div>').addClass('spinner');
@@ -819,19 +825,28 @@ const photoBooth = (function () {
         $.ajax({
             url: 'api/sharelink.php?filename=' + encodeURIComponent(filename),
             type: 'GET',
-            success: function(shareLink) {
+            success: function (shareLink) {
                 if (shareLink) {
                     // Create the img tag with the qrcode.php and the shareLink parameter
-                    $('<img src="api/qrcode.php?share_link=' + encodeURIComponent(shareLink) + '" alt="qr code" style="max-width: 100%;"/>').on('load', function () {
-                        $('<p>').css('max-width', this.width + 'px').html(qrHelpText).appendTo(body);
-                    }).appendTo(body);
+                    $(
+                        '<img src="api/qrcode.php?share_link=' +
+                            encodeURIComponent(shareLink) +
+                            '" alt="qr code" style="max-width: 100%;"/>'
+                    )
+                        .on('load', function () {
+                            $('<p>')
+                                .css('max-width', this.width + 'px')
+                                .html(qrHelpText)
+                                .appendTo(body);
+                        })
+                        .appendTo(body);
                     spinner.remove();
                 } else {
                     console.error('Error getting share link from sharelink.php');
                     spinner.remove();
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.log(xhr.responseText);
                 console.error('Error calling sharelink.php');
                 spinner.remove();
