@@ -46,20 +46,20 @@ include("../admin/inputs/index.php");
 						</p>
 						<h3 class="text-brand-1 font-bold mb-2 mt-4">Here are some basic information for you:</h3>
 						<p class="mb-2">
-							<b>Location of your Photobooth installation:</b><br>
+							<b class="flex mb-1">Location of your Photobooth installation:</b>
 							<code><?=$PHOTOBOOTH_HOME?></code><br>
 							<i class="text-xs text-gray-500">All files and folders inside this path belong to the Webserver user "www-data".</i>
 						</p>
-						<p class="mb-2">
-							<b>Images can be found at:</b> <br>
+						<p class="mb-3">
+							<b class="flex mb-1">Images can be found at:</b> 
 							<code><?=$config['foldersAbs']['images']?></code>
 						</p>
-						<p class="mb-2">
-							<b>Databases are placed at:</b> <br>
+						<p class="mb-3">
+							<b class="flex mb-1">Databases are placed at:</b> 
 							<code><?=$config['foldersAbs']['data']?></code>
 						</p>
 						<p>
-							<b>Add your own files (e.g. background images, frames, overrides.css) inside:</b> <br>
+							<b class="flex mb-1">Add your own files (e.g. background images, frames, overrides.css) inside:</b>
 							<code><?=$PHOTOBOOTH_HOME . DIRECTORY_SEPARATOR . "private"?></code><br>
 							<i class="text-xs text-gray-500">All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i>
 						</p>
