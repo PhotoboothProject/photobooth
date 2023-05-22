@@ -29,4 +29,4 @@
 }
 </style>
 </head> 
-<body>
+<body class="w-full h-screen overflow-hidden fixed">
