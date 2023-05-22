@@ -15,12 +15,6 @@
         <link rel="manifest" href="<?=$fileRoot?>resources/img/site.webmanifest">
         <link rel="mask-icon" href="<?=$fileRoot?>resources/img/safari-pinned-tab.svg" color="#5bbad5">
 
-        <link rel="stylesheet" type="text/css" href="<?=$fileRoot?>node_modules/normalize.css/normalize.css">
-        <link rel="stylesheet" type="text/css" href="<?=$fileRoot?>node_modules/font-awesome/css/font-awesome.css">
-        <link rel="stylesheet" type="text/css" href="<?=$fileRoot?>node_modules/material-icons/iconfont/material-icons.css">
-        <link rel="stylesheet" type="text/css" href="<?=$fileRoot?>node_modules/material-icons/css/material-icons.css">
-        <link rel="stylesheet" type="text/css" href="<?=$fileRoot?>node_modules/selectize/dist/css/selectize.css">
-
         <!-- tw admin -->
         <link rel="stylesheet" href="<?=$fileRoot?>resources/css/tailwind.admin.css"/>
 <style>
