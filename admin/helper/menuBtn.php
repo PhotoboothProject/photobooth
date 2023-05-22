@@ -4,7 +4,7 @@
 
         return(
             '
-                <a href="'. $target .'" class="'. $btnClass .'"><i class="mr-3 '. $icon .'"></i> <span data-i18n="'. $label .'"></span></a>
+                <a href="'. $target .'" class="'. $btnClass .'"><i class="mr-3 '. $icon .'"></i> <span data-i18n="'. $label .'">'. $label .'</span></a>
             '
         );
     }

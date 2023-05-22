@@ -3,8 +3,8 @@ session_start();
 
 require_once 'lib/config.php';
 if (!$config['ui']['skip_welcome']) {
-    if (!is_file('.skip_welcome')) {
-        header('location: welcome.php');
+    if (!is_file('welcome/.skip_welcome')) {
+        header('location: welcome/');
         exit();
     }
 }

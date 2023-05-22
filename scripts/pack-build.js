@@ -74,7 +74,7 @@ function createArchive(fileName, archive) {
     archive.file('private/README.md');
     archive.file('README.md');
     archive.file('trigger.php');
-    archive.file('welcome.php');
+    archive.file('welcome/index.php');
     archive.directory('node_modules/@andreasremdt/simple-translator/');
     archive.directory('node_modules/font-awesome/');
     archive.directory('node_modules/material-icons');

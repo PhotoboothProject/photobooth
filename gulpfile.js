@@ -47,6 +47,7 @@ gulp.task('dev', function() {
       './admin/**/*.php',
       './login/**/*.php',
       './manual/**/*.php',
+      './welcome/**/*.php',
       './src/sass/tailwind.admin.scss',
     ], gulp.series('tailwind-admin'))
     .on('change', browserSync.reload);
