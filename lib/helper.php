@@ -182,4 +182,34 @@ class Helper {
 
         return $fileCount;
     }
+
+    /**
+     * Trims leading and trailing slashes from a path.
+     *
+     * @param string $path The path to trim slashes from.
+     * @return string The trimmed path.
+     */
+    public static function trimSlashes($path) {
+        return trim($path, '/');
+    }
+
+    /**
+     * Checks if a directory is mounted.
+     *
+     * @param string $path The path to the directory.
+     * @return bool True if the directory is mounted, false otherwise.
+     */
+    public static function isDirMounted($path) {
+        $path = realpath($path);
+        $mounts = explode("\n", file_get_contents('/proc/mounts'));
+
+        foreach ($mounts as $mount) {
+            list($dev, $mountpoint) = explode(' ', $mount);
+            if ($mountpoint == $path) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
