@@ -47,37 +47,37 @@ include("../admin/inputs/index.php");
 						<h3 class="text-brand-1 font-bold mb-2 mt-4">Here are some basic information for you:</h3>
 						<p class="mb-2">
 							<b class="flex mb-1">Location of your Photobooth installation:</b>
-							<code><?=$PHOTOBOOTH_HOME?></code><br>
+							<code class="break-all"><?=$PHOTOBOOTH_HOME?></code><br>
 							<i class="text-xs text-gray-500">All files and folders inside this path belong to the Webserver user "www-data".</i>
 						</p>
 						<p class="mb-3">
 							<b class="flex mb-1">Images can be found at:</b> 
-							<code><?=$config['foldersAbs']['images']?></code>
+							<code class="break-all"><?=$config['foldersAbs']['images']?></code>
 						</p>
 						<p class="mb-3">
 							<b class="flex mb-1">Databases are placed at:</b> 
-							<code><?=$config['foldersAbs']['data']?></code>
+							<code class="break-all"><?=$config['foldersAbs']['data']?></code>
 						</p>
 						<p>
 							<b class="flex mb-1">Add your own files (e.g. background images, frames, overrides.css) inside:</b>
-							<code><?=$PHOTOBOOTH_HOME . DIRECTORY_SEPARATOR . "private"?></code><br>
+							<code class="break-all"><?=$PHOTOBOOTH_HOME . DIRECTORY_SEPARATOR . "private"?></code><br>
 							<i class="text-xs text-gray-500">All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i>
 						</p>
 						<p class="mt-4">
 							You can change the settings and look of Photobooth using the Admin panel at 
-							<code><a class="hover:text-brand-1" href="/admin" target="_blank" rel="noopener noreferrer"><?=$URL;?>/admin</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="/admin" target="_blank" rel="noopener noreferrer"><?=$URL;?>/admin</a></code>.
 						</p>
 						<p class="mt-1">
 							A standalone gallery can be found at 
-							<code><a class="hover:text-brand-1" href="gallery.php" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery.php</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="gallery.php" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery.php</a></code>.
 						</p>
 						<p class="mt-1">
 							A standalone slideshow can be found at 
-							<code><a class="hover:text-brand-1" href="slideshow" target="_blank" rel="noopener noreferrer"><?=$URL;?>/slideshow</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="slideshow" target="_blank" rel="noopener noreferrer"><?=$URL;?>/slideshow</a></code>.
 						</p>
 						<p class="mt-1">
 							An integrated FAQ to answer a lot of questions can be found at 
-							<code><a class="hover:text-brand-1" href="/faq" target="_blank" rel="noopener noreferrer"><?=$URL;?>/faq</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="/faq" target="_blank" rel="noopener noreferrer"><?=$URL;?>/faq</a></code>.
 						</p>
 						<p class="mt-4">
 							You are missing some translation or your language isn't supported yet? 
