@@ -127,7 +127,6 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/onoff');
     archive.directory('node_modules/parseqs');
     archive.directory('node_modules/parseuri');
-    archive.directory('node_modules/selectize');
     archive.directory('node_modules/socket.io');
     archive.directory('node_modules/socket.io-adapter');
     archive.directory('node_modules/socket.io-client');
@@ -135,7 +134,6 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/to-array');
     archive.directory('node_modules/file-uri-to-path');
     archive.directory('node_modules/vary');
-    archive.directory('node_modules/waypoints');
     archive.directory('node_modules/ws');
     archive.directory('node_modules/xmlhttprequest-ssl');
     archive.directory('node_modules/yeast');
