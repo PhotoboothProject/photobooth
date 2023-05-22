@@ -132,6 +132,8 @@ class CameraControl:
         if args.device != self.args.device:
             self.args.device = args.device
             print('Video output device changed')
+        if self.ffmpeg:
+            self.ffmpeg.kill()
         self.ffmpeg_open()
         print('Updated video settings')
         if args.imgpath is not None:
