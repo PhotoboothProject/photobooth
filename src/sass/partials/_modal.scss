@@ -75,20 +75,21 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    animation: bounce 2.0s infinite ease-in-out;
+    animation: bounce 2s infinite ease-in-out;
     background-color: #ffffff;
   }
 
   &::after {
-    animation-delay: -1.0s;
+    animation-delay: -1s;
   }
 }
 
 @keyframes bounce {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(0.0);
-  } 
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+  }
   50% {
-    transform: translate(-50%, -50%) scale(1.0);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
