@@ -16,7 +16,7 @@
         </span>
     </div>
     <div class="w-12 h-12 ml-auto text white cursor-pointer flex items-center justify-center" onclick="toggleAdminNavi()">
-        <span class="text-white text-3xl fa fa-bars"></span>
+        <span class="text-white !text-2xl fa fa-bars"></span>
     </div>
 </div>
 
@@ -29,7 +29,7 @@
             </a>
             <h1 class="text-white font-bold"><?=$headline ?></h1>
             <div class="w-12 h-12 ml-auto text white cursor-pointer flex items-center justify-center md:hidden" onclick="toggleAdminNavi()">
-                <span class="text-white text-2xl fa fa-close"></span>
+                <span class="text-white !text-2xl fa fa-close"></span>
             </div>
         </div>
         <div class="w-full h-full flex flex-col overflow-hidden">
