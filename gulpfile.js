@@ -14,6 +14,7 @@ const tailwindcss = require("tailwindcss");
 const rename = require("gulp-rename");
 const autoprefixer = require("autoprefixer");
 const concat = require("gulp-concat");
+const nodeSassImporter = require('node-sass-importer');
 
 gulp.task('dev', function() {
   php.server({
@@ -80,10 +81,12 @@ gulp.task('tailwind-admin', function () {
   var plugins = [
       tailwindcss(twAdminConfig), 
       autoprefixer(),
-  ];
+  ]; 
   return gulp
     .src('./src/sass/tailwind.admin.scss')
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({
+      importer: nodeSassImporter
+    }).on('error', sass.logError))
     .pipe(rename({
       extname: '.scss'
     }))
