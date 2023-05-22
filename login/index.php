@@ -83,7 +83,7 @@ if (isset($_POST['submit'])) {
 			<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 			<div class="w-12 h-12 bg-white absolute right-4 top-4 rounded-b-l-lg shadow-xls flex items-center justify-center text-brand-1 cursor-pointer">
 				<a href="/" >
-					<i class="text-xl <?php echo $config['icons']['close']; ?>"></i>
+					<i class="!text-2xl <?php echo $config['icons']['close']; ?>"></i>
 					<!-- <span data-i18n="close"></span> -->
 				</a>
 			</div>
