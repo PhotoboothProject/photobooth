@@ -12,7 +12,7 @@ if (
     require_once '../lib/configsetup.inc.php';
 } else {
     header('location: ../login');
-    exit();
+    exit(); 
 }
 
 ?>
