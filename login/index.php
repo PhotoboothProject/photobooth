@@ -122,13 +122,8 @@ if (isset($_POST['submit'])) {
 		</div>
 	</div>
 
-	<script src="../node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
-	<script type="text/javascript" src="../api/config.php?v=<?=$config['photobooth']['version']?>"></script>
-	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="../resources/js/adminshortcut.js?v=<?=$config['photobooth']['version']?>"></script>
-	<script type="text/javascript" src="../resources/js/login.js?v=<?=$config['photobooth']['version']?>"></script>
-	<script type="text/javascript" src="../resources/js/theme.js?v=<?=$config['photobooth']['version']?>"></script>
-	<script src="../node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="../resources/js/i18n.js?v=<?=$config['photobooth']['version']?>"></script>
-</body>
-</html>
+
+
+<?php
+    include("../admin/components/footer.admin.php");
+?>

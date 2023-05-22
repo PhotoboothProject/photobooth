@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 // font awesome
-$fa-font-path:        "//netdna.bootstrapcdn.com/font-awesome/4.7.0/fonts";
+$fa-font-path: '//netdna.bootstrapcdn.com/font-awesome/4.7.0/fonts';
 @import '~font-awesome/scss/font-awesome';
 
 body {
   width: 100%;
   height: 100vh;
-  padding: 0; 
+  padding: 0;
   margin: 0;
   font-family: 'Dosis', sans-serif;
   position: relative;
@@ -23,7 +23,7 @@ body {
   }
 }
 
-code {  
+code {
   background: #eee;
   padding: 3px 5px;
   border-radius: 3px;

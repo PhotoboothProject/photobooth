@@ -6,7 +6,7 @@
             w-full h-16 mt-1 px-3
             flex flex-col justify-center shrink-0
             rounded-l-2xl text-white
-            hover:bg-content-1 hover:bg-opacity-10 hover:z-10
+            hover:bg-content-1 hover:bg-opacity-10 hover:z-10 hover:text-brand-1
             [&.isActive]:bg-content-1 [&.isActive]:text-brand-1 [&.isActive]:font-bold 
         ";
         $href = 'href="#'. $label .'"';

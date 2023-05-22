@@ -1,6 +1,6 @@
 <?php
     function getSelect($setting, $i18ntag) {
-        $className = $setting['type'] === 'multi-select' ? ' multi-select' : '';
+        $className = $setting['type'] === 'multi-select' ? 'min-h-[30px] h-32 resize-y ' : '';
         $className .= "w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 mt-auto";
         $settingName = $setting['name'].''.($setting['type'] === 'multi-select' ? '[]' : '');
         $options = "";

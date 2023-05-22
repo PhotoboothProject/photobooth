@@ -17,6 +17,9 @@
 
         <!-- tw admin -->
         <link rel="stylesheet" href="<?=$fileRoot?>resources/css/tailwind.admin.css"/>
+
+        <!-- js -->
+        <script type="text/javascript" src="<?=$fileRoot?>node_modules/jquery/dist/jquery.min.js"></script>
 <style>
 :root {
     --brand-1: <?=$config['colors']['panel'];?>;  
