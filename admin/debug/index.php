@@ -24,7 +24,7 @@ if (
     include("../../admin/inputs/index.php");
     include("../../admin/components/navItem.debug.php");
 ?>
-	<div class="w-full h-full flex flex-col bg-brand-1">
+    <div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
 		<div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">
 
 

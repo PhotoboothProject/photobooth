@@ -23,8 +23,8 @@ if (
 	include("../helper/index.php");
 	include("../inputs/index.php");
 ?>
-	<div class="w-full h-screen grid place-items-center absolute bg-brand-1 px-6 py-12 overflow-x-hidden overflow-y-auto">
-		<div class="w-full flex items-center justify-center flex-col">
+	<div class="w-full h-full grid place-items-center fixed bg-brand-1 overflow-x-hidden overflow-y-auto">
+		<div class="w-full flex items-center justify-center flex-col px-6 py-12">
 
 			<div class="w-full max-w-xl h-144 rounded-lg p-8 bg-white flex flex-col shadow-xl">
 				<div class="w-full flex items-center pb-3 mb-3 border-b border-solid border-gray-200">
