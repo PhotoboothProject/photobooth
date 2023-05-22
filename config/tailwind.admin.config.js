@@ -4,6 +4,7 @@ module.exports = {
     "./admin/**/*.php",
     "./login/**/*.php",
     "./manual/**/*.php",
+    "./welcome/**/*.php",
   ],
   darkMode: "class",
   theme: {
