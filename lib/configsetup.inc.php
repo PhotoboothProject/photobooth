@@ -3049,6 +3049,7 @@ $configsetup = [
     ],
     'nextcloud' => [
         'view' => 'expert',
+        'platform' => 'linux',
         'nextcloud_enabled' => [
             'view' => 'expert',
             'type' => 'checkbox',
