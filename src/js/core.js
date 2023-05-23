@@ -846,16 +846,16 @@ const photoBooth = (function () {
                                 .appendTo(body);
                         })
                         .appendTo(body);
-                    spinner.remove();
+                    spinnerDiv.remove();
                 } else {
                     console.error('Error getting share link from sharelink.php');
-                    spinner.remove();
+                    spinnerDiv.remove();
                 }
             },
             error: function (xhr) {
                 console.log(xhr.responseText);
                 console.error('Error calling sharelink.php');
-                spinner.remove();
+                spinnerDiv.remove();
             },
             // sets timeout to 90 seconds
             timeout: 90000
