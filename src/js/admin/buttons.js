@@ -73,7 +73,7 @@ $(function () {
             success: function (resp) {
                 $('.pageLoader').removeClass('isActive');
                 $('.adminToast').addClass('isActive isSuccess');
-                var msg = elem.find('.success span').html();
+                const msg = elem.find('.success span').html();
                 $('.adminToast').find('.headline').html(msg);
 
                 setTimeout(function () {
@@ -110,7 +110,7 @@ $(function () {
 
                 $('.pageLoader').removeClass('isActive');
                 $('.adminToast').addClass('isActive isSuccess');
-                var msg = elem.find('.success span').html();
+                const msg = elem.find('.success span').html();
                 $('.adminToast').find('.headline').html(msg);
 
                 setTimeout(function () {
@@ -123,7 +123,7 @@ $(function () {
 
                 $('.pageLoader').removeClass('isActive');
                 $('.adminToast').addClass('isActive isError');
-                var msg = elem.find('.error span').html();
+                const msg = elem.find('.error span').html();
                 $('.adminToast').find('.headline').html(msg);
 
                 setTimeout(function () {

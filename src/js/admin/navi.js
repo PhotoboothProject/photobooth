@@ -10,15 +10,15 @@ $(function () {
 });
 
 function isElementInViewport(el) {
-    var offset = 40;
+    let offset = 40;
     if ($('#activeTabLabel').is(':visible')) {
         offset = 100;
     }
     if (typeof jQuery === 'function' && el instanceof jQuery) {
         el = el[0];
     }
-    var rect = el.getBoundingClientRect();
-    var isActive = rect.top <= offset && rect.top >= -el.clientHeight;
+    const rect = el.getBoundingClientRect();
+    const isActive = rect.top <= offset && rect.top >= -el.clientHeight;
 
     if (isActive) {
         return true;
@@ -27,8 +27,8 @@ function isElementInViewport(el) {
 $('.adminContent').on('scroll', function () {
     $('.adminSection.visible').each(function (idx, el) {
         if (isElementInViewport(el)) {
-            var hash = window.location.hash;
-            var urlHash = '#' + el.id;
+            const hash = window.location.hash;
+            const urlHash = '#' + el.id;
             if (hash != urlHash) {
                 window.history.pushState(null, null, urlHash);
                 setNaviItem(el.id);
@@ -41,15 +41,15 @@ function getInitialNaviItem() {
     if (!$('.navItem')[0]) {
         return;
     }
-    var urlHash = window.location.hash;
-    var hash = urlHash.replace('#', '');
+    const urlHash = window.location.hash;
+    const hash = urlHash.replace('#', '');
     if (hash) {
         setNaviItem(hash);
         $(urlHash)[0].scrollIntoView();
     } else {
         $('.navItem').removeClass('isActive');
         $('.navItem').first().addClass('isActive');
-        var itemName = $('.navItem.isActive').find('.naviLabel').html();
+        const itemName = $('.navItem.isActive').find('.naviLabel').html();
         $('#activeTabLabel').html(itemName);
     }
 }
@@ -58,11 +58,11 @@ function setNaviItem(item) {
     $('.navItem').removeClass('isActive');
     $('#nav-' + item).addClass('isActive');
 
-    var itemName = $('.navItem.isActive').find('.naviLabel').html();
+    const itemName = $('.navItem.isActive').find('.naviLabel').html();
     $('#activeTabLabel').html(itemName);
 
-    var top = $('#nav-' + item).offset().top;
-    var height = $(window).height();
+    const top = $('#nav-' + item).offset().top;
+    const height = $(window).height();
 
     if (top <= height || top >= height) {
         $('#nav-' + item)
@@ -87,7 +87,7 @@ function setDebugNavItemActive(elem) {
 
 function initDebugcontent() {
     if (!$('.debugNavItem')[0]) {
-        return;
+
     } else {
         $('.debugNavItem').first().trigger('click');
     }
