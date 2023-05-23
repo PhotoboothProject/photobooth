@@ -3101,7 +3101,7 @@ $configsetup = [
             'type' => 'input',
             'placeholder' => $defaultConfig['nextcloud']['pass'],
             'name' => 'nextcloud[pass]',
-            'value' => $config['nextcloud']['pass'],
+            'value' => htmlentities($config['nextcloud']['pass'] ?? ''),
         ],
     ],
     'folders' => [
