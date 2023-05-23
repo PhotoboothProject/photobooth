@@ -3089,13 +3089,6 @@ $configsetup = [
             'name' => 'nextcloud[mnt]',
             'value' => htmlentities($config['nextcloud']['mnt'] ?? ''),
         ],
-        'nextcloud_share' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['nextcloud']['share'],
-            'name' => 'nextcloud[share]',
-            'value' => htmlentities($config['nextcloud']['share'] ?? ''),
-        ],
         'nextcloud_user' => [
             'view' => 'expert',
             'type' => 'input',
