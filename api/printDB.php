@@ -53,4 +53,5 @@ try {
 $LogData['action'] = $action;
 
 // Output response
-die(json_encode($LogData));
+echo json_encode($LogData);
+exit();

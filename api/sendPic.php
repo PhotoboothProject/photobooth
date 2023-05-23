@@ -13,6 +13,7 @@ require_once '../lib/log.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
 if (empty($_POST['sendTo']) || !PHPMailer::validateAddress($_POST['sendTo'])) {
     $LogData = [
         'success' => false,
@@ -152,4 +153,5 @@ if ($config['dev']['loglevel'] > 0) {
     $Logger->logToFile();
 }
 $LogString = json_encode($LogData);
-die($LogString);
+echo $LogString;
+exit();
