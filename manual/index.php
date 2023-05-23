@@ -15,13 +15,11 @@ if (
     exit();
 }
 
-?>
-<?php 
-	$fileRoot = "../";
-	$pageTitle = "Manual";
-    include("../admin/components/head.admin.php");
-	include("../admin/helper/index.php");
-	include("../admin/inputs/index.php");
+$fileRoot = '../';
+$pageTitle = 'Manual';
+include('../admin/components/head.admin.php');
+include('../admin/helper/index.php');
+include('../admin/inputs/index.php');
 ?>
 	<div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
 		<div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">
@@ -131,5 +129,5 @@ if (
 
 
 <?php
-    include("../admin/components/footer.admin.php");
+    include('../admin/components/footer.admin.php');
 ?>

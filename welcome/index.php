@@ -6,17 +6,16 @@ if (!is_file('.skip_welcome')) {
     touch('.skip_welcome');
 }
 
-
 $photobooth = new Photobooth();
 $URL = $photobooth->getUrl();
-$fileRoot = "../";
+$fileRoot = '../';
 $PHOTOBOOTH_HOME = realpath($fileRoot);
 $PHOTOBOOTH_HOME = rtrim($PHOTOBOOTH_HOME, DIRECTORY_SEPARATOR);
 $pageTitle = 'Welcome to '. $config['ui']['branding'];
 
-include("../admin/components/head.admin.php");
-include("../admin/helper/index.php");
-include("../admin/inputs/index.php");
+include('../admin/components/head.admin.php');
+include('../admin/helper/index.php');
+include('../admin/inputs/index.php');
 ?>
 
 <div class="w-full h-full grid place-items-center fixed bg-brand-1 overflow-x-hidden overflow-y-auto">
@@ -102,7 +101,7 @@ include("../admin/inputs/index.php");
 					<p class="text-center">Thanks for the reading! Enjoy your Photobooth!</p>
 
 					<div class="w-full max-w-md p-5 mx-auto mt-2">
-						<?=getMenuBtn("/", "Start Photobooth", "")?>
+						<?=getMenuBtn('/', 'Start Photobooth', '')?>
 					</div>
 				</div>
 

@@ -19,16 +19,14 @@ if (isset($_POST['submit'])) {
 }
 // END LOGIN
 
-?>
-<?php
-	$fileRoot = "../";
-	$pageTitle = "Login";
-    include("../admin/components/head.admin.php");
-	include("../admin/helper/index.php");
+$fileRoot = '../';
+$pageTitle = 'Login';
+include('../admin/components/head.admin.php');
+include('../admin/helper/index.php');
 
-	$labelClass = "w-full flex flex-col mb-1";
-	$inputClass = "w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto";
-	$btnClass = "w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4";
+$labelClass = 'w-full flex flex-col mb-1';
+$inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto';
+$btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
 ?>
 
 <body>
@@ -92,26 +90,26 @@ if (isset($_POST['submit'])) {
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
 				<?php 
 					if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
-						echo getMenuBtn("/admin", "admin_panel", $config['icons']['admin']);
+						echo getMenuBtn('/admin', 'admin_panel', $config['icons']['admin']);
 					}
 
-					echo getMenuBtn("/gallery.php", "gallery", $config['icons']['gallery']);
-					echo getMenuBtn("/slideshow", "slideshow", $config['icons']['slideshow']);
+					echo getMenuBtn('/gallery.php', 'gallery', $config['icons']['gallery']);
+					echo getMenuBtn('/slideshow', 'slideshow', $config['icons']['slideshow']);
 
 					if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
-						echo getMenuBtn("/livechroma.php", "livechroma", $config['icons']['livechroma']);
+						echo getMenuBtn('/livechroma.php', 'livechroma', $config['icons']['livechroma']);
 					}
 
 					if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
-						echo getMenuBtn("/faq", "show_faq", $config['icons']['faq']);
-						echo getMenuBtn("/manual", "show_manual", $config['icons']['manual']);
-						echo getMenuBtn("https://t.me/PhotoboothGroup", "telegram", $config['icons']['telegram']);
+						echo getMenuBtn('/faq', 'show_faq', $config['icons']['faq']);
+						echo getMenuBtn('/manual', 'show_manual', $config['icons']['manual']);
+						echo getMenuBtn('https://t.me/PhotoboothGroup', 'telegram', $config['icons']['telegram']);
 					}
 
 					// echo getMenuBtn("/", "reload", $config['icons']['refresh']);
 
 					if(isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
-						echo getMenuBtn("/login/logout.php", "logout", $config['icons']['logout']);
+						echo getMenuBtn('/login/logout.php', 'logout', $config['icons']['logout']);
 					}
 
 				?>
@@ -125,5 +123,5 @@ if (isset($_POST['submit'])) {
 
 
 <?php
-    include("../admin/components/footer.admin.php");
+    include('../admin/components/footer.admin.php');
 ?>
