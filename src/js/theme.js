@@ -15,7 +15,6 @@ style.setProperty('--border-color', config.colors.border);
 style.setProperty('--box-color', config.colors.box);
 style.setProperty('--gallery-button-color', config.colors.gallery_button);
 style.setProperty('--background-default', config.background.defaults);
-style.setProperty('--background-admin', config.background.admin);
 style.setProperty('--background-chroma', config.background.chroma);
 style.setProperty('--background-url', config.preview.url);
 style.setProperty('--fontSize', config.ui.font_size);
