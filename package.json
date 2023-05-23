@@ -21,6 +21,7 @@
     "eslint:fix": "eslint src/js/*.js --fix",
     "format": "npm-run-all --parallel format:*",
     "format:js": "prettier src/js/*.js --write",
+    "format:phpadmin": "prettier admin/{,*/**/}*.php --write",
     "format:phpapi": "prettier api/{,*/**/}*.php --write",
     "format:phplib": "prettier lib/*.php --write",
     "format:phptest": "prettier test/*.php --write",
