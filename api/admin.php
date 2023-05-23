@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 
 require_once '../lib/config.php';
+require_once '../lib/helper.php';
 require_once '../lib/db.php';
 require_once '../lib/printdb.php';
 
@@ -154,10 +155,10 @@ if (isset($data['type'])) {
         }
     }
 
-    $content = "<?php\n\$config = " . var_export(arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
+    $content = "<?php\n\$config = " . var_export(Helper::arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
 
     if (file_put_contents($my_config_file, $content)) {
-        clearCache($my_config_file);
+        Helper::clearCache($my_config_file);
         $Logger->addLogData(['config' => 'New config saved']);
 
         if ($data['type'] == 'reset') {
@@ -247,33 +248,3 @@ $Logger->logToFile();
 
 /* Kill service daemons after config has changed */
 require_once '../lib/services_stop.php';
-
-function arrayRecursiveDiff($aArray1, $aArray2) {
-    $aReturn = [];
-
-    foreach ($aArray1 as $mKey => $mValue) {
-        if (array_key_exists($mKey, $aArray2)) {
-            if (is_array($mValue)) {
-                $aRecursiveDiff = arrayRecursiveDiff($mValue, $aArray2[$mKey]);
-                if (count($aRecursiveDiff)) {
-                    $aReturn[$mKey] = $aRecursiveDiff;
-                }
-            } else {
-                if ($mValue != $aArray2[$mKey]) {
-                    $aReturn[$mKey] = $mValue;
-                }
-            }
-        } else {
-            $aReturn[$mKey] = $mValue;
-        }
-    }
-    return $aReturn;
-}
-
-function clearCache($file) {
-    if (function_exists('opcache_invalidate') && strlen(ini_get('opcache.restrict_api')) < 1) {
-        opcache_invalidate($file, true);
-    } elseif (function_exists('apc_compile_file')) {
-        apc_compile_file($file);
-    }
-}
