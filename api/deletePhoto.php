@@ -8,6 +8,8 @@ require_once '../lib/log.php';
 require_once '../lib/deleteFile.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
+$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
 try {
     if (empty($_POST['file'])) {
         throw new Exception('No file provided');
@@ -49,3 +51,4 @@ if (!$logData['success'] || $config['dev']['loglevel'] > 1) {
 
 $logString = json_encode($logData);
 echo $logString;
+exit();

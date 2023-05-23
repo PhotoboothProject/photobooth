@@ -7,7 +7,6 @@ require_once '../lib/db.php';
 require_once '../lib/printdb.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
-
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 
 $data = $_POST;
@@ -248,3 +247,4 @@ $Logger->logToFile();
 
 /* Kill service daemons after config has changed */
 require_once '../lib/services_stop.php';
+exit();

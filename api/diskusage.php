@@ -22,3 +22,4 @@ if ($data['type'] == 'zip') {
         'file' => $file,
     ]);
 }
+exit();

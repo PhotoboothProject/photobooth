@@ -42,3 +42,4 @@ if ($filename || !$config['qr']['append_filename']) {
     http_response_code(400);
     echo 'No filename defined.';
 }
+exit();

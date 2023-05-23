@@ -32,4 +32,5 @@ function getLogData($debugLevel) {
 
 $logData = getLogData($config['dev']['loglevel']);
 $logString = json_encode($logData);
-die($logString);
+echo $logString;
+exit();

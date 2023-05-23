@@ -24,7 +24,6 @@ if ($image) {
         header('Content-Length: ' . filesize($path));
         header('Content-Disposition: attachment; filename="photobooth-' . $image . '"');
         echo file_get_contents($path);
-        exit();
     } catch (Exception $e) {
         http_response_code(500);
         echo 'Error downloading the file ' . $image;
@@ -36,3 +35,4 @@ if ($image) {
     http_response_code(400);
     echo 'No image defined.';
 }
+exit();

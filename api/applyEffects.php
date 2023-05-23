@@ -11,6 +11,7 @@ require_once '../lib/log.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
 try {
     if (!extension_loaded('gd')) {
         throw new Exception('GD library not loaded! Please enable GD!');
@@ -272,3 +273,4 @@ if ($config['dev']['loglevel'] > 1) {
 
 $LogString = json_encode($LogData);
 echo $LogString;
+exit();

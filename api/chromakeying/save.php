@@ -120,4 +120,5 @@ if ($config['dev']['loglevel'] > 1) {
     $Logger->logToFile();
 }
 $LogString = json_encode($LogData);
-die($LogString);
+echo $LogString;
+exit();

@@ -9,6 +9,7 @@ require_once '../lib/log.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
 try {
     if (empty($_GET['filename'])) {
         throw new Exception('No file provided!');
@@ -194,4 +195,5 @@ if ($config['dev']['loglevel'] > 1) {
     $Logger->logToFile();
 }
 $LogString = json_encode($LogData);
-die($LogString);
+echo $LogString;
+exit();

@@ -8,4 +8,5 @@ $database = new DatabaseManager();
 $database->db_file = DB_FILE;
 $database->file_dir = IMG_DIR;
 
-die(json_encode($database->rebuildDB()));
+echo json_encode($database->rebuildDB());
+exit();

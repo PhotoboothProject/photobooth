@@ -90,3 +90,4 @@ if ($config['dev']['loglevel'] > 0) {
 
 $LogString = json_encode($LogData);
 echo $LogString;
+exit();

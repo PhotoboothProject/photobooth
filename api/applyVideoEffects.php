@@ -11,6 +11,7 @@ require_once '../lib/image.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+
 try {
     if (empty($_POST['file'])) {
         throw new Exception('No file provided');
@@ -243,3 +244,4 @@ if ($config['dev']['loglevel'] > 1) {
 }
 $LogString = json_encode($LogData);
 echo $LogString;
+exit();
