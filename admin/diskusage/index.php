@@ -15,13 +15,12 @@ if (
     header('location: ../../login');
     exit();
 }
-?>
-<?php 
-	$fileRoot = "../../";
-	$pageTitle = "Diskusage";
-    include("../../admin/components/head.admin.php");
-	include("../helper/index.php");
-	include("../inputs/index.php");
+
+$fileRoot = '../../';
+$pageTitle = 'Diskusage';
+include('../../admin/components/head.admin.php');
+include('../helper/index.php');
+include('../inputs/index.php');
 ?>
 	<div class="w-full h-full grid place-items-center fixed bg-brand-1 overflow-x-hidden overflow-y-auto">
 		<div class="w-full flex items-center justify-center flex-col px-6 py-12">
@@ -66,5 +65,5 @@ if (
 
 
 <?php
-    include("../components/footer.admin.php");
+    include('../components/footer.admin.php');
 ?>

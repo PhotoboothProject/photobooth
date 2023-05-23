@@ -1,7 +1,7 @@
 <?php
-    include("navItem.php");
+    include('navItem.php');
 
-    $headline = "Sidebar";
+    $headline = 'Sidebar';
     if (isset($sidebarHeadline)) {
         $headline = $sidebarHeadline;
     }

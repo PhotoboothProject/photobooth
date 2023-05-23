@@ -14,15 +14,13 @@ if (
     header('location: ../../login');
     exit();
 }
-?>
 
-<?php 
-	$fileRoot = "../../";
-	$pageTitle = "Debugpanel";
-    include("../../admin/components/head.admin.php");
-    include("../../admin/helper/index.php");
-    include("../../admin/inputs/index.php");
-    include("../../admin/components/navItem.debug.php");
+$fileRoot = '../../';
+$pageTitle = 'Debugpanel';
+include('../../admin/components/head.admin.php');
+include('../../admin/helper/index.php');
+include('../../admin/inputs/index.php');
+include('../../admin/components/navItem.debug.php');
 ?>
     <div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
 		<div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">
@@ -55,15 +53,15 @@ if (
                             <ul class="w-full h-full flex flex-col overflow-x-hidden overflow-y-auto">
                                 <li class="flex w-full h-6 shrink-0"></li>
                                     <?php
-                                        echo getNavItemDebug("myconfig" );
-                                        echo getNavItemDebug("remotebuzzerlog" );
-                                        echo getNavItemDebug("synctodrivelog" );
-                                        echo getNavItemDebug("devlog" );
-                                        echo getNavItemDebug("serverprocesses" );
-                                        echo getNavItemDebug("bootconfig" );
-                                        echo getNavItemDebug("printdb" );
-                                        echo getNavItemDebug("installlog" );
-                                        echo getNavItemDebug("githead" );
+                                        echo getNavItemDebug('myconfig');
+                                        echo getNavItemDebug('remotebuzzerlog');
+                                        echo getNavItemDebug('synctodrivelog');
+                                        echo getNavItemDebug('devlog');
+                                        echo getNavItemDebug('serverprocesses');
+                                        echo getNavItemDebug('bootconfig');
+                                        echo getNavItemDebug('printdb');
+                                        echo getNavItemDebug('installlog');
+                                        echo getNavItemDebug('githead');
                                     ?>
                             </ul>
                     </div>
@@ -108,6 +106,6 @@ if (
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/debugpanel.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 <?php
-    include("../components/footer.admin.php");
+    include('../components/footer.admin.php');
 ?>
 
