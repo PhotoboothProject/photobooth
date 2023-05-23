@@ -36,7 +36,7 @@ $(function () {
 
         // show loader
         $('.pageLoader').addClass('isActive');
-        $('.pageLoader').find('label').html("Wird gespeichert...");
+        $('.pageLoader').find('label').html(photoboothTools.getTranslation('saving'));
 
         // ajax
         $.ajax({
@@ -68,7 +68,7 @@ $(function () {
 
         // show loader
         $('.pageLoader').addClass('isActive');
-        $('.pageLoader').find('label').html("Wird gespeichert...");
+        $('.pageLoader').find('label').html(photoboothTools.getTranslation('busy'));
 
         $.ajax({
             url: '../api/rebuildImageDB.php',
@@ -91,7 +91,7 @@ $(function () {
 
         // show loader
         $('.pageLoader').addClass('isActive');
-        $('.pageLoader').find('label').html("Wird geprüft...");
+        $('.pageLoader').find('label').html(photoboothTools.getTranslation('checking'));
 
         $.ajax({
             url: '../api/checkVersion.php',
