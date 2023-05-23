@@ -122,18 +122,21 @@ class CameraControl:
         if args.exit:
             self.socket.send_string('Exiting service!')
             self.exit_gracefully()
-        self.handle_chroma_params(args)
-        self.handle_video_params(args)
+        video_settings_were_updated = self.handle_chroma_params(args)
+        video_settings_were_updated = video_settings_were_updated or self.handle_video_params(args)
         self.handle_bsm_timeout(args)
         if args.config is not None and args.config != self.args.config:
             self.args.config = args.config
             self.connect_to_camera()
+            video_settings_were_updated = True
             print('Applied updated config')
         if args.device != self.args.device:
             self.args.device = args.device
+            video_settings_were_updated = True
             print('Video output device changed')
-        self.ffmpeg_open()
-        print('Updated video settings')
+        if video_settings_were_updated:
+            self.ffmpeg_open()
+            print('Restarted ffmpeg stream with updated video settings')
         if args.imgpath is not None:
             try:
                 self.capture_image(args.imgpath)
@@ -161,7 +164,7 @@ class CameraControl:
                 self.socket.send_string('failure')
 
     def ffmpeg_open(self):
-        input = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
+        input_config = ['-i', '-', '-vcodec', 'rawvideo', '-pix_fmt', 'yuv420p']
         stream = ['-preset', 'ultrafast', '-f', 'v4l2', self.args.device]
         pre_input = []
         filters = []
@@ -181,8 +184,11 @@ class CameraControl:
                         self.args.video_frames = 99
                     image_fps = self.args.video_frames / self.args.video_length
                     file_output.extend(['-vf', 'fps=' + str(image_fps), self.args.video_path + '-%02d.jpg'])
-        commands = ['ffmpeg', *pre_input, *input, *filters, *stream, *file_output]
+        commands = ['ffmpeg', *pre_input, *input_config, *filters, *stream, *file_output]
         print(commands)
+        if self.ffmpeg:
+            print("end open ffmpeg stream to start a new one")
+            self.ffmpeg.kill()
         self.ffmpeg = Popen(commands, stdin=PIPE)
 
     def handle_bsm_timeout(self, args):
@@ -205,19 +211,23 @@ class CameraControl:
             chroma_blend = 1.0
         chroma_active = chroma_sensitivity != 0.0 and chroma_image is not None
         print('chromakeying active: %s' % chroma_active)
-        self.chroma = {
+        new_chroma = {
             'active': chroma_active,
             'image': chroma_image,
             'color': chroma_color,
             'sensitivity': str(chroma_sensitivity),
             'blend': str(chroma_blend)
         }
+        settings_changed = new_chroma != self.chroma
+        self.chroma = new_chroma
+        return settings_changed
 
     def handle_video_params(self, args):
         self.args.video_path = args.video_path
         self.args.video_frames = args.video_frames
         self.args.video_length = args.video_length
         self.args.video_fps = args.video_fps
+        return args.video_path is not None
 
     def get_chroma_ffmpeg_params(self):
         input_chroma = ['-i', self.chroma['image']]
@@ -371,8 +381,8 @@ def main():
     args = parser.parse_args()
     pid = get_running_pid()
     if pid > 0:
+        print("Service running with pid %d" % pid)
         MessageSender(vars(args))
-        print(pid)
     else:
         CameraControl(args)
 
