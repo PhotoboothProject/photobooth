@@ -1,2 +1,9 @@
 test/chroma.php
 test/preview.php
+admin/index.php
+admin/components/content.php
+admin/components/footer.admin.php
+admin/components/head.admin.php
+admin/components/sidebar.php
+admin/debug/index.php
+admin/diskusage/index.php
