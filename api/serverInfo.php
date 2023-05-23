@@ -66,19 +66,23 @@ function getLatestCommits(): string {
 
 function readFileContents(string $file, bool $devModeRequired = false): string {
     global $config;
-    if ($devModeRequired && $config['dev']['loglevel'] < 1) {
-        throw new Exception('INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.');
-    }
+    try {
+        if ($devModeRequired && $config['dev']['loglevel'] < 1) {
+            throw new Exception('INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.');
+        }
 
-    if (!file_exists($file)) {
-        throw new Exception('INFO: File (' . $file . ') does not exist');
-    }
+        if (!file_exists($file)) {
+            throw new Exception('INFO: File (' . $file . ') does not exist');
+        }
 
-    if (!is_file($file)) {
-        throw new Exception('INFO: Path (' . $file . ') is not a file');
-    }
+        if (!is_file($file)) {
+            throw new Exception('INFO: Path (' . $file . ') is not a file');
+        }
 
-    return file_get_contents($file);
+        return file_get_contents($file);
+    } catch (Exception $e) {
+        return $e->getMessage();
+    }
 }
 
 function read_csv(string $path_to_csv_file, array &$result): bool {
