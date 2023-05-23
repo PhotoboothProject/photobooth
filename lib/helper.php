@@ -47,6 +47,52 @@ class Helper {
     }
 
     /**
+     * Recursively compares two arrays and returns the differences between them.
+     *
+     * @param array $array1 The first array to compare.
+     * @param array $array2 The second array to compare.
+     *
+     * @return array The array containing the differences between $array1 and $array2.
+     */
+    public static function arrayRecursiveDiff($array1, $array2) {
+        $returnArray = [];
+
+        foreach ($array1 as $key => $value) {
+            if (array_key_exists($key, $array2)) {
+                if (is_array($value)) {
+                    $recursiveDiff = self::arrayRecursiveDiff($value, $array2[$key]);
+                    if (count($recursiveDiff)) {
+                        $returnArray[$key] = $recursiveDiff;
+                    }
+                } else {
+                    if ($value != $array2[$key]) {
+                        $returnArray[$key] = $value;
+                    }
+                }
+            } else {
+                $returnArray[$key] = $value;
+            }
+        }
+
+        return $returnArray;
+    }
+
+    /**
+     * Clears the cache for a specific file.
+     *
+     * @param string $file The path to the file for which the cache should be cleared.
+     *
+     * @return void
+     */
+    public static function clearCache($file) {
+        if (function_exists('opcache_invalidate') && strlen(ini_get('opcache.restrict_api')) < 1) {
+            opcache_invalidate($file, true);
+        } elseif (function_exists('apc_compile_file')) {
+            apc_compile_file($file);
+        }
+    }
+
+    /**
      * Calculates the total size of a folder and its subfolders recursively.
      *
      * @param string $path The path to the folder.
