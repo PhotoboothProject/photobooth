@@ -70,7 +70,11 @@ try {
         }
     }
 
+    $imageHandler = new Image();
+    $imageHandler->debugLevel = $config['dev']['loglevel'];
+
     foreach ($srcImages as $image) {
+        $imageHandler->imageModified = false;
         $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $image;
         $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $image;
         $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $image;
@@ -79,10 +83,6 @@ try {
         if (!file_exists($filename_tmp)) {
             throw new Exception('Image doesn\'t exist.');
         }
-
-        $imageHandler = new Image();
-        $imageHandler->debugLevel = $config['dev']['loglevel'];
-        $imageHandler->imageModified = false;
 
         $imageResource = $imageHandler->createFromImage($filename_tmp);
         if (!$imageResource) {
