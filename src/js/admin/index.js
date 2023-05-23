@@ -1,5 +1,4 @@
 $(function () {
-
     // adminRangeInput
     $(document).on('input', '.adminRangeInput', function () {
         document.querySelector('#' + this.name.replace('[', '\\[').replace(']', '\\]') + '-value span').innerHTML =
@@ -8,7 +7,7 @@ $(function () {
 
     // Localization of toggle button text
     $('.adminCheckbox').on('click', function () {
-        if ($(this).find("input").is(':checked')) {
+        if ($(this).find('input').is(':checked')) {
             $('.adminCheckbox-true', this).removeClass('hidden');
             $('.adminCheckbox-false', this).addClass('hidden');
         } else {
@@ -16,9 +15,7 @@ $(function () {
             $('.adminCheckbox-false', this).removeClass('hidden');
         }
     });
-    
 });
-
 
 const shellCommand = function ($mode, $filename = '') {
     const command = {

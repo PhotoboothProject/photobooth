@@ -1,6 +1,5 @@
 /* globals photoboothTools */
 $(function () {
-
     $('#reset-btn').on('click', function (e) {
         e.preventDefault();
         const msg = photoboothTools.getTranslation('really_delete');
@@ -45,7 +44,6 @@ $(function () {
             dataType: 'json',
             type: 'post',
             success: function (resp) {
-
                 setTimeout(function () {
                     if (resp === 'success') {
                         window.location.reload();
@@ -57,7 +55,7 @@ $(function () {
 
     $('#diskusage-btn').on('click', function (e) {
         e.preventDefault();
-        location.assign('/admin/diskusage/');  
+        location.assign('/admin/diskusage/');
 
         return false;
     });
