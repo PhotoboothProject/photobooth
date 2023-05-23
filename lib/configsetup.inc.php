@@ -2452,13 +2452,6 @@ $configsetup = [
             'placeholder' => $defaultConfig['background']['defaults'],
             'value' => htmlentities($config['background']['defaults'] ?? ''),
         ],
-        'background_admin' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'name' => 'background[admin]',
-            'placeholder' => $defaultConfig['background']['admin'],
-            'value' => htmlentities($config['background']['admin'] ?? ''),
-        ],
         'background_chroma' => [
             'view' => 'expert',
             'type' => 'input',

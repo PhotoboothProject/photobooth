@@ -392,7 +392,6 @@ $config['colors']['countdown'] = '#ffffff';
 $config['colors']['background_countdown'] = '#2e2e2e';
 $config['colors']['cheese'] = '#ffffff';
 $config['background']['defaults'] = '';
-$config['background']['admin'] = '';
 $config['background']['chroma'] = '';
 $config['ui']['decore_lines'] = true;
 $config['ui']['rounded_corners'] = false;

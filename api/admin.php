@@ -64,7 +64,6 @@ if (isset($data['type'])) {
         if (
             !is_readable('../template/custom.template.php') &&
             !is_readable('../resources/css/custom_style.css') &&
-            !is_readable('../resources/css/custom_admin.css') &&
             !is_readable('../resources/css/custom_chromakeying.css') &&
             !is_readable('../resources/css/custom_live_chromakeying.css')
         ) {
@@ -76,9 +75,6 @@ if (isset($data['type'])) {
             }
             if (!file_exists('../resources/css/custom_style.css')) {
                 copy('../resources/css/modern_style.css', '../resources/css/custom_style.css');
-            }
-            if (!file_exists('../resources/css/custom_admin.css')) {
-                copy('../resources/css/modern_admin.css', '../resources/css/custom_admin.css');
             }
             if (!file_exists('../resources/css/custom_chromakeying.css')) {
                 copy('../resources/css/modern_chromakeying.css', '../resources/css/custom_chromakeying.css');
