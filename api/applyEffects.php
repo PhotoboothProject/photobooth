@@ -204,7 +204,27 @@ try {
             }
             // preserve jpeg meta data
             if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
-                addExifData($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+                try {
+                    $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+                    $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
+
+                    exec($cmd, $output, $returnValue);
+
+                    if ($returnValue) {
+                        $ErrorData = [
+                            'error' => 'exiftool returned with an error code',
+                            'cmd' => $cmd,
+                            'returnValue' => $returnValue,
+                            'output' => $output,
+                        ];
+                        $Logger->addLogData($ErrorData);
+                    }
+                } catch (Exception $e) {
+                    $ErrorData = [
+                        'error' => $e->getMessage(),
+                    ];
+                    $Logger->addLogData($ErrorData);
+                }
             }
         } else {
             if (!copy($filename_tmp, $filename_photo)) {

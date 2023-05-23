@@ -14,22 +14,3 @@ function getCollageFiles($collage, $filename_tmp, $file, array $srcImages) {
     }
     return [$collageSrcImagePaths, $srcImages];
 }
-
-function addExifData($command, $filename_tmp, $filename_photo) {
-    $cmd = sprintf($command, $filename_tmp, $filename_photo);
-    $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
-
-    exec($cmd, $output, $returnValue);
-
-    if ($returnValue) {
-        $ErrorData = [
-            'error' => 'exiftool returned with an error code',
-            'cmd' => $cmd,
-            'returnValue' => $returnValue,
-            'output' => $output,
-        ];
-        $ErrorString = json_encode($ErrorData);
-        logError($ErrorData);
-        die($ErrorString);
-    }
-}
