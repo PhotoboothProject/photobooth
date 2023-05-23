@@ -1,5 +1,6 @@
 <?php
-require_once '../lib/helper.php';
+require_once __DIR__ . '/helper.php';
+require_once __DIR__ . '/log.php';
 
 /**
  * Class NextcloudShareLink
@@ -29,6 +30,22 @@ class NextcloudShareLink {
      * @var string|null $nextcloudPath The path to the Nextcloud directory.
      */
     public $nextcloudPath;
+
+    /**
+     * @var DataLogger|null $logger
+     */
+    public $logger = null;
+
+    /**
+     * NextcloudShareLink constructor.
+     * @param DataLogger|null $logger
+     */
+    public function __construct($logger = null) {
+        if ($logger == null || !is_object($this->logger)) {
+            $this->logger = new DataLogger(PHOTOBOOTH_LOG);
+            $this->logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+        }
+    }
 
     /**
      * Creates a share link for a file in Nextcloud.
@@ -61,6 +78,7 @@ class NextcloudShareLink {
             'shareType' => 3, // Public link
             'permissions' => 1, // Read-only
         ];
+        $this->logger->addLogData($data);
 
         $retry_count = 0;
         $max_retries = 15; // adjust as needed
@@ -84,13 +102,21 @@ class NextcloudShareLink {
                 $public_url = "{$base_url}/s/{$share_token}";
                 return $public_url;
             } else {
-                $error_message = 'Error creating share link: Data - ' . print_r($data, true) . "; HTTP code - {$http_code}; Response - {$response}";
+                $ErrorData = [
+                    'error' => 'Error creating share link:',
+                    'data' => print_r($data, true),
+                    'httpCode' => $http_code,
+                    'response' => $response,
+                ];
+                $this->logger->addLogData($ErrorData);
                 $retry_count++;
                 if ($retry_count <= $max_retries) {
                     sleep(2); // wait for 2 seconds before retrying
                 }
             }
         } while ($retry_count <= $max_retries);
+
+        $this->logger->logToFile();
 
         return null;
     }
