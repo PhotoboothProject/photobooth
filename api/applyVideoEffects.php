@@ -96,7 +96,9 @@ try {
         if (!$imageHandler->saveJpeg($thumbResource, $thumbsFolder . basename($image))) {
             $imageHandler->addErrorData(['Warning' => 'Failed to create thumbnail.']);
         }
-        imagedestroy($thumbResource);
+        if (is_resource($thumbResource)) {
+            imagedestroy($thumbResource);
+        }
 
         $newFile = $imageFolder . basename($image);
 
