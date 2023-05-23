@@ -1,7 +1,6 @@
 <?php
-    function html_src_indent($num)
-    {
-        echo "\n".str_repeat("\t",$num);
-    }
-    $indent = 2;
+function html_src_indent($num) {
+    echo "\n" . str_repeat("\t", $num);
+}
+$indent = 2;
 ?>
