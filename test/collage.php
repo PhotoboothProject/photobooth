@@ -1,6 +1,7 @@
 <?php
 require_once '../lib/config.php';
 require_once '../lib/collage.php';
+require_once '../lib/image.php';
 
 $demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
 $demoFolder = realpath($demoPath);
@@ -21,16 +22,23 @@ for ($i = 0; $i < $config['collage']['limit']; $i++) {
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
-$out_file = $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
-
 if (createCollage($collageSrcImagePaths, $filename_tmp, $config['filters']['defaults'])) {
     for ($k = 0; $k < $config['collage']['limit']; $k++) {
         unlink($collageSrcImagePaths[$k]);
-    } ?>
-		<html>
-			<body style="width: 80%; height:80%; background-color: <?php echo $config['colors']['primary']; ?>">
-				<img style="max-width: 100%;  max-height: 100%; " src="../<?php echo $out_file; ?>">
-			</body>
-		</html>
-<?php
+    }
+    $imageHandler = new Image();
+    $imageHandler->debugLevel = $config['dev']['loglevel'];
+    $imageHandler->imageModified = false;
+
+    $imageResource = $imageHandler->createFromImage($filename_tmp);
+    if (!$imageResource) {
+        throw new Exception('Error creating image resource.');
+    }
+
+    header('Content-Type: image/jpeg');
+
+    imagejpeg($imageResource);
+    imagedestroy($imageResource);
+    $imageHandler = null;
+    unlink($filename_tmp);
 }
