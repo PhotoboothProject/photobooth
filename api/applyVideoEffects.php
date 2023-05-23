@@ -94,8 +94,7 @@ try {
         $thumbResource = $imageHandler->resizeImage($imageResource);
         $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
         if (!$imageHandler->saveJpeg($thumbResource, $thumbsFolder . basename($image))) {
-            $imageHandler->errorCount++;
-            $imageHandler->errorLog[] = ['Warning' => 'Failed to create thumbnail.'];
+            $imageHandler->addErrorData(['Warning' => 'Failed to create thumbnail.']);
         }
         imagedestroy($thumbResource);
 
@@ -115,8 +114,7 @@ try {
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($image)) {
-                $imageHandler->errorCount++;
-                $imageHandler->errorLog[] = ['Warning' => 'Failed to delete photo.'];
+                $imageHandler->addErrorData(['Warning' => 'Failed to delete photo.']);
             }
         }
 
@@ -125,8 +123,7 @@ try {
         }
         $picture_permissions = $config['picture']['permissions'];
         if (!chmod($newFile, octdec($picture_permissions))) {
-            $imageHandler->errorCount++;
-            $imageHandler->errorLog[] = ['Warning' => 'Failed to change picture permissions.'];
+            $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
         }
     }
 
@@ -136,8 +133,7 @@ try {
         }
         if (!$config['picture']['keep_original']) {
             if (!unlink($filenameTmp)) {
-                $imageHandler->errorCount++;
-                $imageHandler->errorLog[] = ['Warning' => 'Failed to remove temporary photo.'];
+                $imageHandler->addErrorData(['Warning' => 'Failed to remove temporary photo.']);
             }
         }
         $file = $collageFilename;
@@ -176,8 +172,7 @@ try {
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($filenameTmp)) {
-                $imageHandler->errorCount++;
-                $imageHandler->errorLog[] = ['Warning' => 'Failed to remove temporary photo.'];
+                $imageHandler->addErrorData(['Warning' => 'Failed to remove temporary photo.']);
             }
         }
 
@@ -208,8 +203,7 @@ try {
         // Change permissions
         $picture_permissions = $config['picture']['permissions'];
         if (!chmod($filenameOutput, octdec($picture_permissions))) {
-            $imageHandler->errorCount++;
-            $imageHandler->errorLog[] = ['Warning' => 'Failed to change picture permissions.'];
+            $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
         }
     }
 } catch (Exception $e) {
