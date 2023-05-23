@@ -322,6 +322,14 @@ class Image {
     }
 
     /**
+     * Collect error data and increase errorCount
+     */
+    public function addErrorData($errorData) {
+        $this->errorCount++;
+        $this->errorLog[] = $errorData;
+    }
+
+    /**
      * Reset the error count and error log.
      */
     public function errorReset() {
@@ -372,8 +380,7 @@ class Image {
             }
             return $resource;
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             return false;
         }
@@ -420,8 +427,7 @@ class Image {
             return true;
         } catch (Exception $e) {
             // If there is an exception, return false
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             return false;
         }
@@ -499,8 +505,7 @@ class Image {
                 }
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Try to clear cache
             if (is_resource($new)) {
@@ -551,8 +556,7 @@ class Image {
                 throw new Exception('Cannot resize image.');
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Re-throw exception on loglevel > 1
             if ($this->debugLevel > 1) {
@@ -604,8 +608,7 @@ class Image {
                 throw new Exception('Cannot resize image.');
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Try to clear cache
             if (is_resource($new)) {
@@ -669,8 +672,7 @@ class Image {
                 }
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Try to clear cache
             if (is_resource($new)) {
@@ -750,8 +752,7 @@ class Image {
                 throw new Exception('Error applying frame to image.');
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Clear cache
             if (is_resource($img)) {
@@ -817,8 +818,7 @@ class Image {
                 }
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Re-throw exception on loglevel > 1
             if ($this->debugLevel > 1) {
@@ -902,8 +902,7 @@ class Image {
                 throw new Exception('Can\'t add image to resource.');
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
             throw $e;
         }
         $this->imageModified = true;
@@ -934,8 +933,7 @@ class Image {
                 throw new Exception('Can\'t draw image line.');
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Re-throw exception on loglevel > 1
             if ($this->debugLevel > 1) {
@@ -1011,8 +1009,7 @@ class Image {
             }
             return $qrCodeImage;
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
             throw $e;
         }
     }
@@ -1030,8 +1027,8 @@ class Image {
             // Display the QR code as a PNG image
             imagepng($qrCode);
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
+
             // If an exception is caught, display the error message
             echo $e->getMessage();
         }
@@ -1061,8 +1058,7 @@ class Image {
             // Return true if the QR code was successfully saved
             return true;
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // If an exception is caught, return false
             return false;
@@ -1143,8 +1139,7 @@ class Image {
             $this->imageModified = true;
             return $imageResource;
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Try to clear cache
             if (is_resource($qrCode)) {
@@ -1227,8 +1222,7 @@ class Image {
                 throw new Exception('Cannot rotate image.');
             }
         } catch (Exception $e) {
-            $this->errorCount++;
-            $this->errorLog[] = $e->getMessage();
+            $this->addErrorData($e->getMessage());
 
             // Try to clear cache
             if (is_resource($img)) {

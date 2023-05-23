@@ -53,8 +53,7 @@ try {
         throw new Exception('Failed to save ' . $filename_photo);
     }
     if (!$imageHandler->saveJpeg($imageResource, $filename_keying)) {
-        $imageHandler->errorCount++;
-        $imageHandler->errorLog[] = ['Warning' => 'Failed to save chroma image copy.'];
+        $imageHandler->addErrorData(['Warning' => 'Failed to save chroma image copy.']);
     }
 
     // image scale, create thumbnail
@@ -65,8 +64,7 @@ try {
 
     $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
     if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-        $imageHandler->errorCount++;
-        $imageHandler->errorLog[] = ['Warning' => 'Failed to create thumbnail.'];
+        $imageHandler->addErrorData(['Warning' => 'Failed to create thumbnail.']);
     }
 
     // clear cache
@@ -79,16 +77,14 @@ try {
     // insert into database
     if ($config['database']['enabled']) {
         if (!$database->appendContentToDB($file)) {
-            $imageHandler->errorCount++;
-            $imageHandler->errorLog[] = ['Warning' => 'Failed to add ' . $file . ' to database.'];
+            $imageHandler->addErrorData(['Warning' => 'Failed to add ' . $file . ' to database.']);
         }
     }
 
     // Change permissions
     $picture_permissions = $config['picture']['permissions'];
     if (!chmod($filename_photo, octdec($picture_permissions))) {
-        $imageHandler->errorCount++;
-        $imageHandler->errorLog[] = ['Warning' => 'Failed to change picture permissions.'];
+        $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
     }
 } catch (Exception $e) {
     // Try to clear cache
