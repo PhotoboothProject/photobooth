@@ -1,13 +1,6 @@
 <?php
 function getInputButton($setting, $i18ntag, $key, $config) {
     switch ($key) {
-        case 'reset_button':
-            $btn = getCtaBtn('reset', $setting['value'], $config);
-            break;
-        case 'database_rebuild':
-        case 'check_version':
-            $btn = getCtaBtn('check', $setting['value'], $config);
-            break;
         default:
             $btn = getCtaBtn($setting['placeholder'], $setting['value'], $config);
             break;
