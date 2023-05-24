@@ -15,7 +15,7 @@ $(function () {
                 content: this.id
             },
             success: (data) => {
-                $('.debugcontent').html('<pre>' + data + '</pre>');
+                $('.debugcontent').html('<pre class="break-all whitespace-pre-wrap">' + data + '</pre>');
                 if (autoRefreshActive) {
                     $('html,body').animate({scrollTop: $('#admincontentpage').height()}, 0);
                 }
