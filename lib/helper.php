@@ -204,7 +204,7 @@ class Helper {
         $mounts = explode("\n", file_get_contents('/proc/mounts'));
 
         foreach ($mounts as $mount) {
-            list($dev, $mountpoint) = explode(' ', $mount);
+            list($dev, $mountpoint) = array_pad(explode(' ', $mount), 2, null);
             if ($mountpoint == $path) {
                 return true;
             }
