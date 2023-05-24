@@ -23,6 +23,8 @@ function isElementInViewport(el) {
     if (isActive) {
         return true;
     }
+
+    return false;
 }
 $('.adminContent').on('scroll', function () {
     $('.adminSection.visible').each(function (idx, el) {
@@ -38,19 +40,18 @@ $('.adminContent').on('scroll', function () {
 });
 
 function getInitialNaviItem() {
-    if (!$('.navItem')[0]) {
-        return;
-    }
-    const urlHash = window.location.hash;
-    const hash = urlHash.replace('#', '');
-    if (hash) {
-        setNaviItem(hash);
-        $(urlHash)[0].scrollIntoView();
-    } else {
-        $('.navItem').removeClass('isActive');
-        $('.navItem').first().addClass('isActive');
-        const itemName = $('.navItem.isActive').find('.naviLabel').html();
-        $('#activeTabLabel').html(itemName);
+    if ($('.navItem')[0]) {
+        const urlHash = window.location.hash;
+        const hash = urlHash.replace('#', '');
+        if (hash) {
+            setNaviItem(hash);
+            $(urlHash)[0].scrollIntoView();
+        } else {
+            $('.navItem').removeClass('isActive');
+            $('.navItem').first().addClass('isActive');
+            const itemName = $('.navItem.isActive').find('.naviLabel').html();
+            $('#activeTabLabel').html(itemName);
+        }
     }
 }
 
@@ -71,6 +72,7 @@ function setNaviItem(item) {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function toggleAdminNavi() {
     if ($('.adminNavi').hasClass('isActive')) {
         $('.adminNavi').removeClass('isActive');
@@ -79,6 +81,7 @@ function toggleAdminNavi() {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 function setDebugNavItemActive(elem) {
     $('.debugNavItem').removeClass('isActive');
     $(elem).addClass('isActive');
@@ -86,9 +89,7 @@ function setDebugNavItemActive(elem) {
 }
 
 function initDebugcontent() {
-    if (!$('.debugNavItem')[0]) {
-
-    } else {
+    if ($('.debugNavItem')[0]) {
         $('.debugNavItem').first().trigger('click');
     }
 }
