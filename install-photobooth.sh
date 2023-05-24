@@ -61,6 +61,7 @@ COMMON_PACKAGES=(
         'nodejs'
         'php-gd'
         'php-zip'
+        'php-curl'
         'python3'
         'python3-gphoto2'
         'python3-psutil'
