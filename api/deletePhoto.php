@@ -6,6 +6,7 @@ require_once '../lib/db.php';
 require_once '../lib/config.php';
 require_once '../lib/log.php';
 require_once '../lib/deleteFile.php';
+require_once '../lib/nextcloud.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
@@ -42,6 +43,12 @@ if ($config['database']['enabled']) {
     $database->db_file = DB_FILE;
     $database->file_dir = IMG_DIR;
     $database->deleteContentFromDB($file);
+}
+
+// Check for Nextcloud Enabled and Upload image to Nextcloud
+if ($config['nextcloud']['enabled'] && !$config['nextcloud']['mntEnabled']) {
+    $nextcloud = new Nextcloud($config['nextcloud'], $Logger);
+    $nextcloud->deleteImage($file);
 }
 
 if (!$logData['success'] || $config['dev']['loglevel'] > 1) {

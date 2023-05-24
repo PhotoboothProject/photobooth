@@ -84,10 +84,9 @@ if (!file_exists($filename_print)) {
 
         if ($config['print']['qrcode'] && $imageHandler->qrAvailable) {
             // create qr code
-            $imageHandler->qrUrl = $config['qr']['url'];
-            if ($config['qr']['append_filename']) {
-                $imageHandler->qrUrl = $config['qr']['url'] . $filename;
-            }
+            $nextcloud = new Nextcloud($config['nextcloud'], $Logger);
+
+            $imageHandler->qrUrl = $nextcloud->generateShareLink($filename);
             $imageHandler->qrEcLevel = $config['qr']['ecLevel'];
             $imageHandler->qrSize = $config['print']['qrSize'];
             $imageHandler->qrMargin = $config['print']['qrMargin'];

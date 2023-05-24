@@ -478,6 +478,7 @@ $config['shutdown']['cmd'] = '';
 
 // N E X T C L O U D
 $config['nextcloud']['enabled'] = false;
+$config['nextcloud']['mntEnabled'] = false;
 $config['nextcloud']['fileshare'] = true;
 $config['nextcloud']['url'] = '';
 $config['nextcloud']['path'] = '';

@@ -2985,10 +2985,10 @@ $configsetup = [
         ],
     ],
     'nextcloud' => [
-        'view' => 'expert',
+        'view' => 'advanced',
         'platform' => 'linux',
         'nextcloud_enabled' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'nextcloud[enabled]',
             'value' => $config['nextcloud']['enabled'],
@@ -3000,24 +3000,30 @@ $configsetup = [
             'value' => $config['nextcloud']['logfile'],
         ],
         'nextcloud_fileshare' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'nextcloud[fileshare]',
             'value' => $config['nextcloud']['fileshare'],
         ],
         'nextcloud_url' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['nextcloud']['url'],
             'name' => 'nextcloud[url]',
             'value' => htmlentities($config['nextcloud']['url'] ?? ''),
         ],
         'nextcloud_path' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['nextcloud']['path'],
             'name' => 'nextcloud[path]',
             'value' => htmlentities($config['nextcloud']['path'] ?? ''),
+        ],
+        'nextcloud_mntEnabled' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'nextcloud[mntEnabled]',
+            'value' => $config['nextcloud']['mntEnabled'],
         ],
         'nextcloud_mnt' => [
             'view' => 'expert',
@@ -3027,14 +3033,14 @@ $configsetup = [
             'value' => htmlentities($config['nextcloud']['mnt'] ?? ''),
         ],
         'nextcloud_user' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['nextcloud']['user'],
             'name' => 'nextcloud[user]',
             'value' => $config['nextcloud']['user'],
         ],
         'nextcloud_pass' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['nextcloud']['pass'],
             'name' => 'nextcloud[pass]',

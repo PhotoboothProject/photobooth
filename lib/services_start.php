@@ -50,7 +50,7 @@ if ($config['synctodrive']['enabled']) {
     }
 }
 
-if ($config['nextcloud']['enabled']) {
+if ($config['nextcloud']['mntEnabled'] && isset($config['nextcloud']['mnt']) && !empty($config['nextcloud']['mnt'])) {
     if ($config['dev']['loglevel'] > 0) {
         $logfile = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['nextcloud']['logfile'];
     } else {
