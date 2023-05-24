@@ -1,3 +1,4 @@
+/* globals photoboothTools */
 $(function () {
     // adminRangeInput
     $(document).on('input', '.adminRangeInput', function () {
@@ -17,6 +18,7 @@ $(function () {
     });
 });
 
+// eslint-disable-next-line no-unused-vars
 const shellCommand = function ($mode, $filename = '') {
     const command = {
         mode: $mode,

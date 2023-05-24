@@ -1,4 +1,4 @@
-/* globals photoboothTools */
+/* globals photoboothTools shellCommand */
 $(function () {
     $('#reset-btn').on('click', function (e) {
         e.preventDefault();
@@ -70,6 +70,7 @@ $(function () {
 
         $.ajax({
             url: '../api/rebuildImageDB.php',
+            // eslint-disable-next-line no-unused-vars
             success: function (resp) {
                 $('.pageLoader').removeClass('isActive');
                 $('.adminToast').addClass('isActive isSuccess');
