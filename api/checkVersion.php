@@ -18,12 +18,12 @@ function getLogData($debugLevel) {
         ];
 
         if ($debugLevel > 0) {
-            $Logger->addLogData($LogData);
+            $Logger->addLogData($logData);
             $Logger->logToFile();
         }
     } catch (Exception $e) {
         $logData = ['error' => $e->getMessage()];
-        $Logger->addLogData($LogData);
+        $Logger->addLogData($logData);
         $Logger->logToFile();
     }
 
