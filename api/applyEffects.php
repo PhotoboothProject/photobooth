@@ -8,6 +8,7 @@ require_once '../lib/collage.php';
 require_once '../lib/applyEffects.php';
 require_once '../lib/image.php';
 require_once '../lib/log.php';
+require_once '../lib/nextcloud.php';
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
@@ -270,6 +271,12 @@ try {
             if (!unlink($filename_thumb)) {
                 $imageHandler->addErrorData(['Warning' => 'Failed to remove thumbnail.']);
             }
+        }
+
+        // Check for Nextcloud Enabled and Upload image to Nextcloud
+        if ($config['nextcloud']['enabled'] && !$config['nextcloud']['mntEnabled']) {
+            $nextcloud = new Nextcloud($config['nextcloud'], $Logger);
+            $nextcloud->uploadImage($config['foldersAbs']['images'], $file);
         }
     }
 } catch (Exception $e) {
