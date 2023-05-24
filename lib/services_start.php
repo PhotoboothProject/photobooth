@@ -62,7 +62,7 @@ if ($config['nextcloud']['enabled']) {
     } else {
         print "\t<!-- Nextcloud Copy On Mount --- starting server -->\n";
         $command = sprintf(
-            '../scripts/nc_copy_on_mnt.sh "%s" "%s" "%s" 1>%s 2>&1 &',
+            'scripts/nc_copy_on_mnt.sh "%s" "%s" "%s" 1>%s 2>&1 &',
             $config['foldersAbs']['images'],
             $config['nextcloud']['mnt'],
             $config['foldersAbs']['tmp'],
