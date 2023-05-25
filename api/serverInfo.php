@@ -11,7 +11,8 @@ function handleDebugPanel(string $content, array $config): string {
         case 'nav-synctodrivelog':
             return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile'], true);
         case 'nav-myconfig':
-            return json_encode($config);
+            echo implode("\n", showConfig($config));
+            return json_encode('');
         case 'nav-serverprocesses':
             return shell_exec('/bin/ps -ef');
         case 'nav-bootconfig':
@@ -102,6 +103,51 @@ function read_csv(string $path_to_csv_file, array &$result): bool {
     }
 
     return true;
+}
+
+function processItem($key, $content) {
+    $output = [];
+
+    $output[] = "Subconfig: $key";
+
+    if (isset($content)) {
+        if (is_array($content)) {
+            $contentString = implode(', ', $content);
+            $output[] = "Value:     $contentString";
+        } elseif (is_bool($content)) {
+            $contentString = $content ? 'true' : 'false';
+            $output[] = "Value:     $contentString";
+        } else {
+            $output[] = 'Value:     ' . json_encode($content);
+        }
+    } else {
+        $output[] = 'Value:     Not defined';
+    }
+
+    $output[] = '----------------';
+
+    return $output;
+}
+
+function showConfig(array $config): array {
+    $output = [];
+
+    foreach ($config as $name => $items) {
+        $output[] = '################################';
+        $output[] = "Config: $name";
+        $output[] = '----------------';
+
+        if (is_array($items)) {
+            foreach ($items as $key => $content) {
+                $itemOutput = processItem($key, $content);
+                $output = array_merge($output, $itemOutput);
+            }
+        } else {
+            $output[] = 'Invalid value for items';
+        }
+    }
+
+    return $output;
 }
 
 function generateTableHtml(array $columns, array $result): string {
