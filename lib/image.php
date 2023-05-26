@@ -442,7 +442,7 @@ class Image {
     public function rotateResizeImage($image) {
         try {
             if (!$image) {
-                throw new InvalidArgumentException('Invalid image resource');
+                throw new Exception('Invalid image resource');
             }
 
             $rotation = $this->resizeRotation;
@@ -534,7 +534,7 @@ class Image {
     public function resizeImage($image) {
         try {
             if (!$image) {
-                throw new InvalidArgumentException('Invalid image resource.');
+                throw new Exception('Invalid image resource.');
             }
 
             $old_width = imagesx($image);
@@ -543,7 +543,7 @@ class Image {
             $max_height = $this->resizeMaxHeight;
 
             if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
-                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+                throw new Exception('Invalid image dimensions or maximum dimensions.');
             }
 
             $scale = min($max_width / $old_width, $max_height / $old_height);
@@ -580,7 +580,7 @@ class Image {
     public function resizePngImage($image) {
         try {
             if (!$image) {
-                throw new InvalidArgumentException('Invalid image resource.');
+                throw new Exception('Invalid image resource.');
             }
 
             $old_width = imagesx($image);
@@ -589,7 +589,7 @@ class Image {
             $max_height = $this->resizeMaxHeight;
 
             if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
-                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+                throw new Exception('Invalid image dimensions or maximum dimensions.');
             }
 
             $scale = min($max_width / $old_width, $max_height / $old_height);
@@ -642,7 +642,7 @@ class Image {
             $max_height = $this->resizeMaxHeight;
 
             if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
-                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+                throw new Exception('Invalid image dimensions or maximum dimensions.');
             }
 
             $new_width = intval(($old_height * $max_width) / $max_height);
@@ -1088,7 +1088,7 @@ class Image {
             $qrHeight = imagesy($qrCode);
 
             if ($width <= 0 || $height <= 0 || $qrWidth <= 0 || $qrHeight <= 0) {
-                throw new InvalidArgumentException('Invalid image dimensions or maximum dimensions.');
+                throw new Exception('Invalid image dimensions or maximum dimensions.');
             }
             switch ($this->qrPosition) {
                 case 'topLeft':
