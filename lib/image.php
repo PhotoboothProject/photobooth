@@ -508,7 +508,7 @@ class Image {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (is_resource($new)) {
+            if (isset($new) && is_resource($new)) {
                 imagedestroy($new);
             }
 
@@ -611,7 +611,7 @@ class Image {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (is_resource($new)) {
+            if (isset($new) && is_resource($new)) {
                 imagedestroy($new);
             }
 
@@ -675,7 +675,7 @@ class Image {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (is_resource($new)) {
+            if (isset($new) && is_resource($new)) {
                 imagedestroy($new);
             }
 
@@ -755,7 +755,7 @@ class Image {
             $this->addErrorData($e->getMessage());
 
             // Clear cache
-            if (is_resource($img)) {
+            if (isset($new) && is_resource($img)) {
                 imagedestroy($img);
             }
 
@@ -1142,7 +1142,7 @@ class Image {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (is_resource($qrCode)) {
+            if (isset($qrCode) && is_resource($qrCode)) {
                 imagedestroy($qrCode);
             }
 
@@ -1225,7 +1225,7 @@ class Image {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (is_resource($img)) {
+            if (isset($img) && is_resource($img)) {
                 imagedestroy($img);
             }
 
