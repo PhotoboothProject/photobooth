@@ -54,6 +54,12 @@ if ($config['picture']['polaroid_effect']) {
 
 if ($config['picture']['take_frame']) {
     $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
+    if ($config['picture']['extend_by_frame']) {
+        $imageHandler->frameExtendLeft = $config['picture']['frame_left_percentage'];
+        $imageHandler->frameExtendRight = $config['picture']['frame_right_percentage'];
+        $imageHandler->frameExtendBottom = $config['picture']['frame_bottom_percentage'];
+        $imageHandler->frameExtendTop = $config['picture']['frame_top_percentage'];
+    }
     $imageResource = $imageHandler->applyFrame($imageResource);
     if (!$imageResource) {
         throw new Exception('Error applying frame to image resource.');
