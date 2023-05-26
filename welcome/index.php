@@ -64,19 +64,19 @@ include('../admin/inputs/index.php');
 						</p>
 						<p class="mt-4">
 							You can change the settings and look of Photobooth using the Admin panel at 
-							<code class="break-all"><a class="hover:text-brand-1" href="/admin" target="_blank" rel="noopener noreferrer"><?=$URL;?>/admin</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="../admin" target="_blank" rel="noopener noreferrer"><?=$URL;?>/admin</a></code>.
 						</p>
 						<p class="mt-1">
 							A standalone gallery can be found at 
-							<code class="break-all"><a class="hover:text-brand-1" href="gallery.php" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery.php</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="../gallery.php" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery.php</a></code>.
 						</p>
 						<p class="mt-1">
 							A standalone slideshow can be found at 
-							<code class="break-all"><a class="hover:text-brand-1" href="slideshow" target="_blank" rel="noopener noreferrer"><?=$URL;?>/slideshow</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="../slideshow" target="_blank" rel="noopener noreferrer"><?=$URL;?>/slideshow</a></code>.
 						</p>
 						<p class="mt-1">
 							An integrated FAQ to answer a lot of questions can be found at 
-							<code class="break-all"><a class="hover:text-brand-1" href="/faq" target="_blank" rel="noopener noreferrer"><?=$URL;?>/faq</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="../faq" target="_blank" rel="noopener noreferrer"><?=$URL;?>/faq</a></code>.
 						</p>
 						<p class="mt-4">
 							You are missing some translation or your language isn't supported yet? 
