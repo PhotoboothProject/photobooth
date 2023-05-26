@@ -134,6 +134,38 @@ $(function () {
         });
     });
 
+    $('#reset-print-lock-btn').on('click', function (e) {
+        e.preventDefault();
+        const elem = $(this);
+
+        // show loader
+        $('.pageLoader').addClass('isActive');
+        $('.pageLoader').find('label').html(photoboothTools.getTranslation('busy'));
+
+        $.ajax({
+            method: 'GET',
+            url: '../api/printDB.php',
+            data: {
+                action: 'unlockPrint'
+            },
+            success: (data) => {
+                $('.pageLoader').removeClass('isActive');
+                if (data.success) {
+                    $('.adminToast').addClass('isActive isSuccess');
+                    const msg = elem.find('.success span').html();
+                    $('.adminToast').find('.headline').html(msg);
+                } else {
+                    $('.adminToast').addClass('isActive isError');
+                    const msg = elem.find('.error span').html();
+                    $('.adminToast').find('.headline').html(msg);
+                }
+                setTimeout(function () {
+                    $('.adminToast').removeClass('isActive');
+                }, 2000);
+            }
+        });
+    });
+
     $('#debugpanel-btn').on('click', function (ev) {
         ev.preventDefault();
         window.open('/admin/debug');
