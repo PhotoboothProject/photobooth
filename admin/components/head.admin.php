@@ -18,6 +18,9 @@
         <!-- tw admin -->
         <link rel="stylesheet" href="<?=$fileRoot?>resources/css/tailwind.admin.css"/>
 
+        <?php if (is_file($fileRoot . "private/overrides.css")): ?>
+        <link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
+        <?php endif; ?>
         <!-- js -->
         <script type="text/javascript" src="<?=$fileRoot?>node_modules/jquery/dist/jquery.min.js"></script>
 <style>
