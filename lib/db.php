@@ -93,7 +93,7 @@ class DatabaseManager {
      */
     public function appendContentToDB($content) {
         if (!$content) {
-            throw new InvalidArgumentException('Invalid content.');
+            throw new Exception('Invalid content.');
         }
 
         // check if the database file is defined and non-empty
@@ -116,7 +116,7 @@ class DatabaseManager {
      */
     public function deleteContentFromDB($content) {
         if (!$content) {
-            throw new InvalidArgumentException('Invalid filename.');
+            throw new Exception('Invalid filename.');
         }
 
         // check if the database file is defined and non-empty
@@ -144,7 +144,7 @@ class DatabaseManager {
      */
     public function isInDB($content) {
         if (!$content) {
-            throw new InvalidArgumentException('Invalid filename.');
+            throw new Exception('Invalid filename.');
         }
 
         // check if the database file is defined and non-empty
