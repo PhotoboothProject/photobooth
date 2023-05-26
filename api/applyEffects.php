@@ -135,6 +135,12 @@ try {
             if (($config['picture']['take_frame'] && !$isCollage) || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
                 if (!$isCollage) {
                     $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
+                    if ($config['picture']['extend_by_frame']) {
+                        $imageHandler->frameExtendLeft = $config['picture']['frame_left_percentage'];
+                        $imageHandler->frameExtendRight = $config['picture']['frame_right_percentage'];
+                        $imageHandler->frameExtendBottom = $config['picture']['frame_bottom_percentage'];
+                        $imageHandler->frameExtendTop = $config['picture']['frame_top_percentage'];
+                    }
                 } else {
                     $imageHandler->frameExtend = false;
                 }
