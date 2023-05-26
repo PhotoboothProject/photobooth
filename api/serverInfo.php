@@ -31,10 +31,11 @@ function handleDebugPanel(string $content, array $config): string {
                 return 'Can\'t read print database.';
             } else {
                 $columns = [
-                    0 => 'Date',
-                    1 => 'Time',
-                    2 => 'Image',
-                    3 => 'Unique name',
+                    0 => 'Count',
+                    1 => 'Date',
+                    2 => 'Time',
+                    3 => 'Image',
+                    4 => 'Unique name',
                 ];
                 return generateTableHtml($columns, $result);
             }
