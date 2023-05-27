@@ -1162,28 +1162,36 @@ echo "<https://example.nextcloud.com>/remote.php/dav/files/<nextcloud_username>/
 - **Note:** <path_to_nc_folder> is not provided by Nextcloud as described, this is folder path within your user you would like to mount.  
 
 #### Create a systemd service for the mount to persist across reboots:
-```sh
-sudo bash -c 'echo "[Unit]
+
+Create the service file:
+
+```
+sudo nano /etc/systemd/system/mnt-nextcloud.mount
+```
+
+now add the following lines:
+
+```
+[Unit]
 Description=Mount personal Nextcloud WebDAV
 After=network-online.target
 Wants=network-online.target
 
 [Mount]
-What=https://example.nextcloud.com/
-/remote.php/dav/files/<nextcloud_username>/<path to desired directory>
+What=https://example.nextcloud.com/remote.php/dav/files/<nextcloud_username>/<path to desired directory>
 Where=/mnt/nextcloud
 Options=noauto,user,uid=33,gid=33
 Type=davfs
 TimeoutSec=60
 
 [Install]
-WantedBy=remote-fs.target" > /etc/systemd/system/mnt-nextcloud.mount'
+WantedBy=remote-fs.target
 ```
 
 - A mount service is required to be named according to the directory that is being mounted in this case /mnt/nextloud, therefore this mount service fie must /etc/systemd/system/mnt-nextcloud.mount
 - As with previous add you own information in place of the "<>"
 
-** Enable the service: **
+**Enable the service:**
 ```sh
 sudo systemctl enable mnt-nextcloud.mount
 sudo systemctl start mnt-nextcloud.mount
