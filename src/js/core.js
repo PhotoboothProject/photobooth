@@ -86,6 +86,7 @@ const photoBooth = (function () {
 
     api.takingPic = false;
     api.nextCollageNumber = 0;
+    api.chromaimage = '';
 
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -786,22 +787,10 @@ const photoBooth = (function () {
         if (config.live_keying.show_all) {
             api.addImage(filename);
         }
-        const imageUrl = config.live_keying.show_all
-            ? config.foldersJS.images + '/' + filename
-            : config.foldersJS.keying + '/' + filename;
-        const preloadImage = new Image();
+        loader.hide();
 
-        preloadImage.onload = function () {
-            $('body').attr('data-main-image', filename);
-            photoboothTools.console.log('Chroma image: ' + config.foldersJS.keying + '/' + filename);
-            const chromaimage = config.foldersJS.keying + '/' + filename;
-
-            loader.hide();
-            api.chromaimage = filename;
-            setMainImage(chromaimage);
-        };
-
-        preloadImage.src = imageUrl;
+        const chromaimage = config.foldersJS.keying + '/' + filename;
+        setMainImage(chromaimage, filename);
 
         api.takingPic = false;
         remoteBuzzerClient.inProgress(false);

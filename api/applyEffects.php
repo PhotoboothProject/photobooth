@@ -53,8 +53,11 @@ try {
 }
 
 $isCollage = false;
+$isChroma = false;
 if ($_POST['style'] === 'collage') {
     $isCollage = true;
+} elseif ($_POST['style'] === 'chroma') {
+    $isChroma = true;
 }
 
 $srcImages = [];
@@ -90,75 +93,77 @@ try {
             throw new Exception('Error creating image resource.');
         }
 
-        if ($isCollage && $file != $image) {
-            $editSingleCollage = true;
-            $imageHandler->framePath = $config['collage']['frame'];
-        } else {
-            $editSingleCollage = false;
-            $imageHandler->framePath = $config['picture']['frame'];
-        }
+        if (!$isChroma) {
+            if ($isCollage && $file != $image) {
+                $editSingleCollage = true;
+                $imageHandler->framePath = $config['collage']['frame'];
+            } else {
+                $editSingleCollage = false;
+                $imageHandler->framePath = $config['picture']['frame'];
+            }
 
-        if (!$isCollage || $editSingleCollage) {
-            if ($config['picture']['flip'] !== 'off') {
-                try {
-                    if ($config['picture']['flip'] === 'horizontal') {
-                        imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-                    } elseif ($config['picture']['flip'] === 'vertical') {
-                        imageflip($imageResource, IMG_FLIP_VERTICAL);
-                    } elseif ($config['picture']['flip'] === 'both') {
-                        imageflip($imageResource, IMG_FLIP_BOTH);
+            if (!$isCollage || $editSingleCollage) {
+                if ($config['picture']['flip'] !== 'off') {
+                    try {
+                        if ($config['picture']['flip'] === 'horizontal') {
+                            imageflip($imageResource, IMG_FLIP_HORIZONTAL);
+                        } elseif ($config['picture']['flip'] === 'vertical') {
+                            imageflip($imageResource, IMG_FLIP_VERTICAL);
+                        } elseif ($config['picture']['flip'] === 'both') {
+                            imageflip($imageResource, IMG_FLIP_BOTH);
+                        }
+                        $imageHandler->imageModified = true;
+                    } catch (Exception $e) {
+                        throw new Exception('Error flipping image.');
                     }
-                    $imageHandler->imageModified = true;
-                } catch (Exception $e) {
-                    throw new Exception('Error flipping image.');
                 }
-            }
 
-            // apply filter
-            if ($image_filter) {
-                try {
-                    applyFilter($image_filter, $imageResource);
-                    $imageHandler->imageModified = true;
-                } catch (Exception $e) {
-                    throw new Exception('Error applying image filter.');
-                }
-            }
-
-            if ($config['picture']['polaroid_effect'] && !$isCollage) {
-                $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
-                $imageResource = $imageHandler->effectPolaroid($imageResource);
-                if (!$imageResource) {
-                    throw new Exception('Error applying polaroid effect.');
-                }
-            }
-
-            if (($config['picture']['take_frame'] && !$isCollage) || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
-                if (!$isCollage) {
-                    $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
-                    if ($config['picture']['extend_by_frame']) {
-                        $imageHandler->frameExtendLeft = $config['picture']['frame_left_percentage'];
-                        $imageHandler->frameExtendRight = $config['picture']['frame_right_percentage'];
-                        $imageHandler->frameExtendBottom = $config['picture']['frame_bottom_percentage'];
-                        $imageHandler->frameExtendTop = $config['picture']['frame_top_percentage'];
+                // apply filter
+                if ($image_filter) {
+                    try {
+                        applyFilter($image_filter, $imageResource);
+                        $imageHandler->imageModified = true;
+                    } catch (Exception $e) {
+                        throw new Exception('Error applying image filter.');
                     }
-                } else {
-                    $imageHandler->frameExtend = false;
                 }
-                $imageResource = $imageHandler->applyFrame($imageResource);
-                if (!$imageResource) {
-                    throw new Exception('Error applying frame to image resource.');
-                }
-            }
 
-            if ($config['picture']['rotation'] !== '0') {
-                $imageHandler->resizeRotation = $config['picture']['rotation'];
-                $imageResource = $imageHandler->rotateResizeImage($imageResource);
-                if (!$imageResource) {
-                    throw new Exception('Error resizing resource.');
+                if ($config['picture']['polaroid_effect'] && !$isCollage) {
+                    $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
+                    $imageResource = $imageHandler->effectPolaroid($imageResource);
+                    if (!$imageResource) {
+                        throw new Exception('Error applying polaroid effect.');
+                    }
+                }
+
+                if (($config['picture']['take_frame'] && !$isCollage) || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
+                    if (!$isCollage) {
+                        $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
+                        if ($config['picture']['extend_by_frame']) {
+                            $imageHandler->frameExtendLeft = $config['picture']['frame_left_percentage'];
+                            $imageHandler->frameExtendRight = $config['picture']['frame_right_percentage'];
+                            $imageHandler->frameExtendBottom = $config['picture']['frame_bottom_percentage'];
+                            $imageHandler->frameExtendTop = $config['picture']['frame_top_percentage'];
+                        }
+                    } else {
+                        $imageHandler->frameExtend = false;
+                    }
+                    $imageResource = $imageHandler->applyFrame($imageResource);
+                    if (!$imageResource) {
+                        throw new Exception('Error applying frame to image resource.');
+                    }
+                }
+
+                if ($config['picture']['rotation'] !== '0') {
+                    $imageHandler->resizeRotation = $config['picture']['rotation'];
+                    $imageResource = $imageHandler->rotateResizeImage($imageResource);
+                    if (!$imageResource) {
+                        throw new Exception('Error resizing resource.');
+                    }
                 }
             }
         }
-        if ($config['keying']['enabled'] || $_POST['style'] === 'chroma') {
+        if ($config['keying']['enabled'] || $isChroma) {
             $chroma_size = substr($config['keying']['size'], 0, -2);
             $imageHandler->resizeMaxWidth = $chroma_size;
             $imageHandler->resizeMaxHeight = $chroma_size;
@@ -172,7 +177,7 @@ try {
             }
         }
 
-        if (!$isCollage && $config['textonpicture']['enabled']) {
+        if (!$isCollage && !$isChroma && $config['textonpicture']['enabled']) {
             $imageHandler->fontSize = $config['textonpicture']['font_size'];
             $imageHandler->fontRotation = $config['textonpicture']['rotation'];
             $imageHandler->fontLocationX = $config['textonpicture']['locationx'];
@@ -241,7 +246,7 @@ try {
 
         // insert into database
         if ($config['database']['enabled']) {
-            if ($_POST['style'] !== 'chroma' || ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === true)) {
+            if (!$isChroma || ($isChroma && $config['live_keying']['show_all'] === true)) {
                 $database->appendContentToDB($image);
             }
         }
