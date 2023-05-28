@@ -200,4 +200,110 @@ $(function () {
 
         return false;
     });
+
+    $('#nclogin-btn').on('click', function (e) {
+        e.preventDefault();
+
+        // show loader
+        $('.pageLoader').addClass('isActive');
+        $('.pageLoader').find('label').html(photoboothTools.getTranslation('ncCredentials'));
+
+        let url = $('input[name="nextcloud[url]"]').val().trim();
+
+        // Process the url input
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        if (url.endsWith('/')) {
+            url = url.slice(0, -1);
+        }
+        $('input[name="nextcloud[url]"]').val(url);
+
+        // Send Nextcloud Login flow v2 request
+        $.ajax({
+            type: 'POST',
+            url: '../api/nclogin.php',
+            data: {url: url},
+            success: function (response) {
+                response = $.parseJSON(response);
+                // Open new tab or window
+                window.open(response.login);
+                // Start polling Poll Endpoint
+                $.ajax({
+                    type: 'POST',
+                    url: '../api/ncpoll.php',
+                    data: JSON.stringify(response),
+                    contentType: 'application/json',
+                    success: function (resp) {
+                        response = $.parseJSON(resp);
+                        $('.pageLoader').find('div[role="status"]').hide();
+                        $('.pageLoader').find('label').html(photoboothTools.getTranslation('ncCredentials'));
+                        $('input[name="nextcloud[user]"]').val(response.loginName);
+                        $('input[name="nextcloud[pass]"]').val(response.appPassword);
+                        setTimeout(function () {
+                            $('.pageLoader').removeClass('isActive');
+                            $('.pageLoader').find('div[role="status"]').show();
+                            $('#save-admin-btn').click();
+                        }, 3000);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $('.pageLoader').find('div[role="status"]').hide();
+                        switch (jqXHR.status) {
+                            case 400:
+                                // Handle 400 Bad Request error
+                                $('.pageLoader')
+                                    .find('label')
+                                    .html('Invalid input: ' + jqXHR.responseText);
+                                break;
+                            case 500:
+                                // Handle 500 Internal Server Error
+                                $('.pageLoader').find('label').html('An error occurred on the server.');
+                                break;
+                            default:
+                                // Handle other HTTP error statuses
+                                $('.pageLoader')
+                                    .find('label')
+                                    .html('An error occurred: ' + textStatus + errorThrown);
+                                break;
+                        }
+                        setTimeout(function () {
+                            $('.pageLoader').removeClass('isActive');
+                            $('.pageLoader').find('div[role="status"]').show();
+                            $('#reset-btn').click();
+                        }, 3000);
+                    }
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('.pageLoader').find('div[role="status"]').hide();
+                switch (jqXHR.status) {
+                    case 400:
+                        // Handle 400 Bad Request error
+                        $('.pageLoader')
+                            .find('label')
+                            .html('Invalid input: ' + jqXHR.responseText);
+                        break;
+                    case 500:
+                        // Handle 500 Internal Server Error
+                        $('.pageLoader')
+                            .find('label')
+                            .html('An error occurred on the server: ' + jqXHR.responseText);
+                        break;
+                    default:
+                        // Handle other HTTP error statuses
+                        $('.pageLoader')
+                            .find('label')
+                            .html('An error occurred: ' + textStatus + errorThrown);
+                        break;
+                }
+                setTimeout(function () {
+                    $('.pageLoader').removeClass('isActive');
+                    $('.pageLoader').find('div[role="status"]').show();
+                    $('#reset-btn').click();
+                }, 3000);
+            }
+        });
+
+        return false;
+    });
 });

@@ -1146,39 +1146,73 @@ For hassle-free (ssh/sftp-free) upload, you may want to use the integrated image
 ### How can I have my photos coppied to Nextcloud and generate Nextcloud share links for the qrcodes?
 DISCLAIMER: The Photobooth project isn't built for security in mind and should not be exposed to the internet. This feature is no exception. While it requires a connection to a Nextcloud server, it's highly recommended to do so through a VPN such as WireGuard for security.
 
-#### Add packages
+### Enabling Nextcloud WebDAV Storage and Share API
+
+Before you start: Photobooth will communicate credentials to your Nextcloud instance, so please bear security in mind. We strongly recommend making the connection to your Nextcloud instance through a VPN like WireGuard, and/or using HTTPS by placing Photobooth behind a reverse proxy. Alternatively, you can isolate Photobooth to a trusted private network.
+
+1. Navigate to the Photobooth Admin Panel.
+
+2. Select "Advanced" from General -> Admin Options.
+
+3. Go to the "Nextcloud" tab.
+
+4. Enable Nextcloud WebDAV Storage and Share API.
+    - This feature will automatically upload your images as they are captured, to your Nextcloud instance. The share API will automatically create a public share link for your images and generate a QR code for your users to download their images.
+
+5. Input your Nextcloud instance's public URL. For example: `https://nextcloud.example.com`.
+
+6. Specify the path to the Nextcloud folder you want images to be uploaded to. This path should not include your username. For example: `Documents/Photobooh`.
+
+7. Disable popup blocking for Photobooth.
+    - Chrome: Click the three-dot menu icon, go to "Settings" > "Privacy and security" > "Site settings" > "Pop-ups and redirects". Toggle the switch to allow pop-ups for the current site.
+    - Firefox: Click the three-line menu icon, go to "Settings" > "Privacy & Security" > "Permissions" > "Block pop-up windows". Click "Exceptions...", enter the site URL, and click "Allow".
+    - Edge: Click the three-dot menu icon, go to "Settings" > "Privacy, search, and services" > "Pop-ups and redirects". Toggle the switch to allow pop-ups for the current site.
+    - Safari: Click "Safari" in the menu bar, go to "Preferences" > "Websites" > "Pop-up Windows". Select the current site from the list and choose "Allow" from the dropdown menu.
+
+8. Click the "Log in to Nextcloud" button.
+    - You'll be directed to your Nextcloud instance (given by "Nextcloud URL") to authorize Photobooth as an App. Nextcloud will generate an App Password which can be revoked by you in your Nextcloud security settings. You'll need to disable popup blocking to authorize Photobooth. You will only need to authenticate with Nextcloud once, unless your username or Nextcloud URL changes.
+
+Photobooth is now set up to save photos to your Nextcloud instance and generate share links for images. Scanning the QR code of an image will direct the user to a Nextcloud download page for the image. Please note that generating the QR code might take a couple seconds after taking the picture. If the connection to Nextcloud is lost or an error occurs, the share links' generation will revert to Photobooth's original functionality.
+
+### How to Enable Nextcloud Host Mounted Storage
+
+Before we begin, here's a heads up: Photobooth will communicate credentials to your Nextcloud instance. Therefore, please bear security in mind. We strongly recommend making the connection to your Nextcloud instance through a VPN like WireGuard, and/or using HTTPS by placing Photobooth behind a reverse proxy. Alternatively, you can isolate Photobooth to a trusted private network.
+
+#### Installing Required Packages
+
+Let's start by installing two necessary packages: `davfs2` and `inotify-tools`.
+
 ```sh
 sudo apt-get install davfs2 inotify-tools
 ```
-- davfs2 is need to mount your Nextcloud directory on the system.
-- inotify-tools gives us the inotifywait tool which is used to watch for new images and then copy them to the Nextcloud mount automatically.
 
-#### Add your Nextcloud details to /etc/davfs2/secrets:
+- `davfs2` is necessary to mount your Nextcloud directory on the system.
+- `inotify-tools` provides the `inotifywait` tool, which is used to watch for new images and then copy them to the Nextcloud mount automatically.
+
+#### Adding Nextcloud Details to `/etc/davfs2/secrets`
+
+Input your Nextcloud details into the `secrets` file as follows:
+
 ```sh
-echo "<https://example.nextcloud.com>/remote.php/dav/files/<nextcloud_username>/<path_to_nc_folder> <nextcloud_username> <nextcloud_password>" | sudo tee -a /etc/davfs2/secrets
-```
-- /etc/davfs2/secrets is used by davfs2 to athenticate you against the Nextcloud server.
-- Replace the information enclosed in "<>" your full Nextcloud WebDav URL can be found in the Files app under Files Settings-\>WebDAV on your Nextcloud instance.
-- **Note:** <path_to_nc_folder> is not provided by Nextcloud as described, this is folder path within your user you would like to mount.  
-
-#### Create a systemd service for the mount to persist across reboots:
-
-Create the service file:
-
-```
-sudo nano /etc/systemd/system/mnt-nextcloud.mount
+echo "https://example.nextcloud.com/remote.php/dav/files/nextcloud_username/path_to_nc_folder nextcloud_username nextcloud_password" | sudo tee -a /etc/davfs2/secrets
 ```
 
-now add the following lines:
+- `/etc/davfs2/secrets` is used by `davfs2` to authenticate you with the Nextcloud server.
+- Replace the placeholders in the command above with your own information. You can find your full Nextcloud WebDav URL in the Files app under Files Settings -> WebDAV on your Nextcloud instance.
+- **Note:** The path_to_nc_folder is not provided by Nextcloud. This should be the folder path within your user account that you would like to mount.
 
-```
+#### Creating a Systemd Service for Persistent Mounts
+
+To ensure your Nextcloud directory remains mounted across reboots, you'll need to create a systemd service:
+
+```sh
 [Unit]
 Description=Mount personal Nextcloud WebDAV
 After=network-online.target
 Wants=network-online.target
 
 [Mount]
-What=https://example.nextcloud.com/remote.php/dav/files/<nextcloud_username>/<path to desired directory>
+What=https://example.nextcloud.com/remote.php/dav/files/nextcloud_username/path_to_desired_directory
 Where=/mnt/nextcloud
 Options=noauto,user,uid=33,gid=33
 Type=davfs
@@ -1188,35 +1222,22 @@ TimeoutSec=60
 WantedBy=remote-fs.target
 ```
 
-- A mount service is required to be named according to the directory that is being mounted in this case /mnt/nextloud, therefore this mount service fie must /etc/systemd/system/mnt-nextcloud.mount
-- As with previous add you own information in place of the "<>"
+- The mount service must be named according to the directory being mounted, in this case, `/mnt/nextcloud`. Therefore, you must save this service file as `/etc/systemd/system/mnt-nextcloud.mount`.
+- As before, replace the placeholders with your own information.
 
-**Enable the service:**
+#### Enabling the Service
+
+With the service file in place, you're now ready to enable the service:
+
 ```sh
+sudo systemctl daemon-reload
 sudo systemctl enable mnt-nextcloud.mount
 sudo systemctl start mnt-nextcloud.mount
 ```
 
-- This will ensure the /mnt/nextcloud is mounted at boot time.
+- Congratulations! Your Nextcloud folder should now be mounted!
 
-#### Using Photobooth with Nextcloud
+#### Enabling Nextcloud Host Mount Feature in Photobooth
 
-Photobooth is now set to save photos to your Nextcloud instance and generate shareable links for the images. Scanning the QR code of an image will lead to its shareable link. Note that generating the QR code might take a few seconds after taking the picture. The share links' generation will default to Photobooth's original functionality if the Nextcloud mount is not available.
+In the Admin Panel, select "Expert View" under General -> Admin Options. Make sure you follow the steps from the "Enabling Nextcloud WebDAV Storage and Share API" section of this FAQ. Once you've done this, enable Nextcloud Host Mounted Storage. Input the path to your mounted Nextcloud folder (from this example, `/mnt/nextcloud`). Save your configuration and then reload the Photobooth main page.
 
-The following options are available in the Nextcloud section of the admin panel:
-
-1. Enable Nexcloud Storage and Share API: Toggles whether photos are saved to your Nextcloud instance and shareable links are generated for them. When enabled, the image data directory is monitored for new images and copies them to the Nextcloud mount directory.
-
-2. Enable ShareAPI for Image Specific QrCodes: Toggles whether a specific Nextcloud share URL is generated for each image. When enabled, scanning a QR code leads to that specific image's share URL.
-
-3. Nextcloud WebDAV url: Fill with the URL from your Nextcloud instance under Files -> Files Settings -> WebDAV.
-
-4. Path to Nextcloud folder: Specifies the path to the folder where images will be stored in Nextcloud.
-
-5. Path to Nextcloud Mount Directory: Specifies the mount point of the Nextcloud directory on the local system.
-
-6. Share URL for Nextcloud Folder: Specifies a share URL for the folder where images are stored on Nextcloud instance. This share URL will be used if Enable Nexcloud Storage and Share API is disabled or if a image specific share URL cannot be generaed
-
-7. Nextcloud User Name: The username for the Nextcloud account.
-
-8. Nextcloud Password: The password for the Nextcloud account.
