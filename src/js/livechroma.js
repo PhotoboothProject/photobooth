@@ -10,6 +10,8 @@ let chroma;
 let seriouslyimage;
 let needsReload = false;
 const notificationTimeout = config.ui.notification_timeout * 1000;
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext ? canvas.getContext('2d') : null;
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -56,7 +58,7 @@ function alphaBoundary(imageOut, radius) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function setMainImage(imgSrc) {
+function setMainImage(imgSrc, filename = false) {
     photoboothTools.console.logDev('[LIVECHROMA] Keying variant: ' + config.keying.variant);
     if (config.keying.variant === 'marvinj') {
         const image = new MarvinImage();
@@ -83,7 +85,7 @@ function setMainImage(imgSrc) {
             mainImage = new Image();
             mainImage.src = tmpCanvas.toDataURL('image/png');
             mainImage.onload = function () {
-                drawCanvas();
+                drawCanvas(filename);
             };
         });
     } else {
@@ -121,7 +123,7 @@ function setMainImage(imgSrc) {
             mainImage = new Image();
             mainImage.src = tmpCanvas.toDataURL('image/png');
             mainImage.onload = function () {
-                drawCanvas();
+                drawCanvas(filename);
             };
         };
     }
@@ -136,8 +138,7 @@ function setBackgroundImage(url) {
     };
 }
 
-function drawCanvas() {
-    const canvas = document.getElementById('mainCanvas');
+function drawCanvas(filename = false) {
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
         canvas.width = mainImage.width;
         canvas.height = mainImage.height;
@@ -146,7 +147,6 @@ function drawCanvas() {
         canvas.height = backgroundImage.height;
     }
 
-    const ctx = canvas.getContext ? canvas.getContext('2d') : null;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (typeof backgroundImage !== 'undefined' && backgroundImage !== null) {
@@ -170,8 +170,26 @@ function drawCanvas() {
             //important to fetch tmpimageout
             ctx.drawImage(document.getElementById('tmpimageout'), 0, 0);
         }
-        saveImage();
+        saveImage(filename);
     }
+}
+
+function clearCanvasAndLoadImage(imageUrl) {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Create a new image element
+    const newImage = new Image();
+
+    // Set the onload event handler to execute code after the image is loaded
+    newImage.onload = function () {
+        canvas.width = newImage.width;
+        canvas.height = newImage.height;
+        ctx.drawImage(newImage, 0, 0);
+    };
+
+    // Set the source of the image to the specified URL
+    newImage.src = imageUrl;
 }
 
 function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
@@ -183,22 +201,25 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
     };
 }
 
-function saveImage(cb) {
-    const canvas = document.getElementById('mainCanvas');
+function saveImage(filename, cb) {
     const dataURL = canvas.toDataURL('image/png');
-
-    $.post(
-        'api/chromakeying/save.php',
-        {
-            imgData: dataURL
+    $.ajax({
+        method: 'POST',
+        url: 'api/chromakeying/save.php',
+        data: {
+            imgData: dataURL,
+            file: filename
         },
-        function (data) {
+        success: (resp) => {
             photoBooth.takingPic = false;
             needsReload = true;
+            photoBooth.chromaimage = resp.filename;
             if ($('.chroma-control-bar').is(':hidden')) {
                 $('.chroma-control-bar').show();
                 $('.takeChroma').hide();
             }
+            clearCanvasAndLoadImage(config.foldersJS.images + '/' + resp.filename);
+
             if (config.picture.allow_delete) {
                 $('.deletebtn').css('visibility', 'visible');
                 $('.chroma-control-bar')
@@ -208,9 +229,9 @@ function saveImage(cb) {
                         ev.preventDefault();
 
                         const msg = photoboothTools.getTranslation('really_delete_image');
-                        const really = config.delete.no_request ? true : confirm(data.filename + ' ' + msg);
+                        const really = config.delete.no_request ? true : confirm(resp.filename + ' ' + msg);
                         if (really) {
-                            photoBooth.deleteImage(data.filename, (result) => {
+                            photoBooth.deleteImage(resp.filename, (result) => {
                                 if (result.success && config.live_keying.show_all) {
                                     photoBooth.deleteImage(photoBooth.chromaimage, () => {
                                         setTimeout(function () {
@@ -228,15 +249,21 @@ function saveImage(cb) {
                         }
                     });
             }
-            if (data.filename) {
+            if (resp.filename) {
                 // Add Image to gallery and slider
-                photoBooth.addImage(data.filename);
+                photoBooth.addImage(resp.filename);
             }
             if (cb) {
-                cb(data);
+                cb(resp);
             }
+        },
+        error: (jqXHR, textStatus) => {
+            photoboothTools.console.log(textStatus);
+            setTimeout(function () {
+                photoboothTools.reloadPage();
+            }, notificationTimeout);
         }
-    );
+    });
 }
 
 $('.backgroundPreview').on('click', function () {
