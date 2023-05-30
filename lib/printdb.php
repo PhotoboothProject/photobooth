@@ -60,15 +60,12 @@ class PrintManager {
                 $linecount = 0;
                 while (!feof($handle)) {
                     $line = fgets($handle, 4096);
-                    if ($line === false) {
-                        throw new Exception('Error reading print database.');
-                    }
                     $linecount += substr_count($line, PHP_EOL);
                 }
                 fclose($handle);
                 return $linecount;
             }
-            throw new Exception('Print database does not exist or is not readable.');
+            return intval(0);
         } catch (Exception $e) {
             return false;
         }
@@ -90,7 +87,7 @@ class PrintManager {
             }
             return $this->getPrintCountFromDB();
         } catch (Exception $e) {
-            return false;
+            return $this->getPrintCountFromDB();
         }
     }
 

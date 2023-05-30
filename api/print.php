@@ -169,6 +169,7 @@ $printManager->addToPrintDb($filename, $uniquename);
 $linecount = 0;
 if ($config['print']['limit'] > 0) {
     $linecount = $printManager->getPrintCountFromDB();
+    $linecount = $linecount ? $linecount : 0;
     if ($linecount % $config['print']['limit'] == 0) {
         if ($printManager->lockPrint()) {
             $status = 'locking';
