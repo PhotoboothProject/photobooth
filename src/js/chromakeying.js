@@ -4,7 +4,6 @@ let mainImage;
 let mainImageWidth;
 let mainImageHeight;
 let backgroundImage;
-let isPrinting = false;
 let seriously;
 let target;
 let chroma;
@@ -181,55 +180,6 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
     };
 }
 
-function printImage(filename, cb) {
-    const errormsg = photoboothTools.getTranslation('error');
-
-    if (isPrinting) {
-        photoboothTools.console.log('Printing already: ' + isPrinting);
-    } else {
-        isPrinting = true;
-        setTimeout(function () {
-            $.ajax({
-                method: 'GET',
-                url: 'api/print.php',
-                data: {
-                    filename: filename
-                },
-                success: (data) => {
-                    photoboothTools.console.log('Picture processed: ', data);
-
-                    if (data.error) {
-                        photoboothTools.console.log('An error occurred: ', data.error);
-                        photoboothTools.modal.close('#print_mesg');
-                        photoboothTools.modalMesg.showError('#modal_mesg', data.error);
-                    }
-
-                    setTimeout(function () {
-                        if (data.error) {
-                            photoboothTools.modalMesg.reset('#modal_mesg');
-                        } else {
-                            photoboothTools.modal.close('#print_mesg');
-                        }
-                        cb();
-                        isPrinting = false;
-                    }, config.print.time);
-                },
-                error: (jqXHR, textStatus) => {
-                    photoboothTools.console.log('An error occurred: ', textStatus);
-                    photoboothTools.modal.close('#print_mesg');
-                    photoboothTools.modalMesg.showError('#modal_mesg', errormsg);
-
-                    setTimeout(function () {
-                        photoboothTools.modalMesg.reset('#modal_mesg');
-                        cb();
-                        isPrinting = false;
-                    }, 5000);
-                }
-            });
-        }, 1000);
-    }
-}
-
 function saveImage(cb) {
     const canvas = document.getElementById('mainCanvas');
     const dataURL = canvas.toDataURL('image/png');
@@ -249,7 +199,6 @@ function saveImage(cb) {
 
 function printImageHandler(ev) {
     ev.preventDefault();
-    photoboothTools.modal.open('#print_mesg');
 
     setTimeout(function () {
         saveImage((data) => {
@@ -257,7 +206,7 @@ function printImageHandler(ev) {
                 return;
             }
 
-            printImage(data.filename, () => {
+            photoboothTools.printImage(data.filename, () => {
                 $('#print-btn').blur();
             });
         });
@@ -291,7 +240,7 @@ function closeHandler(ev) {
 
 $(document).on('keyup', function (ev) {
     if (config.print.from_chromakeying && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
-        if (isPrinting) {
+        if (photoboothTools.isPrinting) {
             photoboothTools.console.log('Printing already in progress!');
         } else {
             $('#print-btn').trigger('click');
