@@ -75,7 +75,6 @@ const photoBooth = (function () {
         notificationTimeout = config.ui.notification_timeout * 1000;
 
     let timeOut,
-        isPrinting = false,
         chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
@@ -836,14 +835,17 @@ const photoBooth = (function () {
             e.preventDefault();
             e.stopPropagation();
 
-            api.printImage(filename, () => {
+            photoboothTools.printImage(filename, () => {
+                remoteBuzzerClient.inProgress(false);
                 printBtn.blur();
             });
         });
 
         if (config.print.auto) {
             setTimeout(function () {
-                api.printImage(filename);
+                photoboothTools.printImage(filename, () => {
+                    remoteBuzzerClient.inProgress(false);
+                });
             }, config.print.auto_delay);
         }
 
@@ -871,12 +873,12 @@ const photoBooth = (function () {
             });
 
         // gallery doesn't support videos atm
-        if (!api.isVideoFile(filename)) {
+        if (!photoboothTools.isVideoFile(filename)) {
             api.addImage(filename);
         }
 
         // if image is a video render the qr code as image (video should be displayed over this)
-        const imageUrl = api.isVideoFile(filename)
+        const imageUrl = photoboothTools.isVideoFile(filename)
             ? 'api/qrcode.php?filename=' + filename
             : config.foldersJS.images + '/' + filename;
 
@@ -1036,87 +1038,6 @@ const photoBooth = (function () {
         }
 
         timerFunction();
-    };
-
-    api.isVideoFile = function (filename) {
-        const extension = api.getFileExtension(filename);
-
-        return extension === 'mp4' || extension === 'gif';
-    };
-
-    api.getFileExtension = function (filename) {
-        const parts = filename.split('.');
-
-        return parts[parts.length - 1];
-    };
-
-    api.resetPrintErrorMessage = function (cb, to) {
-        setTimeout(function () {
-            photoboothTools.modalMesg.reset('#modal_mesg');
-            cb();
-            isPrinting = false;
-            remoteBuzzerClient.inProgress(false);
-        }, to);
-    };
-
-    api.printImage = function (imageSrc, cb) {
-        if (api.isVideoFile(imageSrc)) {
-            photoboothTools.console.log('ERROR: An error occurred: attempt to print non printable file.');
-            photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('no_printing'));
-            setTimeout(function () {
-                photoboothTools.modalMesg.reset('#modal_mesg');
-            }, notificationTimeout);
-        } else if (isPrinting) {
-            photoboothTools.console.log('Printing in progress: ' + isPrinting);
-        } else {
-            photoboothTools.modal.open('#print_mesg');
-            isPrinting = true;
-
-            remoteBuzzerClient.inProgress('print');
-
-            $.ajax({
-                method: 'GET',
-                url: 'api/print.php',
-                data: {
-                    filename: imageSrc
-                },
-                success: (data) => {
-                    photoboothTools.console.log('Picture processed: ', data);
-
-                    if (data.status == 'locking') {
-                        photoboothTools.modal.close('#print_mesg');
-                        photoboothTools.modalMesg.showWarn(
-                            '#modal_mesg',
-                            config.print.locking_msg +
-                                ' (' +
-                                photoboothTools.getTranslation('printed') +
-                                ' ' +
-                                data.count +
-                                ')'
-                        );
-                        api.resetPrintErrorMessage(cb, config.print.time);
-                    } else if (data.error) {
-                        photoboothTools.console.log('ERROR: An error occurred: ', data.error);
-                        photoboothTools.modal.close('#print_mesg');
-                        photoboothTools.modalMesg.showError('#modal_mesg', data.error);
-                        api.resetPrintErrorMessage(cb, config.print.time);
-                    } else {
-                        setTimeout(function () {
-                            photoboothTools.modal.close('#print_mesg');
-                            cb();
-                            isPrinting = false;
-                            remoteBuzzerClient.inProgress(false);
-                        }, config.print.time);
-                    }
-                },
-                error: (jqXHR, textStatus) => {
-                    photoboothTools.console.log('ERROR: An error occurred: ', textStatus);
-                    photoboothTools.modal.close('#print_mesg');
-                    photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
-                    api.resetPrintErrorMessage(cb, notificationTimeout);
-                }
-            });
-        }
     };
 
     api.deleteImage = function (imageName, cb) {
@@ -1373,7 +1294,7 @@ const photoBooth = (function () {
                 }
                 api.closeGallery();
             } else if (config.print.from_result && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
-                if (isPrinting) {
+                if (photoboothTools.isPrinting) {
                     photoboothTools.console.log('Printing already in progress!');
                 } else {
                     printBtn.trigger('click');

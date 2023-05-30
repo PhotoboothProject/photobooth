@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* globals photoBooth photoboothTools rotaryController */
+/* globals photoBooth photoboothTools rotaryController remoteBuzzerClient */
 
 // eslint-disable-next-line no-unused-vars
 let globalGalleryHandle;
@@ -7,8 +7,7 @@ let globalGalleryHandle;
 // eslint-disable-next-line no-unused-vars
 function initPhotoSwipeFromDOM(gallerySelector) {
     let ssTimeOut,
-        ssRunning = false,
-        isPrinting = false;
+        ssRunning = false;
 
     const ssDelay = config.gallery.pictureTime,
         ssButtonClass = '.pswp__button--playpause',
@@ -158,14 +157,15 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                         event.preventDefault();
                         event.stopPropagation();
 
-                        if (isPrinting) {
+                        if (photoboothTools.isPrinting) {
                             photoboothTools.console.log('Printing already in progress!');
                         } else {
-                            isPrinting = true;
                             const img = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
 
-                            photoBooth.printImage(img, () => {
-                                isPrinting = false;
+                            photoboothTools.printImage(img, () => {
+                                if (typeof remoteBuzzerClient !== 'undefined') {
+                                    remoteBuzzerClient.inProgress(false);
+                                }
                                 pswp.close();
                             });
                         }
@@ -342,7 +342,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
     $(document).on('keyup', function (ev) {
         if (config.print.from_gallery && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
-            if (isPrinting) {
+            if (photoboothTools.isPrinting) {
                 photoboothTools.console.log('Printing already in progress!');
             } else if ($('#gallery').hasClass('gallery--open') && typeof gallery !== 'undefined') {
                 $('.pswp__button--print').trigger('click');
