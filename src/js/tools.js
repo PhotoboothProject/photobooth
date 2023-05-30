@@ -1,7 +1,10 @@
-/* globals i18n */
+/* globals i18n remoteBuzzerClient */
 const photoboothTools = (function () {
     // vars
-    const api = {};
+    const notificationTimeout = config.ui.notification_timeout * 1000,
+        api = {};
+
+    api.isPrinting = false;
 
     api.console = {
         log: function (...content) {
@@ -92,6 +95,55 @@ const photoboothTools = (function () {
 
         request.open('GET', url);
         request.send();
+    };
+
+    api.resetPrintErrorMessage = function (cb, to) {
+        setTimeout(function () {
+            api.modalMesg.reset('#modal_mesg');
+            cb();
+            api.isPrinting = false;
+        }, to);
+    };
+
+    api.printImage = function (imageSrc, cb) {
+        if (api.isPrinting) {
+            api.console.log('Printing in progress: ' + api.isPrinting);
+        } else {
+            api.modal.open('#print_mesg');
+            api.isPrinting = true;
+            if (typeof remoteBuzzerClient !== 'undefined') {
+                remoteBuzzerClient.inProgress('print');
+            }
+            $.ajax({
+                method: 'GET',
+                url: 'api/print.php',
+                data: {
+                    filename: imageSrc
+                },
+                success: (data) => {
+                    api.console.log('Picture processed: ', data);
+
+                    if (data.error) {
+                        api.console.log('ERROR: An error occurred: ', data.error);
+                        api.modal.close('#print_mesg');
+                        api.modalMesg.showError('#modal_mesg', data.error);
+                        api.resetPrintErrorMessage(cb, config.print.time);
+                    } else {
+                        setTimeout(function () {
+                            api.modal.close('#print_mesg');
+                            cb();
+                            api.isPrinting = false;
+                        }, config.print.time);
+                    }
+                },
+                error: (jqXHR, textStatus) => {
+                    api.console.log('ERROR: An error occurred: ', textStatus);
+                    api.modal.close('#print_mesg');
+                    api.modalMesg.showError('#modal_mesg', api.getTranslation('error'));
+                    api.resetPrintErrorMessage(cb, notificationTimeout);
+                }
+            });
+        }
     };
 
     return api;

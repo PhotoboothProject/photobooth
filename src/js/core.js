@@ -70,7 +70,6 @@ const photoBooth = (function () {
         notificationTimeout = config.ui.notification_timeout * 1000;
 
     let timeOut,
-        isPrinting = false,
         chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
@@ -707,14 +706,17 @@ const photoBooth = (function () {
             e.preventDefault();
             e.stopPropagation();
 
-            api.printImage(filename, () => {
+            photoboothTools.printImage(filename, () => {
+                remoteBuzzerClient.inProgress(false);
                 printBtn.blur();
             });
         });
 
         if (config.print.auto) {
             setTimeout(function () {
-                api.printImage(filename);
+                photoboothTools.printImage(filename, () => {
+                    remoteBuzzerClient.inProgress(false);
+                });
             }, config.print.auto_delay);
         }
 
@@ -744,7 +746,6 @@ const photoBooth = (function () {
         api.addImage(filename);
 
         const imageUrl = config.foldersJS.images + '/' + filename;
-
         const preloadImage = new Image();
         preloadImage.onload = () => {
             resultPage.css({
@@ -893,57 +894,6 @@ const photoBooth = (function () {
         }
 
         timerFunction();
-    };
-
-    api.printImage = function (imageSrc, cb) {
-        if (isPrinting) {
-            photoboothTools.console.log('Printing in progress: ' + isPrinting);
-        } else {
-            photoboothTools.modal.open('#print_mesg');
-            isPrinting = true;
-
-            remoteBuzzerClient.inProgress(true);
-
-            $.ajax({
-                method: 'GET',
-                url: 'api/print.php',
-                data: {
-                    filename: imageSrc
-                },
-                success: (data) => {
-                    photoboothTools.console.log('Picture processed: ', data);
-
-                    if (data.error) {
-                        photoboothTools.console.log('ERROR: An error occurred: ', data.error);
-                        photoboothTools.modal.close('#print_mesg');
-                        photoboothTools.modalMesg.showError('#modal_mesg', data.error);
-                    }
-
-                    setTimeout(function () {
-                        if (data.error) {
-                            photoboothTools.modalMesg.reset('#modal_mesg');
-                        } else {
-                            photoboothTools.modal.close('#print_mesg');
-                        }
-                        cb();
-                        isPrinting = false;
-                        remoteBuzzerClient.inProgress(false);
-                    }, config.print.time);
-                },
-                error: (jqXHR, textStatus) => {
-                    photoboothTools.console.log('ERROR: An error occurred: ', textStatus);
-                    photoboothTools.modal.close('#print_mesg');
-                    photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('error'));
-
-                    setTimeout(function () {
-                        photoboothTools.modalMesg.reset('#modal_mesg');
-                        cb();
-                        isPrinting = false;
-                        remoteBuzzerClient.inProgress(false);
-                    }, notificationTimeout);
-                }
-            });
-        }
     };
 
     api.deleteImage = function (imageName, cb) {
@@ -1187,7 +1137,7 @@ const photoBooth = (function () {
                 }
                 api.closeGallery();
             } else if (config.print.from_result && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
-                if (isPrinting) {
+                if (photoboothTools.isPrinting) {
                     photoboothTools.console.log('Printing already in progress!');
                 } else {
                     printBtn.trigger('click');

@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* global photoBooth photoboothTools rotaryController */
+/* global photoBooth photoboothTools rotaryController remoteBuzzerClient */
 
 // eslint-disable-next-line no-unused-vars
 let globalGalleryHandle;
@@ -8,8 +8,7 @@ let globalGalleryHandle;
 function initPhotoSwipeFromDOM(gallerySelector) {
     let gallery,
         ssTimeOut,
-        ssRunning = false,
-        isPrinting = false;
+        ssRunning = false;
 
     const ssDelay = config.gallery.pictureTime,
         ssButtonClass = '.pswp__button--playpause';
@@ -228,15 +227,16 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (isPrinting) {
+        if (photoboothTools.isPrinting) {
             photoboothTools.console.log('Printing already in progress!');
         } else {
-            isPrinting = true;
             const img = gallery.currItem.src.split('\\').pop().split('/').pop();
 
-            photoBooth.printImage(img, () => {
+            photoboothTools.printImage(img, () => {
+                if (typeof remoteBuzzerClient !== 'undefined') {
+                    remoteBuzzerClient.inProgress(false);
+                }
                 gallery.close();
-                isPrinting = false;
             });
         }
     });
@@ -291,7 +291,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
     $(document).on('keyup', function (ev) {
         if (config.print.from_gallery && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
-            if (isPrinting) {
+            if (photoboothTools.isPrinting) {
                 photoboothTools.console.log('Printing already in progress!');
             } else if ($('#gallery').hasClass('gallery--open') && typeof gallery !== 'undefined') {
                 $('.pswp__button--print').trigger('click');
