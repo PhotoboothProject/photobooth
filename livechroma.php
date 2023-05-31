@@ -144,13 +144,18 @@ if (
         </div>
         <div class="modal" id="modal_mesg"></div>
 
+        <script type="text/javascript">
+            onLiveChromaKeyingView = true;
+        </script>
         <script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
         <script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
         <script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
         <script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <?php if ($config['keying']['variant'] === 'marvinj'): ?>
@@ -159,17 +164,11 @@ if (
             <script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
             <script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
         <?php endif; ?>
-        <script type="text/javascript" src="resources/js/livechroma.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-        <script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-        <script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="resources/js/chromakeying.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
         <script type="text/javascript" src="resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
         <?php require_once('lib/services_start.php'); ?>
-
-        <script type="text/javascript">
-            onLiveChromaKeyingView = true;
-        </script>
     </div>
 </div>
 </body>
