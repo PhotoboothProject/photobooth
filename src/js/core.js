@@ -789,7 +789,7 @@ const photoBooth = (function () {
         loader.hide();
 
         const chromaimage = config.foldersJS.keying + '/' + filename;
-        setMainImage(chromaimage, filename);
+        setMainImage(chromaimage, true, filename);
 
         api.takingPic = false;
         remoteBuzzerClient.inProgress(false);
