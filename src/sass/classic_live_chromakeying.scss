@@ -16,15 +16,16 @@
 }
 
 .chromaNote {
+  display: block;
   color: #ff0000;
   padding-bottom: 10px;
   background-color: $mainColor;
   border: 2px solid $borderColor;
   width: 1000px;
-  text-align: center;
-  display: inline-block;
-  font-weight: bold;
   max-width: 100%;
+  margin: auto;
+  text-align: center;
+  font-weight: bold;
   z-index: 10;
 }
 
@@ -87,7 +88,6 @@
 
   .chromaNote {
     position: absolute;
-    display: block;
     bottom: 40px;
     right: 0;
     width: 950px;
