@@ -75,7 +75,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
-    "browser-sync": "^2.29.1",
+    "browser-sync": "^2.29.3",
     "@babel/core": "^7.22.1",
     "@babel/preset-env": "^7.21.5",
     "@prettier/plugin-php": "^0.19.4",
