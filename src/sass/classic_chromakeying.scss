@@ -22,9 +22,10 @@
 }
 
 .canvasWrapper {
-  display: inline-block;
+  display: block;
   max-width: 100%;
   background-color: green;
+  margin: auto;
   &.initial {
     width: 1000px;
   }
