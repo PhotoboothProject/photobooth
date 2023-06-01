@@ -60,7 +60,7 @@
     "gulp": "^4.0.2",
     "gulp-sass": "^5.1.0",
     "gulp-connect-php": "^1.0.3",
-    "jquery": "^3.6.4",
+    "jquery": "^3.7.0",
     "marvinj": "^1.0.0",
     "material-icons": "^1.13.6",
     "normalize.css": "^8.0.1",
