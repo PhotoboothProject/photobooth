@@ -41,7 +41,7 @@ class Helper {
      * @return string The absolute path.
      */
     public static function setAbsolutePath($path) {
-        if ($path[0] != '/') {
+        if (!empty($path) && $path[0] != '/') {
             $path = '/' . $path;
         }
         return $path;
