@@ -1195,10 +1195,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@prettier/plugin-php@^0.19.4":
-  version "0.19.4"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.19.4.tgz#054d51fe84bd649da6760181328adea023ba3997"
-  integrity sha512-FiSnSfP+Vo0/HVRXg7ZnEYJEM1eWS+MmsozYtzEdIf8Vg9v/+fwvyXMNayI5SgZ1Y9F5LGhl/EOMWIPzr9c2Xg==
+"@prettier/plugin-php@^0.19.5":
+  version "0.19.5"
+  resolved "https://registry.yarnpkg.com/@prettier/plugin-php/-/plugin-php-0.19.5.tgz#2f8833f616d402a383de2ed00671f07e44dd76db"
+  integrity sha512-AnmiB76G7qX2d7FbvGgABc3l4dVshOlBqxajiHe8nfMVTzmge7xDhiC28aP8OZafhIRksLKNRB1ZEemfN+j5pg==
   dependencies:
     linguist-languages "^7.21.0"
     mem "^8.0.0"
