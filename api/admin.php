@@ -12,7 +12,7 @@ $data = $_POST;
 
 if (isset($data['type'])) {
     $newConfig = [];
-    $LogData[] = ['config' => 'Saving Photobooth configuration'];
+    $LogData[] = ['config' => 'Saving Photobooth configuration...'];
 
     foreach ($config as $k => $conf) {
         if (is_array($conf)) {
@@ -144,13 +144,68 @@ if (isset($data['type'])) {
         $newConfig['collage']['limit'] = 4;
     }
 
-    //If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
+    // If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
     if ($newConfig['collage']['placeholder']) {
         $collagePlaceholderPosition = (int) $newConfig['collage']['placeholderposition'];
         if ($collagePlaceholderPosition > 0 && $collagePlaceholderPosition <= $newConfig['collage']['limit']) {
             $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
         } else {
-            $newConfig['collage']['placeholderposition'] = false;
+            $newConfig['collage']['placeholder'] = false;
+            $LogData[] = ['collage' => 'Placeholder position not in range. Placeholder disabled.'];
+        }
+
+        if (empty($newConfig['collage']['placeholderpath']) || !is_array(getimagesize($newConfig['collage']['placeholderpath']))) {
+            $newConfig['collage']['placeholder'] = false;
+            $LogData[] = ['collage' => 'Collage Placeholder does not exist or is empty. Collage Placeholder disabled. Note: Must be an absoloute path'];
+            $LogData[] = ['collage' => empty($newConfig['collage']['placeholderpath']) ? 'Empty.' : $newConfig['collage']['placeholderpath']];
+        }
+    }
+
+    if ($newConfig['picture']['take_frame']) {
+        if (empty($newConfig['picture']['frame']) || !is_array(getimagesize($newConfig['picture']['frame']))) {
+            $newConfig['picture']['take_frame'] = false;
+            $LogData[] = ['frame' => 'Picture frame does not exist or is empty. Picture frame disabled. Note: Must be an absoloute path'];
+            $LogData[] = ['frame' => empty($newConfig['picture']['frame']) ? 'Empty.' : $newConfig['picture']['frame']];
+        }
+    }
+
+    if ($newConfig['collage']['take_frame']) {
+        if (empty($newConfig['collage']['frame']) || !is_array(getimagesize($newConfig['collage']['frame']))) {
+            $newConfig['collage']['take_frame'] = false;
+            $LogData[] = ['frame' => 'Collage frame does not exist or is empty. Collage frame disabled. Note: Must be an absoloute path'];
+            $LogData[] = ['frame' => empty($newConfig['collage']['frame']) ? 'Empty.' : $newConfig['collage']['frame']];
+        }
+    }
+
+    if ($newConfig['print']['print_frame']) {
+        if (empty($newConfig['print']['frame']) || !is_array(getimagesize($newConfig['print']['frame']))) {
+            $newConfig['print']['print_frame'] = false;
+            $LogData[] = ['frame' => 'Print frame does not exist or is empty. Printing frame disabled. Note: Must be an absoloute path'];
+            $LogData[] = ['frame' => empty($newConfig['print']['frame']) ? 'Empty.' : $newConfig['print']['frame']];
+        }
+    }
+
+    if ($newConfig['textonpicture']['enabled']) {
+        if (empty($newConfig['textonpicture']['font']) || !file_exists($newConfig['textonpicture']['font'])) {
+            $newConfig['textonpicture']['enabled'] = false;
+            $LogData[] = ['font' => 'Picture font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path'];
+            $LogData[] = ['font' => empty($newConfig['textonpicture']['font']) ? 'Empty.' : $newConfig['textonpicture']['font']];
+        }
+    }
+
+    if ($newConfig['textoncollage']['enabled']) {
+        if (empty($newConfig['textoncollage']['font']) || !file_exists($newConfig['textoncollage']['font'])) {
+            $newConfig['textoncollage']['enabled'] = false;
+            $LogData[] = ['font' => 'Collage font does not exist or is empty. Disabled text on collage. Note: Must be an absoloute path.'];
+            $LogData[] = ['font' => empty($newConfig['textoncollage']['font']) ? 'Empty.' : $newConfig['textoncollage']['font']];
+        }
+    }
+
+    if ($newConfig['textonprint']['enabled']) {
+        if (empty($newConfig['textonprint']['font']) || !file_exists($newConfig['textonprint']['font'])) {
+            $newConfig['textonprint']['enabled'] = false;
+            $LogData[] = ['font' => 'Print font does not exist or is empty. Disabled text on print. Note: Must be an absoloute path.'];
+            $LogData[] = ['font' => empty($newConfig['textonprint']['font']) ? 'Empty.' : $newConfig['textonprint']['font']];
         }
     }
 
