@@ -24,12 +24,13 @@ class Helper {
     /**
      * Fix path separators to use forward slashes instead of backslashes.
      *
-     * @param string $fix_path The path to be fixed.
+     * @param string $fixPath The path to be fixed.
      *
      * @return string The fixed path.
      */
-    public static function fixSeperator($fix_path) {
-        return str_replace('\\', '/', $fix_path);
+    public static function fixSeperator($fixPath) {
+        $fixPath = stripslashes($fixPath);
+        return str_replace('\\', '/', $fixPath);
     }
 
     /**
