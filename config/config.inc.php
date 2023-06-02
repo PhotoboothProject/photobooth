@@ -216,12 +216,12 @@ $config['preview']['showFrame'] = false;
 $config['keying']['enabled'] = false;
 // possible size values: '1000px', '1500px', '2000px', '2500px'
 $config['keying']['size'] = '1500px';
-$config['live_keying']['enabled'] = false;
+$config['chromaCapture']['enabled'] = false;
 // possible variant values: 'marvinj', 'seriouslyjs'
 $config['keying']['variant'] = 'seriouslyjs';
 $config['keying']['seriouslyjs_color'] = '#62af74';
 $config['keying']['background_path'] = 'resources/img/background';
-$config['live_keying']['show_all'] = false;
+$config['keying']['show_all'] = false;
 
 
 // P R I N T
@@ -422,7 +422,7 @@ $config['icons']['gallery'] = 'fa fa-picture-o';
 $config['icons']['dependencies'] = 'fa fa-list-ul';
 $config['icons']['update'] = 'fa fa-tasks';
 $config['icons']['slideshow'] = 'fa fa-play';
-$config['icons']['livechroma'] = 'fa fa-paint-brush';
+$config['icons']['chromaCapture'] = 'fa fa-paint-brush';
 $config['icons']['faq'] = 'fa fa-question-circle';
 $config['icons']['manual'] = 'fa fa-info-circle';
 $config['icons']['telegram'] = 'fa fa-telegram';

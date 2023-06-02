@@ -21,7 +21,7 @@ if (
     }
     $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
 
-    $btnClass = 'btn btn--' . $config['ui']['button'] . ' livechroma-btn';
+    $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
     $btnShape = 'shape--' . $config['ui']['button'];
     $uiShape = 'shape--' . $config['ui']['style'];
 
@@ -55,7 +55,7 @@ if (
     <link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
     <link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
     <link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css"/>
-    <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_live_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>"/>
+    <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromacapture.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php if (is_file("private/overrides.css")): ?>
         <link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php endif; ?>
@@ -67,12 +67,12 @@ if (
 <div class="chromawrapper">
     <div class="rotarygroup" id="start">
         <div class="top-bar">
-            <?php if (!$config['live_keying']['enabled']): ?>
-                <a href="index.php" class="<?php echo $btnClass; ?> livechroma-close-btn rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
+            <?php if (!$config['chromaCapture']['enabled']): ?>
+                <a href="index.php" class="<?php echo $btnClass; ?> chromaCapture-close-btn rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
             <?php endif; ?>
 
             <?php if ($config['gallery']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass ?> livechroma-gallery-btn rotaryfocus"><i class="<?php echo $config['icons']['gallery']; ?>"></i>
+                <a href="#" class="<?php echo $btnClass ?> chromaCapture-gallery-btn rotaryfocus"><i class="<?php echo $config['icons']['gallery']; ?>"></i>
                     <span data-i18n="gallery"></span></a>
             <?php endif; ?>
         </div>
@@ -121,13 +121,13 @@ if (
         </div>
 
         <div class="chroma-control-bar">
-            <a href="#" class="<?php echo $btnClass; ?> takeChroma livechroma rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i>
+            <a href="#" class="<?php echo $btnClass; ?> takeChroma chromaCapture rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i>
                 <span data-i18n="takePhoto"></span></a>
             <?php if ($config['picture']['allow_delete']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> deletebtn livechroma"><i class="<?php echo $config['icons']['delete']; ?>"></i> <span
+                <a href="#" class="<?php echo $btnClass; ?> deletebtn chromaCapture"><i class="<?php echo $config['icons']['delete']; ?>"></i> <span
                             data-i18n="delete"></span></a>
             <?php endif; ?>
-            <a href="#" class="<?php echo $btnClass; ?> reloadPage livechroma rotaryfocus"><i class="<?php echo $config['icons']['refresh']; ?>"></i>
+            <a href="#" class="<?php echo $btnClass; ?> reloadPage chromaCapture rotaryfocus"><i class="<?php echo $config['icons']['refresh']; ?>"></i>
                 <span data-i18n="reload"></span></a>
         </div>
     </div>
@@ -145,7 +145,7 @@ if (
         <div class="modal" id="modal_mesg"></div>
 
         <script type="text/javascript">
-            onLiveChromaKeyingView = true;
+            onCaptureChromaView = true;
         </script>
         <script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
         <script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>

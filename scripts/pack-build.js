@@ -60,6 +60,7 @@ function createArchive(fileName, archive) {
     archive.directory('vendor');
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
+    archive.file('chromacapture.php');
     archive.file('chromakeying.php');
     archive.file('faq/index.php');
     archive.file('faq/faq.md.php');
@@ -68,7 +69,6 @@ function createArchive(fileName, archive) {
     archive.file('index.php');
     archive.file('LICENSE');
     archive.file('LICENSE_NOTICE');
-    archive.file('livechroma.php');
     archive.file('package.json');
     archive.file('phpinfo.php');
     archive.file('private/README.md');

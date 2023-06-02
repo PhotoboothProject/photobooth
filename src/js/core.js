@@ -783,7 +783,7 @@ const photoBooth = (function () {
     };
 
     api.renderChroma = function (filename) {
-        if (config.live_keying.show_all) {
+        if (config.keying.show_all) {
             api.addImage(filename);
         }
         loader.hide();
@@ -1281,7 +1281,7 @@ const photoBooth = (function () {
     };
 
     $(document).on('keyup', function (ev) {
-        if (typeof onStandaloneGalleryView === 'undefined' && typeof onLiveChromaKeyingView === 'undefined') {
+        if (typeof onStandaloneGalleryView === 'undefined' && typeof onCaptureChromaView === 'undefined') {
             if (
                 (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) ||
                 (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) ||
