@@ -206,7 +206,7 @@ function saveImage(filename, cb) {
             file: filename
         },
         success: (resp) => {
-            if (typeof onLiveChromaKeyingView === 'undefined') {
+            if (typeof onCaptureChromaView === 'undefined') {
                 setTimeout(function () {
                     photoboothTools.modal.close('#save_mesg');
                     $('#save-chroma-btn').blur();
@@ -233,7 +233,7 @@ function saveImage(filename, cb) {
                             const really = config.delete.no_request ? true : confirm(resp.filename + ' ' + msg);
                             if (really) {
                                 photoBooth.deleteImage(resp.filename, (result) => {
-                                    if (result.success && config.live_keying.show_all) {
+                                    if (result.success && config.keying.show_all) {
                                         photoBooth.deleteImage(photoBooth.chromaimage, () => {
                                             setTimeout(function () {
                                                 photoboothTools.reloadPage();
@@ -313,7 +313,7 @@ function closeHandler(ev) {
 
 $(document).on('keyup', function (ev) {
     if (
-        typeof onLiveChromaKeyingView === 'undefined' &&
+        typeof onCaptureChromaView === 'undefined' &&
         config.print.from_chromakeying &&
         config.print.key &&
         parseInt(config.print.key, 10) === ev.keyCode
@@ -324,7 +324,7 @@ $(document).on('keyup', function (ev) {
             $('#print-btn').trigger('click');
         }
     } else if (
-        typeof onLiveChromaKeyingView != 'undefined' &&
+        typeof onCaptureChromaView != 'undefined' &&
         ((config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) ||
             (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode))
     ) {
@@ -357,7 +357,7 @@ $(document).on('keyup', function (ev) {
 });
 
 $(document).ready(function () {
-    if (typeof onLiveChromaKeyingView === 'undefined') {
+    if (typeof onCaptureChromaView === 'undefined') {
         $('#save-chroma-btn').on('click', saveImageHandler);
         $('#print-btn').on('click', printImageHandler);
         $('#close-btn').on('click', closeHandler);
@@ -428,18 +428,18 @@ $(document).ready(function () {
         });
 
         // Open Gallery Button
-        $('.livechroma-gallery-btn').on('click', function (e) {
+        $('.chromaCapture-gallery-btn').on('click', function (e) {
             e.preventDefault();
 
             photoBooth.openGallery($(this));
         });
 
         // Close Button
-        $('.livechroma-close-btn').on('click', function () {
+        $('.chromaCapture-close-btn').on('click', function () {
             location.assign('./index.php');
         });
 
-        photoboothTools.console.log('[LIVECHROMA] DOM ready');
+        photoboothTools.console.log('[CHROMA CAPTURE] DOM ready');
         if (typeof rotaryController !== 'undefined') {
             rotaryController.focusSet('#start');
         }

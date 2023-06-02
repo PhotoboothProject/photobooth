@@ -1380,11 +1380,11 @@ $configsetup = [
             ],
             'value' => $config['keying']['size'],
         ],
-        'live_keying_enabled' => [
+        'chromaCapture_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'live_keying[enabled]',
-            'value' => $config['live_keying']['enabled'],
+            'name' => 'chromaCapture[enabled]',
+            'value' => $config['chromaCapture']['enabled'],
         ],
         'keying_variant' => [
             'view' => 'expert',
@@ -1411,11 +1411,11 @@ $configsetup = [
             'name' => 'keying[background_path]',
             'value' => htmlentities($config['keying']['background_path'] ?? ''),
         ],
-        'live_keying_show_all' => [
+        'keying_show_all' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'live_keying[show_all]',
-            'value' => $config['live_keying']['show_all'],
+            'name' => 'keying[show_all]',
+            'value' => $config['keying']['show_all'],
         ],
     ],
     'print' => [
@@ -2633,12 +2633,12 @@ $configsetup = [
             'placeholder' => htmlentities($defaultConfig['icons']['slideshow'] ?? ''),
             'value' => htmlentities($config['icons']['slideshow'] ?? ''),
         ],
-        'icons_livechroma' => [
+        'icons_chromaCapture' => [
             'view' => 'expert',
             'type' => 'input',
-            'name' => 'icons[livechroma]',
-            'placeholder' => htmlentities($defaultConfig['icons']['livechroma'] ?? ''),
-            'value' => htmlentities($config['icons']['livechroma'] ?? ''),
+            'name' => 'icons[chromaCapture]',
+            'placeholder' => htmlentities($defaultConfig['icons']['chromaCapture'] ?? ''),
+            'value' => htmlentities($config['icons']['chromaCapture'] ?? ''),
         ],
         'icons_faq' => [
             'view' => 'expert',

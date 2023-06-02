@@ -65,7 +65,7 @@ if (isset($data['type'])) {
             !is_readable('../template/custom.template.php') &&
             !is_readable('../resources/css/custom_style.css') &&
             !is_readable('../resources/css/custom_chromakeying.css') &&
-            !is_readable('../resources/css/custom_live_chromakeying.css')
+            !is_readable('../resources/css/custom_chromacapture.css')
         ) {
             $newConfig['ui']['style'] = 'modern_squared';
             $Logger->addLogData(['ui' => 'No custom style resources found. Falling back to modern squared style.']);
@@ -79,8 +79,8 @@ if (isset($data['type'])) {
             if (!file_exists('../resources/css/custom_chromakeying.css')) {
                 copy('../resources/css/modern_chromakeying.css', '../resources/css/custom_chromakeying.css');
             }
-            if (!file_exists('../resources/css/custom_live_chromakeying.css')) {
-                copy('../resources/css/modern_live_chromakeying.css', '../resources/css/custom_live_chromakeying.css');
+            if (!file_exists('../resources/css/custom_chromacapture.css')) {
+                copy('../resources/css/modern_chromacapture.css', '../resources/css/custom_chromacapture.css');
             }
         }
     }
