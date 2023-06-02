@@ -86,6 +86,7 @@ const photoBooth = (function () {
     api.takingPic = false;
     api.nextCollageNumber = 0;
     api.chromaimage = '';
+    api.filename = '';
 
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -783,6 +784,8 @@ const photoBooth = (function () {
     };
 
     api.renderChroma = function (filename) {
+        api.filename = filename;
+
         if (config.keying.show_all) {
             api.addImage(filename);
         }
@@ -828,6 +831,7 @@ const photoBooth = (function () {
     };
 
     api.renderPic = function (filename, files) {
+        api.filename = filename;
         api.showQr('#qrCode', filename);
 
         $(document).off('click touchstart', '.printbtn');

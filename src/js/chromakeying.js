@@ -234,7 +234,7 @@ function saveImage(filename, cb) {
                             if (really) {
                                 photoBooth.deleteImage(resp.filename, (result) => {
                                     if (result.success && config.keying.show_all) {
-                                        photoBooth.deleteImage(photoBooth.chromaimage, () => {
+                                        photoBooth.deleteImage(photoBooth.filename, () => {
                                             setTimeout(function () {
                                                 photoboothTools.reloadPage();
                                             }, notificationTimeout);
