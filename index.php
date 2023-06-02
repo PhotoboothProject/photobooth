@@ -9,7 +9,7 @@ if (!$config['ui']['skip_welcome']) {
     }
 }
 
-if ($config['chromaCaptrue']['enabled']) {
+if ($config['chromaCapture']['enabled']) {
     header('location: chromacapture.php');
     exit();
 }
