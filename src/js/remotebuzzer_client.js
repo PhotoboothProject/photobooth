@@ -219,7 +219,7 @@ function initRemoteBuzzerFromDOM() {
             return (
                 (config.remotebuzzer.usebuttons || config.remotebuzzer.usenogpio) &&
                 typeof onStandaloneGalleryView === 'undefined' &&
-                typeof onLiveChromaKeyingView === 'undefined'
+                typeof onCaptureChromaView === 'undefined'
             );
         };
 

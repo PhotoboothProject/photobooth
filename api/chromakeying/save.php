@@ -44,7 +44,7 @@ if ($config['database']['file'] != 'db') {
 if ($saveCopy) {
     $singleImageBase = substr($file, 0, -4);
     $file = $singleImageBase . '-edit.jpg';
-    if (!$config['live_keying']['show_all']) {
+    if (!$config['keying']['show_all']) {
         $database->deleteContentFromDB($_POST['file']);
 
         if (!$config['picture']['keep_original']) {

@@ -9,8 +9,8 @@ if (!$config['ui']['skip_welcome']) {
     }
 }
 
-if ($config['live_keying']['enabled']) {
-    header('location: livechroma.php');
+if ($config['chromaCaptrue']['enabled']) {
+    header('location: chromacapture.php');
     exit();
 }
 

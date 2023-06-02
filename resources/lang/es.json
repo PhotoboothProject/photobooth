@@ -99,7 +99,7 @@
   "jpeg_quality:jpeg_quality_thumb": "Calidad de JPEG para thumbnails (10 ... 100)",
   "keying": "Efecto Chroma key",
   "keying:keying_enabled": "Active el croma verde.",
-  "keying:live_keying_show_all": "Mostrar la imagen original y la editada dentro de la galería al extraer en vivo",
+  "keying:keying_show_all": "Mostrar la imagen original y la editada dentro de la galería al extraer en vivo",
   "keyingerror": "¡La incrustación en el croma verde es imposible!",
   "login_invalid": "¡Nombre de usuario o contraseña no es válido!",
   "logout": "Cerrar sesión",

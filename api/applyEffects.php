@@ -246,7 +246,7 @@ try {
 
         // insert into database
         if ($config['database']['enabled']) {
-            if (!$isChroma || ($isChroma && $config['live_keying']['show_all'] === true)) {
+            if (!$isChroma || ($isChroma && $config['keying']['show_all'] === true)) {
                 $database->appendContentToDB($image);
             }
         }
@@ -263,7 +263,7 @@ try {
             }
         }
 
-        if ($_POST['style'] === 'chroma' && $config['live_keying']['show_all'] === false) {
+        if ($_POST['style'] === 'chroma' && $config['keying']['show_all'] === false) {
             if (!unlink($filename_photo)) {
                 $imageHandler->addErrorData(['Warning' => 'Failed to remove photo.']);
             }
