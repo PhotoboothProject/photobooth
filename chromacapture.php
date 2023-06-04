@@ -26,6 +26,8 @@ if (
     $uiShape = 'shape--' . $config['ui']['style'];
 
     $GALLERY_FOOTER = false;
+    $fileRoot = '';
+    $pageTitle = $config['ui']['branding'] . ' Chroma capture';
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
@@ -34,26 +36,7 @@ if (
 <!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
-    <meta name="msapplication-TileColor" content="<?= $config['colors']['primary'] ?>">
-    <meta name="theme-color" content="<?= $config['colors']['primary'] ?>">
-
-    <!-- Favicon + Android/iPhone Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="resources/img/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="resources/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="resources/img/favicon-16x16.png">
-    <link rel="manifest" href="resources/img/site.webmanifest">
-    <link rel="mask-icon" href="resources/img/safari-pinned-tab.svg" color="#5bbad5">
-
-    <!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-
-    <link rel="stylesheet" href="node_modules/normalize.css/normalize.css"/>
-    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css"/>
-    <link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
-    <link rel="stylesheet" href="node_modules/material-icons/css/material-icons.css">
+    <?php include('template/components/mainHead.php'); ?>
     <link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css"/>
     <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromacapture.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php if (is_file("private/overrides.css")): ?>

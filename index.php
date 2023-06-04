@@ -36,6 +36,7 @@ if (
     $btnClass = 'btn btn--' . $config['ui']['button'];
     $btnShape = 'shape--' . $config['ui']['button'];
     $uiShape = 'shape--' . $config['ui']['style'];
+    $fileRoot = '';
     $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
