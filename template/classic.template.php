@@ -54,30 +54,7 @@
 				</div>
 				<?php endif; ?>
 
-				<?php if ($config['button']['force_buzzer']): ?>
-				<div id="useBuzzer">
-						<span data-i18n="use_button"></span>
-				</div>
-				<?php else: ?>
-					<?php if ($config['picture']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass; ?> takePic rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i> <span data-i18n="takePhoto"></span></a>
-					<?php endif; ?>
-
-					<?php if ($config['custom']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass; ?> takeCustom rotaryfocus"><i class="<?php echo $config['icons']['take_custom']; ?>"></i> <span><?php echo $config['custom']['btn_text']; ?></span></a>
-					<?php endif; ?>
-
-					<?php if ($config['collage']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass; ?> takeCollage rotaryfocus"><i class="<?php echo $config['icons']['take_collage']; ?>"></i> <span
-							data-i18n="takeCollage"></span></a>
-					<?php endif; ?>
-
-					<?php if ($config['video']['enabled']): ?>
-					<a href="#" class="<?php echo $btnClass; ?> takeVideo rotaryfocus"><i class="<?php echo $config['icons']['take_video']; ?>"></i> <span
-							data-i18n="takeVideo"></span></a>
-					<?php endif; ?>
-
-				<?php endif; ?>
+				<?php include('components/actionBtn.php'); ?>
 			</div>
 
 			<?php if ($config['ui']['show_fork']): ?>
