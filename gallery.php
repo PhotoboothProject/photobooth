@@ -67,27 +67,21 @@ $GALLERY_FOOTER = false;
 		</div>
 	</div>
 
-	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
-	<script type="text/javascript" src="api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
-	<script type="text/javascript" src="resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
-	<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
 	<script type="text/javascript">
 		onStandaloneGalleryView = true;
 	</script>
-	<script type="text/javascript" src="resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <?php include('template/components/mainFooter.php'); ?>
+	<script type="text/javascript" src="resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
+	<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
 	<script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-	<script type="text/javascript" src="resources/js/theme.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="resources/js/gallery.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<?php if ($config['gallery']['db_check_enabled']): ?>
 	<script type="text/javascript" src="resources/js/gallery_updatecheck.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<?php endif; ?>
-	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="resources/js/i18n.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 	<?php require_once('lib/services_start.php'); ?>
 </body>
