@@ -128,8 +128,18 @@ The following example should look exactly like the 1+2 layout (this layout looks
 [ "horizontal position",   "vertical position",   "width",               "height",        "rotation" ]
 ```
 Please note that if the number of images in a collage design was changed the admin page has to be saved again to calculate the correct number of photos to be used for a collage.
-Other value changes can be checked on the collage test page immediatly with a simple reload - so it's quite easy to configure a layout with the help of [http://localhost/test/collage.php](http://localhost/test/collage.php).
+Other value changes can be checked on the collage test page immediately with a simple reload - so it's quite easy to configure a layout with the help of [http://localhost/test/collage.php](http://localhost/test/collage.php).
 The file `collage.json` needs to be a well-formed json array and something like a missing quotation or a trailing comma can be enough to make a design fail.
+
+If you want to configure additional properties of the collage layout you have to wrap this array in a json object like this:
+```
+{
+  "portrait": true,
+  "rotate_after_creation": false,
+  "layout": [ # the array from above ]
+}
+```
+`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added.
 
 ---
 
