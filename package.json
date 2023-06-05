@@ -16,7 +16,7 @@
     "clean:head": "rm HEAD || echo 'HEAD can not be removed or file not exist!'",
     "clean:js": "rm resources/js/*.js || echo 'resources/js/*.js can not be removed or no .js files exist!'",
     "clean:node": "rm -rf node_modules/ || echo 'node_modules/ can not be removed or does not exist!'",
-    "clean:skipwelcome": "rm .skip_welcome || echo '.skip_welcome can not be removed or does not exist!'",
+    "clean:skipwelcome": "rm welcome/.skip_welcome || echo 'welcome/.skip_welcome can not be removed or does not exist!'",
     "eslint": "eslint src/js/{,*/**/}*.js",
     "eslint:fix": "eslint src/js/{,*/**/}*.js --fix",
     "format": "npm-run-all --parallel format:*",
