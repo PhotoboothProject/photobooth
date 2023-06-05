@@ -505,11 +505,22 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             break;
         default:
             $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . $c->collageLayout;
-            if (!file_exists($collageConfigFilePath)) {
-                $my_collage = imagecreatetruecolor($width, $height);
+            $collageJson = json_decode(file_get_contents($collageConfigFilePath), true);
+            if (is_array($collageJson)) {
+                $layoutConfig = $collageJson;
+            } else {
+                $layoutConfig = $collageJson['layout'];
+                if ($collageJson['portrait']) {
+                    $tmp = $collage_width;
+                    $collage_width = $collage_height;
+                    $collage_height = $tmp;
+                    $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
+                }
+                if ($collageJson['rotate_after_creation']) {
+                    $rotate_after_creation = true;
+                }
             }
-            $layoutConfig = json_decode(file_get_contents($collageConfigFilePath), true);
-            if (!is_array($layoutConfig) || count($layoutConfig) != $c->collageLimit) {
+            if (count($layoutConfig) != $c->collageLimit) {
                 return false;
             }
             // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
