@@ -4,7 +4,7 @@ require_once 'lib/config.php';
 $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
-
+$fileRoot = '';
 ?>
 <!DOCTYPE html>
 <html>
@@ -83,12 +83,6 @@ $uiShape = 'shape--' . $config['ui']['style'];
 		</div>
 	</div>
 
-	<script src="node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
-	<script type="text/javascript" src="api/config.php"></script>
-	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="resources/js/tools.js"></script>
-	<script type="text/javascript" src="resources/js/theme.js"></script>
-	<script src="node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-	<script type="text/javascript" src="resources/js/i18n.js"></script>
+    <?php include('template/components/mainFooter.php'); ?>
 </body>
 </html>
