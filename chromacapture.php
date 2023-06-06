@@ -19,7 +19,7 @@ if (
     } else {
         $images = $database->getFilesFromDirectory();
     }
-    $imagelist = $config['gallery']['newest_first'] === true ? array_reverse($images) : $images;
+    $imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;
 
     $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
     $btnShape = 'shape--' . $config['ui']['button'];
