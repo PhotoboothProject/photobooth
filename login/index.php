@@ -43,7 +43,7 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 					</div>
 
 					<div class="w-full text-center text-gray-500 mb-8">
-						Bitte logge dich ein um fortzufahren.
+						<span data-i18n="login_please"></span>
 					</div>
 
 					<!-- user -->
@@ -75,7 +75,9 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 		<div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
 
 			<div class="px-4">
-				<h1 class="text-2xl font-bold text-center mb-6 border-solid border-b border-gray-200 pb-4 text-brand-1">Menü</h1>
+				<h1 class="text-2xl font-bold text-center mb-6 border-solid border-b border-gray-200 pb-4 text-brand-1">
+					<span data-i18n="menu"></span>
+				</h1>
 			</div>
 
 			<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
