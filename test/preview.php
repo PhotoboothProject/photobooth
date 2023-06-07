@@ -1,11 +1,12 @@
 <?php
-require_once '../lib/config.php';
+$fileRoot = '../';
+
+require_once $fileRoot . 'lib/config.php';
 
 $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
 
-$fileRoot = '../';
 $pageTitle = $config['ui']['branding'] . ' Preview-Test';
 ?>
 
@@ -13,11 +14,11 @@ $pageTitle = $config['ui']['branding'] . ' Preview-Test';
 <html>
 
 <head>
-	<?php include('../template/components/mainHead.php'); ?>
+	<?php include($fileRoot . 'template/components/mainHead.php'); ?>
 
-    <link rel="stylesheet" href="../resources/css/test_preview.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php if (is_file('../private/overrides.css')): ?>
-        <link rel="stylesheet" href="../private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
+    <link rel="stylesheet" href="<?=$fileRoot?>resources/css/test_preview.css?v=<?php echo $config['photobooth']['version']; ?>"/>
+    <?php if (is_file($fileRoot . 'private/overrides.css')): ?>
+        <link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php endif; ?>
 </head>
 
@@ -42,10 +43,10 @@ $pageTitle = $config['ui']['branding'] . ' Preview-Test';
         </div>
     </div>
 
-    <?php include('../template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 
-    <script type="text/javascript" src="../resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-    <script type="text/javascript" src="../resources/js/test_preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script type="text/javascript" src="<?=$fileRoot?>resources/js/test_preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 </body>
 </html>

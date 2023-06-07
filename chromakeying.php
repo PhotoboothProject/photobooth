@@ -1,5 +1,7 @@
 <?php
-require_once('lib/config.php');
+$fileRoot = '';
+
+require_once($fileRoot . 'lib/config.php');
 
 if (empty($_GET['filename'])) {
     die('No or invalid file provided');
@@ -17,27 +19,26 @@ if (file_exists($keyingimage)) {
         $keying_possible = true;
     } else {
         $keying_possible = false;
-        $mainimage = 'resources/img/bg.jpg';
+        $mainimage = . $fileRoot . 'resources/img/bg.jpg';
     }
 } else {
     $keying_possible = false;
-    $mainimage = 'resources/img/bg.jpg';
+    $mainimage = $fileRoot . 'resources/img/bg.jpg';
 }
 
 $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
-$fileRoot = '';
 $pageTitle = $config['ui']['branding'] . ' Chromakeying';
 
 ?>
 <!doctype html>
 <html>
 	<head>
-		<?php include('template/components/mainHead.php'); ?>
-		<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>" />
-		<?php if (is_file("private/overrides.css")): ?>
-		<link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
+		<?php include($fileRoot . 'template/components/mainHead.php'); ?>
+		<link rel="stylesheet" href="<?=$fileRoot?>resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>" />
+		<?php if (is_file($fileRoot . 'private/overrides.css')): ?>
+		<link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
 		<?php endif; ?>
 	</head>
 <body data-main-image="<?=$mainimage?>">
@@ -84,17 +85,17 @@ $pageTitle = $config['ui']['branding'] . ' Chromakeying';
 		</div>
 	</div>
 
-    <?php include('template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 
 	<?php if ($config['keying']['variant'] === 'marvinj'): ?>
-	<script type="text/javascript" src="node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
+	<script type="text/javascript" src="<?=$fileRoot?>node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
 	<?php else:?>
-	<script type="text/javascript" src="vendor/Seriously/seriously.js"></script>
-	<script type="text/javascript" src="vendor/Seriously/effects/seriously.chroma.js"></script>
+	<script type="text/javascript" src="<?=$fileRoot?>vendor/Seriously/seriously.js"></script>
+	<script type="text/javascript" src="<?=$fileRoot?>vendor/Seriously/effects/seriously.chroma.js"></script>
 	<?php endif; ?>
-	<script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-	<script type="text/javascript" src="resources/js/chromakeying.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="<?=$fileRoot?>resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="<?=$fileRoot?>resources/js/chromakeying.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
-	<?php require_once('lib/services_start.php'); ?>
+	<?php require_once($fileRoot . 'lib/services_start.php'); ?>
 </body>
 </html>

@@ -1,22 +1,23 @@
 <?php
-require_once 'lib/config.php';
+$fileRoot = '';
+
+require_once $fileRoot . 'lib/config.php';
 
 $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
-$fileRoot = '';
 $pageTitle = $config['ui']['branding'] . ' Remote Trigger';
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-	<?php include('template/components/mainHead.php'); ?>
+	<?php include($fileRoot . 'template/components/mainHead.php'); ?>
 
-	<link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
-	<link rel="stylesheet" href="resources/css/trigger.css" />
-	<?php if (is_file("private/overrides.css")): ?>
-	<link rel="stylesheet" href="private/overrides.css" />
+	<link rel="stylesheet" href="<?=$fileRoot?>resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
+	<link rel="stylesheet" href="<?=$fileRoot?>resources/css/trigger.css" />
+	<?php if (is_file($fileRoot . 'private/overrides.css')): ?>
+	<link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css" />
 	<?php endif; ?>
 </head>
 
@@ -64,6 +65,6 @@ $pageTitle = $config['ui']['branding'] . ' Remote Trigger';
 		</div>
 	</div>
 
-    <?php include('template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 </body>
 </html>

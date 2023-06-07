@@ -1,7 +1,9 @@
 <?php
-require_once '../lib/config.php';
-require_once '../lib/collage.php';
-require_once '../lib/image.php';
+$fileRoot = '../';
+
+require_once $fileRoot . 'lib/config.php';
+require_once $fileRoot . 'lib/collage.php';
+require_once $fileRoot . 'lib/image.php';
 
 $demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
 $demoFolder = realpath($demoPath);
