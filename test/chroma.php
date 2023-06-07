@@ -7,7 +7,7 @@ $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
 
-$pageTitle = $config['ui']['branding'] . ' Chroma-Test';
+$pageTitle = $config['ui']['branding'] . ' Chroma-Preview Test';
 ?>
 
 <!DOCTYPE html>
