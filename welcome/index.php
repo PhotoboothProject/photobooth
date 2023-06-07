@@ -1,6 +1,8 @@
 <?php
-require_once '../lib/config.php';
-require_once '../lib/photobooth.php';
+$fileRoot = '../';
+
+require_once $fileRoot . 'lib/config.php';
+require_once $fileRoot . 'lib/photobooth.php';
 
 if (!is_file('.skip_welcome')) {
     touch('.skip_welcome');
@@ -8,14 +10,14 @@ if (!is_file('.skip_welcome')) {
 
 $photobooth = new Photobooth();
 $URL = $photobooth->getUrl();
-$fileRoot = '../';
+
 $PHOTOBOOTH_HOME = realpath($fileRoot);
 $PHOTOBOOTH_HOME = rtrim($PHOTOBOOTH_HOME, DIRECTORY_SEPARATOR);
 $pageTitle = 'Welcome to '. $config['ui']['branding'];
 
-include('../admin/components/head.admin.php');
-include('../admin/helper/index.php');
-include('../admin/inputs/index.php');
+include($fileRoot . 'admin/components/head.admin.php');
+include($fileRoot . 'admin/helper/index.php');
+include($fileRoot . 'admin/inputs/index.php');
 ?>
 
 <div class="w-full h-full grid place-items-center fixed bg-brand-1 overflow-x-hidden overflow-y-auto">
@@ -111,6 +113,6 @@ include('../admin/inputs/index.php');
 	</div>
 
 
-    <?php include('template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 </body>
 </html>

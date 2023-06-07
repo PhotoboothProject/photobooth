@@ -1,6 +1,8 @@
 <?php
 session_start();
-require_once '../lib/config.php';
+$fileRoot = '../';
+
+require_once $fileRoot . 'lib/config.php';
 
 // Login / Authentication check
 if (
@@ -9,13 +11,12 @@ if (
     (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
     !$config['protect']['admin']
 ) {
-    require_once '../lib/configsetup.inc.php';
+    require_once $fileRoot . 'lib/configsetup.inc.php';
 } else {
-    header('location: ../login');
+    header('location: ' . $fileRoot . 'login');
     exit(); 
 }
 
-$fileRoot = '../';
 $pageTitle = 'Adminpanel';
 include('components/head.admin.php');
 include('helper/index.php');

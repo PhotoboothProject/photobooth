@@ -1,7 +1,8 @@
 <?php
 session_start();
+$fileRoot = '../';
 
-require_once('../lib/config.php');
+require_once($fileRoot . 'lib/config.php');
 
 // LOGIN
 $username = $config['login']['username'];
@@ -19,10 +20,9 @@ if (isset($_POST['submit'])) {
 }
 // END LOGIN
 
-$fileRoot = '../';
 $pageTitle = 'Login';
-include('../admin/components/head.admin.php');
-include('../admin/helper/index.php');
+include($fileRoot . 'admin/components/head.admin.php');
+include($fileRoot . 'admin/helper/index.php');
 
 $labelClass = 'w-full flex flex-col mb-1';
 $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto';
@@ -93,23 +93,23 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 						echo getMenuBtn('/admin', 'admin_panel', $config['icons']['admin']);
 					}
 
-					echo getMenuBtn('/gallery.php', 'gallery', $config['icons']['gallery']);
-					echo getMenuBtn('/slideshow', 'slideshow', $config['icons']['slideshow']);
+					echo getMenuBtn($fileRoot . 'gallery.php', 'gallery', $config['icons']['gallery']);
+					echo getMenuBtn($fileRoot . 'slideshow', 'slideshow', $config['icons']['slideshow']);
 
 					if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
-						echo getMenuBtn('/chromacapture.php', 'chromaCapture', $config['icons']['chromaCapture']);
+						echo getMenuBtn($fileRoot . 'chromacapture.php', 'chromaCapture', $config['icons']['chromaCapture']);
 					}
 
 					if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
-						echo getMenuBtn('/faq', 'show_faq', $config['icons']['faq']);
-						echo getMenuBtn('/manual', 'show_manual', $config['icons']['manual']);
+						echo getMenuBtn($fileRoot . 'faq', 'show_faq', $config['icons']['faq']);
+						echo getMenuBtn($fileRoot . 'manual', 'show_manual', $config['icons']['manual']);
 						echo getMenuBtn('https://t.me/PhotoboothGroup', 'telegram', $config['icons']['telegram']);
 					}
 
 					// echo getMenuBtn("/", "reload", $config['icons']['refresh']);
 
 					if(isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
-						echo getMenuBtn('/login/logout.php', 'logout', $config['icons']['logout']);
+						echo getMenuBtn($fileRoot . 'login/logout.php', 'logout', $config['icons']['logout']);
 					}
 
 				?>
@@ -123,5 +123,5 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 
 
 <?php
-    include('../admin/components/footer.admin.php');
+    include($fileRoot . 'admin/components/footer.admin.php');
 ?>

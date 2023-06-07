@@ -1,7 +1,8 @@
 <?php
 session_start();
+$fileRoot = '../';
 
-require_once('../lib/config.php');
+require_once($fileRoot . 'lib/config.php');
 
 // Login / Authentication check
 if (
@@ -9,17 +10,16 @@ if (
     (!$config['protect']['localhost_manual'] && isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['manual'])
 ) {
-    require_once('../lib/configsetup.inc.php');
+    require_once($fileRoot . 'lib/configsetup.inc.php');
 } else {
-    header('location: ../login');
+    header('location: ' . $fileRoot . 'login');
     exit();
 }
 
-$fileRoot = '../';
 $pageTitle = 'Manual';
-include('../admin/components/head.admin.php');
-include('../admin/helper/index.php');
-include('../admin/inputs/index.php');
+include($fileRoot . 'admin/components/head.admin.php');
+include($fileRoot . 'admin/helper/index.php');
+include($fileRoot . 'admin/inputs/index.php');
 ?>
 	<div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
 		<div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">
@@ -29,7 +29,7 @@ include('../admin/inputs/index.php');
 			<div class="w-full h-full flex flex-1 flex-col md:flex-row mt-5 overflow-hidden">
 				<?php 
 					$sidebarHeadline = $pageTitle;
-					include("../admin/components/sidebar.php"); 
+					include($fileRoot . 'admin/components/sidebar.php'); 
 				?>
 				<div class="flex flex-1 flex-col bg-content-1 rounded-xl ml-5 mr-5 mb-5 md:ml-0 overflow-hidden">
 
@@ -113,7 +113,7 @@ include('../admin/inputs/index.php');
 								?>
 								
 								<div class="py-4 px-4 lg:px-8">
-									<a href="/faq/" class="flex items-center hover:underline hover:text-brand-1 mb-2" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="ml-2 <?php echo $config['icons']['faq']; ?>"></i></a>
+									<a href="<?=$fileRoot?>faq/" class="flex items-center hover:underline hover:text-brand-1 mb-2" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="ml-2 <?php echo $config['icons']['faq']; ?>"></i></a>
 									<a href="https://photoboothproject.github.io" target="_blank" class="flex items-center hover:underline hover:text-brand-1"><span data-i18n="show_wiki"></span></a>
 								</div>
 							</form>
@@ -129,5 +129,5 @@ include('../admin/inputs/index.php');
 
 
 <?php
-    include('../admin/components/footer.admin.php');
+    include($fileRoot . 'admin/components/footer.admin.php');
 ?>

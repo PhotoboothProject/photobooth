@@ -1,16 +1,16 @@
 <?php
 session_start();
-
-require_once 'lib/config.php';
+$fileRoot = '';
+require_once $fileRoot . 'lib/config.php';
 if (!$config['ui']['skip_welcome']) {
-    if (!is_file('welcome/.skip_welcome')) {
-        header('location: welcome/');
+    if (!is_file($fileRoot . 'welcome/.skip_welcome')) {
+        header('location: ' . $fileRoot . 'welcome/');
         exit();
     }
 }
 
 if ($config['chromaCapture']['enabled']) {
-    header('location: chromacapture.php');
+    header('location: ' . $fileRoot . 'chromacapture.php');
     exit();
 }
 
@@ -20,8 +20,8 @@ if (
     (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
 ) {
-    require_once 'lib/db.php';
-    require_once 'lib/filter.php';
+    require_once $fileRoot . 'lib/db.php';
+    require_once $fileRoot . 'lib/filter.php';
 
     $database = new DatabaseManager();
     $database->db_file = DB_FILE;
@@ -36,7 +36,6 @@ if (
     $btnClass = 'btn btn--' . $config['ui']['button'];
     $btnShape = 'shape--' . $config['ui']['button'];
     $uiShape = 'shape--' . $config['ui']['style'];
-    $fileRoot = '';
     $pageTitle = $config['ui']['branding'];
     $GALLERY_FOOTER = true;
 } else {
@@ -48,15 +47,15 @@ if (
 <html>
 
 <head>
-	<?php include('template/components/mainHead.php'); ?>
+	<?php include($fileRoot . 'template/components/mainHead.php'); ?>
 
-    <link rel="stylesheet" href="node_modules/photoswipe/dist/photoswipe.css"/>
-    <link rel="stylesheet" href="resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>"/>
+    <link rel="stylesheet" href="<?=$fileRoot?>node_modules/photoswipe/dist/photoswipe.css"/>
+    <link rel="stylesheet" href="<?=$fileRoot?>resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php if ($config['gallery']['bottom_bar']): ?>
-        <link rel="stylesheet" href="resources/css/photoswipe-bottom.css?v=<?php echo $config['photobooth']['version']; ?>"/>
+        <link rel="stylesheet" href="<?=$fileRoot?>resources/css/photoswipe-bottom.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php endif; ?>
-    <?php if (is_file("private/overrides.css")): ?>
-        <link rel="stylesheet" href="private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
+    <?php if (is_file($fileRoot . 'private/overrides.css')): ?>
+        <link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
     <?php endif; ?>
 </head>
 
@@ -82,7 +81,7 @@ if (
     </div>
 <?php endif; ?>
 <div id="wrapper">
-    <?php include('template/' . $config['ui']['style'] . '.template.php'); ?>
+    <?php include($fileRoot . 'template/' . $config['ui']['style'] . '.template.php'); ?>
 
     <!-- image Filter Pane -->
     <?php if ($config['filters']['enabled']): ?>
@@ -201,11 +200,11 @@ if (
     </div>
 
     <?php if ($config['gallery']['enabled']): ?>
-        <?php include('template/gallery.template.php'); ?>
+        <?php include($fileRoot . 'template/gallery.template.php'); ?>
     <?php endif; ?>
 </div>
 
-<?php include('template/send-mail.template.php'); ?>
+<?php include($fileRoot . 'template/send-mail.template.php'); ?>
 
 <div class="modal" id="print_mesg">
     <div class="modal__body"><span data-i18n="printing"></span></div>
@@ -215,20 +214,20 @@ if (
 
 <div id="adminsettings">
     <div style="position:absolute; bottom:0; right:0;">
-        <img src="resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()"/>
+        <img src="<?=$fileRoot?>resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()"/>
     </div>
 </div>
 
-<?php include('template/components/mainFooter.php'); ?>
+<?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 
-<script type="text/javascript" src="resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
-<script type="text/javascript" src="node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
-<script type="text/javascript" src="resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
+<script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
-<?php require_once('lib/services_start.php'); ?>
+<?php require_once($fileRoot . 'lib/services_start.php'); ?>
 </body>
 </html>
