@@ -197,7 +197,7 @@
   "keying:keying_background_path": "Background images path",
   "keying:keying_enabled": "Allow chroma keying",
   "keying:keying_seriouslyjs_color": "Seriously.js keying color",
-  "keying:keying_show_all": "Show original and keyed image inside gallery while using live keying",
+  "keying:keying_show_all": "Show original and keyed image inside gallery while using chroma capture.",
   "keying:keying_size": "Chromakeying size",
   "keying:keying_variant": "Keying algorithm",
   "keyingerror": "Chroma keying not possible!",
