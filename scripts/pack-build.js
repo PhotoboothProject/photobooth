@@ -70,7 +70,6 @@ function createArchive(fileName, archive) {
     archive.file('LICENSE');
     archive.file('LICENSE_NOTICE');
     archive.file('package.json');
-    archive.file('phpinfo.php');
     archive.file('private/README.md');
     archive.file('README.md');
     archive.file('trigger.php');
