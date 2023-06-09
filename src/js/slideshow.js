@@ -9,7 +9,7 @@ let ssTimeOut,
 const ssDelay = config.slideshow.pictureTime,
     ssButtonClass = '.pswp__button--playpause',
     interval = 1000 * config.slideshow.refreshTime,
-    ajaxurl = 'gallery.php?status';
+    ajaxurl = config.foldersJS.api + '/gallery.php?status';
 
 // eslint-disable-next-line no-unused-vars
 function initPhotoSlideFromDOM(gallerySelector) {

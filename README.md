@@ -58,7 +58,7 @@ _*2 Capture from webcam is possible e.g. using [fswebcam](https://www.sanslogic.
 - Works on Windows and Linux.
 - Images are processed with GD.
 - Gallery based on [PhotoSwipe v5](https://github.com/PhotoboothProject/PhotoSwipe)
-- Standalone Gallery based on PhotoSwipe v5 ([localhost/gallery.php](http://localhost/gallery.php)).
+- Standalone Gallery based on PhotoSwipe v5 ([localhost/gallery](http://localhost/gallery)).
 - Standalone Slideshow based on PhotoSwipe v5 ([localhost/slideshow](http://localhost/slideshow)).
 - Access login via [localhost/login](http://localhost/login).
 - Offline manual with settings explained at [localhost/manual](http://localhost/manual).

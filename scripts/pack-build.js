@@ -50,6 +50,7 @@ function createArchive(fileName, archive) {
 
     archive.directory('admin');
     archive.directory('api');
+    archive.directory('gallery');
     archive.directory('lib');
     archive.directory('login');
     archive.directory('manual');
@@ -64,7 +65,6 @@ function createArchive(fileName, archive) {
     archive.file('chromakeying.php');
     archive.file('faq/index.php');
     archive.file('faq/faq.md.php');
-    archive.file('gallery.php');
     archive.file('HEAD');
     archive.file('index.php');
     archive.file('LICENSE');

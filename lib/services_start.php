@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/config.php';
+require_once $fileRoot . 'lib/config.php';
 
 function processIsRunning($pName, $pidFile) {
     if (file_exists($pidFile)) {
@@ -25,14 +25,13 @@ if ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'
             $logfile = '/dev/null';
         }
 
-        print "\t<!-- Remote Buzzer enabled --- starting server -->\n";
+        echo '<!-- Remote Buzzer enabled --- starting server -->' . "\n";
 
-        proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/remotebuzzer_server.js 1>' . $logfile . ' 2>&1 &', [], $foo));
+        proc_close(proc_open($config['nodebin']['cmd'] . $fileRoot . ' resources/js/remotebuzzer_server.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     } else {
-        print "\t<!-- Remote Buzzer Enabled --- server already started (port in use) -->\n";
+        echo '<!-- Remote Buzzer Enabled --- server already started (port in use) -->' . "\n";
     }
-
-    print "\t<script type=\"text/javascript\" src=\"node_modules/socket.io-client/dist/socket.io.min.js\"></script>\n";
+    echo '<script type="text/javascript" src="' . $fileRoot . 'node_modules/socket.io-client/dist/socket.io.min.js"></script>' . "\n";
 }
 
 if ($config['synctodrive']['enabled']) {
@@ -43,10 +42,10 @@ if ($config['synctodrive']['enabled']) {
     }
 
     if (processIsRunning('sync-to-drive.js', $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'synctodrive_server.pid')) {
-        print "\t<!-- Sync To Drive enabled --- server already active -->\n";
+        echo '<!-- Sync To Drive enabled --- server already active -->' . "\n";
     } else {
-        print "\t<!-- Sync To Drive enabled --- starting server -->\n";
-        proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/sync-to-drive.js 1>' . $logfile . ' 2>&1 &', [], $foo));
+        echo '<!-- Sync To Drive enabled --- starting server -->' . "\n";
+        proc_close(proc_open($config['nodebin']['cmd'] . $fileRoot . ' resources/js/sync-to-drive.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     }
 }
 ?>
