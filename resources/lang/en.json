@@ -613,6 +613,7 @@
   "no_printing": "File type can't be printed.",
   "path": "Path:",
   "percent": "%",
+  "phpinfo": "PHP Info",
   "pictureTest": "Picture test",
   "pictures": "Pictures",
   "pictures:filters_defaults": "Default image filter",
