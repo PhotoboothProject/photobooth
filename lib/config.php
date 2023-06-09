@@ -176,6 +176,8 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = $path;
 }
 
+$config['foldersJS']['api'] = Helper::fixSeperator(Helper::getRootpath($basepath . 'api'));
+
 define('PRINT_DB', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'printed.csv');
 define('PRINT_LOCKFILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.lock');
 define('PRINT_COUNTER', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.count');
