@@ -29,6 +29,7 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 					echo getMenuBtn('collage.php', 'collageTest', '');
 					echo getMenuBtn('preview.php', 'previewTest', '');
 					echo getMenuBtn('chroma.php', 'chromaPreviewTest', '');
+					echo getMenuBtn('trigger.php', 'remotebuzzerGetTrigger', '');
 				?>
 				</div>
 

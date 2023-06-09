@@ -1,5 +1,5 @@
 <?php
-$fileRoot = '';
+$fileRoot = '../';
 
 require_once $fileRoot . 'lib/config.php';
 
@@ -27,7 +27,7 @@ $pageTitle = $config['ui']['branding'] . ' Remote Trigger';
 		<div class="buttonbar">
 
 			<?php if ($config['remotebuzzer']['usebuttons']): ?>
-                <?php if ($config['picture']['enabled'] && $config['remotebuzzer']['picturebutton']): ?>
+			<?php if ($config['picture']['enabled'] && $config['remotebuzzer']['picturebutton']): ?>
 			    <a href="#" class="<?php echo $btnClass; ?> remotePicture" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/start-picture');"><i class="<?php echo $config['icons']['take_picture'] ?>"></i> <span data-i18n="takePhoto"></span></a>
 			    <?php endif; ?>
 
@@ -59,9 +59,9 @@ $pageTitle = $config['ui']['branding'] . ' Remote Trigger';
 
 			<?php if ($config['remotebuzzer']['userotary']): ?>
 			    <a href="#" class="<?php echo $btnClass; ?> remotePrevious" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/rotary-ccw');"><i class="fa fa-chevron-left" aria-hidden="true"></i> <span data-i18n="previous_element"></span></a>
-                <a href="#" class="<?php echo $btnClass; ?> remoteNext" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/rotary-cw');"><i class="fa fa-chevron-right" aria-hidden="true"></i> <span data-i18n="next_element"></span></a>
+			    <a href="#" class="<?php echo $btnClass; ?> remoteNext" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/rotary-cw');"><i class="fa fa-chevron-right" aria-hidden="true"></i> <span data-i18n="next_element"></span></a>
 			    <a href="#" class="<?php echo $btnClass; ?> remoteClick" onclick="photoboothTools.getRequest('http://' + config.webserver.ip + ':' + config.remotebuzzer.port + '/commands/rotary-btn-press');"><i class="fa fa-circle" aria-hidden="true"></i> <span data-i18n="click_element"></span></a>
-		    <?php endif; ?>
+			<?php endif; ?>
 		</div>
 	</div>
 
