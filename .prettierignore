@@ -1,5 +1,6 @@
 test/chroma.php
 test/preview.php
+test/trigger.php
 admin/index.php
 admin/components/content.php
 admin/components/footer.admin.php
