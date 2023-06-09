@@ -1,21 +1,12 @@
 <?php
 
-$fileRoot = '';
+$fileRoot = '../';
 require_once($fileRoot . 'lib/config.php');
 require_once($fileRoot . 'lib/db.php');
 
 $database = new DatabaseManager();
 $database->db_file = DB_FILE;
 $database->file_dir = IMG_DIR;
-
-// Check if there is a request for the status of the database
-if (isset($_GET['status'])){
-	// Request for DB-Status,
-	// Currently reports back the DB-Size to give the Client the ability
-	// to detect changes
-	$resp = array('dbsize'=>$database->getDBSize());
-	exit(json_encode($resp));
-}
 
 if ($config['database']['enabled']) {
 	$images = $database->getContentFromDB();
@@ -70,7 +61,7 @@ $GALLERY_FOOTER = false;
 	<script type="text/javascript">
 		onStandaloneGalleryView = true;
 	</script>
-    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
+	<?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 	<script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
 	<script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>

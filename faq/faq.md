@@ -736,7 +736,7 @@ Tested working setup:
 
 ### How to only open the gallery to avoid people taking pictures?
 
-Open [http://localhost/gallery.php](http://localhost/gallery.php) in your browser (you can replace `localhost` with your IP adress).
+Open [http://localhost/gallery](http://localhost/gallery) in your browser (you can replace `localhost` with your IP adress).
 
 ---
 

@@ -70,7 +70,7 @@ include($fileRoot . 'admin/inputs/index.php');
 						</p>
 						<p class="mt-1">
 							A standalone gallery can be found at 
-							<code class="break-all"><a class="hover:text-brand-1" href="../gallery.php" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery.php</a></code>.
+							<code class="break-all"><a class="hover:text-brand-1" href="../gallery" target="_blank" rel="noopener noreferrer"><?=$URL;?>/gallery</a></code>.
 						</p>
 						<p class="mt-1">
 							A standalone slideshow can be found at 

@@ -214,7 +214,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
                             el.href =
-                                'api/download.php?image=' + pswp.currSlide.data.src.split('\\').pop().split('/').pop();
+                                config.foldersJS.api +
+                                '/download.php?image=' +
+                                pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                         });
                     }
                 });

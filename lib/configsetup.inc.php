@@ -2327,7 +2327,7 @@ $configsetup = [
             'type' => 'select',
             'options' => [
                 'login' => 'Login',
-                'gallery.php' => 'Standalone Gallery',
+                'gallery' => 'Standalone Gallery',
                 'slideshow' => 'Standalone Slideshow',
                 'private' => 'Private (private/index.php)',
             ],
