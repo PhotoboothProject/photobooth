@@ -1,6 +1,6 @@
 <?php
 session_start();
-$fileRoot = '';
+$fileRoot = '../';
 
 require_once $fileRoot . 'lib/config.php';
 
@@ -93,7 +93,7 @@ if (
 
         <div class="backgrounds <?php echo $uiShape ?>">
             <?php
-            $dir = $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
+            $dir = '..' . DIRECTORY_SEPARATOR . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
             $cdir = scandir($dir);
             foreach ($cdir as $key => $value) {
                 if (!in_array($value, array(".", "..")) && !is_dir($dir . $value)) {

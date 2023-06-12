@@ -361,7 +361,7 @@
   "manual:jpeg_quality:jpeg_quality_chroma": "Picture quality used for chromakeying pictures.",
   "manual:jpeg_quality:jpeg_quality_image": "Picture quality used for taking pictures. Value of -1 means the original file from the camera will be retained, if there is no other mods i.e. filters active.",
   "manual:jpeg_quality:jpeg_quality_thumb": "Picture quality used for thumbnails.",
-  "manual:keying:chromaCapture_enabled": "Redirect from index to chromacapture.php, default start page can't be accessed!",
+  "manual:keying:chromaCapture_enabled": "Redirect from index to chroma to use chroma capture, default start page can't be accessed!",
   "manual:keying:keying_background_path": "Enter the path of the background images used on chroma keying.",
   "manual:keying:keying_enabled": "If enabled, chromakeying can be accessed from gallery for your pictures.",
   "manual:keying:keying_show_all": "If enabled, the original image and the keyed image get added to the gallery.",

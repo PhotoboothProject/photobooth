@@ -200,7 +200,7 @@ function saveImage(filename, cb) {
     const dataURL = canvas.toDataURL('image/png');
     $.ajax({
         method: 'POST',
-        url: 'api/chromakeying/save.php',
+        url: config.foldersJS.api + '/chromakeying/save.php',
         data: {
             imgData: dataURL,
             file: filename
