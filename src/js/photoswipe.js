@@ -233,7 +233,8 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
                             el.href =
-                                'chromakeying.php?filename=' +
+                                config.foldersJS.chroma +
+                                '/chromakeying.php?filename=' +
                                 pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                         });
                     }

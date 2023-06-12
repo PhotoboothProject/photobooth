@@ -1,5 +1,5 @@
 <?php
-$fileRoot = '';
+$fileRoot = '../';
 
 require_once($fileRoot . 'lib/config.php');
 
@@ -50,7 +50,7 @@ $pageTitle = $config['ui']['branding'] . ' Chromakeying';
 
 		<div style="padding-top:10px;text-align:center;">
 			<?php
-				$dir = $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
+				$dir = '..' . DIRECTORY_SEPARATOR . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
