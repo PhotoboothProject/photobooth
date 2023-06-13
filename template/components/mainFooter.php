@@ -9,6 +9,7 @@ echo '<script src="' . $fileRoot . 'node_modules/@andreasremdt/simple-translator
 echo '<script type="text/javascript" src="' . $fileRoot . 'resources/js/i18n.js?v=' . $config['photobooth']['version'] . '"></script>' . "\n";
 
 if ($remoteBuzzer) {
+    echo '<script type="text/javascript" src="' . $fileRoot . 'node_modules/socket.io-client/dist/socket.io.min.js"></script>' . "\n";
     echo '<script type="text/javascript" src="' . $fileRoot . 'resources/js/remotebuzzer_client.js?v=' . $config['photobooth']['version'] . '"></script>' . "\n";
 }
 
