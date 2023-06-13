@@ -51,8 +51,8 @@ NEEDS_NODEJS_CHECK=true
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
 NODEJS_MAJOR="16"
-NODEJS_MINOR="19"
-NODEJS_MICRO="1"
+NODEJS_MINOR="20"
+NODEJS_MICRO="0"
 NEEDED_NODE_VERSION="v$NODEJS_MAJOR.$NODEJS_MINOR(.$NODEJS_MICRO or newer)"
 
 COMMON_PACKAGES=(
@@ -286,26 +286,22 @@ check_nodejs() {
     minor=${VER[1]}
     micro=${VER[2]}
 
-    if [[ -n "$major" && "$major" -eq "$NODEJS_MAJOR" ]]; then
-        if [[ -n "$minor" && "$minor" -ge "$NODEJS_MINOR" ]]; then
-            info "[Info]      Node.js matches our requirements!"
-        elif [[ -n "$minor" ]]; then
-            warn "[WARN]      Node.js needs to be updated, minor version not matching our requirements!"
-            warn "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
-            NODEJS_NEEDS_UPDATE=true
+    info "[Info]      Node.js is only supported on v14 and v16!"
+
+    if [[ -n "$major" && "$major" -ge "14" ]]; then
+        if [[ -n "$major" && "$major" -ge "18" ]]; then
+            info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
-                error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
+                error "[ERROR]     Downgrade was not possible. Aborting Photobooth installation!"
                 exit 1
             else
                 update_nodejs
             fi
         else
-            error "[ERROR]     Unable to handle Node.js version string (minor)"
-            exit 1
+            info "[Info]      Found Node.js $NODE_VERSION".
         fi
+
     elif [[ -n "$major" ]]; then
-        warn "[WARN]      Node.js needs to be updated, major version not matching our requirements!"
-        warn "[WARN]      Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is needed!"
         if [ "$NODEJS_CHECKED" = true ]; then
             error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
             exit 1
@@ -319,28 +315,38 @@ check_nodejs() {
 }
 
 update_nodejs() {
-    if [ $(dpkg-query -W -f='${Status}' "nodejs" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        info "[Cleanup]   Removing nodejs package"
-        apt purge -y nodejs
-    fi
+    echo -e "\033[0;33m### Node.js should be updated/downgraded. Node.js version not matching our requirements"
+    echo -e "###  Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is suggested."
+    echo -e "###  NOTE: Currently Node.js is only supported on v14 and v16."
+    echo -e "###        The installation of Photobooth will fail on Node.js versions below v14."
+    ask_yes_no "### Would you like to update/downgrade Node.js to $NEEDED_NODE_VERSION ? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        if [ $(dpkg-query -W -f='${Status}' "nodejs" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+            info "[Cleanup]   Removing nodejs package"
+            apt purge -y nodejs
+        fi
 
-    if [ $(dpkg-query -W -f='${Status}' "nodejs-doc" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-        info "[Cleanup]   Removing nodejs-doc package"
-        apt purge -y nodejs-doc
-    fi
+        if [ $(dpkg-query -W -f='${Status}' "nodejs-doc" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+            info "[Cleanup]   Removing nodejs-doc package"
+            apt purge -y nodejs-doc
+        fi
 
-    if [ "$RUNNING_ON_PI" = true ]; then
-        info "[Package]   Installing Node.js v$NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO"
-        wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
-        node-install -v $NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO
-        NODEJS_CHECKED=true
-        check_nodejs
+        if [ "$RUNNING_ON_PI" = true ]; then
+            info "[Package]   Installing Node.js v$NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO"
+            wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
+            node-install -v $NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO
+            NODEJS_CHECKED=true
+            check_nodejs
+        else
+            info "[Package]   Installing latest Node.js v16"
+            curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+            apt-get install -y nodejs
+            NODEJS_CHECKED=true
+            check_nodejs
+        fi
     else
-        info "[Package]   Installing latest Node.js v16"
-        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-        apt-get install -y nodejs
-        NODEJS_CHECKED=true
-        check_nodejs
+        info "### We won't update Node.js."
     fi
 }
 
