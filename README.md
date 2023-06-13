@@ -24,13 +24,38 @@ _Latest development version:_
 [![Build](https://github.com/PhotoboothProject/photobooth/workflows/Build/badge.svg?branch=dev)](https://github.com/PhotoboothProject/photobooth/actions?query=branch%3Adev+workflow%3ABuild)
 
 
+## :camera: Screenshots
+
+![](https://raw.githubusercontent.com/PhotoboothProject/PhotoboothProject.github.io/master/resources/img/start.png)
+
+
+## :gear: Supported Platforms and Cameras
+
+| Hardware-Platform  | Software-Platform                  | Supported Cameras                                                                                                                                                                     |
+|--------------------|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Raspberry Pi 3 / 4 | Raspberry Pi OS 64bit Bullseye     | [Camera Modules](https://www.raspberrypi.com/documentation/accessories/camera.html), [gphoto2 DSLR](http://www.gphoto.org/proj/libgphoto2/support.php), webcam _*2_ |
+| Raspberry Pi 3 / 4 | Raspberry Pi OS 32bit Bullseye_*1_ | [Camera Modules](https://www.raspberrypi.com/documentation/accessories/camera.html), [gphoto2 DSLR](http://www.gphoto.org/proj/libgphoto2/support.php), webcam _*2_ |
+| Generic PC         | Debian/Ubuntu                      | [gphoto2 DSLR](http://www.gphoto.org/proj/libgphoto2/support.php), webcam _*2_                                                                                      |
+| Generic PC         | Windows                            | [digiCamControl](http://digicamcontrol.com/), webcam _*2_                                                                                                           |
+
+_*1 On Raspberry Pi OS 32bit Bullseye you **must** add `arm_64bit=0` to your `/boot/config.txt` and reboot once before installing Photobooth._  
+_The Raspberry Pi foundation uses a 64bit kernel while the system is 32bit. The Installation fails because the v4l2loopback module can't be compiled for a 32bit OS while using a 64bit kernel._
+
+_*2 Capture from webcam is possible e.g. using [fswebcam](https://www.sanslogic.co.uk/fswebcam/), else it only works on access via [http://localhost](http://localhost)_
+
+
+## :gear: Prerequisites
+
+| Software          | Tested version         | Note
+|-------------------|------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| Node.js           | v14, v16               | Currently only v14 and v16 are tested. Our installer will check your Node.js version and suggest an update/downgrade if needed.     |
+| php               | v7.4, v8.0, v8.1       |                                                                                                                                     |
+| Webserver         |                        | Apache, Nginx or lighttpd is needed. By default Apache webserver is installed by our installer.                                     |
+
+
 ## :heart_eyes: Features
 
 - Works on Windows and Linux.
-  - Under Windows [digiCamControl](http://digicamcontrol.com/) by Duka Istvan
-    can be used to control the camera and to take pictures.
-  - Under Linux [gPhoto2](http://gphoto.org/) is used to control the camera and
-    to take pictures.
 - Images are processed with GD.
 - Photobooth caches all generated QR-Codes, Thumbnails and Prints.
 - Updated [PhotoSwipe Gallery](https://github.com/PhotoboothProject/PhotoSwipe)
@@ -96,16 +121,6 @@ _Latest development version:_
   - Adjust take picture and print commands.
   - Adjust the style of Photobooth via admin panel.
 - ... _And many more options to adjust and style Photobooth for your personal needs_
-
-## :camera: Screenshots
-
-![](https://raw.githubusercontent.com/PhotoboothProject/PhotoboothProject.github.io/master/resources/img/start.png)
-
-## :gear: Prerequisites
-
-- gphoto2, if used on a Raspberry for DSLR control
-- digiCamControl, if used on Windows for DSLR control
-- Apache, NGINX or Lighttpd
 
 ## :wrench: Installation & Troubleshooting
 
