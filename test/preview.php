@@ -6,21 +6,12 @@ require_once $fileRoot . 'lib/config.php';
 $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
-
 $pageTitle = $config['ui']['branding'] . ' Preview-Test';
+$mainStyle = 'test_preview.css';
+$photoswipe = false;
+
+include($fileRoot . 'template/components/mainHead.php');
 ?>
-
-<!DOCTYPE html>
-<html>
-
-<head>
-	<?php include($fileRoot . 'template/components/mainHead.php'); ?>
-
-    <link rel="stylesheet" href="<?=$fileRoot?>resources/css/test_preview.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php if (is_file($fileRoot . 'private/overrides.css')): ?>
-        <link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php endif; ?>
-</head>
 
 <body>
     <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['htmlframe']; ?>" alt="pictureFrame" />
