@@ -26,12 +26,13 @@ if ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'
         }
 
         echo '<!-- Remote Buzzer enabled --- starting server -->' . "\n";
-
-        proc_close(proc_open($config['nodebin']['cmd'] . $fileRoot . ' resources/js/remotebuzzer_server.js 1>' . $logfile . ' 2>&1 &', [], $foo));
+        if (!empty($fileRoot)) {
+            chdir($fileRoot);
+        }
+        proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/remotebuzzer_server.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     } else {
         echo '<!-- Remote Buzzer Enabled --- server already started (port in use) -->' . "\n";
     }
-    echo '<script type="text/javascript" src="' . $fileRoot . 'node_modules/socket.io-client/dist/socket.io.min.js"></script>' . "\n";
 }
 
 if ($config['synctodrive']['enabled']) {
@@ -45,7 +46,10 @@ if ($config['synctodrive']['enabled']) {
         echo '<!-- Sync To Drive enabled --- server already active -->' . "\n";
     } else {
         echo '<!-- Sync To Drive enabled --- starting server -->' . "\n";
-        proc_close(proc_open($config['nodebin']['cmd'] . $fileRoot . ' resources/js/sync-to-drive.js 1>' . $logfile . ' 2>&1 &', [], $foo));
+        if (!empty($fileRoot)) {
+            chdir($fileRoot);
+        }
+        proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/sync-to-drive.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     }
 }
 ?>
