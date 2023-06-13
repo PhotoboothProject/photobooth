@@ -32,6 +32,8 @@ $uiShape = 'shape--' . $config['ui']['style'];
 $pageTitle = $config['ui']['branding'] . ' Chromakeying';
 $mainStyle = $config['ui']['style'] . '_chromakeying.css';
 $photoswipe = false;
+$remoteBuzzer = true;
+$chromaKeying = true;
 $GALLERY_FOOTER = true;
 
 include($fileRoot . 'template/components/mainHead.php');
@@ -82,15 +84,6 @@ include($fileRoot . 'template/components/mainHead.php');
 	</div>
 
     <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
-
-	<?php if ($config['keying']['variant'] === 'marvinj'): ?>
-	<script type="text/javascript" src="<?=$fileRoot?>node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
-	<?php else:?>
-	<script type="text/javascript" src="<?=$fileRoot?>vendor/Seriously/seriously.js"></script>
-	<script type="text/javascript" src="<?=$fileRoot?>vendor/Seriously/effects/seriously.chroma.js"></script>
-	<?php endif; ?>
-	<script type="text/javascript" src="<?=$fileRoot?>resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-	<script type="text/javascript" src="<?=$fileRoot?>resources/js/chromakeying.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 	<?php require_once($fileRoot . 'lib/services_start.php'); ?>
 </body>

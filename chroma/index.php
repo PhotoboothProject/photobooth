@@ -28,6 +28,8 @@ if (
     $pageTitle = $config['ui']['branding'] . ' Chroma capture';
     $mainStyle = $config['ui']['style'] . '_chromacapture.css';
     $photoswipe = true;
+    $remoteBuzzer = true;
+    $chromaKeying = true;
     $GALLERY_FOOTER = false;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
@@ -125,19 +127,8 @@ include($fileRoot . 'template/components/mainHead.php');
 
         <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 
-        <script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
-        <script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
-        <script type="text/javascript" src="<?=$fileRoot?>resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-        <script type="text/javascript" src="<?=$fileRoot?>resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-        <?php if ($config['keying']['variant'] === 'marvinj'): ?>
-            <script type="text/javascript" src="<?=$fileRoot?>node_modules/marvinj/marvinj/release/marvinj-1.0.js"></script>
-        <?php else: ?>
-            <script type="text/javascript" src="<?=$fileRoot?>vendor/Seriously/seriously.js"></script>
-            <script type="text/javascript" src="<?=$fileRoot?>vendor/Seriously/effects/seriously.chroma.js"></script>
-        <?php endif; ?>
-        <script type="text/javascript" src="<?=$fileRoot?>resources/js/chromakeying.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
         <?php require_once($fileRoot . 'lib/services_start.php'); ?>
     </div>
