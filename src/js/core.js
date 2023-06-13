@@ -1285,12 +1285,15 @@ const photoBooth = (function () {
     };
 
     $(document).on('keyup', function (ev) {
-        if (typeof onStandaloneGalleryView !== 'undefined' || startPage.is(':visible')) {
-            clearTimeout(timeOut);
-            photoboothTools.console.logDev('Timeout for auto reload cleared.');
-        } else {
-            api.resetTimeOut();
+        if (api.isTimeOutPending()) {
+            if (typeof onStandaloneGalleryView !== 'undefined' || startPage.is(':visible')) {
+                clearTimeout(timeOut);
+                photoboothTools.console.logDev('Timeout for auto reload cleared.');
+            } else {
+                api.resetTimeOut();
+            }
         }
+
         if (typeof onStandaloneGalleryView === 'undefined' && typeof onCaptureChromaView === 'undefined') {
             if (
                 (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) ||
