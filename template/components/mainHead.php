@@ -1,5 +1,10 @@
 <?php
 
+echo '<!DOCTYPE html>' . "\n";
+echo '<html>' . "\n";
+
+echo '<head>' . "\n";
+
 echo '<meta charset="UTF-8" />' . "\n";
 echo '<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">' . "\n";
 echo '<meta name="msapplication-TileColor" content="' . $config['colors']['primary'] . '">' . "\n";
@@ -22,4 +27,18 @@ echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/normalize.css/n
 echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/font-awesome/css/font-awesome.css" />' . "\n";
 echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/material-icons/iconfont/material-icons.css">' . "\n";
 echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/material-icons/css/material-icons.css">' . "\n";
+
+if ($photoswipe) {
+    echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/photoswipe/dist/photoswipe.css"/>' . "\n";
+}
+echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/' . $mainStyle . '?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+
+if ($photoswipe && $config['gallery']['bottom_bar']) {
+    echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/photoswipe-bottom.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+}
+
+if (is_file($fileRoot . 'private/overrides.css')) {
+    echo '<link rel="stylesheet" href="' . $fileRoot . 'private/overrides.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+}
+echo '</head>' . "\n";
 ?>

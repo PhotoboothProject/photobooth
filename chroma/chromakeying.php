@@ -30,17 +30,13 @@ $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
 $pageTitle = $config['ui']['branding'] . ' Chromakeying';
+$mainStyle = $config['ui']['style'] . '_chromakeying.css';
+$photoswipe = false;
+$GALLERY_FOOTER = true;
 
+include($fileRoot . 'template/components/mainHead.php');
 ?>
-<!doctype html>
-<html>
-	<head>
-		<?php include($fileRoot . 'template/components/mainHead.php'); ?>
-		<link rel="stylesheet" href="<?=$fileRoot?>resources/css/<?php echo $config['ui']['style']; ?>_chromakeying.css?v=<?php echo $config['photobooth']['version']; ?>" />
-		<?php if (is_file($fileRoot . 'private/overrides.css')): ?>
-		<link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
-		<?php endif; ?>
-	</head>
+
 <body data-main-image="<?=$mainimage?>">
 	<div class="chromawrapper rotarygroup">
 	<?php if ($keying_possible): ?>

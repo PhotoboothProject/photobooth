@@ -25,25 +25,17 @@ if (
     $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
     $btnShape = 'shape--' . $config['ui']['button'];
     $uiShape = 'shape--' . $config['ui']['style'];
-
-    $GALLERY_FOOTER = false;
     $pageTitle = $config['ui']['branding'] . ' Chroma capture';
+    $mainStyle = $config['ui']['style'] . '_chromacapture.css';
+    $photoswipe = true;
+    $GALLERY_FOOTER = false;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
 }
-?>
-<!doctype html>
-<html>
-<head>
-    <?php include($fileRoot . 'template/components/mainHead.php'); ?>
-    <link rel="stylesheet" href="<?=$fileRoot?>node_modules/photoswipe/dist/photoswipe.css"/>
-    <link rel="stylesheet" href="<?=$fileRoot?>resources/css/<?php echo $config['ui']['style']; ?>_chromacapture.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php if (is_file($fileRoot . 'private/overrides.css')): ?>
-        <link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php endif; ?>
-</head>
 
+include($fileRoot . 'template/components/mainHead.php');
+?>
 <body>
 <div id="blocker"></div>
 <div id="aperture"></div>

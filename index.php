@@ -37,27 +37,16 @@ if (
     $btnShape = 'shape--' . $config['ui']['button'];
     $uiShape = 'shape--' . $config['ui']['style'];
     $pageTitle = $config['ui']['branding'];
+    $mainStyle = $config['ui']['style'] . '_style.css';
+    $photoswipe = true;
     $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
 }
+
+include($fileRoot . 'template/components/mainHead.php');
 ?>
-<!DOCTYPE html>
-<html>
-
-<head>
-	<?php include($fileRoot . 'template/components/mainHead.php'); ?>
-
-    <link rel="stylesheet" href="<?=$fileRoot?>node_modules/photoswipe/dist/photoswipe.css"/>
-    <link rel="stylesheet" href="<?=$fileRoot?>resources/css/<?php echo $config['ui']['style']; ?>_style.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php if ($config['gallery']['bottom_bar']): ?>
-        <link rel="stylesheet" href="<?=$fileRoot?>resources/css/photoswipe-bottom.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php endif; ?>
-    <?php if (is_file($fileRoot . 'private/overrides.css')): ?>
-        <link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>"/>
-    <?php endif; ?>
-</head>
 
 <body class="deselect">
 <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['htmlframe']; ?>" alt="pictureFrame" />

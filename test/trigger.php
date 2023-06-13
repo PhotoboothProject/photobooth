@@ -7,19 +7,11 @@ $btnClass = 'btn btn--' . $config['ui']['button'];
 $btnShape = 'shape--' . $config['ui']['button'];
 $uiShape = 'shape--' . $config['ui']['style'];
 $pageTitle = $config['ui']['branding'] . ' Remote Trigger';
+$mainStyle = 'trigger.css';
+$photoswipe = false;
+
+include($fileRoot . 'template/components/mainHead.php');
 ?>
-<!DOCTYPE html>
-<html>
-
-<head>
-	<?php include($fileRoot . 'template/components/mainHead.php'); ?>
-
-	<link rel="stylesheet" href="<?=$fileRoot?>resources/css/<?php echo $config['ui']['style']; ?>_style.css" />
-	<link rel="stylesheet" href="<?=$fileRoot?>resources/css/trigger.css" />
-	<?php if (is_file($fileRoot . 'private/overrides.css')): ?>
-	<link rel="stylesheet" href="<?=$fileRoot?>private/overrides.css" />
-	<?php endif; ?>
-</head>
 
 <body>
 
