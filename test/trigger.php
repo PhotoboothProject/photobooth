@@ -9,6 +9,8 @@ $uiShape = 'shape--' . $config['ui']['style'];
 $pageTitle = $config['ui']['branding'] . ' Remote Trigger';
 $mainStyle = 'trigger.css';
 $photoswipe = false;
+$remoteBuzzer = false;
+$chromaKeying = false;
 
 include($fileRoot . 'template/components/mainHead.php');
 ?>

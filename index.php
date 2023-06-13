@@ -39,6 +39,8 @@ if (
     $pageTitle = $config['ui']['branding'];
     $mainStyle = $config['ui']['style'] . '_style.css';
     $photoswipe = true;
+    $remoteBuzzer = true;
+    $chromaKeying = false;
     $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
@@ -210,10 +212,6 @@ include($fileRoot . 'template/components/mainHead.php');
 <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
 
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=$fileRoot?>resources/js/remotebuzzer_client.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe.umd.min.js"></script>
-<script type="text/javascript" src="<?=$fileRoot?>node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js"></script>
-<script type="text/javascript" src="<?=$fileRoot?>resources/js/photoswipe.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
