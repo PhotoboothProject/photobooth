@@ -2298,6 +2298,19 @@ $configsetup = [
             'name' => 'login[password]',
             'value' => htmlentities($config['login']['password'] ?? ''),
         ],
+        'login_keypad' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'login[keypad]',
+            'value' => $config['login']['keypad'],
+        ],
+        'login_pin' => [
+            'view' => 'basic',
+            'type' => 'number',
+            'placeholder' => '5555',
+            'name' => 'login[pin]',
+            'value' => $config['login']['pin'],
+        ],
         'protect_admin' => [
             'view' => 'advanced',
             'type' => 'checkbox',

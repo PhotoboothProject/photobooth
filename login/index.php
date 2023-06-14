@@ -33,44 +33,15 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 	<div class="w-full h-screen grid place-items-center absolute bg-brand-1 px-6 py-12 overflow-x-hidden overflow-y-auto">
 		<div class="w-full flex items-center justify-center flex-col">
 
-		<!-- login -->
-		<?php if($config['login']['enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
-			<div class="w-full max-w-xl h-144 rounded-lg p-8 bg-white flex flex-col shadow-xl">
-				<form method="post">
-
-					<div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
-						<?=$config['ui']['branding']?> Login
-					</div>
-
-					<div class="w-full text-center text-gray-500 mb-8">
-						<span data-i18n="login_please"></span>
-					</div>
-
-					<!-- user -->
-					<div class="relative">
-						<label class="<?=$labelClass?>" for="username"><span data-i18n="login_username"></span></label>
-						<input class="<?=$inputClass?>" type="text" name="username" id="username" autocomplete="on" required>
-					</div>
-
-					<!-- pw -->
-					<div class="relative mt-2">
-						<label class="<?=$labelClass?>" for="password"><span data-i18n="login_password"></span></label>
-						<input class="<?=$inputClass?>"  type="password" name="password" id="password" autocomplete="on" required>
-						<span toggle="#password" class="absolute w-10 h-10 bottom-0 right-0 cursor-pointer text-brand-1 flex items-center justify-center password-toggle <?=$config['icons']['password_visibility']?>"></span>
-					</div>
-
-					<!-- btn -->
-					<div class="mt-6">
-						<input class="<?=$btnClass?>" type="submit" name="submit" value="Login">
-					</div>
-					<?php if ($error !== false) {
-						echo '<span class="w-full flex mt-6 text-red-500" data-i18n="login_invalid"></span>'; 
-					} ?>  
-				</form>
-			</div>
-			<div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20"></div>
-		<?php endif; ?>
-
+		<?php 
+			if($config['login']['enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
+				if(isset($config['login']['keypad']) && $config['login']['keypad'] === true) {
+					include('keypad.php');
+				} else {
+					include('loginMask.php');
+				}
+			}	
+		?>
 
 		<div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
 
@@ -80,7 +51,7 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 				</h1>
 			</div>
 
-			<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
+			<?php if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)): ?>
 			<div class="w-12 h-12 bg-white absolute right-4 top-4 rounded-b-l-lg shadow-xls flex items-center justify-center text-brand-1 cursor-pointer">
 				<a href="<?=$fileRoot?>" >
 					<i class="!text-2xl <?php echo $config['icons']['close']; ?>"></i>
@@ -91,18 +62,18 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
 				<?php 
-					if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
+					if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
 						echo getMenuBtn('/admin', 'admin_panel', $config['icons']['admin']);
 					}
 
 					echo getMenuBtn($fileRoot . 'gallery', 'gallery', $config['icons']['gallery']);
 					echo getMenuBtn($fileRoot . 'slideshow', 'slideshow', $config['icons']['slideshow']);
 
-					if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
+					if(!$config['protect']['index'] || (!$config['protect']['localhost_index'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
 						echo getMenuBtn($fileRoot . 'chroma', 'chromaCapture', $config['icons']['chromaCapture']);
 					}
 
-					if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
+					if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
 						echo getMenuBtn($fileRoot . 'faq', 'show_faq', $config['icons']['faq']);
 						echo getMenuBtn($fileRoot . 'manual', 'show_manual', $config['icons']['manual']);
 						echo getMenuBtn('https://t.me/PhotoboothGroup', 'telegram', $config['icons']['telegram']);

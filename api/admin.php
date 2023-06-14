@@ -55,6 +55,12 @@ if (isset($data['type'])) {
         $newConfig['login']['password'] = null;
     }
 
+    if (strlen($newConfig['login']['pin']) != 4) {
+        $newConfig['login']['keypad'] = false;
+        $newConfig['login']['pin'] = '';
+        $Logger->addLogData(['keypad' => 'keypad pin reset']);
+    }
+
     if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
         $newConfig['preview']['camTakesPic'] = false;
         $Logger->addLogData(['preview' => 'Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.']);

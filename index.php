@@ -17,7 +17,7 @@ if ($config['chromaCapture']['enabled']) {
 // Login / Authentication check
 if (
     !$config['login']['enabled'] ||
-    (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (!$config['protect']['localhost_index'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) ||
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
 ) {
     require_once $fileRoot . 'lib/filter.php';
