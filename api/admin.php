@@ -42,17 +42,32 @@ if (isset($data['type'])) {
     }
 
     if (isset($newConfig['login']['enabled']) && $newConfig['login']['enabled'] == true) {
-        if (isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) {
-            if (!($newConfig['login']['password'] === $config['login']['password'])) {
-                $hashing = password_hash($newConfig['login']['password'], PASSWORD_DEFAULT);
-                $newConfig['login']['password'] = $hashing;
+        if ((isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) || $newConfig['login']['keypad']) {
+            if ($newConfig['login']['keypad'] && strlen($newConfig['login']['pin']) != 4) {
+                $Logger->addLogData(['keypad' => 'Keypad pin reset.']);
+                $newConfig['login']['enabled'] = false;
+                $newConfig['login']['keypad'] = false;
+                $newConfig['login']['pin'] = '';
+            }
+            if (isset($newConfig['login']['password'])) {
+                // allow login via password, but we might have disabled because the PIN length did not match our requirements
+                $newConfig['login']['enabled'] = true;
+
+                if (newConfig['login']['password'] === $config['login']['password']) {
+                    $hashing = password_hash($newConfig['login']['password'], PASSWORD_DEFAULT);
+                    $newConfig['login']['password'] = $hashing;
+                }
             }
         } else {
             $newConfig['login']['enabled'] = false;
+            $newConfig['login']['keypad'] = false;
+            $newConfig['login']['pin'] = '';
             $Logger->addLogData(['login' => 'Password not set. Login disabled.']);
         }
     } else {
         $newConfig['login']['password'] = null;
+        $newConfig['login']['keypad'] = false;
+        $newConfig['login']['pin'] = '';
     }
 
     if (strlen($newConfig['login']['pin']) != 4) {
