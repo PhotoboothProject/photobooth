@@ -58,6 +58,11 @@ class Image {
     public $resizeMaxHeight = 0;
 
     /**
+     * @var bool Determine to keep aspect ratio on resize.
+     */
+    public $keepAspectRatio = false;
+
+    /**
      *
      * Text to Image Difinitions
      *
@@ -585,17 +590,18 @@ class Image {
 
             $old_width = imagesx($image);
             $old_height = imagesy($image);
-            $max_width = $this->resizeMaxWidth;
-            $max_height = $this->resizeMaxHeight;
+            $new_width = $this->resizeMaxWidth;
+            $new_height = $this->resizeMaxHeight;
 
-            if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
+            if ($old_width <= 0 || $old_height <= 0 || $new_width <= 0 || $new_height <= 0) {
                 throw new Exception('Invalid image dimensions or maximum dimensions.');
             }
 
-            $scale = min($max_width / $old_width, $max_height / $old_height);
-            $new_width = ceil($scale * $old_width);
-            $new_height = ceil($scale * $old_height);
-
+            if ($this->keepAspectRatio) {
+                $scale = min($new_width / $old_width, $new_height / $old_height);
+                $new_width = ceil($scale * $old_width);
+                $new_height = ceil($scale * $old_height);
+            }
             $new = imagecreatetruecolor($new_width, $new_height);
             if (!$new) {
                 throw new Exception('Cannot create new image.');
@@ -604,8 +610,14 @@ class Image {
             imagealphablending($new, false);
             imagesavealpha($new, true);
 
-            if (!imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
-                throw new Exception('Cannot resize image.');
+            if ($this->keepAspectRatio) {
+                if (!imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
+                    throw new Exception('Cannot resize image.');
+                }
+            } else {
+                if (!imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
+                    throw new Exception('Cannot resize image.');
+                }
             }
         } catch (Exception $e) {
             $this->addErrorData($e->getMessage());
