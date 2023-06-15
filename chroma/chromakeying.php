@@ -71,17 +71,13 @@ include($fileRoot . 'template/components/main.head.php');
 		</div>
 	<?php endif; ?>
 
-		<div class="modal" id="print_mesg">
-			<div class="modal__body" id="print_mesg_text"><span data-i18n="printing"></span></div>
-		</div>
-		<div class="modal" id="modal_mesg"></div>
-		<div class="modal" id="save_mesg">
-			<div class="modal__body" id="save_mesg_text"><span data-i18n="saving"></span></div>
-		</div>
+	<?php include($fileRoot . 'template/modal.template.php'); ?>
+
 	</div>
 
-    <?php include($fileRoot . 'template/components/main.footer.php'); ?>
-
-	<?php require_once($fileRoot . 'lib/services_start.php'); ?>
+        <?php
+	    include($fileRoot . 'template/components/main.footer.php');
+	    require_once($fileRoot . 'lib/services_start.php');
+	?>
 </body>
 </html>

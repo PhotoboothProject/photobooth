@@ -183,12 +183,7 @@ include($fileRoot . 'template/components/main.head.php');
 </div>
 
 <?php include($fileRoot . 'template/send-mail.template.php'); ?>
-
-<div class="modal" id="print_mesg">
-    <div class="modal__body"><span data-i18n="printing"></span></div>
-</div>
-
-<div class="modal" id="modal_mesg"></div>
+<?php include($fileRoot . 'template/modal.template.php'); ?>
 
 <div id="adminsettings">
     <div style="position:absolute; bottom:0; right:0;">

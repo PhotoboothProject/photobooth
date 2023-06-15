@@ -101,12 +101,10 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
             <?php include($fileRoot . 'template/gallery.template.php'); ?>
         </div>
 
-        <?php include($fileRoot . 'template/send-mail.template.php'); ?>
-
-        <div class="modal" id="print_mesg">
-            <div class="modal__body"><span data-i18n="printing"></span></div>
-        </div>
-        <div class="modal" id="modal_mesg"></div>
+        <?php
+            include($fileRoot . 'template/send-mail.template.php');
+            include($fileRoot . 'template/components/main.footer.php');
+        ?>
 
         <script type="text/javascript">
             onCaptureChromaView = true;
