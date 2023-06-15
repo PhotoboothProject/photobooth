@@ -3,34 +3,17 @@
 $fileRoot = '../';
 
 require_once($fileRoot . 'lib/config.php');
-require_once($fileRoot . 'lib/db.php');
 
-$database = new DatabaseManager();
-$database->db_file = DB_FILE;
-$database->file_dir = IMG_DIR;
-if ($config['database']['enabled']) {
-    $images = $database->getContentFromDB();
-} else {
-    $images = $database->getFilesFromDirectory();
-}
-
-$imagelist = !empty($images) ? array_reverse($images) : $images;
-
-if (!empty($imagelist) && $config['slideshow']['randomPicture']) {
-    shuffle($imagelist);
-}
-
-$btnShape = 'shape--' . $config['ui']['button'];
-$uiShape = 'shape--' . $config['ui']['style'];
-$btnClass = 'btn btn--' . $config['ui']['button'];
 $pageTitle = $config['ui']['branding'] . ' Slideshow';
 $mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
+$randomImage = $config['slideshow']['randomPicture'];
 $remoteBuzzer = false;
 $chromaKeying = false;
 $GALLERY_FOOTER = false;
 
 include($fileRoot . 'template/components/main.head.php');
+
 ?>
 
 <body class="deselect">

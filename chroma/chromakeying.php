@@ -26,9 +26,6 @@ if (file_exists($keyingimage)) {
     $mainimage = $fileRoot . 'resources/img/bg.jpg';
 }
 
-$btnClass = 'btn btn--' . $config['ui']['button'];
-$btnShape = 'shape--' . $config['ui']['button'];
-$uiShape = 'shape--' . $config['ui']['style'];
 $pageTitle = $config['ui']['branding'] . ' Chromakeying';
 $mainStyle = $config['ui']['style'] . '_chromakeying.css';
 $photoswipe = false;
