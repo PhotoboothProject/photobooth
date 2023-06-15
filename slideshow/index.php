@@ -30,7 +30,7 @@ $remoteBuzzer = false;
 $chromaKeying = false;
 $GALLERY_FOOTER = false;
 
-include($fileRoot . 'template/components/mainHead.php');
+include($fileRoot . 'template/components/main.head.php');
 ?>
 
 <body class="deselect">
@@ -40,11 +40,11 @@ include($fileRoot . 'template/components/mainHead.php');
 		        <div class="gallery__header">
 			        <h1><span data-i18n="slideshow"></span></h1>
 		        </div>
-                <?php include($fileRoot . 'template/components/galImages.php'); ?>
+                <?php include($fileRoot . 'template/components/gal.images.php'); ?>
         </div>
 	</div>
 
-    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/main.footer.php'); ?>
 
 	<script type="text/javascript" src="<?=$fileRoot?>resources/js/slideshow.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 </body>

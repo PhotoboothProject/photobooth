@@ -6,10 +6,10 @@
 		</div>
 
         <?php
-        include('components/galImages.php');
+        include('components/gal.images.php');
 
         if($GALLERY_FOOTER === true && $config['gallery']['action_footer'] === true) {
-            include('components/galBtnFooter.php');
+            include('components/gal.btnFooter.php');
         }
         ?>
 	</div>
