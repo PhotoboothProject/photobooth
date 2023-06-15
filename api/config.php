@@ -7,6 +7,7 @@ require '../lib/config.php';
 $config['mail']['password'] = 'secret';
 $config['login']['username'] = 'secret';
 $config['login']['password'] = 'secret';
+$config['login']['pin'] = 'secret';
 ?>
 const config = <?= json_encode($config) ?>;
 
