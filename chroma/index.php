@@ -10,24 +10,10 @@ if (
     (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
 ) {
-    require_once $fileRoot . 'lib/db.php';
-
-    $database = new DatabaseManager();
-    $database->db_file = DB_FILE;
-    $database->file_dir = IMG_DIR;
-    if ($config['database']['enabled']) {
-        $images = $database->getContentFromDB();
-    } else {
-        $images = $database->getFilesFromDirectory();
-    }
-    $imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;
-
-    $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
-    $btnShape = 'shape--' . $config['ui']['button'];
-    $uiShape = 'shape--' . $config['ui']['style'];
     $pageTitle = $config['ui']['branding'] . ' Chroma capture';
     $mainStyle = $config['ui']['style'] . '_chromacapture.css';
     $photoswipe = true;
+    $randomImage = false;
     $remoteBuzzer = true;
     $chromaKeying = true;
     $GALLERY_FOOTER = false;
@@ -37,6 +23,7 @@ if (
 }
 
 include($fileRoot . 'template/components/main.head.php');
+$btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
 ?>
 <body>
 <div id="blocker"></div>

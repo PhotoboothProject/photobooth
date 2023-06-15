@@ -1,5 +1,7 @@
 <?php
 
+include 'main.defaults.php';
+
 echo '<!DOCTYPE html>' . "\n";
 echo '<html>' . "\n";
 

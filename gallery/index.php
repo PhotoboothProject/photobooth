@@ -2,26 +2,11 @@
 
 $fileRoot = '../';
 require_once($fileRoot . 'lib/config.php');
-require_once($fileRoot . 'lib/db.php');
 
-$database = new DatabaseManager();
-$database->db_file = DB_FILE;
-$database->file_dir = IMG_DIR;
-
-if ($config['database']['enabled']) {
-	$images = $database->getContentFromDB();
-} else {
-	$images = $database->getFilesFromDirectory();
-}
-
-$imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;
-
-$btnShape = 'shape--' . $config['ui']['button'];
-$uiShape = 'shape--' . $config['ui']['style'];
-$btnClass = 'btn btn--' . $config['ui']['button'];
 $pageTitle = $config['ui']['branding'] . ' Gallery';
 $mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
+$randomImage = false;
 $remoteBuzzer = true;
 $chromaKeying = false;
 $GALLERY_FOOTER = false;
