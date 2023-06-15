@@ -114,7 +114,7 @@ if (!file_exists($filename_print)) {
             $imageHandler->fontColor = $config['textonprint']['font_color'];
             $imageHandler->fontPath = $config['textonprint']['font'];
             $imageHandler->textLine1 = $config['textonprint']['line1'];
-            $imageHandler->textLine1 = $config['textonprint']['line2'];
+            $imageHandler->textLine2 = $config['textonprint']['line2'];
             $imageHandler->textLine3 = $config['textonprint']['line3'];
             $imageHandler->textLineSpacing = $config['textonprint']['linespace'];
 
