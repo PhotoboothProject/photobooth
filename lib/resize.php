@@ -103,7 +103,7 @@ function resizeImage($image, $max_width, $max_height) {
     return $new_image;
 }
 
-function resizePngImage($image, $max_width, $max_height) {
+function resizePngImage($image, $new_width, $new_height) {
     try {
         if (!$image) {
             throw new Exception('Invalid image resource.');
@@ -111,12 +111,9 @@ function resizePngImage($image, $max_width, $max_height) {
 
         $old_width = imagesx($image);
         $old_height = imagesy($image);
-        if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
+        if ($old_width <= 0 || $old_height <= 0 || $new_width <= 0 || $new_height <= 0) {
             throw new Exception('Invalid image dimensions or maximum dimensions.');
         }
-        $scale = min($max_width / $old_width, $max_height / $old_height);
-        $new_width = ceil($scale * $old_width);
-        $new_height = ceil($scale * $old_height);
         $new = imagecreatetruecolor($new_width, $new_height);
         if (!$new) {
             throw new Exception('Cannot create new image.');
@@ -124,7 +121,7 @@ function resizePngImage($image, $max_width, $max_height) {
 
         imagealphablending($new, false);
         imagesavealpha($new, true);
-        if (!imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
+        if (!imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
             throw new Exception('Cannot resize image.');
         }
     } catch (Exception $e) {
