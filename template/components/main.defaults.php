@@ -16,7 +16,7 @@ if (isset($photoswipe) && $photoswipe) {
         $images = $database->getFilesFromDirectory();
     }
     $imagelist = $config['gallery']['newest_first'] === true && !empty($images) ? array_reverse($images) : $images;
-    if ($randomImage && !empty($imagelist)) {
+    if (isset($randomImage) && $randomImage && !empty($imagelist)) {
         shuffle($imagelist);
     }
 }
