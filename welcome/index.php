@@ -113,6 +113,6 @@ include($fileRoot . 'admin/inputs/index.php');
 	</div>
 
 
-    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/main.footer.php'); ?>
 </body>
 </html>

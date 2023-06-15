@@ -47,7 +47,7 @@ if (
     exit();
 }
 
-include($fileRoot . 'template/components/mainHead.php');
+include($fileRoot . 'template/components/main.head.php');
 ?>
 
 <body class="deselect">
@@ -209,7 +209,7 @@ include($fileRoot . 'template/components/mainHead.php');
     </div>
 </div>
 
-<?php include($fileRoot . 'template/components/mainFooter.php'); ?>
+<?php include($fileRoot . 'template/components/main.footer.php'); ?>
 
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>

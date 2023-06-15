@@ -12,7 +12,7 @@ $photoswipe = false;
 $remoteBuzzer = false;
 $chromaKeying = false;
 
-include($fileRoot . 'template/components/mainHead.php');
+include($fileRoot . 'template/components/main.head.php');
 ?>
 
 <body>
@@ -59,6 +59,6 @@ include($fileRoot . 'template/components/mainHead.php');
 		</div>
 	</div>
 
-    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/main.footer.php'); ?>
 </body>
 </html>

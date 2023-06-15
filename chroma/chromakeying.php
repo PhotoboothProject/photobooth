@@ -36,7 +36,7 @@ $remoteBuzzer = true;
 $chromaKeying = true;
 $GALLERY_FOOTER = true;
 
-include($fileRoot . 'template/components/mainHead.php');
+include($fileRoot . 'template/components/main.head.php');
 ?>
 
 <body data-main-image="<?=$mainimage?>">
@@ -83,7 +83,7 @@ include($fileRoot . 'template/components/mainHead.php');
 		</div>
 	</div>
 
-    <?php include($fileRoot . 'template/components/mainFooter.php'); ?>
+    <?php include($fileRoot . 'template/components/main.footer.php'); ?>
 
 	<?php require_once($fileRoot . 'lib/services_start.php'); ?>
 </body>
