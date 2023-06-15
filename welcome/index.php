@@ -103,7 +103,7 @@ include($fileRoot . 'admin/inputs/index.php');
 					<p class="text-center">Thanks for the reading! Enjoy your Photobooth!</p>
 
 					<div class="w-full max-w-md p-5 mx-auto mt-2">
-						<?=getMenuBtn('/', 'Start Photobooth', '')?>
+						<?=getMenuBtn($fileRoot, 'Start Photobooth', '')?>
 					</div>
 				</div>
 
