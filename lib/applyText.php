@@ -10,7 +10,7 @@ function applyText($sourceResource, $fontSize, $fontRotation, $fontLocationX, $f
 
         // Add first line of text
         if (!empty($line1Text)) {
-            if (imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $line1Text)) {
+            if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $line1Text)) {
                 throw new Exception('Could not add first line of text to resource.');
             }
         }
@@ -19,7 +19,7 @@ function applyText($sourceResource, $fontSize, $fontRotation, $fontLocationX, $f
         if (!empty($line2Text)) {
             $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $lineSpacing : $fontLocationY;
             $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $lineSpacing;
-            if (imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $line2Text)) {
+            if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $line2Text)) {
                 throw new Exception('Could not add second line of text to resource.');
             }
         }
@@ -28,7 +28,7 @@ function applyText($sourceResource, $fontSize, $fontRotation, $fontLocationX, $f
         if (!empty($line3Text)) {
             $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $lineSpacing * 2 : $fontLocationY;
             $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $lineSpacing * 2;
-            if (imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $line3Text)) {
+            if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $line3Text)) {
                 throw new Exception('Could not add third line of text to resource.');
             }
         }
