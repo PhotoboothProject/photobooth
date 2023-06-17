@@ -84,9 +84,12 @@ if (!file_exists($filename_print)) {
 
         if ($config['print']['qrcode'] && $imageHandler->qrAvailable) {
             // create qr code
-            $imageHandler->qrUrl = $config['qr']['url'];
-            if ($config['qr']['append_filename']) {
+            if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
+                $imageHandler->qrUrl = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $filename;
+            } elseif ($config['qr']['append_filename']) {
                 $imageHandler->qrUrl = $config['qr']['url'] . $filename;
+            } else {
+                $imageHandler->qrUrl = $config['qr']['url'];
             }
             $imageHandler->qrEcLevel = $config['qr']['ecLevel'];
             $imageHandler->qrSize = $config['print']['qrSize'];
