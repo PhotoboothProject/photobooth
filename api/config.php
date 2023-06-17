@@ -8,6 +8,8 @@ $config['mail']['password'] = 'secret';
 $config['login']['username'] = 'secret';
 $config['login']['password'] = 'secret';
 $config['login']['pin'] = 'secret';
+$config['ftp']['username'] = 'secret';
+$config['ftp']['password'] = 'secret';
 ?>
 const config = <?= json_encode($config) ?>;
 

@@ -182,4 +182,93 @@ class Helper {
 
         return $fileCount;
     }
+
+    /**
+     * Navigate through the ftp folder system.
+     *
+     * @param resource $conn The connection to the FTP server.
+     *
+     * @param string $currentDir The path to the directory in the FTP server.
+     *
+     * @throws Exception If the provided path is not a valid directory in the FTP server.
+     *
+     */
+    public static function cdFTPTree($conn, $currentDir) {
+        if ($currentDir == '') {
+            throw new Exception('The path cannot be empty!');
+        }
+
+        if (ftp_chdir($conn, $currentDir)) {
+            // the directory already exist and we are already in it
+            return;
+        }
+
+        $exploded = explode(DIRECTORY_SEPARATOR, $currentDir);
+        array_pop($exploded);
+
+        $rejoined = join(DIRECTORY_SEPARATOR, $exploded);
+        self::cdFTPTree($conn, $rejoined);
+
+        ftp_mkdir($conn, $currentDir);
+        ftp_chdir($conn, $currentDir);
+    }
+
+    /**
+     * Convert a text into a slug.
+     *
+     * @param string $text The text to convert.
+     *
+     * @param string $divider The custom divider to use between words.
+     *
+     * @return string The text converted into a slug.
+     *
+     * @throws Exception If the provided path is not a valid directory in the FTP server.
+     *
+     */
+    public static function slugify($text, $divider = '-') {
+        // replace non letter or digits by divider
+        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, $divider);
+
+        // remove duplicate divider
+        $text = preg_replace('~-+~', $divider, $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
+    }
+
+    /**
+     * Check if the file exist, and it isn't a location.
+     *
+     * @param string $file_location The location of the file to check.
+     *
+     * @return boolean true if the file exist and it isn't a location, false otherwise.
+     *
+     */
+    public static function testFile($file_location) {
+        if (is_dir($file_location)) {
+            //throw new Exception($file_location . ' is a path! Frames need to be PNG, Fonts need to be ttf!');
+            return false;
+        }
+
+        if (!file_exists($file_location)) {
+            //throw new Exception($file_location . ' does not exist!');
+            return false;
+        }
+        return true;
+    }
 }

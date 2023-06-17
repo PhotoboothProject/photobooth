@@ -195,6 +195,7 @@ if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $
 
 $default_font = realpath($basepath . 'resources/fonts/GreatVibes-Regular.ttf');
 $default_frame = realpath($basepath . 'resources/img/frames/frame.png');
+$default_template = realpath($basepath . DIRECTORY_SEPARATOR . 'resources/template/index.php');
 
 if (empty($config['picture']['frame'])) {
     $config['picture']['frame'] = $default_frame;
@@ -258,6 +259,32 @@ if (empty($config['webserver']['ip'])) {
 
 if (empty($config['qr']['url'])) {
     $config['qr']['url'] = $photobooth->getUrl() . '/api/download.php?image=';
+}
+
+if (empty($config['ftp']['template_location']) || !Helper::testFile($config['ftp']['template_location'])) {
+    $config['ftp']['template_location'] = $default_template;
+}
+
+if (!empty($config['ftp']['urlTemplate'])) {
+    try {
+        $parameters = [
+            '%website' => $config['ftp']['website'],
+            '%baseFolder' => $config['ftp']['baseFolder'],
+            '%folder' => $config['ftp']['folder'],
+            '%title' => Helper::slugify($config['ftp']['title']),
+            '%date' => date('Y/m/d'),
+        ];
+    } catch (Exception $e) {
+        $parameters = [
+            '%website' => $config['ftp']['website'],
+            '%baseFolder' => $config['ftp']['baseFolder'],
+            '%folder' => $config['ftp']['folder'],
+            '%title' => 'Example',
+            '%date' => date('Y/m/d'),
+        ];
+    }
+
+    $config['ftp']['processedTemplate'] = str_replace(array_keys($parameters), array_values($parameters), $config['ftp']['urlTemplate']);
 }
 
 $config['cheese_img'] = $config['ui']['shutter_cheese_img'];
