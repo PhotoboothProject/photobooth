@@ -34,7 +34,7 @@ _Latest development version:_
 | Hardware-Platform  | Software-Platform                  | Supported Cameras                                                                                                                                                                     |
 |--------------------|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Raspberry Pi 3 / 4 | Raspberry Pi OS 64bit Bullseye     | [Camera Modules](https://www.raspberrypi.com/documentation/accessories/camera.html), [gphoto2 DSLR](http://www.gphoto.org/proj/libgphoto2/support.php), webcam _*2_ |
-| Raspberry Pi 3 / 4 | Raspberry Pi OS 32bit Bullseye_*1_ | [Camera Modules](https://www.raspberrypi.com/documentation/accessories/camera.html), [gphoto2 DSLR](http://www.gphoto.org/proj/libgphoto2/support.php), webcam _*2_ |
+| Raspberry Pi 3 / 4 | Raspberry Pi OS 32bit Bullseye _*1_ | [Camera Modules](https://www.raspberrypi.com/documentation/accessories/camera.html), [gphoto2 DSLR](http://www.gphoto.org/proj/libgphoto2/support.php), webcam _*2_ |
 | Generic PC         | Debian/Ubuntu                      | [gphoto2 DSLR](http://www.gphoto.org/proj/libgphoto2/support.php), webcam _*2_                                                                                      |
 | Generic PC         | Windows                            | [digiCamControl](http://digicamcontrol.com/), webcam _*2_                                                                                                           |
 
