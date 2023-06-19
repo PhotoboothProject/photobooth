@@ -43,6 +43,35 @@
   min-height: 100%;
 }
 
+#resultQR {
+  position: fixed;
+  width: 10em;
+  &.left {
+    left: 1em;
+    &--top {
+      top: 10em;
+    }
+    &--center {
+      top: 50%;
+    }
+    &--bottom {
+      bottom: 10em;
+    }
+  }
+  &.right {
+    right: 1em;
+    &--top {
+      top: 10em;
+    }
+    &--center {
+      top: 50%;
+    }
+    &--bottom {
+      bottom: 10em;
+    }
+  }
+}
+
 #resultVideoQR {
   display: none;
   position: fixed;
