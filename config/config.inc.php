@@ -268,6 +268,7 @@ $config['qr']['url'] = '';
 $config['qr']['append_filename'] = true;
 $config['qr']['custom_text'] = false;
 $config['qr']['text'] = '';
+$config['qr']['result'] = 'hidden';
 
 
 // E -  M A I L

@@ -902,7 +902,15 @@ const photoBooth = (function () {
 
             loader.css('background-image', 'url()');
             loader.removeClass('showBackgroundImage');
-
+            if (config.qr.enabled && config.qr.result != 'hidden') {
+                $(
+                    '<img src="api/qrcode.php?filename=' +
+                        filename +
+                        '" alt="qr code" id="resultQR" class="' +
+                        config.qr.result +
+                        '"/>'
+                ).appendTo(resultPage);
+            }
             if (!mySideNav.hasClass('sidenav--open')) {
                 rotaryController.focusSet('#result');
             }
