@@ -4,7 +4,7 @@
   height: 0px;
   left: 0;
   top: 0;
-  background: $mainColor;
+  background: $secondaryColor;
   overflow: hidden;
   color: $fontColor;
   transition: width 0.3s, height 0.3s;
@@ -32,7 +32,7 @@
     height: auto;
     max-height: 100px;
     width: 100%;
-    background: $mainColor;
+    background: $secondaryColor;
 
     > a {
       position: absolute;
@@ -42,7 +42,7 @@
       font-size: 1.875em;
       width: 50px;
       height: 50px;
-      background: $secondaryColor;
+      background: $mainColor;
       text-align: center;
       line-height: 50px;
     }
@@ -57,7 +57,7 @@
     margin-top: auto;
     display: flex;
     justify-content: center;
-    background: $mainColor;
+    background: $secondaryColor;
     box-shadow: 0 0 1em $highlightColor;
   }
 
