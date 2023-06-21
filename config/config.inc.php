@@ -405,7 +405,6 @@ $config['colors']['font'] = '#c9c9c9';
 $config['colors']['button_font'] = '#ffffff';
 $config['colors']['start_font'] = '#ffffff';
 $config['colors']['panel'] = '#1b3faa';
-$config['colors']['hover_panel'] = '#2e2e2e';
 $config['colors']['border'] = '#eeeeee';
 $config['colors']['box'] = '#e8ebf6';
 $config['colors']['gallery_button'] = '#ffffff';

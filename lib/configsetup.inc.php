@@ -2544,13 +2544,6 @@ $configsetup = [
             'placeholder' => $defaultConfig['colors']['panel'],
             'value' => $config['colors']['panel'],
         ],
-        'colors_hover_panel' => [
-            'view' => 'expert',
-            'type' => 'color',
-            'name' => 'colors[hover_panel]',
-            'placeholder' => $defaultConfig['colors']['hover_panel'],
-            'value' => $config['colors']['hover_panel'],
-        ],
         'colors_border' => [
             'view' => 'expert',
             'type' => 'color',
