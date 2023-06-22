@@ -18,10 +18,7 @@ include($fileRoot . 'template/components/main.head.php');
 		<?php include($fileRoot . 'template/gallery.template.php'); ?>
 	</div>
 
-	<?php
-	    include($fileRoot . 'template/send-mail.template.php');
-	    include($fileRoot . 'template/components/main.footer.php');
-	?>
+	<?php include($fileRoot . 'template/send-mail.template.php'); ?>
 
 	<div id="adminsettings">
 		<div style="position:absolute; bottom:0; right:0;">
