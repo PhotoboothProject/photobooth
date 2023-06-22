@@ -14,6 +14,9 @@ $URL = $photobooth->getUrl();
 $PHOTOBOOTH_HOME = realpath($fileRoot);
 $PHOTOBOOTH_HOME = rtrim($PHOTOBOOTH_HOME, DIRECTORY_SEPARATOR);
 $pageTitle = 'Welcome to '. $config['ui']['branding'];
+$remoteBuzzer = false;
+$photoswipe = false;
+$chromaKeying = false;
 
 include($fileRoot . 'admin/components/head.admin.php');
 include($fileRoot . 'admin/helper/index.php');
