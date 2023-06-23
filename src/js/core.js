@@ -229,7 +229,7 @@ const photoBooth = (function () {
         photoboothTools.console.log('Run', cmd);
 
         jQuery
-            .post(config.foldersJS.api + '/api/shellCommand.php', command)
+            .post(config.foldersJS.api + '/shellCommand.php', command)
             .done(function (result) {
                 photoboothTools.console.log(cmd, 'result: ', result);
             })
@@ -426,7 +426,7 @@ const photoBooth = (function () {
         }
         startTime = new Date().getTime();
         jQuery
-            .post(config.foldersJS.api + '/api/capture.php', data)
+            .post(config.foldersJS.api + '/capture.php', data)
             .done(function (result) {
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
@@ -605,7 +605,7 @@ const photoBooth = (function () {
         }
         startTime = new Date().getTime();
         jQuery
-            .post(config.foldersJS.api + '/api/capture.php', data)
+            .post(config.foldersJS.api + '/capture.php', data)
             .done(function (result) {
                 if (config.video.animation) {
                     videoAnimation.hide();
@@ -687,7 +687,7 @@ const photoBooth = (function () {
 
         $.ajax({
             method: 'POST',
-            url: config.foldersJS.api + '/api/applyEffects.php',
+            url: config.foldersJS.api + '/applyEffects.php',
             data: {
                 file: result.file,
                 filter: imgFilter,
@@ -733,7 +733,7 @@ const photoBooth = (function () {
 
         $.ajax({
             method: 'POST',
-            url: config.foldersJS.api + '/api/applyVideoEffects.php',
+            url: config.foldersJS.api + '/applyVideoEffects.php',
             data: {
                 file: result.file
             },
@@ -912,7 +912,7 @@ const photoBooth = (function () {
                 $(
                     '<img src="' +
                         config.foldersJS.api +
-                        '/api/qrcode.php?filename=' +
+                        '/qrcode.php?filename=' +
                         filename +
                         '" alt="qr code" id="resultQR" class="' +
                         config.qr.result +
@@ -1193,7 +1193,7 @@ const photoBooth = (function () {
         submitButton.html('<i class="' + config.icons.mail_submit + '"></i>');
 
         $.ajax({
-            url: config.foldersJS.api + '/api/sendPic.php',
+            url: config.foldersJS.api + '/sendPic.php',
             type: 'POST',
             data: form.serialize(),
             dataType: 'json',
