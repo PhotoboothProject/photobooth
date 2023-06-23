@@ -162,7 +162,7 @@ if (isset($data['type'])) {
             $Logger->addLogData(['collage' => 'Placeholder position not in range. Placeholder disabled.']);
         }
 
-        if (empty($newConfig['collage']['placeholderpath']) || !is_array(getimagesize($newConfig['collage']['placeholderpath']))) {
+        if (empty($newConfig['collage']['placeholderpath']) || !is_array(@getimagesize($newConfig['collage']['placeholderpath']))) {
             $newConfig['collage']['placeholder'] = false;
             $Logger->addLogData(['collage' => 'Collage Placeholder does not exist or is empty. Collage Placeholder disabled. Note: Must be an absoloute path']);
             $Logger->addLogData(['collage' => empty($newConfig['collage']['placeholderpath']) ? 'Empty.' : $newConfig['collage']['placeholderpath']]);
@@ -170,7 +170,7 @@ if (isset($data['type'])) {
     }
 
     if ($newConfig['picture']['take_frame']) {
-        if (empty($newConfig['picture']['frame']) || !is_array(getimagesize($newConfig['picture']['frame']))) {
+        if (empty($newConfig['picture']['frame']) || !is_array(@getimagesize($newConfig['picture']['frame']))) {
             $newConfig['picture']['take_frame'] = false;
             $Logger->addLogData(['frame' => 'Picture frame does not exist or is empty. Picture frame disabled. Note: Must be an absoloute path']);
             $Logger->addLogData(['frame' => empty($newConfig['picture']['frame']) ? 'Empty.' : $newConfig['picture']['frame']]);
@@ -178,7 +178,7 @@ if (isset($data['type'])) {
     }
 
     if ($newConfig['collage']['take_frame']) {
-        if (empty($newConfig['collage']['frame']) || !is_array(getimagesize($newConfig['collage']['frame']))) {
+        if (empty($newConfig['collage']['frame']) || !is_array(@getimagesize($newConfig['collage']['frame']))) {
             $newConfig['collage']['take_frame'] = false;
             $Logger->addLogData(['frame' => 'Collage frame does not exist or is empty. Collage frame disabled. Note: Must be an absoloute path']);
             $Logger->addLogData(['frame' => empty($newConfig['collage']['frame']) ? 'Empty.' : $newConfig['collage']['frame']]);
@@ -186,7 +186,7 @@ if (isset($data['type'])) {
     }
 
     if ($newConfig['print']['print_frame']) {
-        if (empty($newConfig['print']['frame']) || !is_array(getimagesize($newConfig['print']['frame']))) {
+        if (empty($newConfig['print']['frame']) || !is_array(@getimagesize($newConfig['print']['frame']))) {
             $newConfig['print']['print_frame'] = false;
             $Logger->addLogData(['frame' => 'Print frame does not exist or is empty. Printing frame disabled. Note: Must be an absoloute path']);
             $Logger->addLogData(['frame' => empty($newConfig['print']['frame']) ? 'Empty.' : $newConfig['print']['frame']]);
@@ -218,7 +218,7 @@ if (isset($data['type'])) {
     }
 
     if ($newConfig['logo']['enabled']) {
-        if (empty($newConfig['logo']['path']) || !is_array(getimagesize('..' . DIRECTORY_SEPARATOR . $newConfig['logo']['path']))) {
+        if (empty($newConfig['logo']['path']) || !is_array(@getimagesize('..' . DIRECTORY_SEPARATOR . $newConfig['logo']['path']))) {
             $newConfig['logo']['enabled'] = false;
             $Logger->addLogData(['logo' => 'Logo file path does not exist or is empty. Logo disabled.']);
         } else {

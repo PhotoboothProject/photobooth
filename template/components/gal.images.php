@@ -22,8 +22,8 @@ if (empty($imagelist)) {
             $filename_photo = $fileRoot . $config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
             $filename_thumb = $fileRoot . $config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 
-            $imageinfo = getimagesize($filename_photo);
-            $imageinfoThumb = getimagesize($filename_thumb);
+            $imageinfo = @getimagesize($filename_photo);
+            $imageinfoThumb = @getimagesize($filename_thumb);
 
             if (is_array($imageinfo)) {
                 if (!is_array($imageinfoThumb)) {
