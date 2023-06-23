@@ -3,7 +3,7 @@
   text-decoration: none;
   text-align: center;
   color: $buttonFontColor;
-  background: $mainColor;
+  background: $primaryColor;
   display: inline-block;
   margin: auto;
   width: 12.5em;
@@ -20,7 +20,7 @@
     height: 5em;
     border: 2px solid $borderColor;
     border-radius: 50%;
-    background: radial-gradient($hoverColor, $mainColor, $secondaryColor);
+    background: radial-gradient($hoverColor, $primaryColor, $secondaryColor);
     position: relative;
 
     span {
@@ -43,7 +43,7 @@
     height: 5em;
     box-shadow: 0 0 0.5em $highlightColor;
     border-radius: 15%;
-    background: $mainColor;
+    background: $primaryColor;
     position: relative;
     margin: 5px;
     flex: none;
@@ -263,7 +263,7 @@
     width: 1.625em;
     height: 1.625em;
     margin: 0.3em;
-    background: radial-gradient($hoverColor, $mainColor, $secondaryColor);
+    background: radial-gradient($hoverColor, $primaryColor, $secondaryColor);
     color: $buttonFontColor;
     .fa,
     .material-icons {
@@ -304,7 +304,7 @@
   border: 2px solid $fontColor;
   border-radius: 10px;
   color: $buttonFontColor;
-  background: $mainColor;
+  background: $primaryColor;
 }
 
 .material-icons {

@@ -21,8 +21,8 @@
   overflow: hidden;
   width: 100%;
   height: 100%;
-  background-color: $secondaryColor;
-  background-image: $backgroundImage;
+  background-color: $primaryLightColor;
+  background-image: $defaultBackground;
   background-position: center center;
   background-size: cover;
 }
@@ -379,5 +379,5 @@ button {
 }
 
 .pswp-rotary-focus {
-  background: $mainColor !important;
+  background: $primaryColor !important;
 }
