@@ -13,7 +13,7 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 ?>
 
 <body>
-	<div class="w-full h-screen grid place-items-center absolute bg-brand-1 px-6 py-12 overflow-x-hidden overflow-y-auto">
+	<div class="w-full h-screen grid place-items-center absolute bg-brand-2 px-6 py-12 overflow-x-hidden overflow-y-auto">
 		<div class="w-full flex items-center justify-center flex-col">
 			<div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
 				<div class="px-4">

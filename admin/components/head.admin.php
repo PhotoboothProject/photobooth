@@ -25,7 +25,8 @@
         <script type="text/javascript" src="<?=$fileRoot?>node_modules/jquery/dist/jquery.min.js"></script>
 <style>
 :root {
-    --brand-1: <?=$config['colors']['panel'];?>;  
+    --brand-1: <?=$config['colors']['panel'];?>;
+    --brand-2: <?=$config['colors']['primary_light'];?>;
 }
 </style>
 </head> 

@@ -1,9 +1,11 @@
 const style = document.documentElement.style;
 
 style.setProperty('--primary-color', config.colors.primary);
+style.setProperty('--primary-light-color', config.colors.primary_light);
 style.setProperty('--secondary-color', config.colors.secondary);
 style.setProperty('--highlight-color', config.colors.highlight);
 style.setProperty('--font-color', config.colors.font);
+style.setProperty('--secondary-font-color', config.colors.font_secondary);
 style.setProperty('--button-font-color', config.colors.button_font);
 style.setProperty('--start-font-color', config.colors.start_font);
 style.setProperty('--countdown-color', config.colors.countdown);

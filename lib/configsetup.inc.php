@@ -2502,6 +2502,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['colors']['primary'],
             'value' => $config['colors']['primary'],
         ],
+        'colors_primary_light' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[primary_light]',
+            'placeholder' => $defaultConfig['colors']['primary_light'],
+            'value' => $config['colors']['primary_light'],
+        ],
         'colors_secondary' => [
             'view' => 'expert',
             'type' => 'color',
@@ -2522,6 +2529,13 @@ $configsetup = [
             'name' => 'colors[font]',
             'placeholder' => $defaultConfig['colors']['font'],
             'value' => $config['colors']['font'],
+        ],
+        'colors_font_secondary' => [
+            'view' => 'expert',
+            'type' => 'color',
+            'name' => 'colors[font_secondary]',
+            'placeholder' => $defaultConfig['colors']['font_secondary'],
+            'value' => $config['colors']['font_secondary'],
         ],
         'colors_button_font' => [
             'view' => 'expert',
