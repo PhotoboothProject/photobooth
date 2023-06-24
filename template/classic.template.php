@@ -4,8 +4,8 @@
 			<a class="<?php echo $btnClass; ?> gallery-button rotaryfocus" href="#"><i class="<?php echo $config['icons']['gallery']; ?>"></i> <span data-i18n="gallery"></span></a>
 			<?php endif; ?>
 			<?php if ($config['logo']['enabled']): ?>
-				<div class="logo_<?=$config['logo']['position']?>">
-					<img src=<?=$config['logo']['path']?> alt="logo">
+				<div id="pblogo" class="logo--<?=$config['logo']['position']?> pblogo--div">
+					<img class="pblogo--img" src=<?=$config['logo']['path']?> alt="logo">
 				</div>
 			<?php endif; ?>
 			<div class="startInner <?php echo $uiShape; ?> noborder">

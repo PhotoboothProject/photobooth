@@ -218,11 +218,24 @@ if (isset($data['type'])) {
     }
 
     if ($newConfig['logo']['enabled']) {
-        if (empty($newConfig['logo']['path']) || !is_array(@getimagesize('..' . DIRECTORY_SEPARATOR . $newConfig['logo']['path']))) {
+        $logoPath = $newConfig['logo']['path'];
+        if (empty($logoPath) || !file_exists('..' . DIRECTORY_SEPARATOR . $logoPath)) {
             $newConfig['logo']['enabled'] = false;
             $Logger->addLogData(['logo' => 'Logo file path does not exist or is empty. Logo disabled.']);
         } else {
-            $newConfig['logo']['path'] = Helper::fixSeperator($newConfig['logo']['path']);
+            $newConfig['logo']['path'] = Helper::fixSeperator($logoPath);
+            $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
+            if ($ext === 'svg') {
+                $Logger->addLogData(['logo' => 'Logo file is SVG, path saved.']);
+            } else {
+                $imageInfo = @getimagesize('..' . DIRECTORY_SEPARATOR . $logoPath);
+                if ($imageInfo === false) {
+                    $newConfig['logo']['enabled'] = false;
+                    $Logger->addLogData(['logo' => 'Logo file is not a supported image type [' . $ext . ']. Logo disabled.']);
+                } else {
+                    $Logger->addLogData(['logo' => 'Logo file is a supported image type [' . $ext . '], path saved.']);
+                }
+            }
         }
     }
 
