@@ -4,9 +4,9 @@
 				<div class="divaussen">
 					<div class="divinnen">
 						<?php if ($config['logo']['enabled']): ?>
-							<div class="logo_<?=$config['logo']['position']?>">
-								<img src=<?=$config['logo']['path']?> alt="logo">
-							</div>
+                        <div id="pblogo" class="logo--<?=$config['logo']['position']?> pblogo--div">
+                            <img class="pblogo--img" src=<?=$config['logo']['path']?> alt="logo">
+                        </div>
 						<?php endif; ?>
 						<div class="divinnen2">
 							<?php if ($config['event']['enabled']): ?>

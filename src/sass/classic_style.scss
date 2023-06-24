@@ -197,28 +197,6 @@
     align-items: center;
     justify-content: center;
   }
-
-  .logo_bottom_left {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-  }
-  .logo_bottom_right {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-  }
-  .logo_top_left {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-  }
-  .logo_top_right {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-  }
-
   .startInner {
     background: rgba(0, 0, 0, 0.5);
     color: $startFontColor;
@@ -300,6 +278,28 @@
     position: fixed;
     bottom: 5px;
     left: 5px;
+  }
+}
+
+#pblogo {
+  &.logo {
+    position: absolute;
+    &--bottom_left {
+      bottom: 0px;
+      left: 0px;
+    }
+    &--bottom_right {
+      bottom: 0px;
+      right: 0px;
+    }
+    &--top_left {
+      top: 0px;
+      left: 0px;
+    }
+    &--top_right {
+      top: 0px;
+      right: 0px;
+    }
   }
 }
 
