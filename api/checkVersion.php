@@ -12,9 +12,9 @@ function getLogData($debugLevel) {
     try {
         $photobooth = new Photobooth();
         $logData = [
-            'update_available' => $photobooth->checkUpdate(),
-            'current_version' => $photobooth->getPhotoboothVersion(),
-            'available_version' => $photobooth->getLatestRelease(),
+            'updateAvailable' => $photobooth->checkUpdate(),
+            'currentVersion' => $photobooth->getPhotoboothVersion(),
+            'availableVersion' => $photobooth->getLatestRelease(),
         ];
 
         if ($debugLevel > 0) {
