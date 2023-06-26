@@ -300,6 +300,16 @@
       top: 0px;
       right: 0px;
     }
+    &--center {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .pblogo--img {
+    width: 30vw;
   }
 }
 

@@ -395,6 +395,7 @@ $configsetup = [
             'type' => 'select',
             'name' => 'logo[position]',
             'options' => [
+                'center' => 'center',
                 'top_right' => 'Top Right',
                 'top_left' => 'Top Left',
                 'bottom_right' => 'Bottom Right',

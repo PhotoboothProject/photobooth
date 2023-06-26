@@ -229,6 +229,11 @@ if (empty($config['collage']['limit'])) {
 }
 
 $bg_url = Helper::setAbsolutePath($rootpath . '/resources/img/background.png');
+$logo_url = Helper::setAbsolutePath($rootpath . '/resources/img/logo/logo-qrcode-text.png');
+
+if (empty($config['logo']['path'])) {
+    $config['logo']['path'] = $logo_url;
+}
 
 if (empty($config['background']['defaults'])) {
     $config['background']['defaults'] = 'url(' . $bg_url . ')';
