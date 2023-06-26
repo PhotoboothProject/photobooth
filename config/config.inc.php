@@ -14,10 +14,10 @@ $config['adminpanel']['view'] = 'basic';
 $config['adminpanel']['experimental_settings'] = false;
 $config['dev']['loglevel'] = '1';
 $config['dev']['demo_images'] = false;
-$config['start_screen']['title'] = 'Photobooth';
-$config['start_screen']['title_visible'] = true;
+$config['start_screen']['title'] = '';
+$config['start_screen']['title_visible'] = false;
 $config['start_screen']['subtitle'] = '';
-$config['start_screen']['subtitle_visible'] = true;
+$config['start_screen']['subtitle_visible'] = false;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
 $config['picture']['thumb_size'] = '540px';
 $config['dev']['reload_on_error'] = true;
@@ -39,16 +39,16 @@ $config['database']['file'] = 'db';
 // F R O N T P A G E
 $config['ui']['show_fork'] = true;
 $config['ui']['skip_welcome'] = false;
-$config['logo']['enabled'] = false;
-$config['logo']['path'] = 'private/logo.png';
-// possible logo position values: 'top_right', 'top_left', 'bottom_right', 'bottom_left'
-$config['logo']['position'] = 'bottom_right';
-$config['event']['enabled'] = true;
-$config['event']['textLeft'] = 'We';
+$config['logo']['enabled'] = true;
+$config['logo']['path'] = '';
+// possible logo position values: 'center', 'top_right', 'top_left', 'bottom_right', 'bottom_left'
+$config['logo']['position'] = 'center';
+$config['event']['enabled'] = false;
+$config['event']['textLeft'] = '';
 // possible event symbol values: 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o',
 //                               'fa-heart', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
 $config['event']['symbol'] = 'fa-heart-o';
-$config['event']['textRight'] = 'OpenSource';
+$config['event']['textRight'] = '';
 $config['button']['force_buzzer'] = false;
 
 
