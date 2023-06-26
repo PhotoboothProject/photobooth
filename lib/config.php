@@ -228,7 +228,7 @@ if (empty($config['collage']['limit'])) {
     $config['collage']['limit'] = 4;
 }
 
-$bg_url = Helper::setAbsolutePath($rootpath . '/resources/img/bg_stone.jpg');
+$bg_url = Helper::setAbsolutePath($rootpath . '/resources/img/background.png');
 
 if (empty($config['background']['defaults'])) {
     $config['background']['defaults'] = 'url(' . $bg_url . ')';
