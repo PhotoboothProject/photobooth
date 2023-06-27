@@ -54,6 +54,13 @@ if (isset($data['type'])) {
         $newConfig['login']['password'] = null;
     }
 
+    if (isset($newConfig['filters']['enabled']) && $newConfig['filters']['enabled'] == true) {
+        if (isset($newConfig['picture']['keep_original']) && !$newConfig['picture']['keep_original']) {
+            $newConfig['filters']['enabled'] = false;
+            $LogData[] = ['filters' => 'Filters disabled, you must keep original images in tmp folder to use this function.'];
+        }
+    }
+
     if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
         $newConfig['preview']['camTakesPic'] = false;
         $LogData[] = [
