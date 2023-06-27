@@ -87,6 +87,7 @@ const photoBooth = (function () {
     api.nextCollageNumber = 0;
     api.chromaimage = '';
     api.filename = '';
+    api.photoStyle = '';
 
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -268,11 +269,11 @@ const photoBooth = (function () {
         if (chromaFile) {
             photoStyle = PhotoStyle.CHROMA;
         }
-
-        photoboothTools.console.log('PhotoStyle: ' + photoStyle);
+        api.photoStyle = photoStyle;
+        photoboothTools.console.log('PhotoStyle: ' + api.photoStyle);
 
         let countdownTime;
-        switch (photoStyle) {
+        switch (api.photoStyle) {
             case PhotoStyle.COLLAGE:
                 countdownTime = config.collage.cntdwn_time;
                 break;
@@ -298,10 +299,13 @@ const photoBooth = (function () {
                 config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) &&
             config.preview.showFrame
         ) {
-            if ((photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CUSTOM) && config.picture.take_frame) {
+            if (
+                (api.photoStyle === PhotoStyle.PHOTO || api.photoStyle === PhotoStyle.CUSTOM) &&
+                config.picture.take_frame
+            ) {
                 pictureFrame.show();
             } else if (
-                photoStyle === PhotoStyle.COLLAGE &&
+                api.photoStyle === PhotoStyle.COLLAGE &&
                 config.collage.take_frame === CollageFrameMode.ALWAYS.valueOf()
             ) {
                 collageFrame.show();
@@ -312,7 +316,7 @@ const photoBooth = (function () {
 
         if (config.get_request.countdown) {
             let getMode;
-            switch (photoStyle) {
+            switch (api.photoStyle) {
                 case PhotoStyle.COLLAGE:
                     getMode = config.get_request.collage;
                     break;
@@ -335,7 +339,7 @@ const photoBooth = (function () {
             if (config.picture.no_cheese) {
                 photoboothTools.console.log('Cheese is disabled.');
             } else {
-                api.cheese(photoStyle);
+                api.cheese();
             }
         });
 
@@ -346,22 +350,22 @@ const photoBooth = (function () {
                 api.errorPic({
                     error: 'No preview by device cam available!'
                 });
-            } else if (photoStyle === PhotoStyle.VIDEO) {
+            } else if (api.photoStyle === PhotoStyle.VIDEO) {
                 api.takeVideo(retry);
             } else {
                 photoboothTools.console.logDev('Capture image.');
-                api.takePic(photoStyle, retry);
+                api.takePic(retry);
             }
         }, triggerCnt * 1000);
     };
 
-    api.cheese = function (photoStyle) {
+    api.cheese = function () {
         cheese.empty();
-        if (photoStyle === PhotoStyle.VIDEO) {
+        if (api.photoStyle === PhotoStyle.VIDEO) {
             cheese.text(config.video.cheese);
         } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
             return;
-        } else if (photoStyle === PhotoStyle.COLLAGE) {
+        } else if (api.photoStyle === PhotoStyle.COLLAGE) {
             cheese.text(photoboothTools.getTranslation('cheeseCollage'));
             $('<p>')
                 .text(`${api.nextCollageNumber + 1} / ${config.collage.limit}`)
@@ -380,23 +384,23 @@ const photoBooth = (function () {
         api.callTakeVideoApi(data, retry);
     };
 
-    api.takePic = function (photoStyle, retry) {
+    api.takePic = function (retry) {
         remoteBuzzerClient.inProgress('in-progress');
 
         api.stopPreviewAndCaptureFromVideo();
 
         const data = {
             filter: imgFilter,
-            style: photoStyle.valueOf(),
+            style: api.photoStyle,
             canvasimg: videoSensor.toDataURL('image/jpeg')
         };
 
-        if (photoStyle === PhotoStyle.COLLAGE) {
+        if (api.photoStyle === PhotoStyle.COLLAGE) {
             data.file = currentCollageFile;
             data.collageNumber = api.nextCollageNumber;
         }
 
-        if (photoStyle === PhotoStyle.CHROMA) {
+        if (api.photoStyle === PhotoStyle.CHROMA) {
             data.file = chromaFile;
         }
 
@@ -406,7 +410,7 @@ const photoBooth = (function () {
         api.callTakePicApi(data, retry);
     };
 
-    api.retryTakePic = function (photoStyle, retry) {
+    api.retryTakePic = function (retry) {
         api.takingPic = false;
         retry += 1;
         loading.append(
@@ -416,7 +420,7 @@ const photoBooth = (function () {
         );
         photoboothTools.console.logDev('Retry to capture image: ' + retry);
         setTimeout(() => {
-            api.thrill(photoStyle, retry);
+            api.thrill(api.photoStyle, retry);
         }, retryTimeout);
     };
 
@@ -439,7 +443,7 @@ const photoBooth = (function () {
                 if (result.error) {
                     photoboothTools.console.logDev('Error while taking picture.');
                     if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                        api.retryTakePic(data.style, retry);
+                        api.retryTakePic(retry);
                     } else {
                         api.errorPic(result);
                     }
@@ -494,7 +498,7 @@ const photoBooth = (function () {
                                 loaderImage.css('background-image', 'none');
                                 imageUrl = '';
                                 loaderImage.css('display', 'none');
-                                api.processPic(data.style, result);
+                                api.processPic(result);
                             }, continuousCollageTime);
                         }
                     } else {
@@ -534,7 +538,7 @@ const photoBooth = (function () {
                                     currentCollageFile = '';
                                     api.nextCollageNumber = 0;
 
-                                    api.processPic(data.style, result);
+                                    api.processPic(result);
                                 });
 
                             remoteBuzzerClient.collageWaitForProcessing();
@@ -574,12 +578,12 @@ const photoBooth = (function () {
                     }
                 } else if (result.success === PhotoStyle.CHROMA) {
                     chromaFile = result.file;
-                    api.processPic(data.style, result);
+                    api.processPic(result);
                 } else {
                     currentCollageFile = '';
                     api.nextCollageNumber = 0;
 
-                    api.processPic(data.style, result);
+                    api.processPic(result);
                 }
             })
             .fail(function (xhr, status, result) {
@@ -592,7 +596,7 @@ const photoBooth = (function () {
                             ' / ' +
                             config.picture.retry_on_error
                     );
-                    api.retryTakePic(data.style, retry);
+                    api.retryTakePic(retry);
                 } else {
                     api.errorPic(result);
                 }
@@ -663,17 +667,17 @@ const photoBooth = (function () {
         }, 500);
     };
 
-    api.processPic = function (photoStyle, result) {
+    api.processPic = function (result) {
         startTime = new Date().getTime();
         spinner.show();
         loading.text(
-            photoStyle === PhotoStyle.COLLAGE
+            api.photoStyle === PhotoStyle.COLLAGE
                 ? photoboothTools.getTranslation('busyCollage')
                 : photoboothTools.getTranslation('busy')
         );
 
         if (
-            (photoStyle === PhotoStyle.PHOTO || photoStyle === PhotoStyle.CUSTOM) &&
+            (api.photoStyle === PhotoStyle.PHOTO || api.photoStyle === PhotoStyle.CUSTOM) &&
             config.picture.preview_before_processing
         ) {
             const tempImageUrl = config.foldersJS.tmp + '/' + result.file;
@@ -691,23 +695,23 @@ const photoBooth = (function () {
             data: {
                 file: result.file,
                 filter: imgFilter,
-                style: photoStyle
+                style: api.photoStyle
             },
             success: (data) => {
-                photoboothTools.console.log(photoStyle + ' processed', data);
+                photoboothTools.console.log(api.photoStyle + ' processed', data);
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
-                photoboothTools.console.logDev('Processing ' + photoStyle + ' took ' + totalTime + 'ms');
+                photoboothTools.console.logDev('Processing ' + api.photoStyle + ' took ' + totalTime + 'ms');
                 photoboothTools.console.logDev('Images:', data.images);
 
                 if (config.get_request.processed) {
-                    const getUrl = config.get_request.server + '/' + photoStyle;
+                    const getUrl = config.get_request.server + '/' + api.photoStyle;
                     photoboothTools.getRequest(getUrl);
                 }
 
                 if (data.error) {
                     api.errorPic(data);
-                } else if (photoStyle === PhotoStyle.CHROMA) {
+                } else if (api.photoStyle === PhotoStyle.CHROMA) {
                     api.renderChroma(data.file);
                 } else {
                     api.renderPic(data.file, data.images);
@@ -1125,7 +1129,7 @@ const photoBooth = (function () {
 
         photoboothTools.console.logDev('Applying filter: ' + imgFilter, result);
 
-        api.processPic(imgFilter, result);
+        api.processPic(result);
 
         rotaryController.focusSet('#mySidenav');
     });
