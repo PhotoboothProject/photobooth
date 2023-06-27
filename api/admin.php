@@ -70,6 +70,13 @@ if (isset($data['type'])) {
         $newConfig['login']['pin'] = '';
     }
 
+    if (isset($newConfig['filters']['enabled']) && $newConfig['filters']['enabled'] == true) {
+        if (isset($newConfig['picture']['keep_original']) && !$newConfig['picture']['keep_original']) {
+            $newConfig['filters']['enabled'] = false;
+            $Logger->addLogData(['filters' => 'Filters disabled, you must keep original images in tmp folder to use this function.']);
+        }
+    }
+
     if (strlen($newConfig['login']['pin']) != 4) {
         $newConfig['login']['keypad'] = false;
         $newConfig['login']['pin'] = '';
