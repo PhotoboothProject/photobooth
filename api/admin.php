@@ -49,11 +49,11 @@ if (isset($data['type'])) {
                 $newConfig['login']['keypad'] = false;
                 $newConfig['login']['pin'] = '';
             }
-            if (isset($newConfig['login']['password'])) {
+            if (isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) {
                 // allow login via password, but we might have disabled because the PIN length did not match our requirements
                 $newConfig['login']['enabled'] = true;
 
-                if (newConfig['login']['password'] === $config['login']['password']) {
+                if ($newConfig['login']['password'] != $config['login']['password']) {
                     $hashing = password_hash($newConfig['login']['password'], PASSWORD_DEFAULT);
                     $newConfig['login']['password'] = $hashing;
                 }
