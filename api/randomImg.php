@@ -37,9 +37,11 @@
 			
 *****************************************************/
 
+require_once '../lib/config.php';
+
 $dir = $_GET['dir'];
 
-$path = '/var/www/html/private/images/' . $dir;
+$path = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $dir;
 $files = scandir($path);
 $files = array_diff(scandir($path), ['.', '..']);
 
