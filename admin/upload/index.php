@@ -1,3 +1,9 @@
+<?php
+$fileRoot = '../../';
+
+require_once $fileRoot . 'lib/config.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,7 +80,7 @@
 
         <?php if (isset($_POST['submit'])) {
             $folderName = $_POST['folder_name'];
-            $parentDirectory = '/var/www/html/private/images'; // Replace with the actual path to the parent directory
+            $parentDirectory = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images';
             // Check if the parent directory exists
             if (!is_dir($parentDirectory)) {
                 mkdir($parentDirectory, 0777, true);
