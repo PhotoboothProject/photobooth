@@ -8,3 +8,4 @@ admin/components/head.admin.php
 admin/components/sidebar.php
 admin/debug/index.php
 admin/diskusage/index.php
+admin/upload/index.php
