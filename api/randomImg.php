@@ -39,7 +39,11 @@
 
 require_once '../lib/config.php';
 
-$dir = $_GET['dir'];
+if (isset($_GET['dir']) && !empty($_GET['dir'])) {
+    $dir = $_GET['dir'];
+} else {
+    $dir = 'demoframes';
+}
 
 if ($dir == 'demoframes') {
     $path = realpath('../resources/img/frames');
@@ -47,7 +51,6 @@ if ($dir == 'demoframes') {
     $path = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $dir;
 }
 
-$files = scandir($path);
 $files = array_diff(scandir($path), ['.', '..']);
 
 /* - - - - - - - - - - */
