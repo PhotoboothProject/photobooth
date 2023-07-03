@@ -45,10 +45,10 @@ if (isset($_GET['dir']) && !empty($_GET['dir'])) {
     $dir = 'demoframes';
 }
 
-if ($dir == 'demoframes') {
+$path = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $dir;
+
+if ($dir == 'demoframes' || !is_dir($path)) {
     $path = realpath('../resources/img/frames');
-} else {
-    $path = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $dir;
 }
 
 $files = array_diff(scandir($path), ['.', '..']);
