@@ -507,13 +507,13 @@ $configsetup = [
             'value' => $config['filters']['disabled'],
         ],
         'picture_take_frame' => [
-            'view' => 'expert',
+            'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'picture[take_frame]',
             'value' => $config['picture']['take_frame'],
         ],
         'picture_frame' => [
-            'view' => 'expert',
+            'view' => 'basic',
             'type' => 'input',
             'placeholder' => $defaultConfig['picture']['frame'],
             'name' => 'picture[frame]',

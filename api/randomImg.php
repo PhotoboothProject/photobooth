@@ -41,7 +41,12 @@ require_once '../lib/config.php';
 
 $dir = $_GET['dir'];
 
-$path = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $dir;
+if ($dir == 'demoframes') {
+    $path = realpath('../resources/img/frames');
+} else {
+    $path = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $dir;
+}
+
 $files = scandir($path);
 $files = array_diff(scandir($path), ['.', '..']);
 
@@ -49,7 +54,7 @@ $files = array_diff(scandir($path), ['.', '..']);
 
 $images = array_rand($files);
 $image = $files[$images];
-$filename = $path . '/' . basename($image);
+$filename = $path . DIRECTORY_SEPARATOR . basename($image);
 $file_extension = strtolower(substr(strrchr($filename, '.'), 1));
 
 switch ($file_extension) {
