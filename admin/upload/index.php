@@ -1,7 +1,24 @@
 <?php
+
+session_start();
+
 $fileRoot = '../../';
 
 require_once $fileRoot . 'lib/config.php';
+
+// Login / Authentication check
+if (
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_admin'] && isset($_SERVER['SERVER_ADDR']) &&  $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
+    !$config['protect']['admin']
+) {
+    // nothing for now
+} else {
+    header('location: ' . $fileRoot . 'login');
+    exit(); 
+}
+
 ?>
 
 <!DOCTYPE html>
