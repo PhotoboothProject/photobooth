@@ -33,41 +33,45 @@ if (isset($_POST['submit'])) {
     $parentDirectory = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images';
     // Check if the parent directory exists
     if (!is_dir($parentDirectory)) {
-        mkdir($parentDirectory, 0777, true);
+        mkdir($parentDirectory, 0755, true);
     } else {
-        chmod($parentDirectory, 0777); // Set parent directory permissions to 777
+        chmod($parentDirectory, octdec(0755));
     }
 
     // Check if the folder already exists
     $folderPath = $parentDirectory . '/' . $folderName;
     if (!is_dir($folderPath)) {
         // Create the folder if it doesn't exist
-        mkdir($folderPath, 0777, true);
+        mkdir($folderPath, 0755, true);
     }
 
-    // Process uploaded images
-    $uploadedImages = $_FILES['images'];
+    if (is_writable($folderPath)) {
+        // Process uploaded images
+        $uploadedImages = $_FILES['images'];
 
-    // Array of allowed image file types
-    $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        // Array of allowed image file types
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 
-    for ($i = 0; $i < count($uploadedImages['name']); $i++) {
-        $imageName = $uploadedImages['name'][$i];
-        $imageTmpName = $uploadedImages['tmp_name'][$i];
-        $imageType = $uploadedImages['type'][$i];
-        $imagePath = $folderPath . '/' . $imageName;
+        for ($i = 0; $i < count($uploadedImages['name']); $i++) {
+            $imageName = $uploadedImages['name'][$i];
+            $imageTmpName = $uploadedImages['tmp_name'][$i];
+            $imageType = $uploadedImages['type'][$i];
+            $imagePath = $folderPath . '/' . $imageName;
 
-        // Check if the file type is allowed
-        if (in_array($imageType, $allowedTypes)) {
-            // Move the uploaded image to the custom folder
-            move_uploaded_file($imageTmpName, $imagePath);
-            chmod($imagePath, 0777); // Set parent directory permissions to 777
-        } else {
-            $error = true;
+            // Check if the file type is allowed
+            if (in_array($imageType, $allowedTypes)) {
+                // Move the uploaded image to the custom folder
+                move_uploaded_file($imageTmpName, $imagePath);
+                chmod($imagePath, octdec(0644));
+            } else {
+                $error = true;
+            }
         }
-    }
-    if (!$error) {
-        $success = true;
+        if (!$error) {
+            $success = true;
+        }
+    } else {
+        $error = true;
     }
 }
 ?>
