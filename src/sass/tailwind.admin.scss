@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 // font awesome
-$fa-font-path: '//netdna.bootstrapcdn.com/font-awesome/4.7.0/fonts';
-@import '~font-awesome/scss/font-awesome';
+$fa-font-path: '../../node_modules/font-awesome/fonts';
+@import '../../node_modules/font-awesome/scss/font-awesome';
 
 body {
   width: 100%;
