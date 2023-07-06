@@ -196,4 +196,6 @@ Thanks for reading!
 - [vucubcaquix](https://github.com/vucubcaquix)
 - [Spike-78](https://github.com/Spike-78)
 - [Mathias Fiege](https://www.webpension.de/)
+- [Guillaume Roure](https://github.com/Ippephyx)
+
 
