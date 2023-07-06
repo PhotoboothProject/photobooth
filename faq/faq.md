@@ -1118,22 +1118,24 @@ You can now use the URL with which you can access your remote server from the in
 ### How to use the image randomizer
 
 To use the image randomizer images must be placed inside private/images/{folderName}.  
+For hassle-free (ssh/sftp-free) upload, you may want to use the integrated images uploader: [http://localhost/admin/upload](http://localhost/admin/upload).
+
 
 #### Use for PICTURE FRAMES:
 
-1. Copy all the (transparent) frames you want to private/images/{FrameFolder}
+1. Upload / Copy all the (transparent) frames you want to private/images/{FrameFolder}
 2. Enable picture_take_frame
 3. specify picture_frame url : http://localhost/api/randomImg.php?dir={FrameFolder}
 
 #### Use for COLLAGE FRAMES:
 
-1. Copy all the (transparent) frames you want to private/images/{FrameFolder}
+1. Upload / Copy all the (transparent) frames you want to private/images/{FrameFolder}
 2. Enable collage_take_frame (always or once)
 3. specify collage_frame url : http://localhost/api/randomImg.php?dir={FrameFolder}
 
 #### Use for BACKGROUNDS:
 
-1. Copy all the backgrounds you want to private/images/{BgFolder}
+1. Upload / Copy all the backgrounds you want to private/images/{BgFolder}
 2. specify collage_background url : http://localhost/api/randomImg.php?dir={BgFolder}
 
 **NOTES:**
