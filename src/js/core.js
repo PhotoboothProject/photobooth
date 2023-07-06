@@ -756,7 +756,7 @@ const photoBooth = (function () {
             startPage.hide();
             resultPage.show();
 
-            api.showResultInner(config.ui.result_buttons);
+            api.showResultInner(true);
 
             loader.removeClass('open');
 
