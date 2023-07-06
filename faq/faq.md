@@ -1114,3 +1114,30 @@ sudo -u www-data ssh-copy-id [username@remotehost]
 sudo -u www-data scp /var/www/html/photobooth/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
 ```
 You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server. 
+
+### How to use the image randomizer
+
+To use the image randomizer images must be placed inside private/images/{folderName}.  
+
+#### Use for PICTURE FRAMES:
+
+1. Copy all the (transparent) frames you want to private/images/{FrameFolder}
+2. Enable picture_take_frame
+3. specify picture_frame url : http://localhost/api/randomImg.php?dir={FrameFolder}
+
+#### Use for COLLAGE FRAMES:
+
+1. Copy all the (transparent) frames you want to private/images/{FrameFolder}
+2. Enable collage_take_frame (always or once)
+3. specify collage_frame url : http://localhost/api/randomImg.php?dir={FrameFolder}
+
+#### Use for BACKGROUNDS:
+
+1. Copy all the backgrounds you want to private/images/{BgFolder}
+2. specify collage_background url : http://localhost/api/randomImg.php?dir={BgFolder}
+
+**NOTES:**
+- Replace _"localhost"_ with your IP-Adress.
+- Same thing can be applied for collage_placeholderpath so a random holder image takes place.
+- You can specify a diffrent {FrameFolder} for collage frames if needed.
+
