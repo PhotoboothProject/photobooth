@@ -828,6 +828,7 @@
   "toggleFullscreen": "Toggle Fullscreen",
   "translate": "Translate",
   "update_available": "There is an update available.",
+  "uploading": "Uploading...",
   "upload_error": "Error : Please select only image files.",
   "upload_folder": "Folder name:",
   "upload_selection": "Select image(s):",
