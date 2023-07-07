@@ -24,7 +24,7 @@
 <div class="adminNavi hidden [&.isActive]:flex z-50 bg-brand-1 h-full pb-10 overflow-hidden w-3/4 fixed top-0 right-0 md:w-64 md:flex md:static md:bg-transparent">
     <div class="w-full h-full pl-5 flex flex-col overflow-hidden">
         <div class="flex items-center shrink-0 border-b border-solid border-white border-opacity-20 py-4 mr-4">
-            <a href="/login" class="h-4 mr-4 flex items-center justify-center border-r border-solid border-white border-opacity-20 px-3">
+            <a href="<?=$fileRoot?>login" class="h-4 mr-4 flex items-center justify-center border-r border-solid border-white border-opacity-20 px-3">
                 <span class="fa fa-home text-white text-opacity-60 text-2xl hover:text-opacity-100 transition-all"></span>
             </a>
             <h1 class="text-white font-bold"><?=$headline ?></h1>
