@@ -29,6 +29,7 @@ $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-bran
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
 
 if (isset($_POST['submit'])) {
+
     $folderName = $_POST['folder_name'];
     $parentDirectory = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images';
     // Check if the parent directory exists
@@ -96,11 +97,33 @@ if (isset($_POST['submit'])) {
                         <input class="<?= $btnClass ?>" type="submit" name="submit" value="Upload">
                     </div>
                     <?php if ($error !== false) {
-                        echo '<span class="w-full flex mt-6 text-red-500" data-i18n="upload_error"></span>';
+                        echo '<script type="text/javascript">
+                                 $(document).ready(
+                                    function() {
+                                        $(".adminToast").addClass("isActive isError");
+                                        const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_error\"></span>";
+                                        $(".adminToast").find(".headline").html(msg);
+
+                                        setTimeout(function () {
+                                            $(".adminToast").removeClass("isActive");
+                                        }, 2000);
+                                  });
+                              </script>';
                     } ?>
 
                     <?php if ($success) {
-                        echo '<span class="w-full flex mt-6 text-green" data-i18n="upload_success"></span>';
+                        echo '<script type="text/javascript">
+                                 $(document).ready(
+                                    function() {
+                                        $(".adminToast").addClass("isActive isSuccess");
+                                        const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_success\"></span>";
+                                        $(".adminToast").find(".headline").html(msg);
+
+                                        setTimeout(function () {
+                                            $(".adminToast").removeClass("isActive");
+                                        }, 2000);
+                                  });
+                              </script>';
                     } ?>
                 </form>
             </div>
