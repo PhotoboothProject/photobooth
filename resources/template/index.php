@@ -9,7 +9,7 @@ $og_locale = 'it_IT';
 $og_description = 'Prenota l\'horse booth di cavallo production per riempire la tua festa di foto e di divertimento! Visita il nostro sito o contattaci!';
 $og_sitename = 'Cavallo Production';
 $og_img_alt = 'Horsebooth';
-$whatsapp_msg = "Guarda questa foto scattata dall'Horsebooth! \n\n %s \n\n\n\n Prenota anche tu l'Horsebooth allo 0801234567";
+$whatsapp_msg = "Guarda questa foto scattata dall'Horsebooth! \n\n %s \n\n\n\n Prenota anche tu l'Horsebooth allo 0804166291";
 $seconds_to_cache = 60;
 
 header("Cache-Control: max-age=$seconds_to_cache");
@@ -20,7 +20,13 @@ header("Cache-Control: max-age=$seconds_to_cache");
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
     <link rel="canonical" href="<?=$actual_link?>">
     <!--  Essential META Tags -->
     <meta property="og:locale" content="<?=$og_locale?>">
@@ -78,11 +84,13 @@ header("Cache-Control: max-age=$seconds_to_cache");
             width: 100%;
             height: 10vh;
             background-color: rgba(33, 33, 33, 0.90);
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .action-bar {
-            max-width: 30vw;
+            width: clamp(200px, 40vw, 1000px);
             color: white;
             display: flex;
             align-items: center;
