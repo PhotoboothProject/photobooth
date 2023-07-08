@@ -7,9 +7,9 @@ function countreset() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function adminsettings() {
+function adminsettings(rootPath = '') {
     if (admincount == 3) {
-        window.location.href = '/login';
+        window.location.href = rootPath + 'login';
     }
     photoboothTools.console.log(admincount);
     admincount++;

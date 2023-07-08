@@ -22,7 +22,7 @@ include($fileRoot . 'template/components/main.head.php');
 
 	<div id="adminsettings">
 		<div style="position:absolute; bottom:0; right:0;">
-			<img src="<?=$fileRoot?>resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings()" />
+			<img src="<?=$fileRoot?>resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings('<?=$fileRoot?>')" />
 		</div>
 	</div>
 
