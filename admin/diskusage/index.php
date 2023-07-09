@@ -27,7 +27,7 @@ include('../inputs/index.php');
 
 			<div class="w-full max-w-xl h-144 rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl">
 				<div class="w-full flex items-center pb-3 mb-3 border-b border-solid border-gray-200">
-					<a href="/admin/" class="h-4 mr-4 flex items-center justify-center border-r border-solid border-black border-opacity-20 pr-3">
+					<a href="../" class="h-4 mr-4 flex items-center justify-center border-r border-solid border-black border-opacity-20 pr-3">
 						<span class="fa fa-chevron-left text-brand-1 text-opacity-60 text-md hover:text-opacity-100 transition-all"></span>
 					</a>
 					<h2 class="text-brand-1 text-xl font-bold">
