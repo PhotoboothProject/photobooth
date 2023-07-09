@@ -55,7 +55,7 @@ $(function () {
 
     $('#diskusage-btn').on('click', function (e) {
         e.preventDefault();
-        location.assign('/admin/diskusage/');
+        location.assign('diskusage');
 
         return false;
     });
@@ -168,7 +168,7 @@ $(function () {
 
     $('#debugpanel-btn').on('click', function (ev) {
         ev.preventDefault();
-        window.open('/admin/debug');
+        window.open('debug');
 
         return false;
     });
