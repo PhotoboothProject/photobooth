@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
     if (!is_dir($parentDirectory)) {
         mkdir($parentDirectory, 0755, true);
     } else {
-        chmod($parentDirectory, octdec(0755));
+        chmod($parentDirectory, 0755);
     }
 
     // Check if the folder already exists
@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
             if (in_array($imageType, $allowedTypes)) {
                 // Move the uploaded image to the custom folder
                 move_uploaded_file($imageTmpName, $imagePath);
-                chmod($imagePath, octdec(0644));
+                chmod($imagePath, 0644);
             } else {
                 $error = true;
             }
