@@ -78,8 +78,14 @@ if (
 </head>
 
 <body class="deselect">
+
+<?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
 <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['htmlframe']; ?>" alt="pictureFrame" />
+<?php endif; ?>
+<?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
 <img id="collage--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['collage']['htmlframe']; ?>" alt="collageFrame" />
+<?php endif; ?>
+
 <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
        autoplay playsinline></video>
 <div id="blocker"></div>
