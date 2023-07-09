@@ -307,6 +307,13 @@ $configsetup = [
             'name' => 'DISKUSAGEBUTTON',
             'value' => 'diskusage-btn',
         ],
+        'images_upload' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'images_upload',
+            'name' => 'IMAGESUPLOAD',
+            'value' => 'imagesupload-btn',
+        ],
     ],
     'frontpage' => [
         'view' => 'basic',

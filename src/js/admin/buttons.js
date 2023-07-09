@@ -180,6 +180,13 @@ $(function () {
         return false;
     });
 
+    $('#imagesupload-btn').on('click', function (ev) {
+        ev.preventDefault();
+        window.open('upload');
+
+        return false;
+    });
+
     $('#reboot-btn').on('click', function (ev) {
         ev.preventDefault();
         shellCommand('reboot');
