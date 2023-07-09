@@ -96,52 +96,58 @@ if (isset($_POST['submit'])) {
                     <div class="mt-6">
                         <input class="<?= $btnClass ?>" type="submit" name="submit" value="Upload">
                     </div>
-                    <?php if ($error !== false) {
-                        echo '<script type="text/javascript">
-                                 $(document).ready(
-                                    function() {
-                                        $(".adminToast").addClass("isActive isError");
-                                        const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_error\"></span>";
-                                        $(".adminToast").find(".headline").html(msg);
-
-                                        setTimeout(function () {
-                                            $(".adminToast").removeClass("isActive");
-                                        }, 2000);
-                                  });
-                              </script>';
-                    } ?>
-
-                    <?php if ($success) {
-                        echo '<script type="text/javascript">
-                                 $(document).ready(
-                                    function() {
-                                        $(".adminToast").addClass("isActive isSuccess");
-                                        const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_success\"></span>";
-                                        $(".adminToast").find(".headline").html(msg);
-
-                                        setTimeout(function () {
-                                            $(".adminToast").removeClass("isActive");
-                                        }, 2000);
-                                  });
-                              </script>';
-                    } ?>
                 </form>
             </div>
+
             <div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20">
             </div>
-	    <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
-		<?php
+
+            <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
+                <?php
                     echo getMenuBtn($fileRoot . 'admin', 'admin_panel', $config['icons']['admin']);
 
                     if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
                         echo getMenuBtn($fileRoot . 'login/logout.php', 'logout', $config['icons']['logout']);
                     }
                 ?>
-		</div>
-	    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-<?php include '../components/footer.admin.php'; ?>
+<?php
+if ($error !== false) {
+    echo '<script type="text/javascript">
+    $(document).ready(
+        function() {
+            $(".adminToast").addClass("isActive isError");
+            const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_error\"></span>";
+            $(".adminToast").find(".headline").html(msg);
+
+            setTimeout(function () {
+                $(".adminToast").removeClass("isActive");
+            }, 2000);
+        });
+</script>';
+}
+
+if ($success) {
+    echo '<script type="text/javascript">
+    $(document).ready(
+        function() {
+            $(".adminToast").addClass("isActive isSuccess");
+            const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_success\"></span>";
+            $(".adminToast").find(".headline").html(msg);
+
+            setTimeout(function () {
+                $(".adminToast").removeClass("isActive");
+            }, 2000);
+        });
+</script>';
+}
+
+include '../components/footer.admin.php';
+
+?>
 
