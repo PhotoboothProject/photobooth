@@ -417,7 +417,7 @@ $configsetup = [
         ],
         'logo_path' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'image',
             'placeholder' => $defaultConfig['logo']['enabled'],
             'name' => 'logo[path]',
             'value' => htmlentities($config['logo']['path'] ?? ''),
@@ -546,7 +546,7 @@ $configsetup = [
         ],
         'picture_frame' => [
             'view' => 'basic',
-            'type' => 'input',
+            'type' => 'image',
             'placeholder' => $defaultConfig['picture']['frame'],
             'name' => 'picture[frame]',
             'value' => htmlentities($config['picture']['frame'] ?? ''),
@@ -836,14 +836,14 @@ $configsetup = [
         ],
         'collage_frame' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'image',
             'placeholder' => $defaultConfig['collage']['frame'],
             'name' => 'collage[frame]',
             'value' => htmlentities($config['collage']['frame'] ?? ''),
         ],
         'collage_background' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'image',
             'placeholder' => $defaultConfig['collage']['background'],
             'name' => 'collage[background]',
             'value' => htmlentities($config['collage']['background'] ?? ''),
@@ -863,7 +863,7 @@ $configsetup = [
         ],
         'collage_placeholderpath' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'image',
             'placeholder' => $defaultConfig['collage']['placeholderpath'],
             'name' => 'collage[placeholderpath]',
             'value' => htmlentities($config['collage']['placeholderpath'] ?? ''),
@@ -1613,7 +1613,7 @@ $configsetup = [
         ],
         'print_frame' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'image',
             'placeholder' => $defaultConfig['print']['frame'],
             'name' => 'print[frame]',
             'value' => htmlentities($config['print']['frame'] ?? ''),
@@ -2542,14 +2542,14 @@ $configsetup = [
         ],
         'background_defaults' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'image',
             'name' => 'background[defaults]',
             'placeholder' => $defaultConfig['background']['defaults'],
             'value' => htmlentities($config['background']['defaults'] ?? ''),
         ],
         'background_chroma' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'image',
             'name' => 'background[chroma]',
             'placeholder' => $defaultConfig['background']['chroma'],
             'value' => htmlentities($config['background']['chroma'] ?? ''),
