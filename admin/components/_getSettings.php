@@ -68,6 +68,9 @@ foreach ($configsetup as $section => $fields) {
             case 'button':
                 echo getInputButton($setting, $i18ntag, $key, $config);
                 break;
+            case 'image':
+                echo getImageSelect($setting, $i18ntag);
+                break;
         }
 
         echo '</div>';

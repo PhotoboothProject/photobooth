@@ -139,6 +139,7 @@ gulp.task('js-admin', function () {
       './src/js/admin/buttons.js',
       './src/js/admin/navi.js',
       './src/js/admin/keypad.js',
+      './src/js/admin/imageSelect.js',
       './src/js/admin/toast.js',
     ])
     .pipe(concat('main.admin.js'))
