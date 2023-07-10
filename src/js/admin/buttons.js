@@ -182,7 +182,7 @@ $(function () {
 
     $('#imagesupload-btn').on('click', function (ev) {
         ev.preventDefault();
-        window.open('upload');
+        window.open('./admin/upload');
 
         return false;
     });

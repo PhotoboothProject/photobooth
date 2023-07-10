@@ -13,9 +13,9 @@ function getToast($type = false, $msg = false) {
         ' ' .
         $transition .
         '">    
-                    <div class="flex items-center">
-                        <div class="fa fa-check mr-3 text-white"></div>
-                        <div class="headline">Fehler beim speichern</div>
+                    <div class="flex items-start">
+                        <div class="adminToast-icon fa fa-check mr-3 mt-1 text-white"></div>
+                        <div class="headline">Erfolgreich</div>
                     </div>
                 </div>
             ';
