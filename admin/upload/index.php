@@ -117,37 +117,17 @@ if (isset($_POST['submit'])) {
     </div>
 
 <?php
-if ($error !== false) {
-    echo '<script type="text/javascript">
-    $(document).ready(
-        function() {
-            $(".adminToast").addClass("isActive isError");
-            const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_error\"></span>";
-            $(".adminToast").find(".headline").html(msg);
+    include '../components/footer.admin.php';
 
-            setTimeout(function () {
-                $(".adminToast").removeClass("isActive");
-            }, 2000);
-        });
-</script>';
-}
 
-if ($success) {
-    echo '<script type="text/javascript">
-    $(document).ready(
-        function() {
-            $(".adminToast").addClass("isActive isSuccess");
-            const msg = "<span class=\"w-full flex mt-6\" data-i18n=\"upload_success\"></span>";
-            $(".adminToast").find(".headline").html(msg);
 
-            setTimeout(function () {
-                $(".adminToast").removeClass("isActive");
-            }, 2000);
-        });
-</script>';
-}
 
-include '../components/footer.admin.php';
+    if ($success) {
+        echo '<script>openToast("<span data-i18n=\"upload_success\"></span>");</script>';
+    }
+    if ($error !== false) {
+        echo '<script>openToast("<span data-i18n=\"upload_error\"></span>", "isError", 5000);</script>';
+    }
 
 ?>
 

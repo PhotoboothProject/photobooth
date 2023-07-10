@@ -139,6 +139,7 @@ gulp.task('js-admin', function () {
       './src/js/admin/buttons.js',
       './src/js/admin/navi.js',
       './src/js/admin/keypad.js',
+      './src/js/admin/toast.js',
     ])
     .pipe(concat('main.admin.js'))
     .pipe(babel({ presets: ['@babel/env'], ignore: [ 'src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js' ] }))
