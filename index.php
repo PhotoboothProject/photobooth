@@ -191,16 +191,12 @@ include($fileRoot . 'template/components/main.head.php');
     <?php endif; ?>
 </div>
 
-<?php include($fileRoot . 'template/send-mail.template.php'); ?>
-<?php include($fileRoot . 'template/modal.template.php'); ?>
-
-<div id="adminsettings">
-    <div style="position:absolute; bottom:0; right:0;">
-        <img src="<?=$fileRoot?>resources/img/spacer.png" alt="adminsettings" ondblclick="adminsettings('<?=$fileRoot?>')"/>
-    </div>
-</div>
-
-<?php include($fileRoot . 'template/components/main.footer.php'); ?>
+<?php
+    include($fileRoot . 'template/send-mail.template.php');
+    include($fileRoot . 'template/modal.template.php');
+    include($fileRoot . 'template/components/adminShortcut.php');
+    include($fileRoot . 'template/components/main.footer.php');
+?>
 
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>

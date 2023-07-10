@@ -31,13 +31,14 @@
         echo '</div>';
     }
     function getKey( $key = null ) {
-        $containerClass = 'keypad_key peer flex items-center justify-center p-2';
+        $containerClass = 'keypad_key peer flex items-center justify-center p-2 hover:text-brand-1 transition-all';
         $keyClass = '
             flex items-center justify-center w-16 h-16 transition-all
             text-gray-500 text-lg cursor-pointer font-bold
             border border-solid border-gray-200 rounded-full
             hover:border-brand-1 hover:text-brand-1 hover:scale-110
             active:border-brand-1 active:bg-brand-1 active:text-white
+            outline-none focus:outline-none focus:ring-2 focus:ring-brand-1 active:ring-2 active:ring-brand-1 active:outline-none
         ';
 
         if( isset($key) ) {
@@ -47,6 +48,8 @@
                 </div>';
             } elseif ( $key  === "remove" ) {
                 echo '<div class="'. $containerClass .' cursor-pointer" onclick="keypadRemoveLastValue();"><span class="fa fa-chevron-left"></span></div>';
+            } elseif ( $key  === "home" ) {
+                echo '<a href="./" class="text-2xl '. $containerClass .' cursor-pointer"><span class="fa fa-home"></span></div>';
             }
         } else {
             echo '<div class="'. $containerClass .'"></div>';
@@ -84,7 +87,7 @@
                     echo getKey(9);
                     echo getKey("remove");
                     echo getKey(0);
-                    echo getKey();
+                    echo getKey("home");
                 ?>
             </div>
         </div>
