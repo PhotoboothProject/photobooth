@@ -39,6 +39,9 @@ $config['database']['file'] = 'db';
 // F R O N T P A G E
 $config['ui']['show_fork'] = true;
 $config['ui']['skip_welcome'] = false;
+$config['ui']['admin_shortcut'] = true;
+// possible admin shortcut position values: 'top_right', 'top_left', 'bottom_right', 'bottom_left'
+$config['ui']['admin_shortcut_position'] = "bottom-right";
 $config['logo']['enabled'] = true;
 $config['logo']['path'] = '';
 // possible logo position values: 'center', 'top_right', 'top_left', 'bottom_right', 'bottom_left'

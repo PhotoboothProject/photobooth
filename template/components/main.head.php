@@ -29,6 +29,7 @@ echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/normalize.css/n
 echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/font-awesome/css/font-awesome.css" />' . "\n";
 echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/material-icons/iconfont/material-icons.css">' . "\n";
 echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/material-icons/css/material-icons.css">' . "\n";
+echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/tailwind.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
 
 if ($photoswipe) {
     echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/photoswipe/dist/photoswipe.css"/>' . "\n";

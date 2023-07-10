@@ -322,6 +322,24 @@ $configsetup = [
             'name' => 'ui[skip_welcome]',
             'value' => $config['ui']['skip_welcome'],
         ],
+        'ui_admin_shortcut' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'ui[admin_shortcut]',
+            'value' => $config['ui']['admin_shortcut'],
+        ],
+        'ui_admin_shortcut_position' => [
+            'view' => 'expert',
+            'type' => 'select',
+            'name' => 'ui[admin_shortcut_position]',
+            'value' => $config['ui']['admin_shortcut_position'],
+            'options' => [
+                'top-left' => 'Top-Left',
+                'top-right' => 'Top-Right',
+                'bottom-left' => 'Bottom-Left',
+                'bottom-right' => 'Bottom-Right',
+            ],
+        ],
         'ui_github' => [
             'view' => 'expert',
             'type' => 'hidden',

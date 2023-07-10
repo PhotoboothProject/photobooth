@@ -93,7 +93,11 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 		</div>
 	</div>
 
-
+<script>
+	setTimeout(function() {
+		window.location = "<?=$fileRoot?>";
+	}, 30000);
+</script>
 
 <?php
     include($fileRoot . 'admin/components/footer.admin.php');
