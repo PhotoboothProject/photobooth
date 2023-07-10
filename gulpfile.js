@@ -8,6 +8,7 @@ var browserSync = require('browser-sync').create();
 var filters = require('gulp-filter');
 
 // tw
+const twConfig = require("./config/tailwind.config");
 const twAdminConfig = require("./config/tailwind.admin.config");
 const postcss = require("gulp-postcss");
 const tailwindcss = require("tailwindcss");
@@ -38,6 +39,16 @@ gulp.task('dev', function() {
     .watch('./src/js/*.js', gulp.series('js'))
     .on('change', browserSync.reload);
 
+  // tailwind
+  gulp
+    .watch([
+      './index.php',
+      './gallery/**/*.php',
+      './template/**/*.php',
+      './src/sass/tailwind.scss',
+    ], gulp.series('tailwind'))
+    .on('change', browserSync.reload);
+
   // admin
   gulp
   .watch('./src/js/admin/**/*.js', gulp.series('js-admin'))
@@ -55,11 +66,11 @@ gulp.task('dev', function() {
 
 
 gulp.task('sass', function () {
-  var filterAdmin = filters(['**/*', '!tailwind.admin.scss']);
+  var twFilter = filters(['**/*', '!tailwind.admin.scss', '!tailwind.scss']);
 
   return gulp
     .src('./src/sass/**/*.scss')
-    .pipe(filterAdmin)
+    .pipe(twFilter)
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(gulp.dest('./resources/css'));
 });
@@ -76,6 +87,27 @@ gulp.task('watch', function () {
   gulp.watch('./src/js/*.js', gulp.series('js'));
 });
 
+
+
+gulp.task('tailwind', function () {
+  var plugins = [
+      tailwindcss(twConfig), 
+      autoprefixer(),
+  ]; 
+  return gulp
+    .src('./src/sass/tailwind.scss')
+    .pipe(sass({
+      importer: nodeSassImporter
+    }).on('error', sass.logError))
+    .pipe(rename({
+      extname: '.scss'
+    }))
+    .pipe(postcss(plugins))
+    .pipe(rename({
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('./resources/css'));
+});
 
 
 gulp.task('tailwind-admin', function () {
@@ -114,4 +146,4 @@ gulp.task('js-admin', function () {
 });
 
 
-gulp.task('default', gulp.parallel('sass', 'js', 'js-admin', 'tailwind-admin'));
+gulp.task('default', gulp.parallel('sass', 'js', 'js-admin', 'tailwind', 'tailwind-admin'));
