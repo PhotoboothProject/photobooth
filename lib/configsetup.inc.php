@@ -949,7 +949,7 @@ $configsetup = [
             'type' => 'input',
             'name' => 'custom[key]',
             'placeholder' => '',
-            'value' => $config['collage']['key'],
+            'value' => $config['custom']['key'],
         ],
         'custom_btn_text' => [
             'type' => 'input',
