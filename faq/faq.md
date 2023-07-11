@@ -256,11 +256,11 @@ Having trouble?
   - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
   - Button GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
     ```
-    gpio=9,16,17,20,21,22,23,24,26,27=pu
+    gpio=5,6,7,8,16,17,20,21,22,26,27=pu
     ```
   - LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
     ```
-    gpio=5,6,7,8,12,18,19,25=op
+    gpio=9,10,11,12,18,19,23,24,25=op
     ```
 - For the shutdown and reboot buttons to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
     ```sh
