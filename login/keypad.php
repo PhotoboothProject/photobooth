@@ -49,7 +49,7 @@
             } elseif ( $key  === "remove" ) {
                 echo '<div class="'. $containerClass .' cursor-pointer" onclick="keypadRemoveLastValue();"><span class="fa fa-chevron-left"></span></div>';
             } elseif ( $key  === "home" ) {
-                echo '<a href="./" class="text-2xl '. $containerClass .' cursor-pointer"><span class="fa fa-home"></span></div>';
+                echo '<a href="' . $fileRoot . '" class="text-2xl '. $containerClass .' cursor-pointer"><span class="fa fa-home"></span></div>';
             }
         } else {
             echo '<div class="'. $containerClass .'"></div>';
