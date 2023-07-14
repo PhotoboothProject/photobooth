@@ -18,7 +18,7 @@ $imageResource = $imageHandler->createFromImage($demoFolder . DIRECTORY_SEPARATO
 if (!$imageResource) {
     throw new Exception('Error creating image resource.');
 }
-$imageHandler->framePath = $config['picture']['frame'];
+$imageHandler->framePath = str_starts_with($config['picture']['frame'], 'http') ? $config['picture']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $config['picture']['frame'];
 
 if ($config['picture']['flip'] !== 'off') {
     try {
