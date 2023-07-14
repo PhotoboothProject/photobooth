@@ -197,7 +197,7 @@ if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $
 }
 
 $default_font = realpath($basepath . 'resources/fonts/GreatVibes-Regular.ttf');
-$default_frame = realpath($basepath . 'resources/img/frames/frame.png');
+$default_frame = Helper::setAbsolutePath($rootpath . '/resources/img/frames/frame.png');
 $random_frame = $photobooth->getUrl() . '/api/randomImg.php?dir=demoframes';
 
 if (empty($config['picture']['frame'])) {
@@ -213,7 +213,7 @@ if (empty($config['collage']['frame'])) {
 }
 
 if (empty($config['collage']['placeholderpath'])) {
-    $config['collage']['placeholderpath'] = realpath($basepath . 'resources/img/background/01.jpg');
+    $config['collage']['placeholderpath'] = Helper::setAbsolutePath($rootpath . '/resources/img/background/01.jpg');
 }
 
 if (empty($config['textoncollage']['font'])) {
@@ -252,13 +252,11 @@ if (empty($config['background']['chroma'])) {
 }
 
 if ($config['preview']['showFrame'] && !empty($config['picture']['frame'])) {
-    $pf_root = Helper::getRootpath($config['picture']['frame']);
-    $config['picture']['htmlframe'] = Helper::setAbsolutePath(Helper::fixSeperator($pf_root));
+    $config['picture']['htmlframe'] = $config['picture']['frame'];
 }
 
 if ($config['preview']['showFrame'] && !empty($config['collage']['frame'])) {
-    $cf_root = Helper::getRootpath($config['collage']['frame']);
-    $config['collage']['htmlframe'] = Helper::setAbsolutePath(Helper::fixSeperator($cf_root));
+    $config['collage']['htmlframe'] = $config['collage']['frame'];
 }
 
 if (empty($config['webserver']['ip'])) {

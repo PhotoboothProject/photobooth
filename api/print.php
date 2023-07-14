@@ -74,7 +74,7 @@ if (!file_exists($filename_print)) {
         }
 
         if ($config['print']['print_frame']) {
-            $imageHandler->framePath = $config['print']['frame'];
+            $imageHandler->framePath = str_starts_with($config['print']['frame'], 'http') ? $config['print']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $config['print']['frame'];
             $imageHandler->frameExtend = false;
             $source = $imageHandler->applyFrame($source);
             if (!$source) {
