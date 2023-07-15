@@ -380,7 +380,9 @@ const photoBooth = (function () {
 
     api.takeVideo = function (retry) {
         remoteBuzzerClient.inProgress('in-progress');
-        const data = {};
+        const data = {
+            style: api.photoStyle
+        };
         api.callTakeVideoApi(data, retry);
     };
 
