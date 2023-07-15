@@ -31,6 +31,7 @@
         echo '</div>';
     }
     function getKey( $key = null ) {
+        global $fileRoot;
         $containerClass = 'keypad_key peer flex items-center justify-center p-2 hover:text-brand-1 transition-all';
         $keyClass = '
             flex items-center justify-center w-16 h-16 transition-all
