@@ -2354,6 +2354,19 @@ $configsetup = [
             'name' => 'login[pin]',
             'value' => $config['login']['pin'],
         ],
+        'login_rental_keypad' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'login[rental_keypad]',
+            'value' => $config['login']['rental_keypad'],
+        ],
+        'login_rental_pin' => [
+            'view' => 'basic',
+            'type' => 'number',
+            'placeholder' => '0815',
+            'name' => 'login[rental_pin]',
+            'value' => $config['login']['rental_pin'],
+        ],
         'protect_admin' => [
             'view' => 'advanced',
             'type' => 'checkbox',

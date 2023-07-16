@@ -50,7 +50,7 @@
             } elseif ( $key  === "remove" ) {
                 echo '<div class="'. $containerClass .' cursor-pointer" onclick="keypadRemoveLastValue();"><span class="fa fa-chevron-left"></span></div>';
             } elseif ( $key  === "home" ) {
-                echo '<a href="' . $fileRoot . '" class="text-2xl '. $containerClass .' cursor-pointer"><span class="fa fa-home"></span></div>';
+                echo '<a href="' . $fileRoot . '" class="text-2xl '. $containerClass .' cursor-pointer"><span class="fa fa-home"></span></a>';
             }
         } else {
             echo '<div class="'. $containerClass .'"></div>';
@@ -74,7 +74,7 @@
             <?php getKeyIndicator($pinMap, $pinLength); ?>
         </div>
 
-        <div class="w-full text-center text-gray-500 mb-8">
+        <div class="w-full text-center text-gray-500">
             <div class="grid grid-cols-3">
                 <?php
                     echo getKey(1);
@@ -95,10 +95,10 @@
 
         <div id="keypad_pin" class="hidden"></div>
 
-        <div class="keypadLoader w-full h-full absolute top-0 left-0 flex flex-col items-center justify-center bg-white bg-opacity-90 hidden">
+        <div class="keypadLoader w-full h-full absolute top-0 left-0 flex-col items-center justify-center bg-white bg-opacity-90 hidden">
             <?php echo getLoader("sm"); ?>
         </div>
 
     </form>
 </div>
-<div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20"></div>
+
