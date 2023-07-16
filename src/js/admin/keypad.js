@@ -64,6 +64,7 @@ document.addEventListener('keydown', function (event) {
 
 function checkKeypadPin(pin) {
     $('.keypadLoader').removeClass('hidden');
+    $('.keypadLoader').addClass('flex');
 
     $.ajax({
         url: config.foldersJS.api + '/controller.php',
@@ -95,6 +96,7 @@ function checkKeypadPin(pin) {
         error: function () {
             keypadClear();
             $('.keypadLoader').addClass('hidden');
+            $('.keypadLoader').removeClass('flex');
         }
     });
 }

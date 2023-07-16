@@ -70,6 +70,16 @@ if (isset($data['type'])) {
         $newConfig['login']['pin'] = '';
     }
 
+    if (isset($newConfig['login']['rental_keypad']) && $newConfig['login']['rental_keypad'] == true) {
+        if (strlen($newConfig['login']['rental_pin']) != 4 || $newConfig['login']['rental_pin'] == $newConfig['login']['pin']) {
+            $Logger->addLogData(['rental_keypad' => 'Rental keypad pin reset.']);
+            $newConfig['login']['rental_keypad'] = false;
+            $newConfig['login']['rental_pin'] = '';
+        }
+    } else {
+        $newConfig['login']['rental_pin'] = '';
+    }
+
     if (isset($newConfig['filters']['enabled']) && $newConfig['filters']['enabled'] == true) {
         if (isset($newConfig['picture']['keep_original']) && !$newConfig['picture']['keep_original']) {
             $newConfig['filters']['enabled'] = false;
