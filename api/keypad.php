@@ -3,14 +3,14 @@ class Keypad {
     public function __construct() {
     }
 
-    public function keypadLogin($userPin, $config) {
-        if ($userPin == $config['login']['pin']) {
+    public function keypadLogin($userPin, $login) {
+        if ($userPin == $login['pin']) {
             $_SESSION['auth'] = true;
 
             $return = [
                 'state' => true,
             ];
-        } elseif ($config['login']['rental_keypad'] && $userPin == $config['login']['rental_pin']) {
+        } elseif ($login['rental_keypad'] && $userPin == $login['rental_pin']) {
             $_SESSION['rental'] = true;
 
             $return = [
