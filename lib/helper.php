@@ -29,7 +29,6 @@ class Helper {
      * @return string The fixed path.
      */
     public static function fixSeperator($fixPath) {
-        $fixPath = stripslashes($fixPath);
         return str_replace('\\', '/', $fixPath);
     }
 
