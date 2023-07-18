@@ -905,8 +905,8 @@ class Image {
                 $this->resizeRotation = $degrees;
                 $imageResource = self::rotateResizeImage($imageResource);
                 if (abs($degrees) != 90) {
-                    $width = intval(imagesx($imageResource));
-                    $height = intval(imagesy($imageResource));
+                    $width = imagesx($imageResource);
+                    $height = imagesy($imageResource);
                 }
             }
 
