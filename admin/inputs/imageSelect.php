@@ -18,11 +18,13 @@ function getImageSelect($setting, $i18ntag) {
             str_contains($value, '.webp') ||
             str_contains($value, '.svg')
         ) {
+            $value = Helper::fixSeperator($value);
             $imgPath = $value;
             $origin = $value;
-            if (str_contains($value, $_SERVER['DOCUMENT_ROOT'])) {
-                $origin = substr($value, strlen($_SERVER['DOCUMENT_ROOT']));
-                $imgPath = substr($value, strlen($_SERVER['DOCUMENT_ROOT']));
+            $serverRoot = Helper::fixSeperator($_SERVER['DOCUMENT_ROOT']);
+            if (str_contains($value, $serverRoot)) {
+                $origin = substr($value, strlen($serverRoot));
+                $imgPath = substr($value, strlen($serverRoot));
             }
             if (str_contains($setting['value'], 'url(')) {
                 $origin = 'url(' . $origin . ')';
