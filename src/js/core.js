@@ -1154,7 +1154,7 @@ const photoBooth = (function () {
         $(this).blur();
     });
 
-    $('.takeVideo').on('click', function (e) {
+    $('.takeVideo, .newVideo').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.VIDEO);
         $(this).blur();
