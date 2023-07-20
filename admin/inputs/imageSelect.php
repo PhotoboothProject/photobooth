@@ -27,6 +27,11 @@ function getImageSelect($setting, $i18ntag) {
             if (str_contains($setting['value'], 'url(')) {
                 $origin = 'url(' . $origin . ')';
             }
+            $hiddenPreview = '';
+            if (str_starts_with($setting['value'], 'http')) {
+                $hiddenPreview = 'hidden';
+            }
+
             $images .= '<div class="w-full relative h-0 pb-2/3">';
             $images .=
                 '<img onclick="adminImageSelect(this, \'' .
@@ -55,7 +60,9 @@ function getImageSelect($setting, $i18ntag) {
             <div class="adminImageSelection group">
 
                 <div class="w-full flex items-start">
-                    <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer" onclick="openAdminImageSelect(this)"><img class="adminImageSelection-preview object-contain" src="' .
+                    <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer ' .
+        $hiddenPreview .
+        '" onclick="openAdminImageSelect(this)"><img class="adminImageSelection-preview object-contain" src="' .
         $selectedImage .
         '"></div>
                     <div class="w-full flex flex-col">
@@ -85,7 +92,7 @@ function getImageSelect($setting, $i18ntag) {
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="' .
+                <input type="input" class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto" name="' .
         $setting['name'] .
         '" value="' .
         $setting['value'] .
