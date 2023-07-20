@@ -399,8 +399,8 @@ common_software() {
         else
             info "[Package]   Installing missing common package: ${package}"
             if [[ ${package} == "yarn" ]]; then
-                curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-                echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+                curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --yes --dearmor -o /usr/share/keyrings/yarnkey.gpg
+                echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list > /dev/null
                 apt update
             fi
             if [[ ${package} == "gphoto2" ]]; then
