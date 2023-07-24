@@ -1,6 +1,9 @@
 <?php
 define('SERVER_OS', DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux');
 
+if (is_file(__DIR__ . '/../private/lib/polyfill.php')) {
+    require_once __DIR__ . '/../private/lib/polyfill.php';
+}
 require_once __DIR__ . '/arrayDeepMerge.php';
 require_once __DIR__ . '/helper.php';
 require_once __DIR__ . '/photobooth.php';
