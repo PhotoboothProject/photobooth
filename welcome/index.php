@@ -20,18 +20,19 @@ include($fileRoot . 'admin/helper/index.php');
 include($fileRoot . 'admin/inputs/index.php');
 
 $healthCheck = new HealthCheck();
-$healthData = $healthCheck->healthStatus ? '' : '<h3 class="font-bold uppercase underline pb-2">Health Status</h3>';
+$healthData = '<h3 class="font-bold uppercase underline pb-2">Health Status</h3>';
 
+$healthData .= '<p class="pb-2">Current PHP version: ' . $healthCheck->phpMajor . '.' . $healthCheck->phpMinor . '<br>';
 if ($healthCheck->phpMajor >= 8) {
-    $healthData .= '<p class=\"pb-2\">PHP machtes our requirements.<br>';
+    $healthData .= 'PHP machtes our requirements.<br>';
 } else {
-    $healthData .= '<p class="pb-2">ERROR - Please update PHP to PHP8! <br>PHP does not match our requirements!<br>';
+    $healthData .= $healthCheck->healthStatus ? '</p><p class="text-red-500">' : '</p><p>';
+    $healthData .= 'PHP does not match our requirements!<br>';
+    $healthData .= $healthCheck->healthStatus ? 'WARNING: Polyfill might be used.</b><br>Please update PHP to PHP8!<br></p><p>' : 'ERROR: Please update PHP to PHP8! <br>';
 }
-$healthData .= 'Current PHP version: ' . $healthCheck->phpMajor . '.' . $healthCheck->phpMinor . '<br>';
-
-$healthData .= $healthCheck->gdEnabled ? 'GD is enabled.<br>' : 'ERROR - GD must be enabled!<br>';
-$healthData .= $healthCheck->zipEnabled ? 'ZIP is enabled.</p><br>' : 'ERROR - ZIP must be enabled!</p><br>';
-$healthData .= $healthCheck->healthStatus ? '<p>No errors found.</p>' : '<p>ERROR: Please fix mentioned errors to enjoy your Photobooth!</p>';
+$healthData .= $healthCheck->gdEnabled ? 'GD is enabled.<br>' : 'ERROR: GD must be enabled!<br>';
+$healthData .= $healthCheck->zipEnabled ? 'ZIP is enabled.</p><br>' : 'ERROR: ZIP must be enabled!</p><br>';
+$healthData .= $healthCheck->healthStatus ? '<p>No errors found.</p>' : '<p><b>ERROR: Please fix mentioned errors to enjoy your Photobooth!</b></p>';
 
 ?>
 
@@ -117,13 +118,14 @@ $healthData .= $healthCheck->healthStatus ? '<p>No errors found.</p>' : '<p>ERRO
 				<div class="p-4 md:p-8">
 					<p class="text-center">Thanks for the reading!</p>
 					<?php
+					$healthCheckBg = $healthCheck->healthStatus ? 'bg-green-500' : 'bg-red-500';
 					if ($healthCheck->healthStatus) {
 						echo '<div class="w-full max-w-md p-5 mx-auto mt-2">';
 						echo getMenuBtn($fileRoot, 'Enjoy your Photobooth!', '');
-					} else {
-						echo '<div class="w-full p-5 mx-auto mt-2 rounded bg-red-500 text-white text-center">';
-						echo $healthData;
+						echo '</div>';
 					}
+					echo '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . $healthCheckBg . ' text-white text-center">';
+					echo $healthData;
 					?>
 					</div>
 				</div>
@@ -139,15 +141,8 @@ $healthData .= $healthCheck->healthStatus ? '<p>No errors found.</p>' : '<p>ERRO
             touch('.skip_welcome');
         }
 
-        echo getToast();
     }
-
     include($fileRoot . 'template/components/main.footer.php');
-    echo '<script type="text/javascript" src="' . $fileRoot . 'resources/js/main.admin.js?v=' . $config['photobooth']['version'] . '"></script>' . "\n";
-
-    if ($healthCheck->healthStatus) {
-        echo '<script>openToast("' . $healthData . '", "isSuccess", 5000);</script>';
-    }
     ?>
 
 </body>
