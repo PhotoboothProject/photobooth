@@ -39,7 +39,11 @@ class HealthCheck {
         list($this->phpMajor, $this->phpMinor) = $this->phpVersion();
         $this->gdEnabled = extension_loaded('gd');
         $this->zipEnabled = extension_loaded('zip');
-        if ($this->phpMajor >= 8 && $this->gdEnabled && $this->zipEnabled) {
+        if (
+            ($this->phpMajor >= 8 || (function_exists('str_contains') && function_exists('str_ends_with') && function_exists('str_starts_with'))) &&
+            $this->gdEnabled &&
+            $this->zipEnabled
+        ) {
             $this->healthStatus = true;
         }
     }
