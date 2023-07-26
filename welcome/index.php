@@ -24,7 +24,7 @@ $healthData = '<h3 class="font-bold uppercase underline pb-2"><span data-i18n="h
 
 $healthData .= '<p class="pb-2"><span data-i18n="currentPhpVersion"></span> ' . $healthCheck->phpMajor . '.' . $healthCheck->phpMinor . '<br>';
 if ($healthCheck->phpMajor >= 8) {
-    $healthData .= '<span data-i18n="phpVersionOk"></span><br>';
+    $healthData .= '<i class="fa fa-check mr-2"></i><span data-i18n="phpVersionOk"></span><br>';
 } else {
     $healthData .= $healthCheck->healthStatus ? '</p><p class="text-red-500">' : '</p><p>';
     $healthData .= '<i class="fa fa-times mr-2"></i><span data-i18n="phpVersionError"></span><br>';
