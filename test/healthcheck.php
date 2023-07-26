@@ -1,20 +1,55 @@
 <?php
 $fileRoot = '../';
 
+require_once $fileRoot . 'lib/config.php';
 require_once $fileRoot . 'lib/healthcheck.php';
+$pageTitle = $config['ui']['branding'] . ' Health Check';
+$remoteBuzzer = false;
+$photoswipe = false;
+$chromaKeying = false;
+
+include($fileRoot . 'admin/components/head.admin.php');
+include($fileRoot . 'admin/helper/index.php');
+include($fileRoot . 'admin/inputs/index.php');
 
 $healthCheck = new HealthCheck();
+$healthData = '<h3 class="font-bold uppercase underline pb-2"><span data-i18n="healthStatus"></span></h3>';
 
-
+$healthData .= '<p class="pb-2"><span data-i18n="currentPhpVersion"></span> ' . $healthCheck->phpMajor . '.' . $healthCheck->phpMinor . '<br>';
 if ($healthCheck->phpMajor >= 8) {
-    echo 'Status: ok. PHP machtes our requirements. ';
+    $healthData .= '<span data-i18n="phpVersionOk"></span><br>';
 } else {
-    echo 'Status: Error - Please update PHP to PHP8! PHP does not match our requirements! ';
+    $healthData .= $healthCheck->healthStatus ? '</p><p class="text-red-500">' : '</p><p>';
+    $healthData .= '<i class="fa fa-times mr-2"></i><span data-i18n="phpVersionError"></span><br>';
+    $healthData .= $healthCheck->healthStatus ? '<span data-i18n="phpVersionWarning"></span></b><br><span data-i18n="phpUpdateRequired"></span><br></p><p>' : '<b><span data-i18n="phpUpdateRequired"></span></b><br>';
 }
-echo 'Current PHP version: ' . $healthCheck->phpMajor . '.' . $healthCheck->phpMinor, '<br>';
+$healthData .= $healthCheck->gdEnabled ? '<i class="fa fa-check mr-2"></i><span data-i18n="phpGdEnabled"></span><br>' : '<i class="fa fa-times mr-2"></i><span data-i18n="phpGdDisabled"></span><br>';
+$healthData .= $healthCheck->zipEnabled ? '<i class="fa fa-check mr-2"></i><span data-i18n="phpZipEnabled"></span></p><br>' : '<i class="fa fa-times mr-2"></i><span data-i18n="phpZipDisabled"></span></p><br>';
+$healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood"></span></b></p>' : '<p><b><span data-i18n="healthError"></span></b></p>';
 
-echo $healthCheck->gdEnabled ? 'Status: ok. GD is enabled.' : 'Status: Error - GD must be enabled!', '<br>';
-echo $healthCheck->zipEnabled ? 'Status: ok. ZIP is enabled.' : 'Status: Error - ZIP must be enabled!', '<br>';
-echo '', '<br>';
-echo 'H E A L T H   S T A T U S', '<br>';
-echo $healthCheck->healthStatus ? 'No errors found. Enjoy your Photobooth!' : 'ERROR Please fix mentioned errors to enjoy your Photobooth!', '<br>';
+?>
+
+<div class="w-full h-full grid place-items-center fixed bg-brand-2 overflow-x-hidden overflow-y-auto">
+		<div class="w-full flex items-center justify-center flex-col px-6 py-12">
+			<div class="w-full max-w-4xl h-144 rounded-lg bg-white flex flex-col shadow-xl">
+				<div class="p-4 md:p-8">
+					<?php
+					$healthCheckBg = $healthCheck->healthStatus ? 'bg-green-500' : 'bg-red-500';
+					echo '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . $healthCheckBg . ' text-white text-center">';
+					echo $healthData;
+					echo '</div>';
+					echo '<div class="w-full max-w-md p-5 mx-auto mt-2">';
+					echo getMenuBtn($fileRoot . 'test', 'back', 'fa fa-chevron-left');
+					echo '</div>';
+					?>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <?php
+    include $fileRoot . 'template/components/main.footer.php';
+    ?>
+
+</body>
+</html>
