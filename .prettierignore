@@ -1,4 +1,5 @@
 test/chroma.php
+test/healthcheck.php
 test/preview.php
 test/trigger.php
 admin/index.php
