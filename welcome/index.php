@@ -20,19 +20,19 @@ include($fileRoot . 'admin/helper/index.php');
 include($fileRoot . 'admin/inputs/index.php');
 
 $healthCheck = new HealthCheck();
-$healthData = '<h3 class="font-bold uppercase underline pb-2">Health Status</h3>';
+$healthData = '<h3 class="font-bold uppercase underline pb-2"><span data-i18n="healthStatus"></span></h3>';
 
-$healthData .= '<p class="pb-2">Current PHP version: ' . $healthCheck->phpMajor . '.' . $healthCheck->phpMinor . '<br>';
+$healthData .= '<p class="pb-2"><span data-i18n="currentPhpVersion"></span> ' . $healthCheck->phpMajor . '.' . $healthCheck->phpMinor . '<br>';
 if ($healthCheck->phpMajor >= 8) {
-    $healthData .= 'PHP machtes our requirements.<br>';
+    $healthData .= '<span data-i18n="phpVersionOk"></span><br>';
 } else {
     $healthData .= $healthCheck->healthStatus ? '</p><p class="text-red-500">' : '</p><p>';
-    $healthData .= '<i class="fa fa-times mr-2"></i>PHP does not match our requirements!<br>';
-    $healthData .= $healthCheck->healthStatus ? 'WARNING: Polyfill might be used.</b><br>Please update PHP to PHP8!<br></p><p>' : '<b>ERROR:</b> Please update PHP to PHP8! <br>';
+    $healthData .= '<i class="fa fa-times mr-2"></i><span data-i18n="phpVersionError"></span><br>';
+    $healthData .= $healthCheck->healthStatus ? '<span data-i18n="phpVersionWarning"></span></b><br><span data-i18n="phpUpdateRequired"></span><br></p><p>' : '<b><span data-i18n="phpUpdateRequired"></span></b><br>';
 }
-$healthData .= $healthCheck->gdEnabled ? '<i class="fa fa-check mr-2"></i>GD is enabled.<br>' : '<i class="fa fa-times mr-2"></i>GD must be enabled!<br>';
-$healthData .= $healthCheck->zipEnabled ? '<i class="fa fa-check mr-2"></i>ZIP is enabled.</p><br>' : '<i class="fa fa-times mr-2"></i>ZIP must be enabled!</p><br>';
-$healthData .= $healthCheck->healthStatus ? '<p><b>No errors found.</b></p>' : '<p><b>ERROR: Please fix mentioned errors to enjoy your Photobooth!</b></p>';
+$healthData .= $healthCheck->gdEnabled ? '<i class="fa fa-check mr-2"></i><span data-i18n="phpGdEnabled"></span><br>' : '<i class="fa fa-times mr-2"></i><span data-i18n="phpGdDisabled"></span><br>';
+$healthData .= $healthCheck->zipEnabled ? '<i class="fa fa-check mr-2"></i><span data-i18n="phpZipEnabled"></span></p><br>' : '<i class="fa fa-times mr-2"></i><span data-i18n="phpZipDisabled"></span></p><br>';
+$healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood"></span></b></p>' : '<p><b><span data-i18n="healthError"></span></b></p>';
 
 ?>
 
