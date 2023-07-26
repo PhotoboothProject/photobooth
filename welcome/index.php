@@ -27,12 +27,12 @@ if ($healthCheck->phpMajor >= 8) {
     $healthData .= 'PHP machtes our requirements.<br>';
 } else {
     $healthData .= $healthCheck->healthStatus ? '</p><p class="text-red-500">' : '</p><p>';
-    $healthData .= 'PHP does not match our requirements!<br>';
-    $healthData .= $healthCheck->healthStatus ? 'WARNING: Polyfill might be used.</b><br>Please update PHP to PHP8!<br></p><p>' : 'ERROR: Please update PHP to PHP8! <br>';
+    $healthData .= '<i class="fa fa-times mr-2"></i>PHP does not match our requirements!<br>';
+    $healthData .= $healthCheck->healthStatus ? 'WARNING: Polyfill might be used.</b><br>Please update PHP to PHP8!<br></p><p>' : '<b>ERROR:</b> Please update PHP to PHP8! <br>';
 }
-$healthData .= $healthCheck->gdEnabled ? 'GD is enabled.<br>' : 'ERROR: GD must be enabled!<br>';
-$healthData .= $healthCheck->zipEnabled ? 'ZIP is enabled.</p><br>' : 'ERROR: ZIP must be enabled!</p><br>';
-$healthData .= $healthCheck->healthStatus ? '<p>No errors found.</p>' : '<p><b>ERROR: Please fix mentioned errors to enjoy your Photobooth!</b></p>';
+$healthData .= $healthCheck->gdEnabled ? '<i class="fa fa-check mr-2"></i>GD is enabled.<br>' : '<i class="fa fa-times mr-2"></i>GD must be enabled!<br>';
+$healthData .= $healthCheck->zipEnabled ? '<i class="fa fa-check mr-2"></i>ZIP is enabled.</p><br>' : '<i class="fa fa-times mr-2"></i>ZIP must be enabled!</p><br>';
+$healthData .= $healthCheck->healthStatus ? '<p><b>No errors found.</b></p>' : '<p><b>ERROR: Please fix mentioned errors to enjoy your Photobooth!</b></p>';
 
 ?>
 
