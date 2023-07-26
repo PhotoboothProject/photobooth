@@ -121,7 +121,7 @@ $healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood">
 					$healthCheckBg = $healthCheck->healthStatus ? 'bg-green-500' : 'bg-red-500';
 					if ($healthCheck->healthStatus) {
 						echo '<div class="w-full max-w-md p-5 mx-auto mt-2">';
-						echo getMenuBtn($fileRoot, 'Enjoy your Photobooth!', '');
+						echo getMenuBtn($fileRoot, 'enjoyPhotobooth', '');
 						echo '</div>';
 					}
 					echo '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . $healthCheckBg . ' text-white text-center">';
