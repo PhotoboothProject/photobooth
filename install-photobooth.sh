@@ -71,7 +71,12 @@ COMMON_PACKAGES=(
         'v4l-utils'
 )
 
-EXTRA_PACKAGES=('curl')
+EXTRA_PACKAGES=(
+        'curl'
+        'gcc'
+        'g++'
+        'make'
+)
 
 INSTALL_PACKAGES=()
 
