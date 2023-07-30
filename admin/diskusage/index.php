@@ -38,9 +38,9 @@ include('../inputs/index.php');
 				<?php
 					foreach ($config['foldersAbs'] as $key => $folder) {
 						try {
-							$folderSize = Helper::getFolderSize($path);
+							$folderSize = Helper::getFolderSize($folder);
 							$formattedSize = Helper::formatSize($folderSize);
-							$fileCount = Helper::getFileCount($path);
+							$fileCount = Helper::getFileCount($folder);
 
 							echo('<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">');
 							echo('<h3 class="font-bold whitespace-pre-wrap break-all"><span data-i18n="path"></span> ' . $folder . '</h3>');
