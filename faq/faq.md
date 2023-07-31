@@ -245,7 +245,7 @@ For the **LED Support** GPIOs need to be set as OUTPUT.
 
 ##### Troubleshooting / Debugging
 
-**Important: For WLAN connected screens you must make sure to set the IP address of the Photobooth web server in the admin settings - section "General"**. The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Photobooth web server, to which the remote display connects to.
+**Important: For WLAN connected screens you must make sure to set the IP address of the Remote buzzer server in the admin settings.** The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Remote buzzer Server.
 
 Having trouble?
 - Set Photobooth loglevel to 1 (or above). (admin screen -> general section)

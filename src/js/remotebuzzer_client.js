@@ -30,11 +30,14 @@ function initRemoteBuzzerFromDOM() {
                 return;
             }
 
-            if (config.webserver.ip) {
-                ioClient = io('http://' + config.webserver.ip + ':' + config.remotebuzzer.port);
+            if (config.remotebuzzer.serverip) {
+                ioClient = io('http://' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port);
 
                 photoboothTools.console.logDev(
-                    'Remote buzzer connecting to http://' + config.webserver.ip + ':' + config.remotebuzzer.port
+                    'Remote buzzer connecting to http://' +
+                        config.remotebuzzer.serverip +
+                        ':' +
+                        config.remotebuzzer.port
                 );
 
                 ioClient.on('photobooth-socket', function (data) {
@@ -91,13 +94,15 @@ function initRemoteBuzzerFromDOM() {
 
                 ioClient.on('connect_error', function () {
                     photoboothTools.console.log(
-                        'ERROR: Remote buzzer client unable to connect to webserver ip - please ensure Remote buzzer server is running on Photobooth server. Set Photobooth loglevel to 1 (or above) to create log file for debugging.'
+                        'ERROR: Remote buzzer client unable to connect to Remote buzzer Server - please ensure Remote buzzer server is running on ' +
+                            config.remotebuzzer.serverip +
+                            '. Set Photobooth loglevel to 1 (or above) to create log file for debugging.'
                     );
                 });
 
                 ioClient.on('connect', function () {
                     photoboothTools.console.logDev(
-                        'Remote buzzer client successfully connected to Photobooth webserver ip.'
+                        'Remote buzzer client successfully connected to Remote buzzer Server.'
                     );
                 });
 
@@ -107,7 +112,7 @@ function initRemoteBuzzerFromDOM() {
                 rotaryController.focusSet('#start');
             } else {
                 photoboothTools.console.log(
-                    'ERROR: Remote buzzer client unable to connect - webserver ip not defined in photobooth config!'
+                    'ERROR: Remote buzzer client unable to connect - Remote buzzer Server IP not defined in photobooth config!'
                 );
             }
         };

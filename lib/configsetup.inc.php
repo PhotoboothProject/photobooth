@@ -1906,8 +1906,21 @@ $configsetup = [
     'remotebuzzer' => [
         'view' => 'advanced',
         'platform' => 'linux',
+        'remotebuzzer_startserver' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'remotebuzzer[startserver]',
+            'value' => $config['remotebuzzer']['startserver'],
+        ],
+        'remotebuzzer_serverip' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'name' => 'remotebuzzer[serverip]',
+            'placeholder' => $defaultConfig['remotebuzzer']['serverip'],
+            'value' => $config['remotebuzzer']['serverip'],
+        ],
         'remotebuzzer_port' => [
-            'view' => 'expert',
+            'view' => 'advanced',
             'type' => 'number',
             'placeholder' => $defaultConfig['remotebuzzer']['port'],
             'name' => 'remotebuzzer[port]',

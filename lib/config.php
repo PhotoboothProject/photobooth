@@ -265,6 +265,10 @@ if (empty($config['webserver']['ip'])) {
     $config['webserver']['ip'] = $photobooth->getIp();
 }
 
+if (empty($config['remotebuzzer']['serverip'])) {
+    $config['remotebuzzer']['serverip'] = $photobooth->getIp();
+}
+
 if (empty($config['qr']['url'])) {
     $config['qr']['url'] = $photobooth->getUrl() . '/api/download.php?image=';
 }
