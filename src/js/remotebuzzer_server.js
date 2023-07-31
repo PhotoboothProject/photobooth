@@ -58,7 +58,7 @@ fs.writeFile(pidFilename, parseInt(PID, 10).toString(), function (err) {
 });
 
 /* START HTTP & WEBSOCKET SERVER */
-const baseUrl = 'http://' + config.webserver.ip + ':' + config.remotebuzzer.port;
+const baseUrl = 'http://' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port;
 log('Server starting on ' + baseUrl);
 
 function photoboothAction(type) {

@@ -302,6 +302,9 @@ $config['slideshow']['use_thumbs'] = false;
 
 
 // R E M O T E   B U Z Z E R
+$config['remotebuzzer']['startserver'] = false;
+$config['remotebuzzer']['serverip'] = '';
+$config['remotebuzzer']['port'] = 14711;
 $config['remotebuzzer']['usebuttons'] = false;
 $config['remotebuzzer']['userotary'] = false;
 $config['remotebuzzer']['enable_standalonegallery'] = false;
@@ -320,7 +323,6 @@ $config['remotebuzzer']['printgpio'] = 26;
 $config['remotebuzzer']['shutdownbutton'] = false;
 $config['remotebuzzer']['shutdowngpio'] = 16;
 $config['remotebuzzer']['shutdownholdtime'] = '5';
-$config['remotebuzzer']['port'] = 14711;
 $config['remotebuzzer']['debounce'] = 30;
 $config['remotebuzzer']['rebootbutton'] = false;
 $config['remotebuzzer']['rebootgpio'] = 8;
