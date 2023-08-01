@@ -4473,10 +4473,10 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-photoswipe@^5.3.7:
-  version "5.3.7"
-  resolved "https://registry.yarnpkg.com/photoswipe/-/photoswipe-5.3.7.tgz#c67df67aaddb5705bcf8ff265bd2086f57805756"
-  integrity sha512-zsyLsTTLFrj0XR1m4/hO7qNooboFKUrDy+Zt5i2d6qjFPAtBjzaj/Xtydso4uxzcXpcqbTmyxDibb3BcSISseg==
+photoswipe@^5.3.8:
+  version "5.3.8"
+  resolved "https://registry.yarnpkg.com/photoswipe/-/photoswipe-5.3.8.tgz#bea7db18e79383833f85c005b833da2029f0daee"
+  integrity sha512-4vTzOQt8GP4Chsm0s+8j2xDtVHAEN252PxrU12A1zXauNn0zD5HRHgjALKO2GKTyBnTnOrJUOxbV8LTrFIMrYw==
 
 php-parser@^3.1.5:
   version "3.1.5"
