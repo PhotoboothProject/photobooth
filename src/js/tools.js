@@ -176,6 +176,12 @@ const photoboothTools = (function () {
         }
     };
 
+    $(document).on('keyup', function (ev) {
+        if (config.reload.key && parseInt(config.reload.key, 10) === ev.keyCode) {
+            api.reloadPage();
+        }
+    });
+
     return api;
 })();
 

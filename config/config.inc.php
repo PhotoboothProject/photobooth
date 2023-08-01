@@ -20,6 +20,9 @@ $config['start_screen']['subtitle'] = '';
 $config['start_screen']['subtitle_visible'] = false;
 // possible thumb_size values: '360px', '540px', '900px', '1080px', '1260px'
 $config['picture']['thumb_size'] = '540px';
+// specify key id (e.g. 13 is the enter key) to use that key to reload the page
+// use for example https://keycode.info to get the key code
+$config['reload']['key'] = '';
 $config['dev']['reload_on_error'] = true;
 $config['webserver']['ip'] = '';
 $config['webserver']['ssid'] = 'Photobooth';
@@ -396,6 +399,7 @@ $config['ui']['shutter_animation'] = true;
 $config['ui']['shutter_cheese_img'] = 'none';
 $config['button']['show_fs'] = false;
 $config['button']['homescreen'] = true;
+$config['button']['reload'] = false;
 $config['ui']['result_buttons'] = true;
 $config['ui']['font_size'] = '16px';
 $config['colors']['countdown'] = '#1b3faa';

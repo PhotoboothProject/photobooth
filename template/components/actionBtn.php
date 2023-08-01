@@ -36,5 +36,13 @@ if ($config['button']['force_buzzer']) {
             '"></i> <span data-i18n="takeVideo"></span></a>' .
             "\n";
     }
+    if ($config['button']['reload']) {
+        echo '<a href="#" class="' .
+            $btnClass .
+            ' rotaryfocus" onclick="window.location.reload();"><i class="' .
+            $config['icons']['refresh'] .
+            '"></i> <span data-i18n="reload"></span></a>' .
+            "\n";
+    }
 }
 ?>

@@ -192,6 +192,13 @@ $configsetup = [
             ],
             'value' => $config['picture']['thumb_size'],
         ],
+        'reload_key' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'reload[key]',
+            'placeholder' => '',
+            'value' => $config['reload']['key'],
+        ],
         'dev_reload_on_error' => [
             'view' => 'expert',
             'type' => 'checkbox',
@@ -2492,6 +2499,12 @@ $configsetup = [
             'type' => 'checkbox',
             'name' => 'button[homescreen]',
             'value' => $config['button']['homescreen'],
+        ],
+        'button_reload' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'button[reload]',
+            'value' => $config['button']['reload'],
         ],
         'ui_result_buttons' => [
             'view' => 'advanced',
