@@ -57,7 +57,9 @@ include('../../admin/components/navItem.debug.php');
                                         echo getNavItemDebug('remotebuzzerlog');
                                         echo getNavItemDebug('synctodrivelog');
                                         echo getNavItemDebug('devlog');
-                                        echo getNavItemDebug('serverprocesses');
+                                        if (SERVER_OS === 'linux') {
+                                            echo getNavItemDebug('serverprocesses');
+                                        }
                                         echo getNavItemDebug('bootconfig');
                                         echo getNavItemDebug('printdb');
                                         echo getNavItemDebug('installlog');
