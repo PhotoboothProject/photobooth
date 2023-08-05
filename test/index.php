@@ -24,13 +24,13 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
 				<?php 
-					echo getMenuBtn('healthcheck.php', 'healthCheck', '');
-					echo getMenuBtn('phpinfo.php', 'phpinfo', '');
-					echo getMenuBtn('photo.php', 'pictureTest', '');
-					echo getMenuBtn('collage.php', 'collageTest', '');
-					echo getMenuBtn('preview.php', 'previewTest', '');
-					echo getMenuBtn('chroma.php', 'chromaPreviewTest', '');
-					echo getMenuBtn('trigger.php', 'remotebuzzerGetTrigger', '');
+					echo getMenuBtn('../test/healthcheck.php', 'healthCheck', '');
+					echo getMenuBtn('../test/phpinfo.php', 'phpinfo', '');
+					echo getMenuBtn('../test/photo.php', 'pictureTest', '');
+					echo getMenuBtn('../test/collage.php', 'collageTest', '');
+					echo getMenuBtn('../test/preview.php', 'previewTest', '');
+					echo getMenuBtn('../test/chroma.php', 'chromaPreviewTest', '');
+					echo getMenuBtn('../test/trigger.php', 'remotebuzzerGetTrigger', '');
 				?>
 				</div>
 
