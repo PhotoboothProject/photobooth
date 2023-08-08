@@ -505,28 +505,31 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             break;
         default:
             $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . $c->collageLayout;
-
             $collageJson = json_decode(file_get_contents($collageConfigFilePath), true);
 
             if (is_array($collageJson)) {
-                $layoutConfigArray = $collageJson['layout'];
+                if (array_key_exists('layout', $collageJson)) {
+                    $layoutConfigArray = $collageJson['layout'];
 
-                if ($collageJson['background']) {
-                    $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
-                    $backgroundImage = $imageHandler->resizeImage($backgroundImage);
-                    imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
-                    $imageHandler->addPictureBgImage = $collageJson['background'];
-                }
+                    if ($collageJson['background']) {
+                        $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
+                        $backgroundImage = $imageHandler->resizeImage($backgroundImage);
+                        imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
+                        $imageHandler->addPictureBgImage = $collageJson['background'];
+                    }
 
-                if ($collageJson['portrait']) {
-                    $tmp = $collage_width;
-                    $collage_width = $collage_height;
-                    $collage_height = $tmp;
-                    $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
-                }
+                    if ($collageJson['portrait']) {
+                        $tmp = $collage_width;
+                        $collage_width = $collage_height;
+                        $collage_height = $tmp;
+                        $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
+                    }
 
-                if ($collageJson['rotate_after_creation']) {
-                    $rotate_after_creation = true;
+                    if ($collageJson['rotate_after_creation']) {
+                        $rotate_after_creation = true;
+                    }
+                } else {
+                    $layoutConfigArray = $collageJson;
                 }
             } else {
                 return false;
