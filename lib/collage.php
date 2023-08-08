@@ -511,6 +511,13 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             if (is_array($collageJson)) {
                 $layoutConfigArray = $collageJson['layout'];
 
+                if ($collageJson['background']) {
+                    $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
+                    $backgroundImage = $imageHandler->resizeImage($backgroundImage);
+                    imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
+                    $imageHandler->addPictureBgImage = $collageJson['background'];
+                }
+
                 if ($collageJson['portrait']) {
                     $tmp = $collage_width;
                     $collage_width = $collage_height;
