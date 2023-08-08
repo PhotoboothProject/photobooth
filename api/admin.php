@@ -155,7 +155,11 @@ if (isset($data['type'])) {
     } elseif ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
         $collageConfig = json_decode(file_get_contents($collageConfigFilePath), true);
         if (is_array($collageConfig)) {
-            $newConfig['collage']['limit'] = count($collageConfig);
+            if (array_key_exists('layout', $collageConfig)) {
+                $newConfig['collage']['limit'] = count($collageConfig['layout']);
+            } else {
+                $newConfig['collage']['limit'] = count($collageConfig);
+            }
         } else {
             $newConfig['collage']['limit'] = 4;
         }
