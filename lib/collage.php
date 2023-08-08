@@ -505,42 +505,48 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
             break;
         default:
             $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . $c->collageLayout;
+
             $collageJson = json_decode(file_get_contents($collageConfigFilePath), true);
+
             if (is_array($collageJson)) {
-                $layoutConfig = $collageJson;
-            } else {
-                $layoutConfig = $collageJson['layout'];
+                $layoutConfigArray = $collageJson['layout'];
+
                 if ($collageJson['portrait']) {
                     $tmp = $collage_width;
                     $collage_width = $collage_height;
                     $collage_height = $tmp;
                     $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
                 }
+
                 if ($collageJson['rotate_after_creation']) {
                     $rotate_after_creation = true;
                 }
-            }
-            if (count($layoutConfig) != $c->collageLimit) {
+            } else {
                 return false;
             }
-            // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
-            $pictureOptions = [];
-            for ($i = 0; $i < $c->collageLimit; $i++) {
-                $imgConfig = $layoutConfig[$i];
-                if (!is_array($imgConfig) || count($imgConfig) !== 5) {
+
+            foreach ($layoutConfigArray as $layoutConfig) {
+                if (!is_array($layoutConfig) || count($layoutConfig) !== 5) {
                     return false;
                 }
+
                 $singlePictureOptions = [];
                 for ($j = 0; $j < 5; $j++) {
-                    $value = str_replace(['x', 'y'], [$collage_width, $collage_height], $imgConfig[$j]);
+                    $value = str_replace(['x', 'y'], [$collage_width, $collage_height], $layoutConfig[$j]);
                     $singlePictureOptions[] = doMath($value);
                 }
                 $pictureOptions[] = $singlePictureOptions;
             }
 
-            for ($i = 0; $i < $c->collageLimit; $i++) {
+            foreach ($pictureOptions as $i => $singlePictureOptions) {
                 $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                $imageHandler->setAddPictureOptions(
+                    $singlePictureOptions[0],
+                    $singlePictureOptions[1],
+                    $singlePictureOptions[2],
+                    $singlePictureOptions[3],
+                    $singlePictureOptions[4]
+                );
                 $imageHandler->addPicture($tmpImg, $my_collage);
                 imagedestroy($tmpImg);
             }
