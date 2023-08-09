@@ -528,7 +528,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                         $imageHandler->addPictureBgImage = $collageJson['background'];
                     }
 
-                    if ($collageJson['portrait']) {
+                    if ($collageJson['portrait'] && $collage_width > $collage_height) {
                         $tmp = $collage_width;
                         $collage_width = $collage_height;
                         $collage_height = $tmp;
