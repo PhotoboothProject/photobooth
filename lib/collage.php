@@ -528,6 +528,28 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                     if ($collageJson['rotate_after_creation']) {
                         $rotate_after_creation = true;
                     }
+
+                    if (array_key_exists('frame', $collageJson)) {
+                        $c->collageTakeFrame = $collageJson['apply_frame'];
+                        $c->collageFrame = $collageJson['frame'];
+                        $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
+                    }
+
+                    if (array_key_exists('text_font_size', $collageJson)) {
+                        if ($collageJson['text_custom_style'] == true) {
+                            $c->textOnCollageEnabled = 'enabled';
+                            $c->textOnCollageFontSize = $collageJson['text_font_size'];
+                            $c->textOnCollageRotation = $collageJson['text_rotation'];
+                            $c->textOnCollageLocationX = $collageJson['text_locationx'];
+                            $c->textOnCollageLocationY = $collageJson['text_locationy'];
+                            $c->textOnCollageFontColor = $collageJson['text_font_color'];
+                            $c->textOnCollageFont = $collageJson['text_font'];
+                            $c->textOnCollageLine1 = $collageJson['text_line1'];
+                            $c->textOnCollageLine2 = $collageJson['text_line2'];
+                            $c->textOnCollageLine3 = $collageJson['text_line3'];
+                            $c->textOnCollageLinespace = $collageJson['text_linespace'];
+                        }
+                    }
                 } else {
                     $layoutConfigArray = $collageJson;
                 }
