@@ -511,7 +511,17 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                 if (array_key_exists('layout', $collageJson)) {
                     $layoutConfigArray = $collageJson['layout'];
 
+                    if (array_key_exists('width', $collageJson) && array_key_exists('height', $collageJson)) {
+                        $collage_width = $collageJson['width'];
+                        $collage_height = $collageJson['height'];
+                        $my_collage = imagecreatetruecolor($collage_width, $collage_height);
+                        $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+                        imagefill($my_collage, 0, 0, $background);
+                    }
+
                     if ($collageJson['background']) {
+                        $imageHandler->resizeMaxWidth = $collage_width;
+                        $imageHandler->resizeMaxHeight = $collage_height;
                         $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
                         $backgroundImage = $imageHandler->resizeImage($backgroundImage);
                         imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
