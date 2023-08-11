@@ -28,7 +28,7 @@ CHROME_FLAGS=false
 CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
 DESKTOP_OS=true
-PHP_VERSION="7.4"
+PHP_VERSION="8.2"
 
 # Update
 RUN_UPDATE=false
@@ -392,6 +392,12 @@ common_software() {
     for required in "${INSTALL_PACKAGES[@]}"; do
         info "[Required]  ${required}"
     done
+
+    if [[ ${PHP_VERSION} == "8.2" ]]; then
+        wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+        apt update
+    fi
 
     for package in "${INSTALL_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
