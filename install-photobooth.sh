@@ -352,6 +352,11 @@ update_nodejs() {
 
 common_software() {
     info "### First we update your system. That's not worth mentioning."
+    if [[ ${PHP_VERSION} == "8.2" ]]; then
+        apt install apt-transport-https lsb-release ca-certificates software-properties-common -y
+        wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+    fi
     apt update
     apt upgrade -y
 
@@ -392,12 +397,6 @@ common_software() {
     for required in "${INSTALL_PACKAGES[@]}"; do
         info "[Required]  ${required}"
     done
-
-    if [[ ${PHP_VERSION} == "8.2" ]]; then
-        wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-        apt update
-    fi
 
     for package in "${INSTALL_PACKAGES[@]}"; do
         if [ $(dpkg-query -W -f='${Status}' ${package} 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
