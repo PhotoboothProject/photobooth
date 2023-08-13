@@ -354,8 +354,10 @@ common_software() {
     info "### First we update your system. That's not worth mentioning."
     if [[ ${PHP_VERSION} == "8.2" ]]; then
         apt install apt-transport-https lsb-release ca-certificates software-properties-common -y
-        wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+        if [[ $(lsb_release -sc) == "buster" || $(lsb_release -sc) == "bullseye" || $(lsb_release -sc) == "bookworm" ]]; then
+            wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+            echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+        fi
     fi
     apt update
     apt upgrade -y
