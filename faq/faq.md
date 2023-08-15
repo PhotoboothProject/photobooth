@@ -277,7 +277,6 @@ The server supports up to four connected hardware buttons for the following func
 
 1) **Picture Button**
 
-- Defaults to GPIO21
 - Short button press (default <= 2 sec) will trigger a single picture in Photobooth
 - Long button press (default > 2 sec) will trigger a collage in Photobooth
 
@@ -289,7 +288,6 @@ The server supports up to four connected hardware buttons for the following func
 
 2)  **Collage Button**
 
-- Defaults to GPIO20
 - Button press will trigger a collage in Photobooth.
 
 **Note:**
@@ -299,7 +297,6 @@ The server supports up to four connected hardware buttons for the following func
 
 3) **Shutdown Button**
 
-- Defaults to GPIO16
 - This button will initate a safe system shutdown and halt (`shutdown -h now`).
 
 **Note:**
@@ -309,27 +306,22 @@ The server supports up to four connected hardware buttons for the following func
 
 4) **Print Button**
 
-- Defaults to GPIO26
 - This button will initiate a print of the current picture either from the results screen or the gallery.
 
 5) **Reboot Button**
 
-- Defaults to GPIO23
 - This button will initate a safe system shutdown and halt (`shutdown -r now`).
 
 6) **Video Button**
 
-- Defaults to GPIO9
 - This button will initiate the recording of a short video.
 
 7) **Custom Button**
 
-- Defaults to GPIO24
 - Button press will trigger a single picture in Photobooth
 
 8) **Move2USB Button**
 
-- Defaults to GPIO10
 - This button will initiate the copy/move of all pictures an videos (jpg, gif und mp4) to a USB-thumb.
 - In the admin panel you can choose between disabled, copy and move.
 
