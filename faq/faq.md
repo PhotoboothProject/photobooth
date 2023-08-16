@@ -136,10 +136,42 @@ If you want to configure additional properties of the collage layout you have to
 {
   "portrait": true,
   "rotate_after_creation": false,
+  "width": "1800",
+  "height": "1200",
+  "text_custom_style": true,
+  "text_font_size": "50",
+  "text_rotation": "10",
+  "text_locationx": "200",
+  "text_locationy": "220",
+  "text_font_color": "#420C09",
+  "text_font": "/var/www/html/resources/fonts/GreatVibes-Regular.ttf",
+  "text_line1": "This is",
+  "text_line2": "a",
+  "text_line3": "Custom Collage-Test",
+  "text_linespace": "100",
+  "apply_frame": "once",
+  "frame": "/var/www/html/resources/img/frames/frame_stone.png",
+  "background": "/var/www/html/resources/img/background.png",
   "layout": [ # the array from above ]
 }
 ```
-`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added.
+`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added.  
+`width` and `height` (optional) can be defined in pixel to change the resolution of the collage. **Note:** both dimensions must be defined, else the default collage configuration will be used.  
+`text_custom_style` set to `true` if you want to apply text. Make sure all of the following properties are defined if enabled:
+- `text_font_size`
+- `text_rotation`
+- `text_locationx`
+- `text_locationy`
+- `text_font_color`
+- `text_font` (real path to font)
+- `text_line1` (text, can also be empty)
+- `text_line2`(text, can also be empty)
+- `text_line`(text, can also be empty)
+- `text_linespace`
+
+`frame` (optional) the real path to the frame to be used.  
+`apply_frame` needed if `frame` is defined. Needs `once` or `always` to be defined.  
+`background` the real path to the background image to be used. Set to `false` to disable.   
 
 ---
 
