@@ -249,7 +249,7 @@
   "manual:authentication:login_password": "Scegli la password utilizzata per il login. Nota: dopo aver salvato la password sarà visibile solo come hash all'interno del pannello di amministrazione. Per accedere non inserire l'hash, inserisci la password che hai impostato.",
   "manual:authentication:login_pin": "Pin per il login del tastierino numerico. (0-9) Pin deve essere impostato a 4 cifre altrimenti il codice sarà azzerato e il tastierino numerico non può essere abilitato.",
   "manual:authentication:login_rental_keypad": "Tastiera per accesso a noleggio. Dopo aver effettuato il login sono disponibili le informazioni e alcuni pulsanti amministratori.",
-  "manual:authentication:login_rental_pin": "Pin per il login del tastierino numerico. (0-9) Pin deve essere impostato a 4 cifre altrimenti il codice sarà resettato e il tastierino numerico non può essere abilitato.",
+  "manual:authentication:login_rental_pin": "Pin per Rental-Login. (0-9) Pin deve essere impostato a 4 cifre, altrimenti il codice verrà azzerato e Rental-Login non può essere attivo.",
   "manual:authentication:login_username": "Definisci il nome utente usato per accedere a Photobooth.",
   "manual:authentication:protect_admin": "Se abilitata, è possibile accedere al pannello di amministrazione solo se viene inserito un nome utente e una password.",
   "manual:authentication:protect_index": "Se abilitata, è possibile accedere alla schermata iniziale solo se viene inserito un nome utente e una password.",
