@@ -542,6 +542,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                     if (array_key_exists('frame', $collageJson)) {
                         $c->collageTakeFrame = $collageJson['apply_frame'];
                         $c->collageFrame = $collageJson['frame'];
+                        $imageHandler->framePath = $c->collageFrame;
                         $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
                     }
 
@@ -596,7 +597,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     }
 
     if ($c->collageTakeFrame === 'once') {
-        $my_collage = $imageHandler->applyFrame($my_collage, $c->collageFrame, true);
+        $my_collage = $imageHandler->applyFrame($my_collage);
     }
 
     if ($c->textOnCollageEnabled === 'enabled') {
