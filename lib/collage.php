@@ -519,7 +519,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                         imagefill($my_collage, 0, 0, $background);
                     }
 
-                    if ($collageJson['background']) {
+                    if (array_key_exists('background', $collageJson)) {
                         $imageHandler->resizeMaxWidth = $collage_width;
                         $imageHandler->resizeMaxHeight = $collage_height;
                         $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
@@ -528,38 +528,40 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                         $imageHandler->addPictureBgImage = $collageJson['background'];
                     }
 
-                    if ($collageJson['portrait'] && $collage_width > $collage_height) {
-                        $tmp = $collage_width;
-                        $collage_width = $collage_height;
-                        $collage_height = $tmp;
-                        $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
+                    if (array_key_exists('portrait', $collageJson) && $collage_width > $collage_height) {
+                        if ($collageJson['portrait']) {
+                            $tmp = $collage_width;
+                            $collage_width = $collage_height;
+                            $collage_height = $tmp;
+                            $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
+                        }
                     }
 
-                    if ($collageJson['rotate_after_creation']) {
-                        $rotate_after_creation = true;
+                    if (array_key_exists('rotate_after_creation', $collageJson)) {
+                        $rotate_after_creation = $collageJson['rotate_after_creation'];
                     }
 
-                    if (array_key_exists('frame', $collageJson)) {
-                        $c->collageTakeFrame = $collageJson['apply_frame'];
+                    if (array_key_exists('apply_frame', $collageJson) && array_key_exists('frame', $collageJson)) {
+                        if ($collageJson['apply_frame'] === 'once' || $collageJson['apply_frame'] === 'always') {
+                            $c->collageTakeFrame = $collageJson['apply_frame'];
+                        }
                         $c->collageFrame = $collageJson['frame'];
                         $imageHandler->framePath = $c->collageFrame;
                         $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
                     }
 
-                    if (array_key_exists('text_font_size', $collageJson)) {
-                        if ($collageJson['text_custom_style'] == true) {
-                            $c->textOnCollageEnabled = 'enabled';
-                            $c->textOnCollageFontSize = $collageJson['text_font_size'];
-                            $c->textOnCollageRotation = $collageJson['text_rotation'];
-                            $c->textOnCollageLocationX = $collageJson['text_locationx'];
-                            $c->textOnCollageLocationY = $collageJson['text_locationy'];
-                            $c->textOnCollageFontColor = $collageJson['text_font_color'];
-                            $c->textOnCollageFont = $collageJson['text_font'];
-                            $c->textOnCollageLine1 = $collageJson['text_line1'];
-                            $c->textOnCollageLine2 = $collageJson['text_line2'];
-                            $c->textOnCollageLine3 = $collageJson['text_line3'];
-                            $c->textOnCollageLinespace = $collageJson['text_linespace'];
-                        }
+                    $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? $collageJson['text_custom_style'] : $c->textOnCollageEnabled;
+                    if ($c->textOnCollageEnabled) {
+                        $c->textOnCollageFontSize = isset($collageJson['text_font_size']) ? $collageJson['text_font_size'] : $c->textOnCollageFontSize;
+                        $c->textOnCollageRotation = isset($collageJson['text_rotation']) ? $collageJson['text_rotation'] : $c->textOnCollageRotation;
+                        $c->textOnCollageLocationX = isset($collageJson['text_locationx']) ? $collageJson['text_locationx'] : $c->textOnCollageLocationX;
+                        $c->textOnCollageLocationY = isset($collageJson['text_locationy']) ? $collageJson['text_locationy'] : $c->textOnCollageLocationY;
+                        $c->textOnCollageFontColor = isset($collageJson['text_font_color']) ? $collageJson['text_font_color'] : $c->textOnCollageFontColor;
+                        $c->textOnCollageFont = isset($collageJson['text_font']) ? $collageJson['text_font'] : $c->textOnCollageFont;
+                        $c->textOnCollageLine1 = isset($collageJson['text_line1']) ? $collageJson['text_line1'] : $c->textOnCollageLine1;
+                        $c->textOnCollageLine2 = isset($collageJson['text_line2']) ? $collageJson['text_line2'] : $c->textOnCollageLine2;
+                        $c->textOnCollageLine3 = isset($collageJson['text_line3']) ? $collageJson['text_line3'] : $c->textOnCollageLine3;
+                        $c->textOnCollageLinespace = isset($collageJson['text_linespace']) ? $collageJson['text_linespace'] : $c->textOnCollageLinespace;
                     }
                 } else {
                     $layoutConfigArray = $collageJson;
