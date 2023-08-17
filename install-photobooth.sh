@@ -286,9 +286,9 @@ check_nodejs() {
     minor=${VER[1]}
     micro=${VER[2]}
 
-    info "[Info]      Node.js is only supported on v14 and v16!"
+    info "[Info]      Node.js on Photobooth is only supported on v16!"
 
-    if [[ -n "$major" && "$major" -ge "14" ]]; then
+    if [[ -n "$major" && "$major" -ge "16" ]]; then
         if [[ -n "$major" && "$major" -ge "18" ]]; then
             info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
@@ -317,8 +317,8 @@ check_nodejs() {
 update_nodejs() {
     echo -e "\033[0;33m### Node.js should be updated/downgraded. Node.js version not matching our requirements"
     echo -e "###  Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is suggested."
-    echo -e "###  NOTE: Currently Node.js is only supported on v14 and v16."
-    echo -e "###        The installation of Photobooth will fail on Node.js versions below v14."
+    echo -e "###  NOTE: Currently Node.js on Photobooth is only supported on v16."
+    echo -e "###        The installation of Photobooth will fail on Node.js versions below v16."
     ask_yes_no "### Would you like to update/downgrade Node.js to $NEEDED_NODE_VERSION ? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
