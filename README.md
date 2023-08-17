@@ -50,7 +50,7 @@ _*2 Capture from webcam is possible e.g. using [fswebcam](https://www.sanslogic.
 
 | Software          | Required version       | Note
 |-------------------|------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| Node.js           | >= v14, <= v16         | Currently only v14 and v16 are tested. Our installer will check your Node.js version and suggest an update/downgrade if needed. Versions below v14 aren't supported anymore. |
+| Node.js           | v16                    | Currently only v16 is tested. Our installer will check your Node.js version and suggest an update/downgrade if needed. Versions below v16 aren't supported anymore. |
 | php               | >=v8.0                 |                                                                                                                                     |
 | Webserver         |                        | Apache, Nginx or lighttpd is needed. By default Apache webserver is installed by our installer.                                     |
 
@@ -197,5 +197,4 @@ Thanks for reading!
 - [Spike-78](https://github.com/Spike-78)
 - [Mathias Fiege](https://www.webpension.de/)
 - [Guillaume Roure](https://github.com/Ippephyx)
-
 
