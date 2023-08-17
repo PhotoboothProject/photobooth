@@ -63,6 +63,12 @@ if ($_POST['style'] === 'collage') {
 $srcImages = [];
 $srcImages[] = $file;
 
+if (is_file(__DIR__ . '/../private/api/applyEffects.php')) {
+    $Logger->addLogData(['Info' => 'Using private/api/applyEffects.php.']);
+    $Logger->logToFile();
+    include __DIR__ . '/../private/api/applyEffects.php';
+}
+
 try {
     $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 

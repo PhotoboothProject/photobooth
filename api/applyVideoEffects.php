@@ -55,6 +55,12 @@ for ($i = 1; $i < 99; $i++) {
     }
 }
 
+if (is_file(__DIR__ . '/../private/api/applyVideoEffects.php')) {
+    $Logger->addLogData(['Info' => 'Using private/api/applyVideoEffects.php.']);
+    $Logger->logToFile();
+    include __DIR__ . '/../private/api/applyVideoEffects.php';
+}
+
 try {
     // If the video command created 4 images, create a cuttable collage (more flexibility to maybe come one day)
     $collageFilename = '';
