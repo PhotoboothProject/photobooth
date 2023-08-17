@@ -56,7 +56,7 @@
   ],
   "dependencies": {
     "@andreasremdt/simple-translator": "^2.0.4",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "^10.4.15",
     "font-awesome": "^4.7.0",
     "github-markdown-css": "^5.2.0",
     "gulp": "^4.0.2",
