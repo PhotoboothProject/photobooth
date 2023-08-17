@@ -134,7 +134,7 @@ The file `collage.json` needs to be a well-formed json array and something like 
 If you want to configure additional properties of the collage layout you have to wrap this array in a json object like this:
 ```
 {
-  "portrait": true,
+  "portrait": false,
   "rotate_after_creation": false,
   "width": "1800",
   "height": "1200",
@@ -147,7 +147,7 @@ If you want to configure additional properties of the collage layout you have to
   "text_font": "/var/www/html/resources/fonts/GreatVibes-Regular.ttf",
   "text_line1": "This is",
   "text_line2": "a",
-  "text_line3": "Custom Collage-Test",
+  "text_line3": "Custom Collage",
   "text_linespace": "100",
   "apply_frame": "once",
   "frame": "/var/www/html/resources/img/frames/frame_stone.png",
@@ -155,9 +155,9 @@ If you want to configure additional properties of the collage layout you have to
   "layout": [ # the array from above ]
 }
 ```
-`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added.  
+`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added. Collage width must be greater than hight to take effect.  
 `width` and `height` (optional) can be defined in pixel to change the resolution of the collage. **Note:** both dimensions must be defined, else the default collage configuration will be used.  
-`text_custom_style` set to `true` if you want to apply text. Make sure all of the following properties are defined if enabled:
+`text_custom_style` set to `true` if you want to apply text. Make sure all of the following properties are defined if enabled, else the default collage configuration will be used:
 - `text_font_size`
 - `text_rotation`
 - `text_locationx`
@@ -169,9 +169,9 @@ If you want to configure additional properties of the collage layout you have to
 - `text_line`(text, can also be empty)
 - `text_linespace`
 
-`frame` (optional) the real path to the frame to be used.  
-`apply_frame` needed if `frame` is defined. Needs `once` or `always` to be defined.  
-`background` the real path to the background image to be used. Set to `false` to disable.   
+`frame` (optional) the real path to the frame to be used, else the default collage configuration will be used.  
+`apply_frame` needed if `frame` is defined. Needs `once` or `always` to be defined, else the default collage configuration will be used.  
+`background` (optional) the real path to the background image to be used.   
 
 ---
 
