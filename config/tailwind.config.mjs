@@ -1,5 +1,4 @@
-
-module.exports = {
+export default {
   content: [
     "./index.php",
     "./gallery/**/*.php",
@@ -22,3 +21,4 @@ module.exports = {
     },
   },
 };
+

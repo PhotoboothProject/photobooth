@@ -1,5 +1,4 @@
-
-module.exports = {
+export default {
   content: [
     "./admin/**/*.php",
     "./login/**/*.php",
@@ -57,3 +56,4 @@ module.exports = {
     },
   },
 };
+
