@@ -552,7 +552,7 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
                         $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
                     }
 
-                    $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? $collageJson['text_custom_style'] : $c->textOnCollageEnabled;
+                    $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;
                     if ($c->textOnCollageEnabled) {
                         $c->textOnCollageFontSize = isset($collageJson['text_font_size']) ? $collageJson['text_font_size'] : $c->textOnCollageFontSize;
                         $c->textOnCollageRotation = isset($collageJson['text_rotation']) ? $collageJson['text_rotation'] : $c->textOnCollageRotation;
