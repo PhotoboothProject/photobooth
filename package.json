@@ -84,7 +84,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.10",
     "@babel/preset-env": "^7.22.10",
-    "@prettier/plugin-php": "^0.19.7",
+    "@prettier/plugin-php": "^0.20.1",
     "archiver": "^6.0.0",
     "browser-sync": "^2.29.3",
     "colors": "^1.4.0",
@@ -92,6 +92,6 @@
     "eslint-plugin-node": "^11.1.0",
     "git-tag-version": "^1.3.1",
     "gulp-babel": "^8.0.0",
-    "prettier": "^2.8.8"
+    "prettier": "^3.0.2"
   }
 }
