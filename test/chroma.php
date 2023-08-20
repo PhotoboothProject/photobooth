@@ -33,7 +33,8 @@ include($fileRoot . 'template/components/main.head.php');
             <input id="chromaSensitivity" type="number" value="0.4"/>
             <label for="chromaBlend">Blend:</label>
             <input id="chromaBlend" type="number" value="0.1"/>
-            <a href="#" class="<?php echo $btnClass; ?> setChroma">Set</a>
+            <a href="#" class="<?php echo $btnClass; ?> setChroma"><span data-i18n="set">Set</span></a>
+            <a href="<?php echo $fileRoot . 'test'; ?>" class="<?php echo $btnClass; ?> backBtn"><span data-i18n="back"></span></a>
         </div>
     </div>
 

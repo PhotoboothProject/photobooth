@@ -53,6 +53,7 @@ include($fileRoot . 'template/components/main.head.php');
 			    <a href="#" class="<?php echo $btnClass; ?> remoteNext" onclick="photoboothTools.getRequest('http://' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port + '/commands/rotary-cw');"><i class="fa fa-chevron-right" aria-hidden="true"></i> <span data-i18n="next_element"></span></a>
 			    <a href="#" class="<?php echo $btnClass; ?> remoteClick" onclick="photoboothTools.getRequest('http://' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port + '/commands/rotary-btn-press');"><i class="fa fa-circle" aria-hidden="true"></i> <span data-i18n="click_element"></span></a>
 			<?php endif; ?>
+			    <a href="<?php echo $fileRoot . 'test'; ?>" class="<?php echo $btnClass; ?>"><i class="fa fa-chevron-left" aria-hidden="true"></i> <span data-i18n="back"></span></a>
 		</div>
 	</div>
 

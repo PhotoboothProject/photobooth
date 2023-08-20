@@ -40,6 +40,7 @@ include($fileRoot . 'template/components/main.head.php');
 			<?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe']) || $config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
 			<a href="#" class="<?php echo $btnClass; ?> hideFrame"><span data-i18n="hideFrame"></span></a>
 			<?php endif; ?>
+			<a href="<?php echo $fileRoot . 'test'; ?>" class="<?php echo $btnClass; ?> backBtn"><span data-i18n="back"></span></a>
         </div>
     </div>
 
