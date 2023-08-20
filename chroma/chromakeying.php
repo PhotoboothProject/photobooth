@@ -8,14 +8,13 @@ if (empty($_GET['filename'])) {
 }
 
 $filename = $_GET['filename'];
-$keyingimage = $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$mainimage = $fileRoot . $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$imginfo = @getimagesize($config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $filename);
 
-if (file_exists($keyingimage)) {
+if (is_array($imginfo)) {
     // Only jpg/jpeg are supported
-    $imginfo = getimagesize($keyingimage);
-    $mimetype = $imginfo['mime'];
+    $mimetype = isset($imginfo['mime']) ? $imginfo['mime'] : 'unknown';
     if ($mimetype == 'image/jpg' || $mimetype == 'image/jpeg') {
-        $mainimage = $keyingimage;
         $keying_possible = true;
     } else {
         $keying_possible = false;
