@@ -66,7 +66,7 @@ include($fileRoot . 'template/components/main.head.php');
 	<?php else:?>
 		<div style="text-align:center;padding-top:250px">
 			<h1 style="color: red;" data-i18n="keyingerror"></h1>
-			<a class="<?php echo $btnClass; ?>" href="/"><span data-i18n="close"></span></a>
+			<a class="<?php echo $btnClass; ?>" href="<?=$fileRoot?>"><span data-i18n="close"></span></a>
 		</div>
 	<?php endif; ?>
 
