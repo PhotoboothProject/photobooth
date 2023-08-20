@@ -25,6 +25,7 @@
         <?php 
             if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
                 echo getMenuBtn($fileRoot . 'admin', 'admin_panel', $config['icons']['admin']);
+                echo getMenuBtn($fileRoot . 'test', 'testMenu', $config['icons']['admin']);
             }
 
             echo getMenuBtn($fileRoot . 'gallery', 'gallery', $config['icons']['gallery']);
