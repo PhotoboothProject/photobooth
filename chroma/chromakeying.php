@@ -19,7 +19,7 @@ if (file_exists($keyingimage)) {
         $keying_possible = true;
     } else {
         $keying_possible = false;
-        $mainimage = . $fileRoot . 'resources/img/bg.jpg';
+        $mainimage = $fileRoot . 'resources/img/bg.jpg';
     }
 } else {
     $keying_possible = false;
@@ -45,7 +45,7 @@ include($fileRoot . 'template/components/main.head.php');
 
 		<div style="padding-top:10px;text-align:center;">
 			<?php
-				$dir = '..' . DIRECTORY_SEPARATOR . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
+				$dir = $fileRoot . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
 				$cdir = scandir($dir);
 				foreach ($cdir as $key => $value) {
 					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
