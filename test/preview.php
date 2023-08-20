@@ -13,8 +13,12 @@ include($fileRoot . 'template/components/main.head.php');
 ?>
 
 <body>
+    <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
     <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['htmlframe']; ?>" alt="pictureFrame" />
+    <?php endif; ?>
+    <?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
     <img id="collage--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['collage']['htmlframe']; ?>" alt="collageFrame" />
+    <?php endif; ?>
     <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" autoplay playsinline></video>
 
     <div id="wrapper">
@@ -27,9 +31,15 @@ include($fileRoot . 'template/components/main.head.php');
 		<div class="buttonbar">
 			<a href="#" class="<?php echo $btnClass; ?> startPreview"><span data-i18n="startPreview"></span></a>
 			<a href="#" class="<?php echo $btnClass; ?> stopPreview"><span data-i18n="stopPreview"></span></a>
+			<?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
 			<a href="#" class="<?php echo $btnClass; ?> showPictureFrame"><span data-i18n="showPictureFrame"></span></a>
+			<?php endif; ?>
+			<?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
 			<a href="#" class="<?php echo $btnClass; ?> showCollageFrame"><span data-i18n="showCollageFrame"></span></a>
+			<?php endif; ?>
+			<?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe']) || $config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
 			<a href="#" class="<?php echo $btnClass; ?> hideFrame"><span data-i18n="hideFrame"></span></a>
+			<?php endif; ?>
         </div>
     </div>
 
