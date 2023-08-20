@@ -76,9 +76,8 @@ gulp.task('tailwind-admin', function () {
 gulp.task('js-admin', function () {
   return gulp
     .src([
-      './src/js/admin/index.js',
       './src/js/tools.js',
-      './src/js/i18n.js',
+      './src/js/admin/index.js',
       './src/js/admin/buttons.js',
       './src/js/admin/navi.js',
       './src/js/admin/keypad.js',
