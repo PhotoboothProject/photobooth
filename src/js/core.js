@@ -949,6 +949,9 @@ const photoBooth = (function () {
     };
 
     api.addImage = function (imageName) {
+        if (!config.gallery.enabled) {
+            return;
+        }
         const thumbImg = new Image();
         const bigImg = new Image();
         let thumbSize = '';
