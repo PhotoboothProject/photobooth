@@ -808,6 +808,9 @@ const photoBooth = (function () {
     };
 
     api.showQr = function (modal, filename) {
+        if (!config.qr.enabled) {
+            return;
+        }
         photoboothTools.modal.empty(modal);
 
         const qrHelpText = config.qr.custom_text
@@ -846,16 +849,18 @@ const photoBooth = (function () {
         api.filename = filename;
         api.showQr('#qrCode', filename);
 
-        $(document).off('click touchstart', '.printbtn');
-        $(document).on('click', '.printbtn', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
+        if (config.print.from_result) {
+            $(document).off('click touchstart', '.printbtn');
+            $(document).on('click', '.printbtn', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-            photoboothTools.printImage(filename, () => {
-                remoteBuzzerClient.inProgress(false);
-                printBtn.blur();
+                photoboothTools.printImage(filename, () => {
+                    remoteBuzzerClient.inProgress(false);
+                    printBtn.blur();
+                });
             });
-        });
+        }
 
         if (config.print.auto) {
             setTimeout(function () {
