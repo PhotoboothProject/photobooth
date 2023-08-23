@@ -950,6 +950,42 @@ sudo cupsctl --remote-any
 sudo /etc/init.d/cups restart
 ```
 
+---
+
+### How does the connection to the FTP server work?
+
+The connection to the FTP server needs 4 distinct properties.
+
+- `baseURL` which is the url where all requests will be made
+- `port` for ssl connection (the default value is 21)
+- `username` the username of the user authorized to interact to the FTP server
+- `password` the password of the user
+
+With these four variables you can test the connection to the FTP server to check if everything is alright.
+
+The next variables are for the place where you want the pictures to be stored:
+- `baseFolder` is the folder of your website (if you have multiple websites living on the server with this property you can choose on which of these the file should be stored)
+- `folder` the folder dedicated to the upload of the files
+- `title` if you are doing an event you can set the title of the event to create another folder (the system will slugify the string)
+- `appendDate` just like a simple blog websites, when articles are uploaded, the date is added to the url as the path. So if you want, the system will create a set of folder with this template: yyyy/mm/dd
+- `upload_thumb` if you want you can upload next to the processed picture also the thumbnails
+
+In the end the processed picture, and the thumbnails, will be uploaded in the folder according to these variables.
+
+If you have a website, you can use the following variables to generate the qr codes that will point to the photos uploaded to the ftp server
+- `useForQr` to enable this functionality
+- `website` accessible from the internet, it will be the base of the qr code link
+- `urlTemplate` starting from the previous set of variables, you have to define the template which will be used to generate the qrcode link (each variable should be written whit '%' before e.g. %website/%folder/%date)
+
+Last but not least you can upload a php file on the `title` folder on the FTP server to create an online gallery which is updated with every new picture (and collage) taken.
+The variable to manage this feature are the following:
+- `create_webpage` to enable this functionality
+- `template_location` which is the location of the index.php file, which is formatted with the title of the current event and uploaded to the FTP server
+
+In the end you can enable the `delete` functionality that will delete photos (and collages) from the ftp server when they are deleted from the photobooth gallery (no admin reset)
+
+---
+
 ### I get the error message "Something went wrong." while taking a picure, what can i do?
 
 There's different reasons if you get the error "Something went wrong. Please try it again. Photobooth reloads automatically." while taking an image.

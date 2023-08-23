@@ -29,6 +29,31 @@ $(function () {
         }
     });
 
+    $('#test-connection').on('click', function (e) {
+        e.preventDefault();
+        const elem = $(this);
+        const data = $('form').serialize();
+        elem.removeClass('error success');
+        $('[name^="ftp"]').removeClass('required');
+        elem.addClass('saving');
+        $.ajax({
+            url: '../api/testFtpConnection.php',
+            dataType: 'json',
+            data: data,
+            type: 'post',
+            success: function (resp) {
+                elem.removeClass('saving');
+                elem.addClass(resp.response);
+                console.log(resp);
+                resp.missing.forEach((el) => {
+                    photoboothTools.console.log(el);
+                    $('#ftp\\:' + el).addClass('required');
+                });
+                alert(photoboothTools.getTranslation(resp.message));
+            }
+        });
+    });
+
     $('#save-admin-btn').on('click', function (e) {
         e.preventDefault();
         const data = 'type=config&' + $('form').serialize();

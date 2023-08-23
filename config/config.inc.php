@@ -372,6 +372,25 @@ $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
 $config['get_request']['video'] = 'CNTDWNVIDEO';
 
 
+// FTP
+$config['ftp']['enabled'] = false;
+$config['ftp']['baseURL'] = '';
+$config['ftp']['port'] = 21;
+$config['ftp']['username'] = '';
+$config['ftp']['password'] = '';
+$config['ftp']['baseFolder'] = '';
+$config['ftp']['folder'] = '';
+$config['ftp']['title'] = '';
+$config['ftp']['appendDate'] = false;
+$config['ftp']['useForQr'] = false;
+$config['ftp']['website'] = '';
+$config['ftp']['urlTemplate'] = '';
+$config['ftp']['create_webpage'] = false;
+$config['ftp']['template_location'] = '';
+$config['ftp']['upload_thumb'] = false;
+$config['ftp']['delete'] = false;
+
+
 // A U T H E N T I C A T I O N
 $config['login']['enabled'] = false;
 $config['login']['username'] = 'Photo';

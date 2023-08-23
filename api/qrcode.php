@@ -5,7 +5,9 @@ require_once '../lib/helper.php';
 $filename = (isset($_GET['filename']) && $_GET['filename']) != '' ? $_GET['filename'] : false;
 
 if ($filename || !$config['qr']['append_filename']) {
-    if ($config['qr']['append_filename']) {
+    if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
+        $url = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $filename;
+    } elseif ($config['qr']['append_filename']) {
         $url = $config['qr']['url'] . $filename;
     } else {
         $url = $config['qr']['url'];
