@@ -5,11 +5,11 @@ $first_img = $full_images[0];
 $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
 // meta params to evaluate
-$og_locale = 'it_IT';
-$og_description = 'Prenota l\'horse booth di cavallo production per riempire la tua festa di foto e di divertimento! Visita il nostro sito o contattaci!';
-$og_sitename = 'Cavallo Production';
-$og_img_alt = 'Horsebooth';
-$whatsapp_msg = "Guarda questa foto scattata dall'Horsebooth! \n\n %s \n\n\n\n Prenota anche tu l'Horsebooth allo 0804166291";
+$og_locale = 'en_GB';
+$og_description = 'Book the photobooth';
+$og_sitename = 'Website';
+$og_img_alt = 'Photobooth';
+$whatsapp_msg = "Look at this Photobooth photo! \n\n %s \n\n\n\n Book the photobooth at 0123456789";
 $seconds_to_cache = 60;
 
 header("Cache-Control: max-age=$seconds_to_cache");
