@@ -59,15 +59,15 @@ $(function () {
             complete: (jqXHR, textStatus) => {
                 const status = jqXHR.status;
                 let classes = 'isActive isSuccess';
-                let find_classes = '.success span';
-                if (status != 200 || jqXHR.responseJSON.response != 'success') {
+                let findClasses = '.success span';
+                if (status != 200 || jqXHR.responseJSON.response != 'success' || textStatus != 'success') {
                     classes = 'isActive isError';
-                    find_classes = '.error span';
+                    findClasses = '.error span';
                 }
 
                 $('.pageLoader').removeClass('isActive');
                 $('.adminToast').addClass(classes);
-                const msg = elem.find(find_classes).html();
+                const msg = elem.find(findClasses).html();
                 $('.adminToast').find('.headline').html(msg);
 
                 setTimeout(function () {
