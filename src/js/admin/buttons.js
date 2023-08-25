@@ -32,24 +32,47 @@ $(function () {
     $('#test-connection').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
-        const data = $('form').serialize();
-        elem.removeClass('error success');
-        $('[name^="ftp"]').removeClass('required');
-        elem.addClass('saving');
+
+        // show loader
+        $('.pageLoader').addClass('isActive');
+        $('.pageLoader').find('label').html(photoboothTools.getTranslation('checking'));
+
         $.ajax({
             url: '../api/testFtpConnection.php',
             dataType: 'json',
-            data: data,
+            data: $('form').serialize(),
             type: 'post',
-            success: function (resp) {
-                elem.removeClass('saving');
-                elem.addClass(resp.response);
-                console.log(resp);
+            success: (resp) => {
+                photoboothTools.console.log('resp', resp);
+
                 resp.missing.forEach((el) => {
                     photoboothTools.console.log(el);
                     $('#ftp\\:' + el).addClass('required');
                 });
                 alert(photoboothTools.getTranslation(resp.message));
+            },
+
+            error: (jqXHR) => {
+                photoboothTools.console.log('Error checking FTP connection: ', jqXHR.responseText);
+            },
+
+            complete: (jqXHR, textStatus) => {
+                const status = jqXHR.status;
+                let classes = 'isActive isSuccess';
+                let findClasses = '.success span';
+                if (status != 200 || jqXHR.responseJSON.response != 'success' || textStatus != 'success') {
+                    classes = 'isActive isError';
+                    findClasses = '.error span';
+                }
+
+                $('.pageLoader').removeClass('isActive');
+                $('.adminToast').addClass(classes);
+                const msg = elem.find(findClasses).html();
+                $('.adminToast').find('.headline').html(msg);
+
+                setTimeout(function () {
+                    $('.adminToast').removeClass('isActive');
+                }, 2000);
             }
         });
     });

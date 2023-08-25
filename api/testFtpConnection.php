@@ -32,22 +32,22 @@ $username = $data['ftp']['username'];
 $password = $data['ftp']['password'];
 
 // init connection to ftp server
-$ftp = ftp_ssl_connect($baseUrl, $port);
+$ftp = ftp_ssl_connect($baseUrl, $port, 10);
 
 // login to ftp server
-$login_result = ftp_login($ftp, $username, $password);
+$login_result = @ftp_login($ftp, $username, $password);
+$result['response'] = 'success';
+$result['message'] = 'ftp:connected';
 
 if (!$login_result) {
     $ErrorData = [
         'error' => "Can't connect to FTP Server!",
     ];
+    $Logger->addLogData($ErrorData);
+    $Logger->logToFile();
 
-    $Logger->logToFile($ErrorData);
-
+    $result['response'] = 'error';
     $result['message'] = 'ftp:no_connection';
-    die(json_encode($result));
 }
-ftp_close($ftp);
-$result['response'] = 'success';
-$result['message'] = 'ftp:connected';
+@ftp_close($ftp);
 die(json_encode($result));
