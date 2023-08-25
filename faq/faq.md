@@ -1014,6 +1014,19 @@ reboot
 
 Does it work?
 
+- **No**: Try updating gphoto2 and libgphoto. Run the following commands to install latest development version of gphoto2 and libgphoto:
+
+```
+wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
+wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
+chmod +x gphoto2-updater.sh
+sudo ./gphoto2-updater.sh --development
+sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+reboot
+```
+
+Now try again! Does it work?
+
 - **No**: Sorry, we're am almost out of ideas! Please check the special notes below and feel free to contact us at [Telegram](https://t.me/PhotoboothGroup) if you still have issues.
 
 
