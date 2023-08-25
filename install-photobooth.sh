@@ -325,6 +325,7 @@ update_nodejs() {
         if [ $(dpkg-query -W -f='${Status}' "nodejs" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Cleanup]   Removing nodejs package"
             apt purge -y nodejs
+            apt autoremove --purge -y
         fi
 
         if [ $(dpkg-query -W -f='${Status}' "nodejs-doc" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
