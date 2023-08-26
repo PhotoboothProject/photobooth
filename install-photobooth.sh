@@ -412,11 +412,11 @@ common_software() {
                 apt update
             fi
             if [[ ${package} == "gphoto2" ]]; then
-                info "            Installing latest stable release."
+                info "            Installing latest development version."
                 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
                 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
                 chmod +x gphoto2-updater.sh
-                ./gphoto2-updater.sh --stable
+                ./gphoto2-updater.sh --development
                 rm gphoto2-updater.sh
                 rm .env
             else
