@@ -36,6 +36,15 @@ if (
 
 include($fileRoot . 'template/components/helper/index.php');
 include($fileRoot . 'template/components/main.head.php');
+
+if($config['ui']['style'] == 'evolution') {
+    $gallery_path = "";
+    $templateFolder = $config['ui']['style'] . '/';
+    $templateGalleryFolder = 'components/'. $config['ui']['style'] . '/';
+} else {
+    $templateFolder = '';
+    $templateGalleryFolder = '';
+}
 ?>
 
 <body class="deselect">
@@ -71,17 +80,16 @@ include($fileRoot . 'template/components/main.head.php');
         include($fileRoot . 'template/' . $config['ui']['style'] . '.template.php');
 
         if ($config['filters']['enabled']) {
-            include($fileRoot . 'template/components/start.filter.php');
+            include($fileRoot . 'template/components/'. $templateFolder .'start.filter.php');
         }
 
-        include($fileRoot . 'template/components/start.loader.php');
-        include($fileRoot . 'template/components/start.results.php');
+        include($fileRoot . 'template/components/' . $templateFolder . 'start.loader.php');
+        include($fileRoot . 'template/components/' . $templateFolder . 'start.results.php');
 
         if ($config['gallery']['enabled']) {
-            include($fileRoot . 'template/gallery.template.php');
+            include($fileRoot . 'template/'. $templateGalleryFolder . 'gallery.template.php');
         }
     ?>
-
 
 </div>
 

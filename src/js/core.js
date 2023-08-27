@@ -981,6 +981,8 @@ const photoBooth = (function () {
         setTimeout(() => {
             gallery.find('.gallery__inner').show();
             rotaryController.focusSet('#gallery');
+            // eslint-disable-next-line new-cap
+            $('img.lazy').Lazy();
         }, 300);
     };
 

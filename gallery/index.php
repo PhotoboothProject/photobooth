@@ -10,12 +10,23 @@ $randomImage = false;
 $remoteBuzzer = true;
 $chromaKeying = false;
 $GALLERY_FOOTER = false;
+$gallery_standalone = true;
 
+include($fileRoot . 'template/components/helper/index.php');
 include($fileRoot . 'template/components/main.head.php');
+
+if($config['ui']['style'] == 'evolution') {
+    $templateFolder = 'template/components/'. $config['ui']['style'] . '/';
+} else {
+    $templateFolder = 'template/';
+}
 ?>
 <body class="deselect">
 	<div id="wrapper">
-		<?php include($fileRoot . 'template/gallery.template.php'); ?>
+		<?php
+		$gallery_path = $fileRoot;
+		include($fileRoot . $templateFolder . 'gallery.template.php');
+		?>
 	</div>
 
 	<script type="text/javascript">

@@ -2602,6 +2602,7 @@ $configsetup = [
                 'classic_rounded' => 'classic rounded',
                 'modern' => 'modern',
                 'modern_squared' => 'squared',
+                'evolution' => 'evolution',
                 'custom' => 'custom',
             ],
             'value' => $config['ui']['style'],

@@ -4,6 +4,7 @@
 <script type="text/javascript" src="<?= $fileRoot ?>resources/js/theme.js?v=<?= $config['photobooth']['version'] ?>"></script>
 <script src="<?= $fileRoot ?>node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
 <script type="text/javascript" src="<?= $fileRoot ?>resources/js/i18n.js?v=<?= $config['photobooth']['version'] ?>"></script>
+<script src="<?= $fileRoot ?>node_modules/jquery-lazy/jquery.lazy.min.js"></script>
 
 <?php
 if ($remoteBuzzer) {

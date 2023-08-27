@@ -3611,7 +3611,14 @@ jiti@^1.18.2:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.18.2.tgz#80c3ef3d486ebf2450d9335122b32d121f2a83cd"
   integrity sha512-QAdOptna2NYiSSpv0O/BwoHBSmz4YhpzJHyi+fnMRTXFjp7B8i/YG5Z8IfusxB1ufjcD2Sre1F3R+nX3fvy7gg==
 
-jquery@^3.7.1:
+jquery-lazy@^1.7.11:
+  version "1.7.11"
+  resolved "https://registry.yarnpkg.com/jquery-lazy/-/jquery-lazy-1.7.11.tgz#f4146501ba64cad95cc5c20f184ac1b1d3712fe5"
+  integrity sha512-jNAOMwfgf+lYaOCc/atBVjbOzAIRW5BUyjQ4b4jJPkQM6I0zGZd4m/Y73ekfAlrQQDg3/Dge3YNhW7Cqjgi0UA==
+  dependencies:
+    jquery ">=1.7.2"
+
+jquery@>=1.7.2, jquery@^3.7.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
   integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
