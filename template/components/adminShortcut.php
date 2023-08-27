@@ -1,6 +1,6 @@
 <?php
 if ($config['ui']['admin_shortcut']) {
-    $shortcutClasses = 'w-24 h-24 absolute z-50 cursor-pointer ';
+    $shortcutClasses = 'w-16 h-16 sm:w-24 sm:h-24 absolute z-50 ';
     if ($config['ui']['admin_shortcut_position'] == 'top-left') {
         $shortcutClasses .= 'top-0 left-0';
     } elseif ($config['ui']['admin_shortcut_position'] == 'top-right') {
