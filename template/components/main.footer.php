@@ -27,4 +27,5 @@ if ($chromaKeying) {
     echo '<script type="text/javascript" src="' . $fileRoot . 'resources/js/chromakeying.js?v=' . $config['photobooth']['version'] . '"></script>' . "\n";
 }
 
+
 ?>
