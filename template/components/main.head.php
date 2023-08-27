@@ -28,17 +28,19 @@ include 'main.defaults.php'; ?>
     <link rel="stylesheet" href="<?= $fileRoot ?>node_modules/material-icons/iconfont/material-icons.css">
     <link rel="stylesheet" href="<?= $fileRoot ?>node_modules/material-icons/css/material-icons.css">
     <link rel="stylesheet" href="<?= $fileRoot ?>resources/css/tailwind.css?v=<?= $config['photobooth']['version'] ?>"/>
-    <link rel="stylesheet" href="<?= $fileRoot ?>resources/css/<?= $mainStyle ?>?v=<?= $config['photobooth']['version'] ?>"/>
-    
+
     <?php
+    echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/' . $mainStyle . '?v=' . $config['photobooth']['version'] . '"/>';
     if ($photoswipe) {
         echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/photoswipe/dist/photoswipe.css"/>' . "\n";
-    }
-    if ($photoswipe && $config['gallery']['bottom_bar']) {
-        echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/photoswipe-bottom.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+        if ($config['gallery']['bottom_bar']) {
+            echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/photoswipe-bottom.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+        }
     }
     if (is_file($fileRoot . 'private/overrides.css')) {
         echo '<link rel="stylesheet" href="' . $fileRoot . 'private/overrides.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
     }
     ?>
+
+    <script type="text/javascript" src="<?= $fileRoot ?>node_modules/jquery/dist/jquery.min.js"></script>
 </head>
