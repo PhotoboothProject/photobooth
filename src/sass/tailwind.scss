@@ -42,3 +42,9 @@ code {
     right: 10px;
   }
 }
+
+#imageQrCode svg,
+#wifiQrCode svg {
+  width: 100%;
+  height: 100%;
+}

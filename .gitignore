@@ -1,4 +1,5 @@
 archives/
+api/QR_ECLEVEL*
 bower_components/
 config/*
 !config/config.inc.php

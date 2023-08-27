@@ -175,30 +175,14 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
             if (config.qr.enabled) {
                 gallery.pswp.ui.registerElement({
-                    name: 'qrPswp',
-                    className: 'modal',
-                    appendTo: 'root',
-                    // eslint-disable-next-line no-unused-vars
-                    onInit: (el, pswp) => {
-                        el.setAttribute('id', 'qrPswp');
-                    }
-                });
-
-                gallery.pswp.ui.registerElement({
                     name: 'qrcode',
                     ariaLabel: 'qrcode',
                     order: orderNumber.shift(),
                     isButton: true,
                     html: '<i class="' + config.icons.qr + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
-                    onInit: (el, pswp) => {
-                        photoboothTools.modal.empty('#qrPswp');
-                    },
-                    // eslint-disable-next-line no-unused-vars
                     onClick: (event, el, pswp) => {
                         const image = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
-                        photoBooth.showQr('#qrPswp', image);
-                        photoboothTools.modal.toggle('#qrPswp');
+                        photoBooth.showQr(image);
                     }
                 });
             }
@@ -297,8 +281,6 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 $('.pswp__button--arrow--prev').removeClass('rotaryfocus');
                 $('.pswp__button--arrow--next').removeClass('rotaryfocus');
             }
-            $('.pswp__button--close').empty();
-            $('.pswp__button--close').html('<i class="' + config.icons.close + '"></i>');
             if (config.pswp.zoomEl) {
                 $('.pswp__button--zoom').empty();
                 $('.pswp__button--zoom').html('<i class="' + config.icons.zoom + '"></i>');

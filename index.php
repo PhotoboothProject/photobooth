@@ -86,6 +86,7 @@ include($fileRoot . 'template/components/main.head.php');
 </div>
 
 <?php
+    include($fileRoot . 'template/components/modal.qr.php');
     include($fileRoot . 'template/send-mail.template.php');
     include($fileRoot . 'template/modal.template.php');
     include($fileRoot . 'template/components/adminShortcut.php');
@@ -94,6 +95,7 @@ include($fileRoot . 'template/components/main.head.php');
 
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/qrcode.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 <?php require_once($fileRoot . 'lib/services_start.php'); ?>

@@ -102,6 +102,7 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
         </div>
 
         <?php
+            include($fileRoot . 'template/components/modal.qr.php');
             include($fileRoot . 'template/send-mail.template.php');
             include($fileRoot . 'template/components/main.footer.php');
         ?>
@@ -113,6 +114,7 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
         <?php include($fileRoot . 'template/components/main.footer.php'); ?>
 
         <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+        <script type="text/javascript" src="<?=$fileRoot?>resources/js/qrcode.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
         <script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
         <?php require_once($fileRoot . 'lib/services_start.php'); ?>

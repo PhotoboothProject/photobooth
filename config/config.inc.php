@@ -275,6 +275,11 @@ $config['qr']['append_filename'] = true;
 $config['qr']['custom_text'] = false;
 $config['qr']['text'] = '';
 $config['qr']['result'] = 'hidden';
+$config['qr']['wifi_enabled'] = false;
+$config['qr']['wifi_ssid_hidden'] = false;
+$config['qr']['wifi_ssid'] = '';
+$config['qr']['wifi_pass'] = '';
+$config['qr']['wifi_secure'] = '';
 
 
 // E -  M A I L

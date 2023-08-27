@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools photoboothPreview */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools photoboothPreview openQrCodeModal */
 
 const photoBooth = (function () {
     const PhotoStyle = {
@@ -807,47 +807,12 @@ const photoBooth = (function () {
         api.resetTimeOut();
     };
 
-    api.showQr = function (modal, filename) {
-        if (!config.qr.enabled) {
-            return;
-        }
-        photoboothTools.modal.empty(modal);
-
-        const qrHelpText = config.qr.custom_text
-            ? config.qr.text
-            : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
-        const body = $(modal).find('.modal__body');
-
-        $('<button>')
-            .on('click touchstart', function (ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-
-                photoboothTools.modal.close(modal);
-            })
-            .append('<i class="' + config.icons.close + '"></i>')
-            .css('float', 'right')
-            .appendTo(body);
-        $(
-            '<img src="' +
-                config.foldersJS.api +
-                '/qrcode.php?filename=' +
-                filename +
-                '" alt="qr code" style="max-width: 100%;"/>'
-        )
-            .on('load', function () {
-                $('<p>')
-                    .css('max-width', this.width + 'px')
-                    .html(qrHelpText)
-                    .appendTo(body);
-            })
-            .appendTo(body);
-        $(modal).addClass('shape--' + config.ui.style);
+    api.showQr = function (filename) {
+        openQrCodeModal(filename);
     };
 
     api.renderPic = function (filename, files) {
         api.filename = filename;
-        api.showQr('#qrCode', filename);
 
         if (config.print.from_result) {
             $(document).off('click touchstart', '.printbtn');
@@ -1264,8 +1229,7 @@ const photoBooth = (function () {
     qrBtn.on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-
-        photoboothTools.modal.open('#qrCode');
+        openQrCodeModal(resultPage.attr('data-img'));
     });
 
     $('.homebtn').on('click', function (e) {

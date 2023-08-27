@@ -4,6 +4,7 @@ require_once '../lib/config.php';
 
 // includes
 include_once 'keypad.php';
+include_once 'qr.php';
 
 // KEYPAD LOGIN
 if (isset($_POST['controller']) and $_POST['controller'] == 'keypadLogin') {
@@ -14,4 +15,15 @@ if (isset($_POST['controller']) and $_POST['controller'] == 'keypadLogin') {
 
     echo json_encode($return);
 }
+// includes
+if (isset($_POST['controller']) and $_POST['controller'] == 'getWifiQrCode') {
+    $qrcode = new QrCodeClass();
+    return $qrcode->getWifiQrCode($config['qr']);
+}
+if (isset($_POST['controller']) and $_POST['controller'] == 'getImageQrCode') {
+    $qrcode = new QrCodeClass();
+    $image = $_POST['image'];
+    return $qrcode->getImageQrCode($config['qr'], $image);
+}
+
 ?>

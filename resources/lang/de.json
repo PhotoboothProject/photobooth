@@ -607,7 +607,16 @@
   "qr:qr_enabled": "QR-Codes aktivieren",
   "qr:qr_text": "Eigener Hilfetext",
   "qr:qr_url": "URL für QR-Code",
+  "qr:qr_wifi_enabled": "QR-Code für lokales Wifi anzeigen.",
+  "qr:qr_wifi_pass": "Lokales Wifi Passwort",
+  "qr:qr_wifi_secure": "Lokales Wifi Verschlüsselung ",
+  "qr:qr_wifi_ssid": "Lokale Wifi SSID",
+  "qr:qr_wifi_ssid_hidden": "Lokale Wifi-SSID unsichtbar?",
   "qrHelp": "Um das Bild auf Ihr Handy herunterzuladen, verbinden Sie sich mit dem WLAN:",
+  "qr_step_one": "Schritt 1:",
+  "qr_step_one_long": "Verbinde dich zuerst mit dem WLAN der Photobooth.",
+  "qr_step_two": "Schritt 2:",
+  "qr_step_two_long": "Scanne den QR-Code um das Foto herunterzuladen.",
   "really_delete": "Wirklich nach Ihren Einstellungen zurücksetzen? Dies kann nicht rückgängig gemacht werden!",
   "really_delete_image": "wird gelöscht! Dies kann nicht rückgängig gemacht werden! Bild wirklich löschen?",
   "reboot_button": "Neustart",
@@ -743,5 +752,6 @@
   "video:video_enabled": "Kurzvideos erlauben",
   "video:video_gif": "Video als GIF",
   "video:video_qr": "QR für Video",
-  "wait_message": "Bitte warten..."
+  "wait_message": "Bitte warten...",
+  "your_picture": "Dein Foto"
 }

@@ -16,18 +16,20 @@ include($fileRoot . 'template/components/main.head.php');
 <body class="deselect">
 	<div id="wrapper">
 		<?php include($fileRoot . 'template/gallery.template.php'); ?>
-    </div>
+	</div>
 
 	<script type="text/javascript">
 		onStandaloneGalleryView = true;
 	</script>
 
 	<?php
-	    include($fileRoot . 'template/send-mail.template.php');
-	    include($fileRoot . 'template/components/main.footer.php');
+		include($fileRoot . 'template/components/modal.qr.php');
+		include($fileRoot . 'template/send-mail.template.php');
+		include($fileRoot . 'template/components/main.footer.php');
 	?>
 
 	<script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+	<script type="text/javascript" src="<?=$fileRoot?>resources/js/qrcode.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<script type="text/javascript" src="<?=$fileRoot?>resources/js/gallery.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 	<?php if ($config['gallery']['db_check_enabled']): ?>
