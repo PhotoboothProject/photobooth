@@ -1130,8 +1130,8 @@ const photoBooth = (function () {
         api.navbar.toggle();
     });
 
-    $('.sidenav > div').on('click', function () {
-        $('.sidenav > div').removeAttr('class');
+    $('.sidenav .filter').on('click', function () {
+        $('.sidenav').find('.activeSidenavBtn').removeClass('activeSidenavBtn');
         $(this).addClass('activeSidenavBtn');
 
         imgFilter = $(this).attr('id');
