@@ -83,7 +83,7 @@ echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'relo
         <div id="wrapper">
             <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
         </div>
-
+        <?php include PathUtility::getAbsolutePath('template/components/modal.qr.php'); ?>
         <?php include PathUtility::getAbsolutePath('template/components/send-mail.php'); ?>
     </div>
 </div>
@@ -94,6 +94,7 @@ echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'relo
 <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/qrcode.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 <?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>

@@ -18,15 +18,16 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
     <div id="wrapper">
         <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
     </div>
-
     <script type="text/javascript">
         onStandaloneGalleryView = true;
     </script>
 
+    <?php include PathUtility::getAbsolutePath('template/components/modal.qr.php'); ?>
     <?php include PathUtility::getAbsolutePath('template/components/send-mail.php'); ?>
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/qrcode.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/gallery.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
     <?php if ($config['gallery']['db_check_enabled']): ?>

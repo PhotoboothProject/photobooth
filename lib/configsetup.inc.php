@@ -1801,6 +1801,43 @@ $configsetup = [
             ],
             'value' => $config['qr']['result'],
         ],
+        'qr_wifi_enabled' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'qr[wifi_enabled]',
+            'value' => $config['qr']['wifi_enabled'],
+        ],
+        'qr_wifi_ssid_hidden' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'qr[wifi_ssid_hidden]',
+            'value' => $config['qr']['wifi_ssid_hidden'],
+        ],
+        'qr_wifi_ssid' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['qr']['wifi_ssid'],
+            'name' => 'qr[wifi_ssid]',
+            'value' => htmlentities($config['qr']['wifi_ssid'] ?? ''),
+        ],
+        'qr_wifi_pass' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['qr']['wifi_pass'],
+            'name' => 'qr[wifi_pass]',
+            'value' => htmlentities($config['qr']['wifi_pass'] ?? ''),
+        ],
+        'qr_wifi_secure' => [
+            'type' => 'select',
+            'name' => 'qr[wifi_secure]',
+            'placeholder' => $defaultConfig['qr']['wifi_secure'],
+            'options' => [
+                '' => 'none',
+                'WPA' => 'WPA/WPA2',
+                'WEP' => 'WEP',
+            ],
+            'value' => $config['qr']['wifi_secure'],
+        ],
     ],
     'mail' => [
         'view' => 'basic',
