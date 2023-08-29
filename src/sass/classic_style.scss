@@ -203,6 +203,7 @@
     color: $startFontColor;
     text-align: center;
     padding: 3rem;
+    z-index: 1;
 
     &.shape--classic_rounded {
       border: 0 none;
