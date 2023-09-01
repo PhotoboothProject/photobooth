@@ -3908,10 +3908,10 @@ matchdep@^2.0.0:
     resolve "^1.4.0"
     stack-trace "0.0.10"
 
-material-icons@^1.13.9:
-  version "1.13.9"
-  resolved "https://registry.yarnpkg.com/material-icons/-/material-icons-1.13.9.tgz#15dbe8895111ae2cca9a55871cdcd30a6783e06a"
-  integrity sha512-dwuf2C8LR07FcrjRDx0vWnDEcHiDuamXOmtAck8bdONUv5Fi6wR/ubQwPfG1NbcqgPg+y0fHN8Unj5DO+5fV4w==
+material-icons@^1.13.10:
+  version "1.13.10"
+  resolved "https://registry.yarnpkg.com/material-icons/-/material-icons-1.13.10.tgz#08f128aab3976c2f1ac03a35a0b030e945817291"
+  integrity sha512-XSESl/zo7XzD9nz8ihUq5HO0DzsvnVex9t8hpH8pqY1SFlESAdHlMQQbcCyyP58mPp6Wm1tyt0OaDNZhBT9lXQ==
 
 mdurl@^1.0.1:
   version "1.0.1"
