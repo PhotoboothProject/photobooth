@@ -82,7 +82,7 @@
     "whatwg-fetch": "^3.6.18"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.10",
+    "@babel/core": "^7.22.11",
     "@babel/preset-env": "^7.22.10",
     "@prettier/plugin-php": "^0.20.1",
     "archiver": "^6.0.0",
