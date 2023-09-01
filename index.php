@@ -34,6 +34,7 @@ if (
     exit();
 }
 
+include($fileRoot . 'template/components/helper/index.php');
 include($fileRoot . 'template/components/main.head.php');
 ?>
 

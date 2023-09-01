@@ -1277,7 +1277,7 @@ const photoBooth = (function () {
         rotaryController.focusSet('#start');
     });
 
-    $('#cups-button').on('click', function (ev) {
+    $('.cups-button').on('click', function (ev) {
         ev.preventDefault();
 
         const url = `http://${location.hostname}:631/jobs/`;
@@ -1286,7 +1286,7 @@ const photoBooth = (function () {
         window.open(url, 'newwin', features);
     });
 
-    $('#fs-button').on('click', function (e) {
+    $('.fs-button').on('click', function (e) {
         e.preventDefault();
         if (document.fullscreenElement) {
             document.exitFullscreen();

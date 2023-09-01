@@ -281,6 +281,17 @@
     bottom: 5px;
     left: 5px;
   }
+
+  .gallery-button,
+  .fs-button,
+  .cups-button {
+    &.btn--classic,
+    &.btn--classic_rounded {
+      width: auto;
+      padding: 10px 10px;
+      margin-top: 3px;
+    }
+  }
 }
 
 #pblogo {

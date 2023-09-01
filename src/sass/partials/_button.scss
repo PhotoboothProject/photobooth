@@ -11,6 +11,7 @@
 
   &--classic,
   &--classic_rounded {
+    margin: 2px;
     padding: 20px 40px;
     border: 0 none;
   }
@@ -105,17 +106,6 @@
     .btn--classic_rounded {
       width: auto;
       margin-top: 3px;
-    }
-
-    @media (max-width: 1024px) {
-      .btn {
-        &.btn--classic,
-        &.btn--classic_rounded {
-          font-size: 0.8em;
-          margin-top: 1px;
-          width: 80%;
-        }
-      }
     }
   }
 }
@@ -342,7 +332,8 @@
   .takePic,
   .takeCollage,
   .takeCustom,
-  .takeVideo {
+  .takeVideo,
+  .reload {
     &.btn--classic,
     &.btn--classic_rounded {
       padding: 10px 10px;

@@ -55,18 +55,7 @@
                     </div>
                     <?php endif; ?>
                     <div class="rotarygroup">
-                        <?php if ($config['button']['show_cups']): ?>
-                        <a id="cups-button" class="<?php echo $btnClass; ?> cups-button rotaryfocus" href="#" target="newwin"><i class="<?php echo $config['icons']['cups']; ?>"></i> <span>CUPS</span></a>
-                        <?php endif; ?>
-
                         <?php include 'components/actionBtn.php'; ?>
-
-                        <?php if ($config['gallery']['enabled']): ?>
-                        <a href="#" class="<?php echo $btnClass; ?> gallery-button rotaryfocus"><i class="<?php echo $config['icons']['gallery']; ?>"></i> <span data-i18n="gallery"></span></a>
-                        <?php endif; ?>
-                        <?php if ($config['button']['show_fs']): ?>
-                        <a href="#" id="fs-button" class="<?php echo $btnClass; ?> fs-button"><i class="<?php echo $config['icons']['fullscreen']; ?>"></i> <span data-i18n="toggleFullscreen"></span></a>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>
