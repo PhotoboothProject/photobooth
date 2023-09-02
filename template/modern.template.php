@@ -3,11 +3,7 @@
     <div class="startInner <?php echo $uiShape; ?> noborder">
         <div class="divaussen">
             <div class="divinnen">
-                <?php if ($config['logo']['enabled']): ?>
-                <div id="pblogo" class="logo--<?= $config['logo']['position'] ?> pblogo--div">
-                    <img class="pblogo--img" src=<?= $config['logo']['path'] ?> alt="logo">
-                </div>
-                <?php endif; ?>
+                <?php include 'components/start.logo.php'; ?>
                 <div class="divinnen2">
                     <?php if ($config['event']['enabled']): ?>
                     <div class="names">
