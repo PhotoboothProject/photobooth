@@ -23,6 +23,7 @@ if (str_contains($bgImage, 'url(')) {
     </div>
 </div>
 
+<!--  BROKEN AND NEEDS FIX
 <?php if ($config['event']['enabled']): ?>
 <div class="names">
     <?php if ($config['ui']['decore_lines']): ?>
@@ -69,6 +70,7 @@ if (str_contains($bgImage, 'url(')) {
 </div>
 <?php endif; ?>
 
+BROKEN AND NEEDS FIX END -->
 
 <?php if ($config['ui']['show_fork']): ?>
 <a href="https://github.com/<?=$config['ui']['github']?>/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
