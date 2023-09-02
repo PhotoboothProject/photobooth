@@ -12,10 +12,7 @@ if (str_contains($bgImage, 'url(')) {
     </div>
 
     <!-- logo -->
-    <?php
-        include 'components/start.logo.php';
-        echo $config['background']['defaults'];
-    ?>
+    <?php include 'components/start.logo.php'; ?>
 
     <!-- controls -->
     <div class="w-full flex items-center justify-center mb-8 mt-auto rotarygroup">
