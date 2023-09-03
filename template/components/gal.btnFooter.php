@@ -3,33 +3,21 @@ echo '<div class="gallery__footer">' . "\n";
 echo '<div class="buttongroup">' . "\n";
 
 if ($config['button']['force_buzzer']) {
-    echo '<div id="useBuzzer">';
-    echo '<span data-i18n="use_button"></span>';
-    echo '</div>' . "\n";
+    echo '<div id="useBuzzer">
+          <span data-i18n="use_button"></span>
+          </div>';
 } else {
     if ($config['picture']['enabled']) {
-        echo '<a href="#" class="' . $btnClass . ' takePic rotaryfocus"><i class="' . $config['icons']['take_picture'] . '"></i> <span data-i18n="takePhoto"></span></a>' . "\n";
+        echo getBoothButton('takePhoto', $config['icons']['take_picture'], 'takePic');
     }
     if ($config['custom']['enabled']) {
-        echo '<a href="#" class="' .
-            $btnClass .
-            ' takeCustom rotaryfocus"><i class="' .
-            $config['icons']['take_custom'] .
-            '"></i> <span>' .
-            $config['custom']['btn_text'] .
-            '</span></a>' .
-            "\n";
+        echo getBoothButton($config['custom']['btn_text'], $config['icons']['take_custom'], 'takeCustom');
     }
     if ($config['collage']['enabled']) {
-        echo '<a href="#" class="' .
-            $btnClass .
-            ' takeCollage rotaryfocus"><i class="' .
-            $config['icons']['take_collage'] .
-            '"></i> <span data-i18n="takeCollage"></span></a>' .
-            "\n";
+        echo getBoothButton('takeCollage', $config['icons']['take_collage'], 'takeCollage');
     }
     if ($config['video']['enabled']) {
-        echo '<a href="#" class="' . $btnClass . ' takeVideo rotaryfocus"><i class="' . $config['icons']['take_video'] . '"></i> <span data-i18n="takeVideo"></span></a>' . "\n";
+        echo getBoothButton('takeVideo', $config['icons']['take_video'], 'takeVideo');
     }
 }
 
