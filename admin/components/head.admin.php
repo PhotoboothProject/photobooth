@@ -27,6 +27,21 @@
 :root {
     --brand-1: <?=$config['colors']['panel'];?>;
     --brand-2: <?=$config['colors']['primary_light'];?>;
+    --primary: <?=$config['colors']['primary'];?>;
+    --primary-light: <?=$config['colors']['primary_light'];?>;
+    --secondary: <?=$config['colors']['secondary'];?>;
+    --secondary-font: <?=$config['colors']['font_secondary'];?>;
+    --tertiary: <?=$config['colors']['highlight'];?>;
+    --font: <?=$config['colors']['font'];?>;
+    --button-font: <?=$config['colors']['button_font'];?>;
+    --start-font: <?=$config['colors']['start_font'];?>;
+    --panel: <?=$config['colors']['panel'];?>;
+    --btn-border: <?=$config['colors']['border'];?>;
+    --box: <?=$config['colors']['box'];?>;
+    --gallery-button: <?=$config['colors']['gallery_button'];?>;
+    --countdown: <?=$config['colors']['countdown'];?>;
+    --countdown-bg: <?=$config['colors']['background_countdown'];?>;
+    --cheese: <?=$config['colors']['cheese'];?>;
 }
 </style>
 </head> 
