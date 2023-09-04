@@ -43,7 +43,7 @@ if (
         if(file_exists('faq.md.php')) {
             include('faq.md.php');
         } else {
-            echo '<p>The file <code>faq/faq.md.php</code> does not exist. Please run <code>yarn build:faq</code> to generate it.</p>';
+            echo '<p>The file <code>faq/faq.md.php</code> does not exist. Please run <code>npm run build:faq</code> to generate it.</p>';
         }
 	?>
 

@@ -14,13 +14,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: Install modules
-        run: yarn install
+        run: npm install
       - name: Build
-        run: yarn build
+        run: npm run build
       - name: Pack zip
-        run: yarn pack:build
+        run: npm run pack:build
       - name: Publish zip
         uses: actions/upload-artifact@v2
         with:
