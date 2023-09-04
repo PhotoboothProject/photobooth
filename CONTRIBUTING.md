@@ -7,16 +7,10 @@ Is this **your first time** contributing to a different project? You might be in
 ## Project setup
 
 1. Fork and clone the repo
-2. To install all client dependencies you have to [install yarn](https://yarnpkg.com/lang/en/docs/install/#debian-stable):
-```
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt update && sudo apt install -y yarn
-``` 
-3. Run `yarn install` to install all dependencies
+2. Run `npm install` to install all dependencies
 4. Create a branch for your PR with `git checkout -b pr/your-branch-name`
 
-If you want to build the project, run `yarn build`.
+If you want to build the project, run `npm run build`.
 
 > Tip: Keep your `dev` branch pointing at the original repository and make
 > pull requests from branches on your fork. To do this, run:
@@ -35,7 +29,7 @@ If you want to build the project, run `yarn build`.
 
 ## Committing and pushing changes
 
-Please make sure to run `yarn build` and `yarn eslint` before you commit your changes. Running `yarn eslint:fix` might be able to fix general issues on `*.js` files for you.  
+Please make sure to run `npm run build` and `npm run eslint` before you commit your changes. Running `npm run eslint:fix` might be able to fix general issues on `*.js` files for you.  
 
 **General Notes**  
 - changes to the FAQ need to be done inside the `faq/faq.md`

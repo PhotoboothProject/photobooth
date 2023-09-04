@@ -50,8 +50,8 @@ PHOTOBOOTH_SUBMODULES=(
 NEEDS_NODEJS_CHECK=true
 NODEJS_NEEDS_UPDATE=false
 NODEJS_CHECKED=false
-NODEJS_MAJOR="16"
-NODEJS_MINOR="20"
+NODEJS_MAJOR="18"
+NODEJS_MINOR="17"
 NODEJS_MICRO="0"
 NEEDED_NODE_VERSION="v$NODEJS_MAJOR.$NODEJS_MINOR(.$NODEJS_MICRO or newer)"
 
@@ -286,10 +286,10 @@ check_nodejs() {
     minor=${VER[1]}
     micro=${VER[2]}
 
-    info "[Info]      Node.js on Photobooth is only supported on v16!"
+    info "[Info]      Node.js on Photobooth is only supported on v18!"
 
-    if [[ -n "$major" && "$major" -ge "16" ]]; then
-        if [[ -n "$major" && "$major" -ge "18" ]]; then
+    if [[ -n "$major" && "$major" -ge "18" ]]; then
+        if [[ -n "$major" && "$major" -ge "19" ]]; then
             info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
                 error "[ERROR]     Downgrade was not possible. Aborting Photobooth installation!"
@@ -317,8 +317,8 @@ check_nodejs() {
 update_nodejs() {
     echo -e "\033[0;33m### Node.js should be updated/downgraded. Node.js version not matching our requirements"
     echo -e "###  Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is suggested."
-    echo -e "###  NOTE: Currently Node.js on Photobooth is only supported on v16."
-    echo -e "###        The installation of Photobooth will fail on Node.js versions below v16."
+    echo -e "###  NOTE: Currently Node.js on Photobooth is only supported on v18."
+    echo -e "###        The installation of Photobooth will fail on Node.js versions below v18."
     ask_yes_no "### Would you like to update/downgrade Node.js to $NEEDED_NODE_VERSION ? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -340,8 +340,8 @@ update_nodejs() {
             NODEJS_CHECKED=true
             check_nodejs
         else
-            info "[Package]   Installing latest Node.js v16"
-            curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+            info "[Package]   Installing latest Node.js v18"
+            curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
             apt-get install -y nodejs
             NODEJS_CHECKED=true
             check_nodejs
@@ -377,7 +377,6 @@ common_software() {
     if [ $GIT_INSTALL = true ]; then
         EXTRA_PACKAGES+=(
             'git'
-            'yarn'
         )
     else
         EXTRA_PACKAGES+=(
@@ -406,11 +405,6 @@ common_software() {
             info "[Package]   ${package} installed already"
         else
             info "[Package]   Installing missing common package: ${package}"
-            if [[ ${package} == "yarn" ]]; then
-                curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --yes --dearmor -o /usr/share/keyrings/yarnkey.gpg
-                echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list > /dev/null
-                apt update
-            fi
             if [[ ${package} == "gphoto2" ]]; then
                 info "            Installing latest development version."
                 wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
@@ -582,8 +576,8 @@ start_git_install() {
     fi
 
     info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
-    yarn install
-    yarn build
+    npm install
+    npm run build
 }
 
 start_install() {
@@ -763,17 +757,13 @@ general_permissions() {
     gpasswd -a www-data video
     gpasswd -a $USERNAME www-data
 
-    touch "/var/www/.yarnrc"
-    info "### Fixing permissions on .yarnrc"
-    chown www-data:www-data "/var/www/.yarnrc"
-
     info "### Fixing permissions on cache folder."
     mkdir -p "/var/www/.cache"
     chown -R www-data:www-data "/var/www/.cache"
 
-    info "### Fixing permissions on yarn folder."
-    mkdir -p "/var/www/.yarn"
-    chown -R www-data:www-data "/var/www/.yarn"
+    info "### Fixing permissions on npm folder."
+    mkdir -p "/var/www/.npm"
+    chown -R www-data:www-data "/var/www/.npm"
 
     info "### Disabling camera automount."
     chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor || true
