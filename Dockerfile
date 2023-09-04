@@ -1,13 +1,33 @@
-FROM webdevops/php-apache
+FROM webdevops/php-apache:8.2
 
 # Update and install dependencies
-RUN apt update
+RUN apt-get update
+RUN apt install -y \
+    build-essential \
+    git \
+    gphoto2 \
+    libimage-exiftool-perl \
+    rsync \
+    udisks2
 
-RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt install -y build-essential git php-gd php-zip gphoto2 libimage-exiftool-perl nodejs rsync udisks2
+# Install Nodejs
+# https://github.com/nodesource/distributions#debian-versions
+RUN apt update &&\
+    apt install -y \
+    ca-certificates \
+    curl \
+    gnupg
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN apt-get update 
+RUN apt-get install -y nodejs
+
+# Install Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt update && apt install -y yarn
+RUN apt update
+RUN apt install -y yarn
 
 # Copy files
 WORKDIR /app
