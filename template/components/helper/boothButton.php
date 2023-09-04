@@ -8,15 +8,6 @@ function getBoothButton($label, $icon, $command, $type = 'md') {
         $btnClass .= ' rotaryfocus';
     }
 
-    if ($config['ui']['style'] == 'evolution' && $command == 'homebtn') {
-        $btnClass .= ' !absolute !top-4 !left-4';
-    }
-
-    if ($config['ui']['style'] == 'evolution' && $type == 'gallery') {
-        $btnClass .=
-            ' !w-full !h-full absolute rounded-none border-opacity-30 border-dashed m-0 !mb-2 p-0 flex items-center justify-center flex-col !bg-transparent hover:text-white';
-    }
-
     if (($config['ui']['style'] == 'classic' || $config['ui']['style'] == 'classic_rounded') && $type == 'xs') {
         $btnClass .= ' btn--small';
     }
