@@ -8,7 +8,8 @@ RUN apt install -y \
     gphoto2 \
     libimage-exiftool-perl \
     rsync \
-    udisks2
+    udisks2 \
+    python3
 
 # Install Nodejs
 # https://github.com/nodesource/distributions#debian-versions
