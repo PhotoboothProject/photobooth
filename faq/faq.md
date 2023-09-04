@@ -140,13 +140,13 @@ Photobooth can be easylie styled for your personal needs via admin panel, open [
 To use a private custom index you need to create the following files:
 
 - `resources/css/custom_style.css`
-  - Optional: `src/sass/custom_style.scss` (`yarn build` will create the `resources/css/custom_style.css` out of it)
+  - Optional: `src/sass/custom_style.scss` (`npm run build` will create the `resources/css/custom_style.css` out of it)
 - `resources/css/custom_admin.css`
-  - Optional: `src/sass/custom_admin.scss` (`yarn build` will create the `resources/css/custom_admin.css` out of it)
+  - Optional: `src/sass/custom_admin.scss` (`npm run build` will create the `resources/css/custom_admin.css` out of it)
 - `resources/css/custom_chromakeying.css`
-  - Optional: `src/sass/custom_chromakeying.scss` (`yarn build` will create the `resources/css/custom_chromakeying.css` out of it)
+  - Optional: `src/sass/custom_chromakeying.scss` (`npm run build` will create the `resources/css/custom_chromakeying.css` out of it)
 - `resources/css/custom_live_chromakeying.css`
-  - Optional: `src/sass/custom_live_chromakeying.scss` (`yarn build` will create the `resources/css/custom_live_chromakeying.css` out of it)
+  - Optional: `src/sass/custom_live_chromakeying.scss` (`npm run build` will create the `resources/css/custom_live_chromakeying.css` out of it)
 - `template/custom.template.php`
 
 At least one of these custom style files need to exist! If other custom style files are missing a copy of the modern style file will be used.
