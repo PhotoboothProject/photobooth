@@ -344,16 +344,6 @@
   }
 }
 
-#useBuzzer {
-  font-size: 1.75em;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-
-  @media (max-width: 1024px) {
-    font-size: 1.25em;
-  }
-}
-
 .rotaryfocus.focused {
   opacity: 0.6;
 }
