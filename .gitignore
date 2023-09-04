@@ -10,7 +10,6 @@ HEAD
 faq/faq.md.php
 manual/faq.*
 node_modules/
-package-lock.json
 private/*
 !private/README.md
 resources/css/*
@@ -34,6 +33,7 @@ vendor/simple-translator/
 .skip_welcome
 .vscode
 venv/
+yarn.lock
 
 # ignore some IDE and OS files
 *.iml

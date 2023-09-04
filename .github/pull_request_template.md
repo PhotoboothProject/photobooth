@@ -19,8 +19,8 @@
 <!--
     Please ensure your pull request is ready:
 
-    - Please run 'yarn build' before submitting to have consistent formatting for both JavaScript & SCSS
-    - Please run 'yarn eslint' to make sure there's no lint issues
+    - Please run 'npm run build' before submitting to have consistent formatting for both JavaScript & SCSS
+    - Please run 'npm run eslint' to make sure there's no lint issues
 -->
 
 <!--
