@@ -4,9 +4,9 @@
   height: 0px;
   left: 0;
   top: 0;
-  background: $primaryLightColor;
+  background: var(--primary-light-color);
   overflow: hidden;
-  color: $secondaryFontColor;
+  color: var(--secondary-font-color);
   transition:
     width 0.3s,
     height 0.3s;
@@ -34,17 +34,17 @@
     height: auto;
     max-height: 100px;
     width: 100%;
-    background: $secondaryColor;
+    background: var(--secondary-color);
 
     > a {
       position: absolute;
       right: 30px;
       top: 13px;
-      color: $galleryButtonColor;
+      color: var(--gallery-button-color);
       font-size: 1.875em;
       width: 50px;
       height: 50px;
-      background: $primaryColor;
+      background: var(--primary-color);
       text-align: center;
       line-height: 50px;
     }
@@ -59,8 +59,8 @@
     margin-top: auto;
     display: flex;
     justify-content: center;
-    background: $secondaryColor;
-    box-shadow: 0 0 1em $highlightColor;
+    background: var(--secondary-color);
+    box-shadow: 0 0 1em var(--highlight-color);
   }
 
   &__body {
@@ -85,8 +85,8 @@
 
     figure {
       margin: 0;
-      border: 1px solid $borderColor;
-      background-color: $primaryLightColor;
+      border: 1px solid var(--border-color);
+      background-color: var(--primary-light-color);
     }
   }
 
@@ -97,7 +97,7 @@
   figcaption {
     border: none;
     text-align: center;
-    color: $secondaryFontColor;
+    color: var(--secondary-font-color);
   }
 }
 

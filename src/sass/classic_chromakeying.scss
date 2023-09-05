@@ -13,8 +13,8 @@
   width: 100%;
   height: 100%;
   text-align: center;
-  background-color: $primaryLightColor;
-  background-image: $chromaBackground;
+  background-color: var(--primary-light-color);
+  background-image: var(--background-chroma);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -41,7 +41,7 @@
   cursor: pointer;
   max-width: 120px;
   max-height: 80px;
-  border: 2px solid $borderColor;
+  border: 2px solid var(--border-color);
   margin: 3px;
 }
 

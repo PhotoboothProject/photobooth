@@ -23,10 +23,10 @@
   a {
     text-transform: uppercase;
     margin-bottom: 3px;
-    background-color: $primaryColor;
+    background-color: var(--primary-color);
 
     &:hover {
-      background-color: $hoverColor;
+      background-color: var(--highlight-color);
     }
   }
 
@@ -38,16 +38,16 @@
     position: absolute;
     right: 30px;
     top: 0;
-    color: $fontColor;
+    color: var(--font-color);
     font-size: 1.875em;
     width: 50px;
     height: 50px;
-    background: $primaryColor;
+    background: var(--primary-color);
     text-align: center;
     line-height: 50px;
 
     &:hover {
-      background: $hoverColor;
+      background: var(--highlight-color);
     }
 
     &.btn--classic_rounded {
@@ -57,7 +57,7 @@
 
   .activeSidenavBtn {
     a {
-      background-color: $hoverColor;
+      background-color: var(--highlight-color);
     }
   }
 }

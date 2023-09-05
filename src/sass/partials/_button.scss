@@ -2,8 +2,8 @@
   font-size: 1em;
   text-decoration: none;
   text-align: center;
-  color: $buttonFontColor;
-  background: $primaryColor;
+  color: var(--button-font-color);
+  background: var(--primary-color);
   display: inline-block;
   margin: auto;
   width: 12.5em;
@@ -19,9 +19,9 @@
   &--modern {
     width: 5em;
     height: 5em;
-    border: 2px solid $borderColor;
+    border: 2px solid var(--border-color);
     border-radius: 50%;
-    background: radial-gradient($hoverColor, $primaryColor, $secondaryColor);
+    background: radial-gradient(var(--highlight-color), var(--primary-color), var(--secondary-color));
     position: relative;
 
     span {
@@ -42,9 +42,9 @@
   &--modern_squared {
     width: 5em;
     height: 5em;
-    box-shadow: 0 0 0.5em $highlightColor;
+    box-shadow: 0 0 0.5em var(--highlight-color);
     border-radius: 15%;
-    background: $primaryColor;
+    background: var(--primary-color);
     position: relative;
     margin: 5px;
     flex: none;
@@ -78,7 +78,7 @@
   &:focus,
   &:hover,
   &.focused {
-    background: $hoverColor;
+    background: var(--highlight-color);
   }
 }
 
@@ -253,8 +253,8 @@
     width: 1.625em;
     height: 1.625em;
     margin: 0.3em;
-    background: radial-gradient($hoverColor, $primaryColor, $secondaryColor);
-    color: $buttonFontColor;
+    background: radial-gradient(var(--highlight-color), var(--primary-color), var(--secondary-color));
+    color: var(--button-font-color);
     .fa,
     .material-icons {
       font-size: 0.8em;
@@ -276,7 +276,7 @@
 
 .btn--classic.gal-action-btn,
 .btn--classic_rounded.gal-action-btn {
-  background: $secondaryColor;
+  background: var(--secondary-color);
 }
 
 .buttongroup {
@@ -291,10 +291,10 @@
 .mail-form-input.btn--modern_squared,
 .dependencies-btn.btn--modern,
 .dependencies-btn.btn--modern_squared {
-  border: 2px solid $fontColor;
+  border: 2px solid var(--font-color);
   border-radius: 10px;
-  color: $buttonFontColor;
-  background: $primaryColor;
+  color: var(--button-font-color);
+  background: var(--primary-color);
 }
 
 .material-icons {

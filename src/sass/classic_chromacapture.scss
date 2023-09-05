@@ -19,8 +19,8 @@
   display: block;
   color: #ff0000;
   padding-bottom: 10px;
-  background-color: $primaryLightColor;
-  border: 2px solid $borderColor;
+  background-color: var(--primary-light-color);
+  border: 2px solid var(--border-color);
   width: 1000px;
   max-width: 100%;
   margin: auto;
