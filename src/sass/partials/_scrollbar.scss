@@ -12,5 +12,5 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0px;
-  background: $secondaryColor;
+  background: var(--secondary-color);
 }

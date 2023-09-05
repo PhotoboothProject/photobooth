@@ -11,8 +11,8 @@
   overflow: hidden;
   width: 100%;
   height: 100%;
-  background-color: $primaryLightColor;
-  background-image: $defaultBackground;
+  background-color: var(--primary-light-color);
+  background-image: var(--background-default);
   background-position: center center;
   background-size: cover;
 }
@@ -24,7 +24,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 1.75em;
-  color: $startFontColor;
+  color: var(--start-font-color);
   text-align: center;
 }
 

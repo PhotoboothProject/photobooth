@@ -4,8 +4,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: $panelColor;
-  color: $fontColor;
+  background-color: var(--panel-color);
+  color: var(--font-color);
   padding: 25px 15px 15px;
   min-width: 250px;
   display: none;
@@ -26,9 +26,9 @@
 }
 
 input[type='email'] {
-  color: $fontColor;
-  background: $boxColor;
-  border: 1px solid $borderColor;
+  color: var(--font-color);
+  background: var(--box-color);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   width: 100%;
   padding: 0 10px;

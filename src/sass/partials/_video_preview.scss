@@ -3,7 +3,7 @@
 #collage--frame {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate($previewRotation);
+  transform: translate(-50%, -50%) rotate(var(--preview-rotation));
   position: absolute;
   height: 100%;
   width: 100%;
@@ -23,10 +23,10 @@
     object-fit: scale-down;
   }
   &.flip-horizontal {
-    transform: translate(-50%, -50%) rotate($previewRotation) scalex(-1);
+    transform: translate(-50%, -50%) rotate(var(--preview-rotation)) scalex(-1);
   }
   &.flip-vertical {
-    transform: translate(-50%, -50%) rotate($previewRotation) scaleY(-1);
+    transform: translate(-50%, -50%) rotate(var(--preview-rotation)) scaleY(-1);
   }
   z-index: 0;
 }
@@ -50,14 +50,14 @@
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
-  transform: rotate($previewRotation);
+  transform: rotate(var(--preview-rotation));
 
   &.cover {
     background-size: cover;
   }
 
   &.streaming {
-    background-image: $urlBackground;
+    background-image: var(--background-url);
   }
 }
 

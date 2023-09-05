@@ -14,13 +14,13 @@ $success: #2ecc71;
   right: 10px;
   top: 0.5em;
   z-index: 300;
-  background: $primaryColor;
-  color: $buttonFontColor;
+  background: var(--primary-color);
+  color: var(--button-font-color);
   cursor: pointer;
   transition: background 0.7s ease;
 
   &:hover {
-    background: $hoverColor;
+    background: var(--highlight-color);
   }
 
   .saving,
@@ -76,14 +76,14 @@ $success: #2ecc71;
   cursor: pointer;
   width: 10em;
   height: 2.5em;
-  background: $primaryColor;
-  color: $buttonFontColor;
+  background: var(--primary-color);
+  color: var(--button-font-color);
   transition: background 0.7s ease;
   z-index: 300;
   float: left;
 
   &:hover {
-    background: $hoverColor;
+    background: var(--highlight-color);
   }
 
   .saving,
