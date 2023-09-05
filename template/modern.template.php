@@ -1,9 +1,9 @@
 <!-- Start Page -->
 <div class="stages <?php echo $uiShape; ?> noborder" id="start">
+    <?php include 'components/start.logo.php'; ?>
     <div class="startInner <?php echo $uiShape; ?> noborder">
         <div class="divaussen">
             <div class="divinnen">
-                <?php include 'components/start.logo.php'; ?>
                 <div class="divinnen2">
                     <?php if ($config['event']['enabled']): ?>
                     <div class="names">
