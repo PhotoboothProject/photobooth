@@ -28,6 +28,8 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
 <body>
 <div id="blocker"></div>
 <div id="aperture"></div>
+<video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
+       autoplay playsinline></video>
 <div class="chromawrapper">
     <div class="rotarygroup" id="start">
         <div class="top-bar">
@@ -49,25 +51,7 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
             <span data-i18n="chromaInfoBefore"></span>
         </div>
 
-        <div class="stages" id="loader">
-            <div class="loaderInner">
-                <div class="spinner">
-                    <i class="<?php echo $config['icons']['spinner']; ?>"></i>
-                </div>
-
-                <div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
-
-                <video id="video--view"
-                       class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-                       autoplay playsinline></video>
-
-                <div id="counter">
-                    <canvas id="video--sensor"></canvas>
-                </div>
-                <div class="cheese"></div>
-                <div class="loading"></div>
-            </div>
-        </div>
+        <?php include($fileRoot . 'template/components/start.loader.php'); ?>
 
         <!-- Result Page -->
         <div class="stages" id="result"></div>
@@ -96,24 +80,22 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
         </div>
     </div>
     <div class="rotarygroup">
-
         <div id="wrapper">
             <?php include($fileRoot . 'template/gallery.template.php'); ?>
         </div>
 
         <?php include($fileRoot . 'template/send-mail.template.php'); ?>
-
-        <script type="text/javascript">
-            onCaptureChromaView = true;
-        </script>
-
-        <?php include($fileRoot . 'template/components/main.footer.php'); ?>
-
-        <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-        <script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-
-        <?php require_once($fileRoot . 'lib/services_start.php'); ?>
     </div>
 </div>
+<script type="text/javascript">
+    onCaptureChromaView = true;
+</script>
+
+<?php include($fileRoot . 'template/components/main.footer.php'); ?>
+
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+
+<?php require_once($fileRoot . 'lib/services_start.php'); ?>
 </body>
 </html>
