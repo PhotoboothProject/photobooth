@@ -28,7 +28,7 @@ jobs:
       - name: Setup node ${{ matrix.node }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.version }}
+          node-version: ${{ matrix.node }}
       - name: Install Dependencies
         run: npm install
       - name: Lint
