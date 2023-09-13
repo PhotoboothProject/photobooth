@@ -4,12 +4,28 @@ require_once '../lib/collage.php';
 
 $demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
 $demoFolder = realpath($demoPath);
-$demoImages = [
-    'adi-goldstein-Hli3R6LKibo-unsplash.jpg',
-    'alasdair-elmes-ULHxWq8reao-unsplash.jpg',
-    'elena-de-soto-w423NnHFjFg-unsplash.jpg',
-    'matty-adame-nLUb9GThIcg-unsplash.jpg',
-];
+$devImg = array_diff(scandir($demoFolder), ['.', '..']);
+
+$demoImages = [];
+// Loop to select 4 random images
+for ($i = 0; $i < 4; $i++) {
+    // Check if there are any images left to select
+    if (empty($devImg)) {
+        break; // Break the loop if there are no more images
+    }
+
+    // Select a random index from the remaining images
+    $randomIndex = array_rand($devImg);
+
+    // Add the selected image to the $demoImages array
+    $demoImages[] = $devImg[$randomIndex];
+
+    // Remove the selected image from the $devImg array to avoid selecting it again
+    unset($devImg[$randomIndex]);
+
+    // Reset array keys to ensure consecutive integer keys
+    $devImg = array_values($devImg);
+}
 
 $name = date('Ymd_His') . '.jpg';
 $collageSrcImagePaths = [];
