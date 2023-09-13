@@ -13,7 +13,8 @@ $chromaEnabled = $config['keying']['enabled'] || $style === 'chroma';
 
 $demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
 $demoFolder = realpath($demoPath);
-$demoImage = 'adi-goldstein-Hli3R6LKibo-unsplash.jpg';
+$devImg = array_diff(scandir($demoFolder), ['.', '..']);
+$demoImage = $devImg[array_rand($devImg)];
 
 $name = date('Ymd_His') . '.jpg';
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $name;
