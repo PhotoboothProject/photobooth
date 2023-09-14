@@ -450,7 +450,7 @@ class Image {
                 throw new Exception('Invalid image resource');
             }
 
-            $rotation = $this->resizeRotation;
+            $rotation = intval($this->resizeRotation);
 
             // simple rotate if possible and ignore changed dimensions (doesn't need to care about background color)
             $simple_rotate = [-180, -90, 0, 180, 90, 360];
@@ -467,8 +467,8 @@ class Image {
                 list($bg_r, $bg_g, $bg_b, $bg_a) = sscanf($bg_color, '#%02x%02x%02x%02x');
 
                 // get old dimensions
-                $old_width = imagesx($image);
-                $old_height = imagesy($image);
+                $old_width = intval(imagesx($image));
+                $old_height = intval(imagesy($image));
 
                 // create new image with old dimensions
                 $new = imagecreatetruecolor($old_width, $old_height);
@@ -490,20 +490,20 @@ class Image {
                 }
 
                 // make sure width and/or height fits into old dimensions
-                $this->resizeMaxWidth = $old_width;
-                $this->resizeMaxHeight = $old_height;
+                $this->resizeMaxWidth = intval($old_width);
+                $this->resizeMaxHeight = intval($old_height);
                 $image = self::resizeImage($image);
                 if (!$image) {
                     throw new Exception('Cannot resize image.');
                 }
 
                 // get new dimensions after rotate and resize
-                $new_width = imagesx($image);
-                $new_height = imagesy($image);
+                $new_width = intval(imagesx($image));
+                $new_height = intval(imagesy($image));
 
                 // center rotated image
-                $x = ($old_width - $new_width) / 2;
-                $y = ($old_height - $new_height) / 2;
+                $x = intval(($old_width - $new_width) / 2);
+                $y = intval(($old_height - $new_height) / 2);
 
                 // copy rotated image to new image with old dimensions
                 if (imagecopy($new, $image, $x, $y, 0, 0, $new_width, $new_height)) {
@@ -906,8 +906,8 @@ class Image {
                 $this->resizeRotation = $degrees;
                 $imageResource = self::rotateResizeImage($imageResource);
                 if (abs($degrees) != 90) {
-                    $width = imagesx($imageResource);
-                    $height = imagesy($imageResource);
+                    $width = intval(imagesx($imageResource));
+                    $height = intval(imagesy($imageResource));
                 }
             }
 
