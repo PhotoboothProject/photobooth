@@ -80,6 +80,25 @@ EXTRA_PACKAGES=(
 
 INSTALL_PACKAGES=()
 
+DEBIAN=(
+        'buster'
+        'bullseye'
+        'bookworm'
+)
+
+UBUNTU=(
+        'bionic'
+        'cosmic'
+        'disco'
+        'eoan'
+        'focal'
+        'groovy'
+        'hirsute'
+        'impish'
+        'jammy'
+        'kinetic'
+)
+
 function info {
     echo -e "\033[0;36m${1}\033[0m"
     echo "${1}" >> "${PHOTOBOOTH_TMP_LOG}"
@@ -359,10 +378,11 @@ common_software() {
     info "### First we update your system. That's not worth mentioning."
     if [[ ${PHP_VERSION} == "8.2" ]]; then
         apt install apt-transport-https lsb-release ca-certificates software-properties-common -y
-        if [[ $(lsb_release -sc) == "buster" || $(lsb_release -sc) == "bullseye" || $(lsb_release -sc) == "bookworm" ]]; then
+        OS=$(lsb_release -sc);
+        if [[ "${DEBIAN[@]}" =~ "${OS}" ]]; then
             wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
             echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-        elif [[ $(lsb_release -sc) == "focal" ]]; then
+        elif [[ "${UBUNTU[@]}" =~ "${OS}" ]]; then
             add-apt-repository ppa:ondrej/php -y
         fi
     fi
