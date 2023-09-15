@@ -358,6 +358,8 @@ common_software() {
         if [[ $(lsb_release -sc) == "buster" || $(lsb_release -sc) == "bullseye" || $(lsb_release -sc) == "bookworm" ]]; then
             wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
             echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+        elif [[ $(lsb_release -sc) == "focal" ]]; then
+            add-apt-repository ppa:ondrej/php -y
         fi
     fi
     apt update
