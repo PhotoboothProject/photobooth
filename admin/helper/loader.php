@@ -1,5 +1,6 @@
 <?php
-function getLoader($size = 'xs') {
+function getLoader($size = 'xs')
+{
     $loaderSize = 'w-8 h-8';
 
     if ($size == 'sm') {

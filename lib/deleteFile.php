@@ -3,7 +3,8 @@
 /**
  * Class FileDelete.
  */
-class FileDelete {
+class FileDelete
+{
     /** @var string The filename of the file. */
     private $file;
 
@@ -25,7 +26,8 @@ class FileDelete {
      * @param string $file The filename of the file.
      * @param array $paths The file paths of the files.
      */
-    public function __construct($file, $paths) {
+    public function __construct($file, $paths)
+    {
         $this->file = $file;
         $this->paths = $paths;
     }
@@ -33,7 +35,8 @@ class FileDelete {
     /**
      * Deletes the files.
      */
-    public function deleteFiles() {
+    public function deleteFiles()
+    {
         foreach ($this->paths as $file) {
             $file = $file . DIRECTORY_SEPARATOR . $this->file;
             try {
@@ -57,7 +60,8 @@ class FileDelete {
      *
      * @param array $paths The file paths of the files.
      */
-    public function setPaths(array $paths) {
+    public function setPaths(array $paths)
+    {
         $this->paths = $paths;
     }
 
@@ -66,7 +70,8 @@ class FileDelete {
      *
      * @param array $unavailableFiles The file paths of the unavailable files.
      */
-    public function setUnavailableFiles(array $unavailableFiles) {
+    public function setUnavailableFiles(array $unavailableFiles)
+    {
         $this->unavailableFiles = $unavailableFiles;
     }
 
@@ -75,7 +80,8 @@ class FileDelete {
      *
      * @param array $failedFiles The file incl. paths of the failed files.
      */
-    public function setFailedFiles(array $failedFiles) {
+    public function setFailedFiles(array $failedFiles)
+    {
         $this->failedFiles = $failedFiles;
     }
 
@@ -84,7 +90,8 @@ class FileDelete {
      *
      * @return array The log data.
      */
-    public function getLogData() {
+    public function getLogData()
+    {
         return [
             'success' => $this->success,
             'file' => $this->file,

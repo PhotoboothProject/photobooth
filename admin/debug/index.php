@@ -54,17 +54,17 @@ include('../../admin/components/navItem.debug.php');
                                 <li class="flex w-full h-6 shrink-0"></li>
                                     <?php
                                         echo getNavItemDebug('myconfig');
-                                        echo getNavItemDebug('remotebuzzerlog');
-                                        echo getNavItemDebug('synctodrivelog');
-                                        echo getNavItemDebug('devlog');
-                                        if (SERVER_OS === 'linux') {
-                                            echo getNavItemDebug('serverprocesses');
-                                        }
-                                        echo getNavItemDebug('bootconfig');
-                                        echo getNavItemDebug('printdb');
-                                        echo getNavItemDebug('installlog');
-                                        echo getNavItemDebug('githead');
-                                    ?>
+echo getNavItemDebug('remotebuzzerlog');
+echo getNavItemDebug('synctodrivelog');
+echo getNavItemDebug('devlog');
+if (SERVER_OS === 'linux') {
+    echo getNavItemDebug('serverprocesses');
+}
+echo getNavItemDebug('bootconfig');
+echo getNavItemDebug('printdb');
+echo getNavItemDebug('installlog');
+echo getNavItemDebug('githead');
+?>
                             </ul>
                     </div>
                 </div>

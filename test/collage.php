@@ -1,4 +1,5 @@
 <?php
+
 $fileRoot = '../';
 
 require_once $fileRoot . 'lib/config.php';

@@ -30,14 +30,14 @@ $btnClass =
 
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
 				<?php
-				echo getMenuBtn('../test/healthcheck.php', 'healthCheck', '');
-				echo getMenuBtn('../test/phpinfo.php', 'phpinfo', '');
-				echo getMenuBtn('../test/photo.php', 'pictureTest', '');
-				echo getMenuBtn('../test/collage.php', 'collageTest', '');
-				echo getMenuBtn('../test/preview.php', 'previewTest', '');
-				echo getMenuBtn('../test/chroma.php', 'chromaPreviewTest', '');
-				echo getMenuBtn('../test/trigger.php', 'remotebuzzerGetTrigger', '');
-				?>
+                echo getMenuBtn('../test/healthcheck.php', 'healthCheck', '');
+echo getMenuBtn('../test/phpinfo.php', 'phpinfo', '');
+echo getMenuBtn('../test/photo.php', 'pictureTest', '');
+echo getMenuBtn('../test/collage.php', 'collageTest', '');
+echo getMenuBtn('../test/preview.php', 'previewTest', '');
+echo getMenuBtn('../test/chroma.php', 'chromaPreviewTest', '');
+echo getMenuBtn('../test/trigger.php', 'remotebuzzerGetTrigger', '');
+?>
 				</div>
 
 			</div>

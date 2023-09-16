@@ -4,8 +4,8 @@
     <?php foreach (AVAILABLE_FILTERS as $filter => $name): ?>
         <?php if (!in_array($filter, $config['filters']['disabled'])): ?>
             <div id="<?= $filter ?>" class="filter <?php if ($config['filters']['defaults'] === $filter) {
-    echo 'activeSidenavBtn';
-} ?>">
+                echo 'activeSidenavBtn';
+            } ?>">
                 <a class="btn btn--small rotaryfocus" href="#"><?= $name ?></a>
             </div>
         <?php endif; ?>

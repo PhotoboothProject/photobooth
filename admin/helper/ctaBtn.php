@@ -1,5 +1,7 @@
 <?php
-function getCtaBtn($label, $btnId = '', $config = false) {
+
+function getCtaBtn($label, $btnId = '', $config = false)
+{
     $labels = '';
     if ($config) {
         $labels =
@@ -28,4 +30,3 @@ function getCtaBtn($label, $btnId = '', $config = false) {
                 </button>
             ';
 }
-?>

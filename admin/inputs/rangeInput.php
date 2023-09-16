@@ -1,5 +1,7 @@
 <?php
-function getRangeInput($setting, $i18ntag) {
+
+function getRangeInput($setting, $i18ntag)
+{
     $inputClass = 'adminRangeInput w-full h-2 mb-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700';
 
     return getHeadline($i18ntag) .
@@ -42,4 +44,3 @@ function getRangeInput($setting, $i18ntag) {
                 </div>
             ';
 }
-?>

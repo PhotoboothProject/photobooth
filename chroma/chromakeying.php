@@ -43,15 +43,15 @@ include($fileRoot . 'template/components/main.head.php');
 		</div>
 
 		<div style="padding-top:10px;text-align:center;">
-			<?php
-				$dir = $fileRoot . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
-				$cdir = scandir($dir);
-				foreach ($cdir as $key => $value) {
-					if (!in_array($value, array(".","..")) && !is_dir($dir.$value)) {
-						echo '<img src="'.$dir.$value.'" class="backgroundPreview '. $uiShape .' rotaryfocus" onclick="setBackgroundImage(this.src)">';
-					}
-				}
-			?>
+		<?php
+            $dir = $fileRoot . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
+	    $cdir = scandir($dir);
+	    foreach ($cdir as $key => $value) {
+	        if (!in_array($value, ['.', '..']) && !is_dir($dir . $value)) {
+	            echo '<img src="' . $dir . $value . '" class="backgroundPreview ' . $uiShape . ' rotaryfocus" onclick="setBackgroundImage(this.src)">';
+	        }
+	    }
+	    ?>
 		</div>
 
 		<div class="chroma-control-bar">
@@ -70,13 +70,10 @@ include($fileRoot . 'template/components/main.head.php');
 		</div>
 	<?php endif; ?>
 
-	<?php include($fileRoot . 'template/modal.template.php'); ?>
-
+		<?php include($fileRoot . 'template/modal.template.php'); ?>
 	</div>
 
-        <?php
-	    include($fileRoot . 'template/components/main.footer.php');
-	    require_once($fileRoot . 'lib/services_start.php');
-	?>
+	<?php include($fileRoot . 'template/components/main.footer.php'); ?>
+	<?php require_once($fileRoot . 'lib/services_start.php'); ?>
 </body>
 </html>

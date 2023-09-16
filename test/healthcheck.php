@@ -34,14 +34,14 @@ $healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood">
 			<div class="w-full max-w-4xl h-144 rounded-lg bg-white flex flex-col shadow-xl">
 				<div class="p-4 md:p-8">
 					<?php
-					$healthCheckBg = $healthCheck->healthStatus ? 'bg-green-500' : 'bg-red-500';
-					echo '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . $healthCheckBg . ' text-white text-center">';
-					echo $healthData;
-					echo '</div>';
-					echo '<div class="w-full max-w-md p-5 mx-auto mt-2">';
-					echo getMenuBtn($fileRoot . 'test', 'back', 'fa fa-chevron-left');
-					echo '</div>';
-					?>
+                    $healthCheckBg = $healthCheck->healthStatus ? 'bg-green-500' : 'bg-red-500';
+echo '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . $healthCheckBg . ' text-white text-center">';
+echo $healthData;
+echo '</div>';
+echo '<div class="w-full max-w-md p-5 mx-auto mt-2">';
+echo getMenuBtn($fileRoot . 'test', 'back', 'fa fa-chevron-left');
+echo '</div>';
+?>
 				</div>
 			</div>
 		</div>
@@ -49,7 +49,7 @@ $healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood">
 
     <?php
     include $fileRoot . 'template/components/main.footer.php';
-    ?>
+?>
 
 </body>
 </html>

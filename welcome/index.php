@@ -10,7 +10,7 @@ $URL = $photobooth->getUrl();
 
 $PHOTOBOOTH_HOME = realpath($fileRoot);
 $PHOTOBOOTH_HOME = rtrim($PHOTOBOOTH_HOME, DIRECTORY_SEPARATOR);
-$pageTitle = 'Welcome to '. $config['ui']['branding'];
+$pageTitle = 'Welcome to ' . $config['ui']['branding'];
 $remoteBuzzer = false;
 $photoswipe = false;
 $chromaKeying = false;
@@ -77,7 +77,7 @@ $healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood">
 						</p>
 						<p>
 							<b class="flex mb-1">Add your own files (e.g. background images, frames, overrides.css) inside:</b>
-							<code class="break-all"><?=$PHOTOBOOTH_HOME . DIRECTORY_SEPARATOR . "private"?></code><br>
+							<code class="break-all"><?=$PHOTOBOOTH_HOME . DIRECTORY_SEPARATOR . 'private'?></code><br>
 							<i class="text-xs text-gray-500">All files and folders inside this path will be ignored on git and won't cause trouble while updating Photobooth.</i>
 						</p>
 						<p class="mt-4">
@@ -118,15 +118,15 @@ $healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood">
 				<div class="p-4 md:p-8">
 					<p class="text-center">Thanks for the reading!</p>
 					<?php
-					$healthCheckBg = $healthCheck->healthStatus ? 'bg-green-500' : 'bg-red-500';
-					if ($healthCheck->healthStatus) {
-						echo '<div class="w-full max-w-md p-5 mx-auto mt-2">';
-						echo getMenuBtn($fileRoot, 'enjoyPhotobooth', '');
-						echo '</div>';
-					}
-					echo '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . $healthCheckBg . ' text-white text-center">';
-					echo $healthData;
-					?>
+                    $healthCheckBg = $healthCheck->healthStatus ? 'bg-green-500' : 'bg-red-500';
+if ($healthCheck->healthStatus) {
+    echo '<div class="w-full max-w-md p-5 mx-auto mt-2">';
+    echo getMenuBtn($fileRoot, 'enjoyPhotobooth', '');
+    echo '</div>';
+}
+echo '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . $healthCheckBg . ' text-white text-center">';
+echo $healthData;
+?>
 					</div>
 				</div>
 
@@ -143,7 +143,7 @@ $healthData .= $healthCheck->healthStatus ? '<p><b><span data-i18n="healthGood">
 
     }
     include($fileRoot . 'template/components/main.footer.php');
-    ?>
+?>
 
 </body>
 </html>

@@ -36,26 +36,26 @@ include('../inputs/index.php');
 					</h2>
 				</div>
 				<?php
-					foreach ($config['foldersAbs'] as $key => $folder) {
-						try {
-							$folderSize = Helper::getFolderSize($folder);
-							$formattedSize = Helper::formatSize($folderSize);
-							$fileCount = Helper::getFileCount($folder);
+                    foreach ($config['foldersAbs'] as $key => $folder) {
+                        try {
+                            $folderSize = Helper::getFolderSize($folder);
+                            $formattedSize = Helper::formatSize($folderSize);
+                            $fileCount = Helper::getFileCount($folder);
 
-							echo('<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">');
-							echo('<h3 class="font-bold whitespace-pre-wrap break-all"><span data-i18n="path"></span> ' . $folder . '</h3>');
-							echo('<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">'. $formattedSize .'</span>');
-							echo('<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $fileCount .'</span>'); 
-							echo('</div>');
-						} catch (Exception $e) {
-							echo('<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">');
-							echo('<h3 class="font-bold whitespace-pre-wrap break-all"><span data-i18n="path"></span> ' . $folder . '</h3>');
-							echo('<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">'. $e->getMessage() .'</span>');
-							echo('<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $e->getMessage() .'</span>'); 
-							echo('</div>');
-						}
-					}
-				?>
+                            echo '<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">';
+                            echo '<h3 class="font-bold whitespace-pre-wrap break-all"><span data-i18n="path"></span> ' . $folder . '</h3>';
+                            echo '<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">' . $formattedSize . '</span>';
+                            echo '<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $fileCount . '</span>';
+                            echo '</div>';
+                        } catch (Exception $e) {
+                            echo '<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">';
+                            echo '<h3 class="font-bold whitespace-pre-wrap break-all"><span data-i18n="path"></span> ' . $folder . '</h3>';
+                            echo '<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
+                            echo '<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
+                            echo '</div>';
+                        }
+                    }
+?>
 			</div>
 
 		</div>

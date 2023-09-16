@@ -33,4 +33,3 @@ if ($config['button']['show_fs']) {
 if ($config['button']['show_cups']) {
     echo getBoothButton('cups', $config['icons']['cups'], 'cups-button');
 }
-?>

@@ -1,5 +1,7 @@
 <?php
-function isElementHidden($element_class, $setting) {
+
+function isElementHidden($element_class, $setting)
+{
     global $config;
     if (empty($setting['view'])) {
         $setting['view'] = $config['adminpanel']['view_default'];
@@ -38,4 +40,3 @@ function isElementHidden($element_class, $setting) {
 
     return $element_class;
 }
-?>

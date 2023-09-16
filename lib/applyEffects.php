@@ -1,6 +1,7 @@
 <?php
 
-function getCollageFiles($collage, $filename_tmp, $file, array $srcImages) {
+function getCollageFiles($collage, $filename_tmp, $file, array $srcImages)
+{
     $collageBasename = substr($filename_tmp, 0, -4);
     $singleImageBase = substr($file, 0, -4);
 

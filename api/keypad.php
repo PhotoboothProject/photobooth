@@ -1,9 +1,13 @@
 <?php
-class Keypad {
-    public function __construct() {
+
+class Keypad
+{
+    public function __construct()
+    {
     }
 
-    public function keypadLogin($userPin, $login) {
+    public function keypadLogin($userPin, $login)
+    {
         if ($userPin == $login['pin']) {
             $_SESSION['auth'] = true;
 
@@ -25,5 +29,3 @@ class Keypad {
         return $return;
     }
 }
-
-?>

@@ -1,1 +1,3 @@
-<?php include 'classic.template.php'; ?>
+<?php
+
+include 'classic.template.php';

@@ -1,4 +1,5 @@
 <?php
+
 if (empty($imagelist)) {
     echo '<h1 style="text-align:center" data-i18n="gallery_no_image"></h1>' . "\n";
 } else {
@@ -47,4 +48,3 @@ if (empty($imagelist)) {
     }
 }
 echo '</div>' . "\n";
-?>

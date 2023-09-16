@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/config.php';
 
 define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');
@@ -10,7 +11,8 @@ define('IMG_DIR', $config['foldersAbs']['images']);
  *
  * Manages the database, including adding and deleting files.
  */
-class DatabaseManager {
+class DatabaseManager
+{
     /**
      * @var string The absolute path and name of the file containing the database of files.
      */
@@ -26,7 +28,8 @@ class DatabaseManager {
      *
      * @return array The list of files from the database file.
      */
-    public function getContentFromDB() {
+    public function getContentFromDB()
+    {
         // check if the database file is defined and non-empty
         if (!isset($this->db_file) || empty($this->db_file)) {
             throw new Exception('Database not defined.');
@@ -55,8 +58,8 @@ class DatabaseManager {
      *
      * @return array The list of images from the images directory.
      */
-
-    public function getFilesFromDirectory() {
+    public function getFilesFromDirectory()
+    {
         // check if the directory is defined and non-empty
         if (!isset($this->file_dir) || empty($this->file_dir)) {
             throw new Exception('Directory not defined.');
@@ -91,7 +94,8 @@ class DatabaseManager {
      *
      * @param string $content The content to add to the database file.
      */
-    public function appendContentToDB($content) {
+    public function appendContentToDB($content)
+    {
         if (!$content) {
             throw new Exception('Invalid content.');
         }
@@ -114,7 +118,8 @@ class DatabaseManager {
      *
      * @param string $content The content to delete from the database file.
      */
-    public function deleteContentFromDB($content) {
+    public function deleteContentFromDB($content)
+    {
         if (!$content) {
             throw new Exception('Invalid filename.');
         }
@@ -142,7 +147,8 @@ class DatabaseManager {
      *
      * @return bool Whether the content exists in the database file.
      */
-    public function isInDB($content) {
+    public function isInDB($content)
+    {
         if (!$content) {
             throw new Exception('Invalid filename.');
         }
@@ -162,7 +168,8 @@ class DatabaseManager {
      *
      * @return int The size of the database file in bytes.
      */
-    public function getDBSize() {
+    public function getDBSize()
+    {
         if (file_exists($this->db_file)) {
             return (int) filesize($this->db_file);
         }
@@ -176,7 +183,8 @@ class DatabaseManager {
      * @return string The string "success" if the database was rebuilt successfully, or "error"
      *                if an error occurred during the rebuilding process.
      */
-    public function rebuildDB() {
+    public function rebuildDB()
+    {
         // check if the database file is defined and non-empty
         if (!isset($this->db_file) || empty($this->db_file)) {
             throw new Exception('Database not defined.');

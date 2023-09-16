@@ -1,5 +1,6 @@
 <?php
-function getBoothButton($label, $icon, $command, $type = 'md') {
+function getBoothButton($label, $icon, $command, $type = 'md')
+{
     global $config;
     $btnClass = 'btn btn--' . $config['ui']['button'];
     $btnClass .= ' ' . $command;

@@ -1,10 +1,12 @@
 <?php
+
 require_once __DIR__ . '/helper.php';
 
 /**
  * The Photobooth class holds information about the server and Photobooth installation.
  */
-class Photobooth {
+class Photobooth
+{
     /** @var string $serverIp The IP address of the server. */
     public $serverIp;
     /** @var string $os The operating system of the server. */
@@ -21,7 +23,8 @@ class Photobooth {
     /**
      * Photobooth constructor.
      */
-    function __construct() {
+    public function __construct()
+    {
         $this->serverIp = $this->getIp();
         $this->os = $this->serverOs();
         $this->webRoot = $this->getWebRoot();
@@ -35,7 +38,8 @@ class Photobooth {
      *
      * @return string The operating system of the server.
      */
-    public static function serverOs() {
+    public static function serverOs()
+    {
         return DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
     }
 
@@ -44,7 +48,8 @@ class Photobooth {
      *
      * @return string The IP address of the server.
      */
-    public static function getIp() {
+    public static function getIp()
+    {
         return self::serverOs() == 'linux' ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
     }
 
@@ -53,7 +58,8 @@ class Photobooth {
      *
      * @return string The web root directory of the server.
      */
-    public static function getWebRoot() {
+    public static function getWebRoot()
+    {
         return self::serverOs() == 'linux' ? $_SERVER['DOCUMENT_ROOT'] : str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
     }
 
@@ -63,7 +69,8 @@ class Photobooth {
      * @return string The version number of the installed photobooth software, or "unknown" if the version cannot be determined.
      * @throws Exception If the package.json file cannot be found or cannot be decoded.
      */
-    public function getPhotoboothVersion() {
+    public function getPhotoboothVersion()
+    {
         $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'package.json';
         if (!is_file($packageJsonPath)) {
             throw new Exception('Package file not found.');
@@ -82,7 +89,8 @@ class Photobooth {
      * @return string The version number of the latest release of the photobooth software.
      * @throws Exception If the latest release cannot be fetched from the GitHub API or the data returned is invalid.
      */
-    public function getLatestRelease() {
+    public function getLatestRelease()
+    {
         $gh = 'PhotoboothProject';
         $url = 'https://api.github.com/repos/' . $gh . '/photobooth/releases/latest';
         $options = [
@@ -112,7 +120,8 @@ class Photobooth {
      *
      * @return bool Whether an update is available or not.
      */
-    public function checkUpdate() {
+    public function checkUpdate()
+    {
         try {
             $remoteVersion = $this->getLatestRelease();
             $localVersion = $this->getPhotoboothVersion();
@@ -129,7 +138,8 @@ class Photobooth {
      *
      * @return bool Whether the Photobooth installation is in a subfolder.
      */
-    public static function detectSubfolderInstall() {
+    public static function detectSubfolderInstall()
+    {
         return empty(Helper::getRootpath()) ? false : true;
     }
 
@@ -138,7 +148,8 @@ class Photobooth {
      *
      * @return string The URL of the Photobooth installation.
      */
-    public function getUrl() {
+    public function getUrl()
+    {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
         $url = $protocol . '://' . $this->serverIp;
         if ($this->isSubfolderInstall) {

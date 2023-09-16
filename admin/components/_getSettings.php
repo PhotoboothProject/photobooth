@@ -1,4 +1,5 @@
 <?php
+
 foreach ($configsetup as $section => $fields) {
     html_src_indent($indent);
     html_src_indent($indent++);
@@ -40,9 +41,7 @@ foreach ($configsetup as $section => $fields) {
         echo '<!-- ' . strtoupper($setting['type']) . ' ' . strtoupper($setting['name']) . ' -->';
         echo '<div class="flex flex-col rounded-xl p-3 shadow-xl bg-white ' . $hidden . '" id="' . $i18ntag . '">';
 
-        /************************************
-         ** Populate setting elements by type
-         ************************************/
+        // Populate setting elements by type
 
         switch ($setting['type']) {
             case 'input':
@@ -82,4 +81,3 @@ foreach ($configsetup as $section => $fields) {
 
     echo '</div>';
 }
-?>

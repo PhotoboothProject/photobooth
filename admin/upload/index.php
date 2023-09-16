@@ -107,10 +107,10 @@ if (isset($_POST['submit'])) {
                 <?php
                     echo getMenuBtn($fileRoot . 'admin', 'admin_panel', $config['icons']['admin']);
 
-                    if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
-                        echo getMenuBtn($fileRoot . 'login/logout.php', 'logout', $config['icons']['logout']);
-                    }
-                ?>
+if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
+    echo getMenuBtn($fileRoot . 'login/logout.php', 'logout', $config['icons']['logout']);
+}
+?>
                 </div>
             </div>
         </div>
@@ -119,15 +119,12 @@ if (isset($_POST['submit'])) {
 <?php
     include '../components/footer.admin.php';
 
-
-
-
-    if ($success) {
-        echo '<script>openToast("<span data-i18n=\"upload_success\"></span>");</script>';
-    }
-    if ($error !== false) {
-        echo '<script>openToast("<span data-i18n=\"upload_error\"></span>", "isError", 5000);</script>';
-    }
+if ($success) {
+    echo '<script>openToast("<span data-i18n=\"upload_success\"></span>");</script>';
+}
+if ($error !== false) {
+    echo '<script>openToast("<span data-i18n=\"upload_error\"></span>", "isError", 5000);</script>';
+}
 
 ?>
 

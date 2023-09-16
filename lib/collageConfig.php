@@ -41,7 +41,8 @@ define('TEXTONCOLLAGE_FONT_COLOR', $config['textoncollage']['font_color']);
 define('TEXTONCOLLAGE_FONT_SIZE', $config['textoncollage']['font_size']);
 define('TEXTONCOLLAGE_LINESPACE', $config['textoncollage']['linespace']);
 
-class CollageConfig {
+class CollageConfig
+{
     public $collageLayout;
     public $collageResolution;
     public $collageBackgroundColor;
@@ -69,7 +70,7 @@ class CollageConfig {
     public $textOnCollageFontSize;
     public $textOnCollageLinespace;
 
-    function __construct(
+    public function __construct(
         $collageLayout = COLLAGE_LAYOUT,
         $collageResolution = COLLAGE_RESOLUTION,
         $collageBackgroundColor = COLLAGE_BACKGROUND_COLOR,

@@ -1,10 +1,10 @@
 <?php
-    include('navItem.php');
+include('navItem.php');
 
-    $headline = 'Sidebar';
-    if (isset($sidebarHeadline)) {
-        $headline = $sidebarHeadline;
-    }
+$headline = 'Sidebar';
+if (isset($sidebarHeadline)) {
+    $headline = $sidebarHeadline;
+}
 ?>
 
 <div class="w-full flex md:hidden px-5 pb-5 items-center">
@@ -36,11 +36,10 @@
             <ul class="w-full h-full flex flex-col overflow-x-hidden overflow-y-auto">
                 <li class="flex w-full h-6 shrink-0"></li>
                 <?php
-                    foreach($configsetup as $section => $fields)
-                    {
-                        echo getNavItem($section, isElementHidden('adminnavlistelement',$fields) );
+                    foreach($configsetup as $section => $fields) {
+                        echo getNavItem($section, isElementHidden('adminnavlistelement', $fields));
                     }
-                ?>
+?>
             </ul>
         </div>
     </div>

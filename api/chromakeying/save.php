@@ -1,4 +1,5 @@
 <?php
+
 header('Content-Type: application/json');
 
 if (!isset($_POST['imgData']) || empty($_POST['imgData'])) {

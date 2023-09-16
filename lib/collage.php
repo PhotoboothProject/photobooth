@@ -1,10 +1,12 @@
 <?php
+
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/collageConfig.php';
 require_once __DIR__ . '/filter.php';
 require_once __DIR__ . '/image.php';
 
-function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null) {
+function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null)
+{
     if (is_null($c)) {
         $c = new CollageConfig();
     }
@@ -638,7 +640,8 @@ function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', Collag
     return true;
 }
 
-function doMath($expression): int {
+function doMath($expression): int
+{
     $o = 0;
     // eval is evil. To mitigate any attacks the allowed characters are limited to numbers and math symbols
     eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');

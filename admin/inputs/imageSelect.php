@@ -1,5 +1,7 @@
 <?php
-function getImageSelect($setting, $i18ntag) {
+
+function getImageSelect($setting, $i18ntag)
+{
     $dir = '../';
 
     $files = getDirContents($dir);
@@ -103,7 +105,8 @@ function getImageSelect($setting, $i18ntag) {
         ';
 }
 
-function getDirContents($dir, &$results = []) {
+function getDirContents($dir, &$results = [])
+{
     $files = scandir($dir);
 
     foreach ($files as $key => $value) {
@@ -118,4 +121,3 @@ function getDirContents($dir, &$results = []) {
 
     return $results;
 }
-?>

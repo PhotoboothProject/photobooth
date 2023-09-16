@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/filter.php';
 /*
  ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows

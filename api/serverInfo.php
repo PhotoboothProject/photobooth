@@ -1,10 +1,12 @@
 <?php
+
 header('Content-Type: application/json');
 ob_start();
 require_once 'config.php';
 ob_end_clean();
 
-function handleDebugPanel(string $content, array $config): string {
+function handleDebugPanel(string $content, array $config): string
+{
     switch ($content) {
         case 'nav-remotebuzzerlog':
             return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile'], true);
@@ -39,13 +41,15 @@ function handleDebugPanel(string $content, array $config): string {
                 ];
                 return generateTableHtml($columns, $result);
             }
+            // no break
         default:
             http_response_code(400);
             return json_encode(['error' => 'Unknown debug panel parameter']);
     }
 }
 
-function getLatestCommits(): string {
+function getLatestCommits(): string
+{
     try {
         $getHead = shell_exec('git rev-parse --is-inside-work-tree 2>/dev/null && git log --format="%h %s" -n 20 || false');
         $headFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'HEAD';
@@ -66,7 +70,8 @@ function getLatestCommits(): string {
     }
 }
 
-function readFileContents(string $file, bool $devModeRequired = false): string {
+function readFileContents(string $file, bool $devModeRequired = false): string
+{
     global $config;
     try {
         if ($devModeRequired && $config['dev']['loglevel'] < 1) {
@@ -87,7 +92,8 @@ function readFileContents(string $file, bool $devModeRequired = false): string {
     }
 }
 
-function read_csv(string $path_to_csv_file, array &$result): bool {
+function read_csv(string $path_to_csv_file, array &$result): bool
+{
     $handle = fopen($path_to_csv_file, 'r');
 
     if (!$handle) {
@@ -106,7 +112,8 @@ function read_csv(string $path_to_csv_file, array &$result): bool {
     return true;
 }
 
-function processItem($key, $content) {
+function processItem($key, $content)
+{
     $output = [];
 
     $output[] = "Subconfig: $key";
@@ -130,7 +137,8 @@ function processItem($key, $content) {
     return $output;
 }
 
-function showConfig(array $config): array {
+function showConfig(array $config): array
+{
     $output = [];
 
     foreach ($config as $name => $items) {
@@ -151,7 +159,8 @@ function showConfig(array $config): array {
     return $output;
 }
 
-function generateTableHtml(array $columns, array $result): string {
+function generateTableHtml(array $columns, array $result): string
+{
     $html = '<h2 class="center">Print database</h2>' . "\r\n";
     $html .= '<table style="width:90%; margin-left: auto; margin-right: auto;">' . "\r\n";
     $html .= '    <thead>' . "\r\n";

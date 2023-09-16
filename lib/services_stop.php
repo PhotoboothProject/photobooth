@@ -1,9 +1,11 @@
 <?php
-/* check PID file and if found, kill process and delete PID file */
+
+// check PID file and if found, kill process and delete PID file
 
 require_once __DIR__ . '/config.php';
 
-function killProcessIfActive($pName, $pidFile, $logfileName, $killSig) {
+function killProcessIfActive($pName, $pidFile, $logfileName, $killSig)
+{
     global $config;
 
     exec('pgrep -f ' . $pName, $pids);
@@ -40,5 +42,3 @@ killProcessIfActive(
     $config['synctodrive']['logfile'],
     15
 );
-
-?>

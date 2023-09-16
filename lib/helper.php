@@ -1,10 +1,12 @@
 <?php
+
 require_once __DIR__ . '/log.php';
 
 /**
  * A collection of helper functions used throughout the photobooth application.
  */
-class Helper {
+class Helper
+{
     /**
      * @var string[] Array of unit labels.
      */
@@ -17,7 +19,8 @@ class Helper {
      *
      * @return string The relative path of the file or directory.
      */
-    public static function getRootpath($relative_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) {
+    public static function getRootpath($relative_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)
+    {
         return str_replace(Photobooth::getWebRoot(), '', realpath($relative_path));
     }
 
@@ -28,7 +31,8 @@ class Helper {
      *
      * @return string The fixed path.
      */
-    public static function fixSeperator($fixPath) {
+    public static function fixSeperator($fixPath)
+    {
         return str_replace('\\', '/', $fixPath);
     }
 
@@ -39,7 +43,8 @@ class Helper {
      *
      * @return string The absolute path.
      */
-    public static function setAbsolutePath($path) {
+    public static function setAbsolutePath($path)
+    {
         if (!empty($path) && $path[0] != '/') {
             $path = '/' . $path;
         }
@@ -54,7 +59,8 @@ class Helper {
      *
      * @return array The array containing the differences between $array1 and $array2.
      */
-    public static function arrayRecursiveDiff($array1, $array2) {
+    public static function arrayRecursiveDiff($array1, $array2)
+    {
         $returnArray = [];
 
         foreach ($array1 as $key => $value) {
@@ -84,7 +90,8 @@ class Helper {
      *
      * @return void
      */
-    public static function clearCache($file) {
+    public static function clearCache($file)
+    {
         if (function_exists('opcache_invalidate') && strlen(ini_get('opcache.restrict_api')) < 1) {
             opcache_invalidate($file, true);
         } elseif (function_exists('apc_compile_file')) {
@@ -101,7 +108,8 @@ class Helper {
      *
      * @throws Exception If the provided path is not a valid directory.
      */
-    public static function getFolderSize($path) {
+    public static function getFolderSize($path)
+    {
         if (!is_dir($path)) {
             throw new Exception('Invalid directory path: ' . $path);
         }
@@ -139,7 +147,8 @@ class Helper {
      * @param int $size The size in bytes.
      * @return string The formatted size with unit label.
      */
-    public static function formatSize($size) {
+    public static function formatSize($size)
+    {
         $mod = 1024;
 
         for ($i = 0; $size > $mod; $i++) {
@@ -161,7 +170,8 @@ class Helper {
      * @throws Exception If the provided path is not a valid directory or an error occurs while reading the directory.
      *
      */
-    public static function getFileCount($path) {
+    public static function getFileCount($path)
+    {
         if (!is_dir($path)) {
             throw new Exception('Invalid directory path: ' . $path);
         }
@@ -192,7 +202,8 @@ class Helper {
      * @throws Exception If the provided path is not a valid directory in the FTP server.
      *
      */
-    public static function cdFTPTree($conn, $currentDir) {
+    public static function cdFTPTree($conn, $currentDir)
+    {
         if ($currentDir == '') {
             throw new Exception('The path cannot be empty!');
         }
@@ -205,7 +216,7 @@ class Helper {
         $exploded = explode(DIRECTORY_SEPARATOR, $currentDir);
         array_pop($exploded);
 
-        $rejoined = join(DIRECTORY_SEPARATOR, $exploded);
+        $rejoined = implode(DIRECTORY_SEPARATOR, $exploded);
         self::cdFTPTree($conn, $rejoined);
 
         ftp_mkdir($conn, $currentDir);
@@ -224,7 +235,8 @@ class Helper {
      * @throws Exception If the provided path is not a valid directory in the FTP server.
      *
      */
-    public static function slugify($text, $divider = '-') {
+    public static function slugify($text, $divider = '-')
+    {
         // replace non letter or digits by divider
         $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
@@ -255,10 +267,11 @@ class Helper {
      *
      * @param string $file_location The location of the file to check.
      *
-     * @return boolean true if the file exist and it isn't a location, false otherwise.
+     * @return bool true if the file exist and it isn't a location, false otherwise.
      *
      */
-    public static function testFile($file_location) {
+    public static function testFile($file_location)
+    {
         if (is_dir($file_location)) {
             //throw new Exception($file_location . ' is a path! Frames need to be PNG, Fonts need to be ttf!');
             return false;

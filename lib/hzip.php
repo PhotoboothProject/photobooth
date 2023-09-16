@@ -1,12 +1,15 @@
 <?php
-class HZip {
+
+class HZip
+{
     /**
      * Add files and sub-directories in a folder to zip file.
      * @param string $folder
      * @param ZipArchive $zipFile
      * @param int $exclusiveLength Number of text to be exclusived from the file path.
      */
-    private static function folderToZip($folder, &$zipFile, $exclusiveLength) {
+    private static function folderToZip($folder, &$zipFile, $exclusiveLength)
+    {
         $handle = opendir($folder);
         while (false !== ($f = readdir($handle))) {
             if ($f != '.' && $f != '..') {
@@ -33,13 +36,14 @@ class HZip {
      * @param string $sourcePath Path of directory to be zip.
      * @param string $outZipPath Path of output zip file.
      */
-    public static function zipDir($sourcePath, $outZipPath) {
+    public static function zipDir($sourcePath, $outZipPath)
+    {
         // check if zip exist already and delete if it exist
         if (is_file($outZipPath)) {
             unlink($outZipPath);
         }
 
-        $pathInfo = pathInfo($sourcePath);
+        $pathInfo = pathinfo($sourcePath);
         $parentPath = $pathInfo['dirname'];
         $dirName = $pathInfo['basename'];
 
@@ -50,4 +54,3 @@ class HZip {
         $z->close();
     }
 }
-?>
