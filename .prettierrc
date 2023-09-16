@@ -3,15 +3,5 @@
   "singleQuote": true,
   "bracketSpacing": false,
   "printWidth": 120,
-  "useTabs": false,
-  "overrides": [
-    {
-      "files": "*.php",
-      "options": {
-          "tabWidth": 4,
-          "printWidth": 180,
-          "braceStyle": "1tbs",
-      }
-    },
-  ]
+  "useTabs": false
 }

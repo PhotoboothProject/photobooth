@@ -35,9 +35,21 @@ vendor/simple-translator/
 venv/
 yarn.lock
 
+# tooling
+tools/*/vendor
+
+# php-cs-fixer
+.php-cs-fixer.cache
+
+# phplint
+.phplint.cache
+
 # ignore some IDE and OS files
+.ddev/
 *.iml
 *.ipr
 *.iws
 .idea/
 **/.DS_Store
+
+/vendor/
