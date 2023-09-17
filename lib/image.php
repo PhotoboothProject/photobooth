@@ -1,6 +1,7 @@
 <?php
 
-class Image {
+class Image
+{
     /**
      * @var string The new filename for the image.
      */
@@ -302,7 +303,8 @@ class Image {
      * QR constructor.
      * Includes the QR code library.
      */
-    public function __construct() {
+    public function __construct()
+    {
         if (file_exists('../vendor/phpqrcode/lib/full/qrlib.php')) {
             include_once '../vendor/phpqrcode/lib/full/qrlib.php';
             $this->qrEcLevel = QR_ECLEVEL_M;
@@ -317,7 +319,8 @@ class Image {
      * @param string $ext The file extension to use for the filename. Default is ".jpg".
      * @return string The new filename.
      */
-    public static function createNewFilename($naming = 'random', $ext = '.jpg') {
+    public static function createNewFilename($naming = 'random', $ext = '.jpg')
+    {
         if ($naming === 'dateformatted') {
             $name = date('Ymd_His') . $ext;
         } else {
@@ -329,7 +332,8 @@ class Image {
     /**
      * Collect error data and increase errorCount
      */
-    public function addErrorData($errorData) {
+    public function addErrorData($errorData)
+    {
         $this->errorCount++;
         $this->errorLog[] = $errorData;
     }
@@ -337,7 +341,8 @@ class Image {
     /**
      * Reset the error count and error log.
      */
-    public function errorReset() {
+    public function errorReset()
+    {
         $this->errorCount = 0;
         $this->errorLog = [];
     }
@@ -347,7 +352,8 @@ class Image {
      *
      * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
      */
-    public function setNewFilename($naming) {
+    public function setNewFilename($naming)
+    {
         $this->newFilename = $this->createNewFilename($naming);
     }
 
@@ -356,7 +362,8 @@ class Image {
      *
      * @return string The new filename.
      */
-    public function getNewFilename() {
+    public function getNewFilename()
+    {
         return $this->newFilename;
     }
 
@@ -366,7 +373,8 @@ class Image {
      * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
      * @return string The new filename.
      */
-    public function setAndGetNewFilename($naming) {
+    public function setAndGetNewFilename($naming)
+    {
         $this->setNewFilename($naming);
         return $this->newFilename;
     }
@@ -377,7 +385,8 @@ class Image {
      * @param string $image The file path or URL of the image to create a resource from.
      * @return resource|false Returns the GD image resource if successful, or false if an error occurs.
      */
-    public static function createFromImage($image) {
+    public static function createFromImage($image)
+    {
         try {
             $resource = imagecreatefromstring(file_get_contents($image));
             if (!$resource) {
@@ -397,7 +406,8 @@ class Image {
      * @param resource|null $resource The GD image resource to validate.
      * @return bool Returns true if the resource is a valid GD image resource, or false otherwise.
      */
-    private function validateGdResource($resource) {
+    private function validateGdResource($resource)
+    {
         try {
             if (!isset($resource) || !is_resource($resource) || get_resource_type($resource) !== 'gd') {
                 return false;
@@ -417,7 +427,8 @@ class Image {
      *
      * @return bool Returns true on success, or false on failure.
      */
-    public function saveJpeg($sourceResource, $destination) {
+    public function saveJpeg($sourceResource, $destination)
+    {
         try {
             // Check if the $sourceResource and $destination are defined
             if (!isset($sourceResource) || !isset($destination)) {
@@ -444,7 +455,8 @@ class Image {
      * @param resource $image The image resource to be rotated and resized.
      * @return resource The rotated and resized image resource, or the original image if an error occurs.
      */
-    public function rotateResizeImage($image) {
+    public function rotateResizeImage($image)
+    {
         try {
             if (!$image) {
                 throw new Exception('Invalid image resource');
@@ -537,7 +549,8 @@ class Image {
      * @param resource $image The image resource to be resized.
      * @return resource The resized image resource, or the original image if an error occurs.
      */
-    public function resizeImage($image) {
+    public function resizeImage($image)
+    {
         try {
             if (!$image) {
                 throw new Exception('Invalid image resource.');
@@ -583,7 +596,8 @@ class Image {
      * @param resource $image The image resource to be resized.
      * @return resource The resized PNG image resource, or the original image if an error occurs.
      */
-    public function resizePngImage($image) {
+    public function resizePngImage($image)
+    {
         try {
             if (!$image) {
                 throw new Exception('Invalid image resource.');
@@ -647,7 +661,8 @@ class Image {
      * @param resource $source_file The source image resource to be resized and cropped.
      * @return resource The resized and cropped image resource, or the original image if an error occurs.
      */
-    public function resizeCropImage($source_file) {
+    public function resizeCropImage($source_file)
+    {
         try {
             $old_width = intval(imagesx($source_file));
             $old_height = intval(imagesy($source_file));
@@ -711,7 +726,8 @@ class Image {
      * @param resource $sourceResource The source image resource to which the frame will be applied
      * @return resource The modified source image resource with the frame applied
      */
-    public function applyFrame($sourceResource) {
+    public function applyFrame($sourceResource)
+    {
         try {
             if ($this->frameExtend) {
                 $new_width = intval(imagesx($sourceResource) / (1 - 0.01 * ($this->frameExtendLeft + $this->frameExtendRight)));
@@ -792,7 +808,8 @@ class Image {
      * @param resource $sourceResource The source image resource to which text will be applied
      * @return resource The modified source image resource with text applied
      */
-    public function applyText($sourceResource) {
+    public function applyText($sourceResource)
+    {
         try {
             $fontSize = $this->fontSize;
             $fontRotation = $this->fontRotation;
@@ -857,7 +874,8 @@ class Image {
      * @param int $rotation The rotation angle of the picture.
      * @return void
      */
-    public function setAddPictureOptions($x, $y, $width, $height, $rotation) {
+    public function setAddPictureOptions($x, $y, $width, $height, $rotation)
+    {
         $this->addPictureX = $x;
         $this->addPictureY = $y;
         $this->addPictureWidth = $width;
@@ -871,7 +889,8 @@ class Image {
      * @param resource $imageResource The source image resource to be added.
      * @param resource $destinationResource The destination image resource where the picture will be added.
      */
-    public function addPicture($imageResource, $destinationResource) {
+    public function addPicture($imageResource, $destinationResource)
+    {
         try {
             $dX = intval($this->addPictureX);
             $dY = intval($this->addPictureY);
@@ -927,7 +946,8 @@ class Image {
      * @param resource $imageResource The image resource to draw the dashed line on.
      * @return void
      */
-    public function drawDashedLine($imageResource) {
+    public function drawDashedLine($imageResource)
+    {
         try {
             $dashedLine = [
                 $this->dashedLineColor,
@@ -965,7 +985,8 @@ class Image {
      *
      * @throws Exception If no URL for QR code generation is defined or if there are issues with image rotation.
      */
-    public function createQr() {
+    public function createQr()
+    {
         try {
             if (!$this->qrAvailable) {
                 throw new Exception('QR library not available.');
@@ -1032,7 +1053,8 @@ class Image {
      *
      * @throws Exception If an error occurs during the generation of the QR code.
      */
-    public function showQR() {
+    public function showQR()
+    {
         try {
             // Generate the QR code
             $qrCode = $this->createQr();
@@ -1054,7 +1076,8 @@ class Image {
      *
      * @return bool True if the QR code was successfully saved, false otherwise.
      */
-    public function saveQr($destination) {
+    public function saveQr($destination)
+    {
         try {
             if (empty($destination)) {
                 throw new Exception('No destination path given.');
@@ -1088,7 +1111,8 @@ class Image {
      *
      * @throws Exception If the QR offset is not a numeric value.
      */
-    public function applyQr($qrCode, $imageResource) {
+    public function applyQr($qrCode, $imageResource)
+    {
         try {
             if (!is_numeric($this->qrOffset)) {
                 throw new Exception('QR-Offset is not numeric.');
@@ -1175,7 +1199,8 @@ class Image {
      * @param resource $resource The source image resource to apply the effect to.
      * @return resource The rotated image resource with the polaroid effect, or the original source image if an exception occurs.
      */
-    public function effectPolaroid($resource) {
+    public function effectPolaroid($resource)
+    {
         try {
             // We create a new image
             $img = imagecreatetruecolor(imagesx($resource) + 25, imagesy($resource) + 80);

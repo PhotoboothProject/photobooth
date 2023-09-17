@@ -1,8 +1,8 @@
 <?php
-$full_images = glob("./{,*/,*/*/,*/*/*/}*.{jpg,JPG}", GLOB_BRACE);
-$tmb_images = glob("./{,*/,*/*/,*/*/*/}tmb_*.{jpg,JPG}", GLOB_BRACE);
+$full_images = glob('./{,*/,*/*/,*/*/*/}*.{jpg,JPG}', GLOB_BRACE);
+$tmb_images = glob('./{,*/,*/*/,*/*/*/}tmb_*.{jpg,JPG}', GLOB_BRACE);
 $first_img = $full_images[0];
-$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
 // meta params to evaluate
 $og_locale = 'en_GB';
@@ -188,7 +188,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
     <?php foreach ($tmb_images as $filename) { ?>
         <?php
         $index += 1;
-        $this_full = str_replace("tmb_", "", $filename);
+        $this_full = str_replace('tmb_', '', $filename);
         $path_array = explode('/', $this_full);
         $download_name = end($path_array);
         ?>

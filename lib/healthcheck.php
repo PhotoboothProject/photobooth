@@ -4,7 +4,8 @@
  *
  * Performs a health check on the PHP environment.
  */
-class HealthCheck {
+class HealthCheck
+{
     /**
      * @var bool Indicates the health status of the PHP environment.
      */
@@ -35,7 +36,8 @@ class HealthCheck {
      *
      * Initializes the HealthCheck object and performs the health check.
      */
-    function __construct() {
+    public function __construct()
+    {
         list($this->phpMajor, $this->phpMinor) = $this->phpVersion();
         $this->gdEnabled = extension_loaded('gd');
         $this->zipEnabled = extension_loaded('zip');
@@ -53,7 +55,8 @@ class HealthCheck {
      *
      * @return int[] An array containing the major and minor versions of PHP.
      */
-    public static function phpVersion() {
+    public static function phpVersion()
+    {
         try {
             return [\PHP_MAJOR_VERSION, \PHP_MINOR_VERSION];
         } catch (Exception $e) {

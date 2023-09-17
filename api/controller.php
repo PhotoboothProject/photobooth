@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once '../lib/config.php';
 
@@ -14,4 +15,3 @@ if (isset($_POST['controller']) and $_POST['controller'] == 'keypadLogin') {
 
     echo json_encode($return);
 }
-?>

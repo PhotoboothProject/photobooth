@@ -15,6 +15,7 @@ jobs:
   build:
     strategy:
       matrix:
+        php: ['8.2']
         node: [18]
         os: [ubuntu-latest, macos-11]
     runs-on: ${{ matrix.os }}
@@ -23,14 +24,30 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: true
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+
       - name: Setup node ${{ matrix.node }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+
       - name: Install modules
         run: npm install
+      
       - name: Build
         run: npm run build
+
+      - name: PHP Coding Guidelines
+        run: composer cgl:ci
+
+      - name: PHP Lint
+        run: composer lint
+
       - name: Status
         run: |
           git status

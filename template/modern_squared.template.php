@@ -1,1 +1,3 @@
-<?php include 'modern.template.php'; ?>
+<?php
+
+include 'modern.template.php';

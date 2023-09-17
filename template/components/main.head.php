@@ -31,16 +31,16 @@ include 'main.defaults.php'; ?>
 
     <?php
     echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/' . $mainStyle . '?v=' . $config['photobooth']['version'] . '"/>';
-    if ($photoswipe) {
-        echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/photoswipe/dist/photoswipe.css"/>' . "\n";
-        if ($config['gallery']['bottom_bar']) {
-            echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/photoswipe-bottom.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
-        }
+if ($photoswipe) {
+    echo '<link rel="stylesheet" href="' . $fileRoot . 'node_modules/photoswipe/dist/photoswipe.css"/>' . "\n";
+    if ($config['gallery']['bottom_bar']) {
+        echo '<link rel="stylesheet" href="' . $fileRoot . 'resources/css/photoswipe-bottom.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
     }
-    if (is_file($fileRoot . 'private/overrides.css')) {
-        echo '<link rel="stylesheet" href="' . $fileRoot . 'private/overrides.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
-    }
-    ?>
+}
+if (is_file($fileRoot . 'private/overrides.css')) {
+    echo '<link rel="stylesheet" href="' . $fileRoot . 'private/overrides.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+}
+?>
 
     <script type="text/javascript" src="<?= $fileRoot ?>node_modules/jquery/dist/jquery.min.js"></script>
 </head>

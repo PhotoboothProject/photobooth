@@ -1,4 +1,5 @@
 <?php
+
 header('Content-Type: application/json');
 
 require_once '../lib/config.php';
@@ -8,7 +9,8 @@ $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 $simpleExec = $config['preview']['simpleExec'];
 
-function isRunning($pid, $Logger) {
+function isRunning($pid, $Logger)
+{
     try {
         $result = shell_exec(sprintf('ps %d', $pid));
 

@@ -3,9 +3,9 @@
 
     <div class="px-4">
         <h1 class="text-2xl font-bold text-center mb-6 border-solid border-b border-gray-200 pb-4 text-brand-1">
-            <?php 
+            <?php
                 if((isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
-                    echo "Admin -";
+                    echo 'Admin -';
                 }
             ?>
             <span data-i18n="menu"></span>
@@ -22,7 +22,7 @@
     <?php endif; ?>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
-        <?php 
+        <?php
             if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
                 echo getMenuBtn($fileRoot . 'admin', 'admin_panel', $config['icons']['admin']);
                 echo getMenuBtn($fileRoot . 'test', 'testMenu', $config['icons']['admin']);
@@ -44,20 +44,20 @@
             // echo getMenuBtn("/", "reload", $config['icons']['refresh']);
 
             // reboot
-            if( (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ) {
+            if((isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
                 echo getMenuBtn('reboot-btn', 'reboot_button');
             }
 
             // shutdown
-            if( (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental']) ) {
+            if((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental'])) {
                 echo getMenuBtn('shutdown-btn', 'shutdown_button');
             }
 
             // logout
-            if( (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental']) ) {
+            if((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental'])) {
                 echo getMenuBtn($fileRoot . 'login/logout.php', 'logout', $config['icons']['logout']);
             }
 
-        ?>
+            ?>
     </div>
 </div>

@@ -1,7 +1,9 @@
 <?php
+
 require_once __DIR__ . '/config.php';
 
-class DataLogger {
+class DataLogger
+{
     /** @var string The path to the log file. */
     public $logFile;
 
@@ -13,7 +15,8 @@ class DataLogger {
      *
      * @param string $logFile The path to the log file.
      */
-    public function __construct($logFile) {
+    public function __construct($logFile)
+    {
         $this->logFile = $logFile;
     }
 
@@ -23,7 +26,8 @@ class DataLogger {
      * @param mixed $data The data to be added to the log.
      * @return void
      */
-    public function addLogData($data) {
+    public function addLogData($data)
+    {
         $this->logData[] = $data;
     }
 
@@ -32,7 +36,8 @@ class DataLogger {
      *
      * @return array The log data.
      */
-    public function getLogData() {
+    public function getLogData()
+    {
         return $this->logData;
     }
 
@@ -42,7 +47,8 @@ class DataLogger {
      * @param array|null $data The data to log. If null, retrieves the log data from the instance.
      * @return void
      */
-    public function logToFile($data = null) {
+    public function logToFile($data = null)
+    {
         if ($data === null) {
             $data = $this->getLogData();
         }
@@ -67,7 +73,8 @@ class DataLogger {
      * @param int $indentLevel The current indentation level.
      * @return string The formatted log data.
      */
-    private static function formatLogData($data, $indentLevel = 0) {
+    private static function formatLogData($data, $indentLevel = 0)
+    {
         $fileData = '';
 
         foreach ($data as $entry) {
@@ -85,7 +92,8 @@ class DataLogger {
      * @param int $indentLevel The current indentation level.
      * @return string The formatted array entry.
      */
-    private static function formatArrayEntry($entry, $indentLevel) {
+    private static function formatArrayEntry($entry, $indentLevel)
+    {
         $formattedEntry = '';
 
         foreach ($entry as $key => $value) {
@@ -107,7 +115,8 @@ class DataLogger {
      * @param int $indentLevel The indentation level.
      * @return string The indented string.
      */
-    private static function indent($string, $indentLevel) {
+    private static function indent($string, $indentLevel)
+    {
         $indentation = str_repeat('    ', $indentLevel);
         return $indentation . $string;
     }
@@ -118,7 +127,8 @@ class DataLogger {
      * @param string $errormsg The error message to log.
      * @return void
      */
-    public function logErrorAndDie($errormsg) {
+    public function logErrorAndDie($errormsg)
+    {
         try {
             $errorData = [
                 'error' => $errormsg,

@@ -27,7 +27,7 @@
             <input class="<?=$btnClass?>" type="submit" name="submit" value="Login">
         </div>
         <?php if ($error !== false) {
-            echo '<span class="w-full flex mt-6 text-red-500" data-i18n="login_invalid"></span>'; 
+            echo '<span class="w-full flex mt-6 text-red-500" data-i18n="login_invalid"></span>';
         } ?>  
     </form>
 </div>

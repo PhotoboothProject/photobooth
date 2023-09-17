@@ -1,11 +1,11 @@
 <?php
 /****************************************************
-			RANDOM FRAME/BACKGROUND/... 
-	This "script" allows to randomize images,
-	backgrounds, canvas, frames, etc. so 
-	pictures taken are "funnier" and an element
-	of "surprise".
-			
+            RANDOM FRAME/BACKGROUND/...
+    This "script" allows to randomize images,
+    backgrounds, canvas, frames, etc. so
+    pictures taken are "funnier" and an element
+    of "surprise".
+
 *****************************************************/
 
 require_once '../lib/config.php';
@@ -24,7 +24,7 @@ if ($dir == 'demoframes' || !is_dir($path)) {
 
 $files = array_diff(scandir($path), ['.', '..']);
 
-/* - - - - - - - - - - */
+// - - - - - - - - - -
 
 $images = array_rand($files);
 $image = $files[$images];
@@ -50,4 +50,3 @@ switch ($file_extension) {
 
 header('Content-type: ' . $ctype);
 readfile($filename);
-?>

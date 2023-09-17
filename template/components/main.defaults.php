@@ -20,5 +20,3 @@ if (isset($photoswipe) && $photoswipe) {
         shuffle($imagelist);
     }
 }
-
-?>

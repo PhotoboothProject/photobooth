@@ -1,4 +1,5 @@
 <?php
+
 header('Content-Type: application/json');
 
 require_once '../lib/config.php';
@@ -369,6 +370,6 @@ if (isset($data['type'])) {
 }
 $Logger->logToFile();
 
-/* Kill service daemons after config has changed */
+// Kill service daemons after config has changed
 require_once '../lib/services_stop.php';
 exit();

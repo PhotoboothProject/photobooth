@@ -2,7 +2,8 @@
 
 require_once __DIR__ . '/config.php';
 
-function processIsRunning($pName, $pidFile) {
+function processIsRunning($pName, $pidFile)
+{
     if (file_exists($pidFile)) {
         exec('pgrep -F ' . $pidFile, $output, $return);
         if ($return == 0) {
@@ -52,4 +53,3 @@ if ($config['synctodrive']['enabled']) {
         proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/sync-to-drive.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     }
 }
-?>

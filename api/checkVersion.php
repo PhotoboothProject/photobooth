@@ -1,11 +1,13 @@
 <?php
+
 header('Content-Type: application/json');
 
 require_once '../lib/config.php';
 require_once '../lib/log.php';
 require_once '../lib/photobooth.php';
 
-function getLogData($debugLevel) {
+function getLogData($debugLevel)
+{
     $Logger = new DataLogger(PHOTOBOOTH_LOG);
     $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 

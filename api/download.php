@@ -1,4 +1,5 @@
 <?php
+
 require_once '../lib/config.php';
 
 $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : false;

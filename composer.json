@@ -1,0 +1,31 @@
+{
+    "name": "photoboothproject/photobooth",
+    "type": "project",
+    "license": "MIT",
+    "require": {},
+    "scripts": {
+        "post-install-cmd": [
+            "@tools:install"
+        ],
+        "post-update-cmd": [
+            "@tools:update"
+        ],
+        "cgl": [
+            "tools/php-cs-fixer/vendor/bin/php-cs-fixer --diff -v fix --config=.php-cs-fixer.dist.php"
+        ],
+        "cgl:ci": [
+            "tools/php-cs-fixer/vendor/bin/php-cs-fixer --diff -v fix --config=.php-cs-fixer.dist.php -v --dry-run"
+        ],
+        "lint": [
+            "tools/phplint/vendor/bin/phplint"
+        ],
+        "tools:install": [
+            "composer install --working-dir=tools/php-cs-fixer",
+            "composer install --working-dir=tools/phplint"
+        ],
+        "tools:update": [
+            "composer update -w --working-dir=tools/php-cs-fixer",
+            "composer update -w --working-dir=tools/phplint"
+        ]
+    }
+}

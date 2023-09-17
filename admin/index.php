@@ -14,13 +14,13 @@ if (
     require_once $fileRoot . 'lib/configsetup.inc.php';
 } else {
     header('location: ' . $fileRoot . 'login');
-    exit(); 
+    exit();
 }
 
 $pageTitle = 'Adminpanel';
 include('components/head.admin.php');
 include('helper/index.php');
-include('inputs/index.php'); 
+include('inputs/index.php');
 ?>
 
     <div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
@@ -28,10 +28,10 @@ include('inputs/index.php');
             
             <!-- body -->
 			<div class="w-full h-full flex flex-1 flex-col md:flex-row mt-5 overflow-hidden">
-                <?php 
+                <?php
                     $sidebarHeadline = $pageTitle;
-                    include('components/sidebar.php'); 
-                ?>
+include('components/sidebar.php');
+?>
 				<div class="flex flex-1 flex-col bg-content-1 rounded-xl ml-5 mr-5 mb-5 md:ml-0 overflow-hidden">
                     <?php include('components/content.php'); ?>
                 </div>

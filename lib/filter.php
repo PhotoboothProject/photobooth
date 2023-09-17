@@ -56,7 +56,8 @@ define('AVAILABLE_FILTERS', [
     FILTER_YELLOW => 'Yellow',
 ]);
 
-function applyFilter($imgfilter, $sourceResource) {
+function applyFilter($imgfilter, $sourceResource)
+{
     switch ($imgfilter) {
         case 'antique':
             imagefilter($sourceResource, IMG_FILTER_BRIGHTNESS, 0);

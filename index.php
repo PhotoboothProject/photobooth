@@ -55,12 +55,12 @@ include($fileRoot . 'template/components/main.head.php');
     <div id="videoAnimation">
         <ul class="left">
             <?php for ($i = 1; $i <= 50; $i++) {
-                print('<li class="reel-item"></li>');
+                print '<li class="reel-item"></li>';
             } ?>
         </ul>
         <ul class="right">
             <?php for ($i = 1; $i <= 50; $i++) {
-                print('<li class="reel-item"></li>');
+                print '<li class="reel-item"></li>';
             } ?>
         </ul>
     </div>
@@ -70,26 +70,26 @@ include($fileRoot . 'template/components/main.head.php');
     <?php
         include($fileRoot . 'template/' . $config['ui']['style'] . '.template.php');
 
-        if ($config['filters']['enabled']) {
-            include($fileRoot . 'template/components/start.filter.php');
-        }
+if ($config['filters']['enabled']) {
+    include($fileRoot . 'template/components/start.filter.php');
+}
 
-        include($fileRoot . 'template/components/start.loader.php');
-        include($fileRoot . 'template/components/start.results.php');
+include($fileRoot . 'template/components/start.loader.php');
+include($fileRoot . 'template/components/start.results.php');
 
-        if ($config['gallery']['enabled']) {
-            include($fileRoot . 'template/gallery.template.php');
-        }
-    ?>
+if ($config['gallery']['enabled']) {
+    include($fileRoot . 'template/gallery.template.php');
+}
+?>
 
 
 </div>
 
 <?php
-    include($fileRoot . 'template/send-mail.template.php');
-    include($fileRoot . 'template/modal.template.php');
-    include($fileRoot . 'template/components/adminShortcut.php');
-    include($fileRoot . 'template/components/main.footer.php');
+include($fileRoot . 'template/send-mail.template.php');
+include($fileRoot . 'template/modal.template.php');
+include($fileRoot . 'template/components/adminShortcut.php');
+include($fileRoot . 'template/components/main.footer.php');
 ?>
 
 <script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>

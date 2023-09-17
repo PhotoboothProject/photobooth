@@ -1,4 +1,5 @@
 <?php
+
 if (!$config['button']['force_buzzer']) {
     if ($config['picture']['enabled']) {
         echo getBoothButton('newPhoto', $config['icons']['take_picture'], 'newpic');
@@ -37,4 +38,3 @@ if ($config['filters']['enabled']) {
 if ($config['picture']['allow_delete']) {
     echo getBoothButton('delete', $config['icons']['delete'], 'deletebtn');
 }
-?>

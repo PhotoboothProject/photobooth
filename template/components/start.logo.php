@@ -1,4 +1,5 @@
 <?php
+
 if ($config['logo']['enabled']) {
     $logoClasses = 'w-full h-auto max-w-[30vw] absolute';
     if ($config['logo']['position'] == 'top_left') {
@@ -20,4 +21,3 @@ if ($config['logo']['enabled']) {
         '" alt="logo">
 </div>';
 }
-?>

@@ -1,5 +1,7 @@
 <?php
-function getInputButton($setting, $i18ntag, $key, $config) {
+
+function getInputButton($setting, $i18ntag, $key, $config)
+{
     switch ($key) {
         default:
             $btn = getCtaBtn($setting['placeholder'], $setting['value'], $config);
@@ -25,4 +27,3 @@ function getInputButton($setting, $i18ntag, $key, $config) {
                 </div>' .
         $test;
 }
-?>

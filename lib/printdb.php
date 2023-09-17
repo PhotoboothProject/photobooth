@@ -1,7 +1,9 @@
 <?php
+
 require_once __DIR__ . '/config.php';
 
-class PrintManager {
+class PrintManager
+{
     /**
      * @var string Path to the print database file.
      */
@@ -24,7 +26,8 @@ class PrintManager {
      * @param string $uniquename The unique name associated with the print.
      * @return bool True on success, false on failure.
      */
-    public function addToPrintDb($filename, $uniquename) {
+    public function addToPrintDb($filename, $uniquename)
+    {
         try {
             $csvData = [];
             $csvData[] = date('Y-m-d');
@@ -50,7 +53,8 @@ class PrintManager {
      *
      * @return int|bool The total count of prints on success, false on failure.
      */
-    public function getPrintCountFromDB() {
+    public function getPrintCountFromDB()
+    {
         try {
             if (file_exists($this->printDb) && is_readable($this->printDb)) {
                 $handle = fopen($this->printDb, 'r');
@@ -76,7 +80,8 @@ class PrintManager {
      *
      * @return string|bool The total count of prints on success, false on failure.
      */
-    public function getPrintCountFromCounter() {
+    public function getPrintCountFromCounter()
+    {
         try {
             if (file_exists($this->printCounter)) {
                 $counterContent = file_get_contents($this->printCounter);
@@ -96,7 +101,8 @@ class PrintManager {
      *
      * @return bool True if printing is locked, false otherwise.
      */
-    public function isPrintLocked() {
+    public function isPrintLocked()
+    {
         return file_exists($this->printLockFile);
     }
 
@@ -105,7 +111,8 @@ class PrintManager {
      *
      * @return bool True on success, false on failure.
      */
-    public function lockPrint() {
+    public function lockPrint()
+    {
         try {
             $handle = fopen($this->printLockFile, 'w');
             if (!$handle) {
@@ -123,7 +130,8 @@ class PrintManager {
      *
      * @return bool True on success, false on failure.
      */
-    public function unlockPrint() {
+    public function unlockPrint()
+    {
         try {
             if (file_exists($this->printLockFile) && unlink($this->printLockFile)) {
                 return true;
@@ -139,7 +147,8 @@ class PrintManager {
      *
      * @return bool True on success, false on failure.
      */
-    public function removePrintDb() {
+    public function removePrintDb()
+    {
         try {
             if (file_exists($this->printDb) && unlink($this->printDb)) {
                 return true;
@@ -155,7 +164,8 @@ class PrintManager {
      *
      * @return bool True on success, false on failure.
      */
-    public function removePrintCounter() {
+    public function removePrintCounter()
+    {
         try {
             if (file_exists($this->printCounter) && unlink($this->printCounter)) {
                 return true;
@@ -171,7 +181,8 @@ class PrintManager {
      *
      * @return void
      */
-    public function resetPrint() {
+    public function resetPrint()
+    {
         try {
             $this->removePrintDb();
             $this->unlockPrint();

@@ -59,13 +59,13 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
         <div class="backgrounds <?php echo $uiShape ?>">
             <?php
             $dir = '..' . DIRECTORY_SEPARATOR . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
-            $cdir = scandir($dir);
-            foreach ($cdir as $key => $value) {
-                if (!in_array($value, array(".", "..")) && !is_dir($dir . $value)) {
-                    echo '<img src="' . $dir . $value . '" class="' . $uiShape . ' backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
-                }
-            }
-            ?>
+$cdir = scandir($dir);
+foreach ($cdir as $key => $value) {
+    if (!in_array($value, ['.', '..']) && !is_dir($dir . $value)) {
+        echo '<img src="' . $dir . $value . '" class="' . $uiShape . ' backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
+    }
+}
+?>
         </div>
 
         <div class="chroma-control-bar">

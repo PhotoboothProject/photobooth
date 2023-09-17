@@ -22,7 +22,8 @@
  *
  * @source https://www.php.net/manual/en/function.array-merge.php#54946
  */
-function array_deep_merge() {
+function array_deep_merge()
+{
     switch (func_num_args()) {
         case 0:
             return false;
@@ -39,12 +40,12 @@ function array_deep_merge() {
                         $args[2][$key] = array_deep_merge($args[0][$key], $args[1][$key]);
                     } elseif (is_string($key) and isset($args[0][$key]) and isset($args[1][$key])) {
                         $args[2][$key] = $args[1][$key];
-                    } elseif (is_integer($key) and isset($args[0][$key]) and isset($args[1][$key])) {
+                    } elseif (is_int($key) and isset($args[0][$key]) and isset($args[1][$key])) {
                         $args[2][] = $args[0][$key];
                         $args[2][] = $args[1][$key];
-                    } elseif (is_integer($key) and isset($args[0][$key])) {
+                    } elseif (is_int($key) and isset($args[0][$key])) {
                         $args[2][] = $args[0][$key];
-                    } elseif (is_integer($key) and isset($args[1][$key])) {
+                    } elseif (is_int($key) and isset($args[1][$key])) {
                         $args[2][] = $args[1][$key];
                     } elseif (!isset($args[1][$key])) {
                         $args[2][$key] = $args[0][$key];

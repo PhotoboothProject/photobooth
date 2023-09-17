@@ -8,10 +8,10 @@
         <?php
         include 'components/gal.images.php';
 
-        if ($GALLERY_FOOTER === true && $config['gallery']['action_footer'] === true) {
-            include 'components/gal.btnFooter.php';
-        }
-        ?>
+            if ($GALLERY_FOOTER === true && $config['gallery']['action_footer'] === true) {
+                include 'components/gal.btnFooter.php';
+            }
+            ?>
     </div>
 </div>
 

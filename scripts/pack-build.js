@@ -50,6 +50,7 @@ function createArchive(fileName, archive) {
 
     archive.directory('admin');
     archive.directory('api');
+    archive.directory('bin');
     archive.directory('chroma');
     archive.directory('gallery');
     archive.directory('lib');
@@ -59,12 +60,14 @@ function createArchive(fileName, archive) {
     archive.directory('slideshow');
     archive.directory('template');
     archive.directory('test');
+    archive.directory('tools');
     archive.directory('vendor');
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
     archive.file('faq/index.php');
     archive.file('faq/faq.md.php');
     archive.file('HEAD');
+    archive.file('composer.json');
     archive.file('index.php');
     archive.file('LICENSE');
     archive.file('LICENSE_NOTICE');

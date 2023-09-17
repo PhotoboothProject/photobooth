@@ -4,7 +4,7 @@
 // Do not modify this file directly.
 // Please use the admin panel (http://localhost/admin) to change your personal configuration.
 //
-$config = array();
+$config = [];
 
 // G E N E R A L
 // possible language values: de, en, fr, it
@@ -38,13 +38,12 @@ $config['delete']['no_request'] = false;
 $config['database']['enabled'] = true;
 $config['database']['file'] = 'db';
 
-
 // F R O N T P A G E
 $config['ui']['show_fork'] = true;
 $config['ui']['skip_welcome'] = false;
 $config['ui']['admin_shortcut'] = true;
 // possible admin shortcut position values: 'top_right', 'top_left', 'bottom_right', 'bottom_left'
-$config['ui']['admin_shortcut_position'] = "bottom-right";
+$config['ui']['admin_shortcut_position'] = 'bottom-right';
 $config['logo']['enabled'] = true;
 $config['logo']['path'] = '';
 // possible logo position values: 'center', 'top_right', 'top_left', 'bottom_right', 'bottom_left'
@@ -56,7 +55,6 @@ $config['event']['textLeft'] = '';
 $config['event']['symbol'] = 'fa-heart-o';
 $config['event']['textRight'] = '';
 $config['button']['force_buzzer'] = false;
-
 
 // P I C T U R E S
 $config['picture']['enabled'] = true;
@@ -73,7 +71,7 @@ $config['picture']['polaroid_effect'] = false;
 $config['picture']['polaroid_rotation'] = '0';
 $config['filters']['enabled'] = true;
 $config['filters']['defaults'] = 'plain';
-$config['filters']['disabled'] = array();
+$config['filters']['disabled'] = [];
 $config['picture']['take_frame'] = true;
 $config['picture']['frame'] = '';
 $config['picture']['extend_by_frame'] = true;
@@ -103,7 +101,6 @@ $config['textonpicture']['font_color'] = '#ffffff';
 $config['textonpicture']['font_size'] = '80';
 $config['textonpicture']['linespace'] = '90';
 
-
 // C U S T O M
 $config['custom']['enabled'] = false;
 $config['take_custom']['cmd'] = '';
@@ -115,7 +112,6 @@ $config['custom']['key'] = '';
 $config['custom']['btn_text'] = 'Custom';
 $config['get_request']['custom'] = 'CNTDWNCUSTOM';
 $config['icons']['take_custom'] = 'fa fa-paint-brush';
-
 
 // C O L L A G E
 $config['collage']['enabled'] = true;
@@ -154,7 +150,6 @@ $config['textoncollage']['linespace'] = '90';
 // DO NOT CHANGE limit here
 $config['collage']['limit'] = '';
 
-
 // V I D E O
 $config['video']['enabled'] = false;
 $config['video']['cntdwn_time'] = '3';
@@ -166,7 +161,6 @@ $config['video']['effects'] = 'none';
 $config['video']['animation'] = true;
 $config['video']['gif'] = false;
 $config['video']['qr'] = true;
-
 
 // G A L L E R Y
 $config['gallery']['enabled'] = true;
@@ -196,7 +190,6 @@ $config['pswp']['tapAction'] = 'toggle-controls';
 $config['pswp']['doubleTapAction'] = 'zoom';
 $config['pswp']['bgClickAction'] = 'none';
 
-
 // P R E V I E W
 // Please read https://photoboothproject.github.io/FAQ#how-to-use-a-live-stream-as-background-at-countdown
 // possible preview_mode values: none, device_cam, url
@@ -217,7 +210,6 @@ $config['preview']['camera_mode'] = 'user';
 $config['preview']['asBackground'] = false;
 $config['preview']['showFrame'] = false;
 
-
 // K E Y I N G
 $config['keying']['enabled'] = false;
 // possible size values: '1000px', '1500px', '2000px', '2500px'
@@ -228,7 +220,6 @@ $config['keying']['variant'] = 'seriouslyjs';
 $config['keying']['seriouslyjs_color'] = '#62af74';
 $config['keying']['background_path'] = 'resources/img/background';
 $config['keying']['show_all'] = false;
-
 
 // P R I N T
 $config['button']['show_cups'] = false;
@@ -266,7 +257,6 @@ $config['textonprint']['font_color'] = '#ffffff';
 $config['textonprint']['font_size'] = '100';
 $config['textonprint']['linespace'] = '100';
 
-
 // Q R  -  C O D E
 $config['qr']['enabled'] = true;
 $config['qr']['ecLevel'] = 'QR_ECLEVEL_M';
@@ -275,7 +265,6 @@ $config['qr']['append_filename'] = true;
 $config['qr']['custom_text'] = false;
 $config['qr']['text'] = '';
 $config['qr']['result'] = 'hidden';
-
 
 // E -  M A I L
 // Please read https://photoboothproject.github.io/FAQ#ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem
@@ -296,13 +285,11 @@ $config['mail']['file'] = 'mail-adresses';
 $config['mail']['secure'] = 'tls';
 $config['mail']['port'] = '587';
 
-
 // S T A N D A L O N E   S L I D E S H O W
 $config['slideshow']['refreshTime'] = '60';
 $config['slideshow']['pictureTime'] = '3000';
 $config['slideshow']['randomPicture'] = true;
 $config['slideshow']['use_thumbs'] = false;
-
 
 // R E M O T E   B U Z Z E R
 $config['remotebuzzer']['startserver'] = false;
@@ -356,12 +343,10 @@ $config['remotebuzzer']['move2usbgpio'] = 6;
 $config['remotebuzzer']['move2usbled'] = false;
 $config['remotebuzzer']['move2usbledgpio'] = 11;
 
-
 // S Y N C  T O  U S B  S T I C K
 $config['synctodrive']['enabled'] = false;
 $config['synctodrive']['target'] = 'photobooth'; //Default target for the sync script
 $config['synctodrive']['interval'] = 300;
-
 
 // G E T  R E Q U E S T
 $config['get_request']['countdown'] = false;
@@ -370,7 +355,6 @@ $config['get_request']['server'] = '';
 $config['get_request']['picture'] = 'CNTDWNPHOTO';
 $config['get_request']['collage'] = 'CNTDWNCOLLAGE';
 $config['get_request']['video'] = 'CNTDWNVIDEO';
-
 
 // FTP
 $config['ftp']['enabled'] = false;
@@ -390,7 +374,6 @@ $config['ftp']['template_location'] = '';
 $config['ftp']['upload_thumb'] = false;
 $config['ftp']['delete'] = false;
 
-
 // A U T H E N T I C A T I O N
 $config['login']['enabled'] = false;
 $config['login']['username'] = 'Photo';
@@ -406,7 +389,6 @@ $config['protect']['localhost_index'] = false;
 $config['protect']['index_redirect'] = 'login';
 $config['protect']['manual'] = false;
 $config['protect']['localhost_manual'] = false;
-
 
 // U S E R   I N T E R F A C E
 // possible style values: "classic", "modern", "modern_squared", "custom"
@@ -440,7 +422,6 @@ $config['colors']['panel'] = '#1b3faa';
 $config['colors']['border'] = '#eeeeee';
 $config['colors']['box'] = '#e8ebf6';
 $config['colors']['gallery_button'] = '#ffffff';
-
 
 // I C O N S
 $config['icons']['admin_back'] = 'fa fa-long-arrow-left fa-3x';
@@ -488,12 +469,10 @@ $config['icons']['password_toggle'] = 'fa-eye fa-eye-slash';
 $config['icons']['slideshow_play'] = 'fa fa-play';
 $config['icons']['slideshow_toggle'] = 'fa-play fa-pause';
 
-
 // J P E G   Q U A L I T Y
 $config['jpeg_quality']['image'] = 100;
 $config['jpeg_quality']['chroma'] = 100;
 $config['jpeg_quality']['thumb'] = 60;
-
 
 // C O M M A N D S
 $config['take_picture']['cmd'] = '';
@@ -526,4 +505,3 @@ $config['reset']['remove_images'] = true;
 $config['reset']['remove_mailtxt'] = false;
 $config['reset']['remove_config'] = false;
 $config['reset']['remove_print_db'] = false;
-

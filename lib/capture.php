@@ -1,11 +1,13 @@
 <?php
+
 require_once __DIR__ . '/log.php';
 require_once __DIR__ . '/image.php';
 
 /**
  * Class PhotoboothCapture
  */
-class PhotoboothCapture {
+class PhotoboothCapture
+{
     /** @var string $style */
     public $style;
     /** @var string $fileName */
@@ -33,7 +35,8 @@ class PhotoboothCapture {
      * PhotoboothCapture constructor.
      * @param DataLogger|null $logger
      */
-    public function __construct($logger = null) {
+    public function __construct($logger = null)
+    {
         if ($logger == null || !is_object($this->logger)) {
             $this->logger = new DataLogger(PHOTOBOOTH_LOG);
             $this->logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
@@ -43,7 +46,8 @@ class PhotoboothCapture {
     /**
      * Capture a demo image.
      */
-    public function captureDemo() {
+    public function captureDemo()
+    {
         $demoFolder = $this->demoFolder;
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $this->tmpFile);
@@ -53,7 +57,8 @@ class PhotoboothCapture {
      * Capture an image from canvas data.
      * @param string $data
      */
-    public function captureCanvas($data) {
+    public function captureCanvas($data)
+    {
         try {
             list($type, $data) = explode(';', $data);
             list(, $data) = explode(',', $data);
@@ -101,7 +106,8 @@ class PhotoboothCapture {
     /**
      * Capture an image or video using a command.
      */
-    public function captureWithCmd() {
+    public function captureWithCmd()
+    {
         //gphoto must be executed in a dir with write permission for other commands we stay in the api dir
         if (substr($this->captureCmd, 0, strlen('gphoto')) === 'gphoto') {
             chdir(dirname($this->tmpFile));
@@ -162,7 +168,8 @@ class PhotoboothCapture {
     /**
      * Return information about the successful capture process
      */
-    public function returnData() {
+    public function returnData()
+    {
         if ($this->style === 'collage') {
             $LogData = [
                 'success' => 'collage',

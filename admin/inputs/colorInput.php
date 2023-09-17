@@ -1,5 +1,7 @@
 <?php
-function getColorInput($setting, $i18ntag) {
+
+function getColorInput($setting, $i18ntag)
+{
     return '<label class="mb-3" data-i18n="' .
         $i18ntag .
         '"> ' .
@@ -14,4 +16,3 @@ function getColorInput($setting, $i18ntag) {
         '"/>
             ';
 }
-?>
