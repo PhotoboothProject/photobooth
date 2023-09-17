@@ -1,7 +1,8 @@
 <?php
-session_start();
+
 $fileRoot = '';
-require_once $fileRoot . 'lib/config.php';
+require_once $fileRoot . 'lib/boot.php';
+
 if (!$config['ui']['skip_welcome']) {
     if (!is_file($fileRoot . 'welcome/.skip_welcome')) {
         header('location: ' . $fileRoot . 'welcome/');
@@ -20,8 +21,6 @@ if (
     (!$config['protect']['localhost_index'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) ||
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
 ) {
-    require_once $fileRoot . 'lib/filter.php';
-
     $pageTitle = $config['ui']['branding'];
     $mainStyle = $config['ui']['style'] . '_style.css';
     $photoswipe = true;

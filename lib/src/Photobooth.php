@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/helper.php';
+namespace Photobooth;
 
 /**
  * The Photobooth class holds information about the server and Photobooth installation.
@@ -71,14 +71,14 @@ class Photobooth
      */
     public function getPhotoboothVersion()
     {
-        $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'package.json';
+        $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . '/../package.json';
         if (!is_file($packageJsonPath)) {
-            throw new Exception('Package file not found.');
+            throw new \Exception('Package file not found.');
         }
         $packageContent = file_get_contents($packageJsonPath);
         $package = json_decode($packageContent, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception('Error decoding package file: ' . json_last_error_msg());
+            throw new \Exception('Error decoding package file: ' . json_last_error_msg());
         }
         return $package['version'] ?? 'unknown';
     }
@@ -103,12 +103,12 @@ class Photobooth
         $context = stream_context_create($options);
         $content = file_get_contents($url, false, $context);
         if ($content === false) {
-            throw new Exception('Failed to fetch latest release from GitHub API');
+            throw new \Exception('Failed to fetch latest release from GitHub API');
         }
 
         $data = json_decode($content, true);
         if (!$data || !isset($data['tag_name'])) {
-            throw new Exception('Invalid data returned from GitHub API');
+            throw new \Exception('Invalid data returned from GitHub API');
         }
 
         $remoteVersion = substr($data['tag_name'], 1);
@@ -128,7 +128,7 @@ class Photobooth
             $updateAvailable = $localVersion != $remoteVersion;
 
             return $updateAvailable;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }

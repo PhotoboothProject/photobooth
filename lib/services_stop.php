@@ -2,8 +2,6 @@
 
 // check PID file and if found, kill process and delete PID file
 
-require_once __DIR__ . '/config.php';
-
 function killProcessIfActive($pName, $pidFile, $logfileName, $killSig)
 {
     global $config;

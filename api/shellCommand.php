@@ -1,8 +1,10 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/config.php';
+use Photobooth\DataLogger;
+
+header('Content-Type: application/json');
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);

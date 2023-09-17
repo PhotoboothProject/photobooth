@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/config.php';
+namespace Photobooth;
 
 class PrintManager
 {
@@ -36,14 +36,14 @@ class PrintManager
             $csvData[] = $uniquename;
             $handle = fopen($this->printDb, 'a');
             if (!$handle) {
-                throw new Exception('Failed to open print database.');
+                throw new \Exception('Failed to open print database.');
             }
             if (fputcsv($handle, $csvData) === false) {
-                throw new Exception('Failed to write to print database.');
+                throw new \Exception('Failed to write to print database.');
             }
             fclose($handle);
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -59,7 +59,7 @@ class PrintManager
             if (file_exists($this->printDb) && is_readable($this->printDb)) {
                 $handle = fopen($this->printDb, 'r');
                 if (!$handle) {
-                    throw new Exception('Failed to open print database.');
+                    throw new \Exception('Failed to open print database.');
                 }
                 $linecount = 0;
                 while (!feof($handle)) {
@@ -70,7 +70,7 @@ class PrintManager
                 return $linecount;
             }
             return intval(0);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -86,12 +86,12 @@ class PrintManager
             if (file_exists($this->printCounter)) {
                 $counterContent = file_get_contents($this->printCounter);
                 if ($counterContent === false) {
-                    throw new Exception('Failed to read print counter.');
+                    throw new \Exception('Failed to read print counter.');
                 }
                 return $counterContent;
             }
             return $this->getPrintCountFromDB();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->getPrintCountFromDB();
         }
     }
@@ -116,11 +116,11 @@ class PrintManager
         try {
             $handle = fopen($this->printLockFile, 'w');
             if (!$handle) {
-                throw new Exception('Failed to lock print.');
+                throw new \Exception('Failed to lock print.');
             }
             fclose($handle);
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -136,8 +136,8 @@ class PrintManager
             if (file_exists($this->printLockFile) && unlink($this->printLockFile)) {
                 return true;
             }
-            throw new Exception('Failed to unlock printing.');
-        } catch (Exception $e) {
+            throw new \Exception('Failed to unlock printing.');
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -153,8 +153,8 @@ class PrintManager
             if (file_exists($this->printDb) && unlink($this->printDb)) {
                 return true;
             }
-            throw new Exception('Failed to remove print database.');
-        } catch (Exception $e) {
+            throw new \Exception('Failed to remove print database.');
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -170,8 +170,8 @@ class PrintManager
             if (file_exists($this->printCounter) && unlink($this->printCounter)) {
                 return true;
             }
-            throw new Exception('Failed to remove print counter.');
-        } catch (Exception $e) {
+            throw new \Exception('Failed to remove print counter.');
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -187,7 +187,7 @@ class PrintManager
             $this->removePrintDb();
             $this->unlockPrint();
             $this->removePrintCounter();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return;
         }
     }

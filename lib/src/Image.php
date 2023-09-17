@@ -1,5 +1,9 @@
 <?php
 
+namespace Photobooth;
+
+use GdImage;
+
 class Image
 {
     /**
@@ -383,17 +387,17 @@ class Image
      * Creates a GD image resource from an image file.
      *
      * @param string $image The file path or URL of the image to create a resource from.
-     * @return resource|false Returns the GD image resource if successful, or false if an error occurs.
+     * @return GdImage|false Returns the GD image resource if successful, or false if an error occurs.
      */
-    public static function createFromImage($image)
+    public function createFromImage($image)
     {
         try {
             $resource = imagecreatefromstring(file_get_contents($image));
             if (!$resource) {
-                throw new Exception('Can\'t create GD resource.');
+                throw new \Exception('Can\'t create GD resource.');
             }
             return $resource;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             return false;
@@ -403,7 +407,7 @@ class Image
     /**
      * Validates a GD image resource.
      *
-     * @param resource|null $resource The GD image resource to validate.
+     * @param GdImage|null $resource The GD image resource to validate.
      * @return bool Returns true if the resource is a valid GD image resource, or false otherwise.
      */
     private function validateGdResource($resource)
@@ -412,7 +416,7 @@ class Image
             if (!isset($resource) || !is_resource($resource) || get_resource_type($resource) !== 'gd') {
                 return false;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -422,7 +426,7 @@ class Image
     /**
      * Saves a GD image resource to disk.
      *
-     * @param resource $sourceResource The GD image resource to save.
+     * @param GdImage $sourceResource The GD image resource to save.
      * @param string $destination The file path and name where the image will be saved.
      *
      * @return bool Returns true on success, or false on failure.
@@ -432,16 +436,16 @@ class Image
         try {
             // Check if the $sourceResource and $destination are defined
             if (!isset($sourceResource) || !isset($destination)) {
-                throw new Exception('Missing parameters.');
+                throw new \Exception('Missing parameters.');
             }
 
             // Save the image to disk
             if (!imagejpeg($sourceResource, $destination, $this->jpegQuality)) {
-                throw new Exception('Error saving image.');
+                throw new \Exception('Error saving image.');
             }
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // If there is an exception, return false
             $this->addErrorData($e->getMessage());
 
@@ -452,14 +456,14 @@ class Image
     /**
      * Rotate and resize an image.
      *
-     * @param resource $image The image resource to be rotated and resized.
-     * @return resource The rotated and resized image resource, or the original image if an error occurs.
+     * @param GdImage $image The image resource to be rotated and resized.
+     * @return GdImage The rotated and resized image resource, or the original image if an error occurs.
      */
     public function rotateResizeImage($image)
     {
         try {
             if (!$image) {
-                throw new Exception('Invalid image resource');
+                throw new \Exception('Invalid image resource');
             }
 
             $rotation = intval($this->resizeRotation);
@@ -469,7 +473,7 @@ class Image
             if (in_array($rotation, $simple_rotate)) {
                 $new = imagerotate($image, $rotation, 0);
                 if (!$new) {
-                    throw new Exception('Cannot rotate image.');
+                    throw new \Exception('Cannot rotate image.');
                 }
             } else {
                 $bg_color = $this->resizeBgColor;
@@ -485,20 +489,20 @@ class Image
                 // create new image with old dimensions
                 $new = imagecreatetruecolor($old_width, $old_height);
                 if (!$new) {
-                    throw new Exception('Cannot create new image.');
+                    throw new \Exception('Cannot create new image.');
                 }
 
                 // color background as defined
                 $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
                 if (!imagefill($new, 0, 0, $background)) {
-                    throw new Exception('Cannot fill image.');
+                    throw new \Exception('Cannot fill image.');
                 }
 
                 // rotate the image
                 $background = imagecolorallocatealpha($image, $bg_r, $bg_g, $bg_b, $bg_a);
                 $image = imagerotate($image, $rotation, $background);
                 if (!$image) {
-                    throw new Exception('Cannot rotate image.');
+                    throw new \Exception('Cannot rotate image.');
                 }
 
                 // make sure width and/or height fits into old dimensions
@@ -506,7 +510,7 @@ class Image
                 $this->resizeMaxHeight = intval($old_height);
                 $image = self::resizeImage($image);
                 if (!$image) {
-                    throw new Exception('Cannot resize image.');
+                    throw new \Exception('Cannot resize image.');
                 }
 
                 // get new dimensions after rotate and resize
@@ -519,14 +523,14 @@ class Image
 
                 // copy rotated image to new image with old dimensions
                 if (imagecopy($new, $image, $x, $y, 0, 0, $new_width, $new_height)) {
-                    throw new Exception('Cannot copy rotated image to new image.');
+                    throw new \Exception('Cannot copy rotated image to new image.');
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($new) && is_resource($new)) {
+            if (isset($new)) {
                 imagedestroy($new);
             }
 
@@ -546,14 +550,14 @@ class Image
     /**
      * Resize an image based on the maximum dimensions.
      *
-     * @param resource $image The image resource to be resized.
-     * @return resource The resized image resource, or the original image if an error occurs.
+     * @param GdImage $image The image resource to be resized.
+     * @return GdImage The resized image resource, or the original image if an error occurs.
      */
     public function resizeImage($image)
     {
         try {
             if (!$image) {
-                throw new Exception('Invalid image resource.');
+                throw new \Exception('Invalid image resource.');
             }
 
             $old_width = imagesx($image);
@@ -562,7 +566,7 @@ class Image
             $max_height = $this->resizeMaxHeight;
 
             if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
-                throw new Exception('Invalid image dimensions or maximum dimensions.');
+                throw new \Exception('Invalid image dimensions or maximum dimensions.');
             }
 
             $scale = min($max_width / $old_width, $max_height / $old_height);
@@ -572,9 +576,9 @@ class Image
 
             $new_image = imagescale($image, $new_width, $new_height, IMG_TRIANGLE);
             if (!$new_image) {
-                throw new Exception('Cannot resize image.');
+                throw new \Exception('Cannot resize image.');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Re-throw exception on loglevel > 1
@@ -593,14 +597,14 @@ class Image
     /**
      * Resize a PNG image based on the maximum dimensions.
      *
-     * @param resource $image The image resource to be resized.
-     * @return resource The resized PNG image resource, or the original image if an error occurs.
+     * @param GdImage $image The image resource to be resized.
+     * @return GdImage The resized PNG image resource, or the original image if an error occurs.
      */
     public function resizePngImage($image)
     {
         try {
             if (!$image) {
-                throw new Exception('Invalid image resource.');
+                throw new \Exception('Invalid image resource.');
             }
 
             $old_width = imagesx($image);
@@ -609,7 +613,7 @@ class Image
             $new_height = $this->resizeMaxHeight;
 
             if ($old_width <= 0 || $old_height <= 0 || $new_width <= 0 || $new_height <= 0) {
-                throw new Exception('Invalid image dimensions or maximum dimensions.');
+                throw new \Exception('Invalid image dimensions or maximum dimensions.');
             }
 
             if ($this->keepAspectRatio) {
@@ -619,7 +623,7 @@ class Image
             }
             $new = imagecreatetruecolor($new_width, $new_height);
             if (!$new) {
-                throw new Exception('Cannot create new image.');
+                throw new \Exception('Cannot create new image.');
             }
 
             imagealphablending($new, false);
@@ -627,18 +631,18 @@ class Image
 
             if ($this->keepAspectRatio) {
                 if (!imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
-                    throw new Exception('Cannot resize image.');
+                    throw new \Exception('Cannot resize image.');
                 }
             } else {
                 if (!imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
-                    throw new Exception('Cannot resize image.');
+                    throw new \Exception('Cannot resize image.');
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($new) && is_resource($new)) {
+            if (isset($new)) {
                 imagedestroy($new);
             }
 
@@ -658,8 +662,8 @@ class Image
     /**
      * Resize and crop an image by center.
      *
-     * @param resource $source_file The source image resource to be resized and cropped.
-     * @return resource The resized and cropped image resource, or the original image if an error occurs.
+     * @param GdImage $source_file The source image resource to be resized and cropped.
+     * @return GdImage The resized and cropped image resource, or the original image if an error occurs.
      */
     public function resizeCropImage($source_file)
     {
@@ -670,7 +674,7 @@ class Image
             $max_height = $this->resizeMaxHeight;
 
             if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
-                throw new Exception('Invalid image dimensions or maximum dimensions.');
+                throw new \Exception('Invalid image dimensions or maximum dimensions.');
             }
 
             $new_width = intval(($old_height * $max_width) / $max_height);
@@ -681,7 +685,7 @@ class Image
 
             $new = imagecreatetruecolor(intval($max_width), intval($max_height));
             if (!$new) {
-                throw new Exception('Cannot create new image.');
+                throw new \Exception('Cannot create new image.');
             }
 
             // If the new width is greater than the actual width of the image, then the height is too large and the rest is cut off, or vice versa
@@ -690,20 +694,20 @@ class Image
                 $h_point = intval(($old_height - $new_height) / 2);
                 // Copy image
                 if (!imagecopyresampled($new, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height)) {
-                    throw new Exception('Cannot resize and crop image by height.');
+                    throw new \Exception('Cannot resize and crop image by height.');
                 }
             } else {
                 // Cut point by width
                 $w_point = intval(($old_width - $new_width) / 2);
                 if (!imagecopyresampled($new, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height)) {
-                    throw new Exception('Cannot resize and crop image by width.');
+                    throw new \Exception('Cannot resize and crop image by width.');
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($new) && is_resource($new)) {
+            if (isset($new) && $new instanceof GdImage) {
                 imagedestroy($new);
             }
 
@@ -723,8 +727,8 @@ class Image
     /**
      * Apply the frame to the source image resource
      *
-     * @param resource $sourceResource The source image resource to which the frame will be applied
-     * @return resource The modified source image resource with the frame applied
+     * @param GdImage $sourceResource The source image resource to which the frame will be applied
+     * @return GdImage The modified source image resource with the frame applied
      */
     public function applyFrame($sourceResource)
     {
@@ -735,13 +739,13 @@ class Image
 
                 $img = imagecreatetruecolor($new_width, $new_height);
                 if (!$img) {
-                    throw new Exception('Cannot create new image.');
+                    throw new \Exception('Cannot create new image.');
                 }
                 $white = imagecolorallocate($img, 255, 255, 255);
 
                 // We fill in the new white image
                 if (!imagefill($img, 0, 0, $white)) {
-                    throw new Exception('Cannot fill image.');
+                    throw new \Exception('Cannot fill image.');
                 }
 
                 $image_pos_x = intval(imagesx($img) * 0.01 * $this->frameExtendLeft);
@@ -749,7 +753,7 @@ class Image
 
                 // We copy the image to which we want to apply the frame in our new image.
                 if (!imagecopy($img, $sourceResource, $image_pos_x, $image_pos_y, 0, 0, imagesx($sourceResource), imagesy($sourceResource))) {
-                    throw new Exception('Error copying image to new frame.');
+                    throw new \Exception('Error copying image to new frame.');
                 }
             } else {
                 $img = $sourceResource;
@@ -763,7 +767,7 @@ class Image
             $this->resizeMaxHeight = $pic_height;
             $frame = self::resizePngImage($frame);
             if (!$frame) {
-                throw new Exception('Cannot resize Frame.');
+                throw new \Exception('Cannot resize Frame.');
             }
             $frame_width = imagesx($frame);
             $frame_height = imagesy($frame);
@@ -778,13 +782,13 @@ class Image
             }
 
             if (!imagecopy($img, $frame, $dst_x, $dst_y, 0, 0, $frame_width, $frame_height)) {
-                throw new Exception('Error applying frame to image.');
+                throw new \Exception('Error applying frame to image.');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Clear cache
-            if (isset($new) && is_resource($img)) {
+            if (isset($new) && $new instanceof GdImage) {
                 imagedestroy($img);
             }
 
@@ -805,8 +809,8 @@ class Image
     /**
      * Apply text to the source image resource
      *
-     * @param resource $sourceResource The source image resource to which text will be applied
-     * @return resource The modified source image resource with text applied
+     * @param GdImage $sourceResource The source image resource to which text will be applied
+     * @return GdImage The modified source image resource with text applied
      */
     public function applyText($sourceResource)
     {
@@ -826,7 +830,7 @@ class Image
             // Add first line of text
             if (!empty($this->textLine1)) {
                 if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $this->textLine1)) {
-                    throw new Exception('Could not add first line of text to resource.');
+                    throw new \Exception('Could not add first line of text to resource.');
                 }
             }
 
@@ -835,7 +839,7 @@ class Image
                 $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing : $fontLocationY;
                 $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing;
                 if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $this->textLine2)) {
-                    throw new Exception('Could not add second line of text to resource.');
+                    throw new \Exception('Could not add second line of text to resource.');
                 }
             }
 
@@ -844,10 +848,10 @@ class Image
                 $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing * 2 : $fontLocationY;
                 $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing * 2;
                 if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $this->textLine3)) {
-                    throw new Exception('Could not add third line of text to resource.');
+                    throw new \Exception('Could not add third line of text to resource.');
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Re-throw exception on loglevel > 1
@@ -886,8 +890,8 @@ class Image
     /**
      * Add a picture to the destination image resource.
      *
-     * @param resource $imageResource The source image resource to be added.
-     * @param resource $destinationResource The destination image resource where the picture will be added.
+     * @param GdImage $imageResource The source image resource to be added.
+     * @param GdImage $destinationResource The destination image resource where the picture will be added.
      */
     public function addPicture($imageResource, $destinationResource)
     {
@@ -899,7 +903,7 @@ class Image
             $degrees = intval($this->addPictureRotation);
 
             if ($width <= 0 || $height <= 0) {
-                throw new Exception('Invalid image dimensions or maximum dimensions.');
+                throw new \Exception('Invalid image dimensions or maximum dimensions.');
             }
 
             if (abs($degrees) == 90) {
@@ -931,9 +935,9 @@ class Image
             }
 
             if (!imagecopy($destinationResource, $imageResource, $dX, $dY, 0, 0, $width, $height)) {
-                throw new Exception('Can\'t add image to resource.');
+                throw new \Exception('Can\'t add image to resource.');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
             throw $e;
         }
@@ -943,7 +947,7 @@ class Image
     /**
      * Draw a dashed line on the specified image resource.
      *
-     * @param resource $imageResource The image resource to draw the dashed line on.
+     * @param GdImage $imageResource The image resource to draw the dashed line on.
      * @return void
      */
     public function drawDashedLine($imageResource)
@@ -960,12 +964,12 @@ class Image
                 IMG_COLOR_TRANSPARENT,
             ];
             if (!imagesetstyle($imageResource, $dashedLine)) {
-                throw new Exception('Can\'t set the style for line drawing.');
+                throw new \Exception('Can\'t set the style for line drawing.');
             }
             if (!imageline($imageResource, $this->dashedLineStartX, $this->dashedLineStartY, $this->dashedLineEndX, $this->dashedLineEndY, IMG_COLOR_STYLED)) {
-                throw new Exception('Can\'t draw image line.');
+                throw new \Exception('Can\'t draw image line.');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Re-throw exception on loglevel > 1
@@ -981,7 +985,7 @@ class Image
     /**
      * Generates a QR code image using the provided URL and configuration settings.
      *
-     * @return resource An image resource of the generated QR code.
+     * @return GdImage An image resource of the generated QR code.
      *
      * @throws Exception If no URL for QR code generation is defined or if there are issues with image rotation.
      */
@@ -989,39 +993,39 @@ class Image
     {
         try {
             if (!$this->qrAvailable) {
-                throw new Exception('QR library not available.');
+                throw new \Exception('QR library not available.');
             }
 
             if (empty($this->qrUrl)) {
-                throw new Exception('No URL for QR-Code generation defined.');
+                throw new \Exception('No URL for QR-Code generation defined.');
             }
 
             if (!is_numeric($this->qrSize)) {
-                throw new Exception('QR-Size is not numeric.');
+                throw new \Exception('QR-Size is not numeric.');
             }
             if ($this->qrSize % 2 != 0) {
-                throw new Exception('QR-Size is not even.');
+                throw new \Exception('QR-Size is not even.');
             }
             if ($this->qrSize < 2 || $this->qrSize > 10) {
-                throw new Exception('QR-Size must be 2, 4, 6, 8 or 10.');
+                throw new \Exception('QR-Size must be 2, 4, 6, 8 or 10.');
             }
 
             if (!is_numeric($this->qrMargin)) {
-                throw new Exception('QR-Margin is not numeric.');
+                throw new \Exception('QR-Margin is not numeric.');
             }
             if ($this->qrMargin < 0 || $this->qrMargin > 10) {
-                throw new Exception('QR-Size must be in range between 0 and 10.');
+                throw new \Exception('QR-Size must be in range between 0 and 10.');
             }
 
             $qrCode = QRcode::text($this->qrUrl, false, $this->qrEcLevel);
             $qrCodeImage = QRimage::image($qrCode, $this->qrSize, $this->qrMargin);
             if (!$qrCodeImage) {
-                throw new Exception('Failed to create image from QR code.');
+                throw new \Exception('Failed to create image from QR code.');
             }
 
             if ($this->qrRotate) {
                 if (!imagerotate($qrCodeImage, 90, 0)) {
-                    throw new Exception('Unable to rotate QR-Code-Image.');
+                    throw new \Exception('Unable to rotate QR-Code-Image.');
                 }
             }
             if ($this->qrColor != '#ffffff') {
@@ -1042,7 +1046,7 @@ class Image
                 }
             }
             return $qrCodeImage;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
             throw $e;
         }
@@ -1061,7 +1065,7 @@ class Image
 
             // Display the QR code as a PNG image
             imagepng($qrCode);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // If an exception is caught, display the error message
@@ -1080,7 +1084,7 @@ class Image
     {
         try {
             if (empty($destination)) {
-                throw new Exception('No destination path given.');
+                throw new \Exception('No destination path given.');
             }
 
             // Generate the QR code
@@ -1088,12 +1092,12 @@ class Image
 
             // Save the QR code as a PNG image to the specified destination path
             if (!imagepng($qrCode, $destination)) {
-                throw new Exception('Unable to save QR code to ' . $destination);
+                throw new \Exception('Unable to save QR code to ' . $destination);
             }
 
             // Return true if the QR code was successfully saved
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // If an exception is caught, return false
@@ -1104,10 +1108,10 @@ class Image
     /**
      * Applies a generated QR code image to an existing image resource.
      *
-     * @param resource $qrCode The QR code image resource to apply.
-     * @param resource $imageResource The existing image resource to apply the QR code to.
+     * @param GdImage $imageResource $qrCode The QR code image resource to apply.
+     * @param GdImage $imageResource The existing image resource to apply the QR code to.
      *
-     * @return resource The updated image resource with the applied QR code.
+     * @return GdImage The updated image resource with the applied QR code.
      *
      * @throws Exception If the QR offset is not a numeric value.
      */
@@ -1115,7 +1119,7 @@ class Image
     {
         try {
             if (!is_numeric($this->qrOffset)) {
-                throw new Exception('QR-Offset is not numeric.');
+                throw new \Exception('QR-Offset is not numeric.');
             }
             $offset = $this->qrOffset;
 
@@ -1125,7 +1129,7 @@ class Image
             $qrHeight = imagesy($qrCode);
 
             if ($width <= 0 || $height <= 0 || $qrWidth <= 0 || $qrHeight <= 0) {
-                throw new Exception('Invalid image dimensions or maximum dimensions.');
+                throw new \Exception('Invalid image dimensions or maximum dimensions.');
             }
             switch ($this->qrPosition) {
                 case 'topLeft':
@@ -1167,19 +1171,19 @@ class Image
             }
 
             if (!imagecopy($imageResource, $qrCode, $x, $y, 0, 0, $qrWidth, $qrHeight)) {
-                throw new Exception('Can not apply QR Code onto image.');
+                throw new \Exception('Can not apply QR Code onto image.');
             }
             // Try to clear cache
-            if (is_resource($qrCode)) {
+            if ($qrCode instanceof GdImage) {
                 imagedestroy($qrCode);
             }
             $this->imageModified = true;
             return $imageResource;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($qrCode) && is_resource($qrCode)) {
+            if (isset($qrCode) && $qrCode instanceof GdImage) {
                 imagedestroy($qrCode);
             }
 
@@ -1196,8 +1200,8 @@ class Image
     /**
      * Applies a polaroid effect to the given image resource.
      *
-     * @param resource $resource The source image resource to apply the effect to.
-     * @return resource The rotated image resource with the polaroid effect, or the original source image if an exception occurs.
+     * @param GdImage $resource The source image resource to apply the effect to.
+     * @return GdImage The rotated image resource with the polaroid effect, or the original source image if an exception occurs.
      */
     public function effectPolaroid($resource)
     {
@@ -1205,19 +1209,19 @@ class Image
             // We create a new image
             $img = imagecreatetruecolor(imagesx($resource) + 25, imagesy($resource) + 80);
             if (!$img) {
-                throw new Exception('Cannot create new image.');
+                throw new \Exception('Cannot create new image.');
             }
             $white = imagecolorallocate($img, 255, 255, 255);
 
             // We fill in the new white image
             if (!imagefill($img, 0, 0, $white)) {
-                throw new Exception('Cannot fill image.');
+                throw new \Exception('Cannot fill image.');
             }
 
             // We copy the image to which we want to apply the polariod effect in our new image.
             if (!imagecopy($img, $resource, 11, 11, 0, 0, imagesx($resource), imagesy($resource))) {
                 imagedestroy($img);
-                throw new Exception('Cannot copy image.');
+                throw new \Exception('Cannot copy image.');
             }
 
             // Clear cach
@@ -1228,7 +1232,7 @@ class Image
             // We put a gray border to our image.
             if (!imagerectangle($img, 0, 0, imagesx($img) - 4, imagesy($img) - 4, $color)) {
                 imagedestroy($img);
-                throw new Exception('Cannot add border.');
+                throw new \Exception('Cannot add border.');
             }
 
             // Shade Colors
@@ -1246,7 +1250,7 @@ class Image
                 !imageline($img, imagesx($img) - 1, 6, imagesx($img) - 1, imagesy($img) - 4, $gris3)
             ) {
                 imagedestroy($img);
-                throw new Exception('Cannot add shadow.');
+                throw new \Exception('Cannot add shadow.');
             }
 
             // Convert hex color string to RGB values
@@ -1257,13 +1261,13 @@ class Image
             $rotatedImg = imagerotate($img, $this->polaroidRotation, $background);
 
             if (!$rotatedImg) {
-                throw new Exception('Cannot rotate image.');
+                throw new \Exception('Cannot rotate image.');
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($img) && is_resource($img)) {
+            if (isset($img) && $img instanceof GdImage) {
                 imagedestroy($img);
             }
 

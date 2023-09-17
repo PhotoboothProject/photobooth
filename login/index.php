@@ -1,8 +1,7 @@
 <?php
-session_start();
-$fileRoot = '../';
 
-require_once($fileRoot . 'lib/config.php');
+$fileRoot = '../';
+require_once($fileRoot . 'lib/boot.php');
 
 // LOGIN
 $username = $config['login']['username'];

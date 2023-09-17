@@ -2,7 +2,7 @@
 
 $fileRoot = '../';
 
-require_once($fileRoot . 'lib/config.php');
+require_once($fileRoot . 'lib/boot.php');
 
 $pageTitle = $config['ui']['branding'] . ' Slideshow';
 $mainStyle = $config['ui']['style'] . '_style.css';

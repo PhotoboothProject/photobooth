@@ -1,45 +1,6 @@
 <?php
 
-require_once __DIR__ . '/config.php';
-
-define('COLLAGE_LAYOUT', $config['collage']['layout']);
-define('COLLAGE_RESOLUTION', (int) substr($config['collage']['resolution'], 0, -3));
-define('COLLAGE_BACKGROUND_COLOR', $config['collage']['background_color']);
-define('COLLAGE_FRAME', str_starts_with($config['collage']['frame'], 'http') ? $config['collage']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $config['collage']['frame']);
-define(
-    'COLLAGE_BACKGROUND',
-    (empty($config['collage']['background'])
-            ? ''
-            : str_starts_with($config['collage']['background'], 'http'))
-        ? $config['collage']['background']
-        : $_SERVER['DOCUMENT_ROOT'] . $config['collage']['background']
-);
-define('COLLAGE_TAKE_FRAME', $config['collage']['take_frame']);
-define('COLLAGE_PLACEHOLDER', $config['collage']['placeholder']);
-// If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
-define('COLLAGE_PLACEHOLDER_POSITION', (int) $config['collage']['placeholderposition'] - 1);
-define(
-    'COLLAGE_PLACEHOLDER_PATH',
-    str_starts_with($config['collage']['placeholderpath'], 'http') ? $config['collage']['placeholderpath'] : $_SERVER['DOCUMENT_ROOT'] . $config['collage']['placeholderpath']
-);
-define('COLLAGE_DASHEDLINE_COLOR', $config['collage']['dashedline_color']);
-// If a placholder image should be used, we need to increase the limit here in order to count the images correct
-define('COLLAGE_LIMIT', $config['collage']['placeholder'] ? $config['collage']['limit'] + 1 : $config['collage']['limit']);
-define('PICTURE_FLIP', $config['picture']['flip']);
-define('PICTURE_ROTATION', $config['picture']['rotation']);
-define('PICTURE_POLAROID_EFFECT', $config['picture']['polaroid_effect'] === true ? 'enabled' : 'disabled');
-define('PICTURE_POLAROID_ROTATION', $config['picture']['polaroid_rotation']);
-define('TEXTONCOLLAGE_ENABLED', $config['textoncollage']['enabled'] === true ? 'enabled' : 'disabled');
-define('TEXTONCOLLAGE_LINE1', $config['textoncollage']['line1']);
-define('TEXTONCOLLAGE_LINE2', $config['textoncollage']['line2']);
-define('TEXTONCOLLAGE_LINE3', $config['textoncollage']['line3']);
-define('TEXTONCOLLAGE_LOCATIONX', $config['textoncollage']['locationx']);
-define('TEXTONCOLLAGE_LOCATIONY', $config['textoncollage']['locationy']);
-define('TEXTONCOLLAGE_ROTATION', $config['textoncollage']['rotation']);
-define('TEXTONCOLLAGE_FONT', $config['textoncollage']['font']);
-define('TEXTONCOLLAGE_FONT_COLOR', $config['textoncollage']['font_color']);
-define('TEXTONCOLLAGE_FONT_SIZE', $config['textoncollage']['font_size']);
-define('TEXTONCOLLAGE_LINESPACE', $config['textoncollage']['linespace']);
+namespace Photobooth;
 
 class CollageConfig
 {

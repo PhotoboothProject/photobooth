@@ -1,5 +1,7 @@
 <?php
 
+namespace Photobooth;
+
 class HZip
 {
     /**
@@ -47,8 +49,8 @@ class HZip
         $parentPath = $pathInfo['dirname'];
         $dirName = $pathInfo['basename'];
 
-        $z = new ZipArchive();
-        $z->open($outZipPath, ZIPARCHIVE::CREATE);
+        $z = new \ZipArchive();
+        $z->open($outZipPath, \ZipArchive::CREATE);
         $z->addEmptyDir($dirName);
         self::folderToZip($sourcePath, $z, strlen("$parentPath/"));
         $z->close();

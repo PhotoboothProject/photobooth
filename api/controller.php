@@ -1,7 +1,6 @@
 <?php
 
-session_start();
-require_once '../lib/config.php';
+require_once '../lib/boot.php';
 
 // includes
 include_once 'keypad.php';

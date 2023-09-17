@@ -1,14 +1,15 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/db.php';
-require_once '../lib/config.php';
-require_once '../lib/filter.php';
-require_once '../lib/collage.php';
-require_once '../lib/applyEffects.php';
-require_once '../lib/image.php';
-require_once '../lib/log.php';
+use Photobooth\DataLogger;
+use Photobooth\DatabaseManager;
+use Photobooth\Image;
+use Photobooth\ImageFilter;
+use Photobooth\Helper;
+use Photobooth\Collage;
+
+header('Content-Type: application/json');
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
@@ -74,9 +75,9 @@ try {
     $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
 
     if ($isCollage) {
-        list($collageSrcImagePaths, $srcImages) = getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
+        list($collageSrcImagePaths, $srcImages) = Collage::getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
 
-        if (!createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
+        if (!Collage::createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
             throw new Exception('Error creating collage image.');
         }
     }
@@ -132,7 +133,7 @@ try {
                 // apply filter
                 if ($image_filter) {
                     try {
-                        applyFilter($image_filter, $imageResource);
+                        ImageFilter::applyFilter($image_filter, $imageResource);
                         $imageHandler->imageModified = true;
                     } catch (Exception $e) {
                         throw new Exception('Error applying image filter.');

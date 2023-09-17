@@ -1,7 +1,3 @@
-[submodule "vendor/PHPMailer"]
-	path = vendor/PHPMailer
-	url = https://github.com/PHPMailer/PHPMailer
-    ignore = dirty
 [submodule "vendor/Seriously"]
 	path = vendor/Seriously
 	url = https://github.com/brianchirls/Seriously.js

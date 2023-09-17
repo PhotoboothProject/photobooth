@@ -1,5 +1,7 @@
 <?php
 
+use Photobooth\Helper;
+
 function getImageSelect($setting, $i18ntag)
 {
     $dir = '../';

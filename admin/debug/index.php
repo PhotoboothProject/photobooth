@@ -1,6 +1,7 @@
 <?php
-session_start();
-require_once '../../lib/config.php';
+require_once '../../lib/boot.php';
+
+use Photobooth\Environment;
 
 // Login / Authentication check
 if (
@@ -57,7 +58,8 @@ include('../../admin/components/navItem.debug.php');
 echo getNavItemDebug('remotebuzzerlog');
 echo getNavItemDebug('synctodrivelog');
 echo getNavItemDebug('devlog');
-if (SERVER_OS === 'linux') {
+
+if ((new Environment())->isLinux()) {
     echo getNavItemDebug('serverprocesses');
 }
 echo getNavItemDebug('bootconfig');
@@ -109,5 +111,3 @@ echo getNavItemDebug('githead');
 
 <?php
     include('../components/footer.admin.php');
-?>
-

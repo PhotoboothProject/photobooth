@@ -1,11 +1,10 @@
 <?php
 
 $fileRoot = '../';
+require_once $fileRoot . 'lib/boot.php';
 
-require_once $fileRoot . 'lib/config.php';
-require_once $fileRoot . 'lib/filter.php';
-require_once $fileRoot . 'lib/applyEffects.php';
-require_once $fileRoot . 'lib/image.php';
+use Photobooth\ImageFilter;
+use Photobooth\Image;
 
 $demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
 $demoFolder = realpath($demoPath);
@@ -41,7 +40,7 @@ if ($config['picture']['flip'] !== 'off') {
 $image_filter = $config['filters']['defaults'];
 if ($image_filter) {
     try {
-        applyFilter($image_filter, $imageResource);
+        ImageFilter::applyFilter($image_filter, $imageResource);
         $imageHandler->imageModified = true;
     } catch (Exception $e) {
         throw new Exception('Error applying image filter.');

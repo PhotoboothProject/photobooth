@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . '/config.php';
-
 function processIsRunning($pName, $pidFile)
 {
     if (file_exists($pidFile)) {

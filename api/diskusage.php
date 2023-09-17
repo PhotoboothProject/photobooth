@@ -1,9 +1,10 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/config.php';
-require_once '../lib/hzip.php';
+use Photobooth\HZip;
+
+header('Content-Type: application/json');
 
 $data = $_POST;
 $file = date('Ymd-Hi') . '.zip';

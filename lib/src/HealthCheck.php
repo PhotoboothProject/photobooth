@@ -1,4 +1,7 @@
 <?php
+
+namespace Photobooth;
+
 /**
  * Class HealthCheck
  *
@@ -59,7 +62,7 @@ class HealthCheck
     {
         try {
             return [\PHP_MAJOR_VERSION, \PHP_MINOR_VERSION];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return [0, 0];
         }
     }
