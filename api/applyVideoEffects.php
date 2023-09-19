@@ -1,14 +1,14 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/db.php';
-require_once '../lib/config.php';
-require_once '../lib/log.php';
-require_once '../lib/applyEffects.php';
-require_once '../lib/collageConfig.php';
-require_once '../lib/collage.php';
-require_once '../lib/image.php';
+use Photobooth\DataLogger;
+use Photobooth\DatabaseManager;
+use Photobooth\Collage;
+use Photobooth\CollageConfig;
+use Photobooth\Image;
+
+header('Content-Type: application/json');
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
@@ -72,7 +72,7 @@ try {
         $collageConfig->collageLayout = '2x4-3';
         $collageConfig->collageTakeFrame = 'off';
         $collageConfig->collagePlaceholder = false;
-        if (!createCollage($frames, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
+        if (!Collage::createCollage($frames, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
             throw new Exception('Could not create collage.');
         }
         $images[] = $collageFilename;

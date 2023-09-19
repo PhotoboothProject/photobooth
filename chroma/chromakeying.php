@@ -1,7 +1,7 @@
 <?php
-$fileRoot = '../';
 
-require_once($fileRoot . 'lib/config.php');
+$fileRoot = '../';
+require_once($fileRoot . 'lib/boot.php');
 
 if (empty($_GET['filename'])) {
     die('No or invalid file provided');

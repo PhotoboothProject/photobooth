@@ -1,11 +1,13 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/db.php';
-require_once '../lib/config.php';
-require_once '../lib/log.php';
-require_once '../lib/deleteFile.php';
+use Photobooth\DataLogger;
+use Photobooth\FileDelete;
+use Photobooth\DatabaseManager;
+use Photobooth\Helper;
+
+header('Content-Type: application/json');
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);

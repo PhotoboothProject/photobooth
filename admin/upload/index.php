@@ -1,9 +1,7 @@
 <?php
-session_start();
 
 $fileRoot = '../../';
-
-require_once $fileRoot . 'lib/config.php';
+require_once $fileRoot . 'lib/boot.php';
 
 // Login / Authentication check
 if (
@@ -125,6 +123,3 @@ if ($success) {
 if ($error !== false) {
     echo '<script>openToast("<span data-i18n=\"upload_error\"></span>", "isError", 5000);</script>';
 }
-
-?>
-

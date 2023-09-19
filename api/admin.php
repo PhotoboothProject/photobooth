@@ -1,11 +1,13 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/config.php';
-require_once '../lib/helper.php';
-require_once '../lib/db.php';
-require_once '../lib/printdb.php';
+use Photobooth\Helper;
+use Photobooth\DataLogger;
+use Photobooth\PrintManager;
+use Photobooth\Environment;
+
+header('Content-Type: application/json');
 
 $Logger = new DataLogger(PHOTOBOOTH_LOG);
 $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
@@ -118,7 +120,7 @@ if (isset($data['type'])) {
         }
     }
 
-    if (SERVER_OS === 'windows') {
+    if ((new Environment())->isWindows()) {
         if (!empty($newConfig['remotebuzzer']['enabled'])) {
             $newConfig['remotebuzzer']['enabled'] = false;
             $Logger->addLogData(['remotebuzzer' => 'Remotebuzzer server unsupported on Windows.']);

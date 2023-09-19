@@ -1,5 +1,7 @@
 <?php
 
+namespace Photobooth;
+
 /**
  * Class FileDelete.
  */
@@ -48,7 +50,7 @@ class FileDelete
                 } else {
                     $this->unavailableFiles[] = $file;
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->success = false;
                 $this->failedFiles[] = $file;
             }

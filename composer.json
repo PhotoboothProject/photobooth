@@ -2,7 +2,15 @@
     "name": "photoboothproject/photobooth",
     "type": "project",
     "license": "MIT",
-    "require": {},
+    "require": {
+        "php": "^8.2",
+        "phpmailer/phpmailer": "^6.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Photobooth\\": "lib/src/"
+        }
+    },
     "scripts": {
         "post-install-cmd": [
             "@tools:install"

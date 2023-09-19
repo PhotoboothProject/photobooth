@@ -1,10 +1,11 @@
 <?php
+
 function getToast($type = false, $msg = false)
 {
     $transition = 'slideInRight';
     $scheme = '
-            bg-white 
-            [&.isSuccess]:bg-green-500 [&.isSuccess]:font-bold [&.isSuccess]:text-white 
+            bg-white
+            [&.isSuccess]:bg-green-500 [&.isSuccess]:font-bold [&.isSuccess]:text-white
             [&.isError]:bg-red-500 [&.isError]:font-bold [&.isError]:text-white
         ';
 
@@ -13,11 +14,11 @@ function getToast($type = false, $msg = false)
         $scheme .
         ' ' .
         $transition .
-        '">    
+        '">
                     <div class="flex items-start">
                         <div class="adminToast-icon fa fa-check mr-3 mt-1 text-white"></div>
                         <div class="headline">Erfolgreich</div>
                     </div>
                 </div>
             ';
-} ?> 
+}

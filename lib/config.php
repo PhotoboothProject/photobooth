@@ -1,13 +1,13 @@
 <?php
 
-define('SERVER_OS', DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux');
-
 if (is_file(__DIR__ . '/../private/lib/polyfill.php')) {
     require_once __DIR__ . '/../private/lib/polyfill.php';
 }
-require_once __DIR__ . '/arrayDeepMerge.php';
-require_once __DIR__ . '/helper.php';
-require_once __DIR__ . '/photobooth.php';
+
+use Photobooth\Environment;
+use Photobooth\Photobooth;
+use Photobooth\Helper;
+use Photobooth\Utility\ArrayUtility;
 
 $photobooth = new Photobooth();
 $default_config_file = __DIR__ . '/../config/config.inc.php';
@@ -100,13 +100,14 @@ $mailTemplates = [
 
 require_once $default_config_file;
 
-$config['take_picture']['cmd'] = $cmds[SERVER_OS]['take_picture']['cmd'];
-$config['take_video']['cmd'] = $cmds[SERVER_OS]['take_video']['cmd'];
-$config['print']['cmd'] = $cmds[SERVER_OS]['print']['cmd'];
-$config['exiftool']['cmd'] = $cmds[SERVER_OS]['exiftool']['cmd'];
-$config['nodebin']['cmd'] = $cmds[SERVER_OS]['nodebin']['cmd'];
-$config['reboot']['cmd'] = $cmds[SERVER_OS]['reboot']['cmd'];
-$config['shutdown']['cmd'] = $cmds[SERVER_OS]['shutdown']['cmd'];
+$environment = new Environment();
+$config['take_picture']['cmd'] = $cmds[$environment->getOperatingSystem()]['take_picture']['cmd'];
+$config['take_video']['cmd'] = $cmds[$environment->getOperatingSystem()]['take_video']['cmd'];
+$config['print']['cmd'] = $cmds[$environment->getOperatingSystem()]['print']['cmd'];
+$config['exiftool']['cmd'] = $cmds[$environment->getOperatingSystem()]['exiftool']['cmd'];
+$config['nodebin']['cmd'] = $cmds[$environment->getOperatingSystem()]['nodebin']['cmd'];
+$config['reboot']['cmd'] = $cmds[$environment->getOperatingSystem()]['reboot']['cmd'];
+$config['shutdown']['cmd'] = $cmds[$environment->getOperatingSystem()]['shutdown']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';
 
@@ -137,7 +138,7 @@ if (file_exists($my_config_file)) {
         }
     }
 
-    $config = array_deep_merge($defaultConfig, $config);
+    $config = ArrayUtility::array_deep_merge($defaultConfig, $config);
 }
 
 if ($config['dev']['loglevel'] > 0) {
@@ -286,7 +287,7 @@ if (!empty($config['ftp']['urlTemplate'])) {
             '%title' => Helper::slugify($config['ftp']['title']),
             '%date' => date('Y/m/d'),
         ];
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         $parameters = [
             '%website' => $config['ftp']['website'],
             '%baseFolder' => $config['ftp']['baseFolder'],

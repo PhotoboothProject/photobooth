@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/log.php';
+namespace Photobooth;
+
+use FTP\Connection;
 
 /**
  * A collection of helper functions used throughout the photobooth application.
@@ -111,7 +113,7 @@ class Helper
     public static function getFolderSize($path)
     {
         if (!is_dir($path)) {
-            throw new Exception('Invalid directory path: ' . $path);
+            throw new \Exception('Invalid directory path: ' . $path);
         }
 
         $totalSize = 0;
@@ -119,7 +121,7 @@ class Helper
         $cleanPath = rtrim($path, '/') . '/';
 
         if ($files === false) {
-            throw new Exception('Failed to read directory: ' . $path);
+            throw new \Exception('Failed to read directory: ' . $path);
         }
 
         foreach ($files as $file) {
@@ -131,7 +133,7 @@ class Helper
                 } else {
                     $size = filesize($currentFile);
                     if ($size === false) {
-                        throw new Exception('Failed to get size of file: ' . $currentFile);
+                        throw new \Exception('Failed to get size of file: ' . $currentFile);
                     }
                     $totalSize += $size;
                 }
@@ -173,14 +175,14 @@ class Helper
     public static function getFileCount($path)
     {
         if (!is_dir($path)) {
-            throw new Exception('Invalid directory path: ' . $path);
+            throw new \Exception('Invalid directory path: ' . $path);
         }
 
         $fileCount = 0;
-        $fi = new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS);
+        $fi = new \FilesystemIterator($path, \FilesystemIterator::SKIP_DOTS);
 
         if ($fi === false) {
-            throw new Exception('Failed to read directory: ' . $path);
+            throw new \Exception('Failed to read directory: ' . $path);
         }
 
         foreach ($fi as $file) {
@@ -195,17 +197,14 @@ class Helper
     /**
      * Navigate through the ftp folder system.
      *
-     * @param resource $conn The connection to the FTP server.
-     *
+     * @param Connection $conn The connection to the FTP server.
      * @param string $currentDir The path to the directory in the FTP server.
-     *
      * @throws Exception If the provided path is not a valid directory in the FTP server.
-     *
      */
-    public static function cdFTPTree($conn, $currentDir)
+    public static function cdFTPTree(Connection $conn, string $currentDir)
     {
         if ($currentDir == '') {
-            throw new Exception('The path cannot be empty!');
+            throw new \Exception('The path cannot be empty!');
         }
 
         if (ftp_chdir($conn, $currentDir)) {
@@ -273,12 +272,12 @@ class Helper
     public static function testFile($file_location)
     {
         if (is_dir($file_location)) {
-            //throw new Exception($file_location . ' is a path! Frames need to be PNG, Fonts need to be ttf!');
+            //throw new \Exception($file_location . ' is a path! Frames need to be PNG, Fonts need to be ttf!');
             return false;
         }
 
         if (!file_exists($file_location)) {
-            //throw new Exception($file_location . ' does not exist!');
+            //throw new \Exception($file_location . ' does not exist!');
             return false;
         }
         return true;

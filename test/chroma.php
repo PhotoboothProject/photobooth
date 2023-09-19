@@ -1,7 +1,7 @@
 <?php
-$fileRoot = '../';
 
-require_once $fileRoot . 'lib/config.php';
+$fileRoot = '../';
+require_once $fileRoot . 'lib/boot.php';
 
 $pageTitle = $config['ui']['branding'] . ' Chroma-Preview Test';
 $mainStyle = 'test_preview.css';

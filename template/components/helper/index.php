@@ -1,3 +1,3 @@
 <?php
-include 'boothButton.php'; ?>
 
+include 'boothButton.php';

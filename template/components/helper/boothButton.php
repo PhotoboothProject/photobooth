@@ -1,4 +1,5 @@
 <?php
+
 function getBoothButton($label, $icon, $command, $type = 'md')
 {
     global $config;
@@ -35,5 +36,4 @@ function getBoothButton($label, $icon, $command, $type = 'md')
         '
             </span>
         </a>';
-} ?>
-
+}

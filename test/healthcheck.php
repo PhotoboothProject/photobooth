@@ -1,8 +1,10 @@
 <?php
-$fileRoot = '../';
 
-require_once $fileRoot . 'lib/config.php';
-require_once $fileRoot . 'lib/healthcheck.php';
+$fileRoot = '../';
+require_once $fileRoot . 'lib/boot.php';
+
+use Photobooth\HealthCheck;
+
 $pageTitle = $config['ui']['branding'] . ' Health Check';
 $remoteBuzzer = false;
 $photoswipe = false;

@@ -1,7 +1,7 @@
 <?php
-$fileRoot = '../';
 
-require_once $fileRoot . 'lib/config.php';
+$fileRoot = '../';
+require_once $fileRoot . 'lib/boot.php';
 
 $pageTitle = 'Tests';
 include $fileRoot . 'admin/components/head.admin.php';

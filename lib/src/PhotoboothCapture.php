@@ -1,7 +1,6 @@
 <?php
 
-require_once __DIR__ . '/log.php';
-require_once __DIR__ . '/image.php';
+namespace Photobooth;
 
 /**
  * Class PhotoboothCapture
@@ -21,7 +20,7 @@ class PhotoboothCapture
     /** @var int $collageLimit */
     public $collageLimit;
     /** @var string $demoFolder */
-    public $demoFolder = __DIR__ . '/../resources/img/demo/';
+    public $demoFolder = __DIR__ . '/../../resources/img/demo/';
     /** @var string $flipImage */
     public $flipImage = 'off';
     /** @var string $captureCmd */
@@ -84,7 +83,7 @@ class PhotoboothCapture
                     }
                     $imageHandler->saveJpeg($im, $this->tmpFile);
                     imagedestroy($im);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $ErrorData = ['error' => $e->getMessage()];
                     $this->logger->addLogData($ErrorData);
                     if ($this->debugLevel > 1) {
@@ -94,7 +93,7 @@ class PhotoboothCapture
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $ErrorData = ['error' => $e->getMessage()];
             $this->logger->addLogData($ErrorData);
             $this->logger->logToFile();

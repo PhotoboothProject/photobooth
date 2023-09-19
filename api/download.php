@@ -1,6 +1,6 @@
 <?php
 
-require_once '../lib/config.php';
+require_once '../lib/boot.php';
 
 $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : false;
 if ($image) {

@@ -1,4 +1,5 @@
 <?php
+
 function getCheckbox($setting, $i18ntag)
 {
     $checkboxClasses =
@@ -25,5 +26,4 @@ function getCheckbox($setting, $i18ntag)
         '" data-i18n="adminpanel_toggletextOFF"></label>
                 </span>
             </label>';
-} ?>
-
+}

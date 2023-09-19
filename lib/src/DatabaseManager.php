@@ -1,10 +1,6 @@
 <?php
 
-require_once __DIR__ . '/config.php';
-
-define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');
-define('MAIL_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt');
-define('IMG_DIR', $config['foldersAbs']['images']);
+namespace Photobooth;
 
 /**
  * Class DatabaseManager
@@ -32,7 +28,7 @@ class DatabaseManager
     {
         // check if the database file is defined and non-empty
         if (!isset($this->db_file) || empty($this->db_file)) {
-            throw new Exception('Database not defined.');
+            throw new \Exception('Database not defined.');
         }
 
         try {
@@ -40,13 +36,13 @@ class DatabaseManager
             if (file_exists($this->db_file)) {
                 $data = file_get_contents($this->db_file);
                 if ($data === false) {
-                    throw new Exception('Failed to read file: ' . $this->db_file);
+                    throw new \Exception('Failed to read file: ' . $this->db_file);
                 }
                 return json_decode($data);
             } else {
-                throw new Exception('File not found: ' . $this->db_file);
+                throw new \Exception('File not found: ' . $this->db_file);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return [];
         }
 
@@ -62,14 +58,14 @@ class DatabaseManager
     {
         // check if the directory is defined and non-empty
         if (!isset($this->file_dir) || empty($this->file_dir)) {
-            throw new Exception('Directory not defined.');
+            throw new \Exception('Directory not defined.');
         }
 
         try {
             // open the directory
             $dh = opendir($this->file_dir);
             if ($dh === false) {
-                throw new Exception('Failed to open directory: ' . $this->file_dir);
+                throw new \Exception('Failed to open directory: ' . $this->file_dir);
             }
 
             // read the files in the directory
@@ -82,7 +78,7 @@ class DatabaseManager
             $images = preg_grep('/\.(jpg|jpeg)$/i', $files);
 
             return $images;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return [];
         }
 
@@ -97,12 +93,12 @@ class DatabaseManager
     public function appendContentToDB($content)
     {
         if (!$content) {
-            throw new Exception('Invalid content.');
+            throw new \Exception('Invalid content.');
         }
 
         // check if the database file is defined and non-empty
         if (!isset($this->db_file) || empty($this->db_file)) {
-            throw new Exception('Database not defined.');
+            throw new \Exception('Database not defined.');
         }
 
         $currContent = $this->getContentFromDB();
@@ -121,12 +117,12 @@ class DatabaseManager
     public function deleteContentFromDB($content)
     {
         if (!$content) {
-            throw new Exception('Invalid filename.');
+            throw new \Exception('Invalid filename.');
         }
 
         // check if the database file is defined and non-empty
         if (!isset($this->db_file) || empty($this->db_file)) {
-            throw new Exception('Database not defined.');
+            throw new \Exception('Database not defined.');
         }
         $currContent = $this->getContentFromDB();
 
@@ -150,12 +146,12 @@ class DatabaseManager
     public function isInDB($content)
     {
         if (!$content) {
-            throw new Exception('Invalid filename.');
+            throw new \Exception('Invalid filename.');
         }
 
         // check if the database file is defined and non-empty
         if (!isset($this->db_file) || empty($this->db_file)) {
-            throw new Exception('Database not defined.');
+            throw new \Exception('Database not defined.');
         }
 
         $currContent = $this->getContentFromDB();
@@ -187,16 +183,16 @@ class DatabaseManager
     {
         // check if the database file is defined and non-empty
         if (!isset($this->db_file) || empty($this->db_file)) {
-            throw new Exception('Database not defined.');
+            throw new \Exception('Database not defined.');
         }
 
         // check if the file directory is defined and non-empty
         if (!isset($this->file_dir) || empty($this->file_dir)) {
-            throw new Exception('File directory not defined.');
+            throw new \Exception('File directory not defined.');
         }
 
         $output = [];
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->file_dir, FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS)) as $value) {
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->file_dir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS)) as $value) {
             if ($value->isFile()) {
                 $output[] = [$value->getMTime(), $value->getFilename()];
             }

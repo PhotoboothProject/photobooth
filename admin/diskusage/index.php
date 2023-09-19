@@ -1,17 +1,16 @@
 <?php
-session_start();
+require_once '../../lib/boot.php';
 
-require_once '../../lib/config.php';
+use Photobooth\Helper;
 
 // Login / Authentication check
 if (
-    !$config['login']['enabled'] ||
-    (!$config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
-    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
-    !$config['protect']['admin']
+    $config['login']['enabled'] ||
+    ($config['protect']['localhost_admin'] && $_SERVER['REMOTE_ADDR'] !== $_SERVER['SERVER_ADDR']) ||
+    !isset($_SESSION['auth']) ||
+    $_SESSION['auth'] !== true ||
+    $config['protect']['admin']
 ) {
-    require_once '../../lib/helper.php';
-} else {
     header('location: ../../login');
     exit();
 }

@@ -1,7 +1,6 @@
 <?php
 
-require_once '../lib/config.php';
-require_once '../lib/helper.php';
+require_once '../lib/boot.php';
 
 $filename = (isset($_GET['filename']) && $_GET['filename']) != '' ? $_GET['filename'] : false;
 
@@ -14,7 +13,6 @@ if ($filename || !$config['qr']['append_filename']) {
         $url = $config['qr']['url'];
     }
     try {
-        include '../vendor/phpqrcode/lib/full/qrlib.php';
         switch ($config['qr']['ecLevel']) {
             case 'QR_ECLEVEL_L':
                 $ecLevel = QR_ECLEVEL_L;

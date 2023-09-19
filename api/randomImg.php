@@ -1,4 +1,7 @@
 <?php
+
+require_once '../lib/boot.php';
+
 /****************************************************
             RANDOM FRAME/BACKGROUND/...
     This "script" allows to randomize images,
@@ -7,8 +10,6 @@
     of "surprise".
 
 *****************************************************/
-
-require_once '../lib/config.php';
 
 if (isset($_GET['dir']) && !empty($_GET['dir'])) {
     $dir = $_GET['dir'];

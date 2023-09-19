@@ -1,4 +1,5 @@
 <?php
+
 function getLoader($size = 'xs')
 {
     $loaderSize = 'w-8 h-8';
@@ -20,4 +21,4 @@ function getLoader($size = 'xs')
                     </svg>
                 </div>
             ';
-} ?> 
+}

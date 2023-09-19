@@ -1,4 +1,5 @@
 <?php
+
 echo '<div class="gallery__footer">' . "\n";
 echo '<div class="buttongroup">' . "\n";
 
@@ -23,5 +24,3 @@ if ($config['button']['force_buzzer']) {
 
 echo '</div>' . "\n";
 echo '</div>' . "\n";
-?>
-

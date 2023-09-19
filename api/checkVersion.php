@@ -1,10 +1,11 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/config.php';
-require_once '../lib/log.php';
-require_once '../lib/photobooth.php';
+use Photobooth\Photobooth;
+use Photobooth\DataLogger;
+
+header('Content-Type: application/json');
 
 function getLogData($debugLevel)
 {

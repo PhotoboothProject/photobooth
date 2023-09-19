@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/config.php';
+namespace Photobooth;
 
 class DataLogger
 {
@@ -136,7 +136,7 @@ class DataLogger
             $errorString = json_encode($errorData);
             self::logToFile($errorData);
             die($errorString);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $errorData = [
                 'error' => $e->getMessage(),
             ];

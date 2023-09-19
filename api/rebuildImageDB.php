@@ -1,9 +1,10 @@
 <?php
 
-header('Content-Type: application/json');
+require_once '../lib/boot.php';
 
-require_once '../lib/config.php';
-require_once '../lib/db.php';
+use Photobooth\DatabaseManager;
+
+header('Content-Type: application/json');
 
 $database = new DatabaseManager();
 $database->db_file = DB_FILE;
