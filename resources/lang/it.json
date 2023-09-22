@@ -601,7 +601,6 @@
   "percent": "%",
   "phpGdDisabled": "GD deve essere abilitato!",
   "phpGdEnabled": "GD è abilitato",
-  "phpUpdateRequired": "Si prega di aggiornare PHP a PHP8!",
   "phpVersionError": "PHP non soddisfa i nostri requisiti!",
   "phpVersionOk": "PHP rispecchia i nostri requisiti",
   "phpVersionWarning": "ATTENZIONE: potrebbe essere usato il Polyfill.",
