@@ -4,7 +4,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "phpmailer/phpmailer": "^6.8"
+        "ext-gd": "*",
+        "ext-zip": "*",
+        "phpmailer/phpmailer": "^6.8",
+        "endroid/qr-code": "^4.8"
     },
     "autoload": {
         "psr-4": {

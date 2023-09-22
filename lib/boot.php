@@ -4,7 +4,6 @@ session_start();
 
 // Autoload
 require_once dirname(__DIR__) . '/vendor/autoload.php';
-require_once dirname(__DIR__) . '/vendor/phpqrcode/lib/full/qrlib.php';
 
 // Config
 require_once dirname(__DIR__) . '/lib/config.php';

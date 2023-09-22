@@ -3,6 +3,7 @@
 namespace Photobooth;
 
 use GdImage;
+use Photobooth\Utility\QrCodeUtility;
 
 class Image
 {
@@ -243,11 +244,6 @@ class Image
      */
 
     /**
-     * @var bool $qrAvailable QR library available or not.
-     */
-    public $qrAvailable = false;
-
-    /**
      * @var bool $qrRotate Whether or not to rotate the QR code.
      */
     public $qrRotate = false;
@@ -278,11 +274,6 @@ class Image
     public $qrColor = '#ffffff';
 
     /**
-     * @var int The error correction level for the QR code (QR_ECLEVEL_L, QR_ECLEVEL_M, QR_ECLEVEL_Q, or QR_ECLEVEL_H)
-     */
-    public $qrEcLevel = '';
-
-    /**
      * @var string $qrUrl The URL to generate a QR code for.
      */
     public $qrUrl = '';
@@ -302,19 +293,6 @@ class Image
      * @var int The rotation angle for the polaroid effect in degrees.
      */
     public $polaroidRotation = 0;
-
-    /**
-     * QR constructor.
-     * Includes the QR code library.
-     */
-    public function __construct()
-    {
-        if (file_exists('../vendor/phpqrcode/lib/full/qrlib.php')) {
-            include_once '../vendor/phpqrcode/lib/full/qrlib.php';
-            $this->qrEcLevel = QR_ECLEVEL_M;
-            $this->qrAvailable = true;
-        }
-    }
 
     /**
      * Creates a new filename for the image.
@@ -992,10 +970,6 @@ class Image
     public function createQr()
     {
         try {
-            if (!$this->qrAvailable) {
-                throw new \Exception('QR library not available.');
-            }
-
             if (empty($this->qrUrl)) {
                 throw new \Exception('No URL for QR-Code generation defined.');
             }
@@ -1017,8 +991,11 @@ class Image
                 throw new \Exception('QR-Size must be in range between 0 and 10.');
             }
 
-            $qrCode = QRcode::text($this->qrUrl, false, $this->qrEcLevel);
-            $qrCodeImage = QRimage::image($qrCode, $this->qrSize, $this->qrMargin);
+            $size = $this->qrSize * 40;
+            $margin = (int)($size / 100 * $this->qrMargin);
+            $result = QrCodeUtility::create($this->qrUrl, '', $size, $margin);
+            $qrCodeImage = imagecreatefromstring($result->getString());
+
             if (!$qrCodeImage) {
                 throw new \Exception('Failed to create image from QR code.');
             }
