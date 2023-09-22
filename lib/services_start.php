@@ -1,5 +1,7 @@
 <?php
 
+use Photobooth\Utility\PathUtility;
+
 function processIsRunning($pName, $pidFile)
 {
     if (file_exists($pidFile)) {
@@ -25,9 +27,7 @@ if ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebutto
         }
 
         echo '<!-- Remote Buzzer enabled --- starting server -->' . "\n";
-        if (!empty($fileRoot)) {
-            chdir($fileRoot);
-        }
+        chdir(PathUtility::getRootPath());
         proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/remotebuzzer_server.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     } else {
         echo '<!-- Remote Buzzer Enabled --- server already started (port in use) -->' . "\n";
@@ -45,9 +45,7 @@ if ($config['synctodrive']['enabled']) {
         echo '<!-- Sync To Drive enabled --- server already active -->' . "\n";
     } else {
         echo '<!-- Sync To Drive enabled --- starting server -->' . "\n";
-        if (!empty($fileRoot)) {
-            chdir($fileRoot);
-        }
+        chdir(PathUtility::getRootPath());
         proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/sync-to-drive.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     }
 }

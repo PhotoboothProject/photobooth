@@ -3,6 +3,8 @@
 namespace Photobooth;
 
 use GdImage;
+use Photobooth\Utility\ImageUtility;
+use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\QrCodeUtility;
 
 class Image
@@ -370,6 +372,13 @@ class Image
     public function createFromImage($image)
     {
         try {
+            if (str_contains($image, '/api/randomImg.php')) {
+                parse_str(parse_url($image)['query'] ?? '', $query);
+                $image = ImageUtility::getRandomImageFromPath($query['dir'] ?? '');
+            } elseif (PathUtility::isAbsolutePath(PathUtility::getAbsolutePath($image))) {
+                $image = PathUtility::getAbsolutePath($image);
+            }
+
             $resource = imagecreatefromstring(file_get_contents($image));
             if (!$resource) {
                 throw new \Exception('Can\'t create GD resource.');
@@ -797,7 +806,7 @@ class Image
             $fontRotation = $this->fontRotation;
             $fontLocationX = $this->fontLocationX;
             $fontLocationY = $this->fontLocationY;
-            $fontPath = $this->fontPath;
+            $fontPath = PathUtility::getAbsolutePath($this->fontPath);
             $textLineSpacing = $this->textLineSpacing;
             // Convert hex color string to RGB values
             list($r, $g, $b) = sscanf($this->fontColor, '#%02x%02x%02x');

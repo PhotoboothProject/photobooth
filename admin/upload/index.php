@@ -1,24 +1,24 @@
 <?php
 
-$fileRoot = '../../';
-require_once $fileRoot . 'lib/boot.php';
+require_once '../../lib/boot.php';
+
+use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
-if (
+if (!(
     !$config['login']['enabled'] ||
-    (!$config['protect']['localhost_admin'] && isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
-    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ||
-    !$config['protect']['admin']
-) {
-    // nothing for now
-} else {
-    header('location: ' . $fileRoot . 'login');
+    (!$config['protect']['localhost_admin'] && isset($_SERVER['SERVER_ADDR']) &&  $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['admin']
+)) {
+    header('location: ' . PathUtility::getPublicPath('login'));
     exit();
 }
 
+require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
+
 $pageTitle = 'Image uploader';
-include '../components/head.admin.php';
-include '../helper/index.php';
+include PathUtility::getAbsolutePath('admin/components/head.admin.php');
+include PathUtility::getAbsolutePath('admin/helper/index.php');
 
 $error = false;
 $success = false;
@@ -103,10 +103,10 @@ if (isset($_POST['submit'])) {
             <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
                 <?php
-                    echo getMenuBtn($fileRoot . 'admin', 'admin_panel', $config['icons']['admin']);
+                    echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
 
 if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
-    echo getMenuBtn($fileRoot . 'login/logout.php', 'logout', $config['icons']['logout']);
+    echo getMenuBtn(PathUtility::getPublicPath('login/logout.php'), 'logout', $config['icons']['logout']);
 }
 ?>
                 </div>
@@ -114,8 +114,8 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
         </div>
     </div>
 
-<?php
-    include '../components/footer.admin.php';
+    <?php
+    include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
 
 if ($success) {
     echo '<script>openToast("<span data-i18n=\"upload_success\"></span>");</script>';

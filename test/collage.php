@@ -1,13 +1,12 @@
 <?php
 
-$fileRoot = '../';
-require_once $fileRoot . 'lib/boot.php';
+require_once '../lib/boot.php';
 
 use Photobooth\Collage;
 use Photobooth\Image;
+use Photobooth\Utility\PathUtility;
 
-$demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
-$demoFolder = realpath($demoPath);
+$demoFolder = PathUtility::getAbsolutePath('resources/img/demo');
 $devImg = array_diff(scandir($demoFolder), ['.', '..']);
 
 $demoImages = [];

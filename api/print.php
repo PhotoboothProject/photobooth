@@ -5,6 +5,7 @@ require_once '../lib/boot.php';
 use Photobooth\DataLogger;
 use Photobooth\PrintManager;
 use Photobooth\Image;
+use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
@@ -75,7 +76,7 @@ if (!file_exists($filename_print)) {
         }
 
         if ($config['print']['print_frame']) {
-            $imageHandler->framePath = str_starts_with($config['print']['frame'], 'http') ? $config['print']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $config['print']['frame'];
+            $imageHandler->framePath = $config['print']['frame'];
             $imageHandler->frameExtend = false;
             $source = $imageHandler->applyFrame($source);
             if (!$source) {
@@ -88,9 +89,9 @@ if (!file_exists($filename_print)) {
             if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
                 $imageHandler->qrUrl = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $filename;
             } elseif ($config['qr']['append_filename']) {
-                $imageHandler->qrUrl = $config['qr']['url'] . $filename;
+                $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'] . $filename, true);
             } else {
-                $imageHandler->qrUrl = $config['qr']['url'];
+                $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'], true);
             }
             $imageHandler->qrSize = $config['print']['qrSize'];
             $imageHandler->qrMargin = $config['print']['qrMargin'];

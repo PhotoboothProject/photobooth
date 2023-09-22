@@ -1,6 +1,11 @@
+<?php
+
+use Photobooth\Utility\PathUtility;
+
+?>
 <div class="stages rotarygroup" id="result">
     <div class="resultInner hidden">
-    <?php include 'resultsBtn.php'; ?>
+    <?php include PathUtility::getAbsolutePath('template/components/resultsBtn.php'); ?>
     </div>
 
     <?php if ($config['qr']['enabled']): ?>

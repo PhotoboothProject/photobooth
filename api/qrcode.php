@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\QrCodeUtility;
 
 require_once '../lib/boot.php';
@@ -10,9 +11,9 @@ if ($filename || !$config['qr']['append_filename']) {
     if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
         $url = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $filename;
     } elseif ($config['qr']['append_filename']) {
-        $url = $config['qr']['url'] . $filename;
+        $url = PathUtility::getPublicPath($config['qr']['url'] . $filename, true);
     } else {
-        $url = $config['qr']['url'];
+        $url = PathUtility::getPublicPath($config['qr']['url'], true);
     }
     try {
         $result = QrCodeUtility::create($url);

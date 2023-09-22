@@ -112,7 +112,7 @@ try {
         }
 
         if ($config['picture']['take_frame']) {
-            $imageHandler->framePath = str_starts_with($config['picture']['frame'], 'http') ? $config['picture']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $config['picture']['frame'];
+            $imageHandler->framePath = $config['picture']['frame'];
             $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
             if ($config['picture']['extend_by_frame']) {
                 $imageHandler->frameExtendLeft = $config['picture']['frame_left_percentage'];

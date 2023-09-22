@@ -1,7 +1,8 @@
 <?php
 
-$fileRoot = '../';
-require_once($fileRoot . 'lib/boot.php');
+use Photobooth\Utility\PathUtility;
+
+require_once '../lib/boot.php';
 
 // LOGIN
 $username = $config['login']['username'];
@@ -20,8 +21,8 @@ if (isset($_POST['submit'])) {
 // END LOGIN
 
 $pageTitle = 'Login';
-include($fileRoot . 'admin/components/head.admin.php');
-include($fileRoot . 'admin/helper/index.php');
+include PathUtility::getAbsolutePath('admin/components/head.admin.php');
+include PathUtility::getAbsolutePath('admin/helper/index.php');
 
 $labelClass = 'w-full flex flex-col mb-1';
 $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto';
@@ -29,41 +30,41 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 ?>
 
 <body>
-	<div class="w-full h-screen grid place-items-center absolute bg-brand-2 px-6 py-12 overflow-x-hidden overflow-y-auto">
-		<div class="w-full flex items-center justify-center flex-col">
+    <div class="w-full h-screen grid place-items-center absolute bg-brand-2 px-6 py-12 overflow-x-hidden overflow-y-auto">
+        <div class="w-full flex items-center justify-center flex-col">
 
-		<?php
+        <?php
             if($config['login']['enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'] === true) && !(isset($_SESSION['rental']))) {
                 if(isset($config['login']['keypad']) && $config['login']['keypad'] === true) {
-                    include('keypad.php');
+                    include PathUtility::getAbsolutePath('login/keypad.php');
                 } else {
-                    include('loginMask.php');
+                    include PathUtility::getAbsolutePath('login/loginMask.php');
                 }
 
                 if(!$config['login']['rental_keypad']) {
                     echo '<div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20"></div>';
-                    include('menu.php');
+                    include PathUtility::getAbsolutePath('login/menu.php');
                 }
             } else {
-                include('menu.php');
+                include PathUtility::getAbsolutePath('login/menu.php');
             }
 ?>
 
-		
+
 <?php
     if((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental'])) {
         echo'<script>
-			setTimeout(function() {
-				window.location = "' . $fileRoot . '/login/logout.php";
-			}, 60000);
-		</script>';
+            setTimeout(function() {
+                window.location = "' . PathUtility::getPublicPath('login/logout.php') . '";
+            }, 60000);
+        </script>';
     } else {
         echo'<script>
-			setTimeout(function() {
-				window.location = "' . $fileRoot . '";
-			}, 30000);
-		</script>';
+            setTimeout(function() {
+                window.location = "' . PathUtility::getPublicPath() . '";
+            }, 30000);
+        </script>';
     }
 
-    include($fileRoot . 'admin/components/footer.admin.php');
+    include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
 ?>

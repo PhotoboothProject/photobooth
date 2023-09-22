@@ -1,25 +1,20 @@
 <?php
 
-$fileRoot = '../';
-require_once $fileRoot . 'lib/boot.php';
+require_once '../lib/boot.php';
 
 use Photobooth\ImageFilter;
 use Photobooth\Image;
-
-$demoPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources/img/demo';
-$demoFolder = realpath($demoPath);
-$devImg = array_diff(scandir($demoFolder), ['.', '..']);
-$demoImage = $devImg[array_rand($devImg)];
+use Photobooth\Utility\ImageUtility;
 
 $imageHandler = new Image();
 $imageHandler->debugLevel = $config['dev']['loglevel'];
 $imageHandler->imageModified = false;
 
-$imageResource = $imageHandler->createFromImage($demoFolder . DIRECTORY_SEPARATOR . $demoImage);
+$imageResource = $imageHandler->createFromImage(ImageUtility::getRandomImageFromPath('resources/img/demo'));
 if (!$imageResource) {
     throw new Exception('Error creating image resource.');
 }
-$imageHandler->framePath = str_starts_with($config['picture']['frame'], 'http') ? $config['picture']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $config['picture']['frame'];
+$imageHandler->framePath = $config['picture']['frame'];
 
 if ($config['picture']['flip'] !== 'off') {
     try {

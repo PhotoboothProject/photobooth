@@ -16,7 +16,7 @@ if ($config['logo']['enabled']) {
     echo '<div id="pblogo" class="' .
         $logoClasses .
         ' pblogo--div">
-		<img class="w-full h-full object-contain pblogo--img" src="' .
+        <img class="w-full h-full object-contain pblogo--img" src="' .
         $config['logo']['path'] .
         '" alt="logo">
 </div>';

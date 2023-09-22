@@ -6,6 +6,7 @@ use Photobooth\Helper;
 use Photobooth\DataLogger;
 use Photobooth\PrintManager;
 use Photobooth\Environment;
+use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
@@ -196,67 +197,37 @@ if (isset($data['type'])) {
         }
     }
 
-    if ($newConfig['picture']['take_frame']) {
-        if (
-            empty($newConfig['picture']['frame']) ||
-            !is_array(
-                @getimagesize(str_starts_with($newConfig['picture']['frame'], 'http') ? $newConfig['picture']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $newConfig['picture']['frame'])
-            )
-        ) {
-            $newConfig['picture']['take_frame'] = false;
-            $Logger->addLogData(['frame' => 'Picture frame does not exist or is empty. Picture frame disabled.']);
-            $Logger->addLogData(['frame' => empty($newConfig['picture']['frame']) ? 'Empty.' : $newConfig['picture']['frame']]);
-        }
+    if ($newConfig['picture']['take_frame'] && $newConfig['picture']['frame'] === '') {
+        $newConfig['picture']['take_frame'] = false;
+        $Logger->addLogData(['frame' => empty($newConfig['picture']['frame']) ? 'Empty.' : $newConfig['picture']['frame']]);
     }
 
-    if ($newConfig['collage']['take_frame']) {
-        if (
-            empty($newConfig['collage']['frame']) ||
-            !is_array(
-                @getimagesize(str_starts_with($newConfig['collage']['frame'], 'http') ? $newConfig['collage']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $newConfig['collage']['frame'])
-            )
-        ) {
-            $newConfig['collage']['take_frame'] = false;
-            $Logger->addLogData(['frame' => 'Collage frame does not exist or is empty. Collage frame disabled.']);
-            $Logger->addLogData(['frame' => empty($newConfig['collage']['frame']) ? 'Empty.' : $newConfig['collage']['frame']]);
-        }
+    if ($newConfig['collage']['take_frame'] && $newConfig['collage']['frame'] === '') {
+        $newConfig['collage']['take_frame'] = false;
+        $Logger->addLogData(['frame' => empty($newConfig['collage']['frame']) ? 'Empty.' : $newConfig['collage']['frame']]);
     }
 
-    if ($newConfig['print']['print_frame']) {
-        if (
-            empty($newConfig['print']['frame']) ||
-            !is_array(
-                @getimagesize(str_starts_with($newConfig['print']['frame'], 'http') ? $newConfig['print']['frame'] : $_SERVER['DOCUMENT_ROOT'] . $newConfig['print']['frame'])
-            )
-        ) {
-            $newConfig['print']['print_frame'] = false;
-            $Logger->addLogData(['frame' => 'Print frame does not exist or is empty. Printing frame disabled.']);
-            $Logger->addLogData(['frame' => empty($newConfig['print']['frame']) ? 'Empty.' : $newConfig['print']['frame']]);
-        }
+    if ($newConfig['print']['print_frame'] && $newConfig['print']['frame'] === '') {
+        $newConfig['print']['print_frame'] = false;
+        $Logger->addLogData(['frame' => empty($newConfig['print']['frame']) ? 'Empty.' : $newConfig['print']['frame']]);
     }
 
-    if ($newConfig['textonpicture']['enabled']) {
-        if (empty($newConfig['textonpicture']['font']) || !file_exists($newConfig['textonpicture']['font'])) {
-            $newConfig['textonpicture']['enabled'] = false;
-            $Logger->addLogData(['font' => 'Picture font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path.']);
-            $Logger->addLogData(['font' => empty($newConfig['textonpicture']['font']) ? 'Empty.' : $newConfig['textonpicture']['font']]);
-        }
+    if ($newConfig['textonpicture']['enabled'] && ($newConfig['textonpicture']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textonpicture']['font'])))) {
+        $newConfig['textonpicture']['enabled'] = false;
+        $Logger->addLogData(['font' => 'Picture font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path.']);
+        $Logger->addLogData(['font' => empty($newConfig['textonpicture']['font']) ? 'Empty.' : $newConfig['textonpicture']['font']]);
     }
 
-    if ($newConfig['textoncollage']['enabled']) {
-        if (empty($newConfig['textoncollage']['font']) || !file_exists($newConfig['textoncollage']['font'])) {
-            $newConfig['textoncollage']['enabled'] = false;
-            $Logger->addLogData(['font' => 'Collage font does not exist or is empty. Disabled text on collage. Note: Must be an absoloute path.']);
-            $Logger->addLogData(['font' => empty($newConfig['textoncollage']['font']) ? 'Empty.' : $newConfig['textoncollage']['font']]);
-        }
+    if ($newConfig['textoncollage']['enabled'] && ($newConfig['textoncollage']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textoncollage']['font'])))) {
+        $newConfig['textoncollage']['enabled'] = false;
+        $Logger->addLogData(['font' => 'Collage font does not exist or is empty. Disabled text on collage. Note: Must be an absoloute path.']);
+        $Logger->addLogData(['font' => empty($newConfig['textoncollage']['font']) ? 'Empty.' : $newConfig['textoncollage']['font']]);
     }
 
-    if ($newConfig['textonprint']['enabled']) {
-        if (empty($newConfig['textonprint']['font']) || !file_exists($newConfig['textonprint']['font'])) {
-            $newConfig['textonprint']['enabled'] = false;
-            $Logger->addLogData(['font' => 'Print font does not exist or is empty. Disabled text on print. Note: Must be an absoloute path.']);
-            $Logger->addLogData(['font' => empty($newConfig['textonprint']['font']) ? 'Empty.' : $newConfig['textonprint']['font']]);
-        }
+    if ($newConfig['textonprint']['enabled'] && ($newConfig['textonprint']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textonprint']['font'])))) {
+        $newConfig['textonprint']['enabled'] = false;
+        $Logger->addLogData(['font' => 'Print font does not exist or is empty. Disabled text on print. Note: Must be an absoloute path.']);
+        $Logger->addLogData(['font' => empty($newConfig['textonprint']['font']) ? 'Empty.' : $newConfig['textonprint']['font']]);
     }
 
     if ($newConfig['logo']['enabled']) {
@@ -265,7 +236,7 @@ if (isset($data['type'])) {
             $newConfig['logo']['enabled'] = false;
             $Logger->addLogData(['logo' => 'Logo file path does not exist or is empty. Logo disabled.']);
         } else {
-            $newConfig['logo']['path'] = Helper::fixSeperator($logoPath);
+            $newConfig['logo']['path'] = PathUtility::fixFilePath($logoPath);
             $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
             if ($ext === 'svg') {
                 $Logger->addLogData(['logo' => 'Logo file is SVG, path saved.']);
@@ -283,8 +254,8 @@ if (isset($data['type'])) {
 
     $content = "<?php\n\$config = " . var_export(Helper::arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
 
-    if (file_put_contents($my_config_file, $content)) {
-        Helper::clearCache($my_config_file);
+    if (file_put_contents(PathUtility::getAbsolutePath('config/my.config.inc.php'), $content)) {
+        Helper::clearCache(PathUtility::getAbsolutePath('config/my.config.inc.php'));
         $Logger->addLogData(['config' => 'New config saved']);
 
         if ($data['type'] == 'reset') {
@@ -337,8 +308,8 @@ if (isset($data['type'])) {
 
             if ($newConfig['reset']['remove_config']) {
                 // delete personal config
-                if (is_file('../config/my.config.inc.php')) {
-                    unlink('../config/my.config.inc.php');
+                if (is_file(PathUtility::getAbsolutePath('config/my.config.inc.php'))) {
+                    unlink(PathUtility::getAbsolutePath('config/my.config.inc.php'));
                     $Logger->addLogData(['my.config.inc.php' => 'deleted']);
                 }
             }
@@ -373,5 +344,5 @@ if (isset($data['type'])) {
 $Logger->logToFile();
 
 // Kill service daemons after config has changed
-require_once '../lib/services_stop.php';
+require_once PathUtility::getAbsolutePath('lib/services_stop.php');
 exit();

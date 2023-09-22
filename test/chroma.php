@@ -1,7 +1,8 @@
 <?php
 
-$fileRoot = '../';
-require_once $fileRoot . 'lib/boot.php';
+require_once '../lib/boot.php';
+
+use Photobooth\Utility\PathUtility;
 
 $pageTitle = $config['ui']['branding'] . ' Chroma-Preview Test';
 $mainStyle = 'test_preview.css';
@@ -9,7 +10,7 @@ $photoswipe = false;
 $remoteBuzzer = false;
 $chromaKeying = false;
 
-include($fileRoot . 'template/components/main.head.php');
+include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 
 <body>
@@ -22,7 +23,7 @@ include($fileRoot . 'template/components/main.head.php');
             <span data-i18n="no_preview"></span>
         </div>
 
-		<div class="buttonbar">
+        <div class="buttonbar">
             <a href="#" class="<?php echo $btnClass; ?> startPreview"><span data-i18n="startPreview"></span></a>
             <a href="#" class="<?php echo $btnClass; ?> stopPreview"><span data-i18n="stopPreview"></span></a><br>
             <label for="chromaImage">Chroma Image:</label>
@@ -34,15 +35,15 @@ include($fileRoot . 'template/components/main.head.php');
             <label for="chromaBlend">Blend:</label>
             <input id="chromaBlend" type="number" value="0.1"/>
             <a href="#" class="<?php echo $btnClass; ?> setChroma"><span data-i18n="set">Set</span></a>
-            <a href="<?php echo $fileRoot . 'test'; ?>" class="<?php echo $btnClass; ?> backBtn"><span data-i18n="back"></span></a>
+            <a href="<?php echo PathUtility::getPublicPath('test'); ?>" class="<?php echo $btnClass; ?> backBtn"><span data-i18n="back"></span></a>
         </div>
     </div>
 
-    <?php include($fileRoot . 'template/components/main.footer.php'); ?>
+    <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
-    <script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-    <script type="text/javascript" src="<?=$fileRoot?>resources/js/test_preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-    <script type="text/javascript" src="<?=$fileRoot?>resources/js/test_chroma.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/test_preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/test_chroma.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
 </body>
 </html>

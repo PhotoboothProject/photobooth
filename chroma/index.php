@@ -1,27 +1,29 @@
 <?php
 
-$fileRoot = '../';
-require_once $fileRoot . 'lib/boot.php';
+require_once '../lib/boot.php';
+
+use Photobooth\Utility\ImageUtility;
+use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
-if (
+if (!(
     !$config['login']['enabled'] ||
-    (!$config['protect']['localhost_index'] && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
-    ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
-) {
-    $pageTitle = $config['ui']['branding'] . ' Chroma capture';
-    $mainStyle = $config['ui']['style'] . '_chromacapture.css';
-    $photoswipe = true;
-    $randomImage = false;
-    $remoteBuzzer = true;
-    $chromaKeying = true;
-    $GALLERY_FOOTER = false;
-} else {
-    header('location: ' . $config['protect']['index_redirect']);
+    (!$config['protect']['localhost_index'] && isset($_SERVER['SERVER_ADDR']) &&  $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index']
+)) {
+    header('location: ' . PathUtility::getPublicPath('login'));
     exit();
 }
 
-include($fileRoot . 'template/components/main.head.php');
+$pageTitle = $config['ui']['branding'] . ' Chroma capture';
+$mainStyle = $config['ui']['style'] . '_chromacapture.css';
+$photoswipe = true;
+$randomImage = false;
+$remoteBuzzer = true;
+$chromaKeying = true;
+$GALLERY_FOOTER = false;
+
+include PathUtility::getAbsolutePath('template/components/main.head.php');
 $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
 ?>
 <body>
@@ -33,7 +35,7 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
     <div class="rotarygroup" id="start">
         <div class="top-bar">
             <?php if (!$config['chromaCapture']['enabled']): ?>
-                <a href="<?=$fileRoot?>index.php" class="<?php echo $btnClass; ?> chromaCapture-close-btn rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
+                <a href="<?=PathUtility::getPublicPath()?>index.php" class="<?php echo $btnClass; ?> chromaCapture-close-btn rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
             <?php endif; ?>
 
             <?php if ($config['gallery']['enabled']): ?>
@@ -50,19 +52,16 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
             <span data-i18n="chromaInfoBefore"></span>
         </div>
 
-        <?php include($fileRoot . 'template/components/start.loader.php'); ?>
+        <?php include PathUtility::getAbsolutePath('template/components/start.loader.php'); ?>
 
         <!-- Result Page -->
         <div class="stages" id="result"></div>
 
         <div class="backgrounds <?php echo $uiShape ?>">
-            <?php
-            $dir = '..' . DIRECTORY_SEPARATOR . $config['keying']['background_path'] . DIRECTORY_SEPARATOR;
-$cdir = scandir($dir);
-foreach ($cdir as $key => $value) {
-    if (!in_array($value, ['.', '..']) && !is_dir($dir . $value)) {
-        echo '<img src="' . $dir . $value . '" class="' . $uiShape . ' backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
-    }
+        <?php
+        $backgroundImages = ImageUtility::getImagesFromPath(PathUtility::getAbsolutePath($config['keying']['background_path']));
+foreach ($backgroundImages as $backgroundImage) {
+    echo '<img src="' . PathUtility::getPublicPath($backgroundImage) . '" class="backgroundPreview ' . $uiShape . ' rotaryfocus" onclick="setBackgroundImage(this.src)">';
 }
 ?>
         </div>
@@ -80,21 +79,21 @@ foreach ($cdir as $key => $value) {
     </div>
     <div class="rotarygroup">
         <div id="wrapper">
-            <?php include($fileRoot . 'template/gallery.template.php'); ?>
+            <?php include PathUtility::getAbsolutePath('template/gallery.template.php'); ?>
         </div>
 
-        <?php include($fileRoot . 'template/send-mail.template.php'); ?>
+        <?php include PathUtility::getAbsolutePath('template/send-mail.template.php'); ?>
     </div>
 </div>
 <script type="text/javascript">
     onCaptureChromaView = true;
 </script>
 
-<?php include($fileRoot . 'template/components/main.footer.php'); ?>
+<?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
-<script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
-<?php require_once($fileRoot . 'lib/services_start.php'); ?>
+<?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>
 </body>
 </html>

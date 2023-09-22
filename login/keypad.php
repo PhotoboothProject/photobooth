@@ -1,4 +1,7 @@
 <?php
+
+use Photobooth\Utility\PathUtility;
+
 $pinLength = strlen($config['login']['pin']);
 $pinMap = str_split($config['login']['pin']);
 
@@ -12,15 +15,15 @@ function getKeyIndicator($pinMap, $length)
         }
 
         $containerClass = '
-                keypad_keybox ' . $activeClass . ' 
-                flex items-center justify-center w-10 h-14 
-                border border-solid border-gray-200 bg-gray-50 rounded m-2 
-                [&.active]:border-brand-1 
+                keypad_keybox ' . $activeClass . '
+                flex items-center justify-center w-10 h-14
+                border border-solid border-gray-200 bg-gray-50 rounded m-2
+                [&.active]:border-brand-1
                 [&.error]:animate-error [&.error]:border-red-500 [&.error]:border-opacity-70
             ';
         $dotClass = '
-                keypad_key ' . $activeClass . ' 
-                w-3 h-3 rounded-full bg-gray-400 
+                keypad_key ' . $activeClass . '
+                w-3 h-3 rounded-full bg-gray-400
                 [&.active]:border-2 [&.active]:border-solid [&.active]:border-brand-1 [&.active]:bg-transparent
                 [&.checked]:bg-brand-1
                 [&.error]:bg-red-500 [&.error]:bg-opacity-70
@@ -33,7 +36,6 @@ function getKeyIndicator($pinMap, $length)
 }
 function getKey($key = null)
 {
-    global $fileRoot;
     $containerClass = 'keypad_key peer flex items-center justify-center p-2 hover:text-brand-1 transition-all';
     $keyClass = '
             flex items-center justify-center w-16 h-16 transition-all
@@ -52,7 +54,7 @@ function getKey($key = null)
         } elseif ($key  === 'remove') {
             echo '<div class="' . $containerClass . ' cursor-pointer" onclick="keypadRemoveLastValue();"><span class="fa fa-chevron-left"></span></div>';
         } elseif ($key  === 'home') {
-            echo '<a href="' . $fileRoot . '" class="text-2xl ' . $containerClass . ' cursor-pointer"><span class="fa fa-home"></span></a>';
+            echo '<a href="' . PathUtility::getPublicPath() . '" class="text-2xl ' . $containerClass . ' cursor-pointer"><span class="fa fa-home"></span></a>';
         }
     } else {
         echo '<div class="' . $containerClass . '"></div>';
@@ -78,8 +80,9 @@ function getKey($key = null)
 
         <div class="w-full text-center text-gray-500">
             <div class="grid grid-cols-3">
-                <?php
-                    echo getKey(1);
+<?php
+
+echo getKey(1);
 echo getKey(2);
 echo getKey(3);
 echo getKey(4);
@@ -91,6 +94,7 @@ echo getKey(9);
 echo getKey('remove');
 echo getKey(0);
 echo getKey('home');
+
 ?>
             </div>
         </div>
