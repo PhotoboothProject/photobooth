@@ -31,10 +31,13 @@ function initRemoteBuzzerFromDOM() {
             }
 
             if (config.remotebuzzer.serverip) {
-                ioClient = io('http://' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port);
-
+                ioClient = io(
+                    window.location.protocol + '//' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port
+                );
                 photoboothTools.console.logDev(
-                    'Remote buzzer connecting to http://' +
+                    'Remote buzzer connecting to ' +
+                        window.location.protocol +
+                        '//' +
                         config.remotebuzzer.serverip +
                         ':' +
                         config.remotebuzzer.port

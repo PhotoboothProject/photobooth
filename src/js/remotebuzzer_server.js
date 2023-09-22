@@ -192,6 +192,7 @@ function photoboothAction(type) {
 const requestListener = function (req, res) {
     function sendText(content, contentType) {
         res.setHeader('Content-Type', contentType || 'text/plain');
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.writeHead(200);
         res.end(content);
     }
