@@ -5,10 +5,17 @@
     "require": {
         "php": "^8.2",
         "ext-gd": "*",
-        "ext-zip": "*",
         "ext-mbstring": "*",
+        "ext-zip": "*",
+        "endroid/qr-code": "^4.8",
         "phpmailer/phpmailer": "^6.8",
-        "endroid/qr-code": "^4.8"
+        "symfony/console": "^6.3"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "vendor-dir": "vendor"
     },
     "autoload": {
         "psr-4": {

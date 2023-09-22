@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../lib/boot.php';
+
+use Photobooth\Console\Application;
+
+$application = new Application($config);
+$application->run();
