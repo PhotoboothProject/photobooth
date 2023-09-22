@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 /* VARIABLES */
 let collageInProgress = false,
     triggerArmed = true,
@@ -12,8 +14,6 @@ let collageInProgress = false,
     move2usbled,
     copySucess = false;
 
-const API_DIR_NAME = 'api';
-const API_FILE_NAME = 'config.php';
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 let rotaryClkPin, rotaryDtPin;
 const {execSync, spawnSync} = require('child_process');
@@ -24,6 +24,23 @@ const {pid: PID, platform: PLATFORM} = process;
 const log = function (...optionalParams) {
     console.log('[', new Date().toISOString(), ']:', ` Remote Buzzer Server [${PID}]:`, ...optionalParams);
 };
+
+/* SOURCE PHOTOBOOTH CONFIG */
+/*const {execSync} = require('child_process');*/
+let cmd = 'bin/photobooth photobooth:config:list json';
+let stdout = execSync(cmd).toString();
+const config = JSON.parse(stdout);
+
+/* WRITE PROCESS PID FILE */
+const pidFilename = config.foldersAbs.tmp + '/remotebuzzer_server.pid';
+
+fs.writeFile(pidFilename, parseInt(PID, 10).toString(), function (err) {
+    if (err) {
+        throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
+    }
+
+    log('PID file created [', pidFilename, ']');
+});
 
 /* HANDLE EXCEPTIONS */
 process.on('uncaughtException', function (err) {
@@ -37,24 +54,6 @@ process.on('uncaughtException', function (err) {
 
     /* got to exit now and here - can not recover from error */
     process.exit();
-});
-
-/* SOURCE PHOTOBOOTH CONFIG */
-/*const {execSync} = require('child_process');*/
-let cmd = `cd ${API_DIR_NAME} && php ./${API_FILE_NAME}`;
-let stdout = execSync(cmd).toString();
-const config = JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
-
-/* WRITE PROCESS PID FILE */
-const pidFilename = config.foldersJS.tmp + '/remotebuzzer_server.pid';
-const fs = require('fs');
-
-fs.writeFile(pidFilename, parseInt(PID, 10).toString(), function (err) {
-    if (err) {
-        throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
-    }
-
-    log('PID file created [', pidFilename, ']');
 });
 
 /* START HTTP & WEBSOCKET SERVER */
