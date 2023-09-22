@@ -79,27 +79,27 @@ const photoboothTools = (function () {
     };
 
     api.getRequest = function (url) {
-        const request = new XMLHttpRequest();
         api.console.log('Sending GET request to: ' + url);
-
-        request.onload = function () {
-            if (request.status === 200) {
-                // parse JSON data
-                const responseData = request.responseText;
-                api.console.log(responseData);
-            } else if (request.status === 404) {
-                api.console.log('No records found');
-            } else {
-                api.console.log('Unhandled request status: ' + request.status);
-            }
-        };
-
-        request.onerror = function () {
-            api.console.log('Network error occurred');
-        };
-
-        request.open('GET', url);
-        request.send();
+        fetch(new Request(url), {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'same-origin'
+        })
+            .then(function (response) {
+                if (response.status === 200) {
+                    return response.text();
+                } else if (response.status === 404) {
+                    throw new Error('No records found');
+                } else {
+                    throw new Error('Unhandled request status: ' + response.status);
+                }
+            })
+            .then(function (data) {
+                api.console.log(data);
+            })
+            .catch(function (error) {
+                api.console.log('Error occurred: ' + error.message);
+            });
     };
 
     api.isVideoFile = function (filename) {
