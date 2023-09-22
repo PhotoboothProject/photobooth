@@ -6,6 +6,7 @@
         "php": "^8.2",
         "ext-gd": "*",
         "ext-zip": "*",
+        "ext-mbstring": "*",
         "phpmailer/phpmailer": "^6.8",
         "endroid/qr-code": "^4.8"
     },

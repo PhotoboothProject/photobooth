@@ -1,5 +1,7 @@
 <?php
 
+use Photobooth\Utility\PathUtility;
+
 if (empty($imagelist)) {
     echo '<h1 style="text-align:center" data-i18n="gallery_no_image"></h1>' . "\n";
 } else {
@@ -20,8 +22,8 @@ if (empty($imagelist)) {
                 }
             }
 
-            $filename_photo = $fileRoot . $config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image;
-            $filename_thumb = $fileRoot . $config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+            $filename_photo = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image);
+            $filename_thumb = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image);
 
             $imageinfo = @getimagesize($filename_photo);
             $imageinfoThumb = @getimagesize($filename_thumb);
@@ -30,11 +32,11 @@ if (empty($imagelist)) {
                 if (!is_array($imageinfoThumb)) {
                     $imageinfoThumb = $imageinfo;
                 }
-                echo '<a href="' . $filename_photo . '" class="gallery__img rotaryfocus" data-size="' . $imageinfo[0] . 'x' . $imageinfo[1] . '"';
+                echo '<a href="' . PathUtility::getPublicPath($filename_photo) . '" class="gallery__img rotaryfocus" data-size="' . $imageinfo[0] . 'x' . $imageinfo[1] . '"';
                 echo ' data-pswp-width="' . $imageinfo[0] . '" data-pswp-height="' . $imageinfo[1] . '"';
-                echo ' data-med="' . $filename_thumb . '" data-med-size="' . $imageinfoThumb[0] . 'x' . $imageinfoThumb[1] . '">' . "\n";
+                echo ' data-med="' . PathUtility::getPublicPath($filename_thumb) . '" data-med-size="' . $imageinfoThumb[0] . 'x' . $imageinfoThumb[1] . '">' . "\n";
                 echo '<figure class="' . $uiShape . '">' . "\n";
-                echo '<img class="' . $uiShape . '" src="' . $filename_thumb . '" alt="' . $image . '" />' . "\n";
+                echo '<img class="' . $uiShape . '" src="' . PathUtility::getPublicPath($filename_thumb) . '" alt="' . $image . '" />' . "\n";
                 if ($config['gallery']['figcaption']) {
                     echo '<figcaption class="' . $uiShape . '">' . $date . '</figcaption>' . "\n";
                 }

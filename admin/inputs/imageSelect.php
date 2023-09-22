@@ -1,6 +1,6 @@
 <?php
 
-use Photobooth\Helper;
+use Photobooth\Utility\PathUtility;
 
 function getImageSelect($setting, $i18ntag)
 {
@@ -22,10 +22,10 @@ function getImageSelect($setting, $i18ntag)
             str_contains($value, '.webp') ||
             str_contains($value, '.svg')
         ) {
-            $value = Helper::fixSeperator($value);
+            $value = PathUtility::fixFilePath($value);
             $imgPath = $value;
             $origin = $value;
-            $serverRoot = Helper::fixSeperator($_SERVER['DOCUMENT_ROOT']);
+            $serverRoot = PathUtility::fixFilePath($_SERVER['DOCUMENT_ROOT']);
             if (str_contains($value, $serverRoot)) {
                 $origin = substr($value, strlen($serverRoot));
                 $imgPath = substr($value, strlen($serverRoot));

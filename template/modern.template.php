@@ -1,6 +1,11 @@
+<?php
+
+use Photobooth\Utility\PathUtility;
+
+?>
 <!-- Start Page -->
 <div class="stages <?php echo $uiShape; ?> noborder" id="start">
-    <?php include 'components/start.logo.php'; ?>
+    <?php include PathUtility::getAbsolutePath('template/components/start.logo.php'); ?>
     <div class="startInner <?php echo $uiShape; ?> noborder">
         <div class="divaussen">
             <div class="divinnen">
@@ -51,7 +56,7 @@
                     </div>
                     <?php endif; ?>
                     <div class="rotarygroup">
-                        <?php include 'components/actionBtn.php'; ?>
+                        <?php include PathUtility::getAbsolutePath('template/components/actionBtn.php'); ?>
                     </div>
                 </div>
             </div>

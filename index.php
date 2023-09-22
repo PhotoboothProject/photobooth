@@ -1,17 +1,18 @@
 <?php
 
-$fileRoot = '';
-require_once $fileRoot . 'lib/boot.php';
+require_once 'lib/boot.php';
+
+use Photobooth\Utility\PathUtility;
 
 if (!$config['ui']['skip_welcome']) {
-    if (!is_file($fileRoot . 'welcome/.skip_welcome')) {
-        header('location: ' . $fileRoot . 'welcome/');
+    if (!is_file(PathUtility::getAbsolutePath('welcome/.skip_welcome'))) {
+        header('location: ' . PathUtility::getPublicPath('welcome'));
         exit();
     }
 }
 
 if ($config['chromaCapture']['enabled']) {
-    header('location: ' . $fileRoot . 'chroma/');
+    header('location: ' . PathUtility::getPublicPath('chroma'));
     exit();
 }
 
@@ -33,8 +34,8 @@ if (
     exit();
 }
 
-include($fileRoot . 'template/components/helper/index.php');
-include($fileRoot . 'template/components/main.head.php');
+include PathUtility::getAbsolutePath('template/components/helper/index.php');
+include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 
 <body class="deselect">
@@ -65,36 +66,35 @@ include($fileRoot . 'template/components/main.head.php');
     </div>
 <?php endif; ?>
 <div id="wrapper">
+<?php
 
-    <?php
-        include($fileRoot . 'template/' . $config['ui']['style'] . '.template.php');
+include PathUtility::getAbsolutePath('template/' . $config['ui']['style'] . '.template.php');
 
 if ($config['filters']['enabled']) {
-    include($fileRoot . 'template/components/start.filter.php');
+    include PathUtility::getAbsolutePath('template/components/start.filter.php');
 }
 
-include($fileRoot . 'template/components/start.loader.php');
-include($fileRoot . 'template/components/start.results.php');
+include PathUtility::getAbsolutePath('template/components/start.loader.php');
+include PathUtility::getAbsolutePath('template/components/start.results.php');
 
 if ($config['gallery']['enabled']) {
-    include($fileRoot . 'template/gallery.template.php');
+    include PathUtility::getAbsolutePath('template/gallery.template.php');
 }
+
 ?>
-
-
 </div>
 
 <?php
-include($fileRoot . 'template/send-mail.template.php');
-include($fileRoot . 'template/modal.template.php');
-include($fileRoot . 'template/components/adminShortcut.php');
-include($fileRoot . 'template/components/main.footer.php');
+include PathUtility::getAbsolutePath('template/send-mail.template.php');
+include PathUtility::getAbsolutePath('template/modal.template.php');
+include PathUtility::getAbsolutePath('template/components/adminShortcut.php');
+include PathUtility::getAbsolutePath('template/components/main.footer.php');
 ?>
 
-<script type="text/javascript" src="<?=$fileRoot?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=$fileRoot?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=$fileRoot?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
-<?php require_once($fileRoot . 'lib/services_start.php'); ?>
+<?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>
 </body>
 </html>

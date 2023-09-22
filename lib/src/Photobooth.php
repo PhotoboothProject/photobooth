@@ -7,69 +7,33 @@ namespace Photobooth;
  */
 class Photobooth
 {
-    /** @var string $serverIp The IP address of the server. */
-    public $serverIp;
-    /** @var string $os The operating system of the server. */
-    public $os;
-    /** @var string $webRoot The web root directory of the server. */
-    public $webRoot;
-    /** @var string $photoboothRoot The root directory of the Photobooth installation. */
-    public $photoboothRoot;
-    /** @var bool $isSubfolderInstall Whether the Photobooth installation is in a subfolder. */
-    public $isSubfolderInstall;
-    /** @var string $version The version of the Photobooth installation. */
-    public $version;
+    protected Environment $environment;
+    protected string $serverIp;
+    protected string $version;
 
-    /**
-     * Photobooth constructor.
-     */
     public function __construct()
     {
-        $this->serverIp = $this->getIp();
-        $this->os = $this->serverOs();
-        $this->webRoot = $this->getWebRoot();
-        $this->photoboothRoot = Helper::getRootpath();
-        $this->isSubfolderInstall = $this->detectSubfolderInstall();
-        $this->version = $this->getPhotoboothVersion();
+        $this->environment = new Environment();
+        $this->serverIp = $this->environment->isLinux() ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
+        $this->version = $this->calculatePhotoboothVersion();
     }
 
-    /**
-     * Returns the operating system of the server.
-     *
-     * @return string The operating system of the server.
-     */
-    public static function serverOs()
+    public function getEnvironment(): Environment
     {
-        return DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
+        return $this->environment;
     }
 
-    /**
-     * Returns the IP address of the server.
-     *
-     * @return string The IP address of the server.
-     */
-    public static function getIp()
+    public function getIp(): string
     {
-        return self::serverOs() == 'linux' ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
+        return $this->serverIp;
     }
 
-    /**
-     * Returns the web root directory of the server.
-     *
-     * @return string The web root directory of the server.
-     */
-    public static function getWebRoot()
+    public function getVersion(): string
     {
-        return self::serverOs() == 'linux' ? $_SERVER['DOCUMENT_ROOT'] : str_replace('/', '\\', $_SERVER['DOCUMENT_ROOT']);
+        return $this->version;
     }
 
-    /**
-     * Get the version number of the installed photobooth software.
-     *
-     * @return string The version number of the installed photobooth software, or "unknown" if the version cannot be determined.
-     * @throws Exception If the package.json file cannot be found or cannot be decoded.
-     */
-    public function getPhotoboothVersion()
+    protected function calculatePhotoboothVersion(): string
     {
         $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . '/../package.json';
         if (!is_file($packageJsonPath)) {
@@ -83,13 +47,7 @@ class Photobooth
         return $package['version'] ?? 'unknown';
     }
 
-    /**
-     * Get the version number of the latest release of the photobooth software on GitHub.
-     *
-     * @return string The version number of the latest release of the photobooth software.
-     * @throws Exception If the latest release cannot be fetched from the GitHub API or the data returned is invalid.
-     */
-    public function getLatestRelease()
+    public function getLatestRelease(): string
     {
         $gh = 'PhotoboothProject';
         $url = 'https://api.github.com/repos/' . $gh . '/photobooth/releases/latest';
@@ -117,44 +75,17 @@ class Photobooth
 
     /**
      * Check whether an update to the photobooth software is available.
-     *
-     * @return bool Whether an update is available or not.
      */
-    public function checkUpdate()
+    public function checkUpdate(): bool
     {
         try {
             $remoteVersion = $this->getLatestRelease();
-            $localVersion = $this->getPhotoboothVersion();
+            $localVersion = $this->getVersion();
             $updateAvailable = $localVersion != $remoteVersion;
 
             return $updateAvailable;
         } catch (\Exception $e) {
             return false;
         }
-    }
-
-    /**
-     * Detects whether the Photobooth installation is in a subfolder.
-     *
-     * @return bool Whether the Photobooth installation is in a subfolder.
-     */
-    public static function detectSubfolderInstall()
-    {
-        return empty(Helper::getRootpath()) ? false : true;
-    }
-
-    /**
-     * Returns the URL of the Photobooth installation.
-     *
-     * @return string The URL of the Photobooth installation.
-     */
-    public function getUrl()
-    {
-        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
-        $url = $protocol . '://' . $this->serverIp;
-        if ($this->isSubfolderInstall) {
-            $url .= Helper::setAbsolutePath(Helper::getRootpath());
-        }
-        return Helper::fixSeperator($url);
     }
 }

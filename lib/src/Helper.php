@@ -15,45 +15,6 @@ class Helper
     private static $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
     /**
-     * Get the relative path of a file or directory.
-     *
-     * @param string $relative_path The path to the file or directory relative to the application root.
-     *
-     * @return string The relative path of the file or directory.
-     */
-    public static function getRootpath($relative_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR)
-    {
-        return str_replace(Photobooth::getWebRoot(), '', realpath($relative_path));
-    }
-
-    /**
-     * Fix path separators to use forward slashes instead of backslashes.
-     *
-     * @param string $fixPath The path to be fixed.
-     *
-     * @return string The fixed path.
-     */
-    public static function fixSeperator($fixPath)
-    {
-        return str_replace('\\', '/', $fixPath);
-    }
-
-    /**
-     * Set an absolute path by adding a leading slash if necessary.
-     *
-     * @param string $path The path to be set as absolute.
-     *
-     * @return string The absolute path.
-     */
-    public static function setAbsolutePath($path)
-    {
-        if (!empty($path) && $path[0] != '/') {
-            $path = '/' . $path;
-        }
-        return $path;
-    }
-
-    /**
      * Recursively compares two arrays and returns the differences between them.
      *
      * @param array $array1 The first array to compare.

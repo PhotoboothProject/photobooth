@@ -1,36 +1,23 @@
 <?php
 
+use Photobooth\Utility\ImageUtility;
+
 require_once '../lib/boot.php';
 
-/****************************************************
-            RANDOM FRAME/BACKGROUND/...
-    This "script" allows to randomize images,
-    backgrounds, canvas, frames, etc. so
-    pictures taken are "funnier" and an element
-    of "surprise".
+// RANDOM FRAME/BACKGROUND/...
+//
+// This "script" allows to randomize images,
+// backgrounds, canvas, frames, etc. so
+// pictures taken are "funnier" and an element
+// of "surprise".
 
-*****************************************************/
-
+$directory = 'demoframes';
 if (isset($_GET['dir']) && !empty($_GET['dir'])) {
-    $dir = $_GET['dir'];
-} else {
-    $dir = 'demoframes';
+    $directory = $_GET['dir'];
 }
 
-$path = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $dir;
-
-if ($dir == 'demoframes' || !is_dir($path)) {
-    $path = realpath('../resources/img/frames');
-}
-
-$files = array_diff(scandir($path), ['.', '..']);
-
-// - - - - - - - - - -
-
-$images = array_rand($files);
-$image = $files[$images];
-$filename = $path . DIRECTORY_SEPARATOR . basename($image);
-$file_extension = strtolower(substr(strrchr($filename, '.'), 1));
+$filename = ImageUtility::getRandomImageFromPath($directory);
+$file_extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
 switch ($file_extension) {
     case 'gif':

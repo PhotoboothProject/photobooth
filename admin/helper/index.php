@@ -1,8 +1,10 @@
 <?php
 
-include 'loader.php';
-include 'hiddenElement.php';
-include 'indent.php';
-include 'ctaBtn.php';
-include 'menuBtn.php';
-include 'toast.php';
+use Photobooth\Utility\PathUtility;
+
+include PathUtility::getAbsolutePath('admin/helper/loader.php');
+include PathUtility::getAbsolutePath('admin/helper/hiddenElement.php');
+include PathUtility::getAbsolutePath('admin/helper/indent.php');
+include PathUtility::getAbsolutePath('admin/helper/ctaBtn.php');
+include PathUtility::getAbsolutePath('admin/helper/menuBtn.php');
+include PathUtility::getAbsolutePath('admin/helper/toast.php');

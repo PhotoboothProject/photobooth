@@ -16,7 +16,7 @@ function getLogData($debugLevel)
         $photobooth = new Photobooth();
         $logData = [
             'updateAvailable' => $photobooth->checkUpdate(),
-            'currentVersion' => $photobooth->getPhotoboothVersion(),
+            'currentVersion' => $photobooth->getVersion(),
             'availableVersion' => $photobooth->getLatestRelease(),
         ];
 

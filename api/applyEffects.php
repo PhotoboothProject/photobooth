@@ -104,14 +104,10 @@ try {
         if (!$isChroma) {
             if ($isCollage && $file != $image) {
                 $editSingleCollage = true;
-                $imageHandler->framePath = str_starts_with($config['collage']['frame'], 'http')
-                    ? $config['collage']['frame']
-                    : $_SERVER['DOCUMENT_ROOT'] . $config['collage']['frame'];
+                $imageHandler->framePath = $config['collage']['frame'];
             } else {
                 $editSingleCollage = false;
-                $imageHandler->framePath = str_starts_with($config['picture']['frame'], 'http')
-                    ? $config['picture']['frame']
-                    : $_SERVER['DOCUMENT_ROOT'] . $config['picture']['frame'];
+                $imageHandler->framePath = $config['picture']['frame'];
             }
 
             if (!$isCollage || $editSingleCollage) {

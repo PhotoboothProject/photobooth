@@ -1,5 +1,7 @@
 <?php
 
+use Photobooth\Utility\PathUtility;
+
 session_start();
 
 // Autoload
@@ -47,7 +49,7 @@ define('TEXTONCOLLAGE_LINE3', $config['textoncollage']['line3']);
 define('TEXTONCOLLAGE_LOCATIONX', $config['textoncollage']['locationx']);
 define('TEXTONCOLLAGE_LOCATIONY', $config['textoncollage']['locationy']);
 define('TEXTONCOLLAGE_ROTATION', $config['textoncollage']['rotation']);
-define('TEXTONCOLLAGE_FONT', $config['textoncollage']['font']);
+define('TEXTONCOLLAGE_FONT', PathUtility::getAbsolutePath($config['textoncollage']['font']));
 define('TEXTONCOLLAGE_FONT_COLOR', $config['textoncollage']['font_color']);
 define('TEXTONCOLLAGE_FONT_SIZE', $config['textoncollage']['font_size']);
 define('TEXTONCOLLAGE_LINESPACE', $config['textoncollage']['linespace']);

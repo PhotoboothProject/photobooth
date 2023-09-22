@@ -271,9 +271,9 @@ $config['qr']['result'] = 'hidden';
 // If send_all_later is enabled, a checkbox to save the current mail address for later in {mail_file}.txt is visible
 $config['mail']['enabled'] = false;
 $config['mail']['send_all_later'] = false;
-$config['mail']['subject'] = ''; 	// if empty, default translation is used
-$config['mail']['text'] = '';		// if empty, default translation is used
-$config['mail']['alt_text'] = '';		// if empty, default translation is used
+$config['mail']['subject'] = '';    // if empty, default translation is used
+$config['mail']['text'] = '';       // if empty, default translation is used
+$config['mail']['alt_text'] = '';   // if empty, default translation is used
 $config['mail']['is_html'] = false;
 $config['mail']['host'] = 'smtp.example.com';
 $config['mail']['username'] = 'photobooth@example.com';
