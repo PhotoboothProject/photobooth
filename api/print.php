@@ -83,7 +83,7 @@ if (!file_exists($filename_print)) {
             }
         }
 
-        if ($config['print']['qrcode'] && $imageHandler->qrAvailable) {
+        if ($config['print']['qrcode']) {
             // create qr code
             if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
                 $imageHandler->qrUrl = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $filename;
@@ -92,7 +92,6 @@ if (!file_exists($filename_print)) {
             } else {
                 $imageHandler->qrUrl = $config['qr']['url'];
             }
-            $imageHandler->qrEcLevel = $config['qr']['ecLevel'];
             $imageHandler->qrSize = $config['print']['qrSize'];
             $imageHandler->qrMargin = $config['print']['qrMargin'];
             $imageHandler->qrColor = $config['print']['qrBgColor'];

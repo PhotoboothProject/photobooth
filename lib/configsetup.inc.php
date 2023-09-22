@@ -1727,18 +1727,6 @@ $configsetup = [
             'name' => 'qr[enabled]',
             'value' => $config['qr']['enabled'],
         ],
-        'qr_ecLevel' => [
-            'type' => 'select',
-            'name' => 'qr[ecLevel]',
-            'placeholder' => $defaultConfig['qr']['ecLevel'],
-            'options' => [
-                'QR_ECLEVEL_L' => 'L - smallest',
-                'QR_ECLEVEL_M' => 'M',
-                'QR_ECLEVEL_Q' => 'Q',
-                'QR_ECLEVEL_H' => 'H - best',
-            ],
-            'value' => $config['qr']['ecLevel'],
-        ],
         'qr_url' => [
             'view' => 'expert',
             'type' => 'input',

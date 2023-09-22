@@ -1,5 +1,7 @@
 <?php
 
+use Photobooth\Utility\QrCodeUtility;
+
 require_once '../lib/boot.php';
 
 $filename = (isset($_GET['filename']) && $_GET['filename']) != '' ? $_GET['filename'] : false;
@@ -13,25 +15,9 @@ if ($filename || !$config['qr']['append_filename']) {
         $url = $config['qr']['url'];
     }
     try {
-        switch ($config['qr']['ecLevel']) {
-            case 'QR_ECLEVEL_L':
-                $ecLevel = QR_ECLEVEL_L;
-                break;
-            case 'QR_ECLEVEL_M':
-                $ecLevel = QR_ECLEVEL_M;
-                break;
-            case 'QR_ECLEVEL_Q':
-                $ecLevel = QR_ECLEVEL_Q;
-                break;
-            case 'QR_ECLEVEL_H':
-                $ecLevel = QR_ECLEVEL_H;
-                break;
-            default:
-                $ecLevel = QR_ECLEVEL_M;
-                break;
-        }
-
-        QRcode::png($url, false, $ecLevel, 8);
+        $result = QrCodeUtility::create($url);
+        header('Content-Type: ' . $result->getMimeType());
+        echo $result->getString();
     } catch (Exception $e) {
         http_response_code(500);
         echo 'Error generating QR Code.';

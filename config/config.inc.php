@@ -259,7 +259,6 @@ $config['textonprint']['linespace'] = '100';
 
 // Q R  -  C O D E
 $config['qr']['enabled'] = true;
-$config['qr']['ecLevel'] = 'QR_ECLEVEL_M';
 $config['qr']['url'] = '';
 $config['qr']['append_filename'] = true;
 $config['qr']['custom_text'] = false;

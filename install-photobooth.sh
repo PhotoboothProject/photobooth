@@ -39,7 +39,6 @@ PHOTOBOOTH_PATH=(
         '/var/www/html/photobooth'
 )
 PHOTOBOOTH_SUBMODULES=(
-        'vendor/phpqrcode'
         'vendor/rpihotspot'
         'vendor/Seriously'
 )
