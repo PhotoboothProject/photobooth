@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Utility\MarkdownUtility;
 use Photobooth\Utility\PathUtility;
 
 require_once('../lib/boot.php');
@@ -40,14 +41,6 @@ require_once('../lib/configsetup.inc.php');
     <link rel="stylesheet" type="text/css" href="../node_modules/github-markdown-css/github-markdown.css">
 </head>
 <body class="markdown-body" style="padding: 5rem;">
-
-<?php
-    if(file_exists(PathUtility::getAbsolutePath('faq/faq.md.php'))) {
-        include PathUtility::getAbsolutePath('faq/faq.md.php');
-    } else {
-        echo '<p>The file <code>faq/faq.md.php</code> does not exist. Please run <code>npm run build:faq</code> to generate it.</p>';
-    }
-?>
-
-  </body>
+    <?php echo MarkdownUtility::render('docs/faq.md'); ?>
+</body>
 </html>

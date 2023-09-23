@@ -7,8 +7,7 @@
     "npm": ">=9.6.0"
   },
   "scripts": {
-    "build": "npm-run-all --serial composer:install format build:faq build:gulp build:head clean:skipwelcome",
-    "build:faq": "node scripts/faq.js",
+    "build": "npm-run-all --serial composer:install format build:gulp build:head clean:skipwelcome",
     "build:gulp": "gulp",
     "build:head": "git log --format='%h %s' -n 20 > HEAD",
     "build:sass": "gulp sass",
@@ -68,7 +67,6 @@
     "gulp-postcss": "^9.0.1",
     "gulp-rename": "^2.0.0",
     "jquery": "^3.7.1",
-    "markdown-it": "^13.0.1",
     "marvinj": "^1.0.0",
     "material-icons": "^1.13.11",
     "node-sass-importer": "^2.0.2",

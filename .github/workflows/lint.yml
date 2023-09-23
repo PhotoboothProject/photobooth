@@ -23,7 +23,7 @@ jobs:
         os: [ubuntu-latest, macos-11]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout repository 
+      - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup node ${{ matrix.node }}
         uses: actions/setup-node@v3
