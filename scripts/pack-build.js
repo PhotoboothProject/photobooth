@@ -65,7 +65,7 @@ function createArchive(fileName, archive) {
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
     archive.file('faq/index.php');
-    archive.file('faq/faq.md.php');
+    archive.file('faq/faq.md');
     archive.file('HEAD');
     archive.file('composer.json');
     archive.file('index.php');
@@ -137,7 +137,7 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/ws');
     archive.directory('node_modules/xmlhttprequest-ssl');
     archive.directory('node_modules/yeast');
-    
+
     output.on('close', function () {
         console.log(`Wrote ${archive.pointer()} bytes to ${fileName}`.verbose);
     });

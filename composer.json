@@ -8,6 +8,7 @@
         "ext-mbstring": "*",
         "ext-zip": "*",
         "endroid/qr-code": "^4.8",
+        "league/commonmark": "^2.4",
         "phpmailer/phpmailer": "^6.8",
         "symfony/console": "^6.3"
     },
