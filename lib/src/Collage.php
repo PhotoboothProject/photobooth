@@ -2,6 +2,9 @@
 
 namespace Photobooth;
 
+use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Utility\ImageUtility;
+
 class Collage
 {
     public static function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null)
@@ -76,7 +79,7 @@ class Collage
 
             // apply filter
             if ($image_filter) {
-                ImageFilter::applyFilter($image_filter, $imageResource);
+                ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
                 $imageHandler->imageModified = true;
             }
 

@@ -3,10 +3,11 @@
 require_once '../../lib/boot.php';
 
 use Photobooth\Image;
-use Photobooth\ImageFilter;
 use Photobooth\DatabaseManager;
 use Photobooth\DataLogger;
+use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\FileDelete;
+use Photobooth\Utility\ImageUtility;
 
 header('Content-Type: application/json');
 
@@ -96,7 +97,7 @@ try {
         // apply filter
         if ($config['filters']['defaults'] != 'plain') {
             try {
-                ImageFilter::applyFilter($config['filters']['defaults'], $imageResource);
+                ImageUtility::applyFilter(ImageFilterEnum::tryFrom($config['filters']['defaults']), $imageResource);
                 $imageHandler->imageModified = true;
             } catch (Exception $e) {
                 throw new Exception('Error applying image filter.');

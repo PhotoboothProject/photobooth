@@ -8,6 +8,7 @@ use Photobooth\Image;
 use Photobooth\ImageFilter;
 use Photobooth\Helper;
 use Photobooth\Collage;
+use Photobooth\Enum\ImageFilterEnum;
 
 header('Content-Type: application/json');
 
@@ -129,7 +130,7 @@ try {
                 // apply filter
                 if ($image_filter) {
                     try {
-                        ImageFilter::applyFilter($image_filter, $imageResource);
+                        ImageFilter::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
                         $imageHandler->imageModified = true;
                     } catch (Exception $e) {
                         throw new Exception('Error applying image filter.');
