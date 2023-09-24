@@ -2,8 +2,10 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
+$languageService = LanguageService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Slideshow';
 $mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
@@ -20,7 +22,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         <div id="gallery" class="gallery">
             <div class="gallery__inner">
                 <div class="gallery__header">
-                    <h1><span data-i18n="slideshow"></span></h1>
+                    <h1><?=$languageService->translate('slideshow')?></h1>
                 </div>
                 <?php include PathUtility::getAbsolutePath('template/components/gal.images.php'); ?>
         </div>

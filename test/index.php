@@ -2,8 +2,10 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
+$languageService = LanguageService::getInstance();
 $pageTitle = 'Tests';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
@@ -20,7 +22,7 @@ $btnClass =
             <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
                 <div class="px-4">
                     <h1 class="text-2xl font-bold text-center mb-6 border-solid border-b border-gray-200 pb-4 text-brand-1">
-                        <span data-i18n="testMenu"></span>
+                        <?=$languageService->translate('testMenu')?>
                     </h1>
                 </div>
                 <div class="w-12 h-12 bg-white absolute right-4 top-4 rounded-b-l-lg shadow-xls flex items-center justify-center text-brand-1 cursor-pointer">

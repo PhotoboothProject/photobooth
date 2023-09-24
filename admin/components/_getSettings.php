@@ -1,5 +1,9 @@
 <?php
 
+use Photobooth\Service\LanguageService;
+
+$languageService = LanguageService::getInstance();
+
 foreach ($configsetup as $section => $fields) {
     html_src_indent($indent);
     html_src_indent($indent++);
@@ -18,7 +22,7 @@ foreach ($configsetup as $section => $fields) {
     html_src_indent($indent);
 
     // headline
-    echo '<h1 class="text-brand-1 text-xl font-bold pt-4 px-4 lg:pt-8 lg:px-8 mb-4"> <span data-i18n="' . $section . '">' . $section . '</span></h1>';
+    echo '<h1 class="text-brand-1 text-xl font-bold pt-4 px-4 lg:pt-8 lg:px-8 mb-4">' . $languageService->translate($section) . '</h1>';
 
     // grid
     echo '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-8 px-4 lg:px-8">';

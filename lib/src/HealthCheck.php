@@ -2,6 +2,8 @@
 
 namespace Photobooth;
 
+use Photobooth\Service\LanguageService;
+
 /**
  * Class HealthCheck
  *
@@ -19,6 +21,8 @@ class HealthCheck
     public bool $zipEnabled = false;
     public bool $mbstringEnabled = false;
 
+    private LanguageService $languageService;
+
     public function __construct()
     {
         list($this->phpMajor, $this->phpMinor) = $this->phpVersion();
@@ -33,6 +37,8 @@ class HealthCheck
         ) {
             $this->healthStatus = true;
         }
+
+        $this->languageService = LanguageService::getInstance();
     }
 
     /**
@@ -52,27 +58,27 @@ class HealthCheck
         $content = [];
 
         $content[] = '<div class="w-full p-5 mx-auto mt-2 rounded-lg ' . ($this->healthStatus ? 'bg-green-500' : 'bg-red-500') . ' text-white text-center">';
-        $content[] = '<h3 class="font-bold uppercase underline pb-2"><span data-i18n="healthStatus"></span></h3>';
+        $content[] = '<h3 class="font-bold uppercase underline pb-2">' . $this->languageService->translate('healthStatus') . '</h3>';
         $content[] = '<p>';
-        $content[] = '<span data-i18n="currentPhpVersion"></span> ' . $this->phpMajor . '.' . $this->phpMinor . '<br>';
+        $content[] = $this->languageService->translate('currentPhpVersion') . ' ' . $this->phpMajor . '.' . $this->phpMinor . '<br>';
         if ($this->phpMajor >= self::MINIMUM_PHP_MAJOR && $this->phpMinor >= self::MINIMUM_PHP_MINOR) {
-            $content[] = '<i class="fa fa-check mr-2"></i><span data-i18n="phpVersionOk"></span>';
+            $content[] = '<i class="fa fa-check mr-2"></i> ' . $this->languageService->translate('phpVersionOk');
         } else {
-            $content[] = '<i class="fa fa-times mr-2"></i><span data-i18n="phpVersionError"></span><br>';
-            $content[] = '<span data-i18n="phpVersionWarning"></span>';
-            $content[] = '<span data-i18n="phpUpdateRequired"></span>';
+            $content[] = '<i class="fa fa-times mr-2"></i> ' . $this->languageService->translate('phpVersionError') . '<br>';
+            $content[] = $this->languageService->translate('phpVersionWarning');
+            $content[] = $this->languageService->translate('phpUpdateRequired');
         }
         $content[] = '</p>';
         $content[] = '<p>';
-        $content[] = $this->gdEnabled ? '<i class="fa fa-check mr-2"></i><span data-i18n="phpGdEnabled"></span>' : '<i class="fa fa-times mr-2"></i><span data-i18n="phpGdDisabled"></span>';
+        $content[] = $this->gdEnabled ? '<i class="fa fa-check mr-2"></i> ' . $this->languageService->translate('phpGdEnabled') : '<i class="fa fa-times mr-2"></i> ' . $this->languageService->translate('phpGdDisabled');
         $content[] = '</p>';
         $content[] = '<p>';
-        $content[] = $this->zipEnabled ? '<i class="fa fa-check mr-2"></i><span data-i18n="phpZipEnabled"></span>' : '<i class="fa fa-times mr-2"></i><span data-i18n="phpZipDisabled"></span>';
+        $content[] = $this->zipEnabled ? '<i class="fa fa-check mr-2"></i> ' . $this->languageService->translate('phpZipEnabled') : '<i class="fa fa-times mr-2"></i> ' . $this->languageService->translate('phpZipDisabled');
         $content[] = '</p>';
         $content[] = '<p>';
-        $content[] = $this->mbstringEnabled ? '<i class="fa fa-check mr-2"></i><span data-i18n="phpMbstringEnabled"></span>' : '<i class="fa fa-times mr-2"></i><span data-i18n="phpMbstringDisabled"></span>';
+        $content[] = $this->mbstringEnabled ? '<i class="fa fa-check mr-2"></i> ' . $this->languageService->translate('phpMbstringEnabled') : '<i class="fa fa-times mr-2"></i> ' . $this->languageService->translate('phpMbstringDisabled');
         $content[] = '</p>';
-        $content[] = '<p><b>' . ($this->healthStatus ? '<span data-i18n="healthGood"></span>' : '<span data-i18n="healthError"></span>') . '</b></p>';
+        $content[] = '<p><b>' . ($this->healthStatus ? $this->languageService->translate('healthGood') : $this->languageService->translate('healthError')) . '</b></p>';
         $content[] = '</div>';
 
         return implode('', $content);

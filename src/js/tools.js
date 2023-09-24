@@ -1,10 +1,18 @@
-/* globals i18n remoteBuzzerClient */
+/* globals remoteBuzzerClient */
 const photoboothTools = (function () {
     // vars
     const notificationTimeout = config.ui.notification_timeout * 1000,
         api = {};
 
+    api.translations = null;
     api.isPrinting = false;
+
+    api.initialize = async function () {
+        const result = await fetch(
+            config.photobooth.basePath + 'api/translations.php?ver=' + config.photobooth.version
+        );
+        this.translations = await result.json();
+    };
 
     api.console = {
         log: function (...content) {
@@ -18,15 +26,13 @@ const photoboothTools = (function () {
     };
 
     api.getTranslation = function (key) {
-        const translation = i18n(key, config.ui.language);
-        const fallbackTranslation = i18n(key, 'en');
-        if (translation) {
-            return translation;
-        } else if (fallbackTranslation) {
-            return fallbackTranslation;
+        if (!this.translations[key]) {
+            this.console.logDev('translation key not found: ' + key);
+
+            return key;
         }
 
-        return key;
+        return this.translations[key];
     };
 
     api.modal = {
@@ -187,5 +193,8 @@ const photoboothTools = (function () {
 
 // Init on domready
 $(function () {
-    photoboothTools.console.log('Loglevel: ' + config.dev.loglevel);
+    photoboothTools.initialize().then(() => {
+        photoboothTools.console.log('PhotoboothTools: initialized');
+        photoboothTools.console.log('Loglevel: ' + config.dev.loglevel);
+    });
 });

@@ -296,3 +296,4 @@ if (!empty($config['ftp']['urlTemplate'])) {
 }
 
 $config['photobooth']['version'] = $photobooth->getVersion();
+$config['photobooth']['basePath'] = PathUtility::getPublicPath();

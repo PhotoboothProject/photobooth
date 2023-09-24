@@ -2,8 +2,10 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
+$languageService = LanguageService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Preview-Test';
 $mainStyle = 'test_preview.css';
 $photoswipe = false;
@@ -24,24 +26,34 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
     <div id="wrapper">
         <div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
-
         <div id="no_preview">
-            <span data-i18n="no_preview"></span>
+            <?=$languageService->translate('no_preview')?>
         </div>
-
         <div class="buttonbar">
-            <a href="#" class="<?php echo $btnClass; ?> startPreview"><span data-i18n="startPreview"></span></a>
-            <a href="#" class="<?php echo $btnClass; ?> stopPreview"><span data-i18n="stopPreview"></span></a>
+            <a href="#" class="<?php echo $btnClass; ?> startPreview">
+                <?=$languageService->translate('startPreview')?>
+            </a>
+            <a href="#" class="<?php echo $btnClass; ?> stopPreview">
+                <?=$languageService->translate('stopPreview')?>
+            </a>
             <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
-            <a href="#" class="<?php echo $btnClass; ?> showPictureFrame"><span data-i18n="showPictureFrame"></span></a>
+            <a href="#" class="<?php echo $btnClass; ?> showPictureFrame">
+                <?=$languageService->translate('showPictureFrame')?>
+            </a>
             <?php endif; ?>
             <?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
-            <a href="#" class="<?php echo $btnClass; ?> showCollageFrame"><span data-i18n="showCollageFrame"></span></a>
+                <a href="#" class="<?php echo $btnClass; ?> showCollageFrame">
+                    <?=$languageService->translate('showCollageFrame')?>
+                </a>
             <?php endif; ?>
             <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe']) || $config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
-            <a href="#" class="<?php echo $btnClass; ?> hideFrame"><span data-i18n="hideFrame"></span></a>
+                <a href="#" class="<?php echo $btnClass; ?> hideFrame">
+                    <?=$languageService->translate('hideFrame')?>
+                </a>
             <?php endif; ?>
-            <a href="<?php echo PathUtility::getPublicPath('test'); ?>" class="<?php echo $btnClass; ?> backBtn"><span data-i18n="back"></span></a>
+            <a href="<?php echo PathUtility::getPublicPath('test'); ?>" class="<?php echo $btnClass; ?> backBtn">
+                <?=$languageService->translate('back')?>
+            </a>
         </div>
     </div>
 

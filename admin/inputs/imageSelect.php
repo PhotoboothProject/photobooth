@@ -1,9 +1,12 @@
 <?php
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
 function getImageSelect($setting, $i18ntag)
 {
+    $languageService = LanguageService::getInstance();
+
     $dir = '../';
 
     $files = getDirContents($dir);
@@ -63,48 +66,45 @@ function getImageSelect($setting, $i18ntag)
     $selectedImage = preg_replace('#/+#', '/', $selectedImage);
 
     return '
-            <div class="adminImageSelection group">
-
-                <div class="w-full flex items-start">
-                    <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer ' .
-        $hiddenPreview .
-        '" onclick="openAdminImageSelect(this)"><img class="adminImageSelection-preview object-contain" src="' .
-        $selectedImage .
-        '"></div>
-                    <div class="w-full flex flex-col">
-                        ' .
-        getHeadline($i18ntag) .
-        '
-                        <div class="text-xs mb-3 -mt-2 break-all">' .
-        $setting['value'] .
-        '</div>
-                        <div class="w-full h-10 bg-brand-1 text-white flex items-center justify-center rounded-full" onclick="openAdminImageSelect(this)"><span data-i18n="choose_image">choose_image</span></div>
+        <div class="adminImageSelection group">
+            <div class="w-full flex items-start">
+                <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer ' . $hiddenPreview . '" onclick="openAdminImageSelect(this)">
+                    <img class="adminImageSelection-preview object-contain" src="' . $selectedImage . '">
+                </div>
+                <div class="w-full flex flex-col">' . getHeadline($i18ntag) . '
+                    <div class="text-xs mb-3 -mt-2 break-all">
+                        ' . $setting['value'] . '
+                    </div>
+                    <div class="w-full h-10 bg-brand-1 text-white flex items-center justify-center rounded-full" onclick="openAdminImageSelect(this)">
+                        ' . $languageService->translate('choose_image') . '
                     </div>
                 </div>
-
-                <div class="hidden group-[&.isOpen]:grid w-full h-full fixed left-0 top-0 z-50 place-items-center">
-                    <div class="w-full h-full left-0 top-0 z-10 absolute bg-black bg-opacity-60 cursor-pointer" onclick="closeAdminImageSelect()"></div>
-                    <div class="w-full max-h-3/4 max-w-2xl bg-white p-4 pt-2 rounded relative z-20 flex flex-col overflow-hidden">
-                        <div class="w-full flex items-center">
-                            <h2 class="flex text-brand-1 font-bold"><span data-i18n="choose_image">choose_image</span></h2>
-                            <div class="ml-auto flex items-center justify-center p-3 text-xl fa fa-close" onclick="closeAdminImageSelect()"></div>
-                        </div>
-                        <div class="flex w-full h-full flex-col overflow-y-auto">
-                            <div class="grid grid-cols-3 gap-4">
-                                ' .
-        $images .
-        '
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <input type="input" class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto" name="' .
-        $setting['name'] .
-        '" value="' .
-        $setting['value'] .
-        '"/>
             </div>
-        ';
+
+            <div class="hidden group-[&.isOpen]:grid w-full h-full fixed left-0 top-0 z-50 place-items-center">
+                <div class="w-full h-full left-0 top-0 z-10 absolute bg-black bg-opacity-60 cursor-pointer" onclick="closeAdminImageSelect()"></div>
+                <div class="w-full max-h-3/4 max-w-2xl bg-white p-4 pt-2 rounded relative z-20 flex flex-col overflow-hidden">
+                    <div class="w-full flex items-center">
+                        <h2 class="flex text-brand-1 font-bold">
+                            ' . $languageService->translate('choose_image') . '
+                        </h2>
+                        <div class="ml-auto flex items-center justify-center p-3 text-xl fa fa-close" onclick="closeAdminImageSelect()"></div>
+                    </div>
+                    <div class="flex w-full h-full flex-col overflow-y-auto">
+                        <div class="grid grid-cols-3 gap-4">
+                            ' . $images . '
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input
+                type="input"
+                class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto"
+                name="' . $setting['name'] . '"
+                value="' . $setting['value'] . '"
+            />
+        </div>
+    ';
 }
 
 function getDirContents($dir, &$results = [])

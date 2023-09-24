@@ -15,8 +15,6 @@ use Photobooth\Utility\PathUtility;
 
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
-    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/i18n.js?v=<?=$config['photobooth']['version']?>"></script>
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/main.admin.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
  </body>
 </html>

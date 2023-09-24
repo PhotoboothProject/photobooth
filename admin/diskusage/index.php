@@ -3,6 +3,7 @@
 require_once '../../lib/boot.php';
 
 use Photobooth\Helper;
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
@@ -17,6 +18,7 @@ if (!(
 
 require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 
+$languageService = LanguageService::getInstance();
 $pageTitle = 'Diskusage';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
@@ -32,7 +34,7 @@ include PathUtility::getAbsolutePath('admin/inputs/index.php');
                 </a>
                 <h2 class="text-brand-1 text-xl font-bold">
                     <?= $config['ui']['branding'] ?>
-                    <span data-i18n="disk_usage"></span>
+                    <?=$languageService->translate('disk_usage')?>
                 </h2>
             </div>
             <?php
@@ -43,15 +45,15 @@ include PathUtility::getAbsolutePath('admin/inputs/index.php');
                     $fileCount = Helper::getFileCount($folder);
 
                     echo '<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">';
-                    echo '<h3 class="font-bold whitespace-pre-wrap break-all"><span data-i18n="path"></span> ' . $folder . '</h3>';
-                    echo '<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">' . $formattedSize . '</span>';
-                    echo '<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $fileCount . '</span>';
+                    echo '<h3 class="font-bold whitespace-pre-wrap break-all">' . $languageService->translate('path') . ' ' . $folder . '</h3>';
+                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('foldersize') . '</span></div><span class="text-brand-1">' . $formattedSize . '</span>';
+                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('filecount') . '</span></div><span class="text-brand-1">' . $fileCount . '</span>';
                     echo '</div>';
                 } catch (Exception $e) {
                     echo '<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">';
-                    echo '<h3 class="font-bold whitespace-pre-wrap break-all"><span data-i18n="path"></span> ' . $folder . '</h3>';
-                    echo '<div><span class="flex text-sm mt-2" data-i18n="foldersize"></span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
-                    echo '<div><span class="flex text-sm mt-2" data-i18n="filecount"></span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
+                    echo '<h3 class="font-bold whitespace-pre-wrap break-all">' . $languageService->translate('path') . ' ' . $folder . '</h3>';
+                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('foldersize') . '</span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
+                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('filecount') . '</span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
                     echo '</div>';
                 }
             }

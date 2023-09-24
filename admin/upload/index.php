@@ -2,6 +2,7 @@
 
 require_once '../../lib/boot.php';
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
@@ -16,6 +17,7 @@ if (!(
 
 require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 
+$languageService = LanguageService::getInstance();
 $pageTitle = 'Image uploader';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
@@ -85,9 +87,9 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <div class="relative">
-                        <label class="<?= $labelClass ?>" for="folder_name"><span data-i18n="upload_folder"></span></label>
+                        <label class="<?= $labelClass ?>" for="folder_name"><?=$languageService->translate('upload_folder')?></label>
                         <input class="<?= $inputClass ?>" type="text" name="folder_name" id="folder_name" required><br><br>
-                        <label class="<?= $labelClass ?>" for="images"><span data-i18n="upload_selection"></label>
+                        <label class="<?= $labelClass ?>" for="images"><?=$languageService->translate('upload_selection')?></label>
                         <input class="<?= $labelClass ?>" type="file" name="images[]" id="images" multiple accept="image/*" required><br><br>
                     </div>
 
@@ -118,8 +120,8 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
     include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
 
 if ($success) {
-    echo '<script>openToast("<span data-i18n=\"upload_success\"></span>");</script>';
+    echo '<script>openToast("' . $languageService->translate('upload_success') . '");</script>';
 }
 if ($error !== false) {
-    echo '<script>openToast("<span data-i18n=\"upload_error\"></span>", "isError", 5000);</script>';
+    echo '<script>openToast("' . $languageService->translate('upload_error') . '", "isError", 5000);</script>';
 }

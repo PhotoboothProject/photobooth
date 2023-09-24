@@ -1,7 +1,9 @@
 <?php
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
+$languageService = LanguageService::getInstance();
 $pinLength = strlen($config['login']['pin']);
 $pinMap = str_split($config['login']['pin']);
 
@@ -71,7 +73,7 @@ function getKey($key = null)
         </div>
 
         <div class="w-full text-center text-gray-500 mb-8">
-            <span data-i18n="login_pin_request"></span>
+            <?=$languageService->translate('login_pin_request')?>
         </div>
 
         <div class="w-full text-center text-gray-500 mb-8">

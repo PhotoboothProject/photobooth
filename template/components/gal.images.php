@@ -1,9 +1,12 @@
 <?php
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
+$languageService = LanguageService::getInstance();
+
 if (empty($imagelist)) {
-    echo '<h1 style="text-align:center" data-i18n="gallery_no_image"></h1>' . "\n";
+    echo '<h1 style="text-align:center">' . $languageService->translate('gallery_no_image') . '</h1>' . "\n";
 } else {
     echo '<div class="gallery__body" id="galimages">' . "\n";
     foreach ($imagelist as $image) {
