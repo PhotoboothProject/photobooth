@@ -5,10 +5,10 @@ require_once '../lib/boot.php';
 use Photobooth\DataLogger;
 use Photobooth\DatabaseManager;
 use Photobooth\Image;
-use Photobooth\ImageFilter;
 use Photobooth\Helper;
 use Photobooth\Collage;
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Utility\ImageUtility;
 
 header('Content-Type: application/json');
 
@@ -130,7 +130,7 @@ try {
                 // apply filter
                 if ($image_filter) {
                     try {
-                        ImageFilter::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
+                        ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
                         $imageHandler->imageModified = true;
                     } catch (Exception $e) {
                         throw new Exception('Error applying image filter.');
