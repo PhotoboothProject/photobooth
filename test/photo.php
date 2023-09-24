@@ -2,7 +2,7 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\ImageFilter;
+use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Image;
 use Photobooth\Utility\ImageUtility;
 
@@ -35,7 +35,7 @@ if ($config['picture']['flip'] !== 'off') {
 $image_filter = $config['filters']['defaults'];
 if ($image_filter) {
     try {
-        ImageFilter::applyFilter($image_filter, $imageResource);
+        ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
         $imageHandler->imageModified = true;
     } catch (Exception $e) {
         throw new Exception('Error applying image filter.');
