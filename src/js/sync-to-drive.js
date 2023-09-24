@@ -7,8 +7,6 @@ const path = require('path');
 const events = require('events');
 
 /* Variables */
-const API_DIR_NAME = 'api';
-const API_FILE_NAME = 'config.php';
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 const {pid: PID, platform: PLATFORM} = process;
 const myEmitter = new events.EventEmitter();
@@ -22,12 +20,11 @@ const log = function (...optionalParams) {
 };
 
 const getConfigFromPHP = () => {
-    const cmd = `cd ${API_DIR_NAME} && php ./${API_FILE_NAME}`;
-
     try {
+        const cmd = 'bin/photobooth photobooth:config:list json';
         const stdout = execSync(cmd).toString();
 
-        return JSON.parse(stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf(';')));
+        return JSON.parse(stdout);
     } catch (err) {
         log('ERROR: Unable to load photobooth config', err);
     }
@@ -223,7 +220,7 @@ const parsedConfig = parseConfig(phpConfig);
 log('USB target ', ...parsedConfig.drive);
 
 /* WRITE PROCESS PID FILE */
-writePIDFile(path.join(phpConfig.foldersJS.tmp, 'synctodrive_server.pid'));
+writePIDFile(path.join(phpConfig.foldersAbs.tmp, 'synctodrive_server.pid'));
 
 /* INSTALL HANDLER TO MONITOR CHILD PROCESS EXITS */
 myEmitter.on('rsync-completed', (childPID) => {
