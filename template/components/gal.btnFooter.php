@@ -1,12 +1,16 @@
 <?php
 
+use Photobooth\Service\LanguageService;
+
+$languageService = LanguageService::getInstance();
+
 echo '<div class="gallery__footer">' . "\n";
 echo '<div class="buttongroup">' . "\n";
 
 if ($config['button']['force_buzzer']) {
-    echo '<div id="useBuzzer" class="mt-4 mb-2 text-lg lg:text-3xl">
-          <span data-i18n="use_button"></span>
-          </div>';
+    echo '<div id="useBuzzer" class="mt-4 mb-2 text-lg lg:text-3xl">'
+        . $languageService->translate('use_button')
+        . '</div>';
 } else {
     if ($config['picture']['enabled']) {
         echo getBoothButton('takePhoto', $config['icons']['take_picture'], 'takePic');

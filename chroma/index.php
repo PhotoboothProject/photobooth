@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -15,6 +16,7 @@ if (!(
     exit();
 }
 
+$languageService = LanguageService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Chroma capture';
 $mainStyle = $config['ui']['style'] . '_chromacapture.css';
 $photoswipe = true;
@@ -39,8 +41,10 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
             <?php endif; ?>
 
             <?php if ($config['gallery']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass ?> chromaCapture-gallery-btn rotaryfocus"><i class="<?php echo $config['icons']['gallery']; ?>"></i>
-                    <span data-i18n="gallery"></span></a>
+                <a href="#" class="<?php echo $btnClass ?> chromaCapture-gallery-btn rotaryfocus">
+                    <i class="<?php echo $config['icons']['gallery']; ?>"></i>
+                    <?=$languageService->translate('gallery')?>
+                </a>
             <?php endif; ?>
         </div>
 
@@ -49,7 +53,7 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
         </div>
 
         <div class="chromaNote <?php echo $uiShape ?>">
-            <span data-i18n="chromaInfoBefore"></span>
+            <?=$languageService->translate('chromaInfoBefore')?>
         </div>
 
         <?php include PathUtility::getAbsolutePath('template/components/start.loader.php'); ?>
@@ -67,14 +71,20 @@ foreach ($backgroundImages as $backgroundImage) {
         </div>
 
         <div class="chroma-control-bar">
-            <a href="#" class="<?php echo $btnClass; ?> takeChroma chromaCapture rotaryfocus"><i class="<?php echo $config['icons']['take_picture']; ?>"></i>
-                <span data-i18n="takePhoto"></span></a>
+            <a href="#" class="<?php echo $btnClass; ?> takeChroma chromaCapture rotaryfocus">
+                <i class="<?php echo $config['icons']['take_picture']; ?>"></i>
+                <?=$languageService->translate('takePhoto')?>
+            </a>
             <?php if ($config['picture']['allow_delete']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> deletebtn chromaCapture"><i class="<?php echo $config['icons']['delete']; ?>"></i> <span
-                            data-i18n="delete"></span></a>
+                <a href="#" class="<?php echo $btnClass; ?> deletebtn chromaCapture">
+                    <i class="<?php echo $config['icons']['delete']; ?>"></i>
+                    <?=$languageService->translate('delete')?>
+                </a>
             <?php endif; ?>
-            <a href="#" class="<?php echo $btnClass; ?> reloadPage chromaCapture rotaryfocus"><i class="<?php echo $config['icons']['refresh']; ?>"></i>
-                <span data-i18n="reload"></span></a>
+            <a href="#" class="<?php echo $btnClass; ?> reloadPage chromaCapture rotaryfocus">
+                <i class="<?php echo $config['icons']['refresh']; ?>"></i>
+                <?=$languageService->translate('reload')?>
+            </a>
         </div>
     </div>
     <div class="rotarygroup">

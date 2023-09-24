@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
@@ -16,6 +17,7 @@ if (!(
 
 require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 
+$languageService = LanguageService::getInstance();
 $pageTitle = 'Manual';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
@@ -36,8 +38,8 @@ include PathUtility::getAbsolutePath('admin/components/sidebar.php');
                     <div class="w-full h-full flex flex-col" autocomplete="off">
                         <div class="adminContent w-full flex flex-1 flex-col py-5 overflow-x-hidden overflow-y-auto">
                             <form>
-                                <?php
-                    $i = 0;
+<?php
+$i = 0;
 foreach($configsetup as $panel => $fields) {
     $panelHidden = 'visible';
     if (empty($fields['view'])) {
@@ -68,7 +70,7 @@ foreach($configsetup as $panel => $fields) {
 
     // headline
     echo '<div id="' . $panel . '" class="adminSection ' . $panelHidden . '">';
-    echo '<h2 class="text-brand-1 text-xl font-bold pt-4 px-4 lg:pt-8 lg:px-8 mb-4"> <span data-i18n="' . $panel . '">' . $panel . '</span></h2>';
+    echo '<h2 class="text-brand-1 text-xl font-bold pt-4 px-4 lg:pt-8 lg:px-8 mb-4">' . $languageService->translate($panel) . '</h2>';
     echo '<div class="flex flex-col px-4 lg:px-8 py-2">';
     echo '<div class="flex flex-col rounded-xl p-3 shadow-xl bg-white">';
 
@@ -99,8 +101,8 @@ foreach($configsetup as $panel => $fields) {
         switch($field['type']) {
             case 'checkbox':
                 echo '<div class="w-full max-w-3xl pb-3 mb-3 border-b border-solid border-gray-200">';
-                echo '<h3 class="text-brand-1 text-md font-bold mb-1"><span data-i18n="' . $panel . ':' . $key . '">' . $panel . ':' . $key . '</span></h3>';
-                echo '<p class="leading-8" data-i18n="manual:' . $panel . ':' . $key . '">manual:' . $panel . ':' . $key . '</p>';
+                echo '<h3 class="text-brand-1 text-md font-bold mb-1">' . $languageService->translate($panel . ':' . $key) . '</span></h3>';
+                echo '<p class="leading-8">' . $languageService->translate('manual:' . $panel . ':' . $key) . '</p>';
                 echo '</div>';
                 break;
             case 'multi-select':
@@ -108,8 +110,8 @@ foreach($configsetup as $panel => $fields) {
             case 'select':
             case 'input':
                 echo '<div class="w-full max-w-3xl pb-3 mb-3 border-b border-solid border-gray-200">';
-                echo '<h3 class="text-brand-1 text-md font-bold mb-1"><span data-i18n="' . $panel . ':' . $key . '"></span></h3>';
-                echo '<p class="leading-8" data-i18n="manual:' . $panel . ':' . $key . '">manual:' . $panel . ':' . $key . '</p>';
+                echo '<h3 class="text-brand-1 text-md font-bold mb-1">' . $languageService->translate($panel . ':' . $key) . '</h3>';
+                echo '<p class="leading-8">' . $languageService->translate('manual:' . $panel . ':' . $key) . '</p>';
                 echo '</div>';
                 break;
             case 'color':
@@ -126,10 +128,14 @@ foreach($configsetup as $panel => $fields) {
     $i++;
 }
 ?>
-
                                 <div class="py-4 px-4 lg:px-8">
-                                    <a href="<?=PathUtility::getPublicPath('faq')?>" class="flex items-center hover:underline hover:text-brand-1 mb-2" title="FAQ" target="newwin"><span data-i18n="show_faq"></span> <i class="ml-2 <?php echo $config['icons']['faq']; ?>"></i></a>
-                                    <a href="https://photoboothproject.github.io" target="_blank" class="flex items-center hover:underline hover:text-brand-1"><span data-i18n="show_wiki"></span></a>
+                                    <a href="<?=PathUtility::getPublicPath('faq')?>" class="flex items-center hover:underline hover:text-brand-1 mb-2" title="FAQ" target="newwin">
+                                        <?=$languageService->translate('show_faq')?>
+                                        <i class="ml-2 <?php echo $config['icons']['faq']; ?>"></i>
+                                    </a>
+                                    <a href="https://photoboothproject.github.io" target="_blank" class="flex items-center hover:underline hover:text-brand-1">
+                                        <?=$languageService->translate('show_wiki')?>
+                                    </a>
                                 </div>
                             </form>
                         </div>

@@ -1,7 +1,11 @@
 <?php
 
+use Photobooth\Service\LanguageService;
+
 function getBoothButton($label, $icon, $command, $type = 'md')
 {
+    $languageService = LanguageService::getInstance();
+
     global $config;
     $btnClass = 'btn btn--' . $config['ui']['button'];
     $btnClass .= ' ' . $command;
@@ -22,18 +26,11 @@ function getBoothButton($label, $icon, $command, $type = 'md')
         $btnClass .= '" onclick="window.location.reload();';
     }
 
-    return '<a href="#" class="' .
-        $btnClass .
-        '">
-            <i class="' .
-        $icon .
-        ' mb-2"></i>
-            <span class="text-sm whitespace-nowrap" data-i18n="' .
-        $label .
-        '">
-                ' .
-        $label .
-        '
+    return '
+        <a href="#" class="' . $btnClass . '">
+            <i class="' . $icon . ' mb-2"></i>
+            <span class="text-sm whitespace-nowrap">
+            ' . $languageService->translate($label) . '
             </span>
         </a>';
 }

@@ -1,6 +1,9 @@
 <?php
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
+
+$languageService = LanguageService::getInstance();
 
 ?>
 
@@ -8,12 +11,10 @@ use Photobooth\Utility\PathUtility;
 
     <div class="px-4">
         <h1 class="text-2xl font-bold text-center mb-6 border-solid border-b border-gray-200 pb-4 text-brand-1">
-            <?php
-                if((isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
-                    echo 'Admin -';
-                }
+<?php
+echo (isset($_SESSION['auth']) && $_SESSION['auth'] === true) ? 'Admin - ' : '';
+echo $languageService->translate('menu');
 ?>
-            <span data-i18n="menu"></span>
         </h1>
     </div>
 
@@ -21,7 +22,6 @@ use Photobooth\Utility\PathUtility;
         <div class="w-12 h-12 bg-white absolute right-4 top-4 rounded-b-l-lg shadow-xls flex items-center justify-center text-brand-1 cursor-pointer">
             <a href="<?=PathUtility::getPublicPath('')?>" >
                 <i class="!text-2xl <?php echo $config['icons']['close']; ?>"></i>
-                <!-- <span data-i18n="close"></span> -->
             </a>
         </div>
     <?php endif; ?>

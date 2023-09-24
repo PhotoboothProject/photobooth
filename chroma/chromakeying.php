@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -27,6 +28,7 @@ if (is_array($imginfo)) {
     $mainimage = PathUtility::getPublicPath('resources/img/bg.jpg');
 }
 
+$languageService = LanguageService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Chromakeying';
 $mainStyle = $config['ui']['style'] . '_chromakeying.css';
 $photoswipe = false;
@@ -54,18 +56,25 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         </div>
 
         <div class="chroma-control-bar">
-            <a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#"><i class="<?php echo $config['icons']['save']; ?>"></i> <span data-i18n="save"></span></a>
-
+            <a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#">
+                <i class="<?php echo $config['icons']['save']; ?>"></i>
+                <?=$languageService->translate('save')?>
+            </a>
             <?php if ($config['print']['from_chromakeying']): ?>
-                <a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#"><i class="<?php echo $config['icons']['print']; ?>"></i> <span data-i18n="print"></span></a>
+                <a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#">
+                    <i class="<?php echo $config['icons']['print']; ?>"></i>
+                    <?=$languageService->translate('print')?>
+                </a>
             <?php endif; ?>
-
-            <a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#"><i class="<?php echo $config['icons']['close']; ?>"></i> <span data-i18n="close"></span></a>
+            <a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#">
+                <i class="<?php echo $config['icons']['close']; ?>"></i>
+                <?=$languageService->translate('close')?>
+            </a>
         </div>
     <?php else:?>
         <div style="text-align:center;padding-top:250px">
-            <h1 style="color: red;" data-i18n="keyingerror"></h1>
-            <a class="<?php echo $btnClass; ?>" href="<?=PathUtility::getPublicPath()?>"><span data-i18n="close"></span></a>
+            <h1 style="color: red;"><?=$languageService->translate('keyingerror')?></h1>
+            <a class="<?php echo $btnClass; ?>" href="<?=PathUtility::getPublicPath()?>"><?=$languageService->translate('close')?></a>
         </div>
     <?php endif; ?>
 

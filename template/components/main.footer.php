@@ -8,8 +8,6 @@ use Photobooth\Utility\PathUtility;
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>api/config.php?v=<?= $config['photobooth']['version'] ?>"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/tools.js?v=<?= $config['photobooth']['version'] ?>"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/theme.js?v=<?= $config['photobooth']['version'] ?>"></script>
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>node_modules/@andreasremdt/simple-translator/dist/umd/translator.min.js"></script>
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/i18n.js?v=<?= $config['photobooth']['version'] ?>"></script>
 
 <?php
 
