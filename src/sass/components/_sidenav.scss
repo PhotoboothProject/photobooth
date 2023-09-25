@@ -1,0 +1,113 @@
+/**
+ * Sidenav
+ */
+:root {
+  --sidenav-background: rgba(0, 0, 0, 0.75);
+  --sidenav-padding-y: 1.5rem;
+  --sidenav-padding-x: 1.5rem;
+  --sidenav-close-color: var(--button-font-color);
+  --sidenav-close-background: var(--primary-color);
+  --sidenav-close-font-size: 2rem;
+  --sidenav-close-height: 4rem;
+  --sidenav-close-width: 4rem;
+  --sidenav-list-item-color: var(--button-font-color);
+  --sidenav-list-item-background: var(--primary-color);
+  --sidenav-list-item-font-size: 1rem;
+  --sidenav-list-item-font-weight: 400;
+  --sidenav-list-item-padding-y: 0.75rem;
+  --sidenav-list-item-padding-x: 1rem;
+  --sidenav-list-item-hover-background: color-mix(
+    in srgb,
+    var(--sidenav-list-item-background),
+    var(--sidenav-list-item-color) 10%
+  );
+  --sidenav-list-item-focus-background: color-mix(
+    in srgb,
+    var(--sidenav-list-item-background),
+    var(--sidenav-list-item-color) 20%
+  );
+  --sidenav-list-item-active-background: color-mix(
+    in srgb,
+    var(--sidenav-list-item-background),
+    var(--sidenav-list-item-color) 30%
+  );
+}
+
+.sidenav {
+  width: 100%;
+  position: fixed;
+  z-index: 1005;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: var(--sidenav-background);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--sidenav-padding-y) var(--sidenav-padding-x);
+  padding-top: calc(var(--sidenav-padding-y) + var(--sidenav-close-height));
+  transition: translate 0.5s;
+  translate: 100% 0;
+  backdrop-filter: blur(10px);
+
+  @media (min-width: 576px) {
+    width: 250px;
+  }
+
+  &--open {
+    translate: 0 0;
+  }
+}
+
+.sidenav-close {
+  position: absolute;
+  right: var(--sidenav-padding-x);
+  top: 0;
+  color: var(--sidenav-close-color);
+  background: var(--sidenav-close-background);
+  font-size: var(--sidenav-close-font-size);
+  width: var(--sidenav-close-width);
+  height: var(--sidenav-close-height);
+  line-height: 1;
+
+  &:hover {
+    background: var(--highlight-color);
+  }
+}
+
+.sidenav-list {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0;
+}
+
+.sidenav-list-item {
+  padding: var(--sidenav-list-item-padding-y) var(--sidenav-list-item-padding-x);
+  font-size: var(--sidenav-list-item-font-size);
+  font-weight: var(--sidenav-list-item-font-weight);
+  line-height: 1;
+  color: var(--sidenav-list-item-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background: var(--sidenav-list-item-background);
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  line-height: 1;
+  text-transform: uppercase;
+
+  &:hover {
+    --sidenav-list-item-background: var(--sidenav-list-item-hover-background);
+  }
+
+  &.focused,
+  &:focus {
+    --sidenav-list-item-background: var(--sidenav-list-item-focus-background);
+  }
+
+  &--active {
+    --sidenav-list-item-background: var(--sidenav-list-item-active-background);
+  }
+}
