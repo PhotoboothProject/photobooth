@@ -38,7 +38,7 @@ const photoBooth = (function () {
         gallery = $('#gallery'),
         cheese = $('.cheese'),
         resultPage = $('#result'),
-        mySideNav = $('#mySidenav'),
+        filternav = $('#filternav'),
         ipcamView = $('#ipcam--view'),
         galimages = $('#galimages'),
         loading = $('.loading'),
@@ -152,17 +152,17 @@ const photoBooth = (function () {
 
     api.navbar = {
         open: function () {
-            mySideNav.addClass('sidenav--open');
-            rotaryController.focusSet('#mySidenav');
+            filternav.addClass('sidenav--open');
+            rotaryController.focusSet('#filternav');
         },
         close: function () {
-            mySideNav.removeClass('sidenav--open');
+            filternav.removeClass('sidenav--open');
         },
         toggle: function () {
-            mySideNav.toggleClass('sidenav--open');
+            filternav.toggleClass('sidenav--open');
 
-            if (mySideNav.hasClass('sidenav--open')) {
-                rotaryController.focusSet('#mySidenav');
+            if (filternav.hasClass('sidenav--open')) {
+                rotaryController.focusSet('#filternav');
             }
         }
     };
@@ -439,8 +439,8 @@ const photoBooth = (function () {
                 photoboothTools.console.log('Took ' + data.style, result);
                 photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
                 imgFilter = config.filters.defaults;
-                $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
-                $('#' + imgFilter).addClass('activeSidenavBtn');
+                $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
+                $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
 
                 if (result.error) {
                     photoboothTools.console.logDev('Error while taking picture.');
@@ -623,8 +623,8 @@ const photoBooth = (function () {
                 cheese.empty();
 
                 imgFilter = config.filters.defaults;
-                $('#mySidenav .activeSidenavBtn').removeClass('activeSidenavBtn');
-                $('#' + imgFilter).addClass('activeSidenavBtn');
+                $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
+                $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
 
                 if (result.error) {
                     api.errorPic(result);
@@ -930,7 +930,7 @@ const photoBooth = (function () {
                         '"/>'
                 ).appendTo(resultPage);
             }
-            if (!mySideNav.hasClass('sidenav--open')) {
+            if (!filternav.hasClass('sidenav--open')) {
                 rotaryController.focusSet('#result');
             }
         };
@@ -1130,18 +1130,18 @@ const photoBooth = (function () {
         api.navbar.toggle();
     });
 
-    $('.sidenav .filter').on('click', function () {
-        $('.sidenav').find('.activeSidenavBtn').removeClass('activeSidenavBtn');
-        $(this).addClass('activeSidenavBtn');
+    $('.sidenav-list-item[data-filter]').on('click', function () {
+        $('.sidenav').find('.sidenav-list-item--active').removeClass('sidenav-list-item--active');
+        $(this).addClass('sidenav-list-item--active');
 
-        imgFilter = $(this).attr('id');
+        imgFilter = $(this).data('filter');
         const result = {file: resultPage.attr('data-img')};
 
         photoboothTools.console.logDev('Applying filter: ' + imgFilter, result);
 
         api.processPic(result);
 
-        rotaryController.focusSet('#mySidenav');
+        rotaryController.focusSet('#filternav');
     });
 
     $('.takePic, .newpic').on('click', function (e) {
@@ -1168,9 +1168,8 @@ const photoBooth = (function () {
         $(this).blur();
     });
 
-    $('#mySidenav .closebtn').on('click', function (e) {
+    $('[data-command="sidenav-close"]').on('click', function (e) {
         e.preventDefault();
-
         api.navbar.close();
         rotaryController.focusSet('#result');
     });
@@ -1256,7 +1255,7 @@ const photoBooth = (function () {
     });
 
     resultPage.on('click', function () {
-        if (!mySideNav.hasClass('sidenav--open')) {
+        if (!filternav.hasClass('sidenav--open')) {
             rotaryController.focusSet('#result');
         }
     });

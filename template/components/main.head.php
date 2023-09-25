@@ -6,7 +6,10 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
 
 ?>
 <!DOCTYPE html>
-<html>
+<html
+    data-ui-theme="<?php echo $config['ui']['style'] ?? 'default'; ?>"
+    data-ui-button="<?php echo $config['ui']['button'] ?? 'default'; ?>"
+>
 <head>
 
     <meta charset="UTF-8" />
@@ -32,6 +35,7 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/iconfont/material-icons.css">
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/css/material-icons.css">
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/tailwind.css?v=<?= $config['photobooth']['version'] ?>"/>
+    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/framework.css" />
 
     <?php
     echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'resources/css/' . $mainStyle . '?v=' . $config['photobooth']['version'] . '"/>';
