@@ -1,59 +1,61 @@
 <?php
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
-function getImageSelect($setting, $i18ntag)
+function getImageSelect($setting, $label)
 {
     $languageService = LanguageService::getInstance();
 
-    $dir = '../';
-
-    $files = getDirContents($dir);
     $images = '';
-    foreach ($files as &$value) {
-        if (str_contains($value, 'node_modules') || str_contains($value, 'vendor') || str_contains($value, 'data')) {
-            continue;
+    if (isset($setting['paths']) && is_array($setting['paths'])) {
+        foreach ($setting['paths'] as $path) {
+            $images .= '
+                <div class="col-span-3">
+                    <h2 class="font-bold">' . PathUtility::getPublicPath($path) . '</h2>
+                </div>
+            ';
+            try {
+                $files = ImageUtility::getImagesFromPath($path, false);
+                $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
+                if (count($files) === 0) {
+                    $images .= '
+                        <div class="col-span-3">
+                            <p>' . $languageService->translate('error.path.noimages') . '</p>
+                        </div>
+                    ';
+                }
+                foreach ($files as $file) {
+                    $origin = $file;
+                    if (str_contains($setting['value'], 'url(')) {
+                        $origin = 'url(' . $origin . ')';
+                    }
+                    $images .= '
+                        <div class="w-full relative h-0 pb-2/3">
+                            <img
+                                onclick="adminImageSelect(this, \'' . $setting['name'] . '\');"
+                                data-origin="' . $origin . '"
+                                class="w-full h-full left-0 top-0 absolute object-contain"
+                                src="' . $file . '"
+                                title="' . $file . '"
+                            >
+                        </div>
+                    ';
+                }
+            } catch (\Exception $e) {
+                $images .= '
+                    <div class="col-span-3">
+                        <p>' . $e->getMessage() . '</p>
+                    </div>
+                ';
+            }
         }
+    }
 
-        if (
-            str_contains($value, '.jpg') ||
-            str_contains($value, '.png') ||
-            str_contains($value, '.jpeg') ||
-            str_contains($value, '.gif') ||
-            str_contains($value, '.bmp') ||
-            str_contains($value, '.webp') ||
-            str_contains($value, '.svg')
-        ) {
-            $value = PathUtility::fixFilePath($value);
-            $imgPath = $value;
-            $origin = $value;
-            $serverRoot = PathUtility::fixFilePath($_SERVER['DOCUMENT_ROOT']);
-            if (str_contains($value, $serverRoot)) {
-                $origin = substr($value, strlen($serverRoot));
-                $imgPath = substr($value, strlen($serverRoot));
-            }
-            if (str_contains($setting['value'], 'url(')) {
-                $origin = 'url(' . $origin . ')';
-            }
-            $hiddenPreview = '';
-            if (str_starts_with($setting['value'], 'http')) {
-                $hiddenPreview = 'hidden';
-            }
-
-            $images .= '<div class="w-full relative h-0 pb-2/3">';
-            $images .=
-                '<img onclick="adminImageSelect(this, \'' .
-                $setting['name'] .
-                '\');" data-origin="' .
-                $origin .
-                '" class="w-full h-full left-0 top-0 absolute object-cover" src="' .
-                $imgPath .
-                '" title="' .
-                $value .
-                '"><br>';
-            $images .= '</div>';
-        }
+    $hiddenPreview = '';
+    if (str_starts_with($setting['value'], 'http')) {
+        $hiddenPreview = 'hidden';
     }
 
     $selectedImage = $setting['value'];
@@ -71,16 +73,14 @@ function getImageSelect($setting, $i18ntag)
                 <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer ' . $hiddenPreview . '" onclick="openAdminImageSelect(this)">
                     <img class="adminImageSelection-preview object-contain" src="' . $selectedImage . '">
                 </div>
-                <div class="w-full flex flex-col">' . getHeadline($i18ntag) . '
+                <div class="w-full flex flex-col">
+                    ' . getHeadline($label) . '
                     <div class="text-xs mb-3 -mt-2 break-all">
                         ' . $setting['value'] . '
                     </div>
-                    <div class="w-full h-10 bg-brand-1 text-white flex items-center justify-center rounded-full" onclick="openAdminImageSelect(this)">
-                        ' . $languageService->translate('choose_image') . '
-                    </div>
+                    ' . ($images !== '' ? '<div class="w-full mb-3 h-10 bg-brand-1 text-white flex items-center justify-center rounded-full" onclick="openAdminImageSelect(this)">' . $languageService->translate('choose_image') . '</div>' : '') . '
                 </div>
             </div>
-
             <div class="hidden group-[&.isOpen]:grid w-full h-full fixed left-0 top-0 z-50 place-items-center">
                 <div class="w-full h-full left-0 top-0 z-10 absolute bg-black bg-opacity-60 cursor-pointer" onclick="closeAdminImageSelect()"></div>
                 <div class="w-full max-h-3/4 max-w-2xl bg-white p-4 pt-2 rounded relative z-20 flex flex-col overflow-hidden">
@@ -105,21 +105,4 @@ function getImageSelect($setting, $i18ntag)
             />
         </div>
     ';
-}
-
-function getDirContents($dir, &$results = [])
-{
-    $files = scandir($dir);
-
-    foreach ($files as $key => $value) {
-        $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
-        if (!is_dir($path)) {
-            $results[] = $path;
-        } elseif ($value != '.' && $value != '..') {
-            getDirContents($path, $results);
-            $results[] = $path;
-        }
-    }
-
-    return $results;
 }

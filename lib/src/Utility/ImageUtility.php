@@ -7,12 +7,31 @@ use Photobooth\Enum\ImageFilterEnum;
 
 class ImageUtility
 {
-    // svg is not working as image
-    public const supportedFileExtensions = [
+    public const supportedFileExtensionsProcessing = [
         'gif',
         'png',
         'jpeg',
         'jpg',
+    ];
+
+    public const supportedMimeTypesSelect = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif',
+        'image/svg+xml',
+        'image/bmp',
+        'image/webp',
+    ];
+
+    public const supportedFileExtensionsSelect = [
+        'gif',
+        'png',
+        'jpeg',
+        'jpg',
+        'svg',
+        'bmp',
+        'webp',
     ];
 
     public const resourcePaths = [
@@ -21,7 +40,7 @@ class ImageUtility
         'resources/img/demo'
     ];
 
-    public static function getImagesFromPath(string $path): array
+    public static function getImagesFromPath(string $path, bool $processing = true): array
     {
         if (!PathUtility::isAbsolutePath($path)) {
             $path = PathUtility::getAbsolutePath($path);
@@ -32,7 +51,7 @@ class ImageUtility
 
         $files = [];
         foreach (new \DirectoryIterator($path) as $file) {
-            if(!$file->isFile() || !in_array(strtolower($file->getExtension()), self::supportedFileExtensions)) {
+            if(!$file->isFile() || !in_array(strtolower($file->getExtension()), $processing ? self::supportedFileExtensionsProcessing : self::supportedFileExtensionsSelect)) {
                 continue;
             }
             $files[] = $path . '/' . $file->getFilename();

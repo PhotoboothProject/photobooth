@@ -3,6 +3,7 @@
 require_once '../../lib/boot.php';
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
@@ -51,7 +52,7 @@ if (isset($_POST['submit'])) {
         $uploadedImages = $_FILES['images'];
 
         // Array of allowed image file types
-        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        $allowedTypes = ImageUtility::supportedMimeTypesSelect;
 
         for ($i = 0; $i < count($uploadedImages['name']); $i++) {
             $imageName = $uploadedImages['name'][$i];

@@ -106,6 +106,7 @@
   "download_zip": "Download data folder as zip",
   "enjoyPhotobooth": "Enjoy your Photobooth!",
   "error": "Something went wrong. Please try it again.",
+  "error.path.noimages": "The path does not contain any images",
   "event": "Event",
   "filecount": "File count:",
   "folders": "Folders",
