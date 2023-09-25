@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Utility\PathUtility;
 
 /*
  ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows
@@ -423,6 +424,10 @@ $configsetup = [
             'placeholder' => $defaultConfig['logo']['enabled'],
             'name' => 'logo[path]',
             'value' => htmlentities($config['logo']['path'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/logo'),
+                PathUtility::getAbsolutePath('private/images/logo'),
+            ]
         ],
         'logo_position' => [
             'view' => 'advanced',
@@ -552,6 +557,10 @@ $configsetup = [
             'placeholder' => $defaultConfig['picture']['frame'],
             'name' => 'picture[frame]',
             'value' => htmlentities($config['picture']['frame'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/frames'),
+                PathUtility::getAbsolutePath('private/images/frames'),
+            ]
         ],
         'picture_extend_by_frame' => [
             'view' => 'expert',
@@ -842,6 +851,10 @@ $configsetup = [
             'placeholder' => $defaultConfig['collage']['frame'],
             'name' => 'collage[frame]',
             'value' => htmlentities($config['collage']['frame'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/frames'),
+                PathUtility::getAbsolutePath('private/images/frames'),
+            ]
         ],
         'collage_background' => [
             'view' => 'expert',
@@ -849,6 +862,10 @@ $configsetup = [
             'placeholder' => $defaultConfig['collage']['background'],
             'name' => 'collage[background]',
             'value' => htmlentities($config['collage']['background'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/background'),
+                PathUtility::getAbsolutePath('private/images/background'),
+            ]
         ],
         'collage_placeholder' => [
             'view' => 'expert',
@@ -1619,6 +1636,10 @@ $configsetup = [
             'placeholder' => $defaultConfig['print']['frame'],
             'name' => 'print[frame]',
             'value' => htmlentities($config['print']['frame'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/frames'),
+                PathUtility::getAbsolutePath('private/images/frames'),
+            ]
         ],
         'print_crop' => [
             'view' => 'expert',
@@ -2652,6 +2673,10 @@ $configsetup = [
             'name' => 'background[defaults]',
             'placeholder' => $defaultConfig['background']['defaults'],
             'value' => htmlentities($config['background']['defaults'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/background'),
+                PathUtility::getAbsolutePath('private/images/background'),
+            ]
         ],
         'background_chroma' => [
             'view' => 'expert',
@@ -2659,6 +2684,10 @@ $configsetup = [
             'name' => 'background[chroma]',
             'placeholder' => $defaultConfig['background']['chroma'],
             'value' => htmlentities($config['background']['chroma'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/background'),
+                PathUtility::getAbsolutePath('private/images/background'),
+            ]
         ],
         'ui_decore_lines' => [
             'view' => 'expert',
