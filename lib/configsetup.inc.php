@@ -886,6 +886,10 @@ $configsetup = [
             'placeholder' => $defaultConfig['collage']['placeholderpath'],
             'name' => 'collage[placeholderpath]',
             'value' => htmlentities($config['collage']['placeholderpath'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/demo'),
+                PathUtility::getAbsolutePath('private/images/placeholder'),
+            ]
         ],
         'textoncollage_enabled' => [
             'view' => 'advanced',
