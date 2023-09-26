@@ -4,6 +4,7 @@ namespace Photobooth;
 
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Utility\ImageUtility;
+use Photobooth\Utility\PathUtility;
 
 class Collage
 {
@@ -508,7 +509,7 @@ class Collage
                 $imageHandler->drawDashedLine($my_collage);
                 break;
             default:
-                $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . $c->collageLayout;
+                $collageConfigFilePath = PathUtility::getAbsolutePath('private' . DIRECTORY_SEPARATOR . $c->collageLayout);
                 $collageJson = json_decode(file_get_contents($collageConfigFilePath), true);
 
                 if (is_array($collageJson)) {
