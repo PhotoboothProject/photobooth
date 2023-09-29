@@ -49,8 +49,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
        autoplay playsinline></video>
-<div id="blocker"></div>
-<div id="aperture" class="relative z-50"></div>
 <?php if ($config['video']['enabled'] && $config['video']['animation']): ?>
     <div id="videoAnimation">
         <ul class="left">

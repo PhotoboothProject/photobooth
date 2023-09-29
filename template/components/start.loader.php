@@ -6,11 +6,7 @@
         </div>
 
         <div id="ipcam--view" class="<?php echo $config['preview']['style']; ?>"></div>
-
-        <div id="counter">
-            <canvas id="video--sensor"></canvas>
-        </div>
-        <div class="cheese"></div>
+        <canvas id="video--sensor"></canvas>
         <div class="loaderImage"></div>
         <div class="loading rotarygroup"></div>
     </div>

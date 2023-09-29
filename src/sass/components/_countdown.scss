@@ -1,0 +1,29 @@
+.countdown {
+  z-index: 1500;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  color: var(--countdown-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+
+  &-number {
+    animation: tick 1s normal forwards ease-in;
+  }
+}
+
+@keyframes tick {
+  from {
+    opacity: 1;
+    font-size: 80vh;
+  }
+  to {
+    opacity: 0.1;
+    font-size: 0;
+  }
+}
