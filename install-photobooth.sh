@@ -96,6 +96,14 @@ UBUNTU=(
         'impish'
         'jammy'
         'kinetic'
+        'faye'
+        'ulyana'
+        'ulyssa'
+        'uma'
+        'una'
+        'vanessa'
+        'vera'
+        'victoria'
 )
 
 function info {
