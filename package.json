@@ -67,7 +67,7 @@
     "gulp-rename": "^2.0.0",
     "jquery": "^3.7.1",
     "marvinj": "^1.0.0",
-    "material-icons": "^1.13.11",
+    "material-icons": "^1.13.12",
     "node-sass-importer": "^2.0.2",
     "normalize.css": "^8.0.1",
     "npm-run-all": "^4.1.5",
