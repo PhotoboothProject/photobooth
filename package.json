@@ -80,7 +80,7 @@
     "whatwg-fetch": "^3.6.19"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.14",
     "archiver": "^6.0.1",
     "browser-sync": "^2.29.3",
