@@ -29,8 +29,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
 ?>
 <body>
-<div id="blocker"></div>
-<div id="aperture"></div>
 <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
        autoplay playsinline></video>
 <div class="chromawrapper">

@@ -36,7 +36,6 @@ const photoBooth = (function () {
         loader = $('#loader'),
         startPage = $('#start'),
         gallery = $('#gallery'),
-        cheese = $('.cheese'),
         resultPage = $('#result'),
         filternav = $('#filternav'),
         ipcamView = $('#ipcam--view'),
@@ -46,7 +45,6 @@ const photoBooth = (function () {
         printBtn = $('.printbtn'),
         deleteBtn = $('.deletebtn'),
         qrBtn = $('.qrbtn'),
-        counter = $('#counter'),
         resultInner = $('.resultInner'),
         videoAnimation = $('#videoAnimation'),
         resultVideo = $('#resultVideo'),
@@ -56,8 +54,6 @@ const photoBooth = (function () {
         mailMessageForm = $('#mail-form-message'),
         mailImageForm = $('#mail-form-image'),
         mailSendForm = $('#send-mail-form'),
-        blocker = $('#blocker'),
-        aperture = $('#aperture'),
         idVideoView = $('#video--view'),
         idVideoSensor = $('#video--sensor'),
         pictureFrame = $('#picture--frame'),
@@ -68,7 +64,6 @@ const photoBooth = (function () {
             config.preview.asBackground &&
             config.preview.mode === PreviewMode.DEVICE.valueOf() &&
             ((config.preview.cmd && !config.preview.bsm) || !config.preview.cmd),
-        cheeseTime = config.picture.no_cheese ? 0 : config.picture.cheese_time,
         timeToLive = config.picture.time_to_live * 1000,
         continuousCollageTime = config.collage.continuous_time * 1000,
         retryTimeout = config.picture.retry_timeout * 1000,
@@ -144,10 +139,6 @@ const photoBooth = (function () {
         rotaryController.focusSet('#start');
 
         initPhotoSwipeFromDOM('#galimages');
-
-        if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
-            blocker.css('background-image', 'url(' + config.cheese_img + ')');
-        }
     };
 
     api.navbar = {
@@ -167,7 +158,7 @@ const photoBooth = (function () {
         }
     };
 
-    api.stopPreviewAndCaptureFromVideo = function () {
+    api.stopPreviewAndCaptureFromVideo = () => {
         if (config.preview.camTakesPic) {
             if (photoboothPreview.stream) {
                 videoSensor.width = videoView.videoWidth;
@@ -181,34 +172,180 @@ const photoBooth = (function () {
         }
     };
 
-    api.shutter = {
-        start: function () {
-            blocker.fadeTo(500, 1);
-            setTimeout(
-                () => {
-                    api.shutter.stop();
-                },
-                config.picture.no_cheese ? 500 : cheeseTime
-            );
+    api.countdown = {
+        element: null,
+        create: () => {
+            if (api.countdown.element === null) {
+                const element = document.createElement('div');
+                element.classList.add('countdown');
+                document.body.append(element);
+                api.countdown.element = element;
+            }
         },
-        stop: function () {
-            aperture.show();
-            aperture.animate(
-                {
-                    width: 0,
-                    'padding-bottom': 0
-                },
-                500,
-                function () {
-                    blocker.css('opacity', '0');
-                    blocker.hide();
+        destroy: () => {
+            if (api.countdown.element !== null) {
+                api.countdown.element.remove();
+                api.countdown.element = null;
+            }
+        },
+        start: (seconds) => {
+            photoboothTools.console.log('Countdown started. Set to ' + seconds + ' seconds.');
+            api.countdown.create();
+
+            return new Promise((resolve) => {
+                const stop =
+                    seconds > parseInt(config.preview.stop_time, 10)
+                        ? seconds - parseInt(config.preview.stop_time, 10)
+                        : seconds;
+                const interval = setInterval(() => {
+                    const numberElement = document.createElement('div');
+                    numberElement.classList.add('countdown-number');
+                    numberElement.textContent = Number(seconds).toString();
+                    api.countdown.element.innerHtml = '';
+                    api.countdown.element.appendChild(numberElement);
+                    seconds--;
+
+                    if (seconds === stop && config.preview.killcmd && !config.preview.camTakesPic) {
+                        photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
+                        photoboothPreview.stopPreview();
+                    }
+
+                    if (seconds < 0) {
+                        api.countdown.destroy();
+                        clearInterval(interval);
+                        photoboothTools.console.log('Countdown finished.');
+                        resolve();
+                    }
+                }, 1000);
+            });
+        }
+    };
+
+    api.cheese = {
+        element: null,
+        create: () => {
+            if (api.cheese.element === null) {
+                const element = document.createElement('div');
+                element.classList.add('cheese');
+
+                if (config.ui.shutter_cheese_img !== '') {
+                    const image = document.createElement('img');
+                    image.src = config.ui.shutter_cheese_img;
+                    const imageElement = document.createElement('div');
+                    imageElement.classList.add('cheese-image');
+                    imageElement.appendChild(image);
+                    element.appendChild(imageElement);
+                } else if (api.photoStyle === PhotoStyle.VIDEO) {
+                    const labelElement = document.createElement('div');
+                    labelElement.classList.add('cheese-label');
+                    labelElement.textContent = config.video.cheese;
+                    element.appendChild(labelElement);
+                } else if (api.photoStyle === PhotoStyle.COLLAGE) {
+                    const labelElement = document.createElement('div');
+                    labelElement.classList.add('cheese-label');
+                    labelElement.textContent =
+                        photoboothTools.getTranslation('cheese') +
+                        ' ' +
+                        (api.nextCollageNumber + 1) +
+                        ' / ' +
+                        config.collage.limit;
+                    element.appendChild(labelElement);
+                } else {
+                    const labelElement = document.createElement('div');
+                    labelElement.classList.add('cheese-label');
+                    labelElement.textContent = photoboothTools.getTranslation('cheese');
+                    element.appendChild(labelElement);
                 }
-            );
-            aperture.fadeTo(1000, 0, function () {
-                aperture.css('opacity', '1');
-                aperture.css('width', '150%');
-                aperture.css('padding-bottom', '150%');
-                aperture.hide();
+
+                document.body.append(element);
+                api.cheese.element = element;
+            }
+        },
+        destroy: () => {
+            if (api.cheese.element !== null) {
+                api.cheese.element.remove();
+                api.cheese.element = null;
+            }
+        },
+        start: () => {
+            photoboothTools.console.log('Cheese: Start');
+            api.cheese.create();
+
+            return new Promise((resolve) => {
+                setTimeout(
+                    () => {
+                        photoboothTools.console.log('Cheese: End');
+                        api.cheese.destroy();
+                        resolve();
+                    },
+                    config.picture.no_cheese ? 0 : config.picture.cheese_time
+                );
+            });
+        }
+    };
+
+    api.shutter = {
+        element: null,
+        create: () => {
+            if (api.shutter.element === null) {
+                const flash = document.createElement('div');
+                flash.classList.add('shutter-flash');
+                const aperture = document.createElement('div');
+                aperture.classList.add('shutter-aperture');
+                const element = document.createElement('div');
+                element.classList.add('shutter');
+                element.appendChild(flash);
+                element.appendChild(aperture);
+                document.body.append(element);
+                api.shutter.element = element;
+            }
+        },
+        destroy: () => {
+            if (api.shutter.element !== null) {
+                api.shutter.element.remove();
+                api.shutter.element = null;
+            }
+        },
+        start: () => {
+            api.shutter.create();
+
+            return new Promise((resolve) => {
+                photoboothTools.console.log('Shutter: Start');
+                const flash = api.shutter.element.querySelector('.shutter-flash');
+                flash.style.transition = 'opacity 0.5s';
+                const flashAnimation = flash.animate([{}, {opacity: 1}], {
+                    duration: 500,
+                    fill: 'forwards'
+                });
+                flashAnimation.onfinish = () => {
+                    resolve();
+                };
+            });
+        },
+        stop: () => {
+            api.shutter.create();
+
+            return new Promise((resolve) => {
+                photoboothTools.console.log('Shutter: Stop');
+                const aperture = api.shutter.element.querySelector('.shutter-aperture');
+                aperture.style.transition = 'width 0.5s, padding-bottom 0.5s';
+                const apertureAnimation = aperture.animate(
+                    [
+                        {},
+                        {
+                            width: 0,
+                            paddingBottom: 0
+                        }
+                    ],
+                    {
+                        duration: 500,
+                        fill: 'forwards'
+                    }
+                );
+                apertureAnimation.onfinish = () => {
+                    api.shutter.destroy();
+                    resolve();
+                };
             });
         }
     };
@@ -239,7 +376,7 @@ const photoBooth = (function () {
             });
     };
 
-    api.thrill = function (photoStyle, retry = 0) {
+    api.thrill = async (photoStyle, retry = 0) => {
         if (api.takingPic) {
             photoboothTools.console.logDev('ERROR: Taking picture in progress already!');
 
@@ -335,47 +472,23 @@ const photoBooth = (function () {
             photoboothTools.getRequest(getUrl);
         }
 
-        api.startCountdown(countdownTime, counter, () => {
-            if (config.picture.no_cheese) {
-                photoboothTools.console.log('Cheese is disabled.');
-            } else {
-                api.cheese();
-            }
-        });
-
-        const triggerCnt = countdownTime - config.picture.cntdwn_offset;
-        photoboothTools.console.log('Capture image in ' + triggerCnt + ' seconds.');
-        setTimeout(() => {
-            if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
-                api.errorPic({
-                    error: 'No preview by device cam available!'
-                });
-            } else if (api.photoStyle === PhotoStyle.VIDEO) {
-                api.takeVideo(retry);
-            } else {
-                photoboothTools.console.logDev('Capture image.');
-                api.takePic(retry);
-            }
-        }, triggerCnt * 1000);
-    };
-
-    api.cheese = function () {
-        cheese.empty();
-        if (api.photoStyle === PhotoStyle.VIDEO) {
-            cheese.text(config.video.cheese);
-        } else if (config.ui.shutter_animation && config.ui.shutter_cheese_img !== '') {
-            return;
-        } else if (api.photoStyle === PhotoStyle.COLLAGE) {
-            cheese.text(photoboothTools.getTranslation('cheeseCollage'));
-            $('<p>')
-                .text(`${api.nextCollageNumber + 1} / ${config.collage.limit}`)
-                .appendTo('.cheese');
+        await api.countdown.start(countdownTime);
+        if (config.picture.no_cheese) {
+            photoboothTools.console.log('Cheese is disabled.');
         } else {
-            cheese.text(photoboothTools.getTranslation('cheese'));
+            await api.cheese.start();
         }
-        setTimeout(() => {
-            cheese.empty();
-        }, cheeseTime);
+
+        if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
+            api.errorPic({
+                error: 'No preview by device cam available!'
+            });
+        } else if (api.photoStyle === PhotoStyle.VIDEO) {
+            api.takeVideo(retry);
+        } else {
+            photoboothTools.console.logDev('Capture image.');
+            api.takePic(retry);
+        }
     };
 
     api.takeVideo = function (retry) {
@@ -426,14 +539,17 @@ const photoBooth = (function () {
         }, retryTimeout);
     };
 
-    api.callTakePicApi = function (data, retry = 0) {
+    api.callTakePicApi = async (data, retry = 0) => {
         if (config.ui.shutter_animation) {
-            api.shutter.start();
+            await api.shutter.start();
         }
         startTime = new Date().getTime();
         jQuery
             .post(config.foldersJS.api + '/capture.php', data)
-            .done(function (result) {
+            .done(async (result) => {
+                if (config.ui.shutter_animation) {
+                    await api.shutter.stop();
+                }
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('Took ' + data.style, result);
@@ -588,9 +704,10 @@ const photoBooth = (function () {
                     api.processPic(result);
                 }
             })
-            .fail(function (xhr, status, result) {
-                cheese.empty();
-
+            .fail(async (xhr, status, result) => {
+                if (config.ui.shutter_animation) {
+                    await api.shutter.stop();
+                }
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
                     photoboothTools.console.logDev(
                         'ERROR: Taking picture failed. Retrying. Retry: ' +
@@ -620,8 +737,6 @@ const photoBooth = (function () {
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('Took ' + data.style, result);
                 photoboothTools.console.logDev('Taking video took ' + totalTime + 'ms');
-                cheese.empty();
-
                 imgFilter = config.filters.defaults;
                 $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
                 $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
@@ -641,7 +756,6 @@ const photoBooth = (function () {
         setTimeout(function () {
             spinner.hide();
             loading.empty();
-            cheese.empty();
             idVideoView.hide();
             idVideoSensor.hide();
             collageFrame.hide();
@@ -1041,37 +1155,6 @@ const photoBooth = (function () {
     api.resetMailForm = function () {
         mailSendForm.trigger('reset');
         mailMessageForm.empty();
-    };
-
-    api.startCountdown = function (start, element, cb) {
-        let count = 0;
-        let current = start;
-        const stop =
-            start > parseInt(config.preview.stop_time, 10) ? start - parseInt(config.preview.stop_time, 10) : start;
-
-        photoboothTools.console.log('Countdown started. Set to ' + current + ' seconds.');
-
-        function timerFunction() {
-            element.text(Number(current));
-            current--;
-
-            element.removeClass('tick');
-
-            if (count === stop && config.preview.killcmd && !config.preview.camTakesPic) {
-                photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
-                photoboothPreview.stopPreview();
-            }
-            if (count < start) {
-                window.setTimeout(() => element.addClass('tick'), 50);
-                window.setTimeout(timerFunction, 1000);
-            } else {
-                element.empty();
-                cb();
-            }
-            count++;
-        }
-
-        timerFunction();
     };
 
     api.deleteImage = function (imageName, cb) {
