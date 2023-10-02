@@ -4,7 +4,6 @@ use Photobooth\Utility\PathUtility;
 
 ?>
 
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>node_modules/whatwg-fetch/dist/fetch.umd.js"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>api/config.php?v=<?= $config['photobooth']['version'] ?>"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/tools.js?v=<?= $config['photobooth']['version'] ?>"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/theme.js?v=<?= $config['photobooth']['version'] ?>"></script>

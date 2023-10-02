@@ -1,20 +1,17 @@
-import gulp from 'gulp';
-import sass from 'gulp-dart-sass';
-import babel from 'gulp-babel';
-import php from 'gulp-connect-php';
-import browserSync from 'browser-sync';
-import filters from 'gulp-filter';
-import twConfig from './config/tailwind.config.mjs';
-import twAdminConfig from './config/tailwind.admin.config.mjs';
-import postcss from 'gulp-postcss';
-import tailwindcss from 'tailwindcss';
-import rename from 'gulp-rename';
 import autoprefixer from 'autoprefixer';
+import babel from 'gulp-babel';
 import concat from 'gulp-concat';
+import filters from 'gulp-filter';
+import gulp from 'gulp';
 import nodeSassImporter from 'node-sass-importer';
+import postcss from 'gulp-postcss';
+import rename from 'gulp-rename';
+import sass from 'gulp-dart-sass';
+import tailwindcss from 'tailwindcss';
+import twAdminConfig from './config/tailwind.admin.config.mjs';
+import twConfig from './config/tailwind.config.mjs';
 
-const { series, parallel, watch } = gulp;
-const { create } = browserSync;
+const { parallel } = gulp;
 
 gulp.task('sass', function () {
   const twFilter = filters(['**/*', '!tailwind.admin.scss', '!tailwind.scss']);
@@ -29,7 +26,10 @@ gulp.task('sass', function () {
 gulp.task('js', function () {
   return gulp
     .src('./src/js/**/*.js')
-    .pipe(babel({ presets: ['@babel/env'], ignore: [ 'src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js' ] }))
+    .pipe(babel({
+      presets: ['@babel/env'],
+      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js']
+    }))
     .pipe(gulp.dest('./resources/js'));
 });
 
@@ -38,6 +38,7 @@ gulp.task('tailwind', function () {
     tailwindcss(twConfig),
     autoprefixer(),
   ];
+
   return gulp
     .src('./src/sass/tailwind.scss')
     .pipe(sass({
@@ -58,6 +59,7 @@ gulp.task('tailwind-admin', function () {
     tailwindcss(twAdminConfig),
     autoprefixer(),
   ];
+
   return gulp
     .src('./src/sass/tailwind.admin.scss')
     .pipe(sass({
@@ -85,47 +87,11 @@ gulp.task('js-admin', function () {
       './src/js/admin/toast.js',
     ])
     .pipe(concat('main.admin.js'))
-    .pipe(babel({ presets: ['@babel/env'], ignore: [ 'src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js' ] }))
+    .pipe(babel({
+      presets: ['@babel/env'],
+      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js']
+    }))
     .pipe(gulp.dest('./resources/js'));
 });
 
-gulp.task('dev', function () {
-  php.server({
-    base: './',
-    port: 3000,
-    keepalive: true
-  });
-
-  browserSync.init({
-    proxy: '127.0.0.1:3000'
-  });
-
-  watch('./src/sass/**/*.scss', series('sass'))
-    .on('change', browserSync.reload);
-  watch('./**/*.php')
-    .on('change', browserSync.reload);
-  watch('./src/js/*.js', series('js'))
-    .on('change', browserSync.reload);
-
-  watch([
-    './index.php',
-    './gallery/**/*.php',
-    './template/**/*.php',
-    './src/sass/tailwind.scss'
-  ], series('tailwind'))
-    .on('change', browserSync.reload);
-
-  watch('./src/js/admin/**/*.js', series('js-admin'))
-    .on('change', browserSync.reload);
-  watch([
-    './admin/**/*.php',
-    './login/**/*.php',
-    './manual/**/*.php',
-    './welcome/**/*.php',
-    './src/sass/tailwind.admin.scss'
-  ], series('tailwind-admin'))
-    .on('change', browserSync.reload);
-});
-
 gulp.task('default', parallel('sass', 'js', 'js-admin', 'tailwind', 'tailwind-admin'));
-
