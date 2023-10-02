@@ -1,14 +1,14 @@
 /* This script needs to be run from within the photobooth directory */
 
 /* Imports */
-const {execSync, spawn} = require('child_process');
+const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const events = require('events');
 
 /* Variables */
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
-const {pid: PID, platform: PLATFORM} = process;
+const { pid: PID, platform: PLATFORM } = process;
 const myEmitter = new events.EventEmitter();
 let rsyncSemaphore = null;
 let rsyncStartTime = 0;
@@ -49,7 +49,7 @@ const parseConfig = (config) => {
     return null;
 };
 
-const getDriveInfo = ({drive}) => {
+const getDriveInfo = ({ drive }) => {
     let json = null;
     let device = false;
 
@@ -109,7 +109,7 @@ const mountDrive = (drive) => {
     return drive;
 };
 
-const startSync = ({dataAbsPath, drive}) => {
+const startSync = ({ dataAbsPath, drive }) => {
     if (!fs.existsSync(dataAbsPath)) {
         log(`ERROR: Folder [${dataAbsPath}] does not exist!`);
 
@@ -175,7 +175,7 @@ const startSync = ({dataAbsPath, drive}) => {
 
 const writePIDFile = (filename) => {
     try {
-        fs.writeFileSync(filename, parseInt(PID, 10).toString(), {flag: 'w'});
+        fs.writeFileSync(filename, parseInt(PID, 10).toString(), { flag: 'w' });
         log(`PID file created [${filename}]`);
     } catch (err) {
         throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);

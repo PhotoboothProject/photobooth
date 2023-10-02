@@ -19,8 +19,7 @@
     "clean:skipwelcome": "rm welcome/.skip_welcome || echo 'welcome/.skip_welcome can not be removed or does not exist!'",
     "eslint": "eslint src/js/{,*/**/}*.js",
     "eslint:fix": "eslint src/js/{,*/**/}*.js --fix",
-    "format": "npm-run-all --parallel format:*",
-    "format:js": "prettier src/js/{,*/**/}*.js --write",
+    "format": "npm-run-all --parallel format:* eslint:fix",
     "format:scss": "prettier src/sass/{,*/**/}*.scss --write",
     "pack:build": "npm-run-all --serial eslint build pack:zip",
     "pack:zip": "node scripts/pack-build.js",
@@ -80,7 +79,7 @@
     "archiver": "^6.0.1",
     "colors": "^1.4.0",
     "eslint": "^8.50.0",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-n": "^16.1.0",
     "git-tag-version": "^1.3.1",
     "gulp-babel": "^8.0.0",
     "prettier": "^3.0.3"

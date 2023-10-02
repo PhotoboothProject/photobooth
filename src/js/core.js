@@ -313,7 +313,7 @@ const photoBooth = (function () {
                 photoboothTools.console.log('Shutter: Start');
                 const flash = api.shutter.element.querySelector('.shutter-flash');
                 flash.style.transition = 'opacity 0.5s';
-                const flashAnimation = flash.animate([{}, {opacity: 1}], {
+                const flashAnimation = flash.animate([{}, { opacity: 1 }], {
                     duration: 500,
                     fill: 'forwards'
                 });
@@ -997,7 +997,9 @@ const photoBooth = (function () {
                     files.forEach(function (file, index, array) {
                         photoboothTools.console.logDev('Index:', index);
                         photoboothTools.console.logDev('Array:', array);
-                        api.deleteImage(file, () => {});
+                        api.deleteImage(file, () => {
+                            return;
+                        });
                     });
                     setTimeout(function () {
                         photoboothTools.reloadPage();
@@ -1218,7 +1220,7 @@ const photoBooth = (function () {
         $(this).addClass('sidenav-list-item--active');
 
         imgFilter = $(this).data('filter');
-        const result = {file: resultPage.attr('data-img')};
+        const result = { file: resultPage.attr('data-img') };
 
         photoboothTools.console.logDev('Applying filter: ' + imgFilter, result);
 

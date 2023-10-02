@@ -17,7 +17,7 @@ $(function () {
             success: (data) => {
                 $('.debugcontent').html('<pre class="break-all whitespace-pre-wrap">' + data + '</pre>');
                 if (autoRefreshActive) {
-                    $('html,body').animate({scrollTop: $('#admincontentpage').height()}, 0);
+                    $('html,body').animate({ scrollTop: $('#admincontentpage').height() }, 0);
                 }
             },
             error: (jqXHR) => {
