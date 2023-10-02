@@ -29,9 +29,6 @@
     "composer:lint": "bin/composer lint",
     "composer:update": "bin/composer update -w",
     "composer:self-update": "bin/composer self-update",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "gulp watch",
-    "dev": "gulp dev",
     "tw:admin": "gulp tailwind-admin"
   },
   "author": "Andreas Blaesius <andi@unlegacy-android.org>",
@@ -60,7 +57,6 @@
     "github-markdown-css": "^5.2.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
-    "gulp-connect-php": "^1.0.3",
     "gulp-dart-sass": "^1.1.0",
     "gulp-filter": "^8.0.0",
     "gulp-postcss": "^9.0.1",
@@ -76,14 +72,12 @@
     "sass": "^1.68.0",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
-    "tailwindcss": "^3.3.3",
-    "whatwg-fetch": "^3.6.19"
+    "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
     "archiver": "^6.0.1",
-    "browser-sync": "^2.29.3",
     "colors": "^1.4.0",
     "eslint": "^8.50.0",
     "eslint-plugin-node": "^11.1.0",
