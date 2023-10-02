@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\AdminInput;
 
 $languageService = LanguageService::getInstance();
 
@@ -48,6 +49,9 @@ foreach ($configsetup as $section => $fields) {
         // Populate setting elements by type
 
         switch ($setting['type']) {
+            case 'icon':
+                echo AdminInput::renderIcon($setting, $i18ntag);
+                break;
             case 'input':
             case 'number':
                 echo getTextInput($setting, $i18ntag);

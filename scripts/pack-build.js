@@ -75,7 +75,7 @@ function createArchive(fileName, archive) {
     archive.file('private/README.md');
     archive.file('README.md');
     archive.file('welcome/index.php');
-    archive.directory('node_modules/font-awesome/');
+    archive.directory('node_modules/@fortawesome/fontawesome-free/');
     archive.directory('node_modules/material-icons');
     archive.directory('node_modules/photoswipe/');
     archive.file('node_modules/github-markdown-css/github-markdown.css');
