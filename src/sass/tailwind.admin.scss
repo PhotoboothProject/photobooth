@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-// font awesome
-$fa-font-path: '../../node_modules/font-awesome/fonts';
-@import '../../node_modules/font-awesome/scss/font-awesome';
-// @media (prefers-color-scheme: dark) {
-//   html { filter: invert(100%); }
-//   img { filter: invert(100%); }
-// }
 body {
   width: 100%;
   height: 100vh;

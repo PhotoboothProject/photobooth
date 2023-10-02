@@ -31,7 +31,7 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/normalize.css/normalize.css" />
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/iconfont/material-icons.css">
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/css/material-icons.css">
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/tailwind.css?v=<?= $config['photobooth']['version'] ?>"/>
