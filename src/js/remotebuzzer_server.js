@@ -16,9 +16,9 @@ let collageInProgress = false,
 
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 let rotaryClkPin, rotaryDtPin;
-const {execSync, spawnSync} = require('child_process');
+const { execSync, spawnSync } = require('child_process');
 const path = require('path');
-const {pid: PID, platform: PLATFORM} = process;
+const { pid: PID, platform: PLATFORM } = process;
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
@@ -1277,7 +1277,7 @@ function move2usbAction() {
     const parsedConfig = parseConfig();
     log('USB target ', ...parsedConfig.drive);
 
-    const getDriveInfo = ({drive}) => {
+    const getDriveInfo = ({ drive }) => {
         let json = null;
         let device = false;
 
@@ -1337,7 +1337,7 @@ function move2usbAction() {
         return drive;
     };
 
-    const startSync = ({dataAbsPath, drive}) => {
+    const startSync = ({ dataAbsPath, drive }) => {
         if (!fs.existsSync(dataAbsPath)) {
             log(`ERROR: Folder [${dataAbsPath}] does not exist!`);
 
@@ -1442,7 +1442,7 @@ function move2usbAction() {
         }
     };
 
-    const deleteFiles = ({dataAbsPath}) => {
+    const deleteFiles = ({ dataAbsPath }) => {
         if (!fs.existsSync(dataAbsPath)) {
             log(`ERROR: Folder [${dataAbsPath}] does not exist!`);
 
@@ -1485,7 +1485,7 @@ function move2usbAction() {
         stdout = execSync(cmd);
     };
 
-    const deleteDatabase = ({dataAbsPath, dbName}) => {
+    const deleteDatabase = ({ dataAbsPath, dbName }) => {
         if (!fs.existsSync(dataAbsPath)) {
             log(`ERROR: Folder [${dataAbsPath}] does not exist!`);
 
@@ -1545,7 +1545,7 @@ function move2usbAction() {
     unmountDrive();
 
     if (copySucess && config.remotebuzzer.move2usb == 'move') {
-        deleteFiles({dataAbsPath: parsedConfig.dataAbsPath});
+        deleteFiles({ dataAbsPath: parsedConfig.dataAbsPath });
     } else {
         log('[Info] move2USB mode "copy" or Sync unsuccessful. No files will be deleted.');
     }

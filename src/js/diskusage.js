@@ -3,7 +3,7 @@ $(function () {
     $('.download-zip-btn').on('click', function (e) {
         e.preventDefault();
         photoboothTools.modal.open('#save_mesg');
-        const data = {type: 'zip'};
+        const data = { type: 'zip' };
         $.ajax({
             url: '../api/diskusage.php',
             data: data,

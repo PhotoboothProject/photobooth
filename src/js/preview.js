@@ -45,7 +45,12 @@ const photoboothPreview = (function () {
         video.show();
     };
 
-    api.initializeMedia = function (cb = () => {}, retry = 0) {
+    api.initializeMedia = function (
+        cb = () => {
+            return;
+        },
+        retry = 0
+    ) {
         photoboothTools.console.logDev('Preview: Trying to initialize media...');
         if (
             !navigator.mediaDevices ||

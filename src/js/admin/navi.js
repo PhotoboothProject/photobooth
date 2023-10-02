@@ -68,7 +68,7 @@ function setNaviItem(item) {
     if (top <= height || top >= height) {
         $('#nav-' + item)
             .parents()[0]
-            .scrollIntoView({block: 'end'});
+            .scrollIntoView({ block: 'end' });
     }
 }
 
