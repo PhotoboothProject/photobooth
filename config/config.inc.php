@@ -395,8 +395,14 @@ $config['ui']['style'] = 'modern_squared';
 // possible button values: "rounded", "modern", "modern_squared", "custom"
 $config['ui']['button'] = 'modern_squared';
 $config['ui']['shutter_animation'] = true;
-// possible image values: "none", "top", "bottom", "left", "right", "/private/cheese.png"
-$config['ui']['shutter_cheese_img'] = 'none';
+// possible image values:
+// - ''
+// - '/resources/img/cheese/camera_up.png'
+// - '/resources/img/cheese/camera_down.png'
+// - '/resources/img/cheese/camera_left.png'
+// - '/resources/img/cheese/camera_right.png'
+// - '/private/cheese.png'
+$config['ui']['shutter_cheese_img'] = '';
 $config['button']['show_fs'] = false;
 $config['button']['homescreen'] = true;
 $config['button']['reload'] = false;
