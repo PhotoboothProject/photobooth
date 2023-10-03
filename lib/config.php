@@ -150,12 +150,6 @@ if (file_exists(PathUtility::getAbsolutePath('config/my.config.inc.php')) && !is
     die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
-if (empty($config['ui']['folders_lang'])) {
-    $config['ui']['folders_lang'] = 'resources/lang';
-}
-
-$config['ui']['folders_lang'] = PathUtility::getPublicPath($config['ui']['folders_lang']);
-
 foreach ($config['folders'] as $key => $folder) {
     if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
         $path = PathUtility::getAbsolutePath($folder);

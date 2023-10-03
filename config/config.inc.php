@@ -9,7 +9,7 @@ $config = [];
 // G E N E R A L
 // possible language values: de, en, fr, it
 $config['ui']['language'] = 'en';
-$config['ui']['folders_lang'] = '';
+$config['ui']['folders_lang'] = 'resources/lang';
 $config['adminpanel']['view'] = 'basic';
 $config['adminpanel']['experimental_settings'] = false;
 $config['dev']['loglevel'] = '1';

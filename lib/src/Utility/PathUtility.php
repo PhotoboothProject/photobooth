@@ -24,7 +24,7 @@ class PathUtility
 
     public static function isAbsolutePath(string $path): bool
     {
-        return realpath($path) !== false;
+        return trim($path) !== '' && realpath($path) !== false;
     }
 
     public static function isUrl(string $path): bool

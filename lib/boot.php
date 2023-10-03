@@ -35,7 +35,10 @@ require_once dirname(__DIR__) . '/lib/config.php';
 // $languageService = LanguageService::getInstance();
 // $languageService->translate('abort');
 //
-$GLOBALS[LanguageService::class] = new LanguageService($config['ui']['language'] ?? 'en', $config['ui']['folders_lang']);
+$GLOBALS[LanguageService::class] = new LanguageService(
+    $config['ui']['language'] ?? 'en',
+    isset($config['ui']['folders_lang']) && $config['ui']['folders_lang'] !== '' ? $config['ui']['folders_lang'] : 'resources/lang'
+);
 
 define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');
 define('MAIL_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt');
