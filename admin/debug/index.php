@@ -22,8 +22,8 @@ $languageService = LanguageService::getInstance();
 $pageTitle = 'Debugpanel';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
-include PathUtility::getAbsolutePath('admin/inputs/index.php');
 include PathUtility::getAbsolutePath('admin/components/navItem.debug.php');
+
 ?>
     <div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
         <div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">

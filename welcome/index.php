@@ -15,7 +15,6 @@ $chromaKeying = false;
 
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
-include PathUtility::getAbsolutePath('admin/inputs/index.php');
 
 ?>
 

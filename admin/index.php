@@ -19,7 +19,7 @@ require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 $pageTitle = 'Adminpanel';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
-include PathUtility::getAbsolutePath('admin/inputs/index.php');
+
 ?>
 
     <div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
