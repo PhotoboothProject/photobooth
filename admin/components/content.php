@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\PathUtility;
 
 ?>
@@ -10,7 +11,7 @@ use Photobooth\Utility\PathUtility;
 
     <div class="pt-5 pb-5 mx-4 lg:mx-8">
         <div class="w-44 ml-auto">
-            <?php echo getCtaBtn('save', 'save-admin-btn'); ?>
+            <?php echo AdminInput::renderCta('save', 'save-admin-btn'); ?>
         </div>
     </div>
 </form>

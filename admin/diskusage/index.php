@@ -22,7 +22,7 @@ $languageService = LanguageService::getInstance();
 $pageTitle = 'Diskusage';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
-include PathUtility::getAbsolutePath('admin/inputs/index.php');
+
 ?>
 <div class="w-full h-full grid place-items-center fixed bg-brand-1 overflow-x-hidden overflow-y-auto">
     <div class="w-full flex items-center justify-center flex-col px-6 py-12">
