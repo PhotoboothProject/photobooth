@@ -20,10 +20,8 @@ use Photobooth\Utility\PathUtility;
     <link rel="manifest" href="<?=PathUtility::getPublicPath()?>resources/img/site.webmanifest">
     <link rel="mask-icon" href="<?=PathUtility::getPublicPath()?>resources/img/safari-pinned-tab.svg" color="#5bbad5">
 
-    <!-- fontawesome -->
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-
-    <!-- tw admin -->
+    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/fonts.css" />
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/tailwind.admin.css"/>
 
     <?php if (is_file(PathUtility::getPublicPath() . 'private/overrides.css')): ?>
