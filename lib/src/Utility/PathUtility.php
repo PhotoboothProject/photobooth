@@ -6,7 +6,7 @@ class PathUtility
 {
     public static function getRootPath(): string
     {
-        return realpath(self::fixFilePath(__DIR__ . '/../../../'));
+        return self::fixFilePath(realpath(self::fixFilePath(__DIR__ . '/../../../')) . '/');
     }
 
     public static function getAbsolutePath(string $path = ''): string
@@ -51,7 +51,10 @@ class PathUtility
 
     public static function getBaseUrl(): string
     {
-        return self::fixFilePath(str_replace($_SERVER['DOCUMENT_ROOT'], '', self::getAbsolutePath()));
+        $documentRoot = self::fixFilePath($_SERVER['DOCUMENT_ROOT']);
+        $rootPath = self::getRootPath();
+
+        return self::fixFilePath(str_replace($documentRoot, '', $rootPath));
     }
 
     public static function fixFilePath(string $path): string
