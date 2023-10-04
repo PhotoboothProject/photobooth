@@ -1,0 +1,41 @@
+/**
+ * Logo
+ */
+.logo {
+  position: absolute;
+  max-width: 30vw;
+  height: auto;
+  width: auto;
+
+  &--top_left {
+    top: 4rem;
+    left: 4rem;
+  }
+
+  &--top_right {
+    top: 4rem;
+    right: 4rem;
+  }
+
+  &--center {
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+  }
+
+  &--bottom_left {
+    bottom: 4rem;
+    left: 4rem;
+  }
+
+  &--bottom_right {
+    bottom: 4rem;
+    right: 4rem;
+  }
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+}
