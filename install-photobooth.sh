@@ -83,19 +83,6 @@ DEBIAN=(
         'bookworm'
 )
 
-UBUNTU=(
-        'bionic'
-        'cosmic'
-        'disco'
-        'eoan'
-        'focal'
-        'groovy'
-        'hirsute'
-        'impish'
-        'jammy'
-        'kinetic'
-)
-
 function info {
     echo -e "\033[0;36m${1}\033[0m"
     echo "${1}" >> "${PHOTOBOOTH_TMP_LOG}"
@@ -379,7 +366,7 @@ common_software() {
         if [[ "${DEBIAN[@]}" =~ "${OS}" ]]; then
             wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
             echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-        elif [[ "${UBUNTU[@]}" =~ "${OS}" ]]; then
+        else
             if [[ "${OS}" == "jammy" ]]; then
                 echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted" >> /etc/apt/sources.lst
             fi
