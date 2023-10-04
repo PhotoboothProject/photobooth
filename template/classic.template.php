@@ -4,9 +4,9 @@ use Photobooth\Utility\PathUtility;
 
 ?>
 <!-- Start Page -->
-<div class="stages <?php echo $uiShape; ?> rotarygroup noborder" id="start">
+<div class="stage rotarygroup" data-stage="start">
     <?php include PathUtility::getAbsolutePath('template/components/start.logo.php'); ?>
-    <div class="startInner <?php echo $uiShape; ?> noborder">
+    <div class="startInner">
         <?php if ($config['event']['enabled']): ?>
         <div class="names">
             <?php if ($config['ui']['decore_lines']): ?>

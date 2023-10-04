@@ -4,70 +4,83 @@ namespace Photobooth\Utility;
 
 class ArrayUtility
 {
-    /**
-     * array_deep_merge
-     *
-     * array array_deep_merge ( array array1 [, array array2 [, array ...]] )
-     *
-     * Like array_merge
-     *
-     *   array_deep_merge() merges the elements of one or more arrays together so
-     * that the values of one are appended to the end of the previous one. It
-     * returns the resulting array.
-     *   If the input arrays have the same string keys, then the later value for
-     * that key will overwrite the previous one. If, however, the arrays contain
-     * numeric keys, the later value will not overwrite the original value, but
-     * will be appended.
-     *   If only one array is given and the array is numerically indexed, the keys
-     * get reindexed in a continuous way.
-     *
-     * Different from array_merge
-     *   If string keys have arrays for values, these arrays will merge recursively.
-     *
-     * @source https://www.php.net/manual/en/function.array-merge.php#54946
-     */
-    public static function array_deep_merge()
+    public static function mergeRecursive(array $array, array $overrule): array
     {
-        switch (func_num_args()) {
-            case 0:
-                return false;
-                break;
-            case 1:
-                return func_get_arg(0);
-                break;
-            case 2:
-                $args = func_get_args();
-                $args[2] = [];
-                if (is_array($args[0]) and is_array($args[1])) {
-                    foreach (array_unique(array_merge(array_keys($args[0]), array_keys($args[1]))) as $key) {
-                        if (is_string($key) and array_key_exists($key, $args[0]) and is_array($args[0][$key]) and array_key_exists($key, $args[1]) and is_array($args[1][$key])) {
-                            $args[2][$key] = self::array_deep_merge($args[0][$key], $args[1][$key]);
-                        } elseif (is_string($key) and isset($args[0][$key]) and isset($args[1][$key])) {
-                            $args[2][$key] = $args[1][$key];
-                        } elseif (is_int($key) and isset($args[0][$key]) and isset($args[1][$key])) {
-                            $args[2][] = $args[0][$key];
-                            $args[2][] = $args[1][$key];
-                        } elseif (is_int($key) and isset($args[0][$key])) {
-                            $args[2][] = $args[0][$key];
-                        } elseif (is_int($key) and isset($args[1][$key])) {
-                            $args[2][] = $args[1][$key];
-                        } elseif (!isset($args[1][$key])) {
-                            $args[2][$key] = $args[0][$key];
-                        } elseif (!isset($args[0][$key])) {
-                            $args[2][$key] = $args[1][$key];
-                        }
-                    }
-                    return $args[2];
-                } else {
-                    return $args[1];
+        foreach ($overrule as $key => $_) {
+            if (isset($array[$key]) && is_array($array[$key])) {
+                if (is_array($overrule[$key])) {
+                    $array[$key] = self::mergeRecursive($array[$key], $overrule[$key]);
                 }
-                break;
-            default:
-                $args = func_get_args();
-                $args[1] = self::array_deep_merge($args[0], $args[1]);
-                array_shift($args);
-                return self::array_deep_merge(...$args);
-                break;
+            } else {
+                $array[$key] = $overrule[$key];
+            }
         }
+        reset($array);
+
+        return $array;
+    }
+
+    public static function setValueByPath(array $array, string $path, mixed $value): array
+    {
+        $delimiter = '/';
+        if ($path === '') {
+            throw new \RuntimeException('Path must not be empty', 1695053538);
+        }
+        $path = str_getcsv($path, $delimiter);
+
+        $pointer = &$array;
+        foreach ($path as $segment) {
+            if ($segment === '') {
+                throw new \RuntimeException('Invalid path segment specified', 1341406846);
+            }
+            if (is_array($pointer) && !array_key_exists($segment, $pointer)) {
+                $pointer[$segment] = [];
+            }
+            if (!is_array($pointer)) {
+                $pointer = [];
+            }
+            $pointer = &$pointer[$segment];
+        }
+        $pointer = $value;
+
+        return $array;
+    }
+
+    public static function getValueByPath(array $array, string $path): mixed
+    {
+        $delimiter = '/';
+        if ($path === '') {
+            throw new \RuntimeException('Path must not be empty', 1695053537);
+        }
+        $path = str_getcsv($path, $delimiter);
+
+        $value = $array;
+        foreach ($path as $segment) {
+            if (is_array($value) && array_key_exists($segment, $value)) {
+                $value = $value[$segment];
+            } else {
+                throw new \RuntimeException('Segment ' . $segment . ' of path ' . implode($delimiter, $path) . ' does not exist in array', 1695053538);
+            }
+        }
+
+        return $value;
+    }
+
+    public static function diffRecursive(array $array1, array $array2): array
+    {
+        $differenceArray = [];
+        foreach ($array1 as $key => $value) {
+            if (!array_key_exists($key, $array2) || (!is_array($value) && $value !== $array2[$key])) {
+                $differenceArray[$key] = $value;
+            } elseif (is_array($value)) {
+                if (is_array($array2[$key])) {
+                    $recursiveResult = self::diffRecursive($value, $array2[$key]);
+                    if (!empty($recursiveResult)) {
+                        $differenceArray[$key] = $recursiveResult;
+                    }
+                }
+            }
+        }
+        return $differenceArray;
     }
 }

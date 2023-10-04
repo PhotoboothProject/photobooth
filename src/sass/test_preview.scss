@@ -1,7 +1,5 @@
 @import 'partials/basic';
-@import 'partials/button';
 @import 'partials/video_preview';
-@import 'partials/shape';
 
 #wrapper {
   display: block;
@@ -28,51 +26,7 @@
 
 .buttonbar {
   position: absolute;
-  bottom: 0;
-  left: 4em;
+  bottom: 1rem;
+  left: 1rem;
   z-index: 100;
-  .startPreview,
-  .stopPreview,
-  .showPictureFrame,
-  .showCollageFrame,
-  .hideFrame,
-  .backBtn,
-  .setChroma {
-    position: relative;
-    padding: 10px;
-    margin: 1em;
-    text-align: center;
-    span {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      font-size: 1em;
-      bottom: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-    }
-  }
-}
-
-@media (orientation: portrait) {
-  .buttonbar {
-    bottom: -2em;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .startPreview,
-  .stopPreview,
-  .showPictureFrame,
-  .showCollageFrame,
-  .hideFrame {
-    &.btn--modern,
-    &.btn--modern_squared {
-      width: 5em;
-      height: 5em;
-    }
-  }
 }

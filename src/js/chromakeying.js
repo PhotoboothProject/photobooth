@@ -441,7 +441,7 @@ $(document).ready(function () {
 
         photoboothTools.console.log('[CHROMA CAPTURE] DOM ready');
         if (typeof rotaryController !== 'undefined') {
-            rotaryController.focusSet('#start');
+            rotaryController.focusSet('.stage[data-stage="start"]');
         }
     }
 });

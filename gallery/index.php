@@ -16,14 +16,14 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 <body class="deselect">
     <div id="wrapper">
-        <?php include PathUtility::getAbsolutePath('template/gallery.template.php'); ?>
+        <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
     </div>
 
     <script type="text/javascript">
         onStandaloneGalleryView = true;
     </script>
 
-    <?php include PathUtility::getAbsolutePath('template/send-mail.template.php'); ?>
+    <?php include PathUtility::getAbsolutePath('template/components/send-mail.php'); ?>
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>

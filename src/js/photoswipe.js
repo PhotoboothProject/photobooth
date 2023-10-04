@@ -287,7 +287,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         gallery.on('afterInit', () => {
             // photoswipe fully initialized and opening transition is running (if available)
             if (config.qr.enabled) {
-                $('#qrPswp').html('<div class="modal__body shape--' + config.ui.style + '"></div>');
+                $('#qrPswp').html('<div class="modal__body"></div>');
             }
             $('.pswp__button').addClass('rotaryfocus');
             if (!config.no_request) {

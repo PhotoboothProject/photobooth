@@ -1,0 +1,34 @@
+/**
+ * Stage
+ */
+:root {
+  --stage-background: transparent;
+  --stage-background-image: none;
+  --stage-loader-background: var(--background-countdown-color);
+  --stage-result-background: var(--background-countdown-color);
+}
+
+.stage {
+  display: none;
+  height: 100dvh;
+  width: 100dvw;
+  justify-content: center;
+  align-items: center;
+  background: var(--stage-background);
+  background-repeat: no-repeat;
+  background-image: var(--stage-background-image);
+  background-position: center center;
+  background-size: contain;
+
+  &--active {
+    display: flex;
+  }
+
+  &[data-stage='loader'] {
+    --stage-background: var(--stage-loader-background);
+  }
+
+  &[data-stage='result'] {
+    --stage-background: var(--stage-result-background);
+  }
+}

@@ -6,7 +6,7 @@ use Photobooth\Service\LanguageService;
 $languageService = LanguageService::getInstance();
 
 ?>
-<div id="filternav" class="dragscroll sidenav rotarygroup">
+<div id="filternav" class="sidenav dragscroll rotarygroup">
     <button
         type="button"
         class="sidenav-close rotaryfocus"

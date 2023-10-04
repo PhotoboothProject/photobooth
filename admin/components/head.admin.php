@@ -21,12 +21,8 @@ use Photobooth\Utility\PathUtility;
     <link rel="mask-icon" href="<?=PathUtility::getPublicPath()?>resources/img/safari-pinned-tab.svg" color="#5bbad5">
 
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/fonts.css" />
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/tailwind.admin.css"/>
 
-    <?php if (is_file(PathUtility::getPublicPath() . 'private/overrides.css')): ?>
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>private/overrides.css?v=<?php echo $config['photobooth']['version']; ?>" />
-    <?php endif; ?>
     <!-- js -->
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>node_modules/jquery/dist/jquery.min.js"></script>
         <style>

@@ -1,16 +1,55 @@
 <?php
 
-use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\ComponentUtility;
 
-?>
-<div class="stages rotarygroup" id="result">
-    <div class="resultInner hidden">
-    <?php include PathUtility::getAbsolutePath('template/components/resultsBtn.php'); ?>
-    </div>
+echo '<div class="stage rotarygroup" data-stage="result">';
+echo '<div class="resultInner">';
+echo '<div class="buttonbar">';
 
-    <?php if ($config['qr']['enabled']): ?>
-        <div id="qrCode" class="modal">
-            <div class="modal__body <?php echo $uiShape; ?>"></div>
-        </div>
-    <?php endif; ?>
-</div>
+if (!$config['button']['force_buzzer']) {
+    if ($config['picture']['enabled']) {
+        echo ComponentUtility::renderButton('newPhoto', $config['icons']['take_picture'], 'newpic');
+    }
+    if ($config['custom']['enabled']) {
+        echo ComponentUtility::renderButton('newCustom', $config['icons']['take_custom'], 'newcustom');
+    }
+    if ($config['collage']['enabled']) {
+        echo ComponentUtility::renderButton('newCollage', $config['icons']['take_collage'], 'newcollage');
+    }
+    if ($config['video']['enabled']) {
+        echo ComponentUtility::renderButton('newVideo', $config['icons']['take_video'], 'newvideo');
+    }
+}
+
+if ($config['button']['homescreen']) {
+    echo ComponentUtility::renderButton('home', $config['icons']['home'], 'homebtn');
+}
+if ($config['qr']['enabled']) {
+    echo ComponentUtility::renderButton('qr', $config['icons']['qr'], 'qrbtn');
+}
+if ($config['gallery']['enabled']) {
+    echo ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallerybtn');
+}
+if ($config['mail']['enabled']) {
+    echo ComponentUtility::renderButton('mail', $config['icons']['mail'], 'mailbtn');
+}
+if ($config['print']['from_result']) {
+    echo ComponentUtility::renderButton('print', $config['icons']['print'], 'printbtn');
+}
+if ($config['filters']['enabled']) {
+    echo ComponentUtility::renderButton('selectFilter', $config['icons']['filter'], 'imageFilter');
+}
+if ($config['picture']['allow_delete']) {
+    echo ComponentUtility::renderButton('delete', $config['icons']['delete'], 'deletebtn');
+}
+
+echo '</div>';
+echo '</div>';
+
+if ($config['qr']['enabled']) {
+    echo '<div id="qrCode" class="modal">';
+    echo '<div class="modal__body"></div>';
+    echo '</div>';
+}
+
+echo '</div>';

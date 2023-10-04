@@ -33,10 +33,10 @@ const photoBooth = (function () {
         };
 
     const api = {},
-        loader = $('#loader'),
-        startPage = $('#start'),
+        loader = $('.stage[data-stage="loader"]'),
+        startPage = $('.stage[data-stage="start"]'),
+        resultPage = $('.stage[data-stage="result"]'),
         gallery = $('#gallery'),
-        resultPage = $('#result'),
         filternav = $('#filternav'),
         ipcamView = $('#ipcam--view'),
         galimages = $('#galimages'),
@@ -102,13 +102,16 @@ const photoBooth = (function () {
     };
 
     api.reset = function () {
-        loader.css('background', config.colors.background_countdown);
-        loader.css('background-color', config.colors.background_countdown);
-        loader.removeClass('open');
+        loader.css('--stage-background', config.colors.background_countdown);
+        loader.removeClass('stage--active');
         loader.removeClass('error');
         loading.text('');
         spinner.hide();
-        resultPage.hide();
+
+        resultPage.removeClass('stage--active');
+        resultPage.attr('style', null);
+        resultPage.attr('data-img', null);
+
         photoboothTools.modal.empty('#qrCode');
         qrBtn.removeClass('active').attr('style', '');
         api.resetMailForm();
@@ -126,7 +129,7 @@ const photoBooth = (function () {
     api.init = function () {
         api.reset();
 
-        startPage.addClass('open');
+        startPage.addClass('stage--active');
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
             photoboothTools.console.logDev('Preview: core: start video (BACKGROUND) from api.init.');
@@ -136,7 +139,7 @@ const photoBooth = (function () {
         }
 
         initRemoteBuzzerFromDOM();
-        rotaryController.focusSet('#start');
+        rotaryController.focusSet(startPage);
 
         initPhotoSwipeFromDOM('#galimages');
     };
@@ -144,7 +147,7 @@ const photoBooth = (function () {
     api.navbar = {
         open: function () {
             filternav.addClass('sidenav--open');
-            rotaryController.focusSet('#filternav');
+            rotaryController.focusSet(filternav);
         },
         close: function () {
             filternav.removeClass('sidenav--open');
@@ -153,7 +156,7 @@ const photoBooth = (function () {
             filternav.toggleClass('sidenav--open');
 
             if (filternav.hasClass('sidenav--open')) {
-                rotaryController.focusSet('#filternav');
+                rotaryController.focusSet(filternav);
             }
         }
     };
@@ -449,7 +452,8 @@ const photoBooth = (function () {
             }
         }
 
-        loader.addClass('open');
+        startPage.removeClass('stage--active');
+        loader.addClass('stage--active');
 
         if (config.get_request.countdown) {
             let getMode;
@@ -519,8 +523,7 @@ const photoBooth = (function () {
             data.file = chromaFile;
         }
 
-        loader.css('background', config.colors.panel);
-        loader.css('background-color', config.colors.panel);
+        loader.css('--stage-background', config.colors.panel);
 
         api.callTakePicApi(data, retry);
     };
@@ -622,77 +625,60 @@ const photoBooth = (function () {
                     } else {
                         // collage with interruption
                         if (result.current + 1 < result.limit) {
-                            $(
-                                '<a class="btn rotaryfocus" href="#" id="btnCollageNext">' +
-                                    photoboothTools.getTranslation('nextPhoto') +
-                                    '</a>'
-                            )
-                                .appendTo('.loading')
-                                .click((ev) => {
-                                    ev.stopPropagation();
-                                    ev.preventDefault();
-
-                                    loaderImage.css('background-image', 'none');
-                                    imageUrl = '';
-                                    loaderImage.css('display', 'none');
-                                    api.thrill(PhotoStyle.COLLAGE);
-                                });
-
-                            remoteBuzzerClient.collageWaitForNext();
-                        } else {
-                            $(
-                                '<a class="btn rotaryfocus" href="#" id="btnCollageProcess">' +
-                                    photoboothTools.getTranslation('processPhoto') +
-                                    '</a>'
-                            )
-                                .appendTo('.loading')
-                                .click((ev) => {
-                                    ev.stopPropagation();
-                                    ev.preventDefault();
-
-                                    loaderImage.css('background-image', 'none');
-                                    imageUrl = '';
-                                    loaderImage.css('display', 'none');
-                                    currentCollageFile = '';
-                                    api.nextCollageNumber = 0;
-
-                                    api.processPic(result);
-                                });
-
-                            remoteBuzzerClient.collageWaitForProcessing();
-                        }
-
-                        $(
-                            '<a class="btn rotaryfocus" style="margin-left:2px" href="#">' +
-                                photoboothTools.getTranslation('retakePhoto') +
-                                '</a>'
-                        )
-                            .appendTo('.loading')
-                            .click((ev) => {
-                                ev.stopPropagation();
-                                ev.preventDefault();
+                            const takePictureButton = $('<button type="button" class="button rotaryfocus" id="btnCollageNext">')
+                            takePictureButton.append('<span class="button--icon"><i class="' + config.icons.take_picture + '"></i></span>');
+                            takePictureButton.append('<span class="button--label">' + photoboothTools.getTranslation('nextPhoto') + '</span>');
+                            takePictureButton.appendTo('.loading').on('click', (event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
                                 loaderImage.css('background-image', 'none');
                                 imageUrl = '';
                                 loaderImage.css('display', 'none');
-                                api.deleteImage(result.collage_file, () => {
-                                    setTimeout(function () {
-                                        api.nextCollageNumber = result.current;
-                                        api.thrill(PhotoStyle.COLLAGE);
-                                    }, notificationTimeout);
-                                });
+                                api.thrill(PhotoStyle.COLLAGE);
                             });
-
-                        loading
-                            .append(
-                                $('<a class="btn rotaryfocus" style="margin-left:2px" href="#">').text(
-                                    photoboothTools.getTranslation('abort')
-                                )
-                            )
-                            .click(() => {
-                                location.assign('./');
+                            remoteBuzzerClient.collageWaitForNext();
+                        } else {
+                            const collageProcessButton = $('<button type="button" class="button rotaryfocus" id="btnCollageProcess">')
+                            collageProcessButton.append('<span class="button--icon"><i class="' + config.icons.save + '"></i></span>');
+                            collageProcessButton.append('<span class="button--label">' + photoboothTools.getTranslation('processPhoto') + '</span>');
+                            collageProcessButton.appendTo('.loading').on('click', (event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
+                                loaderImage.css('background-image', 'none');
+                                imageUrl = '';
+                                loaderImage.css('display', 'none');
+                                currentCollageFile = '';
+                                api.nextCollageNumber = 0;
+                                api.processPic(result);
                             });
+                            remoteBuzzerClient.collageWaitForProcessing();
+                        }
 
-                        rotaryController.focusSet('.loading.rotarygroup');
+                        const retakeButton = $('<button type="button" class="button rotaryfocus">')
+                        retakeButton.append('<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>');
+                        retakeButton.append('<span class="button--label">' + photoboothTools.getTranslation('retakePhoto') + '</span>');
+                        retakeButton.appendTo('.loading').on('click', (event) => {
+                            event.stopPropagation();
+                            event.preventDefault();
+                            loaderImage.css('background-image', 'none');
+                            imageUrl = '';
+                            loaderImage.css('display', 'none');
+                            api.deleteImage(result.collage_file, () => {
+                                setTimeout(function () {
+                                    api.nextCollageNumber = result.current;
+                                    api.thrill(PhotoStyle.COLLAGE);
+                                }, notificationTimeout);
+                            });
+                        });
+
+                        const abortButton = $('<button type="button" class="button rotaryfocus">')
+                        abortButton.append('<span class="button--icon"><i class="' + config.icons.delete + '"></i></span>');
+                        abortButton.append('<span class="button--label">' + photoboothTools.getTranslation('abort') + '</span>');
+                        abortButton.appendTo('.loading').on('click', () => {
+                            location.assign('./');
+                        });
+
+                        rotaryController.focusSet(loader);
                     }
                 } else if (result.success === PhotoStyle.CHROMA) {
                     chromaFile = result.file;
@@ -846,8 +832,7 @@ const photoBooth = (function () {
 
         idVideoSensor.hide();
         idVideoView.hide();
-        loader.css('background', config.colors.panel);
-        loader.css('background-color', config.colors.panel);
+        loader.css('--stage-background', config.colors.panel);
         spinner.show();
         loading.text(photoboothTools.getTranslation('busyVideo'));
 
@@ -956,7 +941,6 @@ const photoBooth = (function () {
                     .appendTo(body);
             })
             .appendTo(body);
-        $(modal).addClass('shape--' + config.ui.style);
     };
 
     api.renderPic = function (filename, files) {
@@ -1022,19 +1006,18 @@ const photoBooth = (function () {
         const preloadImage = new Image();
         preloadImage.onload = () => {
             resultPage.css({
-                'background-image': `url(${imageUrl}?filter=${imgFilter})`
+                '--stage-background-image': `url(${imageUrl}?filter=${imgFilter})`
             });
             resultPage.attr('data-img', filename);
 
-            startPage.hide();
-            resultPage.show();
+            startPage.removeClass('stage--active');
+            resultPage.addClass('stage--active');
 
             api.showResultInner(true);
 
-            loader.removeClass('open');
-
-            loader.css('background-image', 'url()');
+            loader.removeClass('stage--active');
             loader.removeClass('showBackgroundImage');
+            loader.css('background-image', null);
             if (config.qr.enabled && config.qr.result != 'hidden') {
                 $(
                     '<img src="' +
@@ -1047,7 +1030,7 @@ const photoBooth = (function () {
                 ).appendTo(resultPage);
             }
             if (!filternav.hasClass('sidenav--open')) {
-                rotaryController.focusSet('#result');
+                rotaryController.focusSet(resultPage);
             }
         };
 
@@ -1131,7 +1114,7 @@ const photoBooth = (function () {
 
         setTimeout(() => {
             gallery.find('.gallery__inner').show();
-            rotaryController.focusSet('#gallery');
+            rotaryController.focusSet(gallery);
         }, 300);
     };
 
@@ -1148,9 +1131,9 @@ const photoBooth = (function () {
         api.showResultInner(true);
 
         if (resultPage.is(':visible')) {
-            rotaryController.focusSet('#result');
+            rotaryController.focusSet(resultPage);
         } else if (startPage.is(':visible')) {
-            rotaryController.focusSet('#start');
+            rotaryController.focusSet(startPage);
         }
     };
 
@@ -1226,7 +1209,7 @@ const photoBooth = (function () {
 
         api.processPic(result);
 
-        rotaryController.focusSet('#filternav');
+        rotaryController.focusSet(filternav);
     });
 
     $('.takePic, .newpic').on('click', function (e) {
@@ -1256,37 +1239,36 @@ const photoBooth = (function () {
     $('[data-command="sidenav-close"]').on('click', function (e) {
         e.preventDefault();
         api.navbar.close();
-        rotaryController.focusSet('#result');
+        rotaryController.focusSet(resultPage);
     });
 
     $('.gallery-button, .gallerybtn').on('click', function (e) {
         e.preventDefault();
-
         api.navbar.close();
         api.openGallery($(this));
     });
 
-    $('.gallery__close').on('click', function (e) {
+    $('[data-command="gallery__refresh"]').on('click', function (e) {
         e.preventDefault();
+        photoboothTools.reloadPage();
+    });
 
+    $('[data-command="gallery__close"]').on('click', function (e) {
+        e.preventDefault();
         api.closeGallery();
     });
 
     $('.mailbtn').on('click touchstart', function (e) {
         e.preventDefault();
         e.stopPropagation();
-
         const img = resultPage.attr('data-img');
-
         api.toggleMailDialog(img);
     });
 
     mailSendForm.on('submit', function (e) {
         e.preventDefault();
-
         const form = $(this);
         const submitButton = form.find('.btn');
-
         mailMessageForm.empty();
         submitButton.html('<i class="' + config.icons.mail_submit + '"></i>');
 
@@ -1341,7 +1323,7 @@ const photoBooth = (function () {
 
     resultPage.on('click', function () {
         if (!filternav.hasClass('sidenav--open')) {
-            rotaryController.focusSet('#result');
+            rotaryController.focusSet(resultPage);
         }
     });
 
@@ -1357,8 +1339,7 @@ const photoBooth = (function () {
         e.stopPropagation();
 
         photoboothTools.reloadPage();
-
-        rotaryController.focusSet('#start');
+        rotaryController.focusSet(startPage);
     });
 
     $('.cups-button').on('click', function (ev) {

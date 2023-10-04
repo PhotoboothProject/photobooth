@@ -156,8 +156,9 @@ $(function () {
         $('#gallery').addClass('scrollbar');
     }
 
-    const reloadElement = $('<a class="btn btn--' + config.ui.button + ' gallery__reload rotaryfocus">');
-    reloadElement.append('<i class="' + config.icons.refresh + '"></i>');
+    const reloadElement = $('<button class="button gallery__refresh rotaryfocus" data-command="gallery__refresh">');
+    reloadElement.append('<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>');
+    reloadElement.append('<span class="button--label">Reload</span>');
     reloadElement.attr('href', '#');
     reloadElement.on('click', () => photoboothTools.reloadPage());
     reloadElement.appendTo('.gallery__header');
