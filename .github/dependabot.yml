@@ -1,9 +1,20 @@
 version: 2
 updates:
-  # Enable version updates for npm
+  # Enable version updates for npm and composer
   - package-ecosystem: 'npm'
-    # Look for `package.json` and `lock` files in the `root` directory
     directory: '/'
-    # Check the npm registry for updates every month
+    schedule:
+      interval: 'monthly'
+    open-pull-requests-limit: 12
+  - package-ecosystem: 'composer'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+  - package-ecosystem: 'composer'
+    directory: '/tools/php-cs-fixer/'
+    schedule:
+      interval: 'monthly'
+  - package-ecosystem: 'composer'
+    directory: '/tools/phplint/'
     schedule:
       interval: 'monthly'
