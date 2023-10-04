@@ -22,7 +22,3 @@ style.setProperty('--font-color', config.colors.font);
 style.setProperty('--preview-rotation', config.preview.rotation);
 style.setProperty('--picture-frame', config.picture.htmlframe);
 style.setProperty('--collage-frame', config.collage.htmlframe);
-
-$(function () {
-    $('#wrapper').show();
-});

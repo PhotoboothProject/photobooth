@@ -4,7 +4,7 @@ use Photobooth\Utility\PathUtility;
 
 ?>
 <!-- Start Page -->
-<div class="stage" data-stage="start">
+<div class="stage rotarygroup" data-stage="start">
     <?php include PathUtility::getAbsolutePath('template/components/start.logo.php'); ?>
     <div class="startInner">
         <div class="divaussen">
@@ -55,9 +55,7 @@ use Photobooth\Utility\PathUtility;
                         <?php endif; ?>
                     </div>
                     <?php endif; ?>
-                    <div class="rotarygroup">
-                        <?php include PathUtility::getAbsolutePath('template/components/actionBtn.php'); ?>
-                    </div>
+                    <?php include PathUtility::getAbsolutePath('template/components/actionBtn.php'); ?>
                 </div>
             </div>
         </div>
