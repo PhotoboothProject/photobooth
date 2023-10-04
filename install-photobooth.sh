@@ -542,21 +542,21 @@ general_setup() {
 add_git_remote() {
     cd $INSTALLFOLDERPATH/
     info "### Checking needed remote information..."
-    if git config remote.photoboothproject.url > /dev/null; then
+    if sudo -u www-data git config remote.photoboothproject.url > /dev/null; then
         info "### photoboothproject remote exist already"
-        if git config remote.origin.url == "git@github.com:andi34/photobooth" || git config remote.origin.url == "https://github.com/andi34/photobooth.git"; then
+        if sudo -u www-data git config remote.origin.url == "git@github.com:andi34/photobooth" || sudo -u www-data git config remote.origin.url == "https://github.com/andi34/photobooth.git"; then
             info "origin remote is andi34"
         fi
     else
         info "### Adding photoboothproject remote..."
-        git remote add photoboothproject https://github.com/PhotoboothProject/photobooth.git
+        sudo -u www-data git remote add photoboothproject https://github.com/PhotoboothProject/photobooth.git
     fi
 }
 
 check_git_install() {
     cd $INSTALLFOLDERPATH
     info "### Checking for git Installation"
-    if [ "$(git rev-parse --is-inside-work-tree)" = true ]; then
+    if [ "$(sudo -u www-data git rev-parse --is-inside-work-tree)" = true ]; then
         info "### Photobooth installed via git."
         GIT_INSTALL=true
         add_git_remote
@@ -569,46 +569,46 @@ start_git_install() {
     cd $INSTALLFOLDERPATH
     info "### We are installing/updating Photobooth via git."
     info "### Ignoring filemode changes on git."
-    git config core.fileMode false
-    git fetch photoboothproject $BRANCH
-    git checkout photoboothproject/$BRANCH
+    sudo -u www-data git config core.fileMode false
+    sudo -u www-data git fetch photoboothproject $BRANCH
+    sudo -u www-data git checkout photoboothproject/$BRANCH
 
-    git submodule update --init
+    sudo -u www-data git submodule update --init
 
     if [ -f "0001-backup-changes.patch" ]; then
         info "### Trying to apply your local changes again..."
-        git am --whitespace=nowarn "0001-backup-changes.patch" && PATCH_SUCCESS=true || PATCH_SUCCESS=false
+        sudo -u www-data git am --whitespace=nowarn "0001-backup-changes.patch" && PATCH_SUCCESS=true || PATCH_SUCCESS=false
         if [ "$PATCH_SUCCESS" = true ]; then
             info "### Changes applied successfully!"
-            git reset --soft HEAD^
+            sudo -u www-data git reset --soft HEAD^
         else
             error "ERROR: can not apply your local changes automatically!"
-            git am --abort
+            sudo -u www-data git am --abort
         fi
 
-        mv 0001-backup-changes.patch $INSTALLFOLDERPATH/private/$DATE-backup-changes.patch
+        sudo -u www-data mv 0001-backup-changes.patch $INSTALLFOLDERPATH/private/$DATE-backup-changes.patch
     fi
 
     info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
-    npm install
-    npm run build
+    sudo -u www-data npm install
+    sudo -u www-data npm run build
 }
 
 start_install() {
     info "### Now we are going to install Photobooth."
     if [ $GIT_INSTALL = true ]; then
-        git clone https://github.com/PhotoboothProject/photobooth $INSTALLFOLDER
+        sudo -u www-data git clone https://github.com/PhotoboothProject/photobooth $INSTALLFOLDER
         cd $INSTALLFOLDERPATH
         add_git_remote
         start_git_install
     else
         info "### We are downloading the latest release and extracting it to $INSTALLFOLDERPATH."
-        curl -s https://api.github.com/repos/PhotoboothProject/photobooth/releases/latest |
+        sudo -u www-data curl -s https://api.github.com/repos/PhotoboothProject/photobooth/releases/latest |
             jq '.assets[].browser_download_url | select(endswith(".tar.gz"))' |
             xargs curl -L --output /tmp/photobooth-latest.tar.gz
 
-        mkdir -p $INSTALLFOLDERPATH
-        tar -xzvf /tmp/photobooth-latest.tar.gz -C $INSTALLFOLDERPATH
+        sudo -u www-data mkdir -p $INSTALLFOLDERPATH
+        sudo -u www-data tar -xzvf /tmp/photobooth-latest.tar.gz -C $INSTALLFOLDERPATH
         cd $INSTALLFOLDERPATH
     fi
 }
