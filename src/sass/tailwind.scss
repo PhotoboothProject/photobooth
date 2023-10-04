@@ -1,30 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer components {
-  .debugNavItem.isActive span.corner,
-  .navItem.isActive span.corner {
-    @apply flex;
-  }
-}
-
-code {
-  background: #eee;
-  padding: 3px 5px;
-  border-radius: 3px;
-  font-size: 14px;
-}
-
-.slideInRight {
-  animation: slideInRight 0.25s ease-in-out forwards;
-}
-
-@keyframes slideInRight {
-  0% {
-    right: -250px;
-  }
-  100% {
-    right: 10px;
-  }
-}

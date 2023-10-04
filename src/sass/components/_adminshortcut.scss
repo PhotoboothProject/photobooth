@@ -1,0 +1,34 @@
+/**
+ * Admin Shortcut
+ */
+.adminshortcut {
+  position: absolute;
+  z-index: 50;
+  height: 4rem;
+  width: 4em;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  cursor: pointer;
+
+  &--top-left {
+    top: 0rem;
+    left: 0rem;
+  }
+
+  &--top-right {
+    top: 0rem;
+    right: 0rem;
+  }
+
+  &--bottom-left {
+    bottom: 0rem;
+    left: 0rem;
+  }
+
+  &--bottom-right {
+    bottom: 0rem;
+    right: 0rem;
+  }
+}

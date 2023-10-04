@@ -83,14 +83,13 @@ if ($config['filters']['enabled']) {
 <?php
 include PathUtility::getAbsolutePath('template/components/send-mail.php');
 include PathUtility::getAbsolutePath('template/components/modal.php');
-include PathUtility::getAbsolutePath('template/components/adminShortcut.php');
 include PathUtility::getAbsolutePath('template/components/main.footer.php');
 ?>
 
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/adminshortcut.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
 
+<?php include PathUtility::getAbsolutePath('template/components/start.adminshortcut.php'); ?>
 <?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>
 </body>
 </html>
