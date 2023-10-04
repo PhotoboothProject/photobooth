@@ -12,7 +12,6 @@
 @import 'partials/input_animated';
 
 #wrapper {
-  display: none;
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -21,6 +20,17 @@
   background-image: var(--background-default);
   background-position: center center;
   background-size: cover;
+}
+
+#no_preview {
+  width: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.75em;
+  color: var(--start-font-color);
+  text-align: center;
 }
 
 #resultVideo {

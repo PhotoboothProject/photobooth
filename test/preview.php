@@ -8,7 +8,7 @@ use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Preview-Test';
-$mainStyle = 'test_preview.css';
+$mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = false;
 $remoteBuzzer = false;
 $chromaKeying = false;
@@ -30,7 +30,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         <div id="no_preview">
             <?=$languageService->translate('no_preview')?>
         </div>
-        <div class="buttonbar">
+        <div class="buttonbar buttonbar--bottom">
 <?php
 
 echo ComponentUtility::renderButton('startPreview', 'fa fa-play', 'startPreview');

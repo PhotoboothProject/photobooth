@@ -125,6 +125,14 @@
   gap: 0.5rem;
 }
 
+.buttonbar--bottom {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+  z-index: 100;
+}
+
 .buttonbar--actions {
   justify-content: flex-end;
 }
