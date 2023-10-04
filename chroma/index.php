@@ -41,7 +41,7 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
             <?php if ($config['gallery']['enabled']): ?>
                 <a href="#" class="<?php echo $btnClass ?> chromaCapture-gallery-btn rotaryfocus">
                     <i class="<?php echo $config['icons']['gallery']; ?>"></i>
-                    <?=$languageService->translate('gallery')?>
+                    <span class="text-sm whitespace-nowrap"><?=$languageService->translate('gallery')?></span>
                 </a>
             <?php endif; ?>
         </div>
@@ -71,17 +71,17 @@ foreach ($backgroundImages as $backgroundImage) {
         <div class="chroma-control-bar">
             <a href="#" class="<?php echo $btnClass; ?> takeChroma chromaCapture rotaryfocus">
                 <i class="<?php echo $config['icons']['take_picture']; ?>"></i>
-                <?=$languageService->translate('takePhoto')?>
+                <span class="text-sm whitespace-nowrap"><?=$languageService->translate('takePhoto')?></span>
             </a>
             <?php if ($config['picture']['allow_delete']): ?>
                 <a href="#" class="<?php echo $btnClass; ?> deletebtn chromaCapture">
                     <i class="<?php echo $config['icons']['delete']; ?>"></i>
-                    <?=$languageService->translate('delete')?>
+                    <span class="text-sm whitespace-nowrap"><?=$languageService->translate('delete')?></span>
                 </a>
             <?php endif; ?>
             <a href="#" class="<?php echo $btnClass; ?> reloadPage chromaCapture rotaryfocus">
                 <i class="<?php echo $config['icons']['refresh']; ?>"></i>
-                <?=$languageService->translate('reload')?>
+                <span class="text-sm whitespace-nowrap"><?=$languageService->translate('reload')?></span>
             </a>
         </div>
     </div>

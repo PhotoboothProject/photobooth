@@ -10,7 +10,7 @@ function getBoothButton($label, $icon, $command, $type = 'md')
     $btnClass = 'btn btn--' . $config['ui']['button'];
     $btnClass .= ' ' . $command;
 
-    if (($command != 'deletebtn' && $label != 'cups-button') || ($command == 'deletebtn' && $config['delete']['no_request'])) {
+    if (($command !== 'deletebtn' && $command !== 'cups-button') || ($command === 'deletebtn' && $config['delete']['no_request'])) {
         $btnClass .= ' rotaryfocus';
     }
 
@@ -18,17 +18,9 @@ function getBoothButton($label, $icon, $command, $type = 'md')
         $btnClass .= ' btn--small';
     }
 
-    if ($label == 'cups-button') {
-        $btnClass .= '" target="newwin';
-    }
-
-    if ($command == 'reload') {
-        $btnClass .= '" onclick="window.location.reload();';
-    }
-
     return '
-        <a href="#" class="' . $btnClass . '">
-            <i class="' . $icon . ' mb-2"></i>
+        <a href="#" class="' . $btnClass . '" data-command="' . $command . '">
+            <i class="' . $icon . '"></i>
             <span class="text-sm whitespace-nowrap">
             ' . $languageService->translate($label) . '
             </span>

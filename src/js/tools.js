@@ -12,6 +12,46 @@ const photoboothTools = (function () {
             config.photobooth.basePath + 'api/translations.php?ver=' + config.photobooth.version
         );
         this.translations = await result.json();
+        this.registerEvents();
+    };
+
+    api.registerEvents = () => {
+
+        document.querySelectorAll('[data-command]').forEach((button) => {
+            button.addEventListener('click', (event) => {
+                const target = event.currentTarget;
+                const data = target.dataset;
+
+                // Check if command is in list of supported events
+                // This can be dropped after all actions are migrated
+                if (!['remotebuzzer', 'reload'].includes(data.command)) {
+                    api.console.log('not supported command: ' + name);
+                    return;
+                }
+
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                const name = 'photobooth.' + data.command;
+                const detail = {
+                    trigger: target,
+                    data: Object.assign({}, data)
+                };
+
+                api.console.log('dispatch: ' + name);
+                const customEvent = new CustomEvent(name , { detail: detail });
+                document.dispatchEvent(customEvent);
+            });
+        });
+
+        document.addEventListener('photobooth.remotebuzzer', (event) => {
+            api.getRequest(window.location.protocol + '//' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port + '/commands/' + event.detail.data.action);
+        });
+
+        document.addEventListener('photobooth.reload', () => {
+            api.reloadPage();
+        });
+
     };
 
     api.console = {
