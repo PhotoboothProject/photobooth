@@ -4,8 +4,10 @@ use Photobooth\Service\LanguageService;
 
 $languageService = LanguageService::getInstance();
 
-echo '<div class="gallery__footer">' . "\n";
-echo '<div class="buttongroup">' . "\n";
+use Photobooth\Utility\ComponentUtility;
+
+echo '<div class="gallery__footer">';
+echo '<div class="buttonbar">';
 
 if ($config['button']['force_buzzer']) {
     echo '<div id="useBuzzer" class="mt-4 mb-2 text-lg lg:text-3xl">'
@@ -13,18 +15,18 @@ if ($config['button']['force_buzzer']) {
         . '</div>';
 } else {
     if ($config['picture']['enabled']) {
-        echo getBoothButton('takePhoto', $config['icons']['take_picture'], 'takePic');
+        echo ComponentUtility::renderButton('takePhoto', $config['icons']['take_picture'], 'takePic');
     }
     if ($config['custom']['enabled']) {
-        echo getBoothButton($config['custom']['btn_text'], $config['icons']['take_custom'], 'takeCustom');
+        echo ComponentUtility::renderButton($config['custom']['btn_text'], $config['icons']['take_custom'], 'takeCustom');
     }
     if ($config['collage']['enabled']) {
-        echo getBoothButton('takeCollage', $config['icons']['take_collage'], 'takeCollage');
+        echo ComponentUtility::renderButton('takeCollage', $config['icons']['take_collage'], 'takeCollage');
     }
     if ($config['video']['enabled']) {
-        echo getBoothButton('takeVideo', $config['icons']['take_video'], 'takeVideo');
+        echo ComponentUtility::renderButton('takeVideo', $config['icons']['take_video'], 'takeVideo');
     }
 }
 
-echo '</div>' . "\n";
-echo '</div>' . "\n";
+echo '</div>';
+echo '</div>';

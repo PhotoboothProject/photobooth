@@ -2,13 +2,9 @@
 
 use Photobooth\Utility\PathUtility;
 
-?>
-
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>api/config.php?v=<?= $config['photobooth']['version'] ?>"></script>
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/tools.js?v=<?= $config['photobooth']['version'] ?>"></script>
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/theme.js?v=<?= $config['photobooth']['version'] ?>"></script>
-
-<?php
+echo '<script type="text/javascript" src="' . PathUtility::getPublicPath() . 'api/config.php?v=' . $config['photobooth']['version'] . '"></script>';
+echo '<script type="text/javascript" src="' . PathUtility::getPublicPath() . 'resources/js/tools.js?v=' . $config['photobooth']['version'] . '"></script>';
+echo '<script type="text/javascript" src="' . PathUtility::getPublicPath() . 'resources/js/theme.js?v=' . $config['photobooth']['version'] . '"></script>';
 
 if ($remoteBuzzer) {
     echo '<script type="text/javascript" src="' . PathUtility::getPublicPath() . 'node_modules/socket.io-client/dist/socket.io.min.js"></script>' . "\n";

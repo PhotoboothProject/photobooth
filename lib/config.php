@@ -135,7 +135,7 @@ if (file_exists(PathUtility::getAbsolutePath('config/my.config.inc.php'))) {
         }
     }
 
-    $config = ArrayUtility::array_deep_merge($defaultConfig, $config);
+    $config = ArrayUtility::mergeRecursive($defaultConfig, $config);
 }
 
 if ($config['dev']['loglevel'] > 0) {

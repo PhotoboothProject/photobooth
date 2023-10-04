@@ -39,7 +39,7 @@ const photoboothPreview = (function () {
             wrapper.css('background-color', 'transparent');
         } else {
             wrapper.css('background-color', config.colors.panel);
-            loader.css('background-color', 'transparent');
+            loader.css('--stage-background', 'transparent');
             video.css('z-index', 99);
         }
         video.show();
@@ -206,8 +206,7 @@ const photoboothPreview = (function () {
 
     api.stopVideo = function () {
         wrapper.css('background-color', config.colors.panel);
-        loader.css('background', config.colors.panel);
-        loader.css('background-color', config.colors.panel);
+        loader.css('--stage-background', null);
         if (api.stream) {
             api.stream.getTracks()[0].stop();
             api.stream = null;
@@ -219,7 +218,7 @@ const photoboothPreview = (function () {
 
     api.setElements = function (
         videoSelector = '#video--view',
-        loaderSelector = '#loader',
+        loaderSelector = '.stage[data-stage="loader"]',
         wrapperSelector = '#wrapper',
         urlSelector = '#ipcam--view',
         pictureFrameSelector = '#picture--frame',

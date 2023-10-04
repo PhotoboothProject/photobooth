@@ -34,7 +34,6 @@ if (
     exit();
 }
 
-include PathUtility::getAbsolutePath('template/components/helper/index.php');
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 
@@ -67,24 +66,23 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 <?php
 
 include PathUtility::getAbsolutePath('template/' . $config['ui']['style'] . '.template.php');
-
-if ($config['filters']['enabled']) {
-    include PathUtility::getAbsolutePath('template/components/start.filter.php');
-}
-
 include PathUtility::getAbsolutePath('template/components/start.loader.php');
 include PathUtility::getAbsolutePath('template/components/start.results.php');
 
 if ($config['gallery']['enabled']) {
-    include PathUtility::getAbsolutePath('template/gallery.template.php');
+    include PathUtility::getAbsolutePath('template/components/gallery.php');
+}
+
+if ($config['filters']['enabled']) {
+    include PathUtility::getAbsolutePath('template/components/start.filter.php');
 }
 
 ?>
 </div>
 
 <?php
-include PathUtility::getAbsolutePath('template/send-mail.template.php');
-include PathUtility::getAbsolutePath('template/modal.template.php');
+include PathUtility::getAbsolutePath('template/components/send-mail.php');
+include PathUtility::getAbsolutePath('template/components/modal.php');
 include PathUtility::getAbsolutePath('template/components/adminShortcut.php');
 include PathUtility::getAbsolutePath('template/components/main.footer.php');
 ?>

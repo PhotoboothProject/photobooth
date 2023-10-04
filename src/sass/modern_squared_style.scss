@@ -5,16 +5,3 @@
   margin-left: auto;
   margin-right: auto;
 }
-
-.gallery {
-  &__body {
-    figure {
-      &.shape--modern_squared {
-        background-color: unset;
-        border: none;
-        border-radius: 8px;
-        box-shadow: 0 0 0.5em var(--highlight-color);
-      }
-    }
-  }
-}

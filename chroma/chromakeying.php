@@ -42,15 +42,15 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 <body data-main-image="<?=$mainimage?>">
     <div class="chromawrapper rotarygroup">
     <?php if ($keying_possible): ?>
-        <div class="canvasWrapper <?php echo $uiShape; ?> noborder initial">
-            <canvas class="<?php echo $uiShape; ?>" id="mainCanvas"></canvas>
+        <div class="canvasWrapper initial">
+            <canvas id="mainCanvas"></canvas>
         </div>
 
         <div style="padding-top:10px;text-align:center;">
         <?php
         $backgroundImages = ImageUtility::getImagesFromPath(PathUtility::getAbsolutePath($config['keying']['background_path']));
         foreach ($backgroundImages as $backgroundImage) {
-            echo '<img src="' . PathUtility::getPublicPath($backgroundImage) . '" class="backgroundPreview ' . $uiShape . ' rotaryfocus" onclick="setBackgroundImage(this.src)">';
+            echo '<img src="' . PathUtility::getPublicPath($backgroundImage) . '" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
         }
         ?>
         </div>
@@ -78,7 +78,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         </div>
     <?php endif; ?>
 
-        <?php include PathUtility::getAbsolutePath('template/modal.template.php'); ?>
+        <?php include PathUtility::getAbsolutePath('template/components/modal.php'); ?>
     </div>
 
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>

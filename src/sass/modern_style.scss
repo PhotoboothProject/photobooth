@@ -1,13 +1,5 @@
 @import 'classic_style';
 
-// Override parts from partials/_basic.scss
-html,
-body {
-  height: 100%;
-  background: #ffffff;
-  margin: 0px;
-}
-
 hr,
 hr.small {
   display: none;
@@ -28,49 +20,32 @@ hr.small {
     position: fixed;
     bottom: 0;
 
-    .homebtn {
+    button[data-command='homebtn'] {
       position: fixed;
-      left: 0;
-      top: 0;
-      bottom: auto;
-      margin: 20px;
+      top: 1rem;
+      left: 1rem;
     }
-    .gallerybtn {
+    button[data-command='gallerybtn'] {
       position: relative;
-      top: auto;
-      bottom: 0;
-      left: auto;
+      inset: auto;
     }
   }
 }
 
-#start {
+.stage[data-stage='start'] {
   .startInner {
     height: 100%;
     width: 100%;
     position: relative;
     background: none;
   }
+}
 
-  .gallery-button {
-    position: relative;
-    top: auto;
-    bottom: 0;
-    left: auto;
-  }
-
-  .fs-button {
-    position: relative;
-    top: auto;
-    bottom: 0;
-    left: 0;
-  }
-
-  .cups-button {
+[data-ui-theme='modern'] {
+  button[data-command='cups-button'] {
     position: fixed;
-    left: 5px;
-    top: 5px;
-    bottom: auto;
+    top: 1rem;
+    left: 1rem;
   }
 }
 

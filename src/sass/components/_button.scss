@@ -1,0 +1,130 @@
+/**
+ * Button
+ */
+:root {
+  --button-color: var(--button-font-color);
+  --button-background: var(--primary-color);
+  --button-font-size: 1rem;
+  --button-font-weight: 400;
+  --button-icon-size: 1rem;
+  --button-padding-y: 1rem;
+  --button-padding-x: 1rem;
+  --button-border-width: 0;
+  --button-border-color: var(--border-color);
+  --button-border-radius: 0;
+  --button-height: auto;
+  --button-width: auto;
+  --button-gap: 0.25rem;
+  --button-direction: row;
+  --button-focus-background: color-mix(in srgb, var(--button-background), var(--button-color) 20%);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --button-gap: 0.5rem;
+    --button-padding-y: 1.5rem;
+    --button-padding-x: 2.5rem;
+  }
+}
+
+.button {
+  display: inline-flex;
+  flex-direction: var(--button-direction);
+  padding: var(--button-padding-y) var(--button-padding-x);
+  gap: var(--button-gap);
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+  color: var(--button-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  height: var(--button-height);
+  width: var(--button-width);
+  border: var(--button-border-width) solid var(--button-border-color);
+  border-radius: var(--button-border-radius);
+  background: var(--button-background);
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  line-height: 1;
+
+  &.focused,
+  &:hover,
+  &:focus {
+    --button-background: var(--button-focus-background);
+  }
+
+  &--icon {
+    font-size: var(--button-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+[data-ui-button='classic_rounded'] {
+  --button-border-radius: 0.625rem;
+}
+
+[data-ui-button='modern'] {
+  --button-icon-size: 2rem;
+  --button-padding-y: 0;
+  --button-padding-x: 0;
+  --button-border-width: 2px;
+  --button-border-radius: 50%;
+  --button-width: 4rem;
+  --button-height: 4rem;
+  --button-background: linear-gradient(to bottom, var(--secondary-color), var(--primary-color) 50%);
+  --button-focus-background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--highlight-color), var(--button-color) 10%),
+    color-mix(in srgb, var(--primary-color), var(--button-color) 10%) 50%
+  );
+
+  @media (min-width: 1024px) {
+    --button-width: 5rem;
+    --button-height: 5rem;
+  }
+
+  .button--label {
+    display: none;
+  }
+}
+
+[data-ui-button='modern_squared'] {
+  --button-font-size: 0.75rem;
+  --button-icon-size: 1.5rem;
+  --button-padding-y: 0;
+  --button-padding-x: 0;
+  --button-width: 4rem;
+  --button-height: 4rem;
+  --button-gap: 0.45rem;
+  --button-border-radius: 15%;
+  --button-direction: column;
+
+  @media (min-width: 1024px) {
+    --button-icon-size: 2rem;
+    --button-width: 5rem;
+    --button-height: 5rem;
+  }
+
+  .button--label {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: calc(100% - 1rem);
+  }
+}
+
+.buttonbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.buttonbar--actions {
+  justify-content: flex-end;
+}

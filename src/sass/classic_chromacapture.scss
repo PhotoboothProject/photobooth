@@ -6,7 +6,6 @@
 @import 'partials/modal';
 @import 'partials/scrollbar';
 @import 'vendor/photoswipe';
-@import 'partials/shape';
 
 .top-bar {
   display: inline-block;
@@ -33,15 +32,6 @@
   text-align: center;
   display: none;
   padding-top: 10px;
-
-  @media (max-width: 576px) {
-    span {
-      display: none;
-    }
-    .btn {
-      margin: 0.5em;
-    }
-  }
 }
 
 #gallery .controls a.close_opengal {

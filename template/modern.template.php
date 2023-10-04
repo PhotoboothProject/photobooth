@@ -4,9 +4,9 @@ use Photobooth\Utility\PathUtility;
 
 ?>
 <!-- Start Page -->
-<div class="stages <?php echo $uiShape; ?> noborder" id="start">
+<div class="stage" data-stage="start">
     <?php include PathUtility::getAbsolutePath('template/components/start.logo.php'); ?>
-    <div class="startInner <?php echo $uiShape; ?> noborder">
+    <div class="startInner">
         <div class="divaussen">
             <div class="divinnen">
                 <div class="divinnen2">

@@ -3,6 +3,7 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\ComponentUtility;
 use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
@@ -30,30 +31,22 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
             <?=$languageService->translate('no_preview')?>
         </div>
         <div class="buttonbar">
-            <a href="#" class="<?php echo $btnClass; ?> startPreview">
-                <?=$languageService->translate('startPreview')?>
-            </a>
-            <a href="#" class="<?php echo $btnClass; ?> stopPreview">
-                <?=$languageService->translate('stopPreview')?>
-            </a>
-            <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
-            <a href="#" class="<?php echo $btnClass; ?> showPictureFrame">
-                <?=$languageService->translate('showPictureFrame')?>
-            </a>
-            <?php endif; ?>
-            <?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
-                <a href="#" class="<?php echo $btnClass; ?> showCollageFrame">
-                    <?=$languageService->translate('showCollageFrame')?>
-                </a>
-            <?php endif; ?>
-            <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe']) || $config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
-                <a href="#" class="<?php echo $btnClass; ?> hideFrame">
-                    <?=$languageService->translate('hideFrame')?>
-                </a>
-            <?php endif; ?>
-            <a href="<?php echo PathUtility::getPublicPath('test'); ?>" class="<?php echo $btnClass; ?> backBtn">
-                <?=$languageService->translate('back')?>
-            </a>
+<?php
+
+echo ComponentUtility::renderButton('startPreview', 'fa fa-play', 'startPreview');
+echo ComponentUtility::renderButton('stopPreview', 'fa fa-stop', 'stopPreview');
+if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])) {
+    echo ComponentUtility::renderButton('showPictureFrame', 'fa fa-eye', 'showPictureFrame');
+}
+if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])) {
+    echo ComponentUtility::renderButton('showCollageFrame', 'fa fa-eye', 'showCollageFrame');
+}
+if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe']) || $config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])) {
+    echo ComponentUtility::renderButton('hideFrame', 'fa fa-eye-slash', 'hideFrame');
+}
+echo ComponentUtility::renderButtonLink('back', 'fa fa-chevron-left', PathUtility::getPublicPath('test'));
+
+?>
         </div>
     </div>
 

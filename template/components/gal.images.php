@@ -38,10 +38,10 @@ if (empty($imagelist)) {
                 echo '<a href="' . PathUtility::getPublicPath($filename_photo) . '" class="gallery__img rotaryfocus" data-size="' . $imageinfo[0] . 'x' . $imageinfo[1] . '"';
                 echo ' data-pswp-width="' . $imageinfo[0] . '" data-pswp-height="' . $imageinfo[1] . '"';
                 echo ' data-med="' . PathUtility::getPublicPath($filename_thumb) . '" data-med-size="' . $imageinfoThumb[0] . 'x' . $imageinfoThumb[1] . '">' . "\n";
-                echo '<figure class="' . $uiShape . '">' . "\n";
-                echo '<img class="' . $uiShape . '" src="' . PathUtility::getPublicPath($filename_thumb) . '" alt="' . $image . '" />' . "\n";
+                echo '<figure>' . "\n";
+                echo '<img src="' . PathUtility::getPublicPath($filename_thumb) . '" alt="' . $image . '" />' . "\n";
                 if ($config['gallery']['figcaption']) {
-                    echo '<figcaption class="' . $uiShape . '">' . $date . '</figcaption>' . "\n";
+                    echo '<figcaption>' . $date . '</figcaption>' . "\n";
                 }
                 echo '</figure>' . "\n";
                 echo '</a>' . "\n";

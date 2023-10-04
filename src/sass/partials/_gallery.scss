@@ -1,4 +1,4 @@
-.gallery {
+div.gallery {
   position: fixed;
   width: 0px;
   height: 0px;
@@ -36,31 +36,29 @@
     width: 100%;
     background: var(--secondary-color);
 
-    > a {
+    .button {
+      --button-icon-size: 1.875rem;
+      --button-height: 3.125rem;
+      --button-width: 3.125rem;
       position: absolute;
-      right: 30px;
-      top: 13px;
-      color: var(--gallery-button-color);
-      font-size: 1.875em;
-      width: 50px;
-      height: 50px;
-      background: var(--primary-color);
-      text-align: center;
-      line-height: 50px;
+      right: 1rem;
+      top: 1rem;
+      &--label {
+        display: none;
+      }
     }
   }
 
   &__footer {
     width: 100%;
     height: auto;
-    max-height: 100px;
+    padding: 1rem;
     align-self: flex-end;
     bottom: 0;
     margin-top: auto;
     display: flex;
     justify-content: center;
     background: var(--secondary-color);
-    box-shadow: 0 0 1em var(--highlight-color);
   }
 
   &__body {
@@ -98,27 +96,6 @@
     border: none;
     text-align: center;
     color: var(--secondary-font-color);
-  }
-}
-
-.gallery__reload,
-.gallery__close {
-  width: 2em;
-  height: 2em;
-  line-height: 1em;
-  margin: 0;
-  span {
-    display: none;
-  }
-  .fa,
-  .material-icons {
-    font-size: 1em;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
   }
 }
 

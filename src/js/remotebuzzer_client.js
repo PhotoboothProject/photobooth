@@ -112,7 +112,7 @@ function initRemoteBuzzerFromDOM() {
                 buttonController.init();
                 rotaryController.init();
 
-                rotaryController.focusSet('#start');
+                rotaryController.focusSet('.stage[data-stage="start"]');
             } else {
                 photoboothTools.console.log(
                     'ERROR: Remote buzzer client unable to connect - Remote buzzer Server IP not defined in photobooth config!'
@@ -270,7 +270,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.print = function () {
-            if ($('#result').is(':visible')) {
+            if ($('.stage[data-stage="result"]').is(':visible')) {
                 $('.printbtn').trigger('click');
                 $('.printbtn').blur();
             } else if ($('.pswp__button--print').is(':visible')) {

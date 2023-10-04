@@ -2,10 +2,6 @@
 
 use Photobooth\DatabaseManager;
 
-$btnClass = 'btn btn--' . $config['ui']['button'];
-$btnShape = 'shape--' . $config['ui']['button'];
-$uiShape = 'shape--' . $config['ui']['style'];
-
 if (isset($photoswipe) && $photoswipe) {
     $database = new DatabaseManager();
     $database->db_file = DB_FILE;

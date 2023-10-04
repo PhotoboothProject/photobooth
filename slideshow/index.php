@@ -25,6 +25,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
                     <h1><?=$languageService->translate('slideshow')?></h1>
                 </div>
                 <?php include PathUtility::getAbsolutePath('template/components/gal.images.php'); ?>
+            </div>
         </div>
     </div>
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>

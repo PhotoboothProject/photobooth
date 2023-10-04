@@ -3,6 +3,7 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\ComponentUtility;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -26,7 +27,7 @@ $chromaKeying = true;
 $GALLERY_FOOTER = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
-$btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
+
 ?>
 <body>
 <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
@@ -34,63 +35,56 @@ $btnClass = 'btn btn--' . $config['ui']['button'] . ' chromaCapture-btn';
 <div class="chromawrapper">
     <div class="rotarygroup" id="start">
         <div class="top-bar">
-            <?php if (!$config['chromaCapture']['enabled']): ?>
-                <a href="<?=PathUtility::getPublicPath()?>index.php" class="<?php echo $btnClass; ?> chromaCapture-close-btn rotaryfocus"><i class="<?php echo $config['icons']['close']; ?>"></i></a>
-            <?php endif; ?>
-
-            <?php if ($config['gallery']['enabled']): ?>
-                <a href="#" class="<?php echo $btnClass ?> chromaCapture-gallery-btn rotaryfocus">
-                    <i class="<?php echo $config['icons']['gallery']; ?>"></i>
-                    <span class="text-sm whitespace-nowrap"><?=$languageService->translate('gallery')?></span>
-                </a>
-            <?php endif; ?>
+<?php
+    if (!$config['chromaCapture']['enabled']) {
+        echo ComponentUtility::renderButtonLink('close', $config['icons']['close'], PathUtility::getPublicPath());
+    }
+    if ($config['gallery']['enabled']) {
+        echo ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery');
+    }
+?>
         </div>
 
-        <div class="canvasWrapper <?php echo $uiShape; ?> noborder initial">
-            <canvas class="<?php echo $uiShape; ?> noborder" id="mainCanvas"></canvas>
+        <div class="canvasWrapper initial">
+            <canvas id="mainCanvas"></canvas>
         </div>
 
-        <div class="chromaNote <?php echo $uiShape ?>">
+        <div class="chromaNote">
             <?=$languageService->translate('chromaInfoBefore')?>
         </div>
 
         <?php include PathUtility::getAbsolutePath('template/components/start.loader.php'); ?>
 
         <!-- Result Page -->
-        <div class="stages" id="result"></div>
+        <div class="stage" data-stage="result"></div>
 
-        <div class="backgrounds <?php echo $uiShape ?>">
+        <div class="backgrounds">
         <?php
         $backgroundImages = ImageUtility::getImagesFromPath(PathUtility::getAbsolutePath($config['keying']['background_path']));
 foreach ($backgroundImages as $backgroundImage) {
-    echo '<img src="' . PathUtility::getPublicPath($backgroundImage) . '" class="backgroundPreview ' . $uiShape . ' rotaryfocus" onclick="setBackgroundImage(this.src)">';
+    echo '<img src="' . PathUtility::getPublicPath($backgroundImage) . '" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
 }
 ?>
         </div>
 
         <div class="chroma-control-bar">
-            <a href="#" class="<?php echo $btnClass; ?> takeChroma chromaCapture rotaryfocus">
-                <i class="<?php echo $config['icons']['take_picture']; ?>"></i>
-                <span class="text-sm whitespace-nowrap"><?=$languageService->translate('takePhoto')?></span>
-            </a>
-            <?php if ($config['picture']['allow_delete']): ?>
-                <a href="#" class="<?php echo $btnClass; ?> deletebtn chromaCapture">
-                    <i class="<?php echo $config['icons']['delete']; ?>"></i>
-                    <span class="text-sm whitespace-nowrap"><?=$languageService->translate('delete')?></span>
-                </a>
-            <?php endif; ?>
-            <a href="#" class="<?php echo $btnClass; ?> reloadPage chromaCapture rotaryfocus">
-                <i class="<?php echo $config['icons']['refresh']; ?>"></i>
-                <span class="text-sm whitespace-nowrap"><?=$languageService->translate('reload')?></span>
-            </a>
+<?php
+echo ComponentUtility::renderButton('takePhoto', $config['icons']['take_picture'], 'takeChroma');
+
+if ($config['picture']['allow_delete']) {
+    echo ComponentUtility::renderButton('delete', $config['icons']['delete'], 'deletebtn');
+}
+
+echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'reloadPage');
+?>
         </div>
     </div>
     <div class="rotarygroup">
         <div id="wrapper">
-            <?php include PathUtility::getAbsolutePath('template/gallery.template.php'); ?>
+            <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
         </div>
 
-        <?php include PathUtility::getAbsolutePath('template/send-mail.template.php'); ?>
+        <?php include PathUtility::getAbsolutePath('template/components/send-mail.php'); ?>
     </div>
 </div>
 <script type="text/javascript">
