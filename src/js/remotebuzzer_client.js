@@ -424,7 +424,10 @@ function initRemoteBuzzerFromDOM() {
                 } else if ($('#qrPswp.modal.modal--show').exists()) {
                     photoboothTools.modal.close('#qrPswp');
                 } else {
-                    $('.focused').blur().trigger('click');
+                    const element = document.querySelector('.focused');
+                    if (element) {
+                        element.click();
+                    }
                 }
             }
         };
