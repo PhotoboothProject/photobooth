@@ -5,6 +5,7 @@
     "require": {
         "php": "^8.2",
         "ext-gd": "*",
+        "ext-dom": "*",
         "ext-mbstring": "*",
         "ext-zip": "*",
         "endroid/qr-code": "^4.8",
@@ -24,6 +25,11 @@
             "Photobooth\\": "lib/src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Photobooth\\Tests\\": "tests"
+        }
+    },
     "scripts": {
         "post-install-cmd": [
             "@tools:install"
@@ -40,13 +46,18 @@
         "lint": [
             "tools/phplint/vendor/bin/phplint"
         ],
+        "phpunit": [
+            "tools/phpunit/vendor/bin/phpunit"
+        ],
         "tools:install": [
             "composer install --working-dir=tools/php-cs-fixer",
-            "composer install --working-dir=tools/phplint"
+            "composer install --working-dir=tools/phplint",
+            "composer install --working-dir=tools/phpunit"
         ],
         "tools:update": [
             "composer update -w --working-dir=tools/php-cs-fixer",
-            "composer update -w --working-dir=tools/phplint"
+            "composer update -w --working-dir=tools/phplint",
+            "composer update -w --working-dir=tools/phpunit"
         ]
     }
 }

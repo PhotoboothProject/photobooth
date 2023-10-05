@@ -29,14 +29,14 @@ function killProcessIfActive($pName, $pidFile, $logfileName, $killSig)
 // can be killed if active independent of $config['remotebuzzer']['startserver']
 killProcessIfActive(
     'remotebuzzer_server.js',
-    '..' . DIRECTORY_SEPARATOR . $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'remotebuzzer_server.pid',
+    $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'remotebuzzer_server.pid',
     $config['remotebuzzer']['logfile'],
     9
 );
 
 killProcessIfActive(
     'sync-to-drive.js',
-    '..' . DIRECTORY_SEPARATOR . $config['foldersRoot']['tmp'] . DIRECTORY_SEPARATOR . 'synctodrive_server.pid',
+    $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'synctodrive_server.pid',
     $config['synctodrive']['logfile'],
     15
 );

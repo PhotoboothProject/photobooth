@@ -57,6 +57,7 @@ COMMON_PACKAGES=(
         'gphoto2'
         'libimage-exiftool-perl'
         'nodejs'
+        'php-dom'
         'php-gd'
         'php-zip'
         'php-mbstring'

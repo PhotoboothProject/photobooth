@@ -121,7 +121,7 @@ if (isset($data['type'])) {
         }
     }
 
-    if ((new Environment())->isWindows()) {
+    if (Environment::isWindows()) {
         if (!empty($newConfig['remotebuzzer']['enabled'])) {
             $newConfig['remotebuzzer']['enabled'] = false;
             $Logger->addLogData(['remotebuzzer' => 'Remotebuzzer server unsupported on Windows.']);

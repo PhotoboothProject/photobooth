@@ -97,14 +97,14 @@ $mailTemplates = [
 
 require_once PathUtility::getAbsolutePath('config/config.inc.php');
 
-$environment = new Environment();
-$config['take_picture']['cmd'] = $cmds[$environment->getOperatingSystem()]['take_picture']['cmd'];
-$config['take_video']['cmd'] = $cmds[$environment->getOperatingSystem()]['take_video']['cmd'];
-$config['print']['cmd'] = $cmds[$environment->getOperatingSystem()]['print']['cmd'];
-$config['exiftool']['cmd'] = $cmds[$environment->getOperatingSystem()]['exiftool']['cmd'];
-$config['nodebin']['cmd'] = $cmds[$environment->getOperatingSystem()]['nodebin']['cmd'];
-$config['reboot']['cmd'] = $cmds[$environment->getOperatingSystem()]['reboot']['cmd'];
-$config['shutdown']['cmd'] = $cmds[$environment->getOperatingSystem()]['shutdown']['cmd'];
+$operatingSystem = Environment::getOperatingSystem();
+$config['take_picture']['cmd'] = $cmds[$operatingSystem]['take_picture']['cmd'];
+$config['take_video']['cmd'] = $cmds[$operatingSystem]['take_video']['cmd'];
+$config['print']['cmd'] = $cmds[$operatingSystem]['print']['cmd'];
+$config['exiftool']['cmd'] = $cmds[$operatingSystem]['exiftool']['cmd'];
+$config['nodebin']['cmd'] = $cmds[$operatingSystem]['nodebin']['cmd'];
+$config['reboot']['cmd'] = $cmds[$operatingSystem]['reboot']['cmd'];
+$config['shutdown']['cmd'] = $cmds[$operatingSystem]['shutdown']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';
 
@@ -155,8 +155,7 @@ foreach ($config['folders'] as $key => $folder) {
         $path = PathUtility::getAbsolutePath($folder);
     } else {
         $path = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $folder);
-        $config['foldersRoot'][$key] = $config['folders']['data'] . DIRECTORY_SEPARATOR . $folder;
-        $config['foldersJS'][$key] = PathUtility::getPublicPath($path);
+        $config['foldersPublic'][$key] = PathUtility::getPublicPath($path);
     }
 
     if (!file_exists($path)) {
@@ -170,8 +169,8 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = PathUtility::getAbsolutePath($path);
 }
 
-$config['foldersJS']['api'] = PathUtility::getPublicPath('api');
-$config['foldersJS']['chroma'] = PathUtility::getPublicPath('chroma');
+$config['foldersPublic']['api'] = PathUtility::getPublicPath('api');
+$config['foldersPublic']['chroma'] = PathUtility::getPublicPath('chroma');
 
 define('PRINT_DB', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'printed.csv');
 define('PRINT_LOCKFILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.lock');
@@ -190,7 +189,7 @@ if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $
 $default_font = PathUtility::getPublicPath('resources/fonts/GreatVibes-Regular.ttf');
 $default_frame = PathUtility::getPublicPath('resources/img/frames/frame.png');
 $random_frame = PathUtility::getPublicPath('api/randomImg.php?dir=demoframes');
-$default_template = realpath(PathUtility::getRootPath() . DIRECTORY_SEPARATOR . 'resources/template/index.php');
+$default_template = PathUtility::getAbsolutePath('resources/template/index.php');
 
 if (empty($config['picture']['frame'])) {
     $config['picture']['frame'] = $random_frame;

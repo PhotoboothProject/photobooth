@@ -67,7 +67,7 @@ function checkKeypadPin(pin) {
     $('.keypadLoader').addClass('flex');
 
     $.ajax({
-        url: config.foldersJS.api + '/controller.php',
+        url: config.foldersPublic.api + '/controller.php',
         type: 'POST',
         data: {
             controller: 'keypadLogin',

@@ -11,7 +11,7 @@ if (empty($_GET['filename'])) {
 }
 
 $filename = $_GET['filename'];
-$mainimage = PathUtility::getPublicPath() . $config['foldersRoot']['keying'] . DIRECTORY_SEPARATOR . $filename;
+$mainimage = PathUtility::getPublicPath($config['foldersPublic']['keying'] . DIRECTORY_SEPARATOR . $filename);
 $imginfo = @getimagesize($config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $filename);
 
 if (is_array($imginfo)) {

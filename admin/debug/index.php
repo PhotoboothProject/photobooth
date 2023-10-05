@@ -55,13 +55,12 @@ include PathUtility::getAbsolutePath('admin/components/navItem.debug.php');
                         <div class="w-full h-full flex flex-col overflow-hidden">
                             <ul class="w-full h-full flex flex-col overflow-x-hidden overflow-y-auto">
                                 <li class="flex w-full h-6 shrink-0"></li>
-                                    <?php
-                                        echo getNavItemDebug('myconfig');
+<?php
+echo getNavItemDebug('myconfig');
 echo getNavItemDebug('remotebuzzerlog');
 echo getNavItemDebug('synctodrivelog');
 echo getNavItemDebug('devlog');
-
-if ((new Environment())->isLinux()) {
+if (Environment::isLinux()) {
     echo getNavItemDebug('serverprocesses');
 }
 echo getNavItemDebug('bootconfig');
