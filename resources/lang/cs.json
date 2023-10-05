@@ -42,6 +42,7 @@
   "current_version": "Instalováno:",
   "database_rebuild": "Obnovit",
   "debugpanel": "Panel pro ladění",
+  "error.path.noimages": "Cesta nevede k žádným obrázkům",
   "folders:folders_keying": "Klíčovací složka",
   "folders:folders_print": "Tisková složka",
   "folders:folders_qrcodes": "Složka QR kódu",
