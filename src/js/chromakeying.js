@@ -200,7 +200,7 @@ function saveImage(filename, cb) {
     const dataURL = canvas.toDataURL('image/png');
     $.ajax({
         method: 'POST',
-        url: config.foldersJS.api + '/chromakeying/save.php',
+        url: config.foldersPublic.api + '/chromakeying/save.php',
         data: {
             imgData: dataURL,
             file: filename
@@ -219,7 +219,7 @@ function saveImage(filename, cb) {
                     $('.chroma-control-bar').show();
                     $('.takeChroma').hide();
                 }
-                clearCanvasAndLoadImage(config.foldersJS.images + '/' + resp.filename);
+                clearCanvasAndLoadImage(config.foldersPublic.images + '/' + resp.filename);
 
                 if (config.picture.allow_delete) {
                     $('.deletebtn').css('visibility', 'visible');

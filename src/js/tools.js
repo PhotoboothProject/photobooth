@@ -185,7 +185,7 @@ const photoboothTools = (function () {
             }
             $.ajax({
                 method: 'GET',
-                url: config.foldersJS.api + '/print.php',
+                url: config.foldersPublic.api + '/print.php',
                 data: {
                     filename: imageSrc
                 },

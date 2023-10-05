@@ -43,6 +43,9 @@ tools/*/vendor
 # phplint
 .phplint.cache
 
+# phpunit
+.phpunit.result.cache
+
 # ignore some IDE and OS files
 .ddev/
 *.iml

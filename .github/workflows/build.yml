@@ -48,6 +48,9 @@ jobs:
       - name: PHP Lint
         run: composer lint
 
+      - name: PHP Unit
+        run: composer phpunit
+
       - name: Status
         run: |
           git status

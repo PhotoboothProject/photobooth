@@ -4,25 +4,22 @@ namespace Photobooth;
 
 class Environment
 {
-    protected string $operatingSystem = '';
-
-    public function __construct()
-    {
-        $this->operatingSystem = DIRECTORY_SEPARATOR == '\\' || strtolower(substr(PHP_OS, 0, 3)) === 'win' ? 'windows' : 'linux';
-    }
-
-    public function isLinux(): bool
+    public static function isLinux(): bool
     {
         return self::getOperatingSystem() === 'linux';
     }
 
-    public function isWindows(): bool
+    public static function isWindows(): bool
     {
         return self::getOperatingSystem() === 'windows';
     }
 
-    public function getOperatingSystem(): string
+    public static function getOperatingSystem(): string
     {
-        return $this->operatingSystem;
+        return (stripos(PHP_OS, 'darwin') === false
+            && stripos(PHP_OS, 'cygwin') === false
+            && stripos(PHP_OS, 'win') !== false)
+            ? 'windows'
+            : 'linux';
     }
 }

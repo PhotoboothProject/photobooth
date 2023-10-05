@@ -24,6 +24,10 @@ indent_size = 2
 [package.json]
 indent_size = 2
 
+# .yaml
+[*.{yml,yaml}]
+indent_size = 2
+
 # .htaccess
 [.htaccess]
 indent_style = tab

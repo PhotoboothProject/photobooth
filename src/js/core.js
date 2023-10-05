@@ -370,7 +370,7 @@ const photoBooth = (function () {
         photoboothTools.console.log('Run', cmd);
 
         jQuery
-            .post(config.foldersJS.api + '/shellCommand.php', command)
+            .post(config.foldersPublic.api + '/shellCommand.php', command)
             .done(function (result) {
                 photoboothTools.console.log(cmd, 'result: ', result);
             })
@@ -548,7 +548,7 @@ const photoBooth = (function () {
         }
         startTime = new Date().getTime();
         jQuery
-            .post(config.foldersJS.api + '/capture.php', data)
+            .post(config.foldersPublic.api + '/capture.php', data)
             .done(async (result) => {
                 if (config.ui.shutter_animation) {
                     await api.shutter.stop();
@@ -579,7 +579,7 @@ const photoBooth = (function () {
                     collageFrame.hide();
                     pictureFrame.hide();
 
-                    let imageUrl = config.foldersJS.tmp + '/' + result.collage_file;
+                    let imageUrl = config.foldersPublic.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
                     const picdate = Date.now().toString();
                     preloadImage.onload = () => {
@@ -714,7 +714,7 @@ const photoBooth = (function () {
         }
         startTime = new Date().getTime();
         jQuery
-            .post(config.foldersJS.api + '/capture.php', data)
+            .post(config.foldersPublic.api + '/capture.php', data)
             .done(function (result) {
                 if (config.video.animation) {
                     videoAnimation.hide();
@@ -782,7 +782,7 @@ const photoBooth = (function () {
             (api.photoStyle === PhotoStyle.PHOTO || api.photoStyle === PhotoStyle.CUSTOM) &&
             config.picture.preview_before_processing
         ) {
-            const tempImageUrl = config.foldersJS.tmp + '/' + result.file;
+            const tempImageUrl = config.foldersPublic.tmp + '/' + result.file;
             const preloadImage = new Image();
             preloadImage.onload = () => {
                 loader.css('background-image', `url(${tempImageUrl})`);
@@ -793,7 +793,7 @@ const photoBooth = (function () {
 
         $.ajax({
             method: 'POST',
-            url: config.foldersJS.api + '/applyEffects.php',
+            url: config.foldersPublic.api + '/applyEffects.php',
             data: {
                 file: result.file,
                 filter: imgFilter,
@@ -838,7 +838,7 @@ const photoBooth = (function () {
 
         $.ajax({
             method: 'POST',
-            url: config.foldersJS.api + '/applyVideoEffects.php',
+            url: config.foldersPublic.api + '/applyVideoEffects.php',
             data: {
                 file: result.file
             },
@@ -861,7 +861,7 @@ const photoBooth = (function () {
                     const collage = data.file + '-collage.jpg';
                     const filename = data.images.includes(collage) ? collage : data.file;
                     api.renderPic(filename, data.images);
-                    const file = config.foldersJS.images + '/' + data.file;
+                    const file = config.foldersPublic.images + '/' + data.file;
                     if (!config.video.collage_only) {
                         if (config.video.gif) {
                             resultVideo.attr('src', file);
@@ -874,7 +874,7 @@ const photoBooth = (function () {
                         }
                         resultVideo.show();
                         if (config.video.qr) {
-                            resultVideoQR.attr('src', config.foldersJS.api + '/qrcode.php?filename=' + data.file);
+                            resultVideoQR.attr('src', config.foldersPublic.api + '/qrcode.php?filename=' + data.file);
                             resultVideoQR.show();
                         }
                     }
@@ -896,7 +896,7 @@ const photoBooth = (function () {
         }
         loader.hide();
 
-        const chromaimage = config.foldersJS.keying + '/' + filename;
+        const chromaimage = config.foldersPublic.keying + '/' + filename;
         setMainImage(chromaimage, true, filename);
 
         api.takingPic = false;
@@ -929,7 +929,7 @@ const photoBooth = (function () {
             .appendTo(body);
         $(
             '<img src="' +
-                config.foldersJS.api +
+                config.foldersPublic.api +
                 '/qrcode.php?filename=' +
                 filename +
                 '" alt="qr code" style="max-width: 100%;"/>'
@@ -1000,8 +1000,8 @@ const photoBooth = (function () {
 
         // if image is a video render the qr code as image (video should be displayed over this)
         const imageUrl = photoboothTools.isVideoFile(filename)
-            ? config.foldersJS.api + '/qrcode.php?filename=' + filename
-            : config.foldersJS.images + '/' + filename;
+            ? config.foldersPublic.api + '/qrcode.php?filename=' + filename
+            : config.foldersPublic.images + '/' + filename;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
@@ -1021,7 +1021,7 @@ const photoBooth = (function () {
             if (config.qr.enabled && config.qr.result != 'hidden') {
                 $(
                     '<img src="' +
-                        config.foldersJS.api +
+                        config.foldersPublic.api +
                         '/qrcode.php?filename=' +
                         filename +
                         '" alt="qr code" id="resultQR" class="' +
@@ -1081,8 +1081,8 @@ const photoBooth = (function () {
             }
         };
 
-        bigImg.src = config.foldersJS.images + '/' + imageName;
-        thumbImg.src = config.foldersJS.thumbs + '/' + imageName;
+        bigImg.src = config.foldersPublic.images + '/' + imageName;
+        thumbImg.src = config.foldersPublic.thumbs + '/' + imageName;
 
         function allLoaded() {
             const linkElement = $('<a>').html(thumbImg);
@@ -1091,8 +1091,8 @@ const photoBooth = (function () {
             linkElement.attr('data-size', bigSize);
             linkElement.attr('data-pswp-width', bigSizeW);
             linkElement.attr('data-pswp-height', bigSizeH);
-            linkElement.attr('href', config.foldersJS.images + '/' + imageName);
-            linkElement.attr('data-med', config.foldersJS.thumbs + '/' + imageName);
+            linkElement.attr('href', config.foldersPublic.images + '/' + imageName);
+            linkElement.attr('data-med', config.foldersPublic.thumbs + '/' + imageName);
             linkElement.attr('data-med-size', thumbSize);
 
             if (config.gallery.newest_first) {
@@ -1146,7 +1146,7 @@ const photoBooth = (function () {
         const errorMsg =
             photoboothTools.getTranslation('error') + '</br>' + photoboothTools.getTranslation('auto_reload');
         $.ajax({
-            url: config.foldersJS.api + '/deletePhoto.php',
+            url: config.foldersPublic.api + '/deletePhoto.php',
             method: 'POST',
             data: {
                 file: imageName
@@ -1273,7 +1273,7 @@ const photoBooth = (function () {
         submitButton.html('<i class="' + config.icons.mail_submit + '"></i>');
 
         $.ajax({
-            url: config.foldersJS.api + '/sendPic.php',
+            url: config.foldersPublic.api + '/sendPic.php',
             type: 'POST',
             data: form.serialize(),
             dataType: 'json',

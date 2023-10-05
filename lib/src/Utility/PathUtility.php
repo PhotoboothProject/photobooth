@@ -2,29 +2,44 @@
 
 namespace Photobooth\Utility;
 
+use Photobooth\Environment;
+
 class PathUtility
 {
     public static function getRootPath(): string
     {
-        return self::fixFilePath(realpath(self::fixFilePath(__DIR__ . '/../../../')) . '/');
+        return realpath(__DIR__ . '/../../../');
     }
 
     public static function getAbsolutePath(string $path = ''): string
     {
-        if (self::isAbsolutePath($path)) {
+        if ($path === '') {
+            return '';
+        }
+
+        $documentRoot = self::getRootPath();
+        $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+
+        if (self::isAbsolutePath($path) && str_starts_with($path, self::getRootPath())) {
             return $path;
         }
 
-        $path = self::fixFilePath('/' . $path);
-        $path = self::fixFilePath(str_replace(self::getRootPath(), '', $path));
-        $path = self::fixFilePath(self::getRootPath() . $path);
+        $absolutePath = $documentRoot . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+        $absolutePath = preg_replace('#' . DIRECTORY_SEPARATOR . '+#', DIRECTORY_SEPARATOR, realpath($absolutePath));
+        if ($absolutePath && strpos($absolutePath, $documentRoot) === 0) {
+            return $absolutePath;
+        }
 
-        return $path;
+        return $documentRoot . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
     }
 
     public static function isAbsolutePath(string $path): bool
     {
-        return trim($path) !== '' && realpath($path) !== false;
+        if (Environment::isWindows() && (substr($path, 1, 2) === ':/' || substr($path, 1, 2) === ':\\')) {
+            return true;
+        }
+
+        return str_starts_with($path, '/');
     }
 
     public static function isUrl(string $path): bool
@@ -38,10 +53,11 @@ class PathUtility
             return $path;
         }
 
-        $path = self::fixFilePath(self::getBaseUrl() . $path);
-        $path = self::fixFilePath(str_replace(self::getRootPath(), '', $path));
-        $path = self::fixFilePath(self::resolveRelativePath($path));
+        if (self::isAbsolutePath($path)) {
+            $path = str_replace(self::getRootPath(), '', $path);
+        }
 
+        $path = self::fixFilePath(self::getBaseUrl() . $path);
         if ($absolute) {
             $path = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '//' . $_SERVER['SERVER_NAME'] . $path;
         }
@@ -51,29 +67,13 @@ class PathUtility
 
     public static function getBaseUrl(): string
     {
-        $documentRoot = self::fixFilePath($_SERVER['DOCUMENT_ROOT']);
+        $documentRoot = realpath($_SERVER['DOCUMENT_ROOT']);
         $rootPath = self::getRootPath();
-
-        return self::fixFilePath(str_replace($documentRoot, '', $rootPath));
+        return self::fixFilePath(str_replace($documentRoot, '', $rootPath) . '/');
     }
 
     public static function fixFilePath(string $path): string
     {
         return str_replace(['\\', '//'], '/', $path);
-    }
-
-    protected static function resolveRelativePath(string $relativePath): string
-    {
-        $segments = explode('/', $relativePath);
-        $resolvedPath = '';
-        foreach ($segments as $segment) {
-            if ($segment === '..') {
-                $resolvedPath = dirname($resolvedPath);
-            } elseif ($segment !== '.') {
-                $resolvedPath .= '/' . $segment;
-            }
-        }
-
-        return $resolvedPath;
     }
 }

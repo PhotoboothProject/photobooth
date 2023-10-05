@@ -7,20 +7,13 @@ namespace Photobooth;
  */
 class Photobooth
 {
-    protected Environment $environment;
     protected string $serverIp;
     protected string $version;
 
     public function __construct()
     {
-        $this->environment = new Environment();
-        $this->serverIp = $this->environment->isLinux() ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
+        $this->serverIp = Environment::isLinux() ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
         $this->version = $this->calculatePhotoboothVersion();
-    }
-
-    public function getEnvironment(): Environment
-    {
-        return $this->environment;
     }
 
     public function getIp(): string
