@@ -41,6 +41,6 @@ require_once('../lib/configsetup.inc.php');
     <link rel="stylesheet" type="text/css" href="../node_modules/github-markdown-css/github-markdown.css">
 </head>
 <body class="markdown-body" style="padding: 5rem;">
-    <?php echo MarkdownUtility::render('docs/faq.md'); ?>
+    <?php echo MarkdownUtility::render('faq/faq.md'); ?>
 </body>
 </html>
