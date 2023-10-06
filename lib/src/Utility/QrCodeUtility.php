@@ -4,9 +4,9 @@ namespace Photobooth\Utility;
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelMedium;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Label\Margin\Margin;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Writer\Result\ResultInterface;
 
@@ -19,10 +19,10 @@ class QrCodeUtility
             ->writerOptions([])
             ->data($text)
             ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(new ErrorCorrectionLevelMedium())
+            ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
             ->size($size - (2 * $margin))
             ->margin($margin)
-            ->roundBlockSizeMode(new RoundBlockSizeModeMargin());
+            ->roundBlockSizeMode(RoundBlockSizeMode::Margin);
 
         if ($labelText !== '') {
             $builder
