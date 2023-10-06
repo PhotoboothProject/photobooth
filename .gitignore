@@ -2,7 +2,6 @@ archives/
 bower_components/
 config/*
 !config/config.inc.php
-!config/tailwind.config.js
 !config/tailwind.admin.config.js
 data/
 digicamcontrol/

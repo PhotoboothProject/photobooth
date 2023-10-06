@@ -67,6 +67,7 @@
   font-size: var(--sidenav-close-font-size);
   width: var(--sidenav-close-width);
   height: var(--sidenav-close-height);
+  border: none;
   line-height: 1;
 
   &:hover {
@@ -81,6 +82,7 @@
 }
 
 .sidenav-list-item {
+  border: none;
   padding: var(--sidenav-list-item-padding-y) var(--sidenav-list-item-padding-x);
   font-size: var(--sidenav-list-item-font-size);
   font-weight: var(--sidenav-list-item-font-weight);

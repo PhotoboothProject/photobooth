@@ -34,7 +34,6 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/iconfont/material-icons.css">
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/css/material-icons.css">
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/tailwind.css?v=<?= $config['photobooth']['version'] ?>"/>
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/fonts.css" />
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/framework.css" />
 
