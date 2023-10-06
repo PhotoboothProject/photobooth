@@ -2,8 +2,8 @@ name: Crowdin Translation Download
 
 on:
   schedule:
-    # Run on 1. day of a month at 00:00
-    - cron: '0 0 1 * *'
+    # Run every saturday at 00:00
+    - cron: '0 0 * * 6'
   workflow_dispatch:
 
 jobs:
