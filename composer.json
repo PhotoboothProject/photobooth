@@ -5,9 +5,9 @@
     "require": {
         "php": "^8.2",
         "ext-gd": "*",
-        "ext-dom": "*",
         "ext-mbstring": "*",
         "ext-zip": "*",
+        "ext-xml": "*",
         "endroid/qr-code": "^4.8",
         "league/commonmark": "^2.4",
         "phpmailer/phpmailer": "^6.8",

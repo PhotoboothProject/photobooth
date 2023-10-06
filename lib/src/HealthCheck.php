@@ -13,9 +13,9 @@ class HealthCheck
 {
     public const MINIMUM_PHP_VERSION = '8.2.0';
     public const REQUIRED_PHP_EXTENSIONS = [
-        'dom',
         'gd',
         'mbstring',
+        'xml',
         'zip'
     ];
 
