@@ -523,7 +523,7 @@ const photoBooth = (function () {
             data.file = chromaFile;
         }
 
-        loader.css('--stage-background', config.colors.panel);
+        loader.css('--stage-background', config.colors.background_countdown);
 
         api.callTakePicApi(data, retry);
     };
@@ -832,7 +832,7 @@ const photoBooth = (function () {
 
         idVideoSensor.hide();
         idVideoView.hide();
-        loader.css('--stage-background', config.colors.panel);
+        loader.css('--stage-background', config.colors.background_countdown);
         spinner.show();
         loading.text(photoboothTools.getTranslation('busyVideo'));
 
