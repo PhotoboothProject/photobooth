@@ -7,9 +7,7 @@ $languageService = LanguageService::getInstance();
 
 echo '<div class="buttonbar">';
 if ($config['button']['force_buzzer']) {
-    echo '<div id="useBuzzer" class="mt-4 mb-2 text-lg lg:text-3xl">'
-        . $languageService->translate('use_button')
-        . '</div>';
+    echo '<div class="buzzer-message">' . $languageService->translate('use_button') . '</div>';
 } else {
     if ($config['picture']['enabled']) {
         echo ComponentUtility::renderButton('takePhoto', $config['icons']['take_picture'], 'takePic');

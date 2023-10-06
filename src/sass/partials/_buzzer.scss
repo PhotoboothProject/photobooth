@@ -1,0 +1,9 @@
+.buzzer-message {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+
+  @media (min-width: 1024px) {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}

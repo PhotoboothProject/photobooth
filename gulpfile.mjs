@@ -9,12 +9,11 @@ import rename from 'gulp-rename';
 import sass from 'gulp-dart-sass';
 import tailwindcss from 'tailwindcss';
 import twAdminConfig from './config/tailwind.admin.config.mjs';
-import twConfig from './config/tailwind.config.mjs';
 
 const { parallel } = gulp;
 
 gulp.task('sass', function () {
-  const twFilter = filters(['**/*', '!tailwind.admin.scss', '!tailwind.scss']);
+  const twFilter = filters(['**/*', '!tailwind.admin.scss']);
 
   return gulp
     .src('./src/sass/**/*.scss')
@@ -31,27 +30,6 @@ gulp.task('js', function () {
       ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js']
     }))
     .pipe(gulp.dest('./resources/js'));
-});
-
-gulp.task('tailwind', function () {
-  const plugins = [
-    tailwindcss(twConfig),
-    autoprefixer(),
-  ];
-
-  return gulp
-    .src('./src/sass/tailwind.scss')
-    .pipe(sass({
-      importer: nodeSassImporter
-    }).on('error', sass.logError))
-    .pipe(rename({
-      extname: '.scss'
-    }))
-    .pipe(postcss(plugins))
-    .pipe(rename({
-      extname: '.css'
-    }))
-    .pipe(gulp.dest('./resources/css'));
 });
 
 gulp.task('tailwind-admin', function () {
@@ -94,4 +72,4 @@ gulp.task('js-admin', function () {
     .pipe(gulp.dest('./resources/js'));
 });
 
-gulp.task('default', parallel('sass', 'js', 'js-admin', 'tailwind', 'tailwind-admin'));
+gulp.task('default', parallel('sass', 'js', 'js-admin', 'tailwind-admin'));
