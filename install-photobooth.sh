@@ -56,7 +56,6 @@ NODEJS_MICRO="0"
 NEEDED_NODE_VERSION="v$NODEJS_MAJOR.$NODEJS_MINOR(.$NODEJS_MICRO or newer)"
 
 COMMON_PACKAGES=(
-        'ffmpeg'
         'gphoto2'
         'libimage-exiftool-perl'
         'nodejs'
@@ -64,13 +63,8 @@ COMMON_PACKAGES=(
         'php-xml'
         'php-zip'
         'python3'
-        'python3-gphoto2'
-        'python3-psutil'
-        'python3-zmq'
         'rsync'
         'udisks2'
-        'v4l2loopback-dkms'
-        'v4l-utils'
 )
 
 EXTRA_PACKAGES=('curl')
@@ -401,6 +395,17 @@ common_software() {
     if [ "$RUNNING_ON_PI" = true ]; then
         EXTRA_PACKAGES+=('npm')
         EXTRA_PACKAGES+=('raspberrypi-kernel-headers')
+    fi
+
+    if [ "$GPHOTO_PREVIEW" = true ]; then
+        EXTRA_PACKAGES+=(
+            'ffmpeg'
+            'python3-gphoto2'
+            'python3-psutil'
+            'python3-zmq'
+            'v4l2loopback-dkms'
+            'v4l-utils'
+        )
     fi
 
     # Additional packages
