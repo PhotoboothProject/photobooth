@@ -358,8 +358,8 @@ const photoBooth = (function () {
             data.file = chromaFile;
         }
 
-        loader.css('background', config.colors.panel);
-        loader.css('background-color', config.colors.panel);
+        loader.css('background', config.colors.background_countdown);
+        loader.css('background-color', config.colors.background_countdown);
 
         api.callTakePicApi(data, retry);
     };
