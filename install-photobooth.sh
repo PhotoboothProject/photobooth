@@ -61,6 +61,7 @@ COMMON_PACKAGES=(
         'libimage-exiftool-perl'
         'nodejs'
         'php-gd'
+        'php-xml'
         'php-zip'
         'python3'
         'python3-gphoto2'
