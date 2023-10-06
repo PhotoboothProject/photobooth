@@ -2,6 +2,7 @@
 
 use Photobooth\Service\LanguageService;
 $languageService = LanguageService::getInstance();
+?>
 
 <div id="newQrModal" class="w-full h-full fixed top-0 left-0 hidden place-items-center p-4 [&.isOpen]:grid" style="z-index:9999">
     <div class="w-full h-full absolute top-0 left-0 z-10 bg-black/60 cursor-pointer" onclick="closeQrCodeModal();"></div>
