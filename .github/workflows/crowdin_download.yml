@@ -14,10 +14,10 @@ jobs:
     steps:
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: crowdin action
-      uses: crowdin/github-action@1.4.6
+      uses: crowdin/github-action@v1.13.1
       with:
         upload_sources: true
         upload_translations: false
@@ -32,7 +32,7 @@ jobs:
         pull_request_title: '[Crowdin] Automatic translation import'
         pull_request_body: 'Automatic translation import from https://crowdin.com/project/photobooth'
         pull_request_base_branch_name: dev
-        config: 'crowdin/config.yml'
+        config: 'crowdin_config.yml'
       env:
         GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
         CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
