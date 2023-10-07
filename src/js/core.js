@@ -33,19 +33,22 @@ const photoBooth = (function () {
         };
 
     const api = {},
-        loader = $('.stage[data-stage="loader"]'),
         startPage = $('.stage[data-stage="start"]'),
+
+        loader = $('.stage[data-stage="loader"]'),
+        loaderButtonBar = loader.find('.buttonbar'),
+        loaderMessage = loader.find('.stage-message'),
+        loaderImage = loader.find('.stage-image'),
+
         resultPage = $('.stage[data-stage="result"]'),
+
         gallery = $('#gallery'),
         filternav = $('#filternav'),
         ipcamView = $('#ipcam--view'),
         galimages = $('#galimages'),
-        loading = $('.loading'),
-        loaderImage = $('.loaderImage'),
         printBtn = $('.printbtn'),
         deleteBtn = $('.deletebtn'),
         qrBtn = $('.qrbtn'),
-        resultInner = $('.resultInner'),
         videoAnimation = $('#videoAnimation'),
         resultVideo = $('#resultVideo'),
         resultVideoQR = $('#resultVideoQR'),
@@ -104,8 +107,9 @@ const photoBooth = (function () {
     api.reset = function () {
         loader.css('--stage-background', config.colors.background_countdown);
         loader.removeClass('stage--active');
-        loader.removeClass('error');
-        loading.text('');
+        loaderButtonBar.empty();
+        loaderMessage.empty();
+        loaderMessage.removeClass('stage-message--error');
         spinner.hide();
 
         resultPage.removeClass('stage--active');
@@ -353,14 +357,6 @@ const photoBooth = (function () {
         }
     };
 
-    api.showResultInner = function (flag) {
-        if (flag) {
-            resultInner.addClass('show');
-        } else {
-            resultInner.removeClass('show');
-        }
-    };
-
     api.shellCommand = function (cmd, file = '') {
         command = {
             mode: cmd,
@@ -388,7 +384,6 @@ const photoBooth = (function () {
         api.navbar.close();
         api.reset();
         api.closeGallery();
-        api.showResultInner(false);
 
         remoteBuzzerClient.inProgress(photoStyle);
         api.takingPic = true;
@@ -531,11 +526,7 @@ const photoBooth = (function () {
     api.retryTakePic = function (retry) {
         api.takingPic = false;
         retry += 1;
-        loading.append(
-            $('<p class="text-muted">').text(
-                photoboothTools.getTranslation('retry_message') + ' ' + retry + '/' + config.picture.retry_on_error
-            )
-        );
+        loaderMessage.text(photoboothTools.getTranslation('retry_message') + ' ' + retry + '/' + config.picture.retry_on_error);
         photoboothTools.console.logDev('Retry to capture image: ' + retry);
         setTimeout(() => {
             api.thrill(api.photoStyle, retry);
@@ -573,7 +564,8 @@ const photoBooth = (function () {
                     api.nextCollageNumber = result.current + 1;
 
                     spinner.hide();
-                    loading.empty();
+                    loaderButtonBar.empty();
+                    loaderMessage.empty();
                     idVideoSensor.hide();
                     idVideoView.hide();
                     collageFrame.hide();
@@ -583,10 +575,8 @@ const photoBooth = (function () {
                     const preloadImage = new Image();
                     const picdate = Date.now().toString();
                     preloadImage.onload = () => {
-                        loaderImage.css({
-                            'background-image': `url(${imageUrl}?filter=${imgFilter}&v=${picdate})`
-                        });
                         loaderImage.attr('data-img', picdate);
+                        loaderImage.css('background-image', `url(${imageUrl}?filter=${imgFilter}&v=${picdate})`);
                     };
 
                     preloadImage.src = imageUrl;
@@ -604,21 +594,23 @@ const photoBooth = (function () {
                     }
 
                     if (config.collage.continuous) {
-                        loading.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
+                        loaderMessage.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
-                                loaderImage.css('background-image', 'none');
-                                imageUrl = '';
                                 loaderImage.css('display', 'none');
+                                loaderImage.css('background-image', 'none');
+                                loaderImage.attr('data-img', null);
+                                imageUrl = '';
                                 api.thrill(PhotoStyle.COLLAGE);
                             }, continuousCollageTime);
                         } else {
                             currentCollageFile = '';
                             api.nextCollageNumber = 0;
                             setTimeout(() => {
-                                loaderImage.css('background-image', 'none');
-                                imageUrl = '';
                                 loaderImage.css('display', 'none');
+                                loaderImage.css('background-image', 'none');
+                                loaderImage.attr('data-img', null);
+                                imageUrl = '';
                                 api.processPic(result);
                             }, continuousCollageTime);
                         }
@@ -628,12 +620,13 @@ const photoBooth = (function () {
                             const takePictureButton = $('<button type="button" class="button rotaryfocus" id="btnCollageNext">')
                             takePictureButton.append('<span class="button--icon"><i class="' + config.icons.take_picture + '"></i></span>');
                             takePictureButton.append('<span class="button--label">' + photoboothTools.getTranslation('nextPhoto') + '</span>');
-                            takePictureButton.appendTo('.loading').on('click', (event) => {
+                            takePictureButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                loaderImage.css('background-image', 'none');
-                                imageUrl = '';
                                 loaderImage.css('display', 'none');
+                                loaderImage.css('background-image', 'none');
+                                loaderImage.attr('data-img', null);
+                                imageUrl = '';
                                 api.thrill(PhotoStyle.COLLAGE);
                             });
                             remoteBuzzerClient.collageWaitForNext();
@@ -641,12 +634,13 @@ const photoBooth = (function () {
                             const collageProcessButton = $('<button type="button" class="button rotaryfocus" id="btnCollageProcess">')
                             collageProcessButton.append('<span class="button--icon"><i class="' + config.icons.save + '"></i></span>');
                             collageProcessButton.append('<span class="button--label">' + photoboothTools.getTranslation('processPhoto') + '</span>');
-                            collageProcessButton.appendTo('.loading').on('click', (event) => {
+                            collageProcessButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                loaderImage.css('background-image', 'none');
-                                imageUrl = '';
                                 loaderImage.css('display', 'none');
+                                loaderImage.css('background-image', 'none');
+                                loaderImage.attr('data-img', null);
+                                imageUrl = '';
                                 currentCollageFile = '';
                                 api.nextCollageNumber = 0;
                                 api.processPic(result);
@@ -657,12 +651,13 @@ const photoBooth = (function () {
                         const retakeButton = $('<button type="button" class="button rotaryfocus">')
                         retakeButton.append('<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>');
                         retakeButton.append('<span class="button--label">' + photoboothTools.getTranslation('retakePhoto') + '</span>');
-                        retakeButton.appendTo('.loading').on('click', (event) => {
+                        retakeButton.appendTo(loaderButtonBar).on('click', (event) => {
                             event.stopPropagation();
                             event.preventDefault();
-                            loaderImage.css('background-image', 'none');
-                            imageUrl = '';
                             loaderImage.css('display', 'none');
+                            loaderImage.css('background-image', 'none');
+                            loaderImage.attr('data-img', null);
+                            imageUrl = '';
                             api.deleteImage(result.collage_file, () => {
                                 setTimeout(function () {
                                     api.nextCollageNumber = result.current;
@@ -674,7 +669,7 @@ const photoBooth = (function () {
                         const abortButton = $('<button type="button" class="button rotaryfocus">')
                         abortButton.append('<span class="button--icon"><i class="' + config.icons.delete + '"></i></span>');
                         abortButton.append('<span class="button--label">' + photoboothTools.getTranslation('abort') + '</span>');
-                        abortButton.appendTo('.loading').on('click', () => {
+                        abortButton.appendTo(loaderButtonBar).on('click', () => {
                             location.assign('./');
                         });
 
@@ -741,7 +736,8 @@ const photoBooth = (function () {
     api.errorPic = function (data) {
         setTimeout(function () {
             spinner.hide();
-            loading.empty();
+            loaderMessage.empty();
+            loaderButtonBar.empty();
             idVideoView.hide();
             idVideoSensor.hide();
             collageFrame.hide();
@@ -749,22 +745,27 @@ const photoBooth = (function () {
             if (config.video.animation) {
                 videoAnimation.hide();
             }
-            loader.addClass('error');
-            loading.append($('<p>').text(photoboothTools.getTranslation('error')));
+            loaderMessage.addClass('stage-message--error');
+            loaderMessage.append($('<p>').text(photoboothTools.getTranslation('error')));
             photoboothTools.console.log('An error occurred:', data.error);
             if (config.dev.loglevel > 1) {
-                loading.append($('<p class="text-muted">').text(data.error));
+                loaderMessage.append($('<p').text(data.error));
             }
             api.takingPic = false;
             remoteBuzzerClient.inProgress(false);
             photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
             if (config.dev.reload_on_error) {
-                loading.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
+                loaderMessage.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
                 setTimeout(function () {
                     photoboothTools.reloadPage();
                 }, notificationTimeout);
             } else {
-                loading.append($('<a class="btn" href="/">').text(photoboothTools.getTranslation('reload')));
+                const reloadButton = $('<button type="button" class="button rotaryfocus">')
+                reloadButton.append('<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>');
+                reloadButton.append('<span class="button--label">' + photoboothTools.getTranslation('reload') + '</span>');
+                reloadButton.appendTo(loaderButtonBar).on('click', () => {
+                    photoboothTools.reloadPage();
+                });
             }
         }, 500);
     };
@@ -772,7 +773,7 @@ const photoBooth = (function () {
     api.processPic = function (result) {
         startTime = new Date().getTime();
         spinner.show();
-        loading.text(
+        loaderMessage.text(
             api.photoStyle === PhotoStyle.COLLAGE
                 ? photoboothTools.getTranslation('busyCollage')
                 : photoboothTools.getTranslation('busy')
@@ -834,7 +835,7 @@ const photoBooth = (function () {
         idVideoView.hide();
         loader.css('--stage-background', config.colors.background_countdown);
         spinner.show();
-        loading.text(photoboothTools.getTranslation('busyVideo'));
+        loaderMessage.text(photoboothTools.getTranslation('busyVideo'));
 
         $.ajax({
             method: 'POST',
@@ -1013,8 +1014,6 @@ const photoBooth = (function () {
             startPage.removeClass('stage--active');
             resultPage.addClass('stage--active');
 
-            api.showResultInner(true);
-
             loader.removeClass('stage--active');
             loader.removeClass('showBackgroundImage');
             loader.css('background-image', null);
@@ -1127,8 +1126,6 @@ const photoBooth = (function () {
 
         gallery.find('.gallery__inner').hide();
         gallery.removeClass('gallery--open');
-
-        api.showResultInner(true);
 
         if (resultPage.is(':visible')) {
             rotaryController.focusSet(resultPage);

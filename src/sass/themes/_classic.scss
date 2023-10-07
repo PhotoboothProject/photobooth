@@ -1,0 +1,90 @@
+/**
+ * Classic Theme
+ */
+[data-ui-theme='classic'],
+[data-ui-theme='classic_rounded'] {
+  [data-stage='start'] {
+    .stage-inner {
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: color-mix(in srgb, var(--primary-color), transparent 75%);
+        backdrop-filter: blur(10px);
+      }
+
+      > * {
+        // workaround to allow background blur
+        position: relative;
+      }
+
+      width: auto;
+      height: auto;
+      margin-left: 2rem;
+      margin-right: 2rem;
+      max-width: 40rem;
+    }
+
+    .names {
+      text-align: center;
+    }
+
+    .names--decoration {
+      &:before,
+      &:after,
+      .names-inner:before,
+      .names-inner:after {
+        content: '';
+        display: block;
+        margin: 1rem auto;
+        border-top: 1px solid currentColor;
+      }
+      &:before,
+      &:after {
+        width: 50%;
+      }
+    }
+
+    button[data-command='gallery-button'] {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+    }
+    button[data-command='fs-button'] {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      translate: 0 calc(100% + 0.5rem);
+    }
+    button[data-command='cups-button'] {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+    }
+  }
+
+  [data-stage='result'] {
+    button[data-command='homebtn'] {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+    }
+    button[data-command='gallerybtn'] {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+    }
+  }
+}
+
+[data-ui-theme='classic_rounded'] {
+  [data-stage='start'] {
+    .stage-inner,
+    .stage-inner:before {
+      border-radius: 1rem;
+    }
+  }
+}

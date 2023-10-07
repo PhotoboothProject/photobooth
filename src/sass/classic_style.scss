@@ -82,31 +82,6 @@
   z-index: 150;
 }
 
-.resultInner {
-  display: flex;
-  position: absolute;
-  bottom: -15em;
-  left: 0;
-  right: 0;
-  justify-content: center;
-  transition: bottom 0.5s;
-  z-index: 100;
-
-  &.show {
-    bottom: 0;
-    button[data-command='homebtn'] {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-    }
-    button[data-command='gallerybtn'] {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-    }
-  }
-}
-
 .qr {
   display: none;
   width: 300px;
@@ -144,103 +119,6 @@
   clear: both;
   height: 50px;
   width: 100%;
-}
-
-.loaderImage {
-  display: none;
-  width: 90%;
-  height: 90%;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 101;
-  background: center center no-repeat;
-  background-size: contain;
-  @media (max-width: 767px) {
-    width: 80%;
-    height: 80%;
-  }
-}
-
-.stage[data-stage='start'] {
-  &.open {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .startInner {
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--start-font-color);
-    text-align: center;
-    padding: 3rem;
-    z-index: 1;
-
-    .names {
-      margin-top: 2rem;
-      margin-bottom: 5rem;
-    }
-
-    @media (max-width: 1024px) {
-      padding: 1rem;
-
-      .names {
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      p,
-      h1,
-      h2,
-      h3 {
-        margin: 0;
-        padding: 0 0.9em;
-      }
-
-      p {
-        font-size: 0.8em;
-      }
-
-      h1 {
-        font-size: 1.6em;
-      }
-
-      h2 {
-        font-size: 1.2em;
-      }
-
-      h3 {
-        font-size: 0.9em;
-      }
-    }
-
-    @media (max-width: 800px) {
-      .names {
-        margin-left: 2.5rem;
-        margin-right: 2.5rem;
-      }
-    }
-  }
-}
-
-[data-ui-theme='classic'],
-[data-ui-theme='classic_rounded'] {
-  button[data-command='gallery-button'] {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-  }
-  button[data-command='fs-button'] {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    translate: 0 calc(100% + 0.5rem);
-  }
-  button[data-command='cups-button'] {
-    position: fixed;
-    bottom: 1rem;
-    left: 1rem;
-  }
 }
 
 .sliderImages {

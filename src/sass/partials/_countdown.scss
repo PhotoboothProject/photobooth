@@ -42,22 +42,3 @@
     font-size: 5em;
   }
 }
-
-.loading {
-  position: absolute;
-  bottom: 1.5em;
-  left: 0;
-  z-index: 102;
-  color: var(--countdown-color);
-  font-size: 3.125em;
-  text-align: center;
-  width: 100%;
-
-  p {
-    margin: 0 0 0.2em;
-  }
-
-  @media (max-width: 767px) {
-    bottom: 0.5em;
-  }
-}

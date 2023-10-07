@@ -233,28 +233,24 @@ function initRemoteBuzzerFromDOM() {
 
         api.takePicture = function () {
             if (this.enabled() && config.picture.enabled) {
-                $('.resultInner').removeClass('show');
                 photoBooth.thrill('photo');
             }
         };
 
         api.takeCustom = function () {
             if (this.enabled() && config.custom.enabled) {
-                $('.resultInner').removeClass('show');
                 photoBooth.thrill('custom');
             }
         };
 
         api.takeVideo = function () {
             if (this.enabled() && config.video.enabled) {
-                $('.resultInner').removeClass('show');
                 photoBooth.thrill('video');
             }
         };
 
         api.takeCollage = function () {
             if (this.enabled() && config.collage.enabled) {
-                $('.resultInner').removeClass('show');
                 this.waitingToProcessCollage = false;
                 photoBooth.thrill('collage');
             }
@@ -282,7 +278,6 @@ function initRemoteBuzzerFromDOM() {
 
         api.move2usb = function () {
             if (this.enabled()) {
-                $('.resultInner').removeClass('show');
                 photoBooth.thrill('move2usb');
             }
         };

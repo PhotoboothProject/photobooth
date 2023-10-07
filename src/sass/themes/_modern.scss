@@ -1,0 +1,46 @@
+/**
+ * Modern Theme
+ */
+[data-ui-theme='modern'],
+[data-ui-theme='modern_squared'] {
+  [data-stage='start'] {
+    .stage-inner {
+      justify-content: flex-end;
+    }
+
+    button[data-command='cups-button'] {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+    }
+  }
+
+  [data-stage='result'] {
+    button[data-command='homebtn'] {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+    }
+  }
+}
+
+[data-ui-theme='modern'] {
+  [data-stage='start'] {
+    .stage-inner {
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+
+    .names {
+      text-align: right;
+    }
+  }
+}
+
+[data-ui-theme='modern_squared'] {
+  [data-stage='start'] {
+    .names {
+      text-align: center;
+    }
+  }
+}

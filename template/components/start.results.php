@@ -3,8 +3,8 @@
 use Photobooth\Utility\ComponentUtility;
 
 echo '<div class="stage rotarygroup" data-stage="result">';
-echo '<div class="resultInner">';
-echo '<div class="buttonbar">';
+echo '<div class="stage-inner">';
+echo '<div class="buttonbar buttonbar--bottom">';
 
 if (!$config['button']['force_buzzer']) {
     if ($config['picture']['enabled']) {
@@ -44,7 +44,6 @@ if ($config['picture']['allow_delete']) {
 }
 
 echo '</div>';
-echo '</div>';
 
 if ($config['qr']['enabled']) {
     echo '<div id="qrCode" class="modal">';
@@ -52,4 +51,5 @@ if ($config['qr']['enabled']) {
     echo '</div>';
 }
 
+echo '</div>';
 echo '</div>';

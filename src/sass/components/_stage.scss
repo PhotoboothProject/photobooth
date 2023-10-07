@@ -2,9 +2,14 @@
  * Stage
  */
 :root {
+  --stage-color: inherit;
   --stage-background: transparent;
   --stage-background-image: none;
+  --stage-start-color: var(--start-font-color);
+  --stage-start-background: transparent;
+  --stage-loader-color: inherit;
   --stage-loader-background: var(--background-countdown-color);
+  --stage-result-color: inherit;
   --stage-result-background: var(--background-countdown-color);
 }
 
@@ -14,6 +19,7 @@
   width: 100dvw;
   justify-content: center;
   align-items: center;
+  color: var(--stage-color);
   background: var(--stage-background);
   background-repeat: no-repeat;
   background-image: var(--stage-background-image);
@@ -24,11 +30,61 @@
     display: flex;
   }
 
+  &[data-stage='start'] {
+    --stage-color: var(--stage-start-color);
+    --stage-background: var(--stage-start-background);
+  }
+
   &[data-stage='loader'] {
+    --stage-color: var(--stage-loader-color);
     --stage-background: var(--stage-loader-background);
   }
 
   &[data-stage='result'] {
+    --stage-color: var(--stage-result-color);
     --stage-background: var(--stage-result-background);
+  }
+
+  &-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 2rem;
+    gap: 1rem;
+  }
+
+  &-image {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: center center no-repeat;
+    background-size: contain;
+  }
+
+  &-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    font-size: 3rem;
+    text-align: center;
+    width: calc(100% - 4rem);
+
+    &--error {
+      color: var(--error-color);
+    }
+    &--warning {
+      color: var(--warning-color);
+    }
+    &--success {
+      color: var(--success-color);
+    }
   }
 }

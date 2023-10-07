@@ -18,3 +18,34 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
+
+h1,
+h2,
+h3,
+p {
+  margin: 0.5em 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 300;
+  @media (min-width: 1024px) {
+    font-size: 3rem;
+  }
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: normal;
+}
