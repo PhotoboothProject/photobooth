@@ -46,12 +46,12 @@
 
 .modal__body {
   &.success {
-    color: green;
+    color: var(--success-color);
   }
   &.warning {
-    color: orange;
+    color: var(--warning-color);
   }
   &.error {
-    color: red;
+    color: var(--error-color);
   }
 }

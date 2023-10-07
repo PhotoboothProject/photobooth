@@ -1,4 +1,4 @@
-// Framework Start
+// Framework
 @import 'components/root';
 @import 'components/reboot';
 @import 'components/utility';
@@ -11,3 +11,7 @@
 @import 'components/countdown';
 @import 'components/cheese';
 @import 'components/shutter';
+
+// Themes
+@import 'themes/classic';
+@import 'themes/modern';
