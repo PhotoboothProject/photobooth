@@ -400,6 +400,7 @@ class Collage
                 break;
             case '2x4-2':
             case '2x4-3':
+            case '2x4-4':
                 if ($landscape) {
                     $rotate_after_creation = true;
                 }
@@ -415,7 +416,7 @@ class Collage
                     $img2RatioX = 0.235;
                     $img3RatioX = 0.43611;
                     $img4RatioX = 0.63667;
-                } else {
+                } elseif ($c->collageLayout === '2x4-3') {
                     $widthNew = $collage_height * 0.32;
                     $heightNew = $widthNew * 1.5;
 
@@ -426,6 +427,17 @@ class Collage
                     $img2RatioX = 0.27621;
                     $img3RatioX = 0.51048;
                     $img4RatioX = 0.74475;
+                } else {
+                    $widthNew = $collage_height * 0.30;
+                    $heightNew = $widthNew * 1.5;
+
+                    $shortRatioY = 0.025;
+                    $longRatioY = 0.525;
+
+                    $img1RatioX = 0.02531;
+                    $img2RatioX = 0.24080;
+                    $img3RatioX = 0.45630;
+                    $img4RatioX = 0.67178;
                 }
 
                 $pictureOptions = [
@@ -463,6 +475,7 @@ class Collage
 
                 break;
             case '2x3':
+            case '2x3-2':
                 if ($landscape) {
                     $rotate_after_creation = true;
                 }
@@ -474,8 +487,13 @@ class Collage
                 $longRatioY = 0.51;
 
                 $img1RatioX = 0.04194;
-                $img2RatioX = 0.27621;
-                $img3RatioX = 0.51048;
+                if ($c->collageLayout === '2x3') {
+                    $img2RatioX = 0.27621;
+                    $img3RatioX = 0.51048;
+                } else {
+                    $img2RatioX = 0.28597;
+                    $img3RatioX = 0.53;
+                }
 
                 $pictureOptions = [
                     [$collage_width * $img1RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
@@ -485,6 +503,48 @@ class Collage
                     [$collage_width * $img2RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
                     [$collage_width * $img3RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
                 ];
+
+                if ($c->collageLayout === '2x3-2') {
+                    $centerX = $collage_width * 0.5;
+                    $centerY = $collage_height * 0.5;
+                    $scaleFactor = 0.99;
+
+                    $pictureOptions = array_map(function ($image) use ($centerX, $centerY, $scaleFactor) {
+                        $x_top_left = $image[0];
+                        $y_top_left = $image[1];
+                        $image_width = $image[2];
+                        $image_height = $image[3];
+
+                        // Calculate the center of the current image
+                        $imageCenterX = $x_top_left + $image_width / 2;
+                        $imageCenterY = $y_top_left + $image_height / 2;
+
+                        // Calculate the vector from the group center to the image center
+                        $vectorX = $imageCenterX - $centerX;
+                        $vectorY = $imageCenterY - $centerY;
+
+                        // Scale the vector by the scale factor
+                        $vectorX *= $scaleFactor;
+                        $vectorY *= $scaleFactor;
+
+                        // Calculate the new center of the image
+                        $newImageCenterX = $centerX + $vectorX;
+                        $newImageCenterY = $centerY + $vectorY;
+
+                        // Calculate the new top left position of the image
+                        $new_x_top_left = $newImageCenterX - $image_width * $scaleFactor / 2;
+                        $new_y_top_left = $newImageCenterY - $image_height * $scaleFactor / 2;
+
+                        // Return the new position and size of the image
+                        return [
+                            $new_x_top_left,
+                            $new_y_top_left,
+                            $image_width * $scaleFactor,
+                            $image_height * $scaleFactor,
+                            90
+                        ];
+                    }, $pictureOptions);
+                }
 
                 for ($i = 0; $i < 3; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
@@ -501,12 +561,14 @@ class Collage
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
-                $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
-                $imageHandler->dashedLineStartX = $collage_width * 0.03;
-                $imageHandler->dashedLineStartY = $collage_height / 2;
-                $imageHandler->dashedLineEndX = $collage_width * 0.97;
-                $imageHandler->dashedLineEndY = $collage_height / 2;
-                $imageHandler->drawDashedLine($my_collage);
+                if ($c->collageLayout === '2x3') {
+                    $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
+                    $imageHandler->dashedLineStartX = $collage_width * 0.03;
+                    $imageHandler->dashedLineStartY = $collage_height / 2;
+                    $imageHandler->dashedLineEndX = $collage_width * 0.97;
+                    $imageHandler->dashedLineEndY = $collage_height / 2;
+                    $imageHandler->drawDashedLine($my_collage);
+                }
                 break;
             default:
                 $collageConfigFilePath = PathUtility::getAbsolutePath('private' . DIRECTORY_SEPARATOR . $c->collageLayout);
