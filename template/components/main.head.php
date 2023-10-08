@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\ThemeUtility;
 
 include PathUtility::getAbsolutePath('template/components/main.defaults.php');
 
@@ -36,8 +37,7 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/css/material-icons.css">
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/fonts.css" />
     <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/framework.css" />
-
-    <?php
+<?php
     echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'resources/css/' . $mainStyle . '?v=' . $config['photobooth']['version'] . '"/>';
 if ($photoswipe) {
     echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'node_modules/photoswipe/dist/photoswipe.css"/>' . "\n";
@@ -48,6 +48,8 @@ if ($photoswipe) {
 if (is_file(PathUtility::getAbsolutePath('private/overrides.css'))) {
     echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'private/overrides.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
 }
+
 ?>
+    <?= ThemeUtility::renderCustomUserStyle($config); ?>
     <script type="text/javascript" src="<?= PathUtility::getPublicPath() ?>node_modules/jquery/dist/jquery.min.js"></script>
 </head>
