@@ -39,8 +39,8 @@ class FileDelete
      */
     public function deleteFiles()
     {
-        foreach ($this->paths as $file) {
-            $file = $file . DIRECTORY_SEPARATOR . $this->file;
+        foreach ($this->paths as $path) {
+            $file = $path . DIRECTORY_SEPARATOR . $this->file;
             try {
                 if (is_readable($file)) {
                     if (!unlink($file)) {
