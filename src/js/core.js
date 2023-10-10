@@ -485,7 +485,6 @@ const photoBooth = (function () {
         } else if (api.photoStyle === PhotoStyle.VIDEO) {
             api.takeVideo(retry);
         } else {
-            photoboothTools.console.logDev('Capture image.');
             api.takePic(retry);
         }
     };
@@ -538,6 +537,7 @@ const photoBooth = (function () {
             await api.shutter.start();
         }
         startTime = new Date().getTime();
+        photoboothTools.console.logDev('Capture image.');
         jQuery
             .post(config.foldersPublic.api + '/capture.php', data)
             .done(async (result) => {
