@@ -17,8 +17,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 echo '<body>';
 echo '<div id="wrapper">';
-echo '<div id="trigger">';
-echo '<div class="buttonbar">';
+echo '<div class="buttonbar buttonbar--middle">';
 
 if ($config['remotebuzzer']['usebuttons']) {
     if ($config['picture']['enabled'] && $config['remotebuzzer']['picturebutton']) {
@@ -55,8 +54,6 @@ if ($config['remotebuzzer']['userotary']) {
 
 echo ComponentUtility::renderButtonLink('back', 'fa fa-chevron-left', PathUtility::getPublicPath('test'));
 
-echo '</div>';
-echo '</div>';
 echo '</div>';
 echo '</div>';
 

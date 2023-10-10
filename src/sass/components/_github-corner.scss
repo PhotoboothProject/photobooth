@@ -1,0 +1,41 @@
+// GitHub Corner
+:root {
+  --github-corner-color: var(--button-font-color);
+  --github-corner-bg: var(--primary-color);
+}
+
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
+
+.github-corner {
+  &:hover {
+    .octo-arm {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+  }
+  .octo {
+    color: var(--github-corner-color) !important;
+    fill: var(--github-corner-bg) !important;
+  }
+
+  @media (max-width: 500px) {
+    .github-corner:hover .octo-arm {
+      animation: none;
+    }
+    .github-corner .octo-arm {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+  }
+}

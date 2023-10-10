@@ -1,6 +1,25 @@
 /**
  * Base
  */
+* {
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0px;
+  background: var(--secondary-color);
+}
+
 html,
 body {
   width: 100vw;
