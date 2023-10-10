@@ -361,12 +361,6 @@ $configsetup = [
                 'bottom-right' => 'Bottom-Right',
             ],
         ],
-        'ui_github' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'name' => 'ui[github]',
-            'value' => $config['ui']['github'],
-        ],
         'event_enabled' => [
             'view' => 'basic',
             'type' => 'checkbox',

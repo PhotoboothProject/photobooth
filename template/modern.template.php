@@ -36,7 +36,5 @@ use Photobooth\Utility\PathUtility;
         <?php endif; ?>
         <?php include PathUtility::getAbsolutePath('template/components/actionBtn.php'); ?>
     </div>
-    <?php if ($config['ui']['show_fork']): ?>
-    <a href="https://github.com/<?= $config['ui']['github'] ?>/photobooth" class="github-fork-ribbon" data-ribbon="Fork me on GitHub">Fork me on GitHub</a>
-    <?php endif; ?>
+    <?php include PathUtility::getAbsolutePath('template/components/github-corner.php'); ?>
 </div>

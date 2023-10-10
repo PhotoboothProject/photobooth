@@ -117,22 +117,33 @@
   }
 }
 
+/**
+ * Buttonbar
+ */
 .buttonbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-}
 
-.buttonbar--bottom {
-  position: absolute;
-  bottom: 2rem;
-  left: 2rem;
-  right: 2rem;
-  z-index: 100;
-}
+  &--middle {
+    position: absolute;
+    top: 50%;
+    left: 2rem;
+    right: 2rem;
+    translate: 0 -50%;
+  }
 
-.buttonbar--actions {
-  justify-content: flex-end;
+  &--bottom {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    z-index: 100;
+  }
+
+  &--actions {
+    justify-content: flex-end;
+  }
 }
