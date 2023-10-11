@@ -12,19 +12,18 @@ $photoswipe = true;
 $randomImage = $config['slideshow']['randomPicture'];
 $remoteBuzzer = false;
 $chromaKeying = false;
-$GALLERY_FOOTER = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 ?>
-<body class="deselect">
+<body>
     <div id="wrapper">
         <div id="gallery" class="gallery">
-            <div class="gallery__inner">
-                <div class="gallery__header">
-                    <h1><?=$languageService->translate('slideshow')?></h1>
-                </div>
-                <?php include PathUtility::getAbsolutePath('template/components/gal.images.php'); ?>
+            <div class="gallery-header">
+                <div class="gallery-title"><h1><?=$languageService->translate('slideshow')?></h1></div>
+            </div>
+            <div class="gallery-body">
+                <?php include PathUtility::getAbsolutePath('template/components/gallery.images.php'); ?>
             </div>
         </div>
     </div>

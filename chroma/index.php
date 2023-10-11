@@ -24,12 +24,11 @@ $photoswipe = true;
 $randomImage = false;
 $remoteBuzzer = true;
 $chromaKeying = true;
-$GALLERY_FOOTER = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 ?>
-<body>
+<body class="gallery-mode--overlay ">
 <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
        autoplay playsinline></video>
 <div class="chromawrapper">
@@ -40,7 +39,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         echo ComponentUtility::renderButtonLink('close', $config['icons']['close'], PathUtility::getPublicPath());
     }
     if ($config['gallery']['enabled']) {
-        echo ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery');
+        echo ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery-button');
     }
 ?>
         </div>

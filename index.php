@@ -28,7 +28,6 @@ if (
     $randomImage = false;
     $remoteBuzzer = true;
     $chromaKeying = false;
-    $GALLERY_FOOTER = true;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
@@ -37,7 +36,7 @@ if (
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 
-<body class="deselect">
+<body class="gallery-mode--overlay ">
 
 <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
 <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['htmlframe']; ?>" alt="pictureFrame" />

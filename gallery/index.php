@@ -10,11 +10,10 @@ $photoswipe = true;
 $randomImage = false;
 $remoteBuzzer = true;
 $chromaKeying = false;
-$GALLERY_FOOTER = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
-<body class="deselect">
+<body>
     <div id="wrapper">
         <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
     </div>
