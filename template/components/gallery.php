@@ -8,16 +8,14 @@ $languageService = LanguageService::getInstance();
 
 ?>
 <div id="gallery" class="gallery rotarygroup">
-    <div class="gallery__inner">
-        <div class="gallery__header">
-            <h1><?= $languageService->translate('gallery') ?></h1>
+    <div class="gallery-header">
+        <div class="gallery-title"><h1><?= $languageService->translate('gallery') ?></h1></div>
+        <div class="gallery-actions">
             <?= ComponentUtility::renderButton('close', $config['icons']['close'], 'gallery__close') ?>
             <?= ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'gallery__refresh', true, ['class' => 'hidden']) ?>
         </div>
-        <?php include PathUtility::getAbsolutePath('template/components/gal.images.php'); ?>
-        <?php if ($GALLERY_FOOTER === true && $config['gallery']['action_footer'] === true) {
-            include PathUtility::getAbsolutePath('template/components/gal.btnFooter.php');
-        } ?>
+    </div>
+    <div class="gallery-body">
+        <?php include PathUtility::getAbsolutePath('template/components/gallery.images.php'); ?>
     </div>
 </div>
-

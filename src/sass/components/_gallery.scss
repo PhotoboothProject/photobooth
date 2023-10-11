@@ -1,0 +1,136 @@
+/**
+ * Gallery
+ */
+:root {
+  --gallery-background: var(--primary-light-color);
+  --gallery-color: var(--secondary-font-color);
+  --gallery-bar-background: var(--secondary-color);
+  --gallery-bar-color: var(--secondary-font-color);
+  --gallery-card-color: var(--secondary-font-color);
+  --gallery-card-background: var(--primary-light-color);
+  --gallery-card-border-radius: 0.25rem;
+  --gallery-card-focus-background: var(--primary-color);
+  --gallery-card-focus-color: var(--button-font-color);
+  --gallery-card-width-base: 200px;
+  --gallery-card-width-multiplier: 1;
+  --gallery-card-width: calc(var(--gallery-card-width-base) * var(--gallery-card-width-multiplier));
+  @media (min-width: 1024px) {
+    --gallery-card-width-multiplier: 1.5;
+  }
+}
+
+.gallery {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--gallery-background);
+  color: var(--gallery-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    background: var(--gallery-bar-background);
+    color: var(--gallery-bar-color);
+  }
+
+  &-body {
+    padding: 2rem;
+    flex-grow: 1;
+    overflow-y: scroll;
+  }
+
+  &-title {
+    flex-grow: 1;
+    h1 {
+      margin: 0;
+    }
+  }
+}
+
+.gallery-list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(var(--gallery-card-width), 1fr));
+
+  a {
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    border-radius: var(--gallery-card-border-radius);
+    color: var(--gallery-card-color);
+    background-color: var(--gallery-card-background);
+    box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+
+    &:active,
+    &:focus,
+    &:hover,
+    &.focused {
+      img {
+        opacity: 0.75;
+      }
+
+      --gallery-card-color: var(--gallery-card-focus-color);
+      --gallery-card-background: var(--gallery-card-focus-background);
+    }
+  }
+
+  figure {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+  }
+
+  img {
+    border: none;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  figcaption {
+    margin: 0;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    text-align: center;
+  }
+}
+
+/**
+ * Overlay
+ **/
+.gallery-mode--overlay {
+  .gallery {
+    translate: -100% 0;
+    transition: translate 0.3s ease-in-out;
+    &-body {
+      overflow: hidden;
+      height: 0;
+      width: 0;
+      flex-grow: 0;
+      padding: 0;
+    }
+
+    &.gallery--open {
+      translate: 0 0;
+
+      .gallery-body {
+        overflow-y: scroll;
+        padding: 2rem;
+        height: auto;
+        width: auto;
+        flex-grow: 1;
+      }
+    }
+  }
+}

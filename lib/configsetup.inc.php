@@ -1182,12 +1182,6 @@ $configsetup = [
             'name' => 'gallery[figcaption]',
             'value' => $config['gallery']['figcaption'],
         ],
-        'gallery_action_footer' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'gallery[action_footer]',
-            'value' => $config['gallery']['action_footer'],
-        ],
         'pswp_caption' => [
             'view' => 'basic',
             'type' => 'checkbox',

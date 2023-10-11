@@ -34,7 +34,6 @@ $mainStyle = $config['ui']['style'] . '_chromakeying.css';
 $photoswipe = false;
 $remoteBuzzer = true;
 $chromaKeying = true;
-$GALLERY_FOOTER = true;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>

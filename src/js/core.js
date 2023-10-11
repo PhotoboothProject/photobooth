@@ -1086,7 +1086,7 @@ const photoBooth = (function () {
         function allLoaded() {
             const linkElement = $('<a>').html(thumbImg);
 
-            linkElement.attr('class', 'gallery__img rotaryfocus');
+            linkElement.attr('class', 'gallery-list-item rotaryfocus');
             linkElement.attr('data-size', bigSize);
             linkElement.attr('data-pswp-width', bigSizeW);
             linkElement.attr('data-pswp-height', bigSizeH);

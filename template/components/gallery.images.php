@@ -6,9 +6,9 @@ use Photobooth\Utility\PathUtility;
 $languageService = LanguageService::getInstance();
 
 if (empty($imagelist)) {
-    echo '<h1 style="text-align:center">' . $languageService->translate('gallery_no_image') . '</h1>' . "\n";
+    echo '<h1>' . $languageService->translate('gallery_no_image') . '</h1>';
 } else {
-    echo '<div class="gallery__body" id="galimages">' . "\n";
+    echo '<div class="gallery-list" id="galimages">';
     foreach ($imagelist as $image) {
         try {
             $date = $config['ui']['branding'] . ' Gallery';
@@ -35,16 +35,16 @@ if (empty($imagelist)) {
                 if (!is_array($imageinfoThumb)) {
                     $imageinfoThumb = $imageinfo;
                 }
-                echo '<a href="' . PathUtility::getPublicPath($filename_photo) . '" class="gallery__img rotaryfocus" data-size="' . $imageinfo[0] . 'x' . $imageinfo[1] . '"';
+                echo '<a href="' . PathUtility::getPublicPath($filename_photo) . '" class="gallery-list-item rotaryfocus" data-size="' . $imageinfo[0] . 'x' . $imageinfo[1] . '"';
                 echo ' data-pswp-width="' . $imageinfo[0] . '" data-pswp-height="' . $imageinfo[1] . '"';
-                echo ' data-med="' . PathUtility::getPublicPath($filename_thumb) . '" data-med-size="' . $imageinfoThumb[0] . 'x' . $imageinfoThumb[1] . '">' . "\n";
-                echo '<figure>' . "\n";
-                echo '<img src="' . PathUtility::getPublicPath($filename_thumb) . '" alt="' . $image . '" loading="lazy" />' . "\n";
+                echo ' data-med="' . PathUtility::getPublicPath($filename_thumb) . '" data-med-size="' . $imageinfoThumb[0] . 'x' . $imageinfoThumb[1] . '">';
+                echo '<figure>';
+                echo '<img src="' . PathUtility::getPublicPath($filename_thumb) . '" alt="' . $image . '" loading="lazy" />';
                 if ($config['gallery']['figcaption']) {
-                    echo '<figcaption>' . $date . '</figcaption>' . "\n";
+                    echo '<figcaption>' . $date . '</figcaption>';
                 }
-                echo '</figure>' . "\n";
-                echo '</a>' . "\n";
+                echo '</figure>';
+                echo '</a>';
             }
         } catch (Exception $e) {
             // Empty catch block
@@ -52,4 +52,4 @@ if (empty($imagelist)) {
         }
     }
 }
-echo '</div>' . "\n";
+echo '</div>';
