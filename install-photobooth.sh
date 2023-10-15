@@ -59,6 +59,7 @@ COMMON_PACKAGES=(
         'gphoto2'
         'libimage-exiftool-perl'
         'nodejs'
+        'npm'
         'php-gd'
         'php-xml'
         'php-zip'
@@ -397,7 +398,6 @@ common_software() {
 
     # Note: raspberrypi-kernel-header are needed before v4l2loopback-dkms
     if [ "$RUNNING_ON_PI" = true ]; then
-        EXTRA_PACKAGES+=('npm')
         EXTRA_PACKAGES+=('raspberrypi-kernel-headers')
     fi
 
