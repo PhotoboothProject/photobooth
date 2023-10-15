@@ -325,13 +325,13 @@ update_nodejs() {
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         if [ $(dpkg-query -W -f='${Status}' "nodejs" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Cleanup]   Removing nodejs package"
-            apt purge -y nodejs
-            apt autoremove --purge -y
+            apt-get -qq purge -y nodejs
+            apt-get -qq autoremove --purge -y
         fi
 
         if [ $(dpkg-query -W -f='${Status}' "nodejs-doc" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Cleanup]   Removing nodejs-doc package"
-            apt purge -y nodejs-doc
+            apt-get -qq purge -y nodejs-doc
         fi
 
         if [ "$RUNNING_ON_PI" = true ]; then
@@ -342,12 +342,12 @@ update_nodejs() {
             check_nodejs
         else
             info "[Package]   Installing latest Node.js v18"
-            apt-get install -y ca-certificates curl gnupg
+            apt-get -qq install -y ca-certificates curl gnupg
             mkdir -p /etc/apt/keyrings
             curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
             echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-            apt-get update
-            apt-get install -y nodejs
+            apt-get -qq update
+            apt-get -qq install -y nodejs
             NODEJS_CHECKED=true
             check_nodejs
         fi
@@ -358,8 +358,9 @@ update_nodejs() {
 
 common_software() {
     info "### First we update your system. That's not worth mentioning."
+    apt-get -qq update
     if [[ ${PHP_VERSION} == "8.2" ]]; then
-        apt install apt-transport-https lsb-release ca-certificates software-properties-common -y
+        apt-get -qq install apt-transport-https lsb-release ca-certificates software-properties-common -y
         OS=$(lsb_release -sc);
         if [[ "${DEBIAN[@]}" =~ "${OS}" ]]; then
             wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
@@ -371,8 +372,7 @@ common_software() {
             add-apt-repository ppa:ondrej/php -y
         fi
     fi
-    apt update
-    apt upgrade -y
+    apt-get -qq update
 
     if [ "$RUN_UPDATE" = false ]; then
         info "### Photobooth needs some software to run."
@@ -437,7 +437,7 @@ common_software() {
                 rm gphoto2-updater.sh
                 rm .env
             else
-                apt install -y ${package}
+                apt-get -qq install -y ${package}
             fi
         fi
     done
@@ -449,7 +449,7 @@ common_software() {
 
 apache_webserver() {
     info "### Installing Apache Webserver..."
-    apt install -y apache2 libapache2-mod-php
+    apt-get -qq install -y apache2 libapache2-mod-php
 }
 
 nginx_webserver() {
@@ -457,7 +457,7 @@ nginx_webserver() {
     nginx_conf="/etc/nginx/nginx.conf"
 
     info "### Installing NGINX Webserver..."
-    apt install -y nginx php${PHP_VERSION} php${PHP_VERSION}-fpm
+    apt-get -qq install -y nginx php${PHP_VERSION} php${PHP_VERSION}-fpm
 
     if [ -f "${nginx_site_conf}" ]; then
         info "### Enable PHP in NGINX"
@@ -481,14 +481,14 @@ nginx_webserver() {
     else
         error "Can not find ${nginx_conf} !"
         info "Using Apache Webserver !"
-        apt remove -y nginx php${PHP_VERSION}-fpm
+        apt-get -qq remove -y nginx php${PHP_VERSION}-fpm
         apache_webserver
     fi
 }
 
 lighttpd_webserver() {
     info "### Installing Lighttpd Webserver..."
-    apt install -y lighttpd php${PHP_VERSION}-fpm
+    apt-get -qq install -y lighttpd php${PHP_VERSION}-fpm
     lighttpd-enable-mod fastcgi
     lighttpd-enable-mod fastcgi-php
 
@@ -519,7 +519,7 @@ EOF
     else
         error "Can not find ${php_conf} !"
         info "Using Apache Webserver !"
-        apt remove -y lighttpd php${PHP_VERSION}-fpm
+        apt-get -qq remove -y lighttpd php${PHP_VERSION}-fpm
         apache_webserver
     fi
 }
