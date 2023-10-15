@@ -336,13 +336,17 @@ update_nodejs() {
 
         if [ "$RUNNING_ON_PI" = true ]; then
             info "[Package]   Installing Node.js v$NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO"
-            wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
+            curl -fsSL - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
             node-install -v $NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO
             NODEJS_CHECKED=true
             check_nodejs
         else
             info "[Package]   Installing latest Node.js v18"
-            curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+            apt-get install -y ca-certificates curl gnupg
+            mkdir -p /etc/apt/keyrings
+            curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+            echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+            apt-get update
             apt-get install -y nodejs
             NODEJS_CHECKED=true
             check_nodejs
