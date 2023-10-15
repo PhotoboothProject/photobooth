@@ -545,6 +545,10 @@ general_setup() {
         info "$INSTALLFOLDERPATH not found."
     fi
 
+    mkdir -p "$INSTALLFOLDERPATH"
+    chown www-data:www-data "$INSTALLFOLDERPATH"
+    chown root:www-data /var/www
+
     PHOTOBOOTH_LOG="$INSTALLFOLDERPATH/private/install.log"
 }
 
@@ -599,6 +603,10 @@ start_git_install() {
     fi
 
     info "### Get yourself a hot beverage. The following step can take up to 15 minutes."
+    mkdir -p /var/www/.npm
+    chown www-data:www-data /var/www/.npm
+    mkdir -p /var/www/.cache
+    chown www-data:www-data /var/www/.cache
     sudo -u www-data npm install
     sudo -u www-data npm run build
 }
