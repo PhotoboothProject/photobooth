@@ -1,7 +1,10 @@
 <?php
 
+use Photobooth\Service\AssetService;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\ThemeUtility;
+
+$assetService = AssetService::getInstance();
 
 include PathUtility::getAbsolutePath('template/components/main.defaults.php');
 
@@ -21,35 +24,36 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <title><?= $pageTitle ?></title>
 
     <!-- Favicon + Android/iPhone Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="<?=PathUtility::getPublicPath()?>resources/img/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?=PathUtility::getPublicPath()?>resources/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?=PathUtility::getPublicPath()?>resources/img/favicon-16x16.png">
-    <link rel="manifest" href="<?=PathUtility::getPublicPath()?>resources/img/site.webmanifest">
-    <link rel="mask-icon" href="<?=PathUtility::getPublicPath()?>resources/img/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?=$assetService->getUrl('resources/img/apple-touch-icon.png')?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?=$assetService->getUrl('resources/img/favicon-32x32.png')?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?=$assetService->getUrl('resources/img/favicon-16x16.png')?>">
+    <link rel="manifest" href="<?=$assetService->getUrl('resources/img/site.webmanifest')?>">
+    <link rel="mask-icon" href="<?=$assetService->getUrl('resources/img/safari-pinned-tab.svg')?>" color="#5bbad5">
 
     <!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/normalize.css/normalize.css" />
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/iconfont/material-icons.css">
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/material-icons/css/material-icons.css">
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/fonts.css" />
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/framework.css" />
+    <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/normalize.css/normalize.css')?>" />
+    <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/@fortawesome/fontawesome-free/css/all.min.css')?>" />
+    <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/material-icons/iconfont/material-icons.css')?>">
+    <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/material-icons/css/material-icons.css')?>">
+    <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/fonts.css')?>" />
+    <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/framework.css')?>" />
+    <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/' . $mainStyle)?>" />
 <?php
-    echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'resources/css/' . $mainStyle . '?v=' . $config['photobooth']['version'] . '"/>';
+
 if ($photoswipe) {
-    echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'node_modules/photoswipe/dist/photoswipe.css"/>' . "\n";
+    echo '<link rel="stylesheet" href="' . $assetService->getUrl('node_modules/photoswipe/dist/photoswipe.css') . '"/>';
     if ($config['gallery']['bottom_bar']) {
-        echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'resources/css/photoswipe-bottom.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+        echo '<link rel="stylesheet" href="' . $assetService->getUrl('resources/css/photoswipe-bottom.css') . '"/>';
     }
 }
 if (is_file(PathUtility::getAbsolutePath('private/overrides.css'))) {
-    echo '<link rel="stylesheet" href="' . PathUtility::getPublicPath() . 'private/overrides.css?v=' . $config['photobooth']['version'] . '"/>' . "\n";
+    echo '<link rel="stylesheet" href="' . $assetService->getUrl('private/overrides.css') . '"/>';
 }
 
 ?>
     <?= ThemeUtility::renderCustomUserStyle($config); ?>
-    <script type="text/javascript" src="<?= PathUtility::getPublicPath() ?>node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="<?=$assetService->getUrl('node_modules/jquery/dist/jquery.min.js')?>"></script>
 </head>

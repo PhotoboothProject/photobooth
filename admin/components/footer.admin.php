@@ -1,6 +1,8 @@
 <?php
 
-use Photobooth\Utility\PathUtility;
+use Photobooth\Service\AssetService;
+
+$assetService = AssetService::getInstance();
 
 ?>
     <div class="pageLoader w-full h-full fixed top-0 left-0 z-50 hidden place-items-center [&.isActive]:grid">
@@ -13,7 +15,7 @@ use Photobooth\Utility\PathUtility;
 
     <?php echo getToast(); ?>
 
-    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>api/config.php?v=<?php echo $config['photobooth']['version']; ?>"></script>
-    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/main.admin.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script src="<?=$assetService->getUrl('api/config.php')?>"></script>
+    <script src="<?=$assetService->getUrl('resources/js/main.admin.js')?>"></script>
  </body>
 </html>

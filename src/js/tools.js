@@ -9,7 +9,10 @@ const photoboothTools = (function () {
 
     api.initialize = async function () {
         const result = await fetch(
-            config.photobooth.basePath + 'api/translations.php?ver=' + config.photobooth.version
+            config.photobooth.basePath + 'api/translations.php',
+            {
+                cache: 'no-store'
+            }
         );
         this.translations = await result.json();
         this.registerEvents();

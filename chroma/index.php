@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\ComponentUtility;
 use Photobooth\Utility\ImageUtility;
@@ -18,6 +19,7 @@ if (!(
 }
 
 $languageService = LanguageService::getInstance();
+$assetService = AssetService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Chroma capture';
 $mainStyle = $config['ui']['style'] . '_chromacapture.css';
 $photoswipe = true;
@@ -93,8 +95,8 @@ echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'relo
 
 <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
+<script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>
 
 <?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>
 </body>

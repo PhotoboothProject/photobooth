@@ -1,6 +1,8 @@
 <?php
 
-use Photobooth\Utility\PathUtility;
+use Photobooth\Service\AssetService;
+
+$assetService = AssetService::getInstance();
 
 ?>
 <!DOCTYPE html>
@@ -14,18 +16,18 @@ use Photobooth\Utility\PathUtility;
     <title><?=$pageTitle ?></title>
 
     <!-- Favicon + Android/iPhone Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="<?=PathUtility::getPublicPath()?>resources/img/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?=PathUtility::getPublicPath()?>resources/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?=PathUtility::getPublicPath()?>resources/img/favicon-16x16.png">
-    <link rel="manifest" href="<?=PathUtility::getPublicPath()?>resources/img/site.webmanifest">
-    <link rel="mask-icon" href="<?=PathUtility::getPublicPath()?>resources/img/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?=$assetService->getUrl('resources/img/apple-touch-icon.png')?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?=$assetService->getUrl('resources/img/favicon-32x32.png')?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?=$assetService->getUrl('resources/img/favicon-16x16.png')?>">
+    <link rel="manifest" href="<?=$assetService->getUrl('resources/img/site.webmanifest')?>">
+    <link rel="mask-icon" href="<?=$assetService->getUrl('resources/img/safari-pinned-tab.svg')?>" color="#5bbad5">
 
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-    <link rel="stylesheet" href="<?=PathUtility::getPublicPath()?>resources/css/tailwind.admin.css"/>
+    <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/@fortawesome/fontawesome-free/css/all.min.css')?>" />
+    <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/tailwind.admin.css')?>" />
 
     <!-- js -->
-    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>node_modules/jquery/dist/jquery.min.js"></script>
-        <style>
+    <script type="text/javascript" src="<?=$assetService->getUrl('node_modules/jquery/dist/jquery.min.js')?>"></script>
+    <style>
         :root {
             --brand-1: <?=$config['colors']['panel'];?>;
             --brand-2: <?=$config['colors']['primary_light'];?>;
