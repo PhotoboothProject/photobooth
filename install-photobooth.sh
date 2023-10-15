@@ -972,9 +972,9 @@ if [ "$FORCE_RASPBERRY_PI" = false ]; then
 fi
 
 info "### Checking internet connection..."
-if [ $(dpkg-query -W -f='${Status}' "iputils-ping" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
-    ping -c 1 -q google.com >&/dev/null
-
+if [ $(dpkg-query -W -f='${Status}' "wget" 2>/dev/null | grep -c "ok installed") -eq 1 ];
+then
+    wget -q --tries=10 --timeout=20 -O - http://google.com > /dev/null
     if [ $? -eq 0 ]; then
         info "    connected!"
     else
@@ -983,7 +983,7 @@ if [ $(dpkg-query -W -f='${Status}' "iputils-ping" 2>/dev/null | grep -c "ok ins
         exit 1
     fi
 else
-    warn "Can not check Internet connection, iputils-ping missing!"
+    warn "Can not check Internet connection, wget missing!"
 fi
 
 ############################################################
