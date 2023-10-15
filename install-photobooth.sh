@@ -290,6 +290,8 @@ check_nodejs() {
     info "[Info]      Node.js on Photobooth is only supported on v18!"
 
     if [[ -n "$major" && "$major" -ge "18" ]]; then
+        info "[Info]      Updating npm...".
+        npm install npm@latest -g
         if [[ -n "$major" && "$major" -ge "19" ]]; then
             info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
