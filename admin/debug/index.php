@@ -3,6 +3,7 @@
 require_once '../../lib/boot.php';
 
 use Photobooth\Environment;
+use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
@@ -19,6 +20,7 @@ if (!(
 require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 
 $languageService = LanguageService::getInstance();
+$assetService = AssetService::getInstance();
 $pageTitle = 'Debugpanel';
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
@@ -104,9 +106,8 @@ echo getNavItemDebug('githead');
     </div>
 </div>
 
-
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/tools.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/debugpanel.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script src="<?=$assetService->getUrl('resources/js/tools.js')?>"></script>
+<script src="<?=$assetService->getUrl('resources/js/debugpanel.js')?>"></script>
 
 <?php
     include PathUtility::getAbsolutePath('admin/components/footer.admin.php');

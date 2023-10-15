@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
@@ -35,6 +36,7 @@ require_once dirname(__DIR__) . '/lib/config.php';
 // $languageService = LanguageService::getInstance();
 // $languageService->translate('abort');
 //
+$GLOBALS[AssetService::class] = new AssetService();
 $GLOBALS[LanguageService::class] = new LanguageService(
     $config['ui']['language'] ?? 'en',
     isset($config['ui']['folders_lang']) && $config['ui']['folders_lang'] !== '' ? $config['ui']['folders_lang'] : 'resources/lang'

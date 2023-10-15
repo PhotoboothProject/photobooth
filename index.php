@@ -2,7 +2,10 @@
 
 require_once 'lib/boot.php';
 
+use Photobooth\Service\AssetService;
 use Photobooth\Utility\PathUtility;
+
+$assetService = AssetService::getInstance();
 
 if (!$config['ui']['skip_welcome']) {
     if (!is_file(PathUtility::getAbsolutePath('welcome/.skip_welcome'))) {
@@ -85,8 +88,8 @@ include PathUtility::getAbsolutePath('template/components/modal.php');
 include PathUtility::getAbsolutePath('template/components/main.footer.php');
 ?>
 
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
-<script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/core.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+<script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
+<script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>
 
 <?php include PathUtility::getAbsolutePath('template/components/start.adminshortcut.php'); ?>
 <?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>

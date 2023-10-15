@@ -2,10 +2,12 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
+$assetService = AssetService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Slideshow';
 $mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
@@ -28,6 +30,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         </div>
     </div>
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
-    <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/slideshow.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
+    <script src="<?=$assetService->getUrl('resources/js/slideshow.js')?>"></script>
 </body>
 </html>

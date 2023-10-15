@@ -14,6 +14,7 @@ resources/css/*
 !resources/css/README.md
 resources/js/*
 !resources/js/README.md
+resources/revisions.json
 src/sass/custom_chromacapture.css
 src/sass/custom_chromakeying.css
 src/sass/custom_live_chromakeying.css

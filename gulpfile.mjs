@@ -9,8 +9,9 @@ import rename from 'gulp-rename';
 import sass from 'gulp-dart-sass';
 import tailwindcss from 'tailwindcss';
 import twAdminConfig from './config/tailwind.admin.config.mjs';
-
-const { parallel } = gulp;
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
 
 gulp.task('sass', function () {
   const twFilter = filters(['**/*', '!tailwind.admin.scss']);
@@ -72,4 +73,38 @@ gulp.task('js-admin', function () {
     .pipe(gulp.dest('./resources/js'));
 });
 
-gulp.task('default', parallel('sass', 'js', 'js-admin', 'tailwind-admin'));
+async function generateAssetRevisions() {
+    const resourcesFolder = 'resources';
+    const revisionsManifest = 'resources/revisions.json';
+    const manifest = {};
+
+    const processFile = async (filePath) => {
+        const content = fs.readFileSync(filePath);
+        const sha1Hash = crypto.createHash('sha1').update(content).digest('hex');
+        const relativePath = path.relative(resourcesFolder, filePath).replace(/\\/g, '/');
+        manifest[resourcesFolder + '/' + relativePath] = sha1Hash;
+    };
+
+    const processFolder = async (folderPath) => {
+        const files = fs.readdirSync(folderPath);
+        for (const file of files) {
+            const filePath = path.join(folderPath, file);
+            const stats = fs.statSync(filePath);
+            if (stats.isDirectory()) {
+                await processFolder(filePath);
+            } else if (stats.isFile() && !filePath.endsWith('revisions.json')) {
+                await processFile(filePath);
+            }
+        }
+    };
+
+    await processFolder(resourcesFolder);
+
+    const manifestJSON = JSON.stringify(manifest, null, 2);
+    fs.writeFileSync(revisionsManifest, manifestJSON);
+}
+
+gulp.task('default', gulp.series(
+    gulp.parallel('sass', 'js', 'js-admin', 'tailwind-admin'),
+    generateAssetRevisions
+));

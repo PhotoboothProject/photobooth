@@ -6,11 +6,12 @@
         "php": "^8.2",
         "ext-gd": "*",
         "ext-mbstring": "*",
-        "ext-zip": "*",
         "ext-xml": "*",
+        "ext-zip": "*",
         "endroid/qr-code": "^5.0",
         "league/commonmark": "^2.4",
         "phpmailer/phpmailer": "^6.8",
+        "symfony/asset": "^6.3",
         "symfony/console": "^6.3",
         "symfony/translation": "^6.3"
     },
