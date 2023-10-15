@@ -59,7 +59,6 @@ COMMON_PACKAGES=(
         'gphoto2'
         'libimage-exiftool-perl'
         'nodejs'
-        'npm'
         'php-gd'
         'php-xml'
         'php-zip'
@@ -333,6 +332,11 @@ update_nodejs() {
         if [ $(dpkg-query -W -f='${Status}' "nodejs-doc" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
             info "[Cleanup]   Removing nodejs-doc package"
             apt-get -qq purge -y nodejs-doc
+        fi
+
+        if [ $(dpkg-query -W -f='${Status}' "libnode72" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+            info "[Cleanup]   Removing libnode72 package"
+            apt-get -qq purge -y libnode72
         fi
 
         if [ "$RUNNING_ON_PI" = true ]; then
