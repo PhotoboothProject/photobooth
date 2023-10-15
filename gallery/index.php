@@ -24,6 +24,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
     </script>
 
     <?php include PathUtility::getAbsolutePath('template/components/send-mail.php'); ?>
+    <?php include PathUtility::getAbsolutePath('template/components/modal.php'); ?>
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
     <script type="text/javascript" src="<?=PathUtility::getPublicPath()?>resources/js/preview.js?v=<?php echo $config['photobooth']['version']; ?>"></script>
