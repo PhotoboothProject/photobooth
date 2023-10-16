@@ -369,7 +369,12 @@ update_nodejs() {
 }
 
 proof_npm() {
-    if [ "$(npm -v)" \>= "9.6.0" ]; then
+    npm_version=$(npm -v)
+    major=$(echo "$npm_version" | cut -d. -f1)
+    minor=$(echo "$npm_version" | cut -d. -f2)
+    patch=$(echo "$npm_version" | cut -d. -f3)
+    info "[Info]      Found npm $npm_version"
+    if [ "$major" -gt 9 ] || [ "$major" -eq 9 -a "$minor" -ge 6 ]; then
         info "[Info]      npm version matches our requirements."
         NPM_CHECKED=true
     else
