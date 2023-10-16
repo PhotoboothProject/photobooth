@@ -287,22 +287,21 @@ check_nodejs() {
     minor=${VER[1]}
     micro=${VER[2]}
 
-    info "[Info]      Node.js on Photobooth is only supported on v18!"
+    info "[Info]      Node.js on Photobooth is only supported on v$NODEJS_MAJOR.$NODEJS_MINOR!"
     info "[Info]      Found Node.js $NODE_VERSION".
 
     if [[ -n "$major" && "$major" -ge "$NODEJS_MAJOR" ]]; then
         if [[ -n "$major" && "$major" -ge "19" ]]; then
             info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
-                error "[ERROR]     Downgrade was not possible. Aborting Photobooth installation!"
-                exit 1
+                warn "[WARN]      Downgrade of Node.js was not possible or skipped."
             else
                 update_nodejs
             fi
         else
             if [[ "$major" -eq "$NODEJS_MAJOR" && "$minor" -lt "$NODEJS_MINOR" ]]; then
                 if [ "$NODEJS_CHECKED" = true ]; then
-                    error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
+                    error "[ERROR]     Update of Node.js was not possible. Aborting Photobooth installation!"
                     exit 1
                 else
                     warn "[WARN]      Node.js needs to be updated."
@@ -312,10 +311,9 @@ check_nodejs() {
                 info "[Info]      Node.js matches our requirements.".
             fi
         fi
-
     elif [[ -n "$major" ]]; then
         if [ "$NODEJS_CHECKED" = true ]; then
-            error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
+            error "[ERROR]     Update of Node.js was not possible. Aborting Photobooth installation!"
             exit 1
         else
             update_nodejs
@@ -361,6 +359,8 @@ update_nodejs() {
         check_nodejs
     else
         info "### We won't update Node.js."
+        NODEJS_CHECKED=true
+        check_nodejs
     fi
 }
 
