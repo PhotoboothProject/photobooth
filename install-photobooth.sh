@@ -54,6 +54,9 @@ NODEJS_MAJOR="18"
 NODEJS_MINOR="17"
 NODEJS_MICRO="0"
 NEEDED_NODE_VERSION="v$NODEJS_MAJOR.$NODEJS_MINOR(.$NODEJS_MICRO or newer)"
+NEEDS_NPM_CHECK=true
+NPM_NEEDS_UPDATE=false
+NPM_CHECKED=false
 
 COMMON_PACKAGES=(
         'gphoto2'
@@ -215,6 +218,7 @@ do
                 BRANCH="stable4"
                 GIT_INSTALL=false
                 NEEDS_NODEJS_CHECK=false
+                NEEDS_NPM_CHECK=false
             else
                 BRANCH="dev"
                 GIT_INSTALL=true
@@ -364,6 +368,33 @@ update_nodejs() {
     fi
 }
 
+proof_npm() {
+    if [ "$(npm -v)" \>= "9.6.0" ]; then
+        info "[Info]      npm version matches our requirements."
+        NPM_CHECKED=true
+    else
+        if [ "$NPM_CHECKED" = true ]; then
+            error "[ERROR]     Update of npm was not possible. Aborting Photobooth installation!"
+            exit 1
+        else
+            warn "[WARN]      npm needs to be updated!"
+            npm install npm@latest -g
+            NPM_CHECKED=true
+            check_npm
+        fi 
+    fi
+}
+
+check_npm() {
+    if command -v npm &> /dev/null; then
+        info "[Info]      npm available.".
+    else
+        info "[Info]      npm not installed. Trying to install...".
+        apt-get -qq install -y npm
+    fi
+    proof_npm
+}
+
 common_software() {
     info "### First we update your system. That's not worth mentioning."
     apt-get -qq update
@@ -451,6 +482,9 @@ common_software() {
 
     if [ "$NEEDS_NODEJS_CHECK" = true ]; then
         check_nodejs
+    fi
+    if [ "$NEEDS_NPM_CHECK" = true ]; then
+        check_npm
     fi
 }
 
