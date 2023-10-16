@@ -288,10 +288,9 @@ check_nodejs() {
     micro=${VER[2]}
 
     info "[Info]      Node.js on Photobooth is only supported on v18!"
+    info "[Info]      Found Node.js $NODE_VERSION".
 
-    if [[ -n "$major" && "$major" -ge "18" ]]; then
-        info "[Info]      Updating npm...".
-        npm install npm@latest -g
+    if [[ -n "$major" && "$major" -ge "$NODEJS_MAJOR" ]]; then
         if [[ -n "$major" && "$major" -ge "19" ]]; then
             info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
@@ -301,7 +300,17 @@ check_nodejs() {
                 update_nodejs
             fi
         else
-            info "[Info]      Found Node.js $NODE_VERSION".
+            if [[ "$major" -eq "$NODEJS_MAJOR" && "$minor" -lt "$NODEJS_MINOR" ]]; then
+                if [ "$NODEJS_CHECKED" = true ]; then
+                    error "[ERROR]     Update was not possible. Aborting Photobooth installation!"
+                    exit 1
+                else
+                    warn "[WARN]      Node.js needs to be updated."
+                    update_nodejs
+                fi 
+            else
+                info "[Info]      Node.js matches our requirements.".
+            fi
         fi
 
     elif [[ -n "$major" ]]; then
@@ -320,8 +329,8 @@ check_nodejs() {
 update_nodejs() {
     echo -e "\033[0;33m### Node.js should be updated/downgraded. Node.js version not matching our requirements"
     echo -e "###  Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is suggested."
-    echo -e "###  NOTE: Currently Node.js on Photobooth is only supported on v18."
-    echo -e "###        The installation of Photobooth will fail on Node.js versions below v18."
+    echo -e "###  NOTE: Currently Node.js on Photobooth is only supported on v$NODEJS_MAJOR.$NODEJS_MINOR."
+    echo -e "###        The installation of Photobooth will fail on Node.js versions below v$NODEJS_MAJOR.$NODEJS_MINOR."
     ask_yes_no "### Would you like to update/downgrade Node.js to $NEEDED_NODE_VERSION ? [y/N] " "Y"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1265,4 +1274,3 @@ then
     info "### Your device will reboot now."
     shutdown -r now
 fi
-
