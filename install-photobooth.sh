@@ -343,7 +343,7 @@ update_nodejs() {
 
         if [ "$RUNNING_ON_PI" = true ]; then
             info "[Package]   Installing Node.js v$NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO"
-            curl -fsSL - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
+            curl -fsSL https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
             node-install -v $NODEJS_MAJOR.$NODEJS_MINOR.$NODEJS_MICRO
             NODEJS_CHECKED=true
             check_nodejs
