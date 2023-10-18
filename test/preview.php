@@ -13,7 +13,6 @@ $pageTitle = $config['ui']['branding'] . ' Preview-Test';
 $mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = false;
 $remoteBuzzer = false;
-$chromaKeying = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>

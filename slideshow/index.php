@@ -13,7 +13,6 @@ $mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
 $randomImage = $config['slideshow']['randomPicture'];
 $remoteBuzzer = false;
-$chromaKeying = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 

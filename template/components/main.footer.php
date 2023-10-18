@@ -17,13 +17,3 @@ if ($photoswipe) {
     echo '<script src="' . $assetService->getUrl('node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js') . '"></script>';
     echo '<script src="' . $assetService->getUrl('resources/js/photoswipe.js') . '"></script>';
 }
-
-if ($chromaKeying) {
-    if ($config['keying']['variant'] === 'marvinj') {
-        echo '<script src="' . $assetService->getUrl('node_modules/marvinj/marvinj/release/marvinj-1.0.js') . '"></script>';
-    } else {
-        echo '<script src="' . $assetService->getUrl('vendor/Seriously/seriously.js') . '"></script>';
-        echo '<script src="' . $assetService->getUrl('vendor/Seriously/effects/seriously.chroma.js') . '"></script>';
-    }
-    echo '<script src="' . $assetService->getUrl('resources/js/chromakeying.js') . '"></script>';
-}

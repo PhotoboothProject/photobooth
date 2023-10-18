@@ -33,7 +33,6 @@ $pageTitle = $config['ui']['branding'] . ' Chromakeying';
 $mainStyle = $config['ui']['style'] . '_chromakeying.css';
 $photoswipe = false;
 $remoteBuzzer = true;
-$chromaKeying = true;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
@@ -81,6 +80,8 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
     </div>
 
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
+    <?php include PathUtility::getAbsolutePath('template/components/chroma.footer.php'); ?>
+
     <?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>
 </body>
 </html>
