@@ -472,12 +472,6 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'seconds',
         ],
-        'picture_no_cheese' => [
-            'view' => 'basic',
-            'type' => 'checkbox',
-            'name' => 'picture[no_cheese]',
-            'value' => $config['picture']['no_cheese'],
-        ],
         'picture_cheese_time' => [
             'view' => 'advanced',
             'type' => 'range',
@@ -2591,12 +2585,6 @@ $configsetup = [
                 'custom' => 'custom',
             ],
             'value' => $config['ui']['button'],
-        ],
-        'ui_shutter_animation' => [
-            'view' => 'basic',
-            'type' => 'checkbox',
-            'name' => 'ui[shutter_animation]',
-            'value' => $config['ui']['shutter_animation'],
         ],
         'ui_shutter_cheese_img' => [
             'view' => 'advanced',
