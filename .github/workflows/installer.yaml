@@ -32,6 +32,7 @@ jobs:
 
       - name: Check Response
         run: |
+          sleep 10
           RESPONSE=$(curl -s http://localhost)
           echo "$RESPONSE"
           if echo "$RESPONSE" | grep -q '<title>photobooth</title>';
