@@ -83,8 +83,6 @@ echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'relo
         <div id="wrapper">
             <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
         </div>
-
-        <?php include PathUtility::getAbsolutePath('template/components/send-mail.php'); ?>
     </div>
 </div>
 <script type="text/javascript">

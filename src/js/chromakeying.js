@@ -208,8 +208,8 @@ function saveImage(filename, cb) {
         success: (resp) => {
             if (typeof onCaptureChromaView === 'undefined') {
                 setTimeout(function () {
-                    photoboothTools.modal.close('#save_mesg');
-                    $('#save-chroma-btn').blur();
+                    photoboothTools.overlay.close();
+                    $('[data-command="save-chroma-btn"]').blur();
                 }, notificationTimeout);
             } else {
                 photoBooth.takingPic = false;
@@ -295,9 +295,7 @@ function printImageHandler(ev) {
 
 function saveImageHandler(ev) {
     ev.preventDefault();
-
-    photoboothTools.modal.open('#save_mesg');
-
+    photoboothTools.overlay.show(photoboothTools.getTranslation('saving'));
     saveImage();
 }
 
@@ -329,25 +327,16 @@ $(document).on('keyup', function (ev) {
             (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode))
     ) {
         if (!backgroundImage) {
-            photoboothTools.modalMesg.showError(
-                '#modal_mesg',
-                photoboothTools.getTranslation('chroma_needs_background')
-            );
-            setTimeout(function () {
-                photoboothTools.modalMesg.reset('#modal_mesg');
-            }, 1000);
             photoboothTools.console.logDev('Please choose a background first!');
+            photoboothTools.overlay.showError(photoboothTools.getTranslation('chroma_needs_background'));
+            setTimeout(() => photoboothTools.overlay.close(), 1000);
         } else if (needsReload) {
-            photoboothTools.modalMesg.showError('#modal_mesg', photoboothTools.getTranslation('chroma_needs_reload'));
-            setTimeout(function () {
-                photoboothTools.modalMesg.reset('#modal_mesg');
-            }, 1000);
             photoboothTools.console.logDev('Please reload the page to take a new Picture!');
+            photoboothTools.overlay.showError(photoboothTools.getTranslation('chroma_needs_reload'));
+            setTimeout(() => photoboothTools.overlay.close(), 1000);
         } else if (!photoBooth.takingPic) {
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
-                photoboothTools.console.logDev(
-                    'Collage key pressed. Not possible on live chroma, triggering photo now.'
-                );
+                photoboothTools.console.logDev('Collage key pressed. Not possible on live chroma, triggering photo now.');
             }
             photoBooth.thrill('chroma');
         } else if (config.dev.loglevel > 0 && photoBooth.takingPic) {

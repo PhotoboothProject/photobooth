@@ -81,11 +81,7 @@ if ($config['filters']['enabled']) {
 ?>
 </div>
 
-<?php
-include PathUtility::getAbsolutePath('template/components/send-mail.php');
-include PathUtility::getAbsolutePath('template/components/modal.php');
-include PathUtility::getAbsolutePath('template/components/main.footer.php');
-?>
+<?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
 <script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
 <script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>

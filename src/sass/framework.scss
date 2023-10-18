@@ -1,8 +1,9 @@
 // Framework
 @import 'components/root';
 @import 'components/reboot';
-@import 'components/utility';
 @import 'components/base';
+@import 'components/utility';
+@import 'components/text';
 @import 'components/button';
 @import 'components/sidenav';
 @import 'components/stage';
@@ -13,6 +14,9 @@
 @import 'components/shutter';
 @import 'components/buzzer';
 @import 'components/gallery';
+@import 'components/form';
+@import 'components/modal';
+@import 'components/overlay';
 @import 'components/github-corner';
 
 // Themes

@@ -44,12 +44,5 @@ if ($config['picture']['allow_delete']) {
 }
 
 echo '</div>';
-
-if ($config['qr']['enabled']) {
-    echo '<div id="qrCode" class="modal">';
-    echo '<div class="modal__body"></div>';
-    echo '</div>';
-}
-
 echo '</div>';
 echo '</div>';
