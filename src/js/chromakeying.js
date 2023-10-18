@@ -287,7 +287,7 @@ function printImageHandler(ev) {
             }
 
             photoboothTools.printImage(resp.filename, () => {
-                $('#print-btn').blur();
+                $('[data-command="print-btn"]').blur();
             });
         });
     }, 1000);
@@ -321,7 +321,7 @@ $(document).on('keyup', function (ev) {
         if (photoboothTools.isPrinting) {
             photoboothTools.console.log('Printing already in progress!');
         } else {
-            $('#print-btn').trigger('click');
+            $('[data-command="print-btn"]').trigger('click');
         }
     } else if (
         typeof onCaptureChromaView != 'undefined' &&
@@ -358,9 +358,9 @@ $(document).on('keyup', function (ev) {
 
 $(document).ready(function () {
     if (typeof onCaptureChromaView === 'undefined') {
-        $('#save-chroma-btn').on('click', saveImageHandler);
-        $('#print-btn').on('click', printImageHandler);
-        $('#close-btn').on('click', closeHandler);
+        $('[data-command="save-chroma-btn"]').on('click', saveImageHandler);
+        $('[data-command="print-btn"]').on('click', printImageHandler);
+        $('[data-command="close-btn"]').on('click', closeHandler);
 
         setTimeout(function () {
             setMainImage($('body').attr('data-main-image'));

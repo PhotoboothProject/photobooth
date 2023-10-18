@@ -3,6 +3,7 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\ComponentUtility;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -54,25 +55,18 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         </div>
 
         <div class="chroma-control-bar">
-            <a class="<?php echo $btnClass; ?> rotaryfocus" id="save-chroma-btn" href="#">
-                <i class="<?php echo $config['icons']['save']; ?>"></i>
-                <?=$languageService->translate('save')?>
-            </a>
-            <?php if ($config['print']['from_chromakeying']): ?>
-                <a class="<?php echo $btnClass; ?> rotaryfocus" id="print-btn" href="#">
-                    <i class="<?php echo $config['icons']['print']; ?>"></i>
-                    <?=$languageService->translate('print')?>
-                </a>
-            <?php endif; ?>
-            <a class="<?php echo $btnClass; ?> rotaryfocus" id="close-btn" href="#">
-                <i class="<?php echo $config['icons']['close']; ?>"></i>
-                <?=$languageService->translate('close')?>
-            </a>
+<?php
+    echo ComponentUtility::renderButton('save', $config['icons']['save'], 'save-chroma-btn');
+        if ($config['print']['from_chromakeying']) {
+            echo ComponentUtility::renderButton('print', $config['icons']['print'], 'print-btn');
+        }
+        echo ComponentUtility::renderButton('close', $config['icons']['close'], 'close-btn');
+        ?>
         </div>
     <?php else:?>
         <div style="text-align:center;padding-top:250px">
             <h1 style="color: red;"><?=$languageService->translate('keyingerror')?></h1>
-            <a class="<?php echo $btnClass; ?>" href="<?=PathUtility::getPublicPath()?>"><?=$languageService->translate('close')?></a>
+            <?= ComponentUtility::renderButtonLink('close', $config['icons']['close'], PathUtility::getPublicPath()) ?>
         </div>
     <?php endif; ?>
 
