@@ -2,9 +2,7 @@
 
 use Photobooth\Utility\PathUtility;
 
-if (!isset($_SESSION)) {
-    session_start();
-}
+require_once '../lib/boot.php';
 
 session_destroy();
 unset($_SESSION['auth']);
