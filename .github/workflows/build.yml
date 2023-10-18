@@ -1,14 +1,14 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - dev
-      - stable4
-  pull_request:
-    branches:
-      - dev
-      - stable4
+  # push:
+  #   branches:
+  #     - dev
+  #     - stable4
+  # pull_request:
+  #   branches:
+  #     - dev
+  #     - stable4
   workflow_dispatch:
 
 jobs:

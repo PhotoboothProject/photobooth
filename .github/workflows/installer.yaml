@@ -1,0 +1,43 @@
+name: Installer
+
+on:
+  push:
+    branches:
+      - dev
+    # paths:
+    #   - 'install-photobooth.sh'
+  pull_request:
+    branches:
+      - dev
+    # paths:
+    #   - 'install-photobooth.sh'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install
+        run: |
+          sudo ./install-photobooth.sh --username="$(whoami)" --silent
+
+      - name: Configure Apache2
+        run: |
+          sudo adduser $(whoami) www-data
+          sudo service apache2 restart
+
+      - name: Check Response
+        run: |
+          RESPONSE=$(curl -s http://localhost)
+          echo "$RESPONSE"
+          if echo "$RESPONSE" | grep -q '<title>photobooth</title>';
+          then
+            echo "Start page contains <title>photobooth</title>"
+          else
+            echo "Start page does not contain <title>photobooth</title>"
+            exit 1
+          fi

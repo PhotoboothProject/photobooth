@@ -9,6 +9,11 @@ session_start();
 // Autoload
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+// Fix Permissions
+@chmod(PathUtility::getAbsolutePath('config'), 0755);
+@chmod(PathUtility::getAbsolutePath('data'), 0755);
+@chmod(PathUtility::getAbsolutePath('private'), 0755);
+
 // Config
 require_once dirname(__DIR__) . '/lib/config.php';
 
