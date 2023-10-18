@@ -1,0 +1,122 @@
+/**
+ * Modal
+ */
+:root {
+  --modal-backdrop: rgba(0, 0, 0, 0.8);
+  --modal-color: #313131;
+  --modal-background: #ffffff;
+  --modal-font-size: inherit;
+  --modal-line-height: inherit;
+  --modal-padding: 2rem;
+  --modal-spacing: 2rem;
+
+  --modal-button-color: var(--button-font-color);
+  --modal-button-background: var(--primary-color);
+  --modal-button-font-size: 1rem;
+  --modal-button-font-weight: 400;
+  --modal-button-icon-size: 1rem;
+  --modal-button-padding-y: 1rem;
+  --modal-button-padding-x: 1rem;
+  --modal-button-border-width: 0;
+  --modal-button-border-color: var(--border-color);
+  --modal-button-border-radius: 0;
+  --modal-button-height: auto;
+  --modal-button-width: auto;
+  --modal-button-gap: 0.25rem;
+  --modal-button-direction: row;
+  --modal-button-focus-background: color-mix(in srgb, var(--modal-button-background), var(--modal-button-color) 20%);
+}
+
+.modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--modal-backdrop);
+  justify-content: center;
+  align-items: center;
+  z-index: 16777372;
+
+  &-inner {
+    flex-direction: column;
+    display: flex;
+    position: relative;
+    color: var(--modal-color);
+    background: var(--modal-background);
+    max-width: calc(100dvw - var(--modal-spacing) * 2);
+    max-height: calc(100dvh - var(--modal-spacing) * 2);
+  }
+
+  &-body {
+    text-align: center;
+    overflow-y: scroll;
+    font-size: var(--modal-font-size);
+    line-height: var(--modal-line-height);
+    padding: var(--modal-padding);
+
+    img {
+      display: block;
+      margin: 0 auto;
+      height: auto;
+      max-width: 100%;
+    }
+
+    > *:first-child {
+      margin-top: 0;
+    }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.modal-buttonbar {
+  display: flex;
+  background: color-mix(in srgb, var(--modal-button-background), var(--modal-button-color) 40%);
+  gap: 1px;
+}
+
+.modal-button {
+  flex-grow: 1;
+  display: inline-flex;
+  flex-direction: var(--modal-button-direction);
+  padding: var(--modal-button-padding-y) var(--modal-button-padding-x);
+  gap: var(--modal-button-gap);
+  font-size: var(--modal-button-font-size);
+  font-weight: var(--modal-button-font-weight);
+  color: var(--modal-button-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  height: var(--modal-button-height);
+  width: var(--modal-button-width);
+  border: var(--modal-button-border-width) solid var(--modal-button-border-color);
+  border-radius: var(--modal-button-border-radius);
+  background: var(--modal-button-background);
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  line-height: 1;
+
+  &.focused,
+  &:hover,
+  &:focus {
+    --modal-button-background: var(--modal-button-focus-background);
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+  }
+
+  &--icon {
+    font-size: var(--modal-button-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

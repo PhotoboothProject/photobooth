@@ -77,48 +77,92 @@ const photoboothTools = (function () {
         return this.translations[key];
     };
 
-    api.modal = {
-        open: function (selector) {
-            $(selector).addClass('modal--show');
-        },
-        close: function (selector) {
-            if ($(selector).hasClass('modal--show')) {
-                $(selector).removeClass('modal--show');
-
-                return true;
+    api.overlay = {
+        element: null,
+        show: (message, type = 'default') => {
+            if (api.overlay.element === null) {
+                const element = document.createElement('div');
+                element.classList.add('overlay');
+                document.body.append(element);
+                api.overlay.element = element;
             }
-
-            return false;
+            api.overlay.element.innerHTML = message;
+            api.overlay.element.dataset.type = type;
         },
-        toggle: function (selector) {
-            $(selector).toggleClass('modal--show');
+        showSuccess: (message) => {
+            api.overlay.show(message, 'success');
         },
-        empty: function (selector) {
-            api.modal.close(selector);
-
-            $(selector).find('.modal__body').empty();
+        showWarning: (message) => {
+            api.overlay.show(message, 'warning');
+        },
+        showError: (message) => {
+            api.overlay.show(message, 'error');
+        },
+        close: () => {
+            if (api.overlay.element !== null) {
+                api.overlay.element.remove();
+                api.overlay.element = null;
+            }
         }
     };
 
-    api.modalMesg = {
-        showSuccess: function (selector, successMsg) {
-            $(selector).empty();
-            $(selector).html('<div class="modal__body success"><span>' + successMsg + '</span></div>');
-            api.modal.open($(selector));
+    api.button = {
+        create: (label, iconClass, severity = 'default', prefix = '') => {
+
+            const button = document.createElement('button');
+            button.classList.add(prefix + 'button');
+            button.classList.add('rotaryfocus');
+            button.dataset.severity = severity;
+
+            const iconWrap = document.createElement('span');
+            iconWrap.classList.add(prefix + 'button--icon');
+            const icon = document.createElement('i');
+            icon.classList = iconClass;
+            iconWrap.appendChild(icon);
+            button.appendChild(iconWrap);
+
+            const labelWrap = document.createElement('span');
+            labelWrap.classList.add(prefix + 'button--label');
+            labelWrap.innerHTML = api.getTranslation(label);
+            button.appendChild(labelWrap);
+
+            return button;
+        }
+    };
+
+    api.modal = {
+        element: null,
+        open: (type = 'default') => {
+            if (api.modal.element === null) {
+                const element = document.createElement('div');
+                element.dataset.type = type;
+                element.classList.add('modal');
+                element.classList.add('rotarygroup');
+
+                const inner = document.createElement('div');
+                inner.classList.add('modal-inner');
+                element.appendChild(inner);
+
+                const body = document.createElement('div');
+                body.classList.add('modal-body');
+                inner.appendChild(body);
+
+                const buttonbar = document.createElement('div');
+                buttonbar.classList.add('modal-buttonbar');
+                const closeButton = api.button.create('close', 'fa fa-times', 'default', 'modal-');
+                closeButton.addEventListener('click', () => api.modal.close());
+                buttonbar.appendChild(closeButton);
+                inner.appendChild(buttonbar);
+
+                document.body.append(element);
+                api.modal.element = element;
+            }
         },
-        showWarn: function (selector, warnMsg) {
-            $(selector).empty();
-            $(selector).html('<div class="modal__body warning"><span>' + warnMsg + '</span></div>');
-            api.modal.open($(selector));
-        },
-        showError: function (selector, errorMsg) {
-            $(selector).empty();
-            $(selector).html('<div class="modal__body error"><span>' + errorMsg + '</span></div>');
-            api.modal.open($(selector));
-        },
-        reset: function (selector) {
-            api.modal.close($(selector));
-            $(selector).empty();
+        close: () => {
+            if (api.modal.element !== null) {
+                api.modal.element.remove();
+                api.modal.element = null;
+            }
         }
     };
 
@@ -163,8 +207,8 @@ const photoboothTools = (function () {
     };
 
     api.resetPrintErrorMessage = function (cb, to) {
-        setTimeout(function () {
-            api.modalMesg.reset('#modal_mesg');
+        setTimeout(() => {
+            api.overlay.close();
             cb();
             api.isPrinting = false;
         }, to);
@@ -173,14 +217,12 @@ const photoboothTools = (function () {
     api.printImage = function (imageSrc, cb) {
         if (api.isVideoFile(imageSrc)) {
             api.console.log('ERROR: An error occurred: attempt to print non printable file.');
-            api.modalMesg.showError('#modal_mesg', api.getTranslation('no_printing'));
-            setTimeout(function () {
-                api.modalMesg.reset('#modal_mesg');
-            }, notificationTimeout);
+            api.overlay.showError(api.getTranslation('no_printing'));
+            setTimeout(() => api.overlay.close(), notificationTimeout);
         } else if (api.isPrinting) {
             api.console.log('Printing in progress: ' + api.isPrinting);
         } else {
-            api.modal.open('#print_mesg');
+            api.overlay.show(api.getTranslation('printing'));
             api.isPrinting = true;
             if (typeof remoteBuzzerClient !== 'undefined') {
                 remoteBuzzerClient.inProgress('print');
@@ -195,20 +237,15 @@ const photoboothTools = (function () {
                     api.console.log('Picture processed: ', data);
 
                     if (data.status == 'locking') {
-                        api.modal.close('#print_mesg');
-                        api.modalMesg.showWarn(
-                            '#modal_mesg',
-                            config.print.locking_msg + ' (' + api.getTranslation('printed') + ' ' + data.count + ')'
-                        );
+                        api.overlay.showWarning(config.print.locking_msg + ' (' + api.getTranslation('printed') + ' ' + data.count + ')');
                         api.resetPrintErrorMessage(cb, config.print.time);
                     } else if (data.error) {
                         api.console.log('ERROR: An error occurred: ', data.error);
-                        api.modal.close('#print_mesg');
-                        api.modalMesg.showError('#modal_mesg', data.error);
+                        api.overlay.showError(data.error);
                         api.resetPrintErrorMessage(cb, config.print.time);
                     } else {
                         setTimeout(function () {
-                            api.modal.close('#print_mesg');
+                            api.overlay.close();
                             cb();
                             api.isPrinting = false;
                         }, config.print.time);
@@ -216,8 +253,7 @@ const photoboothTools = (function () {
                 },
                 error: (jqXHR, textStatus) => {
                     api.console.log('ERROR: An error occurred: ', textStatus);
-                    api.modal.close('#print_mesg');
-                    api.modalMesg.showError('#modal_mesg', api.getTranslation('error'));
+                    api.overlay.showError(api.getTranslation('error'));
                     api.resetPrintErrorMessage(cb, notificationTimeout);
                 }
             });

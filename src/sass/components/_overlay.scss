@@ -1,0 +1,36 @@
+/**
+ * Overlay
+ */
+:root {
+  --overlay-color: #ffffff;
+  --overlay-background: rgba(0, 0, 0, 0.8);
+  --overlay-padding: 2rem;
+  --overlay-font-size: 2rem;
+}
+
+.overlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: var(--overlay-color);
+  background: var(--overlay-background);
+  padding: var(--overlay-padding);
+  font-size: var(--overlay-font-size);
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  z-index: 16777373;
+
+  &[data-type='success'] {
+    --overlay-color: var(--success-color);
+  }
+  &[data-type='warning'] {
+    --overlay-color: var(--warning-color);
+  }
+  &[data-type='error'] {
+    --overlay-color: var(--error-color);
+  }
+}

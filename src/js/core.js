@@ -48,15 +48,10 @@ const photoBooth = (function () {
         galimages = $('#galimages'),
         printBtn = $('.printbtn'),
         deleteBtn = $('.deletebtn'),
-        qrBtn = $('.qrbtn'),
         videoAnimation = $('#videoAnimation'),
         resultVideo = $('#resultVideo'),
         resultVideoQR = $('#resultVideoQR'),
         spinner = $('.spinner'),
-        sendMail = $('.send-mail'),
-        mailMessageForm = $('#mail-form-message'),
-        mailImageForm = $('#mail-form-image'),
-        mailSendForm = $('#send-mail-form'),
         idVideoView = $('#video--view'),
         idVideoSensor = $('#video--sensor'),
         pictureFrame = $('#picture--frame'),
@@ -116,10 +111,6 @@ const photoBooth = (function () {
         resultPage.attr('style', null);
         resultPage.attr('data-img', null);
 
-        photoboothTools.modal.empty('#qrCode');
-        qrBtn.removeClass('active').attr('style', '');
-        api.resetMailForm();
-        sendMail.hide();
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
         idVideoView.hide();
@@ -128,6 +119,9 @@ const photoBooth = (function () {
         idVideoView.css('z-index', 0);
         idVideoSensor.hide();
         ipcamView.hide();
+
+        photoboothTools.overlay.close();
+        photoboothTools.modal.close();
     };
 
     api.init = function () {
@@ -907,46 +901,116 @@ const photoBooth = (function () {
         api.resetTimeOut();
     };
 
-    api.showQr = function (modal, filename) {
+    api.showMailForm = function (image) {
+        photoboothTools.modal.open('mail');
+        const body = photoboothTools.modal.element.querySelector('.modal-body');
+        const buttonbar = photoboothTools.modal.element.querySelector('.modal-buttonbar');
+
+        // Text
+        const text = document.createElement('p');
+        text.textContent = config.mail.send_all_later
+            ? photoboothTools.getTranslation('insertMailToDB')
+            : photoboothTools.getTranslation('insertMail');
+        body.appendChild(text);
+
+        // Form
+        const form = document.createElement('form');
+        form.id = 'send-mail-form';
+        form.classList.add('form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (document.querySelector('#send-mail-message')) {
+                document.querySelector('#send-mail-message').remove();
+            }
+            const message = document.createElement('div');
+            message.id = 'send-mail-message';
+            message.classList.add('form-message');
+            form.appendChild(message);
+            const submitButton = document.querySelector('#send-mail-submit');
+            submitButton.diabled = true;
+            fetch(config.foldersPublic.api + '/sendPic.php', {
+                method: 'post',
+                body: new FormData(form),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelector('#send-mail-recipient').value = '';
+                    message.classList.add('text-success');
+                    if (data.saved) {
+                        message.textContent = photoboothTools.getTranslation('mailSaved');
+                    } else {
+                        message.textContent = photoboothTools.getTranslation('mailSent');
+                    }
+                } else {
+                    message.classList.add('text-danger');
+                    message.textContent = data.error;
+                }
+                submitButton.disabled = false;
+            })
+            .catch(() => {
+                message.classList.add('text-danger');
+                message.textContent = photoboothTools.getTranslation('mailError');
+                submitButton.disabled = false;
+            });
+        });
+        body.appendChild(form);
+
+        // Image
+        const imageInput = document.createElement('input');
+        imageInput.type = 'hidden';
+        imageInput.name = 'image';
+        imageInput.value = image;
+        form.appendChild(imageInput);
+
+        // Recipient
+        const recipientInput = document.createElement('input');
+        recipientInput.classList.add('form-input');
+        recipientInput.id = 'send-mail-recipient';
+        recipientInput.type = 'email';
+        recipientInput.name = 'recipient';
+        recipientInput.addEventListener('focusin', (event) => {
+            // workaround for photoswipe blocking input
+            event.stopImmediatePropagation();
+        });
+        form.appendChild(recipientInput);
+
+        // Submit
+        const submitLabel = config.mail.send_all_later
+            ? photoboothTools.getTranslation('add')
+            : photoboothTools.getTranslation('send');
+        const submitButton = photoboothTools.button.create(submitLabel, 'fa fa-check', 'primary', 'modal-');
+        submitButton.id = 'send-mail-submit';
+        submitButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            form.requestSubmit();
+        });
+        buttonbar.insertBefore(submitButton, buttonbar.firstChild);
+    };
+
+    api.showQrCode = function (filename) {
         if (!config.qr.enabled) {
             return;
         }
-        photoboothTools.modal.empty(modal);
+
+        photoboothTools.modal.open();
+        const body = photoboothTools.modal.element.querySelector('.modal-body');
+
+        const image = document.createElement('img');
+        image.src = config.foldersPublic.api + '/qrcode.php?filename=' + filename;
+        body.appendChild(image);
 
         const qrHelpText = config.qr.custom_text
             ? config.qr.text
-            : photoboothTools.getTranslation('qrHelp') + '</br><b>' + config.webserver.ssid + '</b>';
-        const body = $(modal).find('.modal__body');
-
-        $('<button>')
-            .on('click touchstart', function (ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-
-                photoboothTools.modal.close(modal);
-            })
-            .append('<i class="' + config.icons.close + '"></i>')
-            .css('float', 'right')
-            .appendTo(body);
-        $(
-            '<img src="' +
-                config.foldersPublic.api +
-                '/qrcode.php?filename=' +
-                filename +
-                '" alt="qr code" style="max-width: 100%;"/>'
-        )
-            .on('load', function () {
-                $('<p>')
-                    .css('max-width', this.width + 'px')
-                    .html(qrHelpText)
-                    .appendTo(body);
-            })
-            .appendTo(body);
+            : photoboothTools.getTranslation('qrHelp') + '<br><b>' + config.webserver.ssid + '</b>';
+        const text = document.createElement('p');
+        text.innerHTML = qrHelpText;
+        body.appendChild(text);
     };
 
     api.renderPic = function (filename, files) {
         api.filename = filename;
-        api.showQr('#qrCode', filename);
 
         if (config.print.from_result) {
             $(document).off('click touchstart', '.printbtn');
@@ -968,6 +1032,14 @@ const photoBooth = (function () {
                 });
             }, config.print.auto_delay);
         }
+
+        resultPage
+            .find('[data-command="qrbtn"]')
+            .off('click')
+            .on('click', (event) => {
+                event.preventDefault();
+                api.showQrCode(filename);
+            });
 
         resultPage
             .find('.deletebtn')
@@ -1134,11 +1206,6 @@ const photoBooth = (function () {
         }
     };
 
-    api.resetMailForm = function () {
-        mailSendForm.trigger('reset');
-        mailMessageForm.empty();
-    };
-
     api.deleteImage = function (imageName, cb) {
         const errorMsg =
             photoboothTools.getTranslation('error') + '</br>' + photoboothTools.getTranslation('auto_reload');
@@ -1157,37 +1224,21 @@ const photoBooth = (function () {
                         '</br>' +
                         photoboothTools.getTranslation('auto_reload');
                     photoboothTools.console.log('Deleted ' + data.file);
-                    photoboothTools.modalMesg.showSuccess('#modal_mesg', msg);
+                    photoboothTools.overlay.showSuccess(msg);
                 } else {
                     photoboothTools.console.log('Error while deleting ' + data.file);
                     photoboothTools.console.log('Failed: ' + data.failed);
-                    photoboothTools.modalMesg.showError('#modal_mesg', errorMsg);
+                    photoboothTools.overlay.showError(errorMsg);
                 }
-                setTimeout(function () {
-                    photoboothTools.modalMesg.reset('#modal_mesg');
-                }, notificationTimeout);
+                setTimeout(() => photoboothTools.overlay.close(), notificationTimeout);
                 cb(data);
             },
             error: (jqXHR, textStatus) => {
                 photoboothTools.console.log('Error while deleting image: ', textStatus);
-                photoboothTools.modalMesg.showError('#modal_mesg', errorMsg);
-
-                setTimeout(function () {
-                    photoboothTools.modalMesg.reset('#modal_mesg');
-                    photoboothTools.reloadPage();
-                }, notificationTimeout);
+                photoboothTools.overlay.showError(errorMsg);
+                setTimeout(() => photoboothTools.reloadPage(), notificationTimeout);
             }
         });
-    };
-
-    api.toggleMailDialog = function (img) {
-        if (sendMail.hasClass('mail-active')) {
-            api.resetMailForm();
-            sendMail.removeClass('mail-active').fadeOut('fast');
-        } else {
-            mailImageForm.val(img);
-            sendMail.addClass('mail-active').fadeIn('fast');
-        }
     };
 
     $('.imageFilter').on('click', function (e) {
@@ -1259,76 +1310,13 @@ const photoBooth = (function () {
         e.preventDefault();
         e.stopPropagation();
         const img = resultPage.attr('data-img');
-        api.toggleMailDialog(img);
-    });
-
-    mailSendForm.on('submit', function (e) {
-        e.preventDefault();
-        const form = $(this);
-        const submitButton = form.find('.btn');
-        mailMessageForm.empty();
-        submitButton.html('<i class="' + config.icons.mail_submit + '"></i>');
-
-        $.ajax({
-            url: config.foldersPublic.api + '/sendPic.php',
-            type: 'POST',
-            data: form.serialize(),
-            dataType: 'json',
-            cache: false,
-            success: function (result) {
-                submitButton.empty();
-                submitButton.hide();
-                if (result.success) {
-                    if (result.saved) {
-                        mailMessageForm
-                            .fadeIn()
-                            .html(
-                                '<span style="color:green">' + photoboothTools.getTranslation('mailSaved') + '</span>'
-                            );
-                    } else {
-                        mailMessageForm
-                            .fadeIn()
-                            .html(
-                                '<span style="color:green">' + photoboothTools.getTranslation('mailSent') + '</span>'
-                            );
-                    }
-                } else {
-                    mailMessageForm.fadeIn().html('<span style="color:red">' + result.error + '</span>');
-                }
-            },
-            error: function () {
-                mailMessageForm
-                    .fadeIn('fast')
-                    .html('<span style="color: red;">' + photoboothTools.getTranslation('mailError') + '</span>');
-            }
-        });
-
-        setTimeout(function () {
-            submitButton.show();
-            if (config.mail.send_all_later) {
-                submitButton.html('<span>' + photoboothTools.getTranslation('add') + '</span>');
-            } else {
-                submitButton.html('<span>' + photoboothTools.getTranslation('send') + '</span>');
-            }
-        }, notificationTimeout);
-    });
-
-    $('#send-mail-close').on('click', function () {
-        api.resetMailForm();
-        sendMail.removeClass('mail-active').fadeOut('fast');
+        api.showMailForm(img);
     });
 
     resultPage.on('click', function () {
         if (!filternav.hasClass('sidenav--open')) {
             rotaryController.focusSet(resultPage);
         }
-    });
-
-    qrBtn.on('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        photoboothTools.modal.open('#qrCode');
     });
 
     $('.homebtn').on('click', function (e) {

@@ -414,10 +414,8 @@ function initRemoteBuzzerFromDOM() {
         api.click = function () {
             if (this.enabled()) {
                 // click modal if open
-                if ($('#qrCode.modal.modal--show').exists()) {
-                    photoboothTools.modal.close('#qrCode');
-                } else if ($('#qrPswp.modal.modal--show').exists()) {
-                    photoboothTools.modal.close('#qrPswp');
+                if (photoboothTools.modal.element !== null) {
+                    photoboothTools.modal.close();
                 } else {
                     const element = document.querySelector('.focused');
                     if (element) {

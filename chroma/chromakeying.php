@@ -69,8 +69,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
             <?= ComponentUtility::renderButtonLink('close', $config['icons']['close'], PathUtility::getPublicPath()) ?>
         </div>
     <?php endif; ?>
-
-        <?php include PathUtility::getAbsolutePath('template/components/modal.php'); ?>
     </div>
 
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>

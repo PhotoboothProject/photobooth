@@ -1,7 +1,5 @@
-@import 'partials/email';
 @import 'vendor/photoswipe';
 @import 'partials/video_animation';
-@import 'partials/modal';
 @import 'partials/video_preview';
 
 #wrapper {
@@ -74,39 +72,6 @@
   z-index: 150;
 }
 
-.qr {
-  display: none;
-  width: 300px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: #fff;
-
-  > * {
-    display: none;
-  }
-
-  &.active > * {
-    display: block;
-  }
-
-  p {
-    margin: 0;
-    padding: 0 15px;
-    font-size: 1.6em;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  .fa,
-  .material-icons {
-    float: right;
-  }
-}
-
 .spacer {
   clear: both;
   height: 50px;
@@ -119,19 +84,6 @@
   top: 0;
   z-index: 1000000;
   background: #000;
-}
-
-.overlay {
-  display: none;
-  background-color: #000;
-  width: 400px;
-  height: 200px;
-  position: fixed;
-  z-index: 1010;
-  left: 50%;
-  top: 50%;
-  right: 0;
-  bottom: 0;
 }
 
 #gallery .controls a.close_opengal {
