@@ -28,7 +28,6 @@ const photoboothTools = (function () {
                 // Check if command is in list of supported events
                 // This can be dropped after all actions are migrated
                 if (!['remotebuzzer', 'reload'].includes(data.command)) {
-                    api.console.log('not supported command: ' + name);
                     return;
                 }
 
