@@ -27,7 +27,8 @@ echo $languageService->translate('menu');
     <?php endif; ?>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
-        <?php
+<?php
+
 if(!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
     echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
     echo getMenuBtn(PathUtility::getPublicPath('test'), 'testMenu', $config['icons']['admin']);
@@ -45,8 +46,6 @@ if(!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] && 
     echo getMenuBtn(PathUtility::getPublicPath('manual'), 'show_manual', $config['icons']['manual']);
     echo getMenuBtn('https://t.me/PhotoboothGroup', 'telegram', $config['icons']['telegram']);
 }
-
-// echo getMenuBtn("/", "reload", $config['icons']['refresh']);
 
 // reboot
 if((isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
