@@ -25,7 +25,6 @@ $mainStyle = $config['ui']['style'] . '_chromacapture.css';
 $photoswipe = true;
 $randomImage = false;
 $remoteBuzzer = true;
-$chromaKeying = true;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 
@@ -93,6 +92,7 @@ echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'relo
 </script>
 
 <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
+<?php include PathUtility::getAbsolutePath('template/components/chroma.footer.php'); ?>
 
 <script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
 <script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>

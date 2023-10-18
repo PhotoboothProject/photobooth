@@ -11,7 +11,6 @@ $mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
 $randomImage = false;
 $remoteBuzzer = true;
-$chromaKeying = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>

@@ -30,7 +30,6 @@ if (
     $photoswipe = true;
     $randomImage = false;
     $remoteBuzzer = true;
-    $chromaKeying = false;
 } else {
     header('location: ' . $config['protect']['index_redirect']);
     exit();

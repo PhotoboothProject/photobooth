@@ -11,7 +11,6 @@ $photobooth = new Photobooth();
 $pageTitle = 'Welcome to ' . $config['ui']['branding'];
 $remoteBuzzer = false;
 $photoswipe = false;
-$chromaKeying = false;
 
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
