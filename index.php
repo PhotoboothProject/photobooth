@@ -41,14 +41,28 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 <body class="gallery-mode--overlay ">
 
 <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
-<img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['htmlframe']; ?>" alt="pictureFrame" />
+    <img
+        id="picture--frame"
+        class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
+        src="<?php echo $config['picture']['htmlframe']; ?>"
+        alt="pictureFrame"
+    />
 <?php endif; ?>
 <?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
-<img id="collage--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['collage']['htmlframe']; ?>" alt="collageFrame" />
+    <img
+        id="collage--frame"
+        class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
+        src="<?php echo $config['collage']['htmlframe']; ?>"
+        alt="collageFrame"
+    />
 <?php endif; ?>
-
-<video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-       autoplay playsinline></video>
+<video
+    id="video--view"
+    class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
+    autoplay
+    playsinline
+>
+</video>
 <?php if ($config['video']['enabled'] && $config['video']['animation']): ?>
     <div id="videoAnimation">
         <ul class="left">
@@ -66,16 +80,16 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 <div id="wrapper">
 <?php
 
-include PathUtility::getAbsolutePath('template/' . $config['ui']['style'] . '.template.php');
-include PathUtility::getAbsolutePath('template/components/start.loader.php');
-include PathUtility::getAbsolutePath('template/components/start.results.php');
+include PathUtility::getAbsolutePath('template/components/stage.start.php');
+include PathUtility::getAbsolutePath('template/components/stage.loader.php');
+include PathUtility::getAbsolutePath('template/components/stage.results.php');
 
 if ($config['gallery']['enabled']) {
     include PathUtility::getAbsolutePath('template/components/gallery.php');
 }
 
 if ($config['filters']['enabled']) {
-    include PathUtility::getAbsolutePath('template/components/start.filter.php');
+    include PathUtility::getAbsolutePath('template/components/filter.php');
 }
 
 ?>
