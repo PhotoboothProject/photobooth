@@ -61,7 +61,6 @@ $config['picture']['enabled'] = true;
 // control countdown timer in seconds
 $config['picture']['cntdwn_time'] = '5';
 $config['picture']['cntdwn_offset'] = '0';
-$config['picture']['no_cheese'] = false;
 // control time for cheeeeese! in milliseconds
 $config['picture']['cheese_time'] = '1000';
 // possible flip values: 'off', 'horizontal', 'vertical', 'both'
@@ -394,7 +393,6 @@ $config['protect']['localhost_manual'] = false;
 $config['ui']['style'] = 'modern_squared';
 // possible button values: "rounded", "modern", "modern_squared", "custom"
 $config['ui']['button'] = 'modern_squared';
-$config['ui']['shutter_animation'] = true;
 // possible image values:
 // - ''
 // - '/resources/img/cheese/camera_up.png'

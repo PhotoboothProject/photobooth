@@ -51,7 +51,6 @@ const photoBooth = (function () {
         videoAnimation = $('#videoAnimation'),
         resultVideo = $('#resultVideo'),
         resultVideoQR = $('#resultVideoQR'),
-        spinner = $('.spinner'),
         idVideoView = $('#video--view'),
         idVideoSensor = $('#video--sensor'),
         pictureFrame = $('#picture--frame'),
@@ -105,7 +104,6 @@ const photoBooth = (function () {
         loaderButtonBar.empty();
         loaderMessage.empty();
         loaderMessage.removeClass('stage-message--error');
-        spinner.hide();
 
         resultPage.removeClass('stage--active');
         resultPage.attr('style', null);
@@ -276,10 +274,9 @@ const photoBooth = (function () {
                 setTimeout(
                     () => {
                         photoboothTools.console.log('Cheese: End');
-                        api.cheese.destroy();
                         resolve();
                     },
-                    config.picture.no_cheese ? 0 : config.picture.cheese_time
+                    config.picture.cheese_time
                 );
             });
         }
@@ -466,11 +463,7 @@ const photoBooth = (function () {
         }
 
         await api.countdown.start(countdownTime);
-        if (config.picture.no_cheese) {
-            photoboothTools.console.log('Cheese is disabled.');
-        } else {
-            await api.cheese.start();
-        }
+        await api.cheese.start();
 
         if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
             api.errorPic({
@@ -527,17 +520,14 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = async (data, retry = 0) => {
-        if (config.ui.shutter_animation) {
-            await api.shutter.start();
-        }
         startTime = new Date().getTime();
         photoboothTools.console.logDev('Capture image.');
         jQuery
             .post(config.foldersPublic.api + '/capture.php', data)
             .done(async (result) => {
-                if (config.ui.shutter_animation) {
-                    await api.shutter.stop();
-                }
+                api.cheese.destroy();
+                await api.shutter.start();
+                await api.shutter.stop();
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('Took ' + data.style, result);
@@ -557,7 +547,6 @@ const photoBooth = (function () {
                     currentCollageFile = result.file;
                     api.nextCollageNumber = result.current + 1;
 
-                    spinner.hide();
                     loaderButtonBar.empty();
                     loaderMessage.empty();
                     idVideoSensor.hide();
@@ -680,9 +669,7 @@ const photoBooth = (function () {
                 }
             })
             .fail(async (xhr, status, result) => {
-                if (config.ui.shutter_animation) {
-                    await api.shutter.stop();
-                }
+                api.cheese.destroy();
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
                     photoboothTools.console.logDev(
                         'ERROR: Taking picture failed. Retrying. Retry: ' +
@@ -704,7 +691,8 @@ const photoBooth = (function () {
         startTime = new Date().getTime();
         jQuery
             .post(config.foldersPublic.api + '/capture.php', data)
-            .done(function (result) {
+            .done(async (result) => {
+                api.cheese.destroy();
                 if (config.video.animation) {
                     videoAnimation.hide();
                 }
@@ -723,13 +711,16 @@ const photoBooth = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
+                api.cheese.destroy();
                 api.errorPic(result);
             });
     };
 
     api.errorPic = function (data) {
         setTimeout(function () {
-            spinner.hide();
+            api.cheese.destroy();
+            api.shutter.destroy();
+
             loaderMessage.empty();
             loaderButtonBar.empty();
             idVideoView.hide();
@@ -766,11 +757,11 @@ const photoBooth = (function () {
 
     api.processPic = function (result) {
         startTime = new Date().getTime();
-        spinner.show();
-        loaderMessage.text(
-            api.photoStyle === PhotoStyle.COLLAGE
+        loaderMessage.html(
+            '<i class="' + config.icons.spinner + '"></i><br>' +
+            (api.photoStyle === PhotoStyle.COLLAGE
                 ? photoboothTools.getTranslation('busyCollage')
-                : photoboothTools.getTranslation('busy')
+                : photoboothTools.getTranslation('busy'))
         );
 
         if (
@@ -828,8 +819,10 @@ const photoBooth = (function () {
         idVideoSensor.hide();
         idVideoView.hide();
         loader.css('--stage-background', config.colors.background_countdown);
-        spinner.show();
-        loaderMessage.text(photoboothTools.getTranslation('busyVideo'));
+        loaderMessage.html(
+            '<i class="' + config.icons.spinner + '"></i><br>' +
+            photoboothTools.getTranslation('busyVideo')
+        );
 
         $.ajax({
             method: 'POST',
