@@ -96,31 +96,6 @@ if (isset($data['type'])) {
         $Logger->addLogData(['preview' => 'Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.']);
     }
 
-    if ($newConfig['ui']['style'] === 'custom') {
-        if (
-            !is_readable('../template/custom.template.php') &&
-            !is_readable('../resources/css/custom_style.css') &&
-            !is_readable('../resources/css/custom_chromakeying.css') &&
-            !is_readable('../resources/css/custom_chromacapture.css')
-        ) {
-            $newConfig['ui']['style'] = 'modern_squared';
-            $Logger->addLogData(['ui' => 'No custom style resources found. Falling back to modern squared style.']);
-        } else {
-            if (!file_exists('../template/custom.template.php')) {
-                copy('../template/modern.template.php', '../template/custom.template.php');
-            }
-            if (!file_exists('../resources/css/custom_style.css')) {
-                copy('../resources/css/modern_style.css', '../resources/css/custom_style.css');
-            }
-            if (!file_exists('../resources/css/custom_chromakeying.css')) {
-                copy('../resources/css/modern_chromakeying.css', '../resources/css/custom_chromakeying.css');
-            }
-            if (!file_exists('../resources/css/custom_chromacapture.css')) {
-                copy('../resources/css/modern_chromacapture.css', '../resources/css/custom_chromacapture.css');
-            }
-        }
-    }
-
     if (Environment::isWindows()) {
         if (!empty($newConfig['remotebuzzer']['enabled'])) {
             $newConfig['remotebuzzer']['enabled'] = false;

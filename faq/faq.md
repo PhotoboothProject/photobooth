@@ -155,8 +155,8 @@ If you want to configure additional properties of the collage layout you have to
   "layout": [ # the array from above ]
 }
 ```
-`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added. Collage width must be greater than hight to take effect.  
-`width` and `height` (optional) can be defined in pixel to change the resolution of the collage. **Note:** both dimensions must be defined, else the default collage configuration will be used.  
+`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added. Collage width must be greater than hight to take effect.
+`width` and `height` (optional) can be defined in pixel to change the resolution of the collage. **Note:** both dimensions must be defined, else the default collage configuration will be used.
 `text_custom_style` set to `true` if you want to apply text, `false` to disable. The following properties can override the config from Adminpanel, else the text on collage configuration will be used from Photobooth:
 - `text_font_size`
 - `text_rotation`
@@ -169,33 +169,9 @@ If you want to configure additional properties of the collage layout you have to
 - `text_line`(text, can also be empty)
 - `text_linespace`
 
-`frame` (optional) the real path to the frame to be used, else the default collage frame configuration will be used.  
-`apply_frame` needed if `frame` is defined. Needs `once` or `always` to be defined, else the default collage configuration will be used.  
-`background` (optional) the real path to the background image to be used.   
-
----
-
-### How to change the look of my Photobooth?
-
-Photobooth can be easylie styled for your personal needs via admin panel, open [localhost/admin](http://localhost/admin) in your browser and take a look at the `User Interface` options.
-
-To use a private custom index you need to create the following files:
-
-- `resources/css/custom_style.css`
-  - Optional: `src/sass/custom_style.scss` (`npm run build` will create the `resources/css/custom_style.css` out of it)
-- `resources/css/custom_chromakeying.css`
-  - Optional: `src/sass/custom_chromakeying.scss` (`npm run build` will create the `resources/css/custom_chromakeying.css` out of it)
-- `resources/css/custom_chromacapture.css`
-  - Optional: `src/sass/custom_chromacapture.scss` (`npm run build` will create the `resources/css/custom_chromacapture.css` out of it)
-- `template/custom.template.php`
-
-At least one of these custom style files need to exist! If other custom style files are missing a copy of the modern style file will be used.
-
-Once you've created needed files you will be able to use the selection `custom` from the `"Styling"` option.
-
-**Please note**: the custom style and template will not be tracked by git to avoid sharing by accident!
-
-If you have e.g. private backgrounds (maybe files without a usable license) you can create a folder called `private` inside the root of your Photbooth source. This folder (and subfolders) will not be tracked by git to avoid sharing by accident!
+`frame` (optional) the real path to the frame to be used, else the default collage frame configuration will be used.
+`apply_frame` needed if `frame` is defined. Needs `once` or `always` to be defined, else the default collage configuration will be used.
+`background` (optional) the real path to the background image to be used.
 
 ---
 
@@ -277,11 +253,11 @@ Using the Remotebuzzer feature makes the button action taking effect at the same
 The Hardware Button functionality supports two separate modes of operation (select via admin panel):
 
 - **Buttons**: Distinct hardware buttons can be connected to distinct GPIOs. Each button will trigger a separate functionality (i.e. take photo).
-- **Rotary Encoder**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions. 
+- **Rotary Encoder**: A rotary encoder connected to GPIOs will drive the input on the screen. This enables to use the rotary to scroll through the Photobooth UI buttons, and click to select actions.
 
 Both buttons and rotary encoder controls can be combined.
 
-Photobooth will watch Button GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always. 
+Photobooth will watch Button GPIOs for a PIN_DOWN event - so the hardware button needs to pull the GPIO to ground, for to trigger. This requires the GPIOs to be configured in PULLUP mode - always.
 
 For the **LED Support** GPIOs need to be set as OUTPUT.
 
@@ -324,7 +300,7 @@ The server supports up to four connected hardware buttons for the following func
 
 **Note:**
 
- -  If collage is configured with interruption, next button presses will trigger the next collage pictures. 
+ -  If collage is configured with interruption, next button presses will trigger the next collage pictures.
  -  If collage is disabled in the admin settings, long button press also triggers a single picture
  -  If the collage button is activated (see next), the picture button will never trigger a collage, regardless
 
@@ -334,7 +310,7 @@ The server supports up to four connected hardware buttons for the following func
 
 **Note:**
 
-- If collage is configured with interruption, next button presses will trigger the next collage pictures. 
+- If collage is configured with interruption, next button presses will trigger the next collage pictures.
 - If collage is disabled in the admin settings (Collage section), this button will do nothing.
 
 3) **Shutdown Button**
@@ -344,7 +320,7 @@ The server supports up to four connected hardware buttons for the following func
 **Note:**
 
 - Hold the button for a defined time to initiate the shut down (defaults to 5 seconds). This can be adjusted in the admin settings.
-- The shutdown button will only trigger if there is currently no action in progress in Photobooth (picture, collage). 
+- The shutdown button will only trigger if there is currently no action in progress in Photobooth (picture, collage).
 
 4) **Print Button**
 
@@ -596,7 +572,7 @@ Change your Photobooth configuration:
 **Further information**:
 
 The _"Command to generate a live preview"_ is only executed if the _"Preview Mode"_ is set to _"from device cam"_.
- 
+
 There's no need to define the _"Command to kill live preview"_ while using the _cameracontrol.py_, so just empty that field. The _"Command to kill live preview"_ is only executed if defined.
 
 If you want to use the DSLR view as background video, enable _"Use stream for live preview as background"_ and disable the _"Execute start command for preview on take picture/collage"_ setting of Photobooth, which is enabled by default.
@@ -720,7 +696,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
     +   url(http://192.168.0.2:8081)
     ```
 
-    To use a Raspberry Pi Camera module Motion is required, but you won't be able to use the Raspberry Pi Camera 
+    To use a Raspberry Pi Camera module Motion is required, but you won't be able to use the Raspberry Pi Camera
     for preview at countdown!
 
     ```sh
@@ -870,7 +846,7 @@ xinput list
 remember the device id=[X] of the touchscreen.
 
 ```
-xinput list-props "Device Name" 
+xinput list-props "Device Name"
 ```
 
 Get the ID in brackets (Y) of Coordinate Transformation Matrix
@@ -884,7 +860,7 @@ adjust the coding c0 0 c1 0 c2 c3 0 0 1 with your own data.
 You can get the values of your screens with the following command:
 
 ```
-xrandr | grep \* # xrandr uses "*" 
+xrandr | grep \* # xrandr uses "*"
 ```
 
 to identify the screen being used
@@ -1017,7 +993,7 @@ Array
             [11] =>     env LANG=C gphoto2 --debug --debug-logfile=my-logfile.txt --capture-image-and-download --filename=/var/www/html/testa/data/tmp/20230103_083437.jpg
             [12] =>
             [13] => Please make sure there is sufficient quoting around the arguments.
-            [14] => 
+            [14] =>
         )
 
     [php] => takePic.php
@@ -1127,7 +1103,7 @@ reboot
 
 Everything working?
 
-- **No**: The camera might be claimed by a different process. The gvfs-gphoto2-volume-monitor is known to cause trouble and shouldn't be executed.  
+- **No**: The camera might be claimed by a different process. The gvfs-gphoto2-volume-monitor is known to cause trouble and shouldn't be executed.
   The Photobooth installer should take care about it, but maybe something went wrong and we should change it manually (reboot required!):
 
 ```
@@ -1167,17 +1143,17 @@ Source: [https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochze
 
 ### How to upload pictures to a remote server after picture has been taken?
 
-#### Goal: 
+#### Goal:
 After a picture is taken with the photobox upload it automatically to a remote server.
 
-#### Usecase: 
-You have a remote server (e.g. with your website on it) or another Raspberry Pi to which you’d like instantly synchronizing your taken pictures. Also you could upload the pictures to a remote server and make them available through the QR code over the internet. By this you would not require people to access a local Wifi to download the picture from your local device which is running your Photobox. 
+#### Usecase:
+You have a remote server (e.g. with your website on it) or another Raspberry Pi to which you’d like instantly synchronizing your taken pictures. Also you could upload the pictures to a remote server and make them available through the QR code over the internet. By this you would not require people to access a local Wifi to download the picture from your local device which is running your Photobox.
 
 #### How to:
 -	You should have a remote server with an SSH login. Know your username and password: (e.g.: [username.strato-hosting.eu]@ssh.strato.de)
--	We will be using the Post-photo script / command of the Photobox which you can find in the admin panel in the section Commands. 
+-	We will be using the Post-photo script / command of the Photobox which you can find in the admin panel in the section Commands.
 -	The command is being executed after the picture has been taken and gets the picture’s name as an attribute.
--	Command: 	
+-	Command:
 ```sh
 scp /var/www/html/photobooth/data/images/%s [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures_on_the_remote_host]
 ```
@@ -1188,7 +1164,7 @@ scp /var/www/html/photobooth/data/images/%s [username@remotehost]:/[path_to_wher
 ```sh
 sudo -u www-data ssh-keygen -t rsa
 ```
-2. Copy the public key to the remote (destination) server 
+2. Copy the public key to the remote (destination) server
 ```sh
 sudo -u www-data ssh-copy-id [username@remotehost]
 ```
@@ -1196,11 +1172,11 @@ sudo -u www-data ssh-copy-id [username@remotehost]
 ```sh
 sudo -u www-data scp /var/www/html/photobooth/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
 ```
-You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server. 
+You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server.
 
 ### How to use the image randomizer
 
-To use the image randomizer images must be placed inside private/images/{folderName}.  
+To use the image randomizer images must be placed inside private/images/{folderName}.
 For hassle-free (ssh/sftp-free) upload, you may want to use the integrated images uploader: [http://localhost/admin/upload](http://localhost/admin/upload).
 
 
