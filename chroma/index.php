@@ -53,7 +53,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
             <?=$languageService->translate('chromaInfoBefore')?>
         </div>
 
-        <?php include PathUtility::getAbsolutePath('template/components/start.loader.php'); ?>
+        <?php include PathUtility::getAbsolutePath('template/components/stage.loader.php'); ?>
 
         <!-- Result Page -->
         <div class="stage" data-stage="result"></div>
