@@ -72,31 +72,6 @@
   z-index: 150;
 }
 
-.spacer {
-  clear: both;
-  height: 50px;
-  width: 100%;
-}
-
-.sliderImages {
-  display: none;
-  position: fixed;
-  top: 0;
-  z-index: 1000000;
-  background: #000;
-}
-
-#gallery .controls a.close_opengal {
-  display: none;
-  right: 30px;
-  top: 30px;
-  position: fixed;
-  z-index: 10000000;
-  font-size: 3.125em;
-  text-shadow: 0 2px 0 #000;
-  color: #fff;
-}
-
 .chroma-control-bar {
   margin-top: 12px;
   text-align: center;
