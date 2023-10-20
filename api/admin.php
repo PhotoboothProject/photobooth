@@ -49,6 +49,7 @@ if (isset($data['type'])) {
         if ((isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) || $newConfig['login']['keypad']) {
             if ($newConfig['login']['keypad'] && strlen($newConfig['login']['pin']) != 4) {
                 $Logger->addLogData(['keypad' => 'Keypad pin reset.']);
+                $Logger->addLogData(['keypad' => 'Length: ' . strlen($newConfig['login']['pin']) . ' Expected length: 4']);
                 $newConfig['login']['enabled'] = false;
                 $newConfig['login']['keypad'] = false;
                 $newConfig['login']['pin'] = '';
@@ -56,7 +57,6 @@ if (isset($data['type'])) {
             if (isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) {
                 // allow login via password, but we might have disabled because the PIN length did not match our requirements
                 $newConfig['login']['enabled'] = true;
-
                 if ($newConfig['login']['password'] != $config['login']['password']) {
                     $hashing = password_hash($newConfig['login']['password'], PASSWORD_DEFAULT);
                     $newConfig['login']['password'] = $hashing;
@@ -75,8 +75,12 @@ if (isset($data['type'])) {
     }
 
     if (isset($newConfig['login']['rental_keypad']) && $newConfig['login']['rental_keypad'] == true) {
-        if (strlen($newConfig['login']['rental_pin']) != 4 || $newConfig['login']['rental_pin'] == $newConfig['login']['pin']) {
+        if (strlen($newConfig['login']['rental_pin']) != 4 || $newConfig['login']['rental_pin'] === $newConfig['login']['pin']) {
             $Logger->addLogData(['rental_keypad' => 'Rental keypad pin reset.']);
+            $Logger->addLogData(['rental_keypad' => 'Length: ' . strlen($newConfig['login']['rental_pin']) . ' Expected length: 4']);
+            if ($newConfig['login']['rental_pin'] === $newConfig['login']['pin']) {
+                $Logger->addLogData(['rental_keypad' => 'Rental keypad pin must be different from login pin.']);
+            }
             $newConfig['login']['rental_keypad'] = false;
             $newConfig['login']['rental_pin'] = '';
         }
