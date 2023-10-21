@@ -680,6 +680,9 @@ detect_browser() {
     if [ $(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
         WEBBROWSER="firefox"
         CHROME_FLAGS=false
+    elif [ $(dpkg-query -W -f='${Status}' "firefox-esr" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+        WEBBROWSER="firefox-esr"
+        CHROME_FLAGS=false
     elif [ $(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
         WEBBROWSER="chromium-browser"
         CHROME_FLAGS=true
