@@ -27,8 +27,6 @@ class ThemeUtility
             '--font-size' => $config['ui']['font_size'] ?? '__UNSET__',
             '--font-color' => $config['colors']['font'] ?? '__UNSET__',
             '--preview-rotation' => $config['preview']['rotation'] ?? '__UNSET__',
-            '--picture-frame' => $config['picture']['htmlframe'] ?? '__UNSET__',
-            '--collage-frame' => $config['collage']['htmlframe'] ?? '__UNSET__',
         ];
 
         $output = '';

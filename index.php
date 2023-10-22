@@ -40,19 +40,19 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 <body class="gallery-mode--overlay ">
 
-<?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
+<?php if ($config['preview']['showFrame'] && !empty($config['picture']['frame'])): ?>
     <img
         id="picture--frame"
         class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-        src="<?php echo $config['picture']['htmlframe']; ?>"
+        src="<?php echo $config['picture']['frame']; ?>"
         alt="pictureFrame"
     />
 <?php endif; ?>
-<?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
+<?php if ($config['preview']['showFrame'] && !empty($config['collage']['frame'])): ?>
     <img
         id="collage--frame"
         class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-        src="<?php echo $config['collage']['htmlframe']; ?>"
+        src="<?php echo $config['collage']['frame']; ?>"
         alt="collageFrame"
     />
 <?php endif; ?>

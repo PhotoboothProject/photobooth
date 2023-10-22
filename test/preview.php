@@ -18,11 +18,11 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 
 <body>
-    <?php if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])): ?>
-    <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['htmlframe']; ?>" alt="pictureFrame" />
+    <?php if ($config['preview']['showFrame'] && !empty($config['picture']['frame'])): ?>
+    <img id="picture--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['picture']['frame']; ?>" alt="pictureFrame" />
     <?php endif; ?>
-    <?php if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])): ?>
-    <img id="collage--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['collage']['htmlframe']; ?>" alt="collageFrame" />
+    <?php if ($config['preview']['showFrame'] && !empty($config['collage']['frame'])): ?>
+    <img id="collage--frame" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" src="<?php echo $config['collage']['frame']; ?>" alt="collageFrame" />
     <?php endif; ?>
     <video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>" autoplay playsinline></video>
 
@@ -36,13 +36,13 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 echo ComponentUtility::renderButton('startPreview', 'fa fa-play', 'startPreview');
 echo ComponentUtility::renderButton('stopPreview', 'fa fa-stop', 'stopPreview');
-if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe'])) {
+if ($config['preview']['showFrame'] && !empty($config['picture']['frame'])) {
     echo ComponentUtility::renderButton('showPictureFrame', 'fa fa-eye', 'showPictureFrame');
 }
-if ($config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])) {
+if ($config['preview']['showFrame'] && !empty($config['collage']['frame'])) {
     echo ComponentUtility::renderButton('showCollageFrame', 'fa fa-eye', 'showCollageFrame');
 }
-if ($config['preview']['showFrame'] && !empty($config['picture']['htmlframe']) || $config['preview']['showFrame'] && !empty($config['collage']['htmlframe'])) {
+if ($config['preview']['showFrame'] && !empty($config['picture']['frame']) || $config['preview']['showFrame'] && !empty($config['collage']['frame'])) {
     echo ComponentUtility::renderButton('hideFrame', 'fa fa-eye-slash', 'hideFrame');
 }
 echo ComponentUtility::renderButtonLink('back', 'fa fa-chevron-left', PathUtility::getPublicPath('test'));
