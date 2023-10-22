@@ -241,14 +241,6 @@ if (empty($config['background']['chroma'])) {
     $config['background']['chroma'] = 'url(' . $bg_url . ')';
 }
 
-if ($config['preview']['showFrame'] && !empty($config['picture']['frame'])) {
-    $config['picture']['htmlframe'] = $config['picture']['frame'];
-}
-
-if ($config['preview']['showFrame'] && !empty($config['collage']['frame'])) {
-    $config['collage']['htmlframe'] = $config['collage']['frame'];
-}
-
 if (empty($config['webserver']['ip'])) {
     $config['webserver']['ip'] = $photobooth->getIp();
 }
