@@ -68,6 +68,28 @@ final class PathUtilityTest extends TestCase
         ];
     }
 
+    #[DataProvider('providerGetPublicPathAbsolute')]
+    public function testGetPublicPathAbsolute(string $path, string $expected): void
+    {
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['SERVER_NAME'] = 'photoboothproject.github.io';
+        $this->assertSame($expected, PathUtility::getPublicPath($path, true));
+    }
+
+    public static function providerGetPublicPathAbsolute(): array
+    {
+        $rootPath = realpath(__DIR__ . '/../../../');
+
+        return [
+            ['https://example.com', 'https://example.com'],
+            ['http://example.com', 'http://example.com'],
+            ['localhost', 'https://photoboothproject.github.io/localhost'],
+            ['data/images/20231001_094317.jpg', 'https://photoboothproject.github.io/data/images/20231001_094317.jpg'],
+            [$rootPath . '/data/images/20231001_094317.jpg', 'https://photoboothproject.github.io/data/images/20231001_094317.jpg'],
+            [$rootPath . '/resources/css/framework.css', 'https://photoboothproject.github.io/resources/css/framework.css'],
+        ];
+    }
+
     #[DataProvider('providerGetBaseUrl')]
     public function testGetBaseUrl(string $documentRoot, string $expected): void
     {
