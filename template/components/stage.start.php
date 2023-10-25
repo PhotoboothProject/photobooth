@@ -4,7 +4,7 @@ use Photobooth\Utility\PathUtility;
 
 ?>
 <!-- Start Page -->
-<div class="stage rotarygroup" data-stage="start">
+<div class="stage stage--start rotarygroup" data-stage="start">
     <?php include PathUtility::getAbsolutePath('template/components/start.logo.php'); ?>
     <div class="stage-inner">
         <?php if ($config['event']['enabled'] || $config['start_screen']['title_visible']): ?>

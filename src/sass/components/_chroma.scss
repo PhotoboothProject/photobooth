@@ -1,0 +1,39 @@
+/**
+ * Cheese
+ */
+.chroma-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  translate: -50% -50%;
+
+  canvas {
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.chroma-background-selector {
+  position: absolute;
+  max-width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  left: 2rem;
+  right: 2rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  bottom: calc(4rem + var(--button-height));
+}
+
+.chroma-background-selector-image {
+  cursor: pointer;
+  max-width: 120px;
+  max-height: 80px;
+  border: 2px solid var(--border-color);
+}

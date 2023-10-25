@@ -1,5 +1,5 @@
-/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously initRemoteBuzzerFromDOM rotaryController photoboothTools */
-/* exported setBackgroundImage setMainImage */
+/* globals photoBooth MarvinColorModelConverter AlphaBoundary MarvinImage Seriously initRemoteBuzzerFromDOM photoboothTools */
+/* exported setChromaImage processChromaImage */
 let mainImage;
 let mainImageWidth;
 let mainImageHeight;
@@ -10,8 +10,9 @@ let chroma;
 let seriouslyimage;
 let needsReload = false;
 const notificationTimeout = config.ui.notification_timeout * 1000;
-const canvas = document.getElementById('mainCanvas');
-const ctx = canvas.getContext ? canvas.getContext('2d') : null;
+
+const chromaCanvas = document.getElementById('chromaCanvas');
+const chromaCanvasContext = chromaCanvas.getContext ? chromaCanvas.getContext('2d') : null;
 
 function greenToTransparency(imageIn, imageOut) {
     for (let y = 0; y < imageIn.getHeight(); y++) {
@@ -57,7 +58,7 @@ function alphaBoundary(imageOut, radius) {
     }
 }
 
-function setMainImage(imgSrc, save = false, filename = '') {
+function processChromaImage(imgSrc, save = false, filename = '') {
     if (config.keying.variant === 'marvinj') {
         const image = new MarvinImage();
         image.load(imgSrc, function () {
@@ -130,26 +131,25 @@ function setMainImage(imgSrc, save = false, filename = '') {
 }
 
 // eslint-disable-next-line no-unused-vars
-function setBackgroundImage(url) {
+function setChromaImage(url) {
     backgroundImage = new Image();
     backgroundImage.src = url;
     backgroundImage.onload = function () {
         drawCanvas();
-        $('.canvasWrapper').css('display', 'inline-block');
     };
 }
 
 function drawCanvas(save = false, filename = '') {
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
-        canvas.width = mainImage.width;
-        canvas.height = mainImage.height;
+       chromaCanvas.width = mainImage.width;
+       chromaCanvas.height = mainImage.height;
     } else if (typeof backgroundImage !== 'undefined' && backgroundImage !== null) {
-        canvas.width = backgroundImage.width;
-        canvas.height = backgroundImage.height;
+       chromaCanvas.width = backgroundImage.width;
+       chromaCanvas.height = backgroundImage.height;
     }
 
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    chromaCanvasContext.clearRect(0, 0,chromaCanvas.width,chromaCanvas.height);
 
     if (typeof backgroundImage !== 'undefined' && backgroundImage !== null) {
         if (typeof mainImage !== 'undefined' && mainImage !== null) {
@@ -159,18 +159,18 @@ function drawCanvas(save = false, filename = '') {
                 mainImage.width,
                 mainImage.height
             );
-            ctx.drawImage(backgroundImage, 0, 0, size.width, size.height);
+            chromaCanvasContext.drawImage(backgroundImage, 0, 0, size.width, size.height);
         } else {
-            ctx.drawImage(backgroundImage, 0, 0, backgroundImage.width, backgroundImage.height);
+            chromaCanvasContext.drawImage(backgroundImage, 0, 0, backgroundImage.width, backgroundImage.height);
         }
     }
 
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
         if (config.keying.variant === 'marvinj') {
-            ctx.drawImage(mainImage, 0, 0);
+            chromaCanvasContext.drawImage(mainImage, 0, 0);
         } else {
             //important to fetch tmpimageout
-            ctx.drawImage(document.getElementById('tmpimageout'), 0, 0);
+            chromaCanvasContext.drawImage(document.getElementById('tmpimageout'), 0, 0);
         }
         if (save) {
             saveImage(filename);
@@ -180,16 +180,16 @@ function drawCanvas(save = false, filename = '') {
 
 function clearCanvasAndLoadImage(imageUrl) {
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    chromaCanvasContext.clearRect(0, 0,chromaCanvas.width,chromaCanvas.height);
 
     // Create a new image element
     const newImage = new Image();
 
     // Set the onload event handler to execute code after the image is loaded
     newImage.onload = function () {
-        canvas.width = newImage.width;
-        canvas.height = newImage.height;
-        ctx.drawImage(newImage, 0, 0);
+       chromaCanvas.width = newImage.width;
+       chromaCanvas.height = newImage.height;
+        chromaCanvasContext.drawImage(newImage, 0, 0);
     };
 
     // Set the source of the image to the specified URL
@@ -197,7 +197,7 @@ function clearCanvasAndLoadImage(imageUrl) {
 }
 
 function saveImage(filename, cb) {
-    const dataURL = canvas.toDataURL('image/png');
+    const dataURL = chromaCanvas.toDataURL('image/png');
     $.ajax({
         method: 'POST',
         url: config.foldersPublic.api + '/chromakeying/save.php',
@@ -209,22 +209,16 @@ function saveImage(filename, cb) {
             if (typeof onCaptureChromaView === 'undefined') {
                 setTimeout(function () {
                     photoboothTools.overlay.close();
-                    $('[data-command="save-chroma-btn"]').blur();
+                    $('[data-command="save-chroma-btn"]').trigger('blur');
                 }, notificationTimeout);
             } else {
                 photoBooth.takingPic = false;
                 needsReload = true;
                 photoBooth.chromaimage = resp.filename;
-                if ($('.chroma-control-bar').is(':hidden')) {
-                    $('.chroma-control-bar').show();
-                    $('.takeChroma').hide();
-                }
                 clearCanvasAndLoadImage(config.foldersPublic.images + '/' + resp.filename);
 
                 if (config.picture.allow_delete) {
-                    $('.deletebtn').css('visibility', 'visible');
-                    $('.chroma-control-bar')
-                        .find('.deletebtn')
+                    $('[data-command="deletebtn"]')
                         .off('click')
                         .on('click', (ev) => {
                             ev.preventDefault();
@@ -246,7 +240,7 @@ function saveImage(filename, cb) {
                                     }
                                 });
                             } else {
-                                $('.deletebtn').blur();
+                                $('.deletebtn').trigger('blur');
                             }
                         });
                 }
@@ -275,38 +269,6 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
         width: srcWidth * ratio,
         height: srcHeight * ratio
     };
-}
-
-function printImageHandler(ev) {
-    ev.preventDefault();
-
-    setTimeout(function () {
-        saveImage('', (resp) => {
-            if (!resp.success) {
-                return;
-            }
-
-            photoboothTools.printImage(resp.filename, () => {
-                $('[data-command="print-btn"]').blur();
-            });
-        });
-    }, 1000);
-}
-
-function saveImageHandler(ev) {
-    ev.preventDefault();
-    photoboothTools.overlay.show(photoboothTools.getTranslation('saving'));
-    saveImage();
-}
-
-function closeHandler(ev) {
-    ev.preventDefault();
-
-    if (document.referrer) {
-        window.location = document.referrer;
-    } else {
-        window.history.back();
-    }
 }
 
 $(document).on('keyup', function (ev) {
@@ -345,92 +307,61 @@ $(document).on('keyup', function (ev) {
     }
 });
 
-$(document).ready(function () {
+$(function() {
+    const $chromaStage = $('.stage[data-stage="start"]');
+    const $chromaActions = $chromaStage.find('.buttonbar.buttonbar--bottom');
+    const $chromaMessage = $chromaStage.find('.stage-message');
+
     if (typeof onCaptureChromaView === 'undefined') {
-        $('[data-command="save-chroma-btn"]').on('click', saveImageHandler);
-        $('[data-command="print-btn"]').on('click', printImageHandler);
-        $('[data-command="close-btn"]').on('click', closeHandler);
+        $('[data-command="save-chroma-btn"]').on('click', (event) => {
+            event.preventDefault();
+            photoboothTools.overlay.show(photoboothTools.getTranslation('saving'));
+            saveImage();
+        });
+        $('[data-command="print-btn"]').on('click', (event) => {
+            event.preventDefault();
+            setTimeout(function () {
+                saveImage('', (resp) => {
+                    if (!resp.success) {
+                        return;
+                    }
+                    photoboothTools.printImage(resp.filename, () => {
+                        $('[data-command="print-btn"]').trigger('blur');
+                    });
+                });
+            }, 1000);
+        });
+        $('[data-command="close-btn"]').on('click', (event) => {
+            event.preventDefault();
+            if (document.referrer) {
+                window.location = document.referrer;
+            } else {
+                window.history.back();
+            }
+        });
 
         setTimeout(function () {
-            setMainImage($('body').attr('data-main-image'));
+            processChromaImage($('body').attr('data-main-image'));
         }, 100);
 
-        // we don't want to scroll on small or horizontal devices
-        const windowHeight = $(window).innerHeight();
-        const bottomLine = $('.chroma-control-bar').position().top + $('.chroma-control-bar').outerHeight(true);
-        const diff = bottomLine - windowHeight;
-
-        if (diff > 0) {
-            const canvasHeight = $('#mainCanvas').height();
-
-            $('#mainCanvas').css('height', canvasHeight - diff + 'px');
-        }
-        $('.canvasWrapper').removeClass('initial');
-
         initRemoteBuzzerFromDOM();
-        rotaryController.focusSet('.chromawrapper');
     } else {
-        $('.backgroundPreview').on('click', function () {
-            $('.canvasWrapper').removeClass('initial');
-            if ($('.chroma-control-bar').is(':hidden')) {
-                $('.chroma-control-bar').show();
-                $('.chromaNote').empty();
-                $('.chromaNote').hide();
-            }
-            $('.backgrounds').addClass('shrinked');
+        $chromaActions.addClass('hidden');
+
+        $('.chroma-background-selector-image').on('click', function () {
+            $chromaMessage.addClass('hidden');
+            $chromaActions.removeClass('hidden');
         });
 
-        // Take Chroma Button
-        $('.takeChroma, .newchroma').on('click', function (e) {
-            e.preventDefault();
-
+        $('[data-command="take-chroma"]').on('click', (event) => {
+            event.preventDefault();
             if (photoBooth.takingPic) {
                 photoboothTools.console.logDev('Taking picture in progress already!');
-
                 return;
             }
-
-            const chromaInfo = photoboothTools.getTranslation('chromaInfoAfter');
-
             photoBooth.thrill('chroma');
-
-            if ($('.chroma-control-bar').is(':visible')) {
-                $('.chroma-control-bar').hide();
-                $('.backgrounds').hide();
-
-                setTimeout(() => {
-                    $('.chromaNote').show();
-                    $('.chromaNote').text(chromaInfo);
-                    $('.chroma-control-bar > .takeChroma').hide();
-                    $('.chroma-control-bar > .deleteBtn').hide();
-                    $('.chroma-control-bar > .reloadPage').show();
-                    $('.chroma-control-bar').show();
-                }, config.picture.cntdwn_time * 1000);
-            }
-        });
-
-        $('.reloadPage').on('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            photoboothTools.reloadPage();
-        });
-
-        // Open Gallery Button
-        $('.chromaCapture-gallery-btn').on('click', function (e) {
-            e.preventDefault();
-
-            photoBooth.openGallery($(this));
-        });
-
-        // Close Button
-        $('.chromaCapture-close-btn').on('click', function () {
-            location.assign('./index.php');
         });
 
         photoboothTools.console.log('[CHROMA CAPTURE] DOM ready');
-        if (typeof rotaryController !== 'undefined') {
-            rotaryController.focusSet('.stage[data-stage="start"]');
-        }
     }
 });

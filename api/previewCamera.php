@@ -6,11 +6,11 @@ use Photobooth\DataLogger;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = new DataLogger(PHOTOBOOTH_LOG);
+$logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 $simpleExec = $config['preview']['simpleExec'];
 
-function isRunning($pid, $Logger)
+function isRunning($pid, $logger)
 {
     try {
         $result = shell_exec(sprintf('ps %d', $pid));
@@ -20,7 +20,7 @@ function isRunning($pid, $Logger)
         }
     } catch (Exception $e) {
         $ErrorData = ['exception' => $e->getMessage()];
-        $Logger->addLogData($ErrorData);
+        $logger->addLogData($ErrorData);
         return false;
     }
 
@@ -31,15 +31,15 @@ if ($_POST['play'] === 'start') {
     $cmd = sprintf($config['preview']['cmd']);
     if ($simpleExec) {
         exec($cmd);
-        $LogData = [
+        $data = [
             'isRunning' => true,
             'pid' => intval(1),
         ];
     } else {
         $pid = exec($cmd, $out);
         sleep(3);
-        $LogData = [
-            'isRunning' => isRunning($pid, $Logger),
+        $data = [
+            'isRunning' => isRunning($pid, $logger),
             'pid' => $pid - 1,
             'cmd' => $cmd,
         ];
@@ -62,22 +62,22 @@ if ($_POST['play'] === 'start') {
         }
     }
     if ($simpleExec) {
-        $LogData = [
+        $data = [
             'isRunning' => false,
             'pid' => intval(0),
         ];
     } else {
-        $LogData = [
-            'isRunning' => isRunning($_POST['pid'], $Logger),
+        $data = [
+            'isRunning' => isRunning($_POST['pid'], $logger),
             'cmd' => $killcmd,
             'pid' => intval($_POST['pid']),
         ];
     }
 }
 if ($config['dev']['loglevel'] > 1) {
-    $Logger->addLogData($LogData);
-    $Logger->logToFile();
+    $logger->addLogData($data);
+    $logger->logToFile();
 }
-$LogString = json_encode($LogData);
-echo $LogString;
+
+echo json_encode($data);
 exit();

@@ -3,7 +3,7 @@
  */
 [data-ui-theme='modern'],
 [data-ui-theme='modern_squared'] {
-  [data-stage='start'] {
+  .stage--start {
     .stage-inner {
       justify-content: flex-end;
     }
@@ -15,7 +15,7 @@
     }
   }
 
-  [data-stage='result'] {
+  .stage--result {
     button[data-command='homebtn'] {
       position: fixed;
       top: 2rem;
@@ -25,7 +25,7 @@
 }
 
 [data-ui-theme='modern'] {
-  [data-stage='start'] {
+  .stage--start {
     .stage-inner {
       justify-content: flex-end;
       align-items: flex-end;
@@ -35,10 +35,13 @@
       text-align: right;
     }
   }
+  .pswp-rotary-focus {
+    background: radial-gradient(var(--highlight-color), var(--primary-color), var(--secondary-color)) !important;
+  }
 }
 
 [data-ui-theme='modern_squared'] {
-  [data-stage='start'] {
+  .stage--start {
     .names {
       text-align: center;
     }

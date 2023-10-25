@@ -20,18 +20,18 @@ if ($_POST['chromaBlend']) {
     $cmd .= ' --chromaBlend ' . escapeshellarg($_POST['chromaBlend']);
 }
 exec($cmd);
-$LogData = [
+$data = [
     'cmd' => $cmd,
     'isRunning' => true,
     'pid' => intval(1),
 ];
 
 if ($config['dev']['loglevel'] > 1) {
-    $Logger = new DataLogger(PHOTOBOOTH_LOG);
-    $Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
-    $Logger->addLogData($LogData);
-    $Logger->logToFile();
+    $logger = new DataLogger(PHOTOBOOTH_LOG);
+    $logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+    $logger->addLogData($data);
+    $logger->logToFile();
 }
-$LogString = json_encode($LogData);
-echo $LogString;
+
+echo json_encode($data);
 exit();

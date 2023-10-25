@@ -28,7 +28,7 @@ gulp.task('js', function () {
     .src('./src/js/**/*.js')
     .pipe(babel({
       presets: ['@babel/env'],
-      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js']
+      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer-server.js']
     }))
     .pipe(gulp.dest('./resources/js'));
 });
@@ -68,7 +68,7 @@ gulp.task('js-admin', function () {
     .pipe(concat('main.admin.js'))
     .pipe(babel({
       presets: ['@babel/env'],
-      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer_server.js']
+      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer-server.js']
     }))
     .pipe(gulp.dest('./resources/js'));
 });

@@ -1,4 +1,4 @@
-/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM setMainImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools photoboothPreview */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM processChromaImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools photoboothPreview */
 
 const photoBooth = (function () {
     const PhotoStyle = {
@@ -42,21 +42,22 @@ const photoBooth = (function () {
 
         resultPage = $('.stage[data-stage="result"]'),
 
+        previewIpcam = $('#preview--ipcam'),
+        previewVideo = $('#preview--video'),
+        previewFramePicture = $('#previewframe--picture'),
+        previewFrameCollage = $('#previewframe--collage'),
+
+        videoSensor = $('#video--sensor'),
+
+        buttonDelete = $('[data-command="deletebtn"]'),
+        buttonPrint = $('[data-command="printbtn"]'),
+
         gallery = $('#gallery'),
         filternav = $('#filternav'),
-        ipcamView = $('#ipcam--view'),
         galimages = $('#galimages'),
-        printBtn = $('.printbtn'),
-        deleteBtn = $('.deletebtn'),
         videoAnimation = $('#videoAnimation'),
         resultVideo = $('#resultVideo'),
         resultVideoQR = $('#resultVideoQR'),
-        idVideoView = $('#video--view'),
-        idVideoSensor = $('#video--sensor'),
-        pictureFrame = $('#picture--frame'),
-        collageFrame = $('#collage--frame'),
-        videoView = idVideoView.get(0),
-        videoSensor = document.querySelector('#video--sensor'),
         usesBackgroundPreview =
             config.preview.asBackground &&
             config.preview.mode === PreviewMode.DEVICE.valueOf() &&
@@ -111,12 +112,12 @@ const photoBooth = (function () {
 
         gallery.removeClass('gallery--open');
         gallery.find('.gallery__inner').hide();
-        idVideoView.hide();
-        collageFrame.hide();
-        pictureFrame.hide();
-        idVideoView.css('z-index', 0);
-        idVideoSensor.hide();
-        ipcamView.hide();
+        previewVideo.hide();
+        previewFrameCollage.hide();
+        previewFramePicture.hide();
+        previewVideo.css('z-index', 0);
+        videoSensor.hide();
+        previewIpcam.hide();
 
         photoboothTools.overlay.close();
         photoboothTools.modal.close();
@@ -160,9 +161,9 @@ const photoBooth = (function () {
     api.stopPreviewAndCaptureFromVideo = () => {
         if (config.preview.camTakesPic) {
             if (photoboothPreview.stream) {
-                videoSensor.width = videoView.videoWidth;
-                videoSensor.height = videoView.videoHeight;
-                videoSensor.getContext('2d').drawImage(videoView, 0, 0);
+                videoSensor.get(0).width = previewVideo.get(0).videoWidth;
+                videoSensor.get(0).height = previewVideo.get(0).videoHeight;
+                videoSensor.get(0).getContext('2d').drawImage(previewVideo.get(0), 0, 0);
             }
         }
         if (!config.preview.killcmd || config.preview.camTakesPic) {
@@ -429,12 +430,12 @@ const photoBooth = (function () {
                 (api.photoStyle === PhotoStyle.PHOTO || api.photoStyle === PhotoStyle.CUSTOM) &&
                 config.picture.take_frame
             ) {
-                pictureFrame.show();
+                previewFramePicture.show();
             } else if (
                 api.photoStyle === PhotoStyle.COLLAGE &&
                 config.collage.take_frame === CollageFrameMode.ALWAYS.valueOf()
             ) {
-                collageFrame.show();
+                previewFrameCollage.show();
             }
         }
 
@@ -492,7 +493,7 @@ const photoBooth = (function () {
         const data = {
             filter: imgFilter,
             style: api.photoStyle,
-            canvasimg: videoSensor.toDataURL('image/jpeg')
+            canvasimg: videoSensor.get(0).toDataURL('image/jpeg')
         };
 
         if (api.photoStyle === PhotoStyle.COLLAGE) {
@@ -549,10 +550,10 @@ const photoBooth = (function () {
 
                     loaderButtonBar.empty();
                     loaderMessage.empty();
-                    idVideoSensor.hide();
-                    idVideoView.hide();
-                    collageFrame.hide();
-                    pictureFrame.hide();
+                    videoSensor.hide();
+                    previewVideo.hide();
+                    previewFrameCollage.hide();
+                    previewFramePicture.hide();
 
                     let imageUrl = config.foldersPublic.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();
@@ -723,10 +724,10 @@ const photoBooth = (function () {
 
             loaderMessage.empty();
             loaderButtonBar.empty();
-            idVideoView.hide();
-            idVideoSensor.hide();
-            collageFrame.hide();
-            pictureFrame.hide();
+            previewVideo.hide();
+            videoSensor.hide();
+            previewFrameCollage.hide();
+            previewFramePicture.hide();
             if (config.video.animation) {
                 videoAnimation.hide();
             }
@@ -816,8 +817,8 @@ const photoBooth = (function () {
     api.processVideo = function (result) {
         startTime = new Date().getTime();
 
-        idVideoSensor.hide();
-        idVideoView.hide();
+        videoSensor.hide();
+        previewVideo.hide();
         loader.css('--stage-background', config.colors.background_countdown);
         loaderMessage.html(
             '<i class="' + config.icons.spinner + '"></i><br>' +
@@ -882,10 +883,14 @@ const photoBooth = (function () {
         if (config.keying.show_all) {
             api.addImage(filename);
         }
-        loader.hide();
+
+        startPage.removeClass('stage--active');
+        loader.removeClass('stage--active');
+        resultPage.addClass('stage--active');
 
         const chromaimage = config.foldersPublic.keying + '/' + filename;
-        setMainImage(chromaimage, true, filename);
+        processChromaImage(chromaimage, true, filename);
+        rotaryController.focusSet(resultPage);
 
         api.takingPic = false;
         remoteBuzzerClient.inProgress(false);
@@ -1005,19 +1010,6 @@ const photoBooth = (function () {
     api.renderPic = function (filename, files) {
         api.filename = filename;
 
-        if (config.print.from_result) {
-            $(document).off('click touchstart', '.printbtn');
-            $(document).on('click', '.printbtn', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                photoboothTools.printImage(filename, () => {
-                    remoteBuzzerClient.inProgress(false);
-                    printBtn.blur();
-                });
-            });
-        }
-
         if (config.print.auto) {
             setTimeout(function () {
                 photoboothTools.printImage(filename, () => {
@@ -1025,6 +1017,17 @@ const photoBooth = (function () {
                 });
             }, config.print.auto_delay);
         }
+
+        buttonPrint
+            .off('click')
+            .on('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                photoboothTools.printImage(filename, () => {
+                    remoteBuzzerClient.inProgress(false);
+                    buttonPrint.trigger('blur');
+                });
+            });
 
         resultPage
             .find('[data-command="qrbtn"]')
@@ -1055,7 +1058,7 @@ const photoBooth = (function () {
                         photoboothTools.reloadPage();
                     }, notificationTimeout);
                 } else {
-                    deleteBtn.blur();
+                    buttonDelete.trigger('blur');
                 }
             });
 
@@ -1082,17 +1085,19 @@ const photoBooth = (function () {
             loader.removeClass('stage--active');
             loader.removeClass('showBackgroundImage');
             loader.css('background-image', null);
+
             if (config.qr.enabled && config.qr.result != 'hidden') {
-                $(
-                    '<img src="' +
-                        config.foldersPublic.api +
-                        '/qrcode.php?filename=' +
-                        filename +
-                        '" alt="qr code" id="resultQR" class="' +
-                        config.qr.result +
-                        '"/>'
-                ).appendTo(resultPage);
+                if (document.getElementById('resultQR')) {
+                    document.getElementById('resultQR').remove();
+                }
+                const qrResultImage = document.createElement('img');
+                qrResultImage.src = config.foldersPublic.api + '/qrcode.php?filename=' + filename;
+                qrResultImage.alt = 'qr code';
+                qrResultImage.id = 'resultQR';
+                qrResultImage.setAttribute('class', 'stage-code ' + config.qr.result);
+                resultPage.append(qrResultImage);
             }
+
             if (!filternav.hasClass('sidenav--open')) {
                 rotaryController.focusSet(resultPage);
             }
@@ -1256,25 +1261,25 @@ const photoBooth = (function () {
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.PHOTO);
-        $(this).blur();
+        $(this).trigger('blur');
     });
 
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.COLLAGE);
-        $(this).blur();
+        $(this).trigger('blur');
     });
 
     $('.takeCustom, .newcustom').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.CUSTOM);
-        $(this).blur();
+        $(this).trigger('blur');
     });
 
     $('.takeVideo, .newVideo').on('click', function (e) {
         e.preventDefault();
         api.thrill(PhotoStyle.VIDEO);
-        $(this).blur();
+        $(this).trigger('blur');
     });
 
     $('[data-command="sidenav-close"]').on('click', function (e) {
@@ -1336,7 +1341,7 @@ const photoBooth = (function () {
         } else {
             document.body.requestFullscreen();
         }
-        $('#fs-button').blur();
+        $('#fs-button').trigger('blur');
     });
 
     api.handleButtonPressWhileTakingPic = function () {
@@ -1383,7 +1388,7 @@ const photoBooth = (function () {
                 if (photoboothTools.isPrinting) {
                     photoboothTools.console.log('Printing already in progress!');
                 } else {
-                    printBtn.trigger('click');
+                    buttonPrint.trigger('click');
                 }
 
                 return;
@@ -1444,7 +1449,7 @@ const photoBooth = (function () {
         });
     }
 
-    idVideoView.on('loadedmetadata', function (ev) {
+    previewVideo.on('loadedmetadata', function (ev) {
         const videoEl = ev.target;
         let newWidth = videoEl.offsetWidth;
         let newHeight = videoEl.offsetHeight;
@@ -1453,10 +1458,10 @@ const photoBooth = (function () {
             newHeight = videoEl.videoHeight;
         }
         if (newWidth !== 0 && newHeight !== 0) {
-            pictureFrame.css('width', newWidth);
-            pictureFrame.css('height', newHeight);
-            collageFrame.css('width', newWidth);
-            collageFrame.css('height', newHeight);
+            previewFramePicture.css('width', newWidth);
+            previewFramePicture.css('height', newHeight);
+            previewFrameCollage.css('width', newWidth);
+            previewFrameCollage.css('height', newHeight);
         }
     });
 

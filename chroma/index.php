@@ -5,7 +5,6 @@ require_once '../lib/boot.php';
 use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\ComponentUtility;
-use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
@@ -21,7 +20,6 @@ if (!(
 $languageService = LanguageService::getInstance();
 $assetService = AssetService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Chroma capture';
-$mainStyle = $config['ui']['style'] . '_chromacapture.css';
 $photoswipe = true;
 $randomImage = false;
 $remoteBuzzer = true;
@@ -30,61 +28,33 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 ?>
 <body class="gallery-mode--overlay ">
-<video id="video--view" class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-       autoplay playsinline></video>
-<div class="chromawrapper">
-    <div class="rotarygroup" id="start">
-        <div class="top-bar">
-<?php
-    if (!$config['chromaCapture']['enabled']) {
-        echo ComponentUtility::renderButtonLink('close', $config['icons']['close'], PathUtility::getPublicPath());
-    }
-    if ($config['gallery']['enabled']) {
-        echo ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery-button');
-    }
-?>
+
+<?php include PathUtility::getAbsolutePath('template/components/preview.php'); ?>
+<?php include PathUtility::getAbsolutePath('template/components/chroma.canvas.php'); ?>
+
+<div class="stage stage--chroma rotarygroup" data-stage="start">
+    <div class="stage-inner">
+        <div class="stage-message stage-message--error"><?=$languageService->translate('chromaInfoBefore')?></div>
+        <?php include PathUtility::getAbsolutePath('template/components/chroma.background.selector.php'); ?>
+        <div class="buttonbar buttonbar--top">
+            <?= ($config['gallery']['enabled']) ? ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery-button') : '' ?>
         </div>
-
-        <div class="canvasWrapper initial">
-            <canvas id="mainCanvas"></canvas>
-        </div>
-
-        <div class="chromaNote">
-            <?=$languageService->translate('chromaInfoBefore')?>
-        </div>
-
-        <?php include PathUtility::getAbsolutePath('template/components/stage.loader.php'); ?>
-
-        <!-- Result Page -->
-        <div class="stage" data-stage="result"></div>
-
-        <div class="backgrounds">
-        <?php
-        $backgroundImages = ImageUtility::getImagesFromPath(PathUtility::getAbsolutePath($config['keying']['background_path']));
-foreach ($backgroundImages as $backgroundImage) {
-    echo '<img src="' . PathUtility::getPublicPath($backgroundImage) . '" class="backgroundPreview rotaryfocus" onclick="setBackgroundImage(this.src)">';
-}
-?>
-        </div>
-
-        <div class="chroma-control-bar">
-<?php
-echo ComponentUtility::renderButton('takePhoto', $config['icons']['take_picture'], 'takeChroma');
-
-if ($config['picture']['allow_delete']) {
-    echo ComponentUtility::renderButton('delete', $config['icons']['delete'], 'deletebtn');
-}
-
-echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'reloadPage');
-?>
-        </div>
-    </div>
-    <div class="rotarygroup">
-        <div id="wrapper">
-            <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
+        <div class="buttonbar buttonbar--bottom">
+            <?= ComponentUtility::renderButton('takePhoto', $config['icons']['take_picture'], 'take-chroma') ?>
         </div>
     </div>
 </div>
+<?php include PathUtility::getAbsolutePath('template/components/stage.loader.php'); ?>
+<div class="stage stage--result" data-stage="result">
+    <div class="stage-inner">
+        <div class="buttonbar buttonbar--bottom">
+            <?= ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'reload') ?>
+            <?= ($config['picture']['allow_delete']) ? ComponentUtility::renderButton('delete', $config['icons']['delete'], 'deletebtn') : '' ?>
+        </div>
+    </div>
+</div>
+
+<?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
 <script type="text/javascript">
     onCaptureChromaView = true;
 </script>

@@ -26,7 +26,6 @@ if (
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
 ) {
     $pageTitle = $config['ui']['branding'];
-    $mainStyle = $config['ui']['style'] . '_style.css';
     $photoswipe = true;
     $randomImage = false;
     $remoteBuzzer = true;
@@ -39,30 +38,8 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 
 <body class="gallery-mode--overlay ">
+<?php include PathUtility::getAbsolutePath('template/components/preview.php'); ?>
 
-<?php if ($config['preview']['showFrame'] && !empty($config['picture']['frame'])): ?>
-    <img
-        id="picture--frame"
-        class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-        src="<?php echo $config['picture']['frame']; ?>"
-        alt="pictureFrame"
-    />
-<?php endif; ?>
-<?php if ($config['preview']['showFrame'] && !empty($config['collage']['frame'])): ?>
-    <img
-        id="collage--frame"
-        class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-        src="<?php echo $config['collage']['frame']; ?>"
-        alt="collageFrame"
-    />
-<?php endif; ?>
-<video
-    id="video--view"
-    class="<?php echo $config['preview']['flip']; ?> <?php echo $config['preview']['style']; ?>"
-    autoplay
-    playsinline
->
-</video>
 <?php if ($config['video']['enabled'] && $config['video']['animation']): ?>
     <div id="videoAnimation">
         <ul class="left">
@@ -77,7 +54,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         </ul>
     </div>
 <?php endif; ?>
-<div id="wrapper">
 <?php
 
 include PathUtility::getAbsolutePath('template/components/stage.start.php');
@@ -92,10 +68,9 @@ if ($config['filters']['enabled']) {
     include PathUtility::getAbsolutePath('template/components/filter.php');
 }
 
-?>
-</div>
+include PathUtility::getAbsolutePath('template/components/main.footer.php');
 
-<?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
+?>
 
 <script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
 <script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>

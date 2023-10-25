@@ -28,7 +28,7 @@ if ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebutto
 
         echo '<!-- Remote Buzzer enabled --- starting server -->' . "\n";
         chdir(PathUtility::getRootPath());
-        proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/remotebuzzer_server.js 1>' . $logfile . ' 2>&1 &', [], $foo));
+        proc_close(proc_open($config['nodebin']['cmd'] . ' resources/js/remotebuzzer-server.js 1>' . $logfile . ' 2>&1 &', [], $foo));
     } else {
         echo '<!-- Remote Buzzer Enabled --- server already started (port in use) -->' . "\n";
     }

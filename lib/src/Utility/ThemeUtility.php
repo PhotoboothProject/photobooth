@@ -23,7 +23,7 @@ class ThemeUtility
             '--gallery-button-color' => $config['colors']['gallery_button'] ?? '__UNSET__',
             '--background-default' => $config['background']['defaults'] ?? '__UNSET__',
             '--background-chroma' => $config['background']['chroma'] ?? '__UNSET__',
-            '--background-url' => $config['preview']['url'] ?? '__UNSET__',
+            '--background-preview' => $config['preview']['url'] ?? '__UNSET__',
             '--font-size' => $config['ui']['font_size'] ?? '__UNSET__',
             '--font-color' => $config['colors']['font'] ?? '__UNSET__',
             '--preview-rotation' => $config['preview']['rotation'] ?? '__UNSET__',

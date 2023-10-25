@@ -135,12 +135,30 @@
     translate: 0 -50%;
   }
 
+  &--top {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    right: 2rem;
+  }
+
+  &--top-left {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+  }
+
+  &--top-right {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+  }
+
   &--bottom {
     position: absolute;
     bottom: 2rem;
     left: 2rem;
     right: 2rem;
-    z-index: 100;
   }
 
   &--actions {
