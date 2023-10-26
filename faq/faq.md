@@ -10,6 +10,8 @@ Some DSLR and Compact Cameras are not supported by this project. Please check fo
 
 Yes it is.
 
+If you're able to capture a picture via `libcamera-still` from terminal you're good to go!
+
 Enable camera support using the `raspi-config` program you will have used when you first set up your Raspberry Pi.
 
 ```sh
@@ -34,9 +36,6 @@ Once done you need to adjust the configuration. Open the admin panel in your bro
 **"Take picture command on Pi OS based on buster":**
 
 `raspistill -n -o %s -q 100 -t 1 | echo Done`
-
-
-Pi Camera works with these config change (also works together with preview at countdown if enabled).
 
 Raspistill / libcamera-still does not give any feedback after the picture was taken, workaround for that with "echo".
 
@@ -474,9 +473,11 @@ There's different ways depending on your needs and personal setup:
 
 #### Preview _"from device cam"_
 
-If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam".
+If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam" on PiOS bookworm inside Firefox which is shipped with the OS.
 
 - Admin panel config "Preview mode": `from device cam`
+
+Currently there's an issue on PiOS bullseye with the new camera stack which avoids the Pi Cameras being detected as Webcam inside the Browser. Theres nothing we can do against this, hopefully the Pi Foundation finds a solution in future.
 
 **Note:**
 
@@ -615,6 +616,40 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 - Do NOT enable *"Device cam takes picture"* in admin panel config!
 - Capture pictures via `raspistill` or `libcamera-still` won't work if motion is installed!
 - Requires Photobooth v2.2.1 or later!
+
+**PiOS bullseye and PiCamera**
+
+If you like to use the Pi Camera only for preview, you're able to setup motion and use the preview from URL option to use the motion stream.
+
+To use the Pi camera for preview and capture on PiOS bullseye you'll also have to setup the _Photobooth-app_ and adjust your preview and capture config:
+
+- [Installation instructions](https://mgrl.github.io/photobooth-docs/setup/installation/)
+- [Photobooth integration](https://mgrl.github.io/photobooth-docs/reference/photoboothprojectintegration/)
+
+This can also be used on PiOS bookworm if you like to have a remote preview and capture with a PiCamera.
+
+**Remote preview and capture workaround for PiOS bullseye**
+
+This workaround, requires the python mjpeg_http_streamer installed - replace _localhost_ with the desired ip-address as needed:
+```
+sudo pip install mjpeg-http-streamer
+```
+TAKE PHOTO CMD:
+```
+wget http://localhost:8080/snapshot -O %s | echo Done
+```
+PREVIEW URL:
+```
+url(http://localhost:8080/stream)
+```
+PRE-PHOTO CMD:
+```
+libcamera-vid -t 0 --width 1920 --height 1080 --framerate 30 --inline --codec mjpeg -o - | python3 -m mjpeg_http_streamer -l 0.0.0.0 -p 8080
+```
+POST-PHOTO CMD:
+```
+kill $(ps aux | grep '[l]ibcamera' | awk '{print $2}')
+```
 
 ---
 
