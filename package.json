@@ -57,7 +57,7 @@
     "gh-markdown-cli": "^0.2.0",
     "github-markdown-css": "^5.2.0",
     "gulp": "^4.0.2",
-    "gulp-sass": "^5.1.0",
+    "gulp-dart-sass": "^1.1.0",
     "jquery": "^3.6.4",
     "marvinj": "^1.0.0",
     "material-icons": "^1.13.6",
