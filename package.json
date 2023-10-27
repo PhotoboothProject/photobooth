@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "npm-run-all --serial format build:faq build:gulp build:head clean:skipwelcome",
-    "build:faq": "mdown --input 'faq/*.md' --output manual --header faq/header.php --footer faq/footer.html && mv manual/faq.html manual/faq.php",
+    "build:faq": "cat faq/header.php > manual/faq.php && marked faq/*.md >> manual/faq.php && cat faq/footer.html >> manual/faq.php",
     "build:gulp": "gulp",
     "build:head": "git log --format='%h %s' -n 20 > HEAD",
     "build:sass": "gulp sass",
@@ -55,11 +55,11 @@
   "dependencies": {
     "@andreasremdt/simple-translator": "^2.0.4",
     "font-awesome": "^4.7.0",
-    "gh-markdown-cli": "^0.2.0",
     "github-markdown-css": "^5.2.0",
     "gulp": "^4.0.2",
     "gulp-dart-sass": "^1.1.0",
     "jquery": "^3.6.4",
+    "marked": "^9.1.2",
     "marvinj": "^1.0.0",
     "material-icons": "^1.13.6",
     "normalize.css": "^8.0.1",
