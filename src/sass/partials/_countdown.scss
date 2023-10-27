@@ -54,7 +54,9 @@
 #counter.tick {
   font-size: 0;
   opacity: 1;
-  transition: font-size 1s, opacity 1s;
+  transition:
+    font-size 1s,
+    opacity 1s;
 }
 
 .cheese {

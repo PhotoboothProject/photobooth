@@ -7,7 +7,9 @@
   background: $secondaryColor;
   overflow: hidden;
   color: $fontColor;
-  transition: width 0.3s, height 0.3s;
+  transition:
+    width 0.3s,
+    height 0.3s;
   z-index: 1000;
 
   h1 {
