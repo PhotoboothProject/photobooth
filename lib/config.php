@@ -1,9 +1,5 @@
 <?php
 
-if (is_file(__DIR__ . '/../private/lib/polyfill.php')) {
-    require_once __DIR__ . '/../private/lib/polyfill.php';
-}
-
 use Photobooth\Environment;
 use Photobooth\Photobooth;
 use Photobooth\Helper;
