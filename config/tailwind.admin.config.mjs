@@ -2,6 +2,7 @@ export default {
   content: [
     "./admin/**/*.php",
     "./lib/**/*.php",
+    "./src/**/*.php",
     "./login/**/*.php",
     "./manual/**/*.php",
     "./welcome/**/*.php",
