@@ -17,7 +17,7 @@ gulp.task('sass', function () {
   const twFilter = filters(['**/*', '!tailwind.admin.scss']);
 
   return gulp
-    .src('./src/sass/**/*.scss')
+    .src('./assets/sass/**/*.scss')
     .pipe(twFilter)
     .pipe(sass().on('error', sass.logError)) // Use sass() without .sync
     .pipe(gulp.dest('./resources/css'));
@@ -25,10 +25,10 @@ gulp.task('sass', function () {
 
 gulp.task('js', function () {
   return gulp
-    .src('./src/js/**/*.js')
+    .src('./assets/js/**/*.js')
     .pipe(babel({
       presets: ['@babel/env'],
-      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer-server.js']
+      ignore: ['assets/js/sync-to-drive.js', 'assets/js/remotebuzzer-server.js']
     }))
     .pipe(gulp.dest('./resources/js'));
 });
@@ -40,7 +40,7 @@ gulp.task('tailwind-admin', function () {
   ];
 
   return gulp
-    .src('./src/sass/tailwind.admin.scss')
+    .src('./assets/sass/tailwind.admin.scss')
     .pipe(sass({
       importer: nodeSassImporter
     }).on('error', sass.logError))
@@ -57,18 +57,18 @@ gulp.task('tailwind-admin', function () {
 gulp.task('js-admin', function () {
   return gulp
     .src([
-      './src/js/tools.js',
-      './src/js/admin/index.js',
-      './src/js/admin/buttons.js',
-      './src/js/admin/navi.js',
-      './src/js/admin/keypad.js',
-      './src/js/admin/imageSelect.js',
-      './src/js/admin/toast.js',
+      './assets/js/tools.js',
+      './assets/js/admin/index.js',
+      './assets/js/admin/buttons.js',
+      './assets/js/admin/navi.js',
+      './assets/js/admin/keypad.js',
+      './assets/js/admin/imageSelect.js',
+      './assets/js/admin/toast.js',
     ])
     .pipe(concat('main.admin.js'))
     .pipe(babel({
       presets: ['@babel/env'],
-      ignore: ['src/js/sync-to-drive.js', 'src/js/remotebuzzer-server.js']
+      ignore: ['assets/js/sync-to-drive.js', 'assets/js/remotebuzzer-server.js']
     }))
     .pipe(gulp.dest('./resources/js'));
 });

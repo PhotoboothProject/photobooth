@@ -29,17 +29,17 @@ If you want to build the project, run `npm run build`.
 
 ## Committing and pushing changes
 
-Please make sure to run `npm run build` and `npm run eslint` before you commit your changes. Running `npm run eslint:fix` might be able to fix general issues on `*.js` files for you.  
+Please make sure to run `npm run build` and `npm run eslint` before you commit your changes. Running `npm run eslint:fix` might be able to fix general issues on `*.js` files for you.
 
-**General Notes**  
+**General Notes**
 - changes to the FAQ need to be done inside the `faq/faq.md`
-- changes to the css-files need to be done inside [src/sass/](src/sass/) (Information can be found [here](resources/css/README.md))
-- changes to the js-files need to be done inside [src/js/](src/js/) (Information can be found [here](resources/js/README.md))
+- changes to the css-files need to be done inside [assets/sass/](assets/sass/) (Information can be found [here](resources/css/README.md))
+- changes to the js-files need to be done inside [assets/js/](assets/js/) (Information can be found [here](resources/js/README.md))
 - translation need to be done on [Crowdin](https://crowdin.com/project/photobooth)
 
 ## Help needed
 
 Please checkout the [open issues](https://github.com/PhotoboothProject/photobooth/issues).
 
-Also, please watch the repo and respond to questions / bug reports / feature requests.  
+Also, please watch the repo and respond to questions / bug reports / feature requests.
 Thanks!
