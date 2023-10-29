@@ -38,22 +38,11 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/@fortawesome/fontawesome-free/css/all.min.css')?>" />
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/material-icons/iconfont/material-icons.css')?>">
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/material-icons/css/material-icons.css')?>">
+    <?= $photoswipe ? '<link rel="stylesheet" href="' . $assetService->getUrl('node_modules/photoswipe/dist/photoswipe.css') . '" />' : ''?>
     <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/fonts.css')?>" />
     <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/framework.css')?>" />
-    <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/' . $mainStyle)?>" />
-<?php
-
-if ($photoswipe) {
-    echo '<link rel="stylesheet" href="' . $assetService->getUrl('node_modules/photoswipe/dist/photoswipe.css') . '"/>';
-    if ($config['gallery']['bottom_bar']) {
-        echo '<link rel="stylesheet" href="' . $assetService->getUrl('resources/css/photoswipe-bottom.css') . '"/>';
-    }
-}
-if (is_file(PathUtility::getAbsolutePath('private/overrides.css'))) {
-    echo '<link rel="stylesheet" href="' . $assetService->getUrl('private/overrides.css') . '"/>';
-}
-
-?>
+    <?= $photoswipe && $config['gallery']['bottom_bar'] ? '<link rel="stylesheet" href="' . $assetService->getUrl('resources/css/photoswipe-bottom.css') . '"/>' : '' ?>
+    <?= is_file(PathUtility::getAbsolutePath('private/overrides.css')) ? '<link rel="stylesheet" href="' . $assetService->getUrl('private/overrides.css') . '"/>' : '' ?>
     <?= ThemeUtility::renderCustomUserStyle($config); ?>
     <script src="<?=$assetService->getUrl('node_modules/jquery/dist/jquery.min.js')?>"></script>
 </head>

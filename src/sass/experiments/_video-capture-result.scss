@@ -1,0 +1,17 @@
+#resultVideo {
+  display: none;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+#resultVideoQR {
+  display: none;
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  min-width: 15%;
+  max-height: 30%;
+}

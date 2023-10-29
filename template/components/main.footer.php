@@ -9,7 +9,7 @@ echo '<script src="' . $assetService->getUrl('resources/js/tools.js') . '"></scr
 
 if ($remoteBuzzer) {
     echo '<script src="' . $assetService->getUrl('node_modules/socket.io-client/dist/socket.io.min.js') . '"></script>';
-    echo '<script src="' . $assetService->getUrl('resources/js/remotebuzzer_client.js') . '"></script>';
+    echo '<script src="' . $assetService->getUrl('resources/js/remotebuzzer-client.js') . '"></script>';
 }
 
 if ($photoswipe) {

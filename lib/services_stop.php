@@ -28,7 +28,7 @@ function killProcessIfActive($pName, $pidFile, $logfileName, $killSig)
 
 // can be killed if active independent of $config['remotebuzzer']['startserver']
 killProcessIfActive(
-    'remotebuzzer_server.js',
+    'remotebuzzer-server.js',
     $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'remotebuzzer_server.pid',
     $config['remotebuzzer']['logfile'],
     9

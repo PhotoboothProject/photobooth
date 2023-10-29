@@ -26,4 +26,8 @@ body {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  background-color: var(--primary-light-color);
+  background-image: var(--background-default);
+  background-position: center center;
+  background-size: cover;
 }

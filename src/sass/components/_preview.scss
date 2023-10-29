@@ -1,0 +1,74 @@
+/**
+ * Preview
+ */
+#preview--none,
+#preview--ipcam,
+#preview--video,
+#previewframe--picture,
+#previewframe--collage {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  translate: -50% -50%;
+  font-size: 1.75em;
+  color: var(--start-font-color);
+  text-align: center;
+}
+
+#preview--ipcam,
+#preview--video,
+#previewframe--picture,
+#previewframe--collage {
+  rotate: var(--preview-rotation);
+}
+
+#preview--none,
+#previewframe--picture,
+#previewframe--collage {
+  height: auto;
+  width: auto;
+}
+
+#preview--ipcam,
+#preview--video,
+#previewframe--picture,
+#previewframe--collage {
+  background-image: none;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  &.fill {
+    object-fit: fill;
+  }
+  &.contain {
+    object-fit: contain;
+  }
+  &.cover {
+    background-size: cover;
+    object-fit: cover;
+  }
+  &.none {
+    object-fit: none;
+  }
+  &.scale-down {
+    object-fit: scale-down;
+  }
+  &.flip-horizontal {
+    scale: 1 -1;
+  }
+  &.flip-vertical {
+    scale: -1 1;
+  }
+}
+
+#preview--ipcam {
+  &.streaming {
+    background-image: var(--background-preview);
+  }
+}

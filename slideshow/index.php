@@ -9,7 +9,6 @@ use Photobooth\Utility\PathUtility;
 $languageService = LanguageService::getInstance();
 $assetService = AssetService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Slideshow';
-$mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
 $randomImage = $config['slideshow']['randomPicture'];
 $remoteBuzzer = false;
@@ -18,14 +17,12 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 ?>
 <body>
-    <div id="wrapper">
-        <div id="gallery" class="gallery">
-            <div class="gallery-header">
-                <div class="gallery-title"><h1><?=$languageService->translate('slideshow')?></h1></div>
-            </div>
-            <div class="gallery-body">
-                <?php include PathUtility::getAbsolutePath('template/components/gallery.images.php'); ?>
-            </div>
+    <div id="gallery" class="gallery">
+        <div class="gallery-header">
+            <div class="gallery-title"><h1><?=$languageService->translate('slideshow')?></h1></div>
+        </div>
+        <div class="gallery-body">
+            <?php include PathUtility::getAbsolutePath('template/components/gallery.images.php'); ?>
         </div>
     </div>
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>

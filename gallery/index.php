@@ -7,7 +7,6 @@ use Photobooth\Utility\PathUtility;
 
 $assetService = AssetService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Gallery';
-$mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = true;
 $randomImage = false;
 $remoteBuzzer = true;
@@ -15,9 +14,7 @@ $remoteBuzzer = true;
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 <body>
-    <div id="wrapper">
-        <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
-    </div>
+    <?php include PathUtility::getAbsolutePath('template/components/gallery.php'); ?>
 
     <script>
         onStandaloneGalleryView = true;
@@ -30,7 +27,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
     <script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>
     <script src="<?=$assetService->getUrl('resources/js/gallery.js')?>"></script>
     <?php if ($config['gallery']['db_check_enabled']): ?>
-    <script src="<?=$assetService->getUrl('resources/js/gallery_updatecheck.js')?>"></script>
+    <script src="<?=$assetService->getUrl('resources/js/gallery-updatecheck.js')?>"></script>
     <?php endif; ?>
 
     <?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>

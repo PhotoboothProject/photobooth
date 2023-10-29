@@ -8,14 +8,12 @@ use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
 $pageTitle = $config['ui']['branding'] . ' Remote Trigger';
-$mainStyle = $config['ui']['style'] . '_style.css';
 $photoswipe = false;
 $remoteBuzzer = false;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 
 echo '<body>';
-echo '<div id="wrapper">';
 echo '<div class="buttonbar buttonbar--middle">';
 
 if ($config['remotebuzzer']['usebuttons']) {
@@ -53,7 +51,6 @@ if ($config['remotebuzzer']['userotary']) {
 
 echo ComponentUtility::renderButtonLink('back', 'fa fa-chevron-left', PathUtility::getPublicPath('test'));
 
-echo '</div>';
 echo '</div>';
 
 include PathUtility::getAbsolutePath('template/components/main.footer.php');

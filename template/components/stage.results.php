@@ -2,7 +2,7 @@
 
 use Photobooth\Utility\ComponentUtility;
 
-echo '<div class="stage rotarygroup" data-stage="result">';
+echo '<div class="stage stage--result rotarygroup" data-stage="result">';
 echo '<div class="stage-inner">';
 echo '<div class="buttonbar buttonbar--bottom">';
 

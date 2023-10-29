@@ -20,22 +20,27 @@ const photoboothPreviewTest = (function () {
         };
 
     const api = {},
-        url = $('#ipcam--view'),
-        video = $('#video--view'),
-        pictureFrame = $('#picture--frame'),
-        collageFrame = $('#collage--frame');
+        previewNone = $('#preview--none'),
+        previewIpcam = $('#preview--ipcam'),
+        previewVideo = $('#preview--video'),
+        previewFramePicture = $('#previewframe--picture'),
+        previewFrameCollage = $('#previewframe--collage'),
+        buttonStartPreview = $('[data-command="startPreview"]'),
+        buttonStopPreview = $('[data-command="stopPreview"]'),
+        buttonShowFramePicture = $('[data-command="showPictureFrame"]'),
+        buttonShowFrameCollage = $('[data-command="showCollageFrame"]'),
+        buttonHideFrame = $('[data-command="hideFrame"]');
 
     let pid;
 
     api.init = function () {
-        video.hide();
-        video.css('z-index', 0);
-        url.hide();
-        $('#no_preview').show();
-        $('.stopPreview').hide();
-        pictureFrame.hide();
-        collageFrame.hide();
-        $('.hideFrame').hide();
+        previewNone.show();
+        previewVideo.hide();
+        previewIpcam.hide();
+        previewFramePicture.hide();
+        previewFrameCollage.hide();
+        buttonStopPreview.hide();
+        buttonHideFrame.hide();
     };
 
     api.runCmd = function (mode) {
@@ -56,11 +61,12 @@ const photoboothPreviewTest = (function () {
             });
     };
 
-    $('.startPreview').on('click', function (e) {
-        e.preventDefault();
+    buttonStartPreview.on('click', (event) => {
+        event.preventDefault();
 
         photoboothTools.console.log('Starting preview...');
-        $('.startPreview').hide();
+        buttonStartPreview.hide();
+        previewNone.hide();
         if (config.preview.cmd) {
             photoboothTools.console.logDev('Running preview cmd (TEST).');
             api.runCmd('start');
@@ -69,67 +75,72 @@ const photoboothPreviewTest = (function () {
 
         setTimeout(() => {
             if (photoboothPreview.stream) {
-                $('#no_preview').hide();
-                $('.stopPreview').show();
+                buttonStopPreview.show();
             } else {
-                $('.startPreview').show();
+                buttonStartPreview.show();
             }
         }, 4000);
     });
 
-    $('.stopPreview').on('click', function (e) {
-        e.preventDefault();
+    buttonStopPreview.on('click', (event) => {
+        event.preventDefault();
 
         photoboothTools.console.log('Stopping preview...');
-        $('.stopPreview').hide();
-        collageFrame.hide();
-        pictureFrame.hide();
+        buttonStopPreview.hide();
+        previewFrameCollage.hide();
+        previewFramePicture.hide();
+        previewNone.show();
         if (config.preview.killcmd) {
             api.runCmd('stop');
         }
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
             photoboothPreview.stopVideo();
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            url.removeClass('streaming');
-            url.hide();
+            previewIpcam.removeClass('streaming');
+            previewIpcam.hide();
         }
 
         setTimeout(() => {
             if (photoboothPreview.stream) {
-                $('.stopPreview').show();
+                buttonStopPreview.show();
             } else {
-                $('#no_preview').show();
-                $('.startPreview').show();
+                buttonStartPreview.show();
             }
         }, 4000);
     });
 
-    $('.showPictureFrame').on('click', function (e) {
-        e.preventDefault();
+    buttonShowFramePicture.on('click', (event) => {
+        event.preventDefault();
         photoboothTools.console.log('Showing picture frame over the preview...');
-        pictureFrame.show();
-        collageFrame.hide();
-        $('.hideFrame').show();
+        previewFramePicture.show();
+        previewFrameCollage.hide();
+        buttonShowFramePicture.hide();
+        buttonShowFrameCollage.hide();
+        buttonHideFrame.show();
     });
 
-    $('.showCollageFrame').on('click', function (e) {
-        e.preventDefault();
+    buttonShowFrameCollage.on('click', (event) => {
+        event.preventDefault();
         photoboothTools.console.log('Showing collage frame over the preview...');
-        collageFrame.show();
-        pictureFrame.hide();
-        $('.hideFrame').show();
+        previewFrameCollage.show();
+        previewFramePicture.hide();
+        buttonShowFramePicture.hide();
+        buttonShowFrameCollage.hide();
+        buttonHideFrame.show();
     });
 
-    $('.hideFrame').on('click', function (e) {
-        e.preventDefault();
+    buttonHideFrame.on('click', (event) => {
+        event.preventDefault();
         photoboothTools.console.log('Hiding frames...');
-        collageFrame.hide();
-        pictureFrame.hide();
-        $('.hideFrame').hide();
+        previewFrameCollage.hide();
+        previewFramePicture.hide();
+        buttonShowFramePicture.show();
+        buttonShowFrameCollage.show();
+        buttonHideFrame.hide();
     });
 
-    video.on('loadedmetadata', function (ev) {
-        const videoEl = ev.target;
+    previewVideo.on('loadedmetadata', (event) => {
+        const videoEl = event.target;
         let newWidth = videoEl.offsetWidth;
         let newHeight = videoEl.offsetHeight;
         if (config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) {
@@ -137,10 +148,10 @@ const photoboothPreviewTest = (function () {
             newHeight = videoEl.videoHeight;
         }
         if (newWidth !== 0 && newHeight !== 0) {
-            pictureFrame.css('width', newWidth);
-            pictureFrame.css('height', newHeight);
-            collageFrame.css('width', newWidth);
-            collageFrame.css('height', newHeight);
+            previewFramePicture.css('width', newWidth);
+            previewFramePicture.css('height', newHeight);
+            previewFrameCollage.css('width', newWidth);
+            previewFrameCollage.css('height', newHeight);
         }
     });
 

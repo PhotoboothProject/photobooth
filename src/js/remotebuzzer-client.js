@@ -268,7 +268,7 @@ function initRemoteBuzzerFromDOM() {
         api.print = function () {
             if ($('.stage[data-stage="result"]').is(':visible')) {
                 $('.printbtn').trigger('click');
-                $('.printbtn').blur();
+                $('.printbtn').trigger('blur');
             } else if ($('.pswp__button--print').is(':visible')) {
                 $('.pswp__button--print').trigger('click');
             } else {

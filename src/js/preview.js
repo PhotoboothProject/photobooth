@@ -25,7 +25,6 @@ const photoboothPreview = (function () {
     let pid,
         video,
         loader,
-        wrapper,
         url,
         pictureFrame,
         collageFrame,
@@ -33,14 +32,8 @@ const photoboothPreview = (function () {
 
     api.changeVideoMode = function (mode) {
         photoboothTools.console.logDev('Preview: Changing video mode: ' + mode);
-        if (mode === CameraDisplayMode.BACKGROUND) {
-            video.css('z-index', 0);
-            wrapper.css('background-image', 'none');
-            wrapper.css('background-color', 'transparent');
-        } else {
-            wrapper.css('background-color', config.colors.panel);
+        if (mode !== CameraDisplayMode.BACKGROUND) {
             loader.css('--stage-background', 'transparent');
-            video.css('z-index', 99);
         }
         video.show();
     };
@@ -205,7 +198,6 @@ const photoboothPreview = (function () {
     };
 
     api.stopVideo = function () {
-        wrapper.css('background-color', config.colors.panel);
         loader.css('--stage-background', null);
         if (api.stream) {
             api.stream.getTracks()[0].stop();
@@ -216,20 +208,12 @@ const photoboothPreview = (function () {
         collageFrame.hide();
     };
 
-    api.setElements = function (
-        videoSelector = '#video--view',
-        loaderSelector = '.stage[data-stage="loader"]',
-        wrapperSelector = '#wrapper',
-        urlSelector = '#ipcam--view',
-        pictureFrameSelector = '#picture--frame',
-        collageFrameSelector = '#collage--frame'
-    ) {
-        video = $(videoSelector);
-        loader = $(loaderSelector);
-        wrapper = $(wrapperSelector);
-        url = $(urlSelector);
-        pictureFrame = $(pictureFrameSelector);
-        collageFrame = $(collageFrameSelector);
+    api.setElements = () => {
+        video = $('#preview--video');
+        loader = $('.stage[data-stage="loader"]');
+        url = $('#preview--ipcam');
+        pictureFrame = $('#previewframe--picture');
+        collageFrame = $('#previewframe--collage');
     };
 
     api.init = function () {
