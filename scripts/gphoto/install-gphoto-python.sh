@@ -60,8 +60,8 @@ if [[ $REPLY =~ ^[1]$ ]]; then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         info "### Installing gphoto2 webcam service."
-        wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/gphoto/ffmpeg-webcam.service -O "/etc/systemd/system/ffmpeg-webcam.service"
-        wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/gphoto/ffmpeg-webcam.sh -O "/usr/ffmpeg-webcam.sh"
+        wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/gphoto/ffmpeg-webcam.service -O "/etc/systemd/system/ffmpeg-webcam.service"
+        wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/gphoto/ffmpeg-webcam.sh -O "/usr/ffmpeg-webcam.sh"
         chmod +x /usr/ffmpeg-webcam.sh
         systemctl start ffmpeg-webcam.service
         systemctl enable ffmpeg-webcam.service
