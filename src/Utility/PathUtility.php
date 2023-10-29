@@ -8,7 +8,7 @@ class PathUtility
 {
     public static function getRootPath(): string
     {
-        return realpath(__DIR__ . '/../../../');
+        return realpath(__DIR__ . '/../../');
     }
 
     public static function getAbsolutePath(string $path = ''): string
