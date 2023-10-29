@@ -555,7 +555,7 @@ The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed usi
 To use `gphoto-python`, first execute the `install-gphoto-python.sh` if you have not already installed "a service to set up a virtual webcam that gphoto2 can stream video to" while using the Photobooth installer on initial installation:
 
 ```sh
-wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/gphoto/install-gphoto-python.sh
+wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/gphoto/install-gphoto-python.sh
 sudo bash install-gphoto-python.sh
 ```
 
