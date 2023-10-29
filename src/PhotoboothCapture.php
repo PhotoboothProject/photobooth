@@ -20,7 +20,7 @@ class PhotoboothCapture
     /** @var int $collageLimit */
     public $collageLimit;
     /** @var string $demoFolder */
-    public $demoFolder = __DIR__ . '/../../resources/img/demo/';
+    public $demoFolder = __DIR__ . '/../resources/img/demo/';
     /** @var string $flipImage */
     public $flipImage = 'off';
     /** @var string $captureCmd */

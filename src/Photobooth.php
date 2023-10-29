@@ -28,7 +28,7 @@ class Photobooth
 
     protected function calculatePhotoboothVersion(): string
     {
-        $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . '/../package.json';
+        $packageJsonPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . '/package.json';
         if (!is_file($packageJsonPath)) {
             throw new \Exception('Package file not found.');
         }

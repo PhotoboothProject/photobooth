@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Photobooth\\": "lib/src/"
+            "Photobooth\\": "src"
         }
     },
     "autoload-dev": {
