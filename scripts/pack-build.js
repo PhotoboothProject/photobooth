@@ -58,6 +58,7 @@ function createArchive(fileName, archive) {
     archive.directory('manual');
     archive.directory('resources');
     archive.directory('slideshow');
+    archive.directory('src');
     archive.directory('template');
     archive.directory('test');
     archive.directory('tools');
