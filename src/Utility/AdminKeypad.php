@@ -4,6 +4,19 @@ namespace Photobooth\Utility;
 
 class AdminKeypad
 {
+    public static function login(string $userPin, array $login): bool
+    {
+        if ($userPin === $login['pin']) {
+            $_SESSION['auth'] = true;
+            return true;
+        } elseif ($login['rental_keypad'] && $userPin == $login['rental_pin']) {
+            $_SESSION['rental'] = true;
+            return true;
+        }
+
+        return false;
+    }
+
     public static function render(): string
     {
         $content = [];

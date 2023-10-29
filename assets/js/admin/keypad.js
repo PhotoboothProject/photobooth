@@ -68,16 +68,15 @@ function checkKeypadPin(pin) {
 
     $.ajax({
         url: config.foldersPublic.api + '/controller.php',
+        dataType: 'json',
         type: 'POST',
         data: {
             controller: 'keypadLogin',
             pin: pin
         },
 
-        success: function (e) {
-            const jsonData = $.parseJSON(e);
-
-            if (jsonData.state == true) {
+        success: (data) => {
+            if (data.state == true) {
                 window.location.href = '../admin';
             } else {
                 $('.keypad_keybox').addClass('error');

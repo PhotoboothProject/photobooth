@@ -2,15 +2,15 @@
 
 require_once '../lib/boot.php';
 
-// includes
-include_once 'keypad.php';
+use Photobooth\Utility\AdminKeypad;
+
+header('Content-Type: application/json');
 
 // KEYPAD LOGIN
 if (isset($_POST['controller']) and $_POST['controller'] == 'keypadLogin') {
-    $userPin = $_POST['pin'];
-
-    $keypad = new Keypad();
-    $return = $keypad->keypadLogin($userPin, $config['login']);
-
-    echo json_encode($return);
+    $data = [
+        'state' => AdminKeypad::login($_POST['pin'] ?? '', $config['login'])
+    ];
+    echo json_encode($data);
+    exit();
 }
