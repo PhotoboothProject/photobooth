@@ -7,9 +7,11 @@
   --sidenav-padding-x: 1.5rem;
   --sidenav-close-color: var(--button-font-color);
   --sidenav-close-background: var(--primary-color);
+  --sidenav-close-border-radius: var(--button-border-radius);
   --sidenav-close-font-size: 2rem;
   --sidenav-close-height: 4rem;
   --sidenav-close-width: 4rem;
+  --sidenav-list-item-boder-radius: 0;
   --sidenav-list-item-color: var(--button-font-color);
   --sidenav-list-item-background: var(--primary-color);
   --sidenav-list-item-font-size: 1rem;
@@ -65,6 +67,8 @@
   color: var(--sidenav-close-color);
   background: var(--sidenav-close-background);
   font-size: var(--sidenav-close-font-size);
+  border-bottom-left-radius: var(--sidenav-close-border-radius);
+  border-bottom-right-radius: var(--sidenav-close-border-radius);
   width: var(--sidenav-close-width);
   height: var(--sidenav-close-height);
   border: none;
@@ -86,6 +90,7 @@
   padding: var(--sidenav-list-item-padding-y) var(--sidenav-list-item-padding-x);
   font-size: var(--sidenav-list-item-font-size);
   font-weight: var(--sidenav-list-item-font-weight);
+  border-radius: var(--sidenav-list-item-boder-radius);
   line-height: 1;
   color: var(--sidenav-list-item-color);
   text-align: center;
@@ -112,4 +117,16 @@
   &--active {
     --sidenav-list-item-background: var(--sidenav-list-item-active-background);
   }
+}
+
+[data-ui-button='classic_rounded'] {
+  --sidenav-list-item-boder-radius: var(--button-border-radius);
+}
+
+[data-ui-button='modern_squared'] {
+  --sidenav-list-item-boder-radius: 0.625rem;
+}
+
+[data-ui-button='modern'] {
+  --sidenav-list-item-boder-radius: 2rem;
 }
