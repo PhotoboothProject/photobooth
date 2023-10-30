@@ -2586,6 +2586,12 @@ $configsetup = [
             ],
             'value' => $config['ui']['button'],
         ],
+        'ui_shutter_animation' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'ui[shutter_animation]',
+            'value' => $config['ui']['shutter_animation'],
+        ],
         'ui_shutter_cheese_img' => [
             'view' => 'advanced',
             'type' => 'select',

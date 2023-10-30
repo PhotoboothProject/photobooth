@@ -393,6 +393,7 @@ $config['protect']['localhost_manual'] = false;
 $config['ui']['style'] = 'modern_squared';
 // possible button values: "rounded", "modern", "modern_squared", "custom"
 $config['ui']['button'] = 'modern_squared';
+$config['ui']['shutter_animation'] = true;
 // possible image values:
 // - ''
 // - '/resources/img/cheese/camera_up.png'

@@ -527,8 +527,10 @@ const photoBooth = (function () {
             .post(config.foldersPublic.api + '/capture.php', data)
             .done(async (result) => {
                 api.cheese.destroy();
-                await api.shutter.start();
-                await api.shutter.stop();
+                if (config.ui.shutter_animation) {
+                    await api.shutter.start();
+                    await api.shutter.stop();
+                }
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
                 photoboothTools.console.log('Took ' + data.style, result);
