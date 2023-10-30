@@ -1012,7 +1012,7 @@ const photoBooth = (function () {
     api.renderPic = function (filename, files) {
         api.filename = filename;
 
-        if (config.print.auto) {
+        if (config.print.auto && config.filters.enabled === false) {
             setTimeout(function () {
                 photoboothTools.printImage(filename, () => {
                     remoteBuzzerClient.inProgress(false);
