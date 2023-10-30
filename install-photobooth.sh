@@ -469,17 +469,7 @@ common_software() {
             info "[Package]   ${package} installed already"
         else
             info "[Package]   Installing missing common package: ${package}"
-            if [[ ${package} == "gphoto2" ]]; then
-                info "            Installing latest development version."
-                wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
-                wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
-                chmod +x gphoto2-updater.sh
-                ./gphoto2-updater.sh --development
-                rm gphoto2-updater.sh
-                rm .env
-            else
-                apt-get -qq install -y ${package}
-            fi
+            apt-get -qq install -y ${package}
         fi
     done
 
