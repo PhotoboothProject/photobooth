@@ -662,7 +662,7 @@ sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
 
 Now again check if everything is fine (`v4l2-ctl --list-devices`).
 
-Another problem could be, that you system has `secure boot` enabled.
+Another problem could be, that your system has `secure boot` enabled.
 Disable `secure boot` in the BIOS and try again.
 
 If you're still having trouble feel free to join us at Telegram to get further support.
