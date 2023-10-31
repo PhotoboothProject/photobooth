@@ -737,7 +737,7 @@ const photoBooth = (function () {
             loaderMessage.append($('<p>').text(photoboothTools.getTranslation('error')));
             photoboothTools.console.log('An error occurred:', data.error);
             if (config.dev.loglevel > 1) {
-                loaderMessage.append($('<p').text(data.error));
+                loaderMessage.append($('<p>').text(data.error));
             }
             api.takingPic = false;
             remoteBuzzerClient.inProgress(false);
