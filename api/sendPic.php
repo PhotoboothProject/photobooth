@@ -4,6 +4,7 @@ require_once '../lib/boot.php';
 
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\MailService;
 use PHPMailer\PHPMailer\PHPMailer;
 
 header('Content-Type: application/json');
@@ -22,15 +23,8 @@ if (empty($_POST['recipient']) || !PHPMailer::validateAddress($_POST['recipient'
 }
 
 if ($config['mail']['send_all_later']) {
-    if (!file_exists(MAIL_FILE)) {
-        $addresses = [];
-    } else {
-        $addresses = json_decode(file_get_contents(MAIL_FILE));
-    }
-    if (!in_array($_POST['recipient'], $addresses)) {
-        $addresses[] = $_POST['recipient'];
-    }
-    file_put_contents(MAIL_FILE, json_encode($addresses));
+    $mailService = MailService::getInstance();
+    $mailService->addRecipientToDatabase($_POST['recipient']);
     echo json_encode(['success' => true, 'saved' => true ]);
     exit();
 }

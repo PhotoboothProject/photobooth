@@ -4,6 +4,7 @@ use Photobooth\Service\AssetService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 
 session_start();
@@ -56,5 +57,6 @@ $GLOBALS[DatabaseManagerService::class] = new DatabaseManagerService(
     $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt',
     $config['foldersAbs']['images'],
 );
-
-define('MAIL_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt');
+$GLOBALS[MailService::class] = new MailService(
+    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt'
+);
