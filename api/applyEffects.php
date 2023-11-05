@@ -2,11 +2,11 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DatabaseManager;
 use Photobooth\Image;
 use Photobooth\Helper;
 use Photobooth\Collage;
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 
@@ -14,6 +14,8 @@ header('Content-Type: application/json');
 
 $logger = LoggerService::getInstance();
 $logger->debug(basename($_SERVER['PHP_SELF']));
+
+$database = DatabaseManagerService::getInstance();
 
 try {
     if (!extension_loaded('gd')) {
@@ -25,10 +27,6 @@ try {
     }
 
     $file = $_POST['file'];
-
-    $database = new DatabaseManager();
-    $database->db_file = DB_FILE;
-    $database->file_dir = IMG_DIR;
 
     if (!isset($_POST['style']) || !in_array($_POST['style'], ['photo', 'collage', 'custom', 'chroma'])) {
         throw new Exception('Invalid or missing style parameter');

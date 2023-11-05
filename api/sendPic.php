@@ -2,7 +2,7 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DatabaseManager;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -46,9 +46,7 @@ if (empty($_POST['image'])) {
 }
 
 $postImage = basename($_POST['image']);
-$database = new DatabaseManager();
-$database->db_file = DB_FILE;
-$database->file_dir = IMG_DIR;
+$database = DatabaseManagerService::getInstance();
 if (!$database->isInDB($postImage)) {
     $data = [
         'success' => false,

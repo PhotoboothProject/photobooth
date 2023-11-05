@@ -1,46 +1,43 @@
 <?php
 
-namespace Photobooth;
+namespace Photobooth\Service;
 
 /**
  * Class DatabaseManager
  *
  * Manages the database, including adding and deleting files.
  */
-class DatabaseManager
+class DatabaseManagerService
 {
-    /**
-     * @var string The absolute path and name of the file containing the database of files.
-     */
-    public $db_file = '';
+    public string $databaseFile = '';
+    public string $imageDirectory = '';
 
-    /**
-     * @var string The absolute path to the directory containing the files.
-     */
-    public $file_dir = '';
+    public function __construct(string $databaseFile, string $imageDirectory)
+    {
+        $this->databaseFile = $databaseFile;
+        $this->imageDirectory = $imageDirectory;
+    }
 
     /**
      * Get the list of files from the database file.
-     *
-     * @return array The list of files from the database file.
      */
-    public function getContentFromDB()
+    public function getContentFromDB(): array
     {
         // check if the database file is defined and non-empty
-        if (!isset($this->db_file) || empty($this->db_file)) {
+        if (!isset($this->databaseFile) || empty($this->databaseFile)) {
             throw new \Exception('Database not defined.');
         }
 
         try {
             // get data from database
-            if (file_exists($this->db_file)) {
-                $data = file_get_contents($this->db_file);
+            if (file_exists($this->databaseFile)) {
+                $data = file_get_contents($this->databaseFile);
                 if ($data === false) {
-                    throw new \Exception('Failed to read file: ' . $this->db_file);
+                    throw new \Exception('Failed to read file: ' . $this->databaseFile);
                 }
                 return json_decode($data);
             } else {
-                throw new \Exception('File not found: ' . $this->db_file);
+                throw new \Exception('File not found: ' . $this->databaseFile);
             }
         } catch (\Exception $e) {
             return [];
@@ -51,21 +48,19 @@ class DatabaseManager
 
     /**
      * Get the list of images from the images directory.
-     *
-     * @return array The list of images from the images directory.
      */
-    public function getFilesFromDirectory()
+    public function getFilesFromDirectory(): array
     {
         // check if the directory is defined and non-empty
-        if (!isset($this->file_dir) || empty($this->file_dir)) {
+        if (!isset($this->imageDirectory) || empty($this->imageDirectory)) {
             throw new \Exception('Directory not defined.');
         }
 
         try {
             // open the directory
-            $dh = opendir($this->file_dir);
+            $dh = opendir($this->imageDirectory);
             if ($dh === false) {
-                throw new \Exception('Failed to open directory: ' . $this->file_dir);
+                throw new \Exception('Failed to open directory: ' . $this->imageDirectory);
             }
 
             // read the files in the directory
@@ -87,17 +82,15 @@ class DatabaseManager
 
     /**
      * Append a new content by name to the database file.
-     *
-     * @param string $content The content to add to the database file.
      */
-    public function appendContentToDB($content)
+    public function appendContentToDB(string $content): void
     {
         if (!$content) {
             throw new \Exception('Invalid content.');
         }
 
         // check if the database file is defined and non-empty
-        if (!isset($this->db_file) || empty($this->db_file)) {
+        if (!isset($this->databaseFile) || empty($this->databaseFile)) {
             throw new \Exception('Database not defined.');
         }
 
@@ -105,52 +98,46 @@ class DatabaseManager
 
         if (!in_array($content, $currContent)) {
             $currContent[] = $content;
-            file_put_contents($this->db_file, json_encode($currContent));
+            file_put_contents($this->databaseFile, json_encode($currContent));
         }
     }
 
     /**
-     * Delete an content by name from the database file.
-     *
-     * @param string $content The content to delete from the database file.
+     * Delete an entry by name from the database file.
      */
-    public function deleteContentFromDB($content)
+    public function deleteContentFromDB(string $content): void
     {
         if (!$content) {
             throw new \Exception('Invalid filename.');
         }
 
         // check if the database file is defined and non-empty
-        if (!isset($this->db_file) || empty($this->db_file)) {
+        if (!isset($this->databaseFile) || empty($this->databaseFile)) {
             throw new \Exception('Database not defined.');
         }
         $currContent = $this->getContentFromDB();
 
         if (in_array($content, $currContent)) {
             unset($currContent[array_search($content, $currContent)]);
-            file_put_contents($this->db_file, json_encode(array_values($currContent)));
+            file_put_contents($this->databaseFile, json_encode(array_values($currContent)));
         }
 
-        if (file_exists($this->db_file) && empty($currContent)) {
-            unlink($this->db_file);
+        if (file_exists($this->databaseFile) && empty($currContent)) {
+            unlink($this->databaseFile);
         }
     }
 
     /**
      * Check if an content exists in the database file.
-     *
-     * @param string $content The content of the file to check.
-     *
-     * @return bool Whether the content exists in the database file.
      */
-    public function isInDB($content)
+    public function isInDB(string $content): bool
     {
         if (!$content) {
             throw new \Exception('Invalid filename.');
         }
 
         // check if the database file is defined and non-empty
-        if (!isset($this->db_file) || empty($this->db_file)) {
+        if (!isset($this->databaseFile) || empty($this->databaseFile)) {
             throw new \Exception('Database not defined.');
         }
 
@@ -160,14 +147,12 @@ class DatabaseManager
     }
 
     /**
-     * Returns the size of the database file.
-     *
-     * @return int The size of the database file in bytes.
+     * Returns the size of the database file in bytes.
      */
-    public function getDBSize()
+    public function getDBSize(): int
     {
-        if (file_exists($this->db_file)) {
-            return (int) filesize($this->db_file);
+        if (file_exists($this->databaseFile)) {
+            return (int) filesize($this->databaseFile);
         }
         return 0;
     }
@@ -179,20 +164,20 @@ class DatabaseManager
      * @return string The string "success" if the database was rebuilt successfully, or "error"
      *                if an error occurred during the rebuilding process.
      */
-    public function rebuildDB()
+    public function rebuildDB(): string
     {
         // check if the database file is defined and non-empty
-        if (!isset($this->db_file) || empty($this->db_file)) {
+        if (!isset($this->databaseFile) || empty($this->databaseFile)) {
             throw new \Exception('Database not defined.');
         }
 
         // check if the file directory is defined and non-empty
-        if (!isset($this->file_dir) || empty($this->file_dir)) {
+        if (!isset($this->imageDirectory) || empty($this->imageDirectory)) {
             throw new \Exception('File directory not defined.');
         }
 
         $output = [];
-        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->file_dir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS)) as $value) {
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->imageDirectory, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS)) as $value) {
             if ($value->isFile()) {
                 $output[] = [$value->getMTime(), $value->getFilename()];
             }
@@ -202,10 +187,19 @@ class DatabaseManager
             return strlen($a[0]) <=> strlen($b[0]);
         });
 
-        if (file_put_contents($this->db_file, json_encode(array_column($output, 1))) === 'false') {
+        if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === 'false') {
             return 'error';
         } else {
             return 'success';
         }
+    }
+
+    public static function getInstance(): self
+    {
+        if (!isset($GLOBALS[self::class])) {
+            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+        }
+
+        return $GLOBALS[self::class];
     }
 }
