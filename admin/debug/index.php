@@ -86,8 +86,8 @@ echo getNavItemDebug('githead');
                                 <div class="mr-2">
                                     <label class="settinglabel"><?=$languageService->translate('debugpanel:autorefresh')?></label>
                                 </div>
-                                <label id="debugpanel_autorefresh" class="adminCheckbox relative flex items-center cursor-pointer">
-                                    <input class="hidden peer" type="checkbox" id="debugpanel_autorefresh" value="true"/>
+                                <label for="autorefreshInput" class="adminCheckbox relative flex items-center cursor-pointer">
+                                    <input class="hidden peer" type="checkbox" id="autorefreshInput" value="true"/>
                                     <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                     <span class="hidden ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
                                         <label class="adminCheckbox-true hidden"><?=$languageService->translate('adminpanel_toggletextON')?></label>

@@ -1,7 +1,6 @@
 $(function () {
     // init navi item
     getInitialNaviItem();
-    initDebugcontent();
 
     // item click
     $('.navItem').on('click', function () {
@@ -78,18 +77,5 @@ function toggleAdminNavi() {
         $('.adminNavi').removeClass('isActive');
     } else {
         $('.adminNavi').addClass('isActive');
-    }
-}
-
-// eslint-disable-next-line no-unused-vars
-function setDebugNavItemActive(elem) {
-    $('.debugNavItem').removeClass('isActive');
-    $(elem).addClass('isActive');
-    $('.adminNavi').removeClass('isActive');
-}
-
-function initDebugcontent() {
-    if ($('.debugNavItem')[0]) {
-        $('.debugNavItem').first().trigger('click');
     }
 }

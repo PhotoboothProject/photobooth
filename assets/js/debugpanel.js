@@ -1,92 +1,71 @@
-$(function () {
-    let autoRefreshActive = false;
+class DebugPanel {
 
-    // Click on nav bar element populates content page
-    $('.debugNavItem').on('click', function (e) {
-        e.preventDefault();
-        $('.adminnavlistelement').removeClass('active');
-        $(this).addClass('active');
+    constructor() {
+        this.autorefresh = false;
+        this.currentNavigationId = null;
 
-        $.ajax({
-            url: '../../api/serverInfo.php',
-            method: 'GET',
-            dataType: 'text',
-            data: {
-                content: this.id
-            },
-            success: (data) => {
-                $('.debugcontent').html('<pre class="break-all whitespace-pre-wrap">' + data + '</pre>');
-                if (autoRefreshActive) {
-                    $('html,body').animate({ scrollTop: $('#admincontentpage').height() }, 0);
-                }
-            },
-            error: (jqXHR) => {
-                $('.debugcontent').html('ERROR: No data available - Server Response <' + jqXHR.responseText);
+        this.buttons = document.querySelectorAll('.debugNavItem');
+        this.buttons.forEach((button) => {
+            button.addEventListener('click', async (event) => {
+                this.currentNavigationId = event.currentTarget.id;
+                this.updateMenu();
+                await this.fetchContent();
+            });
+        });
+
+        this.autoRefreshInput = document.querySelector('#autorefreshInput');
+        this.autoRefreshInput.addEventListener('change', (event) => {
+            this.autorefresh = event.target.checked;
+            if (event.target.checked) {
+              setInterval(() => {
+                this.refreshContent();
+              }, 1000);
+            } else {
+              clearInterval();
             }
         });
 
-        return false;
-    });
+        this.adminContent = document.querySelector('.adminContent');
+        this.debugContent = document.querySelector('.debugcontent');
 
-    // menu toggle button for topnavbar (small screen sizes)
-    $('#admintopnavbarmenutoggle').on('click', function () {
-        $('.adminsidebar').toggle();
-        if (window.matchMedia('screen and (min-width: 701px)').matches) {
-            if ($('#adminsidebar').is(':visible')) {
-                $('#admincontentpage').css('margin-left', '200px');
-            } else {
-                $('#admincontentpage').css('margin-left', '0px');
-            }
-        }
-    });
-
-    // back  button for topnavbar (small screen sizes)
-    $('#admintopnavbarback').on('click', function () {
-        location.assign('../');
-    });
-
-    // check padding of settings content on window resize
-    window.addEventListener('resize', onWindowResize);
-    function onWindowResize() {
-        if (window.matchMedia('screen and (max-width: 700px)').matches) {
-            $('#admincontentpage').css('margin-left', '0px');
-        } else if ($('#adminsidebar').is(':visible')) {
-            $('#admincontentpage').css('margin-left', '200px');
+        if (this.buttons.length) {
+            this.buttons[0].click();
         }
     }
 
-    // autorefresh button
-    $('#debugpanel_autorefresh').on('click', function () {
-        if ($('input', this).is(':checked') === autoRefreshActive) {
-            // filter double events where no change
-            return;
+    async updateMenu() {
+        this.buttons.forEach((button) => {
+            button.classList.remove('isActive');
+        });
+        const button = Array.from(this.buttons).find(button => button.id === this.currentNavigationId);
+        if (button) {
+            button.classList.add('isActive');
         }
+    }
 
-        autoRefreshActive = $('input', this).is(':checked');
-        autoRefresh();
-    });
-
-    // autorefresh function
-    const autoRefresh = function () {
-        if (!autoRefreshActive) {
-            return false;
+    async refreshContent() {
+        if (this.autorefresh) {
+            await this.fetchContent();
         }
+    }
 
-        $('.adminnavlistelement.active').trigger('click');
+    async fetchContent() {
+        return fetch(config.foldersPublic.api + '/serverInfo.php?content=' + this.currentNavigationId)
+            .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                this.debugContent.innerHTML = '<pre class="break-all whitespace-pre-wrap">' + html + '</pre>';
+                this.adminContent.scrollTo(0, 0);
+            })
+            .catch(error => {
+                this.debugContent.innerHTML = error;
+            });
+    }
+}
 
-        setTimeout(autoRefresh, 1000);
-
-        return true;
-    };
-
-    // Localization of toggle button text
-    $('.toggle').click(function () {
-        if ($('input', this).is(':checked')) {
-            $('.toggleTextON', this).removeClass('hidden');
-            $('.toggleTextOFF', this).addClass('hidden');
-        } else {
-            $('.toggleTextOFF', this).removeClass('hidden');
-            $('.toggleTextON', this).addClass('hidden');
-        }
-    });
-});
+// eslint-disable-next-line no-unused-vars
+const debugPanel = new DebugPanel();
