@@ -35,10 +35,10 @@ jobs:
           sleep 10
           RESPONSE=$(curl -s http://localhost)
           echo "$RESPONSE"
-          if echo "$RESPONSE" | grep -q '<title>Welcome to Photobooth</title>';
+          if echo "$RESPONSE" | grep -q '<title>Photobooth</title>';
           then
-            echo "Start page contains <title>Welcome to Photobooth</title>"
+            echo "Start page contains <title>Photobooth</title>"
           else
-            echo "Start page does not contain <title>Welcome to Photobooth</title>"
+            echo "Start page does not contain <title>Photobooth</title>"
             exit 1
           fi
