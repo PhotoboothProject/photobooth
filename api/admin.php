@@ -3,9 +3,9 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Helper;
-use Photobooth\PrintManager;
 use Photobooth\Environment;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
@@ -257,10 +257,7 @@ if (isset($data['type'])) {
             }
 
             if ($newConfig['reset']['remove_print_db']) {
-                $printManager = new PrintManager();
-                $printManager->printDb = PRINT_DB;
-                $printManager->printLockFile = PRINT_LOCKFILE;
-                $printManager->printCounter = PRINT_COUNTER;
+                $printManager = PrintManagerService::getInstance();
                 // delete print database
                 if ($printManager->removePrintDb()) {
                     $logger->debug('printed.csv deleted.');

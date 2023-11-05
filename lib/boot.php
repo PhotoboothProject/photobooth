@@ -3,6 +3,7 @@
 use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
 
 session_start();
@@ -45,6 +46,11 @@ $GLOBALS[LanguageService::class] = new LanguageService(
 $GLOBALS[LoggerService::class] = new LoggerService(
     $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['dev']['logfile'],
     $config['dev']['loglevel'] ?? 0
+);
+$GLOBALS[PrintManagerService::class] = new PrintManagerService(
+    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'printed.csv',
+    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.count',
+    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.lock',
 );
 
 define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');

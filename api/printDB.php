@@ -2,7 +2,7 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\PrintManager;
+use Photobooth\Service\PrintManagerService;
 
 header('Content-Type: application/json');
 
@@ -18,10 +18,7 @@ if (!in_array($action, $validActions)) {
     die(json_encode($LogData));
 }
 
-$printManager = new PrintManager();
-$printManager->printDb = PRINT_DB;
-$printManager->printLockFile = PRINT_LOCKFILE;
-$printManager->printCounter = PRINT_COUNTER;
+$printManager = PrintManagerService::getInstance();
 
 try {
     // Perform action

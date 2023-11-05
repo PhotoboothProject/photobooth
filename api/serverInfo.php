@@ -2,6 +2,8 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\PrintManagerService;
+
 header('Content-Type: application/json');
 
 function handleDebugPanel(string $content, array $config): string
@@ -26,9 +28,10 @@ function handleDebugPanel(string $content, array $config): string
             return getLatestCommits();
         case 'nav-printdb':
             $result = [];
-            if (!file_exists(PRINT_DB)) {
+            $printManager = PrintManagerService::getInstance();
+            if (!file_exists($printManager->printDb)) {
                 return 'No database found.';
-            } elseif (!read_csv(PRINT_DB, $result)) {
+            } elseif (!read_csv($printManager->printDb, $result)) {
                 return 'Can\'t read print database.';
             } else {
                 $columns = [
