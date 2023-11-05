@@ -1,9 +1,8 @@
 <?php
 
+require_once '../lib/boot.php';
+
 header('Content-Type: application/json');
-ob_start();
-require_once 'config.php';
-ob_end_clean();
 
 function handleDebugPanel(string $content, array $config): string
 {
@@ -191,5 +190,3 @@ function generateTableHtml(array $columns, array $result): string
 if (!empty($_GET['content'])) {
     echo handleDebugPanel($_GET['content'], $config);
 }
-
-return true;
