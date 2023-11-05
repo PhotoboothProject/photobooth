@@ -81,4 +81,5 @@ if((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['
     ';
 }
 
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
 include PathUtility::getAbsolutePath('admin/components/footer.admin.php');

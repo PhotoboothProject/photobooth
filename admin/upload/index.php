@@ -117,8 +117,9 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
         </div>
     </div>
 
-    <?php
-    include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
+<?php
+
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
 
 if ($success) {
     echo '<script>openToast("' . $languageService->translate('upload_success') . '");</script>';
@@ -126,3 +127,5 @@ if ($success) {
 if ($error !== false) {
     echo '<script>openToast("' . $languageService->translate('upload_error') . '", "isError", 5000);</script>';
 }
+
+include PathUtility::getAbsolutePath('admin/components/footer.admin.php');

@@ -50,5 +50,6 @@ echo getMenuBtn(PathUtility::getPublicPath('test/trigger.php'), 'remotebuzzerGet
     </div>
 
 <?php
+
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
 include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
-?>
