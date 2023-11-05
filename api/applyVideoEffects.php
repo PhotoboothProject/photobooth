@@ -4,7 +4,7 @@ require_once '../lib/boot.php';
 
 use Photobooth\DatabaseManager;
 use Photobooth\Collage;
-use Photobooth\CollageConfig;
+use Photobooth\Factory\CollageConfigFactory;
 use Photobooth\Image;
 use Photobooth\Service\LoggerService;
 
@@ -63,11 +63,11 @@ try {
     $images = [];
     if ($config['video']['collage'] && count($frames) === 4) {
         $collageFilename = sprintf('%s-collage.jpg', $file);
-        $collageConfig = new CollageConfig();
+        $collageConfig = CollageConfigFactory::fromConfig($config);
         $collageConfig->collageLayout = '2x4-3';
         $collageConfig->collageTakeFrame = 'off';
         $collageConfig->collagePlaceholder = false;
-        if (!Collage::createCollage($frames, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
+        if (!Collage::createCollage($config, $frames, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
             throw new Exception('Could not create collage.');
         }
         $images[] = $collageFilename;

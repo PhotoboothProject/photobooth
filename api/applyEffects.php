@@ -72,7 +72,7 @@ try {
     if ($isCollage) {
         list($collageSrcImagePaths, $srcImages) = Collage::getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
 
-        if (!Collage::createCollage($collageSrcImagePaths, $filename_tmp, $image_filter)) {
+        if (!Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $image_filter)) {
             throw new Exception('Error creating collage image.');
         }
     }
