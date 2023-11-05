@@ -6,6 +6,7 @@ use Photobooth\Helper;
 use Photobooth\Environment;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
 
@@ -272,10 +273,9 @@ if (isset($data['type'])) {
             }
 
             if ($newConfig['reset']['remove_mailtxt']) {
-                if (is_file(MAIL_FILE)) {
-                    unlink(MAIL_FILE); // delete file
-                    $logger->debug(MAIL_FILE . ' deleted.');
-                }
+                $mailService = MailService::getInstance();
+                $mailService->resetDatabase();
+                $logger->debug('Mail database resetted.');
             }
 
             if ($newConfig['reset']['remove_config']) {
