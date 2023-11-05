@@ -338,7 +338,7 @@
   "manual:frontpage:logo_enabled": "If enabled, the logo will be shown on the frontpage.",
   "manual:frontpage:logo_path": "Path of the logo (default: private/logo.png).",
   "manual:frontpage:logo_position": "Choose the position of the logo.",
-  "manual:frontpage:ui_admin_shortcut": "If enabled, a hidden admin button is shown on the right lower corner on the start screen. Clicking it six times in 5 seconds will redirect you to the admin page.",
+  "manual:frontpage:ui_admin_shortcut": "If enabled, a hidden button is added to defined corner of the start screen. Clicking it six times within 5 seconds will redirect you to the login panel for easy access of the admin page.",
   "manual:frontpage:ui_admin_shortcut_position": "Choose the position of the admin shortcut.",
   "manual:frontpage:ui_show_fork": "If enabled, a fork badge is shown on the right upper corner on the start screen.",
   "manual:frontpage:ui_skip_welcome": "If enabled, the welcome screen won't be visible while accessing Photobooth the first time after installation / update.",
