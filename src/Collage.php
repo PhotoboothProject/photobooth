@@ -237,14 +237,14 @@ class Collage
 
                 if ($c->collageLayout === '1+3-2') {
                     // Vertical Positions for big and small images
+                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
                     $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
                     $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
-                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
                 } else {
                     // Switch vertical Positions for big and small images
+                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
                     $shortRatioY = 0.4252; // shortRatioY,  = heightRatioSmall + shortRatioY + distance between the images.
                     $longRatioY = 0.08; // longRatio = vertical distance until the top left corner of the image
-                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
                 }
 
                 // Horizontal Positions for small images
