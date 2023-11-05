@@ -1,32 +1,38 @@
 <?php
 
-namespace Photobooth;
+namespace Photobooth\Service;
 
-class PrintManager
+class PrintManagerService
 {
     /**
-     * @var string Path to the print database file.
+     * Path to the print database file.
      */
-    public $printDb = '';
+    public string $printDb = '';
 
     /**
-     * @var string Path to the print counter file.
+     * Path to the print counter file.
      */
-    public $printCounter = '';
+    public string $printCounter = '';
 
     /**
-     * @var string Path to the print lock file.
+     * Path to the print lock file.
      */
-    public $printLockFile = '';
+    public string $printLockFile = '';
+
+    public function __construct(string $printDb, string $printCounter, string $printLockFile)
+    {
+        $this->printDb = $printDb;
+        $this->printCounter = $printCounter;
+        $this->printLockFile = $printLockFile;
+    }
 
     /**
      * Add a new entry to the print database.
      *
      * @param string $filename The filename associated with the print.
      * @param string $uniquename The unique name associated with the print.
-     * @return bool True on success, false on failure.
      */
-    public function addToPrintDb($filename, $uniquename)
+    public function addToPrintDb(string $filename, string $uniquename): bool
     {
         try {
             $csvData = [];
@@ -50,10 +56,8 @@ class PrintManager
 
     /**
      * Get the total count of prints from the print database.
-     *
-     * @return int|bool The total count of prints on success, false on failure.
      */
-    public function getPrintCountFromDB()
+    public function getPrintCountFromDB(): ?int
     {
         try {
             if (file_exists($this->printDb) && is_readable($this->printDb)) {
@@ -71,16 +75,14 @@ class PrintManager
             }
             return intval(0);
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
     }
 
     /**
      * Get the total count of prints from either the print counter file or the print database.
-     *
-     * @return string|bool The total count of prints on success, false on failure.
      */
-    public function getPrintCountFromCounter()
+    public function getPrintCountFromCounter(): ?string
     {
         try {
             if (file_exists($this->printCounter)) {
@@ -88,7 +90,7 @@ class PrintManager
                 if ($counterContent === false) {
                     throw new \Exception('Failed to read print counter.');
                 }
-                return $counterContent;
+                return $counterContent ?? null;
             }
             return $this->getPrintCountFromDB();
         } catch (\Exception $e) {
@@ -98,20 +100,16 @@ class PrintManager
 
     /**
      * Check if printing is currently locked.
-     *
-     * @return bool True if printing is locked, false otherwise.
      */
-    public function isPrintLocked()
+    public function isPrintLocked(): bool
     {
         return file_exists($this->printLockFile);
     }
 
     /**
      * Lock the printing system.
-     *
-     * @return bool True on success, false on failure.
      */
-    public function lockPrint()
+    public function lockPrint(): bool
     {
         try {
             $handle = fopen($this->printLockFile, 'w');
@@ -127,10 +125,8 @@ class PrintManager
 
     /**
      * Unlock the printing system.
-     *
-     * @return bool True on success, false on failure.
      */
-    public function unlockPrint()
+    public function unlockPrint(): bool
     {
         try {
             if (file_exists($this->printLockFile) && unlink($this->printLockFile)) {
@@ -144,10 +140,8 @@ class PrintManager
 
     /**
      * Remove the print database file.
-     *
-     * @return bool True on success, false on failure.
      */
-    public function removePrintDb()
+    public function removePrintDb(): bool
     {
         try {
             if (file_exists($this->printDb) && unlink($this->printDb)) {
@@ -161,10 +155,8 @@ class PrintManager
 
     /**
      * Remove the print counter file.
-     *
-     * @return bool True on success, false on failure.
      */
-    public function removePrintCounter()
+    public function removePrintCounter(): bool
     {
         try {
             if (file_exists($this->printCounter) && unlink($this->printCounter)) {
@@ -178,10 +170,8 @@ class PrintManager
 
     /**
      * Reset the print system by removing the print database, unlocking print, and removing the print counter.
-     *
-     * @return void
      */
-    public function resetPrint()
+    public function resetPrint(): void
     {
         try {
             $this->removePrintDb();
@@ -190,5 +180,14 @@ class PrintManager
         } catch (\Exception $e) {
             return;
         }
+    }
+
+    public static function getInstance(): self
+    {
+        if (!isset($GLOBALS[self::class])) {
+            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+        }
+
+        return $GLOBALS[self::class];
     }
 }

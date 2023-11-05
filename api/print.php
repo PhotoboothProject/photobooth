@@ -2,9 +2,9 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\PrintManager;
 use Photobooth\Image;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
@@ -17,11 +17,7 @@ try {
         throw new Exception('No file provided!');
     }
 
-    $printManager = new PrintManager();
-    $printManager->printDb = PRINT_DB;
-    $printManager->printLockFile = PRINT_LOCKFILE;
-    $printManager->printCounter = PRINT_COUNTER;
-
+    $printManager = PrintManagerService::getInstance();
     if ($printManager->isPrintLocked()) {
         throw new Exception($config['print']['limit_msg']);
     }
@@ -170,10 +166,10 @@ if ($config['print']['limit'] > 0) {
         if ($printManager->lockPrint()) {
             $status = 'locking';
         } else {
-            $logger->error('Error creating the file ' . PRINT_LOCKFILE);
+            $logger->error('Error creating the file ' . $printManager->printLockFile);
         }
     }
-    file_put_contents(PRINT_COUNTER, $linecount);
+    file_put_contents($printManager->printCounter, $linecount);
 }
 
 $data = [
