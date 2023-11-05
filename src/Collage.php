@@ -2,16 +2,18 @@
 
 namespace Photobooth;
 
+use Photobooth\Dto\CollageConfig;
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Factory\CollageConfigFactory;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
 class Collage
 {
-    public static function createCollage($srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null)
+    public static function createCollage(array $config, $srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null)
     {
-        if (is_null($c)) {
-            $c = new CollageConfig();
+        if ($c === null) {
+            $c = CollageConfigFactory::fromConfig($config);
         }
         $editImages = [];
         $rotate_after_creation = false;
