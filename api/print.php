@@ -2,15 +2,15 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
 use Photobooth\PrintManager;
 use Photobooth\Image;
+use Photobooth\Service\LoggerService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 try {
     if (empty($_GET['filename'])) {
@@ -49,14 +49,10 @@ try {
     }
 } catch (Exception $e) {
     // Handle the exception
-    $ErrorData = [
-        'error' => $e->getMessage(),
-    ];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-
-    $ErrorString = json_encode($ErrorData);
-    die($ErrorString);
+    $data = ['error' => $e->getMessage()];
+    $logger->error($e->getMessage());
+    echo json_encode($data);
+    die();
 }
 
 if (!file_exists($filename_print)) {
@@ -149,15 +145,11 @@ if (!file_exists($filename_print)) {
         if ($source instanceof GdImage) {
             imagedestroy($source);
         }
-        // log error and die
-        $ErrorData = [
-            'error' => $e->getMessage(),
-        ];
-        $Logger->addLogData($ErrorData);
-        $Logger->logToFile();
 
-        $ErrorString = json_encode($ErrorData);
-        die($ErrorString);
+        $data = ['error' => $e->getMessage()];
+        $logger->error($e->getMessage());
+        echo json_encode($data);
+        die();
     }
 }
 
@@ -177,28 +169,20 @@ if ($config['print']['limit'] > 0) {
     if ($linecount % $config['print']['limit'] == 0) {
         if ($printManager->lockPrint()) {
             $status = 'locking';
-        } elseif ($config['dev']['loglevel'] > 1) {
-            $Logger->addLogData(['Warning' => 'Error creating the file ' . PRINT_LOCKFILE]);
+        } else {
+            $logger->error('Error creating the file ' . PRINT_LOCKFILE);
         }
     }
     file_put_contents(PRINT_COUNTER, $linecount);
 }
 
-$LogData = [
+$data = [
     'status' => $status,
     'count' => $linecount,
     'msg' => $cmd,
     'returnValue' => $returnValue,
     'output' => $output,
 ];
-
-if ($config['dev']['loglevel'] > 1) {
-    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        $Logger->addLogData($imageHandler->errorLog);
-    }
-    $Logger->addLogData($LogData);
-    $Logger->logToFile();
-}
-$LogString = json_encode($LogData);
-echo $LogString;
+$logger->debug('data', $data);
+echo json_encode($data);
 exit();

@@ -59,7 +59,11 @@ class DebugPanel {
             })
             .then(html => {
                 this.debugContent.innerHTML = '<pre class="break-all whitespace-pre-wrap">' + html + '</pre>';
-                this.adminContent.scrollTo(0, 0);
+                if (this.currentNavigationId === 'nav-devlog') {
+                    this.adminContent.scrollTo(0, this.adminContent.scrollHeight);
+                } else {
+                    this.adminContent.scrollTo(0, 0);
+                }
             })
             .catch(error => {
                 this.debugContent.innerHTML = error;

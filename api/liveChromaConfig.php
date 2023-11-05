@@ -2,7 +2,7 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
+use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
@@ -26,12 +26,8 @@ $data = [
     'pid' => intval(1),
 ];
 
-if ($config['dev']['loglevel'] > 1) {
-    $logger = new DataLogger(PHOTOBOOTH_LOG);
-    $logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
-    $logger->addLogData($data);
-    $logger->logToFile();
-}
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']), $data);
 
 echo json_encode($data);
 exit();

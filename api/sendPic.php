@@ -2,24 +2,21 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
 use Photobooth\DatabaseManager;
+use Photobooth\Service\LoggerService;
 use PHPMailer\PHPMailer\PHPMailer;
 
 header('Content-Type: application/json');
 
-$logger = new DataLogger(PHOTOBOOTH_LOG);
-$logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 if (empty($_POST['recipient']) || !PHPMailer::validateAddress($_POST['recipient'])) {
     $data = [
         'success' => false,
         'error' => 'E-Mail address invalid',
     ];
-    if ($config['dev']['loglevel'] > 0) {
-        $logger->addLogData($data);
-        $logger->logToFile();
-    }
+    $logger->info('message', $data);
     echo json_encode($data);
     exit();
 }
@@ -43,10 +40,7 @@ if (empty($_POST['image'])) {
         'success' => false,
         'error' => 'Image not defined',
     ];
-    if ($config['dev']['loglevel'] > 0) {
-        $logger->addLogData($data);
-        $logger->logToFile();
-    }
+    $logger->debug('message', $data);
     echo json_encode($data);
     exit();
 }
@@ -60,10 +54,7 @@ if (!$database->isInDB($postImage)) {
         'success' => false,
         'error' => 'Image not found in database',
     ];
-    if ($config['dev']['loglevel'] > 0) {
-        $logger->addLogData($data);
-        $logger->logToFile();
-    }
+    $logger->info('message', $data);
     echo json_encode($data);
     exit();
 }
@@ -85,10 +76,7 @@ if (!$mail->addAddress($_POST['recipient'])) {
         'success' => false,
         'error' => 'E-Mail address not valid / error',
     ];
-    if ($config['dev']['loglevel'] > 0) {
-        $logger->addLogData($data);
-        $logger->logToFile();
-    }
+    $logger->debug('message', $data);
     echo json_encode($data);
     exit();
 }
@@ -117,10 +105,7 @@ if (!$mail->addAttachment($path . $postImage)) {
         'success' => false,
         'error' => 'File error:' . $path . $postImage,
     ];
-    if ($config['dev']['loglevel'] > 0) {
-        $logger->addLogData($data);
-        $logger->logToFile();
-    }
+    $logger->debug('message', $data);
     echo json_encode($data);
     exit();
 }
@@ -134,9 +119,6 @@ $data = [
     'success' => false,
     'error' => $mail->ErrorInfo,
 ];
-if ($config['dev']['loglevel'] > 0) {
-    $logger->addLogData($data);
-    $logger->logToFile();
-}
+$logger->debug('message', $data);
 echo json_encode($data);
 exit();

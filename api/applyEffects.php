@@ -2,18 +2,18 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
 use Photobooth\DatabaseManager;
 use Photobooth\Image;
 use Photobooth\Helper;
 use Photobooth\Collage;
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 try {
     if (!extension_loaded('gd')) {
@@ -39,20 +39,15 @@ try {
     $image_filter = false;
 
     if (!isset($_POST['filter'])) {
-        $Logger->addLogData(['Warning' => 'No filter provided.']);
+        $logger->debug('No filter provided.');
     } elseif (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
         $image_filter = $_POST['filter'];
     }
 } catch (Exception $e) {
     // Handle the exception
-    $ErrorData = [
-        'error' => $e->getMessage(),
-    ];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-
-    $ErrorString = json_encode($ErrorData);
-    die($ErrorString);
+    $logger->error($e->getMessage(), $_POST);
+    echo json_encode(['error' => $e->getMessage()]);
+    die();
 }
 
 $isCollage = false;
@@ -67,8 +62,7 @@ $srcImages = [];
 $srcImages[] = $file;
 
 if (is_file(__DIR__ . '/../private/api/applyEffects.php')) {
-    $Logger->addLogData(['Info' => 'Using private/api/applyEffects.php.']);
-    $Logger->logToFile();
+    $logger->debug('Using private/api/applyEffects.php.');
     include __DIR__ . '/../private/api/applyEffects.php';
 }
 
@@ -231,19 +225,16 @@ try {
                     exec($cmd, $output, $returnValue);
 
                     if ($returnValue) {
-                        $ErrorData = [
+                        $errorData = [
                             'error' => 'exiftool returned with an error code',
                             'cmd' => $cmd,
                             'returnValue' => $returnValue,
                             'output' => $output,
                         ];
-                        $Logger->addLogData($ErrorData);
+                        $logger->error('exiftool returned with an error code', $errorData);
                     }
                 } catch (Exception $e) {
-                    $ErrorData = [
-                        'error' => $e->getMessage(),
-                    ];
-                    $Logger->addLogData($ErrorData);
+                    $logger->error($e->getMessage());
                 }
             }
         } else {
@@ -269,7 +260,10 @@ try {
             $login_result = ftp_login($ftp, $config['ftp']['username'], $config['ftp']['password']);
 
             if (!$login_result) {
-                $Logger->logErrorAndDie("Can't connect to FTP Server!");
+                $message = 'Can\'t connect to FTP Server!';
+                $logger->error($message, $config['ftp']);
+                echo json_encode(['error' => $message]);
+                die();
             }
 
             // turn passive mode on to enable creation of folder and upload of files
@@ -289,18 +283,17 @@ try {
             $put_result = ftp_put($ftp, $image, $filename_photo, FTP_BINARY);
 
             if (!$put_result) {
-                $Logger->logErrorAndDie('Unable to save file on FTP Server!');
+                $message = 'Unable to save file on FTP Server!';
+                $logger->error($message, $config['ftp']);
+                echo json_encode(['error' => $message]);
+                die();
             }
 
             // upload the thumbnail if enabled
             if ($config['ftp']['upload_thumb']) {
                 $thumb_result = ftp_put($ftp, 'tmb_' . $image, $filename_thumb, FTP_BINARY);
-
                 if (!$thumb_result) {
-                    $ErrorData = [
-                        'error' => 'Unable to load the thumbnail',
-                    ];
-                    $Logger->addLogData($ErrorData);
+                    $logger->error('Unable to load the thumbnail', $config['ftp']);
                 }
             }
 
@@ -331,7 +324,10 @@ try {
                     fclose($stream);
 
                     if (!$upload_webpage) {
-                        $Logger->logErrorAndDie('Unable to save file on FTP Server!');
+                        $message = 'Unable to save file on FTP Server!';
+                        $logger->error($message, $config['ftp']);
+                        echo json_encode(['error' => $message]);
+                        die();
                     }
 
                     // update the session variable to avoid unnecessary checks
@@ -370,30 +366,21 @@ try {
         imagedestroy($imageResource);
     }
     if (isset($imageHandler) && is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        $Logger->addLogData($imageHandler->errorLog);
+        $logger->error('Error', $imageHandler->errorLog);
     }
-    $ErrorData = [
-        'error' => $e->getMessage(),
-    ];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-
-    $ErrorString = json_encode($ErrorData);
-    die($ErrorString);
+    $logger->error($e->getMessage());
+    echo json_encode(['error' => $e->getMessage()]);
+    die();
 }
 
-$LogData = [
+if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+    $logger->error('Error', $imageHandler->errorLog);
+}
+
+$data = [
     'file' => $file,
     'images' => $srcImages,
 ];
-if ($config['dev']['loglevel'] > 1) {
-    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        $Logger->addLogData($imageHandler->errorLog);
-    }
-    $Logger->addLogData($LogData);
-    $Logger->logToFile();
-}
-
-$LogString = json_encode($LogData);
-echo $LogString;
+$logger->debug('effects applied', $data);
+echo json_encode($data);
 exit();

@@ -10,6 +10,7 @@
         "ext-zip": "*",
         "endroid/qr-code": "^5.0",
         "league/commonmark": "^2.4",
+        "monolog/monolog": "^3.5",
         "phpmailer/phpmailer": "^6.8",
         "symfony/asset": "^6.3",
         "symfony/console": "^6.3",

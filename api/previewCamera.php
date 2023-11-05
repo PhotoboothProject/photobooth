@@ -2,12 +2,12 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
+use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
-$logger = new DataLogger(PHOTOBOOTH_LOG);
-$logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 $simpleExec = $config['preview']['simpleExec'];
 
 function isRunning($pid, $logger)
@@ -19,8 +19,7 @@ function isRunning($pid, $logger)
             return true;
         }
     } catch (Exception $e) {
-        $ErrorData = ['exception' => $e->getMessage()];
-        $logger->addLogData($ErrorData);
+        $logger->error($e->getMessage());
         return false;
     }
 
@@ -74,10 +73,8 @@ if ($_POST['play'] === 'start') {
         ];
     }
 }
-if ($config['dev']['loglevel'] > 1) {
-    $logger->addLogData($data);
-    $logger->logToFile();
-}
+
+$logger->debug('data', $data);
 
 echo json_encode($data);
 exit();

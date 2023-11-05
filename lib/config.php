@@ -170,7 +170,6 @@ $config['foldersPublic']['chroma'] = PathUtility::getPublicPath('chroma');
 define('PRINT_DB', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'printed.csv');
 define('PRINT_LOCKFILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.lock');
 define('PRINT_COUNTER', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.count');
-define('PHOTOBOOTH_LOG', $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['dev']['logfile']);
 
 if ($config['preview']['mode'] === 'gphoto') {
     $config['preview']['mode'] = 'device_cam';

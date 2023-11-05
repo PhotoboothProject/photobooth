@@ -2,44 +2,32 @@
 
 namespace Photobooth;
 
+use Photobooth\Service\LoggerService;
+
 /**
  * Class PhotoboothCapture
  */
 class PhotoboothCapture
 {
-    /** @var string $style */
-    public $style;
-    /** @var string $fileName */
-    public $fileName;
-    /** @var string $tmpFile */
-    public $tmpFile;
-    /** @var string $collageSubFile */
-    public $collageSubFile;
-    /** @var int $collageNumber */
-    public $collageNumber;
-    /** @var int $collageLimit */
-    public $collageLimit;
-    /** @var string $demoFolder */
-    public $demoFolder = __DIR__ . '/../resources/img/demo/';
-    /** @var string $flipImage */
-    public $flipImage = 'off';
-    /** @var string $captureCmd */
-    public $captureCmd;
-    /** @var DataLogger|null $logger */
-    public $logger = null;
-    /** @var int $debugLevel */
-    public $debugLevel = 1;
+    public string $style;
+    public string $fileName;
+    public string $tmpFile;
+    public string $collageSubFile;
+    public int $collageNumber;
+    public int $collageLimit;
+    public string $demoFolder = __DIR__ . '/../resources/img/demo/';
+    public string $flipImage = 'off';
+    public string $captureCmd;
+    public LoggerService $logger;
+    public int $debugLevel = 1;
 
     /**
      * PhotoboothCapture constructor.
-     * @param DataLogger|null $logger
      */
-    public function __construct($logger = null)
+    public function __construct()
     {
-        if ($logger == null || !is_object($this->logger)) {
-            $this->logger = new DataLogger(PHOTOBOOTH_LOG);
-            $this->logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
-        }
+        $this->logger = LoggerService::getInstance();
+        $this->logger->debug(self::class);
     }
 
     /**
@@ -47,6 +35,9 @@ class PhotoboothCapture
      */
     public function captureDemo()
     {
+        $this->logger->debug('Capture Demo', [
+            'demoFolder' => $this->demoFolder
+        ]);
         $demoFolder = $this->demoFolder;
         $devImg = array_diff(scandir($demoFolder), ['.', '..']);
         copy($demoFolder . $devImg[array_rand($devImg)], $this->tmpFile);
@@ -58,6 +49,7 @@ class PhotoboothCapture
      */
     public function captureCanvas($data)
     {
+        $this->logger->debug('Capture Canvas');
         try {
             list($type, $data) = explode(';', $data);
             list(, $data) = explode(',', $data);
@@ -66,39 +58,27 @@ class PhotoboothCapture
             file_put_contents($this->tmpFile, $data);
 
             if ($this->flipImage != 'off') {
-                try {
-                    $imageHandler = new Image();
-                    $im = $imageHandler->createFromImage($this->tmpFile);
-                    $imageHandler->debugLevel = $this->debugLevel;
-                    $imageHandler->jpegQuality = 100;
-                    switch ($this->flipImage) {
-                        case 'flip-horizontal':
-                            imageflip($im, IMG_FLIP_HORIZONTAL);
-                            break;
-                        case 'flip-vertical':
-                            imageflip($im, IMG_FLIP_VERTICAL);
-                            break;
-                        default:
-                            break;
-                    }
-                    $imageHandler->saveJpeg($im, $this->tmpFile);
-                    imagedestroy($im);
-                } catch (\Exception $e) {
-                    $ErrorData = ['error' => $e->getMessage()];
-                    $this->logger->addLogData($ErrorData);
-                    if ($this->debugLevel > 1) {
-                        $this->logger->logToFile();
-                        $ErrorString = json_encode($ErrorData);
-                        die($ErrorString);
-                    }
+                $imageHandler = new Image();
+                $im = $imageHandler->createFromImage($this->tmpFile);
+                $imageHandler->debugLevel = $this->debugLevel;
+                $imageHandler->jpegQuality = 100;
+                switch ($this->flipImage) {
+                    case 'flip-horizontal':
+                        imageflip($im, IMG_FLIP_HORIZONTAL);
+                        break;
+                    case 'flip-vertical':
+                        imageflip($im, IMG_FLIP_VERTICAL);
+                        break;
+                    default:
+                        break;
                 }
+                $imageHandler->saveJpeg($im, $this->tmpFile);
+                imagedestroy($im);
             }
         } catch (\Exception $e) {
-            $ErrorData = ['error' => $e->getMessage()];
-            $this->logger->addLogData($ErrorData);
-            $this->logger->logToFile();
-            $ErrorString = json_encode($ErrorData);
-            die($ErrorString);
+            $this->logger->error($e->getMessage());
+            echo json_encode(['error' => $e->getMessage()]);
+            die();
         }
     }
 
@@ -107,6 +87,10 @@ class PhotoboothCapture
      */
     public function captureWithCmd()
     {
+        $this->logger->debug('Capture with CMD', [
+            'cmd' => $this->captureCmd,
+            'tmpFile' => $this->tmpFile,
+        ]);
         //gphoto must be executed in a dir with write permission for other commands we stay in the api dir
         if (substr($this->captureCmd, 0, strlen('gphoto')) === 'gphoto') {
             chdir(dirname($this->tmpFile));
@@ -117,18 +101,16 @@ class PhotoboothCapture
         exec($cmd, $output, $returnValue);
 
         if ($returnValue && ($this->debugLevel > 1 || $this->style === 'video')) {
-            $ErrorData = [
+            $data = [
                 'error' => 'Capture command returned an error code.',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => $output,
             ];
-            $this->logger->addLogData($ErrorData);
+            $this->logger->error('error', $data);
             if ($this->style === 'video') {
-                $this->logger->logToFile();
-                $ErrorString = json_encode($ErrorData);
-
-                die($ErrorString);
+                echo json_encode($data);
+                die();
             }
         }
 
@@ -146,7 +128,7 @@ class PhotoboothCapture
         }
 
         if (!file_exists($this->tmpFile)) {
-            $ErrorData = [
+            $data = [
                 'error' => 'File was not created',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
@@ -156,11 +138,9 @@ class PhotoboothCapture
                 // remove all files that were created - all filenames start with the videos name
                 exec('rm -f ' . $this->tmpFile . '*');
             }
-            $this->logger->addLogData($ErrorData);
-            $this->logger->logToFile();
-            $ErrorString = json_encode($ErrorData);
-
-            die($ErrorString);
+            $this->logger->error('error', $data);
+            echo json_encode($data);
+            die();
         }
     }
 
@@ -170,7 +150,7 @@ class PhotoboothCapture
     public function returnData()
     {
         if ($this->style === 'collage') {
-            $LogData = [
+            $data = [
                 'success' => 'collage',
                 'file' => $this->fileName,
                 'collage_file' => $this->collageSubFile,
@@ -178,12 +158,9 @@ class PhotoboothCapture
                 'limit' => $this->collageLimit,
             ];
         } else {
-            $LogData = ['success' => $this->style, 'file' => $this->fileName];
+            $data = ['success' => $this->style, 'file' => $this->fileName];
         }
-        if ($this->debugLevel > 1) {
-            $this->logger->addLogData($LogData);
-            $this->logger->logToFile();
-        }
-        return $LogData;
+        $this->logger->debug('returnData', $data);
+        return $data;
     }
 }
