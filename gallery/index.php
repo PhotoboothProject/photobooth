@@ -20,7 +20,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
         onStandaloneGalleryView = true;
     </script>
 
-    <?php include PathUtility::getAbsolutePath('template/components/send-mail.php'); ?>
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
 
     <script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
