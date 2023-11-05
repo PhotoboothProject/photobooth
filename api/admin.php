@@ -4,6 +4,7 @@ require_once '../lib/boot.php';
 
 use Photobooth\Helper;
 use Photobooth\Environment;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
@@ -296,10 +297,11 @@ if (isset($data['type'])) {
             }
 
             // delete db.txt
-            if (is_file(DB_FILE)) {
+            $database = DatabaseManagerService::getInstance();
+            if (is_file($database->databaseFile)) {
                 // delete file
-                unlink(DB_FILE);
-                $logger->debug(DB_FILE . ' deleted.');
+                unlink($database->databaseFile);
+                $logger->debug($database->databaseFile . ' deleted.');
             }
         }
         echo json_encode('success');

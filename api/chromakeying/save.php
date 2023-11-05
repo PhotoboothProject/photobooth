@@ -3,9 +3,9 @@
 require_once '../../lib/boot.php';
 
 use Photobooth\Image;
-use Photobooth\DatabaseManager;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\FileDelete;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 
@@ -38,10 +38,7 @@ if (!isset($_POST['file']) || empty($_POST['file'])) {
     $file = $_POST['file'];
 }
 
-$database = new DatabaseManager();
-$database->db_file = DB_FILE;
-$database->file_dir = IMG_DIR;
-
+$database = DatabaseManagerService::getInstance();
 if ($config['database']['file'] != 'db') {
     $file = $config['database']['file'] . '_' . $file;
 }

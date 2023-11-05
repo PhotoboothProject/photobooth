@@ -3,8 +3,8 @@
 require_once '../lib/boot.php';
 
 use Photobooth\FileDelete;
-use Photobooth\DatabaseManager;
 use Photobooth\Helper;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
@@ -35,9 +35,7 @@ $delete->deleteFiles();
 $logData = $delete->getLogData();
 
 if ($config['database']['enabled']) {
-    $database = new DatabaseManager();
-    $database->db_file = DB_FILE;
-    $database->file_dir = IMG_DIR;
+    $database = DatabaseManagerService::getInstance();
     $database->deleteContentFromDB($file);
 }
 

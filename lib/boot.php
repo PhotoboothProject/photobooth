@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Service\AssetService;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\PrintManagerService;
@@ -51,7 +52,9 @@ $GLOBALS[PrintManagerService::class] = new PrintManagerService(
     $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.count',
     $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.lock',
 );
+$GLOBALS[DatabaseManagerService::class] = new DatabaseManagerService(
+    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt',
+    $config['foldersAbs']['images'],
+);
 
-define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');
 define('MAIL_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt');
-define('IMG_DIR', $config['foldersAbs']['images']);

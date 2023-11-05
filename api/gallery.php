@@ -2,11 +2,9 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DatabaseManager;
+use Photobooth\Service\DatabaseManagerService;
 
-$database = new DatabaseManager();
-$database->db_file = DB_FILE;
-$database->file_dir = IMG_DIR;
+$database = DatabaseManagerService::getInstance();
 
 // Check if there is a request for the status of the database
 if (isset($_GET['status'])) {

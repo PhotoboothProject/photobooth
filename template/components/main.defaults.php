@@ -1,11 +1,9 @@
 <?php
 
-use Photobooth\DatabaseManager;
+use Photobooth\Service\DatabaseManagerService;
 
 if (isset($photoswipe) && $photoswipe) {
-    $database = new DatabaseManager();
-    $database->db_file = DB_FILE;
-    $database->file_dir = IMG_DIR;
+    $database = DatabaseManagerService::getInstance();
     if ($config['database']['enabled']) {
         $images = $database->getContentFromDB();
     } else {

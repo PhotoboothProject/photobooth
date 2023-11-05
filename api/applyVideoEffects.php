@@ -2,16 +2,18 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DatabaseManager;
 use Photobooth\Collage;
 use Photobooth\Factory\CollageConfigFactory;
 use Photobooth\Image;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
 $logger = LoggerService::getInstance();
 $logger->debug(basename($_SERVER['PHP_SELF']));
+
+$database = DatabaseManagerService::getInstance();
 
 try {
     if (empty($_POST['file'])) {
@@ -37,10 +39,6 @@ try {
     echo json_encode($data);
     die($ErrorString);
 }
-
-$database = new DatabaseManager();
-$database->db_file = DB_FILE;
-$database->file_dir = IMG_DIR;
 
 $frames = [];
 for ($i = 1; $i < 99; $i++) {
