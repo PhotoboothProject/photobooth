@@ -39,6 +39,7 @@ include PathUtility::getAbsolutePath('admin/components/sidebar.php');
         </div>
     </div>
 
-
 <?php
-    include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
+
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+include PathUtility::getAbsolutePath('admin/components/footer.admin.php');

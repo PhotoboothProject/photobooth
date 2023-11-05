@@ -148,4 +148,6 @@ foreach($configsetup as $panel => $fields) {
     </div>
 
 <?php
-    include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
+
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+include PathUtility::getAbsolutePath('admin/components/footer.admin.php');

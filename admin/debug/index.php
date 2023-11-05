@@ -106,8 +106,9 @@ echo getNavItemDebug('githead');
     </div>
 </div>
 
-<script src="<?=$assetService->getUrl('resources/js/tools.js')?>"></script>
-<script src="<?=$assetService->getUrl('resources/js/debugpanel.js')?>"></script>
-
 <?php
-    include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
+
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+echo '<script src="' . $assetService->getUrl('resources/js/tools.js') . '"></script>';
+echo '<script src="' . $assetService->getUrl('resources/js/debugpanel.js') . '"></script>';
+include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
