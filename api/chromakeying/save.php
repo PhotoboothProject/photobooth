@@ -4,21 +4,25 @@ require_once '../../lib/boot.php';
 
 use Photobooth\Image;
 use Photobooth\DatabaseManager;
-use Photobooth\DataLogger;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\FileDelete;
+use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 
 header('Content-Type: application/json');
 
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
+
 if (!isset($_POST['imgData']) || empty($_POST['imgData'])) {
     http_response_code(400);
-    $logData = [
+    $data = [
         'success' => false,
         'error' => 'imgData not set or empty.',
     ];
-    $logString = json_encode($logData);
-    die($logString);
+    $logger->debug('message', $data);
+    echo json_encode($data);
+    die();
 }
 
 $imageHandler = new Image();
@@ -33,9 +37,6 @@ if (!isset($_POST['file']) || empty($_POST['file'])) {
     $applyEffects = true;
     $file = $_POST['file'];
 }
-
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
 
 $database = new DatabaseManager();
 $database->db_file = DB_FILE;
@@ -55,8 +56,7 @@ if ($saveCopy) {
             $paths = [$config['foldersAbs']['images'], $config['foldersAbs']['thumbs'], $config['foldersAbs']['keying'], $config['foldersAbs']['tmp']];
             $delete = new FileDelete($_POST['file'], $paths);
             $delete->deleteFiles();
-            $logData = $delete->getLogData();
-            $Logger->addLogData($logData);
+            $logger->debug('delete', $delete->getLogData());
         }
     }
 }
@@ -206,30 +206,23 @@ try {
         imagedestroy($imageResource);
     }
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        $Logger->addLogData($imageHandler->errorLog);
+        $logger->debug('imageHandler->errorLog', $imageHandler->errorLog);
     }
-    $ErrorData = [
+    $logger->debug($e->getMessage());
+    echo json_encode([
         'success' => false,
         'error' => $e->getMessage(),
-    ];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-    $ErrorString = json_encode($ErrorData);
-    die($ErrorString);
+    ]);
+    die();
 }
 
 // send imagename to frontend
-$LogData = [
+$data = [
     'success' => true,
     'filename' => $file,
 ];
-if ($config['dev']['loglevel'] > 1) {
-    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        $Logger->addLogData($imageHandler->errorLog);
-    }
-    $Logger->addLogData($LogData);
-    $Logger->logToFile();
+if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+    $logger->debug('imageHandler->errorLog', $imageHandler->errorLog);
 }
-$LogString = json_encode($LogData);
-echo $LogString;
+echo json_encode($data);
 exit();

@@ -2,6 +2,7 @@
 
 use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
+use Photobooth\Service\LoggerService;
 use Photobooth\Utility\PathUtility;
 
 session_start();
@@ -40,6 +41,10 @@ $GLOBALS[AssetService::class] = new AssetService();
 $GLOBALS[LanguageService::class] = new LanguageService(
     $config['ui']['language'] ?? 'en',
     isset($config['ui']['folders_lang']) && $config['ui']['folders_lang'] !== '' ? $config['ui']['folders_lang'] : 'resources/lang'
+);
+$GLOBALS[LoggerService::class] = new LoggerService(
+    $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['dev']['logfile'],
+    $config['dev']['loglevel'] ?? 0
 );
 
 define('DB_FILE', $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt');

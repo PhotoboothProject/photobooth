@@ -3,21 +3,21 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Helper;
-use Photobooth\DataLogger;
 use Photobooth\PrintManager;
 use Photobooth\Environment;
+use Photobooth\Service\LoggerService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 $data = $_POST;
 
 if (isset($data['type'])) {
     $newConfig = [];
-    $Logger->addLogData(['config' => 'Saving Photobooth configuration...']);
+    $logger->debug('Saving Photobooth configuration...');
 
     foreach ($config as $k => $conf) {
         if (is_array($conf)) {
@@ -48,8 +48,8 @@ if (isset($data['type'])) {
     if (isset($newConfig['login']['enabled']) && $newConfig['login']['enabled'] == true) {
         if ((isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) || $newConfig['login']['keypad']) {
             if ($newConfig['login']['keypad'] && strlen($newConfig['login']['pin']) != 4) {
-                $Logger->addLogData(['keypad' => 'Keypad pin reset.']);
-                $Logger->addLogData(['keypad' => 'Length: ' . strlen($newConfig['login']['pin']) . ' Expected length: 4']);
+                $logger->debug('Keypad pin reset.');
+                $logger->debug('Length: ' . strlen($newConfig['login']['pin']) . ' Expected length: 4', $newConfig['login']);
                 $newConfig['login']['enabled'] = false;
                 $newConfig['login']['keypad'] = false;
                 $newConfig['login']['pin'] = '';
@@ -66,7 +66,7 @@ if (isset($data['type'])) {
             $newConfig['login']['enabled'] = false;
             $newConfig['login']['keypad'] = false;
             $newConfig['login']['pin'] = '';
-            $Logger->addLogData(['login' => 'Password not set. Login disabled.']);
+            $logger->debug('Password not set. Login disabled.', $newConfig['login']);
         }
     } else {
         $newConfig['login']['password'] = null;
@@ -76,10 +76,10 @@ if (isset($data['type'])) {
 
     if (isset($newConfig['login']['rental_keypad']) && $newConfig['login']['rental_keypad'] == true) {
         if (strlen($newConfig['login']['rental_pin']) != 4 || $newConfig['login']['rental_pin'] === $newConfig['login']['pin']) {
-            $Logger->addLogData(['rental_keypad' => 'Rental keypad pin reset.']);
-            $Logger->addLogData(['rental_keypad' => 'Length: ' . strlen($newConfig['login']['rental_pin']) . ' Expected length: 4']);
+            $logger->debug('Rental keypad pin reset.', $newConfig['login']);
+            $logger->debug('Length: ' . strlen($newConfig['login']['rental_pin']) . ' Expected length: 4', $newConfig['login']);
             if ($newConfig['login']['rental_pin'] === $newConfig['login']['pin']) {
-                $Logger->addLogData(['rental_keypad' => 'Rental keypad pin must be different from login pin.']);
+                $logger->debug('Rental keypad pin must be different from login pin.', $newConfig['login']);
             }
             $newConfig['login']['rental_keypad'] = false;
             $newConfig['login']['rental_pin'] = '';
@@ -91,23 +91,23 @@ if (isset($data['type'])) {
     if (isset($newConfig['filters']['enabled']) && $newConfig['filters']['enabled'] == true) {
         if (isset($newConfig['picture']['keep_original']) && !$newConfig['picture']['keep_original']) {
             $newConfig['filters']['enabled'] = false;
-            $Logger->addLogData(['filters' => 'Filters disabled, you must keep original images in tmp folder to use this function.']);
+            $logger->debug('Filters disabled, you must keep original images in tmp folder to use this function.', [$newConfig['filters'], $newConfig['picture']]);
         }
     }
 
     if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
         $newConfig['preview']['camTakesPic'] = false;
-        $Logger->addLogData(['preview' => 'Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.']);
+        $logger->debug('Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.');
     }
 
     if (Environment::isWindows()) {
         if (!empty($newConfig['remotebuzzer']['enabled'])) {
             $newConfig['remotebuzzer']['enabled'] = false;
-            $Logger->addLogData(['remotebuzzer' => 'Remotebuzzer server unsupported on Windows.']);
+            $logger->debug('Remotebuzzer server unsupported on Windows.');
         }
         if (!empty($newConfig['synctodrive']['enabled'])) {
             $newConfig['synctodrive']['enabled'] = false;
-            $Logger->addLogData(['synctodrive' => 'Sync pictures to USB stick unsupported on Windows.']);
+            $logger->debug('Sync pictures to USB stick unsupported on Windows.');
         }
     }
 
@@ -127,7 +127,7 @@ if (isset($data['type'])) {
         if (isset($newConfig['get_request']['server']) && empty($newConfig['get_request']['server'])) {
             $newConfig['get_request']['countdown'] = false;
             $newConfig['get_request']['processed'] = false;
-            $Logger->addLogData(['get_request' => 'No GET request server entered. Disabled GET request options.']);
+            $logger->debug('No GET request server entered. Disabled GET request options.');
         }
     }
 
@@ -157,7 +157,7 @@ if (isset($data['type'])) {
             $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
         } else {
             $newConfig['collage']['placeholder'] = false;
-            $Logger->addLogData(['collage' => 'Placeholder position not in range. Placeholder disabled.']);
+            $logger->debug('Placeholder position not in range. Placeholder disabled.');
         }
 
         if (
@@ -171,61 +171,57 @@ if (isset($data['type'])) {
             )
         ) {
             $newConfig['collage']['placeholder'] = false;
-            $Logger->addLogData(['collage' => 'Collage Placeholder does not exist or is empty. Collage Placeholder disabled.']);
-            $Logger->addLogData(['collage' => empty($newConfig['collage']['placeholderpath']) ? 'Empty.' : $newConfig['collage']['placeholderpath']]);
+            $logger->debug('Collage Placeholder does not exist or is empty. Collage Placeholder disabled.', $newConfig['collage']);
         }
     }
 
     if ($newConfig['picture']['take_frame'] && $newConfig['picture']['frame'] === '') {
         $newConfig['picture']['take_frame'] = false;
-        $Logger->addLogData(['frame' => empty($newConfig['picture']['frame']) ? 'Empty.' : $newConfig['picture']['frame']]);
+        $logger->debug('set picture.frame empty', [$newConfig['picture']['frame']]);
     }
 
     if ($newConfig['collage']['take_frame'] && $newConfig['collage']['frame'] === '') {
         $newConfig['collage']['take_frame'] = false;
-        $Logger->addLogData(['frame' => empty($newConfig['collage']['frame']) ? 'Empty.' : $newConfig['collage']['frame']]);
+        $logger->debug('collage.frame empty', [$newConfig['collage']['frame']]);
     }
 
     if ($newConfig['print']['print_frame'] && $newConfig['print']['frame'] === '') {
         $newConfig['print']['print_frame'] = false;
-        $Logger->addLogData(['frame' => empty($newConfig['print']['frame']) ? 'Empty.' : $newConfig['print']['frame']]);
+        $logger->debug('print.frame empty', [$newConfig['print']['frame']]);
     }
 
     if ($newConfig['textonpicture']['enabled'] && ($newConfig['textonpicture']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textonpicture']['font'])))) {
         $newConfig['textonpicture']['enabled'] = false;
-        $Logger->addLogData(['font' => 'Picture font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path.']);
-        $Logger->addLogData(['font' => empty($newConfig['textonpicture']['font']) ? 'Empty.' : $newConfig['textonpicture']['font']]);
+        $logger->debug('Picture font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path.', [$newConfig['textonpicture']['font']]);
     }
 
     if ($newConfig['textoncollage']['enabled'] && ($newConfig['textoncollage']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textoncollage']['font'])))) {
         $newConfig['textoncollage']['enabled'] = false;
-        $Logger->addLogData(['font' => 'Collage font does not exist or is empty. Disabled text on collage. Note: Must be an absoloute path.']);
-        $Logger->addLogData(['font' => empty($newConfig['textoncollage']['font']) ? 'Empty.' : $newConfig['textoncollage']['font']]);
+        $logger->debug('Collage font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path.', [$newConfig['textoncollage']['font']]);
     }
 
     if ($newConfig['textonprint']['enabled'] && ($newConfig['textonprint']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textonprint']['font'])))) {
         $newConfig['textonprint']['enabled'] = false;
-        $Logger->addLogData(['font' => 'Print font does not exist or is empty. Disabled text on print. Note: Must be an absoloute path.']);
-        $Logger->addLogData(['font' => empty($newConfig['textonprint']['font']) ? 'Empty.' : $newConfig['textonprint']['font']]);
+        $logger->debug('Print font does not exist or is empty. Disabled text on print. Note: Must be an absoloute path.', [$newConfig['textonprint']['font']]);
     }
 
     if ($newConfig['logo']['enabled']) {
         $logoPath = $newConfig['logo']['path'];
         if (empty($logoPath) || !file_exists($_SERVER['DOCUMENT_ROOT'] . $logoPath)) {
             $newConfig['logo']['enabled'] = false;
-            $Logger->addLogData(['logo' => 'Logo file path does not exist or is empty. Logo disabled.']);
+            $logger->debug('Logo file path does not exist or is empty. Logo disabled.', $newConfig['logo']);
         } else {
             $newConfig['logo']['path'] = PathUtility::fixFilePath($logoPath);
             $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
             if ($ext === 'svg') {
-                $Logger->addLogData(['logo' => 'Logo file is SVG, path saved.']);
+                $logger->debug('Logo file is SVG, path saved.', $newConfig['logo']);
             } else {
                 $imageInfo = @getimagesize($_SERVER['DOCUMENT_ROOT'] . $logoPath);
                 if ($imageInfo === false) {
                     $newConfig['logo']['enabled'] = false;
-                    $Logger->addLogData(['logo' => 'Logo file is not a supported image type [' . $ext . ']. Logo disabled.']);
+                    $logger->debug('Logo file is not a supported image type [' . $ext . ']. Logo disabled.', $newConfig['logo']);
                 } else {
-                    $Logger->addLogData(['logo' => 'Logo file is a supported image type [' . $ext . '], path saved.']);
+                    $logger->debug('Logo file is a supported image type [' . $ext . '], path saved.', $newConfig['logo']);
                 }
             }
         }
@@ -235,12 +231,11 @@ if (isset($data['type'])) {
 
     if (file_put_contents(PathUtility::getAbsolutePath('config/my.config.inc.php'), $content)) {
         Helper::clearCache(PathUtility::getAbsolutePath('config/my.config.inc.php'));
-        $Logger->addLogData(['config' => 'New config saved']);
-
+        $logger->debug('New config saved.');
         if ($data['type'] == 'reset') {
-            $Logger->addLogData(['reset' => 'Resetting Photobooth']);
+            $logger->debug('Resetting Photobooth.');
             if ($newConfig['reset']['remove_images']) {
-                $Logger->addLogData(['remove_images' => 'Removing images']);
+                $logger->debug('Removing images.');
                 // empty folders
                 foreach ($config['foldersAbs'] as $folder) {
                     if ($folder != $config['foldersAbs']['archives'] && $folder != $config['foldersAbs']['private']) {
@@ -251,12 +246,12 @@ if (isset($data['type'])) {
                                 if (is_file($file)) {
                                     // delete file
                                     unlink($file);
-                                    $Logger->addLogData([$file => 'deleted']);
+                                    $logger->debug($file . ' deleted.');
                                 }
                             }
                         }
                     } else {
-                        $Logger->addLogData([$folder => 'skipped']);
+                        $logger->debug($folder . ' skipped.');
                     }
                 }
             }
@@ -268,20 +263,20 @@ if (isset($data['type'])) {
                 $printManager->printCounter = PRINT_COUNTER;
                 // delete print database
                 if ($printManager->removePrintDb()) {
-                    $Logger->addLogData(['printed.csv' => 'deleted']);
+                    $logger->debug('printed.csv deleted.');
                 }
                 if ($printManager->unlockPrint()) {
-                    $Logger->addLogData(['print.lock' => 'deleted']);
+                    $logger->debug('print.lock deleted.');
                 }
                 if ($printManager->removePrintCounter()) {
-                    $Logger->addLogData(['print.count' => 'deleted']);
+                    $logger->debug('print.count deleted.');
                 }
             }
 
             if ($newConfig['reset']['remove_mailtxt']) {
                 if (is_file(MAIL_FILE)) {
                     unlink(MAIL_FILE); // delete file
-                    $Logger->addLogData([MAIL_FILE => 'deleted']);
+                    $logger->debug(MAIL_FILE . ' deleted.');
                 }
             }
 
@@ -289,7 +284,7 @@ if (isset($data['type'])) {
                 // delete personal config
                 if (is_file(PathUtility::getAbsolutePath('config/my.config.inc.php'))) {
                     unlink(PathUtility::getAbsolutePath('config/my.config.inc.php'));
-                    $Logger->addLogData(['my.config.inc.php' => 'deleted']);
+                    $logger->debug('my.config.inc.php deleted.');
                 }
             }
 
@@ -299,7 +294,7 @@ if (isset($data['type'])) {
                 if (is_file($logFile)) {
                     // delete file
                     unlink($logFile);
-                    $Logger->addLogData([$logFile => 'deleted']);
+                    $logger->debug($logFile . ' deleted.');
                 }
             }
 
@@ -307,20 +302,18 @@ if (isset($data['type'])) {
             if (is_file(DB_FILE)) {
                 // delete file
                 unlink(DB_FILE);
-                $Logger->addLogData([DB_FILE => 'deleted']);
+                $logger->debug(DB_FILE . ' deleted.');
             }
         }
         echo json_encode('success');
     } else {
-        $Logger->addLogData(['config' => 'ERROR: Config can not be saved!']);
+        $logger->error('ERROR: Config can not be saved!');
         echo json_encode('error');
     }
 } else {
-    $Logger->addLogData(['type' => 'ERROR: Unknown action.']);
-    $Logger->logToFile();
+    $logger->error('ERROR: Unknown action.');
     die(json_encode('error'));
 }
-$Logger->logToFile();
 
 // Kill service daemons after config has changed
 require_once PathUtility::getAbsolutePath('lib/services_stop.php');

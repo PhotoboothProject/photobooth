@@ -2,27 +2,23 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
+use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 $mode = $_POST['mode'];
 
 if (empty($mode)) {
-    $LogData = [
+    $data = [
         'success' => 'false',
         'mode' => 'No mode defined.',
     ];
-    if ($config['dev']['loglevel'] > 0) {
-        $Logger->addLogData($LogData);
-        $Logger->logToFile();
-    }
-
-    $LogString = json_encode($LogData);
-    die($LogString);
+    $logger->debug('message', $data);
+    echo json_encode($data);
+    die();
 }
 
 switch ($mode) {
@@ -39,17 +35,13 @@ switch ($mode) {
         $cmd = 'sudo ' . sprintf($config['shutdown']['cmd']);
         break;
     default:
-        $LogData = [
+        $data = [
             'success' => 'false',
             'mode' => 'Unknown mode ' . $mode,
         ];
-        if ($config['dev']['loglevel'] > 0) {
-            $Logger->addLogData($LogData);
-            $Logger->logToFile();
-        }
-
-        $LogString = json_encode($LogData);
-        die($LogString);
+        $logger->debug('message', $data);
+        echo json_encode($data);
+        die();
         break;
 }
 
@@ -69,28 +61,20 @@ if (isset($success)) {
             break;
     }
 
-    $LogData = [
+    $data = [
         'success' => $success,
         'output' => $output,
         'retval' => $retval,
         'command' => $cmd,
     ];
-    if ($config['dev']['loglevel'] > 1) {
-        $Logger->addLogData($LogData);
-    }
+    $logger->debug('data', $data);
 } else {
-    $LogData = [
+    $data = [
         'success' => 'false',
         'command' => $cmd,
     ];
-    if ($config['dev']['loglevel'] > 0) {
-        $Logger->addLogData($LogData);
-    }
-}
-if ($config['dev']['loglevel'] > 0) {
-    $Logger->logToFile();
 }
 
-$LogString = json_encode($LogData);
-echo $LogString;
+$logger->debug('data', $data);
+echo json_encode($data);
 exit();

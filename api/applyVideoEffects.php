@@ -2,16 +2,16 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
 use Photobooth\DatabaseManager;
 use Photobooth\Collage;
 use Photobooth\CollageConfig;
 use Photobooth\Image;
+use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 try {
     if (empty($_POST['file'])) {
@@ -32,13 +32,9 @@ try {
     }
 } catch (Exception $e) {
     // Handle the exception
-    $ErrorData = [
-        'error' => $e->getMessage(),
-    ];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-
-    $ErrorString = json_encode($ErrorData);
+    $data = ['error' => $e->getMessage()];
+    $logger->error($e->getMessage(), $data);
+    echo json_encode($data);
     die($ErrorString);
 }
 
@@ -57,8 +53,7 @@ for ($i = 1; $i < 99; $i++) {
 }
 
 if (is_file(__DIR__ . '/../private/api/applyVideoEffects.php')) {
-    $Logger->addLogData(['Info' => 'Using private/api/applyVideoEffects.php.']);
-    $Logger->logToFile();
+    $logger->info('Using private/api/applyVideoEffects.php.');
     include __DIR__ . '/../private/api/applyVideoEffects.php';
 }
 
@@ -81,7 +76,7 @@ try {
     if (!$config['video']['collage_keep_images']) {
         foreach ($frames as $frame) {
             if (!unlink($frame)) {
-                $Logger->addLogData(['Warning' => 'Error while deleting ' . $frame]);
+                $logger->error('Error while deleting ' . $frame);
             }
         }
     } else {
@@ -156,8 +151,7 @@ try {
                 $frames = shell_exec("ffprobe -v error -select_streams v:0 -count_packets \
         -show_entries stream=nb_read_packets -of csv=p=0 $filenameTmp");
                 $secondToLastFrame = intval($frames) - 1;
-                $Logger->addLogData(['Info' => 'Seconds to last frame: ' . $secondToLastFrame]);
-
+                $logger->info('Seconds to last frame: ' . $secondToLastFrame);
                 $cfilter[] = "[0]trim=start_frame=1:end_frame=$secondToLastFrame,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
             }
         }
@@ -189,19 +183,17 @@ try {
         if ($returnValue != 0) {
             // Handle the exception
             if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-                $Logger->addLogData($imageHandler->errorLog);
+                $logger->error('Error: ', $imageHandler->errorLog);
             }
-            $ErrorData = [
+            $data = [
                 'error' => 'Take picture command returned an error code',
                 'cmd' => $cmd,
                 'returnValue' => $returnValue,
                 'output' => json_encode($output),
             ];
-            $Logger->addLogData($ErrorData);
-            $Logger->logToFile();
-
-            $ErrorString = json_encode($ErrorData);
-            die($ErrorString);
+            $logger->error('Take picture command returned an error code', $data);
+            echo json_encode($data);
+            die();
         }
 
         /* TODO gallery doesn't support videos atm
@@ -222,16 +214,12 @@ try {
         imagedestroy($imageResource);
     }
     if (isset($imageHandler) && is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        $Logger->addLogData($imageHandler->errorLog);
+        $logger->error('Error:', $imageHandler->errorLog);
     }
-    $ErrorData = [
-        'error' => $e->getMessage(),
-    ];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-
-    $ErrorString = json_encode($ErrorData);
-    die($ErrorString);
+    $data = ['error' => $e->getMessage()];
+    $logger->error($e->getMessage());
+    echo json_encode($data);
+    die();
 }
 
 $images = [];
@@ -239,16 +227,14 @@ foreach (glob("$filenameOutput*") as $filename) {
     $images[] = basename($filename);
 }
 
-$LogData = [
+$data = [
     'file' => $file,
     'images' => $images,
 ];
 if ($config['dev']['loglevel'] > 1) {
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
-        $Logger->addLogData($imageHandler->errorLog);
+        $logger->error('Error: ', $imageHandler->errorLog);
     }
-    $Logger->logToFile();
 }
-$LogString = json_encode($LogData);
-echo $LogString;
+echo json_encode($data);
 exit();

@@ -2,14 +2,14 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
 use Photobooth\Image;
 use Photobooth\PhotoboothCapture;
+use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 try {
     if (!isset($_POST['style'])) {
@@ -32,7 +32,7 @@ try {
         rename($filename_tmp, $filename_random);
     }
 
-    $captureHandler = new PhotoboothCapture($Logger);
+    $captureHandler = new PhotoboothCapture();
     $captureHandler->debugLevel = $config['dev']['loglevel'];
     $captureHandler->fileName = $file;
     $captureHandler->tmpFile = $filename_tmp;
@@ -89,13 +89,11 @@ try {
         $captureHandler->captureWithCmd();
     }
     // send image to frontend
-    $LogString = json_encode($captureHandler->returnData());
-    echo $LogString;
+    echo json_encode($captureHandler->returnData());
     exit();
 } catch (Exception $e) {
-    $ErrorData = ['error' => $e->getMessage()];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-    $ErrorString = json_encode($ErrorData);
-    die($ErrorString);
+    $data = ['error' => $e->getMessage()];
+    $logger->error($e->getMessage(), $data);
+    echo json_encode($data);
+    exit();
 }

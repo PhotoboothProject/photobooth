@@ -2,12 +2,12 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\DataLogger;
+use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
-$Logger = new DataLogger(PHOTOBOOTH_LOG);
-$Logger->addLogData(['php' => basename($_SERVER['PHP_SELF'])]);
+$logger = LoggerService::getInstance();
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 $data = $_POST;
 
@@ -43,12 +43,7 @@ $result['response'] = 'success';
 $result['message'] = 'ftp:connected';
 
 if (!$login_result) {
-    $ErrorData = [
-        'error' => "Can't connect to FTP Server!",
-    ];
-    $Logger->addLogData($ErrorData);
-    $Logger->logToFile();
-
+    $logger->error('Can\'t connect to FTP Server!');
     $result['response'] = 'error';
     $result['message'] = 'ftp:no_connection';
 }
