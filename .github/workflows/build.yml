@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         node: [18]
+        python: [3.11]
         os: [ubuntu-latest, macos-11]
     runs-on: ${{ matrix.os }}
     steps:
@@ -27,6 +28,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
       - name: Install modules
         run: npm install
       - name: Build
