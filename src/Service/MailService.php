@@ -11,17 +11,37 @@ class MailService
         $this->databaseFile = $databaseFile;
     }
 
+    private function loadDatabase(): array
+    {
+        if (is_file($this->databaseFile)) {
+            $data = file_get_contents($this->databaseFile);
+            $addresses = json_decode($data, true);
+            if ($addresses === null) {
+                throw new \Exception('Failed to decode the database ' . $this->databaseFile);
+            }
+        } else {
+            $addresses = [];
+        }
+
+        return $addresses;
+    }
+
     public function addRecipientToDatabase(string $recipient): void
     {
-        if (!file_exists($this->databaseFile)) {
-            $addresses = [];
-        } else {
-            $addresses = json_decode(file_get_contents($this->databaseFile));
-        }
+        $addresses = $this->loadDatabase();
+
         if (!in_array($recipient, $addresses)) {
             $addresses[] = $recipient;
+            $this->saveDatabase($addresses);
         }
-        file_put_contents($this->databaseFile, json_encode($addresses));
+    }
+
+    private function saveDatabase(array $addresses): void
+    {
+        $data = json_encode($addresses);
+        if (file_put_contents($this->databaseFile, $data) === false) {
+            throw new \Exception('Failed to save the database ' . $this->databaseFile);
+        }
     }
 
     public function resetDatabase(): void
