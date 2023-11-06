@@ -27,7 +27,9 @@ class MailService
     public function resetDatabase(): void
     {
         if (is_file($this->databaseFile)) {
-            unlink($this->databaseFile);
+            if (!unlink($this->databaseFile)) {
+                throw new \Exception('Failed to reset the database ' . $this->databaseFile);
+            }
         }
     }
 
