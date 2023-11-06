@@ -8,7 +8,19 @@ class MailService
 
     public function __construct(string $databaseFile)
     {
+        if (!$this->isValidDatabasePath($databaseFile)) {
+            throw new \Exception('Database or path is not writable: ' . $databaseFile);
+        }
         $this->databaseFile = $databaseFile;
+    }
+
+    private function isValidDatabasePath(string $path): bool
+    {
+        if (is_file($path)) {
+            return is_writable($path);
+        } else {
+            return is_writable(dirname($path));
+        }
     }
 
     private function loadDatabase(): array
