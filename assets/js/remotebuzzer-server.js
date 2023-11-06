@@ -22,7 +22,9 @@ const { pid: PID, platform: PLATFORM } = process;
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
-    console.log('[', new Date().toISOString(), ']:', ` Remote Buzzer Server [${PID}]:`, ...optionalParams);
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    console.log('[' + formattedDate + `][remotebuzzer][DEBUG] ${PID}:`, ...optionalParams);
 };
 
 /* SOURCE PHOTOBOOTH CONFIG */
@@ -32,15 +34,17 @@ let stdout = execSync(cmd).toString();
 const config = JSON.parse(stdout);
 
 /* WRITE PROCESS PID FILE */
-const pidFilename = config.foldersAbs.tmp + '/remotebuzzer_server.pid';
-
-fs.writeFile(pidFilename, parseInt(PID, 10).toString(), function (err) {
-    if (err) {
-        throw new Error('Unable to write PID file [' + pidFilename + '] - ' + err.message);
+const writePIDFile = (filename) => {
+    try {
+        fs.writeFileSync(filename, parseInt(PID, 10).toString(), { flag: 'w' });
+        log(`PID file created [${filename}]`);
+    } catch (err) {
+        throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
     }
+};
 
-    log('PID file created [', pidFilename, ']');
-});
+const pidFilename = path.join(config.foldersAbs.var, 'run/remotebuzzer.pid');
+writePIDFile(pidFilename);
 
 /* HANDLE EXCEPTIONS */
 process.on('uncaughtException', function (err) {

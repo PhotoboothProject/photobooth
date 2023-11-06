@@ -6,7 +6,7 @@ use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
 
-$logger = LoggerService::getInstance();
+$logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $mode = $_POST['mode'];

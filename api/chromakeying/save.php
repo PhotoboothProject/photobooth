@@ -11,7 +11,7 @@ use Photobooth\Utility\ImageUtility;
 
 header('Content-Type: application/json');
 
-$logger = LoggerService::getInstance();
+$logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 if (!isset($_POST['imgData']) || empty($_POST['imgData'])) {

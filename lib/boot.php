@@ -1,11 +1,14 @@
 <?php
 
+use Photobooth\Factory\ProcessFactory;
 use Photobooth\Service\AssetService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
+use Photobooth\Service\ProcessService;
+use Photobooth\Utility\PathUtility;
 
 session_start();
 
@@ -45,7 +48,6 @@ $GLOBALS[LanguageService::class] = new LanguageService(
     isset($config['ui']['folders_lang']) && $config['ui']['folders_lang'] !== '' ? $config['ui']['folders_lang'] : 'resources/lang'
 );
 $GLOBALS[LoggerService::class] = new LoggerService(
-    $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $config['dev']['logfile'],
     $config['dev']['loglevel'] ?? 0
 );
 $GLOBALS[PrintManagerService::class] = new PrintManagerService(
@@ -60,3 +62,15 @@ $GLOBALS[DatabaseManagerService::class] = new DatabaseManagerService(
 $GLOBALS[MailService::class] = new MailService(
     $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt'
 );
+$GLOBALS[ProcessService::class] = new ProcessService([
+    ProcessFactory::fromConfig([
+        'name' => 'remotebuzzer',
+        'command' => $config['nodebin']['cmd'] . ' ' . PathUtility::getAbsolutePath('resources/js/remotebuzzer-server.js'),
+        'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio']))
+    ]),
+    ProcessFactory::fromConfig([
+        'name' => 'synctodrive',
+        'command' => $config['nodebin']['cmd'] . ' ' . PathUtility::getAbsolutePath('resources/js/sync-to-drive.js'),
+        'enabled' => ($config['synctodrive']['enabled'])
+    ]),
+]);

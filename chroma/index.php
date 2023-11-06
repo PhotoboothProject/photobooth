@@ -4,6 +4,7 @@ require_once '../lib/boot.php';
 
 use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
+use Photobooth\Service\ProcessService;
 use Photobooth\Utility\ComponentUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -65,6 +66,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 <script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
 <script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>
 
-<?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>
+<?php ProcessService::getInstance()->boot(); ?>
 </body>
 </html>

@@ -218,7 +218,6 @@
   "qr": "Kod QR",
   "qrHelp": "Aby pobrać zdjęcie na swój smartfon, połącz się z WiFi:",
   "remotebuzzer:remotebuzzer_collagetime": "Przytrzymaj przycisk x sekund, aby wyzwolić kolaż",
-  "remotebuzzer:remotebuzzer_logfile": "Plik dziennika",
   "remotebuzzer:remotebuzzer_port": "Port serwera",
   "reset": "Reset",
   "reset:reset_remove_config": "Usuń konfigurację osobistą (my.config.inc.php)",

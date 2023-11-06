@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 header('Content-Type: application/json');
 
-$logger = LoggerService::getInstance();
+$logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 if (empty($_POST['recipient']) || !PHPMailer::validateAddress($_POST['recipient'])) {

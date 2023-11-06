@@ -3,6 +3,7 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Service\AssetService;
+use Photobooth\Service\ProcessService;
 use Photobooth\Utility\PathUtility;
 
 $assetService = AssetService::getInstance();
@@ -29,6 +30,6 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
     <script src="<?=$assetService->getUrl('resources/js/gallery-updatecheck.js')?>"></script>
     <?php endif; ?>
 
-    <?php require_once PathUtility::getAbsolutePath('lib/services_start.php'); ?>
+    <?php ProcessService::getInstance()->boot(); ?>
 </body>
 </html>

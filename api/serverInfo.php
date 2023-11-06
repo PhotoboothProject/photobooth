@@ -3,16 +3,19 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Service\PrintManagerService;
+use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
 function handleDebugPanel(string $content, array $config): string
 {
     switch ($content) {
+        case 'nav-devlog':
+            return readFileContents(PathUtility::getAbsolutePath('var/log/main.log'));
         case 'nav-remotebuzzerlog':
-            return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['remotebuzzer']['logfile'], true);
+            return readFileContents(PathUtility::getAbsolutePath('var/log/remotebuzzer.log'));
         case 'nav-synctodrivelog':
-            return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['synctodrive']['logfile'], true);
+            return readFileContents(PathUtility::getAbsolutePath('var/log/synctodrive.log'));
         case 'nav-myconfig':
             echo implode("\n", showConfig($config));
             return json_encode('');
@@ -20,8 +23,6 @@ function handleDebugPanel(string $content, array $config): string
             return shell_exec('/bin/ps -ef');
         case 'nav-bootconfig':
             return readFileContents('/boot/config.txt');
-        case 'nav-devlog':
-            return readFileContents($config['foldersAbs']['tmp'] . '/' . $config['dev']['logfile']);
         case 'nav-installlog':
             return readFileContents($config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'install.log');
         case 'nav-githead':
@@ -72,11 +73,11 @@ function getLatestCommits(): string
     }
 }
 
-function readFileContents(string $file, bool $devModeRequired = false): string
+function readFileContents(string $file): string
 {
     global $config;
     try {
-        if ($devModeRequired && $config['dev']['loglevel'] < 1) {
+        if ($config['dev']['loglevel'] < 1) {
             throw new Exception('INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.');
         }
 
