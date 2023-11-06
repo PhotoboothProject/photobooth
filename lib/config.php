@@ -104,10 +104,6 @@ $config['shutdown']['cmd'] = $cmds[$operatingSystem]['shutdown']['cmd'];
 
 $config['adminpanel']['view_default'] = 'expert';
 
-$config['remotebuzzer']['logfile'] = 'remotebuzzer_server.log';
-$config['synctodrive']['logfile'] = 'synctodrive_server.log';
-$config['dev']['logfile'] = 'error.log';
-
 $config['ui']['branding'] = 'Photobooth';
 
 $defaultConfig = $config;
@@ -164,6 +160,7 @@ foreach ($config['folders'] as $key => $folder) {
     $config['foldersAbs'][$key] = PathUtility::getAbsolutePath($path);
 }
 
+$config['foldersAbs']['var'] = PathUtility::getAbsolutePath('var');
 $config['foldersPublic']['api'] = PathUtility::getPublicPath('api');
 $config['foldersPublic']['chroma'] = PathUtility::getPublicPath('chroma');
 

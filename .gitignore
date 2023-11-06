@@ -28,6 +28,7 @@ vendor/simple-translator/
 .vscode
 venv/
 yarn.lock
+var/
 
 # tooling
 tools/*/vendor

@@ -146,12 +146,6 @@ $configsetup = [
             'range_step' => 1,
             'unit' => 'empty',
         ],
-        'dev_logfile' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'name' => 'dev[logfile]',
-            'value' => $config['dev']['logfile'],
-        ],
         'dev_debugpanel' => [
             'view' => 'basic',
             'type' => 'button',
@@ -2118,12 +2112,6 @@ $configsetup = [
             'range_step' => 5,
             'unit' => 'milliseconds',
         ],
-        'remotebuzzer_logfile' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'name' => 'remotebuzzer[logfile]',
-            'value' => $config['remotebuzzer']['logfile'],
-        ],
         'remotebuzzer_picturegpio' => [
             'view' => 'experimental',
             'type' => 'number',
@@ -2291,12 +2279,6 @@ $configsetup = [
             'range_max' => 600,
             'range_step' => 1,
             'unit' => 'seconds',
-        ],
-        'synctodrive_logfile' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'name' => 'synctodrive[logfile]',
-            'value' => $config['synctodrive']['logfile'],
         ],
     ],
     'get_request' => [

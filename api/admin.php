@@ -8,11 +8,12 @@ use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
+use Photobooth\Service\ProcessService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
-$logger = LoggerService::getInstance();
+$logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $data = $_POST;
@@ -286,7 +287,7 @@ if (isset($data['type'])) {
                 }
             }
 
-            $logFiles = glob($config['foldersAbs']['tmp'] . '/*.log');
+            $logFiles = glob(PathUtility::getAbsolutePath('var/log') . '/*.log');
             foreach ($logFiles as $logFile) {
                 // iterate files
                 if (is_file($logFile)) {
@@ -315,5 +316,5 @@ if (isset($data['type'])) {
 }
 
 // Kill service daemons after config has changed
-require_once PathUtility::getAbsolutePath('lib/services_stop.php');
+ProcessService::getInstance()->shutdown();
 exit();

@@ -16,7 +16,9 @@ let rsyncStartTime = 0;
 /* Functions */
 
 const log = function (...optionalParams) {
-    console.log('[', new Date().toISOString(), ']:', ` Sync-To-Drive server [${PID}]:`, ...optionalParams);
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    console.log('[' + formattedDate + `][synctodrive][DEBUG] ${PID}:`, ...optionalParams);
 };
 
 const getConfigFromPHP = () => {
@@ -173,15 +175,6 @@ const startSync = ({ dataAbsPath, drive }) => {
     rsyncStartTime = new Date();
 };
 
-const writePIDFile = (filename) => {
-    try {
-        fs.writeFileSync(filename, parseInt(PID, 10).toString(), { flag: 'w' });
-        log(`PID file created [${filename}]`);
-    } catch (err) {
-        throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
-    }
-};
-
 const unmountDrive = () => {
     const driveInfo = getDriveInfo(parsedConfig);
     const mountedDrive = mountDrive(driveInfo);
@@ -220,7 +213,16 @@ const parsedConfig = parseConfig(phpConfig);
 log('USB target ', ...parsedConfig.drive);
 
 /* WRITE PROCESS PID FILE */
-writePIDFile(path.join(phpConfig.foldersAbs.tmp, 'synctodrive_server.pid'));
+const writePIDFile = (filename) => {
+    try {
+        fs.writeFileSync(filename, parseInt(PID, 10).toString(), { flag: 'w' });
+        log(`PID file created [${filename}]`);
+    } catch (err) {
+        throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
+    }
+};
+const pidFilename = path.join(phpConfig.foldersAbs.var, 'run/synctodrive.pid');
+writePIDFile(pidFilename);
 
 /* INSTALL HANDLER TO MONITOR CHILD PROCESS EXITS */
 myEmitter.on('rsync-completed', (childPID) => {

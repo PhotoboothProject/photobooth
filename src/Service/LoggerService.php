@@ -2,53 +2,32 @@
 
 namespace Photobooth\Service;
 
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
-use Monolog\Logger;
+use Photobooth\Logger\NamedLogger;
 
 class LoggerService
 {
-    protected Logger $logger;
-    protected Level $level;
+    /**
+     * @var array<string, NamedLogger> $channels
+     */
+    protected array $channels = [];
+    protected int $level;
 
-    public function __construct(string $filename, int $loglevel)
+    /**
+     * @param array<string, string> $channels
+     */
+    public function __construct(int $level)
     {
-        switch ($loglevel) {
-            case 1:
-                $this->level = Level::Info;
-                break;
-            case 2:
-                $this->level = Level::Debug;
-                break;
-            default:
-                $this->level = Level::Error;
-                break;
+        $this->level = $level;
+        $this->channels['default'] = new NamedLogger('default', $this->level);
+    }
+
+    public function getLogger(string $name = 'default'): NamedLogger
+    {
+        if (!array_key_exists($name, $this->channels)) {
+            $this->channels[$name] = new NamedLogger($name, $this->level);
         }
 
-        $dateFormat = 'Y-m-d H:i:s';
-        $output = "[%datetime%][%level_name%] %message% %context%\n";
-        $formatter = new LineFormatter($output, $dateFormat);
-        $stream = new StreamHandler($filename, $this->level);
-        $stream->setFormatter($formatter);
-
-        $this->logger = new Logger('photobooth');
-        $this->logger->pushHandler($stream);
-    }
-
-    public function debug(string $message, array $context = []): void
-    {
-        $this->logger->debug($message, $context);
-    }
-
-    public function info(string $message, array $context = []): void
-    {
-        $this->logger->info($message, $context);
-    }
-
-    public function error(string $message, array $context = []): void
-    {
-        $this->logger->error($message, $context);
+        return $this->channels[$name];
     }
 
     public static function getInstance(): self

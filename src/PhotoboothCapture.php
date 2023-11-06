@@ -2,6 +2,7 @@
 
 namespace Photobooth;
 
+use Photobooth\Logger\NamedLogger;
 use Photobooth\Service\LoggerService;
 
 /**
@@ -18,7 +19,7 @@ class PhotoboothCapture
     public string $demoFolder = __DIR__ . '/../resources/img/demo/';
     public string $flipImage = 'off';
     public string $captureCmd;
-    public LoggerService $logger;
+    public NamedLogger $logger;
     public int $debugLevel = 1;
 
     /**
@@ -26,7 +27,7 @@ class PhotoboothCapture
      */
     public function __construct()
     {
-        $this->logger = LoggerService::getInstance();
+        $this->logger = LoggerService::getInstance()->getLogger('main');
         $this->logger->debug(self::class);
     }
 

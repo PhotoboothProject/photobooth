@@ -26,7 +26,7 @@ $data = [
     'pid' => intval(1),
 ];
 
-$logger = LoggerService::getInstance();
+$logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']), $data);
 
 echo json_encode($data);
