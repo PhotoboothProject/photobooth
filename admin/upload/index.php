@@ -3,6 +3,7 @@
 require_once '../../lib/boot.php';
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\FileUtility;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -30,22 +31,9 @@ $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-bran
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
 
 if (isset($_POST['submit'])) {
-
     $folderName = $_POST['folder_name'];
-    $parentDirectory = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images';
-    // Check if the parent directory exists
-    if (!is_dir($parentDirectory)) {
-        mkdir($parentDirectory, 0755, true);
-    } else {
-        chmod($parentDirectory, 0755);
-    }
-
-    // Check if the folder already exists
-    $folderPath = $parentDirectory . '/' . $folderName;
-    if (!is_dir($folderPath)) {
-        // Create the folder if it doesn't exist
-        mkdir($folderPath, 0755, true);
-    }
+    $folderPath = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $folderName;
+    FileUtility::createDirectory($folderPath);
 
     if (is_writable($folderPath)) {
         // Process uploaded images
