@@ -4,6 +4,7 @@ use Photobooth\Environment;
 use Photobooth\Photobooth;
 use Photobooth\Helper;
 use Photobooth\Utility\ArrayUtility;
+use Photobooth\Utility\FileUtility;
 use Photobooth\Utility\PathUtility;
 
 $photobooth = new Photobooth();
@@ -148,19 +149,14 @@ foreach ($config['folders'] as $key => $folder) {
         $path = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $folder);
         $config['foldersPublic'][$key] = PathUtility::getPublicPath($path);
     }
-
-    if (!file_exists($path)) {
-        if (!mkdir($path, 0755, true)) {
-            die("Abort. Could not create $folder.");
-        }
-    } elseif (!is_writable($path)) {
-        die("Abort. The folder $folder is not writable.");
-    }
-
+    FileUtility::createDirectory($path);
     $config['foldersAbs'][$key] = PathUtility::getAbsolutePath($path);
 }
 
+FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
 $config['foldersAbs']['var'] = PathUtility::getAbsolutePath('var');
+
 $config['foldersPublic']['api'] = PathUtility::getPublicPath('api');
 $config['foldersPublic']['chroma'] = PathUtility::getPublicPath('chroma');
 
