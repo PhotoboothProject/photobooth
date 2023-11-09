@@ -416,8 +416,10 @@ const photoBooth = (function () {
                 break;
         }
 
-        const maxGetMediaRetry = countdownTime - 1;
-        console.log(maxGetMediaRetry);
+        let maxGetMediaRetry = countdownTime - 1;
+        if (config.preview.killcmd && countdownTime > 0) {
+            maxGetMediaRetry = (countdownTime - parseInt(config.preview.stop_time, 10)) > 0 ? countdownTime - parseInt(config.preview.stop_time, 10) : countdownTime;
+        }
         photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry, maxGetMediaRetry);
 
         if (
