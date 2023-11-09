@@ -60,7 +60,6 @@ $config['button']['force_buzzer'] = false;
 $config['picture']['enabled'] = true;
 // control countdown timer in seconds
 $config['picture']['cntdwn_time'] = '5';
-$config['picture']['cntdwn_offset'] = '0';
 // control time for cheeeeese! in milliseconds
 $config['picture']['cheese_time'] = '1000';
 // possible flip values: 'off', 'horizontal', 'vertical', 'both'
