@@ -186,14 +186,10 @@ const photoboothPreview = (function () {
             api.runCmd('stop');
         }
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
-            setTimeout(function () {
-                api.stopVideo();
-            }, config.picture.cntdwn_offset * 1000);
+            api.stopVideo();
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            setTimeout(function () {
-                url.removeClass('streaming');
-                url.hide();
-            }, config.picture.cntdwn_offset * 1000);
+            url.removeClass('streaming');
+            url.hide();
         }
     };
 

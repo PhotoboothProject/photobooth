@@ -164,11 +164,6 @@ if ($config['preview']['mode'] === 'gphoto') {
     $config['preview']['mode'] = 'device_cam';
 }
 
-// Preview need to be stopped before we can take an image
-if (!empty($config['preview']['killcmd']) && $config['preview']['stop_time'] < $config['picture']['cntdwn_offset']) {
-    $config['preview']['stop_time'] = $config['picture']['cntdwn_offset'] + 1;
-}
-
 $default_font = PathUtility::getPublicPath('resources/fonts/GreatVibes-Regular.ttf');
 $default_frame = PathUtility::getPublicPath('resources/img/frames/frame.png');
 $random_frame = PathUtility::getPublicPath('api/randomImg.php?dir=demoframes');
