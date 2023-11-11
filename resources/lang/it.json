@@ -337,7 +337,7 @@
   "manual:frontpage:logo_enabled": "Se abilitato, il logo verrà mostrato sulla frontpage.",
   "manual:frontpage:logo_path": "Percorso del logo (default: private/logo.png).",
   "manual:frontpage:logo_position": "Scegli la posizione del logo.",
-  "manual:frontpage:ui_admin_shortcut": "Se abilitata, viene visualizzato un pulsante di amministrazione nascosto nell'angolo in basso a destra nella schermata di avvio. Facendo clic su di esso sei volte in 5 secondi ti reindirizzerà alla pagina di amministrazione.",
+  "manual:frontpage:ui_admin_shortcut": "Se abilitato, viene aggiunto un pulsante nascosto nell'angolo definito sulla schermata di avvio. Facendo clic su di esso sei volte entro 5 secondi si viene reindirizzati alla login della pagina di amministrazione.",
   "manual:frontpage:ui_admin_shortcut_position": "Scegli la posizione della scorciatoia al pannello di amministrazione.",
   "manual:frontpage:ui_show_fork": "Se abilitata, viene visualizzato il pulsante per il fork nell'angolo superiore destro della schermata di avvio.",
   "manual:frontpage:ui_skip_welcome": "Se abilitata, la schermata di benvenuto non sarà visibile durante l'accesso a Photobooth la prima volta dopo l'installazione/aggiornamento.",
