@@ -66,11 +66,13 @@ $GLOBALS[ProcessService::class] = new ProcessService([
     ProcessFactory::fromConfig([
         'name' => 'remotebuzzer',
         'command' => $config['nodebin']['cmd'] . ' ' . PathUtility::getAbsolutePath('resources/js/remotebuzzer-server.js'),
-        'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio']))
+        'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio'])),
+        'killSignal' => 9,
     ]),
     ProcessFactory::fromConfig([
         'name' => 'synctodrive',
         'command' => $config['nodebin']['cmd'] . ' ' . PathUtility::getAbsolutePath('resources/js/sync-to-drive.js'),
-        'enabled' => ($config['synctodrive']['enabled'])
+        'enabled' => ($config['synctodrive']['enabled']),
+        'killSignal' => 15,
     ]),
 ]);

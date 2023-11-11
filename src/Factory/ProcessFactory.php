@@ -12,6 +12,7 @@ class ProcessFactory
         $process->name = (string) $config['name'];
         $process->command = (string) $config['command'];
         $process->enabled = (bool) $config['enabled'];
+        $process->killSignal = (int) $config['killSignal'] ?? 9;
 
         return $process;
     }
