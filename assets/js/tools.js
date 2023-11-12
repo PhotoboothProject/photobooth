@@ -166,6 +166,50 @@ const photoboothTools = (function () {
         }
     };
 
+    api.confirm = async(confirmationText) => {
+        return new Promise((resolve) => {
+            const element = document.createElement('dialog');
+            element.classList.add('dialog');
+            element.classList.add('rotarygroup');
+
+            const message = document.createElement('div');
+            message.classList.add('dialog-message');
+            message.textContent = confirmationText;
+            element.appendChild(message);
+
+            const buttonbar = document.createElement('div');
+            buttonbar.classList.add('dialog-buttonbar');
+            element.appendChild(buttonbar);
+
+            // confirm
+            const confirmButton = api.button.create('confirm', 'fa fa-check', 'default', 'dialog-');
+            confirmButton.addEventListener('click', () => {
+                element.close(true);
+                element.remove();
+                resolve(true);
+            });
+            buttonbar.appendChild(confirmButton);
+
+            // cancel
+            const cancelButton = api.button.create('cancel', 'fa fa-times', 'default', 'dialog-');
+            cancelButton.addEventListener('click', () => {
+                element.close(false);
+                element.remove();
+                resolve(false);
+            });
+            buttonbar.appendChild(cancelButton);
+
+            element.addEventListener('cancel', function() {
+                element.close(false);
+                element.remove();
+                resolve(false);
+            });
+
+            document.body.append(element);
+            element.showModal();
+        });
+    }
+
     api.reloadPage = function () {
         window.location.reload();
     };

@@ -1042,12 +1042,12 @@ const photoBooth = (function () {
         resultPage
             .find('.deletebtn')
             .off('click')
-            .on('click', (ev) => {
+            .on('click', async (ev) => {
                 ev.preventDefault();
 
                 const really = config.delete.no_request
                     ? true
-                    : confirm(filename + ' ' + photoboothTools.getTranslation('really_delete_image'));
+                    : await photoboothTools.confirm(filename + ' ' + photoboothTools.getTranslation('really_delete_image'));
                 if (really) {
                     files.forEach(function (file, index, array) {
                         photoboothTools.console.logDev('Index:', index);
