@@ -244,13 +244,13 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     isButton: true,
                     html: '<i class="' + config.icons.delete + '"></i>',
                     // eslint-disable-next-line no-unused-vars
-                    onClick: (event, el, pswp) => {
+                    onClick: async (event, el, pswp) => {
                         event.preventDefault();
                         event.stopPropagation();
 
                         const img = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                         const msg = photoboothTools.getTranslation('really_delete_image');
-                        const really = config.delete.no_request ? true : confirm(img + ' ' + msg);
+                        const really = config.delete.no_request ? true : await photoboothTools.confirm(img + ' ' + msg);
                         if (really) {
                             photoBooth.deleteImage(img, () => {
                                 setTimeout(() => photoboothTools.reloadPage(), config.ui.notification_timeout * 1000);
