@@ -86,8 +86,7 @@ if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
 }
 
 if (!$logData['success'] || $config['dev']['loglevel'] > 1) {
-    $Logger->addLogData($logData);
-    $Logger->logToFile();
+    $logger->debug('data', $logData);
 }
 
 $logString = json_encode($logData);
