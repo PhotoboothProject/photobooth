@@ -784,16 +784,27 @@ ask_usb_sync() {
 raspberry_permission() {
     info "### Remote Buzzer Feature"
     info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
+    BOOT_CONFIG="/boot/config.txt"
+    if [[ -L "$BOOT_CONFIG" ]]; then
+        info "###  $BOOT_CONFIG is a symlink."
+        DESTINATION=$(readlink -f "$BOOT_CONFIG")
+        if [ -n "$DESTINATION" ]; then
+            info "###  Found symlink of $DESTINATION"
+            BOOT_CONFIG=$DESTINATION
+        else
+            warn "WARN: Unable to determine the destination of $BOOT_CONFIG."
+        fi
+    fi
     usermod -a -G gpio www-data
     # remove old artifacts from node-rpio library, if there was
     if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
         info "### Remotebuzzer switched from node-rpio to onoff library. We detected an old remotebuzzer installation and will remove artifacts"
         rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
-        sed -i '/dtoverlay=gpio-no-irq/d' /boot/config.txt
+        sed -i '/dtoverlay=gpio-no-irq/d' $BOOT_CONFIG
     fi
     # add configuration required for onoff library
-    sed -i '/Photobooth/,/Photobooth End/d' /boot/config.txt
-cat >> /boot/config.txt  << EOF
+    sed -i '/Photobooth/,/Photobooth End/d' $BOOT_CONFIG
+cat >> $BOOT_CONFIG << EOF
 # Photobooth
 #IN
 gpio=5,6,7,8,16,17,20,21,22,26,27=pu
