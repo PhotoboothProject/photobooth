@@ -20,6 +20,10 @@
   background: var(--secondary-color);
 }
 
+html {
+  touch-action: none;
+}
+
 html,
 body {
   width: 100vw;
