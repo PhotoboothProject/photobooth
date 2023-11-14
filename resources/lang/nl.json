@@ -338,7 +338,6 @@
   "manual:frontpage:logo_enabled": "Indien ingeschakeld, wordt het logo weergegeven op de voorpagina.",
   "manual:frontpage:logo_path": "Pad naar het logo (standaard: private/logo.png).",
   "manual:frontpage:logo_position": "Kies de positie van het logo.",
-  "manual:frontpage:ui_admin_shortcut": "Indien ingeschakeld, wordt een verborgen beheerknop weergegeven in de rechteronderhoek van het startscherm. Als u er zes keer op klikt binnen 5 seconden, wordt u doorverwezen naar de beheerpagina.",
   "manual:frontpage:ui_admin_shortcut_position": "Kies de positie van de snelkoppeling naar het beheerdersgedeelte.",
   "manual:frontpage:ui_show_fork": "Indien ingeschakeld, wordt een vorkbadge weergegeven in de rechterbovenhoek van het startscherm.",
   "manual:frontpage:ui_skip_welcome": "Indien ingeschakeld, wordt het welkomstscherm niet weergegeven bij de eerste toegang tot Photobooth na installatie/update.",
