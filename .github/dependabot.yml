@@ -8,6 +8,7 @@ updates:
       interval: 'monthly'
     commit-message:
       prefix: 'dep:'
+      prefix-development: 'dep-dev:'
       include: 'scope'
     labels:
       - 'npm'
@@ -19,6 +20,7 @@ updates:
       interval: 'monthly'
     commit-message:
       prefix: 'dep:'
+      prefix-development: 'dep-dev:'
       include: 'scope'
     labels:
       - 'composer'
@@ -30,6 +32,7 @@ updates:
       interval: 'monthly'
     commit-message:
       prefix: 'dep:'
+      prefix-development: 'dep-dev:'
       include: 'scope'
     labels:
       - 'composer'
@@ -41,6 +44,7 @@ updates:
       interval: 'monthly'
     commit-message:
       prefix: 'dep:'
+      prefix-development: 'dep-dev:'
       include: 'scope'
     labels:
       - 'composer'
@@ -52,6 +56,7 @@ updates:
       interval: 'daily'
     commit-message:
       prefix: 'dep:'
+      prefix-development: 'dep-dev:'
       include: 'scope'
     labels:
       - 'actions'
