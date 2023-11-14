@@ -1,20 +1,58 @@
 version: 2
 updates:
+
   # Enable version updates for npm and composer
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'monthly'
-    open-pull-requests-limit: 12
+    commit-message:
+      prefix: 'dep:'
+      include: 'scope'
+    labels:
+      - 'npm'
+      - 'dependencies'
+
   - package-ecosystem: 'composer'
     directory: '/'
     schedule:
       interval: 'monthly'
+    commit-message:
+      prefix: 'dep:'
+      include: 'scope'
+    labels:
+      - 'composer'
+      - 'dependencies'
+
   - package-ecosystem: 'composer'
     directory: '/tools/php-cs-fixer/'
     schedule:
       interval: 'monthly'
+    commit-message:
+      prefix: 'dep:'
+      include: 'scope'
+    labels:
+      - 'composer'
+      - 'dependencies'
+
   - package-ecosystem: 'composer'
     directory: '/tools/phplint/'
     schedule:
       interval: 'monthly'
+    commit-message:
+      prefix: 'dep:'
+      include: 'scope'
+    labels:
+      - 'composer'
+      - 'dependencies'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    commit-message:
+      prefix: 'dep:'
+      include: 'scope'
+    labels:
+      - 'actions'
+      - 'dependencies'
