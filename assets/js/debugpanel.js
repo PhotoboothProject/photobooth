@@ -59,7 +59,7 @@ class DebugPanel {
             })
             .then(html => {
                 this.debugContent.innerHTML = '<pre class="break-all whitespace-pre-wrap">' + html + '</pre>';
-                if (['nav-devlog', 'nav-remotebuzzerlog', 'synctodrivelog'].indexOf(this.currentNavigationId) != -1) {
+                if (['nav-devlog', 'nav-remotebuzzerlog', 'nav-synctodrivelog'].indexOf(this.currentNavigationId) != -1) {
                     this.adminContent.scrollTo(0, this.adminContent.scrollHeight);
                 } else {
                     this.adminContent.scrollTo(0, 0);

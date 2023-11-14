@@ -20,6 +20,11 @@
   background: var(--secondary-color);
 }
 
+html {
+  touch-action: none;
+  font-size: var(--ui-scale);
+}
+
 html,
 body {
   width: 100vw;
@@ -30,4 +35,6 @@ body {
   background-image: var(--background-default);
   background-position: center center;
   background-size: cover;
+  font-size: 1rem;
+  text-size-adjust: auto;
 }

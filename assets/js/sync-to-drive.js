@@ -1,304 +1,254 @@
+/*eslint no-unreachable: "warn"*/
+
 /* This script needs to be run from within the photobooth directory */
 
 /* Imports */
 const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const events = require('events');
 
-/* Variables */
-const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
-const { pid: PID, platform: PLATFORM } = process;
-const myEmitter = new events.EventEmitter();
-let rsyncSemaphore = null;
-let rsyncStartTime = 0;
-
-/* Functions */
-
-const log = function (...optionalParams) {
+const log = (...optionalParams) => {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-    console.log('[' + formattedDate + `][synctodrive][DEBUG] ${PID}:`, ...optionalParams);
-};
-
-const getConfigFromPHP = () => {
-    try {
-        const cmd = 'bin/photobooth photobooth:config:list json';
-        const stdout = execSync(cmd).toString();
-
-        return JSON.parse(stdout);
-    } catch (err) {
-        log('ERROR: Unable to load photobooth config', err);
-    }
-
-    return null;
-};
-
-const parseConfig = (config) => {
-    if (!config) {
-        return null;
-    }
-
-    try {
-        return {
-            dataAbsPath: config.foldersAbs.data,
-            drive: config.synctodrive.target
-        };
-    } catch (err) {
-        log('ERROR: unable to parse sync-to-drive config', err);
-    }
-
-    return null;
-};
-
-const getDriveInfo = ({ drive }) => {
-    let json = null;
-    let device = false;
-
-    drive = drive.toLowerCase();
-
-    try {
-        //Assuming that the lsblk version supports JSON output!
-        const output = execSync('export LC_ALL=C; lsblk -ablJO 2>/dev/null; unset LC_ALL').toString();
-        json = JSON.parse(output);
-    } catch (err) {
-        log(
-            'ERROR: Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!'
-        );
-
-        return null;
-    }
-
-    if (!json || !json.blockdevices) {
-        log('ERROR: The output of lsblk was malformed!');
-
-        return null;
-    }
-
-    try {
-        device = json.blockdevices.find(
-            (blk) =>
-                // eslint-disable-next-line implicit-arrow-linebreak
-                blk.subsystems.includes('usb') &&
-                ((blk.name && drive === blk.name.toLowerCase()) ||
-                    (blk.kname && drive === blk.kname.toLowerCase()) ||
-                    (blk.path && drive === blk.path.toLowerCase()) ||
-                    (blk.label && drive === blk.label.toLowerCase()))
-        );
-    } catch (err) {
-        device = false;
-    }
-
-    return device;
-};
-
-const mountDrive = (drive) => {
-    if (typeof drive.mountpoint === 'undefined' || !drive.mountpoint) {
-        try {
-            const mountRes = execSync(`export LC_ALL=C; udisksctl mount -b ${drive.path}; unset LC_ALL`).toString();
-            const mountPoint = mountRes
-                .substr(mountRes.indexOf('at') + 3)
-                .trim()
-                .replace(/[\n.]/gu, '');
-
-            drive.mountpoint = mountPoint;
-        } catch (error) {
-            log('ERROR: unable to mount drive', drive.path);
-            drive = null;
-        }
-    }
-
-    return drive;
-};
-
-const startSync = ({ dataAbsPath, drive }) => {
-    if (!fs.existsSync(dataAbsPath)) {
-        log(`ERROR: Folder [${dataAbsPath}] does not exist!`);
-
-        return;
-    }
-
-    log('Starting sync to USB drive ...');
-    log(`Source data folder [${dataAbsPath}]`);
-    log(`Syncing to drive [${drive.path}] -> [${drive.mountpoint}]`);
-
-    const cmd = (() => {
-        switch (process.platform) {
-            case 'win32':
-                return null;
-            case 'linux':
-                // prettier-ignore
-                return [
-                    'rsync',
-                    '-a',
-                    '--delete-before',
-                    '-b',
-                    `--backup-dir=${path.join(drive.mountpoint, 'deleted')}`,
-                    '--ignore-existing',
-                    '--include=\'*.\'{jpg,chk,gif,mp4}',
-                    '--include=\'*/\'',
-                    '--exclude=\'*\'',
-                    '--prune-empty-dirs',
-                    dataAbsPath,
-                    path.join(drive.mountpoint, SYNC_DESTINATION_DIR)
-                ].join(' ');
-            default:
-                return null;
-        }
-    })();
-
-    if (!cmd) {
-        log('ERROR: No command for syncing!');
-
-        return;
-    }
-
-    log('Executing command: <', cmd, '>');
-
-    try {
-        rsyncSemaphore = spawn(cmd, {
-            shell: '/bin/bash',
-            stdio: 'ignore'
-        });
-    } catch (err) {
-        log('ERROR: Could not start rsync:', err.toString());
-
-        return;
-    }
-
-    log('Rsync child process PID:', rsyncSemaphore.pid, 'started');
-
-    rsyncSemaphore.on('exit', () => {
-        myEmitter.emit('rsync-completed', rsyncSemaphore.pid);
-    });
-
-    rsyncStartTime = new Date();
-};
-
-const unmountDrive = () => {
-    const driveInfo = getDriveInfo(parsedConfig);
-    const mountedDrive = mountDrive(driveInfo);
-
-    if (mountedDrive) {
-        try {
-            execSync(`export LC_ALL=C; udisksctl unmount -b ${mountedDrive.path}; unset LC_ALL`).toString();
-            log('Unmounted drive', mountedDrive.path);
-        } catch (error) {
-            log('ERROR: unable to unmount drive', mountedDrive.path);
-        }
-    } else {
-        log('Nothing to umount');
-    }
-};
-
-/* Execution starts here */
-
-if (PLATFORM === 'win32') {
-    log('Windows is currently not supported!');
-    process.exit();
+    console.log('[' + formattedDate + `][synctodrive][DEBUG] ${process.pid}:`, ...optionalParams);
 }
 
-/* GET PHOTOBOOTH CONFIG */
-const phpConfig = getConfigFromPHP();
-
-if (!phpConfig) {
-    process.exit();
-} else if (!phpConfig.synctodrive.enabled) {
-    log('WARN: Sync script disabled by config - exiting');
-    process.exit();
+const error = (...optionalParams) => {
+    log(...optionalParams);
+    log('Shutdown');
+    throw new Error('Failed to execute the code');
 }
 
-/* PARSE PHOTOBOOTH CONFIG */
-const parsedConfig = parseConfig(phpConfig);
-log('USB target ', ...parsedConfig.drive);
+if (process.platform === 'win32') {
+    error('Windows is not supported.');
+}
 
-/* WRITE PROCESS PID FILE */
-const writePIDFile = (filename) => {
-    try {
-        fs.writeFileSync(filename, parseInt(PID, 10).toString(), { flag: 'w' });
-        log(`PID file created [${filename}]`);
-    } catch (err) {
-        throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
+class SyncToDrive {
+    constructor() {
+        this.config = this.fetchConfig();
+        if (!this.config.synctodrive.enabled) {
+            error('Sync to drive is disabled.');
+        }
+
+        this.rsyncProcess = null;
+        this.intervalInSeconds = Number(this.config.synctodrive.interval);
+        this.intervalInMilliseconds = this.intervalInSeconds * 1000;
+        this.source = this.config.foldersAbs.data;
+        this.destination = 'photobooth-pic-sync';
+        this.driveName = this.config.synctodrive.target.toLowerCase();
+
+        log('Sync to drive starting...');
+        log('Interval: ' + this.intervalInSeconds + 's');
+        log('Source: ' + this.source);
+        log('Drive Name: ' + this.driveName);
+
+        this.createProcessFile();
+        this.start();
     }
-};
-const pidFilename = path.join(phpConfig.foldersAbs.var, 'run/synctodrive.pid');
-writePIDFile(pidFilename);
 
-/* INSTALL HANDLER TO MONITOR CHILD PROCESS EXITS */
-myEmitter.on('rsync-completed', (childPID) => {
-    log('Rsync child process PID:', childPID, 'finished after', new Date() - rsyncStartTime, 'ms');
-    rsyncSemaphore = false;
-    log('... finished sync, going back to sleep');
-});
-
-/* INSTALL HANDLER ON SERVER PROCESS SIGHUP SIGTERM, SIGINT */
-const signalHandler = async (signal) => {
-    log(
-        'SignalHandler: received signal',
-        signal,
-        '- wait for possible rsync to complete, umount USB stick and gracefully terminate'
-    );
-
-    if (rsyncSemaphore) {
-        log('SignalHandler: rsync in progress - waiting for termination for max 60 seconds');
-
-        setTimeout(() => {
-            log('SignalHandler: rsync seems stale, terminate child process (SIGKILL)');
-            rsyncSemaphore.kill('SIGKILL');
-            rsyncSemaphore = false;
-        }, 60000);
-
-        const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
-
-        // eslint-disable-next-line no-unmodified-loop-condition
-        while (rsyncSemaphore) {
-            // eslint-disable-next-line no-await-in-loop
-            await sleep(1000);
+    start() {
+        try {
+            const device = this.findDevice(this.driveName);
+            this.mountDevice(device);
+            this.sync(device);
+        } catch (error) {
+            // Log all errors, do not kill the process.
+            // The script will resume and try again.
+            log(error.message);
+            log('Retry in ' + this.intervalInSeconds + 's');
+            setTimeout(() => {
+                this.start();
+            },this.intervalInMilliseconds);
         }
     }
 
-    /* umount drives here */
-    unmountDrive();
+    stop() {
+        try {
+            const device = this.findDevice(this.driveName);
+            this.unmountDevice(device);
+        } catch (error) {
+            // Log all errors, do not kill the process.
+            // The script will resume and try again.
+            log(error.message);
+        }
 
-    log('SignalHandler: gracefully terminating now - bye bye');
-    process.exit();
-};
-
-['SIGTERM', 'SIGHUP', 'SIGINT'].forEach((term) => process.on(term, signalHandler.bind(null, term)));
-
-/* START FOREVER LOOP */
-log('Starting server process');
-log(`Interval is [${phpConfig.synctodrive.interval}] seconds`);
-
-const syncLoop = () => {
-    if (rsyncSemaphore) {
-        log(`WARN: Sync in progress, waiting for [${phpConfig.synctodrive.interval}] seconds`);
-
-        return;
+        log('Sync to drive stopped...');
+        process.exit();
     }
 
-    log('Checking for USB drive');
+    sync(device) {
+        if (!fs.existsSync(this.source)) {
+            throw new Error('Folder ' + this.source + ' does not exist!');
+        }
 
-    const driveInfo = getDriveInfo(parsedConfig);
-    try {
-        log(`Processing drive ${driveInfo.label} -> ${driveInfo.path}`);
-    } catch (error) {
-        return;
-    }
+        log('Starting sync to USB drive ...');
+        const distinationPath = path.join(device.mountpoint, this.destination);
+        if (!fs.existsSync(distinationPath)) {
+            log('Creating target directory' + distinationPath);
+            fs.mkdirSync(distinationPath, { recursive: true });
+        }
 
-    const mountedDrive = mountDrive(driveInfo);
-    try {
-        log(`Mounted drive ${mountedDrive.name} -> ${mountedDrive.mountpoint}`);
-    } catch (error) {
-        return;
-    }
+        log('Source data folder ' + this.source);
+        log('Syncing to drive ' + device.path + ' -> ' + distinationPath);
 
-    if (mountedDrive) {
-        startSync({
-            dataAbsPath: parsedConfig.dataAbsPath,
-            drive: mountedDrive
+        const command = [
+            'rsync',
+            '-a',
+            '--delete-before',
+            '-b',
+            '--backup-dir=' + path.join(device.mountpoint, 'deleted'),
+            '--ignore-existing',
+            '--include=\'*.\'{jpg,chk,gif,mp4}',
+            '--include=\'*/\'',
+            '--exclude=\'*\'',
+            '--prune-empty-dirs',
+            this.source,
+            path.join(device.mountpoint, this.destination)
+        ].join(' ');
+        log('Executing command "' + command + '"');
+
+        this.rsyncProcess = spawn(command, {
+            'shell': '/bin/bash'
+        });
+
+        this.rsyncProcess.on('error', (error) => {
+            this.rsyncProcess = null;
+            throw new Error(error.message);
+        });
+        this.rsyncProcess.on('exit', () => {
+            this.rsyncProcess = null;
+            log('Sync finished');
+            log('Next run in ' + this.intervalInSeconds + 's');
+            setTimeout(() => {
+                this.start();
+            },this.intervalInMilliseconds);
         });
     }
-};
 
-setInterval(syncLoop, phpConfig.synctodrive.interval * 1000);
+    findDevice(driveName) {
+        log('Finding device ' + driveName);
+
+        let json = {};
+        try {
+            //Assuming that the lsblk version supports JSON output!
+            json = JSON.parse(execSync('export LC_ALL=C; lsblk -ablJO 2>/dev/null; unset LC_ALL').toString());
+        } catch (error) {
+            log(error.message);
+            throw new Error('Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!');
+        }
+
+        if (!json || !json.blockdevices) {
+            throw new Error('The output of lsblk was malformed!');
+        }
+
+        const device = json.blockdevices.find(
+            (blk) => blk.subsystems.includes('usb')
+                && (
+                    (blk.name && driveName === blk.name.toLowerCase())
+                    || (blk.kname && driveName === blk.kname.toLowerCase())
+                    || (blk.path && driveName === blk.path.toLowerCase())
+                    || (blk.label && driveName === blk.label.toLowerCase())
+                )
+        );
+
+        if (device === undefined) {
+            throw new Error('Device ' + driveName + ' was not detected');
+        }
+
+        return device;
+    }
+
+    mountDevice(device) {
+        try {
+            if (!this.isDeviceMounted(device)) {
+                const command = `export LC_ALL=C; udisksctl mount -b ${device.path}; unset LC_ALL`
+                log('Mounting device ' + device.path + ', command: "' + command + '"');
+                const mountRes = execSync(command).toString();
+                const mountPoint = mountRes
+                    .substr(mountRes.indexOf('at') + 3)
+                    .trim()
+                    .replace(/[\n.]/gu, '');
+                device.mountpoint = mountPoint;
+            }
+        } catch (error) {
+            throw new Error('Unable to mount device');
+        }
+    
+        return device;
+    }
+
+    unmountDevice(device) {
+        try {
+            if (this.isDeviceMounted(device)) {
+                try {
+                    const command = `export LC_ALL=C; udisksctl unmount -b ${device.path}; unset LC_ALL`;
+                    execSync(command);
+                    log('Unmounted drive ' + device.path + ', command: "' + command + '"');
+                } catch (error) {
+                    throw new Error('Unable to unmount device');
+                }
+            }
+        } catch (error) {
+            // Log all errors, do not kill the process.
+            // The script will resume and try again.
+            log(error.message);
+        }
+    }
+
+    isDeviceMounted(device) {
+        if (device.mountpoint === undefined || !device.mountpoint) {
+            return false;
+        }
+
+        return true;
+    }
+
+    async handleSignal(signal) {
+        log('Termination requested through ' + signal);
+
+        if (this.rsyncProcess) {
+            log('Rsync in progress - waiting for termination for max 60 seconds');
+            setTimeout(() => {
+                log('Rsync seems stale, terminate child process (SIGKILL)');
+                this.rsyncProcess.kill('SIGKILL');
+                this.rsyncProcess = null;
+            }, 60000);
+    
+            const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+            // eslint-disable-next-line no-unmodified-loop-condition
+            while (this.rsyncProcess) {
+                // eslint-disable-next-line no-await-in-loop
+                await sleep(1000);
+            }
+        }
+
+        this.stop();
+    }
+
+    fetchConfig() {
+        try {
+            const cmd = 'bin/photobooth photobooth:config:list json';
+            const output = execSync(cmd).toString();
+            return JSON.parse(output);
+        } catch (error) {
+            error('Unable to load photobooth config', error);
+        }
+    }
+
+    createProcessFile() {
+        const processFilename = path.join(this.config.foldersAbs.var, 'run/synctodrive.pid')
+        try {
+            fs.writeFileSync(processFilename, parseInt(process.pid, 10).toString(), { flag: 'w' });
+            log(`Process file created successfully: ${processFilename}`);
+        } catch (error) {
+            error(`Failed to create the process file: ${processFilename} - ${error.message}`);
+        }
+    }
+}
+
+// eslint-disable-next-line no-unused-vars
+const syncToDrive = new SyncToDrive();
+
+['SIGTERM', 'SIGHUP', 'SIGINT'].forEach((term) => process.on(term, () => { 
+    syncToDrive.handleSignal(term); 
+}));

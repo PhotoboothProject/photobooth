@@ -220,11 +220,11 @@ function saveImage(filename, cb) {
                 if (config.picture.allow_delete) {
                     $('[data-command="deletebtn"]')
                         .off('click')
-                        .on('click', (ev) => {
+                        .on('click', async (ev) => {
                             ev.preventDefault();
 
                             const msg = photoboothTools.getTranslation('really_delete_image');
-                            const really = config.delete.no_request ? true : confirm(resp.filename + ' ' + msg);
+                            const really = config.delete.no_request ? true : await photoboothTools.confirm(resp.filename + ' ' + msg);
                             if (really) {
                                 photoBooth.deleteImage(resp.filename, (result) => {
                                     if (result.success && config.keying.show_all) {
