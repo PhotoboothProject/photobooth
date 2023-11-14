@@ -270,18 +270,18 @@ Having trouble?
 - Check the browser developer console for error logs
 - Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel)
 - If there is no errors logged but hardware buttons still do not trigger:
-  - GPIO interrupts might be disabled. Check file `/boot/config.txt` and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
-  - Button GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
+  - GPIO interrupts might be disabled. Check file `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
+  - Button GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
     ```
     gpio=5,6,7,8,16,17,20,21,22,26,27=pu
     ```
-  - LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/config.txt` by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
+  - LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
     ```
     gpio=9,10,11,12,18,19,23,24,25=op
     ```
 - For the shutdown and reboot buttons to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
     ```sh
-    cat >> /etc/sudoers.d/020_www-data-shutdown << EOF
+    cat > /etc/sudoers.d/020_www-data-shutdown << EOF
     www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
     EOF
     ```
