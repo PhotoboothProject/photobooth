@@ -40,7 +40,7 @@ for ($i = 0; $i < $config['collage']['limit']; $i++) {
 }
 
 $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
-if (Collage::createCollage($collageSrcImagePaths, $filename_tmp, $config['filters']['defaults'])) {
+if (Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $config['filters']['defaults'])) {
     for ($k = 0; $k < $config['collage']['limit']; $k++) {
         unlink($collageSrcImagePaths[$k]);
     }
