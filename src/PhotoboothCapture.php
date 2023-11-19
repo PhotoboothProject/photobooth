@@ -128,20 +128,28 @@ class PhotoboothCapture
             }
         }
 
-        if (!file_exists($this->tmpFile)) {
-            $data = [
-                'error' => 'File was not created',
-                'cmd' => $cmd,
-                'returnValue' => $returnValue,
-                'output' => $output,
-            ];
-            if ($this->style === 'video') {
-                // remove all files that were created - all filenames start with the videos name
-                exec('rm -f ' . $this->tmpFile . '*');
+        for ($attempt = 1; $attempt <= 3; $attempt++) {
+            if (file_exists($this->tmpFile)) {
+                break;
+            } else {
+                if ($attempt == 3) {
+                    $data = [
+                        'error' => 'File was not created',
+                        'cmd' => $cmd,
+                        'returnValue' => $returnValue,
+                        'output' => $output,
+                    ];
+                    if ($this->style === 'video') {
+                        // remove all files that were created - all filenames start with the videos name
+                        exec('rm -f ' . $this->tmpFile . '*');
+                    }
+                    $this->logger->error('error', $data);
+                    echo json_encode($data);
+                    die();
+                } else {
+                    sleep(1);
+                }
             }
-            $this->logger->error('error', $data);
-            echo json_encode($data);
-            die();
         }
     }
 
