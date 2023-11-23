@@ -1100,10 +1100,6 @@ if (useGpio) {
         rotaryClkPin = 0;
         rotaryDtPin = 0;
 
-        rotaryClk.watch(watchRotaryClk);
-        rotaryDt.watch(watchRotaryDt);
-        rotaryBtn.watch(watchRotaryBtn);
-
         log(
             'Looking for Rotary Encoder connected to GPIOs ',
             config.remotebuzzer.rotaryclkgpio,
@@ -1113,6 +1109,10 @@ if (useGpio) {
             config.remotebuzzer.rotarybtngpio,
             '(BTN)'
         );
+
+        rotaryClk.watch(watchRotaryClk);
+        rotaryDt.watch(watchRotaryDt);
+        rotaryBtn.watch(watchRotaryBtn);
     }
 
     /* NORMAL BUTTON SUPPORT */
@@ -1123,14 +1123,13 @@ if (useGpio) {
                 debounceTimeout: config.remotebuzzer.debounce
             });
 
+            log('Looking for Picture Button on Raspberry GPIO', config.remotebuzzer.picturegpio);
             if (!config.remotebuzzer.collagebutton && config.collage.enabled) {
-                pictureButton.watch(watchPictureGPIOwithCollage);
                 log('config: collage enabled for picture button');
+                pictureButton.watch(watchPictureGPIOwithCollage);
             } else {
                 pictureButton.watch(watchPictureGPIO);
             }
-
-            log('Looking for Picture Button on Raspberry GPIO', config.remotebuzzer.picturegpio);
         }
 
         /* COLLAGE BUTTON */
@@ -1138,8 +1137,8 @@ if (useGpio) {
             const collageButton = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            collageButton.watch(watchCollageGPIO);
             log('Looking for Collage Button on Raspberry GPIO', config.remotebuzzer.collagegpio);
+            collageButton.watch(watchCollageGPIO);
         }
 
         /* CUSTOM BUTTON */
@@ -1147,8 +1146,8 @@ if (useGpio) {
             const videoButton = new Gpio(config.remotebuzzer.customgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            videoButton.watch(watchCustomGPIO);
             log('Looking for Custom Button on Raspberry GPIO', config.remotebuzzer.customgpio);
+            videoButton.watch(watchCustomGPIO);
         }
 
         /* VIDEO BUTTON */
@@ -1156,8 +1155,8 @@ if (useGpio) {
             const videoButton = new Gpio(config.remotebuzzer.videogpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            videoButton.watch(watchVideoGPIO);
             log('Looking for Video Button on Raspberry GPIO', config.remotebuzzer.videogpio);
+            videoButton.watch(watchVideoGPIO);
         }
 
         /* SHUTDOWN BUTTON */
@@ -1165,8 +1164,8 @@ if (useGpio) {
             const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            shutdownButton.watch(watchShutdownGPIO);
             log('Looking for Shutdown Button on Raspberry GPIO', config.remotebuzzer.shutdowngpio);
+            shutdownButton.watch(watchShutdownGPIO);
         }
 
         /* REBOOT BUTTON */
@@ -1174,8 +1173,8 @@ if (useGpio) {
             const rebootButton = new Gpio(config.remotebuzzer.rebootgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            rebootButton.watch(watchRebootGPIO);
             log('Looking for Reboot Button on Raspberry GPIO', config.remotebuzzer.rebootgpio);
+            rebootButton.watch(watchRebootGPIO);
         }
 
         /* PRINT BUTTON */
@@ -1183,8 +1182,8 @@ if (useGpio) {
             const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            printButton.watch(watchPrintGPIO);
             log('Looking for Print Button on Raspberry GPIO', config.remotebuzzer.printgpio);
+            printButton.watch(watchPrintGPIO);
         }
 
         /* Move2USB BUTTON */
@@ -1192,16 +1191,16 @@ if (useGpio) {
             const move2usbButton = new Gpio(config.remotebuzzer.move2usbgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            move2usbButton.watch(watchMove2usbGPIO);
             log('Looking for Move2USB Button on Raspberry GPIO', config.remotebuzzer.move2usbgpio);
+            move2usbButton.watch(watchMove2usbGPIO);
         }
 
         /* LED OUT SUPPORT */
         if (config.remotebuzzer.useleds) {
             /* Photo Light */
             if (config.remotebuzzer.photolight) {
-                photolight = new Gpio(config.remotebuzzer.photolightgpio, 'out');
                 log('OUT for Photo Light on Raspberry GPIO', config.remotebuzzer.photolightgpio);
+                photolight = new Gpio(config.remotebuzzer.photolightgpio, 'out');
             }
 
             /* LED PICTURE BUTTON */
@@ -1212,44 +1211,44 @@ if (useGpio) {
 
             /* LED COLLAGE BUTTON */
             if (config.remotebuzzer.collageled) {
-                collageled = new Gpio(config.remotebuzzer.collageledgpio, 'out');
                 log('LED for Collage Button on Raspberry GPIO', config.remotebuzzer.collageledgpio);
+                collageled = new Gpio(config.remotebuzzer.collageledgpio, 'out');
             }
 
             /* LED CUSTOM BUTTON */
             if (config.remotebuzzer.customled) {
-                customled = new Gpio(config.remotebuzzer.customledgpio, 'out');
                 log('LED for Custom Button on Raspberry GPIO', config.remotebuzzer.customledgpio);
+                customled = new Gpio(config.remotebuzzer.customledgpio, 'out');
             }
 
             /* LED VIDEO BUTTON */
             if (config.remotebuzzer.videoled) {
-                videoled = new Gpio(config.remotebuzzer.videoledgpio, 'out');
                 log('LED for Video Button on Raspberry GPIO', config.remotebuzzer.videoledgpio);
+                videoled = new Gpio(config.remotebuzzer.videoledgpio, 'out');
             }
 
             /* LED SHUTDOWN BUTTON */
             if (config.remotebuzzer.shutdownled) {
-                shutdownled = new Gpio(config.remotebuzzer.shutdownledgpio, 'out');
                 log('LED for Shutdown Button on Raspberry GPIO', config.remotebuzzer.shutdownledgpio);
+                shutdownled = new Gpio(config.remotebuzzer.shutdownledgpio, 'out');
             }
 
             /* LED REBOOT BUTTON */
             if (config.remotebuzzer.rebootled) {
-                rebootled = new Gpio(config.remotebuzzer.rebootledgpio, 'out');
                 log('LED for Reboot Button on Raspberry GPIO', config.remotebuzzer.rebootledgpio);
+                rebootled = new Gpio(config.remotebuzzer.rebootledgpio, 'out');
             }
 
             /* LED PRINT BUTTON */
             if (config.remotebuzzer.printled) {
-                printled = new Gpio(config.remotebuzzer.printledgpio, 'out');
                 log('LED for Print Button on Raspberry GPIO', config.remotebuzzer.printledgpio);
+                printled = new Gpio(config.remotebuzzer.printledgpio, 'out');
             }
 
             /* LED Move2USB BUTTON */
             if (config.remotebuzzer.move2usbled) {
-                move2usbled = new Gpio(config.remotebuzzer.move2usbledgpio, 'out');
                 log('LED for Move2USB Button on Raspberry GPIO', config.remotebuzzer.move2usbledgpio);
+                move2usbled = new Gpio(config.remotebuzzer.move2usbledgpio, 'out');
             }
         }
     }
