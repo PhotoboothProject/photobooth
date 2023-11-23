@@ -1143,11 +1143,11 @@ if (useGpio) {
 
         /* CUSTOM BUTTON */
         if (config.remotebuzzer.custombutton) {
-            const videoButton = new Gpio(config.remotebuzzer.customgpio, 'in', 'both', {
+            const customButton = new Gpio(config.remotebuzzer.customgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
             log('Looking for Custom Button on Raspberry GPIO', config.remotebuzzer.customgpio);
-            videoButton.watch(watchCustomGPIO);
+            customButton.watch(watchCustomGPIO);
         }
 
         /* VIDEO BUTTON */
