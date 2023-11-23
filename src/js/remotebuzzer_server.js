@@ -307,35 +307,34 @@ server.listen(config.remotebuzzer.port, () => {
 
 /* SANITY CHECKS */
 function gpioSanity(gpioconfig) {
-    if (isNaN(gpioconfig)) {
-        throw new Error(gpioconfig + ' is not a valid number');
-    }
+    try {
+        if (isNaN(gpioconfig)) {
+            throw new Error(gpioconfig + ' is not a valid number');
+        }
 
-    if (gpioconfig < 1 || gpioconfig > 27) {
-        throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
-    }
+        if (gpioconfig < 1 || gpioconfig > 27) {
+            throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
+        }
 
-    cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
-    stdout = execSync(cmd).toString();
+        cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
+        stdout = execSync(cmd).toString();
 
-    if (!stdout.split(',').find((el) => el == gpioconfig)) {
-        throw new Error('GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details');
+        if (!stdout.split(',').find((el) => el == gpioconfig)) {
+            throw new Error(
+                'GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details'
+            );
+        }
+
+        return true;
+    } catch (error) {
+        log('Error: ', error.message);
+
+        return false;
     }
 }
 
 const Gpio = require('onoff').Gpio;
 const useGpio = Gpio.accessible && !config.remotebuzzer.usenogpio;
-
-if (useGpio) {
-    gpioSanity(config.remotebuzzer.picturegpio);
-    gpioSanity(config.remotebuzzer.collagegpio);
-    gpioSanity(config.remotebuzzer.shutdowngpio);
-    gpioSanity(config.remotebuzzer.printgpio);
-    gpioSanity(config.remotebuzzer.rotaryclkgpio);
-    gpioSanity(config.remotebuzzer.rotarydtgpio);
-    gpioSanity(config.remotebuzzer.rotarybtngpio);
-    gpioSanity(config.remotebuzzer.rebootgpio);
-}
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
 function buttonActiveCheck(gpio, value) {
@@ -707,7 +706,12 @@ const watchRotaryBtn = function watchRotaryBtn(err, gpioValue) {
 /* INIT ONOFF LIBRARY AND LINK CALLBACK FUNCTIONS */
 if (useGpio) {
     /* ROTARY ENCODER MODE */
-    if (config.remotebuzzer.userotary) {
+    if (
+        config.remotebuzzer.userotary &&
+        gpioSanity(config.remotebuzzer.rotaryclkgpio) &&
+        gpioSanity(config.remotebuzzer.rotarydtgpio) &&
+        gpioSanity(config.remotebuzzer.rotarybtngpio)
+    ) {
         /* ROTARY ENCODER MODE */
         log('ROTARY support active');
         const rotaryClk = new Gpio(config.remotebuzzer.rotaryclkgpio, 'in', 'both');
@@ -737,7 +741,7 @@ if (useGpio) {
     /* NORMAL BUTTON SUPPORT */
     if (config.remotebuzzer.usebuttons) {
         log('BUTTON support active');
-        if (config.remotebuzzer.picturebutton) {
+        if (config.remotebuzzer.picturebutton && gpioSanity(config.remotebuzzer.picturegpio)) {
             const pictureButton = new Gpio(config.remotebuzzer.picturegpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -751,7 +755,11 @@ if (useGpio) {
         }
 
         /* COLLAGE BUTTON */
-        if (config.remotebuzzer.collagebutton && config.collage.enabled) {
+        if (
+            config.collage.enabled &&
+            config.remotebuzzer.collagebutton &&
+            gpioSanity(config.remotebuzzer.collagegpio)
+        ) {
             const collageButton = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -760,7 +768,7 @@ if (useGpio) {
         }
 
         /* SHUTDOWN BUTTON */
-        if (config.remotebuzzer.shutdownbutton) {
+        if (config.remotebuzzer.shutdownbutton && gpioSanity(config.remotebuzzer.shutdowngpio)) {
             const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -769,7 +777,7 @@ if (useGpio) {
         }
 
         /* REBOOT BUTTON */
-        if (config.remotebuzzer.rebootbutton) {
+        if (config.remotebuzzer.rebootbutton && gpioSanity(config.remotebuzzer.rebootgpio)) {
             const rebootButton = new Gpio(config.remotebuzzer.rebootgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -778,7 +786,7 @@ if (useGpio) {
         }
 
         /* PRINT BUTTON */
-        if (config.remotebuzzer.printbutton) {
+        if (config.remotebuzzer.printbutton && gpioSanity(config.remotebuzzer.printgpio)) {
             const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
