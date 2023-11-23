@@ -500,63 +500,57 @@ server.listen(config.remotebuzzer.port, () => {
 
 /* SANITY CHECKS */
 function gpioPuSanity(gpioconfig) {
-    if (isNaN(gpioconfig)) {
-        throw new Error(gpioconfig + ' is not a valid number');
-    }
+    try {
+        if (isNaN(gpioconfig)) {
+            throw new Error(gpioconfig + ' is not a valid number');
+        }
 
-    if (gpioconfig < 1 || gpioconfig > 27) {
-        throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
-    }
+        if (gpioconfig < 1 || gpioconfig > 27) {
+            throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
+        }
 
-    cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
-    stdout = execSync(cmd).toString();
+        cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
+        stdout = execSync(cmd).toString();
 
-    if (!stdout.split(',').find((el) => el == gpioconfig)) {
-        throw new Error('GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details');
+        if (!stdout.split(',').find((el) => el == gpioconfig)) {
+            throw new Error('GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details');
+        }
+
+        return true;
+    } catch (error) {
+        log('Error: ', error.message);
+
+        return false;
     }
 }
 
 function gpioOpSanity(gpioconfig) {
-    if (isNaN(gpioconfig)) {
-        throw new Error(gpioconfig + ' is not a valid number');
-    }
+    try {
+        if (isNaN(gpioconfig)) {
+            throw new Error(gpioconfig + ' is not a valid number');
+        }
 
-    if (gpioconfig < 1 || gpioconfig > 27) {
-        throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
-    }
+        if (gpioconfig < 1 || gpioconfig > 27) {
+            throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
+        }
 
-    cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" /boot/config.txt';
-    stdout = execSync(cmd).toString();
+        cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" /boot/config.txt';
+        stdout = execSync(cmd).toString();
 
-    if (!stdout.split(',').find((el) => el == gpioconfig)) {
-        throw new Error('GPIO' + gpioconfig + ' is not configured as OUTPUT in /boot/config.txt - see FAQ for details');
+        if (!stdout.split(',').find((el) => el == gpioconfig)) {
+            throw new Error('GPIO' + gpioconfig + ' is not configured as OUTPUT in /boot/config.txt - see FAQ for details');
+        }
+
+        return true;
+    } catch (error) {
+        log('Error: ', error.message);
+
+        return false;
     }
 }
 
 const Gpio = require('onoff').Gpio;
 const useGpio = Gpio.accessible && !config.remotebuzzer.usenogpio;
-
-if (useGpio) {
-    gpioPuSanity(config.remotebuzzer.picturegpio);
-    gpioPuSanity(config.remotebuzzer.collagegpio);
-    gpioPuSanity(config.remotebuzzer.shutdowngpio);
-    gpioPuSanity(config.remotebuzzer.printgpio);
-    gpioPuSanity(config.remotebuzzer.rotaryclkgpio);
-    gpioPuSanity(config.remotebuzzer.rotarydtgpio);
-    gpioPuSanity(config.remotebuzzer.rotarybtngpio);
-    gpioPuSanity(config.remotebuzzer.rebootgpio);
-    gpioPuSanity(config.remotebuzzer.customgpio);
-    gpioPuSanity(config.remotebuzzer.videogpio);
-    gpioOpSanity(config.remotebuzzer.photolightgpio);
-    gpioOpSanity(config.remotebuzzer.pictureledgpio);
-    gpioOpSanity(config.remotebuzzer.collageledgpio);
-    gpioOpSanity(config.remotebuzzer.customledgpio);
-    gpioOpSanity(config.remotebuzzer.videoledgpio);
-    gpioOpSanity(config.remotebuzzer.printledgpio);
-    gpioOpSanity(config.remotebuzzer.shutdownledgpio);
-    gpioOpSanity(config.remotebuzzer.rebootledgpio);
-    gpioOpSanity(config.remotebuzzer.move2usbledgpio);
-}
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
 function buttonActiveCheck(gpio, value) {
@@ -1088,7 +1082,12 @@ const watchRotaryBtn = function watchRotaryBtn(err, gpioValue) {
 /* INIT ONOFF LIBRARY AND LINK CALLBACK FUNCTIONS */
 if (useGpio) {
     /* ROTARY ENCODER MODE */
-    if (config.remotebuzzer.userotary) {
+    if (
+        config.remotebuzzer.userotary &&
+        gpioPuSanity(config.remotebuzzer.rotaryclkgpio) &&
+        gpioPuSanity(config.remotebuzzer.rotarydtgpio) &&
+        gpioPuSanity(config.remotebuzzer.rotarybtngpio)
+    ) {
         /* ROTARY ENCODER MODE */
         log('ROTARY support active');
         const rotaryClk = new Gpio(config.remotebuzzer.rotaryclkgpio, 'in', 'both');
@@ -1118,11 +1117,10 @@ if (useGpio) {
     /* NORMAL BUTTON SUPPORT */
     if (config.remotebuzzer.usebuttons) {
         log('BUTTON support active');
-        if (config.remotebuzzer.picturebutton) {
+        if (config.remotebuzzer.picturebutton && gpioPuSanity(config.remotebuzzer.picturegpio)) {
             const pictureButton = new Gpio(config.remotebuzzer.picturegpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-
             log('Looking for Picture Button on Raspberry GPIO', config.remotebuzzer.picturegpio);
             if (!config.remotebuzzer.collagebutton && config.collage.enabled) {
                 log('config: collage enabled for picture button');
@@ -1133,7 +1131,11 @@ if (useGpio) {
         }
 
         /* COLLAGE BUTTON */
-        if (config.remotebuzzer.collagebutton && config.collage.enabled) {
+        if (
+            config.collage.enabled &&
+            config.remotebuzzer.collagebutton &&
+            gpioPuSanity(config.remotebuzzer.collagegpio)
+        ) {
             const collageButton = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1142,7 +1144,7 @@ if (useGpio) {
         }
 
         /* CUSTOM BUTTON */
-        if (config.remotebuzzer.custombutton) {
+        if (config.remotebuzzer.custombutton && gpioPuSanity(config.remotebuzzer.customgpio)) {
             const customButton = new Gpio(config.remotebuzzer.customgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1151,7 +1153,7 @@ if (useGpio) {
         }
 
         /* VIDEO BUTTON */
-        if (config.remotebuzzer.videobutton) {
+        if (config.remotebuzzer.videobutton && gpioPuSanity(config.remotebuzzer.videogpio)) {
             const videoButton = new Gpio(config.remotebuzzer.videogpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1160,7 +1162,7 @@ if (useGpio) {
         }
 
         /* SHUTDOWN BUTTON */
-        if (config.remotebuzzer.shutdownbutton) {
+        if (config.remotebuzzer.shutdownbutton && gpioPuSanity(config.remotebuzzer.shutdowngpio)) {
             const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1169,7 +1171,7 @@ if (useGpio) {
         }
 
         /* REBOOT BUTTON */
-        if (config.remotebuzzer.rebootbutton) {
+        if (config.remotebuzzer.rebootbutton && gpioPuSanity(config.remotebuzzer.rebootgpio)) {
             const rebootButton = new Gpio(config.remotebuzzer.rebootgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1178,7 +1180,7 @@ if (useGpio) {
         }
 
         /* PRINT BUTTON */
-        if (config.remotebuzzer.printbutton) {
+        if (config.remotebuzzer.printbutton && gpioPuSanity(config.remotebuzzer.printgpio)) {
             const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1187,7 +1189,7 @@ if (useGpio) {
         }
 
         /* Move2USB BUTTON */
-        if (config.remotebuzzer.move2usb != 'disabled') {
+        if (config.remotebuzzer.move2usb != 'disabled' && gpioPuSanity(config.remotebuzzer.move2usbgpio)) {
             const move2usbButton = new Gpio(config.remotebuzzer.move2usbgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
@@ -1198,55 +1200,55 @@ if (useGpio) {
         /* LED OUT SUPPORT */
         if (config.remotebuzzer.useleds) {
             /* Photo Light */
-            if (config.remotebuzzer.photolight) {
+            if (config.remotebuzzer.photolight && gpioOpSanity(config.remotebuzzer.photolightgpio)) {
                 log('OUT for Photo Light on Raspberry GPIO', config.remotebuzzer.photolightgpio);
                 photolight = new Gpio(config.remotebuzzer.photolightgpio, 'out');
             }
 
             /* LED PICTURE BUTTON */
-            if (config.remotebuzzer.pictureled) {
+            if (config.remotebuzzer.pictureled && gpioOpSanity(config.remotebuzzer.pictureledgpio)) {
                 pictureled = new Gpio(config.remotebuzzer.pictureledgpio, 'out');
                 log('LED for Picture Button on Raspberry GPIO', config.remotebuzzer.pictureledgpio);
             }
 
             /* LED COLLAGE BUTTON */
-            if (config.remotebuzzer.collageled) {
+            if (config.remotebuzzer.collageled && gpioOpSanity(config.remotebuzzer.collageledgpio)) {
                 log('LED for Collage Button on Raspberry GPIO', config.remotebuzzer.collageledgpio);
                 collageled = new Gpio(config.remotebuzzer.collageledgpio, 'out');
             }
 
             /* LED CUSTOM BUTTON */
-            if (config.remotebuzzer.customled) {
+            if (config.remotebuzzer.customled && gpioOpSanity(config.remotebuzzer.customledgpio)) {
                 log('LED for Custom Button on Raspberry GPIO', config.remotebuzzer.customledgpio);
                 customled = new Gpio(config.remotebuzzer.customledgpio, 'out');
             }
 
             /* LED VIDEO BUTTON */
-            if (config.remotebuzzer.videoled) {
+            if (config.remotebuzzer.videoled && gpioOpSanity(config.remotebuzzer.videoledgpio)) {
                 log('LED for Video Button on Raspberry GPIO', config.remotebuzzer.videoledgpio);
                 videoled = new Gpio(config.remotebuzzer.videoledgpio, 'out');
             }
 
             /* LED SHUTDOWN BUTTON */
-            if (config.remotebuzzer.shutdownled) {
+            if (config.remotebuzzer.shutdownled && gpioOpSanity(config.remotebuzzer.shutdownledgpio)) {
                 log('LED for Shutdown Button on Raspberry GPIO', config.remotebuzzer.shutdownledgpio);
                 shutdownled = new Gpio(config.remotebuzzer.shutdownledgpio, 'out');
             }
 
             /* LED REBOOT BUTTON */
-            if (config.remotebuzzer.rebootled) {
+            if (config.remotebuzzer.rebootled && gpioOpSanity(config.remotebuzzer.rebootledgpio)) {
                 log('LED for Reboot Button on Raspberry GPIO', config.remotebuzzer.rebootledgpio);
                 rebootled = new Gpio(config.remotebuzzer.rebootledgpio, 'out');
             }
 
             /* LED PRINT BUTTON */
-            if (config.remotebuzzer.printled) {
+            if (config.remotebuzzer.printled && gpioOpSanity(config.remotebuzzer.printledgpio)) {
                 log('LED for Print Button on Raspberry GPIO', config.remotebuzzer.printledgpio);
                 printled = new Gpio(config.remotebuzzer.printledgpio, 'out');
             }
 
             /* LED Move2USB BUTTON */
-            if (config.remotebuzzer.move2usbled) {
+            if (config.remotebuzzer.move2usbled && gpioOpSanity(config.remotebuzzer.move2usbledgpio)) {
                 log('LED for Move2USB Button on Raspberry GPIO', config.remotebuzzer.move2usbledgpio);
                 move2usbled = new Gpio(config.remotebuzzer.move2usbledgpio, 'out');
             }
