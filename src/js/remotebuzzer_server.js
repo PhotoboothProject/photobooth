@@ -719,10 +719,6 @@ if (useGpio) {
         rotaryClkPin = 0;
         rotaryDtPin = 0;
 
-        rotaryClk.watch(watchRotaryClk);
-        rotaryDt.watch(watchRotaryDt);
-        rotaryBtn.watch(watchRotaryBtn);
-
         log(
             'Looking for Rotary Encoder connected to GPIOs ',
             config.remotebuzzer.rotaryclkgpio,
@@ -732,6 +728,10 @@ if (useGpio) {
             config.remotebuzzer.rotarybtngpio,
             '(BTN)'
         );
+
+        rotaryClk.watch(watchRotaryClk);
+        rotaryDt.watch(watchRotaryDt);
+        rotaryBtn.watch(watchRotaryBtn);
     }
 
     /* NORMAL BUTTON SUPPORT */
@@ -741,15 +741,13 @@ if (useGpio) {
             const pictureButton = new Gpio(config.remotebuzzer.picturegpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-
+            log('Looking for Picture Button on Raspberry GPIO', config.remotebuzzer.picturegpio);
             if (!config.remotebuzzer.collagebutton && config.collage.enabled) {
                 pictureButton.watch(watchPictureGPIOwithCollage);
                 log('config: collage enabled for picture button');
             } else {
                 pictureButton.watch(watchPictureGPIO);
             }
-
-            log('Looking for Picture Button on Raspberry GPIO', config.remotebuzzer.picturegpio);
         }
 
         /* COLLAGE BUTTON */
@@ -757,8 +755,8 @@ if (useGpio) {
             const collageButton = new Gpio(config.remotebuzzer.collagegpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            collageButton.watch(watchCollageGPIO);
             log('Looking for Collage Button on Raspberry GPIO', config.remotebuzzer.collagegpio);
+            collageButton.watch(watchCollageGPIO);
         }
 
         /* SHUTDOWN BUTTON */
@@ -766,8 +764,8 @@ if (useGpio) {
             const shutdownButton = new Gpio(config.remotebuzzer.shutdowngpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            shutdownButton.watch(watchShutdownGPIO);
             log('Looking for Shutdown Button on Raspberry GPIO', config.remotebuzzer.shutdowngpio);
+            shutdownButton.watch(watchShutdownGPIO);
         }
 
         /* REBOOT BUTTON */
@@ -775,8 +773,8 @@ if (useGpio) {
             const rebootButton = new Gpio(config.remotebuzzer.rebootgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            rebootButton.watch(watchRebootGPIO);
             log('Looking for Reboot Button on Raspberry GPIO', config.remotebuzzer.rebootgpio);
+            rebootButton.watch(watchRebootGPIO);
         }
 
         /* PRINT BUTTON */
@@ -784,8 +782,8 @@ if (useGpio) {
             const printButton = new Gpio(config.remotebuzzer.printgpio, 'in', 'both', {
                 debounceTimeout: config.remotebuzzer.debounce
             });
-            printButton.watch(watchPrintGPIO);
             log('Looking for Print Button on Raspberry GPIO', config.remotebuzzer.printgpio);
+            printButton.watch(watchPrintGPIO);
         }
     }
 } else if (!config.remotebuzzer.usenogpio && !Gpio.accessible) {
