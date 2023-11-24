@@ -45,7 +45,7 @@ $cmds = [
         ],
         'take_custom' => [
             'cmd' =>
-                'python3 cameracontrol.py --chromaImage=/var/www/html/resources/img/bg.jpg --chromaColor 00ff00 --chromaSensitivity 0.4 --chromaBlend 0.1 --capture-image-and-download --filename=%s',
+                'python3 cameracontrol.py --chromaImage=/var/www/html/resources/img/bg.jpg --chromaColor 00ff00 --chromaSensitivity 0.4 --chromaBlend 0.1 --capture-image-and-download %s',
         ],
         'print' => [
             'cmd' => 'lp -o landscape -o fit-to-page %s',
