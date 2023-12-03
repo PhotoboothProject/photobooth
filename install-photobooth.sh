@@ -867,13 +867,13 @@ gphoto_preview() {
 fix_git_modules() {
     cd $INSTALLFOLDERPATH
 
-    git config --global --add safe.directory $INSTALLFOLDERPATH
+    sudo -u www-data git config --global --add safe.directory $INSTALLFOLDERPATH
 
     for submodule in "${PHOTOBOOTH_SUBMODULES[@]}"; do
         if [ -d "${INSTALLFOLDERPATH}/${submodule}" ]; then
             if grep -q ${submodule} "./.gitmodules"; then
                 info "### Adding global safe.directory: ${INSTALLFOLDERPATH}/${submodule}"
-                git config --global --add safe.directory ${INSTALLFOLDERPATH}/${submodule}
+                sudo -u www-data git config --global --add safe.directory ${INSTALLFOLDERPATH}/${submodule}
             else
               warn "### ${INSTALLFOLDERPATH}/${submodule} does not belong to our modules anymore."
               rm -rf  ${INSTALLFOLDERPATH}/${submodule}
@@ -881,9 +881,9 @@ fix_git_modules() {
         fi
     done
 
-    git submodule foreach --recursive git reset --hard
-    git submodule deinit -f .
-    git submodule update --init --recursive
+    sudo -u www-data git submodule foreach --recursive git reset --hard
+    sudo -u www-data git submodule deinit -f .
+    sudo -u www-data git submodule update --init --recursive
 }
 
 commit_git_changes() {
@@ -891,22 +891,22 @@ commit_git_changes() {
     CHANGES_DETECTED=false
     fix_git_modules
 
-    if [ -z "$(git config user.name)" ]; then
+    if [ -z "$(sudo -u www-data git config user.name)" ]; then
         warn "WARN: git user.name not set!"
         info "### Setting git user.name."
-        $(git config user.name Photobooth)
+        $(sudo -u www-data git config user.name Photobooth)
     fi
 
-    if [ -z "$(git config user.email)" ]; then
+    if [ -z "$(sudo -u www-data git config user.email)" ]; then
         warn "WARN: git user.email not set!"
         info "### Setting git user.email."
-        $(git config user.email Photobooth@localhost)
+        $(sudo -u www-data git config user.email Photobooth@localhost)
     fi
 
-    echo "git user.name: $(git config user.name)"
-    echo "git user.email: $(git config user.email)"
+    echo "git user.name: $(sudo -u www-data git config user.name)"
+    echo "git user.email: $(sudo -u www-data git config user.email)"
 
-    if [ -z "$(git status --porcelain)" ]; then
+    if [ -z "$(sudo -u www-data git status --porcelain)" ]; then
         info "### Nothing to commit."
     else
         echo -e "\033[0;33m### Uncommited changes detected. Continue update? [y/N]"
@@ -918,9 +918,9 @@ commit_git_changes() {
         if [ "$REPLY" != "${REPLY#[Yy]}" ]; then
             info "### We will commit your changes and keep them inside a local backup branch."
             CHANGES_DETECTED=true
-            git add --all
-            git commit -a -m "backup changes"
-            git format-patch -1
+            sudo -u www-data git add --all
+            sudo -u www-data git commit -a -m "backup changes"
+            sudo -u www-data git format-patch -1
         else
             error "ERROR: Uncommited changes detected. Please commit your changes."
             if [ "$SILENT_INSTALL" = true ]; then
@@ -931,7 +931,7 @@ commit_git_changes() {
         fi
     fi
 
-    git checkout -b $BACKUPBRANCH
+    sudo -u www-data git checkout -b $BACKUPBRANCH
     info "### Backup done to branch: $BACKUPBRANCH"
 }
 
