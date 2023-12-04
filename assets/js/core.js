@@ -516,11 +516,24 @@ const photoBooth = (function () {
     };
 
     api.callTakePicApi = async (data, retry = 0) => {
-        startTime = new Date().getTime();
-        photoboothTools.console.logDev('Capture image.');
-        jQuery
-            .post(config.foldersPublic.api + '/capture.php', data)
-            .done(async (result) => {
+        console.log(data);
+        try {
+            startTime = new Date().getTime();
+            photoboothTools.console.logDev('Capture image.');
+
+            const response = await Promise.race([
+                fetch(config.foldersPublic.api + '/capture.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 15000))
+            ]);
+
+            if (response.ok) {
+                const result = await response.json();
                 api.cheese.destroy();
                 if (config.ui.shutter_animation) {
                     await api.shutter.start();
@@ -684,24 +697,19 @@ const photoBooth = (function () {
                 } else {
                     currentCollageFile = '';
                     api.nextCollageNumber = 0;
-
                     api.processPic(result);
                 }
-            })
-            .fail(async (xhr, status, result) => {
-                api.cheese.destroy();
-                if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                    photoboothTools.console.logDev(
-                        'ERROR: Taking picture failed. Retrying. Retry: ' +
-                            retry +
-                            ' / ' +
-                            config.picture.retry_on_error
-                    );
-                    api.retryTakePic(retry);
-                } else {
-                    api.errorPic(result);
-                }
-            });
+            } else {
+                throw new Error('Error ${response.status}');
+            }
+        } catch (error) {
+            api.cheese.destroy();
+            if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
+                api.retryTakePic(retry);
+            } else {
+                api.errorPic({ error: error.message });
+            }
+        }
     };
 
     api.callTakeVideoApi = function (data) {
