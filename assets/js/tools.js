@@ -8,18 +8,14 @@ const photoboothTools = (function () {
     api.isPrinting = false;
 
     api.initialize = async function () {
-        const result = await fetch(
-            config.photobooth.basePath + 'api/translations.php',
-            {
-                cache: 'no-store'
-            }
-        );
+        const result = await fetch(config.photobooth.basePath + 'api/translations.php', {
+            cache: 'no-store'
+        });
         this.translations = await result.json();
         this.registerEvents();
     };
 
     api.registerEvents = () => {
-
         document.querySelectorAll('[data-command]').forEach((button) => {
             button.addEventListener('click', (event) => {
                 const target = event.currentTarget;
@@ -41,19 +37,26 @@ const photoboothTools = (function () {
                 };
 
                 api.console.log('dispatch: ' + name);
-                const customEvent = new CustomEvent(name , { detail: detail });
+                const customEvent = new CustomEvent(name, { detail: detail });
                 document.dispatchEvent(customEvent);
             });
         });
 
         document.addEventListener('photobooth.remotebuzzer', (event) => {
-            api.getRequest(window.location.protocol + '//' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port + '/commands/' + event.detail.data.action);
+            api.getRequest(
+                window.location.protocol +
+                    '//' +
+                    config.remotebuzzer.serverip +
+                    ':' +
+                    config.remotebuzzer.port +
+                    '/commands/' +
+                    event.detail.data.action
+            );
         });
 
         document.addEventListener('photobooth.reload', () => {
             api.reloadPage();
         });
-
     };
 
     api.console = {
@@ -108,7 +111,6 @@ const photoboothTools = (function () {
 
     api.button = {
         create: (label, iconClass, severity = 'default', prefix = '') => {
-
             const button = document.createElement('button');
             button.classList.add(prefix + 'button');
             button.classList.add('rotaryfocus');
@@ -166,7 +168,7 @@ const photoboothTools = (function () {
         }
     };
 
-    api.confirm = async(confirmationText) => {
+    api.confirm = async (confirmationText) => {
         return new Promise((resolve) => {
             const element = document.createElement('dialog');
             element.classList.add('dialog');
@@ -199,7 +201,7 @@ const photoboothTools = (function () {
             });
             buttonbar.appendChild(cancelButton);
 
-            element.addEventListener('cancel', function() {
+            element.addEventListener('cancel', function () {
                 element.close(false);
                 element.remove();
                 resolve(false);
@@ -208,7 +210,7 @@ const photoboothTools = (function () {
             document.body.append(element);
             element.showModal();
         });
-    }
+    };
 
     api.reloadPage = function () {
         window.location.reload();
@@ -281,7 +283,9 @@ const photoboothTools = (function () {
                     api.console.log('Picture processed: ', data);
 
                     if (data.status == 'locking') {
-                        api.overlay.showWarning(config.print.locking_msg + ' (' + api.getTranslation('printed') + ' ' + data.count + ')');
+                        api.overlay.showWarning(
+                            config.print.locking_msg + ' (' + api.getTranslation('printed') + ' ' + data.count + ')'
+                        );
                         api.resetPrintErrorMessage(cb, config.print.time);
                     } else if (data.error) {
                         api.console.log('ERROR: An error occurred: ', data.error);
