@@ -513,7 +513,9 @@ function gpioPuSanity(gpioconfig) {
         stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
-            throw new Error('GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details');
+            throw new Error(
+                'GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details'
+            );
         }
 
         return true;
@@ -538,7 +540,9 @@ function gpioOpSanity(gpioconfig) {
         stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
-            throw new Error('GPIO' + gpioconfig + ' is not configured as OUTPUT in /boot/config.txt - see FAQ for details');
+            throw new Error(
+                'GPIO' + gpioconfig + ' is not configured as OUTPUT in /boot/config.txt - see FAQ for details'
+            );
         }
 
         return true;

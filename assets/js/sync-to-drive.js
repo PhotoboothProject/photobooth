@@ -11,13 +11,13 @@ const log = (...optionalParams) => {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '');
     console.log('[' + formattedDate + `][synctodrive][DEBUG] ${process.pid}:`, ...optionalParams);
-}
+};
 
 const error = (...optionalParams) => {
     log(...optionalParams);
     log('Shutdown');
     throw new Error('Failed to execute the code');
-}
+};
 
 if (process.platform === 'win32') {
     error('Windows is not supported.');
@@ -58,7 +58,7 @@ class SyncToDrive {
             log('Retry in ' + this.intervalInSeconds + 's');
             setTimeout(() => {
                 this.start();
-            },this.intervalInMilliseconds);
+            }, this.intervalInMilliseconds);
         }
     }
 
@@ -108,7 +108,7 @@ class SyncToDrive {
         log('Executing command "' + command + '"');
 
         this.rsyncProcess = spawn(command, {
-            'shell': '/bin/bash'
+            shell: '/bin/bash'
         });
 
         this.rsyncProcess.on('error', (error) => {
@@ -121,7 +121,7 @@ class SyncToDrive {
             log('Next run in ' + this.intervalInSeconds + 's');
             setTimeout(() => {
                 this.start();
-            },this.intervalInMilliseconds);
+            }, this.intervalInMilliseconds);
         });
     }
 
@@ -134,7 +134,9 @@ class SyncToDrive {
             json = JSON.parse(execSync('export LC_ALL=C; lsblk -ablJO 2>/dev/null; unset LC_ALL').toString());
         } catch (error) {
             log(error.message);
-            throw new Error('Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!');
+            throw new Error(
+                'Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!'
+            );
         }
 
         if (!json || !json.blockdevices) {
@@ -142,13 +144,12 @@ class SyncToDrive {
         }
 
         const device = json.blockdevices.find(
-            (blk) => blk.subsystems.includes('usb')
-                && (
-                    (blk.name && driveName === blk.name.toLowerCase())
-                    || (blk.kname && driveName === blk.kname.toLowerCase())
-                    || (blk.path && driveName === blk.path.toLowerCase())
-                    || (blk.label && driveName === blk.label.toLowerCase())
-                )
+            (blk) =>
+                blk.subsystems.includes('usb') &&
+                ((blk.name && driveName === blk.name.toLowerCase()) ||
+                    (blk.kname && driveName === blk.kname.toLowerCase()) ||
+                    (blk.path && driveName === blk.path.toLowerCase()) ||
+                    (blk.label && driveName === blk.label.toLowerCase()))
         );
 
         if (device === undefined) {
@@ -161,7 +162,7 @@ class SyncToDrive {
     mountDevice(device) {
         try {
             if (!this.isDeviceMounted(device)) {
-                const command = `export LC_ALL=C; udisksctl mount -b ${device.path}; unset LC_ALL`
+                const command = `export LC_ALL=C; udisksctl mount -b ${device.path}; unset LC_ALL`;
                 log('Mounting device ' + device.path + ', command: "' + command + '"');
                 const mountRes = execSync(command).toString();
                 const mountPoint = mountRes
@@ -173,7 +174,7 @@ class SyncToDrive {
         } catch (error) {
             throw new Error('Unable to mount device');
         }
-    
+
         return device;
     }
 
@@ -213,7 +214,7 @@ class SyncToDrive {
                 this.rsyncProcess.kill('SIGKILL');
                 this.rsyncProcess = null;
             }, 60000);
-    
+
             const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
             // eslint-disable-next-line no-unmodified-loop-condition
             while (this.rsyncProcess) {
@@ -236,7 +237,7 @@ class SyncToDrive {
     }
 
     createProcessFile() {
-        const processFilename = path.join(this.config.foldersAbs.var, 'run/synctodrive.pid')
+        const processFilename = path.join(this.config.foldersAbs.var, 'run/synctodrive.pid');
         try {
             fs.writeFileSync(processFilename, parseInt(process.pid, 10).toString(), { flag: 'w' });
             log(`Process file created successfully: ${processFilename}`);
@@ -249,6 +250,8 @@ class SyncToDrive {
 // eslint-disable-next-line no-unused-vars
 const syncToDrive = new SyncToDrive();
 
-['SIGTERM', 'SIGHUP', 'SIGINT'].forEach((term) => process.on(term, () => { 
-    syncToDrive.handleSignal(term); 
-}));
+['SIGTERM', 'SIGHUP', 'SIGINT'].forEach((term) =>
+    process.on(term, () => {
+        syncToDrive.handleSignal(term);
+    })
+);

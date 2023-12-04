@@ -141,15 +141,15 @@ function setChromaImage(url) {
 
 function drawCanvas(save = false, filename = '') {
     if (typeof mainImage !== 'undefined' && mainImage !== null) {
-       chromaCanvas.width = mainImage.width;
-       chromaCanvas.height = mainImage.height;
+        chromaCanvas.width = mainImage.width;
+        chromaCanvas.height = mainImage.height;
     } else if (typeof backgroundImage !== 'undefined' && backgroundImage !== null) {
-       chromaCanvas.width = backgroundImage.width;
-       chromaCanvas.height = backgroundImage.height;
+        chromaCanvas.width = backgroundImage.width;
+        chromaCanvas.height = backgroundImage.height;
     }
 
     // Clear the canvas
-    chromaCanvasContext.clearRect(0, 0,chromaCanvas.width,chromaCanvas.height);
+    chromaCanvasContext.clearRect(0, 0, chromaCanvas.width, chromaCanvas.height);
 
     if (typeof backgroundImage !== 'undefined' && backgroundImage !== null) {
         if (typeof mainImage !== 'undefined' && mainImage !== null) {
@@ -180,15 +180,15 @@ function drawCanvas(save = false, filename = '') {
 
 function clearCanvasAndLoadImage(imageUrl) {
     // Clear the canvas
-    chromaCanvasContext.clearRect(0, 0,chromaCanvas.width,chromaCanvas.height);
+    chromaCanvasContext.clearRect(0, 0, chromaCanvas.width, chromaCanvas.height);
 
     // Create a new image element
     const newImage = new Image();
 
     // Set the onload event handler to execute code after the image is loaded
     newImage.onload = function () {
-       chromaCanvas.width = newImage.width;
-       chromaCanvas.height = newImage.height;
+        chromaCanvas.width = newImage.width;
+        chromaCanvas.height = newImage.height;
         chromaCanvasContext.drawImage(newImage, 0, 0);
     };
 
@@ -224,7 +224,9 @@ function saveImage(filename, cb) {
                             ev.preventDefault();
 
                             const msg = photoboothTools.getTranslation('really_delete_image');
-                            const really = config.delete.no_request ? true : await photoboothTools.confirm(resp.filename + ' ' + msg);
+                            const really = config.delete.no_request
+                                ? true
+                                : await photoboothTools.confirm(resp.filename + ' ' + msg);
                             if (really) {
                                 photoBooth.deleteImage(resp.filename, (result) => {
                                     if (result.success && config.keying.show_all) {
@@ -298,7 +300,9 @@ $(document).on('keyup', function (ev) {
             setTimeout(() => photoboothTools.overlay.close(), 1000);
         } else if (!photoBooth.takingPic) {
             if (config.collage.key && parseInt(config.collage.key, 10) === ev.keyCode) {
-                photoboothTools.console.logDev('Collage key pressed. Not possible on live chroma, triggering photo now.');
+                photoboothTools.console.logDev(
+                    'Collage key pressed. Not possible on live chroma, triggering photo now.'
+                );
             }
             photoBooth.thrill('chroma');
         } else if (config.dev.loglevel > 0 && photoBooth.takingPic) {
@@ -307,7 +311,7 @@ $(document).on('keyup', function (ev) {
     }
 });
 
-$(function() {
+$(function () {
     const $chromaStage = $('.stage[data-stage="start"]');
     const $chromaActions = $chromaStage.find('.buttonbar.buttonbar--bottom');
     const $chromaMessage = $chromaStage.find('.stage-message');

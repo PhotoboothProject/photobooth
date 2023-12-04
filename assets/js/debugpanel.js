@@ -1,5 +1,4 @@
 class DebugPanel {
-
     constructor() {
         this.autorefresh = false;
         this.currentNavigationId = null;
@@ -17,11 +16,11 @@ class DebugPanel {
         this.autoRefreshInput.addEventListener('change', (event) => {
             this.autorefresh = event.target.checked;
             if (event.target.checked) {
-              setInterval(() => {
-                this.refreshContent();
-              }, 1000);
+                setInterval(() => {
+                    this.refreshContent();
+                }, 1000);
             } else {
-              clearInterval();
+                clearInterval();
             }
         });
 
@@ -37,7 +36,7 @@ class DebugPanel {
         this.buttons.forEach((button) => {
             button.classList.remove('isActive');
         });
-        const button = Array.from(this.buttons).find(button => button.id === this.currentNavigationId);
+        const button = Array.from(this.buttons).find((button) => button.id === this.currentNavigationId);
         if (button) {
             button.classList.add('isActive');
         }
@@ -51,21 +50,23 @@ class DebugPanel {
 
     async fetchContent() {
         return fetch(config.foldersPublic.api + '/serverInfo.php?content=' + this.currentNavigationId)
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) {
-                  throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok');
                 }
                 return response.text();
             })
-            .then(html => {
+            .then((html) => {
                 this.debugContent.innerHTML = '<pre class="break-all whitespace-pre-wrap">' + html + '</pre>';
-                if (['nav-devlog', 'nav-remotebuzzerlog', 'nav-synctodrivelog'].indexOf(this.currentNavigationId) != -1) {
+                if (
+                    ['nav-devlog', 'nav-remotebuzzerlog', 'nav-synctodrivelog'].indexOf(this.currentNavigationId) != -1
+                ) {
                     this.adminContent.scrollTo(0, this.adminContent.scrollHeight);
                 } else {
                     this.adminContent.scrollTo(0, 0);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 this.debugContent.innerHTML = error;
             });
     }
