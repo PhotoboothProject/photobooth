@@ -33,7 +33,7 @@ jobs:
         run: npm run pack:build
 
       - name: Publish zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: photobooth
           path: archives/photobooth-*.zip
