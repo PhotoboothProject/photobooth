@@ -509,7 +509,10 @@ function gpioPuSanity(gpioconfig) {
             throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
         }
 
-        cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
+        const isSymlink =
+            execSync('test -L /boot/config.txt && echo "true" || echo "false"').toString().trim() === 'true';
+        const configPath = isSymlink ? execSync('readlink -f /boot/config.txt').toString().trim() : '/boot/config.txt';
+        cmd = 'sed -n -e "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
         stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
@@ -536,7 +539,10 @@ function gpioOpSanity(gpioconfig) {
             throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
         }
 
-        cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" /boot/config.txt';
+        const isSymlink =
+            execSync('test -L /boot/config.txt && echo "true" || echo "false"').toString().trim() === 'true';
+        const configPath = isSymlink ? execSync('readlink -f /boot/config.txt').toString().trim() : '/boot/config.txt';
+        cmd = 'sed -n -e "s/^gpio=\\(.*\\)=op/\\1/p" ' + configPath;
         stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
