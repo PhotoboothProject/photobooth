@@ -18,7 +18,7 @@
     "clean:skipwelcome": "rimraf welcome/.skip_welcome",
     "eslint": "eslint assets/js/{,*/**/}*.js",
     "eslint:fix": "eslint assets/js/{,*/**/}*.js --fix",
-    "format": "npm-run-all --parallel eslint:fix format:*",
+    "format": "npm-run-all format:* eslint:fix",
     "format:js": "prettier assets/js/{,*/**/}*.js --write",
     "format:scss": "prettier assets/sass/{,*/**/}*.scss --write",
     "pack:build": "npm-run-all --serial eslint build pack:zip",
