@@ -1,8 +1,5 @@
 archives/
-bower_components/
-config/*
-!config/config.inc.php
-!config/tailwind.admin.config.js
+/config/my.config.inc.php
 data/
 digicamcontrol/
 HEAD
@@ -20,8 +17,6 @@ trash
 vendor/PhotoSwipe/
 vendor/simple-translator/
 .sass-cache
-/.htaccess
-.htpasswd
 *.patch
 /welcome/.skip_welcome
 .skip_welcome
@@ -50,4 +45,19 @@ tools/*/vendor
 .idea/
 **/.DS_Store
 
+# composer
+/bin/*
+!/bin/composer
+!/bin/console
+!/bin/photobooth
 /vendor/
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
