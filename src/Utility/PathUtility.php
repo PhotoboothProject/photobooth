@@ -2,13 +2,19 @@
 
 namespace Photobooth\Utility;
 
+use InvalidArgumentException;
 use Photobooth\Environment;
 
 class PathUtility
 {
     public static function getRootPath(): string
     {
-        return realpath(__DIR__ . '/../../');
+        $path = realpath(__DIR__ . '/../../');
+        if ($path === false) {
+            throw new InvalidArgumentException('Rootpath could not be resolved.');
+        }
+
+        return $path;
     }
 
     public static function getAbsolutePath(string $path = ''): string
@@ -25,7 +31,7 @@ class PathUtility
         }
 
         $absolutePath = $documentRoot . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
-        $absolutePath = preg_replace('#' . DIRECTORY_SEPARATOR . '+#', DIRECTORY_SEPARATOR, realpath($absolutePath));
+        $absolutePath = preg_replace('#' . DIRECTORY_SEPARATOR . '+#', DIRECTORY_SEPARATOR, (string) realpath($absolutePath));
         if ($absolutePath && strpos($absolutePath, $documentRoot) === 0) {
             return $absolutePath;
         }
@@ -67,7 +73,7 @@ class PathUtility
 
     public static function getBaseUrl(): string
     {
-        $documentRoot = realpath($_SERVER['DOCUMENT_ROOT']);
+        $documentRoot = (string) realpath($_SERVER['DOCUMENT_ROOT']);
         $rootPath = self::getRootPath();
         return self::fixFilePath(str_replace($documentRoot, '', $rootPath) . '/');
     }
