@@ -25,8 +25,7 @@ class MailService
 
     private function loadDatabase(): array
     {
-        if (is_file($this->databaseFile)) {
-            $data = file_get_contents($this->databaseFile);
+        if (is_file($this->databaseFile) && $data = file_get_contents($this->databaseFile)) {
             $addresses = json_decode($data, true);
             if ($addresses === null) {
                 throw new \Exception('Failed to decode the database ' . $this->databaseFile);
