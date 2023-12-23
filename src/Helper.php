@@ -95,14 +95,13 @@ class Helper
     public static function formatSize(int $size): string
     {
         $mod = 1024;
-
         for ($i = 0; $size > $mod; $i++) {
             $size /= $mod;
         }
 
-        $endIndex = strpos($size, '.') + 3;
+        $endIndex = strpos((string) $size, '.') + 3;
 
-        return substr($size, 0, $endIndex) . ' ' . self::$units[$i];
+        return substr((string) $size, 0, $endIndex) . ' ' . self::$units[$i];
     }
 
     /**
