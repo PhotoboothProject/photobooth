@@ -166,7 +166,7 @@ class AdminInput
         foreach ($setting['options'] as $value => $option) {
             $optionLabel = $option;
             $optionValue = $value;
-            if ($option instanceof \UnitEnum) {
+            if ($option instanceof \BackedEnum) {
                 $optionLabel = ($option instanceof LabelInterface) ? $option->label() : $option->name;
                 $optionValue = $option->value;
             }
