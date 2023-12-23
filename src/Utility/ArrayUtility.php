@@ -26,10 +26,11 @@ class ArrayUtility
         if ($path === '') {
             throw new \RuntimeException('Path must not be empty', 1695053538);
         }
-        $path = str_getcsv($path, $delimiter);
 
+        /** @var string[] */
+        $data = str_getcsv($path, $delimiter);
         $pointer = &$array;
-        foreach ($path as $segment) {
+        foreach ($data as $segment) {
             if ($segment === '') {
                 throw new \RuntimeException('Invalid path segment specified', 1341406846);
             }
@@ -52,14 +53,15 @@ class ArrayUtility
         if ($path === '') {
             throw new \RuntimeException('Path must not be empty', 1695053537);
         }
-        $path = str_getcsv($path, $delimiter);
 
+        /** @var string[] */
+        $data = str_getcsv($path, $delimiter);
         $value = $array;
-        foreach ($path as $segment) {
+        foreach ($data as $segment) {
             if (is_array($value) && array_key_exists($segment, $value)) {
                 $value = $value[$segment];
             } else {
-                throw new \RuntimeException('Segment ' . $segment . ' of path ' . implode($delimiter, $path) . ' does not exist in array', 1695053538);
+                throw new \RuntimeException('Segment ' . $segment . ' of path ' . implode($delimiter, $data) . ' does not exist in array', 1695053538);
             }
         }
 
