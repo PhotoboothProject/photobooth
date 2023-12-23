@@ -37,7 +37,7 @@ class FileDelete
     /**
      * Deletes the files.
      */
-    public function deleteFiles()
+    public function deleteFiles(): void
     {
         foreach ($this->paths as $path) {
             $file = $path . DIRECTORY_SEPARATOR . $this->file;
@@ -62,7 +62,7 @@ class FileDelete
      *
      * @param array $paths The file paths of the files.
      */
-    public function setPaths(array $paths)
+    public function setPaths(array $paths): void
     {
         $this->paths = $paths;
     }
@@ -72,7 +72,7 @@ class FileDelete
      *
      * @param array $unavailableFiles The file paths of the unavailable files.
      */
-    public function setUnavailableFiles(array $unavailableFiles)
+    public function setUnavailableFiles(array $unavailableFiles): void
     {
         $this->unavailableFiles = $unavailableFiles;
     }
@@ -82,7 +82,7 @@ class FileDelete
      *
      * @param array $failedFiles The file incl. paths of the failed files.
      */
-    public function setFailedFiles(array $failedFiles)
+    public function setFailedFiles(array $failedFiles): void
     {
         $this->failedFiles = $failedFiles;
     }

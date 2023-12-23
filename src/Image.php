@@ -10,34 +10,34 @@ use Photobooth\Utility\QrCodeUtility;
 class Image
 {
     /**
-     * @var string The new filename for the image.
+     * The new filename for the image.
      */
-    public $newFilename;
+    public string $newFilename;
 
     /**
-     * @var int The debug level for error handling. Set to 0 avoid failing on error.
+     * The debug level for error handling. Set to 0 avoid failing on error.
      */
-    public $debugLevel = 0;
+    public int $debugLevel = 0;
 
     /**
-     * @var int Error counter.
+     * Error counter.
      */
-    public $errorCount = 0;
+    public int $errorCount = 0;
 
     /**
-     * @var array Array to store error messages.
+     * Array to store error messages.
      */
     public $errorLog = [];
 
     /**
-     * @var bool Indicate source image was modified.
+     * Indicate source image was modified.
      */
-    public $imageModified = false;
+    public bool $imageModified = false;
 
     /**
-     * @var int $jpegQuality The quality of the saved jpeg image, from 0 (lowest) to 100 (highest). Default is 80.
+     * The quality of the saved jpeg image, from 0 (lowest) to 100 (highest). Default is 80.
      */
-    public $jpegQuality = 80;
+    public int $jpegQuality = 80;
 
     /**
      *
@@ -46,29 +46,29 @@ class Image
      */
 
     /**
-     * @var int The rotation angle for image resizing.
+     * The rotation angle for image resizing.
      */
-    public $resizeRotation = 0;
+    public int $resizeRotation = 0;
 
     /**
-     * @var string The background color in hexadecimal format (#RRGGBB) for image resizing.
+     * The background color in hexadecimal format (#RRGGBB) for image resizing.
      */
-    public $resizeBgColor = '#ffffff';
+    public string $resizeBgColor = '#ffffff';
 
     /**
-     * @var int The maximum width for image resizing.
+     * The maximum width for image resizing.
      */
-    public $resizeMaxWidth = 0;
+    public int $resizeMaxWidth = 0;
 
     /**
-     * @var int The maximum height for image resizing.
+     * The maximum height for image resizing.
      */
-    public $resizeMaxHeight = 0;
+    public int $resizeMaxHeight = 0;
 
     /**
-     * @var bool Determine to keep aspect ratio on resize.
+     * Determine to keep aspect ratio on resize.
      */
-    public $keepAspectRatio = false;
+    public bool $keepAspectRatio = false;
 
     /**
      *
@@ -77,54 +77,54 @@ class Image
      */
 
     /**
-     * @var int Font size for the text
+     * Font size for the text
      */
-    public $fontSize = 80;
+    public int $fontSize = 80;
 
     /**
-     * @var int Rotation angle of the font
+     * Rotation angle of the font
      */
-    public $fontRotation = 0;
+    public int $fontRotation = 0;
 
     /**
-     * @var int X-coordinate of the starting position for the text
+     * X-coordinate of the starting position for the text
      */
-    public $fontLocationX = 80;
+    public int $fontLocationX = 80;
 
     /**
-     * @var int Y-coordinate of the starting position for the text
+     * Y-coordinate of the starting position for the text
      */
-    public $fontLocationY = 80;
+    public int $fontLocationY = 80;
 
     /**
-     * @var string Color of the font in hexadecimal format (e.g., "#FF0000" for red)
+     * Color of the font in hexadecimal format (e.g., "#FF0000" for red)
      */
-    public $fontColor = '#ffffff';
+    public string $fontColor = '#ffffff';
 
     /**
-     * @var string File path to the TrueType font file to be used
+     * File path to the TrueType font file to be used
      */
-    public $fontPath = '';
+    public string $fontPath = '';
 
     /**
-     * @var string Text for the first line
+     * Text for the first line
      */
-    public $textLine1 = '';
+    public string $textLine1 = '';
 
     /**
-     * @var string Text for the second line
+     * Text for the second line
      */
-    public $textLine2 = '';
+    public string $textLine2 = '';
 
     /**
-     * @var string Text for the third line
+     * Text for the third line
      */
-    public $textLine3 = '';
+    public string $textLine3 = '';
 
     /**
-     * @var int Vertical spacing between lines of text
+     * Vertical spacing between lines of text
      */
-    public $textLineSpacing = 90;
+    public int $textLineSpacing = 90;
 
     /**
      *
@@ -133,34 +133,34 @@ class Image
      */
 
     /**
-     * @var string File path to the frame image (PNG)
+     * File path to the frame image (PNG)
      */
-    public $framePath = '';
+    public string $framePath = '';
 
     /**
-     * @var bool Whether to extend the frame to fit the source image
+     * Whether to extend the frame to fit the source image
      */
-    public $frameExtend = false;
+    public bool $frameExtend = false;
 
     /**
-     * @var int The percentage of extension to the left side of the frame
+     * The percentage of extension to the left side of the frame
      */
-    public $frameExtendLeft = 0;
+    public int $frameExtendLeft = 0;
 
     /**
-     * @var int The percentage of extension to the right side of the frame
+     * The percentage of extension to the right side of the frame
      */
-    public $frameExtendRight = 0;
+    public int $frameExtendRight = 0;
 
     /**
-     * @var int The percentage of extension to the bottom of the frame
+     * The percentage of extension to the bottom of the frame
      */
-    public $frameExtendBottom = 0;
+    public int $frameExtendBottom = 0;
 
     /**
-     * @var int The percentage of extension to the top of the frame
+     * The percentage of extension to the top of the frame
      */
-    public $frameExtendTop = 0;
+    public int $frameExtendTop = 0;
 
     /**
      *
@@ -169,44 +169,44 @@ class Image
      */
 
     /**
-     * @var int The x-coordinate of the top-left corner of the picture to be added.
+     * The x-coordinate of the top-left corner of the picture to be added.
      */
-    public $addPictureX = 0;
+    public int $addPictureX = 0;
 
     /**
-     * @var int The y-coordinate of the top-left corner of the picture to be added.
+     * The y-coordinate of the top-left corner of the picture to be added.
      */
-    public $addPictureY = 0;
+    public int $addPictureY = 0;
 
     /**
-     * @var int The width of the picture to be added.
+     * The width of the picture to be added.
      */
-    public $addPictureWidth = 0;
+    public int $addPictureWidth = 0;
 
     /**
-     * @var int The height of the picture to be added.
+     * The height of the picture to be added.
      */
-    public $addPictureHeight = 0;
+    public int $addPictureHeight = 0;
 
     /**
-     * @var int The rotation angle of the picture to be added (in degrees).
+     * The rotation angle of the picture to be added (in degrees).
      */
-    public $addPictureRotation = 0;
+    public int $addPictureRotation = 0;
 
     /**
-     * @var bool A flag indicating whether to apply a frame to the picture to be added.
+     * A flag indicating whether to apply a frame to the picture to be added.
      */
-    public $addPictureApplyFrame = false;
+    public bool $addPictureApplyFrame = false;
 
     /**
-     * @var string The path to the background image to be used when rotating the picture to be added.
+     * The path to the background image to be used when rotating the picture to be added.
      */
-    public $addPictureBgImage = '';
+    public string $addPictureBgImage = '';
 
     /**
-     * @var string The hexadecimal color code for the background color to be used when rotating the picture to be added.
+     * The hexadecimal color code for the background color to be used when rotating the picture to be added.
      */
-    public $addPictureBgColor = '#0000007f';
+    public string $addPictureBgColor = '#0000007f';
 
     /**
      *
@@ -215,29 +215,29 @@ class Image
      */
 
     /**
-     * @var string Color of the dashed line.
+     * Color of the dashed line.
      */
-    public $dashedLineColor = '';
+    public string $dashedLineColor = '';
 
     /**
-     * @var int X-coordinate of the starting point of the dashed line.
+     * X-coordinate of the starting point of the dashed line.
      */
-    public $dashedLineStartX = 0;
+    public int $dashedLineStartX = 0;
 
     /**
-     * @var int Y-coordinate of the starting point of the dashed line.
+     * Y-coordinate of the starting point of the dashed line.
      */
-    public $dashedLineStartY = 0;
+    public int $dashedLineStartY = 0;
 
     /**
-     * @var int X-coordinate of the ending point of the dashed line.
+     * X-coordinate of the ending point of the dashed line.
      */
-    public $dashedLineEndX = 0;
+    public int $dashedLineEndX = 0;
 
     /**
-     * @var int Y-coordinate of the ending point of the dashed line.
+     * Y-coordinate of the ending point of the dashed line.
      */
-    public $dashedLineEndY = 0;
+    public int $dashedLineEndY = 0;
 
     /**
      *
@@ -246,39 +246,39 @@ class Image
      */
 
     /**
-     * @var bool $qrRotate Whether or not to rotate the QR code.
+     * Whether or not to rotate the QR code.
      */
-    public $qrRotate = false;
+    public bool $qrRotate = false;
 
     /**
-     * @var string $qrPosition The position to place the QR code on the image.
+     * The position to place the QR code on the image.
      */
-    public $qrPosition = 'bottom-right';
+    public string $qrPosition = 'bottom-right';
 
     /**
-     * @var int $qrOffset The offset in pixels from the specified QR code position.
+     * The offset in pixels from the specified QR code position.
      */
-    public $qrOffset = 0;
+    public int $qrOffset = 0;
 
     /**
-     * @var int $qrSize The size of the QR code, numeric value within the range of 2 to 10 and even.
+     * The size of the QR code, numeric value within the range of 2 to 10 and even.
      */
-    public $qrSize = 4;
+    public int $qrSize = 4;
 
     /**
      * @var int $qrMargin The margin size around the QR code, must be in range between 0 and 10.
      */
-    public $qrMargin = 4;
+    public int $qrMargin = 4;
 
     /**
-     * @var string $qrColor The color to apply to the QR code pixels.
+     * The color to apply to the QR code pixels.
      */
-    public $qrColor = '#ffffff';
+    public string $qrColor = '#ffffff';
 
     /**
-     * @var string $qrUrl The URL to generate a QR code for.
+     * The URL to generate a QR code for.
      */
-    public $qrUrl = '';
+    public string $qrUrl = '';
 
     /**
      *
@@ -287,23 +287,19 @@ class Image
      */
 
     /**
-     * @var string The background color for the polaroid effect in hexadecimal format (e.g., '#c8c8c8').
+     * The background color for the polaroid effect in hexadecimal format (e.g., '#c8c8c8').
      */
-    public $polaroidBgColor = '#c8c8c8';
+    public string $polaroidBgColor = '#c8c8c8';
 
     /**
-     * @var int The rotation angle for the polaroid effect in degrees.
+     * The rotation angle for the polaroid effect in degrees.
      */
-    public $polaroidRotation = 0;
+    public int $polaroidRotation = 0;
 
     /**
      * Creates a new filename for the image.
-     *
-     * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
-     * @param string $ext The file extension to use for the filename. Default is ".jpg".
-     * @return string The new filename.
      */
-    public static function createNewFilename($naming = 'random', $ext = '.jpg')
+    public static function createNewFilename(string $naming = 'random', string $ext = '.jpg'): string
     {
         if ($naming === 'dateformatted') {
             $name = date('Ymd_His') . $ext;
@@ -316,7 +312,7 @@ class Image
     /**
      * Collect error data and increase errorCount
      */
-    public function addErrorData($errorData)
+    public function addErrorData($errorData): void
     {
         $this->errorCount++;
         $this->errorLog[] = $errorData;
@@ -325,7 +321,7 @@ class Image
     /**
      * Reset the error count and error log.
      */
-    public function errorReset()
+    public function errorReset(): void
     {
         $this->errorCount = 0;
         $this->errorLog = [];
@@ -333,31 +329,24 @@ class Image
 
     /**
      * Sets the new filename for the image using the specified naming convention.
-     *
-     * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
      */
-    public function setNewFilename($naming)
+    public function setNewFilename(string $naming): void
     {
         $this->newFilename = $this->createNewFilename($naming);
     }
 
     /**
      * Returns the new filename for the image.
-     *
-     * @return string The new filename.
      */
-    public function getNewFilename()
+    public function getNewFilename(): string
     {
         return $this->newFilename;
     }
 
     /**
      * Sets the new filename for the image using the specified naming convention and returns the new filename.
-     *
-     * @param string $naming The naming convention to use for the filename. Options are "random" or "dateformatted".
-     * @return string The new filename.
      */
-    public function setAndGetNewFilename($naming)
+    public function setAndGetNewFilename(string $naming): string
     {
         $this->setNewFilename($naming);
         return $this->newFilename;
@@ -365,11 +354,8 @@ class Image
 
     /**
      * Creates a GD image resource from an image file.
-     *
-     * @param string $image The file path or URL of the image to create a resource from.
-     * @return GdImage|false Returns the GD image resource if successful, or false if an error occurs.
      */
-    public function createFromImage($image)
+    public function createFromImage($image): GdImage|false
     {
         try {
             if (str_contains($image, '/api/randomImg.php')) {
@@ -392,33 +378,9 @@ class Image
     }
 
     /**
-     * Validates a GD image resource.
-     *
-     * @param GdImage|null $resource The GD image resource to validate.
-     * @return bool Returns true if the resource is a valid GD image resource, or false otherwise.
-     */
-    private function validateGdResource($resource)
-    {
-        try {
-            if (!isset($resource) || !is_resource($resource) || get_resource_type($resource) !== 'gd') {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Saves a GD image resource to disk.
-     *
-     * @param GdImage $sourceResource The GD image resource to save.
-     * @param string $destination The file path and name where the image will be saved.
-     *
-     * @return bool Returns true on success, or false on failure.
      */
-    public function saveJpeg($sourceResource, $destination)
+    public function saveJpeg(GdImage $sourceResource, string $destination): bool
     {
         try {
             // Check if the $sourceResource and $destination are defined
@@ -442,11 +404,8 @@ class Image
 
     /**
      * Rotate and resize an image.
-     *
-     * @param GdImage $image The image resource to be rotated and resized.
-     * @return GdImage The rotated and resized image resource, or the original image if an error occurs.
      */
-    public function rotateResizeImage($image)
+    public function rotateResizeImage(GdImage $image): GdImage
     {
         try {
             if (!$image) {
@@ -536,11 +495,8 @@ class Image
 
     /**
      * Resize an image based on the maximum dimensions.
-     *
-     * @param GdImage $image The image resource to be resized.
-     * @return GdImage The resized image resource, or the original image if an error occurs.
      */
-    public function resizeImage($image)
+    public function resizeImage(GdImage $image): GdImage
     {
         try {
             if (!$image) {
@@ -583,11 +539,8 @@ class Image
 
     /**
      * Resize a PNG image based on the maximum dimensions.
-     *
-     * @param GdImage $image The image resource to be resized.
-     * @return GdImage The resized PNG image resource, or the original image if an error occurs.
      */
-    public function resizePngImage($image)
+    public function resizePngImage(GdImage $image): GdImage
     {
         try {
             if (!$image) {
@@ -648,11 +601,8 @@ class Image
 
     /**
      * Resize and crop an image by center.
-     *
-     * @param GdImage $source_file The source image resource to be resized and cropped.
-     * @return GdImage The resized and cropped image resource, or the original image if an error occurs.
      */
-    public function resizeCropImage($source_file)
+    public function resizeCropImage(GdImage $source_file): GdImage
     {
         try {
             $old_width = intval(imagesx($source_file));
@@ -713,11 +663,8 @@ class Image
 
     /**
      * Apply the frame to the source image resource
-     *
-     * @param GdImage $sourceResource The source image resource to which the frame will be applied
-     * @return GdImage The modified source image resource with the frame applied
      */
-    public function applyFrame($sourceResource)
+    public function applyFrame(GdImage $sourceResource): GdImage
     {
         try {
             if ($this->frameExtend) {
@@ -795,11 +742,8 @@ class Image
 
     /**
      * Apply text to the source image resource
-     *
-     * @param GdImage $sourceResource The source image resource to which text will be applied
-     * @return GdImage The modified source image resource with text applied
      */
-    public function applyText($sourceResource)
+    public function applyText(GdImage $sourceResource): GdImage
     {
         try {
             $fontSize = $this->fontSize;
@@ -857,15 +801,8 @@ class Image
 
     /**
      * Set the picture options for adding a picture to image resource.
-     *
-     * @param int $x The X coordinate of the picture.
-     * @param int $y The Y coordinate of the picture.
-     * @param int $width The width of the picture.
-     * @param int $height The height of the picture.
-     * @param int $rotation The rotation angle of the picture.
-     * @return void
      */
-    public function setAddPictureOptions($x, $y, $width, $height, $rotation)
+    public function setAddPictureOptions(int $x, int $y, int $width, int $height, int $rotation): void
     {
         $this->addPictureX = $x;
         $this->addPictureY = $y;
@@ -876,11 +813,8 @@ class Image
 
     /**
      * Add a picture to the destination image resource.
-     *
-     * @param GdImage $imageResource The source image resource to be added.
-     * @param GdImage $destinationResource The destination image resource where the picture will be added.
      */
-    public function addPicture($imageResource, $destinationResource)
+    public function addPicture(GdImage $imageResource, GdImage $destinationResource): void
     {
         try {
             $dX = intval($this->addPictureX);
@@ -933,11 +867,8 @@ class Image
 
     /**
      * Draw a dashed line on the specified image resource.
-     *
-     * @param GdImage $imageResource The image resource to draw the dashed line on.
-     * @return void
      */
-    public function drawDashedLine($imageResource)
+    public function drawDashedLine(GdImage $imageResource): void
     {
         try {
             $dashedLine = [
@@ -971,10 +902,8 @@ class Image
 
     /**
      * Generates a QR code image using the provided URL and configuration settings.
-     *
-     * @return GdImage An image resource of the generated QR code.
      */
-    public function createQr()
+    public function createQr(): GdImage
     {
         try {
             if (empty($this->qrUrl)) {
@@ -1039,7 +968,7 @@ class Image
     /**
      * Generates a QR code and displays it as a PNG image.
      */
-    public function showQR()
+    public function showQR(): void
     {
         try {
             // Generate the QR code
@@ -1057,12 +986,8 @@ class Image
 
     /**
      * Generates a QR code and saves it to a specified destination path.
-     *
-     * @param string $destination The path where the QR code should be saved.
-     *
-     * @return bool True if the QR code was successfully saved, false otherwise.
      */
-    public function saveQr($destination)
+    public function saveQr(string $destination): bool
     {
         try {
             if (empty($destination)) {
@@ -1089,13 +1014,8 @@ class Image
 
     /**
      * Applies a generated QR code image to an existing image resource.
-     *
-     * @param GdImage $imageResource $qrCode The QR code image resource to apply.
-     * @param GdImage $imageResource The existing image resource to apply the QR code to.
-     *
-     * @return GdImage The updated image resource with the applied QR code.
      */
-    public function applyQr($qrCode, $imageResource)
+    public function applyQr(GdImage $qrCode, GdImage $imageResource): GdImage
     {
         try {
             if (!is_numeric($this->qrOffset)) {
@@ -1179,11 +1099,8 @@ class Image
 
     /**
      * Applies a polaroid effect to the given image resource.
-     *
-     * @param GdImage $resource The source image resource to apply the effect to.
-     * @return GdImage The rotated image resource with the polaroid effect, or the original source image if an exception occurs.
      */
-    public function effectPolaroid($resource)
+    public function effectPolaroid(GdImage $resource): GdImage
     {
         try {
             // We create a new image
