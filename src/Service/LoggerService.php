@@ -12,9 +12,6 @@ class LoggerService
     protected array $channels = [];
     protected int $level;
 
-    /**
-     * @param array<string, string> $channels
-     */
     public function __construct(int $level)
     {
         $this->level = $level;
