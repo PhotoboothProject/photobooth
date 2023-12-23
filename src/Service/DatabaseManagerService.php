@@ -64,6 +64,7 @@ class DatabaseManagerService
             }
 
             // read the files in the directory
+            $files = [];
             while (false !== ($filename = readdir($dh))) {
                 $files[] = $filename;
             }
@@ -71,6 +72,9 @@ class DatabaseManagerService
 
             // filter the files to include only images with .jpg or .jpeg extensions
             $images = preg_grep('/\.(jpg|jpeg)$/i', $files);
+            if ($images === false) {
+                return [];
+            }
 
             return $images;
         } catch (\Exception $e) {
