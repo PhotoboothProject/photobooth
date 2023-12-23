@@ -14,6 +14,10 @@ class MarkdownUtility
         }
 
         $content = file_get_contents($path);
+        if ($content === false) {
+            throw new \Exception('File could not be read: ' . $path);
+        }
+
         $converter = new GithubFlavoredMarkdownConverter([
             'html_input' => 'strip',
             'allow_unsafe_links' => false,
