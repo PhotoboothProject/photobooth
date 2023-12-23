@@ -100,7 +100,7 @@ final class PathUtilityTest extends TestCase
     public static function providerGetBaseUrl(): array
     {
         return [
-            [realpath(__DIR__ . '/../../../../'), '/' . basename(realpath(__DIR__ . '/../../../')) . '/'],
+            [realpath(__DIR__ . '/../../../../'), '/' . basename((string) realpath(__DIR__ . '/../../../')) . '/'],
             [realpath(__DIR__ . '/../../../'), '/'],
         ];
     }
