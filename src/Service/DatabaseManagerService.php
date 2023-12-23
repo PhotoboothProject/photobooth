@@ -191,7 +191,7 @@ class DatabaseManagerService
             return strlen($a[0]) <=> strlen($b[0]);
         });
 
-        if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === 'false') {
+        if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === false) {
             return 'error';
         } else {
             return 'success';
