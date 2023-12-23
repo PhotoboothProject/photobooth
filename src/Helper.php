@@ -46,7 +46,7 @@ class Helper
      */
     public static function clearCache(string $file): void
     {
-        if (function_exists('opcache_invalidate') && strlen(ini_get('opcache.restrict_api')) < 1) {
+        if (function_exists('opcache_invalidate') && ini_get('opcache.restrict_api') !== false && strlen(ini_get('opcache.restrict_api')) < 1) {
             opcache_invalidate($file, true);
         } elseif (function_exists('apc_compile_file')) {
             apc_compile_file($file);
