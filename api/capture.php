@@ -13,7 +13,7 @@ $logger->debug(basename($_SERVER['PHP_SELF']));
 
 try {
     if (!isset($_POST['style'])) {
-        throw new Exception('No style provided');
+        throw new \Exception('No style provided');
     }
 
     if (!empty($_POST['file']) && (preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']) || preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file']))) {
@@ -43,13 +43,13 @@ try {
             break;
         case 'collage':
             if (!is_numeric($_POST['collageNumber'])) {
-                throw new Exception('No or invalid collage number provided.');
+                throw new \Exception('No or invalid collage number provided.');
             }
 
             $number = $_POST['collageNumber'] + 0;
 
             if ($number > $config['collage']['limit']) {
-                throw new Exception('Collage consists only of ' . $config['collage']['limit'] . ' pictures');
+                throw new \Exception('Collage consists only of ' . $config['collage']['limit'] . ' pictures');
             }
 
             $captureHandler->collageSubFile = substr($file, 0, -4) . '-' . $number . '.jpg';
@@ -68,7 +68,7 @@ try {
             $captureHandler->style = 'video';
             break;
         default:
-            throw new Exception('Invalid style provided.');
+            throw new \Exception('Invalid style provided.');
             break;
     }
 
@@ -91,7 +91,7 @@ try {
     // send image to frontend
     echo json_encode($captureHandler->returnData());
     exit();
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $data = ['error' => $e->getMessage()];
     $logger->error($e->getMessage(), $data);
     echo json_encode($data);

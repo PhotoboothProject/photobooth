@@ -973,8 +973,6 @@ class Image
      * Generates a QR code image using the provided URL and configuration settings.
      *
      * @return GdImage An image resource of the generated QR code.
-     *
-     * @throws Exception If no URL for QR code generation is defined or if there are issues with image rotation.
      */
     public function createQr()
     {
@@ -1040,8 +1038,6 @@ class Image
 
     /**
      * Generates a QR code and displays it as a PNG image.
-     *
-     * @throws Exception If an error occurs during the generation of the QR code.
      */
     public function showQR()
     {
@@ -1098,8 +1094,6 @@ class Image
      * @param GdImage $imageResource The existing image resource to apply the QR code to.
      *
      * @return GdImage The updated image resource with the applied QR code.
-     *
-     * @throws Exception If the QR offset is not a numeric value.
      */
     public function applyQr($qrCode, $imageResource)
     {

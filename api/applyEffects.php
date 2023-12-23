@@ -19,17 +19,17 @@ $database = DatabaseManagerService::getInstance();
 
 try {
     if (!extension_loaded('gd')) {
-        throw new Exception('GD library not loaded! Please enable GD!');
+        throw new \Exception('GD library not loaded! Please enable GD!');
     }
 
     if (empty($_POST['file'])) {
-        throw new Exception('No file provided');
+        throw new \Exception('No file provided');
     }
 
     $file = $_POST['file'];
 
     if (!isset($_POST['style']) || !in_array($_POST['style'], ['photo', 'collage', 'custom', 'chroma'])) {
-        throw new Exception('Invalid or missing style parameter');
+        throw new \Exception('Invalid or missing style parameter');
     }
 
     $style = $_POST['style'];
@@ -41,7 +41,7 @@ try {
     } elseif (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
         $image_filter = $_POST['filter'];
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // Handle the exception
     $logger->error($e->getMessage(), $_POST);
     echo json_encode(['error' => $e->getMessage()]);
@@ -71,7 +71,7 @@ try {
         list($collageSrcImagePaths, $srcImages) = Collage::getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
 
         if (!Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $image_filter)) {
-            throw new Exception('Error creating collage image.');
+            throw new \Exception('Error creating collage image.');
         }
     }
 
@@ -86,12 +86,12 @@ try {
         $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
 
         if (!file_exists($filename_tmp)) {
-            throw new Exception('Image doesn\'t exist.');
+            throw new \Exception('Image doesn\'t exist.');
         }
 
         $imageResource = $imageHandler->createFromImage($filename_tmp);
         if (!$imageResource) {
-            throw new Exception('Error creating image resource.');
+            throw new \Exception('Error creating image resource.');
         }
 
         if (!$isChroma) {
@@ -114,8 +114,8 @@ try {
                             imageflip($imageResource, IMG_FLIP_BOTH);
                         }
                         $imageHandler->imageModified = true;
-                    } catch (Exception $e) {
-                        throw new Exception('Error flipping image.');
+                    } catch (\Exception $e) {
+                        throw new \Exception('Error flipping image.');
                     }
                 }
 
@@ -124,8 +124,8 @@ try {
                     try {
                         ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
                         $imageHandler->imageModified = true;
-                    } catch (Exception $e) {
-                        throw new Exception('Error applying image filter.');
+                    } catch (\Exception $e) {
+                        throw new \Exception('Error applying image filter.');
                     }
                 }
 
@@ -133,7 +133,7 @@ try {
                     $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
                     $imageResource = $imageHandler->effectPolaroid($imageResource);
                     if (!$imageResource) {
-                        throw new Exception('Error applying polaroid effect.');
+                        throw new \Exception('Error applying polaroid effect.');
                     }
                 }
 
@@ -151,7 +151,7 @@ try {
                     }
                     $imageResource = $imageHandler->applyFrame($imageResource);
                     if (!$imageResource) {
-                        throw new Exception('Error applying frame to image resource.');
+                        throw new \Exception('Error applying frame to image resource.');
                     }
                 }
 
@@ -159,7 +159,7 @@ try {
                     $imageHandler->resizeRotation = $config['picture']['rotation'];
                     $imageResource = $imageHandler->rotateResizeImage($imageResource);
                     if (!$imageResource) {
-                        throw new Exception('Error resizing resource.');
+                        throw new \Exception('Error resizing resource.');
                     }
                 }
             }
@@ -191,7 +191,7 @@ try {
             $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
             $imageResource = $imageHandler->applyText($imageResource);
             if (!$imageResource) {
-                throw new Exception('Error applying text to image resource.');
+                throw new \Exception('Error applying text to image resource.');
             }
         }
 
@@ -212,7 +212,7 @@ try {
         $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
         if ($imageHandler->imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
             if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
-                throw new Exception('Failed to save image.');
+                throw new \Exception('Failed to save image.');
             }
             // preserve jpeg meta data
             if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
@@ -231,13 +231,13 @@ try {
                         ];
                         $logger->error('exiftool returned with an error code', $errorData);
                     }
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $logger->error($e->getMessage());
                 }
             }
         } else {
             if (!copy($filename_tmp, $filename_photo)) {
-                throw new Exception('Failed to copy photo.');
+                throw new \Exception('Failed to copy photo.');
             }
         }
         imagedestroy($imageResource);
@@ -358,7 +358,7 @@ try {
             }
         }
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // Handle the exception
     if (isset($imageResource) && is_resource($imageResource)) {
         imagedestroy($imageResource);

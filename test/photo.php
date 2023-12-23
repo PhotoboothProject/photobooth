@@ -12,7 +12,7 @@ $imageHandler->imageModified = false;
 
 $imageResource = $imageHandler->createFromImage(ImageUtility::getRandomImageFromPath('resources/img/demo'));
 if (!$imageResource) {
-    throw new Exception('Error creating image resource.');
+    throw new \Exception('Error creating image resource.');
 }
 $imageHandler->framePath = $config['picture']['frame'];
 
@@ -26,8 +26,8 @@ if ($config['picture']['flip'] !== 'off') {
             imageflip($imageResource, IMG_FLIP_BOTH);
         }
         $imageHandler->imageModified = true;
-    } catch (Exception $e) {
-        throw new Exception('Error flipping image.');
+    } catch (\Exception $e) {
+        throw new \Exception('Error flipping image.');
     }
 }
 
@@ -37,8 +37,8 @@ if ($image_filter) {
     try {
         ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
         $imageHandler->imageModified = true;
-    } catch (Exception $e) {
-        throw new Exception('Error applying image filter.');
+    } catch (\Exception $e) {
+        throw new \Exception('Error applying image filter.');
     }
 }
 
@@ -46,7 +46,7 @@ if ($config['picture']['polaroid_effect']) {
     $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
     $imageResource = $imageHandler->effectPolaroid($imageResource);
     if (!$imageResource) {
-        throw new Exception('Error applying polaroid effect.');
+        throw new \Exception('Error applying polaroid effect.');
     }
 }
 
@@ -60,7 +60,7 @@ if ($config['picture']['take_frame']) {
     }
     $imageResource = $imageHandler->applyFrame($imageResource);
     if (!$imageResource) {
-        throw new Exception('Error applying frame to image resource.');
+        throw new \Exception('Error applying frame to image resource.');
     }
 }
 
@@ -68,7 +68,7 @@ if ($config['picture']['rotation'] !== '0') {
     $imageHandler->resizeRotation = $config['picture']['rotation'];
     $imageResource = $imageHandler->rotateResizeImage($imageResource);
     if (!$imageResource) {
-        throw new Exception('Error resizing resource.');
+        throw new \Exception('Error resizing resource.');
     }
 }
 
@@ -85,7 +85,7 @@ if ($config['textonpicture']['enabled']) {
     $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
     $imageResource = $imageHandler->applyText($imageResource);
     if (!$imageResource) {
-        throw new Exception('Error applying text to image resource.');
+        throw new \Exception('Error applying text to image resource.');
     }
 }
 

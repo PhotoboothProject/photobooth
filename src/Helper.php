@@ -68,8 +68,6 @@ class Helper
      * @param string $path The path to the folder.
      *
      * @return int The total size of the folder in bytes.
-     *
-     * @throws Exception If the provided path is not a valid directory.
      */
     public static function getFolderSize($path)
     {
@@ -129,9 +127,6 @@ class Helper
      * @param string $path The path to the directory.
      *
      * @return int The number of files in the directory.
-     *
-     * @throws Exception If the provided path is not a valid directory or an error occurs while reading the directory.
-     *
      */
     public static function getFileCount($path)
     {
@@ -160,7 +155,6 @@ class Helper
      *
      * @param Connection $conn The connection to the FTP server.
      * @param string $currentDir The path to the directory in the FTP server.
-     * @throws Exception If the provided path is not a valid directory in the FTP server.
      */
     public static function cdFTPTree(Connection $conn, string $currentDir)
     {
@@ -191,9 +185,6 @@ class Helper
      * @param string $divider The custom divider to use between words.
      *
      * @return string The text converted into a slug.
-     *
-     * @throws Exception If the provided path is not a valid directory in the FTP server.
-     *
      */
     public static function slugify($text, $divider = '-')
     {

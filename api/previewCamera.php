@@ -18,7 +18,7 @@ function isRunning($pid, $logger)
         if (count(preg_split("/\n/", $result)) > 2) {
             return true;
         }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         $logger->error($e->getMessage());
         return false;
     }

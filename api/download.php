@@ -25,7 +25,7 @@ if ($image) {
         header('Content-Length: ' . filesize($path));
         header('Content-Disposition: attachment; filename="photobooth-' . $image . '"');
         echo file_get_contents($path);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         http_response_code(500);
         echo 'Error downloading the file ' . $image;
         if ($config['dev']['loglevel'] > 1) {
