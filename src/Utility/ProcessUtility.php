@@ -54,7 +54,7 @@ class ProcessUtility
             if ($return == 0) {
                 foreach ($output as $processId) {
                     $logger->debug('Config has changed, killed process ' . $processName . ' -> PID ' . $processId);
-                    posix_kill($processId, $signal);
+                    posix_kill((int) $processId, $signal);
                 }
                 unlink($processIdFile);
             }

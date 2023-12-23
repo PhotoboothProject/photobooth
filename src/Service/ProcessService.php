@@ -81,7 +81,7 @@ class ProcessService
             if ($return == 0) {
                 foreach ($output as $processId) {
                     $logger->debug('Config has changed, killed process ' . $process->name . ' -> PID ' . $processId);
-                    posix_kill($processId, $process->killSignal);
+                    posix_kill((int) $processId, $process->killSignal);
                 }
                 unlink($processIdFile);
             }
