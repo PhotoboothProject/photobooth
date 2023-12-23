@@ -40,5 +40,6 @@ return (new PhpCsFixer\Config())
             ->exclude('node_modules')
             ->exclude('tools')
             ->exclude('vendor')
+            ->exclude('var')
             ->in(__DIR__)
     );
