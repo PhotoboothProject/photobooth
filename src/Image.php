@@ -27,7 +27,7 @@ class Image
     /**
      * Array to store error messages.
      */
-    public $errorLog = [];
+    public array $errorLog = [];
 
     /**
      * Indicate source image was modified.
