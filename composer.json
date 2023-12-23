@@ -51,15 +51,20 @@
         "phpunit": [
             "tools/phpunit/vendor/bin/phpunit"
         ],
+        "phpstan": [
+            "tools/phpstan/vendor/bin/phpstan analyze --configuration phpstan.neon"
+        ],
         "tools:install": [
             "composer install --working-dir=tools/php-cs-fixer",
             "composer install --working-dir=tools/phplint",
-            "composer install --working-dir=tools/phpunit"
+            "composer install --working-dir=tools/phpunit",
+            "composer install --working-dir=tools/phpstan"
         ],
         "tools:update": [
             "composer update -w --working-dir=tools/php-cs-fixer",
             "composer update -w --working-dir=tools/phplint",
-            "composer update -w --working-dir=tools/phpunit"
+            "composer update -w --working-dir=tools/phpunit",
+            "composer update -w --working-dir=tools/phpstan"
         ]
     }
 }
