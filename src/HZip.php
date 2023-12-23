@@ -10,6 +10,10 @@ class HZip
     private static function folderToZip(string $folder, \ZipArchive &$zipFile, int $exclusiveLength): void
     {
         $handle = opendir($folder);
+        if ($handle === false) {
+            throw new \Exception('Failed to open directory: ' . $folder);
+        }
+
         while (false !== ($f = readdir($handle))) {
             if ($f != '.' && $f != '..') {
                 $filePath = "$folder/$f";
@@ -40,7 +44,7 @@ class HZip
         }
 
         $pathInfo = pathinfo($sourcePath);
-        $parentPath = $pathInfo['dirname'];
+        $parentPath = $pathInfo['dirname'] ?? '';
         $dirName = $pathInfo['basename'];
 
         $z = new \ZipArchive();
