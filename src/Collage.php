@@ -10,7 +10,7 @@ use Photobooth\Utility\PathUtility;
 
 class Collage
 {
-    public static function createCollage(array $config, $srcImagePaths, $destImagePath, $filter = 'plain', CollageConfig $c = null)
+    public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, string $filter = 'plain', CollageConfig $c = null): bool
     {
         if ($c === null) {
             $c = CollageConfigFactory::fromConfig($config);
@@ -715,7 +715,7 @@ class Collage
         return intval($o);
     }
 
-    public static function getCollageFiles($collage, $filename_tmp, $file, array $srcImages)
+    public static function getCollageFiles(array $collage, string $filename_tmp, string $file, array $srcImages): array
     {
         $collageBasename = substr($filename_tmp, 0, -4);
         $singleImageBase = substr($file, 0, -4);

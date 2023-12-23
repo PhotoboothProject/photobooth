@@ -67,7 +67,7 @@ class PrintManagerService
                 }
                 $linecount = 0;
                 while (!feof($handle)) {
-                    $line = fgets($handle, 4096);
+                    $line = (string) fgets($handle, 4096);
                     $linecount += substr_count($line, PHP_EOL);
                 }
                 fclose($handle);
@@ -82,7 +82,7 @@ class PrintManagerService
     /**
      * Get the total count of prints from either the print counter file or the print database.
      */
-    public function getPrintCountFromCounter(): ?string
+    public function getPrintCountFromCounter(): ?int
     {
         try {
             if (file_exists($this->printCounter)) {
@@ -90,12 +90,13 @@ class PrintManagerService
                 if ($counterContent === false) {
                     throw new \Exception('Failed to read print counter.');
                 }
-                return $counterContent ?? null;
+                return (int) $counterContent;
             }
-            return $this->getPrintCountFromDB();
         } catch (\Exception $e) {
-            return $this->getPrintCountFromDB();
+            // do nothing
         }
+
+        return $this->getPrintCountFromDB();
     }
 
     /**
