@@ -22,7 +22,7 @@ class LanguageService
         $path = PathUtility::getAbsolutePath($localeFolder);
         if (PathUtility::isAbsolutePath($path)) {
             foreach (new \DirectoryIterator($path) as $file) {
-                if(!$file->isFile() || strtolower($file->getExtension() !== 'json')) {
+                if(!$file->isFile() || strtolower($file->getExtension()) !== 'json') {
                     continue;
                 }
                 $translator->addResource('json', $path . '/' . $file->getFilename(), $file->getBasename('.' . $file->getExtension()), 'photobooth');
