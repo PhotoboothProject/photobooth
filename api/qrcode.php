@@ -19,7 +19,7 @@ if ($filename || !$config['qr']['append_filename']) {
         $result = QrCodeUtility::create($url);
         header('Content-Type: ' . $result->getMimeType());
         echo $result->getString();
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         http_response_code(500);
         echo 'Error generating QR Code.';
         if ($config['dev']['loglevel'] > 1) {

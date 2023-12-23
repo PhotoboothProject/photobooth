@@ -18,7 +18,7 @@ try {
         'availableVersion' => $photobooth->getLatestRelease(),
     ];
     $logger->info('Info', $data);
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $data = ['error' => $e->getMessage()];
     $logger->error($e->getMessage());
 }

@@ -72,7 +72,7 @@ try {
 
     $imageResource = imagecreatefromstring($data);
     if (!$imageResource) {
-        throw new Exception('Failed to create image from data.');
+        throw new \Exception('Failed to create image from data.');
     }
 
     if ($applyEffects) {
@@ -86,8 +86,8 @@ try {
                     imageflip($imageResource, IMG_FLIP_BOTH);
                 }
                 $imageHandler->imageModified = true;
-            } catch (Exception $e) {
-                throw new Exception('Error flipping image.');
+            } catch (\Exception $e) {
+                throw new \Exception('Error flipping image.');
             }
         }
 
@@ -96,8 +96,8 @@ try {
             try {
                 ImageUtility::applyFilter(ImageFilterEnum::tryFrom($config['filters']['defaults']), $imageResource);
                 $imageHandler->imageModified = true;
-            } catch (Exception $e) {
-                throw new Exception('Error applying image filter.');
+            } catch (\Exception $e) {
+                throw new \Exception('Error applying image filter.');
             }
         }
 
@@ -105,7 +105,7 @@ try {
             $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
             $imageResource = $imageHandler->effectPolaroid($imageResource);
             if (!$imageResource) {
-                throw new Exception('Error applying polaroid effect.');
+                throw new \Exception('Error applying polaroid effect.');
             }
         }
 
@@ -120,7 +120,7 @@ try {
             }
             $imageResource = $imageHandler->applyFrame($imageResource);
             if (!$imageResource) {
-                throw new Exception('Error applying frame to image resource.');
+                throw new \Exception('Error applying frame to image resource.');
             }
         }
 
@@ -128,7 +128,7 @@ try {
             $imageHandler->resizeRotation = $config['picture']['rotation'];
             $imageResource = $imageHandler->rotateResizeImage($imageResource);
             if (!$imageResource) {
-                throw new Exception('Error resizing resource.');
+                throw new \Exception('Error resizing resource.');
             }
         }
     }
@@ -158,7 +158,7 @@ try {
             $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
             $imageResource = $imageHandler->applyText($imageResource);
             if (!$imageResource) {
-                throw new Exception('Error applying text to image resource.');
+                throw new \Exception('Error applying text to image resource.');
             }
         }
     }
@@ -179,7 +179,7 @@ try {
 
     $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
     if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
-        throw new Exception('Failed to save image.');
+        throw new \Exception('Failed to save image.');
     }
 
     imagedestroy($imageResource);
@@ -194,7 +194,7 @@ try {
     if (!chmod($filename_photo, octdec($picture_permissions))) {
         $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // Try to clear cache
     if (is_resource($thumbResource)) {
         imagedestroy($thumbResource);

@@ -14,9 +14,9 @@ $logger->debug(basename($_SERVER['PHP_SELF']));
 
 try {
     if (empty($_POST['file'])) {
-        throw new Exception('No file provided');
+        throw new \Exception('No file provided');
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // Handle the exception
     $logger->error($e->getMessage(), $_POST);
     echo json_encode(['error' => $e->getMessage()]);
