@@ -40,7 +40,7 @@ class DatabaseManagerService
                 throw new \Exception('File not found: ' . $this->databaseFile);
             }
         } catch (\Exception $e) {
-            return [];
+            // do nothing
         }
 
         return [];
@@ -74,7 +74,7 @@ class DatabaseManagerService
 
             return $images;
         } catch (\Exception $e) {
-            return [];
+            // do nothing
         }
 
         return [];
