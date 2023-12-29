@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Photobooth\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -11,9 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'photobooth:config:list', description: 'Returns the Photobooth config as JSON')]
 class ConfigListCommand extends Command
 {
-    protected static $defaultName = 'photobooth:config:list';
     protected array $photoboothConfig = [];
 
     public function setPhotoboothConfig(array $photoboothConfig): self
@@ -32,7 +33,7 @@ class ConfigListCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
