@@ -1,5 +1,8 @@
 FROM webdevops/php-apache:8.2
 
+# Adjust LimitRequestLine
+RUN echo "LimitRequestLine 12000" > /opt/docker/etc/httpd/conf.d/limits.conf
+
 # Update and install dependencies
 RUN apt-get update
 RUN apt install -y \
@@ -21,7 +24,7 @@ RUN apt update &&\
 RUN mkdir -p /etc/apt/keyrings
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-RUN apt-get update 
+RUN apt-get update
 RUN apt-get install -y nodejs
 
 # Copy files
@@ -29,7 +32,7 @@ WORKDIR /app
 COPY . .
 
 # Install and build
-RUN git config --global --add safe.directory /app 
+RUN git config --global --add safe.directory /app
 RUN git submodule update --init
 RUN npm install
 RUN npm run build
