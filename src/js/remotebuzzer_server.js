@@ -312,10 +312,6 @@ function gpioSanity(gpioconfig) {
             throw new Error(gpioconfig + ' is not a valid number');
         }
 
-        if (gpioconfig < 1 || gpioconfig > 27) {
-            throw new Error('GPIO' + gpioconfig + ' number is out of range (1-27)');
-        }
-
         cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
         stdout = execSync(cmd).toString();
 
