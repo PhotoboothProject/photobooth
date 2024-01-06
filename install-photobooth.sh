@@ -384,6 +384,7 @@ proof_npm() {
             exit 1
         else
             warn "[WARN]      npm needs to be updated!"
+            apt-get -qq update
             npm install npm@9.6.7 -g
             NPM_CHECKED=true
             check_npm
