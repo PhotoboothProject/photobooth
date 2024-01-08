@@ -16,8 +16,6 @@ BRANCH="dev"
 GIT_INSTALL=true
 SUBFOLDER=true
 PI_CAMERA=false
-KIOSK_MODE=false
-HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
 GPHOTO_PREVIEW=true
@@ -745,33 +743,6 @@ browser_autostart() {
     browser_shortcut
 }
 
-ask_kiosk_mode() {
-    echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
-    ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        KIOSK_MODE=true
-        info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
-    else
-        KIOSK_MODE=false
-        info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
-    fi
-}
-
-ask_hide_mouse() {
-    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start and disable the screen saver."
-    ask_yes_no "### Disable screen saver and hide the mouse cursor? [y/N] " "Y"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        HIDE_MOUSE=true
-        EXTRA_PACKAGES+=('unclutter')
-        info "### We will hide the mouse cursor on every start and disable the screen saver."
-    else
-        HIDE_MOUSE=false
-        info "### We won't hide the mouse cursor on every start and won't disable the screen saver."
-    fi
-}
 
 ask_usb_sync() {
     echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
@@ -1064,22 +1035,6 @@ if [ "$RUN_UPDATE" = true ]; then
     fi
 
     if [ "$GIT_INSTALL" = true ]; then
-        detect_browser
-        if [ -d "/etc/xdg/autostart" ] && [ "$WEBBROWSER" != "unknown" ]; then
-            ask_kiosk_mode
-        else
-            warn "### No supported webbrowser found!"
-        fi
-        print_spaces
-
-# Pi specific setup start
-        if [ "$RUNNING_ON_PI" = true ] && [ "$DESKTOP_OS" = true ]; then
-            ask_hide_mouse
-        else
-            info "### lxde is not installed. Can not hide the mouse cursor on every start."
-        fi
-        print_spaces
-# Pi specific setup end
         if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
             ask_usb_sync
         else
@@ -1106,6 +1061,7 @@ if [ "$RUN_UPDATE" = true ]; then
             raspberry_permission
         fi
         fix_git_modules
+        detect_browser
         if [ "$WEBBROWSER" != "unknown" ]; then
             browser_desktop_shortcut
             if [ "$KIOSK_MODE" = true ]; then
@@ -1113,9 +1069,6 @@ if [ "$RUN_UPDATE" = true ]; then
             fi
         else
             info "### Browser unknown or not installed. Can not add shortcut to Desktop."
-        fi
-        if [ "$HIDE_MOUSE" = true ] ; then
-            hide_mouse
         fi
         print_spaces
         print_logo
@@ -1200,47 +1153,26 @@ fi
 
 print_spaces
 
-detect_browser
-if [ -d "/etc/xdg/autostart" ]; then
-    if [ "$WEBBROWSER" != "unknown" ]; then
-        ask_kiosk_mode
-    else
-        warn "### No supported webbrowser found!"
-    fi
-    print_spaces
+if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
+    ask_usb_sync
+else
+    info "### /etc/polkit-1/localauthority/50-local.d not found!"
+    info "### Can not setup your OS to use the USB sync file backup."
 fi
+print_spaces
 
-# Pi specific setup start
-if [ "$RUNNING_ON_PI" = true ]; then
-    if [ "$DESKTOP_OS" = true ]; then
-        ask_hide_mouse
-    else
-        info "### lxde is not installed. Can not hide the mouse cursor on every start."
-    fi
-    print_spaces
+echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
+echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
+echo -e "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
+ask_yes_no "### If unsure, type N. [y/N] " "N"
+echo -e "\033[0m"
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    GPHOTO_PREVIEW=true
+    info "### We will install a service to set up a virtual webcam for gphoto2."
+else
+    GPHOTO_PREVIEW=false
+    info "### We won't install a service to set up a virtual webcam for gphoto2."
 fi
-# Pi specific setup end
-
-    if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
-        ask_usb_sync
-    else
-        info "### /etc/polkit-1/localauthority/50-local.d not found!"
-        info "### Can not setup your OS to use the USB sync file backup."
-    fi
-    print_spaces
-
-    echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
-    echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
-    echo -e "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
-    ask_yes_no "### If unsure, type N. [y/N] " "N"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        GPHOTO_PREVIEW=true
-        info "### We will install a service to set up a virtual webcam for gphoto2."
-    else
-        GPHOTO_PREVIEW=false
-        info "### We won't install a service to set up a virtual webcam for gphoto2."
-    fi
 
 ############################################################
 #                                                          #
@@ -1260,6 +1192,7 @@ general_permissions
 if [ "$RUNNING_ON_PI" = true ]; then
     raspberry_permission
 fi
+detect_browser
 if [ "$WEBBROWSER" != "unknown" ]; then
     browser_desktop_shortcut
     if [ "$KIOSK_MODE" = true ]; then
