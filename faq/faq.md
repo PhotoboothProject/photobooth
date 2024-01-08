@@ -113,6 +113,8 @@ Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in y
 
 In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file has to be created manually.
 
+Photobooth config **must** be saved again via Admin panel after `private/collage.json` was modified!
+
 Content of the file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height and rotation (in that order) of one image.
 For calculation of the values the variables x and y get converted to the width and height of the collage respectively, additionally math operations +, -, *, / and () can be used to calculate values.
 The following example should look exactly like the 1+2 layout (this layout looks more complicated than it is due to the decimal places).
@@ -260,6 +262,40 @@ Photobooth will watch Button GPIOs for a PIN_DOWN event - so the hardware button
 
 For the **LED Support** GPIOs need to be set as OUTPUT.
 
+On a Raspberry Pi 5 you need to adjust the GPIO definition via Admin panel (experimental view) to the high-values of the gpio-sysfs:
+
+GPIO sysfs Pi 3/4    | GPIO sysfs Pi5   |  PIN
+-------------------- | ---------------- | --------
+ 0 (ID_SD)           | 399              | PIN 27
+ 1 (ID_SC)           | 400              | PIN 28
+ 2                   | 401              | PIN  3
+ 3                   | 402              | PIN  5
+ 4                   | 403              | PIN  7 
+ 5                   | 404              | PIN 29
+ 6                   | 405              | PIN 31
+ 7                   | 406              | PIN 26
+ 8                   | 407              | PIN 24
+ 9                   | 408              | PIN 21
+10                   | 409              | PIN 19
+11                   | 410              | PIN 23
+12                   | 411              | PIN 32
+13                   | 412              | PIN 33
+14                   | 413              | PIN  8
+15                   | 414              | PIN 10
+16                   | 415              | PIN 36
+17                   | 416              | PIN 11
+18                   | 417              | PIN 12
+19                   | 418              | PIN 35
+20                   | 419              | PIN 38
+21                   | 420              | PIN 40
+22                   | 421              | PIN 15
+23                   | 422              | PIN 16
+24                   | 423              | PIN 18
+25                   | 424              | PIN 22
+26                   | 425              | PIN 37
+27                   | 426              | PIN 13
+
+
 ##### Troubleshooting / Debugging
 
 **Important: For WLAN connected screens you must make sure to set the IP address of the Remote buzzer server in the admin settings.** The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Remote buzzer Server.
@@ -272,12 +308,24 @@ Having trouble?
 - If there is no errors logged but hardware buttons still do not trigger:
   - GPIO interrupts might be disabled. Check file `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
   - Button GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
+
+    **Raspberry Pi 3 / 4**
     ```
     gpio=5,6,7,8,16,17,20,21,22,26,27=pu
     ```
+    **Raspberry Pi 5**
+    ```
+    gpio=404,405,406,407,415,416,419,420,421,425,426,=pu
+    ```
   - LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
+
+    **Raspberry Pi 3 / 4**
     ```
     gpio=9,10,11,12,18,19,23,24,25=op
+    ```
+    **Raspberry Pi 5**
+    ```
+    gpio=408,409,410,411,417,418,422,423,424=op
     ```
 - For the shutdown and reboot buttons to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
     ```sh
@@ -455,6 +503,7 @@ These trigger URLs can be used for example with [myStrom WiFi Buttons](https://m
 
 ### How do I enable Kiosk Mode to automatically start Photobooth in full screen?
 
+#### Autostart on Pi OS Bullseye and prior
 Add the autostart file:
 
 ```sh
@@ -482,11 +531,22 @@ If you have installed Photobooth inside a subdirectory (e.g. to `/var/www/html/p
 
 The flag `--use-gl=egl` might only be needed on a Raspberry Pi to avoid a white browser window on the first start of kiosk mode! If you're facing issues while using Photobooth on a different device, please remove that flag.
 
+#### Autostart on Pi OS Bookworm
+
+Modify `~/.config/wayfire.ini` as stated. If there is a section [autostart] already, just add the line chromium = ... otherwise insert the complete section.
+
+```
+[autostart]
+chromium = chromium-browser --kiosk --disable-features=Translate --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --touch-events=enabled --start-maximized http://localhost
+```
+
 ---
 
 #### How to hide the mouse cursor, disable screen blanking and screen saver?
 
-There are two options to hide the cursor. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
+**Pi OS Bullseye and prior only**
+
+There are two options to hide the cursor on Pi OS Bullseye and prior. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
 
 ##### Solution A
 To hide the Mouse Cursor we'll use "unclutter":
@@ -809,42 +869,6 @@ Page will look like this:
 <details><summary>CLICK ME</summary>
 <img src="../resources/img/faq/php-ini.png" alt="php.ini Screenshot">
 </details>
-
----
-
-### Turn Photobooth into a WIFI hotspot
-
-If you would like to allow your guests to download their images without connecting to your private WIFI or when there is no other WIFI around, you can turn your Raspberry Pi into setup an access point and WiFi client/station network on the single WiFi chip of the Raspberry Pi.
-
-The default setting is to call your wifi hotspot *Photobooth* as this is built into the Photobooth prompt for guests to download images via QR code.
-
-First, make sure `iptables` package is installed:
-
-```sh
-sudo apt-get install iptables
-```
-
-Now download and run the rpihotspot installer:
-
-```sh
-wget https://raw.githubusercontent.com/idev1/rpihotspot/master/setup-network.sh
-chmod +x setup-network.sh
-sudo ./setup-network.sh --install-upgrade --ap-ssid="Photobooth" --ap-password="password" --ap-password-encrypt
---ap-country-code="CA" --ap-ip-address="10.10.10.10" --wifi-interface="wlan0"
-```
-
-There are a couple of flags you need to change from the example command below:
-
- - change `password` to your desired password, make it easy enough for guests to remember.
- - change `country code` from `CA` to your own localization.
- - keep or change the ip address `10.10.10.10`. Remember what you change it to.
-
-
-If you run into any errors setting up your hotspot we can remove all the settings and try it again. The first time I ran this I ran into an error, I reset it using the command below, then reinstalled it. It went smoothly the second time:
-
-```sh
-sudo bash setup-network.sh --clean
-```
 
 ---
 
