@@ -847,27 +847,6 @@ EOF
     fi
 }
 
-hide_mouse() {
-    if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
-        sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
-    fi
-
-cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
-# Photobooth
-# turn off display power management system
-@xset -dpms
-# turn off screen blanking
-@xset s noblank
-# turn off screen saver
-@xset s off
-
-# Hide mousecursor
-@unclutter -idle 3
-# Photobooth End
-
-EOF
-}
-
 cups_setup() {
     info "### Setting printer permissions."
     gpasswd -a www-data lp
@@ -1071,9 +1050,6 @@ if [ "$RUN_UPDATE" = true ]; then
         detect_browser
         if [ "$WEBBROWSER" != "unknown" ]; then
             browser_desktop_shortcut
-            if [ "$KIOSK_MODE" = true ]; then
-                browser_autostart
-            fi
         else
             info "### Browser unknown or not installed. Can not add shortcut to Desktop."
         fi
@@ -1202,14 +1178,8 @@ fi
 detect_browser
 if [ "$WEBBROWSER" != "unknown" ]; then
     browser_desktop_shortcut
-    if [ "$KIOSK_MODE" = true ]; then
-        browser_autostart
-    fi
 else
     info "### Browser unknown or not installed. Can not add shortcut to Desktop."
-fi
-if [ "$HIDE_MOUSE" = true ] ; then
-    hide_mouse
 fi
 if [ "$SETUP_CUPS" = true ]; then
     cups_setup
