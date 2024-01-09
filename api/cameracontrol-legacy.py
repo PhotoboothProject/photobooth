@@ -252,7 +252,7 @@ class MessageSender:
 
 def get_running_pid():
     for p in psutil.process_iter(['name', 'cmdline']):
-        if p.name() == 'python3' and p.cmdline()[1].endswith('cameracontrol.py') and p.pid != os.getpid():
+        if p.name() == 'python3' and p.cmdline()[1].endswith('cameracontrol-legacy.py') and p.pid != os.getpid():
             return p.pid
     return -1
 
