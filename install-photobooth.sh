@@ -350,6 +350,11 @@ update_nodejs() {
             apt-get -qq purge -y libnode72
         fi
 
+        if [ $(dpkg-query -W -f='${Status}' "npm" 2>/dev/null | grep -c "ok installed") -eq 1 ]; then
+            info "[Cleanup]   Removing npm package"
+            apt-get -qq purge -y npm
+        fi
+
         info "[Package]   Installing latest Node.js v18"
         apt-get -qq install -y ca-certificates curl gnupg
         mkdir -p /etc/apt/keyrings
@@ -381,7 +386,8 @@ proof_npm() {
             exit 1
         else
             warn "[WARN]      npm needs to be updated!"
-            npm install npm@latest -g
+            apt-get -qq --only-upgrade install npm
+            npm install npm@9.6.7 -g
             NPM_CHECKED=true
             check_npm
         fi 
@@ -393,6 +399,7 @@ check_npm() {
         info "[Info]      npm available.".
     else
         info "[Info]      npm not installed. Trying to install...".
+        apt-get -qq update
         apt-get -qq install -y npm
     fi
     proof_npm
