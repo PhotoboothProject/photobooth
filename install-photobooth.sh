@@ -51,7 +51,6 @@ NODEJS_MICRO="0"
 NEEDED_NODE_VERSION="v$NODEJS_MAJOR.$NODEJS_MINOR(.$NODEJS_MICRO or newer)"
 NEEDS_NPM_CHECK=true
 NPM_NEEDS_UPDATE=false
-NPM_CHECKED=false
 
 COMMON_PACKAGES=(
         'gphoto2'
@@ -376,23 +375,26 @@ update_nodejs() {
 
 proof_npm() {
     npm_version=$(npm -v)
-    major=$(echo "$npm_version" | cut -d. -f1)
-    minor=$(echo "$npm_version" | cut -d. -f2)
-    patch=$(echo "$npm_version" | cut -d. -f3)
+    npm_major=$(echo "$npm_version" | cut -d. -f1)
+    npm_minor=$(echo "$npm_version" | cut -d. -f2)
+    npm_patch=$(echo "$npm_version" | cut -d. -f3)
     info "[Info]      Found npm $npm_version"
-    if [ "$major" -gt 9 ] || [ "$major" -eq 9 -a "$minor" -ge 6 ]; then
+    if [ "$npm_major" -gt 9 ] || [ "$npm_major" -eq 9 -a "$npm_minor" -ge 6 ]; then
         info "[Info]      npm version matches our requirements."
-        NPM_CHECKED=true
     else
-        if [ "$NPM_CHECKED" = true ]; then
+        warn "[WARN]      npm needs to be updated!"
+        apt-get -qq --only-upgrade install npm
+        npm install npm@9.6.7 -g
+        npm_version_updated=$(npm -v)
+        npm_major_updated=$(echo "$npm_version_updated" | cut -d. -f1)
+        npm_minor_updated=$(echo "$npm_version_updated" | cut -d. -f2)
+        npm_patch_updated=$(echo "$npm_version_updated" | cut -d. -f3)
+        info "[Info]      Found Node.js $npm_version".
+        if [ "$npm_major_updated" -gt 9 ] || [ "$npm_major_updated" -eq 9 -a "$npm_minor_updated" -ge 6 ]; then
+            info "[Info]      npm version matches our requirements."
+        else
             error "[ERROR]     Update of npm was not possible. Aborting Photobooth installation!"
             exit 1
-        else
-            warn "[WARN]      npm needs to be updated!"
-            apt-get -qq --only-upgrade install npm
-            npm install npm@9.6.7 -g
-            NPM_CHECKED=true
-            check_npm
         fi
     fi
 }
