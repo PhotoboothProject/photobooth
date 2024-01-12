@@ -321,34 +321,34 @@ $config['remotebuzzer']['move2usb'] = 'disabled';
 $config['remotebuzzer']['move2usbled'] = false;
 
 // On Raspberry Pi 5 high-value GPIO are used on sysfs
-$hightValueGpioSysfs = false;
+$highValueGpioSysfs = false;
 $modelFilePath = '/proc/device-tree/model';
 if (file_exists($modelFilePath)) {
     $model = shell_exec('tr -d "\0" < ' . $modelFilePath);
     if (strpos($model, 'Raspberry Pi 5') !== false) {
-        $hightValueGpioSysfs = true;
+        $highValueGpioSysfs = true;
     }
 }
-$config['remotebuzzer']['rotaryclkgpio'] = $hightValueGpioSysfs ? 426 : 27;
-$config['remotebuzzer']['rotarydtgpio'] = $hightValueGpioSysfs ? 416 : 17;
-$config['remotebuzzer']['rotarybtngpio'] = $hightValueGpioSysfs ? 421 : 22;
-$config['remotebuzzer']['picturegpio'] = $hightValueGpioSysfs ? 420 : 21;
-$config['remotebuzzer']['collagegpio'] = $hightValueGpioSysfs ? 419 : 20;
-$config['remotebuzzer']['printgpio'] = $hightValueGpioSysfs ? 425 : 26;
-$config['remotebuzzer']['shutdowngpio'] = $hightValueGpioSysfs ? 415 : 16;
-$config['remotebuzzer']['rebootgpio'] = $hightValueGpioSysfs ? 407 : 8;
-$config['remotebuzzer']['photolightgpio'] = $hightValueGpioSysfs ? 424 : 25;
-$config['remotebuzzer']['pictureledgpio'] = $hightValueGpioSysfs ? 418 : 19;
-$config['remotebuzzer']['collageledgpio'] = $hightValueGpioSysfs ? 411 : 12;
-$config['remotebuzzer']['shutdownledgpio'] = $hightValueGpioSysfs ? 422 : 23;
-$config['remotebuzzer']['rebootledgpio'] = $hightValueGpioSysfs ? 417 : 18;
-$config['remotebuzzer']['printledgpio'] = $hightValueGpioSysfs ? 409 : 10;
-$config['remotebuzzer']['videogpio'] = $hightValueGpioSysfs ? 406 : 7;
-$config['remotebuzzer']['videoledgpio'] = $hightValueGpioSysfs ? 408 : 9;
-$config['remotebuzzer']['customgpio'] = $hightValueGpioSysfs ? 404 : 5;
-$config['remotebuzzer']['customledgpio'] = $hightValueGpioSysfs ? 423 : 24;
-$config['remotebuzzer']['move2usbgpio'] = $hightValueGpioSysfs ? 405 : 6;
-$config['remotebuzzer']['move2usbledgpio'] = $hightValueGpioSysfs ? 410 : 11;
+$config['remotebuzzer']['rotaryclkgpio'] = $highValueGpioSysfs ? 426 : 27;
+$config['remotebuzzer']['rotarydtgpio'] = $highValueGpioSysfs ? 416 : 17;
+$config['remotebuzzer']['rotarybtngpio'] = $highValueGpioSysfs ? 421 : 22;
+$config['remotebuzzer']['picturegpio'] = $highValueGpioSysfs ? 420 : 21;
+$config['remotebuzzer']['collagegpio'] = $highValueGpioSysfs ? 419 : 20;
+$config['remotebuzzer']['printgpio'] = $highValueGpioSysfs ? 425 : 26;
+$config['remotebuzzer']['shutdowngpio'] = $highValueGpioSysfs ? 415 : 16;
+$config['remotebuzzer']['rebootgpio'] = $highValueGpioSysfs ? 407 : 8;
+$config['remotebuzzer']['photolightgpio'] = $highValueGpioSysfs ? 424 : 25;
+$config['remotebuzzer']['pictureledgpio'] = $highValueGpioSysfs ? 418 : 19;
+$config['remotebuzzer']['collageledgpio'] = $highValueGpioSysfs ? 411 : 12;
+$config['remotebuzzer']['shutdownledgpio'] = $highValueGpioSysfs ? 422 : 23;
+$config['remotebuzzer']['rebootledgpio'] = $highValueGpioSysfs ? 417 : 18;
+$config['remotebuzzer']['printledgpio'] = $highValueGpioSysfs ? 409 : 10;
+$config['remotebuzzer']['videogpio'] = $highValueGpioSysfs ? 406 : 7;
+$config['remotebuzzer']['videoledgpio'] = $highValueGpioSysfs ? 408 : 9;
+$config['remotebuzzer']['customgpio'] = $highValueGpioSysfs ? 404 : 5;
+$config['remotebuzzer']['customledgpio'] = $highValueGpioSysfs ? 423 : 24;
+$config['remotebuzzer']['move2usbgpio'] = $highValueGpioSysfs ? 405 : 6;
+$config['remotebuzzer']['move2usbledgpio'] = $highValueGpioSysfs ? 410 : 11;
 
 // S Y N C  T O  U S B  S T I C K
 $config['synctodrive']['enabled'] = false;
