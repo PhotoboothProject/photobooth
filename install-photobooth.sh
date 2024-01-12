@@ -7,6 +7,7 @@ USERNAME=''
 WEBSERVER="apache"
 SILENT_INSTALL=false
 RUNNING_ON_PI=true
+RASPBERRY_PI_5=false
 FORCE_RASPBERRY_PI=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
@@ -785,6 +786,17 @@ raspberry_permission() {
     fi
     # add configuration required for onoff library
     sed -i '/Photobooth/,/Photobooth End/d' "$BOOT_CONFIG"
+    if [ "$RASPBERRY_PI_5" = true ]; then
+cat >> "$BOOT_CONFIG" << EOF
+# Photobooth
+#IN
+gpio=404,405,406,407,415,416,419,420,421,425,426,=pu
+#OUT
+gpio=408,409,410,411,417,418,422,423,424=op
+# Photobooth End
+EOF
+
+    else
 cat >> "$BOOT_CONFIG" << EOF
 # Photobooth
 #IN
@@ -793,6 +805,8 @@ gpio=5,6,7,8,16,17,20,21,22,26,27=pu
 gpio=9,10,11,12,18,19,23,24,25=op
 # Photobooth End
 EOF
+
+    fi
 
     # update artifacts in user configuration from old remotebuzzer implementation
     if [ -f "$INSTALLFOLDERPATH/config/my.config.inc.php" ]; then
@@ -995,6 +1009,8 @@ if [ "$FORCE_RASPBERRY_PI" = false ]; then
 
         if [[ $PI_MODEL != Raspberry* ]]; then
             no_raspberry 3
+        else if [[ $PI_MODEL == *"Raspberry Pi 5"* ]]; then
+            RASPBERRY_PI_5=true
         fi
     fi
 fi

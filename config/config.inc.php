@@ -296,49 +296,59 @@ $config['remotebuzzer']['usebuttons'] = false;
 $config['remotebuzzer']['userotary'] = false;
 $config['remotebuzzer']['enable_standalonegallery'] = false;
 $config['remotebuzzer']['usenogpio'] = false;
-$config['remotebuzzer']['rotaryclkgpio'] = 27;
-$config['remotebuzzer']['rotarydtgpio'] = 17;
-$config['remotebuzzer']['rotarybtngpio'] = 22;
 $config['remotebuzzer']['picturebutton'] = true;
 // collagetime controls the time to distinguish picture from collage in seconds
 $config['remotebuzzer']['collagetime'] = '2';
-$config['remotebuzzer']['picturegpio'] = 21;
 $config['remotebuzzer']['collagebutton'] = false;
-$config['remotebuzzer']['collagegpio'] = 20;
 $config['remotebuzzer']['printbutton'] = false;
-$config['remotebuzzer']['printgpio'] = 26;
 $config['remotebuzzer']['shutdownbutton'] = false;
-$config['remotebuzzer']['shutdowngpio'] = 16;
 $config['remotebuzzer']['shutdownholdtime'] = '5';
 $config['remotebuzzer']['debounce'] = 30;
 $config['remotebuzzer']['rebootbutton'] = false;
-$config['remotebuzzer']['rebootgpio'] = 8;
 $config['remotebuzzer']['rebootholdtime'] = '5';
 $config['remotebuzzer']['useleds'] = false;
 $config['remotebuzzer']['photolight'] = false;
-$config['remotebuzzer']['photolightgpio'] = 25;
 $config['remotebuzzer']['pictureled'] = false;
-$config['remotebuzzer']['pictureledgpio'] = 19;
 $config['remotebuzzer']['collageled'] = false;
-$config['remotebuzzer']['collageledgpio'] = 12;
 $config['remotebuzzer']['shutdownled'] = false;
-$config['remotebuzzer']['shutdownledgpio'] = 23;
 $config['remotebuzzer']['rebootled'] = false;
-$config['remotebuzzer']['rebootledgpio'] = 18;
 $config['remotebuzzer']['printled'] = false;
-$config['remotebuzzer']['printledgpio'] = 10;
 $config['remotebuzzer']['videobutton'] = false;
-$config['remotebuzzer']['videogpio'] = 7;
 $config['remotebuzzer']['videoled'] = false;
-$config['remotebuzzer']['videoledgpio'] = 9;
 $config['remotebuzzer']['custombutton'] = false;
-$config['remotebuzzer']['customgpio'] = 5;
 $config['remotebuzzer']['customled'] = false;
-$config['remotebuzzer']['customledgpio'] = 24;
 $config['remotebuzzer']['move2usb'] = 'disabled';
-$config['remotebuzzer']['move2usbgpio'] = 6;
 $config['remotebuzzer']['move2usbled'] = false;
-$config['remotebuzzer']['move2usbledgpio'] = 11;
+
+// On Raspberry Pi 5 high-value GPIO are used on sysfs
+$hightValueGpioSysfs = false;
+$modelFilePath = '/proc/device-tree/model';
+if (file_exists($modelFilePath)) {
+    $model = shell_exec('tr -d "\0" < ' . $modelFilePath);
+    if (strpos($model, 'Raspberry Pi 5') !== false) {
+        $hightValueGpioSysfs = true;
+    }
+}
+$config['remotebuzzer']['rotaryclkgpio'] = $hightValueGpioSysfs ? 426 : 27;
+$config['remotebuzzer']['rotarydtgpio'] = $hightValueGpioSysfs ? 416 : 17;
+$config['remotebuzzer']['rotarybtngpio'] = $hightValueGpioSysfs ? 421 : 22;
+$config['remotebuzzer']['picturegpio'] = $hightValueGpioSysfs ? 420 : 21;
+$config['remotebuzzer']['collagegpio'] = $hightValueGpioSysfs ? 419 : 20;
+$config['remotebuzzer']['printgpio'] = $hightValueGpioSysfs ? 425 : 26;
+$config['remotebuzzer']['shutdowngpio'] = $hightValueGpioSysfs ? 415 : 16;
+$config['remotebuzzer']['rebootgpio'] = $hightValueGpioSysfs ? 407 : 8;
+$config['remotebuzzer']['photolightgpio'] = $hightValueGpioSysfs ? 424 : 25;
+$config['remotebuzzer']['pictureledgpio'] = $hightValueGpioSysfs ? 418 : 19;
+$config['remotebuzzer']['collageledgpio'] = $hightValueGpioSysfs ? 411 : 12;
+$config['remotebuzzer']['shutdownledgpio'] = $hightValueGpioSysfs ? 422 : 23;
+$config['remotebuzzer']['rebootledgpio'] = $hightValueGpioSysfs ? 417 : 18;
+$config['remotebuzzer']['printledgpio'] = $hightValueGpioSysfs ? 409 : 10;
+$config['remotebuzzer']['videogpio'] = $hightValueGpioSysfs ? 406 : 7;
+$config['remotebuzzer']['videoledgpio'] = $hightValueGpioSysfs ? 408 : 9;
+$config['remotebuzzer']['customgpio'] = $hightValueGpioSysfs ? 404 : 5;
+$config['remotebuzzer']['customledgpio'] = $hightValueGpioSysfs ? 423 : 24;
+$config['remotebuzzer']['move2usbgpio'] = $hightValueGpioSysfs ? 405 : 6;
+$config['remotebuzzer']['move2usbledgpio'] = $hightValueGpioSysfs ? 410 : 11;
 
 // S Y N C  T O  U S B  S T I C K
 $config['synctodrive']['enabled'] = false;
