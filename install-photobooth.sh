@@ -385,6 +385,7 @@ proof_npm() {
         warn "[WARN]      npm needs to be updated!"
         apt-get -qq --only-upgrade install npm
         npm install npm@9.6.7 -g
+        hash -r
         npm_version_updated=$(npm -v)
         npm_major_updated=$(echo "$npm_version_updated" | cut -d. -f1)
         npm_minor_updated=$(echo "$npm_version_updated" | cut -d. -f2)
