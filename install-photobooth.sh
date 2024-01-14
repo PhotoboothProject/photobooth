@@ -390,7 +390,7 @@ proof_npm() {
         npm_major_updated=$(echo "$npm_version_updated" | cut -d. -f1)
         npm_minor_updated=$(echo "$npm_version_updated" | cut -d. -f2)
         npm_patch_updated=$(echo "$npm_version_updated" | cut -d. -f3)
-        info "[Info]      Found Node.js $npm_version".
+        info "[Info]      Found Node.js $npm_version_updated".
         if [ "$npm_major_updated" -gt 9 ] || [ "$npm_major_updated" -eq 9 -a "$npm_minor_updated" -ge 6 ]; then
             info "[Info]      npm version matches our requirements."
         else
