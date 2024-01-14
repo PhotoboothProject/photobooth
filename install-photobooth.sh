@@ -790,7 +790,7 @@ raspberry_permission() {
 cat >> "$BOOT_CONFIG" << EOF
 # Photobooth
 #IN
-gpio=404,405,406,407,415,416,419,420,421,425,426,=pu
+gpio=404,405,406,407,415,416,419,420,421,425,426=pu
 #OUT
 gpio=408,409,410,411,417,418,422,423,424=op
 # Photobooth End
