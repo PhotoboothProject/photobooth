@@ -1009,7 +1009,7 @@ if [ "$FORCE_RASPBERRY_PI" = false ]; then
 
         if [[ $PI_MODEL != Raspberry* ]]; then
             no_raspberry 3
-        else if [[ $PI_MODEL == *"Raspberry Pi 5"* ]]; then
+        elif [[ $PI_MODEL == *"Raspberry Pi 5"* ]]; then
             RASPBERRY_PI_5=true
         fi
     fi
