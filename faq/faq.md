@@ -103,7 +103,7 @@ Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in y
 
 ## How can setup a custom collage design?
 
-In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file has to be cred manually.
+In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file has to be created manually.
 
 Photobooth config **must** be saved again via Admin panel after `private/collage.json` was modified!
 
@@ -307,7 +307,7 @@ Having trouble?
     ```
     **Raspberry Pi 5**
     ```
-    gpio=404,405,406,407,415,416,419,420,421,425,426,=pu
+    gpio=404,405,406,407,415,416,419,420,421,425,426=pu
     ```
   - LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
 
