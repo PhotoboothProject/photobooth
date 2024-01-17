@@ -7,12 +7,14 @@ on:
       - stable4
     paths:
       - '**.sh'
+      - '.github/workflows/shellcheck.yml'
   pull_request:
     branches:
       - dev
       - stable4
     paths:
       - '**.sh'
+      - '.github/workflows/shellcheck.yml'
   workflow_dispatch:
 
 jobs:
