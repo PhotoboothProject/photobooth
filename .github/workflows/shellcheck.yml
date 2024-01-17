@@ -1,0 +1,30 @@
+name: Shellcheck 
+
+on:
+  push:
+    branches:
+      - dev
+      - stable4
+    paths:
+      - '**.sh'
+  pull_request:
+    branches:
+      - dev
+      - stable4
+    paths:
+      - '**.sh'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Shellcheck
+        run: |
+          shellcheck install-photobooth.sh
+          shellcheck scripts/*.sh
+          shellcheck scripts/gphoto/*.sh
