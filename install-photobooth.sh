@@ -19,6 +19,7 @@ SUBFOLDER=true
 USB_SYNC=false
 SETUP_CUPS=false
 GPHOTO_PREVIEW=true
+MJPEG_PREVIEW=false
 CUPS_REMOTE_ANY=false
 WEBBROWSER="unknown"
 KIOSK_FLAG="--kiosk http://localhost"
@@ -93,13 +94,13 @@ function error {
     echo "ERROR: ${1}" >>"$PHOTOBOOTH_TMP_LOG"
 }
 
-print_spaces() {
+function print_spaces() {
     echo ""
     info "###########################################################"
     echo ""
 }
 
-print_logo() {
+function print_logo() {
     echo "
 
 
@@ -146,7 +147,7 @@ function no_raspberry {
     print_spaces
 }
 
-view_help() {
+function view_help() {
     cat <<EOF
 Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:package> -hprsV -w=<apache:nginx:lighttpd]
 
@@ -178,6 +179,8 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
 
     -u,  -username,   --username    Always required. Enter your OS username you like to use Photobooth on.
 
+    -m,  -mjpeg,      --mjpeg
+
     -V,  -verbose,    --verbose     Run script in verbose mode.
 
     -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx, lighttpd].
@@ -197,7 +200,7 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,branch::,php::,update,username::,raspberry,silent,verbose,webserver::" -o "hb::p::u::rsVw::" -a -- "$@")
+options=$(getopt -l "help,branch::,php::,update,username::,raspberry,mjpeg,silent,verbose,webserver::" -o "hb::p::u::rsmVw::" -a -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -239,6 +242,11 @@ while true; do
         USERNAME=$1
         info "### Username: $1"
         ;;
+    -m | --mjpeg)
+        MJPEG_PREVIEW=true
+        GPHOTO_PREVIEW=false
+        info "### Mjpeg mode enabled"
+        ;;
     -s | --silent)
         SILENT_INSTALL=true
         info "### Silent installtion starting..."
@@ -271,7 +279,7 @@ else
     DESKTOP_OS=false
 fi
 
-check_username() {
+function check_username() {
     info "[Info]      Checking if user $USERNAME exists..."
     if id "$USERNAME" &>/dev/null; then
         info "[Info]      User $USERNAME found. Installation process continues."
@@ -282,7 +290,7 @@ check_username() {
     fi
 }
 
-check_nodejs() {
+function check_nodejs() {
     NODE_VERSION=$(node -v || echo "0")
     IFS=. read -r -a VER <<<"${NODE_VERSION##*v}"
     major=${VER[0]}
@@ -325,7 +333,7 @@ check_nodejs() {
     fi
 }
 
-update_nodejs() {
+function update_nodejs() {
     echo -e "\033[0;33m### Node.js should be updated/downgraded. Node.js version not matching our requirements"
     echo -e "###  Found Node.js $NODE_VERSION, but $NEEDED_NODE_VERSION is suggested."
     echo -e "###  NOTE: Currently Node.js on Photobooth is only supported on v$NODEJS_MAJOR.$NODEJS_MINOR."
@@ -370,7 +378,7 @@ update_nodejs() {
     fi
 }
 
-proof_npm() {
+function proof_npm() {
     npm_version=$(npm -v)
     npm_major=$(echo "$npm_version" | cut -d. -f1)
     npm_minor=$(echo "$npm_version" | cut -d. -f2)
@@ -395,7 +403,7 @@ proof_npm() {
     fi
 }
 
-check_npm() {
+function check_npm() {
     if command -v npm &>/dev/null; then
         info "[Info]      npm available.".
     else
@@ -406,8 +414,8 @@ check_npm() {
     proof_npm
 }
 
-common_software() {
-    info "### First we update your system. That's not worth mentioning."
+function common_software() {
+    info "### Updating the system"
     apt-get -qq update
     if [[ ${PHP_VERSION} == "8.2" ]]; then
         apt-get -qq install apt-transport-https lsb-release ca-certificates software-properties-common -y
@@ -489,14 +497,14 @@ common_software() {
     fi
 }
 
-apache_webserver() {
+function apache_webserver() {
     info "### Installing Apache Webserver..."
     apt-get -qq install -y apache2 libapache2-mod-php
     sed -i 's@^Listen 80@Listen 127.0.0.1:80@g' /etc/apache2/ports.conf
     sudo systemctl enable --now apache2
 }
 
-nginx_webserver() {
+function nginx_webserver() {
     nginx_site_conf="/etc/nginx/sites-enabled/default"
     nginx_conf="/etc/nginx/nginx.conf"
 
@@ -530,7 +538,7 @@ nginx_webserver() {
     fi
 }
 
-lighttpd_webserver() {
+function lighttpd_webserver() {
     info "### Installing Lighttpd Webserver..."
     apt-get -qq install -y lighttpd php"$PHP_VERSION"-fpm
     lighttpd-enable-mod fastcgi
@@ -568,7 +576,7 @@ EOF
     fi
 }
 
-general_setup() {
+function general_setup() {
     if [ "$SUBFOLDER" = true ]; then
         cd /var/www/html/
         INSTALLFOLDER="photobooth"
@@ -596,7 +604,7 @@ general_setup() {
     PHOTOBOOTH_LOG="$INSTALLFOLDERPATH/private/install.log"
 }
 
-add_git_remote() {
+function add_git_remote() {
     cd "$INSTALLFOLDERPATH"/
     info "### Checking needed remote information..."
     if sudo -u www-data git config remote.photoboothproject.url >/dev/null; then
@@ -610,7 +618,7 @@ add_git_remote() {
     fi
 }
 
-check_git_install() {
+function check_git_install() {
     cd "$INSTALLFOLDERPATH"
     info "### Checking for git Installation"
     if [ "$(sudo -u www-data git rev-parse --is-inside-work-tree)" = true ]; then
@@ -622,7 +630,7 @@ check_git_install() {
     fi
 }
 
-start_git_install() {
+function start_git_install() {
     cd "$INSTALLFOLDERPATH"
     info "### We are installing/updating Photobooth via git."
     info "### Ignoring filemode changes on git."
@@ -655,7 +663,7 @@ start_git_install() {
     sudo -u www-data npm run build
 }
 
-start_install() {
+function start_install() {
     info "### Now we are going to install Photobooth."
     if [ "$GIT_INSTALL" = true ]; then
         sudo -u www-data git clone https://github.com/PhotoboothProject/photobooth "$INSTALLFOLDER"
@@ -674,7 +682,7 @@ start_install() {
     fi
 }
 
-detect_browser() {
+function detect_browser() {
     if [ "$(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
         WEBBROWSER="firefox"
         CHROME_FLAGS=false
@@ -702,7 +710,7 @@ detect_browser() {
     fi
 }
 
-browser_shortcut() {
+function browser_shortcut() {
     if [ "$CHROME_FLAGS" = true ]; then
         if [ "$RUNNING_ON_PI" = true ]; then
             EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS --use-gl=egl"
@@ -735,7 +743,7 @@ browser_shortcut() {
     } >>"$AUTOSTART_FILE"
 }
 
-browser_desktop_shortcut() {
+function browser_desktop_shortcut() {
     if [ -d "/home/$USERNAME/Desktop" ] && [ "$USERNAME" != "" ]; then
         info "### Adding photobooth shortcut to Desktop"
         AUTOSTART_FILE="/home/$USERNAME/Desktop/photobooth.desktop"
@@ -745,12 +753,12 @@ browser_desktop_shortcut() {
     fi
 }
 
-browser_autostart() {
+function browser_autostart() {
     AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
     browser_shortcut
 }
 
-ask_usb_sync() {
+function ask_usb_sync() {
     echo -e "\033[0;33m### Sync to USB - this feature will automatically copy (sync) new pictures to a USB stick."
     echo -e "### The actual configuration will be done in the admin panel but we need to setup your OS first."
     ask_yes_no "### Would you like to setup your OS to use the USB sync file backup? [y/N] " "Y"
@@ -765,7 +773,7 @@ ask_usb_sync() {
     fi
 }
 
-raspberry_permission() {
+function raspberry_permission() {
     info "### Remote Buzzer Feature"
     info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
     BOOT_CONFIG="/boot/config.txt"
@@ -833,7 +841,7 @@ EOF
     fi
 }
 
-general_permissions() {
+function general_permissions() {
     info "### Setting permissions."
     chown -R www-data:www-data "$INSTALLFOLDERPATH"/
     chmod g+s "$INSTALLFOLDERPATH/private"
@@ -873,7 +881,7 @@ EOF
     fi
 }
 
-cups_setup() {
+function cups_setup() {
     info "### Setting printer permissions."
     gpasswd -a www-data lp
     gpasswd -a www-data lpadmin
@@ -896,7 +904,53 @@ EOF
     rmmod bcm2835-isp || true
 }
 
-fix_git_modules() {
+function mjpeg_preview() {
+    info "### Installing go2rtc (streaming software)"
+    # NOTE: if https://github.com/AlexxIT/go2rtc/pull/871 is merged, use the official version
+    # my version is x86_64 only, so raspberry pi is not supported yet
+
+    if [[ ! -d /usr/local/bin ]]; then
+        mkdir -p /usr/local/bin
+    fi
+    wget -O /usr/local/bin/go2rtc "https://github.com/dadav/go2rtc/releases/download/1.8.6-2/go2rtc"
+    chmod +x /usr/local/bin/go2rtc
+    cat >/etc/go2rtc.yaml <<EOF
+---
+streams:
+  dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint
+EOF
+    cat >/etc/systemd/system/go2rtc.service <<EOF
+[Unit]
+Description=go2rtc streaming software
+
+[Service]
+User=www-data
+ExecStart=/usr/local/bin/go2rtc -config /etc/go2rtc.yaml
+KillMode=process
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    systemctl daemon-reload
+    systemctl enable --now go2rtc.service
+
+    cat >/etc/sudoers.d/020_www-data-systemctl <<EOF
+# Control streaming software
+www-data ALL=(ALL) NOPASSWD: /usr/bin/systemctl start go2rtc.service, /usr/bin/systemctl stop go2rtc.service
+EOF
+
+    cat >/usr/local/bin/capture <<EOF
+#!/bin/bash
+
+sudo systemctl stop go2rtc.service
+gphoto2 --set-config output=Off --capture-image-and-download --filename="\$1"
+sudo systemctl start go2rtc.service
+EOF
+    chmod +x /usr/local/bin/capture
+}
+
+function fix_git_modules() {
     cd "$INSTALLFOLDERPATH"
 
     sudo -u www-data git config --global --add safe.directory "$INSTALLFOLDERPATH"
@@ -918,7 +972,7 @@ fix_git_modules() {
     sudo -u www-data git submodule update --init --recursive
 }
 
-commit_git_changes() {
+function commit_git_changes() {
     cd "$INSTALLFOLDERPATH"
     CHANGES_DETECTED=false
     fix_git_modules
@@ -1184,17 +1238,34 @@ else
 fi
 print_spaces
 
-echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
-echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
-echo -e "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
-ask_yes_no "### If unsure, type N. [y/N] " "N"
-echo -e "\033[0m"
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    GPHOTO_PREVIEW=true
-    info "### We will install a service to set up a virtual webcam for gphoto2."
-else
+if grep -i Microsoft /proc/version &>/dev/null; then
     GPHOTO_PREVIEW=false
-    info "### We won't install a service to set up a virtual webcam for gphoto2."
+
+    echo -e "\033[0;33m### You seem to be installing photobooth inside of wsl."
+    echo -e "Do you want to install a service to be able to stream your camera via http?"
+    echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
+    ask_yes_no "### If unsure, type Y. [Y/n] " "Y"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        MJPEG_PREVIEW=true
+        info "### We will install a service to set up a mjpeg stream for gphoto2."
+    else
+        MJPEG_PREVIEW=false
+        info "### We won't install a service to set up a mjpeg stream for gphoto2."
+    fi
+else
+    echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
+    echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
+    echo -e "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
+    ask_yes_no "### If unsure, type N. [y/N] " "N"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        GPHOTO_PREVIEW=true
+        info "### We will install a service to set up a virtual webcam for gphoto2."
+    else
+        GPHOTO_PREVIEW=false
+        info "### We won't install a service to set up a virtual webcam for gphoto2."
+    fi
+
 fi
 
 ############################################################
@@ -1225,6 +1296,10 @@ if [ "$SETUP_CUPS" = true ]; then
 fi
 if [ "$GPHOTO_PREVIEW" = true ]; then
     gphoto_preview
+fi
+
+if [ "$MJPEG_PREVIEW" = true ]; then
+    mjpeg_preview
 fi
 
 print_logo
