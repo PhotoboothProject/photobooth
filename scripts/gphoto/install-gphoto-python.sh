@@ -19,7 +19,7 @@ function error {
     echo -e "\033[0;31m${1}\033[0m"
 }
 
-if [ $UID != 0 ]; then
+if [ "$UID" != 0 ]; then
     error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
 fi
@@ -43,11 +43,11 @@ info ""
 if [[ $REPLY =~ ^[1]$ ]]; then
     info "### Installing required software..."
     for package in "${COMMON_PACKAGES[@]}"; do
-        if [ "$(dpkg-query -W -f='${Status}' "${package}" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
+        if [ "$(dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
             info "[Package]   ${package} installed already"
         else
             info "[Package]   Installing missing package: ${package}"
-            apt install -y "${package}"
+            apt install -y "$package"
         fi
     done
 
@@ -57,25 +57,24 @@ if [[ $REPLY =~ ^[1]$ ]]; then
     info ""
     ask_yes_no "Do you want to setup gphoto2 as a webcam? (y/n)" "n"
     info ""
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        info "### Installing gphoto2 webcam service."
-        wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/gphoto/ffmpeg-webcam.service -O "/etc/systemd/system/ffmpeg-webcam.service"
-        wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/gphoto/ffmpeg-webcam.sh -O "/usr/ffmpeg-webcam.sh"
-        chmod +x /usr/ffmpeg-webcam.sh
-        systemctl start ffmpeg-webcam.service
-        systemctl enable ffmpeg-webcam.service
-        info "gphoto2 webcam service installed and running..."
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        info "### Installing gphoto2 webcam"
+        # make it persistent
+        [[ ! -d /etc/modprobe.d ]] && mkdir /etc/modprobe.d
+        cat >/etc/modprobe.d/v4l2loopback.conf <<EOF
+options v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
+blacklist bcm2835-isp
+EOF
+        # adjust runtime
+        modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
+        rmmod bcm2835-isp || true
     fi
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### Stopping and removing gphoto2 webcam service."
-    systemctl stop ffmpeg-webcam.service
-    systemctl disable ffmpeg-webcam.service
-    rm '/usr/ffmpeg-webcam.sh'
-    rm '/etc/systemd/system/ffmpeg-webcam.service'
-    info "gphoto2 webcam service stopped and removed..."
+    [[ -f /etc/modprobe.d/v4l2loopback.conf ]] && rm /etc/modprobe.d/v4l2loopback.conf
+    rmmod v4l2loopback || true
+    info "gphoto2 webcam removed..."
 else
     info "Okay... doing nothing!"
 fi
 exit 0
-

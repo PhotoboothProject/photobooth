@@ -1,13 +1,13 @@
 export default {
   content: [
-    "./admin/**/*.php",
-    "./lib/**/*.php",
-    "./src/**/*.php",
-    "./login/**/*.php",
-    "./manual/**/*.php",
-    "./welcome/**/*.php",
+    './admin/**/*.php',
+    './lib/**/*.php',
+    './src/**/*.php',
+    './login/**/*.php',
+    './manual/**/*.php',
+    './welcome/**/*.php',
   ],
-  darkMode: "class",
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -17,10 +17,10 @@ export default {
         'brand-2': 'var(--brand-2, #E8EBF6)',
       },
       boxShadow: {
-        "xl": "0 3px 20px #0000001c"
+        'xl': '0 3px 20px #0000001c'
       },
       maxWidth: {
-        "admin": "2000px"
+        'admin': '2000px'
       },
       spacing: {
         '1/1': '100%',
@@ -58,4 +58,3 @@ export default {
     },
   },
 };
-
