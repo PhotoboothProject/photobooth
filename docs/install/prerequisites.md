@@ -6,4 +6,3 @@
 | npm               | >=v9.6.0               |                                                                                                                                     |
 | php               | >=v8.2                 |                                                                                                                                     |
 | Webserver         |                        | Apache, Nginx or lighttpd is needed. By default Apache webserver is installed by our installer.                                     |
-

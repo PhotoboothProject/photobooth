@@ -2,9 +2,9 @@
 
 ## Upcoming Photobooth release
 
-To use a preview of the upcoming Version you need to install the `Install last development version` using the `install-photobooth.sh` installer (now also works on all devices running debian / a debian based OS).  
-Last development version is installed by default! You can check the commit history for changes made since your installation [here](https://github.com/PhotoboothProject/photobooth/commits/dev).  
-An updated FAQ can always be found at [localhost/faq](http://localhost/faq).  
+To use a preview of the upcoming Version you need to install the `Install last development version` using the `install-photobooth.sh` installer (now also works on all devices running debian / a debian based OS).
+Last development version is installed by default! You can check the commit history for changes made since your installation [here](https://github.com/PhotoboothProject/photobooth/commits/dev).
+An updated FAQ can always be found at [localhost/faq](http://localhost/faq).
 
 Please read the license notice [here](https://github.com/PhotoboothProject/photobooth/blob/dev/LICENSE_NOTICE).
 <hr>
@@ -225,7 +225,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 **Bugfixes**
 
 * core: improve timings while taking an image by @andi34 in [#95](https://github.com/PhotoboothProject/photobooth/pull/95)
-  * Adjust the code to start taking an image before the Cheeeeeese message disappears 
+  * Adjust the code to start taking an image before the Cheeeeeese message disappears
   (the Cheese-Message can be used to "hide" the delay we have until the camera triggers).
   * Also adjust the code to respect the defined offset while taking an image. The take picture action now runs independent of the visible running countdown.
   * Stop the shutter animation after 500ms which should look more fluid and also make sure we can't forget to stop it. If cheese is enabled cheese time will be used instead.
@@ -348,7 +348,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 
 ## 4.0.0 (10.09.2022)
 
-Source code moved to [https://github.com/PhotoboothProject/photobooth](https://github.com/PhotoboothProject/photobooth),  
+Source code moved to [https://github.com/PhotoboothProject/photobooth](https://github.com/PhotoboothProject/photobooth),
 old Releases etc. will still be available at [https://github.com/andi34/photobooth](https://github.com/andi34/photobooth)
 
 
@@ -358,7 +358,7 @@ old Releases etc. will still be available at [https://github.com/andi34/photoboo
 
 **Breaking changes**
 
-  - QR code is now printed onto the image instead on the right side to not break the image ratio,  
+  - QR code is now printed onto the image instead on the right side to not break the image ratio,
     new options have been added for best user experience (see **New Options** for details)
   - Remove Greek, Polish and Spanish from Language options
     because they aren't maintained ([further information](https://github.com/andi34/photobooth/issues/64#issuecomment-1025126230))
@@ -381,7 +381,7 @@ old Releases etc. will still be available at [https://github.com/andi34/photoboo
     - fixed bug: in the background of the continuos collage image preview the gphoto2 preview (without bsm) continued to run visibly
     - Improve preview handling [#6](https://github.com/PhotoboothProject/photobooth/pull/6)
   - core:
-    - respect retry timeout:  
+    - respect retry timeout:
       The timeout should not be a new countdown, it should be a timeout as it's name says. Retry notification will now be visible for defined time. Countdown for picture/next collage image is not touched and will be used as defined.
     - fix get request at countdown
     - handle errors on get requests[#15](https://github.com/PhotoboothProject/photobooth/pull/15)
@@ -426,8 +426,8 @@ old Releases etc. will still be available at [https://github.com/andi34/photoboo
   - Preview:
     - config: allow to adjust the time to stop the gphoto preview
     - choose to flip the preview along the X or Y axis [#465](https://github.com/andi34/photobooth/pull/465), fixup [#476](https://github.com/andi34/photobooth/pull/476)
-    - specify how the preview should be resized to fit:  
-      This setting uses the css _object-fit_ property which is used to specify how the preview should be resized to fit.  
+    - specify how the preview should be resized to fit:
+      This setting uses the css _object-fit_ property which is used to specify how the preview should be resized to fit.
       The following options are available:
       - _fill_ - The image is resized to fill the given dimension. If necessary, the image will be stretched or squished to fit.
       - _contain_ - The image keeps its aspect ratio, but is resized to fit within the given dimension.
@@ -475,7 +475,7 @@ old Releases etc. will still be available at [https://github.com/andi34/photoboo
     - fix git installation message
     - install latest development version via git by default (latest stable3 version can be passed to the installer via option)
     - prevent double entry in autostart while re-running the installer
-    - allow to install gphoto2 Webcam Service 
+    - allow to install gphoto2 Webcam Service
     - create installation log inside `/tmp/photobooth`
     - always install latest stable gphoto2
     - adjust package array handling
@@ -488,16 +488,16 @@ old Releases etc. will still be available at [https://github.com/andi34/photoboo
       - The following browser can be detected: _chromium-browser_ , _google-chrome_ , _google-chrome-stable_ , _google-chrome-beta_ , _firefox_
     - skip Desktop related config if _lxde_ is not installed
     - avoid Chrome/Chromium asking for password to unlock keyring
-    - run apt upgrade instead apt dist-upgrade:  
+    - run apt upgrade instead apt dist-upgrade:
       Users might have come to rely on packages that were installed implicitly because of other (explicitly installed) packages' dependency on them. Thus the packaging system cannot be aware of a user/administrator desire to retain certain functionality that might otherwise be removed via dist-upgrade.
     - fix permission on hidden files and folder
     - seperate general and pi specific permissions
     - ignore filemode changes on git install
     - Check for internet connection (we can't install without an internet connection)
     - *allow to run an update on git installation:*
-      - to update to latest development version please run `sudo bash install-photobooth.sh --update`  
-      If local changes are detected, the installer can try to apply those changes after the update was completed. If the changes can not be applied after update, your local changes will be kept inside a backup branch and can be applied manually again (you might need to resolve conflicts because of source changes).  
-      If local changes are detected, the installer will abort on silent install. You can re-run the update-process without the `-s` flag and confirm backing up your local changes for update.  
+      - to update to latest development version please run `sudo bash install-photobooth.sh --update`
+      If local changes are detected, the installer can try to apply those changes after the update was completed. If the changes can not be applied after update, your local changes will be kept inside a backup branch and can be applied manually again (you might need to resolve conflicts because of source changes).
+      If local changes are detected, the installer will abort on silent install. You can re-run the update-process without the `-s` flag and confirm backing up your local changes for update.
     - mention to clear Browser Cache on Update
   - enable-usb-sync.sh
     - Disable reboot for silent mode (fixes [Issue #450](https://github.com/andi34/photobooth/issues/450))
@@ -540,9 +540,9 @@ old Releases etc. will still be available at [https://github.com/andi34/photoboo
 ## 3.3.0 (16.01.2022)
 
 **Breaking changes**
-  - If you are using an older version of Rasperry Pi OS or Debian / Debian based distribution make sure Node.js v12.22.x is installed!  
-    Check your Node.js version while running `node -v` from your terminal.  
-  - (config) Switch from milliseconds to seconds the image is visible on result screen  
+  - If you are using an older version of Rasperry Pi OS or Debian / Debian based distribution make sure Node.js v12.22.x is installed!
+    Check your Node.js version while running `node -v` from your terminal.
+  - (config) Switch from milliseconds to seconds the image is visible on result screen
     _Please adjust your configuration if you've changed the default setting on previous version. If you've not changed the default setting there's nothing to do._
   - vendor: phpqrcode as submodule
   - config: Webserver IP should not contain subfolder/subpages, IP should be detected if not defined. QR now needs it's own URL defined (see new Options).
@@ -652,14 +652,14 @@ sudo bash enable-usb-sync.sh
 **General**
 - Updated build dependencies
 - Collage: Always show image after taken [#271](https://github.com/andi34/photobooth/pull/271), partially [#290](https://github.com/andi34/photobooth/pull/290)
-- Debug Panel [#275](https://github.com/andi34/photobooth/pull/27) and better logging on issues while taking a picture [#277](https://github.com/andi34/photobooth/pull/277) and post-processing (partially [#290](https://github.com/andi34/photobooth/pull/290)):  
-  Implements a panel for to help debugging in case of issues. Focus is to be able to access through the browser key configuration and log files on the server side.  
-  This feature is  
-  1) for fast and efficient debugging iterations  
-  and  
-  2) also well positioned to help people with less experience on the server administration and Unix / Raspberry Pi OS side of things.  
+- Debug Panel [#275](https://github.com/andi34/photobooth/pull/27) and better logging on issues while taking a picture [#277](https://github.com/andi34/photobooth/pull/277) and post-processing (partially [#290](https://github.com/andi34/photobooth/pull/290)):
+  Implements a panel for to help debugging in case of issues. Focus is to be able to access through the browser key configuration and log files on the server side.
+  This feature is
+  1) for fast and efficient debugging iterations
+  and
+  2) also well positioned to help people with less experience on the server administration and Unix / Raspberry Pi OS side of things.
 
-  Access to the debug panel is available through the admin panel (switch to expert view) or via direct URL [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php).  
+  Access to the debug panel is available through the admin panel (switch to expert view) or via direct URL [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php).
 - Removed unneeded file-type checks all around the Photobooth api (we check for jpeg images already inside the api/applyEffects.php)
 - result screen: smaller QR code & smaller font-size
 
@@ -698,10 +698,10 @@ sudo bash enable-usb-sync.sh
 <hr>
 
 ## 3.0.0
-A lot of changes have been applied to Photobooth! We're proud to tell that some bugs have been fixed and a lot of user wishes could be realized!  
-We have added a lot of new options to make Photobooth adjustable for much more use cases.  
-A big thanks goes to [jacques42@GitHub](https://github.com/jacques42) (who was involved a lot for this Release) and everyone who helped on making Photobooth this powerfull!  
-Photobooth UI has changed to a modern look on most pages and our Admin panel and configuration setup has changed completely (please read the following Changelog).  
+A lot of changes have been applied to Photobooth! We're proud to tell that some bugs have been fixed and a lot of user wishes could be realized!
+We have added a lot of new options to make Photobooth adjustable for much more use cases.
+A big thanks goes to [jacques42@GitHub](https://github.com/jacques42) (who was involved a lot for this Release) and everyone who helped on making Photobooth this powerfull!
+Photobooth UI has changed to a modern look on most pages and our Admin panel and configuration setup has changed completely (please read the following Changelog).
 
 **Breaking changes**
 - The configuration setup has changed completely on Photobooth v3 and some config options have been removed!
@@ -792,7 +792,7 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
 - Robustness and improvements:
   - don't use relative paths for font, frames and background images
   - folders are always part of data folder (besides data folder itself and archives folder)
-    - e.g. images folder config before: `data/images`  
+    - e.g. images folder config before: `data/images`
       now: `images` (this will also point to `data/images`)
   - use 100% picture quality while processing images to not lower given configured jpeg quality for the final image
 - Authentication:
@@ -900,9 +900,9 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
 - run `yarn eslint` once changes to our JavaScripts get pushed to GitHub or if a Pullrequest contains changes on them
 - run `gulp sass` once changes to our SCSS files get pushed to GitHub or if a Pullrequest contains changes on them
 
-**New build pipeline and improved JavaScript**  
+**New build pipeline and improved JavaScript**
 (special thanks to [Andreas Remdt](https://github.com/andreasremdt)) [#90](https://github.com/andi34/photobooth/pull/90)
-  
+
 
 - added Prettier to have consistent formatting for both JavaScript & SCSS
 - Support older browser (should fix [Issue #47](https://github.com/andi34/photobooth/issues/47))

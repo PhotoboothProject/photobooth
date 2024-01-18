@@ -6,4 +6,3 @@
 ## [Enable PHP in nginx](install-nginx.md)
 ## [Enable PHP in Lighttpd](install-lighttpd.md)
 ## [Install on Windows](install-windows.md)
-
