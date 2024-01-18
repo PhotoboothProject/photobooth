@@ -1,3 +1,4 @@
+---
 name: Build
 
 on:
@@ -15,10 +16,15 @@ jobs:
   build:
     strategy:
       matrix:
-        php: ['8.2']
-        node: [18]
-        python: [3.11]
-        os: [ubuntu-latest, macos-latest]
+        php:
+          - '8.2'
+        node:
+          - 18
+        python:
+          - 3.11
+        os:
+          - ubuntu-latest
+          - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository and submodules
@@ -58,7 +64,7 @@ jobs:
         run: composer phpunit
 
       - name: Status
-        run: |
+        run: |-
           git status
           git diff
           git status | grep -q "nothing to commit, working tree clean"

@@ -1,0 +1,37 @@
+---
+name: Installer Tests
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  check-install-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+      - uses: pre-commit/action@v3.0.0
+  run-install-script:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        checks:
+          - sudo ./install-photobooth.sh --username="$(whoami)" --silent
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install
+        run: ${{ matrix.checks }}
+
+      - name: Check welcome page
+        run: curl --fail-with-body http://localhost/welcome/

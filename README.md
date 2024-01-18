@@ -197,4 +197,3 @@ Thanks for reading!
 - [Mathias Fiege](https://www.webpension.de/)
 - [Guillaume Roure](https://github.com/Ippephyx)
 - [Francesco Miccolis](https://github.com/fmiccolis)
-

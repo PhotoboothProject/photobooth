@@ -6,10 +6,7 @@
         "jquery": true,
         "node": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:n/recommended"
-    ],
+    "extends": ["eslint:recommended", "plugin:n/recommended"],
     "globals": {
         "config": true,
         "PhotoSwipe": true,
@@ -19,7 +16,11 @@
         "ecmaVersion": 2018
     },
     "rules": {
+        "n/no-unpublished-require": "off",
+        "n/no-unpublished-import": "off",
         "n/no-process-exit": "off",
+        "n/no-missing-import": "off",
+        "n/no-missing-require": "off",
         "curly": "error",
         "default-case": "error",
         "dot-notation": "error",
@@ -29,10 +30,10 @@
         "no-caller": "error",
         "no-debugger": "error",
         "no-empty": "error",
-        "no-empty-function": ["error",
+        "no-empty-function": [
+            "error",
             {
-            "allow": ["constructors"
-                ]
+                "allow": ["constructors"]
             }
         ],
         "no-eval": "error",
@@ -42,14 +43,8 @@
         "no-multi-spaces": "error",
         "no-var": "error",
         "no-case-declarations": "off",
-        "object-curly-spacing": [
-            "error",
-            "always"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
+        "object-curly-spacing": ["error", "always"],
+        "quotes": ["error", "single"],
         "radix": "error",
         "semi": "off",
         "space-infix-ops": "error"

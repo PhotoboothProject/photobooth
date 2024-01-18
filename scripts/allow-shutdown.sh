@@ -20,4 +20,3 @@ cat > /etc/sudoers.d/020_www-data-shutdown << EOF
 # Photobooth Remotebuzzer shutdown button for www-data to shutdown the system
 www-data ALL=(ALL) NOPASSWD: /sbin/shutdown
 EOF
-
