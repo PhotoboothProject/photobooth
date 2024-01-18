@@ -18,12 +18,12 @@ Change the `15-fastcgi-php.conf` from
 # http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
 
 ## Start an FastCGI server for php (needs the php5-cgi package)
-fastcgi.server += ( ".php" => 
+fastcgi.server += ( ".php" =>
 	((
 		"bin-path" => "/usr/bin/php-cgi",
 		"socket" => "/var/run/lighttpd/php.socket",
 		"max-procs" => 1,
-		"bin-environment" => ( 
+		"bin-environment" => (
 			"PHP_FCGI_CHILDREN" => "4",
 			"PHP_FCGI_MAX_REQUESTS" => "10000"
 		),
@@ -42,7 +42,7 @@ to look like this:
 # http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
 
 ## Start an FastCGI server for php (needs the php5-cgi package)
-fastcgi.server += ( ".php" => 
+fastcgi.server += ( ".php" =>
 	((
 		"socket" => "/var/run/php/php8.2-fpm.sock",
 		"broken-scriptfilename" => "enable"
@@ -54,4 +54,3 @@ Now reload the service:
 ```sh
 sudo service lighttpd force-reload
 ```
-

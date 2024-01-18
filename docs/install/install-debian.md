@@ -168,4 +168,3 @@ gio mount -u gphoto2://YOUR-CAMERA
 Now try again.
 
 If everything is working, open the IP address (you get it via `ip addr`) of your Raspberry Pi, or if you open it on your machine, type [http://localhost](http://localhost) in your browser.
-

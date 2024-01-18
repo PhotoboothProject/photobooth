@@ -59,4 +59,3 @@ then it is time to restart the server with:
 ```sh
 sudo systemctl reload nginx
 ```
-

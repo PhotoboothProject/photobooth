@@ -262,7 +262,7 @@ GPIO sysfs Pi 3/4    | GPIO sysfs Pi5   |  PIN
  1 (ID_SC)           | 400              | PIN 28
  2                   | 401              | PIN  3
  3                   | 402              | PIN  5
- 4                   | 403              | PIN  7 
+ 4                   | 403              | PIN  7
  5                   | 404              | PIN 29
  6                   | 405              | PIN 31
  7                   | 406              | PIN 26

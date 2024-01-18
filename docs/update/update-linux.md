@@ -1,6 +1,6 @@
 # Updating Photobooth on Linux
 
-Node.js **must** be installed in v18. Currently only v16 is tested. Our installer will check your Node.js version and suggest an update/downgrade if needed.  
+Node.js **must** be installed in v18. Currently only v16 is tested. Our installer will check your Node.js version and suggest an update/downgrade if needed.
 Update will fail if Node.js is installed in a version below v16!
 
 
@@ -12,12 +12,12 @@ To update from an old version to latest Photobooth it's recommend to [make a cle
 
 **Note:** You must have the git-version of Photobooth installed.
 
-First, make sure there's no old installer available:  
+First, make sure there's no old installer available:
 ```
 rm -f install-photobooth.sh
 ```
 
-To update an existing Photobooth-Installation via git, run below commands in your terminal. A valid OS username must be passed to the installer:  
+To update an existing Photobooth-Installation via git, run below commands in your terminal. A valid OS username must be passed to the installer:
 ```
 wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
 sudo bash install-photobooth.sh --update --username='<YourUsername>'
@@ -25,7 +25,7 @@ sudo bash install-photobooth.sh --update --username='<YourUsername>'
 
 **Special note:**
 
-If you have accessed Photobooth earlier from your Browser,  
+If you have accessed Photobooth earlier from your Browser,
 please clear your Browsers Cache once to avoid graphical glitches or being unable to save config changes using the Adminpanel.
 
 **Troubleshooting**

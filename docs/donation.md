@@ -5,4 +5,3 @@ If you like our work and consider a donation, we have to tell you that we don't 
 If you still want to donate money to make us happy: consider a donation to the [seal station Norddeich](https://seehundstation-norddeich.de) ([donate via Paypal](https://paypal.me/seehundstation)).
 
 Thanks for reading!
-
