@@ -52,6 +52,7 @@ function createArchive(fileName, archive) {
     archive.directory('api');
     archive.directory('bin');
     archive.directory('chroma');
+    archive.directory('docs');
     archive.directory('gallery');
     archive.directory('lib');
     archive.directory('login');
@@ -66,7 +67,6 @@ function createArchive(fileName, archive) {
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
     archive.file('faq/index.php');
-    archive.file('faq/faq.md');
     archive.file('HEAD');
     archive.file('composer.json');
     archive.file('index.php');
