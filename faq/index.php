@@ -42,6 +42,6 @@ $assetService = AssetService::getInstance();
     <link rel="stylesheet" type="text/css" href="<?=$assetService->getUrl('node_modules/github-markdown-css/github-markdown.css')?>">
 </head>
 <body class="markdown-body" style="padding: 5rem;">
-    <?php echo MarkdownUtility::render('faq/faq.md'); ?>
+    <?php echo MarkdownUtility::render('docs/faq/index.md'); ?>
 </body>
 </html>
