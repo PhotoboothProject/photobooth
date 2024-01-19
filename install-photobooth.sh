@@ -1079,6 +1079,23 @@ if [ "$RUN_UPDATE" = true ]; then
         else
             info "### Browser unknown or not installed. Can not add shortcut to Desktop."
         fi
+
+        if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
+            # clean old files
+            info "### Old ffmpeg-webcam.service detected. Uninstalling..."
+            systemctl disable --now ffmpeg-webcam.service
+            rm /etc/systemd/system/ffmpeg-webcam.service
+            systemctl daemon-reload
+            if [[ -f /usr/ffmpeg-webcam.sh ]]; then
+                info "### Also removing the /usr/ffmpeg-webcam.sh file"
+                rm /usr/ffmpeg-webcam.sh
+            fi
+
+            # install via new method
+            info "### Installing new modprobe config"
+            gphoto_preview
+        fi
+
         print_spaces
         print_logo
         info "###"
