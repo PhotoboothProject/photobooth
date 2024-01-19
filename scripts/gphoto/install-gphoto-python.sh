@@ -36,7 +36,8 @@ info ""
 echo "Your options are:"
 echo "1 Install gphoto2 webcam"
 echo "2 Remove gphoto2 webcam"
-echo "3 Nothing"
+echo "3 Migrate from systemd service to modprobe config"
+echo "4 Nothing"
 info ""
 ask_yes_no "Please enter your choice" "3"
 info ""
@@ -74,6 +75,26 @@ elif [[ $REPLY =~ ^[2]$ ]]; then
     [[ -f /etc/modprobe.d/v4l2loopback.conf ]] && rm /etc/modprobe.d/v4l2loopback.conf
     rmmod v4l2loopback || true
     info "gphoto2 webcam removed..."
+elif [[ $REPLY =~ ^[3]$ ]]; then
+    info "### Migrating to modprobe config"
+    if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
+        # clean old files
+        info "### Old ffmpeg-webcam.service detected. Uninstalling..."
+        systemctl disable --now ffmpeg-webcam.service
+        rm /etc/systemd/system/ffmpeg-webcam.service
+        systemctl daemon-reload
+        if [[ -f /usr/ffmpeg-webcam.sh ]]; then
+            info "### Also removing the /usr/ffmpeg-webcam.sh file"
+            rm /usr/ffmpeg-webcam.sh
+        fi
+
+        # install via new method
+        info "### Installing new modprobe config"
+        gphoto_preview
+    else
+        info "### You seem to already be migrated"
+        exit 1
+    fi
 else
     info "Okay... doing nothing!"
 fi
