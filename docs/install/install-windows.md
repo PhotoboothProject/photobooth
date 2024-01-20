@@ -174,7 +174,7 @@ Go to `C:\php` and rename the `php.ini-production` to `php.ini`.
 
 Edit the `php.ini` using **Notepad++** to enable the GD library:
 Find `;extension=fileinfo` and remove the `;` in front of the line.
-Find `;extension=gd2` and remove the `;` in front of the line.
+Find `;extension=gd` and remove the `;` in front of the line.
 Find `;extension=mbstring` and remove the `;` in front of the line.
 Find `;extension_dir = "ext"` and remove the `;` in front of the
 line and change it to `extension_dir = "C:/php/ext"`.
