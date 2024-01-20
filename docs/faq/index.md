@@ -202,6 +202,19 @@ Choice: 1 Memory card
 
 ---
 
+## My external flash is not working after using the live preview
+
+The reason for this might be that the camera is still in PC mode.
+
+Try setting the output setting to `Off` in your capture command,
+for example like this:
+
+```bash
+gphoto2 --set-config output=Off --capture-image-and-download
+```
+
+---
+
 ## Cromakeying is saving without finishing saving
 
 Checking the browser console you'll see a `413 Request Entity Too Large` error. To fix that you'll have to update your nginx.conf
