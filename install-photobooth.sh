@@ -893,6 +893,9 @@ function cups_setup() {
 
 gphoto_preview() {
     # make configs persistent
+    [[ ! -d /etc/modules-load.d ]] && mkdir /etc/modules-load.d
+    echo v4l2loopback >/etc/modules-load.d/v4l2loopback.conf
+
     [[ ! -d /etc/modprobe.d ]] && mkdir /etc/modprobe.d
     cat >/etc/modprobe.d/v4l2loopback.conf <<EOF
 options v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
