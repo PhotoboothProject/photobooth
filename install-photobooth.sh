@@ -500,7 +500,6 @@ function common_software() {
 function apache_webserver() {
     info "### Installing Apache Webserver..."
     apt-get -qq install -y apache2 libapache2-mod-php
-    sed -i 's@^Listen 80@Listen 127.0.0.1:80@g' /etc/apache2/ports.conf
     sudo systemctl enable --now apache2
 }
 
