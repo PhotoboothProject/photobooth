@@ -29,6 +29,21 @@ function ask_yes_no {
     read -p "${1}: " -n 1 -r
 }
 
+function gphoto_preview() {
+    # make configs persistent
+    [[ ! -d /etc/modules-load.d ]] && mkdir /etc/modules-load.d
+    echo v4l2loopback >/etc/modules-load.d/v4l2loopback.conf
+
+    [[ ! -d /etc/modprobe.d ]] && mkdir /etc/modprobe.d
+    cat >/etc/modprobe.d/v4l2loopback.conf <<EOF
+options v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
+blacklist bcm2835-isp
+EOF
+    # adjust current runtime
+    modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
+    rmmod bcm2835-isp || true
+}
+
 info "This script installs some dependencies and simplifies the setup for using gphoto2 as webcam."
 info "It installs required dependencies and sets up a virtual webcam that gphoto2 can stream video to."
 info "It can remove the gphoto2 webcam setup, as well."
@@ -77,8 +92,9 @@ elif [[ $REPLY =~ ^[2]$ ]]; then
     info "gphoto2 webcam removed..."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### Migrating to modprobe config"
+    gphoto_preview
+
     if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
-        # clean old files
         info "### Old ffmpeg-webcam.service detected. Uninstalling..."
         systemctl disable --now ffmpeg-webcam.service
         rm /etc/systemd/system/ffmpeg-webcam.service
@@ -87,13 +103,6 @@ elif [[ $REPLY =~ ^[3]$ ]]; then
             info "### Also removing the /usr/ffmpeg-webcam.sh file"
             rm /usr/ffmpeg-webcam.sh
         fi
-
-        # install via new method
-        info "### Installing new modprobe config"
-        gphoto_preview
-    else
-        info "### You seem to already be migrated"
-        exit 1
     fi
 else
     info "Okay... doing nothing!"
