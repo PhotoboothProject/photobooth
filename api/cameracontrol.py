@@ -129,8 +129,7 @@ class CameraControl:
                     count = setting.count_choices()
                     if int_value < 0 or int_value >= count:
                         log.error("Parameter out of range")
-                        self.exit_gracefully()
-                        sys.exit(1)
+                        self.exit_gracefully(rc=1)
                     choice = setting.get_choice(int_value)
                     setting.set_value(choice)
                 except ValueError:
@@ -145,14 +144,12 @@ class CameraControl:
                 log.error(
                     "Unhandled setting type %s for %s=%s" % (setting_type, name, value)
                 )
-                self.exit_gracefully()
-                sys.exit(1)
+                self.exit_gracefully(rc=1)
             self.camera.set_config(config)
             log.info("Config set %s=%s" % (name, value))
         except gp.GPhoto2Error or ValueError:
             log.error("Config error for %s=%s" % (name, value))
-            self.exit_gracefully()
-            sys.exit(1)
+            self.exit_gracefully(rc=1)
 
     def disable_video(self):
         """
@@ -171,7 +168,6 @@ class CameraControl:
         if args.exit:
             self.socket.send_string("Exiting service!")
             self.exit_gracefully()
-            sys.exit(0)
         video_settings_were_updated = self.handle_chroma_params(args)
         video_settings_were_updated = (
             video_settings_were_updated or self.handle_video_params(args)
@@ -428,7 +424,7 @@ class CameraControl:
 
         return 0
 
-    def exit_gracefully(self, *_):
+    def exit_gracefully(self, *_, rc=0):
         """
         Close the camera connection gracefully
         """
@@ -439,6 +435,7 @@ class CameraControl:
                 self.disable_video()
                 self.camera.exit()
                 log.info("Closed camera connection")
+        sys.exit(rc)
 
     @staticmethod
     def update_config(config: dict[str, Any]) -> int:
@@ -610,9 +607,6 @@ def main():
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.ERROR)
-
-    # send gphoto2 logs to python
-    _ = gp.check_result(gp.use_python_logging())
 
     if check_port(5555):
         return CameraControl.update_config(vars(args))
