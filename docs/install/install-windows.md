@@ -17,10 +17,10 @@ and has [many open issues](https://github.com/dukus/digiCamControl/issues).
 
 The first methods covers the following steps:
 
-- Activating the windows subsystem for linux
-- Installing the required additional tools
-- Configuring windows to automatically start
-- Installing photobooth in the subsystem
+-   Activating the windows subsystem for linux
+-   Installing the required additional tools
+-   Configuring windows to automatically start
+-   Installing photobooth in the subsystem
 
 ### Step 1: Activating the windows subsystem for linux
 
@@ -98,7 +98,7 @@ sudo bash install-photobooth.sh --username='<YourUsername>' --mjpeg --silent
 Now open the [admin section](http://localhost/admin) and
 set this as the live preview url:
 
-> [http://localhost:1984/stream.html?src=dslr&mode=mjpeg](http://localhost:1984/stream.html?src=dslr&mode=mjpeg)
+> [url(http://localhost:1984/stream.html?src=dslr&mode=mjpeg)](http://localhost:1984/stream.html?src=dslr&mode=mjpeg)
 
 and this as capture command: `capture %s`.
 
@@ -106,19 +106,19 @@ and this as capture command: `capture %s`.
 
 ### Download needed files
 
-- Download Apache2 and Visual C++ Redistributable for Visual Studio: [https://www.apachelounge.com/download](https://www.apachelounge.com/download)
-- Download PHP 8.2 (Thread Safe): [https://windows.php.net/download](https://windows.php.net/download)
-- Download Digicamcontrol: [http://digicamcontrol.com/download](http://digicamcontrol.com/download)
-- Download Notepad++: [https://notepad-plus-plus.org/downloads](https://notepad-plus-plus.org/downloads)
-- Download latest Photobooth release (_photobooth-4.x.x.zip_ or _photobooth-4.x.x.tar.gz_
-  **Note:** the _Source code_ files won't work!): [https://github.com/PhotoboothProject/photobooth/releases](https://github.com/PhotoboothProject/photobooth/releases)
+-   Download Apache2 and Visual C++ Redistributable for Visual Studio: [https://www.apachelounge.com/download](https://www.apachelounge.com/download)
+-   Download PHP 8.2 (Thread Safe): [https://windows.php.net/download](https://windows.php.net/download)
+-   Download Digicamcontrol: [http://digicamcontrol.com/download](http://digicamcontrol.com/download)
+-   Download Notepad++: [https://notepad-plus-plus.org/downloads](https://notepad-plus-plus.org/downloads)
+-   Download latest Photobooth release (_photobooth-4.x.x.zip_ or _photobooth-4.x.x.tar.gz_
+    **Note:** the _Source code_ files won't work!): [https://github.com/PhotoboothProject/photobooth/releases](https://github.com/PhotoboothProject/photobooth/releases)
 
 ### Install & extract needed Software
 
-- Install Notepad++
-- Install Visual C++ Redistributable for Visual Studio
-- Extract the Apache2 ZIP (_httpd-2.4.X-winXX-XXXX.zip_) to C:/
-- Extract the PHP ZIP to C:/php
+-   Install Notepad++
+-   Install Visual C++ Redistributable for Visual Studio
+-   Extract the Apache2 ZIP (_httpd-2.4.X-winXX-XXXX.zip_) to C:/
+-   Extract the PHP ZIP to C:/php
 
 ### Prepare Apache HTTP Server
 
