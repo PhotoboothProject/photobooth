@@ -28,6 +28,7 @@ CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Trans
 AUTOSTART_FILE=""
 DESKTOP_OS=true
 PHP_VERSION="8.2"
+GO2RTC_VERSION="v1.8.6-4"
 
 # Update
 RUN_UPDATE=false
@@ -907,21 +908,61 @@ EOF
 }
 
 function mjpeg_preview() {
-    info "### Installing go2rtc (streaming software)"
-    # NOTE: if https://github.com/AlexxIT/go2rtc/pull/871 is merged, use the official version
-    # my version is x86_64 only, so raspberry pi is not supported yet
+    local arch
+    local goarch
+    local os
+    local file
 
-    if [[ ! -d /usr/local/bin ]]; then
-        mkdir -p /usr/local/bin
+    if ! command -v go2rtc &>/dev/null || [[ ! $(go2rtc -version) =~ $GO2RTC_VERSION ]]; then
+        info "### Installing go2rtc (version: ${GO2RTC_VERSION})"
+
+        if [[ "$OSTYPE" =~ linux ]]; then
+            os=linux
+        elif [[ "$OSTYPE" =~ darwin ]]; then
+            os=darwin
+        elif [[ "$OSTYPE" =~ cygwin|mysys|win32 ]]; then
+            os=windows
+        else
+            error "### $OSTYPE not supported"
+            exit 1
+        fi
+
+        arch=$(uname -m)
+        if [[ "$arch" == "x86_64" ]]; then
+            goarch="amd64"
+        elif [[ "$arch" == "i386" ]]; then
+            goarch="386"
+        elif [[ "$arch" == "armv7l" ]]; then
+            goarch="arm"
+        elif [[ "$arch" == "aarch64" ]]; then
+            goarch="arm64"
+        else
+            error "### $arch not supported"
+            exit 1
+        fi
+
+        if [[ ! -d /usr/local/bin ]]; then
+            mkdir -p /usr/local/bin
+        fi
+        file="go2rtc_${os}_${goarch}.tar.gz"
+        wget -P /tmp "https://github.com/dadav/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
+        tar xf "/tmp/${file}" -C /usr/local/bin go2rtc
+        rm /tmp/"$file"
+        chmod +x /usr/local/bin/go2rtc
     fi
-    wget -O /usr/local/bin/go2rtc "https://github.com/dadav/go2rtc/releases/download/1.8.6-2/go2rtc"
-    chmod +x /usr/local/bin/go2rtc
-    cat >/etc/go2rtc.yaml <<EOF
+
+    if [[ ! -f /etc/go2rtc.yaml ]]; then
+        info "### Creating /etc/go2rtc.yaml configuration file"
+        cat >/etc/go2rtc.yaml <<EOF
 ---
 streams:
   dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint
 EOF
-    cat >/etc/systemd/system/go2rtc.service <<EOF
+    fi
+
+    if [[ ! -f /etc/systemd/system/go2rtc.service ]]; then
+        info "### Creating go2rtc systemd service"
+        cat >/etc/systemd/system/go2rtc.service <<EOF
 [Unit]
 Description=go2rtc streaming software
 
@@ -934,22 +975,50 @@ KillSignal=SIGINT
 [Install]
 WantedBy=multi-user.target
 EOF
-    systemctl daemon-reload
-    systemctl enable --now go2rtc.service
+        systemctl daemon-reload
+        systemctl enable --now go2rtc.service
+    fi
 
-    cat >/etc/sudoers.d/020_www-data-systemctl <<EOF
+    if [[ ! -f /etc/sudoers.d/020_www-data-systemctl ]]; then
+        info "### Creating /etc/sudoers.d/020_www-data-systemctl"
+        cat >/etc/sudoers.d/020_www-data-systemctl <<EOF
 # Control streaming software
 www-data ALL=(ALL) NOPASSWD: /usr/bin/systemctl start go2rtc.service, /usr/bin/systemctl stop go2rtc.service
 EOF
+    fi
 
-    cat >/usr/local/bin/capture <<EOF
+    if [[ ! -f /usr/local/bin/capture ]]; then
+        info "### Creating /usr/local/bin/capture script"
+        cat >/usr/local/bin/capture <<EOF
 #!/bin/bash
 
+if [[ \$1 =~ -h|--help ]]; then
+  cat <<HELP
+This script stops go2rtc, runs gphoto2 and starts go2rtc again.
+You can use it in your photobooth as capture command.
+
+Usage:
+
+    capture <filename> [gphoto2 arguments]
+
+HELP
+  exit 0
+fi
+
+file="\$1"
+shift
+args="--set-config output=Off --capture-image-and-download --filename=\$file"
+
+if [[ \$# -gt 0 ]]; then
+    args="--filename=\${file} \$@"
+fi
+
 sudo systemctl stop go2rtc.service
-gphoto2 --set-config output=Off --capture-image-and-download --filename="\$1"
+gphoto2 \$args
 sudo systemctl start go2rtc.service
 EOF
-    chmod +x /usr/local/bin/capture
+        chmod +x /usr/local/bin/capture
+    fi
 }
 
 function fix_git_modules() {
@@ -1150,6 +1219,11 @@ if [ "$RUN_UPDATE" = true ]; then
             # install via new method
             info "### Installing new modprobe config"
             gphoto_preview
+        fi
+
+        if command -v go2rtc &>/dev/null; then
+            info "### Installation of go2rtc detected. Checking for updates..."
+            mjpeg_preview
         fi
 
         print_spaces
