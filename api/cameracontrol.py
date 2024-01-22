@@ -16,7 +16,8 @@ import sys
 import time
 import zmq
 import socket
-from typing import Any
+import re
+from typing import Any, List
 from argparse import Namespace
 from subprocess import Popen, PIPE
 from datetime import datetime, timedelta
@@ -34,6 +35,51 @@ class CouldNotConnectException(Exception):
 
 class DeviceNotFoundException(Exception):
     pass
+
+
+def create_virtual_camera(video_nr=9):
+    """
+    Create a device and return device path
+
+    raises subprocess.CalledProcessError if not working
+    """
+
+    subprocess.run(
+        f'modprobe v4l2loopback video_nr={video_nr} card_label="Gphoto2 Webcam" exclusive_caps=1',
+        shell=True,
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    return f"/dev/video{video_nr}"
+
+
+def get_v4l2_devices() -> List[str]:
+    """
+    Detects v4l2 and returns them as a list of strings
+    """
+    devices = []
+
+    try:
+        output = subprocess.run(
+            "v4l2-ctl --list-devices",
+            capture_output=True,
+            shell=True,
+            check=True,
+            text=True,
+        )
+        for dev in re.findall(
+            r"platform:v4l2loopback-\d\d\d\):\n\s*([^\n]+)",
+            output.stdout,
+            re.M,
+        ):
+            devices.append(dev)
+
+    except subprocess.CalledProcessError as e:
+        log.error(e)
+
+    return devices
 
 
 class CameraControl:
@@ -490,8 +536,10 @@ def main():
         "-d",
         "--device",
         nargs="?",
-        default="/dev/video0",
-        help="virtual device the ffmpeg stream is sent to",
+        help=(
+            "virtual device the ffmpeg stream is sent to,"
+            "if nothing is given it will be autodetected."
+        ),
     )
     parser.add_argument(
         "-s",
@@ -607,6 +655,24 @@ def main():
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.ERROR)
+
+    if not args.device:
+        log.info("Not device set, try to autodetect")
+        v4l2_devices = get_v4l2_devices()
+        if len(v4l2_devices) > 1:
+            log.info("Found multiple devices, selecting the first one.")
+        if v4l2_devices:
+            args.device = v4l2_devices[0]
+            log.info("Device set to %s", args.device)
+        else:
+            log.error("Could not autodetect virtual camera. Trying to create one...")
+            try:
+                args.device = create_virtual_camera(video_nr=9)
+                log.info("Virtual camera created: %s", args.device)
+            except subprocess.CalledProcessError as e:
+                log.error(e)
+                log.info("Falling back to old default /dev/video0")
+                args.device = "/dev/video0"
 
     if check_port(5555):
         return CameraControl.update_config(vars(args))
