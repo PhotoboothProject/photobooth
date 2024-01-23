@@ -37,6 +37,10 @@ class DeviceNotFoundException(Exception):
     pass
 
 
+class UnsupportedConfigException(Exception):
+    pass
+
+
 def create_virtual_camera(video_nr=9):
     """
     Create a device and return device path
@@ -134,9 +138,13 @@ class CameraControl:
         """
         Capture an image and save it to `path`
         """
-        # be sure the output mode is not set to PC
-        # otherwise the flash is not triggered
-        self.set_config("output", "Off")
+
+        try:
+            # be sure the output mode is not set to PC
+            # otherwise the flash is not triggered
+            self.set_config("output", "Off")
+        except UnsupportedConfigException as e:
+            log.error(e)
 
         log.info("Capturing image")
         file_path = self.camera.capture(gp.GP_CAPTURE_IMAGE)
@@ -157,10 +165,26 @@ class CameraControl:
         setting = config.get_child_by_name(name)
         print("%s=%s" % (name, setting.get_value()))
 
+    def check_config_support(self, name: str):
+        """
+        Checks if the given config param is supported by the connected camera
+
+        Returns a boolean value
+        """
+        config = self.camera.get_config()
+        OK, _ = gp.gp_widget_get_child_by_name(config, name)
+        return OK >= gp.GP_OK
+
     def set_config(self, name, value):
         """
         Set a new config value
+
+        May raises UnsupportedConfigException
         """
+
+        if not self.check_config_support(name):
+            raise UnsupportedConfigException(f"The parameter {name} is not supported")
+
         try:
             config = self.camera.get_config()
             setting = config.get_child_by_name(name)
@@ -203,7 +227,12 @@ class CameraControl:
         """
         self.bsm_stopTime = None
         self.showVideo = False
-        self.set_config("viewfinder", 0)
+
+        try:
+            self.set_config("viewfinder", 0)
+        except UnsupportedConfigException as e:
+            log.error(e)
+
         log.info("Video disabled")
 
     def handle_message(self, message):
@@ -656,24 +685,6 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.ERROR)
 
-    if not args.device:
-        log.info("Not device set, try to autodetect")
-        v4l2_devices = get_v4l2_devices()
-        if len(v4l2_devices) > 1:
-            log.info("Found multiple devices, selecting the first one.")
-        if v4l2_devices:
-            args.device = v4l2_devices[0]
-            log.info("Device set to %s", args.device)
-        else:
-            log.error("Could not autodetect virtual camera. Trying to create one...")
-            try:
-                args.device = create_virtual_camera(video_nr=9)
-                log.info("Virtual camera created: %s", args.device)
-            except subprocess.CalledProcessError as e:
-                log.error(e)
-                log.info("Falling back to old default /dev/video0")
-                args.device = "/dev/video0"
-
     if check_port(5555):
         return CameraControl.update_config(vars(args))
     else:
@@ -692,6 +703,22 @@ def main():
                 log.error("An error occured: %s" % e)
                 return 1
         else:
+            if not args.device:
+                log.info("Not device set, try to autodetect")
+                v4l2_devices = get_v4l2_devices()
+                if len(v4l2_devices) > 1:
+                    log.info("Found multiple devices, selecting the first one.")
+                if v4l2_devices:
+                    args.device = v4l2_devices[0]
+                    log.info("Device set to %s", args.device)
+                else:
+                    log.error("Could not autodetect virtual camera.")
+                    try:
+                        args.device = create_virtual_camera(video_nr=9)
+                        log.info("Virtual camera created: %s", args.device)
+                    except subprocess.CalledProcessError as e:
+                        log.error(e)
+                        return 1
             return cam.daemon()
 
 
