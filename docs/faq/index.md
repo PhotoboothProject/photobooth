@@ -741,6 +741,17 @@ sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
 
 Now again check if everything is fine (`v4l2-ctl --list-devices`).
 
+If you having problems with this version (`v0.12.7`), especially if you see these errors:
+
+```bash
+[video4linux2,v4l2 @ 0x641d7f294f00] ioctl(VIDIOC_G_FMT): Invalid argument
+[out#0/video4linux2,v4l2 @ 0x641d7f287e00] Could not write header (incorrect codec parameters ?): Invalid argument
+Error while filtering: Invalid argument
+[out#0/video4linux2,v4l2 @ 0x641d7f287e00] Nothing was written into output file, because at least one of its streams received no packets.
+```
+
+Then please try using version `v0.12.5` or even the latest (untagged) version of the github repo.
+
 Another problem could be, that your system has `secure boot` enabled.
 Disable `secure boot` in the BIOS and try again.
 
