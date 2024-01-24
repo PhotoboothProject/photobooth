@@ -209,7 +209,7 @@ Next you need to extract the Photobooth Release-ZIP to `C:\Apache24\htdocs\`.
 Open [http://localhost/admin](http://localhost/admin) in your Browser and adjust
 your "_take picture command_" (inside the "_Commands_" section):
 
-> > > > > > > `C:\Apache24\htdocs\digicamcontrol\CameraControlCmd.exe /capture /filename %s`
+`C:\Apache24\htdocs\digicamcontrol\CameraControlCmd.exe /capture /filename %s`
 
 ## Enjoy
 
