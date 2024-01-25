@@ -16,6 +16,8 @@ PHOTOBOOTH_TMP_LOG="/tmp/$DATE-photobooth.txt"
 BRANCH="dev"
 GIT_INSTALL=true
 SUBFOLDER=true
+KIOSK_MODE=false
+HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
 GPHOTO_PREVIEW=true
@@ -27,6 +29,7 @@ CHROME_FLAGS=false
 CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
 DESKTOP_OS=true
+WAYLAND_ENV=true
 PHP_VERSION="8.2"
 GO2RTC_VERSION="v1.8.6-4"
 
@@ -713,7 +716,11 @@ function detect_browser() {
 function browser_shortcut() {
     if [ "$CHROME_FLAGS" = true ]; then
         if [ "$RUNNING_ON_PI" = true ]; then
-            EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS --use-gl=egl"
+            if [ "$WAYLAND_ENV" = true ]; then
+                EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS --ozone-platform=wayland --start-maximized"
+            else
+                EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS --use-gl=egl"
+            fi
         else
             EXTRA_FLAGS="$CHROME_DEFAULT_FLAGS"
         fi
@@ -756,6 +763,36 @@ function browser_desktop_shortcut() {
 function browser_autostart() {
     AUTOSTART_FILE="/etc/xdg/autostart/photobooth.desktop"
     browser_shortcut
+}
+
+function ask_kiosk_mode() {
+    echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
+    ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        KIOSK_MODE=true
+        info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
+    else
+        KIOSK_MODE=false
+        info "### We won't open $WEBBROWSER in Kiosk Mode at every boot."
+    fi
+}
+
+function ask_hide_mouse() {
+    echo -e "\033[0;33m### You probably like hide the mouse cursor on every start."
+    ask_yes_no "### Hide the mouse cursor? [y/N] " "Y"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        HIDE_MOUSE=true
+        if [ "$WAYLAND_ENV" = false ]; then
+            EXTRA_PACKAGES+=('unclutter')
+        fi
+        info "### We will hide the mouse cursor on every start."
+    else
+        HIDE_MOUSE=false
+        info "### We won't hide the mouse cursor on every start."
+    fi
 }
 
 function ask_usb_sync() {
@@ -878,6 +915,32 @@ ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
 EOF
+    fi
+}
+
+function hide_mouse() {
+    if [ "$WAYLAND_ENV" = true ]; then
+        if [ -f "/usr/share/icons/PiXflat/cursors/left_ptr" ]; then
+            mv /usr/share/icons/PiXflat/cursors/left_ptr /usr/share/icons/PiXflat/cursors/left_ptr.bak
+        fi
+    else
+        if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
+            sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
+        fi
+
+        cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+# Photobooth
+# turn off display power management system
+@xset -dpms
+# turn off screen blanking
+@xset s noblank
+# turn off screen saver
+@xset s off
+# Hide mousecursor
+@unclutter -idle 3
+# Photobooth End
+EOF
+
     fi
 }
 
@@ -1051,13 +1114,13 @@ function commit_git_changes() {
     if [ "$(sudo -u www-data git config user.name)" = "" ]; then
         warn "WARN: git user.name not set!"
         info "### Setting git user.name."
-        "$(sudo -u www-data git config user.name Photobooth)"
+        sudo -u www-data git config user.name Photobooth
     fi
 
     if [ "$(sudo -u www-data git config user.email)" = "" ]; then
         warn "WARN: git user.email not set!"
         info "### Setting git user.email."
-        "$(sudo -u www-data git config user.email Photobooth@localhost)"
+        sudo -u www-data git config user.email Photobooth@localhost
     fi
 
     echo "git user.name: $(sudo -u www-data git config user.name)"
@@ -1155,6 +1218,14 @@ else
     warn "Can not check Internet connection, wget missing!"
 fi
 
+if [ "$RUNNING_ON_PI" = true ]; then
+    if [ -f "/home/$USERNAME/.config/wayfire.ini" ]; then
+        WAYLAND_ENV=true
+    else
+        WAYLAND_ENV=false
+    fi
+fi
+
 ############################################################
 #                                                          #
 # Try updating Photobooth                                  #
@@ -1172,6 +1243,23 @@ if [ "$RUN_UPDATE" = true ]; then
     fi
 
     if [ "$GIT_INSTALL" = true ]; then
+        detect_browser
+        if [ -d "/etc/xdg/autostart" ] && [ "$WEBBROWSER" != "unknown" ]; then
+            ask_kiosk_mode
+        else
+            warn "### No supported webbrowser found!"
+        fi
+        print_spaces
+
+# Pi specific setup start
+        if [ "$RUNNING_ON_PI" = true ] && [ "$DESKTOP_OS" = true ]; then
+            ask_hide_mouse
+        else
+            info "### lxde is not installed. Can not hide the mouse cursor on every start."
+        fi
+        print_spaces
+# Pi specific setup end
+
         if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
             ask_usb_sync
         else
@@ -1198,11 +1286,17 @@ if [ "$RUN_UPDATE" = true ]; then
             raspberry_permission
         fi
         fix_git_modules
-        detect_browser
         if [ "$WEBBROWSER" != "unknown" ]; then
             browser_desktop_shortcut
+            if [ "$KIOSK_MODE" = true ]; then
+                browser_autostart
+            fi
         else
             info "### Browser unknown or not installed. Can not add shortcut to Desktop."
+        fi
+
+        if [ "$HIDE_MOUSE" = true ] ; then
+            hide_mouse
         fi
 
         if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
@@ -1306,6 +1400,27 @@ fi
 
 print_spaces
 
+detect_browser
+if [ -d "/etc/xdg/autostart" ]; then
+    if [ "$WEBBROWSER" != "unknown" ]; then
+        ask_kiosk_mode
+    else
+        warn "### No supported webbrowser found!"
+    fi
+    print_spaces
+fi
+
+# Pi specific setup start
+if [ "$RUNNING_ON_PI" = true ]; then
+    if [ "$DESKTOP_OS" = true ]; then
+        ask_hide_mouse
+    else
+        info "### lxde is not installed. Can not hide the mouse cursor on every start."
+    fi
+    print_spaces
+fi
+# Pi specific setup end
+
 if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
     ask_usb_sync
 else
@@ -1361,11 +1476,16 @@ general_permissions
 if [ "$RUNNING_ON_PI" = true ]; then
     raspberry_permission
 fi
-detect_browser
 if [ "$WEBBROWSER" != "unknown" ]; then
     browser_desktop_shortcut
+    if [ "$KIOSK_MODE" = true ]; then
+        browser_autostart
+    fi
 else
     info "### Browser unknown or not installed. Can not add shortcut to Desktop."
+fi
+if [ "$HIDE_MOUSE" = true ] ; then
+    hide_mouse
 fi
 if [ "$SETUP_CUPS" = true ]; then
     cups_setup
