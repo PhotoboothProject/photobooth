@@ -774,7 +774,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 
 **Setting up a stream from your DSLR**
 
-If you want to use a stream from your DSLR, select the `--mjpeg` version when running the install script. This will install go2rtc and automatically setup a stream from your DSLR. go2rtc can be accessed at `http://localhost:1984`. Use `url("http://192.168.0.174:1989/api/stream.mjpeg?src=dslr")` as _"Preview-URL" (replace `localhost` with Photobooths IP for remote access).
+If you want to use a stream from your DSLR, select the `--mjpeg` version when running the install script. This will install go2rtc and automatically setup a stream from your DSLR. go2rtc can be accessed at `http://localhost:1989`. Use `url("http://localhost:1989/api/stream.mjpeg?src=dslr")` as _"Preview-URL" (replace `localhost` with Photobooths IP for remote access).
 
 **PiOS bullseye and PiCamera**
 
