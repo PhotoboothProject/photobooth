@@ -772,6 +772,10 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 -   Capture pictures via `raspistill` or `libcamera-still` won't work if motion is installed!
 -   Requires Photobooth v2.2.1 or later!
 
+**Setting up a stream from your DSLR**
+
+If you want to use a stream from your DSLR, select the `--mjpeg` version when running the install script. This will install go2rtc and automatically setup a stream from your DSLR. go2rtc can be accessed at `http://localhost:1984`. Use `url("http://192.168.0.174:1989/api/stream.mjpeg?src=dslr")` as _"Preview-URL" (replace `localhost` with Photobooths IP for remote access).
+
 **PiOS bullseye and PiCamera**
 
 If you like to use the Pi Camera only for preview, you're able to setup motion and use the preview from URL option to use the motion stream.
