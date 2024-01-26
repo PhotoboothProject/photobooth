@@ -774,7 +774,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 
 **Setting up a stream from your DSLR**
 
-If you want to use a stream from your DSLR, add the `--mjpeg` flag when running the install script. This will install go2rtc and automatically setup a stream from your DSLR. go2rtc can be accessed at `http://localhost:1989`. Use `url("http://localhost:1989/api/stream.mjpeg?src=dslr")` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
+If you want to use a stream from your DSLR, add the `--mjpeg` flag when running the install script. This will install go2rtc and automatically setup a stream from your DSLR. go2rtc can be accessed at `http://localhost:1984`. Use `url("http://localhost:1984/api/stream.mjpeg?src=dslr")` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
 To be able to also capture images you need to adjust the capture command.
 _"Commands"_: _"Take picture command"_: `capture %s`
 
