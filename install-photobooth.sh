@@ -215,7 +215,7 @@ while true; do
         ;;
     -b | --branch)
         shift
-        if [ "$1" == "dev" ] || [ "$1" == "stable3" ] || [ "$1" == "stable4" ]; then
+        if [ "$1" == "dev" ] || [ "$1" == "stable4" ]; then
             BRANCH=$1
             GIT_INSTALL=true
         elif [ "$1" == "package" ]; then
