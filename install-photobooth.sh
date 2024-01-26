@@ -183,7 +183,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable3:dev:packag
 
     -u,  -username,   --username    Always required. Enter your OS username you like to use Photobooth on.
 
-    -m,  -mjpeg,      --mjpeg
+    -m,  -mjpeg,      --mjpeg       Install go2rtc to provide remote preview (via URL) of your camera.
 
     -V,  -verbose,    --verbose     Run script in verbose mode.
 
