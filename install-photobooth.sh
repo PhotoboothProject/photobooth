@@ -22,6 +22,7 @@ USB_SYNC=false
 SETUP_CUPS=false
 GPHOTO_PREVIEW=true
 MJPEG_PREVIEW=false
+MJPEG_PREVIEW_ONLY=false
 CUPS_REMOTE_ANY=false
 WEBBROWSER="unknown"
 KIOSK_FLAG="--kiosk http://localhost"
@@ -185,6 +186,8 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
 
     -m,  -mjpeg,      --mjpeg       Install go2rtc to provide remote preview (via URL) of your camera.
 
+    -M,  -mjpeg-only, --mjpeg-only  Only install go2rtc to provide remote preview (via URL) of your camera, then exit
+
     -V,  -verbose,    --verbose     Run script in verbose mode.
 
     -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx, lighttpd].
@@ -204,7 +207,7 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,branch::,php::,update,username::,raspberry,mjpeg,silent,verbose,webserver::" -o "hb::p::u::rsmVw::" -a -- "$@")
+options=$(getopt -l "help,branch::,php::,update,username::,raspberry,mjpeg,mjpeg-only,silent,verbose,webserver::" -o "hb::p::u::rsmMVw::" -a -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -250,6 +253,10 @@ while true; do
         MJPEG_PREVIEW=true
         GPHOTO_PREVIEW=false
         info "### Mjpeg mode enabled"
+        ;;
+    -M | --mjpeg-only)
+        MJPEG_PREVIEW_ONLY=true
+        info "### Only install mjpeg"
         ;;
     -s | --silent)
         SILENT_INSTALL=true
@@ -1179,6 +1186,11 @@ detect_photobooth_install() {
 if [ "$UID" != 0 ]; then
     error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
+fi
+
+if [ "$MJPEG_PREVIEW_ONLY" = true ]; then
+    mjpeg_preview
+    exit 0
 fi
 
 if [ "$USERNAME" != "" ]; then
