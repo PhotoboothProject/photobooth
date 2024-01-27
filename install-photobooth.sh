@@ -1061,18 +1061,19 @@ You can use it in your photobooth as capture command.
 
 Usage:
 
-    capture <filename> [gphoto2 arguments]
+    capture <filename> [or all required gphoto2 arguments]
+
+In photobooth, usually 'capture %s' is enough. But if you want to use a more complex command,
+don't forget to add --filename=%s.
 
 HELP
   exit 0
 fi
 
-file="\$1"
-shift
-args="--set-config output=Off --capture-image-and-download --filename=\$file"
-
-if [[ \$# -gt 0 ]]; then
-    args="--filename=\${file} \$@"
+if [[ \$# -eq 1 ]]; then
+    args="--set-config output=Off --capture-image-and-download --filename=\$1"
+elseif [[ \$# -gt 1 ]]; then
+    args="\$@"
 fi
 
 sudo systemctl stop go2rtc.service
