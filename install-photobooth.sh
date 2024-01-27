@@ -60,10 +60,10 @@ COMMON_PACKAGES=(
     'gphoto2'
     'libimage-exiftool-perl'
     'nodejs'
-    'php-gd'
-    'php-xml'
-    'php-zip'
-    'php-mbstring'
+    "php${PHP_VERSION}-gd"
+    "php${PHP_VERSION}-xml"
+    "php${PHP_VERSION}-zip"
+    "php${PHP_VERSION}-mbstring"
     'python3'
     'rsync'
     'udisks2'
@@ -504,6 +504,10 @@ function common_software() {
     if [ "$NEEDS_NPM_CHECK" = true ]; then
         check_npm
     fi
+
+    # Install php composer
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 }
 
 function apache_webserver() {
