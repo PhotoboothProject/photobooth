@@ -769,8 +769,7 @@ function ask_kiosk_mode() {
     echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
     ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
     echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
         KIOSK_MODE=true
         info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
     else
@@ -928,7 +927,7 @@ function hide_mouse() {
             sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
         fi
 
-        cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+        cat >>/etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth
 # turn off display power management system
 @xset -dpms
@@ -1253,14 +1252,14 @@ if [ "$RUN_UPDATE" = true ]; then
         fi
         print_spaces
 
-# Pi specific setup start
+        # Pi specific setup start
         if [ "$RUNNING_ON_PI" = true ] && [ "$DESKTOP_OS" = true ]; then
             ask_hide_mouse
         else
             info "### lxde is not installed. Can not hide the mouse cursor on every start."
         fi
         print_spaces
-# Pi specific setup end
+        # Pi specific setup end
 
         if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
             ask_usb_sync
@@ -1297,7 +1296,7 @@ if [ "$RUN_UPDATE" = true ]; then
             info "### Browser unknown or not installed. Can not add shortcut to Desktop."
         fi
 
-        if [ "$HIDE_MOUSE" = true ] ; then
+        if [ "$HIDE_MOUSE" = true ]; then
             hide_mouse
         fi
 
@@ -1486,7 +1485,7 @@ if [ "$WEBBROWSER" != "unknown" ]; then
 else
     info "### Browser unknown or not installed. Can not add shortcut to Desktop."
 fi
-if [ "$HIDE_MOUSE" = true ] ; then
+if [ "$HIDE_MOUSE" = true ]; then
     hide_mouse
 fi
 if [ "$SETUP_CUPS" = true ]; then
