@@ -602,7 +602,7 @@ function general_setup() {
 
     mkdir -p "$INSTALLFOLDERPATH"
     chown www-data:www-data "$INSTALLFOLDERPATH"
-    chown root:www-data /var/www
+    chown www-data:www-data /var/www
 
     PHOTOBOOTH_LOG="$INSTALLFOLDERPATH/private/install.log"
 }
@@ -1236,6 +1236,8 @@ if [ "$RUN_UPDATE" = true ]; then
     detect_photobooth_install
 
     if [ "$PHOTOBOOTH_FOUND" = true ]; then
+        chown www-data:www-data "$INSTALLFOLDERPATH"
+        chown www-data:www-data /var/www
         check_git_install
     else
         error "ERROR: Photobooth installation not found!"
