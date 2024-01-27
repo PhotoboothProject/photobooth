@@ -512,7 +512,7 @@ function common_software() {
 
 function apache_webserver() {
     info "### Installing Apache Webserver..."
-    apt-get -qq install -y apache2 libapache2-mod-php${PHP_VERSION}
+    apt-get -qq install -y apache2 libapache2-mod-php"${PHP_VERSION}"
     sudo systemctl enable --now apache2
 }
 
