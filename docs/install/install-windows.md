@@ -98,7 +98,7 @@ sudo bash install-photobooth.sh --username='<YourUsername>' --mjpeg --silent
 Now open the [admin section](http://localhost/admin) and
 set this as the live preview url:
 
-> [url(http://localhost:1984/stream.html?src=dslr&mode=mjpeg)](http://localhost:1984/stream.html?src=dslr&mode=mjpeg)
+> [url(http://localhost:1984/api/stream.mjpeg?src=dslr)](http://localhost:1984/api/stream.mjpeg?src=dslr)
 
 and this as capture command: `capture %s`.
 
