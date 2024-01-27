@@ -685,6 +685,23 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.ERROR)
 
+    if not args.device:
+        log.info("Not device set, try to autodetect")
+        v4l2_devices = get_v4l2_devices()
+        if len(v4l2_devices) > 1:
+            log.info("Found multiple devices, selecting the first one.")
+        if v4l2_devices:
+            args.device = v4l2_devices[0]
+            log.info("Device set to %s", args.device)
+        else:
+            log.error("Could not autodetect virtual camera.")
+            try:
+                args.device = create_virtual_camera(video_nr=9)
+                log.info("Virtual camera created: %s", args.device)
+            except subprocess.CalledProcessError as e:
+                log.error(e)
+                return 1
+
     if check_port(5555):
         return CameraControl.update_config(vars(args))
     else:
@@ -703,22 +720,6 @@ def main():
                 log.error("An error occured: %s" % e)
                 return 1
         else:
-            if not args.device:
-                log.info("Not device set, try to autodetect")
-                v4l2_devices = get_v4l2_devices()
-                if len(v4l2_devices) > 1:
-                    log.info("Found multiple devices, selecting the first one.")
-                if v4l2_devices:
-                    args.device = v4l2_devices[0]
-                    log.info("Device set to %s", args.device)
-                else:
-                    log.error("Could not autodetect virtual camera.")
-                    try:
-                        args.device = create_virtual_camera(video_nr=9)
-                        log.info("Virtual camera created: %s", args.device)
-                    except subprocess.CalledProcessError as e:
-                        log.error(e)
-                        return 1
             return cam.daemon()
 
 
