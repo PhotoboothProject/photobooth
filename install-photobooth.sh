@@ -505,9 +505,6 @@ function common_software() {
         check_npm
     fi
 
-    # Install php composer
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 }
 
 function apache_webserver() {
