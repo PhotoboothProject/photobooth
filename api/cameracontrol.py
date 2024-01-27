@@ -90,7 +90,7 @@ class CameraControl:
     def __init__(self, args):
         self.running = True
         self.args = args
-        self.showVideo = True
+        self.show_video = True
         self.chroma = {}
         self.camera = None
         self.socket = None
@@ -226,7 +226,7 @@ class CameraControl:
         Disables the video
         """
         self.bsm_stopTime = None
-        self.showVideo = False
+        self.show_video = False
 
         try:
             self.set_config("viewfinder", 0)
@@ -274,8 +274,8 @@ class CameraControl:
         else:
             self.args.bsm = args.bsm
             try:
-                if not self.showVideo and not args.bsmx:
-                    self.showVideo = True
+                if not self.show_video and not args.bsmx:
+                    self.show_video = True
                     self.connect_to_camera()
                     self.socket.send_string("Starting Video")
                 else:
@@ -458,7 +458,7 @@ class CameraControl:
                     ):
                         log.info("Camera stopped because of bsm stop time")
                         self.disable_video()
-                    if self.showVideo:
+                    if self.show_video:
                         capture = self.camera.capture_preview()
                         img_bytes = memoryview(capture.get_data_and_size()).tobytes()
                         self.ffmpeg.stdin.write(img_bytes)
