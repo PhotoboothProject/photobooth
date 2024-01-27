@@ -35,8 +35,9 @@ sudo bash install-photobooth.sh -username='<YourUsername>' -webserver='lighttpd'
 ```
 
 If you want to use your camera as a live preview for your photobooth users, you could
-add the `--mjpeg` option which installs `go2rtc`. Then you just have to set the
-preview mode to `URL` (be sure to enable expert mode) and set this as preview url:
+add the `--mjpeg` option which installs `go2rtc` (or use `--mjpeg-only` to only
+install go2rtc, then exit). Then you just have to set the preview mode to `URL` (be sure to
+enable expert mode) and set this as preview url:
 
 > [url(http://localhost:1984/stream.html?src=dslr&mode=mjpeg)](http://localhost:1984/stream.html?src=dslr&mode=mjpeg)
 
