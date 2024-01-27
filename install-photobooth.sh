@@ -769,8 +769,7 @@ function ask_kiosk_mode() {
     echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
     ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
     echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
         KIOSK_MODE=true
         info "### We will open $WEBBROWSER in Kiosk Mode at every boot."
     else
@@ -928,7 +927,7 @@ function hide_mouse() {
             sed -i '/Photobooth/,/Photobooth End/d' /etc/xdg/lxsession/LXDE-pi/autostart
         fi
 
-        cat >> /etc/xdg/lxsession/LXDE-pi/autostart <<EOF
+        cat >>/etc/xdg/lxsession/LXDE-pi/autostart <<EOF
 # Photobooth
 # turn off display power management system
 @xset -dpms
@@ -1062,18 +1061,19 @@ You can use it in your photobooth as capture command.
 
 Usage:
 
-    capture <filename> [gphoto2 arguments]
+    capture <filename> [or all required gphoto2 arguments]
+
+In photobooth, usually 'capture %s' is enough. But if you want to use a more complex command,
+don't forget to add --filename=%s.
 
 HELP
   exit 0
 fi
 
-file="\$1"
-shift
-args="--set-config output=Off --capture-image-and-download --filename=\$file"
-
-if [[ \$# -gt 0 ]]; then
-    args="--filename=\${file} \$@"
+if [[ \$# -eq 1 ]]; then
+    args="--set-config output=Off --capture-image-and-download --filename=\$1"
+elseif [[ \$# -gt 1 ]]; then
+    args="\$@"
 fi
 
 sudo systemctl stop go2rtc.service
@@ -1253,14 +1253,14 @@ if [ "$RUN_UPDATE" = true ]; then
         fi
         print_spaces
 
-# Pi specific setup start
+        # Pi specific setup start
         if [ "$RUNNING_ON_PI" = true ] && [ "$DESKTOP_OS" = true ]; then
             ask_hide_mouse
         else
             info "### lxde is not installed. Can not hide the mouse cursor on every start."
         fi
         print_spaces
-# Pi specific setup end
+        # Pi specific setup end
 
         if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
             ask_usb_sync
@@ -1297,7 +1297,7 @@ if [ "$RUN_UPDATE" = true ]; then
             info "### Browser unknown or not installed. Can not add shortcut to Desktop."
         fi
 
-        if [ "$HIDE_MOUSE" = true ] ; then
+        if [ "$HIDE_MOUSE" = true ]; then
             hide_mouse
         fi
 
@@ -1486,7 +1486,7 @@ if [ "$WEBBROWSER" != "unknown" ]; then
 else
     info "### Browser unknown or not installed. Can not add shortcut to Desktop."
 fi
-if [ "$HIDE_MOUSE" = true ] ; then
+if [ "$HIDE_MOUSE" = true ]; then
     hide_mouse
 fi
 if [ "$SETUP_CUPS" = true ]; then
