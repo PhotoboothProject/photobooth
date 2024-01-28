@@ -25,14 +25,14 @@ With the help of the community Photobooth grew to a powerfull Photobooth softwar
 
 # Contribute to this Webpage
 
-Clone the _PhotoboothProject.github.io_ project from github. Run the following commands from your Terminal:
+Clone the _photobooth_ project from github. Run the following commands from your Terminal:
 
 ```sh
-git clone https://github.com/PhotoboothProject/PhotoboothProject.github.io.git
-cd PhotoboothProject.github.io
+git clone https://github.com/PhotoboothProject/photobooth.git
+cd photobooth/docs
 ```
 
-Make your changes, upload them to your fork and create a [pull request](https://github.com/PhotoboothProject/PhotoboothProject.github.io/pulls).
+Make your changes inside the _docs/_ directory, upload them to your fork and create a [pull request](https://github.com/PhotoboothProject/photobooth/pulls).
 
 ---
 
