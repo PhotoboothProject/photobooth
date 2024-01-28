@@ -504,7 +504,6 @@ function common_software() {
     if [ "$NEEDS_NPM_CHECK" = true ]; then
         check_npm
     fi
-
 }
 
 function apache_webserver() {
