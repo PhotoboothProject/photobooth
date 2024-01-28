@@ -60,10 +60,10 @@ COMMON_PACKAGES=(
     'gphoto2'
     'libimage-exiftool-perl'
     'nodejs'
-    'php-gd'
-    'php-xml'
-    'php-zip'
-    'php-mbstring'
+    "php${PHP_VERSION}-gd"
+    "php${PHP_VERSION}-xml"
+    "php${PHP_VERSION}-zip"
+    "php${PHP_VERSION}-mbstring"
     'python3'
     'rsync'
     'udisks2'
@@ -508,7 +508,7 @@ function common_software() {
 
 function apache_webserver() {
     info "### Installing Apache Webserver..."
-    apt-get -qq install -y apache2 libapache2-mod-php
+    apt-get -qq install -y apache2 libapache2-mod-php"${PHP_VERSION}"
     sudo systemctl enable --now apache2
 }
 
