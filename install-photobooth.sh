@@ -428,18 +428,16 @@ function check_npm() {
 function common_software() {
     info "### Updating the system"
     apt-get -qq update
-    if [[ ${PHP_VERSION} == "8.2" ]]; then
-        apt-get -qq install apt-transport-https lsb-release ca-certificates software-properties-common -y
-        OS=$(lsb_release -sc)
-        if [[ "${DEBIAN[*]}" =~ $OS ]]; then
-            wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-            echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
-        else
-            if [[ "$OS" == "jammy" ]]; then
-                echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted" >>/etc/apt/sources.lst
-            fi
-            add-apt-repository ppa:ondrej/php -y
+    apt-get -qq install apt-transport-https lsb-release ca-certificates software-properties-common -y
+    OS=$(lsb_release -sc)
+    if [[ "${DEBIAN[*]}" =~ $OS ]]; then
+        wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+    else
+        if [[ "$OS" == "jammy" ]]; then
+            echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted" >>/etc/apt/sources.lst
         fi
+        add-apt-repository ppa:ondrej/php -y
     fi
     apt-get -qq update
 
