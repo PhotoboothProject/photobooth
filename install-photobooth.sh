@@ -1077,7 +1077,7 @@ fi
 
 if [[ \$# -eq 1 ]]; then
     args="--set-config output=Off --capture-image-and-download --filename=\$1"
-elseif [[ \$# -gt 1 ]]; then
+elif [[ \$# -gt 1 ]]; then
     args="\$@"
 fi
 
