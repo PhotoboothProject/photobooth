@@ -1,35 +1,43 @@
-FROM webdevops/php-apache:8.2
+FROM webdevops/php-apache:8.3
 
 # Adjust LimitRequestLine
 RUN echo "LimitRequestLine 12000" > /opt/docker/etc/httpd/conf.d/limits.conf
 
 # Update and install dependencies
-RUN apt-get update
-RUN apt install -y \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     build-essential \
     git \
     gphoto2 \
     libimage-exiftool-perl \
     rsync \
     udisks2 \
-    python3
+    python3 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Nodejs
 # https://github.com/nodesource/distributions#debian-versions
-RUN apt update &&\
-    apt install -y \
+RUN apt-get update &&\
+    apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
-    gnupg
-RUN mkdir -p /etc/apt/keyrings
-RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-RUN apt-get update
-RUN apt-get install -y nodejs
+    gnupg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - &&\
+    apt-get install -y --no-install-recommends nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy files
 WORKDIR /app
 COPY . .
+RUN chown -R application:application /app
+
+# switch to application user
+USER application
 
 # Install and build
 RUN git config --global --add safe.directory /app
