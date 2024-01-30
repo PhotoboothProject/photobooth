@@ -519,7 +519,11 @@ const photoBooth = (function () {
         startTime = new Date().getTime();
         photoboothTools.console.logDev('Capture image.');
         jQuery
-            .post(config.foldersPublic.api + '/capture.php', data)
+            .post({
+                url: config.foldersPublic.api + '/capture.php',
+                data: data,
+                timeout: 15000
+            })
             .done(async (result) => {
                 api.cheese.destroy();
                 if (config.ui.shutter_animation) {
@@ -689,6 +693,10 @@ const photoBooth = (function () {
                 }
             })
             .fail(async (xhr, status, result) => {
+                endTime = new Date().getTime();
+                totalTime = endTime - startTime;
+                photoboothTools.console.log('Took ' + data.style, result);
+                photoboothTools.console.logDev('Failed after ' + totalTime + 'ms');
                 api.cheese.destroy();
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
                     photoboothTools.console.logDev(
