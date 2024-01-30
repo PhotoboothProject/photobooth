@@ -1,0 +1,39 @@
+name: Docker Tests
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Build and start docker container
+        run: docker-compose -f "docker-compose.yml" up -d --build
+
+      - name: Wait for Apache to start
+        run: sleep 5
+
+      - name: Verify container status
+        run: docker-compose -f "docker-compose.yml" ps
+
+      - name: Print container logs
+        run: docker-compose -f "docker-compose.yml" logs
+
+      - name: Check welcome page
+        run: curl --fail-with-body http://localhost/welcome/
+
+      - name: Stop docker container
+        if: always()
+        run: docker-compose -f "docker-compose.yml" down
