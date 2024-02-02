@@ -122,7 +122,7 @@ echo $healthCheck->renderReport();
         }
 
     }
-    include PathUtility::getAbsolutePath('template/components/main.footer.php');
+include PathUtility::getAbsolutePath('template/components/main.footer.php');
 ?>
 
 </body>
