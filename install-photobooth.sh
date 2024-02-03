@@ -817,16 +817,10 @@ function ask_usb_sync() {
 function raspberry_permission() {
     info "### Remote Buzzer Feature"
     info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
-    BOOT_CONFIG="/boot/config.txt"
-    if [[ -L "$BOOT_CONFIG" ]]; then
-        info "### $BOOT_CONFIG is a symlink."
-        DESTINATION=$(readlink -f "$BOOT_CONFIG")
-        if [ "$DESTINATION" != "" ]; then
-            info "### Found symlink of $DESTINATION"
-            BOOT_CONFIG=$DESTINATION
-        else
-            warn "WARN: Unable to determine the destination of $BOOT_CONFIG."
-        fi
+    if [ -f '/boot/firmware/config.txt' ]; then
+        BOOT_CONFIG="/boot/firmware/config.txt"
+    else
+        BOOT_CONFIG="/boot/config.txt"
     fi
     usermod -a -G gpio www-data
     # remove old artifacts from node-rpio library, if there was
