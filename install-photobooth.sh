@@ -1075,9 +1075,13 @@ elif [[ \$# -gt 1 ]]; then
     args="\$@"
 fi
 
-sudo systemctl stop go2rtc.service
+if systemctl cat go2rtc.service >/dev/null; then
+    HAS_GO2RTC=1
+fi
+
+[[ -n "\$HAS_GO2RTC" ]] && sudo systemctl stop go2rtc.service
 gphoto2 \$args
-sudo systemctl start go2rtc.service
+[[ -n "\$HAS_GO2RTC" ]] && sudo systemctl start go2rtc.service
 EOF
         chmod +x /usr/local/bin/capture
     fi
