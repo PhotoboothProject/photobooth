@@ -509,8 +509,8 @@ function gpioPuSanity(gpioconfig) {
             ? '/boot/firmware/config.txt'
             : '/boot/config.txt';
 
-        const cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
-        const stdout = execSync(cmd).toString();
+        cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
+        stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
             throw new Error(
@@ -536,8 +536,8 @@ function gpioOpSanity(gpioconfig) {
             ? '/boot/firmware/config.txt'
             : '/boot/config.txt';
 
-        const cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" ' + configPath;
-        const stdout = execSync(cmd).toString();
+        cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" ' + configPath;
+        stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
             throw new Error(
