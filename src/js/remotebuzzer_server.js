@@ -312,12 +312,16 @@ function gpioSanity(gpioconfig) {
             throw new Error(gpioconfig + ' is not a valid number');
         }
 
-        cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" /boot/config.txt';
+        const configPath = fs.existsSync('/boot/firmware/config.txt')
+            ? '/boot/firmware/config.txt'
+            : '/boot/config.txt';
+
+        cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
         stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
             throw new Error(
-                'GPIO' + gpioconfig + ' is not configured as PULLUP in /boot/config.txt - see FAQ for details'
+                'GPIO' + gpioconfig + ' is not configured as PULLUP in ' + configPath + ' - see FAQ for details'
             );
         }
 
