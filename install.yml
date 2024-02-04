@@ -1,4 +1,5 @@
 ---
+# vim: set ft=yaml.ansible :
 - name: Photbooth
   hosts:
     - 127.0.0.1
@@ -31,11 +32,13 @@
 
   tasks:
     - name: Setup debian repos
+      when: ansible_distribution == 'Debian'
       block:
         - name: Download gpg key
           ansible.builtin.get_url:
             url: https://packages.sury.org/php/apt.gpg
             dest: /etc/apt/trusted.gpg.d/php.gpg
+            mode: '0600'
 
         - name: Add php repo
           ansible.builtin.apt_repository:
@@ -43,73 +46,72 @@
               deb [signed-by=/etc/apt/trusted.gpg.d/php.gpg] https://packages.sury.org/php/ {{ ansible_distribution_release }}
               main
             state: present
-      when: ansible_distribution == 'Debian'
 
     - name: Setup Ubuntu/jammy repos
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'jammy'
       block:
         - name: Add update repo
           ansible.builtin.apt_repository:
             repo: >-
               deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted
             state: present
-        - name:
+        - name: Enable php repo
           ansible.builtin.apt_repository:
             repo: ppa:ondrej/php
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'jammy'
 
-    - name: add firmware packages to hold
-      dpkg_selections:
+    - name: Add firmware packages to hold
+      ansible.builtin.dpkg_selections:
         name: '{{ item }}'
         selection: hold
       with_items: '{{ packages.apt.hold }}'
 
-    - name: update apt package cache
-      apt:
+    - name: Update apt package cache
+      ansible.builtin.apt:
         update_cache: true
 
-    - name: remove unecessary apt packages
-      apt:
+    - name: Remove unecessary apt packages
+      ansible.builtin.apt:
         name: '{{ packages.apt.remove }}'
         state: absent
         purge: true
 
-    - name: upgrade apt distro
-      apt:
+    - name: Upgrade apt distro
+      ansible.builtin.apt:
         upgrade: dist
 
-    - name: install packages
-      apt:
+    - name: Install packages
+      ansible.builtin.apt:
         name: '{{ packages.apt.install }}'
         state: present
 
-    - name: install webserver
-      apt:
+    - name: Install webserver
+      ansible.builtin.apt:
         name: '{{ packages.apt.webserver[webserver] }}'
         state: present
 
-    - name: clean apt cache
-      apt:
+    - name: Clean apt cache
+      ansible.builtin.apt:
         autoclean: true
 
-    - name: remove dependencies that are no longer required
-      apt:
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.apt:
         autoremove: true
 
-    - name: enable services
-      systemd:
+    - name: Enable services
+      ansible.builtin.systemd:
         name: '{{ item }}'
         state: started
         enabled: true
       with_items: '{{ services.enable }}'
 
-    - name: disable unecessary services
-      systemd:
+    - name: Disable unecessary services
+      ansible.builtin.systemd:
         name: '{{ item }}'
         state: stopped
         enabled: false
       with_items: '{{ services.disable }}'
 
   handlers:
-    - name: reload systemd services
-      systemd:
+    - name: Reload systemd services
+      ansible.builtin.systemd:
         daemon_reload: true
