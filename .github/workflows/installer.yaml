@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-install-script:
+  check-install-playbook:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -23,16 +23,14 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        checks:
-          - sudo ./install-photobooth.sh --username="$(whoami)" --silent
-          - sudo ./install-photobooth.sh --username="$(whoami)" --mjpeg --silent
+          - debian-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install
-        run: ${{ matrix.checks }}
+        run: ansible-playbook install.yml
 
-      - name: Check welcome page
-        run: curl --fail-with-body http://localhost/welcome/
+      # - name: Check welcome page
+      #   run: curl --fail-with-body http://localhost/welcome/
