@@ -10,8 +10,8 @@
     photobooth:
       version: "{{ lookup('env', 'PHOTOBOOTH_VERSION') | default('dev', true) }}"
     services:
-      enable:
-      disable:
+      enable: []
+      disable: []
     packages:
       apt:
         install:
@@ -22,8 +22,8 @@
           - software-properties-common
           - git
           - jq
-        remove:
-        hold:
+        remove: []
+        hold: []
         webserver:
           nginx:
             - nginx
