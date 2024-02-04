@@ -4,6 +4,8 @@
     - 127.0.0.1
   become: true
   vars:
+    php_version: '8.2'
+    webserver: "{{ lookup('env', 'PHOTOBOOTH_WEBSERVER') | default('apache', true) }}"
     photobooth:
       version: "{{ lookup('env', 'PHOTOBOOTH_VERSION') | default('dev', true) }}"
     services:
@@ -12,10 +14,49 @@
     packages:
       apt:
         install:
+          # common
+          - apt-transport-https
+          - lsb-release
+          - ca-certificates
+          - software-properties-common
+          - git
+          - jq
         remove:
         hold:
+        webserver:
+          nginx:
+            - nginx
+            - php{{ php_version }}
+            - php{{ php_version }}-fpm
 
   tasks:
+    - name: Setup debian repos
+      block:
+        - name: Download gpg key
+          ansible.builtin.get_url:
+            url: https://packages.sury.org/php/apt.gpg
+            dest: /etc/apt/trusted.gpg.d/php.gpg
+
+        - name: Add php repo
+          ansible.builtin.apt_repository:
+            repo: >-
+              deb [signed-by=/etc/apt/trusted.gpg.d/php.gpg] https://packages.sury.org/php/ {{ ansible_distribution_release }}
+              main
+            state: present
+      when: ansible_distribution == 'Debian'
+
+    - name: Setup Ubuntu/jammy repos
+      block:
+        - name: Add update repo
+          ansible.builtin.apt_repository:
+            repo: >-
+              deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted
+            state: present
+        - name:
+          ansible.builtin.apt_repository:
+            repo: ppa:ondrej/php
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'jammy'
+
     - name: add firmware packages to hold
       dpkg_selections:
         name: '{{ item }}'
@@ -40,6 +81,12 @@
       apt:
         name: '{{ packages.apt.install }}'
         state: present
+
+    - name: install webserver
+      apt:
+        name: '{{ packages.apt.webserver[webserver] }}'
+        state: present
+
     - name: clean apt cache
       apt:
         autoclean: true
