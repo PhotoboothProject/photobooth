@@ -5,12 +5,14 @@
     - 127.0.0.1
   become: true
   vars:
+    go2rtc_version: v1.8.6-4
     php_version: '8.2'
     webserver: "{{ lookup('env', 'PHOTOBOOTH_WEBSERVER') | default('apache', true) }}"
     photobooth:
       version: "{{ lookup('env', 'PHOTOBOOTH_VERSION') | default('dev', true) }}"
     services:
-      enable: []
+      enable:
+        - '{{webserver}}'
       disable: []
     packages:
       apt:
@@ -34,6 +36,14 @@
             - libapache2-mod-php{{ php_version }}
 
   tasks:
+    - name: Install go2rtc
+      ansible.builtin.unarchive:
+        src: >-
+          https://github.com/dadav/go2rtc/releases/download/{{go2rtc_version}}/go2rtc_{{ansible_system | lower}}_{{
+          ansible_architecture | replace('x64_86', 'amd64')}}.tar.gz
+        dest: /usr/local/bin
+        remote_src: true
+
     - name: Setup debian repos
       when: ansible_distribution == 'Debian'
       block:
