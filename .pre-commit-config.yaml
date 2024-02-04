@@ -13,11 +13,11 @@ repos:
     hooks:
       - id: black
 
-  - repo: https://github.com/syntaqx/git-hooks
-    rev: v0.0.18
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v6.22.2
     hooks:
-      - id: shellcheck
-        files: ^install-photobooth.sh$
+      - id: ansible-lint
+        files: ^install.yml$
 
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.56.0
