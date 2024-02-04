@@ -1,0 +1,68 @@
+---
+- name: Photbooth
+  hosts:
+    - 127.0.0.1
+  become: true
+  vars:
+    photobooth:
+      version: "{{ lookup('env', 'PHOTOBOOTH_VERSION') | default('dev', true) }}"
+    services:
+      enable:
+      disable:
+    packages:
+      apt:
+        install:
+        remove:
+        hold:
+
+  tasks:
+    - name: add firmware packages to hold
+      dpkg_selections:
+        name: '{{ item }}'
+        selection: hold
+      with_items: '{{ packages.apt.hold }}'
+
+    - name: update apt package cache
+      apt:
+        update_cache: true
+
+    - name: remove unecessary apt packages
+      apt:
+        name: '{{ packages.apt.remove }}'
+        state: absent
+        purge: true
+
+    - name: upgrade apt distro
+      apt:
+        upgrade: dist
+
+    - name: install packages
+      apt:
+        name: '{{ packages.apt.install }}'
+        state: present
+    - name: clean apt cache
+      apt:
+        autoclean: true
+
+    - name: remove dependencies that are no longer required
+      apt:
+        autoremove: true
+
+    - name: enable services
+      systemd:
+        name: '{{ item }}'
+        state: started
+        enabled: true
+      with_items: '{{ services.enable }}'
+
+    - name: disable unecessary services
+      systemd:
+        name: '{{ item }}'
+        state: stopped
+        enabled: false
+      with_items: '{{ services.disable }}'
+
+  handlers:
+    - name: reload systemd services
+      systemd:
+        daemon_reload: true
