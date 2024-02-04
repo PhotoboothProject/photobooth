@@ -29,6 +29,9 @@
             - nginx
             - php{{ php_version }}
             - php{{ php_version }}-fpm
+          apache:
+            - apache2
+            - libapache2-mod-php{{ php_version }}
 
   tasks:
     - name: Setup debian repos
