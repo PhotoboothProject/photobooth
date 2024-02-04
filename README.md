@@ -98,11 +98,11 @@ _\*2 Capture from webcam is possible e.g. using [fswebcam](https://www.sanslogic
 ## :wrench: Installation & Troubleshooting
 
 Please follow the installation instructions
-[here](https://photoboothproject.github.io/INSTALL) to setup
+[here](https://photoboothproject.github.io/) to setup
 Photobooth.
 
 If you're having trouble or questions please take a look at our
-[FAQ](https://photoboothproject.github.io/FAQ_MENU)
+[FAQ](https://photoboothproject.github.io/faq/)
 before opening a new issue.
 
 For local testing and development, the docker setup can be used with `docker-compose up --build`.
