@@ -971,12 +971,12 @@ EOF
         cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
-  'preview' => 
+  'preview' =>
   array (
     'mode' => 'device_cam',
     'cmd' => 'python3 cameracontrol.py --bsm',
   ),
-  'take_picture' => 
+  'take_picture' =>
   array (
     'cmd' => 'python3 cameracontrol.py --capture-image-and-download %s',
   ),
@@ -1104,12 +1104,12 @@ EOF
         cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
-  'preview' => 
+  'preview' =>
   array (
     'mode' => 'url',
     'url' => 'url("http://localhost:1984/api/stream.mjpeg?src=dslr")',
   ),
-  'take_picture' => 
+  'take_picture' =>
   array (
     'cmd' => 'capture %s',
   ),
