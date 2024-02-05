@@ -1472,6 +1472,8 @@ else
         MJPEG_PREVIEW=true
         info "### We will install a service to set up a mjpeg stream for gphoto2."
     else
+        GPHOTO_PREVIEW=false
+        MJPEG_PREVIEW=false
         info "### We won't install a service to set up preview for gphoto2."
     fi
 fi
