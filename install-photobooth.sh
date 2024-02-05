@@ -1011,7 +1011,9 @@ function mjpeg_preview() {
         elif [[ "$arch" == "i386" ]]; then
             goarch="386"
         elif [[ "$arch" == "armv7l" ]]; then
-            goarch="arm"
+            goarch="armv7"
+        elif [[ "$arch" == "armv6l" ]]; then
+            goarch="armv6"
         elif [[ "$arch" == "aarch64" ]]; then
             goarch="arm64"
         else
