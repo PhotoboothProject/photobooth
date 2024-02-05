@@ -20,7 +20,7 @@ KIOSK_MODE=false
 HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
-GPHOTO_PREVIEW=true
+GPHOTO_PREVIEW=false
 MJPEG_PREVIEW=false
 MJPEG_PREVIEW_ONLY=false
 CUPS_REMOTE_ANY=false
@@ -966,6 +966,23 @@ EOF
     # adjust current runtime
     modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
     rmmod bcm2835-isp || true
+    if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
+        info "### Creating default Photobooth config."
+        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+<?php
+\$config = array (
+  'preview' =>
+  array (
+    'mode' => 'device_cam',
+    'cmd' => 'python3 cameracontrol.py --bsm',
+  ),
+  'take_picture' =>
+  array (
+    'cmd' => 'python3 cameracontrol.py --capture-image-and-download %s',
+  ),
+);
+EOF
+    fi
 }
 
 function mjpeg_preview() {
@@ -1081,6 +1098,24 @@ sudo systemctl start go2rtc.service
 EOF
         chmod +x /usr/local/bin/capture
     fi
+
+    if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
+        info "### Creating default Photobooth config."
+        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+<?php
+\$config = array (
+  'preview' =>
+  array (
+    'mode' => 'url',
+    'url' => 'url("http://localhost:1984/api/stream.mjpeg?src=dslr")',
+  ),
+  'take_picture' =>
+  array (
+    'cmd' => 'capture %s',
+  ),
+);
+EOF
+    fi
 }
 
 function fix_git_modules() {
@@ -1182,6 +1217,7 @@ if [ "$UID" != 0 ]; then
 fi
 
 if [ "$MJPEG_PREVIEW_ONLY" = true ]; then
+    detect_photobooth_install
     mjpeg_preview
     exit 0
 fi
@@ -1439,7 +1475,7 @@ if grep -i Microsoft /proc/version &>/dev/null; then
     GPHOTO_PREVIEW=false
 
     echo -e "\033[0;33m### You seem to be installing photobooth inside of wsl."
-    echo -e "Do you want to install a service to be able to stream your camera via http?"
+    echo -e "Do you want to install a service to be able to stream your camera via http"
     echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
     ask_yes_no "### If unsure, type Y. [Y/n] " "Y"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -1449,20 +1485,33 @@ if grep -i Microsoft /proc/version &>/dev/null; then
         MJPEG_PREVIEW=false
         info "### We won't install a service to set up a mjpeg stream for gphoto2."
     fi
+elif [ "$MJPEG_PREVIEW" = true ]; then
+    info "### Mjpeg mode enabled. Installing go2rtc and needed service to stream your camera via http."
 else
-    echo -e "\033[0;33m### Do you like to install a service to set up a virtual webcam that gphoto2 can stream video to"
-    echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
-    echo -e "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
-    ask_yes_no "### If unsure, type N. [y/N] " "N"
-    echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    info "Do you want to install a service to be able to stream your camera to?"
+    info "Your camera must be supported by gphoto2 for liveview."
+    info ""
+    echo "Your options are:"
+    echo "1 Install gphoto2 webcam service"
+    echo "2 Install go2rtc and needed service to stream your camera via http"
+    echo "3 Don't install a service to set up preview for gphoto2"
+    info ""
+    ask_yes_no "Please enter your choice:" "3"
+    info ""
+    if [[ $REPLY =~ ^[1]$ ]]; then
         GPHOTO_PREVIEW=true
+        MJPEG_PREVIEW=false
         info "### We will install a service to set up a virtual webcam for gphoto2."
+        warn "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
+    elif [[ $REPLY =~ ^[2]$ ]]; then
+        GPHOTO_PREVIEW=false
+        MJPEG_PREVIEW=true
+        info "### We will install a service to set up a mjpeg stream for gphoto2."
     else
         GPHOTO_PREVIEW=false
-        info "### We won't install a service to set up a virtual webcam for gphoto2."
+        MJPEG_PREVIEW=false
+        info "### We won't install a service to set up preview for gphoto2."
     fi
-
 fi
 
 ############################################################
