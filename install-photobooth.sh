@@ -966,6 +966,23 @@ EOF
     # adjust current runtime
     modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
     rmmod bcm2835-isp || true
+    if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
+        info "### Creating default Photobooth config."
+        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+<?php
+\$config = array (
+  'preview' => 
+  array (
+    'mode' => 'device_cam',
+    'cmd' => 'python3 cameracontrol.py --bsm',
+  ),
+  'take_picture' => 
+  array (
+    'cmd' => 'python3 cameracontrol.py --capture-image-and-download %s',
+  ),
+);
+EOF
+    fi
 }
 
 function mjpeg_preview() {
@@ -1081,6 +1098,24 @@ sudo systemctl start go2rtc.service
 EOF
         chmod +x /usr/local/bin/capture
     fi
+
+    if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
+        info "### Creating default Photobooth config."
+        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+<?php
+\$config = array (
+  'preview' => 
+  array (
+    'mode' => 'url',
+    'url' => 'url("http://localhost:1984/api/stream.mjpeg?src=dslr")',
+  ),
+  'take_picture' => 
+  array (
+    'cmd' => 'capture %s',
+  ),
+);
+EOF
+    fi
 }
 
 function fix_git_modules() {
@@ -1182,6 +1217,7 @@ if [ "$UID" != 0 ]; then
 fi
 
 if [ "$MJPEG_PREVIEW_ONLY" = true ]; then
+    detect_photobooth_install
     mjpeg_preview
     exit 0
 fi
