@@ -968,7 +968,7 @@ EOF
     rmmod bcm2835-isp || true
     if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
         info "### Creating default Photobooth config."
-        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+        sudo -u www-data cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
   'preview' =>
@@ -1103,7 +1103,7 @@ EOF
 
     if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
         info "### Creating default Photobooth config."
-        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+        sudo -u www-data cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
   'preview' =>
