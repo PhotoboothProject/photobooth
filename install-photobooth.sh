@@ -1466,6 +1466,7 @@ else
         GPHOTO_PREVIEW=true
         MJPEG_PREVIEW=false
         info "### We will install a service to set up a virtual webcam for gphoto2."
+        warn "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
     elif [[ $REPLY =~ ^[2]$ ]]; then
         GPHOTO_PREVIEW=false
         MJPEG_PREVIEW=true
