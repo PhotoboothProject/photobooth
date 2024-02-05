@@ -40,7 +40,7 @@
       ansible.builtin.unarchive:
         src: >-
           https://github.com/dadav/go2rtc/releases/download/{{go2rtc_version}}/go2rtc_{{ansible_system | lower}}_{{
-          ansible_architecture | replace('x64_86', 'amd64')}}.tar.gz
+          ansible_architecture | replace('x86_64', 'amd64')}}.tar.gz
         dest: /usr/local/bin
         remote_src: true
 
