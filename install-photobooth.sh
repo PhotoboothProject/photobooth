@@ -982,7 +982,14 @@ EOF
   ),
 );
 EOF
-    chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+    else
+        info "### Can not set default config!"
+        info "    Please adjust your Photobooth configuration:"
+        info "    Preview mode: from device cam"
+        info "    Command to generate a live preview: python3 cameracontrol.py --bsm"
+        info "    Execute start command for preview on take picture/collage: enabled"
+        info "    Take picture command: python3 cameracontrol.py --capture-image-and-download %s"
     fi
 }
 
@@ -1118,7 +1125,7 @@ EOF
   ),
 );
 EOF
-    chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
     else
         info "### Can not set default config!"
         info "    Please adjust your Photobooth configuration:"
