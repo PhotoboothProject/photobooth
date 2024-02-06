@@ -1119,6 +1119,12 @@ EOF
 );
 EOF
     chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+    else
+        info "### Can not set default config!"
+        info "    Please adjust your Photobooth configuration:"
+        info "    Preview mode: from URL"
+        info "    Preview-URL: url(\"http://localhost:1984/api/stream.mjpeg?src=dslr\")"
+        info "    Take picture command: capture %s"
     fi
 }
 
