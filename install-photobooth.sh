@@ -989,7 +989,7 @@ EOF
         info "    Please adjust your Photobooth configuration:"
         info "    Preview mode: from device cam"
         info "    Command to generate a live preview: python3 cameracontrol.py"
-        info "    Execute start command for preview on take picture/collage: false"
+        info "    Execute start command for preview on take picture/collage: disabled"
         info "    Take picture command: python3 cameracontrol.py --capture-image-and-download %s"
     fi
 }
