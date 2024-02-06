@@ -974,7 +974,8 @@ EOF
   'preview' =>
   array (
     'mode' => 'device_cam',
-    'cmd' => 'python3 cameracontrol.py --bsm',
+    'cmd' => 'python3 cameracontrol.py',
+    'bsm' => false,
   ),
   'take_picture' =>
   array (
@@ -982,7 +983,14 @@ EOF
   ),
 );
 EOF
-    chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+    else
+        info "### Can not set default config!"
+        info "    Please adjust your Photobooth configuration:"
+        info "    Preview mode: from device cam"
+        info "    Command to generate a live preview: python3 cameracontrol.py"
+        info "    Execute start command for preview on take picture/collage: disabled"
+        info "    Take picture command: python3 cameracontrol.py --capture-image-and-download %s"
     fi
 }
 
@@ -1107,6 +1115,14 @@ EOF
         cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
+  'picture' =>
+  array (
+    'cntdwn_time' => '6',
+  ),
+  'collage' =>
+  array (
+    'cntdwn_time' => '6',
+  ),
   'preview' =>
   array (
     'mode' => 'url',
@@ -1118,7 +1134,14 @@ EOF
   ),
 );
 EOF
-    chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+    else
+        info "### Can not set default config!"
+        info "    Please adjust your Photobooth configuration:"
+        info "    Preview mode: from URL"
+        info "    Preview-URL: url(\"http://localhost:1984/api/stream.mjpeg?src=dslr\")"
+        info "    Take picture command: capture %s"
+        warn "    Note: Countdown for pictures and collage should be set to a minimum of 6 seconds!"
     fi
 }
 
