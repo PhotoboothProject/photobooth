@@ -1114,6 +1114,14 @@ EOF
         cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 \$config = array (
+  'picture' =>
+  array (
+    'cntdwn_time' => '6',
+  ),
+  'collage' =>
+  array (
+    'cntdwn_time' => '6',
+  ),
   'preview' =>
   array (
     'mode' => 'url',
@@ -1132,6 +1140,7 @@ EOF
         info "    Preview mode: from URL"
         info "    Preview-URL: url(\"http://localhost:1984/api/stream.mjpeg?src=dslr\")"
         info "    Take picture command: capture %s"
+        warn "    Note: Countdown for pictures and collage should be set to a minimum of 6 seconds!"
     fi
 }
 
