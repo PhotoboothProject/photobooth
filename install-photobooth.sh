@@ -974,7 +974,8 @@ EOF
   'preview' =>
   array (
     'mode' => 'device_cam',
-    'cmd' => 'python3 cameracontrol.py --bsm',
+    'cmd' => 'python3 cameracontrol.py',
+    'bsm' => false,
   ),
   'take_picture' =>
   array (
@@ -987,8 +988,8 @@ EOF
         info "### Can not set default config!"
         info "    Please adjust your Photobooth configuration:"
         info "    Preview mode: from device cam"
-        info "    Command to generate a live preview: python3 cameracontrol.py --bsm"
-        info "    Execute start command for preview on take picture/collage: enabled"
+        info "    Command to generate a live preview: python3 cameracontrol.py"
+        info "    Execute start command for preview on take picture/collage: false"
         info "    Take picture command: python3 cameracontrol.py --capture-image-and-download %s"
     fi
 }
