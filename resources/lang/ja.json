@@ -1,0 +1,23 @@
+{
+  "abort": "中断",
+  "add": "追加",
+  "admin_panel": "管理パネル",
+  "adminpanel_back": "戻る",
+  "adminpanel_toggletextOFF": "オフ",
+  "adminpanel_toggletextON": "オン",
+  "authentication": "ログイン",
+  "authentication:login_enabled": "ログインが有効",
+  "authentication:login_keypad": "キーパッドログイン",
+  "authentication:login_password": "パスワード",
+  "authentication:login_pin": "ピン",
+  "authentication:login_rental_keypad": "レンタルキーパッド",
+  "authentication:login_rental_pin": "レンタルピン",
+  "authentication:login_username": "ユーザー名",
+  "authentication:protect_admin": "管理パネルを保護する",
+  "authentication:protect_index": "スタートパネルを保護する",
+  "cheese": "チーーーーズ!",
+  "choose_image": "画像を選ぶ",
+  "click_element": "クリック",
+  "close": "閉じる",
+  "collage:collage_background": "バックグラウンド"
+}
