@@ -508,7 +508,7 @@ function common_software() {
 
 function apache_webserver() {
     info "### Installing Apache Webserver..."
-    apt-get -qq install -y apache2 libapache2-mod-php"${PHP_VERSION}"
+    apt-get -qq install -y apache2 libapache2-mod-php"$PHP_VERSION"
     sudo systemctl enable --now apache2
 }
 
@@ -1103,9 +1103,13 @@ elif [[ \$# -gt 1 ]]; then
     args="\$@"
 fi
 
-sudo systemctl stop go2rtc.service
+if systemctl cat go2rtc.service >/dev/null; then
+    HAS_GO2RTC=1
+fi
+
+[[ -n "\$HAS_GO2RTC" ]] && sudo systemctl stop go2rtc.service
 gphoto2 \$args
-sudo systemctl start go2rtc.service
+[[ -n "\$HAS_GO2RTC" ]] && sudo systemctl start go2rtc.service
 EOF
         chmod +x /usr/local/bin/capture
     fi
