@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install
-        run: ansible-playbook install.yml
+        run: ansible-playbook --connection=localhost install.yml
 
       # - name: Check welcome page
       #   run: curl --fail-with-body http://localhost/welcome/
