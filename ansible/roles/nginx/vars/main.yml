@@ -1,0 +1,5 @@
+---
+
+nginx_packages:
+  - nginx
+nginx_service_name: nginx

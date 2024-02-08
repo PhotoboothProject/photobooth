@@ -1,0 +1,53 @@
+---
+# vim: set ft=yaml.ansible :
+
+- name: Photbooth
+  hosts:
+    - 127.0.0.1
+  vars_files:
+    - default.config.yml
+  vars_prompt:
+    - name: user_password
+      prompt: Enter desired user password (if password is already set, this will be ignored)
+      private: true
+      unsafe: true
+  tags:
+    - nginx
+  become: true
+  pre_tasks:
+    - name: Try to detect if running in container
+      ansible.builtin.command: systemd-detect-virt --container
+      changed_when: false
+      register: container_check
+      tags:
+        - always
+    - name: Try to detect if running on a raspberry
+      ansible.builtin.command: grep Raspberry /sys/firmware/devicetree/base/model
+      changed_when: false
+      register: raspberry_check
+      tags:
+        - always
+    - name: Set facts
+      ansible.builtin.set_fact:
+        is_raspberry: '{{ not raspberry_check.failed }}'
+        is_container: '{{ not container_check.failed }}'
+      tags:
+        - always
+    - name: Include playbook configuration.
+      ansible.builtin.include_vars: '{{ item }}'
+      with_fileglob:
+        - '{{ playbook_dir }}/config.yml'
+      tags:
+        - always
+  roles:
+    - role: setup
+    - role: raspberry
+      when: is_raspberry
+    - role: apache
+      tags:
+        - never
+        - apache
+    - role: nginx
+      tags:
+        - never
+        - nginx

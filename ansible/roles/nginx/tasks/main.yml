@@ -1,0 +1,8 @@
+---
+# vim : set ft=yaml.ansible :
+
+- name: Install nginx packages
+  ansible.builtin.package:
+    name: '{{ nginx_packages }}'
+    state: installed
+  notify: Reload nginx
