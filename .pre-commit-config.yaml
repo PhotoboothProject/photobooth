@@ -17,7 +17,7 @@ repos:
     rev: v6.22.2
     hooks:
       - id: ansible-lint
-        files: ^install.yml$
+        files: ^ansible/
         pass_filenames: true
 
   - repo: https://github.com/pre-commit/mirrors-eslint
