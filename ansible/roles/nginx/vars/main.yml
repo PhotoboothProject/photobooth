@@ -2,4 +2,6 @@
 
 nginx_packages:
   - nginx
+  - php{{ php_version }}
+  - php{{ php_version }}-fpm
 nginx_service_name: nginx

@@ -1,0 +1,10 @@
+---
+
+system_packages:
+  - vim
+  - lsb-release
+  - apt-transport-https
+  - ca-certificates
+  - software-properties-common
+  - jq
+  - git

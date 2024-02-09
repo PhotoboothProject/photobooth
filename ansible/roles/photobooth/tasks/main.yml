@@ -1,0 +1,6 @@
+---
+
+- name: Install gphoto2 packages
+  ansible.builtin.apt:
+    name: '{{ photobooth_gphoto_packages }}'
+    state: present

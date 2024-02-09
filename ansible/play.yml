@@ -39,10 +39,16 @@
         - '{{ playbook_dir }}/config.yml'
       tags:
         - always
+    - name: Ensure apt cache is updated.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
   roles:
-    - role: setup
+    - role: system
     - role: raspberry
       when: is_raspberry
+    - role: php
+    - role: photobooth
     - role: apache
       tags:
         - never
@@ -51,3 +57,11 @@
       tags:
         - never
         - nginx
+    - role: lighttpd
+      tags:
+        - never
+        - lighttpd
+    - role: go2rtc
+      tags:
+        - never
+        - go2rtc

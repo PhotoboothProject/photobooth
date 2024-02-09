@@ -1,8 +1,23 @@
 ---
-# vim : set ft=yaml.ansible :
 
 - name: Install nginx packages
   ansible.builtin.package:
     name: '{{ nginx_packages }}'
     state: installed
   notify: Reload nginx
+
+- name: Copy nginx configs
+  ansible.builtin.file:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    state: file
+    mode: '0644'
+  loop:
+    - {src: nginx.conf, dest: /etc/nginx/nginx.conf}
+    - {src: site.conf, dest: /etc/nginx/sites-enabled/default}
+  notify: Reload nginx
+
+- name: Enable nginx service
+  ansible.builtin.service:
+    name: nginx
+    enabled: true

@@ -1,0 +1,8 @@
+---
+lighttpd_packages:
+  - lighttpd
+  - php{{ php_version }}-fpm
+
+lighttpd_mods:
+  - fastcgi
+  - fastcgi-php

@@ -1,0 +1,30 @@
+---
+# vim: ft=yaml.ansible:
+
+- name: Setup debian repos
+  when: ansible_distribution == 'Debian'
+  block:
+    - name: Download gpg key
+      ansible.builtin.get_url:
+        url: https://packages.sury.org/php/apt.gpg
+        dest: /etc/apt/trusted.gpg.d/php.gpg
+        mode: '0600'
+
+    - name: Add php repo
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb [signed-by=/etc/apt/trusted.gpg.d/php.gpg] https://packages.sury.org/php/ {{ ansible_distribution_release }}
+          main
+        state: present
+
+- name: Setup Ubuntu/jammy repos
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'jammy'
+  block:
+    - name: Add update repo
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted
+        state: present
+    - name: Enable php repo
+      ansible.builtin.apt_repository:
+        repo: ppa:ondrej/php
