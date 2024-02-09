@@ -630,8 +630,8 @@ const photoBooth = (function () {
                             );
                             collageProcessButton.append(
                                 '<span class="button--label">' +
-                                    photoboothTools.getTranslation('processPhoto') +
-                                    '</span>'
+                                photoboothTools.getTranslation('processPhoto') +
+                                '</span>'
                             );
                             collageProcessButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
@@ -701,9 +701,9 @@ const photoBooth = (function () {
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
                     photoboothTools.console.logDev(
                         'ERROR: Taking picture failed. Retrying. Retry: ' +
-                            retry +
-                            ' / ' +
-                            config.picture.retry_on_error
+                        retry +
+                        ' / ' +
+                        config.picture.retry_on_error
                     );
                     api.retryTakePic(retry);
                 } else {
@@ -789,11 +789,11 @@ const photoBooth = (function () {
         startTime = new Date().getTime();
         loaderMessage.html(
             '<i class="' +
-                config.icons.spinner +
-                '"></i><br>' +
-                (api.photoStyle === PhotoStyle.COLLAGE
-                    ? photoboothTools.getTranslation('busyCollage')
-                    : photoboothTools.getTranslation('busy'))
+            config.icons.spinner +
+            '"></i><br>' +
+            (api.photoStyle === PhotoStyle.COLLAGE
+                ? photoboothTools.getTranslation('busyCollage')
+                : photoboothTools.getTranslation('busy'))
         );
 
         if (
@@ -1017,6 +1017,112 @@ const photoBooth = (function () {
         buttonbar.insertBefore(submitButton, buttonbar.firstChild);
     };
 
+    api.saveImageWithName = function (image) {
+        photoboothTools.modal.open('mail');
+        const body = photoboothTools.modal.element.querySelector('.modal-body');
+        const buttonbar = photoboothTools.modal.element.querySelector('.modal-buttonbar');
+
+        // Text
+        const text = document.createElement('p');
+        text.textContent = photoboothTools.getTranslation('insertPreLastName');
+        body.appendChild(text);
+
+        // Form
+        const form = document.createElement('form');
+        form.id = 'set-image-name';
+        form.classList.add('form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (document.querySelector('#send-mail-message')) {
+                document.querySelector('#send-mail-message').remove();
+            }
+            const message = document.createElement('div');
+            message.id = 'set-image-name-message';
+            message.classList.add('form-message');
+            form.appendChild(message);
+            const submitButton = document.querySelector('#set-image-name-submit');
+            submitButton.diabled = true;
+
+            fetch(config.foldersPublic.api + '/renameImage.php', {
+                method: 'post',
+                body: new FormData(form)
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if (data.success) {
+                        console.log('TRUE');
+                        // document.querySelector('#send-mail-recipient').value = '';
+                        message.classList.add('text-success');
+                        message.textContent = photoboothTools.getTranslation('nameImage:success');
+                        setTimeout(() => photoboothTools.modal.close(), 3000);
+                    } else {
+                        message.classList.add('text-danger');
+                        if (data.fileExists) {
+                            message.textContent = data.fileExists;
+                        }
+                        if (data.failedCopy) {
+                            message.textContent = data.failedCopy;
+                        }
+                    }
+                    submitButton.disabled = false;
+                })
+                .catch(() => {
+                    message.classList.add('text-danger');
+                    message.textContent = photoboothTools.getTranslation('mailError');
+                    submitButton.disabled = false;
+                });
+        });
+        body.appendChild(form);
+
+        // Image
+        const imageInput = document.createElement('input');
+        imageInput.type = 'hidden';
+        imageInput.name = 'image';
+        imageInput.value = image;
+        form.appendChild(imageInput);
+
+        // FirstName
+        const firstNameInput = document.createElement('input');
+        firstNameInput.classList.add('form-input');
+        firstNameInput.id = 'firstName';
+        firstNameInput.type = 'text';
+        firstNameInput.name = 'firstName';
+        firstNameInput.placeholder = photoboothTools.getTranslation('firstName');
+        // firstNameInput.setAttribute('required','');
+        firstNameInput.addEventListener('focusin', (event) => {
+            // workaround for photoswipe blocking input
+            event.stopImmediatePropagation();
+        });
+        form.appendChild(firstNameInput);
+
+        // LastName
+        const lastNameInput = document.createElement('input');
+        lastNameInput.classList.add('form-input');
+        lastNameInput.id = 'lastName';
+        lastNameInput.type = 'text';
+        lastNameInput.name = 'lastName';
+        // lastNameInput.setAttribute('required','');
+        lastNameInput.placeholder = photoboothTools.getTranslation('lastName');
+
+        lastNameInput.addEventListener('focusin', (event) => {
+            // workaround for photoswipe blocking input
+            event.stopImmediatePropagation();
+        });
+        form.appendChild(lastNameInput);
+
+        // Submit
+        const submitLabel = photoboothTools.getTranslation('save');
+        const submitButton = photoboothTools.button.create(submitLabel, 'fa fa-check', 'primary', 'modal-');
+        submitButton.id = 'set-image-name-submit';
+        submitButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            form.requestSubmit();
+        });
+        buttonbar.insertBefore(submitButton, buttonbar.firstChild);
+    };
+
     api.showQrCode = function (filename) {
         if (!config.qr.enabled) {
             return;
@@ -1066,6 +1172,14 @@ const photoBooth = (function () {
             });
 
         resultPage
+            .find('[data-command="savebtn"]')
+            .off('click')
+            .on('click', (event) => {
+                event.preventDefault();
+                api.saveImageWithName(filename);
+            });
+
+        resultPage
             .find('.deletebtn')
             .off('click')
             .on('click', async (ev) => {
@@ -1074,8 +1188,8 @@ const photoBooth = (function () {
                 const really = config.delete.no_request
                     ? true
                     : await photoboothTools.confirm(
-                          filename + ' ' + photoboothTools.getTranslation('really_delete_image')
-                      );
+                        filename + ' ' + photoboothTools.getTranslation('really_delete_image')
+                    );
                 if (really) {
                     files.forEach(function (file, index, array) {
                         photoboothTools.console.logDev('Index:', index);

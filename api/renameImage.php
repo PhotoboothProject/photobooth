@@ -7,13 +7,16 @@ use Photobooth\Helper;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 
+
+
 header('Content-Type: application/json');
 
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
+$logString = json_encode($_POST);
 try {
-    if (empty($_POST['file'])) {
+    if (empty($_POST['image'])) {
         throw new Exception('No file provided');
     }
 } catch (Exception $e) {
@@ -23,23 +26,36 @@ try {
     die();
 }
 
-$file = $_POST['file'];
-$paths = [$config['foldersAbs']['images'], $config['foldersAbs']['thumbs'], $config['foldersAbs']['keying'],$config['foldersAbs']['namedImages']];
 
-if (!$config['picture']['keep_original']) {
-    $paths[] = $config['foldersAbs']['tmp'];
+
+$file = $_POST['image'];
+$firstName = filter_var($_POST['firstName'], FILTER_UNSAFE_RAW);
+$lastName = filter_var($_POST['lastName'], FILTER_UNSAFE_RAW);
+
+
+
+
+$newFileName = Helper::slugify($lastName.'_'.$firstName).'_'.$file;
+$logData['success'] = false;
+$logData = array();
+
+if(file_exists($config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $newFileName)) {
+    $logData['fileExists'] = 'Same image already exists';
+} else {
+    if (!copy(
+        $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file,
+        $config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $newFileName)) {
+        $logData['failedCopy'] = json_encode('failed to copy');
+    } else {
+        $logData['success'] = true;
+    }
 }
 
-$delete = new FileDelete($file, $paths);
-$delete->deleteFiles();
-$logData = $delete->getLogData();
 
-if ($config['database']['enabled']) {
-    $database = DatabaseManagerService::getInstance();
-    $database->deleteContentFromDB($file);
-}
 
-if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
+
+// TODO: FTP COPY NAMED IMAGE
+/*if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
     $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
 
     // login to ftp server
@@ -83,12 +99,14 @@ if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
 
     // close the connection
     ftp_close($ftp);
-}
+}*/
 
-if (!$logData['success'] || $config['dev']['loglevel'] > 1) {
+// TODO: LOG DATA
+/*if (!$logData['success'] || $config['dev']['loglevel'] > 1) {
     $logger->debug('data', $logData);
-}
+}*/
 
 $logString = json_encode($logData);
 echo $logString;
 exit();
+
