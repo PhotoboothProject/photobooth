@@ -445,6 +445,12 @@ $configsetup = [
             'name' => 'picture[enabled]',
             'value' => $config['picture']['enabled'],
         ],
+        'naming_enabled' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'picture_naming[enabled]',
+            'value' => $config['picture_naming']['enabled'],
+        ],
         'picture_cntdwn_time' => [
             'view' => 'basic',
             'type' => 'range',
@@ -3076,6 +3082,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['icons']['password_visibility'],
             'value' => $config['icons']['password_visibility'],
         ],
+        'icons_rename' => [
+            'view' => 'expert',
+            'type' => 'icon',
+            'name' => 'icons[rename]',
+            'placeholder' => $defaultConfig['icons']['rename'],
+            'value' => $config['icons']['rename'],
+        ],
         'icons_password_toggle' => [
             'view' => 'expert',
             'type' => 'input',
@@ -3239,6 +3252,13 @@ $configsetup = [
             'placeholder' => $defaultConfig['folders']['data'],
             'name' => 'folders[data]',
             'value' => $config['folders']['data'],
+        ],
+        'folders_named_images' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['folders']['namedImages'],
+            'name' => 'folders[namedImages]',
+            'value' => $config['folders']['namedImages'],
         ],
         'folders_images' => [
             'view' => 'expert',

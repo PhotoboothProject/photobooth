@@ -58,6 +58,7 @@ $config['button']['force_buzzer'] = false;
 
 // P I C T U R E S
 $config['picture']['enabled'] = true;
+$config['picture_naming']['enabled'] = false;
 // control countdown timer in seconds
 $config['picture']['cntdwn_time'] = '5';
 // control time for cheeeeese! in milliseconds
@@ -488,6 +489,7 @@ $config['icons']['password_visibility'] = 'fa fa-eye';
 $config['icons']['password_toggle'] = 'fa-eye fa-eye-slash';
 $config['icons']['slideshow_play'] = 'fa fa-play';
 $config['icons']['slideshow_toggle'] = 'fa-play fa-pause';
+$config['icons']['rename'] = 'fa fa-pencil';
 
 // J P E G   Q U A L I T Y
 $config['jpeg_quality']['image'] = 100;
@@ -512,6 +514,7 @@ $config['shutdown']['cmd'] = '';
 $config['folders']['config'] = 'config';
 $config['folders']['data'] = 'data';
 $config['folders']['images'] = 'images';
+$config['folders']['namedImages'] = 'named-images';
 $config['folders']['keying'] = 'keying';
 $config['folders']['print'] = 'print';
 $config['folders']['qrcodes'] = 'qrcodes';
