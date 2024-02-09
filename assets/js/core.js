@@ -1055,6 +1055,112 @@ const photoBooth = (function () {
         buttonbar.insertBefore(submitButton, buttonbar.firstChild);
     };
 
+    api.saveImageWithName = function (image) {
+        photoboothTools.modal.open('mail');
+        const body = photoboothTools.modal.element.querySelector('.modal-body');
+        const buttonbar = photoboothTools.modal.element.querySelector('.modal-buttonbar');
+
+        // Text
+        const text = document.createElement('p');
+        text.textContent = photoboothTools.getTranslation('insertPreLastName');
+        body.appendChild(text);
+
+        // Form
+        const form = document.createElement('form');
+        form.id = 'set-image-name';
+        form.classList.add('form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (document.querySelector('#send-mail-message')) {
+                document.querySelector('#send-mail-message').remove();
+            }
+            const message = document.createElement('div');
+            message.id = 'set-image-name-message';
+            message.classList.add('form-message');
+            form.appendChild(message);
+            const submitButton = document.querySelector('#set-image-name-submit');
+            submitButton.diabled = true;
+
+            fetch(config.foldersPublic.api + '/renameImage.php', {
+                method: 'post',
+                body: new FormData(form)
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if (data.success) {
+                        console.log('TRUE');
+                        // document.querySelector('#send-mail-recipient').value = '';
+                        message.classList.add('text-success');
+                        message.textContent = photoboothTools.getTranslation('nameImage:success');
+                        setTimeout(() => photoboothTools.modal.close(), 3000);
+                    } else {
+                        message.classList.add('text-danger');
+                        if (data.fileExists) {
+                            message.textContent = data.fileExists;
+                        }
+                        if (data.failedCopy) {
+                            message.textContent = data.failedCopy;
+                        }
+                    }
+                    submitButton.disabled = false;
+                })
+                .catch(() => {
+                    message.classList.add('text-danger');
+                    message.textContent = photoboothTools.getTranslation('mailError');
+                    submitButton.disabled = false;
+                });
+        });
+        body.appendChild(form);
+
+        // Image
+        const imageInput = document.createElement('input');
+        imageInput.type = 'hidden';
+        imageInput.name = 'image';
+        imageInput.value = image;
+        form.appendChild(imageInput);
+
+        // FirstName
+        const firstNameInput = document.createElement('input');
+        firstNameInput.classList.add('form-input');
+        firstNameInput.id = 'firstName';
+        firstNameInput.type = 'text';
+        firstNameInput.name = 'firstName';
+        firstNameInput.placeholder = photoboothTools.getTranslation('firstName');
+        // firstNameInput.setAttribute('required','');
+        firstNameInput.addEventListener('focusin', (event) => {
+            // workaround for photoswipe blocking input
+            event.stopImmediatePropagation();
+        });
+        form.appendChild(firstNameInput);
+
+        // LastName
+        const lastNameInput = document.createElement('input');
+        lastNameInput.classList.add('form-input');
+        lastNameInput.id = 'lastName';
+        lastNameInput.type = 'text';
+        lastNameInput.name = 'lastName';
+        // lastNameInput.setAttribute('required','');
+        lastNameInput.placeholder = photoboothTools.getTranslation('lastName');
+
+        lastNameInput.addEventListener('focusin', (event) => {
+            // workaround for photoswipe blocking input
+            event.stopImmediatePropagation();
+        });
+        form.appendChild(lastNameInput);
+
+        // Submit
+        const submitLabel = photoboothTools.getTranslation('save');
+        const submitButton = photoboothTools.button.create(submitLabel, 'fa fa-check', 'primary', 'modal-');
+        submitButton.id = 'set-image-name-submit';
+        submitButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            form.requestSubmit();
+        });
+        buttonbar.insertBefore(submitButton, buttonbar.firstChild);
+    };
+
     api.showQrCode = function (filename) {
         if (!config.qr.enabled) {
             return;
@@ -1101,6 +1207,14 @@ const photoBooth = (function () {
             .on('click', (event) => {
                 event.preventDefault();
                 api.showQrCode(filename);
+            });
+
+        resultPage
+            .find('[data-command="savebtn"]')
+            .off('click')
+            .on('click', (event) => {
+                event.preventDefault();
+                api.saveImageWithName(filename);
             });
 
         resultPage
