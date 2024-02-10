@@ -208,6 +208,13 @@ $config['preview']['camera_mode'] = 'user';
 $config['preview']['asBackground'] = false;
 $config['preview']['showFrame'] = false;
 
+// S O U N D
+$config['sound']['enabled'] = false;
+$config['sound']['countdown_enabled'] = true;
+$config['sound']['cheese_enabled'] = true;
+$config['sound']['fallback_enabled'] = true;
+$config['sound']['voice'] = 'man';
+
 // K E Y I N G
 $config['keying']['enabled'] = false;
 // possible size values: '1000px', '1500px', '2000px', '2500px'

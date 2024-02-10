@@ -1717,6 +1717,52 @@ $configsetup = [
             'value' => $config['textonprint']['linespace'],
         ],
     ],
+    'sound' => [
+        'view' => 'basic',
+        'sound_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'sound[enabled]',
+            'value' => $config['sound']['enabled'],
+        ],
+        'sound_countdown_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'sound[countdown_enabled]',
+            'value' => $config['sound']['countdown_enabled'],
+        ],
+        'sound_cheese_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'sound[cheese_enabled]',
+            'value' => $config['sound']['cheese_enabled'],
+        ],
+        'sound_fallback_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'sound[fallback_enabled]',
+            'value' => $config['sound']['fallback_enabled'],
+        ],
+        'sound_voice' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'sound[voice]',
+            'placeholder' => $defaultConfig['sound']['voice'],
+            'options' => [
+                'woman' => 'female voice',
+                'man' => 'male voice',
+                'custom' => 'custom sounds',
+            ],
+            'value' => $config['sound']['voice'],
+        ],
+        'sound_test' => [
+            'view' => 'basic',
+            'type' => 'button',
+            'placeholder' => 'sound_test',
+            'name' => 'sound[test]',
+            'value' => 'soundtest-btn',
+        ],
+    ],
     'qr' => [
         'view' => 'basic',
         'qr_enabled' => [
