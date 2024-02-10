@@ -153,6 +153,37 @@ if (isset($data['type'])) {
         $newConfig['collage']['limit'] = 4;
     }
 
+    if ($newConfig['sound']['voice'] === 'custom') {
+        $soundDir = DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'sounds' . DIRECTORY_SEPARATOR;
+    } else {
+        $soundDir = DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'sounds' . DIRECTORY_SEPARATOR . $newConfig['sound']['voice'] . DIRECTORY_SEPARATOR . $newConfig['ui']['language'] . DIRECTORY_SEPARATOR;
+    }
+    $fallbackSoundDir = DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'sounds' . DIRECTORY_SEPARATOR . $newConfig['sound']['voice'] . DIRECTORY_SEPARATOR . 'en' . DIRECTORY_SEPARATOR;
+
+    // countdown sounds
+    for ($i = 1; $i <= 10; $i++) {
+        $soundFile = $soundDir . 'counter-' . $i . '.mp3';
+        $fallbackSoundFile = $fallbackSoundDir . 'counter-' . $i . '.mp3';
+        if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . '..' . $soundFile)) {
+            $newConfig['sound']['_files']['counter-' . $i] = $soundFile;
+        } elseif ($newConfig['sound']['fallback_enabled']) {
+            $newConfig['sound']['_files']['counter-' . $i] = $fallbackSoundFile;
+        } else {
+            $newConfig['sound']['_files']['counter-' . $i] = null;
+        }
+    }
+
+    // cheese sound
+    $soundFile = $soundDir . 'cheese.mp3';
+    $fallbackSoundFile = $fallbackSoundDir . 'cheese.mp3';
+    if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . '..' . $soundFile)) {
+        $newConfig['sound']['_files']['cheese'] = $soundFile;
+    } elseif ($newConfig['sound']['fallback_enabled']) {
+        $newConfig['sound']['_files']['cheese'] = $fallbackSoundFile;
+    } else {
+        $newConfig['sound']['_files']['cheese'] = null;
+    }
+
     // If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
     if ($newConfig['collage']['placeholder']) {
         $collagePlaceholderPosition = (int) $newConfig['collage']['placeholderposition'];

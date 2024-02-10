@@ -214,6 +214,41 @@ $(function () {
         });
     });
 
+    $('#soundtest-btn').on('click', function (ev) {
+        ev.preventDefault();
+
+        let audioElement = document.getElementById('testaudio');
+        if (audioElement === null) {
+            audioElement = document.createElement('audio');
+            audioElement.id = 'testaudio';
+            document.body.append(audioElement);
+        }
+
+        let soundfile = null;
+        if ($('[name="sound[voice]"]').val() === 'custom') {
+            soundfile =
+                '/private/sounds/' +
+                $('[name="sound[voice]"]').val() +
+                '/counter-' +
+                Math.floor(Math.random() * 10 + 1) +
+                '.mp3';
+        } else {
+            soundfile =
+                '/resources/sounds/' +
+                $('[name="sound[voice]"]').val() +
+                '/' +
+                $('[name="ui[language]"]').val() +
+                '/counter-' +
+                Math.floor(Math.random() * 10 + 1) +
+                '.mp3';
+        }
+        audioElement.src = soundfile;
+        audioElement.play().catch((error) => {
+            photoboothTools.console.log('Error with audio.play: ' + error);
+        });
+        return false;
+    });
+
     $('#debugpanel-btn').on('click', function (ev) {
         ev.preventDefault();
         window.open('../admin/debug');
