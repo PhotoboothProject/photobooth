@@ -85,6 +85,7 @@ $configsetup = [
                 'en' => 'EN',
                 'es' => 'ES',
                 'fr' => 'FR',
+                'hr' => 'HR',
                 'it' => 'IT',
                 'nl' => 'NL',
                 'pt' => 'PT',
