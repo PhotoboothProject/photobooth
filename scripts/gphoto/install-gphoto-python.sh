@@ -107,4 +107,5 @@ elif [[ $REPLY =~ ^[3]$ ]]; then
 else
     info "Okay... doing nothing!"
 fi
+info "Done!"
 exit 0
