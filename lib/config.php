@@ -90,6 +90,12 @@ $mailTemplates = [
             'text' => 'Hé, ta photo est attachée.',
         ],
     ],
+    'hr' => [
+        'mail' => [
+            'subject' => 'Ovo je vaša slika',
+            'text' => 'Vaša slika je u prilogu',
+        ],
+    ],
 ];
 
 require_once PathUtility::getAbsolutePath('config/config.inc.php');
