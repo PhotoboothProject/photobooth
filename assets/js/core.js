@@ -630,8 +630,8 @@ const photoBooth = (function () {
                             );
                             collageProcessButton.append(
                                 '<span class="button--label">' +
-                                photoboothTools.getTranslation('processPhoto') +
-                                '</span>'
+                                    photoboothTools.getTranslation('processPhoto') +
+                                    '</span>'
                             );
                             collageProcessButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
@@ -701,9 +701,9 @@ const photoBooth = (function () {
                 if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
                     photoboothTools.console.logDev(
                         'ERROR: Taking picture failed. Retrying. Retry: ' +
-                        retry +
-                        ' / ' +
-                        config.picture.retry_on_error
+                            retry +
+                            ' / ' +
+                            config.picture.retry_on_error
                     );
                     api.retryTakePic(retry);
                 } else {
@@ -789,11 +789,11 @@ const photoBooth = (function () {
         startTime = new Date().getTime();
         loaderMessage.html(
             '<i class="' +
-            config.icons.spinner +
-            '"></i><br>' +
-            (api.photoStyle === PhotoStyle.COLLAGE
-                ? photoboothTools.getTranslation('busyCollage')
-                : photoboothTools.getTranslation('busy'))
+                config.icons.spinner +
+                '"></i><br>' +
+                (api.photoStyle === PhotoStyle.COLLAGE
+                    ? photoboothTools.getTranslation('busyCollage')
+                    : photoboothTools.getTranslation('busy'))
         );
 
         if (
@@ -1188,8 +1188,8 @@ const photoBooth = (function () {
                 const really = config.delete.no_request
                     ? true
                     : await photoboothTools.confirm(
-                        filename + ' ' + photoboothTools.getTranslation('really_delete_image')
-                    );
+                          filename + ' ' + photoboothTools.getTranslation('really_delete_image')
+                      );
                 if (really) {
                     files.forEach(function (file, index, array) {
                         photoboothTools.console.logDev('Index:', index);
