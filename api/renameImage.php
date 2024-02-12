@@ -109,4 +109,3 @@ if(file_exists($config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $new
 $logString = json_encode($logData);
 echo $logString;
 exit();
-
