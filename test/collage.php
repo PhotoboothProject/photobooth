@@ -50,7 +50,7 @@ if (Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $confi
 
     $imageResource = $imageHandler->createFromImage($filename_tmp);
     if (!$imageResource) {
-        throw new Exception('Error creating image resource.');
+        throw new \Exception('Error creating image resource.');
     }
 
     header('Content-Type: image/jpeg');

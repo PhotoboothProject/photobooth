@@ -16,13 +16,8 @@ class Helper
 
     /**
      * Recursively compares two arrays and returns the differences between them.
-     *
-     * @param array $array1 The first array to compare.
-     * @param array $array2 The second array to compare.
-     *
-     * @return array The array containing the differences between $array1 and $array2.
      */
-    public static function arrayRecursiveDiff($array1, $array2)
+    public static function arrayRecursiveDiff(array $array1, array $array2): array
     {
         $returnArray = [];
 
@@ -48,14 +43,10 @@ class Helper
 
     /**
      * Clears the cache for a specific file.
-     *
-     * @param string $file The path to the file for which the cache should be cleared.
-     *
-     * @return void
      */
-    public static function clearCache($file)
+    public static function clearCache(string $file): void
     {
-        if (function_exists('opcache_invalidate') && strlen(ini_get('opcache.restrict_api')) < 1) {
+        if (function_exists('opcache_invalidate') && ini_get('opcache.restrict_api') !== false && strlen(ini_get('opcache.restrict_api')) < 1) {
             opcache_invalidate($file, true);
         } elseif (function_exists('apc_compile_file')) {
             apc_compile_file($file);
@@ -64,14 +55,8 @@ class Helper
 
     /**
      * Calculates the total size of a folder and its subfolders recursively.
-     *
-     * @param string $path The path to the folder.
-     *
-     * @return int The total size of the folder in bytes.
-     *
-     * @throws Exception If the provided path is not a valid directory.
      */
-    public static function getFolderSize($path)
+    public static function getFolderSize(string $path): int
     {
         if (!is_dir($path)) {
             throw new \Exception('Invalid directory path: ' . $path);
@@ -106,34 +91,23 @@ class Helper
 
     /**
      * Formats the given size in bytes to a human-readable format.
-     *
-     * @param int $size The size in bytes.
-     * @return string The formatted size with unit label.
      */
-    public static function formatSize($size)
+    public static function formatSize(int $size): string
     {
         $mod = 1024;
-
         for ($i = 0; $size > $mod; $i++) {
             $size /= $mod;
         }
 
-        $endIndex = strpos($size, '.') + 3;
+        $endIndex = strpos((string) $size, '.') + 3;
 
-        return substr($size, 0, $endIndex) . ' ' . self::$units[$i];
+        return substr((string) $size, 0, $endIndex) . ' ' . self::$units[$i];
     }
 
     /**
      * Counts the number of files in the given directory.
-     *
-     * @param string $path The path to the directory.
-     *
-     * @return int The number of files in the directory.
-     *
-     * @throws Exception If the provided path is not a valid directory or an error occurs while reading the directory.
-     *
      */
-    public static function getFileCount($path)
+    public static function getFileCount(string $path): int
     {
         if (!is_dir($path)) {
             throw new \Exception('Invalid directory path: ' . $path);
@@ -157,12 +131,8 @@ class Helper
 
     /**
      * Navigate through the ftp folder system.
-     *
-     * @param Connection $conn The connection to the FTP server.
-     * @param string $currentDir The path to the directory in the FTP server.
-     * @throws Exception If the provided path is not a valid directory in the FTP server.
      */
-    public static function cdFTPTree(Connection $conn, string $currentDir)
+    public static function cdFTPTree(Connection $conn, string $currentDir): void
     {
         if ($currentDir == '') {
             throw new \Exception('The path cannot be empty!');
@@ -185,17 +155,8 @@ class Helper
 
     /**
      * Convert a text into a slug.
-     *
-     * @param string $text The text to convert.
-     *
-     * @param string $divider The custom divider to use between words.
-     *
-     * @return string The text converted into a slug.
-     *
-     * @throws Exception If the provided path is not a valid directory in the FTP server.
-     *
      */
-    public static function slugify($text, $divider = '-')
+    public static function slugify(string $text, string $divider = '-'): string
     {
         // replace non letter or digits by divider
         $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
@@ -224,13 +185,8 @@ class Helper
 
     /**
      * Check if the file exist, and it isn't a location.
-     *
-     * @param string $file_location The location of the file to check.
-     *
-     * @return bool true if the file exist and it isn't a location, false otherwise.
-     *
      */
-    public static function testFile($file_location)
+    public static function testFile(string $file_location): bool
     {
         if (is_dir($file_location)) {
             //throw new \Exception($file_location . ' is a path! Frames need to be PNG, Fonts need to be ttf!');

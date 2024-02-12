@@ -17,7 +17,7 @@ $database = DatabaseManagerService::getInstance();
 
 try {
     if (empty($_POST['file'])) {
-        throw new Exception('No file provided');
+        throw new \Exception('No file provided');
     }
 
     $file = $_POST['file'];
@@ -30,9 +30,9 @@ try {
     $filenameThumb = $thumbsFolder . $file;
 
     if (!file_exists($filenameTmp)) {
-        throw new Exception('Image doesn\'t exist.');
+        throw new \Exception('Image doesn\'t exist.');
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // Handle the exception
     $data = ['error' => $e->getMessage()];
     $logger->error($e->getMessage(), $data);
@@ -66,7 +66,7 @@ try {
         $collageConfig->collageTakeFrame = 'off';
         $collageConfig->collagePlaceholder = false;
         if (!Collage::createCollage($config, $frames, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
-            throw new Exception('Could not create collage.');
+            throw new \Exception('Could not create collage.');
         }
         $images[] = $collageFilename;
     }
@@ -87,7 +87,7 @@ try {
 
         $imageResource = $imageHandler->createFromImage($image);
         if (!$imageResource) {
-            throw new Exception('Error creating image resource.');
+            throw new \Exception('Error creating image resource.');
         }
         $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
         $imageHandler->resizeMaxWidth = $thumb_size;
@@ -106,11 +106,11 @@ try {
         $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
         if ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100) {
             if (!$imageHandler->saveJpeg($imageResource, $newFile)) {
-                throw new Exception('Failed to save image.');
+                throw new \Exception('Failed to save image.');
             }
         } else {
             if (!copy($image, $newFile)) {
-                throw new Exception('Failed to copy photo.');
+                throw new \Exception('Failed to copy photo.');
             }
         }
         imagedestroy($imageResource);
@@ -132,7 +132,7 @@ try {
 
     if ($config['video']['collage_only']) {
         if ($collageFilename === '' || !file_exists($imageFolder . $collageFilename)) {
-            throw new Exception('Configured to save only Collage but collage file does not exist: ' . $collageFilename);
+            throw new \Exception('Configured to save only Collage but collage file does not exist: ' . $collageFilename);
         }
         if (!$config['picture']['keep_original']) {
             if (!unlink($filenameTmp)) {
@@ -206,7 +206,7 @@ try {
             $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
         }
     }
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // Handle the exception
     if (isset($imageResource) && is_resource($imageResource)) {
         imagedestroy($imageResource);

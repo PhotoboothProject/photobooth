@@ -33,6 +33,9 @@ class Photobooth
             throw new \Exception('Package file not found.');
         }
         $packageContent = file_get_contents($packageJsonPath);
+        if ($packageContent === false) {
+            throw new \Exception('Error loading package file: ' . $packageJsonPath);
+        }
         $package = json_decode($packageContent, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \Exception('Error decoding package file: ' . json_last_error_msg());

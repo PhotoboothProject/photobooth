@@ -22,7 +22,7 @@ class AutoVersionStrategy implements VersionStrategyInterface
         $manifestPath = PathUtility::getAbsolutePath('resources/revisions.json');
         if (is_file($manifestPath)) {
             try {
-                $this->revisionData = json_decode(file_get_contents($manifestPath), true, flags: \JSON_THROW_ON_ERROR);
+                $this->revisionData = json_decode((string) file_get_contents($manifestPath), true, flags: \JSON_THROW_ON_ERROR);
             } catch (\JsonException $e) {
                 // if no revisions file exists we do not want
                 // the application to fail, in getVersion it
@@ -33,7 +33,7 @@ class AutoVersionStrategy implements VersionStrategyInterface
         // package-lock.json hash
         $packageLockPath = PathUtility::getAbsolutePath('package-lock.json');
         if (is_file($packageLockPath)) {
-            $this->packageLockHash = sha1(file_get_contents($packageLockPath));
+            $this->packageLockHash = sha1((string) file_get_contents($packageLockPath));
         }
     }
 
@@ -55,7 +55,7 @@ class AutoVersionStrategy implements VersionStrategyInterface
         if (str_starts_with($path, 'private')) {
             $absolutePath = PathUtility::getAbsolutePath($path);
             if (file_exists($absolutePath)) {
-                return sha1(file_get_contents($absolutePath));
+                return sha1((string) file_get_contents($absolutePath));
             }
         }
 

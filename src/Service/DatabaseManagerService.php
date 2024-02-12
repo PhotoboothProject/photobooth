@@ -40,7 +40,7 @@ class DatabaseManagerService
                 throw new \Exception('File not found: ' . $this->databaseFile);
             }
         } catch (\Exception $e) {
-            return [];
+            // do nothing
         }
 
         return [];
@@ -64,6 +64,7 @@ class DatabaseManagerService
             }
 
             // read the files in the directory
+            $files = [];
             while (false !== ($filename = readdir($dh))) {
                 $files[] = $filename;
             }
@@ -71,10 +72,13 @@ class DatabaseManagerService
 
             // filter the files to include only images with .jpg or .jpeg extensions
             $images = preg_grep('/\.(jpg|jpeg)$/i', $files);
+            if ($images === false) {
+                return [];
+            }
 
             return $images;
         } catch (\Exception $e) {
-            return [];
+            // do nothing
         }
 
         return [];
@@ -187,7 +191,7 @@ class DatabaseManagerService
             return strlen($a[0]) <=> strlen($b[0]);
         });
 
-        if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === 'false') {
+        if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === false) {
             return 'error';
         } else {
             return 'success';

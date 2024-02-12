@@ -67,7 +67,7 @@ function getLatestCommits(): string
             return json_encode(['error' => 'Can not get latest commits']);
         }
         return $result;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         http_response_code(500);
         return json_encode(['error' => $e->getMessage()]);
     }
@@ -78,19 +78,19 @@ function readFileContents(string $file): string
     global $config;
     try {
         if ($config['dev']['loglevel'] < 1) {
-            throw new Exception('INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.');
+            throw new \Exception('INFO: Loglevel is ' . $config['dev']['loglevel'] . '. Please set Loglevel > 1 to see logs.');
         }
 
         if (!file_exists($file)) {
-            throw new Exception('INFO: File (' . $file . ') does not exist');
+            throw new \Exception('INFO: File (' . $file . ') does not exist');
         }
 
         if (!is_file($file)) {
-            throw new Exception('INFO: Path (' . $file . ') is not a file');
+            throw new \Exception('INFO: Path (' . $file . ') is not a file');
         }
 
         return file_get_contents($file);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         return $e->getMessage();
     }
 }

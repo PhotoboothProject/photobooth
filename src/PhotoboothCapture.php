@@ -34,7 +34,7 @@ class PhotoboothCapture
     /**
      * Capture a demo image.
      */
-    public function captureDemo()
+    public function captureDemo(): void
     {
         $this->logger->debug('Capture Demo', [
             'demoFolder' => $this->demoFolder
@@ -48,7 +48,7 @@ class PhotoboothCapture
      * Capture an image from canvas data.
      * @param string $data
      */
-    public function captureCanvas($data)
+    public function captureCanvas($data): void
     {
         $this->logger->debug('Capture Canvas');
         try {
@@ -86,7 +86,7 @@ class PhotoboothCapture
     /**
      * Capture an image or video using a command.
      */
-    public function captureWithCmd()
+    public function captureWithCmd(): void
     {
         $this->logger->debug('Capture with CMD', [
             'cmd' => $this->captureCmd,
@@ -148,7 +148,7 @@ class PhotoboothCapture
     /**
      * Return information about the successful capture process
      */
-    public function returnData()
+    public function returnData(): array
     {
         if ($this->style === 'collage') {
             $data = [
@@ -159,7 +159,10 @@ class PhotoboothCapture
                 'limit' => $this->collageLimit,
             ];
         } else {
-            $data = ['success' => $this->style, 'file' => $this->fileName];
+            $data = [
+                'success' => $this->style,
+                'file' => $this->fileName
+            ];
         }
         $this->logger->debug('returnData', $data);
         return $data;

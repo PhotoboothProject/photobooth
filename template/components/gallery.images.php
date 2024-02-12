@@ -46,7 +46,7 @@ if (empty($imagelist)) {
                 echo '</figure>';
                 echo '</a>';
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Empty catch block
             // ignore errors for niw
         }

@@ -166,7 +166,7 @@ class AdminInput
         foreach ($setting['options'] as $value => $option) {
             $optionLabel = $option;
             $optionValue = $value;
-            if ($option instanceof \UnitEnum) {
+            if ($option instanceof \BackedEnum) {
                 $optionLabel = ($option instanceof LabelInterface) ? $option->label() : $option->name;
                 $optionValue = $option->value;
             }
@@ -206,7 +206,7 @@ class AdminInput
                     if (count($files) === 0) {
                         $images .= '
                         <div class="col-span-3">
-                            <p>' . $languageService->translate('error.path.noimages') . '</p>
+                            <p>' . $languageService->translate('error_path_noimages') . '</p>
                         </div>
                     ';
                     }

@@ -168,6 +168,7 @@ const photoBooth = (function () {
 
     api.countdown = {
         element: null,
+        audioElement: null,
         create: () => {
             if (api.countdown.element === null) {
                 const element = document.createElement('div');
@@ -175,11 +176,21 @@ const photoBooth = (function () {
                 document.body.append(element);
                 api.countdown.element = element;
             }
+
+            if (api.countdown.audioElement === null) {
+                const audioElement = document.createElement('audio');
+                document.body.append(audioElement);
+                api.countdown.audioElement = audioElement;
+            }
         },
         destroy: () => {
             if (api.countdown.element !== null) {
                 api.countdown.element.remove();
                 api.countdown.element = null;
+            }
+            if (api.countdown.audioElement !== null) {
+                api.countdown.audioElement.remove();
+                api.countdown.audioElement = null;
             }
         },
         start: (seconds) => {
@@ -197,6 +208,15 @@ const photoBooth = (function () {
                     numberElement.textContent = Number(seconds).toString();
                     api.countdown.element.innerHtml = '';
                     api.countdown.element.appendChild(numberElement);
+
+                    if (config.sound.enabled && config.sound.countdown_enabled) {
+                        let soundfile = config.sound._files['counter-' + Number(seconds).toString()];
+                        api.countdown.audioElement.src = soundfile;
+                        api.countdown.audioElement.play().catch((error) => {
+                            photoboothTools.console.log('Error with audio.play: ' + error);
+                        });
+                    }
+
                     seconds--;
 
                     if (seconds === stop && config.preview.killcmd && !config.preview.camTakesPic) {
@@ -217,7 +237,14 @@ const photoBooth = (function () {
 
     api.cheese = {
         element: null,
+        audioElement: null,
         create: () => {
+            if (api.cheese.audioElement === null) {
+                const audioElement = document.createElement('audio');
+                document.body.append(audioElement);
+                api.cheese.audioElement = audioElement;
+            }
+
             if (api.cheese.element === null) {
                 const element = document.createElement('div');
                 element.classList.add('cheese');
@@ -256,6 +283,10 @@ const photoBooth = (function () {
             }
         },
         destroy: () => {
+            if (api.cheese.audioElement !== null) {
+                api.cheese.audioElement.remove();
+                api.cheese.audioElement = null;
+            }
             if (api.cheese.element !== null) {
                 api.cheese.element.remove();
                 api.cheese.element = null;
@@ -266,6 +297,13 @@ const photoBooth = (function () {
             api.cheese.create();
 
             return new Promise((resolve) => {
+                if (config.sound.enabled && config.sound.cheese_enabled) {
+                    let soundfile = config.sound._files.cheese;
+                    api.cheese.audioElement.src = soundfile;
+                    api.cheese.audioElement.play().catch((error) => {
+                        photoboothTools.console.log('Error with audio.play: ' + error);
+                    });
+                }
                 setTimeout(() => {
                     photoboothTools.console.log('Cheese: End');
                     resolve();
