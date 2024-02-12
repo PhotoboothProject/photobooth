@@ -62,7 +62,7 @@ class FileDelete
         foreach ($this->paths as $path) {
             $files = scandir($path);
             foreach ($files as $file) {
-                if(str_contains($file,$fileName)) {
+                if(str_contains($file, $fileName)) {
                     $fileListToDelete[] = $path . DIRECTORY_SEPARATOR . $file;
                 }
             }

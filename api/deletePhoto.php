@@ -24,7 +24,7 @@ try {
 }
 
 $file = $_POST['file'];
-$paths = [$config['foldersAbs']['images'], $config['foldersAbs']['thumbs'], $config['foldersAbs']['keying'],$config['foldersAbs']['namedImages']];
+$paths = [$config['foldersAbs']['images'], $config['foldersAbs']['thumbs'], $config['foldersAbs']['keying'], $config['foldersAbs']['namedImages']];
 
 if (!$config['picture']['keep_original']) {
     $paths[] = $config['foldersAbs']['tmp'];

@@ -2,12 +2,8 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\FileDelete;
 use Photobooth\Helper;
-use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
-
-
 
 header('Content-Type: application/json');
 
@@ -26,33 +22,25 @@ try {
     die();
 }
 
-
-
 $file = $_POST['image'];
 $firstName = filter_var($_POST['firstName'], FILTER_UNSAFE_RAW);
 $lastName = filter_var($_POST['lastName'], FILTER_UNSAFE_RAW);
-
-
-
-
-$newFileName = Helper::slugify($lastName.'_'.$firstName).'_'.$file;
+$newFileName = Helper::slugify($lastName . '_' . $firstName) . '_' . $file;
 $logData['success'] = false;
-$logData = array();
+$logData = [];
 
 if(file_exists($config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $newFileName)) {
     $logData['fileExists'] = 'Same image already exists';
 } else {
     if (!copy(
         $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file,
-        $config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $newFileName)) {
+        $config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $newFileName
+    )) {
         $logData['failedCopy'] = json_encode('failed to copy');
     } else {
         $logData['success'] = true;
     }
 }
-
-
-
 
 // TODO: FTP COPY NAMED IMAGE
 /*if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
