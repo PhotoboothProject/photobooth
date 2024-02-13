@@ -22,12 +22,30 @@ class Collage
             $image_filter = $filter;
         }
 
-        // colors for background and while rotating jpeg images
-        list($bg_r, $bg_g, $bg_b) = sscanf($c->collageBackgroundColor, '#%02x%02x%02x');
+        if ($c->collageBackgroundColor !== null) {
+            // colors for background and while rotating jpeg images
+            $colorComponents = sscanf($c->collageBackgroundColor, '#%02x%02x%02x');
+            if ($colorComponents !== null) {
+                list($bg_r, $bg_g, $bg_b) = $colorComponents;
+            } else {
+                throw new \Exception('Collage background color: sscanf returned null!');
+            }
+        }
+
         $bg_color_hex = hexdec(substr($c->collageBackgroundColor, 1));
+        if (!is_int($bg_color_hex)) {
+            throw new \Exception('Cannot convert the hexadecimal collage background color to its decimal equivalent!');
+        }
 
         // dashedline color on 2x4 collage layouts
-        list($dashed_r, $dashed_g, $dashed_b) = sscanf($c->collageDashedLineColor, '#%02x%02x%02x');
+        if ($c->collageDashedLineColor !== null) {
+            $dashedColorComponents = sscanf($c->collageDashedLineColor, '#%02x%02x%02x');
+            if ($dashedColorComponents !== null) {
+                list($dashed_r, $dashed_g, $dashed_b) = $dashedColorComponents;
+            } else {
+                throw new \Exception('Collage dashed line color: sscanf returned null!');
+            }
+        }
 
         if (!is_array($srcImagePaths)) {
             throw new \Exception('Source image paths are not an array.');
@@ -97,8 +115,8 @@ class Collage
                 $imageResource = $imageHandler->effectPolaroid($imageResource);
             }
 
-            $width = imagesx($imageResource);
-            $height = imagesy($imageResource);
+            $width = (int) imagesx($imageResource);
+            $height = (int) imagesy($imageResource);
 
             if ($width > $height) {
                 $landscape = true;
@@ -118,8 +136,8 @@ class Collage
             imagedestroy($imageResource);
         }
         //Create Collage based on 300dpi 4x6in - Scale collages with the height
-        $collage_height = 4 * $c->collageResolution;
-        $collage_width = $collage_height * 1.5;
+        $collage_height = intval(4 * $c->collageResolution);
+        $collage_width = intval($collage_height * 1.5);
 
         $my_collage = imagecreatetruecolor($collage_width, $collage_height);
         if (is_array(@getimagesize($c->collageBackground))) {
@@ -129,7 +147,7 @@ class Collage
             $backgroundImage = $imageHandler->resizeImage($backgroundImage);
             imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
         } else {
-            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+            $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
             imagefill($my_collage, 0, 0, $background);
         }
 
@@ -155,7 +173,7 @@ class Collage
 
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
@@ -185,7 +203,7 @@ class Collage
 
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
@@ -225,7 +243,7 @@ class Collage
 
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
@@ -273,7 +291,7 @@ class Collage
 
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
@@ -302,7 +320,7 @@ class Collage
 
                 for ($i = 0; $i < 3; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
@@ -330,7 +348,7 @@ class Collage
 
                 for ($i = 0; $i < 3; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
@@ -338,7 +356,7 @@ class Collage
             case '2x4':
                 // colage size defined by image size
                 $my_collage = imagecreatetruecolor($width, $height);
-                $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+                $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
                 imagefill($my_collage, 0, 0, $background);
 
                 if ($landscape) {
@@ -359,13 +377,13 @@ class Collage
                     }
 
                     $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
-                    $imageHandler->resizeMaxWidth = $height / 3.3;
-                    $imageHandler->resizeMaxHeight = $width / 3.5;
+                    $imageHandler->resizeMaxWidth = intval($height / 3.3);
+                    $imageHandler->resizeMaxHeight = intval($width / 3.5);
                     $images_rotated[] = $imageHandler->resizeImage($tempSubImage);
                 }
 
-                $new_width = imagesx($images_rotated[0]);
-                $new_height = imagesy($images_rotated[0]);
+                $new_width = (int)imagesx($images_rotated[0]);
+                $new_height = (int)imagesy($images_rotated[0]);
 
                 $height_offset = intval(($height / 2 - $new_height) / 2);
                 $width_offset = intval(($width - $new_width * 4) / 5);
@@ -392,7 +410,7 @@ class Collage
                 }
 
                 imagescale($my_collage, $width, $height);
-                $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
+                $imageHandler->dashedLineColor = imagecolorallocate($my_collage, (int) $dashed_r, (int) $dashed_g, (int) $dashed_b);
                 $imageHandler->dashedLineStartX = 50;
                 $imageHandler->dashedLineStartY = $height / 2;
                 $imageHandler->dashedLineEndX = $width - 50;
@@ -455,20 +473,20 @@ class Collage
 
                 for ($i = 0; $i < 4; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int) $pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
 
                     $imageHandler->setAddPictureOptions(
-                        $pictureOptions[$i + 4][0],
-                        $pictureOptions[$i + 4][1],
-                        $pictureOptions[$i + 4][2],
-                        $pictureOptions[$i + 4][3],
-                        $pictureOptions[$i + 4][4]
+                        (int)$pictureOptions[$i + 4][0],
+                        (int)$pictureOptions[$i + 4][1],
+                        (int)$pictureOptions[$i + 4][2],
+                        (int)$pictureOptions[$i + 4][3],
+                        (int)$pictureOptions[$i + 4][4]
                     );
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
-                $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
+                $imageHandler->dashedLineColor = imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
                 $imageHandler->dashedLineStartX = $collage_width * 0.03;
                 $imageHandler->dashedLineStartY = $collage_height / 2;
                 $imageHandler->dashedLineEndX = $collage_width * 0.97;
@@ -482,8 +500,8 @@ class Collage
                     $rotate_after_creation = true;
                 }
 
-                $widthNew = $collage_height * 0.32;
-                $heightNew = $widthNew * 1.5;
+                $widthNew = intval($collage_height * 0.32);
+                $heightNew = intval($widthNew * 1.5);
 
                 $shortRatioY = 0.01;
                 $longRatioY = 0.51;
@@ -550,15 +568,15 @@ class Collage
 
                 for ($i = 0; $i < 3; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
-                    $imageHandler->setAddPictureOptions($pictureOptions[$i][0], $pictureOptions[$i][1], $pictureOptions[$i][2], $pictureOptions[$i][3], $pictureOptions[$i][4]);
+                    $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int) $pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
 
                     $imageHandler->setAddPictureOptions(
-                        $pictureOptions[$i + 3][0],
-                        $pictureOptions[$i + 3][1],
-                        $pictureOptions[$i + 3][2],
-                        $pictureOptions[$i + 3][3],
-                        $pictureOptions[$i + 3][4]
+                        (int)$pictureOptions[$i + 3][0],
+                        (int)$pictureOptions[$i + 3][1],
+                        (int) $pictureOptions[$i + 3][2],
+                        (int)$pictureOptions[$i + 3][3],
+                        (int) $pictureOptions[$i + 3][4]
                     );
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
@@ -584,14 +602,14 @@ class Collage
                             $collage_width = $collageJson['width'];
                             $collage_height = $collageJson['height'];
                             $my_collage = imagecreatetruecolor($collage_width, $collage_height);
-                            $background = imagecolorallocate($my_collage, $bg_r, $bg_g, $bg_b);
+                            $background = imagecolorallocate($my_collage, (int)$bg_r, (int) $bg_g, (int)$bg_b);
                             imagefill($my_collage, 0, 0, $background);
                         }
 
                         if (array_key_exists('background', $collageJson)) {
                             if ($collageJson['background']) {
-                                $imageHandler->resizeMaxWidth = $collage_width;
-                                $imageHandler->resizeMaxHeight = $collage_height;
+                                $imageHandler->resizeMaxWidth = (int)$collage_width;
+                                $imageHandler->resizeMaxHeight = (int)$collage_height;
                                 $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
                                 $backgroundImage = $imageHandler->resizeImage($backgroundImage);
                                 imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
@@ -601,8 +619,8 @@ class Collage
 
                         if (array_key_exists('portrait', $collageJson) && $collage_width > $collage_height) {
                             if ($collageJson['portrait']) {
-                                $tmp = $collage_width;
-                                $collage_width = $collage_height;
+                                $tmp = (int) $collage_width;
+                                $collage_width = (int) $collage_height;
                                 $collage_height = $tmp;
                                 $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
                             }
@@ -657,11 +675,11 @@ class Collage
                 foreach ($pictureOptions as $i => $singlePictureOptions) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
                     $imageHandler->setAddPictureOptions(
-                        $singlePictureOptions[0],
-                        $singlePictureOptions[1],
-                        $singlePictureOptions[2],
-                        $singlePictureOptions[3],
-                        $singlePictureOptions[4]
+                        (int)$singlePictureOptions[0],
+                        (int)$singlePictureOptions[1],
+                        (int)$singlePictureOptions[2],
+                        (int)$singlePictureOptions[3],
+                        (int)$singlePictureOptions[4]
                     );
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
