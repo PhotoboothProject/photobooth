@@ -116,12 +116,12 @@ class Helper
         $fileCount = 0;
         $fi = new \FilesystemIterator($path, \FilesystemIterator::SKIP_DOTS);
 
-        if ($fi === false) {
+        if (!$fi->valid()) {
             throw new \Exception('Failed to read directory: ' . $path);
         }
 
         foreach ($fi as $file) {
-            if ($file->isFile()) {
+            if ($file instanceof \SplFileInfo && $file->isFile()) {
                 $fileCount++;
             }
         }
@@ -162,25 +162,24 @@ class Helper
         $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
         // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
-
-        // trim
-        $text = trim($text, $divider);
-
-        // remove duplicate divider
-        $text = preg_replace('~-+~', $divider, $text);
-
-        // lowercase
-        $text = strtolower($text);
-
-        if (empty($text)) {
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', (string)$text);
+        if ($text === false) {
             return 'n-a';
         }
 
-        return $text;
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', (string)$text);
+
+        // trim
+        $text = trim((string)$text, $divider);
+
+        // remove duplicate divider
+        $text = preg_replace('~-+~', $divider, (string)$text);
+
+        // lowercase
+        $text = strtolower((string)$text);
+
+        return empty($text) ? 'n-a' : $text;
     }
 
     /**

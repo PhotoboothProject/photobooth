@@ -40,8 +40,15 @@ class PhotoboothCapture
             'demoFolder' => $this->demoFolder
         ]);
         $demoFolder = $this->demoFolder;
-        $devImg = array_diff(scandir($demoFolder), ['.', '..']);
-        copy($demoFolder . $devImg[array_rand($devImg)], $this->tmpFile);
+        $scannedFiles = scandir($demoFolder);
+        if ($scannedFiles !== false) {
+            $devImg = array_diff($scannedFiles, ['.', '..']);
+            copy($demoFolder . $devImg[array_rand($devImg)], $this->tmpFile);
+        } else {
+            $this->logger->error('Failed to scan demo folder for images!');
+            echo json_encode(['error' => 'Failed to scan demo folder for images!']);
+            die();
+        }
     }
 
     /**
@@ -61,6 +68,9 @@ class PhotoboothCapture
             if ($this->flipImage != 'off') {
                 $imageHandler = new Image();
                 $im = $imageHandler->createFromImage($this->tmpFile);
+                if (!$im instanceof \GdImage) {
+                    throw new \Exception('Failed to create image resource from tmp image.');
+                }
                 $imageHandler->debugLevel = $this->debugLevel;
                 $imageHandler->jpegQuality = 100;
                 switch ($this->flipImage) {
