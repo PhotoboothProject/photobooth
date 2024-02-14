@@ -16,6 +16,7 @@ class Collage
             $c = CollageConfigFactory::fromConfig($config);
         }
         $editImages = [];
+        $landscape = true;
         $rotate_after_creation = false;
         $image_filter = false;
         if (!empty($filter) && $filter !== 'plain') {
@@ -82,8 +83,7 @@ class Collage
 
         for ($i = 0; $i < $c->collageLimit; $i++) {
             $imageResource = $imageHandler->createFromImage($editImages[$i]);
-            // Only jpg/jpeg are supported
-            if (!$imageResource) {
+            if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Failed to create image resource.');
             }
 
@@ -108,6 +108,9 @@ class Collage
                 $imageHandler->resizeRotation = $c->pictureRotation;
                 $imageHandler->resizeBgColor = $c->collageBackgroundColor;
                 $imageResource = $imageHandler->rotateResizeImage($imageResource);
+                if (!$imageResource instanceof \GdImage) {
+                    throw new \Exception('Failed to rotate and resize image resource.');
+                }
             }
 
             if ($c->picturePolaroidEffect === 'enabled') {
@@ -123,6 +126,9 @@ class Collage
             } else {
                 $landscape = false;
                 $imageResource = imagerotate($imageResource, 90, $bg_color_hex);
+                if (!$imageResource instanceof \GdImage) {
+                    throw new \Exception('Failed to rotate image resource.');
+                }
                 $width = imagesx($imageResource);
                 $height = imagesy($imageResource);
                 $imageHandler->imageModified = true;
@@ -140,15 +146,26 @@ class Collage
         $collage_width = intval($collage_height * 1.5);
 
         $my_collage = imagecreatetruecolor($collage_width, $collage_height);
+
+        if (!$my_collage instanceof \GdImage) {
+            throw new \Exception('Failed to create collage resource.');
+        }
+
         if (is_array(@getimagesize($c->collageBackground))) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
             $imageHandler->resizeMaxWidth = $collage_width;
             $imageHandler->resizeMaxHeight = $collage_height;
+            if (!$backgroundImage instanceof \GdImage) {
+                throw new \Exception('Failed to create collage background image resource.');
+            }
             $backgroundImage = $imageHandler->resizeImage($backgroundImage);
+            if (!$backgroundImage instanceof \GdImage) {
+                throw new \Exception('Failed to resize collage background image resource.');
+            }
             imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
         } else {
             $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
-            imagefill($my_collage, 0, 0, $background);
+            imagefill($my_collage, 0, 0, (int) $background);
         }
 
         if ($landscape == false) {
@@ -173,6 +190,9 @@ class Collage
 
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
@@ -204,6 +224,9 @@ class Collage
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
@@ -243,6 +266,9 @@ class Collage
 
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
@@ -291,6 +317,9 @@ class Collage
 
                 for ($i = 0; $i < $c->collageLimit; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
@@ -320,6 +349,9 @@ class Collage
 
                 for ($i = 0; $i < 3; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
@@ -348,6 +380,9 @@ class Collage
 
                 for ($i = 0; $i < 3; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
@@ -355,9 +390,14 @@ class Collage
                 break;
             case '2x4':
                 // colage size defined by image size
+                if (!isset($width) || !isset($height)) {
+                    throw new \Exception('Width or height not defined!');
+                }
                 $my_collage = imagecreatetruecolor($width, $height);
-                $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
-                imagefill($my_collage, 0, 0, $background);
+                if (!$my_collage instanceof \GdImage) {
+                    throw new \Exception('Failed to create collage resource.');
+                }
+                $background = imagecolorallocate($my_collage, (int)$bg_r, (int)$bg_g, (int)$bg_b);
 
                 if ($landscape) {
                     $rotate_after_creation = true;
@@ -371,17 +411,26 @@ class Collage
                     }
 
                     $tempSubImage = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tempSubImage instanceof \GdImage) {
+                        throw new \Exception('Failed to create tempSubImage resource.');
+                    }
 
                     if ($c->collageTakeFrame === 'always') {
                         $tempSubImage = $imageHandler->applyFrame($tempSubImage);
                     }
 
                     $tempSubImage = imagerotate($tempSubImage, $degrees, $bg_color_hex);
+                    if (!$tempSubImage instanceof \GdImage) {
+                        throw new \Exception('Failed to rotate tempSubImage resource.');
+                    }
                     $imageHandler->resizeMaxWidth = intval($height / 3.3);
                     $imageHandler->resizeMaxHeight = intval($width / 3.5);
                     $images_rotated[] = $imageHandler->resizeImage($tempSubImage);
                 }
 
+                if (!$images_rotated[0] instanceof \GdImage) {
+                    throw new \Exception('Failed to resize tempSubImage resource.');
+                }
                 $new_width = (int)imagesx($images_rotated[0]);
                 $new_height = (int)imagesy($images_rotated[0]);
 
@@ -404,13 +453,15 @@ class Collage
                 for ($i = 0; $i < 4; $i++) {
                     $position_top = $positions_top[$i];
                     $position_bottom = $positions_bottom[$i];
-
+                    if (!$images_rotated[$i] instanceof \GdImage) {
+                        throw new \Exception('Failed to add copy rotated images to collage resource.');
+                    }
                     imagecopy($my_collage, $images_rotated[$i], $position_top[0], $position_top[1], 0, 0, $new_width, $new_height);
                     imagecopy($my_collage, $images_rotated[$i], $position_bottom[0], $position_bottom[1], 0, 0, $new_width, $new_height);
                 }
 
                 imagescale($my_collage, $width, $height);
-                $imageHandler->dashedLineColor = imagecolorallocate($my_collage, (int) $dashed_r, (int) $dashed_g, (int) $dashed_b);
+                $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
                 $imageHandler->dashedLineStartX = 50;
                 $imageHandler->dashedLineStartY = $height / 2;
                 $imageHandler->dashedLineEndX = $width - 50;
@@ -473,6 +524,9 @@ class Collage
 
                 for ($i = 0; $i < 4; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int) $pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
 
@@ -486,11 +540,11 @@ class Collage
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     imagedestroy($tmpImg);
                 }
-                $imageHandler->dashedLineColor = imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
-                $imageHandler->dashedLineStartX = $collage_width * 0.03;
-                $imageHandler->dashedLineStartY = $collage_height / 2;
-                $imageHandler->dashedLineEndX = $collage_width * 0.97;
-                $imageHandler->dashedLineEndY = $collage_height / 2;
+                $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
+                $imageHandler->dashedLineStartX = intval($collage_width * 0.03);
+                $imageHandler->dashedLineStartY = intval($collage_height / 2);
+                $imageHandler->dashedLineEndX = intval($collage_width * 0.97);
+                $imageHandler->dashedLineEndY = intval($collage_height / 2);
                 $imageHandler->drawDashedLine($my_collage);
 
                 break;
@@ -568,6 +622,9 @@ class Collage
 
                 for ($i = 0; $i < 3; $i++) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int) $pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
 
@@ -582,17 +639,17 @@ class Collage
                     imagedestroy($tmpImg);
                 }
                 if ($c->collageLayout === '2x3') {
-                    $imageHandler->dashedLineColor = imagecolorallocate($my_collage, $dashed_r, $dashed_g, $dashed_b);
-                    $imageHandler->dashedLineStartX = $collage_width * 0.03;
-                    $imageHandler->dashedLineStartY = $collage_height / 2;
-                    $imageHandler->dashedLineEndX = $collage_width * 0.97;
-                    $imageHandler->dashedLineEndY = $collage_height / 2;
+                    $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
+                    $imageHandler->dashedLineStartX = intval($collage_width * 0.03);
+                    $imageHandler->dashedLineStartY = intval($collage_height / 2);
+                    $imageHandler->dashedLineEndX = intval($collage_width * 0.97);
+                    $imageHandler->dashedLineEndY = intval($collage_height / 2);
                     $imageHandler->drawDashedLine($my_collage);
                 }
                 break;
             default:
                 $collageConfigFilePath = PathUtility::getAbsolutePath('private' . DIRECTORY_SEPARATOR . $c->collageLayout);
-                $collageJson = json_decode(file_get_contents($collageConfigFilePath), true);
+                $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
 
                 if (is_array($collageJson)) {
                     if (array_key_exists('layout', $collageJson)) {
@@ -602,8 +659,11 @@ class Collage
                             $collage_width = $collageJson['width'];
                             $collage_height = $collageJson['height'];
                             $my_collage = imagecreatetruecolor($collage_width, $collage_height);
-                            $background = imagecolorallocate($my_collage, (int)$bg_r, (int) $bg_g, (int)$bg_b);
-                            imagefill($my_collage, 0, 0, $background);
+                            if (!$my_collage instanceof \GdImage) {
+                                throw new \Exception('Failed to create collage resource.');
+                            }
+                            $background = imagecolorallocate($my_collage, (int)$bg_r, (int)$bg_g, (int)$bg_b);
+                            imagefill($my_collage, 0, 0, (int)$background);
                         }
 
                         if (array_key_exists('background', $collageJson)) {
@@ -611,7 +671,13 @@ class Collage
                                 $imageHandler->resizeMaxWidth = (int)$collage_width;
                                 $imageHandler->resizeMaxHeight = (int)$collage_height;
                                 $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
+                                if (!$backgroundImage instanceof \GdImage) {
+                                    throw new \Exception('Failed to create collage background resource.');
+                                }
                                 $backgroundImage = $imageHandler->resizeImage($backgroundImage);
+                                if (!$backgroundImage instanceof \GdImage) {
+                                    throw new \Exception('Failed to resize collage background resource.');
+                                }
                                 imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
                                 $imageHandler->addPictureBgImage = $collageJson['background'];
                             }
@@ -623,6 +689,9 @@ class Collage
                                 $collage_width = (int) $collage_height;
                                 $collage_height = $tmp;
                                 $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
+                                if (!$my_collage instanceof \GdImage) {
+                                    throw new \Exception('Failed to rotate collage resource.');
+                                }
                             }
                         }
 
@@ -659,6 +728,7 @@ class Collage
                     return false;
                 }
 
+                $pictureOptions = [];
                 foreach ($layoutConfigArray as $layoutConfig) {
                     if (!is_array($layoutConfig) || count($layoutConfig) !== 5) {
                         return false;
@@ -674,6 +744,9 @@ class Collage
 
                 foreach ($pictureOptions as $i => $singlePictureOptions) {
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
+                    if (!$tmpImg instanceof \GdImage) {
+                        throw new \Exception('Failed to create tmp image resource.');
+                    }
                     $imageHandler->setAddPictureOptions(
                         (int)$singlePictureOptions[0],
                         (int)$singlePictureOptions[1],
@@ -689,6 +762,9 @@ class Collage
 
         if ($c->collageTakeFrame === 'once') {
             $my_collage = $imageHandler->applyFrame($my_collage);
+            if (!$my_collage instanceof \GdImage) {
+                throw new \Exception('Failed to apply frame on collage resource.');
+            }
         }
 
         if ($c->textOnCollageEnabled === 'enabled') {
@@ -703,11 +779,17 @@ class Collage
             $imageHandler->textLine3 = $c->textOnCollageLine3;
             $imageHandler->textLineSpacing = $c->textOnCollageLinespace;
             $my_collage = $imageHandler->applyText($my_collage);
+            if (!$my_collage instanceof \GdImage) {
+                throw new \Exception('Failed to apply text to collage resource.');
+            }
         }
 
         // Rotate image if needed
         if ($rotate_after_creation) {
             $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
+            if (!$my_collage instanceof \GdImage) {
+                throw new \Exception('Failed to rotate collage resource after creation.');
+            }
         }
 
         // Transfer image to destImagePath with returns the image to core
@@ -717,7 +799,7 @@ class Collage
         imagedestroy($my_collage);
 
         for ($i = 0; $i < $c->collageLimit; $i++) {
-            if (!$c->collagePlaceholder || ($c->collagePlaceholder && $c->collagePlaceholderPosition != $i)) {
+            if (($c->collagePlaceholder && $c->collagePlaceholderPosition != $i) || !$c->collagePlaceholder) {
                 unlink($editImages[$i]);
             }
         }
@@ -725,7 +807,7 @@ class Collage
         return true;
     }
 
-    public static function doMath($expression): int
+    public static function doMath(string $expression): int
     {
         $o = 0;
         // eval is evil. To mitigate any attacks the allowed characters are limited to numbers and math symbols
