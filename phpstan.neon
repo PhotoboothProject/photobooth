@@ -7,5 +7,6 @@ parameters:
 		- tools/phpunit/vendor/autoload.php
 
 	paths:
+	- %currentWorkingDirectory%/api/
 	- %currentWorkingDirectory%/src/
 	- %currentWorkingDirectory%/tests/
