@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : false;

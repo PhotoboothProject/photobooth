@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $config */
+/** @var array $defaultConfig */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Helper;

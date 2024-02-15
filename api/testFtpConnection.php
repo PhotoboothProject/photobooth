@@ -37,6 +37,13 @@ $password = $data['ftp']['password'];
 // init connection to ftp server
 $ftp = ftp_ssl_connect($baseUrl, $port, 10);
 
+if ($ftp === false) {
+    $logger->error('Can\'t connect to FTP Server!');
+    $result['response'] = 'error';
+    $result['message'] = 'ftp:no_connection';
+    die();
+}
+
 // login to ftp server
 $login_result = @ftp_login($ftp, $username, $password);
 $result['response'] = 'success';

@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 use Photobooth\FileDelete;
@@ -41,6 +43,13 @@ if ($config['database']['enabled']) {
 
 if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
     $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
+
+    if ($ftp === false) {
+        $message = 'Failed to connect to FTP Server!';
+        $logger->error($message, $config['ftp']);
+        echo json_encode(['error' => $message]);
+        die();
+    }
 
     // login to ftp server
     $login_result = ftp_login($ftp, $config['ftp']['username'], $config['ftp']['password']);

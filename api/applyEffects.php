@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Image;
@@ -169,12 +171,13 @@ try {
             $imageHandler->resizeMaxWidth = $chroma_size;
             $imageHandler->resizeMaxHeight = $chroma_size;
             $chromaCopyResource = $imageHandler->resizeImage($imageResource);
-            if (!$chromaCopyResource instanceof \GdImage) {
-                throw new \Exception('Error resizing chroma resource.');
-            }
-            $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
-            if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
-                $imageHandler->addErrorData('Warning: Failed to save chroma image copy.');
+            if ($chromaCopyResource instanceof \GdImage) {
+                $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
+                if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
+                    $imageHandler->addErrorData('Warning: Failed to save chroma image copy.');
+                }
+            } else {
+                $imageHandler->addErrorData('Warning: Failed to resize chroma resource.');
             }
             if ($chromaCopyResource instanceof \GdImage) {
                 imagedestroy($chromaCopyResource);
@@ -260,6 +263,12 @@ try {
         if ($config['ftp']['enabled']) {
             // init connection to ftp server
             $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
+            if ($ftp === false) {
+                $message = 'Failed to connect to FTP Server!';
+                $logger->error($message, $config['ftp']);
+                echo json_encode(['error' => $message]);
+                die();
+            }
 
             // login to ftp server
             $login_result = ftp_login($ftp, $config['ftp']['username'], $config['ftp']['password']);
@@ -315,11 +324,17 @@ try {
                     // get the index.php template file from the configured location
                     $webpage_template = file_get_contents($config['ftp']['template_location']);
 
+                    if ($webpage_template === false) {
+                        throw new \Exception('File could not be read: ' . $config['ftp']['template_location']);
+                    }
                     // set the {title} variable
                     $final_webpage = str_replace('{title}', $config['ftp']['title'], $webpage_template);
 
                     // put the file into a stream
                     $stream = fopen('php://memory', 'r+');
+                    if ($stream === false) {
+                        throw new \Exception('Could not put the file into a stream!');
+                    }
                     fwrite($stream, $final_webpage);
                     rewind($stream);
 
@@ -346,7 +361,7 @@ try {
 
         // Change permissions
         $picture_permissions = $config['picture']['permissions'];
-        if (!chmod($filename_photo, octdec($picture_permissions))) {
+        if (!chmod($filename_photo, (int)octdec($picture_permissions))) {
             $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
         }
 
