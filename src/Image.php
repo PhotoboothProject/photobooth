@@ -312,7 +312,7 @@ class Image
     /**
      * Collect error data and increase errorCount
      */
-    public function addErrorData(string $errorData): void
+    public function addErrorData(string|array $errorData): void
     {
         $this->errorCount++;
         $this->errorLog[] = $errorData;
