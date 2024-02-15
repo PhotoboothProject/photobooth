@@ -10,12 +10,12 @@ $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 $simpleExec = $config['preview']['simpleExec'];
 
-function isRunning($pid, $logger)
+function isRunning(int $pid, Photobooth\Logger\NamedLogger $logger): bool
 {
     try {
-        $result = shell_exec(sprintf('ps %d', $pid));
-
-        if (count(preg_split("/\n/", $result)) > 2) {
+        $result = (string)shell_exec(sprintf('ps %d', $pid));
+        $result = (array)preg_split("/\n/", $result);
+        if (count($result) > 2) {
             return true;
         }
     } catch (\Exception $e) {
@@ -35,18 +35,18 @@ if ($_POST['play'] === 'start') {
             'pid' => intval(1),
         ];
     } else {
-        $pid = exec($cmd, $out);
+        $pid = (int)exec($cmd, $out);
         sleep(3);
         $data = [
             'isRunning' => isRunning($pid, $logger),
-            'pid' => $pid - 1,
+            'pid' => intval($pid - 1),
             'cmd' => $cmd,
         ];
     }
 } else {
     $killcmd = sprintf($config['preview']['killcmd']);
     $success = exec($killcmd, $output, $retval);
-    if (isset($success)) {
+    if ($success) {
         switch ($retval) {
             case 127:
                 $output = 'Command not found';

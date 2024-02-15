@@ -65,7 +65,7 @@ $picture_permissions = $config['picture']['permissions'];
 $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 
 try {
-    $img = $_POST['imgData'];
+    $img = (string)$_POST['imgData'];
     $img = str_replace('data:image/png;base64,', '', $img);
     $img = str_replace(' ', '+', $img);
     $data = base64_decode($img);
@@ -104,7 +104,7 @@ try {
         if ($config['picture']['polaroid_effect']) {
             $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
             $imageResource = $imageHandler->effectPolaroid($imageResource);
-            if (!$imageResource) {
+            if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Error applying polaroid effect.');
             }
         }
@@ -119,7 +119,7 @@ try {
                 $imageHandler->frameExtendTop = $config['picture']['frame_top_percentage'];
             }
             $imageResource = $imageHandler->applyFrame($imageResource);
-            if (!$imageResource) {
+            if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Error applying frame to image resource.');
             }
         }
@@ -127,20 +127,24 @@ try {
         if ($config['picture']['rotation'] !== '0') {
             $imageHandler->resizeRotation = $config['picture']['rotation'];
             $imageResource = $imageHandler->rotateResizeImage($imageResource);
-            if (!$imageResource) {
+            if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Error resizing resource.');
             }
         }
     }
-    $chroma_size = substr($config['keying']['size'], 0, -2);
+    $chroma_size = intval(substr($config['keying']['size'], 0, -2));
     $imageHandler->resizeMaxWidth = $chroma_size;
     $imageHandler->resizeMaxHeight = $chroma_size;
     $chromaCopyResource = $imageHandler->resizeImage($imageResource);
-    $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
-    if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
-        $imageHandler->addErrorData(['Warning' => 'Failed to save chroma image copy.']);
+    if ($chromaCopyResource instanceof \GdImage) {
+        $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
+        if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
+            $imageHandler->addErrorData('Warning: Failed to save chroma image copy.');
+        }
+    } else {
+        $imageHandler->addErrorData('Warning: Failed to resize image copy.');
     }
-    if (is_resource($chromaCopyResource)) {
+    if ($chromaCopyResource instanceof \GdImage) {
         imagedestroy($chromaCopyResource);
     }
 
@@ -157,23 +161,27 @@ try {
             $imageHandler->textLine3 = $config['textonpicture']['line3'];
             $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
             $imageResource = $imageHandler->applyText($imageResource);
-            if (!$imageResource) {
+            if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Error applying text to image resource.');
             }
         }
     }
 
     // image scale, create thumbnail
-    $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+    $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
     $imageHandler->resizeMaxWidth = $thumb_size;
     $imageHandler->resizeMaxHeight = $thumb_size;
     $thumbResource = $imageHandler->resizeImage($imageResource);
-
-    $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
-    if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-        $imageHandler->addErrorData(['Warning' => 'Failed to create thumbnail.']);
+    if ($thumbResource instanceof \GdImage) {
+        $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+        if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
+            $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
+        }
+    } else {
+        throw new \Exception('Error: Failed to resize thumbnail.');
     }
-    if (is_resource($thumbResource)) {
+
+    if ($thumbResource instanceof \GdImage) {
         imagedestroy($thumbResource);
     }
 
@@ -191,15 +199,15 @@ try {
 
     // Change permissions
     $picture_permissions = $config['picture']['permissions'];
-    if (!chmod($filename_photo, octdec($picture_permissions))) {
-        $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
+    if (!chmod($filename_photo, (int)octdec($picture_permissions))) {
+        $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
     }
 } catch (\Exception $e) {
     // Try to clear cache
-    if (is_resource($thumbResource)) {
+    if (isset($thumbResource) && $thumbResource instanceof \GdImage) {
         imagedestroy($thumbResource);
     }
-    if ($imageResource instanceof GdImage) {
+    if ($imageResource instanceof \GdImage) {
         imagedestroy($imageResource);
     }
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {

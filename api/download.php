@@ -13,7 +13,12 @@ if ($image) {
     }
 
     try {
-        $extension = pathinfo($path)['extension'];
+        $pathinfo = pathinfo($path);
+
+        if (!isset($pathinfo['extension'])) {
+            throw new \Exception('Extension not found!');
+        }
+        $extension = $pathinfo['extension'];
         if ($config['download']['thumbs'] && $extension !== 'mp4' && $extension !== 'gif') {
             $thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
             if (is_file($thumb)) {
