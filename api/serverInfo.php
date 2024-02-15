@@ -7,7 +7,7 @@ use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
-function handleDebugPanel(string $content, array $config): string
+function handleDebugPanel(string $content, array $config): string|false
 {
     switch ($content) {
         case 'nav-devlog':
@@ -20,7 +20,7 @@ function handleDebugPanel(string $content, array $config): string
             echo implode("\n", showConfig($config));
             return json_encode('');
         case 'nav-serverprocesses':
-            return shell_exec('/bin/ps -ef');
+            return (string)shell_exec('/bin/ps -ef');
         case 'nav-bootconfig':
             return readFileContents('/boot/config.txt');
         case 'nav-installlog':
@@ -51,7 +51,7 @@ function handleDebugPanel(string $content, array $config): string
     }
 }
 
-function getLatestCommits(): string
+function getLatestCommits(): string|false
 {
     try {
         $getHead = shell_exec('git rev-parse --is-inside-work-tree 2>/dev/null && git log --format="%h %s" -n 20 || false');
@@ -73,7 +73,7 @@ function getLatestCommits(): string
     }
 }
 
-function readFileContents(string $file): string
+function readFileContents(string $file): string|false
 {
     global $config;
     try {
@@ -115,7 +115,7 @@ function read_csv(string $path_to_csv_file, array &$result): bool
     return true;
 }
 
-function processItem($key, $content)
+function processItem(string $key, mixed $content): array
 {
     $output = [];
 

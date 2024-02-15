@@ -34,10 +34,9 @@ try {
     }
 } catch (\Exception $e) {
     // Handle the exception
-    $data = ['error' => $e->getMessage()];
-    $logger->error($e->getMessage(), $data);
-    echo json_encode($data);
-    die($ErrorString);
+    $logger->error($e->getMessage());
+    echo json_encode(['error' => $e->getMessage()]);
+    die();
 }
 
 $frames = [];
@@ -64,7 +63,7 @@ try {
         $collageConfig = CollageConfigFactory::fromConfig($config);
         $collageConfig->collageLayout = '2x4-3';
         $collageConfig->collageTakeFrame = 'off';
-        $collageConfig->collagePlaceholder = false;
+        $collageConfig->collagePlaceholder = 'false';
         if (!Collage::createCollage($config, $frames, $collageFilename, $config['filters']['defaults'], $collageConfig)) {
             throw new \Exception('Could not create collage.');
         }
@@ -81,23 +80,28 @@ try {
         $images = array_merge($images, $frames);
     }
 
-    foreach ($images as $image) {
-        $imageHandler = new Image();
-        $imageHandler->debugLevel = $config['dev']['loglevel'];
+    $imageHandler = new Image();
+    $imageHandler->debugLevel = $config['dev']['loglevel'];
 
+    foreach ($images as $image) {
         $imageResource = $imageHandler->createFromImage($image);
         if (!$imageResource) {
             throw new \Exception('Error creating image resource.');
         }
-        $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+        $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
         $imageHandler->resizeMaxWidth = $thumb_size;
         $imageHandler->resizeMaxHeight = $thumb_size;
         $thumbResource = $imageHandler->resizeImage($imageResource);
-        $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
-        if (!$imageHandler->saveJpeg($thumbResource, $thumbsFolder . basename($image))) {
-            $imageHandler->addErrorData(['Warning' => 'Failed to create thumbnail.']);
+        if ($thumbResource instanceof \GdImage) {
+            $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+            if (!$imageHandler->saveJpeg($thumbResource, $thumbsFolder . basename($image))) {
+                $imageHandler->addErrorData('Warning Failed to create thumbnail.');
+            }
+        } else {
+            $imageHandler->addErrorData('Warning: Failed to resize thumbnail.');
         }
-        if (is_resource($thumbResource)) {
+
+        if ($thumbResource instanceof \GdImage) {
             imagedestroy($thumbResource);
         }
 
@@ -117,7 +121,7 @@ try {
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($image)) {
-                $imageHandler->addErrorData(['Warning' => 'Failed to delete photo.']);
+                $imageHandler->addErrorData('Warning: Failed to delete photo.');
             }
         }
 
@@ -125,8 +129,8 @@ try {
             $database->appendContentToDB(basename($newFile));
         }
         $picture_permissions = $config['picture']['permissions'];
-        if (!chmod($newFile, octdec($picture_permissions))) {
-            $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
+        if (!chmod($newFile, (int)octdec($picture_permissions))) {
+            $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
         }
     }
 
@@ -136,7 +140,7 @@ try {
         }
         if (!$config['picture']['keep_original']) {
             if (!unlink($filenameTmp)) {
-                $imageHandler->addErrorData(['Warning' => 'Failed to remove temporary photo.']);
+                $imageHandler->addErrorData('Warning: Failed to remove temporary photo.');
             }
         }
         $file = $collageFilename;
@@ -174,7 +178,7 @@ try {
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($filenameTmp)) {
-                $imageHandler->addErrorData(['Warning' => 'Failed to remove temporary photo.']);
+                $imageHandler->addErrorData('Warning: Failed to remove temporary photo.');
             }
         }
 
@@ -202,13 +206,13 @@ try {
 
         // Change permissions
         $picture_permissions = $config['picture']['permissions'];
-        if (!chmod($filenameOutput, octdec($picture_permissions))) {
-            $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
+        if (!chmod($filenameOutput, (int)octdec($picture_permissions))) {
+            $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
         }
     }
 } catch (\Exception $e) {
     // Handle the exception
-    if (isset($imageResource) && is_resource($imageResource)) {
+    if (isset($imageResource) && $imageResource instanceof \GdImage) {
         imagedestroy($imageResource);
     }
     if (isset($imageHandler) && is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
@@ -221,8 +225,13 @@ try {
 }
 
 $images = [];
-foreach (glob("$filenameOutput*") as $filename) {
-    $images[] = basename($filename);
+$filenameOutputs = glob("$filenameOutput*");
+if (is_array($filenameOutputs)) {
+    foreach ($filenameOutputs as $filename) {
+        $images[] = basename($filename);
+    }
+} else {
+    $images[] = basename((string)$filenameOutputs);
 }
 
 $data = [

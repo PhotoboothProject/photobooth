@@ -34,6 +34,7 @@ switch ($file_extension) {
         $ctype = 'image/svg+xml';
         break;
     default:
+        throw new \Exception('Unsupported file extension: ' . $file_extension);
 }
 
 header('Content-type: ' . $ctype);
