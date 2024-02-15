@@ -91,7 +91,7 @@ if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
     }
 
     // close the connection
-    ftp_close($ftp);
+    @ftp_close($ftp);
 }
 
 if (!$logData['success'] || $config['dev']['loglevel'] > 1) {

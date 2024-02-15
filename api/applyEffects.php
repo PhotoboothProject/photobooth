@@ -356,7 +356,7 @@ try {
             }
 
             // close the connection
-            ftp_close($ftp);
+            @ftp_close($ftp);
         }
 
         // Change permissions
