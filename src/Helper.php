@@ -67,7 +67,7 @@ class Helper
         $cleanPath = rtrim($path, '/') . '/';
 
         if ($files === false) {
-            throw new \Exception('Failed to read directory: ' . $path);
+            return $totalSize;
         }
 
         foreach ($files as $file) {
@@ -117,7 +117,7 @@ class Helper
         $fi = new \FilesystemIterator($path, \FilesystemIterator::SKIP_DOTS);
 
         if (!$fi->valid()) {
-            throw new \Exception('Failed to read directory: ' . $path);
+            throw new \Exception('Empty directory: ' . $path);
         }
 
         foreach ($fi as $file) {

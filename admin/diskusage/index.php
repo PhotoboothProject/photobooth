@@ -39,23 +39,22 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
             </div>
             <?php
             foreach ($config['foldersAbs'] as $key => $folder) {
+                echo '<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">';
+                echo '<h3 class="font-bold whitespace-pre-wrap break-all">' . $languageService->translate('path') . ' ' . $folder . '</h3>';
                 try {
                     $folderSize = Helper::getFolderSize($folder);
                     $formattedSize = Helper::formatSize($folderSize);
-                    $fileCount = Helper::getFileCount($folder);
-
-                    echo '<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">';
-                    echo '<h3 class="font-bold whitespace-pre-wrap break-all">' . $languageService->translate('path') . ' ' . $folder . '</h3>';
                     echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('foldersize') . '</span></div><span class="text-brand-1">' . $formattedSize . '</span>';
-                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('filecount') . '</span></div><span class="text-brand-1">' . $fileCount . '</span>';
-                    echo '</div>';
                 } catch (\Exception $e) {
-                    echo '<div class="pb-3 mb-3 border-b border-solid border-gray-200 flex flex-col">';
-                    echo '<h3 class="font-bold whitespace-pre-wrap break-all">' . $languageService->translate('path') . ' ' . $folder . '</h3>';
-                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('foldersize') . '</span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
                     echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('filecount') . '</span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
-                    echo '</div>';
                 }
+                try {
+                    $fileCount = Helper::getFileCount($folder);
+                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('filecount') . '</span></div><span class="text-brand-1">' . $fileCount . '</span>';
+                } catch (\Exception $e) {
+                    echo '<div><span class="flex text-sm mt-2">' . $languageService->translate('filecount') . '</span></div><span class="text-brand-1">' . $e->getMessage() . '</span>';
+                }
+                echo '</div>';
             }
 ?>
         </div>
