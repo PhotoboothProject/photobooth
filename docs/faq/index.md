@@ -511,10 +511,8 @@ These trigger URLs can be used for example with [myStrom WiFi Buttons](https://m
 
 -   Be sure to connect the button to the same network as the photobooth
 -   The button can be configured using the following commands
-
     ```sh
     curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-picture
-
     curl --location -g --request POST http://[Button IP]/api/v1/action/long --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-collage
     ```
 
