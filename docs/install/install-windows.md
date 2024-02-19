@@ -73,7 +73,7 @@ Create a file named `wsl.bat` with this content (adjust the `BUSID`):
 ```bat
 wsl --exec dbus-launch true
 :loop
-usbidp attach -a --wsl --busid=<BUSID>
+usbipd attach -a --wsl --busid=<BUSID>
 timeout 1
 goto loop
 ```
