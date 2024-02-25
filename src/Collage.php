@@ -158,6 +158,13 @@ class Collage
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to create collage background image resource.');
             }
+            $bgWidth = imagesx($backgroundImage);
+            $bgHeight = imagesy($backgroundImage);
+            if ($collage_width > $collage_height && $bgHeight > $bgWidth) {
+                if (!imagerotate($backgroundImage, 90, 0) {
+                    throw new \Exception('Failed to rotate collage background image resource.');
+                }
+            }
             $backgroundImage = $imageHandler->resizeImage($backgroundImage);
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to resize collage background image resource.');
