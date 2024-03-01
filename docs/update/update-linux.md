@@ -1,7 +1,7 @@
 # Updating Photobooth on Linux
 
-Node.js **must** be installed in v18. Currently only v16 is tested. Our installer will check your Node.js version and suggest an update/downgrade if needed.
-Update will fail if Node.js is installed in a version below v16!
+Node.js **must** be installed in v18. Our installer will check your Node.js version and suggest an update/downgrade if needed.
+Update will fail if Node.js is installed in a version below v18!
 
 
 ## Updating from v2.x or older
