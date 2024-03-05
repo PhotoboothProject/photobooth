@@ -312,7 +312,7 @@ class Image
     /**
      * Collect error data and increase errorCount
      */
-    public function addErrorData($errorData): void
+    public function addErrorData(string|array $errorData): void
     {
         $this->errorCount++;
         $this->errorLog[] = $errorData;
@@ -355,17 +355,18 @@ class Image
     /**
      * Creates a GD image resource from an image file.
      */
-    public function createFromImage($image): GdImage|false
+    public function createFromImage(string $image): GdImage|false
     {
         try {
             if (str_contains($image, '/api/randomImg.php')) {
                 parse_str(parse_url($image)['query'] ?? '', $query);
-                $image = ImageUtility::getRandomImageFromPath($query['dir'] ?? '');
+                $path = is_array($query['dir']) ? $query['dir']['0'] : $query['dir'];
+                $image = ImageUtility::getRandomImageFromPath($path);
             } elseif (PathUtility::isAbsolutePath(PathUtility::getAbsolutePath($image))) {
                 $image = PathUtility::getAbsolutePath($image);
             }
 
-            $resource = imagecreatefromstring(file_get_contents($image));
+            $resource = imagecreatefromstring((string)file_get_contents($image));
             if (!$resource) {
                 throw new \Exception('Can\'t create GD resource.');
             }
@@ -383,11 +384,6 @@ class Image
     public function saveJpeg(GdImage $sourceResource, string $destination): bool
     {
         try {
-            // Check if the $sourceResource and $destination are defined
-            if (!isset($sourceResource) || !isset($destination)) {
-                throw new \Exception('Missing parameters.');
-            }
-
             // Save the image to disk
             if (!imagejpeg($sourceResource, $destination, $this->jpegQuality)) {
                 throw new \Exception('Error saving image.');
@@ -405,13 +401,9 @@ class Image
     /**
      * Rotate and resize an image.
      */
-    public function rotateResizeImage(GdImage $image): GdImage
+    public function rotateResizeImage(GdImage $image): GdImage|false
     {
         try {
-            if (!$image) {
-                throw new \Exception('Invalid image resource');
-            }
-
             $rotation = intval($this->resizeRotation);
 
             // simple rotate if possible and ignore changed dimensions (doesn't need to care about background color)
@@ -426,7 +418,17 @@ class Image
                 if (strlen($bg_color) === 7) {
                     $bg_color .= '00';
                 }
-                list($bg_r, $bg_g, $bg_b, $bg_a) = sscanf($bg_color, '#%02x%02x%02x%02x');
+                $colorComponents = sscanf($bg_color, '#%02x%02x%02x%02x');
+                if ($colorComponents !== null) {
+                    list($bg_r, $bg_g, $bg_b, $bg_a) = $colorComponents;
+                    $bg_r = intval($bg_r);
+                    $bg_g = intval($bg_g);
+                    $bg_b = intval($bg_b);
+                    $bg_a = intval($bg_a);
+
+                } else {
+                    throw new \Exception('Background color: sscanf returned null!');
+                }
 
                 // get old dimensions
                 $old_width = intval(imagesx($image));
@@ -440,13 +442,13 @@ class Image
 
                 // color background as defined
                 $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
-                if (!imagefill($new, 0, 0, $background)) {
+                if (!imagefill($new, 0, 0, (int)$background)) {
                     throw new \Exception('Cannot fill image.');
                 }
 
                 // rotate the image
                 $background = imagecolorallocatealpha($image, $bg_r, $bg_g, $bg_b, $bg_a);
-                $image = imagerotate($image, $rotation, $background);
+                $image = imagerotate($image, $rotation, (int)$background);
                 if (!$image) {
                     throw new \Exception('Cannot rotate image.');
                 }
@@ -455,10 +457,9 @@ class Image
                 $this->resizeMaxWidth = intval($old_width);
                 $this->resizeMaxHeight = intval($old_height);
                 $image = self::resizeImage($image);
-                if (!$image) {
-                    throw new \Exception('Cannot resize image.');
+                if (!$image instanceof \GdImage) {
+                    throw new \Exception('Failed to resize image.');
                 }
-
                 // get new dimensions after rotate and resize
                 $new_width = intval(imagesx($image));
                 $new_height = intval(imagesy($image));
@@ -472,11 +473,13 @@ class Image
                     throw new \Exception('Cannot copy rotated image to new image.');
                 }
             }
+            $this->imageModified = true;
+            return $new;
         } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($new)) {
+            if (isset($new) && $new instanceof \GdImage) {
                 imagedestroy($new);
             }
 
@@ -488,21 +491,14 @@ class Image
             // Return unmodified resource
             return $image;
         }
-
-        $this->imageModified = true;
-        return $new;
     }
 
     /**
      * Resize an image based on the maximum dimensions.
      */
-    public function resizeImage(GdImage $image): GdImage
+    public function resizeImage(GdImage $image): GdImage|false
     {
         try {
-            if (!$image) {
-                throw new \Exception('Invalid image resource.');
-            }
-
             $old_width = imagesx($image);
             $old_height = imagesy($image);
             $max_width = $this->resizeMaxWidth;
@@ -514,13 +510,15 @@ class Image
 
             $scale = min($max_width / $old_width, $max_height / $old_height);
 
-            $new_width = ceil($scale * $old_width);
-            $new_height = ceil($scale * $old_height);
+            $new_width = intval(ceil($scale * $old_width));
+            $new_height = intval(ceil($scale * $old_height));
 
             $new_image = imagescale($image, $new_width, $new_height, IMG_TRIANGLE);
             if (!$new_image) {
                 throw new \Exception('Cannot resize image.');
             }
+            $this->imageModified = true;
+            return $new_image;
         } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
@@ -532,23 +530,16 @@ class Image
             // Return unmodified resource
             return $image;
         }
-
-        $this->imageModified = true;
-        return $new_image;
     }
 
     /**
      * Resize a PNG image based on the maximum dimensions.
      */
-    public function resizePngImage(GdImage $image): GdImage
+    public function resizePngImage(GdImage $image): GdImage|false
     {
         try {
-            if (!$image) {
-                throw new \Exception('Invalid image resource.');
-            }
-
-            $old_width = imagesx($image);
-            $old_height = imagesy($image);
+            $old_width = intval(imagesx($image));
+            $old_height = intval(imagesy($image));
             $new_width = $this->resizeMaxWidth;
             $new_height = $this->resizeMaxHeight;
 
@@ -558,10 +549,10 @@ class Image
 
             if ($this->keepAspectRatio) {
                 $scale = min($new_width / $old_width, $new_height / $old_height);
-                $new_width = ceil($scale * $old_width);
-                $new_height = ceil($scale * $old_height);
+                $new_width = intval(ceil($scale * $old_width));
+                $new_height = intval(ceil($scale * $old_height));
             }
-            $new = imagecreatetruecolor($new_width, $new_height);
+            $new = imagecreatetruecolor((int)$new_width, (int)$new_height);
             if (!$new) {
                 throw new \Exception('Cannot create new image.');
             }
@@ -578,11 +569,14 @@ class Image
                     throw new \Exception('Cannot resize image.');
                 }
             }
+
+            $this->imageModified = true;
+            return $new;
         } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($new)) {
+            if (isset($new) && $new instanceof \GdImage) {
                 imagedestroy($new);
             }
 
@@ -594,9 +588,6 @@ class Image
             // Return unmodified resource
             return $image;
         }
-
-        $this->imageModified = true;
-        return $new;
     }
 
     /**
@@ -640,6 +631,9 @@ class Image
                     throw new \Exception('Cannot resize and crop image by width.');
                 }
             }
+
+            $this->imageModified = true;
+            return $new;
         } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
@@ -656,9 +650,6 @@ class Image
             // Return unmodified resource
             return $source_file;
         }
-
-        $this->imageModified = true;
-        return $new;
     }
 
     /**
@@ -672,10 +663,10 @@ class Image
                 $new_height = intval(imagesy($sourceResource) / (1 - 0.01 * ($this->frameExtendTop + $this->frameExtendBottom)));
 
                 $img = imagecreatetruecolor($new_width, $new_height);
-                if (!$img) {
+                if (!$img instanceof \GdImage) {
                     throw new \Exception('Cannot create new image.');
                 }
-                $white = imagecolorallocate($img, 255, 255, 255);
+                $white = intval(imagecolorallocate($img, 255, 255, 255));
 
                 // We fill in the new white image
                 if (!imagefill($img, 0, 0, $white)) {
@@ -697,6 +688,10 @@ class Image
             $pic_height = imagesy($img);
 
             $frame = self::createFromImage($this->framePath);
+            if (!$frame instanceof \GdImage) {
+                throw new \Exception('Failed to create frame from image.');
+            }
+
             $this->resizeMaxWidth = $pic_width;
             $this->resizeMaxHeight = $pic_height;
             $frame = self::resizePngImage($frame);
@@ -718,11 +713,15 @@ class Image
             if (!imagecopy($img, $frame, $dst_x, $dst_y, 0, 0, $frame_width, $frame_height)) {
                 throw new \Exception('Error applying frame to image.');
             }
+
+            $this->imageModified = true;
+            // Return resource with text applied
+            return $img;
         } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
             // Clear cache
-            if (isset($new) && $new instanceof GdImage) {
+            if ($img instanceof GdImage) {
                 imagedestroy($img);
             }
 
@@ -734,10 +733,6 @@ class Image
             // Return unmodified resource
             return $sourceResource;
         }
-
-        $this->imageModified = true;
-        // Return resource with text applied
-        return $img;
     }
 
     /**
@@ -753,10 +748,18 @@ class Image
             $fontPath = PathUtility::getAbsolutePath($this->fontPath);
             $textLineSpacing = $this->textLineSpacing;
             // Convert hex color string to RGB values
-            list($r, $g, $b) = sscanf($this->fontColor, '#%02x%02x%02x');
+            $colorComponents = sscanf($this->fontColor, '#%02x%02x%02x');
+            if ($colorComponents !== null) {
+                list($r, $g, $b) = $colorComponents;
+            } else {
+                throw new \Exception('Font color: sscanf returned null!');
+            }
+            $r = intval($r);
+            $g = intval($g);
+            $b = intval($b);
 
             // Allocate color and set font
-            $color = imagecolorallocate($sourceResource, $r, $g, $b);
+            $color = intval(imagecolorallocate($sourceResource, $r, $g, $b));
 
             // Add first line of text
             if (!empty($this->textLine1)) {
@@ -782,6 +785,9 @@ class Image
                     throw new \Exception('Could not add third line of text to resource.');
                 }
             }
+            $this->imageModified = true;
+            // Return resource with text applied
+            return $sourceResource;
         } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
@@ -793,10 +799,6 @@ class Image
             // Return unmodified resource
             return $sourceResource;
         }
-
-        $this->imageModified = true;
-        // Return resource with text applied
-        return $sourceResource;
     }
 
     /**
@@ -849,6 +851,9 @@ class Image
                 $this->resizeBgColor = $backgroundColor;
                 $this->resizeRotation = $degrees;
                 $imageResource = self::rotateResizeImage($imageResource);
+                if (!$imageResource instanceof \GdImage) {
+                    throw new \Exception('Failed to rotate and resize image.');
+                }
                 if (abs($degrees) != 90) {
                     $width = intval(imagesx($imageResource));
                     $height = intval(imagesy($imageResource));
@@ -944,12 +949,21 @@ class Image
             if ($this->qrColor != '#ffffff') {
                 $qrwidth = imagesx($qrCodeImage);
                 $qrheight = imagesy($qrCodeImage);
-                list($r, $g, $b) = sscanf($this->qrColor, '#%02x%02x%02x');
-                $selected = imagecolorallocate($qrCodeImage, $r, $g, $b);
+                $colorComponents = sscanf($this->qrColor, '#%02x%02x%02x');
+                if ($colorComponents !== null) {
+                    list($r, $g, $b) = $colorComponents;
+                } else {
+                    throw new \Exception('QR color: sscanf returned null!');
+                }
+                $r = intval($r);
+                $g = intval($g);
+                $b = intval($b);
+
+                $selected = intval(imagecolorallocate($qrCodeImage, $r, $g, $b));
 
                 for ($xpos = 0; $xpos < $qrwidth; $xpos++) {
                     for ($ypos = 0; $ypos < $qrheight; $ypos++) {
-                        $currentcolor = imagecolorat($qrCodeImage, $xpos, $ypos);
+                        $currentcolor = intval(imagecolorat($qrCodeImage, $xpos, $ypos));
                         $parts = imagecolorsforindex($qrCodeImage, $currentcolor);
 
                         if ($parts['red'] == 255 && $parts['green'] == 255 && $parts['blue'] == 255) {
@@ -1083,7 +1097,7 @@ class Image
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($qrCode) && $qrCode instanceof GdImage) {
+            if ($qrCode instanceof GdImage) {
                 imagedestroy($qrCode);
             }
 
@@ -1108,7 +1122,7 @@ class Image
             if (!$img) {
                 throw new \Exception('Cannot create new image.');
             }
-            $white = imagecolorallocate($img, 255, 255, 255);
+            $white = intval(imagecolorallocate($img, 255, 255, 255));
 
             // We fill in the new white image
             if (!imagefill($img, 0, 0, $white)) {
@@ -1125,7 +1139,7 @@ class Image
             imagedestroy($resource);
 
             // Border color
-            $color = imagecolorallocate($img, 192, 192, 192);
+            $color = intval(imagecolorallocate($img, 192, 192, 192));
             // We put a gray border to our image.
             if (!imagerectangle($img, 0, 0, imagesx($img) - 4, imagesy($img) - 4, $color)) {
                 imagedestroy($img);
@@ -1133,9 +1147,9 @@ class Image
             }
 
             // Shade Colors
-            $gris1 = imagecolorallocate($img, 208, 208, 208);
-            $gris2 = imagecolorallocate($img, 224, 224, 224);
-            $gris3 = imagecolorallocate($img, 240, 240, 240);
+            $gris1 = intval(imagecolorallocate($img, 208, 208, 208));
+            $gris2 = intval(imagecolorallocate($img, 224, 224, 224));
+            $gris3 = intval(imagecolorallocate($img, 240, 240, 240));
 
             // We add a small shadow
             if (
@@ -1151,10 +1165,18 @@ class Image
             }
 
             // Convert hex color string to RGB values
-            list($rbcc, $gbcc, $bbcc) = sscanf($this->polaroidBgColor, '#%02x%02x%02x');
+            $colorComponents = sscanf($this->polaroidBgColor, '#%02x%02x%02x');
+            if ($colorComponents !== null) {
+                list($rbcc, $gbcc, $bbcc) = $colorComponents;
+            } else {
+                throw new \Exception('Polaroid color: sscanf returned null!');
+            }
+            $rbcc = intval($rbcc);
+            $gbcc = intval($gbcc);
+            $bbcc = intval($bbcc);
 
             // We rotate the image
-            $background = imagecolorallocate($img, $rbcc, $gbcc, $bbcc);
+            $background = intval(imagecolorallocate($img, $rbcc, $gbcc, $bbcc));
             $rotatedImg = imagerotate($img, $this->polaroidRotation, $background);
 
             if (!$rotatedImg) {
@@ -1164,7 +1186,7 @@ class Image
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($img) && $img instanceof GdImage) {
+            if ($img instanceof GdImage) {
                 imagedestroy($img);
             }
 

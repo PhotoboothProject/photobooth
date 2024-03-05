@@ -46,6 +46,17 @@ updates:
       - 'composer'
       - 'dependencies'
 
+  - package-ecosystem: 'composer'
+    directory: '/tools/phpstan/'
+    schedule:
+      interval: 'monthly'
+    commit-message:
+      prefix: 'dep: '
+      prefix-development: 'dep-dev: '
+    labels:
+      - 'composer'
+      - 'dependencies'
+
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:

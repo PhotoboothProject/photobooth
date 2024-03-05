@@ -1,0 +1,12 @@
+parameters:
+	level: 8
+	checkMissingIterableValueType: false
+	reportUnmatchedIgnoredErrors: false
+
+	bootstrapFiles:
+		- tools/phpunit/vendor/autoload.php
+
+	paths:
+	- %currentWorkingDirectory%/api/
+	- %currentWorkingDirectory%/src/
+	- %currentWorkingDirectory%/tests/

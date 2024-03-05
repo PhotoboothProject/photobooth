@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\QrCodeUtility;
 

@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Utility\AdminKeypad;

@@ -31,3 +31,6 @@ indent_size = 2
 # .htaccess
 [.htaccess]
 indent_style = tab
+
+[*.neon]
+indent_style = tab

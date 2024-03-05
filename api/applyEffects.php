@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Image;
@@ -132,7 +134,7 @@ try {
                 if ($config['picture']['polaroid_effect'] && !$isCollage) {
                     $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
                     $imageResource = $imageHandler->effectPolaroid($imageResource);
-                    if (!$imageResource) {
+                    if (!$imageResource instanceof \GdImage) {
                         throw new \Exception('Error applying polaroid effect.');
                     }
                 }
@@ -150,7 +152,7 @@ try {
                         $imageHandler->frameExtend = false;
                     }
                     $imageResource = $imageHandler->applyFrame($imageResource);
-                    if (!$imageResource) {
+                    if (!$imageResource instanceof \GdImage) {
                         throw new \Exception('Error applying frame to image resource.');
                     }
                 }
@@ -158,22 +160,26 @@ try {
                 if ($config['picture']['rotation'] !== '0') {
                     $imageHandler->resizeRotation = $config['picture']['rotation'];
                     $imageResource = $imageHandler->rotateResizeImage($imageResource);
-                    if (!$imageResource) {
+                    if (!$imageResource instanceof \GdImage) {
                         throw new \Exception('Error resizing resource.');
                     }
                 }
             }
         }
         if ($config['keying']['enabled'] || $isChroma) {
-            $chroma_size = substr($config['keying']['size'], 0, -2);
+            $chroma_size = intval(substr($config['keying']['size'], 0, -2));
             $imageHandler->resizeMaxWidth = $chroma_size;
             $imageHandler->resizeMaxHeight = $chroma_size;
             $chromaCopyResource = $imageHandler->resizeImage($imageResource);
-            $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
-            if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
-                $imageHandler->addErrorData(['Warning' => 'Failed to save chroma image copy.']);
+            if ($chromaCopyResource instanceof \GdImage) {
+                $imageHandler->jpegQuality = $config['jpeg_quality']['chroma'];
+                if (!$imageHandler->saveJpeg($chromaCopyResource, $filename_keying)) {
+                    $imageHandler->addErrorData('Warning: Failed to save chroma image copy.');
+                }
+            } else {
+                $imageHandler->addErrorData('Warning: Failed to resize chroma resource.');
             }
-            if (is_resource($chromaCopyResource)) {
+            if ($chromaCopyResource instanceof \GdImage) {
                 imagedestroy($chromaCopyResource);
             }
         }
@@ -190,22 +196,26 @@ try {
             $imageHandler->textLine3 = $config['textonpicture']['line3'];
             $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
             $imageResource = $imageHandler->applyText($imageResource);
-            if (!$imageResource) {
+            if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Error applying text to image resource.');
             }
         }
 
         // image scale, create thumbnail
-        $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
+        $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
         $imageHandler->resizeMaxWidth = $thumb_size;
         $imageHandler->resizeMaxHeight = $thumb_size;
         $thumbResource = $imageHandler->resizeImage($imageResource);
-
-        $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
-        if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-            $imageHandler->addErrorData(['Warning' => 'Failed to create thumbnail.']);
+        if ($thumbResource instanceof \GdImage) {
+            $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+            if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
+                $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
+            }
+        } else {
+            $imageHandler->addErrorData('Warning: Failed to resize thumbnail.');
         }
-        if (is_resource($thumbResource)) {
+
+        if ($thumbResource instanceof \GdImage) {
             imagedestroy($thumbResource);
         }
 
@@ -244,7 +254,7 @@ try {
 
         // insert into database
         if ($config['database']['enabled']) {
-            if (!$isChroma || ($isChroma && $config['keying']['show_all'] === true)) {
+            if (($isChroma && $config['keying']['show_all'] === true) || !$isChroma) {
                 $database->appendContentToDB($image);
             }
         }
@@ -253,6 +263,12 @@ try {
         if ($config['ftp']['enabled']) {
             // init connection to ftp server
             $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
+            if ($ftp === false) {
+                $message = 'Failed to connect to FTP Server!';
+                $logger->error($message, $config['ftp']);
+                echo json_encode(['error' => $message]);
+                die();
+            }
 
             // login to ftp server
             $login_result = ftp_login($ftp, $config['ftp']['username'], $config['ftp']['password']);
@@ -308,11 +324,17 @@ try {
                     // get the index.php template file from the configured location
                     $webpage_template = file_get_contents($config['ftp']['template_location']);
 
+                    if ($webpage_template === false) {
+                        throw new \Exception('File could not be read: ' . $config['ftp']['template_location']);
+                    }
                     // set the {title} variable
                     $final_webpage = str_replace('{title}', $config['ftp']['title'], $webpage_template);
 
                     // put the file into a stream
                     $stream = fopen('php://memory', 'r+');
+                    if ($stream === false) {
+                        throw new \Exception('Could not put the file into a stream!');
+                    }
                     fwrite($stream, $final_webpage);
                     rewind($stream);
 
@@ -334,33 +356,33 @@ try {
             }
 
             // close the connection
-            ftp_close($ftp);
+            @ftp_close($ftp);
         }
 
         // Change permissions
         $picture_permissions = $config['picture']['permissions'];
-        if (!chmod($filename_photo, octdec($picture_permissions))) {
-            $imageHandler->addErrorData(['Warning' => 'Failed to change picture permissions.']);
+        if (!chmod($filename_photo, (int)octdec($picture_permissions))) {
+            $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
         }
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($filename_tmp)) {
-                $imageHandler->addErrorData(['Warning' => 'Failed to remove temporary photo.']);
+                $imageHandler->addErrorData('Warning: Failed to remove temporary photo.');
             }
         }
 
         if ($_POST['style'] === 'chroma' && $config['keying']['show_all'] === false) {
             if (!unlink($filename_photo)) {
-                $imageHandler->addErrorData(['Warning' => 'Failed to remove photo.']);
+                $imageHandler->addErrorData('Warning: Failed to remove photo.');
             }
             if (!unlink($filename_thumb)) {
-                $imageHandler->addErrorData(['Warning' => 'Failed to remove thumbnail.']);
+                $imageHandler->addErrorData('Warning: Failed to remove thumbnail.');
             }
         }
     }
 } catch (\Exception $e) {
     // Handle the exception
-    if (isset($imageResource) && is_resource($imageResource)) {
+    if (isset($imageResource) && $imageResource instanceof \GdImage) {
         imagedestroy($imageResource);
     }
     if (isset($imageHandler) && is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {

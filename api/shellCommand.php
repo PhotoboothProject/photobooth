@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Service\LoggerService;
@@ -42,12 +44,11 @@ switch ($mode) {
         $logger->debug('message', $data);
         echo json_encode($data);
         die();
-        break;
 }
 
 $success = exec($cmd, $output, $retval);
 
-if (isset($success)) {
+if ($success) {
     switch ($retval) {
         case 127:
             $output = 'Command not found';

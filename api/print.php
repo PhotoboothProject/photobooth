@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Image;
@@ -65,7 +67,7 @@ if (!file_exists($filename_print)) {
             $imageHandler->framePath = $config['print']['frame'];
             $imageHandler->frameExtend = false;
             $source = $imageHandler->applyFrame($source);
-            if (!$source) {
+            if (!$source instanceof \GdImage) {
                 throw new \Exception('Failed to apply frame to image resource.');
             }
         }
@@ -86,11 +88,11 @@ if (!file_exists($filename_print)) {
             $imageHandler->qrPosition = $config['print']['qrPosition'];
 
             $qrCode = $imageHandler->createQr();
-            if (!$qrCode) {
+            if (!$qrCode instanceof \GdImage) {
                 throw new \Exception('Cannot create QR Code resource.');
             }
             $source = $imageHandler->applyQr($qrCode, $source);
-            if (!$source) {
+            if (!$source instanceof \GdImage) {
                 throw new \Exception('Cannot apply QR Code to image resource.');
             }
             imagedestroy($qrCode);
@@ -109,7 +111,7 @@ if (!file_exists($filename_print)) {
             $imageHandler->textLineSpacing = $config['textonprint']['linespace'];
 
             $source = $imageHandler->applyText($source);
-            if (!$source) {
+            if (!$source instanceof \GdImage) {
                 throw new \Exception('Failed to apply text to image resource.');
             }
         }
@@ -118,7 +120,7 @@ if (!file_exists($filename_print)) {
             $imageHandler->resizeMaxWidth = $config['print']['crop_width'];
             $imageHandler->resizeMaxHeight = $config['print']['crop_height'];
             $source = $imageHandler->resizeCropImage($source);
-            if (!$source) {
+            if (!$source instanceof \GdImage) {
                 throw new \Exception('Failed to crop image resource.');
             }
         }
@@ -132,7 +134,7 @@ if (!file_exists($filename_print)) {
         imagedestroy($source);
     } catch (\Exception $e) {
         // Try to clear cache
-        if ($source instanceof GdImage) {
+        if ($source instanceof \GdImage) {
             imagedestroy($source);
         }
 

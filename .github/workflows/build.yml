@@ -60,6 +60,9 @@ jobs:
       - name: PHP Lint
         run: composer lint
 
+      - name: PHPStan
+        run: composer phpstan -- --error-format=github
+
       - name: PHP Unit
         run: composer phpunit
 

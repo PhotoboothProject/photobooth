@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $config */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Image;
@@ -55,7 +57,7 @@ try {
             $captureHandler->collageSubFile = substr($file, 0, -4) . '-' . $number . '.jpg';
             $captureHandler->tmpFile = substr($filename_tmp, 0, -4) . '-' . $number . '.jpg';
             $captureHandler->style = 'collage';
-            $captureHandler->collageNumber = $number;
+            $captureHandler->collageNumber = intval($number);
             $captureHandler->collageLimit = $config['collage']['limit'];
             break;
         case 'chroma':
@@ -69,7 +71,6 @@ try {
             break;
         default:
             throw new \Exception('Invalid style provided.');
-            break;
     }
 
     if ($_POST['style'] === 'video') {

@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $config */
+/** @var array $defaultConfig */
+
 require_once '../lib/boot.php';
 
 use Photobooth\Helper;
@@ -139,7 +142,7 @@ if (isset($data['type'])) {
     if ($collageLayout === '1+2' || $collageLayout == '2+1' || $collageLayout == '2x3') {
         $newConfig['collage']['limit'] = 3;
     } elseif ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
-        $collageConfig = json_decode(file_get_contents($collageConfigFilePath), true);
+        $collageConfig = json_decode((string)file_get_contents($collageConfigFilePath), true);
         if (is_array($collageConfig)) {
             if (array_key_exists('layout', $collageConfig)) {
                 $newConfig['collage']['limit'] = count($collageConfig['layout']);
@@ -275,8 +278,17 @@ if (isset($data['type'])) {
                     if ($folder != $config['foldersAbs']['archives'] && $folder != $config['foldersAbs']['private']) {
                         if (is_dir($folder)) {
                             $files = glob($folder . '/*.jpg');
-                            foreach ($files as $file) {
-                                // iterate files
+                            if (is_array($files)) {
+                                foreach ($files as $file) {
+                                    // iterate files
+                                    if (is_file($file)) {
+                                        // delete file
+                                        unlink($file);
+                                        $logger->debug($file . ' deleted.');
+                                    }
+                                }
+                            } else {
+                                $file = (string)$files;
                                 if (is_file($file)) {
                                     // delete file
                                     unlink($file);
@@ -319,8 +331,18 @@ if (isset($data['type'])) {
             }
 
             $logFiles = glob(PathUtility::getAbsolutePath('var/log') . '/*.log');
-            foreach ($logFiles as $logFile) {
-                // iterate files
+
+            if (is_array($logFiles)) {
+                foreach ($logFiles as $logFile) {
+                    // iterate files
+                    if (is_file($logFile)) {
+                        // delete file
+                        unlink($logFile);
+                        $logger->debug($logFile . ' deleted.');
+                    }
+                }
+            } else {
+                $logFile = (string)$logFiles;
                 if (is_file($logFile)) {
                     // delete file
                     unlink($logFile);
