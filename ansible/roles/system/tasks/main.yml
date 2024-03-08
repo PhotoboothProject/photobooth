@@ -1,0 +1,15 @@
+---
+# vim: set ft=yaml.ansible:
+
+- name: Install required system packages
+  ansible.builtin.apt:
+    name: '{{ system_packages }}'
+    state: present
+
+- name: Update all packages
+  ansible.builtin.apt:
+    name: '*'
+    state: present
+  tags:
+    - never
+    - update

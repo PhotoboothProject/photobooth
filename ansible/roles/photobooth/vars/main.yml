@@ -1,0 +1,8 @@
+---
+photobooth_gphoto_packages:
+  - ffmpeg
+  - python3-gphoto2
+  - python3-psutil
+  - python3-zmq
+  - v4l2loopback-dkms
+  - v4l-utils

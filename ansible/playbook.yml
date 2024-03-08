@@ -1,0 +1,135 @@
+---
+# vim: set ft=yaml.ansible :
+- name: Photbooth
+  hosts:
+    - 127.0.0.1
+  become: true
+  vars:
+    go2rtc_version: v1.8.6-4
+    php_version: '8.3'
+    webserver: "{{ lookup('env', 'PHOTOBOOTH_WEBSERVER') | default('apache', true) }}"
+    photobooth:
+      version: "{{ lookup('env', 'PHOTOBOOTH_VERSION') | default('dev', true) }}"
+    services:
+      enable:
+        - '{{webserver}}'
+      disable: []
+    packages:
+      apt:
+        install:
+          # common
+          - apt-transport-https
+          - lsb-release
+          - ca-certificates
+          - software-properties-common
+          - git
+          - jq
+        remove: []
+        hold: []
+        webserver:
+          nginx:
+            - nginx
+            - php{{ php_version }}
+            - php{{ php_version }}-fpm
+          apache:
+            - apache2
+            - libapache2-mod-php{{ php_version }}
+          lighttpd:
+            - lighttpd
+            - php{{ php_version }}-fpm
+
+  tasks:
+    - name: Install go2rtc
+      ansible.builtin.unarchive:
+        src: >-
+          https://github.com/dadav/go2rtc/releases/download
+          /{{ go2rtc_version }}/go2rtc_{{ ansible_system | lower }}
+          _{{ ansible_architecture | replace('x64_86', 'amd64') }}.tar.gz
+        dest: /usr/local/bin
+        remote_src: true
+        mode: '0755'
+
+    - name: Setup debian repos
+      when: ansible_distribution == 'Debian'
+      block:
+        - name: Download gpg key
+          ansible.builtin.get_url:
+            url: https://packages.sury.org/php/apt.gpg
+            dest: /etc/apt/trusted.gpg.d/php.gpg
+            mode: '0600'
+
+        - name: Add php repo
+          ansible.builtin.apt_repository:
+            repo: >-
+              deb [signed-by=/etc/apt/trusted.gpg.d/php.gpg] https://packages.sury.org/php/ {{ ansible_distribution_release }}
+              main
+            state: present
+
+    - name: Setup Ubuntu/jammy repos
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'jammy'
+      block:
+        - name: Add update repo
+          ansible.builtin.apt_repository:
+            repo: >-
+              deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted
+            state: present
+        - name: Enable php repo
+          ansible.builtin.apt_repository:
+            repo: ppa:ondrej/php
+
+    - name: Add firmware packages to hold
+      ansible.builtin.dpkg_selections:
+        name: '{{ item }}'
+        selection: hold
+      with_items: '{{ packages.apt.hold }}'
+
+    - name: Update apt package cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Remove unecessary apt packages
+      ansible.builtin.apt:
+        name: '{{ packages.apt.remove }}'
+        state: absent
+        purge: true
+
+    - name: Upgrade apt distro
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Install packages
+      ansible.builtin.apt:
+        name: '{{ packages.apt.install }}'
+        state: present
+
+    - name: Install webserver
+      ansible.builtin.apt:
+        name: '{{ packages.apt.webserver[webserver] }}'
+        state: present
+
+    - name: Clean apt cache
+      ansible.builtin.apt:
+        autoclean: true
+
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.apt:
+        autoremove: true
+
+    - name: Enable services
+      ansible.builtin.systemd:
+        name: '{{ item }}'
+        state: started
+        enabled: true
+      with_items: '{{ services.enable }}'
+
+    - name: Disable unecessary services
+      ansible.builtin.systemd:
+        name: '{{ item }}'
+        state: stopped
+        enabled: false
+      with_items: '{{ services.disable }}'
+
+  handlers:
+    - name: Reload systemd services
+      ansible.builtin.systemd:
+        daemon_reload: true

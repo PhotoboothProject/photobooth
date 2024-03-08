@@ -1,0 +1,6 @@
+---
+
+- name: Install packages required on pi
+  ansible.builtin.apt:
+    name: '{{ raspberry_packages }}'
+    state: present
