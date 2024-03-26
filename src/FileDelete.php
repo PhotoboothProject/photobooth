@@ -61,9 +61,11 @@ class FileDelete
         $fileListToDelete = [];
         foreach ($this->paths as $path) {
             $files = scandir($path);
-            foreach ($files as $file) {
-                if(str_contains($file, $fileName)) {
-                    $fileListToDelete[] = $path . DIRECTORY_SEPARATOR . $file;
+            if ($files !== false) {
+                foreach ($files as $file) {
+                    if(str_contains($file, $fileName)) {
+                        $fileListToDelete[] = $path . DIRECTORY_SEPARATOR . $file;
+                    }
                 }
             }
         }
@@ -78,7 +80,7 @@ class FileDelete
      *
      * Actually delete the image
      */
-    private function doDelete($file): void
+    private function doDelete(string $file): void
     {
         try {
             if (is_readable($file)) {
