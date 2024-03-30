@@ -20,7 +20,7 @@ sudo raspi-config
 
 Use the cursor keys to select and open Interfacing Options, and then select Camera and follow the prompt to enable the camera.
 
-Now you need to allow the webserver to use `raspistill` / `libcamera-still`. You need add the webserver user to video group and reboot once:
+Now you need to allow the webserver to use `raspistill` / `libcamera-still`. You need to add the webserver user to video group and reboot once:
 
 ```sh
 sudo gpasswd -a www-data video
