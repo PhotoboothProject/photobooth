@@ -10,7 +10,7 @@ Some DSLR and Compact Cameras are not supported by this project. Please check fo
 
 Yes it is.
 
-If you're able to capture a picture via `libcamera-still` from terminal you're good to go!
+If you're able to capture a picture via `raspistill` / `libcamera-still` from terminal you're good to go!
 
 You need to allow the webserver to use `raspistill` / `libcamera-still`. You need add the webserver user to video group and reboot once:
 
