@@ -10,17 +10,9 @@ Some DSLR and Compact Cameras are not supported by this project. Please check fo
 
 Yes it is.
 
-If you're able to capture a picture via `libcamera-still` from terminal you're good to go!
+If you're able to capture a picture via `raspistill` / `libcamera-still` from terminal you're good to go!
 
-Enable camera support using the `raspi-config` program you will have used when you first set up your Raspberry Pi.
-
-```sh
-sudo raspi-config
-```
-
-Use the cursor keys to select and open Interfacing Options, and then select Camera and follow the prompt to enable the camera.
-
-Now you need to allow the webserver to use `raspistill` / `libcamera-still`. You need to add the webserver user to video group and reboot once:
+You need to allow the webserver to use `raspistill` / `libcamera-still`. You need add the webserver user to video group and reboot once:
 
 ```sh
 sudo gpasswd -a www-data video
