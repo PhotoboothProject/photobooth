@@ -187,16 +187,16 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "5.0.4",
+            "version": "5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "0efd071a3640af323e23c94122fe92cfd5199833"
+                "reference": "0cc00f0626b73bc71a1ea17af01387d0ac75e046"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/0efd071a3640af323e23c94122fe92cfd5199833",
-                "reference": "0efd071a3640af323e23c94122fe92cfd5199833",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/0cc00f0626b73bc71a1ea17af01387d0ac75e046",
+                "reference": "0cc00f0626b73bc71a1ea17af01387d0ac75e046",
                 "shasum": ""
             },
             "require": {
@@ -250,7 +250,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/5.0.4"
+                "source": "https://github.com/endroid/qr-code/tree/5.0.7"
             },
             "funding": [
                 {
@@ -258,7 +258,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-24T13:47:07+00:00"
+            "time": "2024-03-08T11:24:40+00:00"
         },
         {
             "name": "league/commonmark",
