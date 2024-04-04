@@ -605,7 +605,7 @@ If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camer
 
 -   Admin panel config "Preview mode": `from device cam`
 
-Currently there's an issue on PiOS bullseye with the new camera stack which avoids the Pi Cameras being detected as Webcam inside the Browser. Theres nothing we can do against this, hopefully the Pi Foundation finds a solution in future.
+Currently there's an issue on PiOS bullseye with the new camera stack which avoids the Pi Cameras being detected as Webcam inside the Browser. Theres nothing we can do against this, hopefully the Pi Foundation finds a solution in the future.
 
 **Note:**
 
