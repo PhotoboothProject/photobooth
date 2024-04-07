@@ -433,6 +433,8 @@ function common_software() {
     if [[ "${DEBIAN[*]}" =~ $OS ]]; then
         wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
         echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+    elif [[ "$OS" == "mantic" ]]; then
+        info "### No source lists available."
     else
         if [[ "$OS" == "jammy" ]]; then
             echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted" >>/etc/apt/sources.lst
