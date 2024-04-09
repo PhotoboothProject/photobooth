@@ -489,7 +489,7 @@ $config['icons']['password_visibility'] = 'fa fa-eye';
 $config['icons']['password_toggle'] = 'fa-eye fa-eye-slash';
 $config['icons']['slideshow_play'] = 'fa fa-play';
 $config['icons']['slideshow_toggle'] = 'fa-play fa-pause';
-$config['icons']['rename'] = 'fa fa-pencil';
+$config['icons']['rename'] = 'fa fa-floppy-disk';
 
 // J P E G   Q U A L I T Y
 $config['jpeg_quality']['image'] = 100;

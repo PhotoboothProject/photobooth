@@ -23,16 +23,14 @@ try {
     echo json_encode(['error' => $e->getMessage()]);
     die();
 }
-
-$file = $_POST['image'];
-$firstName = filter_var($_POST['firstName'], FILTER_UNSAFE_RAW);
-$lastName = filter_var($_POST['lastName'], FILTER_UNSAFE_RAW);
-$newFileName = Helper::slugify($lastName . '_' . $firstName) . '_' . $file;
-$logData['success'] = false;
 $logData = [];
+$file = $_POST['image'];
+$fullName = filter_var($_POST['fullName'], FILTER_UNSAFE_RAW);
+$newFileName = Helper::slugify($fullName) . '_' . $file;
+$logData['success'] = false;
 
 if(file_exists($config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $newFileName)) {
-    $logData['fileExists'] = 'Same image already exists';
+    $logData['fileExists'] = 'Same image already exists - popup will close in 3 seconds';
 } else {
     if (!copy(
         $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file,

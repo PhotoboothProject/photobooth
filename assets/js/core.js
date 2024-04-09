@@ -61,6 +61,18 @@ const photoBooth = (function () {
         retryTimeout = config.picture.retry_timeout * 1000,
         notificationTimeout = config.ui.notification_timeout * 1000;
 
+
+    // Modal Rename
+    const renameImageForm = document.getElementById('set-image-name');
+    const modalRename = document.getElementById('modal_rename');
+    const renameImageInput = document.getElementById('modal_rename_image');
+    const setImageNameSubmitButton = document.getElementById('set-image-name-submit')
+    const modalRenameCloseButton = document.getElementById('modal_rename_close')
+    const imageNameInput = document.getElementById('modal_rename_image');
+    const fullNameInput = document.getElementById('fullName');
+    const renameModalMessage = document.getElementById('set-image-name-message');
+    let abortController = new AbortController();
+
     let timeOut,
         chromaFile = '',
         currentCollageFile = '',
@@ -1055,110 +1067,78 @@ const photoBooth = (function () {
         buttonbar.insertBefore(submitButton, buttonbar.firstChild);
     };
 
-    api.saveImageWithName = function (image) {
-        photoboothTools.modal.open('mail');
-        const body = photoboothTools.modal.element.querySelector('.modal-body');
-        const buttonbar = photoboothTools.modal.element.querySelector('.modal-buttonbar');
+    const renameImageSubmitFunctionHandler = function submitFunction(event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-        // Text
-        const text = document.createElement('p');
-        text.textContent = photoboothTools.getTranslation('insertPreLastName');
-        body.appendChild(text);
+        const message = document.getElementById('set-image-name-message');
+        if (document.querySelector('#send-mail-message')) {
+            document.querySelector('#send-mail-message').remove();
+        }
 
-        // Form
-        const form = document.createElement('form');
-        form.id = 'set-image-name';
-        form.classList.add('form');
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            if (document.querySelector('#send-mail-message')) {
-                document.querySelector('#send-mail-message').remove();
-            }
-            const message = document.createElement('div');
-            message.id = 'set-image-name-message';
-            message.classList.add('form-message');
-            form.appendChild(message);
-            const submitButton = document.querySelector('#set-image-name-submit');
-            submitButton.diabled = true;
+        setImageNameSubmitButton.disabled = true;
 
-            fetch(config.foldersPublic.api + '/renameImage.php', {
-                method: 'post',
-                body: new FormData(form)
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data);
-                    if (data.success) {
-                        console.log('TRUE');
-                        // document.querySelector('#send-mail-recipient').value = '';
-                        message.classList.add('text-success');
-                        message.textContent = photoboothTools.getTranslation('nameImage:success');
-                        setTimeout(() => photoboothTools.modal.close(), 3000);
-                    } else {
-                        message.classList.add('text-danger');
-                        if (data.fileExists) {
-                            message.textContent = data.fileExists;
-                        }
-                        if (data.failedCopy) {
-                            message.textContent = data.failedCopy;
-                        }
-                    }
-                    submitButton.disabled = false;
-                })
-                .catch(() => {
+        fetch(config.foldersPublic.api + '/renameImage.php', {
+            method: 'post',
+            body: new FormData(renameImageForm)
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // document.querySelector('#send-mail-recipient').value = '';
+                    message.classList.add('text-success');
+                    message.textContent = photoboothTools.getTranslation('nameImage:success');
+                } else {
+                    modalRenameCloseButton.disabled = true
                     message.classList.add('text-danger');
-                    message.textContent = photoboothTools.getTranslation('mailError');
-                    submitButton.disabled = false;
-                });
-        });
-        body.appendChild(form);
+                    if (data.fileExists) {
+                        message.textContent = data.fileExists;
+                    }
+                    if (data.failedCopy) {
+                        message.textContent = data.failedCopy;
+                    }
 
-        // Image
-        const imageInput = document.createElement('input');
-        imageInput.type = 'hidden';
-        imageInput.name = 'image';
-        imageInput.value = image;
-        form.appendChild(imageInput);
+                }
+                closeRenameModal();
+                modalRenameCloseButton.disabled = false
+                setImageNameSubmitButton.disabled = false;
+            })
+            .catch(() => {
+                message.classList.add('text-danger');
+                message.textContent = photoboothTools.getTranslation('nameImage:fail');
+                setImageNameSubmitButton.disabled = false;
+                closeRenameModal();
+            });
+    }
 
-        // FirstName
-        const firstNameInput = document.createElement('input');
-        firstNameInput.classList.add('form-input');
-        firstNameInput.id = 'firstName';
-        firstNameInput.type = 'text';
-        firstNameInput.name = 'firstName';
-        firstNameInput.placeholder = photoboothTools.getTranslation('firstName');
-        // firstNameInput.setAttribute('required','');
-        firstNameInput.addEventListener('focusin', (event) => {
-            // workaround for photoswipe blocking input
-            event.stopImmediatePropagation();
-        });
-        form.appendChild(firstNameInput);
+    function closeRenameModal() {
+        setTimeout(() => {
+            renameModalMessage.textContent = '';
+            fullNameInput.value = '';
+            imageNameInput.value = '';
+            renameImageForm.reset();
+            modalRenameCloseHandler()
+            // photoboothTools.reloadPage();
+        }, 3000);
+    }
 
-        // LastName
-        const lastNameInput = document.createElement('input');
-        lastNameInput.classList.add('form-input');
-        lastNameInput.id = 'lastName';
-        lastNameInput.type = 'text';
-        lastNameInput.name = 'lastName';
-        // lastNameInput.setAttribute('required','');
-        lastNameInput.placeholder = photoboothTools.getTranslation('lastName');
-
-        lastNameInput.addEventListener('focusin', (event) => {
-            // workaround for photoswipe blocking input
-            event.stopImmediatePropagation();
-        });
-        form.appendChild(lastNameInput);
-
-        // Submit
-        const submitLabel = photoboothTools.getTranslation('save');
-        const submitButton = photoboothTools.button.create(submitLabel, 'fa fa-check', 'primary', 'modal-');
-        submitButton.id = 'set-image-name-submit';
-        submitButton.addEventListener('click', (event) => {
+    const modalRenameCloseHandler = function modalRenameClose(event) {
+        if(event) {
             event.preventDefault();
             event.stopPropagation();
-            form.requestSubmit();
-        });
-        buttonbar.insertBefore(submitButton, buttonbar.firstChild);
+        }
+        modalRename.style.display = 'none';
+        abortController.abort('Remove EventListener AbortController')
+        abortController = new AbortController()
+    }
+
+    api.saveImageWithName = function (image) {
+        modalRename.style.display = 'flex';
+        fullNameInput.value = ''
+        renameImageForm.addEventListener('submit', (event) => renameImageSubmitFunctionHandler(event), { signal:abortController.signal });
+        // Set Image name
+        renameImageInput.value = image;
+        modalRenameCloseButton.addEventListener('click',(event) => modalRenameCloseHandler(event), { signal:abortController.signal });
     };
 
     api.showQrCode = function (filename) {
@@ -1214,6 +1194,7 @@ const photoBooth = (function () {
             .off('click')
             .on('click', (event) => {
                 event.preventDefault();
+                console.log('test');
                 api.saveImageWithName(filename);
             });
 
@@ -1442,6 +1423,7 @@ const photoBooth = (function () {
 
     $('.takePic, .newpic').on('click', function (e) {
         e.preventDefault();
+        // api.saveImageWithName();
         api.thrill(PhotoStyle.PHOTO);
         $(this).trigger('blur');
     });

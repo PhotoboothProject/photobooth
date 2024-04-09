@@ -1,8 +1,11 @@
 <?php
 
 use Photobooth\Utility\ComponentUtility;
+use Photobooth\Utility\PathUtility;
 
 echo '<div class="stage stage--result rotarygroup" data-stage="result">';
+include PathUtility::getAbsolutePath('template/components/modal.rename.php');
+
 echo '<div class="stage-inner">';
 echo '<div class="buttonbar buttonbar--bottom">';
 
@@ -48,7 +51,7 @@ if ($config['picture']['allow_delete']) {
 }
 
 if ($config['picture_naming']['enabled']) {
-    echo ComponentUtility::renderButton('Rename', $config['icons']['rename'], 'savebtn');
+    echo ComponentUtility::renderButton('saveImage', $config['icons']['rename'], 'savebtn');
 }
 
 echo '</div>';
