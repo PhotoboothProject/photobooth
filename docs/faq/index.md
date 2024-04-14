@@ -249,6 +249,8 @@ For example use <a href="https://keycode.info" target="_blank">https://keycode.i
 
 **Important:** Works if you access Photobooth via [http://localhost](http://localhost) or [http://your-ip-adress](#), but accessing via the loopback IP (127.0.0.1) does not work!
 
+**Broken support on Linux 6.6 Kernel (April 2024):** While PiOS now comes with a Linux 6.6 Kernel Photobooth is not able to handle the GPIO buttons via sysfs. If you're able to downgrade to a Linux 6.1 Kernel you can continue reading and set-up your Raspberry Pi.
+
 The **Hardware Button** feature enables to control Photobooth through hardware buttons connected to Raspberry GPIO pins. This works for directly connected screens and as well for WLAN connected screen (i.e. iPad). Configuration takes place in the admin settings - Hardware Button section.
 
 Using the Remotebuzzer feature makes the button action taking effect at the same time on all devices accessing Photobooth!
