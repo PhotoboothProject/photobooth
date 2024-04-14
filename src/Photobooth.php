@@ -77,7 +77,7 @@ class Photobooth
         try {
             $remoteVersion = $this->getLatestRelease();
             $localVersion = $this->getVersion();
-            $updateAvailable = $localVersion != $remoteVersion;
+            $updateAvailable = version_compare($localVersion, $remoteVersion, '<');
 
             return $updateAvailable;
         } catch (\Exception $e) {
