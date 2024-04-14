@@ -163,6 +163,10 @@ FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
 $config['foldersAbs']['var'] = PathUtility::getAbsolutePath('var');
 
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
+
 $config['foldersPublic']['api'] = PathUtility::getPublicPath('api');
 $config['foldersPublic']['chroma'] = PathUtility::getPublicPath('chroma');
 
