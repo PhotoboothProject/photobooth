@@ -26,7 +26,7 @@ try {
 $logData = [];
 $file = $_POST['image'];
 $fullName = filter_var($_POST['fullName'], FILTER_UNSAFE_RAW);
-$newFileName = Helper::slugify($fullName) . '_' . $file;
+$newFileName = Helper::slugify((string) $fullName) . '_' . $file;
 $logData['success'] = false;
 
 if(file_exists($config['foldersAbs']['namedImages'] . DIRECTORY_SEPARATOR . $newFileName)) {

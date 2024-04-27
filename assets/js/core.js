@@ -61,13 +61,12 @@ const photoBooth = (function () {
         retryTimeout = config.picture.retry_timeout * 1000,
         notificationTimeout = config.ui.notification_timeout * 1000;
 
-
     // Modal Rename
     const renameImageForm = document.getElementById('set-image-name');
     const modalRename = document.getElementById('modal_rename');
     const renameImageInput = document.getElementById('modal_rename_image');
-    const setImageNameSubmitButton = document.getElementById('set-image-name-submit')
-    const modalRenameCloseButton = document.getElementById('modal_rename_close')
+    const setImageNameSubmitButton = document.getElementById('set-image-name-submit');
+    const modalRenameCloseButton = document.getElementById('modal_rename_close');
     const imageNameInput = document.getElementById('modal_rename_image');
     const fullNameInput = document.getElementById('fullName');
     const renameModalMessage = document.getElementById('set-image-name-message');
@@ -1089,7 +1088,7 @@ const photoBooth = (function () {
                     message.classList.add('text-success');
                     message.textContent = photoboothTools.getTranslation('nameImage:success');
                 } else {
-                    modalRenameCloseButton.disabled = true
+                    modalRenameCloseButton.disabled = true;
                     message.classList.add('text-danger');
                     if (data.fileExists) {
                         message.textContent = data.fileExists;
@@ -1097,10 +1096,9 @@ const photoBooth = (function () {
                     if (data.failedCopy) {
                         message.textContent = data.failedCopy;
                     }
-
                 }
                 closeRenameModal();
-                modalRenameCloseButton.disabled = false
+                modalRenameCloseButton.disabled = false;
                 setImageNameSubmitButton.disabled = false;
             })
             .catch(() => {
@@ -1109,7 +1107,7 @@ const photoBooth = (function () {
                 setImageNameSubmitButton.disabled = false;
                 closeRenameModal();
             });
-    }
+    };
 
     function closeRenameModal() {
         setTimeout(() => {
@@ -1117,28 +1115,32 @@ const photoBooth = (function () {
             fullNameInput.value = '';
             imageNameInput.value = '';
             renameImageForm.reset();
-            modalRenameCloseHandler()
-            // photoboothTools.reloadPage();
+            modalRenameCloseHandler();
+            photoboothTools.reloadPage();
         }, 3000);
     }
 
     const modalRenameCloseHandler = function modalRenameClose(event) {
-        if(event) {
+        if (event) {
             event.preventDefault();
             event.stopPropagation();
         }
         modalRename.style.display = 'none';
-        abortController.abort('Remove EventListener AbortController')
-        abortController = new AbortController()
-    }
+        abortController.abort('Remove EventListener AbortController');
+        abortController = new AbortController();
+    };
 
     api.saveImageWithName = function (image) {
         modalRename.style.display = 'flex';
-        fullNameInput.value = ''
-        renameImageForm.addEventListener('submit', (event) => renameImageSubmitFunctionHandler(event), { signal:abortController.signal });
+        fullNameInput.value = '';
+        renameImageForm.addEventListener('submit', (event) => renameImageSubmitFunctionHandler(event), {
+            signal: abortController.signal
+        });
         // Set Image name
         renameImageInput.value = image;
-        modalRenameCloseButton.addEventListener('click',(event) => modalRenameCloseHandler(event), { signal:abortController.signal });
+        modalRenameCloseButton.addEventListener('click', (event) => modalRenameCloseHandler(event), {
+            signal: abortController.signal
+        });
     };
 
     api.showQrCode = function (filename) {
