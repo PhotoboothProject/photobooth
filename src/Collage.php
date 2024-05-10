@@ -139,7 +139,7 @@ class Collage
                 $imageHandler->imageModified = false;
             }
 
-            imagedestroy($imageResource);
+            unset($imageResource);
         }
         //Create Collage based on 300dpi 4x6in - Scale collages with the height
         $collage_height = intval(4 * $c->collageResolution);
@@ -195,7 +195,7 @@ class Collage
                     }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
 
                 break;
@@ -228,7 +228,7 @@ class Collage
                         throw new \Exception('Failed to create tmp image resource.');
                     }
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
 
                 break;
@@ -271,7 +271,7 @@ class Collage
                     }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
 
                 break;
@@ -322,7 +322,7 @@ class Collage
                     }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
 
                 break;
@@ -354,7 +354,7 @@ class Collage
                     }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
 
                 break;
@@ -385,7 +385,7 @@ class Collage
                     }
                     $imageHandler->setAddPictureOptions((int)$pictureOptions[$i][0], (int)$pictureOptions[$i][1], (int)$pictureOptions[$i][2], (int)$pictureOptions[$i][3], (int)$pictureOptions[$i][4]);
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
                 break;
             case '2x4':
@@ -538,7 +538,7 @@ class Collage
                         (int)$pictureOptions[$i + 4][4]
                     );
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
                 $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
                 $imageHandler->dashedLineStartX = intval($collage_width * 0.03);
@@ -636,7 +636,7 @@ class Collage
                         (int) $pictureOptions[$i + 3][4]
                     );
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
                 if ($c->collageLayout === '2x3') {
                     $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
@@ -755,7 +755,7 @@ class Collage
                         (int)$singlePictureOptions[4]
                     );
                     $imageHandler->addPicture($tmpImg, $my_collage);
-                    imagedestroy($tmpImg);
+                    unset($tmpImg);
                 }
                 break;
         }
@@ -796,7 +796,7 @@ class Collage
         $imageHandler->saveJpeg($my_collage, $destImagePath);
 
         // Destroy the created collage in memory
-        imagedestroy($my_collage);
+        unset($my_collage);
 
         for ($i = 0; $i < $c->collageLimit; $i++) {
             if (($c->collagePlaceholder && $c->collagePlaceholderPosition != $i) || !$c->collagePlaceholder) {
