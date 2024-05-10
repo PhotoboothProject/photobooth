@@ -95,7 +95,7 @@ if (!file_exists($filename_print)) {
             if (!$source instanceof \GdImage) {
                 throw new \Exception('Cannot apply QR Code to image resource.');
             }
-            imagedestroy($qrCode);
+            unset($qrCode);
         }
 
         if ($config['textonprint']['enabled']) {
@@ -131,11 +131,11 @@ if (!file_exists($filename_print)) {
         }
 
         // clear cache
-        imagedestroy($source);
+        unset($source);
     } catch (\Exception $e) {
         // Try to clear cache
         if ($source instanceof \GdImage) {
-            imagedestroy($source);
+            unset($source);
         }
 
         $data = ['error' => $e->getMessage()];
