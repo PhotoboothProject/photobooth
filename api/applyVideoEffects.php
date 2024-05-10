@@ -104,7 +104,7 @@ try {
         }
 
         if ($thumbResource instanceof \GdImage) {
-            imagedestroy($thumbResource);
+            unset($thumbResource);
         }
 
         $newFile = $imageFolder . basename($image);
@@ -119,7 +119,7 @@ try {
                 throw new \Exception('Failed to copy photo.');
             }
         }
-        imagedestroy($imageResource);
+        unset($imageResource);
 
         if (!$config['picture']['keep_original']) {
             if (!unlink($image)) {
@@ -215,7 +215,7 @@ try {
 } catch (\Exception $e) {
     // Handle the exception
     if (isset($imageResource) && $imageResource instanceof \GdImage) {
-        imagedestroy($imageResource);
+        unset($imageResource);
     }
     if (isset($imageHandler) && is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
         $logger->error('Error:', $imageHandler->errorLog);
