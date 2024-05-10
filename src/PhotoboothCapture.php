@@ -84,7 +84,7 @@ class PhotoboothCapture
                         break;
                 }
                 $imageHandler->saveJpeg($im, $this->tmpFile);
-                imagedestroy($im);
+                unset($im);
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());

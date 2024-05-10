@@ -176,7 +176,7 @@ try {
                 $imageHandler->addErrorData('Warning: Failed to resize chroma resource.');
             }
             if ($chromaCopyResource instanceof \GdImage) {
-                imagedestroy($chromaCopyResource);
+                unset($chromaCopyResource);
             }
         }
 
@@ -212,7 +212,7 @@ try {
         }
 
         if ($thumbResource instanceof \GdImage) {
-            imagedestroy($thumbResource);
+            unset($thumbResource);
         }
 
         $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
@@ -246,7 +246,7 @@ try {
                 throw new \Exception('Failed to copy photo.');
             }
         }
-        imagedestroy($imageResource);
+        unset($imageResource);
 
         // insert into database
         if ($config['database']['enabled']) {
@@ -379,7 +379,7 @@ try {
 } catch (\Exception $e) {
     // Handle the exception
     if (isset($imageResource) && $imageResource instanceof \GdImage) {
-        imagedestroy($imageResource);
+        unset($imageResource);
     }
     if (isset($imageHandler) && is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
         $logger->error('Error', $imageHandler->errorLog);
