@@ -1135,11 +1135,6 @@ class Image
                 throw new \Exception('Cannot copy image.');
             }
 
-            // Clear cach
-            if (isset($resource)) {
-                unset($resource);
-            }
-
             // Border color
             $color = intval(imagecolorallocate($img, 192, 192, 192));
             // We put a gray border to our image.
@@ -1162,9 +1157,7 @@ class Image
                 !imageline($img, imagesx($img) - 2, 4, imagesx($img) - 2, imagesy($img) - 4, $gris2) ||
                 !imageline($img, imagesx($img) - 1, 6, imagesx($img) - 1, imagesy($img) - 4, $gris3)
             ) {
-                if (isset($img)) {
-                    unset($img);
-                }
+                unset($img);
                 throw new \Exception('Cannot add shadow.');
             }
 
@@ -1190,7 +1183,7 @@ class Image
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if ($img instanceof GdImage) {
+            if (isset($img) && $img instanceof GdImage) {
                 unset($img);
             }
 
