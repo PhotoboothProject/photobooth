@@ -1136,7 +1136,9 @@ class Image
             }
 
             // Clear cach
-            unset($resource);
+            if (isset($resource) {
+                unset($resource);
+            }
 
             // Border color
             $color = intval(imagecolorallocate($img, 192, 192, 192));
@@ -1160,7 +1162,9 @@ class Image
                 !imageline($img, imagesx($img) - 2, 4, imagesx($img) - 2, imagesy($img) - 4, $gris2) ||
                 !imageline($img, imagesx($img) - 1, 6, imagesx($img) - 1, imagesy($img) - 4, $gris3)
             ) {
-                unset($img);
+                if (isset($img) {
+                    unset($img);
+                }
                 throw new \Exception('Cannot add shadow.');
             }
 
