@@ -1136,7 +1136,7 @@ class Image
             }
 
             // Clear cach
-            if (isset($resource) {
+            if (isset($resource)) {
                 unset($resource);
             }
 
@@ -1162,7 +1162,7 @@ class Image
                 !imageline($img, imagesx($img) - 2, 4, imagesx($img) - 2, imagesy($img) - 4, $gris2) ||
                 !imageline($img, imagesx($img) - 1, 6, imagesx($img) - 1, imagesy($img) - 4, $gris3)
             ) {
-                if (isset($img) {
+                if (isset($img)) {
                     unset($img);
                 }
                 throw new \Exception('Cannot add shadow.');
