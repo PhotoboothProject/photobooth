@@ -20,10 +20,6 @@ $logger->debug(basename($_SERVER['PHP_SELF']));
 $database = DatabaseManagerService::getInstance();
 
 try {
-    if (!extension_loaded('gd')) {
-        throw new \Exception('GD library not loaded! Please enable GD!');
-    }
-
     if (empty($_POST['file'])) {
         throw new \Exception('No file provided');
     }
