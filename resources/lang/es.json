@@ -254,6 +254,8 @@
   "mail:mail_subject": "Asunto del mail",
   "mail:mail_text": "Texto",
   "mail:mail_username": "Nombre de usuario del mail",
+  "mail:sendPicture:subject": "Aquí está tu foto",
+  "mail:sendPicture:text": "Hola, tu foto está adjunta.",
   "mailError": "Error de envío del e-mail",
   "mailSaved": "Dirección de correo electrónico guardada correctamente",
   "mailSent": "E-mail enviado",

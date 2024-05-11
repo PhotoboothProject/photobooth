@@ -65,39 +65,6 @@ $cmds = [
     ],
 ];
 
-$mailTemplates = [
-    'de' => [
-        'mail' => [
-            'subject' => 'Hier ist dein Bild',
-            'text' => 'Hey, dein Bild ist angehangen.',
-        ],
-    ],
-    'en' => [
-        'mail' => [
-            'subject' => 'Here is your picture',
-            'text' => 'Hey, your picture is attached.',
-        ],
-    ],
-    'es' => [
-        'mail' => [
-            'subject' => 'Aquí está tu foto',
-            'text' => 'Hola, tu foto está adjunta.',
-        ],
-    ],
-    'fr' => [
-        'mail' => [
-            'subject' => 'Voici votre photo',
-            'text' => 'Hé, ta photo est attachée.',
-        ],
-    ],
-    'hr' => [
-        'mail' => [
-            'subject' => 'Ovo je vaša slika',
-            'text' => 'Vaša slika je u prilogu',
-        ],
-    ],
-];
-
 require_once PathUtility::getAbsolutePath('config/config.inc.php');
 
 $operatingSystem = Environment::getOperatingSystem();
@@ -117,22 +84,6 @@ $defaultConfig = $config;
 
 if (file_exists(PathUtility::getAbsolutePath('config/my.config.inc.php'))) {
     require_once PathUtility::getAbsolutePath('config/my.config.inc.php');
-
-    if (empty($config['mail']['subject'])) {
-        if (!empty($config['ui']['language'])) {
-            $config['mail']['subject'] = $mailTemplates[$config['ui']['language']]['mail']['subject'];
-        } else {
-            $config['mail']['subject'] = $mailTemplates[$defaultConfig['ui']['language']]['mail']['subject'];
-        }
-    }
-    if (empty($config['mail']['text'])) {
-        if (!empty($config['ui']['language'])) {
-            $config['mail']['text'] = $mailTemplates[$config['ui']['language']]['mail']['text'];
-        } else {
-            $config['mail']['text'] = $mailTemplates[$defaultConfig['ui']['language']]['mail']['text'];
-        }
-    }
-
     $config = ArrayUtility::mergeRecursive($defaultConfig, $config);
 }
 

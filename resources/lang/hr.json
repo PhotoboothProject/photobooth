@@ -256,6 +256,8 @@
   "mail:mail_subject": "Predmet",
   "mail:mail_text": "Tekst",
   "mail:mail_username": "Korisničko ime e-mail računa",
+  "mail:sendPicture:subject": "Ovo je vaša slika",
+  "mail:sendPicture:text": "Vaša slika je u prilogu.",
   "mailError": "Pogreška pri slanju e-pošte",
   "mailSaved": "E-mail adresa je uspješno spremljena",
   "mailSent": "E-pošta je poslana",

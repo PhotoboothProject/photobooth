@@ -260,6 +260,8 @@
   "mail:mail_subject": "objet du mail",
   "mail:mail_text": "Texte",
   "mail:mail_username": "Nom d'utilisateur du compte de messagerie",
+  "mail:sendPicture:subject": "Voici votre photo",
+  "mail:sendPicture:text": "Hé, ta photo est attachée.",
   "mailError": "Erreur d'envoi d'email",
   "mailSaved": "Adresse e-mail enregistrée avec succès",
   "mailSent": "E-mail envoyé",
