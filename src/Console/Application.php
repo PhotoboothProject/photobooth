@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Photobooth\Console;
 
 use Photobooth\Command;
+use Photobooth\Photobooth;
 use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
@@ -14,7 +15,7 @@ class Application extends BaseApplication
     public function __construct(array $photoboothConfig)
     {
         $this->photoboothConfig = $photoboothConfig;
-        parent::__construct('Photobooth', $this->photoboothConfig['photobooth']['version']);
+        parent::__construct('Photobooth', (new Photobooth())->getVersion());
         $this->add((new Command\ConfigListCommand())->setPhotoboothConfig($this->photoboothConfig));
     }
 }
