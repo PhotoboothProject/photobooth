@@ -12,6 +12,7 @@ use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\ProcessService;
+use Photobooth\Utility\ArrayUtility;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
@@ -264,7 +265,7 @@ if (isset($data['type'])) {
         }
     }
 
-    $content = "<?php\n\$config = " . var_export(Helper::arrayRecursiveDiff($newConfig, $defaultConfig), true) . ';';
+    $content = "<?php\n\n\$config = " . ArrayUtility::export(Helper::arrayRecursiveDiff($newConfig, $defaultConfig)) . ";\n";
 
     if (file_put_contents(PathUtility::getAbsolutePath('config/my.config.inc.php'), $content)) {
         Helper::clearCache(PathUtility::getAbsolutePath('config/my.config.inc.php'));

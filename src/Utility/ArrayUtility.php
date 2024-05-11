@@ -85,4 +85,48 @@ class ArrayUtility
         }
         return $differenceArray;
     }
+
+    public static function export(array $array = [], int $level = 0): string
+    {
+        $output = "[\n";
+        $level++;
+        $writeKeyIndex = false;
+        $expectedKeyIndex = 0;
+        foreach ($array as $key => $value) {
+            if ($key === $expectedKeyIndex) {
+                $expectedKeyIndex++;
+            } else {
+                $writeKeyIndex = true;
+                break;
+            }
+        }
+        foreach ($array as $key => $value) {
+            $output .= str_repeat('    ', $level);
+            if ($writeKeyIndex) {
+                $output .= is_int($key) ? $key . ' => ' : '\'' . $key . '\' => ';
+            }
+            if (is_array($value)) {
+                if (!empty($value)) {
+                    $output .= self::export($value, $level);
+                } else {
+                    $output .= "[],\n";
+                }
+            } elseif (is_int($value) || is_float($value)) {
+                $output .= $value . ",\n";
+            } elseif ($value === null) {
+                $output .= "null,\n";
+            } elseif (is_bool($value)) {
+                $output .= $value ? 'true' : 'false';
+                $output .= ",\n";
+            } elseif (is_string($value)) {
+                $stringContent = str_replace(['\\', '\''], ['\\\\', '\\\''], $value);
+                $output .= '\'' . $stringContent . "',\n";
+            } else {
+                throw new \RuntimeException('Objects are not supported');
+            }
+        }
+
+        $output .= str_repeat('    ', $level - 1) . ']' . ($level - 1 == 0 ? '' : ",\n");
+        return $output;
+    }
 }
