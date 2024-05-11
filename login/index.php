@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\AdminKeypad;
 use Photobooth\Utility\PathUtility;
@@ -22,7 +23,7 @@ if (isset($_POST['submit'])) {
 }
 // END LOGIN
 
-$pageTitle = 'Login';
+$pageTitle = 'Login - ' . ApplicationService::getInstance()->getTitle();
 $languageService = LanguageService::getInstance();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
@@ -40,7 +41,7 @@ if($config['login']['enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth'
         echo '
             <div class="w-full max-w-md h-144 rounded-lg p-8 bg-white flex flex-col shadow-xl relative overflow-hidden">
                 <form method="post">
-                    <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">' . $config['ui']['branding'] . ' Login</div>
+                    <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">Login</div>
                     <div class="w-full text-center text-gray-500 mb-8">' . $languageService->translate('login_pin_request') . '</div>
                     <div class="w-full text-center text-gray-500 mb-8">' . AdminKeypad::renderIndicator(strlen($config['login']['pin'])) . '</div>
                     <div class="w-full text-center text-gray-500">' . AdminKeypad::render() . '</div>

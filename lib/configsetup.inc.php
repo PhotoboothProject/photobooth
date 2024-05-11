@@ -119,12 +119,6 @@ $configsetup = [
             ],
             'value' => $config['adminpanel']['view'],
         ],
-        'adminpanel_view_default' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'name' => 'adminpanel[view_default]',
-            'value' => $config['adminpanel']['view_default'],
-        ],
         'adminpanel_experimental_settings' => [
             'view' => 'expert',
             'type' => 'checkbox',
@@ -3097,12 +3091,6 @@ $configsetup = [
             'name' => 'icons[slideshow_toggle]',
             'placeholder' => $defaultConfig['icons']['slideshow_toggle'],
             'value' => $config['icons']['slideshow_toggle'],
-        ],
-        'ui_branding' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'name' => 'ui[branding]',
-            'value' => $config['ui']['branding'],
         ],
     ],
     'jpeg_quality' => [

@@ -2,13 +2,11 @@
 
 require_once '../lib/boot.php';
 
-use Photobooth\Photobooth;
 use Photobooth\HealthCheck;
+use Photobooth\Service\ApplicationService;
 use Photobooth\Utility\PathUtility;
 
-$photobooth = new Photobooth();
-
-$pageTitle = 'Welcome to ' . $config['ui']['branding'];
+$pageTitle = 'Welcome to ' . ApplicationService::getInstance()->getTitle();
 $remoteBuzzer = false;
 $photoswipe = false;
 

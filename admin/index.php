@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\ApplicationService;
 use Photobooth\Utility\PathUtility;
 
 // Login / Authentication check
@@ -16,7 +17,7 @@ if (!(
 
 require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 
-$pageTitle = 'Adminpanel';
+$pageTitle = 'Adminpanel - ' . ApplicationService::getInstance()->getTitle();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
 

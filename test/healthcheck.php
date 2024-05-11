@@ -3,9 +3,10 @@
 require_once '../lib/boot.php';
 
 use Photobooth\HealthCheck;
+use Photobooth\Service\ApplicationService;
 use Photobooth\Utility\PathUtility;
 
-$pageTitle = $config['ui']['branding'] . ' Health Check';
+$pageTitle = 'Health Check - ' . ApplicationService::getInstance()->getTitle();
 $remoteBuzzer = false;
 $photoswipe = false;
 

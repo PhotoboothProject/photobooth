@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Factory\ProcessFactory;
+use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LanguageService;
@@ -47,6 +48,7 @@ require_once dirname(__DIR__) . '/lib/config.php';
 // $languageService = LanguageService::getInstance();
 // $languageService->translate('abort');
 //
+$GLOBALS[ApplicationService::class] = new ApplicationService();
 $GLOBALS[AssetService::class] = new AssetService();
 $GLOBALS[LanguageService::class] = new LanguageService(
     $config['ui']['language'] ?? 'en',

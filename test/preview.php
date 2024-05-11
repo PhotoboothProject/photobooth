@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\ComponentUtility;
@@ -9,7 +10,7 @@ use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
 $assetService = AssetService::getInstance();
-$pageTitle = $config['ui']['branding'] . ' Preview-Test';
+$pageTitle = 'Preview-Test - ' . ApplicationService::getInstance()->getTitle();
 $photoswipe = false;
 $remoteBuzzer = false;
 

@@ -4,7 +4,7 @@ function isElementHidden($element_class, $setting)
 {
     global $config;
     if (empty($setting['view'])) {
-        $setting['view'] = $config['adminpanel']['view_default'];
+        $setting['view'] = 'expert';
     }
 
     switch ($setting['view']) {

@@ -1,13 +1,10 @@
 <?php
 
 use Photobooth\Environment;
-use Photobooth\Photobooth;
 use Photobooth\Helper;
 use Photobooth\Utility\ArrayUtility;
 use Photobooth\Utility\FileUtility;
 use Photobooth\Utility\PathUtility;
-
-$photobooth = new Photobooth();
 
 $cmds = [
     'windows' => [
@@ -75,10 +72,6 @@ $config['exiftool']['cmd'] = $cmds[$operatingSystem]['exiftool']['cmd'];
 $config['nodebin']['cmd'] = $cmds[$operatingSystem]['nodebin']['cmd'];
 $config['reboot']['cmd'] = $cmds[$operatingSystem]['reboot']['cmd'];
 $config['shutdown']['cmd'] = $cmds[$operatingSystem]['shutdown']['cmd'];
-
-$config['adminpanel']['view_default'] = 'expert';
-
-$config['ui']['branding'] = 'Photobooth';
 
 $defaultConfig = $config;
 
@@ -182,11 +175,11 @@ if (empty($config['background']['chroma'])) {
 }
 
 if (empty($config['webserver']['ip'])) {
-    $config['webserver']['ip'] = $photobooth->getIp();
+    $config['webserver']['ip'] = Environment::getIp();
 }
 
 if (empty($config['remotebuzzer']['serverip'])) {
-    $config['remotebuzzer']['serverip'] = $photobooth->getIp();
+    $config['remotebuzzer']['serverip'] = Environment::getIp();
 }
 
 if (empty($config['qr']['url'])) {
