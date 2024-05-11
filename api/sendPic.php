@@ -5,6 +5,7 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Service\DatabaseManagerService;
+use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -76,19 +77,24 @@ if (!$mail->addAddress($_POST['recipient'])) {
 }
 
 // Email subject
-$mail->Subject = $config['mail']['subject'];
+$mail->Subject = trim($config['mail']['subject']) !== ''
+    ? $config['mail']['subject']
+    : LanguageService::getInstance()->translate('mail:sendPicture:subject');
 
 // Email body content
+$mailText = trim($config['mail']['text']) !== ''
+    ? $config['mail']['text']
+    : LanguageService::getInstance()->translate('mail:sendPicture:subject');
 $mail->isHTML($config['mail']['is_html']);
 if ($config['mail']['is_html']) {
     if (isset($config['mail']['alt_text']) && empty($config['mail']['alt_text'])) {
-        $mail->msgHTML($config['mail']['text']);
+        $mail->msgHTML($mailText);
     } else {
-        $mail->Body = $config['mail']['text'];
+        $mail->Body = $mailText;
         $mail->AltBody = $config['mail']['alt_text'];
     }
 } else {
-    $mail->Body = $config['mail']['text'];
+    $mail->Body = $mailText;
 }
 
 // for send an attachment

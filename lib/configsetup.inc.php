@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
 /*
@@ -1833,14 +1834,14 @@ $configsetup = [
         'mail_subject' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => '',
+            'placeholder' => LanguageService::getInstance()->translate('mail:sendPicture:subject'),
             'name' => 'mail[subject]',
             'value' => htmlentities($config['mail']['subject'] ?? ''),
         ],
         'mail_text' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => '',
+            'placeholder' => LanguageService::getInstance()->translate('mail:sendPicture:text'),
             'name' => 'mail[text]',
             'value' => htmlentities($config['mail']['text'] ?? ''),
         ],

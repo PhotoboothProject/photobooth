@@ -262,6 +262,8 @@
   "mail:mail_subject": "Subject",
   "mail:mail_text": "Text",
   "mail:mail_username": "Username of the e-mail account",
+  "mail:sendPicture:subject": "Here is your picture",
+  "mail:sendPicture:text": "Hey, your picture is attached.",
   "mailError": "Error sending e-mail",
   "mailSaved": "E-mail address saved successfully",
   "mailSent": "E-mail sent",
