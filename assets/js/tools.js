@@ -8,7 +8,7 @@ const photoboothTools = (function () {
     api.isPrinting = false;
 
     api.initialize = async function () {
-        const result = await fetch(config.photobooth.basePath + 'api/translations.php', {
+        const result = await fetch(config.foldersPublic.api + '/translations.php', {
             cache: 'no-store'
         });
         this.translations = await result.json();

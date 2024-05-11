@@ -218,6 +218,3 @@ if (!empty($config['ftp']['urlTemplate'])) {
 
     $config['ftp']['processedTemplate'] = str_replace(array_keys($parameters), array_values($parameters), $config['ftp']['urlTemplate']);
 }
-
-$config['photobooth']['version'] = $photobooth->getVersion();
-$config['photobooth']['basePath'] = PathUtility::getPublicPath();
