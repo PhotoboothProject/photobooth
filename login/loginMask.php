@@ -9,7 +9,7 @@ $languageService = LanguageService::getInstance();
     <form method="post">
 
         <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
-            <?=$config['ui']['branding']?> Login
+            Login
         </div>
 
         <div class="w-full text-center text-gray-500 mb-8">

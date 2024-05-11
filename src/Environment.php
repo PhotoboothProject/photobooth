@@ -22,4 +22,9 @@ class Environment
             ? 'windows'
             : 'linux';
     }
+
+    public static function getIp(): string
+    {
+        return self::isLinux() ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
+    }
 }

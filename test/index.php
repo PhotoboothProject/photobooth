@@ -2,11 +2,12 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
-$pageTitle = 'Tests';
+$pageTitle = 'Tests - ' . ApplicationService::getInstance()->getTitle();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
 

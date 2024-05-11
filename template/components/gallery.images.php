@@ -11,7 +11,7 @@ if (empty($imagelist)) {
     echo '<div class="gallery-list" id="galimages">';
     foreach ($imagelist as $image) {
         try {
-            $date = $config['ui']['branding'] . ' Gallery';
+            $date = 'Gallery';
             if ($config['picture']['naming'] === 'dateformatted' && $config['gallery']['show_date']) {
                 if ($config['database']['file'] != 'db') {
                     $db = strlen($config['database']['file']);
