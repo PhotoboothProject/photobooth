@@ -29,7 +29,7 @@ class HealthCheck
             $this->healthStatus = false;
         }
         foreach (self::REQUIRED_PHP_EXTENSIONS as $extension) {
-            if (!extension_loaded('mbstring')) {
+            if (!extension_loaded($extension)) {
                 $this->healthStatus = false;
             }
         }
