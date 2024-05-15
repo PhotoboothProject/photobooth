@@ -93,7 +93,7 @@ if (file_exists(PathUtility::getAbsolutePath('config/my.config.inc.php')) && !is
 }
 
 foreach ($config['folders'] as $key => $folder) {
-    if ($folder === 'data' || $folder === 'archives' || $folder === 'config' || $folder === 'private') {
+    if ($folder === 'data' || $folder === 'config' || $folder === 'private') {
         $path = PathUtility::getAbsolutePath($folder);
     } else {
         $path = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $folder);
