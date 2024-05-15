@@ -5,13 +5,18 @@ const photoboothTools = (function () {
         api = {};
 
     api.translations = null;
+    api.sounds = null;
     api.isPrinting = false;
 
     api.initialize = async function () {
-        const result = await fetch(config.foldersPublic.api + '/translations.php', {
+        const resultTranslations = await fetch(config.foldersPublic.api + '/translations.php', {
             cache: 'no-store'
         });
-        this.translations = await result.json();
+        this.translations = await resultTranslations.json();
+        const resultSounds = await fetch(config.foldersPublic.api + '/sounds.php', {
+            cache: 'no-store'
+        });
+        this.sounds = await resultSounds.json();
         this.registerEvents();
     };
 
@@ -78,6 +83,16 @@ const photoboothTools = (function () {
         }
 
         return this.translations[key];
+    };
+
+    api.getSound = function (key) {
+        if (!this.sounds[key]) {
+            this.console.logDev('sound key not found: ' + key);
+
+            return null;
+        }
+
+        return this.sounds[key];
     };
 
     api.overlay = {
