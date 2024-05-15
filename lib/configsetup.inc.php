@@ -3278,13 +3278,6 @@ $configsetup = [
             'name' => 'folders[private]',
             'value' => $config['folders']['private'],
         ],
-        'folders_config' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'placeholder' => $defaultConfig['folders']['config'],
-            'name' => 'folders[config]',
-            'value' => $config['folders']['config'],
-        ],
     ],
     'reset' => [
         'view' => 'basic',

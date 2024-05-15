@@ -508,7 +508,6 @@ $config['reboot']['cmd'] = '';
 $config['shutdown']['cmd'] = '';
 
 // F O L D E R S
-$config['folders']['config'] = 'config';
 $config['folders']['data'] = 'data';
 $config['folders']['images'] = 'images';
 $config['folders']['keying'] = 'keying';
