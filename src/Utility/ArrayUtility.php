@@ -121,6 +121,14 @@ class ArrayUtility
             } elseif (is_string($value)) {
                 $stringContent = str_replace(['\\', '\''], ['\\\\', '\\\''], $value);
                 $output .= '\'' . $stringContent . "',\n";
+            } elseif ($value instanceof \BackedEnum) {
+                $value = $value->value;
+                if (is_string($value)) {
+                    $stringContent = str_replace(['\\', '\''], ['\\\\', '\\\''], $value);
+                    $output .= '\'' . $stringContent . "',\n";
+                } else {
+                    $output .= $value . ",\n";
+                }
             } else {
                 throw new \RuntimeException('Objects are not supported');
             }
