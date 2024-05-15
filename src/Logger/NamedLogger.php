@@ -65,4 +65,9 @@ class NamedLogger
     {
         return $this->file;
     }
+
+    public function close(): void
+    {
+        $this->logger->close();
+    }
 }

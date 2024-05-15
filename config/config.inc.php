@@ -519,9 +519,3 @@ $config['folders']['thumbs'] = 'thumbs';
 $config['folders']['tmp'] = 'tmp';
 $config['folders']['archives'] = 'archives';
 $config['folders']['private'] = 'private';
-
-// R E S E T
-$config['reset']['remove_images'] = true;
-$config['reset']['remove_mailtxt'] = false;
-$config['reset']['remove_config'] = false;
-$config['reset']['remove_print_db'] = false;
