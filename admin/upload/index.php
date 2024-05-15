@@ -31,7 +31,7 @@ $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center ju
 
 if (isset($_POST['submit'])) {
     $folderName = $_POST['folder_name'];
-    $folderPath = $config['foldersAbs']['private'] . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $folderName;
+    $folderPath = PathUtility::getAbsolutePath('private/images/' . $folderName);
     FileUtility::createDirectory($folderPath);
 
     if (is_writable($folderPath)) {

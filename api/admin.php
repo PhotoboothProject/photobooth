@@ -223,7 +223,7 @@ if (isset($data['type'])) {
     }
 
     $collageLayout = $newConfig['collage']['layout'];
-    $collageConfigFilePath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'private/collage.json';
+    $collageConfigFilePath = PathUtility::getAbsolutePath('private/collage.json');
     if ($collageLayout === '1+2' || $collageLayout == '2+1' || $collageLayout == '2x3') {
         $newConfig['collage']['limit'] = 3;
     } elseif ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
