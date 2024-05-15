@@ -18,8 +18,6 @@ if (!(
     exit();
 }
 
-require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
-
 $languageService = LanguageService::getInstance();
 $assetService = AssetService::getInstance();
 $pageTitle = 'Debugpanel - ' . ApplicationService::getInstance()->getTitle();

@@ -18,8 +18,6 @@ if (!(
     exit();
 }
 
-require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
-
 $languageService = LanguageService::getInstance();
 $pageTitle = 'Image uploader - ' . ApplicationService::getInstance()->getTitle();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
