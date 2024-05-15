@@ -175,7 +175,6 @@ $config['gallery']['allow_delete'] = true;
 $config['gallery']['scrollbar'] = false;
 $config['gallery']['bottom_bar'] = true;
 $config['gallery']['figcaption'] = true;
-$config['gallery']['action_footer'] = true;
 $config['pswp']['caption'] = true;
 $config['pswp']['clickToCloseNonZoomable'] = false;
 $config['pswp']['pinchToClose'] = true;
