@@ -17,8 +17,6 @@ if (!(
     exit();
 }
 
-require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
-
 $languageService = LanguageService::getInstance();
 $pageTitle = 'Diskusage - ' . ApplicationService::getInstance()->getTitle();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
