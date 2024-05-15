@@ -648,7 +648,7 @@ class Collage
                 }
                 break;
             default:
-                $collageConfigFilePath = PathUtility::getAbsolutePath('private' . DIRECTORY_SEPARATOR . $c->collageLayout);
+                $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $c->collageLayout);
                 $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
 
                 if (is_array($collageJson)) {

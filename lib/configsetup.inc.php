@@ -3271,13 +3271,6 @@ $configsetup = [
             'name' => 'folders[tmp]',
             'value' => $config['folders']['tmp'],
         ],
-        'folders_private' => [
-            'view' => 'expert',
-            'type' => 'hidden',
-            'placeholder' => $defaultConfig['folders']['private'],
-            'name' => 'folders[private]',
-            'value' => $config['folders']['private'],
-        ],
     ],
     'reset' => [
         'view' => 'basic',

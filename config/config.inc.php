@@ -515,4 +515,3 @@ $config['folders']['print'] = 'print';
 $config['folders']['qrcodes'] = 'qrcodes';
 $config['folders']['thumbs'] = 'thumbs';
 $config['folders']['tmp'] = 'tmp';
-$config['folders']['private'] = 'private';
