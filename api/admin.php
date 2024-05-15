@@ -14,13 +14,97 @@ use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\ProcessService;
 use Photobooth\Utility\ArrayUtility;
 use Photobooth\Utility\PathUtility;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 header('Content-Type: application/json');
 
-$logger = LoggerService::getInstance()->getLogger('main');
+$loggerService = LoggerService::getInstance();
+$logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
-
 $data = $_POST;
+
+// Reset
+if (isset($data['type']) && $data['type'] === 'reset') {
+    // First step in resetting the photobooth is always resetting the logs
+    // This ensures we are able to write logmessages afterwards.
+    $loggerService->addLogger('main');
+    $loggerService->addLogger('synctodrive');
+    $loggerService->addLogger('remotebuzzer');
+    $loggerService->reset();
+
+    $logger->debug(basename($_SERVER['PHP_SELF']));
+    $resetOptions = [
+        'remove_images' => (bool) ($data['reset']['remove_images'] ?? false),
+        'remove_print_db' => (bool) ($data['reset']['remove_print_db'] ?? false),
+        'remove_mail_db' => (bool) ($data['reset']['remove_mail_db'] ?? false),
+        'remove_config' => (bool) ($data['reset']['remove_config'] ?? false),
+    ];
+    $logger->info('Resetting Photobooth.', $resetOptions);
+
+    // Remove images and database
+    if ($resetOptions['remove_images']) {
+        $logger->info('Remove images.');
+        $imageFolders = [
+            $config['foldersAbs']['images'],
+            $config['foldersAbs']['keying'],
+            $config['foldersAbs']['print'],
+            $config['foldersAbs']['qrcodes'],
+            $config['foldersAbs']['thumbs'],
+            $config['foldersAbs']['tmp'],
+        ];
+        $filesystem = (new Filesystem());
+        $finder = (new Finder())
+            ->files()
+            ->in($imageFolders)
+            ->name(['*.jpg']);
+        foreach ($finder as $file) {
+            $logger->info($file->getRealPath() . ' deleted.');
+            $filesystem->remove($file->getRealPath());
+        }
+
+        // delete db.txt
+        $database = DatabaseManagerService::getInstance();
+        if (is_file($database->databaseFile)) {
+            // delete file
+            unlink($database->databaseFile);
+            $logger->debug($database->databaseFile . ' deleted.');
+        }
+    }
+
+    // Remove print database
+    if ($resetOptions['remove_print_db']) {
+        $logger->info('Remove print database.');
+        $printManager = PrintManagerService::getInstance();
+        if ($printManager->removePrintDb()) {
+            $logger->info('printed.csv deleted.');
+        }
+        if ($printManager->unlockPrint()) {
+            $logger->info('print.lock deleted.');
+        }
+        if ($printManager->removePrintCounter()) {
+            $logger->info('print.count deleted.');
+        }
+    }
+
+    // Remove mail database
+    if ($resetOptions['remove_mail_db']) {
+        $logger->info('Remove mail database.');
+        $mailService = MailService::getInstance();
+        $mailService->resetDatabase();
+    }
+
+    // Remove personal config
+    if ($resetOptions['remove_config']) {
+        $logger->info('Remove "config/my.config.inc.php".');
+        if (is_file(PathUtility::getAbsolutePath('config/my.config.inc.php'))) {
+            unlink(PathUtility::getAbsolutePath('config/my.config.inc.php'));
+        }
+    }
+
+    echo json_encode('success');
+    exit();
+}
 
 if (isset($data['type'])) {
     $newConfig = [];
@@ -270,95 +354,6 @@ if (isset($data['type'])) {
     if (file_put_contents(PathUtility::getAbsolutePath('config/my.config.inc.php'), $content)) {
         Helper::clearCache(PathUtility::getAbsolutePath('config/my.config.inc.php'));
         $logger->debug('New config saved.');
-        if ($data['type'] == 'reset') {
-            $logger->debug('Resetting Photobooth.');
-            if ($newConfig['reset']['remove_images']) {
-                $logger->debug('Removing images.');
-                // empty folders
-                foreach ($config['foldersAbs'] as $folder) {
-                    if ($folder != $config['foldersAbs']['archives'] && $folder != $config['foldersAbs']['private']) {
-                        if (is_dir($folder)) {
-                            $files = glob($folder . '/*.jpg');
-                            if (is_array($files)) {
-                                foreach ($files as $file) {
-                                    // iterate files
-                                    if (is_file($file)) {
-                                        // delete file
-                                        unlink($file);
-                                        $logger->debug($file . ' deleted.');
-                                    }
-                                }
-                            } else {
-                                $file = (string)$files;
-                                if (is_file($file)) {
-                                    // delete file
-                                    unlink($file);
-                                    $logger->debug($file . ' deleted.');
-                                }
-                            }
-                        }
-                    } else {
-                        $logger->debug($folder . ' skipped.');
-                    }
-                }
-            }
-
-            if ($newConfig['reset']['remove_print_db']) {
-                $printManager = PrintManagerService::getInstance();
-                // delete print database
-                if ($printManager->removePrintDb()) {
-                    $logger->debug('printed.csv deleted.');
-                }
-                if ($printManager->unlockPrint()) {
-                    $logger->debug('print.lock deleted.');
-                }
-                if ($printManager->removePrintCounter()) {
-                    $logger->debug('print.count deleted.');
-                }
-            }
-
-            if ($newConfig['reset']['remove_mailtxt']) {
-                $mailService = MailService::getInstance();
-                $mailService->resetDatabase();
-                $logger->debug('Mail database resetted.');
-            }
-
-            if ($newConfig['reset']['remove_config']) {
-                // delete personal config
-                if (is_file(PathUtility::getAbsolutePath('config/my.config.inc.php'))) {
-                    unlink(PathUtility::getAbsolutePath('config/my.config.inc.php'));
-                    $logger->debug('my.config.inc.php deleted.');
-                }
-            }
-
-            $logFiles = glob(PathUtility::getAbsolutePath('var/log') . '/*.log');
-
-            if (is_array($logFiles)) {
-                foreach ($logFiles as $logFile) {
-                    // iterate files
-                    if (is_file($logFile)) {
-                        // delete file
-                        unlink($logFile);
-                        $logger->debug($logFile . ' deleted.');
-                    }
-                }
-            } else {
-                $logFile = (string)$logFiles;
-                if (is_file($logFile)) {
-                    // delete file
-                    unlink($logFile);
-                    $logger->debug($logFile . ' deleted.');
-                }
-            }
-
-            // delete db.txt
-            $database = DatabaseManagerService::getInstance();
-            if (is_file($database->databaseFile)) {
-                // delete file
-                unlink($database->databaseFile);
-                $logger->debug($database->databaseFile . ' deleted.');
-            }
-        }
         echo json_encode('success');
     } else {
         $logger->error('ERROR: Config can not be saved!');
