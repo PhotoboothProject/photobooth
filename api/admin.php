@@ -5,6 +5,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Helper;
 use Photobooth\Environment;
 use Photobooth\Service\DatabaseManagerService;
@@ -46,12 +47,12 @@ if (isset($data['type']) && $data['type'] === 'reset') {
     if ($resetOptions['remove_images']) {
         $logger->info('Remove images.');
         $imageFolders = [
-            $config['foldersAbs']['images'],
-            $config['foldersAbs']['keying'],
-            $config['foldersAbs']['print'],
-            $config['foldersAbs']['qrcodes'],
-            $config['foldersAbs']['thumbs'],
-            $config['foldersAbs']['tmp'],
+            FolderEnum::IMAGES->absolute(),
+            FolderEnum::KEYING->absolute(),
+            FolderEnum::PRINT->absolute(),
+            FolderEnum::QR->absolute(),
+            FolderEnum::THUMBS->absolute(),
+            FolderEnum::TEMP->absolute(),
         ];
         $filesystem = (new Filesystem());
         $finder = (new Finder())

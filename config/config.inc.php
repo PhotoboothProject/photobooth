@@ -9,7 +9,6 @@ $config = [];
 // G E N E R A L
 // possible language values: de, en, fr, it
 $config['ui']['language'] = 'en';
-$config['ui']['folders_lang'] = 'resources/lang';
 $config['adminpanel']['view'] = 'basic';
 $config['adminpanel']['experimental_settings'] = false;
 $config['dev']['loglevel'] = '1';
@@ -506,12 +505,3 @@ $config['pre_photo']['cmd'] = '';
 $config['post_photo']['cmd'] = '';
 $config['reboot']['cmd'] = '';
 $config['shutdown']['cmd'] = '';
-
-// F O L D E R S
-$config['folders']['data'] = 'data';
-$config['folders']['images'] = 'images';
-$config['folders']['keying'] = 'keying';
-$config['folders']['print'] = 'print';
-$config['folders']['qrcodes'] = 'qrcodes';
-$config['folders']['thumbs'] = 'thumbs';
-$config['folders']['tmp'] = 'tmp';

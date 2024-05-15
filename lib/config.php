@@ -92,27 +92,11 @@ if (file_exists(PathUtility::getAbsolutePath('config/my.config.inc.php')) && !is
     die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
-foreach ($config['folders'] as $key => $folder) {
-    if ($folder === 'data') {
-        $path = PathUtility::getAbsolutePath($folder);
-    } else {
-        $path = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $folder);
-        $config['foldersPublic'][$key] = PathUtility::getPublicPath($path);
-    }
-    FileUtility::createDirectory($path);
-    $config['foldersAbs'][$key] = PathUtility::getAbsolutePath($path);
-}
-
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
-$config['foldersAbs']['var'] = PathUtility::getAbsolutePath('var');
-
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
-
-$config['foldersPublic']['api'] = PathUtility::getPublicPath('api');
-$config['foldersPublic']['chroma'] = PathUtility::getPublicPath('chroma');
 
 if ($config['preview']['mode'] === 'gphoto') {
     $config['preview']['mode'] = 'device_cam';

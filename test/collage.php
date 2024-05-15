@@ -3,6 +3,7 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Collage;
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
 use Photobooth\Utility\PathUtility;
 
@@ -34,12 +35,12 @@ $name = date('Ymd_His') . '.jpg';
 $collageSrcImagePaths = [];
 for ($i = 0; $i < $config['collage']['limit']; $i++) {
     $image = $demoImages[$i];
-    $path = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $i . '_' . $name;
+    $path = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $i . '_' . $name;
     copy($demoFolder . DIRECTORY_SEPARATOR . $image, $path);
     $collageSrcImagePaths[] = $path;
 }
 
-$filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . 'result_' . $name;
+$filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . 'result_' . $name;
 if (Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $config['filters']['defaults'])) {
     for ($k = 0; $k < $config['collage']['limit']; $k++) {
         unlink($collageSrcImagePaths[$k]);

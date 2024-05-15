@@ -193,7 +193,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
                             el.href =
-                                config.foldersPublic.api +
+                                environment.publicFolders.api +
                                 '/download.php?image=' +
                                 pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                         });
@@ -212,7 +212,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
                             el.href =
-                                config.foldersPublic.chroma +
+                                environment.publicFolders.chroma +
                                 '/chromakeying.php?filename=' +
                                 pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                         });

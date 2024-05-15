@@ -4,6 +4,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
 use Photobooth\PhotoboothCapture;
 use Photobooth\Service\LoggerService;
@@ -27,10 +28,10 @@ try {
         }
     }
 
-    $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+    $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $file;
     if (file_exists($filename_tmp)) {
         $random = $_POST['style'] === 'video' ? Image::createNewFilename('random', '.mp4') : Image::createNewFilename('random');
-        $filename_random = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $random;
+        $filename_random = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $random;
         rename($filename_tmp, $filename_random);
     }
 

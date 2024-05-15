@@ -4,6 +4,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
@@ -98,7 +99,7 @@ if ($config['mail']['is_html']) {
 }
 
 // for send an attachment
-$path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
+$path = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR;
 
 if (!$mail->addAttachment($path . $postImage)) {
     $data = [

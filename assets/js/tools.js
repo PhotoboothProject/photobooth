@@ -9,11 +9,11 @@ const photoboothTools = (function () {
     api.isPrinting = false;
 
     api.initialize = async function () {
-        const resultTranslations = await fetch(config.foldersPublic.api + '/translations.php', {
+        const resultTranslations = await fetch(environment.publicFolders.api + '/translations.php', {
             cache: 'no-store'
         });
         this.translations = await resultTranslations.json();
-        const resultSounds = await fetch(config.foldersPublic.api + '/sounds.php', {
+        const resultSounds = await fetch(environment.publicFolders.api + '/sounds.php', {
             cache: 'no-store'
         });
         this.sounds = await resultSounds.json();
@@ -290,7 +290,7 @@ const photoboothTools = (function () {
             }
             $.ajax({
                 method: 'GET',
-                url: config.foldersPublic.api + '/print.php',
+                url: environment.publicFolders.api + '/print.php',
                 data: {
                     filename: imageSrc
                 },

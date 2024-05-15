@@ -4,6 +4,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\PrintManagerService;
@@ -29,8 +30,8 @@ try {
     $random = $imageHandler->createNewFilename('random');
     $filename = $_GET['filename'];
     $uniquename = substr($filename, 0, -4) . '-' . $random;
-    $filename_source = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $filename;
-    $filename_print = $config['foldersAbs']['print'] . DIRECTORY_SEPARATOR . $uniquename;
+    $filename_source = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $filename;
+    $filename_print = FolderEnum::PRINT->absolute() . DIRECTORY_SEPARATOR . $uniquename;
 
     $status = false;
 

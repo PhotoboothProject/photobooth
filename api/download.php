@@ -2,11 +2,13 @@
 
 /** @var array $config */
 
+use Photobooth\Enum\FolderEnum;
+
 require_once '../lib/boot.php';
 
 $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : false;
 if ($image) {
-    $path = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $image;
+    $path = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $image;
 
     if (!is_file($path)) {
         http_response_code(404);
@@ -22,7 +24,7 @@ if ($image) {
         }
         $extension = $pathinfo['extension'];
         if ($config['download']['thumbs'] && $extension !== 'mp4' && $extension !== 'gif') {
-            $thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+            $thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $image;
             if (is_file($thumb)) {
                 $path = $thumb;
             }

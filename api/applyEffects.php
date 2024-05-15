@@ -7,6 +7,7 @@ require_once '../lib/boot.php';
 use Photobooth\Image;
 use Photobooth\Helper;
 use Photobooth\Collage;
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
@@ -63,7 +64,7 @@ if (is_file(__DIR__ . '/../private/api/applyEffects.php')) {
 }
 
 try {
-    $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $file;
+    $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $file;
 
     if ($isCollage) {
         list($collageSrcImagePaths, $srcImages) = Collage::getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
@@ -78,10 +79,10 @@ try {
 
     foreach ($srcImages as $image) {
         $imageHandler->imageModified = false;
-        $filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $image;
-        $filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $image;
-        $filename_tmp = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR . $image;
-        $filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $image;
+        $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $image;
+        $filename_keying = FolderEnum::KEYING->absolute() . DIRECTORY_SEPARATOR . $image;
+        $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $image;
+        $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $image;
 
         if (!file_exists($filename_tmp)) {
             throw new \Exception('Image doesn\'t exist.');

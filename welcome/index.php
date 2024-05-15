@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\HealthCheck;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Utility\PathUtility;
@@ -48,11 +49,11 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
                         </p>
                         <p class="mb-3">
                             <b class="flex mb-1">Images can be found at:</b>
-                            <code class="break-all"><?=$config['foldersAbs']['images']?></code>
+                            <code class="break-all"><?=FolderEnum::IMAGES->absolute()?></code>
                         </p>
                         <p class="mb-3">
                             <b class="flex mb-1">Databases are placed at:</b>
-                            <code class="break-all"><?=$config['foldersAbs']['data']?></code>
+                            <code class="break-all"><?=FolderEnum::DATA->absolute()?></code>
                         </p>
                         <p>
                             <b class="flex mb-1">Add your own files (e.g. background images, frames, overrides.css) inside:</b>

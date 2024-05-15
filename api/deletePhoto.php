@@ -4,6 +4,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\FileDelete;
 use Photobooth\Helper;
 use Photobooth\Service\DatabaseManagerService;
@@ -26,10 +27,14 @@ try {
 }
 
 $file = $_POST['file'];
-$paths = [$config['foldersAbs']['images'], $config['foldersAbs']['thumbs'], $config['foldersAbs']['keying']];
+$paths = [
+    FolderEnum::IMAGES->absolute(),
+    FolderEnum::THUMBS->absolute(),
+    FolderEnum::KEYING->absolute(),
+];
 
 if (!$config['picture']['keep_original']) {
-    $paths[] = $config['foldersAbs']['tmp'];
+    $paths[] = FolderEnum::TEMP->absolute();
 }
 
 $delete = new FileDelete($file, $paths);
