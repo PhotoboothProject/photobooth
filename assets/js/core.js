@@ -210,11 +210,13 @@ const photoBooth = (function () {
                     api.countdown.element.appendChild(numberElement);
 
                     if (config.sound.enabled && config.sound.countdown_enabled) {
-                        let soundfile = config.sound._files['counter-' + Number(seconds).toString()];
-                        api.countdown.audioElement.src = soundfile;
-                        api.countdown.audioElement.play().catch((error) => {
-                            photoboothTools.console.log('Error with audio.play: ' + error);
-                        });
+                        const soundfile = photoboothTools.getSound('counter-' + Number(seconds).toString());
+                        if (soundfile !== null) {
+                            api.countdown.audioElement.src = soundfile;
+                            api.countdown.audioElement.play().catch((error) => {
+                                photoboothTools.console.log('Error with audio.play: ' + error);
+                            });
+                        }
                     }
 
                     seconds--;
@@ -298,11 +300,13 @@ const photoBooth = (function () {
 
             return new Promise((resolve) => {
                 if (config.sound.enabled && config.sound.cheese_enabled) {
-                    let soundfile = config.sound._files.cheese;
-                    api.cheese.audioElement.src = soundfile;
-                    api.cheese.audioElement.play().catch((error) => {
-                        photoboothTools.console.log('Error with audio.play: ' + error);
-                    });
+                    const soundfile = photoboothTools.getSound('cheese');
+                    if (soundfile !== null) {
+                        api.cheese.audioElement.src = soundfile;
+                        api.cheese.audioElement.play().catch((error) => {
+                            photoboothTools.console.log('Error with audio.play: ' + error);
+                        });
+                    }
                 }
                 setTimeout(() => {
                     photoboothTools.console.log('Cheese: End');

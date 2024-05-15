@@ -9,6 +9,7 @@ use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\ProcessService;
+use Photobooth\Service\SoundService;
 use Photobooth\Utility\PathUtility;
 
 session_start();
@@ -53,6 +54,11 @@ $GLOBALS[AssetService::class] = new AssetService();
 $GLOBALS[LanguageService::class] = new LanguageService(
     $config['ui']['language'] ?? 'en',
     isset($config['ui']['folders_lang']) && $config['ui']['folders_lang'] !== '' ? $config['ui']['folders_lang'] : 'resources/lang'
+);
+$GLOBALS[SoundService::class] = new SoundService(
+    $config['ui']['language'] ?? 'en',
+    $config['sound']['voice'] ?? 'man',
+    $config['sound']['fallback_enabled'] ?? true
 );
 $GLOBALS[LoggerService::class] = new LoggerService(
     $config['dev']['loglevel'] ?? 0
