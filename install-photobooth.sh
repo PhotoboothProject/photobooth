@@ -32,7 +32,7 @@ AUTOSTART_FILE=""
 DESKTOP_OS=true
 WAYLAND_ENV=true
 PHP_VERSION="8.3"
-GO2RTC_VERSION="v1.8.6-4"
+GO2RTC_VERSION="v1.9.1"
 
 # Update
 RUN_UPDATE=false
@@ -970,7 +970,7 @@ EOF
     rmmod bcm2835-isp || true
     if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
         info "### Creating default Photobooth config."
-        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+        cat >"$INSTALLFOLDERPATH"/config/my.config.inc.php <<EOF
 <?php
 \$config = array (
   'preview' =>
@@ -985,7 +985,7 @@ EOF
   ),
 );
 EOF
-        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+        chown www-data:www-data "$INSTALLFOLDERPATH"/config/my.config.inc.php
     else
         info "### Can not set default config!"
         info "    Please adjust your Photobooth configuration:"
@@ -1008,9 +1008,7 @@ function mjpeg_preview() {
         if [[ "$OSTYPE" =~ linux ]]; then
             os=linux
         elif [[ "$OSTYPE" =~ darwin ]]; then
-            os=darwin
-        elif [[ "$OSTYPE" =~ cygwin|mysys|win32 ]]; then
-            os=windows
+            os=mac
         else
             error "### $OSTYPE not supported"
             exit 1
@@ -1020,13 +1018,15 @@ function mjpeg_preview() {
         if [[ "$arch" == "x86_64" ]]; then
             goarch="amd64"
         elif [[ "$arch" == "i386" ]]; then
-            goarch="386"
+            goarch="i386"
         elif [[ "$arch" == "armv7l" ]]; then
-            goarch="armv7"
+            goarch="arm"
         elif [[ "$arch" == "armv6l" ]]; then
             goarch="armv6"
         elif [[ "$arch" == "aarch64" ]]; then
             goarch="arm64"
+        elif [[ "$arch" == "mips" ]]; then
+            goarch="mipsel"
         else
             error "### $arch not supported"
             exit 1
@@ -1036,7 +1036,7 @@ function mjpeg_preview() {
             mkdir -p /usr/local/bin
         fi
         file="go2rtc_${os}_${goarch}.tar.gz"
-        wget -P /tmp "https://github.com/dadav/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
+        wget -P /tmp "https://github.com/AlexxIT/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
         tar xf "/tmp/${file}" -C /usr/local/bin go2rtc
         rm /tmp/"$file"
         chmod +x /usr/local/bin/go2rtc
@@ -1118,7 +1118,7 @@ EOF
 
     if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
         info "### Creating default Photobooth config."
-        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
+        cat >"$INSTALLFOLDERPATH"/config/my.config.inc.php <<EOF
 <?php
 \$config = array (
   'picture' =>
@@ -1140,7 +1140,7 @@ EOF
   ),
 );
 EOF
-        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
+        chown www-data:www-data "$INSTALLFOLDERPATH"/config/my.config.inc.php
     else
         info "### Can not set default config!"
         info "    Please adjust your Photobooth configuration:"
