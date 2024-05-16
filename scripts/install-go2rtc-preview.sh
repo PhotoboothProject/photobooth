@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GO2RTC_VERSION="v1.8.6-4"
+GO2RTC_VERSION="v1.9.3"
 YAML_STREAM="dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
 CAPTURE_CMD="gphoto2"
 CAPTURE_ARGS="--set-config output=Off --capture-image-and-download --filename=\$1"
@@ -36,9 +36,7 @@ function mjpeg_preview() {
         if [[ "$OSTYPE" =~ linux ]]; then
             os=linux
         elif [[ "$OSTYPE" =~ darwin ]]; then
-            os=darwin
-        elif [[ "$OSTYPE" =~ cygwin|mysys|win32 ]]; then
-            os=windows
+            os=mac
         else
             error "### $OSTYPE not supported"
             exit 1
@@ -48,13 +46,15 @@ function mjpeg_preview() {
         if [[ "$arch" == "x86_64" ]]; then
             goarch="amd64"
         elif [[ "$arch" == "i386" ]]; then
-            goarch="386"
+            goarch="i386"
         elif [[ "$arch" == "armv7l" ]]; then
-            goarch="armv7"
+            goarch="arm"
         elif [[ "$arch" == "armv6l" ]]; then
             goarch="armv6"
         elif [[ "$arch" == "aarch64" ]]; then
             goarch="arm64"
+        elif [[ "$arch" == "mips" ]]; then
+            goarch="mipsel"
         else
             error "### $arch not supported"
             exit 1
@@ -63,10 +63,8 @@ function mjpeg_preview() {
         if [[ ! -d /usr/local/bin ]]; then
             mkdir -p /usr/local/bin
         fi
-        file="go2rtc_${os}_${goarch}.tar.gz"
-        wget -P /tmp "https://github.com/dadav/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
-        tar xf "/tmp/${file}" -C /usr/local/bin go2rtc
-        rm /tmp/"$file"
+        file="go2rtc_${os}_${goarch}"
+        wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
         chmod +x /usr/local/bin/go2rtc
     fi
 
