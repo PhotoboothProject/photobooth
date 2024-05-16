@@ -1035,10 +1035,8 @@ function mjpeg_preview() {
         if [[ ! -d /usr/local/bin ]]; then
             mkdir -p /usr/local/bin
         fi
-        file="go2rtc_${os}_${goarch}.tar.gz"
-        wget -P /tmp "https://github.com/AlexxIT/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
-        tar xf "/tmp/${file}" -C /usr/local/bin go2rtc
-        rm /tmp/"$file"
+        file="go2rtc_${os}_${goarch}"
+        wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
         chmod +x /usr/local/bin/go2rtc
     fi
 
