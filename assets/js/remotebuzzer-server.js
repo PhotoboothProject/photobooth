@@ -29,9 +29,13 @@ const log = function (...optionalParams) {
 
 /* SOURCE PHOTOBOOTH CONFIG */
 /*const {execSync} = require('child_process');*/
-let cmd = 'bin/photobooth photobooth:config:list json';
-let stdout = execSync(cmd).toString();
-const config = JSON.parse(stdout);
+const cmdConfig = 'bin/photobooth photobooth:config:list json';
+const stdoutConfig = execSync(cmdConfig).toString();
+const config = JSON.parse(stdoutConfig);
+
+const cmdEnvironmentg = 'bin/photobooth photobooth:environment:list json';
+const stdoutEnvironment = execSync(cmdEnvironmentg).toString();
+const environment = JSON.parse(stdoutEnvironment);
 
 /* WRITE PROCESS PID FILE */
 const writePIDFile = (filename) => {
@@ -43,7 +47,7 @@ const writePIDFile = (filename) => {
     }
 };
 
-const pidFilename = path.join(config.foldersAbs.var, 'run/remotebuzzer.pid');
+const pidFilename = path.join(environment.absoluteFolders.var, 'run/remotebuzzer.pid');
 writePIDFile(pidFilename);
 
 /* HANDLE EXCEPTIONS */
@@ -354,8 +358,8 @@ const requestListener = function (req, res) {
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.shutdownbutton) {
                 sendText('SHUTTING DOWN');
                 /*  Initiate system shutdown */
-                cmd = 'sudo ' + config.shutdown.cmd;
-                stdout = execSync(cmd);
+                const cmd = 'sudo ' + config.shutdown.cmd;
+                execSync(cmd);
             } else {
                 sendText('Please enable Hardware Button support and Shutdown Button!');
             }
@@ -365,8 +369,8 @@ const requestListener = function (req, res) {
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.rebootbutton) {
                 sendText('REBOOTING NOW');
                 /*  Initiate system shutdown */
-                cmd = 'sudo ' + config.reboot.cmd;
-                stdout = execSync(cmd);
+                const cmd = 'sudo ' + config.reboot.cmd;
+                execSync(cmd);
             } else {
                 sendText('Please enable Hardware Button support and Reboot Button!');
             }
@@ -509,8 +513,8 @@ function gpioPuSanity(gpioconfig) {
             ? '/boot/firmware/config.txt'
             : '/boot/config.txt';
 
-        cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
-        stdout = execSync(cmd).toString();
+        const cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
+        const stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
             throw new Error(
@@ -536,8 +540,8 @@ function gpioOpSanity(gpioconfig) {
             ? '/boot/firmware/config.txt'
             : '/boot/config.txt';
 
-        cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" ' + configPath;
-        stdout = execSync(cmd).toString();
+        const cmd = 'sed -n "s/^gpio=\\(.*\\)=op/\\1/p" ' + configPath;
+        const stdout = execSync(cmd).toString();
 
         if (!stdout.split(',').find((el) => el == gpioconfig)) {
             throw new Error(
@@ -878,8 +882,8 @@ const watchShutdownGPIO = function watchShutdownGPIO(err, gpioValue) {
             if (timeElapsed >= config.remotebuzzer.shutdownholdtime * 1000) {
                 log('System shutdown initiated - bye bye');
                 /*  Initiate system shutdown */
-                cmd = 'sudo ' + config.shutdown.cmd;
-                stdout = execSync(cmd);
+                const cmd = 'sudo ' + config.shutdown.cmd;
+                execSync(cmd);
             }
         } else {
             /* Too long button press - timeout - reset server state machine */
@@ -923,8 +927,8 @@ const watchRebootGPIO = function watchRebootGPIO(err, gpioValue) {
             if (timeElapsed >= config.remotebuzzer.rebootholdtime * 1000) {
                 log('System reboot initiated - bye bye');
                 /*  Initiate system reboot */
-                cmd = 'sudo ' + config.reboot.cmd;
-                stdout = execSync(cmd);
+                const cmd = 'sudo ' + config.reboot.cmd;
+                execSync(cmd);
             }
         } else {
             /* Too long button press - timeout - reset server state machine */
@@ -1271,7 +1275,7 @@ function move2usbAction() {
     const parseConfig = () => {
         try {
             return {
-                dataAbsPath: config.foldersAbs.data,
+                dataAbsPath: environment.absoluteFolders.data,
                 drive: config.synctodrive.target,
                 dbName: config.database.file
             };
@@ -1357,8 +1361,7 @@ function move2usbAction() {
         log(`Source data folder [${dataAbsPath}]`);
         log(`Syncing to drive [${drive.path}] -> [${drive.mountpoint}]`);
 
-        cmd = 'touch ' + dataAbsPath + '/copy.chk';
-        stdout = execSync(cmd);
+        execSync('touch ' + dataAbsPath + '/copy.chk');
 
         if (fs.existsSync(path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk'))) {
             log(' ');
@@ -1369,7 +1372,7 @@ function move2usbAction() {
             log(' ');
         }
 
-        cmd = (() => {
+        const cmd = (() => {
             switch (process.platform) {
                 case 'win32':
                     return null;
@@ -1428,11 +1431,9 @@ function move2usbAction() {
 
             return;
         }
-        cmd = 'rm ' + path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk');
-        stdout = execSync(cmd);
 
-        cmd = 'rm ' + dataAbsPath + '/copy.chk';
-        stdout = execSync(cmd);
+        execSync('rm ' + path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk'));
+        execSync('rm ' + dataAbsPath + '/copy.chk');
     };
 
     const unmountDrive = () => {
@@ -1465,7 +1466,7 @@ function move2usbAction() {
 
         log('Deleting Files...');
 
-        cmd = (() => {
+        const cmd = (() => {
             switch (process.platform) {
                 case 'win32':
                     return null;
@@ -1490,8 +1491,7 @@ function move2usbAction() {
         })();
 
         log('Executing command: <', cmd, '>');
-
-        stdout = execSync(cmd);
+        execSync(cmd);
     };
 
     const deleteDatabase = ({ dataAbsPath, dbName }) => {
@@ -1506,7 +1506,7 @@ function move2usbAction() {
             return;
         }
         if (!fs.existsSync(path.join(dataAbsPath, dbName + '.txt'))) {
-            cmd = path.join(dataAbsPath, dbName + '.txt');
+            const cmd = path.join(dataAbsPath, dbName + '.txt');
             log('Error: Database not found: ', cmd, ' - nothing to delete');
 
             return;
@@ -1514,11 +1514,9 @@ function move2usbAction() {
 
         log('Deleting Database...');
 
-        cmd = 'rm ' + path.join(dataAbsPath, dbName + '.txt');
-
+        const cmd = 'rm ' + path.join(dataAbsPath, dbName + '.txt');
         log('Executing command: <', cmd, '>');
-
-        stdout = execSync(cmd);
+        execSync(cmd);
     };
 
     /* Execution starts here */

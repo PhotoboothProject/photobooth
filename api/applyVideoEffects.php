@@ -5,6 +5,7 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Collage;
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Factory\CollageConfigFactory;
 use Photobooth\Image;
 use Photobooth\Service\DatabaseManagerService;
@@ -24,9 +25,9 @@ try {
 
     $file = $_POST['file'];
 
-    $tmpFolder = $config['foldersAbs']['tmp'] . DIRECTORY_SEPARATOR;
-    $imageFolder = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR;
-    $thumbsFolder = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR;
+    $tmpFolder = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR;
+    $imageFolder = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR;
+    $thumbsFolder = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR;
     $filenameTmp = $tmpFolder . $file;
     $filenameOutput = $imageFolder . $file;
     $filenameThumb = $thumbsFolder . $file;

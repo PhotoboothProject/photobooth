@@ -9,6 +9,7 @@
     "extends": ["eslint:recommended", "plugin:n/recommended"],
     "globals": {
         "config": true,
+        "environment": true,
         "PhotoSwipe": true,
         "PhotoSwipeLightbox": true
     },

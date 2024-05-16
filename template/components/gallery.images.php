@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
@@ -25,8 +26,8 @@ if (empty($imagelist)) {
                 }
             }
 
-            $filename_photo = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['images'] . DIRECTORY_SEPARATOR . $image);
-            $filename_thumb = PathUtility::getAbsolutePath($config['folders']['data'] . DIRECTORY_SEPARATOR . $config['folders']['thumbs'] . DIRECTORY_SEPARATOR . $image);
+            $filename_photo = PathUtility::getAbsolutePath(FolderEnum::IMAGES->value . DIRECTORY_SEPARATOR . $image);
+            $filename_thumb = PathUtility::getAbsolutePath(FolderEnum::THUMBS->value . DIRECTORY_SEPARATOR . $image);
 
             $imageinfo = @getimagesize($filename_photo);
             $imageinfoThumb = @getimagesize($filename_thumb);

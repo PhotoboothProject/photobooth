@@ -29,11 +29,12 @@ class SyncToDrive {
         if (!this.config.synctodrive.enabled) {
             error('Sync to drive is disabled.');
         }
+        this.environment = this.fetchEnvironment();
 
         this.rsyncProcess = null;
         this.intervalInSeconds = Number(this.config.synctodrive.interval);
         this.intervalInMilliseconds = this.intervalInSeconds * 1000;
-        this.source = this.config.foldersAbs.data;
+        this.source = this.environment.absoluteFolders.data;
         this.destination = 'photobooth-pic-sync';
         this.driveName = this.config.synctodrive.target.toLowerCase();
 
@@ -236,8 +237,18 @@ class SyncToDrive {
         }
     }
 
+    fetchEnvironment() {
+        try {
+            const cmd = 'bin/photobooth photobooth:environment:list json';
+            const output = execSync(cmd).toString();
+            return JSON.parse(output);
+        } catch (error) {
+            error('Unable to load photobooth environment', error);
+        }
+    }
+
     createProcessFile() {
-        const processFilename = path.join(this.config.foldersAbs.var, 'run/synctodrive.pid');
+        const processFilename = path.join(this.environment.absoluteFolders.var, 'run/synctodrive.pid');
         try {
             fs.writeFileSync(processFilename, parseInt(process.pid, 10).toString(), { flag: 'w' });
             log(`Process file created successfully: ${processFilename}`);

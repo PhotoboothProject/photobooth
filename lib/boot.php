@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Factory\ProcessFactory;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
@@ -53,7 +54,7 @@ $GLOBALS[ApplicationService::class] = new ApplicationService();
 $GLOBALS[AssetService::class] = new AssetService();
 $GLOBALS[LanguageService::class] = new LanguageService(
     $config['ui']['language'] ?? 'en',
-    isset($config['ui']['folders_lang']) && $config['ui']['folders_lang'] !== '' ? $config['ui']['folders_lang'] : 'resources/lang'
+    FolderEnum::LANG->value
 );
 $GLOBALS[SoundService::class] = new SoundService(
     $config['ui']['language'] ?? 'en',
@@ -64,16 +65,16 @@ $GLOBALS[LoggerService::class] = new LoggerService(
     $config['dev']['loglevel'] ?? 0
 );
 $GLOBALS[PrintManagerService::class] = new PrintManagerService(
-    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'printed.csv',
-    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.count',
-    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . 'print.lock',
+    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'printed.csv',
+    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'print.count',
+    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'print.lock',
 );
 $GLOBALS[DatabaseManagerService::class] = new DatabaseManagerService(
-    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt',
-    $config['foldersAbs']['images'],
+    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt',
+    FolderEnum::IMAGES->absolute(),
 );
 $GLOBALS[MailService::class] = new MailService(
-    $config['foldersAbs']['data'] . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt'
+    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt'
 );
 $GLOBALS[ProcessService::class] = new ProcessService([
     ProcessFactory::fromConfig([

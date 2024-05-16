@@ -17,5 +17,6 @@ class Application extends BaseApplication
         $this->photoboothConfig = $photoboothConfig;
         parent::__construct('Photobooth', ApplicationService::getInstance()->getVersion());
         $this->add((new Command\ConfigListCommand())->setPhotoboothConfig($this->photoboothConfig));
+        $this->add((new Command\EnvironmentListCommand()));
     }
 }

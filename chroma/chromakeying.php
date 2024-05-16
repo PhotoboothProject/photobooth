@@ -2,6 +2,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\ProcessService;
@@ -13,8 +14,8 @@ if (empty($_GET['filename'])) {
 }
 
 $filename = $_GET['filename'];
-$mainimage = PathUtility::getPublicPath($config['foldersPublic']['keying'] . DIRECTORY_SEPARATOR . $filename);
-$imginfo = @getimagesize($config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $filename);
+$mainimage = PathUtility::getPublicPath(FolderEnum::KEYING->absolute() . DIRECTORY_SEPARATOR . $filename);
+$imginfo = @getimagesize(FolderEnum::KEYING->absolute() . DIRECTORY_SEPARATOR . $filename);
 
 if (is_array($imginfo)) {
     // Only jpg/jpeg are supported

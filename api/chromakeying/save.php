@@ -4,6 +4,7 @@
 
 require_once '../../lib/boot.php';
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\FileDelete;
@@ -52,7 +53,12 @@ if ($saveCopy) {
         $database->deleteContentFromDB($_POST['file']);
 
         if (!$config['picture']['keep_original']) {
-            $paths = [$config['foldersAbs']['images'], $config['foldersAbs']['thumbs'], $config['foldersAbs']['keying'], $config['foldersAbs']['tmp']];
+            $paths = [
+                FolderEnum::IMAGES->absolute(),
+                FolderEnum::THUMBS->absolute(),
+                FolderEnum::KEYING->absolute(),
+                FolderEnum::TEMP->absolute(),
+            ];
             $delete = new FileDelete($_POST['file'], $paths);
             $delete->deleteFiles();
             $logger->debug('delete', $delete->getLogData());
@@ -60,9 +66,9 @@ if ($saveCopy) {
     }
 }
 
-$filename_photo = $config['foldersAbs']['images'] . DIRECTORY_SEPARATOR . $file;
-$filename_thumb = $config['foldersAbs']['thumbs'] . DIRECTORY_SEPARATOR . $file;
-$filename_keying = $config['foldersAbs']['keying'] . DIRECTORY_SEPARATOR . $file;
+$filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $file;
+$filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $file;
+$filename_keying = FolderEnum::KEYING->absolute() . DIRECTORY_SEPARATOR . $file;
 $picture_permissions = $config['picture']['permissions'];
 $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 
