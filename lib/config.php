@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Environment;
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Helper;
 use Photobooth\Utility\ArrayUtility;
 use Photobooth\Utility\FileUtility;
@@ -92,6 +93,9 @@ if (file_exists(PathUtility::getAbsolutePath('config/my.config.inc.php')) && !is
     die('Abort. Can not create config/my.config.inc.php. Config folder is not writable.');
 }
 
+foreach (FolderEnum::cases() as $folder) {
+    FileUtility::createDirectory(PathUtility::getAbsolutePath($folder));
+}
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
