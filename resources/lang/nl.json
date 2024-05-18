@@ -664,7 +664,6 @@
   "path": "Pad:",
   "percent": "%",
   "php-extension-enabled": "PHP-extensie: %s ingeschakeld!",
-  "php-extension-missing": "PHP-extensie: %s moet ingeschakeld zijn!",
   "phpUpdateRequired": "Werk uw PHP-versie bij.",
   "phpVersionError": "PHP voldoet niet aan onze vereisten!",
   "phpVersionOk": "PHP voldoet aan onze vereisten",
