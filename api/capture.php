@@ -80,6 +80,9 @@ try {
     } elseif ($config['dev']['demo_images']) {
         $captureHandler->captureDemo();
     } elseif ($config['preview']['mode'] === 'device_cam' && $config['preview']['camTakesPic']) {
+        if (!isset($_POST['canvasimg'])) {
+            throw new \Exception('No canvas data provided!');
+        }
         $captureHandler->flipImage = $config['preview']['flip'];
         $captureHandler->captureCanvas($_POST['canvasimg']);
     } else {
