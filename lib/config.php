@@ -94,7 +94,7 @@ if (file_exists(PathUtility::getAbsolutePath('config/my.config.inc.php')) && !is
 }
 
 foreach (FolderEnum::cases() as $folder) {
-    FileUtility::createDirectory(PathUtility::getAbsolutePath($folder));
+    FileUtility::createDirectory(PathUtility::getAbsolutePath($folder->value));
 }
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
