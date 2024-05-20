@@ -586,7 +586,8 @@ const photoBooth = (function () {
                 imgFilter = config.filters.defaults;
                 $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
                 $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
-
+                previewFrameCollage.hide();
+                previewFramePicture.hide();
                 if (result.error) {
                     photoboothTools.console.logDev('Error while taking picture.');
                     if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
@@ -602,8 +603,6 @@ const photoBooth = (function () {
                     loaderMessage.empty();
                     videoSensor.hide();
                     previewVideo.hide();
-                    previewFrameCollage.hide();
-                    previewFramePicture.hide();
 
                     let imageUrl = environment.publicFolders.tmp + '/' + result.collage_file;
                     const preloadImage = new Image();

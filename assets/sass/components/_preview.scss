@@ -1,6 +1,26 @@
 /**
  * Preview
  */
+#preview-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-height: 100vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#preview-wrapper {
+  position: relative;
+  height: 100%;
+}
+
 #preview--none,
 #preview--ipcam,
 #preview--video,
@@ -18,6 +38,12 @@
   font-size: 1.75em;
   color: var(--start-font-color);
   text-align: center;
+}
+
+#preview--none,
+#preview--ipcam,
+#preview--video {
+  translate: unset;
 }
 
 #preview--ipcam,

@@ -767,6 +767,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ->end()
                 ->booleanNode('asBackground')->defaultValue(false)->end()
                 ->booleanNode('showFrame')->defaultValue(false)->end()
+                ->booleanNode('extend_by_frame')->defaultValue(false)->end()
                 ->booleanNode('simpleExec')->defaultValue(true)->end()
                 ->booleanNode('bsm')->defaultValue(true)->end()
             ->end();
