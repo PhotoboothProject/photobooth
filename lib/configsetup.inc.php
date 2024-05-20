@@ -761,6 +761,13 @@ return [
             ],
             'value' => $config['collage']['layout'],
         ],
+        'layout_generator' => [
+            'view' => 'expert',
+            'type' => 'button',
+            'placeholder' => 'layout_generator',
+            'name' => 'LAYOUTGENERATOR',
+            'value' => 'layout-generator',
+        ],
         'collage_resolution' => [
             'view' => 'expert',
             'type' => 'select',
