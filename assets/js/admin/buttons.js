@@ -64,6 +64,13 @@ $(function () {
             });
     });
 
+    $('#layout-generator').on('click', function (ev) {
+        ev.preventDefault();
+        window.open('../admin/generator');
+
+        return false;
+    });
+
     $('#test-connection').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
