@@ -9,6 +9,13 @@ class AdminInput
 {
     public static function renderInput(array $setting, string $label): string
     {
+        $attributes = '';
+        if(isset($setting['attributes'])) {
+            foreach ($setting['attributes'] as $key => $prop) {
+                $attributes .= $key . '="' . $prop . '" ';
+            }
+        }
+
         return self::renderHeadline($label) . '
             <input
                 class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto"
@@ -16,6 +23,7 @@ class AdminInput
                 name="' . $setting['name'] . '"
                 value="' . $setting['value'] . '"
                 placeholder="' . $setting['placeholder'] . '"
+				' . $attributes . '
             />
         ';
     }
@@ -132,6 +140,12 @@ class AdminInput
     {
         $languageService = LanguageService::getInstance();
         $inputClass = 'adminRangeInput w-full h-2 mb-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700';
+        $attributes = '';
+        if(isset($setting['attributes'])) {
+            foreach ($setting['attributes'] as $key => $prop) {
+                $attributes .= $key . '="' . $prop . '" ';
+            }
+        }
 
         return self::renderHeadline($label) . '
             <div class="w-full flex flex-col mt-auto">
@@ -148,6 +162,7 @@ class AdminInput
                     max="' . $setting['range_max'] . '"
                     step="' . $setting['range_step'] . '"
                     placeholder="' . $setting['placeholder'] . '"
+					' . $attributes . '
                 />
                 <div class="w-full flex text-gray-300">
                     <span>' . $setting['range_min'] . '</span>
