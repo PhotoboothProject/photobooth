@@ -75,7 +75,7 @@ if (!file_exists($filename_print)) {
 
         if ($config['print']['qrcode']) {
             // create qr code
-            if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
+            if ($config['ftp']['enabled'] && $config['ftp']['useForQr'] && isset($config['ftp']['processedTemplate'])) {
                 $imageHandler->qrUrl = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $filename;
             } elseif ($config['qr']['append_filename']) {
                 $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'] . $filename, true);

@@ -260,6 +260,9 @@ try {
         if ($config['ftp']['enabled']) {
             // init connection to ftp server
             $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
+			
+			ftp_set_option($ftp, FTP_TIMEOUT_SEC, 10);
+			
             if ($ftp === false) {
                 $message = 'Failed to connect to FTP Server!';
                 $logger->error($message, $config['ftp']);
@@ -291,7 +294,7 @@ try {
             @Helper::cdFTPTree($ftp, $destination);
 
             // upload processed picture into destination folder
-            $put_result = ftp_put($ftp, $image, $filename_photo, FTP_BINARY);
+            $put_result = @ftp_put($ftp, $image, $filename_photo, FTP_BINARY);
 
             if (!$put_result) {
                 $message = 'Unable to save file on FTP Server!';
