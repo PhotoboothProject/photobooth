@@ -93,10 +93,17 @@ class AdminInput
             "w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600";
         $init = $setting['value'];
 
+        $attributes = '';
+        if(isset($setting['attributes'])) {
+            foreach ($setting['attributes'] as $key => $prop) {
+                $attributes .= $key . '="' . $prop . '" ';
+            }
+        }
+
         return self::renderHeadline($label) . '
             <label class="adminCheckbox relative inline-flex items-center cursor-pointer mt-auto">
                 <input type="hidden" name="' . $setting['name'] . '" value="false" />
-                <input class="hidden peer" type="checkbox" ' . ($setting['value'] == 'true' ? ' checked="checked"' : '') . ' name="' . $setting['name'] . '" value="true" />
+                <input class="hidden peer" type="checkbox" ' . ($setting['value'] == 'true' ? ' checked="checked"' : '') . ' name="' . $setting['name'] . '" value="true" ' . $attributes . ' />
                 <div class="' . $checkboxClasses . '"></div>
                 <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
                     <label class="adminCheckbox-true ' . ($init == 'true' ? '' : 'hidden') . '">' . $languageService->translate('adminpanel_toggletextON') . '</label>
@@ -109,6 +116,12 @@ class AdminInput
     public static function renderColor(array $setting, string $label): string
     {
         $languageService = LanguageService::getInstance();
+        $attributes = '';
+        if(isset($setting['attributes'])) {
+            foreach ($setting['attributes'] as $key => $prop) {
+                $attributes .= $key . '="' . $prop . '" ';
+            }
+        }
 
         return '
             <label class="mb-3">' . $languageService->translate($label) . '</label>
@@ -118,6 +131,7 @@ class AdminInput
                 name="' . $setting['name'] . '"
                 value="' . $setting['value'] . '"
                 placeholder="' . $setting['placeholder'] . '"
+				' . $attributes . '
             />
         ';
     }
@@ -179,6 +193,13 @@ class AdminInput
         $settingName = $setting['name'] . '' . ($setting['type'] === 'multi-select' ? '[]' : '');
         $options = '';
 
+        $attributes = '';
+        if(isset($setting['attributes'])) {
+            foreach ($setting['attributes'] as $key => $prop) {
+                $attributes .= $key . '="' . $prop . '" ';
+            }
+        }
+
         foreach ($setting['options'] as $value => $option) {
             $optionLabel = $option;
             $optionValue = $value;
@@ -199,6 +220,7 @@ class AdminInput
                 class="' . $className . '"
                 name="' . $settingName . '"
                 ' . ($setting['type'] === 'multi-select' ? ' multiple="multiple"' : '') . '
+				' . $attributes . '
             >
                 ' . $options . '
             </select>
@@ -209,6 +231,14 @@ class AdminInput
     {
         $languageService = LanguageService::getInstance();
         $images = '';
+
+        $attributes = '';
+        if(isset($setting['attributes'])) {
+            foreach ($setting['attributes'] as $key => $prop) {
+                $attributes .= $key . '="' . $prop . '" ';
+            }
+        }
+
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             foreach ($setting['paths'] as $path) {
                 $images .= '
@@ -302,6 +332,7 @@ class AdminInput
                     class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto"
                     name="' . $setting['name'] . '"
                     value="' . $setting['value'] . '"
+					' . $attributes . '
                 />
             </div>
         ';
