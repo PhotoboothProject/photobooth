@@ -24,16 +24,24 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
 $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $config['collage']['layout']);
 $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
 
-$error = false;
-$success = false;
 ?>
 
 <div class="w-full h-screen bg-brand-2 px-3 md:px-6 py-6 md:py-12 overflow-x-hidden overflow-y-auto">
+	<style>
+		@font-face {
+  font-family: "GreatVibes-Regular";
+  src: url(/resources/fonts/GreatVibes-Regular.ttf) format("truetype");
+}
+div.provafont { font-family: "GreatVibes-Regular", sans-serif }
+	</style>
     <div class="w-full flex items-center justify-center flex-col">
         <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center">
             <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
                 Collage Layout Generator
             </div>
+			<div class="provafont">
+				Photobooth we love OpenSource
+			</div>
             <div class="result_section mt-4 w-full flex gap-4 flex-col md:flex-row">
                 <div class="result_positions md:max-h-[75vh] p-2 md:p-4 overflow-y-auto flex-1">
                     <div class="general_settings">
@@ -44,17 +52,31 @@ $success = false;
 							</div>
 							<div>
 								<?=
-                                    AdminInput::renderImageSelect(
+                                    AdminInput::renderColor(
                                         [
-                                            'name' => 'generator-background',
-                                            'value' => '',
-                                            'paths' => [
-                                                PathUtility::getAbsolutePath('resources/img/background'),
-                                                PathUtility::getAbsolutePath('private/images/backgrounds'),
-                                            ]
+                                            'name' => 'background_color',
+                                            'value' => '#FFFFFF',
+                                            'placeholder' => 'background color',
+                                            'attributes' => ['data-trigger' => 'general']
                                         ],
-                                        $languageService->translate('choose_background')
+                                        $languageService->translate('background_color')
                                     )
+?>
+							</div>
+							<div>
+								<?=
+    AdminInput::renderImageSelect(
+        [
+            'name' => 'generator-background',
+            'value' => '',
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/background'),
+                PathUtility::getAbsolutePath('private/images/backgrounds'),
+            ],
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('choose_background')
+    )
 ?>
 							</div>
 							<div>
@@ -66,7 +88,8 @@ $success = false;
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/frames'),
                 PathUtility::getAbsolutePath('private/images/frames'),
-            ]
+            ],
+            'attributes' => ['data-trigger' => 'general']
         ],
         $languageService->translate('choose_frame')
     )
@@ -79,24 +102,43 @@ $success = false;
                         <div class="grid gap-2">
                             <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
                                 <div>
-									<?= AdminInput::renderCheckbox(['name' => 'portrait', 'value' => 'false'], $languageService->translate('portrait')) ?>
+									<?=
+        AdminInput::renderCheckbox(
+            [
+                'name' => 'portrait',
+                'value' => 'false',
+                'attributes' => ['data-trigger' => 'general']
+            ],
+            $languageService->translate('portrait')
+        )
+?>
                                 </div>
                                 <div>
-									<?= AdminInput::renderCheckbox(['name' => 'rotate_after_creation', 'value' => 'false'], $languageService->translate('rotate_after_creation')) ?>
+									<?=
+    AdminInput::renderCheckbox(
+        [
+            'name' => 'rotate_after_creation',
+            'value' => 'false',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('rotate_after_creation')
+    )
+?>
                                 </div>
                             </div>
                             <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
                                 <div>
 									<?=
-        AdminInput::renderInput(
-            [
-                'type' => 'number',
-                'name' => 'final_width',
-                'value' => '1500',
-                'placeholder' => 'collage width'
-            ],
-            $languageService->translate('final_width')
-        )
+    AdminInput::renderInput(
+        [
+            'type' => 'number',
+            'name' => 'final_width',
+            'value' => '1500',
+            'placeholder' => 'collage width',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('final_width')
+    )
 ?>
                                 </div>
 								<div>
@@ -106,7 +148,8 @@ $success = false;
             'type' => 'number',
             'name' => 'final_height',
             'value' => '1000',
-            'placeholder' => 'collage height'
+            'placeholder' => 'collage height',
+            'attributes' => ['data-trigger' => 'general']
         ],
         $languageService->translate('final_height')
     )
@@ -125,6 +168,7 @@ AdminInput::renderSelect(
             'once' => 'Once',
         ],
         'value' => 'always',
+        'attributes' => ['data-trigger' => 'general']
     ],
     $languageService->translate('apply_frame')
 )
@@ -132,10 +176,28 @@ AdminInput::renderSelect(
                             </div>
                             <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
                                 <div>
-									<?= AdminInput::renderCheckbox(['name' => 'show-background', 'value' => 'false'], $languageService->translate('show-background')) ?>
+									<?=
+        AdminInput::renderCheckbox(
+            [
+                'name' => 'show-background',
+                'value' => 'false',
+                'attributes' => ['data-trigger' => 'general']
+            ],
+            $languageService->translate('show-background')
+        )
+?>
                                 </div>
                                 <div>
-									<?= AdminInput::renderCheckbox(['name' => 'show-frame', 'value' => 'true'], $languageService->translate('show-frame')) ?>
+									<?=
+    AdminInput::renderCheckbox(
+        [
+            'name' => 'show-frame',
+            'value' => 'true',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('show-frame')
+    )
+?>
                                 </div>
                             </div>
                         </div>
@@ -150,33 +212,33 @@ AdminInput::renderSelect(
                         </div>
                     </div>
                 </div>
-                <div class="result_images md:max-h-[75vh] flex-1 relative lg:flex-[3_1_0%] p-4 md:p-8 bg-slate-700 shadow-xl">
-					<div id="result_canvas" class="relative m-0 left-[50%] top-[50%] right-0 bottom-0 translate-y-[0%] md:translate-y-[-50%] translate-x-[-50%] max-w-full max-h-full bg-slate-300">
+                <div class="result_images md:max-h-[75vh] flex-1 relative lg:flex-[3_1_0%] p-4 md:p-8 bg-slate-300">
+					<div id="result_canvas" class="relative m-0 left-[50%] top-[50%] right-0 bottom-0 translate-y-[0%] md:translate-y-[-50%] translate-x-[-50%] max-w-full max-h-full shadow-xl">
 						<div id="collage_background" class="absolute h-full">
-							<img class="h-full" src="" alt="Choose the background">
+							<img class="h-full hidden" src="" alt="Choose the background">
 						</div>
 						<div id="picture-0" class="absolute overflow-hidden w-full h-full">
 							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-01.jpg">
-							<img id="picture-0-frame" class="hidden" />
+							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
 						</div>
 						<div id="picture-1" class="absolute overflow-hidden w-full h-full hidden">
 							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-02.jpg">
-							<img id="picture-1-frame" class="hidden" />
+							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
 						</div>
 						<div id="picture-2" class="absolute overflow-hidden w-full h-full hidden">
 							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-03.jpg">
-							<img id="picture-2-frame" class="hidden" />
+							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
 						</div>
 						<div id="picture-3" class="absolute overflow-hidden w-full h-full hidden">
 							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-04.jpg">
-							<img id="picture-3-frame" class="hidden" />
+							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
 						</div>
 						<div id="picture-4" class="absolute overflow-hidden w-full h-full hidden">
 							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-05.jpg">
-							<img id="picture-4-frame" class="hidden" />
+							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
 						</div>
 						<div id="collage_frame" class="absolute h-full">
-							<img class="h-full" src="" alt="Choose the frame">
+							<img class="h-full hidden" src="" alt="Choose the frame">
 						</div>
 					</div>
                 </div>
@@ -201,13 +263,6 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
 </div>
 
 <?php
-
-if ($success) {
-    echo '<script>openToast("' . $languageService->translate('upload_success') . '");</script>';
-}
-if ($error !== false) {
-    echo '<script>openToast("' . $languageService->translate('upload_error') . '", "isError", 5000);</script>';
-}
 
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
 include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
@@ -236,7 +291,7 @@ function generateImageLayoutInputs($languageService)
                 'name' => 'picture-x-position-' . $i,
                 'value' => '0',
                 'placeholder' => 'x position',
-                'attributes' => ['data-prop' => 'left']
+                'attributes' => ['data-prop' => 'left', 'data-trigger' => 'image']
             ],
             $languageService->translate('x_position')
         );
@@ -247,7 +302,7 @@ function generateImageLayoutInputs($languageService)
                 'name' => 'picture-y-position-' . $i,
                 'value' => '0',
                 'placeholder' => 'y position',
-                'attributes' => ['data-prop' => 'top']
+                'attributes' => ['data-prop' => 'top', 'data-trigger' => 'image']
             ],
             $languageService->translate('y_position')
         );
@@ -258,7 +313,7 @@ function generateImageLayoutInputs($languageService)
                 'name' => 'picture-width-' . $i,
                 'value' => '',
                 'placeholder' => $languageService->translate('image_width'),
-                'attributes' => ['data-prop' => 'width']
+                'attributes' => ['data-prop' => 'width', 'data-trigger' => 'image']
             ],
             $languageService->translate('image_width')
         );
@@ -269,7 +324,7 @@ function generateImageLayoutInputs($languageService)
                 'name' => 'picture-height-' . $i,
                 'value' => '',
                 'placeholder' => $languageService->translate('image_height'),
-                'attributes' => ['data-prop' => 'height']
+                'attributes' => ['data-prop' => 'height', 'data-trigger' => 'image']
             ],
             $languageService->translate('image_height')
         );
@@ -284,7 +339,7 @@ function generateImageLayoutInputs($languageService)
                 'range_max' => '90',
                 'range_step' => '1',
                 'placeholder' => 'degrees',
-                'attributes' => ['data-prop' => 'transform']
+                'attributes' => ['data-prop' => 'transform', 'data-trigger' => 'image']
             ],
             $languageService->translate('image_rotation')
         );

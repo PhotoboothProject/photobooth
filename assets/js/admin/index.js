@@ -17,12 +17,8 @@ $(function () {
         }
     });
 
-    $('input[name=\'final_width\'], input[name=\'final_height\']').each(function () {
-        $(this).trigger('change');
-    });
+    changeGeneralSetting();
 });
-
-$(window).on('resize', changeGeneralSetting);
 
 // eslint-disable-next-line no-unused-vars
 const shellCommand = function ($mode, $filename = '') {
@@ -43,35 +39,57 @@ const shellCommand = function ($mode, $filename = '') {
         });
 };
 
-$('input[name^=\'generator-\']').change(function () {
-    const src = $(this).val();
-    const name = $(this).attr('name').replace('generator-', '');
-    const recipient = $('#collage_' + name);
-    recipient.find('img').attr('src', src);
-});
-
-$('input[name=\'final_width\']').change(function () {
-    changeGeneralSetting();
-});
-
-$('input[name=\'final_height\']').change(function () {
-    changeGeneralSetting();
-});
+// triggers
+$(window).on('resize', changeGeneralSetting);
+$('[data-trigger=\'general\']').change(changeGeneralSetting);
+$('[data-trigger=\'image\']').change(handleInputUpdate);
 
 $('#loadCurrentConfiguration').click(function () {
+    //loading the configuration just like in the backend
     const current_config = JSON.parse($('#current_config').val());
     const collageConfig = config.collage;
+    //const textConfig = config.textoncollage;
     const resolution = parseInt(collageConfig.resolution.slice(0, -3), 10);
     let collage_height = 4 * resolution;
     let collage_width = collage_height * 1.5;
     let layout = current_config;
+    let backgroundImage = collageConfig.background;
+    let backgroundColor = collageConfig.background_color;
+    let frameImage = collageConfig.frame;
+    let applyFrame = collageConfig.take_frame;
     if (!Array.isArray(current_config)) {
         collage_width = current_config.width;
         collage_height = current_config.height;
         layout = current_config.layout;
+        backgroundImage = current_config.background;
+        backgroundColor = '#FFFFFF';
+        frameImage = current_config.frame;
+        applyFrame = collageConfig.apply_frame;
     }
+
+    //populate the inputs
+    console.log($('input[name=\'generator-frame\''));
     $('input[name=\'final_width\']').val(collage_width);
     $('input[name=\'final_height\']').val(collage_height);
+    $('input[name=\'background_color\'').val(backgroundColor);
+
+    $('input[name=\'generator-background\'').attr('value', backgroundImage);
+    $('input[name=\'generator-background\'')
+        .parents('.adminImageSelection')
+        .find('.adminImageSelection-preview')
+        .attr('src', backgroundImage);
+
+    $('input[name=\'generator-frame\'').attr('value', frameImage);
+    $('input[name=\'generator-frame\'')
+        .parents('.adminImageSelection')
+        .find('.adminImageSelection-preview')
+        .attr('src', frameImage);
+
+    $('select[name=\'apply_frame\']').val(applyFrame);
+
+    //hide images and image settings
+    $('#result_canvas').find('div[id^=\'picture-\'').addClass('hidden');
+    $('#layout_containers').find('div[data-picture^=\'picture-\'').addClass('hidden');
 
     for (let i = 0; i < layout.length; i++) {
         let identifier = 'picture-' + i;
@@ -88,14 +106,56 @@ $('#loadCurrentConfiguration').click(function () {
             $(this).val(layout[i][propertyPosition]);
         });
     }
+
+    //start rendering
     changeGeneralSetting();
 });
 
-$('input[name^=\'picture-x-position-\'').change(handleInputUpdate);
-$('input[name^=\'picture-y-position-\'').change(handleInputUpdate);
-$('input[name^=\'picture-width-\'').change(handleInputUpdate);
-$('input[name^=\'picture-height-\'').change(handleInputUpdate);
-$('input[name^=\'picture-rotation-\'').change(handleInputUpdate);
+function changeGeneralSetting() {
+    const c_width = $('input[name=\'final_width\']').val();
+    const c_height = $('input[name=\'final_height\']').val();
+    const c_bg_color = $('input[name=\'background_color\']').val();
+    const c_bg = $('input[name=\'generator-background\']').val();
+    const c_frame = $('input[name=\'generator-frame\']').val();
+    const c_apply_frame = $('select[name=\'apply_frame\']').val();
+    const c_show_frame = $('input[name=\'show-frame\']').is(':checked');
+    const c_show_background = $('input[name=\'show-background\']').is(':checked');
+
+    const aspect_ratio = c_width / c_height;
+
+    const canvasDOM = $('#result_canvas');
+
+    canvasDOM.css('aspect-ratio', aspect_ratio);
+    canvasDOM.css('background-color', c_bg_color);
+    canvasDOM.find('div#collage_background img').attr('src', c_bg);
+    canvasDOM.find('div#collage_background img').addClass('hidden');
+
+    if (c_show_background) {
+        canvasDOM.find('div#collage_background img').removeClass('hidden');
+    }
+
+    let collageImgs = canvasDOM.find('div#collage_frame img');
+    let pictureFrameImgs = canvasDOM.find('img.picture-frame');
+    let allImgs = collageImgs.add(pictureFrameImgs);
+
+    allImgs.attr('src', c_frame).addClass('hidden');
+
+    if (c_show_frame) {
+        allImgs.removeClass('hidden');
+
+        if (c_apply_frame === 'always') {
+            collageImgs.addClass('hidden');
+        } else if (c_apply_frame === 'once') {
+            pictureFrameImgs.addClass('hidden');
+        } else {
+            allImgs.addClass('hidden');
+        }
+    }
+
+    for (let i = 0; i < 5; i++) {
+        updateImage(i);
+    }
+}
 
 function handleInputUpdate() {
     const modifiedInput = $(this);
@@ -139,7 +199,6 @@ function changeImageSetting(new_value, prop_name, index) {
         let processed_value = calculate(tokenize(clean_operation));
         if (new_value == processed_value) {
             // == and NOT === because one is a string and the other is a number
-            console.log({ new_value, processed_value });
             let collage_width = $('input[name=\'final_width\']').val();
             let collage_height = $('input[name=\'final_height\']').val();
             if (['width', 'left'].includes(prop_name)) {
@@ -179,19 +238,6 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
         }
     }
     return { imgW: best_guess.imgW, imgH: best_guess.imgH, fromTop: smallCatet };
-}
-
-function changeGeneralSetting() {
-    const collage_width = $('input[name=\'final_width\']').val();
-    const collage_height = $('input[name=\'final_height\']').val();
-
-    const aspect_ratio = collage_width / collage_height;
-
-    $('#result_canvas').css('aspect-ratio', aspect_ratio);
-
-    for (let i = 0; i < 5; i++) {
-        updateImage(i);
-    }
 }
 
 $('#addImage').click(function () {
