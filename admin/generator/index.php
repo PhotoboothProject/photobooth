@@ -5,6 +5,7 @@ use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\AdminInput;
+use Photobooth\Utility\FontUtility;
 
 // Login / Authentication check
 if (!(
@@ -24,22 +25,45 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
 $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $config['collage']['layout']);
 $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
 
+$font_paths = [
+    PathUtility::getAbsolutePath('resources/fonts'),
+    PathUtility::getAbsolutePath('private/fonts')
+];
+
+$font_family_options = [];
+
+$font_styles = '<style>';
+foreach ($font_paths as $path) {
+    try {
+        $files = FontUtility::getFontsFromPath($path, false);
+        $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
+        if (count($files) > 0) {
+            foreach ($files as $name => $path) {
+                $font_styles .= '
+					@font-face {
+						font-family: "' . $name . '";
+						src: url(' . $path . ') format("truetype");
+					}
+				';
+                $font_family_options[$path] = $name;
+            }
+        }
+    } catch (\Exception $e) {
+        $font_styles .= '';
+    }
+}
+$font_styles .= '</style>';
+
 ?>
 
 <div class="w-full h-screen bg-brand-2 px-3 md:px-6 py-6 md:py-12 overflow-x-hidden overflow-y-auto">
-	<style>
-		@font-face {
-  font-family: "GreatVibes-Regular";
-  src: url(/resources/fonts/GreatVibes-Regular.ttf) format("truetype");
-}
-div.provafont { font-family: "GreatVibes-Regular", sans-serif }
-	</style>
+	<?= $font_styles ?>
     <div class="w-full flex items-center justify-center flex-col">
         <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center">
             <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
                 Collage Layout Generator
             </div>
-			<div class="provafont">
+			<div class="provafont2">
 				Photobooth we love OpenSource
 			</div>
             <div class="result_section mt-4 w-full flex gap-4 flex-col md:flex-row">
@@ -200,6 +224,151 @@ AdminInput::renderSelect(
 ?>
                                 </div>
                             </div>
+							<div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
+								<div>
+									<?=
+                                        AdminInput::renderSelect(
+                                            [
+                                                'type' => 'select',
+                                                'name' => 'text_font_family',
+                                                'options' => $font_family_options,
+                                                'value' => '',
+                                                'attributes' => ['data-trigger' => 'general']
+                                            ],
+                                            $languageService->translate('text_font_family')
+                                        )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderColor(
+        [
+            'name' => 'text_font_color',
+            'value' => '#000000',
+            'placeholder' => 'text font color',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_font_color')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderInput(
+        [
+            'type' => 'number',
+            'name' => 'text_font_size',
+            'value' => '50',
+            'placeholder' => 'text font size',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_font_size')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderInput(
+        [
+            'type' => 'text',
+            'name' => 'text_line_1',
+            'value' => 'Photobooth',
+            'placeholder' => 'text line 1',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_line_1')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderInput(
+        [
+            'type' => 'text',
+            'name' => 'text_line_2',
+            'value' => 'we love',
+            'placeholder' => 'text line 2',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_line_2')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderInput(
+        [
+            'type' => 'text',
+            'name' => 'text_line_3',
+            'value' => 'OpenSource',
+            'placeholder' => 'text line 3',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_line_3')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderInput(
+        [
+            'type' => 'number',
+            'name' => 'text_line_space',
+            'value' => '90',
+            'placeholder' => 'text line space',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_line_space')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderInput(
+        [
+            'type' => 'number',
+            'name' => 'text_location_x',
+            'value' => '1470',
+            'placeholder' => 'text location x',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_location_x')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderInput(
+        [
+            'type' => 'number',
+            'name' => 'text_location_y',
+            'value' => '250',
+            'placeholder' => 'text location y',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_location_y')
+    )
+?>
+								</div>
+								<div>
+									<?=
+    AdminInput::renderRange(
+        [
+            'type' => 'number',
+            'name' => 'text_rotation',
+            'value' => '0',
+            'unit' => 'degrees',
+            'range_min' => '-90',
+            'range_max' => '90',
+            'range_step' => '1',
+            'placeholder' => 'degrees',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_rotation')
+    )
+?>
+								</div>
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -240,6 +409,7 @@ AdminInput::renderSelect(
 						<div id="collage_frame" class="absolute h-full">
 							<img class="h-full hidden" src="" alt="Choose the frame">
 						</div>
+						<div id="collage_text" class="absolute h-full hidden"></div>
 					</div>
                 </div>
             </div>

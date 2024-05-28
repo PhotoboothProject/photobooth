@@ -48,7 +48,7 @@ $('#loadCurrentConfiguration').click(function () {
     //loading the configuration just like in the backend
     const current_config = JSON.parse($('#current_config').val());
     const collageConfig = config.collage;
-    //const textConfig = config.textoncollage;
+    const textConfig = config.textoncollage;
     const resolution = parseInt(collageConfig.resolution.slice(0, -3), 10);
     let collage_height = 4 * resolution;
     let collage_width = collage_height * 1.5;
@@ -57,6 +57,16 @@ $('#loadCurrentConfiguration').click(function () {
     let backgroundColor = collageConfig.background_color;
     let frameImage = collageConfig.frame;
     let applyFrame = collageConfig.take_frame;
+    let font_family = textConfig.font;
+    let font_color = textConfig.font_color;
+    let font_size = textConfig.font_size;
+    let line1 = textConfig.line1;
+    let line2 = textConfig.line2;
+    let line3 = textConfig.line3;
+    let linespace = textConfig.linespace;
+    let locationX = textConfig.locationx;
+    let locationY = textConfig.locationy;
+    let text_rotation = textConfig.rotation;
     if (!Array.isArray(current_config)) {
         collage_width = current_config.width;
         collage_height = current_config.height;
@@ -65,10 +75,31 @@ $('#loadCurrentConfiguration').click(function () {
         backgroundColor = '#FFFFFF';
         frameImage = current_config.frame;
         applyFrame = collageConfig.apply_frame;
+        font_family = collageConfig.text_font;
+        font_color = collageConfig.text_font_color;
+        font_size = collageConfig.text_font_size;
+        line1 = collageConfig.text_line1;
+        line2 = collageConfig.text_line2;
+        line3 = collageConfig.text_line3;
+        linespace = collageConfig.text_linespace;
+        locationX = collageConfig.text_locationx;
+        locationY = collageConfig.text_locationy;
+        text_rotation = collageConfig.text_rotation;
     }
+    console.log({
+        font_family,
+        font_color,
+        font_size,
+        line1,
+        line2,
+        line3,
+        linespace,
+        locationX,
+        locationY,
+        text_rotation
+    });
 
     //populate the inputs
-    console.log($('input[name=\'generator-frame\''));
     $('input[name=\'final_width\']').val(collage_width);
     $('input[name=\'final_height\']').val(collage_height);
     $('input[name=\'background_color\'').val(backgroundColor);
@@ -121,6 +152,8 @@ function changeGeneralSetting() {
     const c_show_frame = $('input[name=\'show-frame\']').is(':checked');
     const c_show_background = $('input[name=\'show-background\']').is(':checked');
 
+    const c_text_font = $('select[name=\'text_font_family\'] option:selected').html();
+
     const aspect_ratio = c_width / c_height;
 
     const canvasDOM = $('#result_canvas');
@@ -151,6 +184,8 @@ function changeGeneralSetting() {
             allImgs.addClass('hidden');
         }
     }
+
+    $('.provafont2').css('font-family', c_text_font);
 
     for (let i = 0; i < 5; i++) {
         updateImage(i);
