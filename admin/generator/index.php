@@ -58,37 +58,37 @@ $font_styles .= '</style>';
 
 <div class="w-full h-screen bg-brand-2 px-3 md:px-6 py-6 md:py-12 overflow-x-hidden overflow-y-auto">
 	<?= $font_styles ?>
-    <div class="w-full flex items-center justify-center flex-col">
-        <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center">
-            <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
-                Collage Layout Generator
-            </div>
+  <div class="w-full flex items-center justify-center flex-col">
+    <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center">
+      <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
+        Collage Layout Generator
+      </div>
 			<div class="provafont2">
 				Photobooth we love OpenSource
 			</div>
-            <div class="result_section mt-4 w-full flex gap-4 flex-col md:flex-row">
-                <div class="result_positions md:max-h-[75vh] p-2 md:p-4 overflow-y-auto flex-1">
-                    <div class="general_settings">
-						<input id="current_config" type="hidden" value='<?= json_encode($collageJson) ?>' />
-						<div class="w-full flex flex-col gap-2 my-4 md:my-8">
-							<div>
-								<?= AdminInput::renderCta('load_current_configuration', 'loadCurrentConfiguration') ?>
-							</div>
-							<div>
-								<?=
-                                    AdminInput::renderColor(
-                                        [
-                                            'name' => 'background_color',
-                                            'value' => '#FFFFFF',
-                                            'placeholder' => 'background color',
-                                            'attributes' => ['data-trigger' => 'general']
-                                        ],
-                                        $languageService->translate('background_color')
-                                    )
+        <div class="result_section mt-4 w-full flex gap-4 flex-col md:flex-row">
+          <div class="result_positions md:max-h-[75vh] p-2 md:p-4 overflow-y-auto flex-1">
+            <div class="general_settings">
+							<input id="current_config" type="hidden" value='<?= json_encode($collageJson) ?>' />
+							<div class="w-full flex flex-col gap-2 my-4 md:my-8">
+								<div>
+									<?= AdminInput::renderCta('load_current_configuration', 'loadCurrentConfiguration') ?>
+								</div>
+								<div>
+									<?=
+                                        AdminInput::renderColor(
+                                            [
+                                                'name' => 'background_color',
+                                                'value' => '#FFFFFF',
+                                                'placeholder' => 'background color',
+                                                'attributes' => ['data-trigger' => 'general']
+                                            ],
+                                            $languageService->translate('background_color')
+                                        )
 ?>
-							</div>
-							<div>
-								<?=
+								</div>
+								<div>
+									<?=
     AdminInput::renderImageSelect(
         [
             'name' => 'generator-background',
@@ -102,9 +102,9 @@ $font_styles .= '</style>';
         $languageService->translate('choose_background')
     )
 ?>
-							</div>
-							<div>
-								<?=
+								</div>
+								<div>
+									<?=
     AdminInput::renderImageSelect(
         [
             'name' => 'generator-frame',
@@ -118,15 +118,15 @@ $font_styles .= '</style>';
         $languageService->translate('choose_frame')
     )
 ?>
+								</div>
 							</div>
-						</div>
-                        <div>
-                            <span class="w-full flex flex-col items-center justify-center text-2md font-bold text-brand-1 mb-2">General Settings</span>
-                        </div>
-                        <div class="grid gap-2">
-                            <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
-                                <div>
-									<?=
+              <div>
+                <span class="w-full flex flex-col items-center justify-center text-2md font-bold text-brand-1 mb-2">General Settings</span>
+              </div>
+              <div class="grid gap-2">
+                <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
+                  <div>
+										<?=
         AdminInput::renderCheckbox(
             [
                 'name' => 'portrait',
@@ -136,9 +136,9 @@ $font_styles .= '</style>';
             $languageService->translate('portrait')
         )
 ?>
-                                </div>
-                                <div>
-									<?=
+                  </div>
+                	<div>
+										<?=
     AdminInput::renderCheckbox(
         [
             'name' => 'rotate_after_creation',
@@ -148,11 +148,11 @@ $font_styles .= '</style>';
         $languageService->translate('rotate_after_creation')
     )
 ?>
-                                </div>
-                            </div>
-                            <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
-                                <div>
-									<?=
+                  </div>
+                </div>
+                <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
+                  <div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'number',
@@ -164,9 +164,9 @@ $font_styles .= '</style>';
         $languageService->translate('final_width')
     )
 ?>
-                                </div>
-								<div>
-									<?=
+                  </div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'number',
@@ -178,10 +178,10 @@ $font_styles .= '</style>';
         $languageService->translate('final_height')
     )
 ?>
-								</div>
-                            </div>
-                            <div>
-								<?=
+									</div>
+                </div>
+                <div>
+									<?=
 AdminInput::renderSelect(
     [
         'type' => 'select',
@@ -197,10 +197,10 @@ AdminInput::renderSelect(
     $languageService->translate('apply_frame')
 )
 ?>
-                            </div>
-                            <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
-                                <div>
-									<?=
+                </div>
+                <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
+                  <div>
+										<?=
         AdminInput::renderCheckbox(
             [
                 'name' => 'show-background',
@@ -210,9 +210,9 @@ AdminInput::renderSelect(
             $languageService->translate('show-background')
         )
 ?>
-                                </div>
-                                <div>
-									<?=
+                  </div>
+                  <div>
+										<?=
     AdminInput::renderCheckbox(
         [
             'name' => 'show-frame',
@@ -222,25 +222,37 @@ AdminInput::renderSelect(
         $languageService->translate('show-frame')
     )
 ?>
-                                </div>
-                            </div>
-							<div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
-								<div>
-									<?=
-                                        AdminInput::renderSelect(
-                                            [
-                                                'type' => 'select',
-                                                'name' => 'text_font_family',
-                                                'options' => $font_family_options,
-                                                'value' => '',
-                                                'attributes' => ['data-trigger' => 'general']
-                                            ],
-                                            $languageService->translate('text_font_family')
-                                        )
+                  </div>
+                </div>
+								<div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
+                  <div>
+										<?=
+    AdminInput::renderCheckbox(
+        [
+            'name' => 'text_enabled',
+            'value' => 'false',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_enabled')
+    )
 ?>
-								</div>
-								<div>
-									<?=
+                  </div>
+									<div>
+										<?=
+    AdminInput::renderSelect(
+        [
+            'type' => 'select',
+            'name' => 'text_font_family',
+            'options' => $font_family_options,
+            'value' => array_key_first($font_family_options),
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        $languageService->translate('text_font_family')
+    )
+?>
+									</div>
+									<div>
+										<?=
     AdminInput::renderColor(
         [
             'name' => 'text_font_color',
@@ -251,9 +263,9 @@ AdminInput::renderSelect(
         $languageService->translate('text_font_color')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'number',
@@ -265,9 +277,9 @@ AdminInput::renderSelect(
         $languageService->translate('text_font_size')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'text',
@@ -279,9 +291,9 @@ AdminInput::renderSelect(
         $languageService->translate('text_line_1')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'text',
@@ -293,9 +305,9 @@ AdminInput::renderSelect(
         $languageService->translate('text_line_2')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'text',
@@ -307,9 +319,9 @@ AdminInput::renderSelect(
         $languageService->translate('text_line_3')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'number',
@@ -321,9 +333,9 @@ AdminInput::renderSelect(
         $languageService->translate('text_line_space')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'number',
@@ -335,9 +347,9 @@ AdminInput::renderSelect(
         $languageService->translate('text_location_x')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderInput(
         [
             'type' => 'number',
@@ -349,89 +361,93 @@ AdminInput::renderSelect(
         $languageService->translate('text_location_y')
     )
 ?>
-								</div>
-								<div>
-									<?=
+									</div>
+									<div>
+										<?=
     AdminInput::renderRange(
         [
             'type' => 'number',
             'name' => 'text_rotation',
             'value' => '0',
             'unit' => 'degrees',
-            'range_min' => '-90',
-            'range_max' => '90',
-            'range_step' => '1',
+            'range_min' => '-180',
+            'range_max' => '180',
+            'range_step' => '5',
             'placeholder' => 'degrees',
             'attributes' => ['data-trigger' => 'general']
         ],
         $languageService->translate('text_rotation')
     )
 ?>
-								</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="images_settings flex flex-col gap-4">
-                        <div id="layout_containers" class="flex gap-4 overflow-x-auto">
-                            <?= generateImageLayoutInputs($languageService) ?>
-                        </div>
-                        <div>
-							<?= AdminInput::renderCta('add_image', 'addImage') ?>
-                        </div>
-                    </div>
+									</div>
                 </div>
-                <div class="result_images md:max-h-[75vh] flex-1 relative lg:flex-[3_1_0%] p-4 md:p-8 bg-slate-300">
-					<div id="result_canvas" class="relative m-0 left-[50%] top-[50%] right-0 bottom-0 translate-y-[0%] md:translate-y-[-50%] translate-x-[-50%] max-w-full max-h-full shadow-xl">
-						<div id="collage_background" class="absolute h-full">
-							<img class="h-full hidden" src="" alt="Choose the background">
-						</div>
-						<div id="picture-0" class="absolute overflow-hidden w-full h-full">
-							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-01.jpg">
-							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
-						</div>
-						<div id="picture-1" class="absolute overflow-hidden w-full h-full hidden">
-							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-02.jpg">
-							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
-						</div>
-						<div id="picture-2" class="absolute overflow-hidden w-full h-full hidden">
-							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-03.jpg">
-							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
-						</div>
-						<div id="picture-3" class="absolute overflow-hidden w-full h-full hidden">
-							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-04.jpg">
-							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
-						</div>
-						<div id="picture-4" class="absolute overflow-hidden w-full h-full hidden">
-							<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-05.jpg">
-							<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
-						</div>
-						<div id="collage_frame" class="absolute h-full">
-							<img class="h-full hidden" src="" alt="Choose the frame">
-						</div>
-						<div id="collage_text" class="absolute h-full hidden"></div>
-					</div>
-                </div>
+              </div>
             </div>
+            <hr>
+            <div class="images_settings flex flex-col gap-4">
+              <div id="layout_containers" class="flex gap-4 overflow-x-auto">
+                <?= generateImageLayoutInputs($languageService) ?>
+              </div>
+              <div>
+								<?= AdminInput::renderCta('add_image', 'addImage') ?>
+              </div>
+            </div>
+          </div>
+          <div class="result_images md:max-h-[75vh] flex-1 relative lg:flex-[3_1_0%] p-4 md:p-8 bg-slate-300">
+						<div id="result_canvas" class="relative m-0 left-[50%] top-[50%] right-0 bottom-0 translate-y-[0%] md:translate-y-[-50%] translate-x-[-50%] max-w-full max-h-full shadow-xl">
+							<div id="collage_background" class="absolute h-full">
+								<img class="h-full hidden" src="" alt="Choose the background">
+							</div>
+							<div id="picture-0" class="absolute overflow-hidden w-full h-full">
+								<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-01.jpg">
+								<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+							</div>
+							<div id="picture-1" class="absolute overflow-hidden w-full h-full hidden">
+								<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-02.jpg">
+								<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+							</div>
+							<div id="picture-2" class="absolute overflow-hidden w-full h-full hidden">
+								<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-03.jpg">
+								<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+							</div>
+							<div id="picture-3" class="absolute overflow-hidden w-full h-full hidden">
+								<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-04.jpg">
+								<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+							</div>
+							<div id="picture-4" class="absolute overflow-hidden w-full h-full hidden">
+								<img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-05.jpg">
+								<img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+							</div>
+							<div id="collage_frame" class="absolute h-full">
+								<img class="h-full hidden" src="" alt="Choose the frame">
+							</div>
+							<div id="collage_text" class="absolute h-full">
+								<div class='relative'>
+									<div class='absolute whitespace-nowrap origin-top-left text-line-1 leading-none'></div>
+									<div class='absolute whitespace-nowrap origin-top-left text-line-2 leading-none'></div>
+									<div class='absolute whitespace-nowrap origin-top-left text-line-3 leading-none'></div>
+								</div>
+							</div>
+						</div>
+          </div>
         </div>
+      </div>
+      <div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20"></div>
 
-        <div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20">
-        </div>
-
-		<div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
-			<?php
-                echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
+			<div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
+					<?php
+                        echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
 
 if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
     echo getMenuBtn(PathUtility::getPublicPath('login/logout.php'), 'logout', $config['icons']['logout']);
 }
 ?>
+				</div>
 			</div>
-		</div>
     </div>
+	</div>
 </div>
-
 <?php
 
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
