@@ -212,7 +212,11 @@ class AdminInput
             if ((is_array($setting['value']) && in_array($optionValue, $setting['value'])) || $optionValue === $setting['value']) {
                 $selected = ' selected="selected"';
             }
-            $options .= '<option ' . $selected . ' value="' . ($optionValue instanceof \BackedEnum ? $optionValue->value : $optionValue) . '">' . $optionLabel . '</option>';
+            $styles = '';
+            if($settingName === 'text_font_family') {
+                $styles = 'style="font-family:' . $optionLabel . '"';
+            }
+            $options .= '<option ' . $selected . ' value="' . ($optionValue instanceof \BackedEnum ? $optionValue->value : $optionValue) . '"' . $styles . '>' . $optionLabel . '</option>';
         }
 
         return self::renderHeadline($label) . '
@@ -220,7 +224,7 @@ class AdminInput
                 class="' . $className . '"
                 name="' . $settingName . '"
                 ' . ($setting['type'] === 'multi-select' ? ' multiple="multiple"' : '') . '
-				' . $attributes . '
+				        ' . $attributes . '
             >
                 ' . $options . '
             </select>

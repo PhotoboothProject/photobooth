@@ -57,6 +57,7 @@ $('#loadCurrentConfiguration').click(function () {
     let backgroundColor = collageConfig.background_color;
     let frameImage = collageConfig.frame;
     let applyFrame = collageConfig.take_frame;
+    let text_enabled = textConfig.enabled;
     let font_family = textConfig.font;
     let font_color = textConfig.font_color;
     let font_size = textConfig.font_size;
@@ -74,30 +75,19 @@ $('#loadCurrentConfiguration').click(function () {
         backgroundImage = current_config.background;
         backgroundColor = '#FFFFFF';
         frameImage = current_config.frame;
-        applyFrame = collageConfig.apply_frame;
-        font_family = collageConfig.text_font;
-        font_color = collageConfig.text_font_color;
-        font_size = collageConfig.text_font_size;
-        line1 = collageConfig.text_line1;
-        line2 = collageConfig.text_line2;
-        line3 = collageConfig.text_line3;
-        linespace = collageConfig.text_linespace;
-        locationX = collageConfig.text_locationx;
-        locationY = collageConfig.text_locationy;
-        text_rotation = collageConfig.text_rotation;
+        applyFrame = current_config.apply_frame;
+        text_enabled = current_config.enabled;
+        font_family = current_config.text_font;
+        font_color = current_config.text_font_color;
+        font_size = current_config.text_font_size;
+        line1 = current_config.text_line1;
+        line2 = current_config.text_line2;
+        line3 = current_config.text_line3;
+        linespace = current_config.text_linespace;
+        locationX = current_config.text_locationx;
+        locationY = current_config.text_locationy;
+        text_rotation = current_config.text_rotation;
     }
-    console.log({
-        font_family,
-        font_color,
-        font_size,
-        line1,
-        line2,
-        line3,
-        linespace,
-        locationX,
-        locationY,
-        text_rotation
-    });
 
     //populate the inputs
     $('input[name=\'final_width\']').val(collage_width);
@@ -117,6 +107,19 @@ $('#loadCurrentConfiguration').click(function () {
         .attr('src', frameImage);
 
     $('select[name=\'apply_frame\']').val(applyFrame);
+
+    $('input[name=\'text_enabled\'').prop('checked', text_enabled);
+    $('select[name=\'text_font_family\'').val(font_family);
+    $('input[name=\'text_font_color\'').attr('value', font_color);
+    $('input[name=\'text_font_size\'').attr('value', font_size);
+    $('input[name=\'text_line_1\'').attr('value', line1);
+    $('input[name=\'text_line_2\'').attr('value', line2);
+    $('input[name=\'text_line_3\'').attr('value', line3);
+    $('input[name=\'text_line_space\'').attr('value', linespace);
+    $('input[name=\'text_location_x\'').attr('value', locationX);
+    $('input[name=\'text_location_y\'').attr('value', locationY);
+    $('input[name=\'text_rotation\'').attr('value', text_rotation);
+    $('input[name=\'text_rotation\'').parent().find('span:first').text(text_rotation);
 
     //hide images and image settings
     $('#result_canvas').find('div[id^=\'picture-\'').addClass('hidden');
@@ -152,7 +155,17 @@ function changeGeneralSetting() {
     const c_show_frame = $('input[name=\'show-frame\']').is(':checked');
     const c_show_background = $('input[name=\'show-background\']').is(':checked');
 
+    const c_text_enabled = $('input[name=\'text_enabled\']').is(':checked');
     const c_text_font = $('select[name=\'text_font_family\'] option:selected').html();
+    const c_font_color = $('input[name=\'text_font_color\'').val();
+    const c_font_size = $('input[name=\'text_font_size\'').val();
+    const c_text_1 = $('input[name=\'text_line_1\'').val();
+    const c_text_2 = $('input[name=\'text_line_2\'').val();
+    const c_text_3 = $('input[name=\'text_line_3\'').val();
+    const c_text_space = $('input[name=\'text_line_space\'').val();
+    const c_text_top = $('input[name=\'text_location_y\'').val();
+    const c_text_left = $('input[name=\'text_location_x\'').val();
+    const c_text_rotation = -parseInt($('input[name=\'text_rotation\'').val(), 10);
 
     const aspect_ratio = c_width / c_height;
 
@@ -185,7 +198,49 @@ function changeGeneralSetting() {
         }
     }
 
-    $('.provafont2').css('font-family', c_text_font);
+    const canvas_width = canvasDOM.width();
+    const canvas_height = canvasDOM.height();
+    const adjusted_tfs = (c_font_size * canvas_height) / c_height;
+    const adjusted_tt = (c_text_top * canvas_height) / c_height;
+    const adjusted_tl = (c_text_left * canvas_width) / c_width;
+    const adjusted_tls = (c_text_space * canvas_height) / c_height;
+    const real_text_top = (i) => i * adjusted_tls - adjusted_tfs;
+    const real_text_left = (i) => i * adjusted_tls;
+    const collageTextDOM = $('#collage_text');
+    collageTextDOM.css({
+        'font-family': c_text_font,
+        'font-size': adjusted_tfs + 'pt',
+        color: c_font_color,
+        top: adjusted_tt + 'px',
+        left: adjusted_tl + 'px'
+    });
+    collageTextDOM
+        .find('.text-line-1')
+        .css({
+            transform: 'rotate(' + c_text_rotation + 'deg)',
+            top: real_text_top(0) + 'px'
+        })
+        .html(c_text_1.replace(/ /g, '\u00a0'));
+    collageTextDOM
+        .find('.text-line-2')
+        .css({
+            transform: 'rotate(' + c_text_rotation + 'deg)',
+            top: (c_text_rotation > -45 && c_text_rotation < 45 ? real_text_top(1) : real_text_top(0)) + 'px',
+            left: (c_text_rotation > -45 && c_text_rotation < 45 ? real_text_left(0) : real_text_left(1)) + 'px'
+        })
+        .html(c_text_2.replace(/ /g, '\u00a0'));
+    collageTextDOM
+        .find('.text-line-3')
+        .css({
+            transform: 'rotate(' + c_text_rotation + 'deg)',
+            top: (c_text_rotation > -45 && c_text_rotation < 45 ? real_text_top(2) : real_text_top(0)) + 'px',
+            left: (c_text_rotation > -45 && c_text_rotation < 45 ? real_text_left(0) : real_text_left(2)) + 'px'
+        })
+        .html(c_text_3.replace(/ /g, '\u00a0'));
+    collageTextDOM.addClass('hidden');
+    if (c_text_enabled) {
+        collageTextDOM.removeClass('hidden');
+    }
 
     for (let i = 0; i < 5; i++) {
         updateImage(i);
