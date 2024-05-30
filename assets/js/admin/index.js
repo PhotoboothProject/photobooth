@@ -280,10 +280,12 @@ function changeImageSetting(new_value, prop_name, index) {
         let contW = img_container.width();
         let contH = img_container.height();
         let ar = contW / contH;
-        const { imgW, imgH, fromTop } = calculateImgDimensions(contW, contH, angle, ar, 0, {});
+        const { imgW, imgH, fromTop } = calculateImgDimensions(contW, contH, angle, ar, 1, {});
+        //const minH = Math.min(imgH, contH, contW);
+        //console.log({ minH });
         contImages.height(imgH);
         contImages.width(imgW);
-        contImages.css('top', fromTop);
+        contImages.css('top', Math.min(fromTop, contH));
     } else {
         let clean_operation = new_value.replace('x', canvas_width).replace('y', canvas_height);
         let processed_value = calculate(tokenize(clean_operation));
@@ -303,9 +305,13 @@ function changeImageSetting(new_value, prop_name, index) {
 
 function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_guess) {
     if (angle === '0') {
-        return { imgW: width, imgH: height };
+        return { imgW: width, imgH: height, fromTop: 0 };
+    } else if (['-90', '90', -90, 90].includes(angle)) {
+        let small_side = Math.min(width, height);
+        return { imgW: small_side, imgH: small_side / aspect_ratio, fromTop: small_side };
     }
 
+    const brute_force = angle > -80 && angle < 80 ? 100 : 200;
     const angleCos = Math.cos((angle * Math.PI) / 180);
     let imgW = width / angleCos;
     let imgH = imgW / aspect_ratio;
@@ -316,8 +322,8 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
     if (Math.abs(quality) <= 0.001) {
         return { imgW, imgH, fromTop: smallCatet };
     } else {
-        if (times < 100) {
-            let factor = quality > 0 ? 1.02 : 0.98;
+        if (times < brute_force) {
+            let factor = quality > 0 ? 1.05 : 0.95;
             let new_best_guess = { quality: Math.abs(quality), imgW, imgH, smallCatet };
             if (best_guess) {
                 if (best_guess.quality < new_best_guess.quality) {
@@ -327,6 +333,7 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
             return calculateImgDimensions(width * factor, height, angle, aspect_ratio, times + 1, new_best_guess);
         }
     }
+    console.log({ angle, times, width });
     return { imgW: best_guess.imgW, imgH: best_guess.imgH, fromTop: smallCatet };
 }
 
