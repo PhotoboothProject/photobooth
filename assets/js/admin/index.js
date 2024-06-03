@@ -50,6 +50,8 @@ $('#loadCurrentConfiguration').click(function () {
     const collageConfig = config.collage;
     const textConfig = config.textoncollage;
     const resolution = parseInt(collageConfig.resolution.slice(0, -3), 10);
+    let portrait = false;
+    let rotate_after_creation = false;
     let collage_height = 4 * resolution;
     let collage_width = collage_height * 1.5;
     let layout = current_config;
@@ -69,6 +71,8 @@ $('#loadCurrentConfiguration').click(function () {
     let locationY = textConfig.locationy;
     let text_rotation = textConfig.rotation;
     if (!Array.isArray(current_config)) {
+        portrait = current_config.portrait;
+        rotate_after_creation = current_config.rotate_after_creation;
         collage_width = current_config.width;
         collage_height = current_config.height;
         layout = current_config.layout;
@@ -90,6 +94,8 @@ $('#loadCurrentConfiguration').click(function () {
     }
 
     //populate the inputs
+    $('input[name=\'portrait\'').prop('checked', portrait);
+    $('input[name=\'rotate_after_creation\'').prop('checked', rotate_after_creation);
     $('input[name=\'final_width\']').val(collage_width);
     $('input[name=\'final_height\']').val(collage_height);
     $('input[name=\'background_color\'').val(backgroundColor);
@@ -275,17 +281,16 @@ function changeImageSetting(new_value, prop_name, index) {
         let angle = -parseInt(new_value, 10);
         contImages.css(prop_name, 'rotate(' + angle + 'deg)');
         contImages.css('transform-origin', angle > 0 ? 'top right' : 'top left');
-        contImages.css(angle > 0 ? 'right' : 'left', 0);
-        contImages.css(angle < 0 ? 'right' : 'left', '');
         let contW = img_container.width();
         let contH = img_container.height();
         let ar = contW / contH;
-        const { imgW, imgH, fromTop } = calculateImgDimensions(contW, contH, angle, ar, 1, {});
-        //const minH = Math.min(imgH, contH, contW);
-        //console.log({ minH });
+        const brute_force = angle > -80 && angle < 80 ? 100 : 200;
+        const { imgW, imgH, fromTop, fromHori } = calculateImgDimensions(contW, contH, angle, ar, 1, {}, brute_force);
         contImages.height(imgH);
         contImages.width(imgW);
-        contImages.css('top', Math.min(fromTop, contH));
+        contImages.css('top', Math.min(fromTop, 2 * contH));
+        contImages.css(angle > 0 ? 'right' : 'left', fromHori || 0);
+        contImages.css(angle < 0 ? 'right' : 'left', '');
     } else {
         let clean_operation = new_value.replace('x', canvas_width).replace('y', canvas_height);
         let processed_value = calculate(tokenize(clean_operation));
@@ -303,16 +308,15 @@ function changeImageSetting(new_value, prop_name, index) {
     }
 }
 
-function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_guess) {
-    if (angle === '0') {
-        return { imgW: width, imgH: height, fromTop: 0 };
-    } else if (['-90', '90', -90, 90].includes(angle)) {
+function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_guess, brute_force) {
+    if ([0, -180, 180].includes(angle)) {
+        return { imgW: width, imgH: height, fromTop: angle === 0 ? 0 : height, fromHori: width };
+    } else if (Math.abs(angle) === 90) {
         let small_side = Math.min(width, height);
-        return { imgW: small_side, imgH: small_side / aspect_ratio, fromTop: small_side };
+        return { imgW: small_side, imgH: small_side / aspect_ratio, fromTop: small_side, fromHori: 0 };
     }
 
-    const brute_force = angle > -80 && angle < 80 ? 100 : 200;
-    const angleCos = Math.cos((angle * Math.PI) / 180);
+    const angleCos = Math.abs(Math.cos((angle * Math.PI) / 180));
     let imgW = width / angleCos;
     let imgH = imgW / aspect_ratio;
     let smallCatet = Math.sqrt(Math.pow(imgW, 2) - Math.pow(width, 2));
@@ -320,7 +324,12 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
     let quality = 1 - (largeCatet + smallCatet) / height;
 
     if (Math.abs(quality) <= 0.001) {
-        return { imgW, imgH, fromTop: smallCatet };
+        return {
+            imgW,
+            imgH,
+            fromTop: smallCatet + (angle > -90 && angle < 90 ? 0 : largeCatet),
+            fromHori: angle < -90 || angle > 90 ? imgW * angleCos : null
+        };
     } else {
         if (times < brute_force) {
             let factor = quality > 0 ? 1.05 : 0.95;
@@ -330,11 +339,24 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
                     new_best_guess = { ...best_guess };
                 }
             }
-            return calculateImgDimensions(width * factor, height, angle, aspect_ratio, times + 1, new_best_guess);
+            return calculateImgDimensions(
+                width * factor,
+                height,
+                angle,
+                aspect_ratio,
+                times + 1,
+                new_best_guess,
+                brute_force
+            );
         }
     }
     console.log({ angle, times, width });
-    return { imgW: best_guess.imgW, imgH: best_guess.imgH, fromTop: smallCatet };
+    return {
+        imgW: best_guess.imgW,
+        imgH: best_guess.imgH,
+        fromTop: smallCatet + (angle > -90 && angle < 90 ? 0 : largeCatet),
+        fromHori: angle < -90 || angle > 90 ? imgW + smallCatet : null
+    };
 }
 
 $('#addImage').click(function () {
