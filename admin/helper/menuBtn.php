@@ -2,7 +2,7 @@
 
 use Photobooth\Service\LanguageService;
 
-function getMenuBtn($target, $label, $icon = '')
+function getMenuBtn($target, $label, $icon = '', $newTab = false)
 {
     $languageService = LanguageService::getInstance();
 
@@ -20,7 +20,7 @@ function getMenuBtn($target, $label, $icon = '')
         ';
     }
     return '
-        <a href="' . $target . '" class="' . $btnClass . '">
+        <a href="' . $target . '" class="' . $btnClass . '" target="' . ($newTab ? '_blank' : '_self') . '">
             ' . $iconElement . '
             ' . $languageService->translate($label) . '
         </a>
