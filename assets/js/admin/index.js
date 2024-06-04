@@ -350,7 +350,6 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
             );
         }
     }
-    console.log({ angle, times, width });
     return {
         imgW: best_guess.imgW,
         imgH: best_guess.imgH,
@@ -370,6 +369,44 @@ $('#addImage').click(function () {
 function hideImage(containerId) {
     $('div[data-picture=\'' + containerId + '\'').addClass('hidden');
     $('div#' + containerId).addClass('hidden');
+}
+
+// eslint-disable-next-line no-unused-vars
+function saveConfiguration() {
+    let configuration = {
+        portrait: $('input[name=\'portrait\']').is(':checked'),
+        rotate_after_creation: $('input[name=\'rotate_after_creation\']').is(':checked'),
+        width: $('input[name=\'final_width\']').val(),
+        height: $('input[name=\'final_height\']').val(),
+        text_custom_style: $('input[name=\'text_enabled\']').is(':checked'),
+        text_font_size: $('input[name=\'text_font_size\'').val(),
+        text_rotation: -parseInt($('input[name=\'text_rotation\'').val(), 10),
+        text_locationx: $('input[name=\'text_location_x\'').val(),
+        text_locationy: $('input[name=\'text_location_y\'').val(),
+        font_font_color: $('input[name=\'text_font_color\'').val(),
+        text_font: $('select[name=\'text_font_family\'] option:selected').html(),
+        text_line1: $('input[name=\'text_line_1\'').val(),
+        text_line2: $('input[name=\'text_line_2\'').val(),
+        text_line3: $('input[name=\'text_line_3\'').val(),
+        text_linespace: $('input[name=\'text_line_space\'').val(),
+        apply_frame: $('select[name=\'apply_frame\']').val(),
+        frame: $('input[name=\'generator-frame\']').val(),
+        background: $('input[name=\'generator-background\']').val(),
+        background_color: $('input[name=\'background_color\']').val(),
+        layout: []
+    };
+
+    $('div.image_layout:visible').each(function () {
+        let container = $(this);
+        let single_image_layout = [];
+        container.find('input').each(function () {
+            single_image_layout.push($(this).val());
+        });
+        configuration.layout.push(single_image_layout);
+    });
+
+    $('input[name=\'new-configuration\']').val(JSON.stringify(configuration));
+    $('#configuration_form').trigger('submit');
 }
 
 function tokenize(s) {

@@ -53,9 +53,18 @@ foreach ($font_paths as $path) {
     }
 }
 $font_styles .= '</style>';
+$newConfiguration = '';
+if (isset($_POST['new-configuration'])) {
+    $newConfiguration = $_POST['new-configuration'];
+    $folderPath = PathUtility::getAbsolutePath('private/collage.json');
+
+    if (is_writable($folderPath)) {
+        $newConfiguration = 'yes';
+    }
+}
 
 ?>
-
+<div><?=$newConfiguration?></div>
 <div class="w-full h-screen bg-brand-2 px-3 md:px-6 py-6 md:py-12 overflow-x-hidden overflow-y-auto">
 	<?= $font_styles ?>
   <div class="w-full flex items-center justify-center flex-col">
@@ -393,7 +402,7 @@ $font_styles .= '</style>';
                         $hidden_class = '';
                     }
                     $computed_style = 'background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(\'/resources/img/demo/seal-station-norddeich-0' . ($i + 1) . '.jpg\')';
-                    $computed_classes = 'relative p-3 md:p-5 grid grid-cols-[repeat(auto-fit,_minmax(100px,_1fr))] gap-2 bg-cover bg-center min-w-72 h-fit ' . $hidden_class;
+                    $computed_classes = 'image_layout relative p-3 md:p-5 grid grid-cols-[repeat(auto-fit,_minmax(100px,_1fr))] gap-2 bg-cover bg-center min-w-72 h-fit ' . $hidden_class;
                     ?>
                 <div data-picture="picture-<?=$i?>" style="<?=$computed_style?>" class="<?=$computed_classes?>">
                   <div class="absolute top-1 right-1 z-10 hidden">
@@ -519,7 +528,7 @@ $font_styles .= '</style>';
           </div>
         </div>
       </div>
-      <button class="absolute left-[50%] translate-x-[-50%] bottom-[-30px] w-20 h-20 rounded-full bg-blue-300 flex flex-row items-center justify-center">
+      <button onclick="saveConfiguration()" class="absolute left-[50%] translate-x-[-50%] bottom-[-30px] w-20 h-20 rounded-full bg-blue-300 flex flex-row items-center justify-center">
         <i class="fa fa-save fa-2xl"></i>
       </button>
       <form id="configuration_form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data" class="hidden">
