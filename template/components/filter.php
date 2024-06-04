@@ -17,10 +17,10 @@ $languageService = LanguageService::getInstance();
     </button>
     <div class="sidenav-list">
         <?php foreach (ImageFilterEnum::cases() as $filter): ?>
-            <?php if (!in_array($filter->value, $config['filters']['disabled'])): ?>
+            <?php if (!in_array($filter, $config['filters']['disabled'])): ?>
                 <button
                     type="button"
-                    class="sidenav-list-item<?php echo ImageFilterEnum::tryFrom($config['filters']['defaults']) === $filter ? ' sidenav-list-item--active' : ''; ?> rotaryfocus"
+                    class="sidenav-list-item<?php echo $config['filters']['defaults'] === $filter ? ' sidenav-list-item--active' : ''; ?> rotaryfocus"
                     data-filter="<?= $filter->value ?>"
                 >
                     <?= $filter->label() ?>

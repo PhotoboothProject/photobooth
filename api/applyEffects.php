@@ -222,9 +222,9 @@ try {
                 throw new \Exception('Failed to save image.');
             }
             // preserve jpeg meta data
-            if ($config['picture']['preserve_exif_data'] && $config['exiftool']['cmd']) {
+            if ($config['picture']['preserve_exif_data'] && $config['commands']['exiftool']) {
                 try {
-                    $cmd = sprintf($config['exiftool']['cmd'], $filename_tmp, $filename_photo);
+                    $cmd = sprintf($config['commands']['exiftool'], $filename_tmp, $filename_photo);
                     $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
                     exec($cmd, $output, $returnValue);

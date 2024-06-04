@@ -6,8 +6,8 @@
 require_once '../lib/boot.php';
 
 use Photobooth\Enum\FolderEnum;
-use Photobooth\Helper;
 use Photobooth\Environment;
+use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
@@ -23,10 +23,15 @@ header('Content-Type: application/json');
 $loggerService = LoggerService::getInstance();
 $logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
-$data = $_POST;
+
+$configurationService = ConfigurationService::getInstance();
+$defaultConfig = $configurationService->getDefaultConfiguration();
+
+$data = ArrayUtility::replaceBooleanValues($_POST);
+$action = isset($data['type']) ? $data['type'] : null;
 
 // Reset
-if (isset($data['type']) && $data['type'] === 'reset') {
+if ($action === 'reset') {
     // First step in resetting the photobooth is always resetting the logs
     // This ensures we are able to write logmessages afterwards.
     $loggerService->addLogger('main');
@@ -103,39 +108,13 @@ if (isset($data['type']) && $data['type'] === 'reset') {
         }
     }
 
-    echo json_encode('success');
-    exit();
-}
-
-if (isset($data['type'])) {
-    $newConfig = [];
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Photobooth resetted.'
+    ]);
+} elseif ($action === 'config') {
     $logger->debug('Saving Photobooth configuration...');
-
-    foreach ($config as $k => $conf) {
-        if (is_array($conf)) {
-            foreach ($conf as $sk => $sc) {
-                if (isset($data[$k][$sk])) {
-                    if ($data[$k][$sk] == 'true') {
-                        $newConfig[$k][$sk] = true;
-                    } else {
-                        $newConfig[$k][$sk] = $data[$k][$sk];
-                    }
-                } elseif (isset($defaultConfig[$k][$sk])) {
-                    $newConfig[$k][$sk] = false;
-                }
-            }
-        } else {
-            if (isset($data[$k]) && !empty($data[$k])) {
-                if ($data[$k] == 'true') {
-                    $newConfig[$k] = true;
-                } else {
-                    $newConfig[$k] = $data[$k];
-                }
-            } else {
-                $newConfig[$k] = false;
-            }
-        }
-    }
+    $newConfig = ArrayUtility::mergeRecursive($defaultConfig, $data);
 
     if (isset($newConfig['login']['enabled']) && $newConfig['login']['enabled'] == true) {
         if ((isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) || $newConfig['login']['keypad']) {
@@ -185,6 +164,10 @@ if (isset($data['type'])) {
             $newConfig['filters']['enabled'] = false;
             $logger->debug('Filters disabled, you must keep original images in tmp folder to use this function.', [$newConfig['filters'], $newConfig['picture']]);
         }
+    }
+
+    if (isset($newConfig['filters']['disabled']) && $newConfig['filters']['disabled'] == false) {
+        $newConfig['filters']['disabled'] = [];
     }
 
     if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
@@ -319,19 +302,27 @@ if (isset($data['type'])) {
         }
     }
 
-    $content = "<?php\n\n\$config = " . ArrayUtility::export(Helper::arrayRecursiveDiff($newConfig, $defaultConfig)) . ";\n";
-
-    if (file_put_contents(PathUtility::getAbsolutePath('config/my.config.inc.php'), $content)) {
-        Helper::clearCache(PathUtility::getAbsolutePath('config/my.config.inc.php'));
+    try {
+        $configurationService->update($newConfig);
         $logger->debug('New config saved.');
-        echo json_encode('success');
-    } else {
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'New config saved.',
+        ]);
+    } catch (\Exception $exception) {
         $logger->error('ERROR: Config can not be saved!');
-        echo json_encode('error');
+        echo json_encode([
+            'status' => 'error',
+            'message' => $exception->getMessage(),
+        ]);
     }
 } else {
     $logger->error('ERROR: Unknown action.');
-    die(json_encode('error'));
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Unknown action.',
+    ]);
+    die();
 }
 
 // Kill service daemons after config has changed

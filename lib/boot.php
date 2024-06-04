@@ -4,6 +4,7 @@ use Photobooth\Enum\FolderEnum;
 use Photobooth\Factory\ProcessFactory;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
+use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
@@ -11,6 +12,7 @@ use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\ProcessService;
 use Photobooth\Service\SoundService;
+use Photobooth\Utility\FileUtility;
 use Photobooth\Utility\PathUtility;
 
 session_start();
@@ -18,13 +20,14 @@ session_start();
 // Autoload
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-// Fix Permissions
-@chmod(PathUtility::getAbsolutePath('config'), 0755);
-@chmod(PathUtility::getAbsolutePath('data'), 0755);
-@chmod(PathUtility::getAbsolutePath('private'), 0755);
-
-// Config
-require_once dirname(__DIR__) . '/lib/config.php';
+FileUtility::createDirectory(PathUtility::getAbsolutePath('config'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('data'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
 
 // Shared instances
 //
@@ -51,6 +54,13 @@ require_once dirname(__DIR__) . '/lib/config.php';
 // $languageService->translate('abort');
 //
 $GLOBALS[ApplicationService::class] = new ApplicationService();
+$GLOBALS[ConfigurationService::class] = new ConfigurationService();
+$config = ConfigurationService::getInstance()->getConfiguration();
+if ($config['dev']['loglevel'] > 0) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
 $GLOBALS[AssetService::class] = new AssetService();
 $GLOBALS[LanguageService::class] = new LanguageService(
     $config['ui']['language'] ?? 'en',
@@ -79,13 +89,13 @@ $GLOBALS[MailService::class] = new MailService(
 $GLOBALS[ProcessService::class] = new ProcessService([
     ProcessFactory::fromConfig([
         'name' => 'remotebuzzer',
-        'command' => $config['nodebin']['cmd'] . ' ' . PathUtility::getAbsolutePath('resources/js/remotebuzzer-server.js'),
+        'command' => $config['commands']['nodebin'] . ' ' . PathUtility::getAbsolutePath('resources/js/remotebuzzer-server.js'),
         'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio'])),
         'killSignal' => 9,
     ]),
     ProcessFactory::fromConfig([
         'name' => 'synctodrive',
-        'command' => $config['nodebin']['cmd'] . ' ' . PathUtility::getAbsolutePath('resources/js/sync-to-drive.js'),
+        'command' => $config['commands']['nodebin'] . ' ' . PathUtility::getAbsolutePath('resources/js/sync-to-drive.js'),
         'enabled' => ($config['synctodrive']['enabled']),
         'killSignal' => 15,
     ]),

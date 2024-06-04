@@ -972,18 +972,18 @@ EOF
         info "### Creating default Photobooth config."
         cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
-\$config = array (
-  'preview' =>
-  array (
+
+return = [
+  'preview' => [
     'mode' => 'device_cam',
-    'cmd' => 'python3 cameracontrol.py',
     'bsm' => false,
-  ),
-  'take_picture' =>
-  array (
-    'cmd' => 'python3 cameracontrol.py --capture-image-and-download %s',
-  ),
-);
+  ],
+  'commands' => [
+    'preview' => 'python3 cameracontrol.py',
+    'take_picture' => 'python3 cameracontrol.py --capture-image-and-download %s',
+  ]
+];
+
 EOF
         chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
     else
@@ -1120,25 +1120,23 @@ EOF
         info "### Creating default Photobooth config."
         cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
-\$config = array (
-  'picture' =>
-  array (
+
+return [
+  'picture' => [
     'cntdwn_time' => '6',
-  ),
-  'collage' =>
-  array (
+  ],
+  'collage' => [
     'cntdwn_time' => '6',
-  ),
-  'preview' =>
-  array (
+  ],
+  'preview' => [
     'mode' => 'url',
     'url' => 'url("http://localhost:1984/api/stream.mjpeg?src=dslr")',
-  ),
-  'take_picture' =>
-  array (
-    'cmd' => 'capture %s',
-  ),
-);
+  ],
+  'commands' => [
+    'take_picture' => 'capture %s',
+  ]
+];
+
 EOF
         chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
     else

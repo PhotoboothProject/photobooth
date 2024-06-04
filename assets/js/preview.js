@@ -135,14 +135,18 @@ const photoboothPreview = (function () {
                 api.runCmd('start');
                 break;
             case CameraDisplayMode.BACKGROUND:
-                if (config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.cmd && !config.preview.bsm) {
+                if (
+                    config.preview.mode === PreviewMode.DEVICE.valueOf() &&
+                    config.commands.preview &&
+                    !config.preview.bsm
+                ) {
                     photoboothTools.console.logDev('Preview: Running preview cmd (BACKGROUND).');
                     api.runCmd('start');
                 }
                 api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
                 break;
             case CameraDisplayMode.COUNTDOWN:
-                if (config.preview.cmd) {
+                if (config.commands.preview) {
                     if (
                         config.preview.bsm ||
                         (!config.preview.bsm && retry > 0) ||
@@ -182,7 +186,7 @@ const photoboothPreview = (function () {
     };
 
     api.stopPreview = function () {
-        if (config.preview.killcmd) {
+        if (config.commands.preview_kill) {
             api.runCmd('stop');
         }
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {

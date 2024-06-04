@@ -16,7 +16,7 @@ if (!(
     exit();
 }
 
-require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
+$configsetup = require PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 
 $languageService = LanguageService::getInstance();
 $pageTitle = 'Manual - ' . ApplicationService::getInstance()->getTitle();

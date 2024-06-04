@@ -67,7 +67,7 @@ const photoboothPreviewTest = (function () {
         photoboothTools.console.log('Starting preview...');
         buttonStartPreview.hide();
         previewNone.hide();
-        if (config.preview.cmd) {
+        if (config.commands.preview) {
             photoboothTools.console.logDev('Running preview cmd (TEST).');
             api.runCmd('start');
         }
@@ -90,7 +90,7 @@ const photoboothPreviewTest = (function () {
         previewFrameCollage.hide();
         previewFramePicture.hide();
         previewNone.show();
-        if (config.preview.killcmd) {
+        if (config.commands.preview_kill) {
             api.runCmd('stop');
         }
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {

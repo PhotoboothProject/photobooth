@@ -15,7 +15,7 @@ if (!(
     exit();
 }
 
-require_once PathUtility::getAbsolutePath('lib/configsetup.inc.php');
+$configsetup = require PathUtility::getAbsolutePath('lib/configsetup.inc.php');
 
 $pageTitle = 'Adminpanel - ' . ApplicationService::getInstance()->getTitle();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');

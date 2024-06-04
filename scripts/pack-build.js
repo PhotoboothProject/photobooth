@@ -65,7 +65,6 @@ function createArchive(fileName, archive) {
     archive.directory('tools');
     archive.directory('vendor');
     archive.file('config/.htaccess');
-    archive.file('config/config.inc.php');
     archive.file('faq/index.php');
     archive.file('HEAD');
     archive.file('composer.json');

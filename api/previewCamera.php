@@ -29,7 +29,7 @@ function isRunning(int $pid, Photobooth\Logger\NamedLogger $logger): bool
 }
 
 if ($_POST['play'] === 'start') {
-    $cmd = sprintf($config['preview']['cmd']);
+    $cmd = sprintf($config['commands']['preview']);
     if ($simpleExec) {
         exec($cmd);
         $data = [
@@ -46,7 +46,7 @@ if ($_POST['play'] === 'start') {
         ];
     }
 } else {
-    $killcmd = sprintf($config['preview']['killcmd']);
+    $killcmd = sprintf($config['commands']['preview_kill']);
     $success = exec($killcmd, $output, $retval);
     if ($success) {
         switch ($retval) {

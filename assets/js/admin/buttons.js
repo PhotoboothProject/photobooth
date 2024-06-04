@@ -4,29 +4,63 @@ $(function () {
         e.preventDefault();
         const msg = photoboothTools.getTranslation('really_delete');
         const really = confirm(msg);
-        const data = 'type=reset&' + $('form').serialize();
         const elem = $(this);
         elem.addClass('saving');
         if (really) {
-            $.ajax({
-                url: '../api/admin.php',
-                data: data,
-                dataType: 'json',
-                type: 'post',
-                success: function (resp) {
-                    elem.removeClass('saving');
-                    elem.addClass(resp);
+            // show loader
+            $('.pageLoader').addClass('isActive');
+            $('.pageLoader').find('label').html(photoboothTools.getTranslation('saving'));
 
-                    setTimeout(function () {
-                        elem.removeClass('error success');
+            const data = new FormData(document.querySelector('form'));
+            data.append('type', 'reset');
 
+            fetch('../api/admin.php', {
+                method: 'POST',
+                body: data
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status === 'success') {
                         window.location.reload();
-                    }, 3000);
-                }
-            });
+                    } else {
+                        photoboothTools.console.logDev(data.message);
+                        window.location.reload();
+                    }
+                })
+                .catch((error) => {
+                    photoboothTools.console.logDev('Error:', error);
+                });
         } else {
             elem.removeClass('saving');
         }
+    });
+
+    $('#save-admin-btn').on('click', function (e) {
+        e.preventDefault();
+
+        // show loader
+        $('.pageLoader').addClass('isActive');
+        $('.pageLoader').find('label').html(photoboothTools.getTranslation('saving'));
+
+        const data = new FormData(document.querySelector('form'));
+        data.append('type', 'config');
+
+        fetch('../api/admin.php', {
+            method: 'POST',
+            body: data
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                } else {
+                    photoboothTools.console.logDev(data.message);
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                photoboothTools.console.logDev('Error:', error);
+            });
     });
 
     $('#test-connection').on('click', function (e) {
@@ -72,30 +106,6 @@ $(function () {
 
                 setTimeout(function () {
                     $('.adminToast').removeClass('isActive');
-                }, 2000);
-            }
-        });
-    });
-
-    $('#save-admin-btn').on('click', function (e) {
-        e.preventDefault();
-        const data = 'type=config&' + $('form').serialize();
-
-        // show loader
-        $('.pageLoader').addClass('isActive');
-        $('.pageLoader').find('label').html(photoboothTools.getTranslation('saving'));
-
-        // ajax
-        $.ajax({
-            url: '../api/admin.php',
-            data: data,
-            dataType: 'json',
-            type: 'post',
-            success: function (resp) {
-                setTimeout(function () {
-                    if (resp === 'success') {
-                        window.location.reload();
-                    }
                 }, 2000);
             }
         });

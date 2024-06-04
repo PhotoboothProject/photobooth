@@ -358,7 +358,7 @@ const requestListener = function (req, res) {
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.shutdownbutton) {
                 sendText('SHUTTING DOWN');
                 /*  Initiate system shutdown */
-                const cmd = 'sudo ' + config.shutdown.cmd;
+                const cmd = 'sudo ' + config.commands.shutdown;
                 execSync(cmd);
             } else {
                 sendText('Please enable Hardware Button support and Shutdown Button!');
@@ -369,7 +369,7 @@ const requestListener = function (req, res) {
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.rebootbutton) {
                 sendText('REBOOTING NOW');
                 /*  Initiate system shutdown */
-                const cmd = 'sudo ' + config.reboot.cmd;
+                const cmd = 'sudo ' + config.commands.reboot;
                 execSync(cmd);
             } else {
                 sendText('Please enable Hardware Button support and Reboot Button!');
@@ -882,7 +882,7 @@ const watchShutdownGPIO = function watchShutdownGPIO(err, gpioValue) {
             if (timeElapsed >= config.remotebuzzer.shutdownholdtime * 1000) {
                 log('System shutdown initiated - bye bye');
                 /*  Initiate system shutdown */
-                const cmd = 'sudo ' + config.shutdown.cmd;
+                const cmd = 'sudo ' + config.commands.shutdown;
                 execSync(cmd);
             }
         } else {
@@ -927,7 +927,7 @@ const watchRebootGPIO = function watchRebootGPIO(err, gpioValue) {
             if (timeElapsed >= config.remotebuzzer.rebootholdtime * 1000) {
                 log('System reboot initiated - bye bye');
                 /*  Initiate system reboot */
-                const cmd = 'sudo ' + config.reboot.cmd;
+                const cmd = 'sudo ' + config.commands.reboot;
                 execSync(cmd);
             }
         } else {
