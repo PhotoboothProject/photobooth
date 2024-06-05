@@ -17,13 +17,42 @@ if (!(
     exit();
 }
 
+$error = false;
+$success = false;
 $languageService = LanguageService::getInstance();
 $pageTitle = 'Collage generator - ' . ApplicationService::getInstance()->getTitle();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
 
-$collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $config['collage']['layout']);
-$collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
+$collageConfigFilePath = PathUtility::getAbsolutePath('private/collage.json');
+$collageJson = '';
+$permitSubmit = true;
+$enableWriteMessage = '';
+$startPreloaded = false;
+if(file_exists($collageConfigFilePath)) {
+    $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
+    if(!is_writable($collageConfigFilePath)) {
+        $permitSubmit = false;
+        $enableWriteMessage = $languageService->translate('please_enable_write');
+    }
+}
+
+$newConfiguration = '';
+if (isset($_POST['new-configuration'])) {
+    $newConfiguration = $_POST['new-configuration'];
+
+    $fp = fopen($collageConfigFilePath, 'w');
+    if($fp) {
+        fwrite($fp, $newConfiguration);
+        fclose($fp);
+        $collageJson = json_decode($newConfiguration);
+        $startPreloaded = true;
+    } else {
+        $error = true;
+    }
+
+    $success = !$error;
+}
 
 $font_paths = [
     PathUtility::getAbsolutePath('resources/fonts'),
@@ -53,20 +82,119 @@ foreach ($font_paths as $path) {
     }
 }
 $font_styles .= '</style>';
-$newConfiguration = '';
-if (isset($_POST['new-configuration'])) {
-    $newConfiguration = $_POST['new-configuration'];
-    $folderPath = PathUtility::getAbsolutePath('private/collage.json');
-
-    if (is_writable($folderPath)) {
-        $newConfiguration = 'yes';
-    }
-}
 
 ?>
-<div><?=$newConfiguration?></div>
+
 <div class="w-full h-screen bg-brand-2 px-3 md:px-6 py-6 md:py-12 overflow-x-hidden overflow-y-auto">
 	<?= $font_styles ?>
+  <style>
+    :root {
+	 --modal-backdrop: rgba(0, 0, 0, 0.8);
+	 --modal-color: #313131;
+	 --modal-background: #fff;
+	 --modal-font-size: inherit;
+	 --modal-line-height: inherit;
+	 --modal-padding: 2rem;
+	 --modal-spacing: 2rem;
+	 --modal-button-color: var(--button-font-color);
+	 --modal-button-background: var(--primary-color);
+	 --modal-button-font-size: 1rem;
+	 --modal-button-font-weight: 400;
+	 --modal-button-icon-size: 1rem;
+	 --modal-button-padding-y: 1rem;
+	 --modal-button-padding-x: 1rem;
+	 --modal-button-border-width: 0;
+	 --modal-button-border-color: var(--border-color);
+	 --modal-button-border-radius: 0;
+	 --modal-button-height: auto;
+	 --modal-button-width: auto;
+	 --modal-button-gap: 0.25rem;
+	 --modal-button-direction: row;
+	 --modal-button-focus-background: color-mix(in srgb, var(--modal-button-background), var(--modal-button-color) 20%);
+}
+ .modal {
+	 display: flex;
+	 position: fixed;
+	 top: 0;
+	 right: 0;
+	 bottom: 0;
+	 left: 0;
+	 background: var(--modal-backdrop);
+	 justify-content: center;
+	 align-items: center;
+	 z-index: 16777372;
+}
+ .modal-inner {
+	 flex-direction: column;
+	 display: flex;
+	 position: relative;
+	 color: var(--modal-color);
+	 background: var(--modal-background);
+	 max-width: calc(100dvw - var(--modal-spacing) * 2);
+	 max-height: calc(100dvh - var(--modal-spacing) * 2);
+}
+ .modal-body {
+	 overflow-y: scroll;
+	 font-size: var(--modal-font-size);
+	 line-height: var(--modal-line-height);
+	 padding: var(--modal-padding);
+   white-space: pre;
+}
+ .modal-body img {
+	 display: block;
+	 margin: 0 auto;
+	 height: auto;
+	 max-width: 100%;
+}
+ .modal-body > *:first-child {
+	 margin-top: 0;
+}
+ .modal-body > *:last-child {
+	 margin-bottom: 0;
+}
+ .modal-buttonbar {
+	 display: flex;
+	 background: color-mix(in srgb, var(--modal-button-background), var(--modal-button-color) 40%);
+	 gap: 1px;
+}
+ .modal-button {
+	 flex-grow: 1;
+	 display: inline-flex;
+	 flex-direction: var(--modal-button-direction);
+	 padding: var(--modal-button-padding-y) var(--modal-button-padding-x);
+	 gap: var(--modal-button-gap);
+	 font-size: var(--modal-button-font-size);
+	 font-weight: var(--modal-button-font-weight);
+	 color: var(--modal-button-color);
+	 text-align: center;
+	 text-decoration: none;
+	 vertical-align: middle;
+	 cursor: pointer;
+	 user-select: none;
+	 height: var(--modal-button-height);
+	 width: var(--modal-button-width);
+	 border: var(--modal-button-border-width) solid var(--modal-button-border-color);
+	 border-radius: var(--modal-button-border-radius);
+	 background: var(--modal-button-background);
+	 justify-content: center;
+	 align-items: center;
+	 white-space: nowrap;
+	 line-height: 1;
+}
+ .modal-button.focused, .modal-button:hover, .modal-button:focus {
+	 --modal-button-background: var(--modal-button-focus-background);
+}
+ .modal-button[disabled] {
+	 opacity: 0.5;
+}
+ .modal-button--icon {
+	 font-size: var(--modal-button-icon-size);
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+}
+
+  </style>
   <div class="w-full flex items-center justify-center flex-col">
     <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center relative">
       <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
@@ -76,11 +204,18 @@ if (isset($_POST['new-configuration'])) {
         <div class="result_positions md:max-h-[75vh] p-2 md:p-4 overflow-y-auto overflow-x-hidden flex-1">
           <div class="general_settings">
             <input id="current_config" type="hidden" value='<?= json_encode($collageJson) ?>' />
-            <div class="w-full flex flex-col gap-2 mb-4 md:mb-8">
-              <div>
-                <?= AdminInput::renderCta('load_current_configuration', 'loadCurrentConfiguration') ?>
+            <input id="can_submit" type="hidden" value='<?= $permitSubmit ?>' />
+            <input id="start_preloaded" type="hidden" value='<?= $startPreloaded ?>' />
+            <?php if($enableWriteMessage !== '') { ?>
+              <input id='enable_write_message' type='hidden' value='<?= $enableWriteMessage ?>' />
+            <?php } ?>
+            <?php if($collageJson !== '') { ?>
+              <div class="w-full flex flex-col gap-2 mb-4 md:mb-8">
+                <div>
+                  <?= AdminInput::renderCta('load_current_configuration', 'loadCurrentConfiguration') ?>
+                </div>
               </div>
-            </div>
+            <?php } ?>
             <div class="grid gap-2">
               <div>
                 <span class="w-full flex flex-col items-center justify-center text-2md font-bold text-brand-1 mb-2">
@@ -496,27 +631,27 @@ if (isset($_POST['new-configuration'])) {
               <img class="h-full hidden" src="" alt="Choose the background">
             </div>
             <div id="picture-0" class="absolute overflow-hidden w-full h-full">
-              <img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-01.jpg">
-              <img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-01.jpg">
+              <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-1" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-02.jpg">
-              <img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-02.jpg">
+              <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-2" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-03.jpg">
-              <img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-03.jpg">
+              <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-3" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-04.jpg">
-              <img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-04.jpg">
+              <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-4" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-cover object-left-top rotate-0" src="/resources/img/demo/seal-station-norddeich-05.jpg">
-              <img class="picture-frame absolute object-cover object-left-top rotate-0 hidden" />
+              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-05.jpg">
+              <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
-            <div id="collage_frame" class="absolute h-full">
-              <img class="h-full hidden" src="" alt="Choose the frame">
+            <div id="collage_frame" class="absolute h-full w-full">
+              <img class="h-full w-full hidden" src="" alt="Choose the frame">
             </div>
             <div id="collage_text" class="absolute h-full">
               <div class='relative'>
@@ -555,6 +690,14 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
 <?php
 
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+
+if ($success) {
+    echo '<script>setTimeout(function(){openToast("' . $languageService->translate('configuration_saved') . '")},500);</script>';
+}
+if ($error !== false) {
+    echo '<script>setTimeout(function(){openToast("' . $languageService->translate('configuration_saving_error') . '", "isError", 5000)},500);</script>';
+}
+
 include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
 
 ?>

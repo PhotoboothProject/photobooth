@@ -662,7 +662,11 @@ class Collage
                             imagefill($my_collage, 0, 0, (int)$background);
                         }
 
-                        if (array_key_exists('background', $collageJson)) {
+                        if (array_key_exists('background_color', $collageJson) && !empty($collageJson['background_color'])) {
+                            $imageHandler->addPictureBgColor = $collageJson['background_color'];
+                        }
+
+                        if (array_key_exists('background', $collageJson) && !empty($collageJson['background'])) {
                             if ($collageJson['background']) {
                                 $imageHandler->resizeMaxWidth = (int)$collage_width;
                                 $imageHandler->resizeMaxHeight = (int)$collage_height;
@@ -676,6 +680,9 @@ class Collage
                                 }
                                 imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
                                 $imageHandler->addPictureBgImage = $collageJson['background'];
+                                if(!str_starts_with($collageJson['background'], $_SERVER['DOCUMENT_ROOT'])) {
+                                    $imageHandler->addPictureBgImage = $_SERVER['DOCUMENT_ROOT'] . $collageJson['background'];
+                                }
                             }
                         }
 
@@ -701,7 +708,7 @@ class Collage
                             }
                             $c->collageFrame = $collageJson['frame'];
                             $imageHandler->framePath = $c->collageFrame;
-                            $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
+                            $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' && !empty($collageJson['frame']) ? true : false;
                         }
 
                         $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;
