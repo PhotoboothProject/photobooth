@@ -137,4 +137,23 @@ class ArrayUtility
         $output .= str_repeat('    ', $level - 1) . ']' . ($level - 1 == 0 ? '' : ",\n");
         return $output;
     }
+
+    public static function replaceBooleanValues(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $result[$key] = self::replaceBooleanValues($value);
+            } else {
+                if ($value === 'true') {
+                    $result[$key] = true;
+                } elseif ($value === 'false') {
+                    $result[$key] = false;
+                } else {
+                    $result[$key] = $value;
+                }
+            }
+        }
+        return $result;
+    }
 }

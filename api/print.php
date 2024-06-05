@@ -148,7 +148,7 @@ if (!file_exists($filename_print)) {
 
 // print image
 $status = 'ok';
-$cmd = sprintf($config['print']['cmd'], $filename_print);
+$cmd = sprintf($config['commands']['print'], $filename_print);
 $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
 exec($cmd, $output, $returnValue);

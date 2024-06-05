@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
@@ -71,7 +72,11 @@ use Photobooth\Utility\PathUtility;
  **     * 'unit': Only for type 'range'. Defines the unit of the slider and is used to identify the i18n tag for translation of the unit
  */
 
-$configsetup = [
+$configurationService = ConfigurationService::getInstance();
+$defaultConfig = $configurationService->getDefaultConfiguration();
+$config = $configurationService->getConfiguration();
+
+return [
     'general' => [
         'view' => 'basic',
         'platform' => 'all',
@@ -952,9 +957,9 @@ $configsetup = [
         ],
         'take_custom_cmd' => [
             'type' => 'input',
-            'placeholder' => $defaultConfig['take_custom']['cmd'],
-            'name' => 'take_custom[cmd]',
-            'value' => htmlentities($config['take_custom']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['take_custom'],
+            'name' => 'commands[take_custom]',
+            'value' => htmlentities($config['commands']['take_custom'] ?? ''),
         ],
         'custom_cntdwn_time' => [
             'type' => 'range',
@@ -3127,51 +3132,51 @@ $configsetup = [
         'take_picture_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['take_picture']['cmd'],
-            'name' => 'take_picture[cmd]',
-            'value' => htmlentities($config['take_picture']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['take_picture'],
+            'name' => 'commands[take_picture]',
+            'value' => htmlentities($config['commands']['take_picture'] ?? ''),
         ],
         'pre_photo_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['pre_photo']['cmd'],
-            'name' => 'pre_photo[cmd]',
-            'value' => htmlentities($config['pre_photo']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['pre_photo'],
+            'name' => 'commands[pre_photo]',
+            'value' => htmlentities($config['commands']['pre_photo'] ?? ''),
         ],
         'post_photo_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['post_photo']['cmd'],
-            'name' => 'post_photo[cmd]',
-            'value' => htmlentities($config['post_photo']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['post_photo'],
+            'name' => 'commands[post_photo]',
+            'value' => htmlentities($config['commands']['post_photo'] ?? ''),
         ],
         'print_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['print']['cmd'],
-            'name' => 'print[cmd]',
-            'value' => htmlentities($config['print']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['print'],
+            'name' => 'commands[print]',
+            'value' => htmlentities($config['commands']['print'] ?? ''),
         ],
         'exiftool_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['exiftool']['cmd'],
-            'name' => 'exiftool[cmd]',
-            'value' => htmlentities($config['exiftool']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['exiftool'],
+            'name' => 'commands[exiftool]',
+            'value' => htmlentities($config['commands']['exiftool'] ?? ''),
         ],
         'preview_cmd' => [
             'view' => 'expert',
             'type' => 'input',
             'placeholder' => 'python3 cameracontrol.py --bsm',
-            'name' => 'preview[cmd]',
+            'name' => 'commands[preview]',
             'value' => htmlentities($config['preview']['cmd'] ?? ''),
         ],
         'preview_killcmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['preview']['killcmd'],
-            'name' => 'preview[killcmd]',
-            'value' => htmlentities($config['preview']['killcmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['preview_kill'],
+            'name' => 'commands[preview_kill]',
+            'value' => htmlentities($config['commands']['preview_kill'] ?? ''),
         ],
         'preview_simpleExec' => [
             'view' => 'expert',
@@ -3187,30 +3192,30 @@ $configsetup = [
         'take_video_cmd' => [
             'view' => 'experimental',
             'type' => 'input',
-            'placeholder' => $defaultConfig['take_video']['cmd'],
-            'name' => 'take_video[cmd]',
-            'value' => htmlentities($config['take_video']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['take_video'],
+            'name' => 'commands[take_video]',
+            'value' => htmlentities($config['commands']['take_video'] ?? ''),
         ],
         'nodebin_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['nodebin']['cmd'],
-            'name' => 'nodebin[cmd]',
-            'value' => htmlentities($config['nodebin']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['nodebin'],
+            'name' => 'commands[nodebin]',
+            'value' => htmlentities($config['commands']['nodebin'] ?? ''),
         ],
         'reboot_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['reboot']['cmd'],
-            'name' => 'reboot[cmd]',
-            'value' => htmlentities($config['reboot']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['reboot'],
+            'name' => 'commands[reboot]',
+            'value' => htmlentities($config['commands']['reboot'] ?? ''),
         ],
         'shutdown_cmd' => [
             'view' => 'expert',
             'type' => 'input',
-            'placeholder' => $defaultConfig['shutdown']['cmd'],
-            'name' => 'shutdown[cmd]',
-            'value' => htmlentities($config['shutdown']['cmd'] ?? ''),
+            'placeholder' => $defaultConfig['commands']['shutdown'],
+            'name' => 'commands[shutdown]',
+            'value' => htmlentities($config['commands']['shutdown'] ?? ''),
         ],
     ],
     'reset' => [
@@ -3219,7 +3224,7 @@ $configsetup = [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'reset[remove_images]',
-            'value' => true,
+            'value' => false,
         ],
         'reset_remove_mailtxt' => [
             'view' => 'advanced',

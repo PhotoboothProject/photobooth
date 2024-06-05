@@ -55,7 +55,7 @@ const photoBooth = (function () {
         usesBackgroundPreview =
             config.preview.asBackground &&
             config.preview.mode === PreviewMode.DEVICE.valueOf() &&
-            ((config.preview.cmd && !config.preview.bsm) || !config.preview.cmd),
+            ((config.commands.preview && !config.preview.bsm) || !config.commands.preview),
         timeToLive = config.picture.time_to_live * 1000,
         continuousCollageTime = config.collage.continuous_time * 1000,
         retryTimeout = config.picture.retry_timeout * 1000,
@@ -124,7 +124,7 @@ const photoBooth = (function () {
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
             photoboothTools.console.logDev('Preview: core: start video (BACKGROUND) from api.init.');
-        } else if (config.preview.cmd && !config.preview.bsm) {
+        } else if (config.commands.preview && !config.preview.bsm) {
             photoboothTools.console.logDev('Preview: core: start video (INIT) from api.init.');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
@@ -160,7 +160,7 @@ const photoBooth = (function () {
                 videoSensor.get(0).getContext('2d').drawImage(previewVideo.get(0), 0, 0);
             }
         }
-        if (!config.preview.killcmd || config.preview.camTakesPic) {
+        if (!config.commands.preview_kill || config.preview.camTakesPic) {
             photoboothTools.console.logDev('Preview: core: stopping preview from stopPreviewAndCaptureFromVideo.');
             photoboothPreview.stopPreview();
         }
@@ -221,7 +221,7 @@ const photoBooth = (function () {
 
                     seconds--;
 
-                    if (seconds === stop && config.preview.killcmd && !config.preview.camTakesPic) {
+                    if (seconds === stop && config.commands.preview_kill && !config.preview.camTakesPic) {
                         photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
                         photoboothPreview.stopPreview();
                     }
@@ -418,7 +418,7 @@ const photoBooth = (function () {
             api.resetTimeOut();
         }
 
-        if (config.pre_photo.cmd) {
+        if (config.commands.pre_photo) {
             api.shellCommand('pre-command');
         }
 
@@ -450,7 +450,7 @@ const photoBooth = (function () {
         }
 
         let maxGetMediaRetry = Math.max(countdownTime - 1, 0);
-        if (config.preview.killcmd && maxGetMediaRetry > 0) {
+        if (config.commands.preview_kill && maxGetMediaRetry > 0) {
             maxGetMediaRetry = Math.max(countdownTime - parseInt(config.preview.stop_time, 10), 0);
         }
         photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry, maxGetMediaRetry);
@@ -1180,7 +1180,7 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
-        if (config.post_photo.cmd) {
+        if (config.commands.post_photo) {
             api.shellCommand('post-command', filename);
         }
 
@@ -1190,7 +1190,7 @@ const photoBooth = (function () {
 
         api.resetTimeOut();
 
-        if (config.preview.cmd && !config.preview.bsm) {
+        if (config.commands.preview && !config.preview.bsm) {
             photoboothTools.console.logDev('Preview: core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }

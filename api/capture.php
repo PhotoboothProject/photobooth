@@ -75,7 +75,7 @@ try {
     }
 
     if ($_POST['style'] === 'video') {
-        $captureHandler->captureCmd = $config['take_video']['cmd'];
+        $captureHandler->captureCmd = $config['commands']['take_video'];
         $captureHandler->captureWithCmd();
     } elseif ($config['dev']['demo_images']) {
         $captureHandler->captureDemo();
@@ -87,9 +87,9 @@ try {
         $captureHandler->captureCanvas($_POST['canvasimg']);
     } else {
         if ($_POST['style'] === 'custom') {
-            $captureHandler->captureCmd = $config['take_custom']['cmd'];
+            $captureHandler->captureCmd = $config['commands']['take_custom'];
         } else {
-            $captureHandler->captureCmd = $config['take_picture']['cmd'];
+            $captureHandler->captureCmd = $config['commands']['take_picture'];
         }
         $captureHandler->captureWithCmd();
     }

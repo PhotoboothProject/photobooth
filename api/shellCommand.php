@@ -25,16 +25,16 @@ if (empty($mode)) {
 
 switch ($mode) {
     case 'pre-command':
-        $cmd = sprintf($config['pre_photo']['cmd']);
+        $cmd = sprintf($config['commands']['pre_photo']);
         break;
     case 'post-command':
-        $cmd = sprintf($config['post_photo']['cmd'], $_POST['filename']);
+        $cmd = sprintf($config['commands']['post_photo'], $_POST['filename']);
         break;
     case 'reboot':
-        $cmd = 'sudo ' . sprintf($config['reboot']['cmd']);
+        $cmd = 'sudo ' . sprintf($config['commands']['reboot']);
         break;
     case 'shutdown':
-        $cmd = 'sudo ' . sprintf($config['shutdown']['cmd']);
+        $cmd = 'sudo ' . sprintf($config['commands']['shutdown']);
         break;
     default:
         $data = [

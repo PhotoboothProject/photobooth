@@ -23,6 +23,7 @@ RUN echo "LimitRequestLine 12000" > /opt/docker/etc/httpd/conf.d/limits.conf \
 # Copy files
 WORKDIR /app
 COPY . .
+
 RUN chown -R application:application /app
 
 # switch to application user

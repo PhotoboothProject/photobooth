@@ -1,7 +1,12 @@
+includes:
+	- tools/phpstan/vendor/phpstan/phpstan-symfony/extension.neon
+
 parameters:
 	level: 8
-	checkMissingIterableValueType: false
 	reportUnmatchedIgnoredErrors: false
+
+	ignoreErrors:
+		- identifier: missingType.iterableValue
 
 	bootstrapFiles:
 		- tools/phpunit/vendor/autoload.php
