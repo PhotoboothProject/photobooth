@@ -17,7 +17,12 @@ $(function () {
         }
     });
 
-    changeGeneralSetting();
+    const startPreloaded = $('#start_preloaded').val() === '1';
+    if (startPreloaded) {
+        loadCurrentConfig();
+    } else {
+        changeGeneralSetting();
+    }
 });
 
 // eslint-disable-next-line no-unused-vars
@@ -43,8 +48,9 @@ const shellCommand = function ($mode, $filename = '') {
 $(window).on('resize', changeGeneralSetting);
 $('[data-trigger=\'general\']').change(changeGeneralSetting);
 $('[data-trigger=\'image\']').change(handleInputUpdate);
+$('#loadCurrentConfiguration').click(loadCurrentConfig);
 
-$('#loadCurrentConfiguration').click(function () {
+function loadCurrentConfig() {
     //loading the configuration just like in the backend
     const current_config = JSON.parse($('#current_config').val());
     const collageConfig = config.collage;
@@ -56,8 +62,10 @@ $('#loadCurrentConfiguration').click(function () {
     let collage_width = collage_height * 1.5;
     let layout = current_config;
     let backgroundImage = collageConfig.background;
+    let show_bg = backgroundImage ? true : false;
     let backgroundColor = collageConfig.background_color;
     let frameImage = collageConfig.frame;
+    let show_frame = frameImage ? true : false;
     let applyFrame = collageConfig.take_frame;
     let text_enabled = textConfig.enabled;
     let font_family = textConfig.font;
@@ -77,10 +85,12 @@ $('#loadCurrentConfiguration').click(function () {
         collage_height = current_config.height;
         layout = current_config.layout;
         backgroundImage = current_config.background;
-        backgroundColor = '#FFFFFF';
+        show_bg = backgroundImage ? true : false;
+        backgroundColor = current_config.background_color;
         frameImage = current_config.frame;
+        show_frame = frameImage ? true : false;
         applyFrame = current_config.apply_frame;
-        text_enabled = current_config.enabled;
+        text_enabled = current_config.text_custom_style;
         font_family = current_config.text_font;
         font_color = current_config.text_font_color;
         font_size = current_config.text_font_size;
@@ -105,12 +115,14 @@ $('#loadCurrentConfiguration').click(function () {
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
         .attr('src', backgroundImage);
+    $('input[name=\'show-background\'').prop('checked', show_bg);
 
     $('input[name=\'generator-frame\'').attr('value', frameImage);
     $('input[name=\'generator-frame\'')
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
         .attr('src', frameImage);
+    $('input[name=\'show-frame\'').prop('checked', show_frame);
 
     $('select[name=\'apply_frame\']').val(applyFrame);
 
@@ -149,7 +161,7 @@ $('#loadCurrentConfiguration').click(function () {
 
     //start rendering
     changeGeneralSetting();
-});
+}
 
 function changeGeneralSetting() {
     const c_width = $('input[name=\'final_width\']').val();
@@ -285,12 +297,21 @@ function changeImageSetting(new_value, prop_name, index) {
         let contH = img_container.height();
         let ar = contW / contH;
         const brute_force = angle > -80 && angle < 80 ? 100 : 200;
-        const { imgW, imgH, fromTop, fromHori } = calculateImgDimensions(contW, contH, angle, ar, 1, {}, brute_force);
+        const { imgW, imgH, newContW, fromTop, fromHori } = calculateImgDimensions(
+            contW,
+            contH,
+            angle,
+            ar,
+            1,
+            {},
+            brute_force
+        );
         contImages.height(imgH);
         contImages.width(imgW);
         contImages.css('top', Math.min(fromTop, 2 * contH));
         contImages.css(angle > 0 ? 'right' : 'left', fromHori || 0);
         contImages.css(angle < 0 ? 'right' : 'left', '');
+        img_container.width(newContW);
     } else {
         let clean_operation = new_value.replace('x', canvas_width).replace('y', canvas_height);
         let processed_value = calculate(tokenize(clean_operation));
@@ -313,27 +334,32 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
         return { imgW: width, imgH: height, fromTop: angle === 0 ? 0 : height, fromHori: width };
     } else if (Math.abs(angle) === 90) {
         let small_side = Math.min(width, height);
-        return { imgW: small_side, imgH: small_side / aspect_ratio, fromTop: small_side, fromHori: 0 };
+        return {
+            imgW: small_side,
+            imgH: small_side / aspect_ratio,
+            newContW: small_side / aspect_ratio,
+            fromTop: small_side,
+            fromHori: 0
+        };
     }
 
     const angleCos = Math.abs(Math.cos((angle * Math.PI) / 180));
+    const angleSin = Math.abs(Math.sin((angle * Math.PI) / 180));
     let imgW = width / angleCos;
     let imgH = imgW / aspect_ratio;
     let smallCatet = Math.sqrt(Math.pow(imgW, 2) - Math.pow(width, 2));
     let largeCatet = imgH * angleCos;
+    let newContW = imgW * angleCos + imgH * angleSin;
+    let fromTop = smallCatet + (angle > -90 && angle < 90 ? 0 : largeCatet);
+    let fromHori = angle < -90 || angle > 90 ? imgW * angleCos : null;
     let quality = 1 - (largeCatet + smallCatet) / height;
 
     if (Math.abs(quality) <= 0.001) {
-        return {
-            imgW,
-            imgH,
-            fromTop: smallCatet + (angle > -90 && angle < 90 ? 0 : largeCatet),
-            fromHori: angle < -90 || angle > 90 ? imgW * angleCos : null
-        };
+        return { imgW, imgH, newContW, fromTop, fromHori };
     } else {
         if (times < brute_force) {
             let factor = quality > 0 ? 1.05 : 0.95;
-            let new_best_guess = { quality: Math.abs(quality), imgW, imgH, smallCatet };
+            let new_best_guess = { quality: Math.abs(quality), imgW, imgH, newContW, fromTop, fromHori };
             if (best_guess) {
                 if (best_guess.quality < new_best_guess.quality) {
                     new_best_guess = { ...best_guess };
@@ -350,11 +376,13 @@ function calculateImgDimensions(width, height, angle, aspect_ratio, times, best_
             );
         }
     }
+    console.log('brute force not work! ', { quality, angle });
     return {
         imgW: best_guess.imgW,
         imgH: best_guess.imgH,
-        fromTop: smallCatet + (angle > -90 && angle < 90 ? 0 : largeCatet),
-        fromHori: angle < -90 || angle > 90 ? imgW + smallCatet : null
+        newContW: best_guess.newContW,
+        fromTop: best_guess.fromTop,
+        fromHori: best_guess.fromHori
     };
 }
 
@@ -383,8 +411,8 @@ function saveConfiguration() {
         text_rotation: -parseInt($('input[name=\'text_rotation\'').val(), 10),
         text_locationx: $('input[name=\'text_location_x\'').val(),
         text_locationy: $('input[name=\'text_location_y\'').val(),
-        font_font_color: $('input[name=\'text_font_color\'').val(),
-        text_font: $('select[name=\'text_font_family\'] option:selected').html(),
+        text_font_color: $('input[name=\'text_font_color\'').val(),
+        text_font: $('select[name=\'text_font_family\'] option:selected').attr('value'),
         text_line1: $('input[name=\'text_line_1\'').val(),
         text_line2: $('input[name=\'text_line_2\'').val(),
         text_line3: $('input[name=\'text_line_3\'').val(),
@@ -405,8 +433,46 @@ function saveConfiguration() {
         configuration.layout.push(single_image_layout);
     });
 
-    $('input[name=\'new-configuration\']').val(JSON.stringify(configuration));
-    $('#configuration_form').trigger('submit');
+    const canSubmit = $('#can_submit').val();
+    const stringedConfiguration = customStringify(configuration);
+
+    if (canSubmit === '1') {
+        $('input[name=\'new-configuration\']').val(stringedConfiguration);
+        $('#configuration_form').trigger('submit');
+    } else {
+        photoboothTools.modal.open();
+        const modalBody = photoboothTools.modal.element.querySelector('.modal-body');
+        const enableWriteMessage = $('#enable_write_message').val();
+
+        const messageDiv = document.createElement('div');
+        messageDiv.innerText = enableWriteMessage;
+        modalBody.appendChild(messageDiv);
+
+        const jsonDiv = document.createElement('div');
+        jsonDiv.innerText = stringedConfiguration;
+        jsonDiv.style.fontFamily = 'monospace';
+        modalBody.appendChild(jsonDiv);
+    }
+}
+
+function customStringify(configuration) {
+    let textResult = '{';
+    for (const key of Object.keys(configuration)) {
+        let val = configuration[key];
+        if (val instanceof Array) {
+            textResult += '\n\t"' + key + '": [';
+            for (let prop of val) {
+                textResult += '\n\t\t' + JSON.stringify(prop) + ',';
+            }
+            textResult = textResult.slice(0, -1);
+            textResult += '\n\t],';
+            continue;
+        }
+        textResult += '\n\t"' + key + '": ' + JSON.stringify(val) + ',';
+    }
+    textResult = textResult.slice(0, -1);
+    textResult += '\n}';
+    return textResult;
 }
 
 function tokenize(s) {
