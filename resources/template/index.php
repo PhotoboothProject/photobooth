@@ -36,7 +36,7 @@ function zipFilesAndDownload($files)
         if(str_contains($file, 'tmb_')) {
             continue;
         }
-        
+
         // download file
         $download_file = file_get_contents($file);
         //add it to the zip
