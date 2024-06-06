@@ -261,14 +261,13 @@ try {
             // init connection to ftp server
             $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
 
-            ftp_set_option($ftp, FTP_TIMEOUT_SEC, 10);
-
             if ($ftp === false) {
                 $message = 'Failed to connect to FTP Server!';
                 $logger->error($message, $config['ftp']);
                 echo json_encode(['error' => $message]);
                 die();
             }
+            ftp_set_option($ftp, FTP_TIMEOUT_SEC, 10);
 
             // login to ftp server
             $login_result = ftp_login($ftp, $config['ftp']['username'], $config['ftp']['password']);
