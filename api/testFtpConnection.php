@@ -41,7 +41,7 @@ if ($ftp === false) {
     $logger->error('Can\'t connect to FTP Server!');
     $result['response'] = 'error';
     $result['message'] = 'ftp:no_connection';
-    die();
+    die(json_encode($result));
 }
 
 // login to ftp server
