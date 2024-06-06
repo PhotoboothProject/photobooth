@@ -2,7 +2,10 @@
 $full_images = glob('./{,*/,*/*/,*/*/*/}*.{jpg,JPG}', GLOB_BRACE);
 $tmb_images = glob('./{,*/,*/*/,*/*/*/}tmb_*.{jpg,JPG}', GLOB_BRACE);
 $first_img = $full_images[0];
-$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]';
+$og_image_prop = $actual_link . substr($first_img, 2);
+$total_images = count($tmb_images);
+$time_to_download = round($total_images / 60, 0);
 
 // meta params to evaluate
 $og_locale = 'en_GB';
@@ -11,8 +14,47 @@ $og_sitename = 'Website';
 $og_img_alt = 'Photobooth';
 $whatsapp_msg = "Look at this Photobooth photo! \n\n %s \n\n\n\n Book the photobooth at 0123456789";
 $seconds_to_cache = 60;
+$downloadText = 'DOWNLOAD';
 
 header("Cache-Control: max-age=$seconds_to_cache");
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    zipFilesAndDownload($full_images);
+}
+
+function zipFilesAndDownload($files)
+{
+    // create new zip opbject
+    $zip = new ZipArchive();
+
+    // create a temp file & open it
+    $tmp_file = tempnam('.', 'zipped');
+    $zip->open($tmp_file, ZipArchive::CREATE);
+
+    // loop through each file
+    foreach($files as $file) {
+        if(str_contains($file, 'tmb_')) {
+            continue;
+        }
+
+        // download file
+        $download_file = file_get_contents($file);
+        //add it to the zip
+        $zip->addFromString(basename($file), $download_file);
+    }
+    // close zip
+    $zip->close();
+
+    // send the file to the browser as a download
+    header('Content-disposition: attachment; filename="{title}.zip"');
+    header('Content-type: application/zip');
+    header('Content-length: ' . filesize($tmp_file));
+    header('Pragma: no-cache');
+    header('Expires: 0');
+    readfile($tmp_file);
+    ignore_user_abort(true);
+    unlink($tmp_file);
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,8 +74,8 @@ header("Cache-Control: max-age=$seconds_to_cache");
     <meta property="og:locale" content="<?=$og_locale?>">
     <meta property="og:title" content="{title}">
     <meta property="og:type" content="article" />
-    <meta property="og:image" content="<?=$first_img?>">
-    <meta property="og:image:secure_url" content="<?=$first_img?>">
+    <meta property="og:image" content="<?=$og_image_prop?>">
+    <meta property="og:image:secure_url" content="<?=$og_image_prop?>">
     <meta property="og:image:width" content="500">
     <meta property="og:image:height" content="500">
     <meta property="og:url" content="<?=$actual_link?>">
@@ -43,7 +85,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
     <meta property="og:description" content="<?=$og_description?>">
     <meta property="og:site_name" content="<?=$og_sitename?>">
     <meta name="twitter:image:alt" content="<?=$og_img_alt?>">
-    <meta name="twitter:image" content="<?=$first_img?>">
+    <meta name="twitter:image" content="<?=$og_image_prop?>">
     <title>{title}</title>
     <style>
         .modal-window {
@@ -178,6 +220,33 @@ header("Cache-Control: max-age=$seconds_to_cache");
             margin: 0 auto;
             padding: 1rem 1rem 0 1rem;
         }
+
+        .download-zip-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-content: center;
+            justify-content: center;
+            margin: clamp(16px, 4vw, 30px) 0;
+        }
+
+        .download-zip-button {
+            padding: clamp(8px, 2vw, 16px) clamp(24px, 5vw, 40px);
+            border-radius: clamp(40px, 5vw, 80px);
+            border-color: transparent;
+            color: white;
+            background: teal;
+            font-size: clamp(16px, 4vw, 32px);
+            box-shadow: -4px -3px 20px 10px rgba(0,0,0,0.35);
+            cursor: pointer;
+            transition: 0.5s ease-in;
+        }
+
+        .download-zip-button:hover {
+            background: white;
+            color: teal;
+            transition: 0.5s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -194,7 +263,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
         ?>
         <div class="img-container">
             <div class="interior">
-                <a id="opener<?=$index?>" class="btn" href="#open-modal<?=$index?>"><img src="<?=$filename?>"  alt="<?=$filename?>"/></a>
+                <a id="opener<?=$index?>" class="btn" href="#open-modal<?=$index?>"><img src="<?=$filename?>" alt="<?=$filename?>"/></a>
             </div>
         </div>
         <div id="open-modal<?=$index?>" class="modal-window">
@@ -202,7 +271,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
                 <div class="action-bar-outer">
                     <div class="action-bar">
                         <a href='<?=$this_full?>' class="image-element" download='<?=$og_img_alt?>_<?=$download_name?>'><i class="fa-solid fa-download"></i></a>
-                        <a href="whatsapp://send?text=<?=urldecode(sprintf($whatsapp_msg, $actual_link . substr($this_full, 2)))?>"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="whatsapp://send?text=<?=urlencode(sprintf($whatsapp_msg, $actual_link . substr($this_full, 2)))?>"><i class="fa-brands fa-whatsapp"></i></a>
                         <a href="#opener<?=$index?>" title="Close"><i class="fa-solid fa-xmark"></i></a>
                     </div>
                 </div>
@@ -210,6 +279,11 @@ header("Cache-Control: max-age=$seconds_to_cache");
             </div>
         </div>
     <?php } ?>
+</div>
+<div class="download-zip-container">
+    <form target="_blank" action="" method="post" onsubmit="return confirm('<?=$total_images?> images will be downloaded.\nIt can take up to <?=$time_to_download?> minutes.\nProceed?')">
+        <button type="submit" class="download-zip-button"><?=$downloadText?></button>
+    </form>
 </div>
 </body>
 </html>
