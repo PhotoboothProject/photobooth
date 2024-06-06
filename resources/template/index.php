@@ -43,7 +43,7 @@ function zipFilesAndDownload($files) {
     $zip->close();
 
     # send the file to the browser as a download
-    header('Content-disposition: attachment; filename="18 Anni Francesco.zip"');
+    header('Content-disposition: attachment; filename="{title}.zip"');
     header('Content-type: application/zip');
     header("Content-length: " . filesize($tmp_file));
     header("Pragma: no-cache"); 
