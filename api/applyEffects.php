@@ -261,7 +261,7 @@ try {
             // init connection to ftp server
             $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
 			
-			      ftp_set_option($ftp, FTP_TIMEOUT_SEC, 10);
+			ftp_set_option($ftp, FTP_TIMEOUT_SEC, 10);
 			
             if ($ftp === false) {
                 $message = 'Failed to connect to FTP Server!';

@@ -34,8 +34,8 @@ function zipFilesAndDownload($files)
     // loop through each file
     foreach($files as $file) {
         if(str_contains($file, 'tmb_')) {
-			continue;
-		}
+            continue;
+        }
         
         // download file
         $download_file = file_get_contents($file);
@@ -49,8 +49,8 @@ function zipFilesAndDownload($files)
     header('Content-disposition: attachment; filename="{title}.zip"');
     header('Content-type: application/zip');
     header('Content-length: ' . filesize($tmp_file));
-    header('Pragma: no-cache'); 
-    header('Expires: 0'); 
+    header('Pragma: no-cache');
+    header('Expires: 0');
     readfile($tmp_file);
     ignore_user_abort(true);
     unlink($tmp_file);
