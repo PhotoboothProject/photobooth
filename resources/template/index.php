@@ -14,7 +14,7 @@ $og_sitename = 'Website';
 $og_img_alt = 'Photobooth';
 $whatsapp_msg = "Look at this Photobooth photo! \n\n %s \n\n\n\n Book the photobooth at 0123456789";
 $seconds_to_cache = 60;
-$downloadText = "DOWNLOAD";
+$downloadText = 'DOWNLOAD';
 
 header("Cache-Control: max-age=$seconds_to_cache");
 
@@ -22,32 +22,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     zipFilesAndDownload($full_images);
 }
 
-function zipFilesAndDownload($files) {
-    # create new zip opbject
+function zipFilesAndDownload($files)
+{
+    // create new zip opbject
     $zip = new ZipArchive();
 
-    # create a temp file & open it
-    $tmp_file = tempnam('.','zipped');
+    // create a temp file & open it
+    $tmp_file = tempnam('.', 'zipped');
     $zip->open($tmp_file, ZipArchive::CREATE);
 
-    # loop through each file
+    // loop through each file
     foreach($files as $file) {
-        if(str_contains($file, "tmb_")) continue;
+        if(str_contains($file, 'tmb_')) {
+			continue;
+		}
         
-        # download file
+        // download file
         $download_file = file_get_contents($file);
-        #add it to the zip
+        //add it to the zip
         $zip->addFromString(basename($file), $download_file);
     }
-    # close zip
+    // close zip
     $zip->close();
 
-    # send the file to the browser as a download
+    // send the file to the browser as a download
     header('Content-disposition: attachment; filename="{title}.zip"');
     header('Content-type: application/zip');
-    header("Content-length: " . filesize($tmp_file));
-    header("Pragma: no-cache"); 
-    header("Expires: 0"); 
+    header('Content-length: ' . filesize($tmp_file));
+    header('Pragma: no-cache'); 
+    header('Expires: 0'); 
     readfile($tmp_file);
     ignore_user_abort(true);
     unlink($tmp_file);
