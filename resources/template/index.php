@@ -220,7 +220,7 @@ function zipFilesAndDownload($files)
             margin: 0 auto;
             padding: 1rem 1rem 0 1rem;
         }
-        
+
         .download-zip-container {
             display: flex;
             flex-direction: row;
@@ -229,7 +229,7 @@ function zipFilesAndDownload($files)
             justify-content: center;
             margin: clamp(16px, 4vw, 30px) 0;
         }
-        
+
         .download-zip-button {
             padding: clamp(8px, 2vw, 16px) clamp(24px, 5vw, 40px);
             border-radius: clamp(40px, 5vw, 80px);
@@ -241,7 +241,7 @@ function zipFilesAndDownload($files)
             cursor: pointer;
             transition: 0.5s ease-in;
         }
-        
+
         .download-zip-button:hover {
             background: white;
             color: teal;
