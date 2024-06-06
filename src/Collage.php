@@ -651,6 +651,11 @@ class Collage
                     if (array_key_exists('layout', $collageJson)) {
                         $layoutConfigArray = $collageJson['layout'];
 
+                        if (array_key_exists('background_color', $collageJson) && !empty($collageJson['background_color'])) {
+                            $c->collageBackgroundColor = $collageJson['background_color'];
+                            $imageHandler->addPictureBgColor = $c->collageBackgroundColor;
+                        }
+
                         if (array_key_exists('width', $collageJson) && array_key_exists('height', $collageJson)) {
                             $collage_width = $collageJson['width'];
                             $collage_height = $collageJson['height'];
@@ -658,12 +663,14 @@ class Collage
                             if (!$my_collage instanceof \GdImage) {
                                 throw new \Exception('Failed to create collage resource.');
                             }
+                            $colorComponents = sscanf($c->collageBackgroundColor, '#%02x%02x%02x');
+                            if ($colorComponents !== null) {
+                                list($bg_r, $bg_g, $bg_b) = $colorComponents;
+                            } else {
+                                throw new \Exception('Collage background color: sscanf returned null!');
+                            }
                             $background = imagecolorallocate($my_collage, (int)$bg_r, (int)$bg_g, (int)$bg_b);
                             imagefill($my_collage, 0, 0, (int)$background);
-                        }
-
-                        if (array_key_exists('background_color', $collageJson) && !empty($collageJson['background_color'])) {
-                            $imageHandler->addPictureBgColor = $collageJson['background_color'];
                         }
 
                         if (array_key_exists('background', $collageJson) && !empty($collageJson['background'])) {
