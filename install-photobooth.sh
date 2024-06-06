@@ -973,7 +973,7 @@ EOF
         cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
 <?php
 
-return = [
+return [
   'preview' => [
     'mode' => 'device_cam',
     'bsm' => false,
