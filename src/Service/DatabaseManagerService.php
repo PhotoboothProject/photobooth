@@ -2,6 +2,8 @@
 
 namespace Photobooth\Service;
 
+use Photobooth\Enum\FolderEnum;
+
 /**
  * Class DatabaseManager
  *
@@ -12,10 +14,11 @@ class DatabaseManagerService
     public string $databaseFile = '';
     public string $imageDirectory = '';
 
-    public function __construct(string $databaseFile, string $imageDirectory)
+    public function __construct()
     {
-        $this->databaseFile = $databaseFile;
-        $this->imageDirectory = $imageDirectory;
+        $config = ConfigurationService::getInstance()->getConfiguration();
+        $this->databaseFile = FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt';
+        $this->imageDirectory = FolderEnum::IMAGES->absolute();
     }
 
     /**
@@ -201,7 +204,7 @@ class DatabaseManagerService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];

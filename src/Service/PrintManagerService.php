@@ -2,6 +2,8 @@
 
 namespace Photobooth\Service;
 
+use Photobooth\Enum\FolderEnum;
+
 class PrintManagerService
 {
     /**
@@ -19,11 +21,11 @@ class PrintManagerService
      */
     public string $printLockFile = '';
 
-    public function __construct(string $printDb, string $printCounter, string $printLockFile)
+    public function __construct()
     {
-        $this->printDb = $printDb;
-        $this->printCounter = $printCounter;
-        $this->printLockFile = $printLockFile;
+        $this->printDb = FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'printed.csv';
+        $this->printCounter = FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'print.count';
+        $this->printLockFile = FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'print.lock';
     }
 
     /**
@@ -186,7 +188,7 @@ class PrintManagerService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];

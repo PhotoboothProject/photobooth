@@ -3,6 +3,7 @@
 namespace Photobooth\Service;
 
 use Photobooth\Dto\Process;
+use Photobooth\Factory\ProcessFactory;
 use Photobooth\Utility\PathUtility;
 
 class ProcessService
@@ -12,12 +13,23 @@ class ProcessService
      */
     protected array $processes = [];
 
-    /**
-     * @param Process[] $processes
-     */
-    public function __construct(array $processes)
+    public function __construct()
     {
-        $this->processes = $processes;
+        $config = ConfigurationService::getInstance()->getConfiguration();
+        $this->processes = [
+            ProcessFactory::fromConfig([
+                'name' => 'remotebuzzer',
+                'command' => $config['commands']['nodebin'] . ' ' . PathUtility::getAbsolutePath('resources/js/remotebuzzer-server.js'),
+                'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio'])),
+                'killSignal' => 9,
+            ]),
+            ProcessFactory::fromConfig([
+                'name' => 'synctodrive',
+                'command' => $config['commands']['nodebin'] . ' ' . PathUtility::getAbsolutePath('resources/js/sync-to-drive.js'),
+                'enabled' => ($config['synctodrive']['enabled']),
+                'killSignal' => 15,
+            ])
+        ];
     }
 
     public function boot(): void
@@ -91,7 +103,7 @@ class ProcessService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];

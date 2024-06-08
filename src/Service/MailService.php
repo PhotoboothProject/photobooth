@@ -2,12 +2,17 @@
 
 namespace Photobooth\Service;
 
+use Photobooth\Enum\FolderEnum;
+
 class MailService
 {
     public string $databaseFile = '';
 
-    public function __construct(string $databaseFile)
+    public function __construct()
     {
+        $config = ConfigurationService::getInstance()->getConfiguration();
+        $databaseFile = FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt';
+
         if (!$this->isValidDatabasePath($databaseFile)) {
             throw new \Exception('Database or path is not writable: ' . $databaseFile);
         }
@@ -67,7 +72,7 @@ class MailService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];
