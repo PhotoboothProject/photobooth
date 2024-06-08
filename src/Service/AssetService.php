@@ -24,7 +24,7 @@ class AssetService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];

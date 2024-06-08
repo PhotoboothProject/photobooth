@@ -25,11 +25,12 @@ class SoundService
         'cheese' => null,
     ];
 
-    public function __construct(string $locale = 'en', string $voice = 'male', bool $fallback = true)
+    public function __construct()
     {
-        $this->locale = $locale;
-        $this->voice = $voice;
-        $this->fallback = $fallback;
+        $config = ConfigurationService::getInstance()->getConfiguration();
+        $this->locale = $config['ui']['language'] ?? 'en';
+        $this->voice = $config['sound']['voice'] ?? 'man';
+        $this->fallback =  $config['sound']['fallback_enabled'] ?? true;
 
         $this->files['counter-1'] = $this->findSoundFile('counter-1');
         $this->files['counter-2'] = $this->findSoundFile('counter-2');
@@ -93,7 +94,7 @@ class SoundService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];

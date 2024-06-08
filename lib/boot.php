@@ -1,7 +1,5 @@
 <?php
 
-use Photobooth\Enum\FolderEnum;
-use Photobooth\Factory\ProcessFactory;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
 use Photobooth\Service\ConfigurationService;
@@ -43,7 +41,7 @@ FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
 // public static function getInstance(): self
 // {
 //     if (!isset($GLOBALS[self::class])) {
-//         throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+//         $GLOBALS[self::class] = new self();
 //     }
 //
 //     return $GLOBALS[self::class];
@@ -55,48 +53,18 @@ FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
 //
 $GLOBALS[ApplicationService::class] = new ApplicationService();
 $GLOBALS[ConfigurationService::class] = new ConfigurationService();
+$GLOBALS[AssetService::class] = new AssetService();
+$GLOBALS[LanguageService::class] = new LanguageService();
+$GLOBALS[SoundService::class] = new SoundService();
+$GLOBALS[LoggerService::class] = new LoggerService();
+$GLOBALS[PrintManagerService::class] = new PrintManagerService();
+$GLOBALS[DatabaseManagerService::class] = new DatabaseManagerService();
+$GLOBALS[MailService::class] = new MailService();
+$GLOBALS[ProcessService::class] = new ProcessService();
+
 $config = ConfigurationService::getInstance()->getConfiguration();
 if ($config['dev']['loglevel'] > 0) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 }
-$GLOBALS[AssetService::class] = new AssetService();
-$GLOBALS[LanguageService::class] = new LanguageService(
-    $config['ui']['language'] ?? 'en',
-    FolderEnum::LANG->value
-);
-$GLOBALS[SoundService::class] = new SoundService(
-    $config['ui']['language'] ?? 'en',
-    $config['sound']['voice'] ?? 'man',
-    $config['sound']['fallback_enabled'] ?? true
-);
-$GLOBALS[LoggerService::class] = new LoggerService(
-    $config['dev']['loglevel'] ?? 0
-);
-$GLOBALS[PrintManagerService::class] = new PrintManagerService(
-    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'printed.csv',
-    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'print.count',
-    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . 'print.lock',
-);
-$GLOBALS[DatabaseManagerService::class] = new DatabaseManagerService(
-    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . $config['database']['file'] . '.txt',
-    FolderEnum::IMAGES->absolute(),
-);
-$GLOBALS[MailService::class] = new MailService(
-    FolderEnum::DATA->absolute() . DIRECTORY_SEPARATOR . $config['mail']['file'] . '.txt'
-);
-$GLOBALS[ProcessService::class] = new ProcessService([
-    ProcessFactory::fromConfig([
-        'name' => 'remotebuzzer',
-        'command' => $config['commands']['nodebin'] . ' ' . PathUtility::getAbsolutePath('resources/js/remotebuzzer-server.js'),
-        'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio'])),
-        'killSignal' => 9,
-    ]),
-    ProcessFactory::fromConfig([
-        'name' => 'synctodrive',
-        'command' => $config['commands']['nodebin'] . ' ' . PathUtility::getAbsolutePath('resources/js/sync-to-drive.js'),
-        'enabled' => ($config['synctodrive']['enabled']),
-        'killSignal' => 15,
-    ]),
-]);

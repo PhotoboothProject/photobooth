@@ -2,6 +2,7 @@
 
 namespace Photobooth\Service;
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Utility\PathUtility;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 use Symfony\Component\Translation\Translator;
@@ -11,15 +12,15 @@ class LanguageService
     private string $locale;
     private Translator $translator;
 
-    public function __construct(string $locale = 'en', string $localeFolder = 'resources/lang')
+    public function __construct()
     {
-        $this->locale = $locale;
+        $this->locale = ConfigurationService::getInstance()->getConfiguration()['ui']['language'];
 
         $translator = new Translator($this->locale);
         $translator->setFallbackLocales(['en']);
         $translator->addLoader('json', new JsonFileLoader());
 
-        $path = PathUtility::getAbsolutePath($localeFolder);
+        $path = PathUtility::getAbsolutePath(FolderEnum::LANG->value);
         if (PathUtility::isAbsolutePath($path)) {
             foreach (new \DirectoryIterator($path) as $file) {
                 if(!$file->isFile() || strtolower($file->getExtension()) !== 'json') {
@@ -45,7 +46,7 @@ class LanguageService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];

@@ -12,9 +12,10 @@ class LoggerService
     protected array $channels = [];
     protected int $level;
 
-    public function __construct(int $level)
+    public function __construct()
     {
-        $this->level = $level;
+        $config = ConfigurationService::getInstance()->getConfiguration();
+        $this->level = $config['dev']['loglevel'] ?? 0;
         $this->channels['default'] = new NamedLogger('default', $this->level);
     }
 
@@ -50,7 +51,7 @@ class LoggerService
     public static function getInstance(): self
     {
         if (!isset($GLOBALS[self::class])) {
-            throw new \Exception(self::class . ' instance does not exist in $GLOBALS.');
+            $GLOBALS[self::class] = new self();
         }
 
         return $GLOBALS[self::class];
