@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
 use Photobooth\Service\ConfigurationService;
@@ -20,6 +21,9 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 FileUtility::createDirectory(PathUtility::getAbsolutePath('config'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('data'));
+foreach (FolderEnum::cases() as $folder) {
+    FileUtility::createDirectory(PathUtility::getAbsolutePath($folder->value));
+}
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
