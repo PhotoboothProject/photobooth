@@ -69,6 +69,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addSound(): NodeDefinition
     {
         return (new TreeBuilder('sound'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->booleanNode('countdown_enabled')->defaultValue(true)->end()
@@ -88,6 +89,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addMail(): NodeDefinition
     {
         return (new TreeBuilder('mail'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->booleanNode('send_all_later')->defaultValue(false)->end()
@@ -147,6 +149,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
         $commandDefaults = $commands[Environment::getOperatingSystem()];
 
         return (new TreeBuilder('commands'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('take_picture')->defaultValue($commandDefaults['take_picture'])->end()
                 ->scalarNode('take_custom')->defaultValue($commandDefaults['take_custom'])->end()
@@ -166,6 +169,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addPrint(): NodeDefinition
     {
         return (new TreeBuilder('print'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('from_result')->defaultValue(false)->end()
                 ->booleanNode('from_gallery')->defaultValue(false)->end()
@@ -254,6 +258,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addChromaCapture(): NodeDefinition
     {
         return (new TreeBuilder('chromaCapture'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
             ->end();
@@ -262,6 +267,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addQr(): NodeDefinition
     {
         return (new TreeBuilder('qr'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->scalarNode('url')->defaultValue('')->end()
@@ -288,6 +294,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addTextOnPrint(): NodeDefinition
     {
         return (new TreeBuilder('textonprint'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('line1')->defaultValue('line 1')->end()
@@ -338,6 +345,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addSlideshow(): NodeDefinition
     {
         return (new TreeBuilder('slideshow'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->integerNode('refreshTime')
                     ->defaultValue(60)
@@ -371,6 +379,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
         }
 
         return (new TreeBuilder('remotebuzzer'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('startserver')->defaultValue(false)->end()
                 ->scalarNode('serverip')->defaultValue('')->end()
@@ -589,6 +598,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addSyncToDrive(): NodeDefinition
     {
         return (new TreeBuilder('synctodrive'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('target')->defaultValue('photobooth')->end()
@@ -607,6 +617,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addKeying(): NodeDefinition
     {
         return (new TreeBuilder('keying'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->enumNode('size')
@@ -626,6 +637,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addBackground(): NodeDefinition
     {
         return (new TreeBuilder('background'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('defaults')->defaultValue('')->end()
                 ->scalarNode('chroma')->defaultValue('')->end()
@@ -636,6 +648,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addIcons(): NodeDefinition
     {
         return (new TreeBuilder('icons'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('admin_back')->defaultValue('fa fa-long-arrow-left')->end()
                 ->scalarNode('admin_back_short')->defaultValue('fa fa-arrow-left')->end()
@@ -688,6 +701,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addPreview(): NodeDefinition
     {
         return (new TreeBuilder('preview'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->enumNode('mode')
                     ->values(['none', 'device_cam', 'url'])
@@ -757,6 +771,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addColors(): NodeDefinition
     {
         return (new TreeBuilder('colors'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('countdown')->defaultValue('#1b3faa')->end()
                 ->scalarNode('background_countdown')->defaultValue('#8d9fd4')->end()
@@ -779,6 +794,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addProtect(): NodeDefinition
     {
         return (new TreeBuilder('protect'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('admin')->defaultValue(true)->end()
                 ->booleanNode('localhost_admin')->defaultValue(true)->end()
@@ -793,6 +809,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addGetRequests(): NodeDefinition
     {
         return (new TreeBuilder('get_request'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('countdown')->defaultValue(false)->end()
                 ->booleanNode('processed')->defaultValue(false)->end()
@@ -807,6 +824,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addGallery(): NodeDefinition
     {
         return (new TreeBuilder('gallery'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->booleanNode('newest_first')->defaultValue(true)->end()
@@ -840,6 +858,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addVideo(): NodeDefinition
     {
         return (new TreeBuilder('video'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->integerNode('cntdwn_time')
@@ -868,6 +887,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addPhotoSwipe(): NodeDefinition
     {
         return (new TreeBuilder('pswp'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('counterEl')->defaultValue(true)->end()
                 ->booleanNode('caption')->defaultValue(true)->end()
@@ -895,6 +915,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addFtp(): NodeDefinition
     {
         return (new TreeBuilder('ftp'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('baseURL')->defaultValue('')->end()
@@ -924,6 +945,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addLogin(): NodeDefinition
     {
         return (new TreeBuilder('login'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('username')->defaultValue('Photo')->end()
@@ -956,6 +978,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addAdminPanel(): NodeDefinition
     {
         return (new TreeBuilder('adminpanel'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->enumNode('view')
                     ->values(['basic', 'advanced', 'expert'])
@@ -968,6 +991,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addUiNode(): NodeDefinition
     {
         return (new TreeBuilder('ui'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->enumNode('language')
                     ->values(['cs', 'de', 'en', 'es', 'fr', 'hr', 'it', 'nl', 'pt'])
@@ -1007,6 +1031,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addDev(): NodeDefinition
     {
         return (new TreeBuilder('dev'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->integerNode('loglevel')
                     ->defaultValue(1)
@@ -1029,6 +1054,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addWebserver(): NodeDefinition
     {
         return (new TreeBuilder('webserver'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('ip')->defaultValue('')->end()
                 ->scalarNode('ssid')->defaultValue('Photobooth')->end()
@@ -1038,6 +1064,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addStartScreen(): NodeDefinition
     {
         return (new TreeBuilder('start_screen'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('title')->defaultValue('')->end()
                 ->booleanNode('title_visible')->defaultValue(false)->end()
@@ -1049,6 +1076,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addLogo(): NodeDefinition
     {
         return (new TreeBuilder('logo'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->scalarNode('path')->defaultValue('')->end()
@@ -1062,6 +1090,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addDownload(): NodeDefinition
     {
         return (new TreeBuilder('download'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->booleanNode('thumbs')->defaultValue(false)->end()
@@ -1071,6 +1100,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addReload(): NodeDefinition
     {
         return (new TreeBuilder('reload'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('key')
                     ->info('specify key id (e.g. 13 is the enter key) to use that key to reload the page, use for example https://keycode.info to get the key code')
@@ -1082,6 +1112,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addPicture(): NodeDefinition
     {
         return (new TreeBuilder('picture'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('key')
                     ->info('specify key id (e.g. 13 is the enter key) to use that key to reload the page, use for example https://keycode.info to get the key code')
@@ -1215,6 +1246,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addTextOnPicture(): NodeDefinition
     {
         return (new TreeBuilder('textonpicture'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('line1')->defaultValue('line 1')->end()
@@ -1265,6 +1297,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addDatabase(): NodeDefinition
     {
         return (new TreeBuilder('database'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->scalarNode('file')->defaultValue('db')->end()
@@ -1274,6 +1307,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addDelete(): NodeDefinition
     {
         return (new TreeBuilder('delete'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('no_request')->defaultValue(false)->end()
             ->end();
@@ -1282,6 +1316,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addEvent(): NodeDefinition
     {
         return (new TreeBuilder('event'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('textRight')->defaultValue('')->end()
@@ -1299,6 +1334,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addButton(): NodeDefinition
     {
         return (new TreeBuilder('button'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('force_buzzer')->defaultValue(false)->end()
                 ->booleanNode('show_cups')->defaultValue(false)->end()
@@ -1311,6 +1347,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addFilters(): NodeDefinition
     {
         return (new TreeBuilder('filters'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')
                     ->defaultValue(true)
@@ -1346,6 +1383,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addCustom(): NodeDefinition
     {
         return (new TreeBuilder('custom'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')
                     ->defaultValue(false)
@@ -1372,6 +1410,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addCollage(): NodeDefinition
     {
         return (new TreeBuilder('collage'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->integerNode('cntdwn_time')
@@ -1440,6 +1479,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addTextOnCollage(): NodeDefinition
     {
         return (new TreeBuilder('textoncollage'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->scalarNode('line1')->defaultValue('Photobooth')->end()
@@ -1490,6 +1530,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
     protected function addQuality(): NodeDefinition
     {
         return (new TreeBuilder('jpeg_quality'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
             ->children()
                 ->integerNode('image')
                     ->defaultValue(100)
