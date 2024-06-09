@@ -26,7 +26,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
 $error = false;
 $success = false;
 $labelClass = 'w-full flex flex-col mb-1';
-$inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto';
+$inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mb-3 mt-auto';
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
 
 if (isset($_POST['submit'])) {
@@ -76,7 +76,11 @@ if (isset($_POST['submit'])) {
 
                     <div class="relative">
                         <label class="<?= $labelClass ?>" for="folder_name"><?=$languageService->translate('upload_folder')?></label>
-                        <input class="<?= $inputClass ?>" type="text" name="folder_name" id="folder_name" required><br><br>
+                        <select class="<?= $inputClass ?>" name="folder_name">
+                            <option value="background">background</option>
+                            <option value="frames">frames</option>
+                            <option value="logo">logo</option>
+                        </select>
                         <label class="<?= $labelClass ?>" for="images"><?=$languageService->translate('upload_selection')?></label>
                         <input class="<?= $labelClass ?>" type="file" name="images[]" id="images" multiple accept="image/*" required><br><br>
                     </div>
