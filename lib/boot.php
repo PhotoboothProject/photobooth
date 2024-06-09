@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
 use Photobooth\Service\ConfigurationService;
@@ -19,11 +20,18 @@ session_start();
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 FileUtility::createDirectory(PathUtility::getAbsolutePath('config'));
-FileUtility::createDirectory(PathUtility::getAbsolutePath('data'));
-FileUtility::createDirectory(PathUtility::getAbsolutePath('private'));
+FileUtility::createDirectory(FolderEnum::DATA->absolute());
+FileUtility::createDirectory(FolderEnum::IMAGES->absolute());
+FileUtility::createDirectory(FolderEnum::KEYING->absolute());
+FileUtility::createDirectory(FolderEnum::PRINT->absolute());
+FileUtility::createDirectory(FolderEnum::QR->absolute());
+FileUtility::createDirectory(FolderEnum::THUMBS->absolute());
+FileUtility::createDirectory(FolderEnum::TEMP->absolute());
+FileUtility::createDirectory(FolderEnum::PRIVATE->absolute());
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
+FileUtility::createDirectory(FolderEnum::VAR->absolute());
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
 
