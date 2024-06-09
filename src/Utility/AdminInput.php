@@ -87,6 +87,7 @@ class AdminInput
 
         return self::renderHeadline($label) . '
             <label class="adminCheckbox relative inline-flex items-center cursor-pointer mt-auto">
+                <input type="hidden" name="' . $setting['name'] . '" value="false" />
                 <input class="hidden peer" type="checkbox" ' . ($setting['value'] == 'true' ? ' checked="checked"' : '') . ' name="' . $setting['name'] . '" value="true" />
                 <div class="' . $checkboxClasses . '"></div>
                 <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
