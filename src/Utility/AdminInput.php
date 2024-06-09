@@ -169,14 +169,14 @@ class AdminInput
             $optionValue = $value;
             if ($option instanceof \BackedEnum) {
                 $optionLabel = ($option instanceof LabelInterface) ? $option->label() : $option->name;
-                $optionValue = $option->value;
+                $optionValue = $option;
             }
 
             $selected = '';
             if ((is_array($setting['value']) && in_array($optionValue, $setting['value'])) || $optionValue === $setting['value']) {
                 $selected = ' selected="selected"';
             }
-            $options .= '<option ' . $selected . ' value="' . $optionValue . '">' . $optionLabel . '</option>';
+            $options .= '<option ' . $selected . ' value="' . ($optionValue instanceof \BackedEnum ? $optionValue->value : $optionValue) . '">' . $optionLabel . '</option>';
         }
 
         return self::renderHeadline($label) . '
