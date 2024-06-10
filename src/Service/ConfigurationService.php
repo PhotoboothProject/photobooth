@@ -117,10 +117,6 @@ class ConfigurationService
             $config['background']['chroma'] = 'url(' . $bg_url . ')';
         }
 
-        if (empty($config['webserver']['ip'])) {
-            $config['webserver']['ip'] = Environment::getIp();
-        }
-
         if (empty($config['remotebuzzer']['serverip'])) {
             $config['remotebuzzer']['serverip'] = Environment::getIp();
         }
