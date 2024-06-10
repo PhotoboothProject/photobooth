@@ -1056,7 +1056,6 @@ class PhotoboothConfiguration implements ConfigurationInterface
         return (new TreeBuilder('webserver'))->getRootNode()->addDefaultsIfNotSet()
             ->ignoreExtraKeys()
             ->children()
-                ->scalarNode('ip')->defaultValue('')->end()
                 ->scalarNode('ssid')->defaultValue('Photobooth')->end()
             ->end();
     }
