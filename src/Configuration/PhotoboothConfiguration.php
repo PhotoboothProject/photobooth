@@ -1012,11 +1012,11 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ->defaultValue('bottom-right')
                     ->end()
                 ->enumNode('style')
-                    ->values(['classic', 'classic_rounded', 'modern', 'modern_squared', 'custom'])
+                    ->values(['classic', 'classic_rounded', 'modern', 'modern_squared'])
                     ->defaultValue('modern_squared')
                     ->end()
                 ->enumNode('button')
-                    ->values(['classic', 'classic_rounded', 'modern', 'modern_squared', 'custom'])
+                    ->values(['classic', 'classic_rounded', 'modern', 'modern_squared'])
                     ->defaultValue('modern_squared')
                     ->end()
                 ->booleanNode('shutter_animation')->defaultValue(true)->end()
@@ -1056,7 +1056,6 @@ class PhotoboothConfiguration implements ConfigurationInterface
         return (new TreeBuilder('webserver'))->getRootNode()->addDefaultsIfNotSet()
             ->ignoreExtraKeys()
             ->children()
-                ->scalarNode('ip')->defaultValue('')->end()
                 ->scalarNode('ssid')->defaultValue('Photobooth')->end()
             ->end();
     }
