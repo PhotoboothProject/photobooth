@@ -200,13 +200,6 @@ return [
             'name' => 'dev[reload_on_error]',
             'value' => $config['dev']['reload_on_error'],
         ],
-        'webserver_ip' => [
-            'view' => 'advanced',
-            'type' => 'input',
-            'name' => 'webserver[ip]',
-            'placeholder' => $defaultConfig['webserver']['ip'],
-            'value' => $config['webserver']['ip'],
-        ],
         'webserver_ssid' => [
             'view' => 'expert',
             'type' => 'input',
