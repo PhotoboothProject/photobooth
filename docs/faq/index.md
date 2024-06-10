@@ -1,5 +1,9 @@
 # FAQ - Frequently asked questions
 
+FAQ on [https://photoboothproject.github.io/](https://photoboothproject.github.io/) always matches latest development version of Photobooth. Some options might not be available on older version or might be handled different.
+
+An FAQ matching your installed version can be found at [http://localhost/faq](http://localhost/faq).
+
 ## Is my Camera supported?
 
 Some DSLR and Compact Cameras are not supported by this project. Please check for your specific model [here](http://gphoto.org/proj/libgphoto2/support.php).
@@ -119,7 +123,7 @@ Please note that if the number of images in a collage design was changed the adm
 Other value changes can be checked on the collage test page immediately with a simple reload - so it's quite easy to configure a layout with the help of [http://localhost/test/collage.php](http://localhost/test/collage.php).
 The file `collage.json` needs to be a well-formed json array and something like a missing quotation or a trailing comma can be enough to make a design fail.
 
-If you want to configure additional properties of the collage layout you have to wrap this array in a json object like this:
+If you want to configure additional properties of the collage layout you have to wrap this array in a json object like this (**requires Photobooth v4.99 or newer**):
 
 ```
 {
