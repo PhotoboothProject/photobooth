@@ -365,6 +365,55 @@ $font_styles .= '</style>';
               </div>
               <div>
                 <span class="w-full flex flex-col items-center justify-center text-2md font-bold text-brand-1 mb-2">
+                  <?= $languageService->translate('placeholder_settings') ?>
+                </span>
+              </div>
+              <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
+                <div class="col-span-2 flex flex-col">
+                  <?=
+                    AdminInput::renderCheckbox(
+                        [
+                        'name' => 'enable_placeholder_image',
+                        'value' => 'false',
+                        'attributes' => ['data-trigger' => 'general']
+                      ],
+                        $languageService->translate('enable_placeholder_image')
+                    )
+?>
+                </div>
+                <div class="col-span-2 flex flex-col">
+                  <?=
+  AdminInput::renderInput(
+      [
+      'type' => 'number',
+      'name' => 'placeholder_image_position',
+      'value' => '1',
+      'placeholder' => 'placehoder image position',
+      'attributes' => ['data-trigger' => 'general']
+                      ],
+      $languageService->translate('placeholder_image_position')
+  )
+?>
+                </div>
+                <div class="col-span-2 flex flex-col">
+                  <?=
+  AdminInput::renderImageSelect(
+      [
+      'name' => 'placeholder_image',
+      'value' => '',
+      'paths' => [
+        PathUtility::getAbsolutePath('resources/img/placeholders'),
+        PathUtility::getAbsolutePath('private/images/placeholders'),
+      ],
+      'attributes' => ['data-trigger' => 'general']
+                      ],
+      $languageService->translate('choose_placeholder')
+  )
+?>
+                </div>
+              </div>
+              <div>
+                <span class="w-full flex flex-col items-center justify-center text-2md font-bold text-brand-1 mb-2">
                 <?= $languageService->translate('text_settings') ?>
                 </span>
               </div>

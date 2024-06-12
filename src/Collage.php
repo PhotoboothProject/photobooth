@@ -718,6 +718,31 @@ class Collage
                             $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' && !empty($collageJson['frame']) ? true : false;
                         }
 
+                        if(array_key_exists('placeholder', $collageJson) && $collageJson['placeholder']) {
+                            //Use offset to reflect image file numbering
+                            $c->collagePlaceholder = $collageJson['placeholder'];
+                            $c->collagePlaceholderPosition = $collageJson['placeholderposition'];
+                            $c->collagePlaceholderPath = $collageJson['placeholderpath'];
+                            $editImages[$c->collagePlaceholderPosition - 1] = $c->collagePlaceholderPath;
+                            /*$placeholderOffset = 0;
+                            for ($i = 0; $i < $c->collageLimit; $i++) {
+                                if ($c->collagePlaceholder && $c->collagePlaceholderPosition == $i) {
+                                    $editImages[] = $c->collagePlaceholderPath;
+                                    $placeholderOffset = 1;
+                                } else {
+                                    if (!file_exists($srcImagePaths[$i - $placeholderOffset])) {
+                                        throw new \Exception('The file ' . $srcImagePaths[$i] . ' does not exist.');
+                                    }
+                                    $singleimage = substr($srcImagePaths[$i - $placeholderOffset], 0, -4);
+                                    $editfilename = $singleimage . '-edit.jpg';
+                                    if (!copy($srcImagePaths[$i - $placeholderOffset], $editfilename)) {
+                                        throw new \Exception('Failed to copy image for editing.');
+                                    }
+                                    $editImages[] = $editfilename;
+                                }
+                            }*/
+                        }
+
                         $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;
                         if ($c->textOnCollageEnabled) {
                             $c->textOnCollageFontSize = isset($collageJson['text_font_size']) ? $collageJson['text_font_size'] : $c->textOnCollageFontSize;
