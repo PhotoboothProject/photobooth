@@ -67,6 +67,9 @@ function loadCurrentConfig() {
     let frameImage = collageConfig.frame;
     let show_frame = frameImage ? true : false;
     let applyFrame = collageConfig.take_frame;
+    let placeholder = collageConfig.placeholder;
+    let placeholderpath = collageConfig.placeholderpath;
+    let placeholderposition = collageConfig.placeholderposition;
     let text_enabled = textConfig.enabled;
     let font_family = textConfig.font;
     let font_color = textConfig.font_color;
@@ -90,6 +93,9 @@ function loadCurrentConfig() {
         frameImage = current_config.frame;
         show_frame = frameImage ? true : false;
         applyFrame = current_config.apply_frame;
+        placeholder = current_config.placeholder;
+        placeholderpath = current_config.placeholderpath;
+        placeholderposition = current_config.placeholderposition;
         text_enabled = current_config.text_custom_style;
         font_family = current_config.text_font;
         font_color = current_config.text_font_color;
@@ -104,6 +110,7 @@ function loadCurrentConfig() {
     }
 
     //populate the inputs
+    //general
     $('input[name=\'portrait\'').prop('checked', portrait);
     $('input[name=\'rotate_after_creation\'').prop('checked', rotate_after_creation);
     $('input[name=\'final_width\']').val(collage_width);
@@ -126,6 +133,16 @@ function loadCurrentConfig() {
 
     $('select[name=\'apply_frame\']').val(applyFrame);
 
+    //placehoder
+    $('input[name=\'placeholder_image_position\'').val(placeholderposition);
+    $('input[name=\'placeholder_image\'').attr('value', placeholderpath);
+    $('input[name=\'placeholder_image\'')
+        .parents('.adminImageSelection')
+        .find('.adminImageSelection-preview')
+        .attr('src', placeholderpath);
+    $('input[name=\'enable_placeholder_image\'').prop('checked', placeholder);
+
+    //text
     $('input[name=\'text_enabled\'').prop('checked', text_enabled);
     $('select[name=\'text_font_family\'').val(font_family);
     $('input[name=\'text_font_color\'').attr('value', font_color);
@@ -408,7 +425,7 @@ function saveConfiguration() {
         height: $('input[name=\'final_height\']').val(),
         text_custom_style: $('input[name=\'text_enabled\']').is(':checked'),
         text_font_size: $('input[name=\'text_font_size\'').val(),
-        text_rotation: -parseInt($('input[name=\'text_rotation\'').val(), 10),
+        text_rotation: $('input[name=\'text_rotation\'').val(),
         text_locationx: $('input[name=\'text_location_x\'').val(),
         text_locationy: $('input[name=\'text_location_y\'').val(),
         text_font_color: $('input[name=\'text_font_color\'').val(),
@@ -421,6 +438,9 @@ function saveConfiguration() {
         frame: $('input[name=\'generator-frame\']').val(),
         background: $('input[name=\'generator-background\']').val(),
         background_color: $('input[name=\'background_color\']').val(),
+        placeholder: $('input[name=\'enable_placeholder_image\']').is(':checked'),
+        placeholderpath: $('input[name=\'placeholder_image\']').val(),
+        placeholderposition: $('input[name=\'placeholder_image_position\']').val(),
         layout: []
     };
 
