@@ -7,11 +7,16 @@ use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Factory\CollageConfigFactory;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
+use Photobooth\Service\LoggerService;
 
 class Collage
 {
     public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, CollageConfig $c = null): bool
     {
+        $loggerService = LoggerService::getInstance();
+        $logger = $loggerService->getLogger('main');
+        $logger->debug(basename($_SERVER['PHP_SELF']));
+
         if ($c === null) {
             $c = CollageConfigFactory::fromConfig($config);
         }
@@ -670,6 +675,7 @@ class Collage
                                 throw new \Exception('Collage background color: sscanf returned null!');
                             }
                             $background = imagecolorallocate($my_collage, (int)$bg_r, (int)$bg_g, (int)$bg_b);
+                            $logger->info('resized', [imagesx($my_collage), imagesy($my_collage)]);
                             imagefill($my_collage, 0, 0, (int)$background);
                         }
 
@@ -685,7 +691,9 @@ class Collage
                                 if (!$backgroundImage instanceof \GdImage) {
                                     throw new \Exception('Failed to resize collage background resource.');
                                 }
-                                imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
+                                $bg_width = imagesx($backgroundImage);
+                                $bg_height = imagesy($backgroundImage);
+                                imagecopyresampled($my_collage, $backgroundImage, 0, 0, 0, 0, $bg_width, $bg_height, $bg_width, $bg_height);
                                 $imageHandler->addPictureBgImage = $collageJson['background'];
                                 if(!str_starts_with($collageJson['background'], $_SERVER['DOCUMENT_ROOT'])) {
                                     $imageHandler->addPictureBgImage = $_SERVER['DOCUMENT_ROOT'] . $collageJson['background'];
@@ -719,28 +727,12 @@ class Collage
                         }
 
                         if(array_key_exists('placeholder', $collageJson) && $collageJson['placeholder']) {
-                            //Use offset to reflect image file numbering
                             $c->collagePlaceholder = $collageJson['placeholder'];
-                            $c->collagePlaceholderPosition = $collageJson['placeholderposition'];
-                            $c->collagePlaceholderPath = $collageJson['placeholderpath'];
-                            $editImages[$c->collagePlaceholderPosition - 1] = $c->collagePlaceholderPath;
-                            /*$placeholderOffset = 0;
-                            for ($i = 0; $i < $c->collageLimit; $i++) {
-                                if ($c->collagePlaceholder && $c->collagePlaceholderPosition == $i) {
-                                    $editImages[] = $c->collagePlaceholderPath;
-                                    $placeholderOffset = 1;
-                                } else {
-                                    if (!file_exists($srcImagePaths[$i - $placeholderOffset])) {
-                                        throw new \Exception('The file ' . $srcImagePaths[$i] . ' does not exist.');
-                                    }
-                                    $singleimage = substr($srcImagePaths[$i - $placeholderOffset], 0, -4);
-                                    $editfilename = $singleimage . '-edit.jpg';
-                                    if (!copy($srcImagePaths[$i - $placeholderOffset], $editfilename)) {
-                                        throw new \Exception('Failed to copy image for editing.');
-                                    }
-                                    $editImages[] = $editfilename;
-                                }
-                            }*/
+                            $c->collagePlaceholderPosition = (int) $collageJson['placeholderposition'] - 1;
+                            $c->collagePlaceholderPath = str_starts_with($collageJson['placeholderpath'], 'http') ?
+                                $collageJson['placeholderpath'] :
+                                $_SERVER['DOCUMENT_ROOT'] . $collageJson['placeholderpath'];
+                            $editImages[$c->collagePlaceholderPosition] = $c->collagePlaceholderPath;
                         }
 
                         $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;

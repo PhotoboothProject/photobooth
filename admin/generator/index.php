@@ -677,26 +677,26 @@ $font_styles .= '</style>';
         <div class="result_images md:max-h-[75vh] flex-1 relative lg:flex-[3_1_0%] p-4 md:p-8 bg-slate-300">
           <div id="result_canvas" class="relative m-0 left-[50%] top-[50%] right-0 bottom-0 translate-y-[0%] md:translate-y-[-50%] translate-x-[-50%] max-w-full max-h-full shadow-xl">
             <div id="collage_background" class="absolute h-full">
-              <img class="h-full hidden" src="" alt="Choose the background">
+              <img class="h-full hidden object-contain object-top" src="" alt="Choose the background">
             </div>
             <div id="picture-0" class="absolute overflow-hidden w-full h-full">
-              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-01.jpg">
+              <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-01.jpg">
               <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-1" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-02.jpg">
+              <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-02.jpg">
               <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-2" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-03.jpg">
+              <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-03.jpg">
               <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-3" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-04.jpg">
+              <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-04.jpg">
               <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="picture-4" class="absolute overflow-hidden w-full h-full hidden">
-              <img class="absolute object-left-top rotate-0 max-w-none" src="/resources/img/demo/seal-station-norddeich-05.jpg">
+              <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-05.jpg">
               <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
             </div>
             <div id="collage_frame" class="absolute h-full w-full">
