@@ -133,7 +133,7 @@ function loadCurrentConfig() {
 
     $('select[name=\'apply_frame\']').val(applyFrame);
 
-    //placehoder
+    //placeholder
     $('input[name=\'placeholder_image_position\'').val(placeholderposition);
     $('input[name=\'placeholder_image\'').attr('value', placeholderpath);
     $('input[name=\'placeholder_image\'')
@@ -291,22 +291,33 @@ function handleInputUpdate() {
 
 function updateImage(containerId) {
     const settingsContainer = $('div[data-picture=\'picture-' + containerId + '\'');
+
+    const placeholder = $('input[name=\'enable_placeholder_image\'').is(':checked');
+    const placeholder_image_position = parseInt($('input[name=\'placeholder_image_position\'').val(), 10);
+    const changepath = placeholder && placeholder_image_position === containerId + 1;
+
     settingsContainer.find('input').each(function () {
         let new_value = $(this).val();
         let prop_name = $(this).data('prop');
         if (new_value) {
-            changeImageSetting(new_value, prop_name, containerId);
+            changeImageSetting(new_value, prop_name, containerId, changepath);
         }
     });
 }
 
-function changeImageSetting(new_value, prop_name, index) {
+function changeImageSetting(new_value, prop_name, index, isPlaceholder) {
     const canvas_width = $('#result_canvas').width();
     const canvas_height = $('#result_canvas').height();
     const img_container = $('#picture-' + index);
+    let contImages = img_container.find('img');
+    let firstImg = contImages.first();
+    if (isPlaceholder) {
+        firstImg.attr('src', $('input[name=\'placeholder_image\'').val());
+    } else {
+        firstImg.attr('src', firstImg.data('src'));
+    }
 
     if (prop_name === 'transform') {
-        let contImages = img_container.find('img');
         let angle = -parseInt(new_value, 10);
         contImages.css(prop_name, 'rotate(' + angle + 'deg)');
         contImages.css('transform-origin', angle > 0 ? 'top right' : 'top left');
