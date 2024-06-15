@@ -168,11 +168,15 @@ function loadCurrentConfig() {
         exampleImage.removeClass('hidden');
 
         inputLayout.find('input').each(function (propertyPosition) {
-            let isRange = $(this).attr('type') === 'range';
-            if (isRange) {
+            let inputType = $(this).attr('type');
+            if (inputType === 'range') {
                 $(this).parent().find('span:first').text(layout[i][propertyPosition]);
+            } else if (inputType === 'checkbox') {
+                $(this).prop('checked', layout[i][propertyPosition]);
             }
-            $(this).val(layout[i][propertyPosition]);
+            if (propertyPosition !== 5) {
+                $(this).val(layout[i][propertyPosition]);
+            }
         });
     }
 
@@ -297,11 +301,12 @@ function updateImage(containerId) {
     const changepath = placeholder && placeholder_image_position === containerId + 1;
 
     settingsContainer.find('input').each(function () {
-        let new_value = $(this).val();
         let prop_name = $(this).data('prop');
-        if (new_value) {
-            changeImageSetting(new_value, prop_name, containerId, changepath);
+        let new_value = $(this).val();
+        if (prop_name === 'single_frame') {
+            new_value = $(this).is(':checked');
         }
+        changeImageSetting(new_value, prop_name, containerId, changepath);
     });
 }
 
@@ -340,6 +345,11 @@ function changeImageSetting(new_value, prop_name, index, isPlaceholder) {
         contImages.css(angle > 0 ? 'right' : 'left', fromHori || 0);
         contImages.css(angle < 0 ? 'right' : 'left', '');
         img_container.width(newContW);
+    } else if (prop_name === 'single_frame') {
+        contImages.last().addClass('hidden');
+        if (new_value && $('select[name=\'apply_frame\']').val() === 'always') {
+            contImages.last().removeClass('hidden');
+        }
     } else {
         let clean_operation = new_value.replace('x', canvas_width).replace('y', canvas_height);
         let processed_value = calculate(tokenize(clean_operation));
@@ -459,7 +469,11 @@ function saveConfiguration() {
         let container = $(this);
         let single_image_layout = [];
         container.find('input').each(function () {
-            single_image_layout.push($(this).val());
+            let to_save = $(this).val();
+            if ($(this).attr('type') === 'checkbox') {
+                to_save = $(this).is(':checked') && configuration.apply_frame === 'always';
+            }
+            single_image_layout.push(to_save);
         });
         configuration.layout.push(single_image_layout);
     });

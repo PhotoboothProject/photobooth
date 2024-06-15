@@ -675,7 +675,6 @@ class Collage
                                 throw new \Exception('Collage background color: sscanf returned null!');
                             }
                             $background = imagecolorallocate($my_collage, (int)$bg_r, (int)$bg_g, (int)$bg_b);
-                            $logger->info('resized', [imagesx($my_collage), imagesy($my_collage)]);
                             imagefill($my_collage, 0, 0, (int)$background);
                         }
 
@@ -757,19 +756,24 @@ class Collage
 
                 $pictureOptions = [];
                 foreach ($layoutConfigArray as $layoutConfig) {
-                    if (!is_array($layoutConfig) || count($layoutConfig) !== 5) {
+                    if (!is_array($layoutConfig) || count($layoutConfig) !== 6) {
                         return false;
                     }
 
                     $singlePictureOptions = [];
-                    for ($j = 0; $j < 5; $j++) {
-                        $value = str_replace(['x', 'y'], [$collage_width, $collage_height], $layoutConfig[$j]);
-                        $singlePictureOptions[] = self::doMath($value);
+                    for ($j = 0; $j < 6; $j++) {
+                        $processed = $layoutConfig[$j];
+                        if($j !== 5) {
+                            $value = str_replace(['x', 'y'], [$collage_width, $collage_height], $layoutConfig[$j]);
+                            $processed = self::doMath($value);
+                        }
+                        $singlePictureOptions[] = $processed;
                     }
                     $pictureOptions[] = $singlePictureOptions;
                 }
 
                 foreach ($pictureOptions as $i => $singlePictureOptions) {
+                    $logger->info('apply frame. ', [$imageHandler->addPictureApplyFrame]);
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
                     if (!$tmpImg instanceof \GdImage) {
                         throw new \Exception('Failed to create tmp image resource.');
@@ -779,8 +783,10 @@ class Collage
                         (int)$singlePictureOptions[1],
                         (int)$singlePictureOptions[2],
                         (int)$singlePictureOptions[3],
-                        (int)$singlePictureOptions[4]
+                        (int)$singlePictureOptions[4],
+                        (bool)$singlePictureOptions[5]
                     );
+
                     $imageHandler->addPicture($tmpImg, $my_collage);
                     unset($tmpImg);
                 }

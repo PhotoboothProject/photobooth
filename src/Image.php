@@ -804,13 +804,16 @@ class Image
     /**
      * Set the picture options for adding a picture to image resource.
      */
-    public function setAddPictureOptions(int $x, int $y, int $width, int $height, int $rotation): void
+    public function setAddPictureOptions(int $x, int $y, int $width, int $height, int $rotation, ?bool $applyFrame = null): void
     {
         $this->addPictureX = $x;
         $this->addPictureY = $y;
         $this->addPictureWidth = $width;
         $this->addPictureHeight = $height;
         $this->addPictureRotation = $rotation;
+        if ($applyFrame !== null) {
+            $this->addPictureApplyFrame = $applyFrame;
+        }
     }
 
     /**
