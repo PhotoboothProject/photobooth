@@ -195,7 +195,6 @@
   "general:translate": "Nedostaje prijevod?",
   "general:ui_language": "Odaberite jezik",
   "general:ui_notification_timeout": "Vrijeme obavijesti",
-  "general:webserver_ip": "IP adresa web poslužitelja Photobootha",
   "general:webserver_ssid": "Naziv bežične mreže (SSID) koja se koristi za pristup Photobootha",
   "get_request": "GET request",
   "get_request:get_request_collage": "GET request for collage at countdown",
