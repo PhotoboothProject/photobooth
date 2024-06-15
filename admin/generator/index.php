@@ -648,7 +648,7 @@ $font_styles .= '</style>';
                       )
                     ?>
                   </div>
-                  <div class="col-span-2">
+                  <div>
                     <?=
                       AdminInput::renderRange(
                           [
@@ -663,6 +663,18 @@ $font_styles .= '</style>';
                           'attributes' => ['data-prop' => 'transform', 'data-trigger' => 'image']
                         ],
                           $languageService->translate('image_rotation')
+                      )
+                    ?>
+                  </div>
+                  <div>
+                    <?=
+                      AdminInput::renderCheckbox(
+                          [
+                          'name' => 'picture-show-frame-' . $i,
+                          'value' => 'false',
+                          'attributes' => ['data-prop' => 'single_frame', 'data-trigger' => 'image']
+                        ],
+                          $languageService->translate('show_single_frame')
                       )
                     ?>
                   </div>
