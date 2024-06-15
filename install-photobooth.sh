@@ -163,7 +163,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
                                     By default, latest development verison (dev) will be installed.
                                     package will install latest Release from zip.
 
-    -p,  -php,        --php         Choos the PHP version to install (Default = 8.3)
+    -p,  -php,        --php         Choose the PHP version to install (Default = 8.3)
 
     -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
                                     Note: only to use on Raspberry Pi OS!
