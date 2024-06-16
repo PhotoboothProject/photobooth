@@ -448,7 +448,7 @@ return [
             'placeholder' => $defaultConfig['picture']['cheese_time'],
             'name' => 'picture[cheese_time]',
             'value' => $config['picture']['cheese_time'],
-            'range_min' => 250,
+            'range_min' => 0,
             'range_max' => 10000,
             'range_step' => 250,
             'unit' => 'milliseconds',
