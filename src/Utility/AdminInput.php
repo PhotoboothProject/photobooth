@@ -207,7 +207,7 @@ class AdminInput
                     if (count($files) === 0) {
                         $images .= '
                         <div class="col-span-3">
-                            <p>' . $languageService->translate('error_path_noimages') . '</p>
+                            <p>' . $languageService->translate('error_path_noImages') . '</p>
                         </div>
                     ';
                     }
