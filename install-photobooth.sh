@@ -20,9 +20,6 @@ KIOSK_MODE=false
 HIDE_MOUSE=false
 USB_SYNC=false
 SETUP_CUPS=false
-GPHOTO_PREVIEW=false
-MJPEG_PREVIEW=false
-MJPEG_PREVIEW_ONLY=false
 CUPS_REMOTE_ANY=false
 WEBBROWSER="unknown"
 KIOSK_FLAG="--kiosk http://localhost"
@@ -32,7 +29,6 @@ AUTOSTART_FILE=""
 DESKTOP_OS=true
 WAYLAND_ENV=true
 PHP_VERSION="8.3"
-GO2RTC_VERSION="v1.8.6-4"
 
 # Update
 RUN_UPDATE=false
@@ -184,10 +180,6 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
 
     -u,  -username,   --username    Always required. Enter your OS username you like to use Photobooth on.
 
-    -m,  -mjpeg,      --mjpeg       Install go2rtc to provide remote preview (via URL) of your camera.
-
-    -M,  -mjpeg-only, --mjpeg-only  Only install go2rtc to provide remote preview (via URL) of your camera, then exit
-
     -V,  -verbose,    --verbose     Run script in verbose mode.
 
     -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx, lighttpd].
@@ -248,15 +240,6 @@ while true; do
         shift
         USERNAME=$1
         info "### Username: $1"
-        ;;
-    -m | --mjpeg)
-        MJPEG_PREVIEW=true
-        GPHOTO_PREVIEW=false
-        info "### Mjpeg mode enabled"
-        ;;
-    -M | --mjpeg-only)
-        MJPEG_PREVIEW_ONLY=true
-        info "### Only install mjpeg"
         ;;
     -s | --silent)
         SILENT_INSTALL=true
@@ -461,22 +444,6 @@ function common_software() {
     else
         EXTRA_PACKAGES+=(
             'jq'
-        )
-    fi
-
-    # Note: raspberrypi-kernel-header are needed before v4l2loopback-dkms
-    if [ "$RUNNING_ON_PI" = true ]; then
-        EXTRA_PACKAGES+=('raspberrypi-kernel-headers')
-    fi
-
-    if [ "$GPHOTO_PREVIEW" = true ]; then
-        EXTRA_PACKAGES+=(
-            'ffmpeg'
-            'python3-gphoto2'
-            'python3-psutil'
-            'python3-zmq'
-            'v4l2loopback-dkms'
-            'v4l-utils'
         )
     fi
 
@@ -955,200 +922,6 @@ function cups_setup() {
     fi
 }
 
-gphoto_preview() {
-    # make configs persistent
-    [[ ! -d /etc/modules-load.d ]] && mkdir /etc/modules-load.d
-    echo v4l2loopback >/etc/modules-load.d/v4l2loopback.conf
-
-    [[ ! -d /etc/modprobe.d ]] && mkdir /etc/modprobe.d
-    cat >/etc/modprobe.d/v4l2loopback.conf <<EOF
-options v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
-blacklist bcm2835-isp
-EOF
-    # adjust current runtime
-    modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
-    rmmod bcm2835-isp || true
-    if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
-        info "### Creating default Photobooth config."
-        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
-<?php
-
-return [
-  'preview' => [
-    'mode' => 'device_cam',
-    'bsm' => false,
-  ],
-  'commands' => [
-    'preview' => 'python3 cameracontrol.py',
-    'take_picture' => 'python3 cameracontrol.py --capture-image-and-download %s',
-  ]
-];
-
-EOF
-        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
-    else
-        info "### Can not set default config!"
-        info "    Please adjust your Photobooth configuration:"
-        info "    Preview mode: from device cam"
-        info "    Command to generate a live preview: python3 cameracontrol.py"
-        info "    Execute start command for preview on take picture/collage: disabled"
-        info "    Take picture command: python3 cameracontrol.py --capture-image-and-download %s"
-    fi
-}
-
-function mjpeg_preview() {
-    local arch
-    local goarch
-    local os
-    local file
-
-    if ! command -v go2rtc &>/dev/null || [[ ! $(go2rtc -version) =~ $GO2RTC_VERSION ]]; then
-        info "### Installing go2rtc (version: ${GO2RTC_VERSION})"
-
-        if [[ "$OSTYPE" =~ linux ]]; then
-            os=linux
-        elif [[ "$OSTYPE" =~ darwin ]]; then
-            os=darwin
-        elif [[ "$OSTYPE" =~ cygwin|mysys|win32 ]]; then
-            os=windows
-        else
-            error "### $OSTYPE not supported"
-            exit 1
-        fi
-
-        arch=$(uname -m)
-        if [[ "$arch" == "x86_64" ]]; then
-            goarch="amd64"
-        elif [[ "$arch" == "i386" ]]; then
-            goarch="386"
-        elif [[ "$arch" == "armv7l" ]]; then
-            goarch="armv7"
-        elif [[ "$arch" == "armv6l" ]]; then
-            goarch="armv6"
-        elif [[ "$arch" == "aarch64" ]]; then
-            goarch="arm64"
-        else
-            error "### $arch not supported"
-            exit 1
-        fi
-
-        if [[ ! -d /usr/local/bin ]]; then
-            mkdir -p /usr/local/bin
-        fi
-        file="go2rtc_${os}_${goarch}.tar.gz"
-        wget -P /tmp "https://github.com/dadav/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
-        tar xf "/tmp/${file}" -C /usr/local/bin go2rtc
-        rm /tmp/"$file"
-        chmod +x /usr/local/bin/go2rtc
-    fi
-
-    if [[ ! -f /etc/go2rtc.yaml ]]; then
-        info "### Creating /etc/go2rtc.yaml configuration file"
-        cat >/etc/go2rtc.yaml <<EOF
----
-streams:
-  dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint
-EOF
-    fi
-
-    if [[ ! -f /etc/systemd/system/go2rtc.service ]]; then
-        info "### Creating go2rtc systemd service"
-        cat >/etc/systemd/system/go2rtc.service <<EOF
-[Unit]
-Description=go2rtc streaming software
-
-[Service]
-User=www-data
-ExecStart=/usr/local/bin/go2rtc -config /etc/go2rtc.yaml
-KillMode=process
-KillSignal=SIGINT
-
-[Install]
-WantedBy=multi-user.target
-EOF
-        systemctl daemon-reload
-        systemctl enable --now go2rtc.service
-    fi
-
-    if [[ ! -f /etc/sudoers.d/020_www-data-systemctl ]]; then
-        info "### Creating /etc/sudoers.d/020_www-data-systemctl"
-        cat >/etc/sudoers.d/020_www-data-systemctl <<EOF
-# Control streaming software
-www-data ALL=(ALL) NOPASSWD: /usr/bin/systemctl start go2rtc.service, /usr/bin/systemctl stop go2rtc.service
-EOF
-    fi
-
-    if [[ ! -f /usr/local/bin/capture ]]; then
-        info "### Creating /usr/local/bin/capture script"
-        cat >/usr/local/bin/capture <<EOF
-#!/bin/bash
-
-if [[ \$1 =~ -h|--help ]]; then
-  cat <<HELP
-This script stops go2rtc, runs gphoto2 and starts go2rtc again.
-You can use it in your photobooth as capture command.
-
-Usage:
-
-    capture <filename> [or all required gphoto2 arguments]
-
-In photobooth, usually 'capture %s' is enough. But if you want to use a more complex command,
-don't forget to add --filename=%s.
-
-HELP
-  exit 0
-fi
-
-if [[ \$# -eq 1 ]]; then
-    args="--set-config output=Off --capture-image-and-download --filename=\$1"
-elif [[ \$# -gt 1 ]]; then
-    args="\$@"
-fi
-
-if systemctl cat go2rtc.service >/dev/null; then
-    HAS_GO2RTC=1
-fi
-
-[[ -n "\$HAS_GO2RTC" ]] && sudo systemctl stop go2rtc.service
-gphoto2 \$args
-[[ -n "\$HAS_GO2RTC" ]] && sudo systemctl start go2rtc.service
-EOF
-        chmod +x /usr/local/bin/capture
-    fi
-
-    if [[ ! -f $INSTALLFOLDERPATH/config/my.config.inc.php ]]; then
-        info "### Creating default Photobooth config."
-        cat >$INSTALLFOLDERPATH/config/my.config.inc.php << EOF
-<?php
-
-return [
-  'picture' => [
-    'cntdwn_time' => '6',
-  ],
-  'collage' => [
-    'cntdwn_time' => '6',
-  ],
-  'preview' => [
-    'mode' => 'url',
-    'url' => 'url("http://localhost:1984/api/stream.mjpeg?src=dslr")',
-  ],
-  'commands' => [
-    'take_picture' => 'capture %s',
-  ]
-];
-
-EOF
-        chown www-data:www-data $INSTALLFOLDERPATH/config/my.config.inc.php
-    else
-        info "### Can not set default config!"
-        info "    Please adjust your Photobooth configuration:"
-        info "    Preview mode: from URL"
-        info "    Preview-URL: url(\"http://localhost:1984/api/stream.mjpeg?src=dslr\")"
-        info "    Take picture command: capture %s"
-        warn "    Note: Countdown for pictures and collage should be set to a minimum of 6 seconds!"
-    fi
-}
-
 function fix_git_modules() {
     cd "$INSTALLFOLDERPATH"
 
@@ -1245,12 +1018,6 @@ detect_photobooth_install() {
 if [ "$UID" != 0 ]; then
     error "ERROR: Only root is allowed to execute the installer. Forgot sudo?"
     exit 1
-fi
-
-if [ "$MJPEG_PREVIEW_ONLY" = true ]; then
-    detect_photobooth_install
-    mjpeg_preview
-    exit 0
 fi
 
 if [ "$USERNAME" != "" ]; then
@@ -1372,27 +1139,6 @@ if [ "$RUN_UPDATE" = true ]; then
             hide_mouse
         fi
 
-        if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
-            # clean old files
-            info "### Old ffmpeg-webcam.service detected. Uninstalling..."
-            systemctl disable --now ffmpeg-webcam.service
-            rm /etc/systemd/system/ffmpeg-webcam.service
-            systemctl daemon-reload
-            if [[ -f /usr/ffmpeg-webcam.sh ]]; then
-                info "### Also removing the /usr/ffmpeg-webcam.sh file"
-                rm /usr/ffmpeg-webcam.sh
-            fi
-
-            # install via new method
-            info "### Installing new modprobe config"
-            gphoto_preview
-        fi
-
-        if command -v go2rtc &>/dev/null; then
-            info "### Installation of go2rtc detected. Checking for updates..."
-            mjpeg_preview
-        fi
-
         print_spaces
         print_logo
         info "###"
@@ -1502,49 +1248,6 @@ else
 fi
 print_spaces
 
-if grep -i Microsoft /proc/version &>/dev/null; then
-    GPHOTO_PREVIEW=false
-
-    echo -e "\033[0;33m### You seem to be installing photobooth inside of wsl."
-    echo -e "Do you want to install a service to be able to stream your camera via http"
-    echo -e "### (needed for preview from gphoto2)? Your camera must be supported by gphoto2 for liveview."
-    ask_yes_no "### If unsure, type Y. [Y/n] " "Y"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        MJPEG_PREVIEW=true
-        info "### We will install a service to set up a mjpeg stream for gphoto2."
-    else
-        MJPEG_PREVIEW=false
-        info "### We won't install a service to set up a mjpeg stream for gphoto2."
-    fi
-elif [ "$MJPEG_PREVIEW" = true ]; then
-    info "### Mjpeg mode enabled. Installing go2rtc and needed service to stream your camera via http."
-else
-    info "Do you want to install a service to be able to stream your camera to?"
-    info "Your camera must be supported by gphoto2 for liveview."
-    info ""
-    echo "Your options are:"
-    echo "1 Install gphoto2 webcam service"
-    echo "2 Install go2rtc and needed service to stream your camera via http"
-    echo "3 Don't install a service to set up preview for gphoto2"
-    info ""
-    ask_yes_no "Please enter your choice:" "3"
-    info ""
-    if [[ $REPLY =~ ^[1]$ ]]; then
-        GPHOTO_PREVIEW=true
-        MJPEG_PREVIEW=false
-        info "### We will install a service to set up a virtual webcam for gphoto2."
-        warn "### Note: This will disable other webcam interfaces on a Raspberry Pi (e.g. Pi Camera)."
-    elif [[ $REPLY =~ ^[2]$ ]]; then
-        GPHOTO_PREVIEW=false
-        MJPEG_PREVIEW=true
-        info "### We will install a service to set up a mjpeg stream for gphoto2."
-    else
-        GPHOTO_PREVIEW=false
-        MJPEG_PREVIEW=false
-        info "### We won't install a service to set up preview for gphoto2."
-    fi
-fi
-
 ############################################################
 #                                                          #
 # Go through the installation steps of Photobooth          #
@@ -1575,13 +1278,6 @@ if [ "$HIDE_MOUSE" = true ]; then
 fi
 if [ "$SETUP_CUPS" = true ]; then
     cups_setup
-fi
-if [ "$GPHOTO_PREVIEW" = true ]; then
-    gphoto_preview
-fi
-
-if [ "$MJPEG_PREVIEW" = true ]; then
-    mjpeg_preview
 fi
 
 print_logo
