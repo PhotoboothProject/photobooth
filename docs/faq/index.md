@@ -14,9 +14,9 @@ Some DSLR and Compact Cameras are not supported by this project. Please check fo
 
 Yes it is.
 
-If you're able to capture a picture via `raspistill` / `libcamera-still` from terminal you're good to go!
+If you're able to capture a picture via `raspistill` / `libcamera-still` / `rpicam-still` from terminal you're good to go!
 
-You need to allow the webserver to use `raspistill` / `libcamera-still`. You need add the webserver user to video group and reboot once:
+You need to allow the webserver to use `raspistill` / `libcamera-still` / `rpicam-still`. You need add the webserver user to video group and reboot once:
 
 ```sh
 sudo gpasswd -a www-data video
@@ -24,6 +24,10 @@ reboot
 ```
 
 Once done you need to adjust the configuration. Open the admin panel in your browser [localhost/admin](http://localhost/admin) and make the following changes:
+
+**"Take picture command on Pi OS based on bookworm":**
+
+`rpicam-still -n -o %s -q 100 -t 1 | echo Done`
 
 **"Take picture command on Pi OS based on bullseye":**
 
@@ -33,11 +37,11 @@ Once done you need to adjust the configuration. Open the admin panel in your bro
 
 `raspistill -n -o %s -q 100 -t 1 | echo Done`
 
-Raspistill / libcamera-still does not give any feedback after the picture was taken, workaround for that with "echo".
+`raspistill` / `libcamera-still` / `rpicam-still` does not give any feedback after the picture was taken, workaround for that with "echo".
 
 (Thanks to Andreas Maier for that information)
 
-You've the possibility to add more parameters if needed (define ISO, exposure, white balance etc.). Type `raspistill -?` / `libcamera-still -?`in your terminal to get information about possible parameters / settings.
+You've the possibility to add more parameters if needed (define ISO, exposure, white balance etc.). Type `raspistill -?` / `libcamera-still -?` / `rpicam-still -?` in your terminal to get information about possible parameters / settings.
 
 ---
 
@@ -619,7 +623,7 @@ Currently there's an issue on PiOS bullseye with the new camera stack which avoi
 -   Secure origin or exception required!
     -   [Prefer Secure Origins For Powerful New Features](https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339)
     -   [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
--   Admin panel config _"Device cam takes picture"_ can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still.
+-   Admin panel config _"Device cam takes picture"_ can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still / rpicam-still.
 
 ### Preview from DSLR
 
@@ -765,7 +769,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 **Note**
 
 -   Do NOT enable _"Device cam takes picture"_ in admin panel config!
--   Capture pictures via `raspistill` or `libcamera-still` won't work if motion is installed!
+-   Capture pictures via `raspistill`, `libcamera-still` or ,`rpicam-still` won't work if motion is installed!
 -   Requires Photobooth v2.2.1 or later!
 
 **Setting up a stream from your DSLR**
@@ -825,7 +829,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
 
 1. On Photobooth v2.4.0 and newer you can use the option "Use stream from device cam as background" inside admin panel.
 
-    - If enabled, a stream from your device cam is used as background on start screen. It's still possible to use preview from your device cam as background on countdown and also still possible to take pictures via device cam or using `raspistill` / `libcamera-still` for Pi Camera.
+    - If enabled, a stream from your device cam is used as background on start screen. It's still possible to use preview from your device cam as background on countdown. It is **not possible** capturing via `raspistill` / `libcamera-still` / `rpicam-still` for Pi Camera.
 
 2. You need to change the background URL path via config or admin panel. Replace `url(../img/bg.jpg)` with your IP-Adress and port (if needed) as URL.
    Example:
