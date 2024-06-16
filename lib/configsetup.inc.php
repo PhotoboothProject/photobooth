@@ -2588,6 +2588,17 @@ return [
             ],
             'value' => $config['ui']['button'],
         ],
+        'ui_scale' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['ui']['scale'],
+            'name' => 'ui[scale]',
+            'value' => $config['ui']['scale'],
+            'range_min' => 100,
+            'range_max' => 200,
+            'range_step' => 1,
+            'unit' => '%',
+        ],
         'ui_shutter_animation' => [
             'view' => 'basic',
             'type' => 'checkbox',
