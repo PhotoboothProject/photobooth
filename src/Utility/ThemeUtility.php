@@ -7,6 +7,7 @@ class ThemeUtility
     public static function renderCustomUserStyle(array $config): string
     {
         $properties = [
+            '--ui-scale' => $config['ui']['scale'] ? $config['ui']['scale'] . '%' : '__UNSET__',
             '--primary-color' => $config['colors']['primary'] ?? '__UNSET__',
             '--primary-light-color' => $config['colors']['primary_light'] ?? '__UNSET__',
             '--secondary-color' => $config['colors']['secondary'] ?? '__UNSET__',
