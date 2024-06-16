@@ -1159,7 +1159,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ->end()
                 ->integerNode('cheese_time')
                     ->defaultValue(1000)
-                    ->min(250)
+                    ->min(0)
                     ->max(10000)
                     ->beforeNormalization()
                         ->ifString()
