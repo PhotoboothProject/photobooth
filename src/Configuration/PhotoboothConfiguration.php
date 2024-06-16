@@ -1031,7 +1031,6 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->booleanNode('shutter_animation')->defaultValue(true)->end()
                 ->scalarNode('shutter_cheese_img')->defaultValue('')->end()
                 ->booleanNode('result_buttons')->defaultValue(true)->end()
-                ->scalarNode('font_size')->defaultValue('16px')->end()
                 ->booleanNode('decore_lines')->defaultValue(true)->end()
                 ->booleanNode('rounded_corners')->defaultValue(false)->end()
             ->end();

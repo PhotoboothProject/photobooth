@@ -2644,13 +2644,6 @@ return [
             'name' => 'ui[result_buttons]',
             'value' => $config['ui']['result_buttons'],
         ],
-        'ui_font_size' => [
-            'view' => 'advanced',
-            'type' => 'input',
-            'name' => 'ui[font_size]',
-            'placeholder' => $defaultConfig['ui']['font_size'],
-            'value' => $config['ui']['font_size'],
-        ],
         'colors_countdown' => [
             'view' => 'advanced',
             'type' => 'color',
