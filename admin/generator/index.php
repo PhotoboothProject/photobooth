@@ -6,6 +6,7 @@ use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\FontUtility;
+use Photobooth\Service\AssetService;
 
 // Login / Authentication check
 if (!(
@@ -749,8 +750,10 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
   </div>
 </div>
 <?php
+$assetService = AssetService::getInstance();
 
-include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+echo '<script src="' . $assetService->getUrl('api/settings.php') . '"></script>';
+echo '<script src="' . $assetService->getUrl('resources/js/admin/generator.js') . '"></script>';
 
 if ($success) {
     echo '<script>setTimeout(function(){openToast("' . $languageService->translate('configuration_saved') . '")},500);</script>';
