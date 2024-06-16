@@ -10,7 +10,7 @@ use Photobooth\Utility\PathUtility;
 
 class Collage
 {
-    public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, string $filter = 'plain', CollageConfig $c = null): bool
+    public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, CollageConfig $c = null): bool
     {
         if ($c === null) {
             $c = CollageConfigFactory::fromConfig($config);
@@ -18,10 +18,6 @@ class Collage
         $editImages = [];
         $landscape = true;
         $rotate_after_creation = false;
-        $image_filter = false;
-        if (!empty($filter) && $filter !== 'plain') {
-            $image_filter = $filter;
-        }
 
         if ($c->collageBackgroundColor !== null) {
             // colors for background and while rotating jpeg images
@@ -99,8 +95,8 @@ class Collage
             }
 
             // apply filter
-            if ($image_filter) {
-                ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
+            if ($filter !== null && $filter !== ImageFilterEnum::PLAIN) {
+                ImageUtility::applyFilter($filter, $imageResource);
                 $imageHandler->imageModified = true;
             }
 

@@ -33,12 +33,11 @@ try {
 
     $style = $_POST['style'];
 
-    $image_filter = false;
-
+    $filter = null;
     if (!isset($_POST['filter'])) {
         $logger->debug('No filter provided.');
-    } elseif (!empty($_POST['filter']) && $_POST['filter'] !== 'plain') {
-        $image_filter = $_POST['filter'];
+    } elseif (!empty($_POST['filter'])) {
+        $filter = ImageFilterEnum::tryFrom($_POST['filter']);
     }
 } catch (\Exception $e) {
     // Handle the exception
@@ -69,7 +68,7 @@ try {
     if ($isCollage) {
         list($collageSrcImagePaths, $srcImages) = Collage::getCollageFiles($config['collage'], $filename_tmp, $file, $srcImages);
 
-        if (!Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $image_filter)) {
+        if (!Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $filter)) {
             throw new \Exception('Error creating collage image.');
         }
     }
@@ -119,9 +118,9 @@ try {
                 }
 
                 // apply filter
-                if ($image_filter) {
+                if ($filter !== null && $filter !== ImageFilterEnum::PLAIN) {
                     try {
-                        ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
+                        ImageUtility::applyFilter($filter, $imageResource);
                         $imageHandler->imageModified = true;
                     } catch (\Exception $e) {
                         throw new \Exception('Error applying image filter.');
