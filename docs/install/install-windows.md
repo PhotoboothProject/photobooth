@@ -92,15 +92,11 @@ After creating the account, run these commands:
 
 ```bash
 wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
-sudo bash install-photobooth.sh --username='<YourUsername>' --mjpeg --silent
+sudo bash install-photobooth.sh --username='<YourUsername>' --silent
 ```
 
-Now open the [admin section](http://localhost/admin) and
-set this as the live preview url:
+Enjoy your Photobooth installation!
 
-> [url(http://localhost:1984/api/stream.mjpeg?src=dslr)](http://localhost:1984/api/stream.mjpeg?src=dslr)
-
-and this as capture command: `capture %s`.
 
 ## Direct installation on windows (method 2)
 
