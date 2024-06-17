@@ -4,6 +4,7 @@ GO2RTC_VERSION="v1.8.6-4"
 YAML_STREAM="dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
 CAPTURE_CMD="gphoto2"
 CAPTURE_ARGS="--set-config output=Off --capture-image-and-download --filename=\$1"
+NOTE="don't forget to add --filename=%s."
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
@@ -120,7 +121,7 @@ Usage:
     capture <filename> [or all required $CAPTURE_CMD arguments]
 
 In photobooth, usually 'capture %s' is enough. But if you want to use a more complex command,
-don't forget to add --filename=%s.
+$NOTE
 
 HELP
   exit 0
@@ -180,11 +181,13 @@ elif [[ $REPLY =~ ^[2]$ ]]; then
     YAML_STREAM="dslr: exec:rpicam-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
     CAPTURE_CMD="rpicam-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
+    NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for libcamera-apps."
     YAML_STREAM="dslr: exec:libcamera-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
     CAPTURE_CMD="libcamera-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
+    NOTE="don't forget to add -o %s."
 else
     info "Okay... doing nothing!"
     exit 0
