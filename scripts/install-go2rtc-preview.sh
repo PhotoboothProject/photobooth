@@ -163,6 +163,25 @@ EOF
     fi
 }
 
+function uninstall() {
+    info "### Uninstalling the camera streaming service"
+
+    if systemctl is-active --quiet go2rtc.service; then
+        systemctl stop go2rtc.service
+    fi
+
+    systemctl disable go2rtc.service
+    rm -f /etc/systemd/system/go2rtc.service
+    systemctl daemon-reload
+
+    rm -f /etc/go2rtc.yaml
+    rm -f /usr/local/bin/go2rtc
+    rm -f /usr/local/bin/capture
+    rm -f /etc/sudoers.d/020_www-data-systemctl
+
+    info "### Uninstallation complete!"
+}
+
 info "Do you want to install a service to"
 info "be able to stream your camera to via?"
 info ""
@@ -170,9 +189,10 @@ echo "Your options are:"
 echo "1 Install go2rtc and needed service for gphoto2"
 echo "2 Install go2rtc and needed service for rpicam-apps"
 echo "3 Install go2rtc and needed service for libcamera-apps"
-echo "4 Do nothing"
+echo "4 Uninstall go2rtc and the related services"
+echo "5 Do nothing"
 info ""
-ask_yes_no "Please enter your choice:" "3"
+ask_yes_no "Please enter your choice:" "5"
 info ""
 if [[ $REPLY =~ ^[1]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for gphoto2."
@@ -188,6 +208,9 @@ elif [[ $REPLY =~ ^[3]$ ]]; then
     CAPTURE_CMD="libcamera-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
+elif [[ $REPLY =~ ^[4]$ ]]; then
+    uninstall
+    exit 0
 else
     info "Okay... doing nothing!"
     exit 0
