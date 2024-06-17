@@ -609,7 +609,40 @@ If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.
 
 There's different ways depending on your needs and personal setup:
 
-### Preview _"from device cam"_
+### Preview _"from URL"_ (remote preview, **preferred**)
+
+If you like to have the same preview independent of the device you access Photobooth from:
+
+Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
+
+-   Admin panel config _"Preview mode"_: `from URL`
+-   Admin panel config _"Preview-URL"_ example (add needed IP address instead): `url(http://192.168.0.2:8081)`
+
+**Note**
+
+-   Do NOT enable _"Device cam takes picture"_ in admin panel config!
+-   Capture pictures via `raspistill`, `libcamera-still` or ,`rpicam-still` won't work if motion is installed!
+-   Requires Photobooth v2.2.1 or later!
+
+### Setting up a preview stream from your DSLR or PiCamera
+
+If you want to use a stream from your DSLR or Pi Camera, install go2rtc and setup needed service to use.
+
+go2rtc can be accessed at `http://localhost:1984`. Use `url("http://localhost:1984/api/stream.mjpeg?src=dslr")` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
+To be able to also capture images you need to adjust the capture command.
+_"Commands"_: _"Take picture command"_: `capture %s`
+
+For preview via DSLR make sure your camera supports `--capture-movie`, for PiCamera make sure `rpicam-vid` or `libcamera-vid` works via terminal.
+
+Install go2rtc preview service:
+```sh
+wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/install-go2rtc-preview.sh
+sudo bash install-go2rtc-preview.sh
+```
+
+Follow the instructions and choose your variant to install. Once installed successfully reboot your device and adjust your Photobooth config as mentioned above.
+
+### Preview _"from device cam"_ (no remote preview)
 
 If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam" on PiOS bookworm inside Firefox which is shipped with the OS.
 
@@ -625,7 +658,7 @@ Currently there's an issue on PiOS bullseye with the new camera stack which avoi
     -   [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
 -   Admin panel config _"Device cam takes picture"_ can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still / rpicam-still.
 
-### Preview from DSLR
+### Preview from DSLR via _"from device cam"_ preview option (no remote preview)
 
 By now the DSLR handling of Photobooth on Linux was done exclusively using `gphoto2 CLI` (command line interface). When taking pictures while using preview video from the same camera one command has to be stopped and another one is run after that.
 
@@ -757,70 +790,6 @@ Disable `secure boot` in the BIOS and try again.
 
 If you're still having trouble feel free to join us at Telegram to get further support.
 
-### Preview _"from URL"_
-
-If you like to have the same preview independent of the device you access Photobooth from:
-
-Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
-
--   Admin panel config _"Preview mode"_: `from URL`
--   Admin panel config _"Preview-URL"_ example (add needed IP address instead): `url(http://192.168.0.2:8081)`
-
-**Note**
-
--   Do NOT enable _"Device cam takes picture"_ in admin panel config!
--   Capture pictures via `raspistill`, `libcamera-still` or ,`rpicam-still` won't work if motion is installed!
--   Requires Photobooth v2.2.1 or later!
-
-**Setting up a stream from your DSLR**
-
-If you want to use a stream from your DSLR, add the `--mjpeg` flag when running the install script. This will install go2rtc and automatically setup a stream from your DSLR. go2rtc can be accessed at `http://localhost:1984`. Use `url("http://localhost:1984/api/stream.mjpeg?src=dslr")` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
-To be able to also capture images you need to adjust the capture command.
-_"Commands"_: _"Take picture command"_: `capture %s`
-
-**PiOS bullseye and PiCamera**
-
-If you like to use the Pi Camera only for preview, you're able to setup motion and use the preview from URL option to use the motion stream.
-
-To use the Pi camera for preview and capture on PiOS bullseye you'll also have to setup the _Photobooth-app_ and adjust your preview and capture config:
-
--   [Installation instructions](https://mgrl.github.io/photobooth-docs/setup/installation/)
--   [Photobooth integration](https://mgrl.github.io/photobooth-docs/reference/photoboothprojectintegration/)
-
-This can also be used on PiOS bookworm if you like to have a remote preview and capture with a PiCamera.
-
-**Remote preview and capture workaround for PiOS bullseye**
-
-This workaround, requires the python mjpeg*http_streamer installed - replace \_localhost* with the desired ip-address as needed:
-
-```
-sudo pip install mjpeg-http-streamer
-```
-
-TAKE PHOTO CMD:
-
-```
-wget http://localhost:8080/snapshot -O %s | echo Done
-```
-
-PREVIEW URL:
-
-```
-url(http://localhost:8080/stream)
-```
-
-PRE-PHOTO CMD:
-
-```
-libcamera-vid -t 0 --width 1920 --height 1080 --framerate 30 --inline --codec mjpeg -o - | python3 -m mjpeg_http_streamer -l 0.0.0.0 -p 8080
-```
-
-POST-PHOTO CMD:
-
-```
-kill $(ps aux | grep '[l]ibcamera' | awk '{print $2}')
-```
-
 ---
 
 ## Can I use a live stream as background?
@@ -839,19 +808,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
     +   url(http://192.168.0.2:8081)
     ```
 
-    To use a Raspberry Pi Camera module Motion is required, but you won't be able to use the Raspberry Pi Camera
-    for preview at countdown!
-
-    ```sh
-    sudo apt-get install -y motion
-    ```
-
-    _/etc/motion/motion.conf_ needs to be changed to your needs (e.g. starting on boot, using videoX, resolution, etc.).
-
-    If you're accessing Photobooth from an external device (e.g. Tablet or Mobile Phone) replace `127.0.0.1` with your IP-Adress.
-
-    For reference:
-    [https://github.com/andreknieriem/photobooth/pull/20](https://github.com/andreknieriem/photobooth/pull/20)
+    To use an DSLR or an Raspberry Pi Camera module see _Setting up a preview stream from your DSLR or PiCamera_ above.
 
 ---
 
