@@ -32,6 +32,12 @@ function install_go2rtc() {
     local file
     local install_bin
 
+    if [[ -f /etc/systemd/system/go2rtc.service ]]; then
+        if systemctl is-active --quiet go2rtc.service; then
+            systemctl stop go2rtc.service
+        fi
+    fi
+
     if command -v go2rtc &>/dev/null; then
         if [[ $(go2rtc -version) =~ $GO2RTC_VERSION ]]; then
             info "### go2rtc version ${GO2RTC_VERSION} installed already!"
@@ -83,6 +89,10 @@ function install_go2rtc() {
         file="go2rtc_${os}_${goarch}"
         wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
         chmod +x /usr/local/bin/go2rtc
+    fi
+
+    if [[ -f /etc/systemd/system/go2rtc.service ]]; then
+        systemctl start go2rtc.service
     fi
 }
 
