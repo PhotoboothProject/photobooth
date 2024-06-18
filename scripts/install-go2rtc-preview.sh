@@ -31,6 +31,7 @@ function install_go2rtc() {
     local os
     local file
     local install_bin
+    local installed_version
 
     if [[ -f /etc/systemd/system/go2rtc.service ]]; then
         if systemctl is-active --quiet go2rtc.service; then
@@ -39,7 +40,8 @@ function install_go2rtc() {
     fi
 
     if command -v go2rtc &>/dev/null; then
-        if [[ $(go2rtc -version) =~ $GO2RTC_VERSION ]]; then
+        installed_version=$(go2rtc -version 2>&1 | grep -oP 'version=\K[0-9]+\.[0-9]+\.[0-9]+' || go2rtc -version 2>&1 | grep -oP 'go2rtc version \K[0-9]+\.[0-9]+\.[0-9]+')
+        if [[ $installed_version == $GO2RTC_VERSION ]]; then
             info "### go2rtc version ${GO2RTC_VERSION} installed already!"
             install_bin=false
         else
