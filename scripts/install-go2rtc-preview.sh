@@ -5,6 +5,7 @@ YAML_STREAM="dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
 CAPTURE_CMD="gphoto2"
 CAPTURE_ARGS="--set-config output=Off --capture-image-and-download --filename=\$1"
 NOTE="don't forget to add --filename=%s."
+UPDATE_ONLY=false
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
@@ -24,15 +25,31 @@ function ask_yes_no {
     read -p "${1}: " -n 1 -r
 }
 
-function mjpeg_preview() {
+function install_go2rtc() {
     local arch
     local goarch
     local os
     local file
+    local install_bin
 
-    if ! command -v go2rtc &>/dev/null || [[ ! $(go2rtc -version) =~ $GO2RTC_VERSION ]]; then
+    if command -v go2rtc &>/dev/null; then
+        if [[ $(go2rtc -version) =~ $GO2RTC_VERSION ]]; then
+            info "### go2rtc version ${GO2RTC_VERSION} installed already!"
+            install_bin=false
+        else
+            info "### Updating go2rtc to version: ${GO2RTC_VERSION}"
+            install_bin=true
+        fi
+    else
+        if [ "$UPDATE_ONLY" = true ]; then
+            error "### go2rtc not installed! Can not update!"
+            exit 1
+        fi
         info "### Installing go2rtc (version: ${GO2RTC_VERSION})"
+        install_bin=true
+    fi
 
+    if [ "$install_bin" = true ]; then 
         if [[ "$OSTYPE" =~ linux ]]; then
             os=linux
         elif [[ "$OSTYPE" =~ darwin ]]; then
@@ -67,7 +84,10 @@ function mjpeg_preview() {
         wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
         chmod +x /usr/local/bin/go2rtc
     fi
+}
 
+function mjpeg_preview() {
+    install_go2rtc
     if [[ ! -f /etc/go2rtc.yaml ]]; then
         info "### Creating /etc/go2rtc.yaml configuration file"
         cat >/etc/go2rtc.yaml <<EOF
@@ -187,10 +207,11 @@ echo "Your options are:"
 echo "1 Install go2rtc and needed service for gphoto2"
 echo "2 Install go2rtc and needed service for rpicam-apps"
 echo "3 Install go2rtc and needed service for libcamera-apps"
-echo "4 Uninstall go2rtc and the related services"
-echo "5 Do nothing"
+echo "4 Update go2rtc only (version: ${GO2RTC_VERSION})"
+echo "5 Uninstall go2rtc and the related services"
+echo "6 Do nothing"
 info ""
-ask_yes_no "Please enter your choice:" "5"
+ask_yes_no "Please enter your choice:" "6"
 info ""
 if [[ $REPLY =~ ^[1]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for gphoto2."
@@ -207,6 +228,11 @@ elif [[ $REPLY =~ ^[3]$ ]]; then
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[4]$ ]]; then
+    UPDATE_ONLY=true
+    install_go2rtc
+    info "Done!"
+    exit 0
+elif [[ $REPLY =~ ^[5]$ ]]; then
     uninstall
     exit 0
 else
