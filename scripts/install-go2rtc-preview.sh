@@ -49,7 +49,7 @@ function install_go2rtc() {
         install_bin=true
     fi
 
-    if [ "$install_bin" = true ]; then 
+    if [ "$install_bin" = true ]; then
         if [[ "$OSTYPE" =~ linux ]]; then
             os=linux
         elif [[ "$OSTYPE" =~ darwin ]]; then
