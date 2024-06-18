@@ -184,13 +184,15 @@ EOF
 function uninstall() {
     info "### Uninstalling the camera streaming service"
 
-    if systemctl is-active --quiet go2rtc.service; then
-        systemctl stop go2rtc.service
-    fi
+    if [[ -f /etc/systemd/system/go2rtc.service ]]; then
+        if systemctl is-active --quiet go2rtc.service; then
+            systemctl stop go2rtc.service
+        fi
 
-    systemctl disable go2rtc.service
-    rm -f /etc/systemd/system/go2rtc.service
-    systemctl daemon-reload
+        systemctl disable go2rtc.service
+        rm -f /etc/systemd/system/go2rtc.service
+        systemctl daemon-reload
+    fi
 
     rm -f /etc/go2rtc.yaml
     rm -f /usr/local/bin/go2rtc
