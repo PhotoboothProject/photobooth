@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GO2RTC_VERSION="v1.9.3"
+GO2RTC_VERSION="1.9.3"
 YAML_STREAM="dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
 CAPTURE_CMD="gphoto2"
 CAPTURE_ARGS="--set-config output=Off --capture-image-and-download --filename=\$1"
@@ -87,7 +87,7 @@ function install_go2rtc() {
             mkdir -p /usr/local/bin
         fi
         file="go2rtc_${os}_${goarch}"
-        wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/${GO2RTC_VERSION}/${file}"
+        wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/v${GO2RTC_VERSION}/${file}"
         chmod +x /usr/local/bin/go2rtc
     fi
 
