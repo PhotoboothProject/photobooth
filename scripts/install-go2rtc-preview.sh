@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GO2RTC_VERSION="1.9.3"
-YAML_STREAM="dslr: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
+YAML_STREAM="photobooth: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
 CAPTURE_CMD="gphoto2"
 CAPTURE_ARGS="--set-config output=Off --capture-image-and-download --filename=\$1"
 NOTE="don't forget to add --filename=%s."
@@ -179,7 +179,7 @@ EOF
     info ""
     info "    Please adjust your Photobooth configuration:"
     info "    Preview mode: from URL"
-    info "    Preview-URL: url(\"http://localhost:1984/api/stream.mjpeg?src=dslr\")"
+    info "    Preview-URL: url(\"http://localhost:1984/api/stream.mjpeg?src=photobooth\")"
     info "    Take picture command: capture %s"
     warn "    Note: Countdown for pictures and collage should be set to a minimum of 6 seconds!"
     info ""
@@ -232,13 +232,13 @@ if [[ $REPLY =~ ^[1]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for gphoto2."
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for rpicam-apps."
-    YAML_STREAM="dslr: exec:rpicam-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
     CAPTURE_CMD="rpicam-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for libcamera-apps."
-    YAML_STREAM="dslr: exec:libcamera-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:libcamera-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
     CAPTURE_CMD="libcamera-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
