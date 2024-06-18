@@ -235,7 +235,7 @@ echo "4 Update go2rtc only (version: ${GO2RTC_VERSION})"
 echo "5 Uninstall go2rtc and the related services"
 echo "6 Do nothing"
 info ""
-ask_yes_no "Please enter your choice:" "6"
+ask_yes_no "Please enter your choice" "6"
 info ""
 if [[ $REPLY =~ ^[1]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for gphoto2."
@@ -260,10 +260,10 @@ elif [[ $REPLY =~ ^[5]$ ]]; then
     uninstall
     exit 0
 else
-    info "Okay... doing nothing!"
+    info "### Okay... doing nothing!"
     exit 0
 fi
 
 mjpeg_preview
-info "Done!"
+info "### Done!"
 exit 0
