@@ -59,10 +59,12 @@ function install_go2rtc() {
     fi
 
     if [ "$install_bin" = true ]; then
+        is_zip=false
         if [[ "$OSTYPE" =~ linux ]]; then
             os=linux
         elif [[ "$OSTYPE" =~ darwin ]]; then
             os=mac
+            is_zip=true
         else
             error "### $OSTYPE not supported"
             exit 1
@@ -89,8 +91,15 @@ function install_go2rtc() {
         if [[ ! -d /usr/local/bin ]]; then
             mkdir -p /usr/local/bin
         fi
-        file="go2rtc_${os}_${goarch}"
-        wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/v${GO2RTC_VERSION}/${file}"
+        if [ "$is_zip" = true ]; then
+            file="go2rtc_${os}_${goarch}.zip"
+            wget -O /tmp/go2rtc.zip "https://github.com/AlexxIT/go2rtc/releases/download/v${GO2RTC_VERSION}/${file}"
+            unzip -p /tmp/go2rtc.zip go2rtc >/usr/local/bin/go2rtc
+            rm /tmp/go2rtc.zip
+        else
+            file="go2rtc_${os}_${goarch}"
+            wget -O /usr/local/bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/download/v${GO2RTC_VERSION}/${file}"
+        fi
         chmod +x /usr/local/bin/go2rtc
     fi
 
