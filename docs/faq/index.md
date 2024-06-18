@@ -628,7 +628,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 
 If you want to use a stream from your DSLR or Pi Camera, install go2rtc and setup needed service to use.
 
-go2rtc can be accessed at `http://localhost:1984`. Use `url("http://localhost:1984/api/stream.mjpeg?src=dslr")` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
+go2rtc can be accessed at `http://localhost:1984`. Use `url("http://localhost:1984/api/stream.mjpeg?src=photobooth")` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
 To be able to also capture images you need to adjust the capture command.
 _"Commands"_: _"Take picture command"_: `capture %s`
 
