@@ -45,6 +45,7 @@ function install_go2rtc() {
             info "### go2rtc version ${GO2RTC_VERSION} installed already!"
             install_bin=false
         else
+            info "### Found go2rtc version: ${installed_version}"
             info "### Updating go2rtc to version: ${GO2RTC_VERSION}"
             install_bin=true
         fi
