@@ -44,6 +44,19 @@ EOF
     rmmod bcm2835-isp || true
 }
 
+function clean_service() {
+    if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
+        info "### Old ffmpeg-webcam.service detected. Uninstalling..."
+        systemctl disable --now ffmpeg-webcam.service
+        rm /etc/systemd/system/ffmpeg-webcam.service
+        systemctl daemon-reload
+        if [[ -f /usr/ffmpeg-webcam.sh ]]; then
+            info "### Also removing the /usr/ffmpeg-webcam.sh file"
+            rm /usr/ffmpeg-webcam.sh
+        fi
+    fi
+}
+
 info "This script installs some dependencies and simplifies the setup for using gphoto2 as webcam."
 info "It installs required dependencies and sets up a virtual webcam that gphoto2 can stream video to."
 info "It can remove the gphoto2 webcam setup, as well."
@@ -84,26 +97,24 @@ EOF
         # adjust runtime
         modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
         rmmod bcm2835-isp || true
+        info "### Done!"
+        info "    Please adjust your Photobooth configuration:"
+        info "    Preview mode: from device cam"
+        info "    Command to generate a live preview: python3 cameracontrol.py"
+        info "    Execute start command for preview on take picture/collage: disabled"
+        info "    Take picture command: python3 cameracontrol.py --capture-image-and-download %s"
+        exit 0
     fi
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### Stopping and removing gphoto2 webcam service."
     [[ -f /etc/modprobe.d/v4l2loopback.conf ]] && rm /etc/modprobe.d/v4l2loopback.conf
     rmmod v4l2loopback || true
+    clean_service
     info "gphoto2 webcam removed..."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### Migrating to modprobe config"
     gphoto_preview
-
-    if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
-        info "### Old ffmpeg-webcam.service detected. Uninstalling..."
-        systemctl disable --now ffmpeg-webcam.service
-        rm /etc/systemd/system/ffmpeg-webcam.service
-        systemctl daemon-reload
-        if [[ -f /usr/ffmpeg-webcam.sh ]]; then
-            info "### Also removing the /usr/ffmpeg-webcam.sh file"
-            rm /usr/ffmpeg-webcam.sh
-        fi
-    fi
+    clean_service
 else
     info "Okay... doing nothing!"
 fi
