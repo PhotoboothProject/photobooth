@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GO2RTC_VERSION="1.9.3"
+GO2RTC_VERSION="1.9.4"
 YAML_STREAM="photobooth: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
 CAPTURE_CMD="gphoto2"
 CAPTURE_ARGS="--set-config output=Off --capture-image-and-download --filename=\$1"
