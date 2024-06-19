@@ -29,6 +29,37 @@ function ask_yes_no {
     read -p "${1}: " -n 1 -r
 }
 
+function add_cronjob() {
+    path1="/var/www/html/api/cameracontrol.py"
+    path2="/var/www/html/photobooth/api/cameracontrol.py"
+
+    # Check if cameracontrol.py exists
+    if [ -f "$path1" ]; then
+         script_path="$path1"
+    elif [ -f "$path2" ]; then
+        script_path="$path2"
+    else
+        error "### Error: Neither $path1 nor $path2 exists."
+        error "### Can not create cronjob for www-data user!"
+        exit 1
+    fi
+
+    cron_job="@reboot /usr/bin/python3 $script_path -b"
+    current_crontab=$(sudo -u www-data crontab -l 2>/dev/null)
+
+    if echo "$current_crontab" | grep -qF "$cron_job"; then
+        info "### Cron job already exists."
+    else
+        (echo "$current_crontab"; echo "$cron_job") | sudo -u www-data crontab -
+        info "### Cron job added to start cameracontrol.py at boot"
+        info "    in bsm mode as www-data user"
+    fi
+}
+
+function remove_cronjob() {
+    sudo -u www-data crontab -l 2>/dev/null | grep -v -E '/var/www/html/api/cameracontrol.py|/var/www/html/photobooth/api/cameracontrol.py' | sudo -u www-data crontab -
+}
+
 function gphoto_preview() {
     # make configs persistent
     [[ ! -d /etc/modules-load.d ]] && mkdir /etc/modules-load.d
@@ -80,11 +111,11 @@ if [[ $REPLY =~ ^[1]$ ]]; then
         fi
     done
 
-    info "All required software was installed."
+    info "### All required software was installed."
     info ""
-    info "Note: Installing gphoto2 as webcam disables other webcams."
+    info "### Note: Installing gphoto2 as webcam disables other webcams."
     info ""
-    ask_yes_no "Do you want to setup gphoto2 as a webcam? (y/n)" "n"
+    ask_yes_no "### Do you want to setup gphoto2 as a webcam? (y/n)" "n"
     info ""
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         info "### Installing gphoto2 webcam"
@@ -103,6 +134,9 @@ EOF
         info "    Command to generate a live preview: python3 cameracontrol.py"
         info "    Execute start command for preview on take picture/collage: disabled"
         info "    Take picture command: python3 cameracontrol.py --capture-image-and-download %s"
+        info ""
+        info "### Trying to create needed cronjob ..."
+        add_cronjob
         exit 0
     fi
 elif [[ $REPLY =~ ^[2]$ ]]; then
@@ -110,13 +144,16 @@ elif [[ $REPLY =~ ^[2]$ ]]; then
     [[ -f /etc/modprobe.d/v4l2loopback.conf ]] && rm /etc/modprobe.d/v4l2loopback.conf
     rmmod v4l2loopback || true
     clean_service
+    remove_cronjob
     info "gphoto2 webcam removed..."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### Migrating to modprobe config"
     gphoto_preview
     clean_service
+    info "### Trying to create needed cronjob ..."
+    add_cronjob
 else
-    info "Okay... doing nothing!"
+    info "### Okay... doing nothing!"
 fi
-info "Done!"
+info "### Done!"
 exit 0
