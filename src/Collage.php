@@ -679,24 +679,22 @@ class Collage
                         }
 
                         if (array_key_exists('background', $collageJson) && !empty($collageJson['background'])) {
-                            if ($collageJson['background']) {
-                                $imageHandler->resizeMaxWidth = (int)$collage_width;
-                                $imageHandler->resizeMaxHeight = (int)$collage_height;
-                                $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
-                                if (!$backgroundImage instanceof \GdImage) {
-                                    throw new \Exception('Failed to create collage background resource.');
-                                }
-                                $backgroundImage = $imageHandler->resizeImage($backgroundImage);
-                                if (!$backgroundImage instanceof \GdImage) {
-                                    throw new \Exception('Failed to resize collage background resource.');
-                                }
-                                $bg_width = imagesx($backgroundImage);
-                                $bg_height = imagesy($backgroundImage);
-                                imagecopyresampled($my_collage, $backgroundImage, 0, 0, 0, 0, $bg_width, $bg_height, $bg_width, $bg_height);
-                                $imageHandler->addPictureBgImage = $collageJson['background'];
-                                if(!str_starts_with($collageJson['background'], $_SERVER['DOCUMENT_ROOT'])) {
-                                    $imageHandler->addPictureBgImage = $_SERVER['DOCUMENT_ROOT'] . $collageJson['background'];
-                                }
+                            $imageHandler->resizeMaxWidth = (int)$collage_width;
+                            $imageHandler->resizeMaxHeight = (int)$collage_height;
+                            $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
+                            if (!$backgroundImage instanceof \GdImage) {
+                                throw new \Exception('Failed to create collage background resource.');
+                            }
+                            $backgroundImage = $imageHandler->resizeImage($backgroundImage);
+                            if (!$backgroundImage instanceof \GdImage) {
+                                throw new \Exception('Failed to resize collage background resource.');
+                            }
+                            $bg_width = imagesx($backgroundImage);
+                            $bg_height = imagesy($backgroundImage);
+                            imagecopyresampled($my_collage, $backgroundImage, 0, 0, 0, 0, $bg_width, $bg_height, $bg_width, $bg_height);
+                            $imageHandler->addPictureBgImage = $collageJson['background'];
+                            if(!str_starts_with($collageJson['background'], $_SERVER['DOCUMENT_ROOT'])) {
+                                $imageHandler->addPictureBgImage = $_SERVER['DOCUMENT_ROOT'] . $collageJson['background'];
                             }
                         }
 
