@@ -91,7 +91,7 @@ It will ask you for a username and password. You can choose anything you want.
 After creating the account, run these commands:
 
 ```bash
-wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
+wget -O install-photobooth.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
 sudo bash install-photobooth.sh --username='<YourUsername>' --silent
 ```
 

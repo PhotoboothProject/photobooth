@@ -9,7 +9,7 @@ The installation script is intendet to work on Raspberry Pi OS based on Debian b
 A valid username is needed to run the installer. Your OS username must be passed by the `-username` flag to the installer.
 
 ```sh
-wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
+wget -O install-photobooth.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
 sudo bash install-photobooth.sh -username='<YourUsername>'
 ```
 
@@ -33,13 +33,6 @@ To use Lighttpd as Webserver run
 ```sh
 sudo bash install-photobooth.sh -username='<YourUsername>' -webserver='lighttpd'
 ```
-
-If you want to use your camera as a live preview for your photobooth users, you could
-add the `--mjpeg` option which installs `go2rtc` (or use `--mjpeg-only` to only
-install go2rtc, then exit). Then you just have to set the preview mode to `URL` (be sure to
-enable expert mode) and set this as preview url:
-
-> [url(http://localhost:1984/stream.html?src=dslr&mode=mjpeg)](http://localhost:1984/stream.html?src=dslr&mode=mjpeg)
 
 To get to know all options you can simply run `sudo bash install-photobooth.sh -help`.
 
@@ -91,8 +84,8 @@ sudo apt install -y curl gcc g++ make git ffmpeg gphoto2 libimage-exiftool-perl 
 **Optional:** If you have a new camera, you can also install the latest version of libgphoto2 directly from the maintainer. Choose "Install last stable release":
 
 ```sh
-wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
-wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
+wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
+wget -O .env https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
 chmod +x gphoto2-updater.sh
 sudo ./gphoto2-updater.sh
 ```
