@@ -754,6 +754,7 @@ $assetService = AssetService::getInstance();
 
 echo '<script src="' . $assetService->getUrl('api/settings.php') . '"></script>';
 echo '<script src="' . $assetService->getUrl('resources/js/admin/generator.js') . '"></script>';
+echo '<script src="' . $assetService->getUrl('resources/js/admin/imageSelect.js') . '"></script>';
 
 if ($success) {
     echo '<script>setTimeout(function(){openToast("' . $languageService->translate('configuration_saved') . '")},500);</script>';
