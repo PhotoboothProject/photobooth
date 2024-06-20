@@ -636,7 +636,7 @@ For preview via DSLR make sure your camera supports `--capture-movie`, for PiCam
 
 Install go2rtc preview service:
 ```sh
-wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/install-go2rtc-preview.sh
+wget -O install-go2rtc-preview.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/install-go2rtc-preview.sh
 sudo bash install-go2rtc-preview.sh
 ```
 
@@ -671,7 +671,7 @@ The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed usi
 To use `gphoto-python`, first execute the `install-gphoto-python.sh` if you have not already installed "a service to set up a virtual webcam that gphoto2 can stream video to" while using the Photobooth installer on initial installation:
 
 ```sh
-wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/gphoto/install-gphoto-python.sh
+wget -O install-gphoto-python.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/install-gphoto-python.sh
 sudo bash install-gphoto-python.sh
 ```
 
@@ -885,7 +885,7 @@ Use the `install-photobooth.sh` script to get the operating system setup in plac
 **Note:** If you have declined the question to enable the USB sync file backup while running the `install-photobooth.sh` you need to run the following commands to get the operating system setup done:
 
 ```sh
-wget https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/enable-usb-sync.sh
+wget -O enable-usb-sync.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/enable-usb-sync.sh
 sudo bash enable-usb-sync.sh -username='<YourUsername>'
 ```
 
@@ -1189,8 +1189,8 @@ Does it work?
 -   **No**: Try updating gphoto2 and libgphoto. Run the following commands to install latest development version of gphoto2 and libgphoto:
 
 ```
-wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
-wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
+wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
+wget -O .env https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
 chmod +x gphoto2-updater.sh
 sudo ./gphoto2-updater.sh --development
 sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
