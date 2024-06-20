@@ -245,7 +245,7 @@ $font_styles .= '</style>';
       'value' => '',
       'paths' => [
         PathUtility::getAbsolutePath('resources/img/background'),
-        PathUtility::getAbsolutePath('private/images/backgrounds'),
+        PathUtility::getAbsolutePath('private/images/background'),
       ],
       'attributes' => ['data-trigger' => 'general']
                       ],
