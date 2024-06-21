@@ -403,8 +403,8 @@ $font_styles .= '</style>';
       'name' => 'placeholder_image',
       'value' => '',
       'paths' => [
-        PathUtility::getAbsolutePath('resources/img/placeholders'),
-        PathUtility::getAbsolutePath('private/images/placeholders'),
+        PathUtility::getAbsolutePath('resources/img/demo'),
+        PathUtility::getAbsolutePath('private/images/placeholder'),
       ],
       'attributes' => ['data-trigger' => 'general']
                       ],
