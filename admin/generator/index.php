@@ -34,7 +34,7 @@ if(file_exists($collageConfigFilePath)) {
     $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
     if(!is_writable($collageConfigFilePath)) {
         $permitSubmit = false;
-        $enableWriteMessage = $languageService->translate('please_enable_write');
+        $enableWriteMessage = $languageService->translate('collage:generator:please_enable_write');
     }
 }
 
@@ -213,14 +213,14 @@ $font_styles .= '</style>';
             <?php if($collageJson !== '') { ?>
               <div class="w-full flex flex-col gap-2 mb-4 md:mb-8">
                 <div>
-                  <?= AdminInput::renderCta('load_current_configuration', 'loadCurrentConfiguration') ?>
+                  <?= AdminInput::renderCta('collage:generator:load_current_configuration', 'loadCurrentConfiguration') ?>
                 </div>
               </div>
             <?php } ?>
             <div class="grid gap-2">
               <div>
                 <span class="w-full flex flex-col items-center justify-center text-2md font-bold text-brand-1 mb-2">
-                  <?= $languageService->translate('general_settings') ?>
+                  <?= $languageService->translate('general') ?>
                 </span>
               </div>
               <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
@@ -233,7 +233,7 @@ $font_styles .= '</style>';
                         'placeholder' => 'background color',
                         'attributes' => ['data-trigger' => 'general']
                       ],
-                        $languageService->translate('background_color')
+                        $languageService->translate('collage:collage_background_color')
                     )
 ?>
                 </div>
@@ -289,7 +289,7 @@ $font_styles .= '</style>';
       'value' => 'false',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('rotate_after_creation')
+      $languageService->translate('collage:generator:rotate_after_creation')
   )
 ?>
                 </div>
@@ -303,7 +303,7 @@ $font_styles .= '</style>';
       'placeholder' => 'collage width',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('final_width')
+      $languageService->translate('collage:generator:final_width')
   )
 ?>
                 </div>
@@ -317,7 +317,7 @@ $font_styles .= '</style>';
       'placeholder' => 'collage height',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('final_height')
+      $languageService->translate('collage:generator:final_height')
   )
 ?>
                 </div>
@@ -335,7 +335,7 @@ $font_styles .= '</style>';
       'value' => 'always',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('apply_frame')
+      $languageService->translate('collage:collage_take_frame')
   )
 ?>
                 </div>
@@ -347,7 +347,7 @@ $font_styles .= '</style>';
       'value' => 'false',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('show-background')
+      $languageService->translate('collage:generator:show_background')
   )
 ?>
                 </div>
@@ -359,27 +359,27 @@ $font_styles .= '</style>';
       'value' => 'false',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('show-frame')
+      $languageService->translate('collage:generator:show_frame')
   )
 ?>
                 </div>
               </div>
               <div>
                 <span class="w-full flex flex-col items-center justify-center text-2md font-bold text-brand-1 mb-2">
-                  <?= $languageService->translate('placeholder_settings') ?>
+                  <?= $languageService->translate('collage:generator:placeholder_settings') ?>
                 </span>
               </div>
               <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
                 <div class="col-span-2 flex flex-col">
                   <?=
-                    AdminInput::renderCheckbox(
-                        [
-                        'name' => 'enable_placeholder_image',
-                        'value' => 'false',
-                        'attributes' => ['data-trigger' => 'general']
+  AdminInput::renderCheckbox(
+      [
+      'name' => 'enable_placeholder_image',
+      'value' => 'false',
+      'attributes' => ['data-trigger' => 'general']
                       ],
-                        $languageService->translate('enable_placeholder_image')
-                    )
+      $languageService->translate('collage:collage_placeholder')
+  )
 ?>
                 </div>
                 <div class="col-span-2 flex flex-col">
@@ -392,7 +392,7 @@ $font_styles .= '</style>';
       'placeholder' => 'placehoder image position',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('placeholder_image_position')
+      $languageService->translate('collage:collage_placeholderposition')
   )
 ?>
                 </div>
@@ -427,7 +427,7 @@ $font_styles .= '</style>';
       'value' => 'false',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_enabled')
+      $languageService->translate('collage:textoncollage_enabled')
   )
 ?>
                 </div>
@@ -441,7 +441,7 @@ $font_styles .= '</style>';
       'value' => array_key_first($font_family_options),
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_font_family')
+      $languageService->translate('collage:textoncollage_font')
   )
 ?>
                 </div>
@@ -454,7 +454,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text font color',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_font_color')
+      $languageService->translate('collage:textoncollage_font_color')
   )
 ?>
                 </div>
@@ -468,7 +468,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text font size',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_font_size')
+      $languageService->translate('collage:textoncollage_font_size')
   )
 ?>
                 </div>
@@ -482,7 +482,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text line 1',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_line_1')
+      $languageService->translate('collage:textoncollage_line1')
   )
 ?>
                 </div>
@@ -496,7 +496,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text line 2',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_line_2')
+      $languageService->translate('collage:textoncollage_line2')
   )
 ?>
                 </div>
@@ -510,7 +510,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text line 3',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_line_3')
+      $languageService->translate('collage:textoncollage_line3')
   )
 ?>
                 </div>
@@ -524,7 +524,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text line space',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_line_space')
+      $languageService->translate('collage:textoncollage_linespace')
   )
 ?>
                 </div>
@@ -538,7 +538,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text location x',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_location_x')
+      $languageService->translate('collage:textoncollage_locationx')
   )
 ?>
                 </div>
@@ -552,7 +552,7 @@ $font_styles .= '</style>';
       'placeholder' => 'text location y',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_location_y')
+      $languageService->translate('collage:textoncollage_locationy')
   )
 ?>
                 </div>
@@ -570,7 +570,7 @@ $font_styles .= '</style>';
       'placeholder' => 'degrees',
       'attributes' => ['data-trigger' => 'general']
                       ],
-      $languageService->translate('text_rotation')
+      $languageService->translate('collage:textoncollage_rotation')
   )
 ?>
                 </div>
@@ -603,7 +603,7 @@ $font_styles .= '</style>';
                                 'placeholder' => 'x position',
                                 'attributes' => ['data-prop' => 'left', 'data-trigger' => 'image']
                         ],
-                                $languageService->translate('x_position')
+                                $languageService->translate('collage:generator:x_position')
                             )
                     ?>
                   </div>
@@ -617,7 +617,7 @@ $font_styles .= '</style>';
                           'placeholder' => 'y position',
                           'attributes' => ['data-prop' => 'top', 'data-trigger' => 'image']
                         ],
-                          $languageService->translate('y_position')
+                          $languageService->translate('collage:generator:y_position')
                       )
                     ?>
                   </div>
@@ -675,7 +675,7 @@ $font_styles .= '</style>';
                           'value' => 'false',
                           'attributes' => ['data-prop' => 'single_frame', 'data-trigger' => 'image']
                         ],
-                          $languageService->translate('show_single_frame')
+                          $languageService->translate('collage:generator:show_single_frame')
                       )
                     ?>
                   </div>
@@ -739,7 +739,7 @@ $font_styles .= '</style>';
         <?php
           echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
 
-echo getMenuBtn(PathUtility::getPublicPath('test/collage.php'), 'test_collage', $config['icons']['take_collage'], true);
+echo getMenuBtn(PathUtility::getPublicPath('test/collage.php'), 'collageTest', $config['icons']['take_collage'], true);
 
 if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
     echo getMenuBtn(PathUtility::getPublicPath('login/logout.php'), 'logout', $config['icons']['logout']);
