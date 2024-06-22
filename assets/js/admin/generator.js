@@ -131,7 +131,7 @@ function loadCurrentConfig() {
         let exampleImage = $('#' + identifier);
         exampleImage.removeClass('hidden');
 
-        inputLayout.find('input').each(function (propertyPosition) {
+        inputLayout.find('input:not([type=hidden])').each(function (propertyPosition) {
             let inputType = $(this).attr('type');
             if (inputType === 'range') {
                 $(this).parent().find('span:first').text(layout[i][propertyPosition]);
@@ -270,7 +270,9 @@ function updateImage(containerId) {
         if (prop_name === 'single_frame') {
             new_value = $(this).is(':checked');
         }
-        changeImageSetting(new_value, prop_name, containerId, changepath);
+        if (prop_name) {
+            changeImageSetting(new_value, prop_name, containerId, changepath);
+        }
     });
 }
 
@@ -432,7 +434,7 @@ function saveConfiguration() {
     $('div.image_layout:visible').each(function () {
         let container = $(this);
         let single_image_layout = [];
-        container.find('input').each(function () {
+        container.find('input:not([type=hidden])').each(function () {
             let to_save = $(this).val();
             if ($(this).attr('type') === 'checkbox') {
                 to_save = $(this).is(':checked') && configuration.apply_frame === 'always';

@@ -7,16 +7,11 @@ use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Factory\CollageConfigFactory;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
-use Photobooth\Service\LoggerService;
 
 class Collage
 {
     public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, CollageConfig $c = null): bool
     {
-        $loggerService = LoggerService::getInstance();
-        $logger = $loggerService->getLogger('main');
-        $logger->debug(basename($_SERVER['PHP_SELF']));
-
         if ($c === null) {
             $c = CollageConfigFactory::fromConfig($config);
         }
@@ -771,7 +766,6 @@ class Collage
                 }
 
                 foreach ($pictureOptions as $i => $singlePictureOptions) {
-                    $logger->info('apply frame. ', [$imageHandler->addPictureApplyFrame]);
                     $tmpImg = $imageHandler->createFromImage($editImages[$i]);
                     if (!$tmpImg instanceof \GdImage) {
                         throw new \Exception('Failed to create tmp image resource.');
