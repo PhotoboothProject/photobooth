@@ -183,7 +183,6 @@
   "manual:print:textonprint_locationx": "Współrzędne X tekstu podczas drukowania tekstu na zdjęciu.",
   "manual:print:textonprint_locationy": "Współrzędne Y tekstu podczas drukowania tekstu na zdjęciu.",
   "manual:slideshow:slideshow_randomPicture": "Jeśli włączone, losowe zdjęcia będą wyświetlane na galerii samodzielnej.",
-  "manual:userinterface:ui_font_size": "Wprowadź domyślny rozmiar czcionki używany dla interfejsu Fotobudki.",
   "milliseconds": "milisekundy",
   "newCollage": "Nowy kolaż",
   "newPhoto": "Nowy obraz",
@@ -264,6 +263,5 @@
   "userinterface:colors_primary": "Kolor podstawowy",
   "userinterface:colors_secondary": "Kolor Dodatkowy",
   "userinterface:colors_start_font": "Kolor czcionki ekranu startowego",
-  "userinterface:ui_font_size": "Domyślny rozmiar czcionki",
   "using_latest_version": "Używasz najnowszej dostępnej wersji Fotobudki."
 }
