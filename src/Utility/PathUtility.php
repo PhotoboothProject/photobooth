@@ -23,6 +23,10 @@ class PathUtility
             return '';
         }
 
+        if (self::isUrl($path)) {
+            return $path;
+        }
+
         $documentRoot = self::getRootPath();
         $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
 
