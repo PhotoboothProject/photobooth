@@ -642,6 +642,10 @@ sudo bash install-go2rtc-preview.sh
 
 Follow the instructions and choose your variant to install. Once installed successfully reboot your device and adjust your Photobooth config as mentioned above.
 
+**Note:**
+
+For PiCamera default width is set to _2304px_ and height to _1296px_ for the preview stream generation. If needed, adjust the width and height inside `/etc/go2rtc.yaml` (needs root access!) to your personal needs.
+
 ### Preview _"from device cam"_ (no remote preview)
 
 If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam" on PiOS bookworm inside Firefox which is shipped with the OS.

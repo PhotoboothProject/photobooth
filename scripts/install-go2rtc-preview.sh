@@ -241,13 +241,13 @@ if [[ $REPLY =~ ^[1]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for gphoto2."
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for rpicam-apps."
-    YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=sigint"
     CAPTURE_CMD="rpicam-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for libcamera-apps."
-    YAML_STREAM="photobooth: exec:libcamera-vid -t 0 --codec mjpeg -o -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:libcamera-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=sigint"
     CAPTURE_CMD="libcamera-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
