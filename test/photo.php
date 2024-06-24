@@ -33,9 +33,9 @@ if ($config['picture']['flip'] !== 'off') {
 
 // apply filter
 $image_filter = $config['filters']['defaults'];
-if ($image_filter) {
+if ($image_filter !== ImageFilterEnum::PLAIN) {
     try {
-        ImageUtility::applyFilter(ImageFilterEnum::tryFrom($image_filter), $imageResource);
+        ImageUtility::applyFilter($image_filter, $imageResource);
         $imageHandler->imageModified = true;
     } catch (\Exception $e) {
         throw new \Exception('Error applying image filter.');
