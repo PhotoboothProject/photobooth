@@ -38,7 +38,12 @@ class DatabaseManagerService
                 if ($data === false) {
                     throw new \Exception('Failed to read file: ' . $this->databaseFile);
                 }
-                return json_decode($data);
+                $decodedData = json_decode($data, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \Exception('Failed to decode JSON: ' . json_last_error_msg());
+                }
+
+                return is_array($decodedData) ? $decodedData : [];
             } else {
                 throw new \Exception('File not found: ' . $this->databaseFile);
             }
