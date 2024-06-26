@@ -418,7 +418,7 @@ $font_styles .= '</style>';
                             </span>
                         </div>
                         <div class="grid gap-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
-                            <div class="flex flex-col">
+                            <div class="col-span-2 flex flex-col">
                                 <?=
     AdminInput::renderCheckbox(
         [
@@ -430,14 +430,16 @@ $font_styles .= '</style>';
     )
 ?>
                             </div>
-                            <div class="flex flex-col">
+                            <div class="col-span-2 flex flex-col">
                                 <?=
-    AdminInput::renderSelect(
+    AdminInput::renderFontSelect(
         [
-            'type' => 'select',
             'name' => 'text_font_family',
-            'options' => $font_family_options,
-            'value' => array_key_first($font_family_options),
+            'value' => '',
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/fonts'),
+                PathUtility::getAbsolutePath('private/fonts'),
+            ],
             'attributes' => ['data-trigger' => 'general']
         ],
         'collage:textoncollage_font'

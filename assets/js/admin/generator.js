@@ -75,54 +75,58 @@ function loadCurrentConfig() {
 
     //populate the inputs
     //general
-    $('input[name=\'portrait\'').prop('checked', portrait);
-    $('input[name=\'rotate_after_creation\'').prop('checked', rotate_after_creation);
+    $('input[name=\'portrait\']').prop('checked', portrait);
+    $('input[name=\'rotate_after_creation\']').prop('checked', rotate_after_creation);
     $('input[name=\'final_width\']').val(collage_width);
     $('input[name=\'final_height\']').val(collage_height);
-    $('input[name=\'background_color\'').val(backgroundColor);
+    $('input[name=\'background_color\']').val(backgroundColor);
 
-    $('input[name=\'generator-background\'').attr('value', backgroundImage);
-    $('input[name=\'generator-background\'')
+    $('input[name=\'generator-background\']').attr('value', backgroundImage);
+    $('input[name=\'generator-background\']')
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
         .attr('src', backgroundImage);
-    $('input[name=\'show-background\'').prop('checked', show_bg);
+    $('input[name=\'show-background\'][data-trigger=\'general\']').prop('checked', show_bg);
 
-    $('input[name=\'generator-frame\'').attr('value', frameImage);
-    $('input[name=\'generator-frame\'')
+    $('input[name=\'generator-frame\']').attr('value', frameImage);
+    $('input[name=\'generator-frame\']')
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
         .attr('src', frameImage);
-    $('input[name=\'show-frame\'').prop('checked', show_frame);
+    $('input[name=\'show-frame\'][data-trigger=\'general\']').prop('checked', show_frame);
 
     $('select[name=\'apply_frame\']').val(applyFrame);
 
     //placeholder
-    $('input[name=\'placeholder_image_position\'').val(placeholderposition);
-    $('input[name=\'placeholder_image\'').attr('value', placeholderpath);
-    $('input[name=\'placeholder_image\'')
+    $('input[name=\'placeholder_image_position\']').val(placeholderposition);
+    $('input[name=\'placeholder_image\']').attr('value', placeholderpath);
+    $('input[name=\'placeholder_image\']')
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
         .attr('src', placeholderpath);
-    $('input[name=\'enable_placeholder_image\'').prop('checked', placeholder);
+    $('input[name=\'enable_placeholder_image\'][data-trigger=\'general\']').prop('checked', placeholder);
 
     //text
-    $('input[name=\'text_enabled\'').prop('checked', text_enabled);
-    $('select[name=\'text_font_family\'').val(font_family);
-    $('input[name=\'text_font_color\'').attr('value', font_color);
-    $('input[name=\'text_font_size\'').attr('value', font_size);
-    $('input[name=\'text_line_1\'').attr('value', line1);
-    $('input[name=\'text_line_2\'').attr('value', line2);
-    $('input[name=\'text_line_3\'').attr('value', line3);
-    $('input[name=\'text_line_space\'').attr('value', linespace);
-    $('input[name=\'text_location_x\'').attr('value', locationX);
-    $('input[name=\'text_location_y\'').attr('value', locationY);
-    $('input[name=\'text_rotation\'').attr('value', text_rotation);
-    $('input[name=\'text_rotation\'').parent().find('span:first').text(text_rotation);
+    $('input[name=\'text_enabled\'][data-trigger=\'general\']').prop('checked', text_enabled);
+    $('input[name=\'text_font_family\']').val(font_family);
+    let fClass = $('input[name=\'text_font_family\']').data('fontclass');
+    $('#fontselectedStyle').html(
+        `@font-face{font-family:"fontselected";src:url(${font_family}) format("truetype");} .${fClass}{font-family:"fontselected",Verdena,Tahoma;}`
+    );
+    $('input[name=\'text_font_color\']').attr('value', font_color);
+    $('input[name=\'text_font_size\']').attr('value', font_size);
+    $('input[name=\'text_line_1\']').attr('value', line1);
+    $('input[name=\'text_line_2\']').attr('value', line2);
+    $('input[name=\'text_line_3\']').attr('value', line3);
+    $('input[name=\'text_line_space\']').attr('value', linespace);
+    $('input[name=\'text_location_x\']').attr('value', locationX);
+    $('input[name=\'text_location_y\']').attr('value', locationY);
+    $('input[name=\'text_rotation\']').attr('value', text_rotation);
+    $('input[name=\'text_rotation\']').parent().find('span:first').text(text_rotation);
 
     //hide images and image settings
-    $('#result_canvas').find('div[id^=\'picture-\'').addClass('hidden');
-    $('#layout_containers').find('div[data-picture^=\'picture-\'').addClass('hidden');
+    $('#result_canvas').find('div[id^=\'picture-\']').addClass('hidden');
+    $('#layout_containers').find('div[data-picture^=\'picture-\']').addClass('hidden');
 
     for (let i = 0; i < layout.length; i++) {
         let identifier = 'picture-' + i;
@@ -155,20 +159,22 @@ function changeGeneralSetting() {
     const c_bg = $('input[name=\'generator-background\']').val();
     const c_frame = $('input[name=\'generator-frame\']').val();
     const c_apply_frame = $('select[name=\'apply_frame\']').val();
-    const c_show_frame = $('input[name=\'show-frame\']').is(':checked');
-    const c_show_background = $('input[name=\'show-background\']').is(':checked');
+    const c_show_frame = $('input[name=\'show-frame\'][data-trigger=\'general\']').is(':checked');
+    const c_show_background = $('input[name=\'show-background\'][data-trigger=\'general\']').is(':checked');
 
-    const c_text_enabled = $('input[name=\'text_enabled\']').is(':checked');
-    const c_text_font = $('select[name=\'text_font_family\'] option:selected').html();
-    const c_font_color = $('input[name=\'text_font_color\'').val();
-    const c_font_size = $('input[name=\'text_font_size\'').val();
-    const c_text_1 = $('input[name=\'text_line_1\'').val();
-    const c_text_2 = $('input[name=\'text_line_2\'').val();
-    const c_text_3 = $('input[name=\'text_line_3\'').val();
-    const c_text_space = $('input[name=\'text_line_space\'').val();
-    const c_text_top = $('input[name=\'text_location_y\'').val();
-    const c_text_left = $('input[name=\'text_location_x\'').val();
-    const c_text_rotation = -parseInt($('input[name=\'text_rotation\'').val(), 10);
+    const c_text_enabled = $('input[name=\'text_enabled\'][data-trigger=\'general\']').is(':checked');
+    let c_text_font = $('input[name=\'text_font_family\']').data('fontclass');
+    let c_text_font_unique_id = $('input[name=\'text_font_family\']').data('unique-id');
+    let c_text_font_value = $('input[name=\'text_font_family\']').val();
+    const c_font_color = $('input[name=\'text_font_color\']').val();
+    const c_font_size = $('input[name=\'text_font_size\']').val();
+    const c_text_1 = $('input[name=\'text_line_1\']').val();
+    const c_text_2 = $('input[name=\'text_line_2\']').val();
+    const c_text_3 = $('input[name=\'text_line_3\']').val();
+    const c_text_space = $('input[name=\'text_line_space\']').val();
+    const c_text_top = $('input[name=\'text_location_y\']').val();
+    const c_text_left = $('input[name=\'text_location_x\']').val();
+    const c_text_rotation = -parseInt($('input[name=\'text_rotation\']').val(), 10);
 
     const aspect_ratio = c_width / c_height;
 
@@ -211,12 +217,24 @@ function changeGeneralSetting() {
     const real_text_left = (i) => i * adjusted_tls;
     const collageTextDOM = $('#collage_text');
     collageTextDOM.css({
-        'font-family': c_text_font,
         'font-size': adjusted_tfs + 'pt',
         color: c_font_color,
         top: adjusted_tt + 'px',
         left: adjusted_tl + 'px'
     });
+    if (c_text_font_value.startsWith('http')) {
+        c_text_font = `customfont-${c_text_font_unique_id}`;
+        $('#fontselectedStyle').html(
+            `@font-face{font-family:"fontselected";src:url(${c_text_font_value}) format("truetype");} .${c_text_font}{font-family:"fontselected",Verdena,Tahoma;}`
+        );
+    }
+    collageTextDOM.removeClass((index, classes) =>
+        classes
+            .split(' ')
+            .filter((cName) => cName.startsWith('customfont'))
+            .join(' ')
+    );
+    collageTextDOM.addClass(c_text_font);
     collageTextDOM
         .find('.text-line-1')
         .css({
@@ -258,10 +276,10 @@ function handleInputUpdate() {
 }
 
 function updateImage(containerId) {
-    const settingsContainer = $('div[data-picture=\'picture-' + containerId + '\'');
+    const settingsContainer = $('div[data-picture=\'picture-' + containerId + '\']');
 
-    const placeholder = $('input[name=\'enable_placeholder_image\'').is(':checked');
-    const placeholder_image_position = parseInt($('input[name=\'placeholder_image_position\'').val(), 10);
+    const placeholder = $('input[name=\'enable_placeholder_image\']').is(':checked');
+    const placeholder_image_position = parseInt($('input[name=\'placeholder_image_position\']').val(), 10);
     const changepath = placeholder && placeholder_image_position === containerId + 1;
 
     settingsContainer.find('input').each(function () {
@@ -283,7 +301,7 @@ function changeImageSetting(new_value, prop_name, index, isPlaceholder) {
     let contImages = img_container.find('img');
     let firstImg = contImages.first();
     if (isPlaceholder) {
-        firstImg.attr('src', $('input[name=\'placeholder_image\'').val());
+        firstImg.attr('src', $('input[name=\'placeholder_image\']').val());
     } else {
         firstImg.attr('src', firstImg.data('src'));
     }
@@ -406,26 +424,26 @@ function hideImage(containerId) {
 // eslint-disable-next-line no-unused-vars
 function saveConfiguration() {
     let configuration = {
-        portrait: $('input[name=\'portrait\']').is(':checked'),
-        rotate_after_creation: $('input[name=\'rotate_after_creation\']').is(':checked'),
+        portrait: $('input[name=\'portrait\'][data-trigger=\'general\']').is(':checked'),
+        rotate_after_creation: $('input[name=\'rotate_after_creation\'][data-trigger=\'general\']').is(':checked'),
         width: $('input[name=\'final_width\']').val(),
         height: $('input[name=\'final_height\']').val(),
-        text_custom_style: $('input[name=\'text_enabled\']').is(':checked'),
-        text_font_size: $('input[name=\'text_font_size\'').val(),
-        text_rotation: $('input[name=\'text_rotation\'').val(),
-        text_locationx: $('input[name=\'text_location_x\'').val(),
-        text_locationy: $('input[name=\'text_location_y\'').val(),
-        text_font_color: $('input[name=\'text_font_color\'').val(),
-        text_font: $('select[name=\'text_font_family\'] option:selected').attr('value'),
-        text_line1: $('input[name=\'text_line_1\'').val(),
-        text_line2: $('input[name=\'text_line_2\'').val(),
-        text_line3: $('input[name=\'text_line_3\'').val(),
-        text_linespace: $('input[name=\'text_line_space\'').val(),
+        text_custom_style: $('input[name=\'text_enabled\'][data-trigger=\'general\']').is(':checked'),
+        text_font_size: $('input[name=\'text_font_size\']').val(),
+        text_rotation: $('input[name=\'text_rotation\']').val(),
+        text_locationx: $('input[name=\'text_location_x\']').val(),
+        text_locationy: $('input[name=\'text_location_y\']').val(),
+        text_font_color: $('input[name=\'text_font_color\']').val(),
+        text_font: $('input[name=\'text_font_family\']').val(),
+        text_line1: $('input[name=\'text_line_1\']').val(),
+        text_line2: $('input[name=\'text_line_2\']').val(),
+        text_line3: $('input[name=\'text_line_3\']').val(),
+        text_linespace: $('input[name=\'text_line_space\']').val(),
         apply_frame: $('select[name=\'apply_frame\']').val(),
         frame: $('input[name=\'generator-frame\']').val(),
         background: $('input[name=\'generator-background\']').val(),
         background_color: $('input[name=\'background_color\']').val(),
-        placeholder: $('input[name=\'enable_placeholder_image\']').is(':checked'),
+        placeholder: $('input[name=\'enable_placeholder_image\'][data-trigger=\'general\']').is(':checked'),
         placeholderpath: $('input[name=\'placeholder_image\']').val(),
         placeholderposition: $('input[name=\'placeholder_image_position\']').val(),
         layout: []
