@@ -761,9 +761,17 @@ class Image
             // Allocate color and set font
             $color = intval(imagecolorallocate($sourceResource, $r, $g, $b));
 
+            $localFontPath = $fontPath;
+            $tempFontPath = $_SERVER['DOCUMENT_ROOT'] . '/tempfont.ttf';
+            if(PathUtility::isUrl($fontPath)) {
+                $font = file_get_contents($fontPath);
+                file_put_contents($tempFontPath, $font);
+                $localFontPath = $tempFontPath;
+            }
+
             // Add first line of text
             if (!empty($this->textLine1)) {
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $this->textLine1)) {
+                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $localFontPath, $this->textLine1)) {
                     throw new \Exception('Could not add first line of text to resource.');
                 }
             }
@@ -772,7 +780,7 @@ class Image
             if (!empty($this->textLine2)) {
                 $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing : $fontLocationY;
                 $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing;
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $this->textLine2)) {
+                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $localFontPath, $this->textLine2)) {
                     throw new \Exception('Could not add second line of text to resource.');
                 }
             }
@@ -781,9 +789,13 @@ class Image
             if (!empty($this->textLine3)) {
                 $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing * 2 : $fontLocationY;
                 $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing * 2;
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $this->textLine3)) {
+                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $localFontPath, $this->textLine3)) {
                     throw new \Exception('Could not add third line of text to resource.');
                 }
+            }
+
+            if($localFontPath !== $fontPath) {
+                unlink($tempFontPath);
             }
             $this->imageModified = true;
             // Return resource with text applied
