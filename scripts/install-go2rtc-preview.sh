@@ -190,7 +190,7 @@ EOF
     info "    Preview mode: from URL"
     info "    Preview-URL: url(\"http://localhost:1984/api/stream.mjpeg?src=photobooth\")"
     info "    Take picture command: capture %s"
-    warn "    Note: Countdown for pictures and collage should be set to a minimum of 6 seconds!"
+    error "    Note: Countdown for pictures and collage should be set to a minimum of 6 seconds!"
     info ""
     info "### Have fun with your Photobooth, but first restart your device!"
 
