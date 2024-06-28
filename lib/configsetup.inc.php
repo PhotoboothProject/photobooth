@@ -2599,6 +2599,17 @@ return [
             'range_step' => 1,
             'unit' => '%',
         ],
+        'ui_scale_resultImage' => [
+            'view' => 'basic',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['ui']['scale_resultImage'],
+            'name' => 'ui[scale_resultImage]',
+            'value' => $config['ui']['scale_resultImage'],
+            'range_min' => 10,
+            'range_max' => 100,
+            'range_step' => 1,
+            'unit' => '%',
+        ],
         'ui_shutter_animation' => [
             'view' => 'basic',
             'type' => 'checkbox',
