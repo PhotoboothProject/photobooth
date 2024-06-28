@@ -1,5 +1,6 @@
 #!/bin/bash
 
+GO2RTC_VERSIONS=("1.9.2" "1.9.3" "1.9.4")
 GO2RTC_VERSION="1.9.4"
 YAML_STREAM="photobooth: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
 CAPTURE_CMD="gphoto2"
@@ -23,6 +24,21 @@ fi
 #Param 1: Question / Param 2: Default / silent answer
 function ask_yes_no {
     read -p "${1}: " -n 1 -r
+}
+
+function ask_version() {
+    echo "## Available go2rtc versions:"
+    for i in "${!GO2RTC_VERSIONS[@]}"; do
+        echo "$((i + 1))) ${GO2RTC_VERSIONS[i]}"
+    done
+    read -p "Please select a version (1-${#GO2RTC_VERSIONS[@]}): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[1-${#GO2RTC_VERSIONS[@]}]$ ]]; then
+        GO2RTC_VERSION=${GO2RTC_VERSIONS[$((REPLY - 1))]}
+        info "### Selected go2rtc version: $GO2RTC_VERSION"
+    else
+        error "### Invalid selection. Using default version: $GO2RTC_VERSION"
+    fi
 }
 
 function install_go2rtc() {
@@ -237,7 +253,7 @@ echo "Your options are:"
 echo "1 Install go2rtc and needed service for gphoto2"
 echo "2 Install go2rtc and needed service for rpicam-apps"
 echo "3 Install go2rtc and needed service for libcamera-apps"
-echo "4 Update go2rtc only (version: ${GO2RTC_VERSION})"
+echo "4 Update or downgrade go2rtc only"
 echo "5 Uninstall go2rtc and the related services"
 echo "6 Do nothing"
 info ""
@@ -259,6 +275,7 @@ elif [[ $REPLY =~ ^[3]$ ]]; then
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[4]$ ]]; then
     UPDATE_ONLY=true
+    ask_version
     install_go2rtc
     info "Done!"
     exit 0
@@ -270,6 +287,7 @@ else
     exit 0
 fi
 
+ask_version
 mjpeg_preview
 info "### Done!"
 exit 0
