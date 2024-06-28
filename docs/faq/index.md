@@ -103,24 +103,24 @@ Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in y
 
 ## How can setup a custom collage design?
 
-In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file has to be created manually.
+In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file could be created manually or by using the collage generator at [http://localhost/admin/generator/index.php](http://localhost/admin/generator/index.php) via the button next to it.
 
 Photobooth config **must** be saved again via Admin panel after `private/collage.json` was modified!
 
-Content of the file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height and rotation (in that order) of one image.
+Content of the file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height, rotation and add frame (in that order) of one image.
 For calculation of the values the variables x and y get converted to the width and height of the collage respectively, additionally math operations +, -, \*, / and () can be used to calculate values.
-The following example should look exactly like the 1+2 layout (this layout looks more complicated than it is due to the decimal places).
+The following example should look exactly like the 1+2 layout with only the first and the third image framed (this layout looks more complicated than it is due to the decimal places).
 
 ```
 [
-[ "0",                     "y * 0.055",           "1.5 * y * 0.55546",   "y * 0.55546",   "10"       ],
-[ "x * 0.555",             "y * 0.055",           "1.5 * y * 0.40812",   "y * 0.40812",   "0"        ],
-[ "x * 0.555",             "y * 0.5368",          "1.5 * y * 0.40812",   "y * 0.40812",   "0"        ]
+[ "0",                     "y * 0.055",           "1.5 * y * 0.55546",   "y * 0.55546",   "10",         true       ],
+[ "x * 0.555",             "y * 0.055",           "1.5 * y * 0.40812",   "y * 0.40812",   "0",          false      ],
+[ "x * 0.555",             "y * 0.5368",          "1.5 * y * 0.40812",   "y * 0.40812",   "0",          true       ]
 ]
 ```
 
 ```
-[ "horizontal position",   "vertical position",   "width",               "height",        "rotation" ]
+[ "horizontal position",   "vertical position",   "width",               "height",        "rotation",   "apply frame" ]
 ```
 
 Please note that if the number of images in a collage design was changed the admin page has to be saved again to calculate the correct number of photos to be used for a collage.
@@ -141,14 +141,18 @@ If you want to configure additional properties of the collage layout you have to
   "text_locationx": "200",
   "text_locationy": "220",
   "text_font_color": "#420C09",
-  "text_font": "/var/www/html/resources/fonts/GreatVibes-Regular.ttf",
+  "text_font": "/resources/fonts/GreatVibes-Regular.ttf",
   "text_line1": "This is",
   "text_line2": "a",
   "text_line3": "Custom Collage",
   "text_linespace": "100",
   "apply_frame": "once",
-  "frame": "/var/www/html/resources/img/frames/frame_stone.png",
-  "background": "/var/www/html/resources/img/background.png",
+  "frame": "/resources/img/frames/frame_stone.png",
+  "background": "/resources/img/background.png",,
+  "background_color": "#FFFFFF",
+  "placeholder": true,
+  "placeholderpath": "/resources/img/placeholders/01.jpg",
+  "placeholderposition": "1",
   "layout": [ # the array from above ]
 }
 ```
@@ -171,6 +175,10 @@ If you want to configure additional properties of the collage layout you have to
 `frame` (optional) the real path to the frame to be used, else the default collage frame configuration will be used.
 `apply_frame` needed if `frame` is defined. Needs `once` or `always` to be defined, else the default collage configuration will be used.
 `background` (optional) the real path to the background image to be used.
+
+The single framed images work only if the property `apply_frame` is set to `always` otherwise it will not apply any frame (when it's set to `off`) or apply only once (when it's set to `once`).
+
+The `placeholder` works just like the property in the admin: if enabled the image set into `placeholderpath` will be applied at the position set into `placeholderposition`.
 
 ---
 
