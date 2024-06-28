@@ -5,6 +5,7 @@
   --stage-color: inherit;
   --stage-background: transparent;
   --stage-background-image: none;
+  --stage-background-size: contain;
   --stage-start-color: var(--start-font-color);
   --stage-start-background: transparent;
   --stage-chroma-color: inherit;
@@ -13,6 +14,7 @@
   --stage-loader-background: var(--background-countdown-color);
   --stage-result-color: inherit;
   --stage-result-background: var(--background-countdown-color);
+  --stage-result-scale-background: var(--ui-scale-result);
 }
 
 .stage {
@@ -26,7 +28,7 @@
   background-repeat: no-repeat;
   background-image: var(--stage-background-image);
   background-position: center center;
-  background-size: contain;
+  background-size: var(--stage-background-size);
 
   &--active {
     display: flex;
@@ -50,6 +52,7 @@
   &--result {
     --stage-color: var(--stage-result-color);
     --stage-background: var(--stage-result-background);
+    --stage-background-size: var(--stage-result-scale-background);
   }
 
   &-inner {

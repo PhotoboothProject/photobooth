@@ -27,6 +27,7 @@ class ThemeUtility
             '--background-preview' => $config['preview']['url'] ?? '__UNSET__',
             '--font-color' => $config['colors']['font'] ?? '__UNSET__',
             '--preview-rotation' => $config['preview']['rotation'] ?? '__UNSET__',
+            '--ui-scale-result' => $config['ui']['scale_resultImage'] ? 'auto ' . $config['ui']['scale_resultImage'] . '%' : '__UNSET__',
         ];
 
         $output = '';
