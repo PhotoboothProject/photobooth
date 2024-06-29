@@ -218,6 +218,15 @@ if ($action === 'reset') {
             } else {
                 $newConfig['collage']['limit'] = count($collageConfig);
             }
+            if (array_key_exists('placeholder', $collageConfig)) {
+                $newConfig['collage']['placeholder'] = $collageConfig['placeholder'];
+            }
+            if (array_key_exists('placeholderposition', $collageConfig)) {
+                $newConfig['collage']['placeholderposition'] = $collageConfig['placeholderposition'];
+            }
+            if (array_key_exists('placeholderpath', $collageConfig)) {
+                $newConfig['collage']['placeholderpath'] = $collageConfig['placeholderpath'];
+            }
         } else {
             $newConfig['collage']['limit'] = 4;
         }
