@@ -459,9 +459,9 @@ class Collage
                 imagescale($my_collage, $width, $height);
                 $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
                 $imageHandler->dashedLineStartX = 50;
-                $imageHandler->dashedLineStartY = $height / 2;
+                $imageHandler->dashedLineStartY = intval($height / 2);
                 $imageHandler->dashedLineEndX = $width - 50;
-                $imageHandler->dashedLineEndY = $height / 2;
+                $imageHandler->dashedLineEndY = intval($height / 2);
                 $imageHandler->drawDashedLine($my_collage);
 
                 break;
