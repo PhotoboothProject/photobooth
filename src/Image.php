@@ -504,8 +504,8 @@ class Image
             $max_width = $this->resizeMaxWidth;
             $max_height = $this->resizeMaxHeight;
 
-            if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
-                throw new \Exception('Invalid image dimensions or maximum dimensions.');
+            if ($max_width <= 0 || $max_height <= 0) {
+                throw new \Exception('Invalid image maximum dimensions.');
             }
 
             $scale = min($max_width / $old_width, $max_height / $old_height);
@@ -543,8 +543,8 @@ class Image
             $new_width = $this->resizeMaxWidth;
             $new_height = $this->resizeMaxHeight;
 
-            if ($old_width <= 0 || $old_height <= 0 || $new_width <= 0 || $new_height <= 0) {
-                throw new \Exception('Invalid image dimensions or maximum dimensions.');
+            if ($new_width <= 0 || $new_height <= 0) {
+                throw new \Exception('Invalid image maximum dimensions.');
             }
 
             if ($this->keepAspectRatio) {
@@ -601,8 +601,8 @@ class Image
             $max_width = $this->resizeMaxWidth;
             $max_height = $this->resizeMaxHeight;
 
-            if ($old_width <= 0 || $old_height <= 0 || $max_width <= 0 || $max_height <= 0) {
-                throw new \Exception('Invalid image dimensions or maximum dimensions.');
+            if ($max_width <= 0 || $max_height <= 0) {
+                throw new \Exception('Invalid image maximum dimensions.');
             }
 
             $new_width = intval(($old_height * $max_width) / $max_height);
@@ -1042,9 +1042,6 @@ class Image
             $qrWidth = imagesx($qrCode);
             $qrHeight = imagesy($qrCode);
 
-            if ($width <= 0 || $height <= 0 || $qrWidth <= 0 || $qrHeight <= 0) {
-                throw new \Exception('Invalid image dimensions or maximum dimensions.');
-            }
             switch ($this->qrPosition) {
                 case 'topLeft':
                     $x = $offset;
