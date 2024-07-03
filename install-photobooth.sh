@@ -419,8 +419,7 @@ function check_python() {
     # Check if the Python version is 3.12 or newer
     if [ "$PYTHON_MAJOR_VERSION" -eq 3 ] && [ "$PYTHON_MINOR_VERSION" -ge 12 ]; then
         warn "[WARN]      Python version is 3.12 or newer. Installing distutils..."
-        python3 -m ensurepip --upgrade
-        python3 -m pip install setuptools
+        apt install python3-distutils -y
     else
         info "[INFO]      Python version is older than 3.12. No need to install distutils separately."
     fi
