@@ -131,8 +131,6 @@ If you want to configure additional properties of the collage layout you have to
 
 ```
 {
-  "portrait": false,
-  "rotate_after_creation": false,
   "width": "1800",
   "height": "1200",
   "text_custom_style": true,
@@ -157,7 +155,6 @@ If you want to configure additional properties of the collage layout you have to
 }
 ```
 
-`portrait` changes the orientation of the collage before the images are added while `rotate_after_creation` rotates the collage after all images were added. Collage width must be greater than hight to take effect.
 `width` and `height` (optional) can be defined in pixel to change the resolution of the collage. **Note:** both dimensions must be defined, else the default collage configuration will be used.
 `text_custom_style` set to `true` if you want to apply text, `false` to disable. The following properties can override the config from Adminpanel, else the text on collage configuration will be used from Photobooth:
 
