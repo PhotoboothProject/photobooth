@@ -20,8 +20,6 @@ function loadCurrentConfig() {
     const collageConfig = config.collage;
     const textConfig = config.textoncollage;
     const resolution = parseInt(collageConfig.resolution.slice(0, -3), 10);
-    let portrait = false;
-    let rotate_after_creation = false;
     let collage_height = 4 * resolution;
     let collage_width = collage_height * 1.5;
     let layout = current_config;
@@ -46,8 +44,6 @@ function loadCurrentConfig() {
     let locationY = textConfig.locationy;
     let text_rotation = textConfig.rotation;
     if (!Array.isArray(current_config)) {
-        portrait = current_config.portrait;
-        rotate_after_creation = current_config.rotate_after_creation;
         collage_width = current_config.width;
         collage_height = current_config.height;
         layout = current_config.layout;
@@ -75,8 +71,6 @@ function loadCurrentConfig() {
 
     //populate the inputs
     //general
-    $('input[name=\'portrait\']').prop('checked', portrait);
-    $('input[name=\'rotate_after_creation\']').prop('checked', rotate_after_creation);
     $('input[name=\'final_width\']').val(collage_width);
     $('input[name=\'final_height\']').val(collage_height);
     $('input[name=\'background_color\']').val(backgroundColor);
@@ -424,8 +418,6 @@ function hideImage(containerId) {
 // eslint-disable-next-line no-unused-vars
 function saveConfiguration() {
     let configuration = {
-        portrait: $('input[name=\'portrait\'][data-trigger=\'general\']').is(':checked'),
-        rotate_after_creation: $('input[name=\'rotate_after_creation\'][data-trigger=\'general\']').is(':checked'),
         width: $('input[name=\'final_width\']').val(),
         height: $('input[name=\'final_height\']').val(),
         text_custom_style: $('input[name=\'text_enabled\'][data-trigger=\'general\']').is(':checked'),

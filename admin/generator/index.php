@@ -270,30 +270,6 @@ $font_styles .= '</style>';
                             </div>
                             <div class="flex flex-col">
                                 <?=
-    AdminInput::renderCheckbox(
-        [
-            'name' => 'portrait',
-            'value' => 'false',
-            'attributes' => ['data-trigger' => 'general']
-        ],
-        'collage:generator:portrait'
-    )
-?>
-                            </div>
-                            <div class="flex flex-col">
-                                <?=
-    AdminInput::renderCheckbox(
-        [
-            'name' => 'rotate_after_creation',
-            'value' => 'false',
-            'attributes' => ['data-trigger' => 'general']
-        ],
-        'collage:generator:rotate_after_creation'
-    )
-?>
-                            </div>
-                            <div class="flex flex-col">
-                                <?=
     AdminInput::renderInput(
         [
             'type' => 'number',

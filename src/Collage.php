@@ -693,22 +693,6 @@ class Collage
                             }
                         }
 
-                        if (array_key_exists('portrait', $collageJson) && $collage_width > $collage_height) {
-                            if ($collageJson['portrait']) {
-                                $tmp = (int) $collage_width;
-                                $collage_width = (int) $collage_height;
-                                $collage_height = $tmp;
-                                $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
-                                if (!$my_collage instanceof \GdImage) {
-                                    throw new \Exception('Failed to rotate collage resource.');
-                                }
-                            }
-                        }
-
-                        if (array_key_exists('rotate_after_creation', $collageJson)) {
-                            $rotate_after_creation = $collageJson['rotate_after_creation'];
-                        }
-
                         if (array_key_exists('apply_frame', $collageJson) && array_key_exists('frame', $collageJson)) {
                             if ($collageJson['apply_frame'] === 'once' || $collageJson['apply_frame'] === 'always') {
                                 $c->collageTakeFrame = $collageJson['apply_frame'];
