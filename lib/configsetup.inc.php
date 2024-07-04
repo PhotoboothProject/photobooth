@@ -3175,7 +3175,7 @@ return [
             'type' => 'input',
             'placeholder' => 'python3 cameracontrol.py --bsm',
             'name' => 'commands[preview]',
-            'value' => htmlentities($config['preview']['cmd'] ?? ''),
+            'value' => htmlentities($config['commands']['preview'] ?? ''),
         ],
         'preview_killcmd' => [
             'view' => 'expert',
