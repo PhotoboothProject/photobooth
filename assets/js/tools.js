@@ -9,11 +9,11 @@ const photoboothTools = (function () {
     api.isPrinting = false;
 
     api.initialize = async function () {
-        const resultTranslations = await fetch(environment.publicFolders.api + '/translations.php', {
+        const resultTranslations = await fetch(environment.publicFolders.api + '/translations', {
             cache: 'no-store'
         });
         this.translations = await resultTranslations.json();
-        const resultSounds = await fetch(environment.publicFolders.api + '/sounds.php', {
+        const resultSounds = await fetch(environment.publicFolders.api + '/sounds', {
             cache: 'no-store'
         });
         this.sounds = await resultSounds.json();

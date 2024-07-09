@@ -1,6 +1,6 @@
 <?php
 
-require_once '../lib/boot.php';
+require_once 'lib/boot.php';
 
 use Photobooth\Service\ApplicationService;
 use Photobooth\Utility\PathUtility;
