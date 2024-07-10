@@ -75,6 +75,7 @@
   "collage:generator:please_enable_write": "In order to save the collage.json file automatically you need to enable the write on that file.",
   "collage:generator:portrait": "Portrait",
   "collage:generator:rotate_after_creation": "Rotate after creation",
+  "collage:generator:save_config_manually": "The json is saved but please go to the admin panel and save the configuration",
   "collage:generator:show_background": "Show background",
   "collage:generator:show_frame": "Show frame",
   "collage:generator:show_single_frame": "Toggle frame",
