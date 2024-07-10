@@ -1,12 +1,14 @@
 <?php
 require_once '../../lib/boot.php';
 
+use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\FontUtility;
 use Photobooth\Service\AssetService;
+use Photobooth\Utility\ArrayUtility;
 
 // Login / Authentication check
 if (!(
@@ -18,8 +20,12 @@ if (!(
     exit();
 }
 
+$configurationService = ConfigurationService::getInstance();
+$defaultConfig = $configurationService->getDefaultConfiguration();
+
 $error = false;
 $success = false;
+$warning = false;
 $languageService = LanguageService::getInstance();
 $pageTitle = 'Collage generator - ' . ApplicationService::getInstance()->getTitle();
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
@@ -41,6 +47,7 @@ if(file_exists($collageConfigFilePath)) {
 $newConfiguration = '';
 if (isset($_POST['new-configuration'])) {
     $newConfiguration = $_POST['new-configuration'];
+    $newConfig = ArrayUtility::mergeRecursive($defaultConfig, []);
 
     $fp = fopen($collageConfigFilePath, 'w');
     if($fp) {
@@ -48,11 +55,32 @@ if (isset($_POST['new-configuration'])) {
         fclose($fp);
         $collageJson = json_decode($newConfiguration);
         $startPreloaded = true;
+        $arrayCollageJson = (array) $collageJson;
+
+        if (array_key_exists('layout', $arrayCollageJson)) {
+            $newConfig['collage']['limit'] = count($arrayCollageJson['layout']);
+        } else {
+            $newConfig['collage']['limit'] = count($arrayCollageJson);
+        }
+        if (array_key_exists('placeholder', $arrayCollageJson)) {
+            $newConfig['collage']['placeholder'] = $arrayCollageJson['placeholder'];
+        }
+        if (array_key_exists('placeholderposition', $arrayCollageJson)) {
+            $newConfig['collage']['placeholderposition'] = $arrayCollageJson['placeholderposition'];
+        }
+        if (array_key_exists('placeholderpath', $arrayCollageJson)) {
+            $newConfig['collage']['placeholderpath'] = $arrayCollageJson['placeholderpath'];
+        }
+        try {
+            $configurationService->update($newConfig);
+        } catch (\Exception $exception) {
+            $warning = true;
+        }
     } else {
         $error = true;
     }
 
-    $success = !$error;
+    $success = !($error || $warning);
 }
 
 $font_paths = [
@@ -735,6 +763,9 @@ if ($success) {
 }
 if ($error !== false) {
     echo '<script>setTimeout(function(){openToast("' . $languageService->translate('collage:generator:configuration_saving_error') . '", "isError", 5000)},500);</script>';
+}
+if ($warning) {
+    echo '<script>setTimeout(function(){openToast("' . $languageService->translate('collage:generator:save_config_manually') . '", "isWarning", 5000)},500);</script>';
 }
 
 include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
