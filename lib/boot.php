@@ -31,6 +31,7 @@ FileUtility::createDirectory(FolderEnum::PRIVATE->absolute());
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/placeholder'));
 FileUtility::createDirectory(FolderEnum::VAR->absolute());
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/run'));
