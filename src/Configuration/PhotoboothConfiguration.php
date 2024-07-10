@@ -1534,7 +1534,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->integerNode('linespace')
-                    ->defaultValue(90)
+                    ->defaultValue(60)
                     ->beforeNormalization()
                         ->ifString()
                         ->then(function (string $value): int { return intval($value); })
