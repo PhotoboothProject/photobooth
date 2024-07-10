@@ -48,7 +48,7 @@ class ComponentUtility
         ';
     }
 
-    protected static function renderAttributes(array $attributes): string
+    public static function renderAttributes(array $attributes): string
     {
         $newAttributes = [];
         foreach ($attributes as $attributeName => $attributeValue) {
