@@ -778,7 +778,7 @@
   "translate": "Übersetzen",
   "update_available": "Es ist ein Update verfügbar.",
   "upload_error": "Fehler: Bitte nur Bilddateien auswählen.",
-  "upload_folder": "Ordnername (private/images/{OrdnerName}):",
+  "upload_folder": "Ordner (private/{pfad}):",
   "upload_selection": "Bild(er) auswählen:",
   "upload_success": "Bild(er) erfolgreich hochgeladen!",
   "uploading": "Wird hochgeladen...",

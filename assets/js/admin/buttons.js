@@ -273,7 +273,7 @@ $(function () {
         return false;
     });
 
-    $('#imagesupload-btn').on('click', function (ev) {
+    $('#filesupload-btn').on('click', function (ev) {
         ev.preventDefault();
         window.open('../admin/upload');
 

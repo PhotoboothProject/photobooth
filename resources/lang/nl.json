@@ -883,7 +883,7 @@
   "translate": "Vertalen",
   "update_available": "Er is een update beschikbaar.",
   "upload_error": "Fout: Selecteer alleen afbeeldingsbestanden.",
-  "upload_folder": "Mapnaam (privé/afbeeldingen/{mapnaam}):",
+  "upload_folder": "Mapnaam (private/{path}):",
   "upload_selection": "Selecteer afbeelding(en):",
   "upload_success": "Afbeelding(en) succesvol geüpload!",
   "uploading": "Uploaden...",
