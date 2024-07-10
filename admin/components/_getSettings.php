@@ -72,6 +72,9 @@ foreach ($configsetup as $section => $fields) {
             case 'image':
                 echo AdminInput::renderImageSelect($setting, $i18ntag);
                 break;
+            case 'font':
+                echo AdminInput::renderFontSelect($setting, $i18ntag);
+                break;
         }
 
         echo '</div>';

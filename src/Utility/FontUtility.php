@@ -1,0 +1,74 @@
+<?php
+
+namespace Photobooth\Utility;
+
+class FontUtility
+{
+    public const supportedFileExtensionsProcessing = [
+        'ttf',
+    ];
+
+    public const supportedFileExtensionsSelect = [
+        'ttf',
+    ];
+
+    public static function getFontPreviewImage(
+        string $fontPath,
+        int $width = 300,
+        int $height = 200,
+        int $fontSize = 34,
+        array $textLines = [
+            'Photobooth!',
+            'We love',
+            'OpenSource.'
+        ],
+        array $attributes = [],
+    ): string {
+        $absoluteFontPath = PathUtility::getAbsolutePath($fontPath);
+        $lineHeight = (int) round($fontSize * 1.5);
+
+        $image = imagecreatetruecolor($width, $height);
+        $backgroundColor = (int) imagecolorallocate($image, 255, 255, 255);
+        imagefilledrectangle($image, 0, 0, $width - 1, $height - 1, $backgroundColor);
+
+        if (is_readable($absoluteFontPath)) {
+            $textColor = (int) imagecolorallocate($image, 0, 0, 0);
+            $x = 10;
+            $y = $lineHeight;
+            foreach ($textLines as $line) {
+                imagefttext($image, $fontSize, 0, $x, $y, $textColor, $absoluteFontPath, $line);
+                $y += $lineHeight;
+            }
+        }
+
+        ob_start();
+        imagepng($image);
+        $imageData = (string) ob_get_contents();
+        ob_end_clean();
+        imagedestroy($image);
+
+        $attributes['src'] = 'data:image/png;base64,' . base64_encode($imageData);
+
+        return '<img ' . ComponentUtility::renderAttributes($attributes) . '>';
+    }
+
+    public static function getFontsFromPath(string $path, bool $processing = true): array
+    {
+        if (!PathUtility::isAbsolutePath($path)) {
+            $path = PathUtility::getAbsolutePath($path);
+        }
+        if (!PathUtility::isAbsolutePath($path)) {
+            throw new \Exception('Path ' . $path . ' does not exist.');
+        }
+
+        $files = [];
+        foreach (new \DirectoryIterator($path) as $file) {
+            if(!$file->isFile() || !in_array(strtolower($file->getExtension()), $processing ? self::supportedFileExtensionsProcessing : self::supportedFileExtensionsSelect)) {
+                continue;
+            }
+            $files[$file->getBasename('.' . $file->getExtension())] = $path . '/' . $file->getFilename();
+        }
+
+        return $files;
+    }
+}

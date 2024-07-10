@@ -671,10 +671,14 @@ return [
         ],
         'textonpicture_font' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'font',
             'placeholder' => $defaultConfig['textonpicture']['font'],
             'name' => 'textonpicture[font]',
             'value' => htmlentities($config['textonpicture']['font'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/fonts'),
+                PathUtility::getAbsolutePath('private/fonts'),
+            ]
         ],
         'textonpicture_font_color' => [
             'view' => 'expert',
@@ -909,10 +913,14 @@ return [
         ],
         'textoncollage_font' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'font',
             'placeholder' => $defaultConfig['textoncollage']['font'],
             'name' => 'textoncollage[font]',
             'value' => htmlentities($config['textoncollage']['font'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/fonts'),
+                PathUtility::getAbsolutePath('private/fonts'),
+            ]
         ],
         'textoncollage_font_color' => [
             'view' => 'expert',
@@ -1677,10 +1685,14 @@ return [
         ],
         'textonprint_font' => [
             'view' => 'expert',
-            'type' => 'input',
+            'type' => 'font',
             'placeholder' => $defaultConfig['textonprint']['font'],
             'name' => 'textonprint[font]',
             'value' => htmlentities($config['textonprint']['font'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/fonts'),
+                PathUtility::getAbsolutePath('private/fonts'),
+            ]
         ],
         'textonprint_font_color' => [
             'view' => 'expert',

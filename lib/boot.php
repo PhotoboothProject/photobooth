@@ -28,6 +28,7 @@ FileUtility::createDirectory(FolderEnum::QR->absolute());
 FileUtility::createDirectory(FolderEnum::THUMBS->absolute());
 FileUtility::createDirectory(FolderEnum::TEMP->absolute());
 FileUtility::createDirectory(FolderEnum::PRIVATE->absolute());
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/fonts'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
