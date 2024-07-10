@@ -6,6 +6,9 @@ function openToast(msg, type = 'isSuccess', duration = 2000) {
     if (type == 'isError') {
         $('.adminToast-icon').removeClass('fa-check');
         $('.adminToast-icon').addClass('fa-times');
+    } else if (type == 'isWarning') {
+        $('.adminToast-icon').removeClass('fa-check');
+        $('.adminToast-icon').addClass('fa-triangle-exclamation');
     }
 
     setTimeout(function () {

@@ -302,12 +302,12 @@ return [
             'name' => 'DISKUSAGEBUTTON',
             'value' => 'diskusage-btn',
         ],
-        'images_upload' => [
+        'files_upload' => [
             'view' => 'basic',
             'type' => 'button',
-            'placeholder' => 'images_upload',
-            'name' => 'IMAGESUPLOAD',
-            'value' => 'imagesupload-btn',
+            'placeholder' => 'files_upload',
+            'name' => 'FILESUPLOAD',
+            'value' => 'filesupload-btn',
         ],
     ],
     'frontpage' => [

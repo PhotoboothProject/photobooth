@@ -845,7 +845,7 @@
   "translate": "Traducir",
   "update_available": "Hay una actualización disponible",
   "upload_error": "Error: Por favor, seleccione sólo archivos de imagen.",
-  "upload_folder": "Nombre de carpeta (privado/imagen/{folderName}):",
+  "upload_folder": "Nombre de carpeta (private/{path}):",
   "upload_selection": "Seleccionar imagen(s):",
   "upload_success": "Imágenes subidas con éxito!",
   "uploading": "Subiendo...",

@@ -12,6 +12,10 @@ class FontUtility
         'ttf',
     ];
 
+    public const supportedMimeTypesSelect = [
+        'font/ttf',
+    ];
+
     public static function getFontPreviewImage(
         string $fontPath,
         int $width = 300,

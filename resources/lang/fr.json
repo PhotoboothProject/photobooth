@@ -857,7 +857,7 @@
   "translate": "Traduire",
   "update_available": "Il y a une mise à jour disponible",
   "upload_error": "Erreur: Veuillez sélectionner uniquement les fichiers image.",
-  "upload_folder": "Nom du dossier (private/images/{folderName}):",
+  "upload_folder": "Nom du dossier (private/{path}):",
   "upload_selection": "Sélectionnez le(s) image(s):",
   "upload_success": "Image(s) importées avec succès !",
   "uploading": "Chargement...",

@@ -10,6 +10,7 @@ function getToast()
         bg-white
         [&.isSuccess]:bg-green-500 [&.isSuccess]:font-bold [&.isSuccess]:text-white
         [&.isError]:bg-red-500 [&.isError]:font-bold [&.isError]:text-white
+        [&.isWarning]:bg-yellow-500 [&.isWarning]:font-bold [&.isWarning]:text-white
     ';
 
     return '

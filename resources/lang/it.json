@@ -839,7 +839,7 @@
   "translate": "Traduci",
   "update_available": "C'è un aggiornamento disponibile.",
   "upload_error": "Errore: selezionare solo file immagine.",
-  "upload_folder": "Nome cartella (private/images/{folderName}):",
+  "upload_folder": "Nome cartella (private/{path}):",
   "upload_selection": "Seleziona immagine(i):",
   "upload_success": "Immagine(i) caricate con successo!",
   "uploading": "Caricamento...",
