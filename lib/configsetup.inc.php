@@ -3238,10 +3238,10 @@ return [
     ],
     'reset' => [
         'view' => 'basic',
-        'reset_remove_images' => [
+        'reset_remove_media' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'reset[remove_images]',
+            'name' => 'reset[remove_media]',
             'value' => false,
         ],
         'reset_remove_mailtxt' => [
