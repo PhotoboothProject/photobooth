@@ -41,16 +41,16 @@ if ($action === 'reset') {
 
     $logger->debug(basename($_SERVER['PHP_SELF']));
     $resetOptions = [
-        'remove_images' => (bool) ($data['reset']['remove_images'] ?? false),
+        'remove_media' => (bool) ($data['reset']['remove_media'] ?? false),
         'remove_print_db' => (bool) ($data['reset']['remove_print_db'] ?? false),
         'remove_mail_db' => (bool) ($data['reset']['remove_mail_db'] ?? false),
         'remove_config' => (bool) ($data['reset']['remove_config'] ?? false),
     ];
     $logger->info('Resetting Photobooth.', $resetOptions);
 
-    // Remove images and database
-    if ($resetOptions['remove_images']) {
-        $logger->info('Remove images.');
+    // Remove images, videos and database
+    if ($resetOptions['remove_media']) {
+        $logger->info('Remove media.');
         $imageFolders = [
             FolderEnum::IMAGES->absolute(),
             FolderEnum::KEYING->absolute(),
@@ -63,7 +63,7 @@ if ($action === 'reset') {
         $finder = (new Finder())
             ->files()
             ->in($imageFolders)
-            ->name(['*.jpg']);
+            ->name(['*.jpg', '*.mp4', '*.gif']);
         foreach ($finder as $file) {
             $logger->info($file->getRealPath() . ' deleted.');
             $filesystem->remove($file->getRealPath());
