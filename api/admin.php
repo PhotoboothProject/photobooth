@@ -63,7 +63,7 @@ if ($action === 'reset') {
         $finder = (new Finder())
             ->files()
             ->in($imageFolders)
-            ->name(['*.jpg']);
+            ->name(['*.jpg', '*.mp4']);
         foreach ($finder as $file) {
             $logger->info($file->getRealPath() . ' deleted.');
             $filesystem->remove($file->getRealPath());
