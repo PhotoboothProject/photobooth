@@ -123,7 +123,6 @@
   "general:diskusage_button": "Mostrar utilização de espaço em disco",
   "general:download_enabled": "Permitir transferências",
   "general:download_thumbs": "Usar miniaturas para transferências",
-  "general:images_upload": "Abrir carregador de imagens do Photobooth",
   "general:picture_preview_before_processing": "Pré-carregar e mostrar imagem durante o processamento do filtro",
   "general:picture_retry_on_error": "Tentar tirar uma foto novamente",
   "general:picture_retry_timeout": "Tempo limite de nova tentativa",
