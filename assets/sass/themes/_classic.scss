@@ -5,6 +5,12 @@
 [data-ui-theme='classic_rounded'] {
   .stage--start {
     .stage-inner {
+      width: auto;
+      height: auto;
+      margin-left: 2rem;
+      margin-right: 2rem;
+      max-width: 40rem;
+
       &:before {
         content: '';
         position: absolute;
@@ -20,12 +26,6 @@
         // workaround to allow background blur
         position: relative;
       }
-
-      width: auto;
-      height: auto;
-      margin-left: 2rem;
-      margin-right: 2rem;
-      max-width: 40rem;
     }
 
     .names {

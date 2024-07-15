@@ -74,12 +74,12 @@
     &:focus,
     &:hover,
     &.focused {
+      --gallery-card-color: var(--gallery-card-focus-color);
+      --gallery-card-background: var(--gallery-card-focus-background);
+
       img {
         opacity: 0.75;
       }
-
-      --gallery-card-color: var(--gallery-card-focus-color);
-      --gallery-card-background: var(--gallery-card-focus-background);
     }
   }
 

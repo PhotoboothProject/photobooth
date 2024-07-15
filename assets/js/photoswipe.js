@@ -34,7 +34,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             doubleTapAction: actionDoubleTap,
 
             wheelToZoom: true,
-            // eslint-disable-next-line object-property-newline
+
             //padding: {top: 20, bottom: 40, left: 100, right: 100},
             escKey: true,
             arrowKeys: true,
@@ -132,7 +132,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     order: orderNumber.shift(),
                     isButton: true,
                     html: '<i class="' + config.icons.mail + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
+
                     onClick: (event, el, pswp) => {
                         photoBooth.showMailForm(pswp.currSlide.data.src.split('\\').pop().split('/').pop());
                     }
@@ -146,7 +146,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     order: orderNumber.shift(),
                     isButton: true,
                     html: '<i class="' + config.icons.print + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
+
                     onClick: (event, el, pswp) => {
                         event.preventDefault();
                         event.stopPropagation();
@@ -174,7 +174,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     order: orderNumber.shift(),
                     isButton: true,
                     html: '<i class="' + config.icons.qr + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
+
                     onClick: (event, el, pswp) => {
                         const image = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                         photoBooth.showQrCode(image);
@@ -189,7 +189,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     order: orderNumber.shift(),
                     isButton: true,
                     html: '<i class=" center ' + config.icons.download + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
+
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
                             el.href =
@@ -208,7 +208,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     order: orderNumber.shift(),
                     isButton: true,
                     html: '<i class=" center ' + config.icons.chroma + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
+
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
                             el.href =
@@ -243,7 +243,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     order: orderNumber.shift(),
                     isButton: true,
                     html: '<i class="' + config.icons.delete + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
+
                     onClick: async (event, el, pswp) => {
                         event.preventDefault();
                         event.stopPropagation();

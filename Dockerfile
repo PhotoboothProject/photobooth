@@ -3,7 +3,7 @@ FROM webdevops/php-apache:8.3
 # Adjust LimitRequestLine and
 # update and install dependencies
 RUN echo "LimitRequestLine 12000" > /opt/docker/etc/httpd/conf.d/limits.conf \
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
