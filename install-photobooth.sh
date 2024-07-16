@@ -150,7 +150,7 @@ function no_raspberry {
 
 function view_help() {
     cat <<EOF
-Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:package> -hprsV -w=<apache:nginx:lighttpd]
+Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:package> -hprsV -w=<apache:nginx>]
 
     -h,  -help,       --help        Display help.
 
@@ -182,7 +182,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
 
     -V,  -verbose,    --verbose     Run script in verbose mode.
 
-    -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx, lighttpd].
+    -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx].
                                     Apache is used by default.
 
 Example to install Photobooth on a Raspberry Pi getting asked for enabled options:
@@ -431,8 +431,6 @@ function common_software() {
         info "### Photobooth needs some software to run."
         if [ "$WEBSERVER" == "nginx" ]; then
             nginx_webserver
-        elif [ "$WEBSERVER" == "lighttpd" ]; then
-            lighttpd_webserver
         else
             apache_webserver
         fi
@@ -512,44 +510,6 @@ function nginx_webserver() {
         error "Can not find ${nginx_conf} !"
         info "Using Apache Webserver !"
         apt-get -qq remove -y nginx php"$PHP_VERSION"-fpm
-        apache_webserver
-    fi
-}
-
-function lighttpd_webserver() {
-    info "### Installing Lighttpd Webserver..."
-    apt-get -qq install -y lighttpd php"$PHP_VERSION"-fpm
-    lighttpd-enable-mod fastcgi
-    lighttpd-enable-mod fastcgi-php
-
-    lighttpd_php_conf="/etc/lighttpd/conf-available/15-fastcgi-php.conf"
-
-    if [ -f "$lighttpd_php_conf" ]; then
-        info "### Enable PHP for Lighttpd"
-        cp "$lighttpd_php_conf" "$lighttpd_php_conf".bak
-
-        cat >"$lighttpd_php_conf" <<EOF
-# -*- depends: fastcgi -*-
-# /usr/share/doc/lighttpd/fastcgi.txt.gz
-# http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions#mod_fastcgi-fastcgi
-
-## Start an FastCGI server for php (needs the php5-cgi package)
-fastcgi.server += ( ".php" =>
-	((
-		"socket" => "/var/run/php/php${PHP_VERSION}-fpm.sock",
-		"broken-scriptfilename" => "enable"
-	))
-)
-EOF
-
-        systemctl reload-or-restart lighttpd
-        systemctl enable lighttpd
-        systemctl reload-or-restart php"$PHP_VERSION"-fpm.service
-        systemctl enable php"$PHP_VERSION"-fpm.service
-    else
-        error "Can not find ${lighttpd_php_conf} !"
-        info "Using Apache Webserver !"
-        apt-get -qq remove -y lighttpd php"$PHP_VERSION"-fpm
         apache_webserver
     fi
 }
