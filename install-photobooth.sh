@@ -357,6 +357,7 @@ function update_nodejs() {
         fi
         hash -r
         rm -f /usr/bin/node
+        rm -f /usr/local/bin/node
         info "[Package]   Installing latest Node.js v20"
         apt-get -qq install -y ca-certificates curl gnupg
         mkdir -p /etc/apt/keyrings
@@ -364,10 +365,7 @@ function update_nodejs() {
         echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
         apt-get -qq update
         apt-get -qq install -y nodejs
-
-        hash -r
-        which node
-        node -v
+        refresh_shell
         NODE_VERSION_UPDATED=$(node -v || echo "0")
         IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
         node_major_updated=${VER_UPD[0]}
@@ -1006,6 +1004,21 @@ function commit_git_changes() {
 
     sudo -u www-data git checkout -b "$BACKUPBRANCH"
     info "### Backup done to branch: $BACKUPBRANCH"
+}
+
+refresh_shell() {
+    case "$SHELL" in
+        */bash)
+            source ~/.bashrc
+            ;;
+        */zsh)
+            source ~/.zshrc
+            ;;
+        *)
+            echo "Unsupported shell: $SHELL. Please source your profile manually."
+            ;;
+    esac
+    info "[Info]      Refreshing the shell environment..."
 }
 
 detect_photobooth_install() {
