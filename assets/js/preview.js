@@ -1,3 +1,4 @@
+/* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals photoBooth photoboothTools */
 const photoboothPreview = (function () {
     // vars

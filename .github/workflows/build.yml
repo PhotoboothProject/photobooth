@@ -19,7 +19,7 @@ jobs:
         php:
           - '8.2'
         node:
-          - 18
+          - 20
         python:
           - 3.11
         os:

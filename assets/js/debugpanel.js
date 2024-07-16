@@ -1,3 +1,5 @@
+/* eslint n/no-unsupported-features/node-builtins: "off" */
+
 class DebugPanel {
     constructor() {
         this.autorefresh = false;

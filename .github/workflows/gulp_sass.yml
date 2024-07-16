@@ -19,7 +19,7 @@ jobs:
   build:
     strategy:
       matrix:
-        node: [18]
+        node: [20]
         python: [3.11]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}

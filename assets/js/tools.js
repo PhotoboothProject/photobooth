@@ -1,3 +1,4 @@
+/* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals remoteBuzzerClient */
 const photoboothTools = (function () {
     // vars

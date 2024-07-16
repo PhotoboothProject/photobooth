@@ -1,7 +1,6 @@
 /* exported initPhotoSlideFromDOM */
 /* global photoboothTools */
 
-// eslint-disable-next-line no-unused-vars
 let ssTimeOut,
     ssRunning = false,
     lastDBSize = -1;
@@ -11,7 +10,6 @@ const ssDelay = config.slideshow.pictureTime,
     interval = 1000 * config.slideshow.refreshTime,
     ajaxurl = environment.publicFolders.api + '/gallery.php?status';
 
-// eslint-disable-next-line no-unused-vars
 function initPhotoSlideFromDOM(gallerySelector) {
     const gallery = new PhotoSwipeLightbox({
         gallery: gallerySelector,

@@ -46,8 +46,8 @@ PHOTOBOOTH_SUBMODULES=(
 # Node.js
 NEEDS_NODEJS_CHECK=true
 NODEJS_CHECKED=false
-NODEJS_MAJOR="18"
-NODEJS_MINOR="17"
+NODEJS_MAJOR="20"
+NODEJS_MINOR="15"
 NODEJS_MICRO="0"
 NEEDED_NODE_VERSION="v$NODEJS_MAJOR.$NODEJS_MINOR(.$NODEJS_MICRO or newer)"
 NEEDS_NPM_CHECK=true
@@ -294,7 +294,7 @@ function check_nodejs() {
     info "[Info]      Found Node.js $NODE_VERSION".
 
     if [[ -n "$major" ]] && [[ "$major" -ge "$NODEJS_MAJOR" ]]; then
-        if [[ -n "$major" ]] && [[ "$major" -ge "19" ]]; then
+        if [[ -n "$major" ]] && [[ "$major" -ge "21" ]]; then
             info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
                 warn "[WARN]      Downgrade of Node.js was not possible or skipped."
@@ -355,12 +355,13 @@ function update_nodejs() {
             info "[Cleanup]   Removing npm package"
             apt-get -qq purge -y npm
         fi
-
-        info "[Package]   Installing latest Node.js v18"
+        rm -f /usr/bin/node
+        rm -f /usr/local/bin/node
+        info "[Package]   Installing latest Node.js v20"
         apt-get -qq install -y ca-certificates curl gnupg
         mkdir -p /etc/apt/keyrings
         curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
         apt-get -qq update
         apt-get -qq install -y nodejs
         NODEJS_CHECKED=true
@@ -377,12 +378,12 @@ function proof_npm() {
     npm_major=$(echo "$npm_version" | cut -d. -f1)
     npm_minor=$(echo "$npm_version" | cut -d. -f2)
     info "[Info]      Found npm $npm_version"
-    if [[ "$npm_major" -gt 9 ]] || [[ "$npm_major" -eq 9 ]] && [[ "$npm_minor" -ge 6 ]]; then
+    if [[ "$npm_major" -gt 10 ]] || [[ "$npm_major" -eq 10 ]] && [[ "$npm_minor" -ge 6 ]]; then
         info "[Info]      npm version matches our requirements."
     else
         warn "[WARN]      npm needs to be updated!"
         apt-get -qq --only-upgrade install npm
-        npm install npm@9.6.7 -g
+        npm install npm@10.7.0 -g
         hash -r
         npm_version_updated=$(npm -v)
         npm_major_updated=$(echo "$npm_version_updated" | cut -d. -f1)

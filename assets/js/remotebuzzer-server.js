@@ -1300,6 +1300,8 @@ function move2usbAction() {
             //Assuming that the lsblk version supports JSON output!
             const output = execSync('export LC_ALL=C; lsblk -ablJO 2>/dev/null; unset LC_ALL').toString();
             json = JSON.parse(output);
+
+            // eslint-disable-next-line no-unused-vars
         } catch (err) {
             log(
                 'ERROR: Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!'
@@ -1317,13 +1319,13 @@ function move2usbAction() {
         try {
             device = json.blockdevices.find(
                 (blk) =>
-                    // eslint-disable-next-line implicit-arrow-linebreak
                     blk.subsystems.includes('usb') &&
                     ((blk.name && drive === blk.name.toLowerCase()) ||
                         (blk.kname && drive === blk.kname.toLowerCase()) ||
                         (blk.path && drive === blk.path.toLowerCase()) ||
                         (blk.label && drive === blk.label.toLowerCase()))
             );
+            // eslint-disable-next-line no-unused-vars
         } catch (err) {
             device = false;
         }
@@ -1341,6 +1343,7 @@ function move2usbAction() {
                     .replace(/[\n.]/gu, '');
 
                 drive.mountpoint = mountPoint;
+                // eslint-disable-next-line no-unused-vars
             } catch (error) {
                 log('ERROR: unable to mount drive', drive.path);
                 drive = null;
@@ -1444,6 +1447,7 @@ function move2usbAction() {
             try {
                 execSync(`export LC_ALL=C; udisksctl unmount -b ${mountedDrive.path}; unset LC_ALL`).toString();
                 log('Unmounted drive', mountedDrive.path);
+                // eslint-disable-next-line no-unused-vars
             } catch (error) {
                 log('ERROR: unable to unmount drive', mountedDrive.path);
             }
@@ -1531,6 +1535,7 @@ function move2usbAction() {
     const driveInfo = getDriveInfo(parsedConfig);
     try {
         log(`Processing drive ${driveInfo.label} -> ${driveInfo.path}`);
+        // eslint-disable-next-line no-unused-vars
     } catch (error) {
         return;
     }
@@ -1538,6 +1543,7 @@ function move2usbAction() {
     const mountedDrive = mountDrive(driveInfo);
     try {
         log(`Mounted drive ${mountedDrive.name} -> ${mountedDrive.mountpoint}`);
+        // eslint-disable-next-line no-unused-vars
     } catch (error) {
         return;
     }

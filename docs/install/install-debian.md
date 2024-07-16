@@ -112,7 +112,7 @@ npm run build
 exit
 ```
 
-**Please note:** depending on your hardware `npm install` and `npm run build` takes up to 15min! Node.js is needed in v18 or later!
+**Please note:** depending on your hardware `npm install` and `npm run build` takes up to 15min! Node.js is needed in v20 or later!
 
 Next we have to give our webserver user access to the USB device:
 

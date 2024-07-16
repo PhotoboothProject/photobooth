@@ -172,6 +172,7 @@ class SyncToDrive {
                     .replace(/[\n.]/gu, '');
                 device.mountpoint = mountPoint;
             }
+            // eslint-disable-next-line no-unused-vars
         } catch (error) {
             throw new Error('Unable to mount device');
         }
@@ -186,6 +187,7 @@ class SyncToDrive {
                     const command = `export LC_ALL=C; udisksctl unmount -b ${device.path}; unset LC_ALL`;
                     execSync(command);
                     log('Unmounted drive ' + device.path + ', command: "' + command + '"');
+                    // eslint-disable-next-line no-unused-vars
                 } catch (error) {
                     throw new Error('Unable to unmount device');
                 }
@@ -217,9 +219,8 @@ class SyncToDrive {
             }, 60000);
 
             const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
-            // eslint-disable-next-line no-unmodified-loop-condition
+
             while (this.rsyncProcess) {
-                // eslint-disable-next-line no-await-in-loop
                 await sleep(1000);
             }
         }
@@ -258,7 +259,6 @@ class SyncToDrive {
     }
 }
 
-// eslint-disable-next-line no-unused-vars
 const syncToDrive = new SyncToDrive();
 
 ['SIGTERM', 'SIGHUP', 'SIGINT'].forEach((term) =>
