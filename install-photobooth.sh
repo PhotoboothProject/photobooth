@@ -294,7 +294,7 @@ function check_nodejs() {
     info "[Info]      Found Node.js $NODE_VERSION".
 
     if [[ -n "$major" ]] && [[ "$major" -ge "$NODEJS_MAJOR" ]]; then
-        if [[ -n "$major" ]] && [[ "$major" -ge "23" ]]; then
+        if [[ -n "$major" ]] && [[ "$major" -ge "21" ]]; then
             info "[Info]      Node.js downgrade suggested."
             if [ "$NODEJS_CHECKED" = true ]; then
                 warn "[WARN]      Downgrade of Node.js was not possible or skipped."
