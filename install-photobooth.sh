@@ -355,8 +355,8 @@ function update_nodejs() {
             info "[Cleanup]   Removing npm package"
             apt-get -qq purge -y npm
         fi
-
-        which node
+        hash -r
+        rm -f /usr/local/bin/node
         info "[Package]   Installing latest Node.js v20"
         apt-get -qq install -y ca-certificates curl gnupg
         mkdir -p /etc/apt/keyrings
