@@ -363,8 +363,16 @@ function update_nodejs() {
         echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
         apt-get -qq update
         apt-get -qq install -y nodejs
-        NODEJS_CHECKED=true
-        check_nodejs
+        NODE_VERSION_UPDATED=$(node -v || echo "0")
+        IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
+        node_major_updated=${VER_UPD[0]}
+        node_minor_updated=${VER_UPD[1]}
+        if [[ "$node_major_updated" -eq "$NODEJS_MAJOR" ]] && [[ "$node_minor_updated" -lt "$NODEJS_MINOR" ]]; then
+            error "[ERROR]     Update of Node.js was not possible. Aborting Photobooth installation!"
+            exit 1
+        else
+            info "[Info]      Node.js matches our requirements.".
+        fi
     else
         info "### We won't update Node.js."
         NODEJS_CHECKED=true
