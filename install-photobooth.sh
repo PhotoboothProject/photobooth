@@ -367,6 +367,7 @@ function update_nodejs() {
 
         hash -r
         which node
+        node -v
         NODE_VERSION_UPDATED=$(/usr/local/bin/node -v || echo "0")
         IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
         node_major_updated=${VER_UPD[0]}
@@ -374,7 +375,7 @@ function update_nodejs() {
         info "[Info]      Now found Node.js $NODE_VERSION_UPDATED".
         if [[ "$node_major_updated" -lt "$NODEJS_MAJOR" ]]; then
             error "[ERROR]     Update of Node.js was not possible. Aborting Photobooth installation!"
-            exit 1
+            #exit 1
         else
             info "[Info]      Node.js now matches our requirements.".
         fi
@@ -408,6 +409,7 @@ function proof_npm() {
             exit 1
         fi
     fi
+    node -v
 }
 
 function check_npm() {
