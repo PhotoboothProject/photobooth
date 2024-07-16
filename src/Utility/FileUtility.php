@@ -7,14 +7,14 @@ class FileUtility
     public const DIRECTORY_PERMISSIONS = 0755;
 
     public const FILE_UPLOAD_ERROR_MESSAGES = array(
-        UPLOAD_ERR_OK => 'There is no error, the file uploaded with success',
-        UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
-        UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
-        UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded',
-        UPLOAD_ERR_NO_FILE => 'No file was uploaded',
-        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder',
-        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
-        UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
+        UPLOAD_ERR_OK => 'file_upload:no_error',
+        UPLOAD_ERR_INI_SIZE => 'file_upload:error_ini_size',
+        UPLOAD_ERR_FORM_SIZE => 'file_upload:error_form_size',
+        UPLOAD_ERR_PARTIAL => 'file_upload:error_partial',
+        UPLOAD_ERR_NO_FILE => 'file_upload:error_no_file',
+        UPLOAD_ERR_NO_TMP_DIR => 'file_upload:error_no_tmp_dir',
+        UPLOAD_ERR_CANT_WRITE => 'file_upload:error_cant_write',
+        UPLOAD_ERR_EXTENSION => 'file_upload:error_extension',
     );
 
     public static function createDirectory(string $directory): void

@@ -35,10 +35,7 @@ $folderName = null;
 $labelClass = 'w-full flex flex-col mb-1';
 $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mb-3 mt-auto';
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
-
-if ( !isset($_SERVER['HTACCESS']) ) {
-    $errors['htaccess'] = 'no-htaccess';
-}
+$max_file_size = ini_get('upload_max_filesize');
 
 if (isset($_POST['submit'])) {
     $folderName = $_POST['folder_name'];
@@ -127,6 +124,7 @@ if (isset($_POST['submit'])) {
                     </select>
                     <label class="<?= $labelClass ?>" for="files"><?=$languageService->translate('upload_selection')?></label>
                     <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, .ttf" required><br><br>
+                    <span><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></span>
                 </div>
 
                 <?php
