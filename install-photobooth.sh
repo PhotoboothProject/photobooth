@@ -356,7 +356,7 @@ function update_nodejs() {
             apt-get -qq purge -y npm
         fi
         hash -r
-        rm -f /usr/local/bin/node
+        rm -f /usr/bin/node
         info "[Package]   Installing latest Node.js v20"
         apt-get -qq install -y ca-certificates curl gnupg
         mkdir -p /etc/apt/keyrings
@@ -368,14 +368,14 @@ function update_nodejs() {
         hash -r
         which node
         node -v
-        NODE_VERSION_UPDATED=$(/usr/local/bin/node -v || echo "0")
+        NODE_VERSION_UPDATED=$(node -v || echo "0")
         IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
         node_major_updated=${VER_UPD[0]}
         node_minor_updated=${VER_UPD[1]}
         info "[Info]      Now found Node.js $NODE_VERSION_UPDATED".
         if [[ "$node_major_updated" -lt "$NODEJS_MAJOR" ]]; then
             error "[ERROR]     Update of Node.js was not possible. Aborting Photobooth installation!"
-            #exit 1
+            exit 1
         else
             info "[Info]      Node.js now matches our requirements.".
         fi
