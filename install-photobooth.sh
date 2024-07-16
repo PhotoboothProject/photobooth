@@ -356,6 +356,7 @@ function update_nodejs() {
             apt-get -qq purge -y npm
         fi
 
+        which node
         info "[Package]   Installing latest Node.js v20"
         apt-get -qq install -y ca-certificates curl gnupg
         mkdir -p /etc/apt/keyrings
