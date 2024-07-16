@@ -14,6 +14,7 @@ class FontUtility
 
     public const supportedMimeTypesSelect = [
         'font/ttf',
+        'application/octet-stream',
     ];
 
     public static function getFontPreviewImage(

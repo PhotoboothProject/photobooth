@@ -6,6 +6,7 @@ use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\FontUtility;
+use Photobooth\Utility\FileUtility;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Service\LoggerService;
 
@@ -34,6 +35,7 @@ $folderName = null;
 $labelClass = 'w-full flex flex-col mb-1';
 $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mb-3 mt-auto';
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
+$max_file_size = ini_get('upload_max_filesize');
 
 if (isset($_POST['submit'])) {
     $folderName = $_POST['folder_name'];
@@ -65,29 +67,36 @@ if (isset($_POST['submit'])) {
 
     if (count($errors) === 0) {
         for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
-            $fileErrors = [];
+            $fileError = $uploadedFiles['error'][$i];
             $fileName = $uploadedFiles['name'][$i];
-            $fileTmpName = $uploadedFiles['tmp_name'][$i];
-            $fileType = $uploadedFiles['type'][$i];
-            $filePath = $folderPath . '/' . $fileName;
-            $logger->debug('fileName', [$fileName]);
+            if($fileError == 0) {
+                $fileTmpName = $uploadedFiles['tmp_name'][$i];
+                $fileType = $uploadedFiles['type'][$i];
+                $fileSize = $uploadedFiles['size'][$i];
+                $filePath = $folderPath . '/' . $fileName;
+                $logger->debug('fileName', [$fileName]);
 
-            // check if filetype is allowed for this folder
-            if(!in_array($fileType, $typeChecker[$folderName])) {
-                $errors[$fileName] = $languageService->translate('upload_wrong_type');
-                $logger->debug($languageService->translate('upload_wrong_type'), [$fileName]);
-                break;
+                // check if filetype is allowed for this folder
+                if(!in_array($fileType, $typeChecker[$folderName])) {
+                    $errors[$fileName] = $languageService->translate('upload_wrong_type');
+                    $logger->debug($languageService->translate('upload_wrong_type'), [$fileName]);
+                    break;
+                }
+
+                // check if file already exists
+                if(file_exists($filePath)) {
+                    $errors[$fileName] = $languageService->translate('upload_file_already_exists');
+                    $logger->debug($languageService->translate('upload_file_already_exists'), [$fileName]);
+                    break;
+                }
+
+                move_uploaded_file($fileTmpName, $filePath);
+                chmod($filePath, 0644);
+            } else {
+                $errMsg = $languageService->translate(FileUtility::getErrorMessage($fileError));
+                $errors[$fileName] = $errMsg;
+                $logger->debug($errMsg, [$fileName]);
             }
-
-            // check if file already exists
-            if(file_exists($filePath)) {
-                $errors[$fileName] = $languageService->translate('upload_file_already_exists');
-                $logger->debug($languageService->translate('upload_file_already_exists'), [$fileName]);
-                break;
-            }
-
-            move_uploaded_file($fileTmpName, $filePath);
-            chmod($filePath, 0644);
         }
     }
 
@@ -108,14 +117,17 @@ if (isset($_POST['submit'])) {
                 <div class="relative">
                     <label class="<?= $labelClass ?>" for="folder_name"><?=$languageService->translate('upload_folder')?></label>
                     <select class="<?= $inputClass ?>" name="folder_name">
-                        <option value="images/background" <?= $folderName === 'images/background' ? 'selected' : '' ?>>images/background</option>
-                        <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>images/frames</option>
-                        <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>images/logo</option>
-                        <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>images/placeholder</option>
+                        <optgroup label="images/">
+                            <option value="images/background" <?= $folderName === 'images/background' ? 'selected' : '' ?>>background</option>
+                            <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>frames</option>
+                            <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>logo</option>
+                            <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>placeholder</option>
+                        </optgroup>
                         <option value="fonts" <?= $folderName === 'fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>
                     <label class="<?= $labelClass ?>" for="files"><?=$languageService->translate('upload_selection')?></label>
-                    <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, .ttf" required><br><br>
+                    <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, .ttf" required>
+                    <div class="my-2"><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></div>
                 </div>
 
                 <?php
@@ -150,7 +162,6 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
         </div>
     </div>
 </div>
-
 <?php
 
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
