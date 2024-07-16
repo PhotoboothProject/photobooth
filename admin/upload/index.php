@@ -93,8 +93,9 @@ if (isset($_POST['submit'])) {
                 move_uploaded_file($fileTmpName, $filePath);
                 chmod($filePath, 0644);
             } else {
-                $errors[$fileName] = $languageService->translate(FileUtility::getErrorMessage($fileError));
-                $logger->debug($languageService->translate(FileUtility::getErrorMessage($fileError)), [$fileName]);
+                $errMsg = $languageService->translate(FileUtility::getErrorMessage($fileError));
+                $errors[$fileName] = $errMsg;
+                $logger->debug($errMsg, [$fileName]);
             }
         }
     }
@@ -116,10 +117,12 @@ if (isset($_POST['submit'])) {
                 <div class="relative">
                     <label class="<?= $labelClass ?>" for="folder_name"><?=$languageService->translate('upload_folder')?></label>
                     <select class="<?= $inputClass ?>" name="folder_name">
-                        <option value="images/background" <?= $folderName === 'images/background' ? 'selected' : '' ?>>images/background</option>
-                        <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>images/frames</option>
-                        <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>images/logo</option>
-                        <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>images/placeholder</option>
+                        <optgroup label="images/">
+                            <option value="images/background" <?= $folderName === 'images/background' ? 'selected' : '' ?>>background</option>
+                            <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>frames</option>
+                            <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>logo</option>
+                            <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>placeholder</option>
+                        </optgroup>
                         <option value="fonts" <?= $folderName === 'fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>
                     <label class="<?= $labelClass ?>" for="files"><?=$languageService->translate('upload_selection')?></label>
