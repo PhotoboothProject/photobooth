@@ -367,11 +367,12 @@ function update_nodejs() {
         IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
         node_major_updated=${VER_UPD[0]}
         node_minor_updated=${VER_UPD[1]}
+        info "[Info]      Now found Node.js $NODE_VERSION_UPDATED".
         if [[ "$node_major_updated" -eq "$NODEJS_MAJOR" ]] && [[ "$node_minor_updated" -lt "$NODEJS_MINOR" ]]; then
             error "[ERROR]     Update of Node.js was not possible. Aborting Photobooth installation!"
             exit 1
         else
-            info "[Info]      Node.js matches our requirements.".
+            info "[Info]      Node.js now matches our requirements.".
         fi
     else
         info "### We won't update Node.js."
