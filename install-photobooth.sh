@@ -365,7 +365,7 @@ function update_nodejs() {
         apt-get -qq install -y nodejs
 
         hash -r
-        source /etc/profile.d/nvm.sh
+        which node
         NODE_VERSION_UPDATED=$(node -v || echo "0")
         IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
         node_major_updated=${VER_UPD[0]}
