@@ -126,8 +126,8 @@ if (isset($_POST['submit'])) {
                         <option value="fonts" <?= $folderName === 'fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>
                     <label class="<?= $labelClass ?>" for="files"><?=$languageService->translate('upload_selection')?></label>
-                    <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, .ttf" required><br><br>
-                    <span><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></span>
+                    <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, .ttf" required>
+                    <div class="my-2"><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></div>
                 </div>
 
                 <?php
