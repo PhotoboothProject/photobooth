@@ -75,21 +75,21 @@ if (isset($_POST['submit'])) {
                 $fileSize = $uploadedFiles['size'][$i];
                 $filePath = $folderPath . '/' . $fileName;
                 $logger->debug('fileName', [$fileName]);
-    
+
                 // check if filetype is allowed for this folder
                 if(!in_array($fileType, $typeChecker[$folderName])) {
                     $errors[$fileName] = $languageService->translate('upload_wrong_type');
                     $logger->debug($languageService->translate('upload_wrong_type'), [$fileName]);
                     break;
                 }
-    
+
                 // check if file already exists
                 if(file_exists($filePath)) {
                     $errors[$fileName] = $languageService->translate('upload_file_already_exists');
                     $logger->debug($languageService->translate('upload_file_already_exists'), [$fileName]);
                     break;
                 }
-    
+
                 move_uploaded_file($fileTmpName, $filePath);
                 chmod($filePath, 0644);
             } else {
