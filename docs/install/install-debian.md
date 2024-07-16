@@ -19,7 +19,7 @@ For the user "pi", the command to install Photobooth needs to be:
 sudo bash install-photobooth.sh -username='pi'
 ```
 
-By default Apache is used for an easy and no-hassle setup as NGINX and Lighttpd need some additional steps.
+By default Apache is used for an easy and no-hassle setup as NGINX needs some additional steps.
 To use NGINX run
 
 ```sh
@@ -27,12 +27,6 @@ sudo bash install-photobooth.sh -username='<YourUsername>' -webserver='nginx'
 ```
 
 (additional Setup note: [Cromakeying is saving without finishing saving](../faq/index.md#cromakeying-is-saving-without-finishing-saving) ).
-
-To use Lighttpd as Webserver run
-
-```sh
-sudo bash install-photobooth.sh -username='<YourUsername>' -webserver='lighttpd'
-```
 
 To get to know all options you can simply run `sudo bash install-photobooth.sh -help`.
 
@@ -49,9 +43,9 @@ sudo apt dist-upgrade
 
 ## Install a Webserver
 
-Currently NGINX, Lighttpd and Apache Webserver are supported.
+Currently NGINX and Apache Webserver are supported.
 For an easy and no-hassle setup you should install Apache Webserver.
-NGINX has a smaller memory footprint and typically better performance, which is especially important on the Raspberry Pis, but it needs some additional steps until you're good to go. Also Lighttpd needs some additional steps.
+NGINX has a smaller memory footprint and typically better performance, which is especially important on the Raspberry Pis, but it needs some additional steps until you're good to go.
 
 ### Install Apache & PHP
 
@@ -66,14 +60,6 @@ sudo apt install -y nginx php-fpm
 ```
 
 [Additional needed steps to enable PHP in NGINX](install-nginx.md)
-
-### or Install Lighttpd & PHP
-
-```sh
-sudo apt install -y lighttpd php-fpm
-```
-
-[Additional needed steps to enable PHP in Lighttpd](install-lighttpd.md)
 
 ## Install dependencies
 
