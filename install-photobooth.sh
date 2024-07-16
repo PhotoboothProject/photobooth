@@ -355,7 +355,6 @@ function update_nodejs() {
             info "[Cleanup]   Removing npm package"
             apt-get -qq purge -y npm
         fi
-        hash -r
         rm -f /usr/bin/node
         rm -f /usr/local/bin/node
         info "[Package]   Installing latest Node.js v20"
@@ -365,18 +364,8 @@ function update_nodejs() {
         echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
         apt-get -qq update
         apt-get -qq install -y nodejs
-        refresh_shell
-        NODE_VERSION_UPDATED=$(node -v || echo "0")
-        IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
-        node_major_updated=${VER_UPD[0]}
-        node_minor_updated=${VER_UPD[1]}
-        info "[Info]      Now found Node.js $NODE_VERSION_UPDATED".
-        if [[ "$node_major_updated" -lt "$NODEJS_MAJOR" ]]; then
-            error "[ERROR]     Update of Node.js was not possible. Aborting Photobooth installation!"
-            exit 1
-        else
-            info "[Info]      Node.js now matches our requirements.".
-        fi
+        NODEJS_CHECKED=true
+        check_nodejs
     else
         info "### We won't update Node.js."
         NODEJS_CHECKED=true
@@ -407,7 +396,6 @@ function proof_npm() {
             exit 1
         fi
     fi
-    node -v
 }
 
 function check_npm() {
@@ -1004,21 +992,6 @@ function commit_git_changes() {
 
     sudo -u www-data git checkout -b "$BACKUPBRANCH"
     info "### Backup done to branch: $BACKUPBRANCH"
-}
-
-refresh_shell() {
-    case "$SHELL" in
-        */bash)
-            source ~/.bashrc
-            ;;
-        */zsh)
-            source ~/.zshrc
-            ;;
-        *)
-            echo "Unsupported shell: $SHELL. Please source your profile manually."
-            ;;
-    esac
-    info "[Info]      Refreshing the shell environment..."
 }
 
 detect_photobooth_install() {
