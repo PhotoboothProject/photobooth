@@ -366,7 +366,7 @@ function update_nodejs() {
 
         hash -r
         which node
-        NODE_VERSION_UPDATED=$(node -v || echo "0")
+        NODE_VERSION_UPDATED=$(/usr/local/bin/node -v || echo "0")
         IFS=. read -r -a VER_UPD <<<"${NODE_VERSION_UPDATED##*v}"
         node_major_updated=${VER_UPD[0]}
         node_minor_updated=${VER_UPD[1]}
