@@ -23,6 +23,7 @@
   justify-content: center;
   align-items: center;
   z-index: 16777373;
+  pointer-events: none;
 
   &[data-type='success'] {
     --overlay-color: var(--success-color);
