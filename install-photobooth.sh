@@ -409,6 +409,22 @@ function check_npm() {
     proof_npm
 }
 
+function check_python() {
+    PYTHON_VERSION=$(python3 --version 2>&1)
+    info "[Info]      Python version: $PYTHON_VERSION"
+
+    PYTHON_MAJOR_VERSION=$(python3 -c "import sys; print(sys.version_info.major)")
+    PYTHON_MINOR_VERSION=$(python3 -c "import sys; print(sys.version_info.minor)")
+
+    # Check if the Python version is 3.12 or newer
+    if [ "$PYTHON_MAJOR_VERSION" -eq 3 ] && [ "$PYTHON_MINOR_VERSION" -ge 12 ]; then
+        warn "[WARN]      Python version is 3.12 or newer. Installing distutils..."
+        apt install python3-distutils -y
+    else
+        info "[INFO]      Python version is older than 3.12. No need to install distutils separately."
+    fi
+}
+
 function common_software() {
     info "### Updating the system"
     apt-get -qq update
@@ -472,6 +488,7 @@ function common_software() {
     if [ "$NEEDS_NPM_CHECK" = true ]; then
         check_npm
     fi
+    check_python
 }
 
 function apache_webserver() {
