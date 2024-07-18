@@ -15,33 +15,6 @@ class Helper
     private static $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
     /**
-     * Recursively compares two arrays and returns the differences between them.
-     */
-    public static function arrayRecursiveDiff(array $array1, array $array2): array
-    {
-        $returnArray = [];
-
-        foreach ($array1 as $key => $value) {
-            if (array_key_exists($key, $array2)) {
-                if (is_array($value)) {
-                    $recursiveDiff = self::arrayRecursiveDiff($value, $array2[$key]);
-                    if (count($recursiveDiff)) {
-                        $returnArray[$key] = $recursiveDiff;
-                    }
-                } else {
-                    if ($value != $array2[$key]) {
-                        $returnArray[$key] = $value;
-                    }
-                }
-            } else {
-                $returnArray[$key] = $value;
-            }
-        }
-
-        return $returnArray;
-    }
-
-    /**
      * Clears the cache for a specific file.
      */
     public static function clearCache(string $file): void
