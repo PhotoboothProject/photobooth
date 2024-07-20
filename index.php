@@ -40,6 +40,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 
 <body class="gallery-mode--overlay ">
+<?php include PathUtility::getAbsolutePath('template/components/video.background.php'); ?>
 <?php include PathUtility::getAbsolutePath('template/components/preview.php'); ?>
 
 <?php if ($config['video']['enabled'] && $config['video']['animation']): ?>

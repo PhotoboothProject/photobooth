@@ -44,6 +44,7 @@ const photoBooth = (function () {
         previewVideo = $('#preview--video'),
         previewFramePicture = $('#previewframe--picture'),
         previewFrameCollage = $('#previewframe--collage'),
+        videoBackground = $('#video-background'),
         videoSensor = $('#video--sensor'),
         buttonDelete = $('[data-command="deletebtn"]'),
         buttonPrint = $('[data-command="printbtn"]'),
@@ -588,6 +589,7 @@ const photoBooth = (function () {
                 $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
                 previewFrameCollage.hide();
                 previewFramePicture.hide();
+                videoBackground.hide();
                 if (result.error) {
                     photoboothTools.console.logDev('Error while taking picture.');
                     if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
@@ -888,6 +890,7 @@ const photoBooth = (function () {
 
         videoSensor.hide();
         previewVideo.hide();
+        videoBackground.hide();
         loader.css('--stage-background', config.colors.background_countdown);
         loaderMessage.html(
             '<i class="' + config.icons.spinner + '"></i><br>' + photoboothTools.getTranslation('busyVideo')
