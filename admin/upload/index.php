@@ -47,6 +47,7 @@ if (isset($_POST['submit'])) {
         'images/frames' => ImageUtility::supportedMimeTypesSelect,
         'images/logo' => ImageUtility::supportedMimeTypesSelect,
         'images/placeholder' => ImageUtility::supportedMimeTypesSelect,
+        'images/cheese' => ImageUtility::supportedMimeTypesSelect,
         'fonts' => FontUtility::supportedMimeTypesSelect,
     ];
 
@@ -122,6 +123,7 @@ if (isset($_POST['submit'])) {
                             <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>frames</option>
                             <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>logo</option>
                             <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>placeholder</option>
+                            <option value="images/cheese" <?= $folderName === 'images/cheese' ? 'selected' : '' ?>>cheese</optio5n>
                         </optgroup>
                         <option value="fonts" <?= $folderName === 'fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>

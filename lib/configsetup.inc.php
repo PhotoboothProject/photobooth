@@ -2629,19 +2629,15 @@ return [
             'value' => $config['ui']['shutter_animation'],
         ],
         'ui_shutter_cheese_img' => [
-            'view' => 'advanced',
-            'type' => 'select',
+            'view' => 'expert',
+            'type' => 'image',
             'name' => 'ui[shutter_cheese_img]',
             'placeholder' => $defaultConfig['ui']['shutter_cheese_img'],
-            'options' => [
-                '' => 'none',
-                '/resources/img/cheese/camera_up.png' => 'top',
-                '/resources/img/cheese/camera_down.png' => 'bottom',
-                '/resources/img/cheese/camera_left.png' => 'left',
-                '/resources/img/cheese/camera_right.png' => 'right',
-                '/private/cheese.png' => '/private/cheese.png',
-            ],
-            'value' => $config['ui']['shutter_cheese_img'],
+            'value' => htmlentities($config['ui']['shutter_cheese_img'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/cheese'),
+                PathUtility::getAbsolutePath('private/images/cheese'),
+            ]
         ],
         'button_show_fs' => [
             'view' => 'basic',
