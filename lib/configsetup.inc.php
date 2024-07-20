@@ -2714,6 +2714,28 @@ return [
             'placeholder' => $defaultConfig['colors']['cheese'],
             'value' => $config['colors']['cheese'],
         ],
+        'background_type' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'background[type]',
+            'placeholder' => $defaultConfig['background']['type'],
+            'options' => [
+                'image' => 'image',
+                'video' => 'video',
+            ],
+            'value' => $config['background']['type'],
+        ],
+        'background_video' => [
+            'view' => 'expert',
+            'type' => 'video',
+            'name' => 'background[video]',
+            'placeholder' => $defaultConfig['background']['video'],
+            'value' => htmlentities($config['background']['video'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/videos/background'),
+                PathUtility::getAbsolutePath('private/videos/background'),
+            ],
+        ],
         'background_defaults' => [
             'view' => 'expert',
             'type' => 'image',
