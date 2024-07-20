@@ -75,6 +75,9 @@ foreach ($configsetup as $section => $fields) {
             case 'font':
                 echo AdminInput::renderFontSelect($setting, $i18ntag);
                 break;
+            case 'video':
+                echo AdminInput::renderVideoSelect($setting, $i18ntag);
+                break;
         }
 
         echo '</div>';

@@ -64,6 +64,7 @@ gulp.task('js-admin', function () {
       './assets/js/admin/keypad.js',
       './assets/js/admin/imageSelect.js',
       './assets/js/admin/fontSelect.js',
+      './assets/js/admin/videoSelect.js',
       './assets/js/admin/toast.js',
     ])
     .pipe(concat('main.admin.js'))
