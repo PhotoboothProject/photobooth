@@ -7,6 +7,7 @@ use Photobooth\Service\LanguageService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\FontUtility;
 use Photobooth\Utility\FileUtility;
+use Photobooth\Utility\VideoUtility;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Service\LoggerService;
 
@@ -49,6 +50,7 @@ if (isset($_POST['submit'])) {
         'images/placeholder' => ImageUtility::supportedMimeTypesSelect,
         'images/cheese' => ImageUtility::supportedMimeTypesSelect,
         'fonts' => FontUtility::supportedMimeTypesSelect,
+        'videos/background' => VideoUtility::supportedMimeTypesSelect
     ];
 
     $logger->debug('folderName', [$folderName]);
@@ -59,6 +61,7 @@ if (isset($_POST['submit'])) {
         $logger->debug($languageService->translate('upload_folder_invalid'), [$folderName]);
     } else {
         $folderPath = PathUtility::getAbsolutePath('private/' . $folderName);
+        FileUtility::createDirectory($folderPath);
         // check if folder is writeable
         if (!is_writable($folderPath)) {
             $errors[$folderName] = $languageService->translate('upload_unable_to_write_folder');
@@ -118,17 +121,16 @@ if (isset($_POST['submit'])) {
                 <div class="relative">
                     <label class="<?= $labelClass ?>" for="folder_name"><?=$languageService->translate('upload_folder')?></label>
                     <select class="<?= $inputClass ?>" name="folder_name">
-                        <optgroup label="images/">
-                            <option value="images/background" <?= $folderName === 'images/background' ? 'selected' : '' ?>>background</option>
-                            <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>frames</option>
-                            <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>logo</option>
-                            <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>placeholder</option>
-                            <option value="images/cheese" <?= $folderName === 'images/cheese' ? 'selected' : '' ?>>cheese</optio5n>
-                        </optgroup>
+                        <option value="images/background" <?= $folderName === 'images/background' ? 'selected' : '' ?>>images/background</option>
+                        <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>images/frames</option>
+                        <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>images/logo</option>
+                        <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>images/placeholder</option>
+                        <option value="images/cheese" <?= $folderName === 'images/cheese' ? 'selected' : '' ?>>images/cheese</option>
+                        <option value="videos/background" <?= $folderName === 'videos/background' ? 'selected' : '' ?>>videos/background</option>
                         <option value="fonts" <?= $folderName === 'fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>
                     <label class="<?= $labelClass ?>" for="files"><?=$languageService->translate('upload_selection')?></label>
-                    <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, .ttf" required>
+                    <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, video/*, .ttf" required>
                     <div class="my-2"><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></div>
                 </div>
 
