@@ -135,6 +135,7 @@
   "error": "Something went wrong. Please try it again.",
   "error_path_noFonts": "The path does not contain any fonts",
   "error_path_noImages": "The path does not contain any images",
+  "error_path_noVideos": "The path does not contain any videos",
   "event": "Event",
   "filecount": "File count:",
   "files_upload": "Upload files",
