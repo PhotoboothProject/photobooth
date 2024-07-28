@@ -751,6 +751,18 @@ If you're still having trouble feel free to join us at Telegram to get further s
 
 ---
 
+## Can I use a video as background?
+
+Yes you can. Using the file uploader you can add your video into the `/private/videos/background` folder.
+
+Once done go to [User interface](http://localhost/admin/#userinterface), switch from from `image` to `video` as background and choose your video in "Background video path".
+
+You can also use a youtube video/livestream!\
+In the background video path put the link pulled from youtube. Note that the link should be in the following format: `https://www.youtube.com/embed/<video_id>`.\
+To get a link like that you have to choose your youtube video/livestream and click on the "share" button. Then by choosing "incorporate" it will be shown an HTML code `<iframe />` you have to copy the content of the "src" property from the start till the first question mark `?` in order to resemble the format.
+
+---
+
 ## Can I use a live stream as background?
 
 Yes you can. There's different ways depending on your needs and personal setup:
