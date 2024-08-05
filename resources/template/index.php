@@ -1,28 +1,39 @@
 <?php
-$full_images = glob('./{,*/,*/*/,*/*/*/}*.{jpg,JPG}', GLOB_BRACE);
-$tmb_images = glob('./{,*/,*/*/,*/*/*/}tmb_*.{jpg,JPG}', GLOB_BRACE);
-$first_img = $full_images[0];
-$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]';
-$og_image_prop = $actual_link . substr($first_img, 2);
-$total_images = count($tmb_images);
-$time_to_download = round($total_images / 60, 0);
 
-// meta params to evaluate
-$og_locale = 'en_GB';
-$og_description = 'Book the photobooth';
-$og_sitename = 'Website';
-$og_img_alt = 'Photobooth';
-$whatsapp_msg = "Look at this Photobooth photo! \n\n %s \n\n\n\n Book the photobooth at 0123456789";
-$seconds_to_cache = 60;
-$downloadText = 'DOWNLOAD';
-
-header("Cache-Control: max-age=$seconds_to_cache");
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    zipFilesAndDownload($full_images);
+if (file_exists('config.inc.php')) {
+    $templateConfig = require 'config.inc.php';
 }
 
-function zipFilesAndDownload($files)
+if (!isset($templateConfig)) {
+    die('config.inc.php missing');
+}
+
+$images = [
+    'images' => glob($templateConfig['paths']['images'] . '/*.{jpg,JPG}', GLOB_BRACE) ?: [],
+    'thumbs' => glob($templateConfig['paths']['thumbs'] . '/*.{jpg,JPG}', GLOB_BRACE) ?: [],
+];
+$firstImage = $images['images'][0] ?? null;
+$totalImages = count($images['images']);
+
+$requestUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$urlPrefix = $requestUrl;
+if (substr($urlPrefix, -4) === '.php') {
+    $baseName = basename($urlPrefix);
+    $urlPrefix = rtrim($urlPrefix, $baseName);
+}
+if (substr($urlPrefix, -1) !== '/') {
+    $urlPrefix .= '/';
+}
+
+$ogImage = $urlPrefix . $firstImage;
+
+header('Cache-Control: max-age=' . $templateConfig['meta']['max-age']);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    zipFilesAndDownload($images['images'], $templateConfig);
+}
+
+function zipFilesAndDownload($files, $templateConfig)
 {
     // create new zip opbject
     $zip = new ZipArchive();
@@ -46,7 +57,7 @@ function zipFilesAndDownload($files)
     $zip->close();
 
     // send the file to the browser as a download
-    header('Content-disposition: attachment; filename="{title}.zip"');
+    header('Content-disposition: attachment; filename="' . $templateConfig['files']['download_prefix'] . '.zip"');
     header('Content-type: application/zip');
     header('Content-length: ' . filesize($tmp_file));
     header('Pragma: no-cache');
@@ -55,95 +66,49 @@ function zipFilesAndDownload($files)
     ignore_user_abort(true);
     unlink($tmp_file);
 }
-?>
 
+$styles = '';
+$styles .= '<style>' . PHP_EOL;
+$styles .= ':root {' . PHP_EOL;
+foreach ($templateConfig['theme'] as $key => $value) {
+    $value = trim($value);
+    $styles .= '  ' . $key . ': ' . $value . ';' . PHP_EOL;
+}
+$styles .= '}' . PHP_EOL;
+$styles .= '</style>' . PHP_EOL;
+
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $templateConfig['meta']['lang'] ?>">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer"
     />
-    <link rel="canonical" href="<?=$actual_link?>">
+
     <!--  Essential META Tags -->
-    <meta property="og:locale" content="<?=$og_locale?>">
-    <meta property="og:title" content="{title}">
+    <meta property="og:title" content="<?= $templateConfig['meta']['title'] ?>">
     <meta property="og:type" content="article" />
-    <meta property="og:image" content="<?=$og_image_prop?>">
-    <meta property="og:image:secure_url" content="<?=$og_image_prop?>">
-    <meta property="og:image:width" content="500">
-    <meta property="og:image:height" content="500">
-    <meta property="og:url" content="<?=$actual_link?>">
+    <meta property="og:image" content="<?= $ogImage ?>">
+    <meta property="og:url" content="<?= $requestUrl ?>">
     <meta name="twitter:card" content="summary_large_image">
 
     <!--  Non-Essential, But Recommended -->
-    <meta property="og:description" content="<?=$og_description?>">
-    <meta property="og:site_name" content="<?=$og_sitename?>">
-    <meta name="twitter:image:alt" content="<?=$og_img_alt?>">
-    <meta name="twitter:image" content="<?=$og_image_prop?>">
-    <title>{title}</title>
+    <meta property="og:site_name" content="<?= $templateConfig['meta']['sitename'] ?>">
+    <meta name="twitter:image" content="<?= $ogImage ?>">
+    <title><?= $templateConfig['meta']['title'] ?></title>
+
+    <?= $styles ?>
     <style>
-        .modal-window {
-            position: fixed;
-            background-color: rgba(33, 33, 33, 0.90);
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 999;
-            visibility: hidden;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s;
-        }
-        .modal-window:target {
-            visibility: visible;
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-window > div {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: transparent;
-        }
-        .modal-window > div > img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        *, ::after, ::before {
+            box-sizing: border-box;
         }
 
-        .action-bar-outer {
-            position: absolute;
-            width: 100%;
-            height: 10vh;
-            background-color: rgba(33, 33, 33, 0.90);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .action-bar {
-            width: clamp(200px, 40vw, 1000px);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .action-bar > a {
-            margin: 0 1rem;
-        }
-
-        /* Demo Styles */
         html,
         body {
             margin: 0;
@@ -155,17 +120,22 @@ function zipFilesAndDownload($files)
         }
 
         body {
-            font-family: apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-weight: 600;
-            background-image: linear-gradient(to right, #7f53ac 0, #657ced 100%);
-            color: black;
+            background-image: linear-gradient(135deg, var(--primary-color) 30%, var(--secondary-color));
+            color: var(--primary-color);
+            min-height: 100dvh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
         .front-cover {
-            background-image: linear-gradient(black, white), url(<?=$first_img?>);
+            background-image: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.85)), url(<?= $urlPrefix . $firstImage ?>);
             background-position: center;
             background-repeat: no-repeat;
-            background-blend-mode: screen;
             background-size: cover;
             max-height: 30vh;
             height: 100vw;
@@ -175,115 +145,167 @@ function zipFilesAndDownload($files)
             align-content: center;
             justify-content: center;
             align-items: center;
-            font-size: clamp(5vw, 70px, 10vw);
-            text-transform: uppercase;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .img-container {
-            display: grid;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .img-container .interior {
-            text-align: center;
-        }
-
-        .modal-window div:not(:last-of-type) {
-            margin-bottom: 15px;
-        }
-
-        .btn {
-            text-decoration: none;
-        }
-
-        .btn img {
-            width: 100%;
-            box-shadow: 0 0 10px 1px #000000;
-            aspect-ratio: 1;
-            object-fit: cover;
+            font-size: clamp(1rem, 8vw, 4rem);
+            line-height: 1em;
+            font-weight: 600;
+            text-wrap: balance;
+            color: #fff;
         }
 
         .container {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            margin: clamp(2rem, 4vw, 4rem) auto;
+            padding: 0 2rem;
+            max-width: 1000px;
+        }
+
+        .gallery-list {
             display: grid;
             gap: 1rem;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            align-content: center;
-            align-items: end;
-            justify-content: center;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 1rem 1rem 0 1rem;
+            width: 100%;
         }
 
-        .download-zip-container {
+        .gallery-list-item {
+            display: block;
+            overflow: hidden;
+            text-decoration: none;
+            border-radius: .25rem;
+            box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-list-item figure {
             display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-content: center;
-            justify-content: center;
-            margin: clamp(16px, 4vw, 30px) 0;
+            justify-content: space-between;
+            flex-direction: column;
+            height: 100%;
+            margin: 0;
         }
 
-        .download-zip-button {
+        .gallery-list-item img {
+            border: none;
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .big-button {
             padding: clamp(8px, 2vw, 16px) clamp(24px, 5vw, 40px);
             border-radius: clamp(40px, 5vw, 80px);
             border-color: transparent;
-            color: white;
-            background: teal;
+            color: var(--button-font-color);
+            background: var(--primary-color);
             font-size: clamp(16px, 4vw, 32px);
-            box-shadow: -4px -3px 20px 10px rgba(0,0,0,0.35);
+            box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.35);
             cursor: pointer;
             transition: 0.5s ease-in;
         }
 
-        .download-zip-button:hover {
-            background: white;
-            color: teal;
+        .big-button:hover {
+            background: color-mix(in srgb, var(--primary-color), var(--button-font-color) 20%);
             transition: 0.5s ease-out;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            background-color: rgba(33, 33, 33, 0.90);
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 999;
+        }
+
+        .lightbox:target {
+            display: block;
+        }
+
+        .lightbox-content {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: transparent;
+        }
+
+        .lightbox-content > img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .lightbox div:not(:last-of-type) {
+            margin-bottom: 15px;
+        }
+
+        .lightbox-action-bar-outer {
+            position: absolute;
+            width: 100%;
+            height: 10vh;
+            background-color: rgba(33, 33, 33, 0.90);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-action-bar {
+            width: clamp(200px, 40vw, 1000px);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .lightbox-action-bar > a {
+            margin: 0 1rem;
         }
     </style>
 </head>
 <body>
-<header class="front-cover">{title}</header>
-
-<div class="container">
-    <?php $index = 0; ?>
-    <?php foreach ($tmb_images as $filename) { ?>
-        <?php
-        $index += 1;
-        $this_full = str_replace('tmb_', '', $filename);
-        $path_array = explode('/', $this_full);
-        $download_name = end($path_array);
-        ?>
-        <div class="img-container">
-            <div class="interior">
-                <a id="opener<?=$index?>" class="btn" href="#open-modal<?=$index?>"><img src="<?=$filename?>" alt="<?=$filename?>"/></a>
-            </div>
+    <header class="front-cover">
+        <div class="container">
+            <?= $templateConfig['meta']['title'] ?>
         </div>
-        <div id="open-modal<?=$index?>" class="modal-window">
-            <div class="modal-content">
-                <div class="action-bar-outer">
-                    <div class="action-bar">
-                        <a href='<?=$this_full?>' class="image-element" download='<?=$og_img_alt?>_<?=$download_name?>'><i class="fa-solid fa-download"></i></a>
-                        <a href="whatsapp://send?text=<?=urlencode(sprintf($whatsapp_msg, $actual_link . substr($this_full, 2)))?>"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#opener<?=$index?>" title="Close"><i class="fa-solid fa-xmark"></i></a>
+    </header>
+    <div class="container">
+        <div class="gallery-list">
+            <?php foreach ($images['thumbs'] as $key => $filename) { ?>
+                <?php $fullImage = $urlPrefix . $images['images'][$key]; ?>
+                <a class="gallery-list-item" id="gallery-list-item-<?= $key ?>" href="#lightbox-uid-<?= $key ?>">
+                    <figure>
+                        <img src="<?= $urlPrefix . $filename ?>" alt="<?= basename($filename) ?>"/>
+                    </figure>
+                </a>
+                <div class="lightbox" id="lightbox-uid-<?= $key ?>">
+                    <div class="lightbox-content">
+                        <div class="lightbox-action-bar-outer">
+                            <div class="lightbox-action-bar">
+                                <a href="<?= $fullImage ?>" download="<?= $templateConfig['files']['download_prefix'] ?>_<?= basename($filename) ?>">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                                <a href="whatsapp://send?text=<?= urlencode(sprintf($templateConfig['labels']['share'], $fullImage))?>">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </a>
+                                <a href="#gallery-list-item-<?= $key ?>" title="<?= $templateConfig['labels']['close'] ?>">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <img src="<?= $fullImage ?>" loading="lazy" alt="<?= $filename ?>" />
                     </div>
                 </div>
-                <img src="<?=$this_full?>" loading="lazy" alt="<?=$filename?>" />
-            </div>
+            <?php } ?>
         </div>
-    <?php } ?>
-</div>
-<div class="download-zip-container">
-    <form target="_blank" action="" method="post" onsubmit="return confirm('<?=$total_images?> images will be downloaded.\nIt can take up to <?=$time_to_download?> minutes.\nProceed?')">
-        <button type="submit" class="download-zip-button"><?=$downloadText?></button>
-    </form>
-</div>
+    </div>
+    <div class="container">
+        <form target="_blank" action="" method="post" onsubmit="return confirm('<?= sprintf($templateConfig['labels']['download_confirmation_images'], $totalImages) ?>')">
+            <button type="submit" class="big-button"><?= $templateConfig['labels']['download'] ?></button>
+        </form>
+    </div>
 </body>
 </html>

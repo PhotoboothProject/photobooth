@@ -64,7 +64,6 @@ class ConfigurationService
         $default_font = PathUtility::getPublicPath('resources/fonts/GreatVibes-Regular.ttf');
         $default_frame = PathUtility::getPublicPath('resources/img/frames/frame.png');
         $random_frame = PathUtility::getPublicPath('api/randomImg.php?dir=demoframes');
-        $default_template = PathUtility::getAbsolutePath('resources/template/index.php');
 
         if (empty($config['picture']['frame'])) {
             $config['picture']['frame'] = $random_frame;
@@ -123,32 +122,6 @@ class ConfigurationService
 
         if (empty($config['qr']['url'])) {
             $config['qr']['url'] = PathUtility::getPublicPath('api/download.php?image=');
-        }
-
-        if (empty($config['ftp']['template_location']) || !Helper::testFile($config['ftp']['template_location'])) {
-            $config['ftp']['template_location'] = $default_template;
-        }
-
-        if (!empty($config['ftp']['urlTemplate'])) {
-            try {
-                $parameters = [
-                    '%website' => $config['ftp']['website'],
-                    '%baseFolder' => $config['ftp']['baseFolder'],
-                    '%folder' => $config['ftp']['folder'],
-                    '%title' => Helper::slugify($config['ftp']['title']),
-                    '%date' => date('Y/m/d'),
-                ];
-            } catch (\Exception $e) {
-                $parameters = [
-                    '%website' => $config['ftp']['website'],
-                    '%baseFolder' => $config['ftp']['baseFolder'],
-                    '%folder' => $config['ftp']['folder'],
-                    '%title' => 'Example',
-                    '%date' => date('Y/m/d'),
-                ];
-            }
-
-            $config['ftp']['processedTemplate'] = str_replace(array_keys($parameters), array_values($parameters), $config['ftp']['urlTemplate']);
         }
 
         return $config;

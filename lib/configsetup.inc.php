@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Enum\RemoteStorageTypeEnum;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
@@ -2366,33 +2367,41 @@ return [
             'name' => 'ftp[enabled]',
             'value' => $config['ftp']['enabled'],
         ],
+        'type' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'ftp[type]',
+            'placeholder' => $defaultConfig['ftp']['type'],
+            'options' => RemoteStorageTypeEnum::cases(),
+            'value' => $config['ftp']['type'],
+        ],
         'baseURL' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => 'ftp.photobooth.com',
             'name' => 'ftp[baseURL]',
-            'value' => htmlentities($config['ftp']['baseURL'] ?? ''),
+            'value' => $config['ftp']['baseURL'],
         ],
         'port' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['ftp']['port'],
             'name' => 'ftp[port]',
-            'value' => htmlentities($config['ftp']['port'] ?? ''),
+            'value' => $config['ftp']['port'],
         ],
         'username' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => '',
             'name' => 'ftp[username]',
-            'value' => htmlentities($config['ftp']['username'] ?? ''),
+            'value' => $config['ftp']['username'],
         ],
         'password' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => '',
             'name' => 'ftp[password]',
-            'value' => htmlentities($config['ftp']['password'] ?? ''),
+            'value' => $config['ftp']['password'],
         ],
         'test_connection' => [
             'view' => 'basic',
@@ -2406,27 +2415,21 @@ return [
             'type' => 'input',
             'placeholder' => 'mysite',
             'name' => 'ftp[baseFolder]',
-            'value' => htmlentities($config['ftp']['baseFolder'] ?? ''),
+            'value' => $config['ftp']['baseFolder'],
         ],
         'folder' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => 'photobooth',
             'name' => 'ftp[folder]',
-            'value' => htmlentities($config['ftp']['folder'] ?? ''),
+            'value' => $config['ftp']['folder'],
         ],
         'title' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => '',
             'name' => 'ftp[title]',
-            'value' => htmlentities($config['ftp']['title'] ?? ''),
-        ],
-        'appendDate' => [
-            'view' => 'basic',
-            'type' => 'checkbox',
-            'name' => 'ftp[appendDate]',
-            'value' => $config['ftp']['appendDate'],
+            'value' => $config['ftp']['title'],
         ],
         'useForQr' => [
             'view' => 'basic',
@@ -2439,14 +2442,14 @@ return [
             'type' => 'input',
             'placeholder' => 'https://photobooth.com',
             'name' => 'ftp[website]',
-            'value' => htmlentities($config['ftp']['website'] ?? ''),
+            'value' => $config['ftp']['website'],
         ],
         'urlTemplate' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => '%website/%folder/%title/',
+            'placeholder' => '%website%/%folder%/%title%',
             'name' => 'ftp[urlTemplate]',
-            'value' => htmlentities($config['ftp']['urlTemplate'] ?? ''),
+            'value' => $config['ftp']['urlTemplate'],
         ],
         'create_webpage' => [
             'view' => 'basic',
@@ -2457,15 +2460,9 @@ return [
         'template_location' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => '/resources/template/index.php',
+            'placeholder' => 'resources/template/index.php',
             'name' => 'ftp[template_location]',
-            'value' => htmlentities($config['ftp']['template_location'] ?? ''),
-        ],
-        'upload_thumb' => [
-            'view' => 'basic',
-            'type' => 'checkbox',
-            'name' => 'ftp[upload_thumb]',
-            'value' => $config['ftp']['upload_thumb'],
+            'value' => $config['ftp']['template_location'],
         ],
         'delete' => [
             'view' => 'basic',

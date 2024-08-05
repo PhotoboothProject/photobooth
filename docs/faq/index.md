@@ -964,8 +964,6 @@ The next variables are for the place where you want the pictures to be stored:
 -   `baseFolder` is the folder of your website (if you have multiple websites living on the server with this property you can choose on which of these the file should be stored)
 -   `folder` the folder dedicated to the upload of the files
 -   `title` if you are doing an event you can set the title of the event to create another folder (the system will slugify the string)
--   `appendDate` just like a simple blog websites, when articles are uploaded, the date is added to the url as the path. So if you want, the system will create a set of folder with this template: yyyy/mm/dd
--   `upload_thumb` if you want you can upload next to the processed picture also the thumbnails
 
 In the end the processed picture, and the thumbnails, will be uploaded in the folder according to these variables.
 
