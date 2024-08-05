@@ -12,6 +12,10 @@ $images = [
     'images' => glob($templateConfig['paths']['images'] . '/*.{jpg,JPG}', GLOB_BRACE) ?: [],
     'thumbs' => glob($templateConfig['paths']['thumbs'] . '/*.{jpg,JPG}', GLOB_BRACE) ?: [],
 ];
+
+asort($images['images']);
+asort($images['thumbs']);
+
 $firstImage = $images['images'][0] ?? null;
 $totalImages = count($images['images']);
 
@@ -274,21 +278,29 @@ $styles .= '</style>' . PHP_EOL;
     </header>
     <div class="container">
         <div class="gallery-list">
-            <?php foreach ($images['thumbs'] as $key => $filename) { ?>
-                <?php $fullImage = $urlPrefix . $images['images'][$key]; ?>
+            <?php foreach ($images['images'] as $key => $filename) { ?>
+                <?php
+                    $filename = basename($filename);
+                $image = $urlPrefix . $templateConfig['paths']['images'] . '/' . $filename;
+                $thumbnail = $image;
+                $possibleThumbnail = $templateConfig['paths']['thumbs'] . '/' . $filename;
+                if (file_exists($possibleThumbnail)) {
+                    $thumbnail = $urlPrefix . $possibleThumbnail;
+                }
+                ?>
                 <a class="gallery-list-item" id="gallery-list-item-<?= $key ?>" href="#lightbox-uid-<?= $key ?>">
                     <figure>
-                        <img src="<?= $urlPrefix . $filename ?>" alt="<?= basename($filename) ?>"/>
+                        <img src="<?= $thumbnail ?>" alt="<?= basename($filename) ?>" loading="lazy" />
                     </figure>
                 </a>
                 <div class="lightbox" id="lightbox-uid-<?= $key ?>">
                     <div class="lightbox-content">
                         <div class="lightbox-action-bar-outer">
                             <div class="lightbox-action-bar">
-                                <a href="<?= $fullImage ?>" download="<?= $templateConfig['files']['download_prefix'] ?>_<?= basename($filename) ?>">
+                                <a href="<?= $image ?>" download="<?= $templateConfig['files']['download_prefix'] ?>_<?= basename($image) ?>">
                                     <i class="fa-solid fa-download"></i>
                                 </a>
-                                <a href="whatsapp://send?text=<?= urlencode(sprintf($templateConfig['labels']['share'], $fullImage))?>">
+                                <a href="whatsapp://send?text=<?= urlencode(sprintf($templateConfig['labels']['share'], $image))?>">
                                     <i class="fa-brands fa-whatsapp"></i>
                                 </a>
                                 <a href="#gallery-list-item-<?= $key ?>" title="<?= $templateConfig['labels']['close'] ?>">
@@ -296,7 +308,7 @@ $styles .= '</style>' . PHP_EOL;
                                 </a>
                             </div>
                         </div>
-                        <img src="<?= $fullImage ?>" loading="lazy" alt="<?= $filename ?>" />
+                        <img src="<?= $image ?>" alt="<?= $image ?>" loading="lazy" />
                     </div>
                 </div>
             <?php } ?>
