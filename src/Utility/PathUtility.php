@@ -65,7 +65,7 @@ class PathUtility
 
         $path = self::fixFilePath(self::getBaseUrl() . $path);
         if ($absolute) {
-            $path = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $path;
+            $path = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $path;
         }
 
         return $path;
