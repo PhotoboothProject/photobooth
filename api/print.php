@@ -9,6 +9,7 @@ use Photobooth\Image;
 use Photobooth\Processor\PrintProcessor;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\PrintManagerService;
+use Photobooth\Service\RemoteStorageService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
@@ -96,14 +97,18 @@ if (!file_exists($vars['printFile'])) {
         }
 
         if ($config['print']['qrcode']) {
-            // create qr code
-            if ($config['ftp']['enabled'] && $config['ftp']['useForQr'] && isset($config['ftp']['processedTemplate'])) {
-                $imageHandler->qrUrl = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $vars['fileName'];
-            } elseif ($config['qr']['append_filename']) {
-                $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'] . $vars['fileName'], true);
-            } else {
-                $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'], true);
+            $url = $config['qr']['url'];
+            if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
+                $remoteStorageService = RemoteStorageService::getInstance();
+                $url = $remoteStorageService->getWebpageUri();
+                if ($config['qr']['append_filename']) {
+                    $url .= '/images/';
+                }
             }
+            if ($config['qr']['append_filename']) {
+                $url .= $vars['fileName'];
+            }
+            $imageHandler->qrUrl = PathUtility::getPublicPath($url, true);
             $imageHandler->qrSize = $config['print']['qrSize'];
             $imageHandler->qrMargin = $config['print']['qrMargin'];
             $imageHandler->qrColor = $config['print']['qrBgColor'];

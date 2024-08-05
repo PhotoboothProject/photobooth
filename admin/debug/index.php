@@ -60,6 +60,7 @@ include PathUtility::getAbsolutePath('admin/components/navItem.debug.php');
 echo getNavItemDebug('myconfig');
 echo getNavItemDebug('remotebuzzerlog');
 echo getNavItemDebug('synctodrivelog');
+echo getNavItemDebug('remotestoragelog');
 echo getNavItemDebug('devlog');
 if (Environment::isLinux()) {
     echo getNavItemDebug('serverprocesses');

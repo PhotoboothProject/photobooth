@@ -2,8 +2,6 @@
 
 namespace Photobooth;
 
-use FTP\Connection;
-
 /**
  * A collection of helper functions used throughout the photobooth application.
  */
@@ -114,75 +112,5 @@ class Helper
         $o = 0;
         eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');
         return intval($o);
-    }
-
-    /**
-     * Navigate through the ftp folder system.
-     */
-    public static function cdFTPTree(Connection $conn, string $currentDir): void
-    {
-        if ($currentDir == '') {
-            throw new \Exception('The path cannot be empty!');
-        }
-
-        if (ftp_chdir($conn, $currentDir)) {
-            // the directory already exist and we are already in it
-            return;
-        }
-
-        $exploded = explode(DIRECTORY_SEPARATOR, $currentDir);
-        array_pop($exploded);
-
-        $rejoined = implode(DIRECTORY_SEPARATOR, $exploded);
-        self::cdFTPTree($conn, $rejoined);
-
-        ftp_mkdir($conn, $currentDir);
-        ftp_chdir($conn, $currentDir);
-    }
-
-    /**
-     * Convert a text into a slug.
-     */
-    public static function slugify(string $text, string $divider = '-'): string
-    {
-        // replace non letter or digits by divider
-        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
-
-        // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', (string)$text);
-        if ($text === false) {
-            return 'n-a';
-        }
-
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', (string)$text);
-
-        // trim
-        $text = trim((string)$text, $divider);
-
-        // remove duplicate divider
-        $text = preg_replace('~-+~', $divider, (string)$text);
-
-        // lowercase
-        $text = strtolower((string)$text);
-
-        return empty($text) ? 'n-a' : $text;
-    }
-
-    /**
-     * Check if the file exist, and it isn't a location.
-     */
-    public static function testFile(string $file_location): bool
-    {
-        if (is_dir($file_location)) {
-            //throw new \Exception($file_location . ' is a path! Frames need to be PNG, Fonts need to be ttf!');
-            return false;
-        }
-
-        if (!file_exists($file_location)) {
-            //throw new \Exception($file_location . ' does not exist!');
-            return false;
-        }
-        return true;
     }
 }

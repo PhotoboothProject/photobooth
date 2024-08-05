@@ -6,14 +6,16 @@ require_once '../lib/boot.php';
 
 use Photobooth\Enum\FolderEnum;
 use Photobooth\FileDelete;
-use Photobooth\Helper;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\RemoteStorageService;
 
 header('Content-Type: application/json');
 
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+
+$remoteStorage = RemoteStorageService::getInstance();
 
 try {
     if (empty($_POST['file'])) {
@@ -47,56 +49,8 @@ if ($config['database']['enabled']) {
 }
 
 if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
-    $ftp = ftp_ssl_connect($config['ftp']['baseURL'], $config['ftp']['port']);
-
-    if ($ftp === false) {
-        $message = 'Failed to connect to FTP Server!';
-        $logger->error($message, $config['ftp']);
-        echo json_encode(['error' => $message]);
-        die();
-    }
-
-    // login to ftp server
-    $login_result = ftp_login($ftp, $config['ftp']['username'], $config['ftp']['password']);
-
-    if (!$login_result) {
-        $message = 'Can\'t connect to FTP Server!';
-        $logger->error($message, $config['ftp']);
-        echo json_encode(['error' => $message]);
-        die();
-    }
-
-    $remote_dest = empty($config['ftp']['baseFolder']) ? '' : DIRECTORY_SEPARATOR . $config['ftp']['baseFolder'] . DIRECTORY_SEPARATOR;
-
-    $remote_dest .= $config['ftp']['folder'] . DIRECTORY_SEPARATOR . Helper::slugify($config['ftp']['title']);
-    if ($config['ftp']['appendDate']) {
-        $remote_dest .= DIRECTORY_SEPARATOR . date('Y/m/d');
-    }
-
-    @Helper::cdFTPTree($ftp, $remote_dest);
-
-    $delete_result = ftp_delete($ftp, $file);
-
-    if (!$delete_result) {
-        $message = 'Unable to delete file on ftp server ' . $file;
-        $logger->error($message, $config['ftp']);
-        echo json_encode(['error' => $message]);
-        die();
-    }
-
-    if ($config['ftp']['upload_thumb']) {
-        $delete_result = ftp_delete($ftp, 'tmb_' . $file);
-
-        if (!$delete_result) {
-            $message = 'Unable to delete thumb on ftp server ' . $file;
-            $logger->error($message, $config['ftp']);
-            echo json_encode(['error' => $message]);
-            die();
-        }
-    }
-
-    // close the connection
-    @ftp_close($ftp);
+    $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $file);
+    $remoteStorage->delete($remoteStorage->getStorageFolder() . '/thumbs/' . $file);
 }
 
 if (!$logData['success'] || $config['dev']['loglevel'] > 1) {

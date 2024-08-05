@@ -42,6 +42,7 @@ echo getMenuBtn(PathUtility::getPublicPath('test/collage.php'), 'collageTest', '
 echo getMenuBtn(PathUtility::getPublicPath('test/preview.php'), 'previewTest', '');
 echo getMenuBtn(PathUtility::getPublicPath('test/chroma.php'), 'chromaPreviewTest', '');
 echo getMenuBtn(PathUtility::getPublicPath('test/trigger.php'), 'remotebuzzerGetTrigger', '');
+echo getMenuBtn(PathUtility::getPublicPath('test/remote-storage-template.php'), 'remoteStorageTemplate', '');
 
 ?>
                 </div>
