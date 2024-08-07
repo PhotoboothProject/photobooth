@@ -274,39 +274,6 @@ Photobooth will watch Button GPIOs for a PIN_DOWN event - so the hardware button
 
 For the **LED Support** GPIOs need to be set as OUTPUT.
 
-On a Raspberry Pi 5 you need to adjust the GPIO definition via Admin panel (experimental view) to the high-values of the gpio-sysfs:
-
-| GPIO sysfs Pi 3/4 | GPIO sysfs Pi5 | PIN    |
-| ----------------- | -------------- | ------ |
-| 0 (ID_SD)         | 399            | PIN 27 |
-| 1 (ID_SC)         | 400            | PIN 28 |
-| 2                 | 401            | PIN 3  |
-| 3                 | 402            | PIN 5  |
-| 4                 | 403            | PIN 7  |
-| 5                 | 404            | PIN 29 |
-| 6                 | 405            | PIN 31 |
-| 7                 | 406            | PIN 26 |
-| 8                 | 407            | PIN 24 |
-| 9                 | 408            | PIN 21 |
-| 10                | 409            | PIN 19 |
-| 11                | 410            | PIN 23 |
-| 12                | 411            | PIN 32 |
-| 13                | 412            | PIN 33 |
-| 14                | 413            | PIN 8  |
-| 15                | 414            | PIN 10 |
-| 16                | 415            | PIN 36 |
-| 17                | 416            | PIN 11 |
-| 18                | 417            | PIN 12 |
-| 19                | 418            | PIN 35 |
-| 20                | 419            | PIN 38 |
-| 21                | 420            | PIN 40 |
-| 22                | 421            | PIN 15 |
-| 23                | 422            | PIN 16 |
-| 24                | 423            | PIN 18 |
-| 25                | 424            | PIN 22 |
-| 26                | 425            | PIN 37 |
-| 27                | 426            | PIN 13 |
-
 #### Troubleshooting / Debugging
 
 **Important: For WLAN connected screens you must make sure to set the IP address of the Remote buzzer server in the admin settings.** The loopback IP (127.0.0.1) does not work, it has to be the exact IP address of the Remote buzzer Server.
@@ -322,30 +289,14 @@ Having trouble?
     -   GPIO interrupts might be disabled. Check file `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) and remove / disable the following overlay `dtoverlay=gpio-no-irq` to enable interrupts for GPIOs.
     -   Button GPIOs may not be configured as PULLUP. The configuration for this is done in fie `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
 
-        **Raspberry Pi 3 / 4**
-
         ```
         gpio=5,6,7,8,16,17,20,21,22,26,27=pu
         ```
 
-        **Raspberry Pi 5**
-
-        ```
-        gpio=404,405,406,407,415,416,419,420,421,425,426=pu
-        ```
-
     -   LED GPIOs may not be configured as OUTPUT. The configuration for this is done in fie `/boot/firmware/config.txt` (on PiOS Bullseye and prior `/boot/config.txt`) by adding the GPIO numbers in use as follows - you **must reboot** the Raspberry Pi in order to activate changes in this setting.
-
-        **Raspberry Pi 3 / 4**
 
         ```
         gpio=9,10,11,12,18,19,23,24,25=op
-        ```
-
-        **Raspberry Pi 5**
-
-        ```
-        gpio=408,409,410,411,417,418,422,423,424=op
         ```
 
 -   For the shutdown and reboot buttons to work, `www-data` needs to have the necessary sudo permissions. This is done by the `install-photobooth.sh` script or can be manually added as
