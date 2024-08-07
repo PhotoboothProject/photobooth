@@ -638,13 +638,7 @@ function start_install() {
 }
 
 function detect_browser() {
-    if [ "$(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
-        WEBBROWSER="firefox"
-        CHROME_FLAGS=false
-    elif [ "$(dpkg-query -W -f='${Status}' "firefox-esr" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
-        WEBBROWSER="firefox-esr"
-        CHROME_FLAGS=false
-    elif [ "$(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
+    if [ "$(dpkg-query -W -f='${Status}' "chromium-browser" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
         WEBBROWSER="chromium-browser"
         CHROME_FLAGS=true
     elif [ "$(dpkg-query -W -f='${Status}' "chromium" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
@@ -659,6 +653,12 @@ function detect_browser() {
     elif [ "$(dpkg-query -W -f='${Status}' "google-chrome-beta" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
         WEBBROWSER="google-chrome-beta"
         CHROME_FLAGS=true
+    elif [ "$(dpkg-query -W -f='${Status}' "firefox" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
+        WEBBROWSER="firefox"
+        CHROME_FLAGS=false
+    elif [ "$(dpkg-query -W -f='${Status}' "firefox-esr" 2>/dev/null | grep -c "ok installed")" -eq 1 ]; then
+        WEBBROWSER="firefox-esr"
+        CHROME_FLAGS=false
     else
         WEBBROWSER="unknown"
         CHROME_FLAGS=false
