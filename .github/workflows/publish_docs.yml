@@ -1,0 +1,24 @@
+name: Publish docs via GitHub Pages
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Deploy docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout photobooth
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Deploy and publish docs
+        uses: andi34/mkdocs-deploy-gh-pages@nomaterial
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: PhotoboothProject/photobooth
+          CONFIG_FILE: mkdocs_remote.yml
+          EXTRA_PACKAGES: build-base
+          REQUIREMENTS: requirements.txt
