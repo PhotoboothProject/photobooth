@@ -154,7 +154,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
     -h,  -help,       --help        Display help.
 
     -b,  -branch,     --branch      Enter the Photobooth branch (version) you like to install.
-                                    Available branches: dev (default), stable4, stable3, package
+                                    Available branches: dev (default), stable4, package
                                     By default, latest development verison (dev) will be installed.
                                     package will install latest Release from zip.
 
