@@ -41,6 +41,23 @@ class UnsupportedConfigException(Exception):
     pass
 
 
+def recreate_virtual_camera(video_nr=9):
+    """
+    Re-Create a device and return device path
+
+    raises subprocess.CalledProcessError if not working
+    """
+
+    subprocess.run(
+        f"rmmod modprobe v4l2loopback",
+        shell=True,
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return create_virtual_camera(video_nr)
+
+
 def create_virtual_camera(video_nr=9):
     """
     Create a device and return device path
@@ -70,7 +87,7 @@ def get_v4l2_devices() -> List[str]:
             "v4l2-ctl --list-devices",
             capture_output=True,
             shell=True,
-            check=True,
+            check=False,
             text=True,
         )
         for dev in re.findall(
@@ -232,7 +249,6 @@ class CameraControl:
             self.set_config("viewfinder", 0)
         except UnsupportedConfigException as e:
             log.error(e)
-
         log.info("Video disabled")
 
     def handle_message(self, message):
@@ -680,10 +696,16 @@ def main():
         dest="chroma_blend",
     )
     parser.add_argument("--exit", action="store_true", help="exit the service")
+    parser.add_argument(
+        "--forceRecreateCam", action="store_true", help="exit the service"
+    )
 
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.ERROR)
+    if args.forceRecreateCam:
+        log.info("Recreate virtual camera")
+        recreate_virtual_camera(video_nr=9)
 
     if not args.device:
         log.info("Not device set, try to autodetect")
@@ -725,3 +747,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+create_ffmpeg_webcam_service
