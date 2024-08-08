@@ -20,24 +20,24 @@ jobs:
           submodules: true
 
       - name: Build and start docker container
-        run: docker-compose -f "docker-compose.yml" up -d --build
+        run: docker compose -f "docker-compose.yml" up -d --build
 
       - name: Wait for Apache to start
         run: sleep 5
 
       - name: Verify container status
-        run: docker-compose -f "docker-compose.yml" ps
+        run: docker compose -f "docker-compose.yml" ps
 
       - name: Print container logs
-        run: docker-compose -f "docker-compose.yml" logs
+        run: docker compose -f "docker-compose.yml" logs
 
       - name: Check welcome page
         run: curl --fail-with-body http://localhost/welcome/
 
       - name: Print container logs on failure
         if: failure()
-        run: docker-compose -f "docker-compose.yml" logs
+        run: docker compose -f "docker-compose.yml" logs
 
       - name: Stop docker container
         if: always()
-        run: docker-compose -f "docker-compose.yml" down
+        run: docker compose -f "docker-compose.yml" down
