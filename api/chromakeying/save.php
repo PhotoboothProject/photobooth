@@ -8,6 +8,7 @@ use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\FileDelete;
+use Photobooth\PhotoboothCapture;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
@@ -66,6 +67,7 @@ if ($saveCopy) {
     }
 }
 
+$filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $file;
 $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $file;
 $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $file;
 $filename_keying = FolderEnum::KEYING->absolute() . DIRECTORY_SEPARATOR . $file;
@@ -73,32 +75,20 @@ $picture_permissions = $config['picture']['permissions'];
 $thumb_size = substr($config['picture']['thumb_size'], 0, -2);
 
 try {
-    $img = (string)$_POST['imgData'];
-    $img = str_replace('data:image/png;base64,', '', $img);
-    $img = str_replace(' ', '+', $img);
-    $data = base64_decode($img);
+    $captureHandler = new PhotoboothCapture();
+    $captureHandler->debugLevel = $config['dev']['loglevel'];
+    $captureHandler->style = 'chroma';
+    $captureHandler->fileName = $file;
+    $captureHandler->tmpFile = $filename_tmp;
+    $captureHandler->flipImage = $config['picture']['flip'];
+    $captureHandler->captureCanvas($_POST['imgData']);
 
-    $imageResource = imagecreatefromstring($data);
+    $imageResource = $imageHandler->createFromImage($filename_tmp);
     if (!$imageResource) {
         throw new \Exception('Failed to create image from data.');
     }
 
     if ($applyEffects) {
-        if ($config['picture']['flip'] !== 'off') {
-            try {
-                if ($config['picture']['flip'] === 'flip-horizontal') {
-                    imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-                } elseif ($config['picture']['flip'] === 'flip-vertical') {
-                    imageflip($imageResource, IMG_FLIP_VERTICAL);
-                } elseif ($config['picture']['flip'] === 'flip-both') {
-                    imageflip($imageResource, IMG_FLIP_BOTH);
-                }
-                $imageHandler->imageModified = true;
-            } catch (\Exception $e) {
-                throw new \Exception('Error flipping image.');
-            }
-        }
-
         // apply filter
         if ($config['filters']['defaults'] != ImageFilterEnum::PLAIN) {
             try {
@@ -193,9 +183,15 @@ try {
         unset($thumbResource);
     }
 
-    $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
-    if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
-        throw new \Exception('Failed to save image.');
+    if ($imageHandler->imageModified) {
+        $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
+        if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
+            throw new \Exception('Failed to save image.');
+        }
+    } else {
+        if (!copy($filename_tmp, $filename_photo)) {
+            throw new \Exception('Failed to copy photo.');
+        }
     }
 
     unset($imageResource);
