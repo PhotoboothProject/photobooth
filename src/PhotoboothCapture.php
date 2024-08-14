@@ -80,6 +80,9 @@ class PhotoboothCapture
                     case 'flip-vertical':
                         imageflip($im, IMG_FLIP_VERTICAL);
                         break;
+                    case 'flip-both':
+                        imageflip($im, IMG_FLIP_BOTH);
+                        break;
                     default:
                         break;
                 }
