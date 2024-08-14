@@ -250,6 +250,16 @@ function saveImage(filename, cb) {
                     // Add Image to gallery and slider
                     photoBooth.addImage(resp.filename);
                 }
+                $('[data-command="print-btn"]').on('click', (event) => {
+                    event.preventDefault();
+                    if (photoboothTools.isPrinting) {
+                        photoboothTools.console.log('Printing already in progress!');
+                    } else {
+                        photoboothTools.printImage(resp.filename, () => {
+                            $('[data-command="print-btn"]').trigger('blur');
+                        });
+                    }
+                });
             }
             if (cb) {
                 cb(resp);

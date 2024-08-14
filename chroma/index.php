@@ -51,6 +51,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
     <div class="stage-inner">
         <div class="buttonbar buttonbar--bottom">
             <?= ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'reload') ?>
+            <?= ($config['print']['from_chromakeying']) ? ComponentUtility::renderButton('print', $config['icons']['print'], 'print-btn') : '' ?>
             <?= ($config['picture']['allow_delete']) ? ComponentUtility::renderButton('delete', $config['icons']['delete'], 'deletebtn') : '' ?>
         </div>
     </div>
