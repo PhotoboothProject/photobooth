@@ -48,8 +48,7 @@ if ($config['database']['file'] != 'db') {
 }
 
 if ($saveCopy) {
-    $singleImageBase = substr($file, 0, -4);
-    $file = $singleImageBase . '-edit.jpg';
+    $file = $imageHandler->createNewFilename($config['picture']['naming']);
     if (!$config['keying']['show_all']) {
         $database->deleteContentFromDB($_POST['file']);
 
