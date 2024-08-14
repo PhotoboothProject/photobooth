@@ -100,9 +100,9 @@ try {
         }
 
         // apply filter
-        if ($config['filters']['defaults'] != 'plain') {
+        if ($config['filters']['defaults'] != ImageFilterEnum::PLAIN) {
             try {
-                ImageUtility::applyFilter(ImageFilterEnum::tryFrom($config['filters']['defaults']), $imageResource);
+                ImageUtility::applyFilter($config['filters']['defaults'], $imageResource);
                 $imageHandler->imageModified = true;
             } catch (\Exception $e) {
                 throw new \Exception('Error applying image filter.');
