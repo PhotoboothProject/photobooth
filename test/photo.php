@@ -18,11 +18,11 @@ $imageHandler->framePath = $config['picture']['frame'];
 
 if ($config['picture']['flip'] !== 'off') {
     try {
-        if ($config['picture']['flip'] === 'horizontal') {
+        if ($config['picture']['flip'] === 'flip-horizontal') {
             imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-        } elseif ($config['picture']['flip'] === 'vertical') {
+        } elseif ($config['picture']['flip'] === 'flip-vertical') {
             imageflip($imageResource, IMG_FLIP_VERTICAL);
-        } elseif ($config['picture']['flip'] === 'both') {
+        } elseif ($config['picture']['flip'] === 'flip-both') {
             imageflip($imageResource, IMG_FLIP_BOTH);
         }
         $imageHandler->imageModified = true;

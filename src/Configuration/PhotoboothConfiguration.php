@@ -1174,7 +1174,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->enumNode('flip')
-                    ->values(['off', 'horizontal', 'vertical', '1080px', 'both'])
+                    ->values(['off', 'flip-horizontal', 'flip-vertical', 'flip-both'])
                     ->defaultValue('off')
                     ->end()
                 ->integerNode('rotation')

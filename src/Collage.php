@@ -84,11 +84,11 @@ class Collage
             }
 
             if ($c->pictureFlip !== 'off') {
-                if ($c->pictureFlip === 'horizontal') {
+                if ($c->pictureFlip === 'flip-horizontal') {
                     imageflip($imageResource, IMG_FLIP_HORIZONTAL);
-                } elseif ($c->pictureFlip === 'vertical') {
+                } elseif ($c->pictureFlip === 'flip-vertical') {
                     imageflip($imageResource, IMG_FLIP_VERTICAL);
-                } elseif ($c->pictureFlip === 'both') {
+                } elseif ($c->pictureFlip === 'flip-both') {
                     imageflip($imageResource, IMG_FLIP_BOTH);
                 }
                 $imageHandler->imageModified = true;
