@@ -152,7 +152,7 @@ const photoBooth = (function () {
             }
         }
     };
-
+    
     api.stopPreviewAndCaptureFromVideo = () => {
         if (config.preview.camTakesPic) {
             if (photoboothPreview.stream) {
@@ -381,6 +381,12 @@ const photoBooth = (function () {
                 };
             });
         }
+    };
+
+    api.clearLoaderImage = () => {
+        loaderImage.css('display', 'none');
+        loaderImage.css('background-image', 'none');
+        loaderImage.attr('data-img', null);
     };
 
     api.shellCommand = function (cmd, file = '') {
@@ -625,9 +631,7 @@ const photoBooth = (function () {
                         loaderMessage.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
                         if (result.current + 1 < result.limit) {
                             setTimeout(() => {
-                                loaderImage.css('display', 'none');
-                                loaderImage.css('background-image', 'none');
-                                loaderImage.attr('data-img', null);
+                                api.clearLoaderImage();
                                 imageUrl = '';
                                 api.thrill(PhotoStyle.COLLAGE);
                             }, continuousCollageTime);
@@ -635,9 +639,7 @@ const photoBooth = (function () {
                             currentCollageFile = '';
                             api.nextCollageNumber = 0;
                             setTimeout(() => {
-                                loaderImage.css('display', 'none');
-                                loaderImage.css('background-image', 'none');
-                                loaderImage.attr('data-img', null);
+                                api.clearLoaderImage();
                                 imageUrl = '';
                                 api.processPic(result);
                             }, continuousCollageTime);
@@ -657,9 +659,7 @@ const photoBooth = (function () {
                             takePictureButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                loaderImage.css('display', 'none');
-                                loaderImage.css('background-image', 'none');
-                                loaderImage.attr('data-img', null);
+                                api.clearLoaderImage();
                                 imageUrl = '';
                                 api.thrill(PhotoStyle.COLLAGE);
                             });
@@ -679,9 +679,7 @@ const photoBooth = (function () {
                             collageProcessButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                loaderImage.css('display', 'none');
-                                loaderImage.css('background-image', 'none');
-                                loaderImage.attr('data-img', null);
+                                api.clearLoaderImage();
                                 imageUrl = '';
                                 currentCollageFile = '';
                                 api.nextCollageNumber = 0;
@@ -700,9 +698,7 @@ const photoBooth = (function () {
                         retakeButton.appendTo(loaderButtonBar).on('click', (event) => {
                             event.stopPropagation();
                             event.preventDefault();
-                            loaderImage.css('display', 'none');
-                            loaderImage.css('background-image', 'none');
-                            loaderImage.attr('data-img', null);
+                            api.clearLoaderImage();
                             imageUrl = '';
                             api.deleteImage(result.collage_file, () => {
                                 setTimeout(function () {
