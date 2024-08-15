@@ -152,7 +152,7 @@ const photoBooth = (function () {
             }
         }
     };
-    
+
     api.stopPreviewAndCaptureFromVideo = () => {
         if (config.preview.camTakesPic) {
             if (photoboothPreview.stream) {
