@@ -83,7 +83,7 @@ try {
     $captureHandler->captureCanvas($_POST['imgData']);
 
     $imageResource = $imageHandler->createFromImage($filename_tmp);
-    if (!$imageResource) {
+    if (!$imageResource instanceof \GdImage) {
         throw new \Exception('Failed to create image from data.');
     }
 
