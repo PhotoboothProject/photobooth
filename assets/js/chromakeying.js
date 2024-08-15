@@ -260,6 +260,12 @@ function saveImage(filename, cb) {
                         });
                     }
                 });
+                $('[data-command="qrbtn"]')
+                    .off('click')
+                    .on('click', (event) => {
+                        event.preventDefault();
+                        photoBooth.showQrCode(resp.filename);
+                    });
             }
             if (cb) {
                 cb(resp);
