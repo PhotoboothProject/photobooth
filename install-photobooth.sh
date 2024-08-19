@@ -419,8 +419,8 @@ function check_python() {
     if [ "$PYTHON_MAJOR_VERSION" -eq 3 ] && [ "$PYTHON_MINOR_VERSION" -ge 12 ]; then
         warn "[WARN]      Python version is 3.12 or newer. Installing distutils..."
         if ! apt install python3-distutils -y; then
-            warn "Failed to install python3-distutils!"
-            echo -e "\033[0;33m### Installation of Photobooth might fail of continuing."
+            warn "[WARN]      Failed to install python3-distutils!"
+            echo -e "\033[0;33m### Installation of Photobooth might fail if continuing."
             ask_yes_no "### Do you like to continue installation? [y/N] " "N"
             echo -e "\033[0m"
             if [[ $REPLY =~ ^[Yy]$ ]]; then
