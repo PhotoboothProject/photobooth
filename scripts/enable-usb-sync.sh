@@ -29,15 +29,11 @@ function no_raspberry {
     echo -e "\033[0;33m"
     ask_yes_no "### Continue setup? [y/N] " "N"
     echo -e "\033[0m"
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
         info "### Trying to setup..."
     else
         error "[ERROR] Aborted."
     fi
-else
-    info "### Done. Please reboot your device."
-fi
 }
 
 if [ $UID != 0 ]; then
@@ -157,8 +153,7 @@ fi
 echo -e "\033[0;33m"
 ask_yes_no "### You need to reboot your device. Do you like to reboot now? [y/N] " "N"
 echo -e "\033[0m"
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
     info "### Your device will reboot now."
     shutdown -r now
 else
