@@ -4,6 +4,7 @@
 set -e
 
 SILENT_INSTALL=false
+RUNNING_ON_PI=false
 
 function info {
     echo -e "\033[0;36m${1}\033[0m"
@@ -24,8 +25,19 @@ function ask_yes_no {
 
 function no_raspberry {
     warn "WARNING: This script is intended to run on a Raspberry Pi."
-    warn "Running the script on other devices running Debian / a Debian based distribution is possible, but Raspberry Pi specific features will be missing!"
-    RUNNING_ON_PI=false
+    warn "Running the script on other devices running Debian / a Debian based distribution is possible, but the setup might fail!"
+    echo -e "\033[0;33m"
+    ask_yes_no "### Continue setup? [y/N] " "N"
+    echo -e "\033[0m"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        info "### Trying to setup..."
+    else
+        error "[ERROR] Aborted."
+    fi
+else
+    info "### Done. Please reboot your device."
+fi
 }
 
 if [ $UID != 0 ]; then
@@ -40,6 +52,8 @@ else
 
     if [[ $PI_MODEL != Raspberry* ]]; then
         no_raspberry 3
+    else
+        RUNNING_ON_PI=true
     fi
 fi
 
@@ -107,18 +121,23 @@ else
     exit
 fi
 
-info "### Disabling automount for user $USERNAME"
-mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
+if [ "$RUNNING_ON_PI" = true ]; then
+    info "### Disabling automount for user $USERNAME"
+    mkdir -p /home/$USERNAME/.config/pcmanfm/LXDE-pi/
 
-cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
+    cat >> /home/$USERNAME/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
 [volume]
 mount_on_startup=0
 mount_removable=0
 autorun=0
 EOF
-chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+else
+    error "[WARN] Disabling automount for user $USERNAME not possible!"
+    error "       Automount must be disabled for user $USERNAME!"
+fi
 
-info "### Adding polkit rule so www-data can (un)mount drives"
+info "### Trying to add polkit rule so www-data can (un)mount drives"
 if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
     cat > /etc/polkit-1/localauthority/50-local.d/photobooth.pkla <<EOF
 [Allow www-data to mount drives with udisks2]
@@ -128,9 +147,11 @@ ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
 EOF
+    info "### polkit rule added"
 else
-    info "### /etc/polkit-1/localauthority/50-local.d not found!"
-    info "### Can not setup your OS to use the USB sync file backup."
+    error "### /etc/polkit-1/localauthority/50-local.d not found!"
+    error "### Can not setup your OS to use the USB sync file backup."
+    exit 1
 fi
 
 echo -e "\033[0;33m"
