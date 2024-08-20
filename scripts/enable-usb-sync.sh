@@ -24,8 +24,8 @@ function ask_yes_no {
 }
 
 function no_raspberry {
-    warn "WARNING: This script is intended to run on a Raspberry Pi."
-    warn "Running the script on other devices running Debian / a Debian based distribution is possible, but the setup might fail!"
+    error "WARNING: This script is intended to run on a Raspberry Pi."
+    error "Running the script on other devices running Debian / a Debian based distribution is possible, but the setup might fail!"
     echo -e "\033[0;33m"
     ask_yes_no "### Continue setup? [y/N] " "N"
     echo -e "\033[0m"
