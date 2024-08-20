@@ -33,6 +33,7 @@ function no_raspberry {
         info "### Trying to setup..."
     else
         error "[ERROR] Aborted."
+        exit 1
     fi
 }
 
