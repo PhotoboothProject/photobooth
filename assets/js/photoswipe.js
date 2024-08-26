@@ -175,6 +175,25 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     isButton: true,
                     html: '<i class="' + config.icons.qr + '"></i>',
 
+                    onInit: (el, pswp) => {
+                        if (config.qr.pswp != 'hidden') {
+                            pswp.on('change', () => {
+                                if (document.getElementById('pswpQR')) {
+                                    document.getElementById('pswpQR').remove();
+                                }
+                                const qrImage = document.createElement('img');
+                                qrImage.src =
+                                    environment.publicFolders.api +
+                                    '/qrcode.php?filename=' +
+                                    pswp.currSlide.data.src.split('\\').pop().split('/').pop();
+                                qrImage.alt = 'qr code';
+                                qrImage.id = 'pswpQR';
+                                qrImage.setAttribute('class', 'pswp-qrcode ' + config.qr.pswp);
+                                $('.pswp').append(qrImage);
+                            });
+                        }
+                    },
+
                     onClick: (event, el, pswp) => {
                         const image = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                         photoBooth.showQrCode(image);
@@ -275,6 +294,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             if (config.pswp.zoomEl) {
                 $('.pswp__button--zoom').empty();
                 $('.pswp__button--zoom').html('<i class="' + config.icons.zoom + '"></i>');
+            }
+            if (config.qr.enabled && config.qr.pswp != 'hidden') {
+                $('.pswp__button--qrcode').hide();
             }
             if (typeof rotaryController !== 'undefined') {
                 rotaryController.focusSet('.pswp');

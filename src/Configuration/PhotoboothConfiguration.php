@@ -288,6 +288,18 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ])
                     ->defaultValue('hidden')
                     ->end()
+                ->enumNode('pswp')
+                    ->values([
+                        'hidden',
+                        'left left--top',
+                        'left left--center',
+                        'left left--bottom',
+                        'right right--top',
+                        'right right--center',
+                        'right right--bottom',
+                    ])
+                    ->defaultValue('hidden')
+                    ->end()
             ->end();
     }
 
