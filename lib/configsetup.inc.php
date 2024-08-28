@@ -1825,6 +1825,8 @@ return [
                 'right right--top' => 'top right',
                 'right right--center' => 'right center',
                 'right right--bottom' => 'right bottom',
+                'center center--bottom' => 'bottom center',
+                'center center--top' => 'top center',
             ],
             'value' => $config['qr']['pswp'],
         ],

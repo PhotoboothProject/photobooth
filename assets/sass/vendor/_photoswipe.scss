@@ -114,4 +114,14 @@
       bottom: 4rem;
     }
   }
+  &.center {
+    left: 50%;
+    translate: -50% 0;
+    &--bottom {
+      bottom: 4rem;
+    }
+    &--top {
+      top: 4rem;
+    }
+  }
 }

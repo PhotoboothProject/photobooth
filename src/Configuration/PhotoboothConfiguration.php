@@ -297,6 +297,8 @@ class PhotoboothConfiguration implements ConfigurationInterface
                         'right right--top',
                         'right right--center',
                         'right right--bottom',
+                        'center center--bottom',
+                        'center center--top',
                     ])
                     ->defaultValue('hidden')
                     ->end()
