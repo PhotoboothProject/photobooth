@@ -84,3 +84,44 @@
 .pswp-rotary-focus {
   background: var(--primary-color) !important;
 }
+
+.pswp-qrcode {
+  position: absolute;
+  width: 8rem;
+  &.left {
+    left: 2rem;
+    &--top {
+      top: 4rem;
+    }
+    &--center {
+      top: 50%;
+      translate: 0 -50%;
+    }
+    &--bottom {
+      bottom: 4rem;
+    }
+  }
+  &.right {
+    right: 2rem;
+    &--top {
+      top: 4rem;
+    }
+    &--center {
+      top: 50%;
+      translate: 0 -50%;
+    }
+    &--bottom {
+      bottom: 4rem;
+    }
+  }
+  &.center {
+    left: 50%;
+    translate: -50% 0;
+    &--bottom {
+      bottom: 4rem;
+    }
+    &--top {
+      top: 4rem;
+    }
+  }
+}

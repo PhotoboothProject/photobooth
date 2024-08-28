@@ -1813,6 +1813,23 @@ return [
             ],
             'value' => $config['qr']['result'],
         ],
+        'qr_pswp' => [
+            'type' => 'select',
+            'name' => 'qr[pswp]',
+            'placeholder' => $defaultConfig['qr']['pswp'],
+            'options' => [
+                'hidden' => 'hidden',
+                'left left--top' => 'top left',
+                'left left--center' => 'left center',
+                'left left--bottom' => 'left bottom',
+                'right right--top' => 'top right',
+                'right right--center' => 'right center',
+                'right right--bottom' => 'right bottom',
+                'center center--bottom' => 'bottom center',
+                'center center--top' => 'top center',
+            ],
+            'value' => $config['qr']['pswp'],
+        ],
     ],
     'mail' => [
         'view' => 'basic',
