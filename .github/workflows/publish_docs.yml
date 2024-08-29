@@ -18,7 +18,7 @@ jobs:
         uses: andi34/mkdocs-deploy-gh-pages@nomaterial
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: PhotoboothProject/PhotoboothProject.github.io
+          GITHUB_ORIGIN: PhotoboothProject/PhotoboothProject.github.io.git
           CONFIG_FILE: mkdocs_remote.yml
           EXTRA_PACKAGES: build-base
           REQUIREMENTS: requirements.txt
