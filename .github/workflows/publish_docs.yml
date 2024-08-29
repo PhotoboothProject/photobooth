@@ -17,7 +17,7 @@ jobs:
       - name: Deploy and publish docs
         uses: andi34/mkdocs-deploy-gh-pages@nomaterial
         env:
-          PERSONAL_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+          PERSONAL_TOKEN: ${{ secrets.PAGES }}
           GITHUB_ORIGIN: PhotoboothProject/PhotoboothProject.github.io
           CONFIG_FILE: mkdocs_remote.yml
           EXTRA_PACKAGES: build-base
