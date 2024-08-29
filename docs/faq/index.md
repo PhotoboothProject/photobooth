@@ -571,7 +571,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 
 **Note**
 
--   Do NOT enable _"Device cam takes picture"_ in admin panel config!
+-   Do NOT enable _"Capture screenshot (preview "from device cam" only)"_ in admin panel config!
 -   Capture from Pi Camera won't work if motion is installed!
 -   Requires Photobooth v2.2.1 or later!
 
@@ -610,7 +610,7 @@ If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camer
 -   Secure origin or exception required!
     -   [Prefer Secure Origins For Powerful New Features](https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339)
     -   [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
--   Admin panel config _"Device cam takes picture"_ can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still / rpicam-still.
+-   Admin panel config _"Capture screenshot (preview "from device cam" only)"_ can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still / rpicam-still.
 
 ### Preview from DSLR via _"from device cam"_ preview option (no remote preview)
 
