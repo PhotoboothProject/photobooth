@@ -39,7 +39,7 @@ class LoggerService
 
     public function reset(): void
     {
-        foreach($this->channels as $logger) {
+        foreach ($this->channels as $logger) {
             $logger->close();
             $fileName = $logger->getFile();
             if (file_exists($fileName)) {
