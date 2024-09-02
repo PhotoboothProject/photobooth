@@ -41,7 +41,7 @@ include PathUtility::getAbsolutePath('admin/components/sidebar.php');
                             <form>
 <?php
 $i = 0;
-foreach($configsetup as $panel => $fields) {
+foreach ($configsetup as $panel => $fields) {
     $panelHidden = 'visible';
     if (empty($fields['view'])) {
         $fields['view'] = 'basic';
@@ -75,7 +75,7 @@ foreach($configsetup as $panel => $fields) {
     echo '<div class="flex flex-col px-4 lg:px-8 py-2">';
     echo '<div class="flex flex-col rounded-xl p-3 shadow-xl bg-white">';
 
-    foreach($fields as $key => $field) {
+    foreach ($fields as $key => $field) {
         if ($key == 'platform' || $key == 'view') {
             continue;
         }
@@ -99,7 +99,7 @@ foreach($configsetup as $panel => $fields) {
                 break;
         }
 
-        switch($field['type']) {
+        switch ($field['type']) {
             case 'checkbox':
                 echo '<div class="w-full max-w-3xl pb-3 mb-3 border-b border-solid border-gray-200">';
                 echo '<h3 class="text-brand-1 text-md font-bold mb-1">' . $languageService->translate($panel . ':' . $key) . '</span></h3>';
@@ -117,7 +117,7 @@ foreach($configsetup as $panel => $fields) {
                 break;
             case 'color':
             case 'hidden':
-                if(is_string($field['value'])) {
+                if (is_string($field['value'])) {
                     echo '<input type="hidden" name="' . $field['name'] . '" value="' . $field['value'] . '"/>';
                 }
                 break;

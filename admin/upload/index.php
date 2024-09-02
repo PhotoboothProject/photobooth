@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     $logger->debug('folderName', [$folderName]);
 
     // check if folder is supported
-    if(!isset($typeChecker[$folderName])) {
+    if (!isset($typeChecker[$folderName])) {
         $errors[$folderName] = $languageService->translate('upload_folder_invalid');
         $logger->debug($languageService->translate('upload_folder_invalid'), [$folderName]);
     } else {
@@ -70,7 +70,7 @@ if (isset($_POST['submit'])) {
         for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
             $fileError = $uploadedFiles['error'][$i];
             $fileName = $uploadedFiles['name'][$i];
-            if($fileError == 0) {
+            if ($fileError == 0) {
                 $fileTmpName = $uploadedFiles['tmp_name'][$i];
                 $fileType = $uploadedFiles['type'][$i];
                 $fileSize = $uploadedFiles['size'][$i];
@@ -78,14 +78,14 @@ if (isset($_POST['submit'])) {
                 $logger->debug('fileName', [$fileName]);
 
                 // check if filetype is allowed for this folder
-                if(!in_array($fileType, $typeChecker[$folderName])) {
+                if (!in_array($fileType, $typeChecker[$folderName])) {
                     $errors[$fileName] = $languageService->translate('upload_wrong_type');
                     $logger->debug($languageService->translate('upload_wrong_type'), [$fileName]);
                     break;
                 }
 
                 // check if file already exists
-                if(file_exists($filePath)) {
+                if (file_exists($filePath)) {
                     $errors[$fileName] = $languageService->translate('upload_file_already_exists');
                     $logger->debug($languageService->translate('upload_file_already_exists'), [$fileName]);
                     break;
@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    if(count($errors) === 0) {
+    if (count($errors) === 0) {
         $success = true;
     }
 }
@@ -133,9 +133,9 @@ if (isset($_POST['submit'])) {
                 </div>
 
                 <?php
-                    if(count($errors) > 0) {
+                    if (count($errors) > 0) {
                         echo '<div class="flex flex-col gap-2">';
-                        foreach($errors as $fileName => $reason) {
+                        foreach ($errors as $fileName => $reason) {
                             echo '<div class="flex flex-col justify-between p-2 rounded bg-red-300 text-red-800 border-2 border-red-800"><div class="col-span-1">' . $fileName . '</div><div class="col-span-1">' . $reason . '</div></div>';
                         }
                         echo '</div>';

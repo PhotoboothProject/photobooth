@@ -51,8 +51,8 @@ class AdminKeypad
             ';
 
         $content = [];
-        if(isset($key)) {
-            if(is_numeric($key)) {
+        if (isset($key)) {
+            if (is_numeric($key)) {
                 $content[] = '<div class="' . $containerClass . '">';
                 $content[] = '<span class="' . $keyClass . '" onclick="keypadAdd(' . $key . ');">' . $key . '</span>';
                 $content[] = '</div>';
@@ -89,7 +89,7 @@ class AdminKeypad
         $content[] = '<div class="pinIndicator flex items-center justify-center">';
         for ($x = 0; $x <= $length - 1; $x++) {
             $activeClass = '';
-            if($x == 0) {
+            if ($x == 0) {
                 $activeClass = 'active';
             }
             $content[] = '

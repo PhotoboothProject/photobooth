@@ -32,8 +32,8 @@ function zipFilesAndDownload($files)
     $zip->open($tmp_file, ZipArchive::CREATE);
 
     // loop through each file
-    foreach($files as $file) {
-        if(str_contains($file, 'tmb_')) {
+    foreach ($files as $file) {
+        if (str_contains($file, 'tmb_')) {
             continue;
         }
 

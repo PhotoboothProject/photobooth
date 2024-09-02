@@ -51,7 +51,7 @@ class ImageUtility
 
         $files = [];
         foreach (new \DirectoryIterator($path) as $file) {
-            if(!$file->isFile() || !in_array(strtolower($file->getExtension()), $processing ? self::supportedFileExtensionsProcessing : self::supportedFileExtensionsSelect)) {
+            if (!$file->isFile() || !in_array(strtolower($file->getExtension()), $processing ? self::supportedFileExtensionsProcessing : self::supportedFileExtensionsSelect)) {
                 continue;
             }
             $files[] = $path . '/' . $file->getFilename();
