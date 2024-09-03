@@ -1177,10 +1177,6 @@ const photoBooth = (function () {
 
         preloadImage.src = imageUrl;
 
-        if (config.commands.post_photo) {
-            api.shellCommand('post-command', filename);
-        }
-
         api.takingPic = false;
         remoteBuzzerClient.inProgress(false);
         photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
@@ -1190,6 +1186,10 @@ const photoBooth = (function () {
         if (config.commands.preview && !config.preview.bsm) {
             photoboothTools.console.logDev('Preview: core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
+        }
+
+        if (config.commands.post_photo) {
+            api.shellCommand('post-command', filename);
         }
     };
 
