@@ -125,7 +125,9 @@ function processItem(string $key, mixed $content): array
 
     if (isset($content)) {
         if (is_array($content)) {
-            $contentString = implode(', ', $content);
+            $contentString = implode(', ', array_map(function ($item) {
+                return is_object($item) ? json_encode($item) : $item;
+            }, $content));
             $output[] = "Value:     $contentString";
         } elseif (is_bool($content)) {
             $contentString = $content ? 'true' : 'false';
