@@ -72,7 +72,7 @@ final class PathUtilityTest extends TestCase
     public function testGetPublicPathAbsolute(string $path, string $expected): void
     {
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['SERVER_NAME'] = 'photoboothproject.github.io';
+        $_SERVER['HTTP_HOST'] = 'photoboothproject.github.io';
         $this->assertSame($expected, PathUtility::getPublicPath($path, true));
     }
 

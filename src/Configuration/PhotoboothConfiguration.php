@@ -3,6 +3,7 @@
 namespace Photobooth\Configuration;
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Enum\RemoteStorageTypeEnum;
 use Photobooth\Environment;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -922,6 +923,18 @@ class PhotoboothConfiguration implements ConfigurationInterface
             ->ignoreExtraKeys()
             ->children()
                 ->booleanNode('enabled')->defaultValue(false)->end()
+                ->enumNode('type')
+                    ->values(RemoteStorageTypeEnum::cases())
+                    ->defaultValue(RemoteStorageTypeEnum::FTP)
+                    ->beforeNormalization()
+                        ->always(function ($value) {
+                            if (is_string($value)) {
+                                $value = RemoteStorageTypeEnum::from($value);
+                            }
+                            return $value;
+                        })
+                        ->end()
+                    ->end()
                 ->scalarNode('baseURL')->defaultValue('')->end()
                 ->integerNode('port')
                     ->defaultValue(21)
@@ -935,13 +948,11 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->scalarNode('baseFolder')->defaultValue('')->end()
                 ->scalarNode('folder')->defaultValue('')->end()
                 ->scalarNode('title')->defaultValue('')->end()
-                ->booleanNode('appendDate')->defaultValue(false)->end()
                 ->booleanNode('useForQr')->defaultValue(false)->end()
                 ->scalarNode('website')->defaultValue('')->end()
-                ->scalarNode('urlTemplate')->defaultValue('')->end()
+                ->scalarNode('urlTemplate')->defaultValue('%website%/%folder%/%title%')->end()
                 ->booleanNode('create_webpage')->defaultValue(false)->end()
-                ->scalarNode('template_location')->defaultValue('')->end()
-                ->booleanNode('upload_thumb')->defaultValue(false)->end()
+                ->scalarNode('template_location')->defaultValue('resources/template/index.php')->end()
                 ->booleanNode('delete')->defaultValue(false)->end()
             ->end();
     }

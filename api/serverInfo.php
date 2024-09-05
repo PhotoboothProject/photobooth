@@ -18,6 +18,8 @@ function handleDebugPanel(string $content, array $config): string|false
             return readFileContents(PathUtility::getAbsolutePath('var/log/remotebuzzer.log'));
         case 'nav-synctodrivelog':
             return readFileContents(PathUtility::getAbsolutePath('var/log/synctodrive.log'));
+        case 'nav-remotestoragelog':
+            return readFileContents(PathUtility::getAbsolutePath('var/log/remotestorage.log'));
         case 'nav-myconfig':
             echo implode("\n", showConfig($config));
             return json_encode('');

@@ -23,10 +23,6 @@ class PathUtility
             return '';
         }
 
-        if (self::isUrl($path)) {
-            return $path;
-        }
-
         $documentRoot = self::getRootPath();
         $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
 
@@ -69,7 +65,7 @@ class PathUtility
 
         $path = self::fixFilePath(self::getBaseUrl() . $path);
         if ($absolute) {
-            $path = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $path;
+            $path = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $path;
         }
 
         return $path;
