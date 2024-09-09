@@ -10,20 +10,34 @@
         "ext-zip": "*",
         "endroid/qr-code": "^5.0",
         "league/commonmark": "^2.4",
-        "monolog/monolog": "^3.5",
-        "phpmailer/phpmailer": "^6.8",
+        "monolog/monolog": "^3.6",
+        "phpmailer/phpmailer": "^6.9",
         "symfony/asset": "^7.0",
         "symfony/config": "^7.0",
         "symfony/console": "^7.0",
         "symfony/filesystem": "^7.0",
         "symfony/finder": "^7.0",
-        "symfony/translation": "^7.0"
+        "symfony/dotenv": "^7.0",
+        "symfony/flex": "^2.4",
+        "symfony/framework-bundle": "^7.0",
+        "symfony/runtime": "^7.0",
+        "symfony/translation": "^7.0",
+        "symfony/twig-bundle": "^7.0",
+        "symfony/yaml": "^7.0"
+    },
+    "require-dev": {
+        "symfony/debug-bundle": "^7.0",
+        "symfony/maker-bundle": "^1.59"
     },
     "config": {
         "bin-dir": "bin",
         "optimize-autoloader": true,
         "sort-packages": true,
-        "vendor-dir": "vendor"
+        "vendor-dir": "vendor",
+        "allow-plugins": {
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -68,6 +82,10 @@
             "composer update -w --working-dir=tools/phplint",
             "composer update -w --working-dir=tools/phpunit",
             "composer update -w --working-dir=tools/phpstan"
-        ]
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
     }
 }

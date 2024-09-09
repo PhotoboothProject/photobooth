@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - {{ __application.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <meta name="msapplication-TileColor" content="{{ __config.colors.primary }}">
+    <meta name="theme-color" content="{{ __config.colors.primary }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('resources/img/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/img/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('resources/img/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('resources/img/safari-pinned-tab.svg') }}" color="#5bbad5">
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+</head>
+{% block body %}
+    <body>
+        {% block content %}{% endblock %}
+    </body>
+{% endblock %}
+</html>

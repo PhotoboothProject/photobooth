@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}Faq{% endblock %}
+{% block stylesheets %}
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('node_modules/github-markdown-css/github-markdown.css') }}">
+
+{% endblock %}
+{% block body %}
+    <body class="markdown-body" style="padding: 5rem;">
+        {% block content %}
+            {{ content|raw }}
+        {% endblock %}
+    </body>
+{% endblock %}

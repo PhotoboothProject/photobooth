@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - {{ __application.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <meta name="msapplication-TileColor" content="{{ __config.colors.primary }}">
+    <meta name="theme-color" content="{{ __config.colors.primary }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('resources/img/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/img/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('resources/img/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('resources/img/safari-pinned-tab.svg') }}" color="#5bbad5">
+
+    <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('resources/css/tailwind.admin.css') }}" />
+    {% block stylesheets %}
+    {% endblock %}
+    <style>
+        :root {
+            --brand-1: {{ __config.colors.panel }};
+            --brand-2: {{ __config.colors.primary_light }};
+        }
+    </style>
+
+    <script type="text/javascript" src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    {% block javascripts %}
+    {% endblock %}
+
+</head>
+{% block body %}
+<body class="w-full h-screen overflow-hidden fixed">
+    <div class="w-full h-full flex flex-col bg-brand-1 overflow-hidden fixed top-0 left-0">
+       <div class="max-w-[2000px] mx-auto w-full h-full flex flex-col">
+            <!-- body -->
+            <div class="w-full h-full flex flex-1 flex-col md:flex-row mt-5 overflow-hidden">
+                {% block sidebar %}{% endblock %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+</html>
