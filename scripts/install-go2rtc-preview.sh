@@ -306,7 +306,7 @@ elif [[ $REPLY =~ ^[4]$ ]]; then
     CAPTURE_CMD="fswebcam"
     CAPTURE_ARGS="--no-banner \$1"
     NOTE="don't forget to add %s."
-    YAML_STREAM="photobooth: ffmpeg:device?video=0&video_size=1280x720#video=h264 -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:ffmpeg -hide_banner -v error -f v4l2 -input_format mjpeg -video_size 1280x720 -i /dev/video0 -c copy -f mjpeg -#killsignal=sigint"
     apt install ffmpeg -y
     apt install fswebcam -y
 elif [[ $REPLY =~ ^[5]$ ]]; then
