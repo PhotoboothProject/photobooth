@@ -303,7 +303,7 @@ elif [[ $REPLY =~ ^[3]$ ]]; then
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[4]$ ]]; then
-    CAPTURE_CMD="fswebcam"
+    CAPTURE_CMD="sleep 1;fswebcam"
     CAPTURE_ARGS="--no-banner \$1"
     NOTE="don't forget to add %s."
     YAML_STREAM="photobooth: exec:ffmpeg -hide_banner -v error -f v4l2 -input_format mjpeg -video_size 1280x720 -i /dev/video0 -c copy -f mjpeg -#killsignal=sigint"
