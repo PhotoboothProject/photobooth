@@ -688,7 +688,7 @@ class Collage
                             $bg_height = imagesy($backgroundImage);
                             imagecopyresampled($my_collage, $backgroundImage, 0, 0, 0, 0, $bg_width, $bg_height, $bg_width, $bg_height);
                             $imageHandler->addPictureBgImage = $collageJson['background'];
-                            if(!str_starts_with($collageJson['background'], $_SERVER['DOCUMENT_ROOT'])) {
+                            if (!str_starts_with($collageJson['background'], $_SERVER['DOCUMENT_ROOT'])) {
                                 $imageHandler->addPictureBgImage = $_SERVER['DOCUMENT_ROOT'] . $collageJson['background'];
                             }
                         }
@@ -702,7 +702,7 @@ class Collage
                             $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' && !empty($collageJson['frame']) ? true : false;
                         }
 
-                        if(array_key_exists('placeholder', $collageJson) && $collageJson['placeholder']) {
+                        if (array_key_exists('placeholder', $collageJson) && $collageJson['placeholder']) {
                             $c->collagePlaceholder = $collageJson['placeholder'];
                             $c->collagePlaceholderPosition = (int) $collageJson['placeholderposition'] - 1;
                             $c->collagePlaceholderPath = str_starts_with($collageJson['placeholderpath'], 'http') ?
@@ -740,7 +740,7 @@ class Collage
                     $singlePictureOptions = [];
                     for ($j = 0; $j < 6; $j++) {
                         $processed = $layoutConfig[$j];
-                        if($j !== 5) {
+                        if ($j !== 5) {
                             $value = str_replace(['x', 'y'], [$collage_width, $collage_height], $layoutConfig[$j]);
                             $processed = self::doMath($value);
                         }
