@@ -37,6 +37,7 @@ if (isset($_POST['submit'])) {
     $allowedTypes = ImageUtility::supportedMimeTypesSelect;
 
     for ($i = 0; $i < count($uploadedImages['name']); $i++) {
+        $imageHandler->imageModified = false;
         $imageName = $uploadedImages['name'][$i];
         $imageTmpName = $uploadedImages['tmp_name'][$i];
         $imageType = $uploadedImages['type'][$i];
@@ -52,41 +53,42 @@ if (isset($_POST['submit'])) {
             chmod($filename_photo, 0644);
             
             $imageResource = $imageHandler->createFromImage($filename_photo);
+            $exif = exif_read_data($filename_photo);
+            if (!empty($exif['Orientation'])) {
+                switch ($exif['Orientation']) {
+                    case 3:  //180°
+                        $imageResource = imagerotate($imageResource, 180, 0);
+                        $imageHandler->imageModified = true;
+                        break;
+                    case 6:  //-90°
+                        $imageResource = imagerotate($imageResource, -90, 0);
+                        $imageHandler->imageModified = true;
+                        break;
+                    case 8:  //+90°
+                        $imageResource = imagerotate($imageResource, 90, 0);
+                        $imageHandler->imageModified = true;
+                        break;
+                }
+            }
             $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
             $imageHandler->resizeMaxWidth = $thumb_size;
             $imageHandler->resizeMaxHeight = $thumb_size;
             $thumbResource = $imageHandler->resizeImage($imageResource);
-            $exif = exif_read_data($filename_photo);
-            if ($thumbResource instanceof \GdImage) {
-                if (!empty($exif['Orientation'])) {
-                    switch ($exif['Orientation']) {
-                        case 3:  //180°
-                            $thumbResource = imagerotate($thumbResource, 180, 0);
-                            $imageResource = imagerotate($imageResource, 180, 0);
-                            break;
-                        case 6:  //-90°
-                            $thumbResource = imagerotate($thumbResource, -90, 0);
-                            $imageResource = imagerotate($imageResource, -90, 0);
-                            break;
-                        case 8:  //+90°
-                            $thumbResource = imagerotate($thumbResource, 90, 0);
-                            $imageResource = imagerotate($imageResource, 90, 0);
-                            break;
-                    }
-                }
-                $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
-                if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-                    $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
-                }
+            $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+            if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
+                $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
+            }
+            if ($imageHandler->imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
                 $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
                 if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
                     $imageHandler->addErrorData('Warning: Failed to create image.');
                 }
-            } else {
-                $imageHandler->addErrorData('Warning: Failed to resize thumbnail.');
             }
             if ($thumbResource instanceof \GdImage) {
                 unset($thumbResource);
+            }
+            if ($imageResource instanceof \GdImage) {
+                unset($imageResource);
             }
             json_encode($database->appendContentToDB($imageNewName));
 
