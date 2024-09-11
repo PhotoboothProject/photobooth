@@ -1380,6 +1380,12 @@ return [
             'name' => 'preview[showFrame]',
             'value' => $config['preview']['showFrame'],
         ],
+        'preview_extend_by_frame' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'preview[extend_by_frame]',
+            'value' => $config['preview']['extend_by_frame'],
+        ],
     ],
     'keying' => [
         'view' => 'advanced',
