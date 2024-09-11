@@ -103,7 +103,7 @@ Enjoy your Photobooth installation!
 ### Download needed files
 
 -   Download Apache2 and Visual C++ Redistributable for Visual Studio: [https://www.apachelounge.com/download](https://www.apachelounge.com/download)
--   Download PHP 8.2 (Thread Safe): [https://windows.php.net/download](https://windows.php.net/download)
+-   Download PHP 8.3 (Thread Safe): [https://windows.php.net/download](https://windows.php.net/download)
 -   Download Digicamcontrol: [http://digicamcontrol.com/download](http://digicamcontrol.com/download)
 -   Download Notepad++: [https://notepad-plus-plus.org/downloads](https://notepad-plus-plus.org/downloads)
 -   Download latest Photobooth release (_photobooth-4.x.x.zip_ or _photobooth-4.x.x.tar.gz_
