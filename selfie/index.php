@@ -30,81 +30,72 @@ $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-bran
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
 
 if (isset($_POST['submit'])) {
-    $folderPath = FolderEnum::IMAGES->absolute();
+    // Process uploaded images
+    $uploadedImages = $_FILES['images'];
 
-    if (is_writable($folderPath)) {
-        // Process uploaded images
-        $uploadedImages = $_FILES['images'];
+    // Array of allowed image file types
+    $allowedTypes = ImageUtility::supportedMimeTypesSelect;
 
-        // Array of allowed image file types
-        $allowedTypes = ImageUtility::supportedMimeTypesSelect;
+    for ($i = 0; $i < count($uploadedImages['name']); $i++) {
+        $imageName = $uploadedImages['name'][$i];
+        $imageTmpName = $uploadedImages['tmp_name'][$i];
+        $imageType = $uploadedImages['type'][$i];
+        $imageNewName = Image::createNewFilename('dateformatted');
 
-        for ($i = 0; $i < count($uploadedImages['name']); $i++) {
-            $imageName = $uploadedImages['name'][$i];
-            $imageTmpName = $uploadedImages['tmp_name'][$i];
-            $imageType = $uploadedImages['type'][$i];
-            $imageNewName = Image::createNewFilename('dateformatted');
+        $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
+        $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
 
-            $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
-            $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
-
-            // Check if the file type is allowed
-            if (in_array($imageType, $allowedTypes)) {
-                // Move the uploaded image to the custom folder
-                move_uploaded_file($imageTmpName, $filename_photo);
-                chmod($filename_photo, 0644);
-
-                //MARKUS Thumbnail append and rotation
-                $imageResource = $imageHandler->createFromImage($filename_photo);
-                $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
-                $imageHandler->resizeMaxWidth = $thumb_size;
-                $imageHandler->resizeMaxHeight = $thumb_size;
-                $thumbResource = $imageHandler->resizeImage($imageResource);
-                $exif = exif_read_data($filename_photo);
-                if ($thumbResource instanceof \GdImage) {
-                    if (!empty($exif['Orientation'])) {
-                        switch ($exif['Orientation']) {
-                            case 3:  //180°
-                                $thumbResource = imagerotate($thumbResource, 180, 0);
-                                $imageResource = imagerotate($imageResource, 180, 0);
-                                break;
-                            case 6:  //-90°
-                                $thumbResource = imagerotate($thumbResource, -90, 0);
-                                $imageResource = imagerotate($imageResource, -90, 0);
-                                break;
-                            case 8:  //+90°
-                                $thumbResource = imagerotate($thumbResource, 90, 0);
-                                $imageResource = imagerotate($imageResource, 90, 0);
-                                break;
-                        }
+        // Check if the file type is allowed
+        if (in_array($imageType, $allowedTypes)) {
+            // Move the uploaded image to the custom folder
+            move_uploaded_file($imageTmpName, $filename_photo);
+            chmod($filename_photo, 0644);
+            
+            $imageResource = $imageHandler->createFromImage($filename_photo);
+            $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
+            $imageHandler->resizeMaxWidth = $thumb_size;
+            $imageHandler->resizeMaxHeight = $thumb_size;
+            $thumbResource = $imageHandler->resizeImage($imageResource);
+            $exif = exif_read_data($filename_photo);
+            if ($thumbResource instanceof \GdImage) {
+                if (!empty($exif['Orientation'])) {
+                    switch ($exif['Orientation']) {
+                        case 3:  //180°
+                            $thumbResource = imagerotate($thumbResource, 180, 0);
+                            $imageResource = imagerotate($imageResource, 180, 0);
+                            break;
+                        case 6:  //-90°
+                            $thumbResource = imagerotate($thumbResource, -90, 0);
+                            $imageResource = imagerotate($imageResource, -90, 0);
+                            break;
+                        case 8:  //+90°
+                            $thumbResource = imagerotate($thumbResource, 90, 0);
+                            $imageResource = imagerotate($imageResource, 90, 0);
+                            break;
                     }
-                    $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
-                    if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-                        $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
-                    }
-                    $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
-                    if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
-                        $imageHandler->addErrorData('Warning: Failed to create image.');
-                    }
-                } else {
-                    $imageHandler->addErrorData('Warning: Failed to resize thumbnail.');
                 }
-                if ($thumbResource instanceof \GdImage) {
-                    unset($thumbResource);
+                $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+                if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
+                    $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
                 }
-
-                //MARKUS Database Image append
-                json_encode($database->appendContentToDB($imageNewName));
-
+                $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
+                if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
+                    $imageHandler->addErrorData('Warning: Failed to create image.');
+                }
             } else {
-                $error = true;
+                $imageHandler->addErrorData('Warning: Failed to resize thumbnail.');
             }
+            if ($thumbResource instanceof \GdImage) {
+                unset($thumbResource);
+            }
+            json_encode($database->appendContentToDB($imageNewName));
+
+        } else {
+            $error = true;
         }
-        if (!$error) {
-            $success = true;
-        }
-    } else {
-        $error = true;
+    }
+    if (!$error) {
+        $success = true;
     }
 }
 ?>
