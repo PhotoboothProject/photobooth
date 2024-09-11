@@ -763,7 +763,7 @@ class Image
 
             $localFontPath = $fontPath;
             $tempFontPath = $_SERVER['DOCUMENT_ROOT'] . '/tempfont.ttf';
-            if(PathUtility::isUrl($fontPath)) {
+            if (PathUtility::isUrl($fontPath)) {
                 $font = file_get_contents($fontPath);
                 file_put_contents($tempFontPath, $font);
                 $localFontPath = $tempFontPath;
@@ -794,7 +794,7 @@ class Image
                 }
             }
 
-            if($localFontPath !== $fontPath) {
+            if ($localFontPath !== $fontPath) {
                 unlink($tempFontPath);
             }
             $this->imageModified = true;

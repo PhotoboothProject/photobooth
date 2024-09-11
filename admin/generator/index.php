@@ -36,9 +36,9 @@ $collageJson = '';
 $permitSubmit = true;
 $enableWriteMessage = '';
 $startPreloaded = false;
-if(file_exists($collageConfigFilePath)) {
+if (file_exists($collageConfigFilePath)) {
     $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
-    if(!is_writable($collageConfigFilePath)) {
+    if (!is_writable($collageConfigFilePath)) {
         $permitSubmit = false;
         $enableWriteMessage = $languageService->translate('collage:generator:please_enable_write');
     }
@@ -50,7 +50,7 @@ if (isset($_POST['new-configuration'])) {
     $newConfig = ArrayUtility::mergeRecursive($defaultConfig, []);
 
     $fp = fopen($collageConfigFilePath, 'w');
-    if($fp) {
+    if ($fp) {
         fwrite($fp, $newConfiguration);
         fclose($fp);
         $collageJson = json_decode($newConfiguration);
@@ -234,10 +234,10 @@ $font_styles .= '</style>';
                         <input id="current_config" type="hidden" value='<?= json_encode($collageJson) ?>' />
                         <input id="can_submit" type="hidden" value='<?= $permitSubmit ?>' />
                         <input id="start_preloaded" type="hidden" value='<?= $startPreloaded ?>' />
-                        <?php if($enableWriteMessage !== '') { ?>
+                        <?php if ($enableWriteMessage !== '') { ?>
                             <input id='enable_write_message' type='hidden' value='<?= $enableWriteMessage ?>' />
                         <?php } ?>
-                        <?php if($collageJson !== '') { ?>
+                        <?php if ($collageJson !== '') { ?>
                             <div class="w-full flex flex-col gap-2 mb-4 md:mb-8">
                                 <div>
                                     <?= AdminInput::renderCta('collage:generator:load_current_configuration', 'loadCurrentConfiguration') ?>
@@ -585,7 +585,7 @@ AdminInput::renderColor(
                 <hr>
                 <div class="images_settings flex flex-col gap-4">
                     <div id="layout_containers" class="flex gap-4 overflow-x-auto">
-                        <?php for($i = 0; $i < 5; $i++) {
+                        <?php for ($i = 0; $i < 5; $i++) {
                             $hidden_class = 'hidden';
                             if ($i == 0) {
                                 $hidden_class = '';

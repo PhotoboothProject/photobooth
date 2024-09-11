@@ -10,7 +10,7 @@ class AdminInput
     public static function renderInput(array $setting, string $label): string
     {
         $attributes = '';
-        if(isset($setting['attributes'])) {
+        if (isset($setting['attributes'])) {
             foreach ($setting['attributes'] as $key => $prop) {
                 $attributes .= $key . '="' . $prop . '" ';
             }
@@ -94,7 +94,7 @@ class AdminInput
         $init = $setting['value'];
 
         $attributes = '';
-        if(isset($setting['attributes'])) {
+        if (isset($setting['attributes'])) {
             foreach ($setting['attributes'] as $key => $prop) {
                 $attributes .= $key . '="' . $prop . '" ';
             }
@@ -117,7 +117,7 @@ class AdminInput
     {
         $languageService = LanguageService::getInstance();
         $attributes = '';
-        if(isset($setting['attributes'])) {
+        if (isset($setting['attributes'])) {
             foreach ($setting['attributes'] as $key => $prop) {
                 $attributes .= $key . '="' . $prop . '" ';
             }
@@ -155,7 +155,7 @@ class AdminInput
         $languageService = LanguageService::getInstance();
         $inputClass = 'adminRangeInput w-full h-2 mb-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700';
         $attributes = '';
-        if(isset($setting['attributes'])) {
+        if (isset($setting['attributes'])) {
             foreach ($setting['attributes'] as $key => $prop) {
                 $attributes .= $key . '="' . $prop . '" ';
             }
@@ -194,7 +194,7 @@ class AdminInput
         $options = '';
 
         $attributes = '';
-        if(isset($setting['attributes'])) {
+        if (isset($setting['attributes'])) {
             foreach ($setting['attributes'] as $key => $prop) {
                 $attributes .= $key . '="' . $prop . '" ';
             }
@@ -213,7 +213,7 @@ class AdminInput
                 $selected = ' selected="selected"';
             }
             $styles = '';
-            if($settingName === 'text_font_family') {
+            if ($settingName === 'text_font_family') {
                 $styles = 'style="font-family:' . $optionLabel . '"';
             }
             $options .= '<option ' . $selected . ' value="' . ($optionValue instanceof \BackedEnum ? $optionValue->value : $optionValue) . '"' . $styles . '>' . $optionLabel . '</option>';
@@ -237,7 +237,7 @@ class AdminInput
         $images = '';
 
         $attributes = '';
-        if(isset($setting['attributes'])) {
+        if (isset($setting['attributes'])) {
             foreach ($setting['attributes'] as $key => $prop) {
                 $attributes .= $key . '="' . $prop . '" ';
             }
