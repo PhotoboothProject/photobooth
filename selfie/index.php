@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
         $imageNewName = Image::createNewFilename('dateformatted');
 
         $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
-        $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $image;
+        $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
         $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
 
         // Check if the file type is allowed
