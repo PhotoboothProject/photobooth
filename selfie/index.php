@@ -23,7 +23,7 @@ $pageTitle = 'Selfie uploader - ' . ApplicationService::getInstance()->getTitle(
 include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
 
-$error = false;
+$errors = [];
 $success = false;
 $labelClass = 'w-full flex flex-col mb-1';
 $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto';
@@ -110,10 +110,10 @@ if (isset($_POST['submit'])) {
                 $database->appendContentToDB($imageNewName);
             }
         } else {
-            $error = true;
+            $errors[] = $uploadedImages['name'][$i] . ' off wrong type.';
         }
     }
-    if (!$error) {
+    if (count($errors) === 0) {
         $success = true;
     }
     if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
