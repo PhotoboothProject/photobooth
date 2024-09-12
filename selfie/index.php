@@ -2,19 +2,19 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Image;
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\ApplicationService;
+use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LanguageService;
+use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
-//MARKUS Image Thumb
-use Photobooth\Image;
+$logger = LoggerService::getInstance()->getLogger('main');
+$logger->debug(basename($_SERVER['PHP_SELF']));
 
 $imageHandler = new Image();
-
-//MARKUS Datenbase connection
-use Photobooth\Service\DatabaseManagerService;
 
 $database = DatabaseManagerService::getInstance();
 
@@ -44,16 +44,16 @@ if (isset($_POST['submit'])) {
         $imageNewName = Image::createNewFilename('dateformatted');
 
         $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
+        $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $image;
         $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
 
         // Check if the file type is allowed
         if (in_array($imageType, $allowedTypes)) {
             // Move the uploaded image to the custom folder
-            move_uploaded_file($imageTmpName, $filename_photo);
-            chmod($filename_photo, 0644);
+            move_uploaded_file($imageTmpName, $filename_tmp);
             
-            $imageResource = $imageHandler->createFromImage($filename_photo);
-            $exif = exif_read_data($filename_photo);
+            $imageResource = $imageHandler->createFromImage($filename_tmp);
+            $exif = exif_read_data($filename_tmp);
             if (!empty($exif['Orientation'])) {
                 switch ($exif['Orientation']) {
                     case 3:  //180°
@@ -83,6 +83,21 @@ if (isset($_POST['submit'])) {
                 if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
                     $imageHandler->addErrorData('Warning: Failed to create image.');
                 }
+            } else {
+                if (!copy($filename_tmp, $filename_photo)) {
+                    throw new \Exception('Failed to copy photo.');
+                }
+            }
+            // Change permissions
+            $picture_permissions = $config['picture']['permissions'];
+            if (!chmod($filename_photo, (int)octdec($picture_permissions))) {
+                $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
+            }
+
+            if (!$config['picture']['keep_original']) {
+                if (!unlink($filename_tmp)) {
+                    $imageHandler->addErrorData('Warning: Failed to remove temporary photo.');
+                }
             }
             if ($thumbResource instanceof \GdImage) {
                 unset($thumbResource);
@@ -90,14 +105,18 @@ if (isset($_POST['submit'])) {
             if ($imageResource instanceof \GdImage) {
                 unset($imageResource);
             }
-            json_encode($database->appendContentToDB($imageNewName));
-
+            if ($config['database']['enabled']) {
+                $database->appendContentToDB($imageNewName);
+            }
         } else {
             $error = true;
         }
     }
     if (!$error) {
         $success = true;
+    }
+    if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
+        $logger->error('Error', $imageHandler->errorLog);
     }
 }
 ?>
