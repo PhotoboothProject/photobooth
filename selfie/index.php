@@ -153,3 +153,16 @@ echo getMenuBtn(PathUtility::getPublicPath('slideshow'), 'slideshow', $config['i
             </div>
         </div>
     </div>
+
+<?php
+
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+
+if ($success) {
+    echo '<script>setTimeout(function(){openToast("' . $languageService->translate('upload_success') . '")},500);</script>';
+}
+if (count($errors) > 0) {
+    echo '<script>setTimeout(function(){openToast("' . $languageService->translate('upload_error') . '", "isError", 5000)},500);</script>';
+}
+
+include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
