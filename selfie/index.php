@@ -28,6 +28,7 @@ $success = false;
 $labelClass = 'w-full flex flex-col mb-1';
 $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto';
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
+$max_file_size = ini_get('upload_max_filesize');
 
 if (isset($_POST['submit'])) {
     // Process uploaded images
@@ -131,7 +132,7 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="relative">
                         <input class="<?= $btnClass ?>" type="file" name="images[]" id="images" accept="image/*" capture="camera" required>
-			<br><br>
+                        <div class="my-2"><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></div>
                     </div>
 
                     <div class="mt-6">
