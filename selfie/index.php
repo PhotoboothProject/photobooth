@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
         if (in_array($imageType, $allowedTypes)) {
             // Move the uploaded image to the custom folder
             move_uploaded_file($imageTmpName, $filename_tmp);
-            
+
             $imageResource = $imageHandler->createFromImage($filename_tmp);
             $exif = exif_read_data($filename_tmp);
             if (!empty($exif['Orientation'])) {
@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
             if ($imageHandler->imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
                 $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
                 if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
-                    $imageHandler->addErrorData('Warning: Failed to create image.');
+                    throw new \Exception('Failed to create image.');
                 }
             } else {
                 if (!copy($filename_tmp, $filename_photo)) {
