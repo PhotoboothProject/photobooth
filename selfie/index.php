@@ -131,7 +131,7 @@ if (isset($_POST['submit'])) {
                         Selfie uploader
                     </div>
                     <div class="relative">
-                        <input class="<?= $btnClass ?>" type="file" name="images[]" id="images" accept="image/*" capture="camera" required>
+                        <input class="<?= $labelClass ?>" type="file" name="images[]" id="images" accept="image/*" capture="camera" required>
                         <div class="my-2"><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></div>
                     </div>
 
