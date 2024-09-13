@@ -38,79 +38,86 @@ if (isset($_POST['submit'])) {
     $allowedTypes = ImageUtility::supportedMimeTypesSelect;
 
     for ($i = 0; $i < count($uploadedImages['name']); $i++) {
-        $imageHandler->imageModified = false;
+        $fileError = $uploadedImages['error'][$i];
         $imageName = $uploadedImages['name'][$i];
-        $imageTmpName = $uploadedImages['tmp_name'][$i];
-        $imageType = $uploadedImages['type'][$i];
-        $imageNewName = Image::createNewFilename('dateformatted');
+        if ($fileError == 0) {
+            $imageTmpName = $uploadedImages['tmp_name'][$i];
+            $imageType = $uploadedImages['type'][$i];
+            $imageNewName = Image::createNewFilename('dateformatted');
 
-        $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
-        $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
-        $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
+            $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
+            $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
+            $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
+            $imageHandler->imageModified = false;
 
-        // Check if the file type is allowed
-        if (in_array($imageType, $allowedTypes)) {
-            // Move the uploaded image to the custom folder
-            move_uploaded_file($imageTmpName, $filename_tmp);
+            // Check if the file type is allowed
+            if (in_array($imageType, $allowedTypes)) {
+                // Move the uploaded image to the custom folder
+                move_uploaded_file($imageTmpName, $filename_tmp);
 
-            $imageResource = $imageHandler->createFromImage($filename_tmp);
-            $exif = exif_read_data($filename_tmp);
-            if (!empty($exif['Orientation'])) {
-                switch ($exif['Orientation']) {
-                    case 3:  //180°
-                        $imageResource = imagerotate($imageResource, 180, 0);
-                        $imageHandler->imageModified = true;
-                        break;
-                    case 6:  //-90°
-                        $imageResource = imagerotate($imageResource, -90, 0);
-                        $imageHandler->imageModified = true;
-                        break;
-                    case 8:  //+90°
-                        $imageResource = imagerotate($imageResource, 90, 0);
-                        $imageHandler->imageModified = true;
-                        break;
+                $imageResource = $imageHandler->createFromImage($filename_tmp);
+                $exif = exif_read_data($filename_tmp);
+                if (!empty($exif['Orientation'])) {
+                    switch ($exif['Orientation']) {
+                        case 3:  //180°
+                            $imageResource = imagerotate($imageResource, 180, 0);
+                            $imageHandler->imageModified = true;
+                            break;
+                        case 6:  //-90°
+                            $imageResource = imagerotate($imageResource, -90, 0);
+                            $imageHandler->imageModified = true;
+                            break;
+                        case 8:  //+90°
+                            $imageResource = imagerotate($imageResource, 90, 0);
+                            $imageHandler->imageModified = true;
+                            break;
+                    }
                 }
-            }
-            $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
-            $imageHandler->resizeMaxWidth = $thumb_size;
-            $imageHandler->resizeMaxHeight = $thumb_size;
-            $thumbResource = $imageHandler->resizeImage($imageResource);
-            $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
-            if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
-                $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
-            }
-            if ($imageHandler->imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
-                $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
-                if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
-                    throw new \Exception('Failed to create image.');
+                $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
+                $imageHandler->resizeMaxWidth = $thumb_size;
+                $imageHandler->resizeMaxHeight = $thumb_size;
+                $thumbResource = $imageHandler->resizeImage($imageResource);
+                $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+                if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
+                    $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
+                }
+                if ($imageHandler->imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
+                    $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
+                    if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
+                        throw new \Exception('Failed to create image.');
+                    }
+                } else {
+                    if (!copy($filename_tmp, $filename_photo)) {
+                        throw new \Exception('Failed to copy photo.');
+                    }
+                }
+                // Change permissions
+                $picture_permissions = $config['picture']['permissions'];
+                if (!chmod($filename_photo, (int)octdec($picture_permissions))) {
+                    $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
+                }
+
+                if (!$config['picture']['keep_original']) {
+                    if (!unlink($filename_tmp)) {
+                        $imageHandler->addErrorData('Warning: Failed to remove temporary photo.');
+                    }
+                }
+                if ($thumbResource instanceof \GdImage) {
+                    unset($thumbResource);
+                }
+                if ($imageResource instanceof \GdImage) {
+                    unset($imageResource);
+                }
+                if ($config['database']['enabled']) {
+                    $database->appendContentToDB($imageNewName);
                 }
             } else {
-                if (!copy($filename_tmp, $filename_photo)) {
-                    throw new \Exception('Failed to copy photo.');
-                }
-            }
-            // Change permissions
-            $picture_permissions = $config['picture']['permissions'];
-            if (!chmod($filename_photo, (int)octdec($picture_permissions))) {
-                $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
-            }
-
-            if (!$config['picture']['keep_original']) {
-                if (!unlink($filename_tmp)) {
-                    $imageHandler->addErrorData('Warning: Failed to remove temporary photo.');
-                }
-            }
-            if ($thumbResource instanceof \GdImage) {
-                unset($thumbResource);
-            }
-            if ($imageResource instanceof \GdImage) {
-                unset($imageResource);
-            }
-            if ($config['database']['enabled']) {
-                $database->appendContentToDB($imageNewName);
+                $errors[] = $uploadedImages['name'][$i] . ' off wrong type.';
             }
         } else {
-            $errors[] = $uploadedImages['name'][$i] . ' off wrong type.';
+            $errMsg = $languageService->translate(FileUtility::getErrorMessage($fileError));
+            $errors[$imageName] = $errMsg;
+            $logger->debug($errMsg, [$imageName]);
         }
     }
     if (count($errors) === 0) {
