@@ -112,12 +112,14 @@ if (isset($_POST['submit'])) {
                     $database->appendContentToDB($imageNewName);
                 }
             } else {
-                $errors[] = $uploadedImages['name'][$i] . ' off wrong type.';
+                $errors[$imageTmpName] = $languageService->translate('upload_wrong_type');
+                $logger->debug($languageService->translate('upload_wrong_type'), [$imageTmpName]);
+                break;
             }
         } else {
             $errMsg = $languageService->translate(FileUtility::getErrorMessage($fileError));
-            $errors[$imageName] = $errMsg;
-            $logger->debug($errMsg, [$imageName]);
+            $errors[$imageTmpName] = $errMsg;
+            $logger->debug($errMsg, [$imageTmpName]);
         }
     }
     if (count($errors) === 0) {
