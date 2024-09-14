@@ -460,9 +460,9 @@ return [
             'placeholder' => $defaultConfig['picture']['flip'],
             'options' => [
                 'off' => 'off',
-                'horizontal' => 'horizontal',
-                'vertical' => 'vertical',
-                'both' => 'horizontal + vertical',
+                'flip-horizontal' => 'horizontal',
+                'flip-vertical' => 'vertical',
+                'flip-both' => 'horizontal + vertical',
             ],
             'value' => $config['picture']['flip'],
         ],
