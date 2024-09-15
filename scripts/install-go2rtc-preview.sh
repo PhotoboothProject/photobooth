@@ -281,9 +281,10 @@ echo "Your options are:"
 echo "1 Install go2rtc and needed service for gphoto2"
 echo "2 Install go2rtc and needed service for rpicam-apps"
 echo "3 Install go2rtc and needed service for libcamera-apps"
-echo "4 Update or downgrade go2rtc only"
-echo "5 Uninstall go2rtc and the related services"
-echo "6 Do nothing"
+echo "4 Install go2rtc and needed service for fswebcam"
+echo "5 Update or downgrade go2rtc only"
+echo "6 Uninstall go2rtc and the related services"
+echo "7 Do nothing"
 info ""
 ask_yes_no "Please enter your choice" "6"
 info ""
@@ -302,12 +303,19 @@ elif [[ $REPLY =~ ^[3]$ ]]; then
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[4]$ ]]; then
+    CAPTURE_CMD="sleep 1;fswebcam"
+    CAPTURE_ARGS="--no-banner -d /dev/video0 -r 1280x720 \$1"
+    NOTE="don't forget to add %s."
+    YAML_STREAM="photobooth: exec:ffmpeg -hide_banner -v error -f v4l2 -input_format mjpeg -video_size 1280x720 -i /dev/video0 -c copy -f mjpeg -#killsignal=sigint"
+    apt install ffmpeg -y
+    apt install fswebcam -y
+elif [[ $REPLY =~ ^[5]$ ]]; then
     UPDATE_ONLY=true
     ask_version
     install_go2rtc
     info "Done!"
     exit 0
-elif [[ $REPLY =~ ^[5]$ ]]; then
+elif [[ $REPLY =~ ^[6]$ ]]; then
     uninstall
     exit 0
 else
