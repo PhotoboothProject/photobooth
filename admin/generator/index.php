@@ -8,7 +8,6 @@ use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\FontUtility;
 use Photobooth\Service\AssetService;
-use Photobooth\Utility\ArrayUtility;
 
 // Login / Authentication check
 if (!(
@@ -21,7 +20,6 @@ if (!(
 }
 
 $configurationService = ConfigurationService::getInstance();
-$defaultConfig = $configurationService->getDefaultConfiguration();
 
 $error = false;
 $success = false;
@@ -47,7 +45,7 @@ if (file_exists($collageConfigFilePath)) {
 $newConfiguration = '';
 if (isset($_POST['new-configuration'])) {
     $newConfiguration = $_POST['new-configuration'];
-    $newConfig = ArrayUtility::mergeRecursive($defaultConfig, []);
+    $newConfig = $config;
 
     $fp = fopen($collageConfigFilePath, 'w');
     if ($fp) {
