@@ -51,28 +51,30 @@ if (isset($_POST['new-configuration'])) {
     if ($fp) {
         fwrite($fp, $newConfiguration);
         fclose($fp);
-        $collageJson = json_decode($newConfiguration);
-        $startPreloaded = true;
-        $arrayCollageJson = (array) $collageJson;
+        if ($config['collage']['layout'] === 'collage.json') {
+            $collageJson = json_decode($newConfiguration);
+            $startPreloaded = true;
+            $arrayCollageJson = (array) $collageJson;
 
-        if (array_key_exists('layout', $arrayCollageJson)) {
-            $newConfig['collage']['limit'] = count($arrayCollageJson['layout']);
-        } else {
-            $newConfig['collage']['limit'] = count($arrayCollageJson);
-        }
-        if (array_key_exists('placeholder', $arrayCollageJson)) {
-            $newConfig['collage']['placeholder'] = $arrayCollageJson['placeholder'];
-        }
-        if (array_key_exists('placeholderposition', $arrayCollageJson)) {
-            $newConfig['collage']['placeholderposition'] = $arrayCollageJson['placeholderposition'];
-        }
-        if (array_key_exists('placeholderpath', $arrayCollageJson)) {
-            $newConfig['collage']['placeholderpath'] = $arrayCollageJson['placeholderpath'];
-        }
-        try {
-            $configurationService->update($newConfig);
-        } catch (\Exception $exception) {
-            $warning = true;
+            if (array_key_exists('layout', $arrayCollageJson)) {
+                $newConfig['collage']['limit'] = count($arrayCollageJson['layout']);
+            } else {
+                $newConfig['collage']['limit'] = count($arrayCollageJson);
+            }
+            if (array_key_exists('placeholder', $arrayCollageJson)) {
+                $newConfig['collage']['placeholder'] = $arrayCollageJson['placeholder'];
+            }
+            if (array_key_exists('placeholderposition', $arrayCollageJson)) {
+                $newConfig['collage']['placeholderposition'] = $arrayCollageJson['placeholderposition'];
+            }
+            if (array_key_exists('placeholderpath', $arrayCollageJson)) {
+                $newConfig['collage']['placeholderpath'] = $arrayCollageJson['placeholderpath'];
+            }
+            try {
+                $configurationService->update($newConfig);
+            } catch (\Exception $exception) {
+                $warning = true;
+            }
         }
     } else {
         $error = true;
