@@ -138,6 +138,7 @@ function mjpeg_preview() {
             info "### Recreating go2rtc config."
         else
             CREATE_GO2RTC_CFG=false
+            error "### Skipping go2rtc config..."
         fi
     fi
 
@@ -185,6 +186,7 @@ EOF
             info "### Recreating capture wrapper."
         else
             CREATE_CAPTURE_WRAPPER=false
+            error "### Skipping capture wrapper..."
         fi
     fi
 
