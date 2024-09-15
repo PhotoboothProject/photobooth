@@ -125,8 +125,24 @@ function install_go2rtc() {
 }
 
 function mjpeg_preview() {
+    CREATE_CAPTURE_WRAPPER=true
+    CREATE_GO2RTC_CFG=true
+
     install_go2rtc
-    if [[ ! -f /etc/go2rtc.yaml ]]; then
+
+    if [ -f "/etc/go2rtc.yaml" ]; then
+        echo -e "\033[0;33m"
+        ask_yes_no "### go2rtc config exists already. Recreate? [y/N] " "N"
+        echo -e "\033[0m"
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            info "### Recreating go2rtc config."
+        else
+            CREATE_GO2RTC_CFG=false
+            error "### Skipping go2rtc config..."
+        fi
+    fi
+
+    if [ "$CREATE_GO2RTC_CFG" = true ]; then
         info "### Creating /etc/go2rtc.yaml configuration file"
         cat >/etc/go2rtc.yaml <<EOF
 ---
@@ -162,7 +178,19 @@ www-data ALL=(ALL) NOPASSWD: /usr/bin/systemctl start go2rtc.service, /usr/bin/s
 EOF
     fi
 
-    if [[ ! -f /usr/local/bin/capture ]]; then
+    if [ -f "/usr/local/bin/capture" ]; then
+        echo -e "\033[0;33m"
+        ask_yes_no "### Capture wrapper exists already. Recreate? [y/N] " "N"
+        echo -e "\033[0m"
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            info "### Recreating capture wrapper."
+        else
+            CREATE_CAPTURE_WRAPPER=false
+            error "### Skipping capture wrapper..."
+        fi
+    fi
+
+    if [ "$CREATE_CAPTURE_WRAPPER" = true ]; then
         info "### Creating /usr/local/bin/capture script"
         cat >/usr/local/bin/capture <<EOF
 #!/bin/bash
