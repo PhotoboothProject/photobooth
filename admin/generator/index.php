@@ -70,6 +70,16 @@ if (isset($_POST['new-configuration'])) {
             if (array_key_exists('placeholderpath', $arrayCollageJson)) {
                 $newConfig['collage']['placeholderpath'] = $arrayCollageJson['placeholderpath'];
             }
+            // If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
+            if ($newConfig['collage']['placeholder']) {
+                $collagePlaceholderPosition = (int) $newConfig['collage']['placeholderposition'];
+                if ($collagePlaceholderPosition > 0 && $collagePlaceholderPosition <= $newConfig['collage']['limit']) {
+                    $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
+                } else {
+                    $newConfig['collage']['placeholder'] = false;
+                    $warning = true;
+                }
+            }
             try {
                 $configurationService->update($newConfig);
             } catch (\Exception $exception) {
