@@ -634,7 +634,6 @@
   "no_printing": "Impossible d'imprimer ce type de fichier.",
   "path": "Chemin d'accès :",
   "percent": "%",
-  "php-extension-disabled": "Extension PHP : %s doit être activée !",
   "php-extension-enabled": "Extension PHP : %s activée !",
   "phpUpdateRequired": "Veuillez mettre à jour votre version de PHP.",
   "phpVersionError": "PHP ne correspond pas à nos exigences !",
