@@ -23,6 +23,8 @@ $assetService = AssetService::getInstance();
     <link rel="mask-icon" href="<?=$assetService->getUrl('resources/img/safari-pinned-tab.svg')?>" color="#5bbad5">
 
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/@fortawesome/fontawesome-free/css/all.min.css')?>" />
+    <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/material-icons/iconfont/material-icons.css')?>">
+    <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/material-icons/css/material-icons.css')?>">
     <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/tailwind.admin.css')?>" />
 
     <!-- js -->
