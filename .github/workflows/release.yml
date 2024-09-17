@@ -41,4 +41,3 @@ jobs:
           files: |
             archives/photobooth-*.zip
             archives/photobooth-*.tar.gz
-    
