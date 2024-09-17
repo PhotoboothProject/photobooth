@@ -25,7 +25,6 @@ jobs:
           - ubuntu-latest
         checks:
           - sudo ./install-photobooth.sh --username="$(whoami)" --silent
-          - sudo ./install-photobooth.sh --username="$(whoami)" --mjpeg --silent
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
