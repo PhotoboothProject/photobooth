@@ -8,13 +8,13 @@
 html,
 body {
   background-color: $panelColor;
+  overflow-y: auto;
   p {
     font-size: 1.2em;
   }
   h3 {
     font-size: 1.3em;
   }
-  overflow-y: auto;
 }
 
 .welcome {
