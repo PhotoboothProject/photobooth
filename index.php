@@ -4,7 +4,7 @@ session_start();
 require_once 'lib/config.php';
 if (!$config['ui']['skip_welcome']) {
     if (!is_file('.skip_welcome')) {
-        header('location: welcome.php');
+        header('location: welcome');
         exit();
     }
 }
