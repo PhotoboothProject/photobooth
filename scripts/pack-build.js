@@ -58,6 +58,7 @@ function createArchive(fileName, archive) {
     archive.directory('template');
     archive.directory('test');
     archive.directory('vendor');
+    archive.directory('welcome');
     archive.file('config/.htaccess');
     archive.file('config/config.inc.php');
     archive.file('chromakeying.php');
@@ -73,7 +74,6 @@ function createArchive(fileName, archive) {
     archive.file('private/README.md');
     archive.file('README.md');
     archive.file('trigger.php');
-    archive.file('welcome.php');
     archive.directory('node_modules/@andreasremdt/simple-translator/');
     archive.directory('node_modules/font-awesome/');
     archive.directory('node_modules/material-icons');
