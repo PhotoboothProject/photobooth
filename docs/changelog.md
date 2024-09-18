@@ -9,6 +9,51 @@ An updated FAQ can always be found at [localhost/faq](http://localhost/faq).
 Please read the license notice [here](https://github.com/PhotoboothProject/photobooth/blob/dev/LICENSE_NOTICE).
 <hr>
 
+## 4.5.1 (17.09.2024)
+
+**General**
+
+* sass: fix deprecated build warning by @andi34 in https://github.com/PhotoboothProject/photobooth/pull/863
+
+
+**Full Changelog**
+
+[https://github.com/PhotoboothProject/photobooth/compare/v4.5.0...v4.5.1](https://github.com/PhotoboothProject/photobooth/compare/v4.5.0...v4.5.1)
+
+<hr>
+
+## 4.5.0 (17.09.2024)
+
+This release keeps the stable Photobooth v4 compatible with latest Photobooth installer and allows automated tests via GitHub actions.
+
+**General**
+
+* update script locations
+* Update build dependencies
+* Move welcome page to http://localhost/welcome for automated testing of installation script
+* Add workflow for automated release on push to v* tags
+* Use own fork of Onoff library
+
+
+**Full Changelog**
+
+[https://github.com/PhotoboothProject/photobooth/compare/v4.4.1...v4.5.0](https://github.com/PhotoboothProject/photobooth/compare/v4.4.1...v4.5.0)
+
+<hr>
+
+## 4.4.1 (19.02.2024)
+
+**General**
+
+* task: /boot/config.txt is not an symlink anymore by @andi34 in https://github.com/PhotoboothProject/photobooth/pull/618
+
+
+**Full Changelog**
+
+[https://github.com/PhotoboothProject/photobooth/compare/v4.4.0...v4.4.1](https://github.com/PhotoboothProject/photobooth/compare/v4.4.0...v4.4.1)
+
+<hr>
+
 ## 4.4.0 (09.01.2024)
 
 **Breaking changes**
