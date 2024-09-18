@@ -44,6 +44,31 @@ View all version changes [here](changelog.md).
 
 ## News
 
+### 17. September 2024
+
+Photobooth v4.5.1 has been released.
+
+The release keeps Photobooth v4 compatible with latest Photobooth installer and allows automated installation tests via GitHub actions.
+
+Besides that only dependencies have been updated to latest version.
+
+The changed Onoff library should be able to handle the changed GPIO sysfs on latest PiOS kernel.
+
+
+We're still working on rewriting the Photobooth source for the upcoming v5 release - there's still some work left before the new version can be released.
+
+The current development version runs nicely and stable for most user! We are always happy about feedback and helping hands!
+
+New feature have been added already and the UI got an overhaul in a lot of places.
+
+Like always: The full Changelog can be found [here](changelog.md).
+
+If you're running latest development version already: there's no need to install Photobooth v4.5!
+
+Your Photobooth-Team
+
+---
+
 ### 09. January 2024
 
 It's been a while, but here's some news outside of our Community on Telegram.
