@@ -29,7 +29,7 @@ function ask_yes_no {
 function test_command {
     eval "$1"
     if [ $? -ne 0 ]; then
-        error "### Command failed: $1"
+        error "### Test failed: $1"
         error "### Preview via go2rtc can't be generated!"
         ask_yes_no "### Do you want to continue anyway? [y/N]" "N"
         if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -38,6 +38,8 @@ function test_command {
         else
             info "### Continuing..."
         fi
+    else
+        info "### Test successful: $1"
     fi
 }
 
