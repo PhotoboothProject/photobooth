@@ -679,6 +679,7 @@
   "no_printing": "Il tipo di file non può essere stampato.",
   "path": "Percorso:",
   "percent": "%",
+  "php-extension-disabled": "Estensione PHP: %s deve essere abilitata!",
   "php-extension-enabled": "Estensione PHP: %s abilitata!",
   "phpUpdateRequired": "Si prega di aggiornare la versione PHP.",
   "phpVersionError": "PHP non soddisfa i nostri requisiti!",
