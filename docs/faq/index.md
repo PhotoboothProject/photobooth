@@ -1174,15 +1174,43 @@ Now try again! Does it work?
 
 ### Special notes
 
-#### Canon EOS 1300D
+#### Alternative capture commands
 
-To capture an image gphoto2 might need some time. Add `–wait-event=300ms` to the take picture CMD. Your take picture CMD should look like this:
-
+```sh
+gphoto2 --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
 ```
+
+or
+
+```sh
 gphoto2 –wait-event=300ms –capture-image-and-download –filename=%s
 ```
 
-Source: [https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochzeiten-und-geburtstage/#comment-1211](https://www.dennis-henss.de/2020/01/25/raspberry-pi-fotobox-fuer-hochzeiten-und-geburtstage/#comment-1211)
+or with ` --set-config output=Off`
+
+```sh
+gphoto2 --set-config output=Off --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
+```
+
+or
+
+```sh
+gphoto2 --set-config output=Off –wait-event=300ms –capture-image-and-download –filename=%s
+```
+
+#### Canon EOS 1300D
+
+Capture command:
+```sh
+gphoto2 –wait-event=300ms –capture-image-and-download –filename=%s
+```
+
+#### Canon EOS 2000D
+
+Capture command:
+```sh
+gphoto2 --set-config output=Off --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
+```
 
 ## How to upload pictures to a remote server after picture has been taken?
 
