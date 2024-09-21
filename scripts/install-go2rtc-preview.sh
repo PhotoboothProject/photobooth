@@ -306,12 +306,14 @@ if [[ $REPLY =~ ^[1]$ ]]; then
     test_command "gphoto2 --capture-movie=5s"
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for rpicam-apps."
+    test_command "rpicam-vid -t 5000 --codec mjpeg -o test.mjpeg"
     YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=sigint"
     CAPTURE_CMD="rpicam-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for libcamera-apps."
+    test_command "libcamera-vid -t 5000 --codec mjpeg -o test.mjpeg"
     YAML_STREAM="photobooth: exec:libcamera-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=sigint"
     CAPTURE_CMD="libcamera-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
@@ -335,6 +337,11 @@ elif [[ $REPLY =~ ^[6]$ ]]; then
 else
     info "### Okay... doing nothing!"
     exit 0
+fi
+
+if [ -f "test.mjpeg" ]; then
+    info "### Deleting existing test.mjpeg file."
+    rm test.mjpeg
 fi
 
 ask_version
