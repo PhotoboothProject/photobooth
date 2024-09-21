@@ -26,6 +26,19 @@ function ask_yes_no {
     read -p "${1}: " -n 1 -r
 }
 
+function test_command {
+    eval "$1"
+    if [ $? -ne 0 ]; then
+        error "### Command failed: $1"
+        error "### Preview via go2rtc can't be generated!"
+        ask_yes_no "### Do you want to continue anyway? [y/N]" "N"
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            error "### Exiting script."
+            exit 1
+        fi
+    fi
+}
+
 function ask_version() {
     echo "## Available go2rtc versions:"
     for i in "${!GO2RTC_VERSIONS[@]}"; do
@@ -290,6 +303,7 @@ ask_yes_no "Please enter your choice" "6"
 info ""
 if [[ $REPLY =~ ^[1]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for gphoto2."
+    test_command "gphoto2 --capture-movie=5s"
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for rpicam-apps."
     YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=sigint"
