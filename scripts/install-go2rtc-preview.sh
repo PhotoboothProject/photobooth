@@ -35,6 +35,8 @@ function test_command {
         if [[ ! $REPLY =~ ^[Yy]$ ]]; then
             error "### Exiting script."
             exit 1
+        else
+            info "### Continuing..."
         fi
     fi
 }
