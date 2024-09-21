@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-function adminFontSelect(element, path) {
+function adminFontSelect(element, path, fontclass) {
     const parent = element.closest('.adminFontSelection');
     const origin = element.dataset.origin;
     const src = element.src;
@@ -10,6 +10,7 @@ function adminFontSelect(element, path) {
     previewElement.src = src;
     textElement.textContent = origin;
     inputElement.value = origin;
+    inputElement.setAttribute('data-fontclass', fontclass);
 
     const event = new Event('change');
     inputElement.dispatchEvent(event);

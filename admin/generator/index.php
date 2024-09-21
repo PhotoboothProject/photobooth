@@ -236,6 +236,7 @@ $font_styles .= '</style>';
             justify-content: center;
         }
     </style>
+    <style id="fontselectedStyle"></style>
     <div class="w-full flex items-center justify-center flex-col">
         <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center relative">
             <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
@@ -722,7 +723,7 @@ for ($i = 0; $i < count($demoImages); $i++) {
                     <div id="collage_frame" class="absolute h-full w-full">
                         <img class="h-full w-full hidden" src="" alt="Choose the frame">
                     </div>
-                    <div id="collage_text" class="absolute h-full">
+                    <div id="collage_text" class="absolute h-full font-selected">
                         <div class='relative'>
                             <div class='absolute whitespace-nowrap origin-top-left text-line-1 leading-none'></div>
                             <div class='absolute whitespace-nowrap origin-top-left text-line-2 leading-none'></div>

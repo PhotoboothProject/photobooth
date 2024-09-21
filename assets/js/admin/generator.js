@@ -103,9 +103,9 @@ function loadCurrentConfig() {
     //text
     $('input[name=\'text_enabled\'][data-trigger=\'general\']').prop('checked', text_enabled);
     $('input[name=\'text_font_family\']').val(font_family);
-    let fClass = $('input[name=\'text_font_family\']').data('fontclass');
+    $('input[name=\'text_font_family\']')[0].setAttribute('data-fontclass', 'font-selected');
     $('#fontselectedStyle').html(
-        `@font-face{font-family:"fontselected";src:url(${font_family}) format("truetype");} .${fClass}{font-family:"fontselected",Verdena,Tahoma;}`
+        `@font-face{font-family:"fontselected";src:url(${font_family}) format("truetype");} .font-selected{font-family:"fontselected",Verdena,Tahoma;}`
     );
     $('input[name=\'text_font_color\']').attr('value', font_color);
     $('input[name=\'text_font_size\']').attr('value', font_size);
@@ -157,7 +157,7 @@ function changeGeneralSetting() {
     const c_show_background = $('input[name=\'show-background\'][data-trigger=\'general\']').is(':checked');
 
     const c_text_enabled = $('input[name=\'text_enabled\'][data-trigger=\'general\']').is(':checked');
-    let c_text_font = $('input[name=\'text_font_family\']').data('fontclass');
+    let c_text_font = $('input[name=\'text_font_family\']')[0].getAttribute('data-fontclass');
     let c_text_font_unique_id = $('input[name=\'text_font_family\']').data('unique-id');
     let c_text_font_value = $('input[name=\'text_font_family\']').val();
     const c_font_color = $('input[name=\'text_font_color\']').val();
@@ -217,7 +217,7 @@ function changeGeneralSetting() {
         left: adjusted_tl + 'px'
     });
     if (c_text_font_value.startsWith('http')) {
-        c_text_font = `customfont-${c_text_font_unique_id}`;
+        c_text_font = `font-${c_text_font_unique_id}`;
         $('#fontselectedStyle').html(
             `@font-face{font-family:"fontselected";src:url(${c_text_font_value}) format("truetype");} .${c_text_font}{font-family:"fontselected",Verdena,Tahoma;}`
         );
@@ -225,7 +225,7 @@ function changeGeneralSetting() {
     collageTextDOM.removeClass((index, classes) =>
         classes
             .split(' ')
-            .filter((cName) => cName.startsWith('customfont'))
+            .filter((cName) => cName.startsWith('font-'))
             .join(' ')
     );
     collageTextDOM.addClass(c_text_font);

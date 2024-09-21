@@ -347,6 +347,13 @@ class AdminInput
         $languageService = LanguageService::getInstance();
         $fonts = '';
 
+        $attributes = '';
+        if (isset($setting['attributes'])) {
+            foreach ($setting['attributes'] as $key => $prop) {
+                $attributes .= $key . '="' . $prop . '" ';
+            }
+        }
+
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             $pathIndex = 0;
             foreach ($setting['paths'] as $path) {
@@ -355,6 +362,7 @@ class AdminInput
                     <h2 class="font-bold">' . PathUtility::getPublicPath($path) . '</h2>
                 </div>
             ';
+                $fontClassName = 'font-' . $pathIndex;
                 try {
                     $files = FontUtility::getFontsFromPath($path, false);
                     $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
@@ -365,14 +373,18 @@ class AdminInput
                         </div>
                     ';
                     }
-                    foreach ($files as $file) {
+                    $fontIndex = 0;
+                    foreach ($files as $name => $path) {
+                        $fontClassName .= '-' . $fontIndex;
                         $imageAttributes = [
-                            'onClick' => 'adminFontSelect(this, "' . $setting['name'] . '");',
-                            'data-origin' => $file,
-                            'title' => $file,
-                            'class' => 'w-full h-full left-0 top-0 absolute object-contain cursor-pointer'
+                            'onClick' => 'adminFontSelect(this, "' . $setting['name'] . '", "' . $fontClassName . '");',
+                            'data-origin' => $path,
+                            'title' => $name,
+                            'class' => 'w-full h-full left-0 top-0 absolute object-contain cursor-pointer',
                         ];
-                        $fonts .= '<div class="w-full relative h-0 pb-2/3">' . FontUtility::getFontPreviewImage(fontPath: $file, attributes: $imageAttributes) . '</div>';
+                        $fonts .= '<style>.' . $fontClassName . ' {font-family:"' . $name . '"}</style>';
+                        $fonts .= '<div class="w-full relative h-0 pb-2/3">' . FontUtility::getFontPreviewImage(fontPath: $path, attributes: $imageAttributes) . '</div>';
+                        $fontIndex++;
                     }
                 } catch (\Exception $e) {
                     $fonts .= '
@@ -428,6 +440,7 @@ class AdminInput
                     class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto"
                     name="' . $setting['name'] . '"
                     value="' . $setting['value'] . '"
+					' . $attributes . '
                 />
             </div>
         ';
