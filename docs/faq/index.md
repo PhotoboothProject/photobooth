@@ -1183,7 +1183,7 @@ gphoto2 --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
 or
 
 ```sh
-gphoto2 –wait-event=300ms –capture-image-and-download –filename=%s
+gphoto2 –-wait-event=300ms –-capture-image-and-download –-filename=%s
 ```
 
 or with ` --set-config output=Off`
@@ -1195,14 +1195,14 @@ gphoto2 --set-config output=Off --trigger-capture --wait-event-and-download=FILE
 or
 
 ```sh
-gphoto2 --set-config output=Off –wait-event=300ms –capture-image-and-download –filename=%s
+gphoto2 --set-config output=Off –-wait-event=300ms –-capture-image-and-download –-filename=%s
 ```
 
 #### Canon EOS 1300D
 
 Capture command:
 ```sh
-gphoto2 –wait-event=300ms –capture-image-and-download –filename=%s
+gphoto2 –-wait-event=300ms –-capture-image-and-download –-filename=%s
 ```
 
 #### Canon EOS 2000D
