@@ -676,6 +676,7 @@
   "no_printing": "Bestandstype kan niet worden afgedrukt.",
   "path": "Pad:",
   "percent": "%",
+  "php-extension-disabled": "PHP-extensie: %s moet ingeschakeld zijn!",
   "php-extension-enabled": "PHP-extensie: %s ingeschakeld!",
   "phpUpdateRequired": "Werk uw PHP-versie bij.",
   "phpVersionError": "PHP voldoet niet aan onze vereisten!",
