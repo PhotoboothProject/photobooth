@@ -733,21 +733,31 @@ const photoBooth = (function () {
                 }
             })
             .fail(async (xhr, status, result) => {
-                endTime = new Date().getTime();
-                totalTime = endTime - startTime;
-                photoboothTools.console.log('Took ' + data.style, result);
-                photoboothTools.console.logDev('Failed after ' + totalTime + 'ms');
-                api.cheese.destroy();
-                if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                    photoboothTools.console.logDev(
-                        'ERROR: Taking picture failed. Retrying. Retry: ' +
-                            retry +
-                            ' / ' +
-                            config.picture.retry_on_error
-                    );
-                    api.retryTakePic(retry);
-                } else {
-                    api.errorPic(result);
+                try {
+                    endTime = new Date().getTime();
+                    totalTime = endTime - startTime;
+                    api.cheese.destroy();
+                    if (result === null || result === undefined || typeof result === 'string') {
+                        result = { error: result || 'Unexpected error: result is null or undefined' };
+                    } else if (!result.error) {
+                        result.error = 'Unknown error occurred';
+                    }
+                    photoboothTools.console.log('Took ' + data.style, result);
+                    photoboothTools.console.logDev('Failed after ' + totalTime + 'ms');
+                    if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
+                        photoboothTools.console.logDev(
+                            'ERROR: Taking picture failed. Retrying. Retry: ' +
+                                retry +
+                                ' / ' +
+                                config.picture.retry_on_error
+                        );
+                        api.retryTakePic(retry);
+                    } else {
+                        api.errorPic(result);
+                    }
+                } catch (error) {
+                    photoboothTools.console.log('Unexpected error in .fail block', error);
+                    api.errorPic({ error: error.message || 'An unexpected error occurred during failure handling' });
                 }
             });
     };
@@ -779,8 +789,18 @@ const photoBooth = (function () {
                 }
             })
             .fail(function (xhr, status, result) {
-                api.cheese.destroy();
-                api.errorPic(result);
+                try {
+                    api.cheese.destroy();
+                    if (result === null || result === undefined || typeof result === 'string') {
+                        result = { error: result || 'Unexpected error: result is null or undefined' };
+                    } else if (!result.error) {
+                        result.error = 'Unknown error occurred';
+                    }
+                    api.errorPic(result);
+                } catch (error) {
+                    photoboothTools.console.log('Unexpected error in .fail block', error);
+                    api.errorPic({ error: error.message || 'An unexpected error occurred during failure handling' });
+                }
             });
     };
 
