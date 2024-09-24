@@ -30,6 +30,28 @@ $inputClass = 'w-full h-10 border border-solid border-gray-300 focus:border-bran
 $btnClass = 'w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-white hover:text-brand-1 transition font-bold px-4';
 $max_file_size = ini_get('upload_max_filesize');
 
+function return_bytes($val)  // function needed to calculate php.ini max file size value
+{if (empty($val)) {
+    $val = 0;
+}
+    $val = trim($val);
+    $last = strtolower($val[strlen($val) - 1]);
+    $val = floatval($val);
+    switch ($last) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $val *= (1024 * 1024 * 1024); //1073741824
+            break;
+        case 'm':
+            $val *= (1024 * 1024); //1048576
+            break;
+        case 'k':
+            $val *= 1024;
+            break;
+    }
+    return $val;
+}
+
 if (isset($_POST['submit'])) {
     // Process uploaded images
     $uploadedImages = $_FILES['images'];
@@ -139,9 +161,30 @@ if (isset($_POST['submit'])) {
                     <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
                         Selfie uploader
                     </div>
+
                     <div class="relative">
-                        <input class="<?= $labelClass ?>" type="file" name="images[]" id="images" accept="image/*" capture="camera" required>
-                        <div class="my-2"><?= $languageService->translate('file_upload_max_size') ?> <?= $max_file_size ?></div>
+                        <label for="images" class="<?= $btnClass ?>" style="padding-bottom: 10%;padding-top: 10%;">TAKE A PICTURE</label>
+                        <input class="<?= $btnClass ?>" style="display: none" type="file" name="images[]" id="images" accept="image/*" capture="camera" required onchange="loadFile(event)">
+                        <br></br>
+                        <center>
+                            <img style="max-height: 18em" id="output"/>
+                        </center>
+                        <script>
+                            var loadFile = function(event) {  //Preview image
+                                var output = document.getElementById('output');
+                                output.src = URL.createObjectURL(event.target.files[0]);
+                                output.onload = function() {
+                                    URL.revokeObjectURL(output.src) // free memory
+                                }
+                            };
+                        </script>
+                        <?php
+                        if (return_bytes($max_file_size) <= 5 * 1024 * 1024) {  // only msg if value less than 5MB
+                            echo "<div class='my-2'>";
+                            echo $languageService->translate('file_upload_max_size') . $max_file_size;
+                            echo '</div>';
+                        }
+?>
                     </div>
 
                     <div class="mt-6">
