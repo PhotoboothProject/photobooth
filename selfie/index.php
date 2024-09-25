@@ -182,7 +182,7 @@ if (isset($_FILES['images'])) {
             <div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20">
             </div>
             <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 px-4 ">
                    <?php
                       echo getMenuBtn(PathUtility::getPublicPath('gallery'), 'gallery', $config['icons']['gallery']);
 echo getMenuBtn(PathUtility::getPublicPath('slideshow'), 'slideshow', $config['icons']['slideshow']);
