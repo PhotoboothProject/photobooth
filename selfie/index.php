@@ -174,7 +174,7 @@ if (isset($_FILES['images'])) {
                         <warn></warn>
                     </div>
                     <div class="mt-6">
-                        <input class="<?= $btnClass ?>" type="submit" name="submit" value="Upload">
+                        <input class="<?= $btnClass ?>" type="submit" name="submit" id="Upload" value="Upload">
                     </div>
                 </form>
             </div>
@@ -194,19 +194,22 @@ echo getMenuBtn(PathUtility::getPublicPath('slideshow'), 'slideshow', $config['i
 </body>
 
 <script>
-   var loadFile = function(event) {
-      var output = document.getElementById('output');
-      output.src = URL.createObjectURL(event.target.files[0]);
-      var imagesize = event.target.files[0].size;
-      var maxfilesize = <?= return_bytes($max_file_size); ?>;
-      if (parseInt(maxfilesize) <= parseInt(imagesize)) {
-          var js_Str_warn = '<?php echo $languageService->translate('file_upload_max_size') . $max_file_size; ?>';
-          document.querySelector('warn').textContent = js_Str_warn;
-      }
-      output.onload = function() {
-         URL.revokeObjectURL(output.src) // free memory
-      }
-   }
+    document.getElementById('Upload').style.visibility = 'hidden';
+    var loadFile = function(event) {
+        document.getElementById('Upload').style.visibility = 'visible';
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        var imagesize = event.target.files[0].size;
+        var maxfilesize = <?= return_bytes($max_file_size); ?>;
+        if (parseInt(maxfilesize) <= parseInt(imagesize)) {
+            var js_Str_warn = '<?php echo $languageService->translate('file_upload_max_size') . $max_file_size; ?>';
+            document.querySelector('warn').textContent = js_Str_warn;
+            document.getElementById('Upload').style.visibility = 'hidden';
+        }
+        output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    }
 </script>
 
 <?php
