@@ -185,7 +185,6 @@ if (isset($_FILES['images'])) {
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-4 px-4 ">
                    <?php
                       echo getMenuBtn(PathUtility::getPublicPath('gallery'), 'gallery', $config['icons']['gallery']);
-echo getMenuBtn(PathUtility::getPublicPath('slideshow'), 'slideshow', $config['icons']['slideshow']);
 ?>
                 </div>
             </div>
