@@ -86,10 +86,10 @@
     object-fit: scale-down;
   }
   &.flip-horizontal {
-    scale: 1 -1;
+    scale: -1 1;
   }
   &.flip-vertical {
-    scale: -1 1;
+    scale: 1 -1;
   }
 }
 
