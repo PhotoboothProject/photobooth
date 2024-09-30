@@ -190,30 +190,15 @@ if (isset($_FILES['images'])) {
             </div>
         </div>
     </div>
-</body>
 
 <script>
-    document.getElementById('Upload').style.visibility = 'hidden';
-    var loadFile = function(event) {
-        document.getElementById('Upload').style.visibility = 'visible';
-        var output = document.getElementById('output');
-        output.src = URL.createObjectURL(event.target.files[0]);
-        var imagesize = event.target.files[0].size;
-        var maxfilesize = <?= return_bytes($max_file_size); ?>;
-        if (parseInt(maxfilesize) <= parseInt(imagesize)) {
-            var js_Str_warn = '<?php echo $languageService->translate('file_upload_max_size') . $max_file_size; ?>';
-            document.querySelector('warn').textContent = js_Str_warn;
-            document.getElementById('Upload').style.visibility = 'hidden';
-        }
-        output.onload = function() {
-            URL.revokeObjectURL(output.src) // free memory
-        }
-    }
+        var phpMaxFileSize = <?= return_bytes($max_file_size); ?>;
 </script>
 
 <?php
 
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+echo '<script src="' . $assetService->getUrl('resources/js/selfie.js') . '"></script>';
 
 if ($success) {
     echo '<script>setTimeout(function(){openToast("' . $languageService->translate('upload_success') . '")},500);</script>';
