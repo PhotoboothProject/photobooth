@@ -40,6 +40,7 @@ class FileUploader
 
         // Initialize supported MIME types for folders
         $this->typeChecker = [
+            'data/tmp' => ImageUtility::supportedMimeTypesSelect,
             'private/images/background' => ImageUtility::supportedMimeTypesSelect,
             'private/images/frames' => ImageUtility::supportedMimeTypesSelect,
             'private/images/logo' => ImageUtility::supportedMimeTypesSelect,

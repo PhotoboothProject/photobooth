@@ -34,7 +34,13 @@ use Photobooth\Utility\PathUtility;
                 </div>
             </div>
         <?php endif; ?>
-        <?php include PathUtility::getAbsolutePath('template/components/actionBtn.php'); ?>
+        <?php
+if ($config['ui']['selfie_mode']) {
+    include PathUtility::getAbsolutePath('template/components/selfieAction.php');
+} else {
+    include PathUtility::getAbsolutePath('template/components/actionBtn.php');
+}
+?>
     </div>
     <?php include PathUtility::getAbsolutePath('template/components/github-corner.php'); ?>
 </div>

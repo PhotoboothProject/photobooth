@@ -1466,6 +1466,10 @@ const photoBooth = (function () {
             }
         }
 
+        if (config.selfie_mode) {
+            return;
+        }
+
         if (typeof onStandaloneGalleryView === 'undefined' && typeof onCaptureChromaView === 'undefined') {
             if (
                 (config.picture.key && parseInt(config.picture.key, 10) === ev.keyCode) ||

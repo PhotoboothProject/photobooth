@@ -129,6 +129,12 @@ return [
             'name' => 'dev[demo_images]',
             'value' => $config['dev']['demo_images'],
         ],
+        'ui_selfie_mode' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'ui[selfie_mode]',
+            'value' => $config['ui']['selfie_mode'],
+        ],
         'dev_loglevel' => [
             'view' => 'basic',
             'type' => 'range',
