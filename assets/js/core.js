@@ -1019,7 +1019,7 @@ const photoBooth = (function () {
             message.classList.add('form-message');
             form.appendChild(message);
             const submitButton = document.querySelector('#send-mail-submit');
-            submitButton.diabled = true;
+            submitButton.disabled = true;
             fetch(environment.publicFolders.api + '/sendPic.php', {
                 method: 'post',
                 body: new FormData(form)
