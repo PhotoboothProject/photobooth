@@ -2,7 +2,7 @@
 
 GO2RTC_VERSIONS=("1.9.2" "1.9.3" "1.9.4")
 GO2RTC_VERSION="1.9.4"
-YAML_STREAM="photobooth: exec:gphoto2 --capture-movie --stdout#killsignal=sigint"
+YAML_STREAM="photobooth: exec:gphoto2 --capture-movie --stdout#killsignal=2"
 CAPTURE_CMD="gphoto2"
 CAPTURE_ARGS="--set-config output=Off --capture-image-and-download --filename=\$1"
 NOTE="don't forget to add --filename=%s."
@@ -311,14 +311,14 @@ if [[ $REPLY =~ ^[1]$ ]]; then
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for rpicam-apps."
     test_command "rpicam-vid -t 5000 --codec mjpeg -o test.mjpeg"
-    YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=2"
     CAPTURE_CMD="rpicam-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for libcamera-apps."
     test_command "libcamera-vid -t 5000 --codec mjpeg -o test.mjpeg"
-    YAML_STREAM="photobooth: exec:libcamera-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:libcamera-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=2"
     CAPTURE_CMD="libcamera-still"
     CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
     NOTE="don't forget to add -o %s."
@@ -326,7 +326,7 @@ elif [[ $REPLY =~ ^[4]$ ]]; then
     CAPTURE_CMD="sleep 1;fswebcam"
     CAPTURE_ARGS="--no-banner -d /dev/video0 -r 1280x720 \$1"
     NOTE="don't forget to add %s."
-    YAML_STREAM="photobooth: exec:ffmpeg -hide_banner -v error -f v4l2 -input_format mjpeg -video_size 1280x720 -i /dev/video0 -c copy -f mjpeg -#killsignal=sigint"
+    YAML_STREAM="photobooth: exec:ffmpeg -hide_banner -v error -f v4l2 -input_format mjpeg -video_size 1280x720 -i /dev/video0 -c copy -f mjpeg -#killsignal=2"
     apt install ffmpeg -y
     apt install fswebcam -y
 elif [[ $REPLY =~ ^[5]$ ]]; then
