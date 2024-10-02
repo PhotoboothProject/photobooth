@@ -391,6 +391,13 @@ return [
             'name' => 'button[force_buzzer]',
             'value' => $config['button']['force_buzzer'],
         ],
+        'button_buzzer_message' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['button']['buzzer_message'],
+            'name' => 'button[buzzer_message]',
+            'value' => htmlentities($config['button']['buzzer_message'] ?? ''),
+        ],
         'logo_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
