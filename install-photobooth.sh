@@ -420,14 +420,18 @@ function check_python() {
         warn "[WARN]      Python version is 3.12 or newer. Installing distutils..."
         if ! apt install python3-distutils -y; then
             warn "[WARN]      Failed to install python3-distutils!"
-            echo -e "\033[0;33m### Installation of Photobooth might fail if continuing."
-            ask_yes_no "### Do you like to continue installation? [y/N] " "N"
-            echo -e "\033[0m"
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
+            if grep -i Microsoft /proc/version &>/dev/null; then
                 warn "[WARN]      Continuing installation without python3-distutils..."
             else
-                error "[ERROR]     Abortion installation. python3-distutils missing!"
-                exit 1
+                echo -e "\033[0;33m### Installation of Photobooth might fail if continuing."
+                ask_yes_no "### Do you like to continue installation? [y/N] " "N"
+                echo -e "\033[0m"
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    warn "[WARN]      Continuing installation without python3-distutils..."
+                else
+                    error "[ERROR]     Abortion installation. python3-distutils missing!"
+                    exit 1
+                fi
             fi
         fi
     else
