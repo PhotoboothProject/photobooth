@@ -28,6 +28,7 @@ include PathUtility::getAbsolutePath('admin/components/head.admin.php');
 include PathUtility::getAbsolutePath('admin/helper/index.php');
 
 $errors = [];
+$failedFiles = [];
 $success = false;
 $folderName = null;
 $labelClass = 'w-full flex flex-col mb-1';
@@ -77,10 +78,10 @@ if (isset($_POST['submit'])) {
                 </div>
 
                 <?php
-                    if (count($errors) > 0) {
+                    if (count($failedFiles) > 0) {
                         echo '<div class="flex flex-col gap-2">';
-                        foreach ($errors as $fileName => $reason) {
-                            echo '<div class="flex flex-col justify-between p-2 rounded bg-red-300 text-red-800 border-2 border-red-800"><div class="col-span-1">' . $fileName . '</div><div class="col-span-1">' . $reason . '</div></div>';
+                        foreach ($failedFiles as $fileName => $reason) {
+                            echo '<div class="flex flex-col justify-between p-2 rounded bg-red-300 text-red-800 border-2 border-red-800"><div class="col-span-1">' . $fileName . '</div><div class="col-span-1">' . $languageService->translate($reason) . '</div></div>';
                         }
                         echo '</div>';
                     }

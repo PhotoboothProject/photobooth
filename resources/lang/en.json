@@ -946,7 +946,7 @@
   "toggleFullscreen": "Toggle Fullscreen",
   "translate": "Translate",
   "update_available": "There is an update available.",
-  "upload_error": "Error: Please select only image or font files.",
+  "upload_error": "An error occurred while uploading your file(s)!",
   "upload_folder": "Folder (private/{path}):",
   "upload_selection": "Select file(s):",
   "upload_success": "File(s) uploaded successfully!",

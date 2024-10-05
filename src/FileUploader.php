@@ -24,6 +24,13 @@ class FileUploader
     private array $failedFiles = [];
     // Logger instance for debugging
     private Logger\NamedLogger $logger;
+    // Predefined error messages for various scenarios
+    private array $errorMessages = [
+        'upload_wrong_type' => 'The file is not in the correct type list',
+        'upload_file_already_exists' => 'The file already exists in the folder',
+        'upload_unable_to_write_folder' => 'Unable to upload the file to the folder. Enable write access!',
+        'upload_folder_invalid' => 'The folder is not valid'
+    ];
 
     public function __construct(string $folderName, array $uploadedFiles, Logger\NamedLogger $logger)
     {
@@ -48,11 +55,11 @@ class FileUploader
         $this->logger->debug('Received folderName', [$this->folderName]);
 
         if (!$this->isFolderValid()) {
-            return $this->getResponse(false, 'Invalid folder name provided.', [], []);
+            return $this->getResponse(false, $this->errorMessages['upload_folder_invalid'], [], []);
         }
 
         if (!$this->prepareFolder()) {
-            return $this->getResponse(false, 'Unable to write to the target folder.', [], []);
+            return $this->getResponse(false, $this->errorMessages['upload_unable_to_write_folder'], [], []);
         }
 
         $uploadedFileNames = $this->processFiles();
@@ -69,7 +76,7 @@ class FileUploader
     private function isFolderValid(): bool
     {
         if (!isset($this->typeChecker[$this->folderName])) {
-            $this->addError($this->folderName, 'The specified folder is not supported.');
+            $this->addError($this->folderName, 'upload_folder_invalid');
             return false;
         }
 
@@ -82,7 +89,7 @@ class FileUploader
         FileUtility::createDirectory($this->folderPath);
 
         if (!is_writable($this->folderPath)) {
-            $this->addError($this->folderName, 'The target folder is not writable.');
+            $this->addError($this->folderName, 'upload_unable_to_write_folder');
             return false;
         }
 
@@ -119,12 +126,12 @@ class FileUploader
     private function validateFile(string $fileName, string $fileType, string $filePath): bool
     {
         if (!in_array($fileType, $this->typeChecker[$this->folderName])) {
-            $this->addError($fileName, 'Unsupported file type for the folder.');
+            $this->addError($fileName, 'upload_wrong_type');
             return false;
         }
 
         if (file_exists($filePath)) {
-            $this->addError($fileName, 'The file already exists in the target folder.');
+            $this->addError($fileName, 'upload_file_already_exists');
             return false;
         }
 
@@ -141,10 +148,11 @@ class FileUploader
         }
     }
 
-    private function addError(string $identifier, string $errorMessage): void
+    private function addError(string $identifier, string $errorKey): void
     {
+        $errorMessage = $this->errorMessages[$errorKey] ?? $errorKey;
         $this->errors[$identifier] = $errorMessage;
-        $this->failedFiles[$identifier] = $errorMessage;
+        $this->failedFiles[$identifier] = $errorKey;
         $this->logger->debug($errorMessage, [$identifier]);
     }
 
