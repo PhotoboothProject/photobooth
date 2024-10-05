@@ -99,13 +99,14 @@ class FileUploader
             if ($fileError === UPLOAD_ERR_OK) {
                 $fileTmpName = $this->uploadedFiles['tmp_name'][$index];
                 $fileType = $this->uploadedFiles['type'][$index];
-                $filePath = $this->folderPath . '/' . $fileName;
+                $sanitizedFileName = preg_replace('/\s+/', '_', $fileName);
+                $filePath = $this->folderPath . '/' . $sanitizedFileName;
 
                 $this->logger->debug('Processing file', [$fileName]);
 
-                if ($this->validateFile($fileName, $fileType, $filePath)) {
+                if ($this->validateFile($sanitizedFileName, $fileType, $filePath)) {
                     $this->moveFile($fileTmpName, $filePath);
-                    $uploadedFileNames[] = $fileName;
+                    $uploadedFileNames[] = $sanitizedFileName;
                 }
             } else {
                 $this->addError($fileName, $this->getFileErrorMessage($fileError));
