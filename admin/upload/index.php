@@ -2,12 +2,9 @@
 
 require_once '../../lib/boot.php';
 
+use Photobooth\FileUploader;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
-use Photobooth\Utility\ImageUtility;
-use Photobooth\Utility\FontUtility;
-use Photobooth\Utility\FileUtility;
-use Photobooth\Utility\VideoUtility;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Service\LoggerService;
 
@@ -42,71 +39,16 @@ if (isset($_POST['submit'])) {
     $folderName = $_POST['folder_name'];
     $uploadedFiles = $_FILES['files'];
 
-    // in future this array could be expanded
-    $typeChecker = [
-        'images/background' => ImageUtility::supportedMimeTypesSelect,
-        'images/frames' => ImageUtility::supportedMimeTypesSelect,
-        'images/logo' => ImageUtility::supportedMimeTypesSelect,
-        'images/placeholder' => ImageUtility::supportedMimeTypesSelect,
-        'images/cheese' => ImageUtility::supportedMimeTypesSelect,
-        'fonts' => FontUtility::supportedMimeTypesSelect,
-        'videos/background' => VideoUtility::supportedMimeTypesSelect
+    $uploader = new FileUploader($folderName, $uploadedFiles, $logger);
+    $response = $uploader->uploadFiles();
+
+    list($success, $message, $errors, $uploadedFiles, $failedFiles) = [
+        $response['success'],
+        $response['message'],
+        $response['errors'],
+        $response['uploadedFiles'],
+        $response['failedFiles']
     ];
-
-    $logger->debug('folderName', [$folderName]);
-
-    // check if folder is supported
-    if (!isset($typeChecker[$folderName])) {
-        $errors[$folderName] = $languageService->translate('upload_folder_invalid');
-        $logger->debug($languageService->translate('upload_folder_invalid'), [$folderName]);
-    } else {
-        $folderPath = PathUtility::getAbsolutePath('private/' . $folderName);
-        FileUtility::createDirectory($folderPath);
-        // check if folder is writeable
-        if (!is_writable($folderPath)) {
-            $errors[$folderName] = $languageService->translate('upload_unable_to_write_folder');
-            $logger->debug($languageService->translate('upload_unable_to_write_folder'), [$folderPath]);
-        }
-    }
-
-    if (count($errors) === 0) {
-        for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
-            $fileError = $uploadedFiles['error'][$i];
-            $fileName = $uploadedFiles['name'][$i];
-            if ($fileError == 0) {
-                $fileTmpName = $uploadedFiles['tmp_name'][$i];
-                $fileType = $uploadedFiles['type'][$i];
-                $fileSize = $uploadedFiles['size'][$i];
-                $filePath = $folderPath . '/' . $fileName;
-                $logger->debug('fileName', [$fileName]);
-
-                // check if filetype is allowed for this folder
-                if (!in_array($fileType, $typeChecker[$folderName])) {
-                    $errors[$fileName] = $languageService->translate('upload_wrong_type');
-                    $logger->debug($languageService->translate('upload_wrong_type'), [$fileName]);
-                    break;
-                }
-
-                // check if file already exists
-                if (file_exists($filePath)) {
-                    $errors[$fileName] = $languageService->translate('upload_file_already_exists');
-                    $logger->debug($languageService->translate('upload_file_already_exists'), [$fileName]);
-                    break;
-                }
-
-                move_uploaded_file($fileTmpName, $filePath);
-                chmod($filePath, 0644);
-            } else {
-                $errMsg = $languageService->translate(FileUtility::getErrorMessage($fileError));
-                $errors[$fileName] = $errMsg;
-                $logger->debug($errMsg, [$fileName]);
-            }
-        }
-    }
-
-    if (count($errors) === 0) {
-        $success = true;
-    }
 }
 ?>
 
@@ -121,13 +63,13 @@ if (isset($_POST['submit'])) {
                 <div class="relative">
                     <label class="<?= $labelClass ?>" for="folder_name"><?=$languageService->translate('upload_folder')?></label>
                     <select class="<?= $inputClass ?>" name="folder_name">
-                        <option value="images/background" <?= $folderName === 'images/background' ? 'selected' : '' ?>>images/background</option>
-                        <option value="images/frames" <?= $folderName === 'images/frames' ? 'selected' : '' ?>>images/frames</option>
-                        <option value="images/logo" <?= $folderName === 'images/logo' ? 'selected' : '' ?>>images/logo</option>
-                        <option value="images/placeholder" <?= $folderName === 'images/placeholder' ? 'selected' : '' ?>>images/placeholder</option>
-                        <option value="images/cheese" <?= $folderName === 'images/cheese' ? 'selected' : '' ?>>images/cheese</option>
-                        <option value="videos/background" <?= $folderName === 'videos/background' ? 'selected' : '' ?>>videos/background</option>
-                        <option value="fonts" <?= $folderName === 'fonts' ? 'selected' : '' ?>>fonts</option>
+                        <option value="private/images/background" <?= $folderName === 'private/images/background' ? 'selected' : '' ?>>images/background</option>
+                        <option value="private/images/frames" <?= $folderName === 'private/images/frames' ? 'selected' : '' ?>>images/frames</option>
+                        <option value="private/images/logo" <?= $folderName === 'private/images/logo' ? 'selected' : '' ?>>images/logo</option>
+                        <option value="private/images/placeholder" <?= $folderName === 'private/images/placeholder' ? 'selected' : '' ?>>images/placeholder</option>
+                        <option value="private/images/cheese" <?= $folderName === 'private/images/cheese' ? 'selected' : '' ?>>images/cheese</option>
+                        <option value="private/videos/background" <?= $folderName === 'private/videos/background' ? 'selected' : '' ?>>videos/background</option>
+                        <option value="private/fonts" <?= $folderName === 'private/fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>
                     <label class="<?= $labelClass ?>" for="files"><?=$languageService->translate('upload_selection')?></label>
                     <input class="<?= $labelClass ?>" type="file" name="files[]" id="files" multiple accept="image/*, video/*, .ttf" required>
