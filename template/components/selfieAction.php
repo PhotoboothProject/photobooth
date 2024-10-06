@@ -17,6 +17,10 @@ echo '        <button type="button" class="button" id="submitBtn" style="display
 echo '            <span class="button--icon"><i class="fa fa-upload"></i></span>';
 echo '            <span class="button--label">' . $languageService->translate('upload') . '</span>';
 echo '        </button>';
+echo '        <button type="button" class="button" id="abortBtn" data-command="abort" style="display: none;">';
+echo '            <span class="button--icon"><i class="fa fa-xmark"></i></span>';
+echo '            <span class="button--label">' . $languageService->translate('abort') . '</span>';
+echo '        </button>';
 echo '        <input type="file" name="images[]" id="images" accept="image/*" capture="camera" style="display: none;" required>';
 echo '    </form>';
 echo '</div>';
