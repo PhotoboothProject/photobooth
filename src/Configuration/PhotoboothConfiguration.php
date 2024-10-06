@@ -1018,7 +1018,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ->values(['top-left', 'top-right', 'bottom-left', 'bottom-right'])
                     ->defaultValue('bottom-right')
                     ->end()
-                ->booleanNode('selfie_mode')->defaultValue(true)->end()
+                ->booleanNode('selfie_mode')->defaultValue(false)->end()
                 ->enumNode('style')
                     ->values(['classic', 'classic_rounded', 'modern', 'modern_squared'])
                     ->defaultValue('modern_squared')
