@@ -20,6 +20,7 @@ $(document).ready(function () {
             // Display the image preview and show the upload button when an image is selected
             output.attr('src', URL.createObjectURL(file)).show();
             $('#submitBtn').show();
+            $('#abortBtn').show();
             $('.take-selfie-btn').hide();
         } else {
             // Hide the preview and upload button if no image is selected
@@ -29,6 +30,10 @@ $(document).ready(function () {
         output.on('load', function () {
             URL.revokeObjectURL(output.attr('src')); // Free up memory
         });
+    });
+
+    $('#abortBtn').on('click', function () {
+        photoboothTools.reloadPage();
     });
 
     $('#submitBtn').on('click', function () {
