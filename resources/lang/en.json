@@ -947,6 +947,7 @@
   "toggleFullscreen": "Toggle Fullscreen",
   "translate": "Translate",
   "update_available": "There is an update available.",
+  "upload": "Upload",
   "upload_error": "An error occurred while uploading your file(s)!",
   "upload_folder": "Folder (private/{path}):",
   "upload_selection": "Select file(s):",
