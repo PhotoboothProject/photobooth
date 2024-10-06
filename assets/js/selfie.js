@@ -10,7 +10,7 @@ $(document).ready(function () {
         alt: 'Image Preview',
         style: 'display: none; max-width: 40vw; max-height: 40vh; margin: 15px auto;'
     });
-    $('.buttonbar').prepend(imgPreview);
+    $('.stage-inner').prepend(imgPreview);
 
     // Event listener for file input change to show image preview
     $('#images').on('change', function (event) {
