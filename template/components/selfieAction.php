@@ -7,10 +7,19 @@ $languageService = LanguageService::getInstance();
 
 echo '<div class="buttonbar">';
 
-//
-//  add form for selfie with button here
-//
-echo '<div class="container" id="form-container"></div>';
+echo '<div class="container" id="form-container">';
+echo '    <form id="selfieForm" enctype="multipart/form-data">';
+echo '       <label class="button take-selfie-btn" for="images" data-command="take-selfie">';
+echo '            <span class="button--icon"><i class="' . $config['icons']['take_picture'] . '"></i></span>';
+echo '            <span class="button--label">' . $languageService->translate('takeSelfie') . '</span>';
+echo '        </label>';
+echo '        <button type="button" class="button" id="submitBtn" style="display: none;">';
+echo '            <span class="button--icon"><i class="fa fa-upload"></i></span>';
+echo '            <span class="button--label">' . $languageService->translate('upload') . '</span>';
+echo '        </button>';
+echo '        <input type="file" name="images[]" id="images" accept="image/*" capture="camera" style="display: none;" required>';
+echo '    </form>';
+echo '</div>';
 
 if ($config['button']['reload']) {
     echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'reload');
