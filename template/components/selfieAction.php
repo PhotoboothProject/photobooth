@@ -13,11 +13,11 @@ echo '       <label class="button take-selfie-btn" for="images" data-command="ta
 echo '            <span class="button--icon"><i class="' . $config['icons']['take_picture'] . '"></i></span>';
 echo '            <span class="button--label">' . $languageService->translate('takeSelfie') . '</span>';
 echo '        </label>';
-echo '        <button type="button" class="button" id="submitBtn" style="display: none;">';
+echo '        <button type="button" class="button" id="selfieSubmitBtn" style="display: none;">';
 echo '            <span class="button--icon"><i class="fa fa-upload"></i></span>';
 echo '            <span class="button--label">' . $languageService->translate('upload') . '</span>';
 echo '        </button>';
-echo '        <button type="button" class="button" id="abortBtn" data-command="abort" style="display: none;">';
+echo '        <button type="button" class="button" id="selfieAbortBtn" data-command="selfie-abort" style="display: none;">';
 echo '            <span class="button--icon"><i class="fa fa-xmark"></i></span>';
 echo '            <span class="button--label">' . $languageService->translate('abort') . '</span>';
 echo '        </button>';

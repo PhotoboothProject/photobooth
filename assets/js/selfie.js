@@ -18,24 +18,24 @@ $(document).ready(function () {
         if (file) {
             // Display the image preview and show the upload button when an image is selected
             output.attr('src', URL.createObjectURL(file)).show();
-            $('#submitBtn').show();
-            $('#abortBtn').show();
+            $('#selfieSubmitBtn').show();
+            $('#selfieAbortBtn').show();
             $('.take-selfie-btn').hide();
         } else {
             // Hide the preview and upload button if no image is selected
             output.hide();
-            $('#submitBtn').hide();
+            $('#selfieSubmitBtn').hide();
         }
         output.on('load', function () {
             URL.revokeObjectURL(output.attr('src')); // Free up memory
         });
     });
 
-    $('#abortBtn').on('click', function () {
+    $('#selfieAbortBtn').on('click', function () {
         photoboothTools.reloadPage();
     });
 
-    $('#submitBtn').on('click', function () {
+    $('#selfieSubmitBtn').on('click', function () {
         const formData = new FormData(document.getElementById('selfieForm'));
 
         photoboothTools.overlay.showWaiting(photoboothTools.getTranslation('wait_message'));
