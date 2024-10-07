@@ -39,6 +39,7 @@ $(document).ready(function () {
     $('#submitBtn').on('click', function () {
         const formData = new FormData(document.getElementById('selfieForm'));
 
+        photoboothTools.overlay.showWaiting(photoboothTools.getTranslation('wait_message'));
         $(this).prop('disabled', true);
 
         $.ajax({
@@ -48,6 +49,7 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
+                photoboothTools.overlay.close();
                 if (response.success) {
                     photoboothTools.overlay.showSuccess(response.message);
                 } else {
