@@ -39,14 +39,25 @@ if (isset($_FILES['images'])) {
         }
 
         foreach ($uploadedFiles as $imageName) {
+            $tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageName;
             $imageNewName = Image::createNewFilename($config['picture']['naming']);
             $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
-            $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageName;
+            $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
             $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
             $imageHandler->imageModified = false;
 
-            if (!file_exists($filename_tmp)) {
-                throw new \Exception('Image doesn\'t exist:' . $filename_tmp);
+            if (!file_exists($tmp)) {
+                throw new \Exception('Image doesn\'t exist:' . $tmp);
+            }
+
+            if ($config['picture']['keep_original']) {
+                if (!copy($tmp, $filename_tmp)) {
+                    throw new \Exception('Failed to copy photo.');
+                }
+            } else {
+                if (rename($tmp, $filename_tmp)) {
+                    throw new \Exception('Failed to rename image!');
+                }
             }
 
             $imageResource = $imageHandler->createFromImage($filename_tmp);
