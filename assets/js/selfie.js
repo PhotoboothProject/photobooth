@@ -6,15 +6,14 @@ $(document).ready(function () {
 
     // Create image preview element
     const imgPreview = $('<img>', {
-        id: 'output',
-        alt: 'Image Preview',
-        style: 'display: none; max-width: 40vw; max-height: 40vh; margin: 15px auto;'
+        id: 'selfie-preview',
+        alt: 'Image Preview'
     });
     $('.stage-inner').prepend(imgPreview);
 
     // Event listener for file input change to show image preview
     $('#images').on('change', function (event) {
-        const output = $('#output');
+        const output = $('#selfie-preview');
         const file = event.target.files[0];
         if (file) {
             // Display the image preview and show the upload button when an image is selected
