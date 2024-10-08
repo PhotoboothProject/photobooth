@@ -78,13 +78,13 @@ if ($config['gallery']['enabled']) {
     include PathUtility::getAbsolutePath('template/components/gallery.php');
 }
 
-if ($config['filters']['enabled'] && !$config['ui']['selfie_mode']) {
+if ($config['filters']['enabled'] && !$isSelfieUser) {
     include PathUtility::getAbsolutePath('template/components/filter.php');
 }
 
 include PathUtility::getAbsolutePath('template/components/main.footer.php');
 
-if ($config['ui']['selfie_mode'] && $isSelfieUser) {
+if ($isSelfieUser) {
     echo '<script src="' . $assetService->getUrl('resources/js/selfie.js') . '"></script>';
 }
 ?>
