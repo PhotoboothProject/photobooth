@@ -149,7 +149,7 @@ If you want to configure additional properties of the collage layout you have to
   "background": "/resources/img/background.png",
   "background_color": "#FFFFFF",
   "placeholder": true,
-  "placeholderpath": "/resources/img/placeholders/01.jpg",
+  "placeholderpath": "/resources/img/background/01.jpg",
   "placeholderposition": "1",
   "layout": [ # the array from above ]
 }
