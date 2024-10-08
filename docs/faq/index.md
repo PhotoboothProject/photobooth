@@ -146,7 +146,7 @@ If you want to configure additional properties of the collage layout you have to
   "text_linespace": "100",
   "apply_frame": "once",
   "frame": "/resources/img/frames/frame_stone.png",
-  "background": "/resources/img/background.png",,
+  "background": "/resources/img/background.png",
   "background_color": "#FFFFFF",
   "placeholder": true,
   "placeholderpath": "/resources/img/placeholders/01.jpg",
