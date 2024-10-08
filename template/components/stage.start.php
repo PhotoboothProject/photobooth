@@ -35,7 +35,7 @@ use Photobooth\Utility\PathUtility;
             </div>
         <?php endif; ?>
         <?php
-if ($config['ui']['selfie_mode'] && $isSelfieUser) {
+if ( $isSelfieUser ) {
     include PathUtility::getAbsolutePath('template/components/selfieAction.php');
 } else {
     include PathUtility::getAbsolutePath('template/components/actionBtn.php');
