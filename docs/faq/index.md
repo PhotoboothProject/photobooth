@@ -563,6 +563,8 @@ If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.
 
 ## How to use a live stream as background at countdown?
 
+**Note:** Before setting up a preview please make sure your Photobooth works without as expected. If you're having problems with the preview this makes debugging a lot easier.
+
 There's different ways depending on your needs and personal setup:
 
 ### Preview _"from URL"_ (remote preview, **preferred**)
