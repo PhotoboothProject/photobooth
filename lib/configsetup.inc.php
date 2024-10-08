@@ -2597,6 +2597,7 @@ return [
                 'gallery' => 'Standalone Gallery',
                 'slideshow' => 'Standalone Slideshow',
                 'private' => 'Private (private/index.php)',
+                'selfie' => 'Selfie (User with Smartphonecamera)',
             ],
             'placeholder' => $defaultConfig['protect']['index_redirect'],
             'name' => 'protect[index_redirect]',
