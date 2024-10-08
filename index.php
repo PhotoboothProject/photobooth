@@ -33,7 +33,7 @@ if (
     $remoteBuzzer = true;
     $isSelfieUser = false;
 } else {
-    if (!$config['ui']['selfie_mode']) {
+    if (!$config['protect']['index_redirect'] == 'selfie') {
     header('location: ' . $config['protect']['index_redirect']);
     exit();
     } else {
