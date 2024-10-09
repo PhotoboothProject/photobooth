@@ -69,6 +69,7 @@ if (isset($_POST['submit'])) {
                         <option value="private/images/logo" <?= $folderName === 'private/images/logo' ? 'selected' : '' ?>>images/logo</option>
                         <option value="private/images/placeholder" <?= $folderName === 'private/images/placeholder' ? 'selected' : '' ?>>images/placeholder</option>
                         <option value="private/images/cheese" <?= $folderName === 'private/images/cheese' ? 'selected' : '' ?>>images/cheese</option>
+                        <option value="private/images/demo" <?= $folderName === 'private/images/demo' ? 'selected' : '' ?>>images/demo</option>
                         <option value="private/videos/background" <?= $folderName === 'private/videos/background' ? 'selected' : '' ?>>videos/background</option>
                         <option value="private/fonts" <?= $folderName === 'private/fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>
