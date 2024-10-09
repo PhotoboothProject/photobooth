@@ -15,8 +15,8 @@ if (empty($devImg)) {
 }
 
 $demoImages = [];
-// Loop to select 4 random images
-for ($i = 0; $i < 4; $i++) {
+// Loop to select random images
+for ($i = 0; $i < $config['collage']['limit']; $i++) {
     // Check if there are any images left to select
     if (empty($devImg)) {
         $devImg = $demoImages;
