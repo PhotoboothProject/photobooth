@@ -10,8 +10,7 @@ use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
 
-$loggerService = LoggerService::getInstance();
-$logger = $loggerService->getLogger('main');
+$logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $languageService = LanguageService::getInstance();

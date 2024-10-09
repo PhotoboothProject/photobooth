@@ -18,8 +18,7 @@ if (!(
     exit();
 }
 
-$loggerService = LoggerService::getInstance();
-$logger = $loggerService->getLogger('main');
+$logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $languageService = LanguageService::getInstance();
