@@ -78,6 +78,47 @@ class ImageUtility
         return $files[array_rand($files)];
     }
 
+    public static function getDemoImages(int $filecount = 0): array
+    {
+        $primaryFolder = 'private/images/demo';
+        $secondaryFolder = 'data/tmp';
+        $tertiaryFolder = 'resources/img/demo';
+        $demoImages = [];
+
+        $demoImages = self::getImagesFromPath($primaryFolder);
+
+        if (empty($demoImages)) {
+            $demoImages = self::getImagesFromPath($secondaryFolder);
+        }
+
+        if (empty($demoImages)) {
+            $demoImages = self::getImagesFromPath($tertiaryFolder);
+        }
+
+        if (empty($demoImages)) {
+            throw new \Exception('No images found in any of the demo folders.');
+        }
+
+        if ($filecount > 0) {
+            $demoCounted = [];
+            for ($i = 0; $i < $filecount; $i++) {
+                if (empty($demoImages)) {
+                    $demoImages = $demoCounted;
+                }
+
+                $randomIndex = array_rand($demoImages);
+                $demoCounted[] = $demoImages[$randomIndex];
+                unset($demoImages[$randomIndex]);
+                $demoImages = array_values($demoImages);
+            }
+
+            return $demoCounted;
+        } else {
+
+            return $demoImages;
+        }
+    }
+
     public static function applyFilter(?ImageFilterEnum $filter, GdImage $image): void
     {
         switch ($filter) {
