@@ -415,7 +415,7 @@ const photoBooth = (function () {
             return;
         }
 
-        if (<php echo $isSelfieUser; ?> ) {
+        if ( <?php echo $isSelfieUser; ?> ) {
             photoboothTools.console.logDev('ERROR: Taking picture unsupported on selfie mode!');
 
             return;
