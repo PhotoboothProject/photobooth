@@ -19,7 +19,7 @@ $demoImages = [];
 for ($i = 0; $i < 4; $i++) {
     // Check if there are any images left to select
     if (empty($devImg)) {
-        break; // Break the loop if there are no more images
+        $devImg = $demoImages;
     }
 
     // Select a random index from the remaining images
