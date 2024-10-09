@@ -45,6 +45,7 @@ class FileUploader
             'private/images/logo' => ImageUtility::supportedMimeTypesSelect,
             'private/images/placeholder' => ImageUtility::supportedMimeTypesSelect,
             'private/images/cheese' => ImageUtility::supportedMimeTypesSelect,
+            'private/images/demo' => ImageUtility::supportedMimeTypesSelect,
             'private/fonts' => FontUtility::supportedMimeTypesSelect,
             'private/videos/background' => VideoUtility::supportedMimeTypesSelect
         ];
