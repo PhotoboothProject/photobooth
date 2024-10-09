@@ -43,7 +43,7 @@ if (file_exists($collageConfigFilePath)) {
     }
 }
 
-$demoImages = ImageUtility::getDemoImages(5);
+$demoImages = ImageUtility::getDemoImages(8);
 
 $newConfiguration = '';
 if (isset($_POST['new-configuration'])) {
