@@ -7,11 +7,22 @@ use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
 use Photobooth\Utility\ImageUtility;
 
-$demoFolder = 'resources/img/demo';
-$devImg = ImageUtility::getImagesFromPath($demoFolder);
+$primaryFolder = 'private/images/demo';
+$secondaryFolder = 'data/tmp';
+$tertiaryFolder = 'resources/img/demo';
+
+$devImg = ImageUtility::getImagesFromPath($primaryFolder);
 
 if (empty($devImg)) {
-    throw new \Exception('No images found inside demo folders.');
+    $devImg = ImageUtility::getImagesFromPath($secondaryFolder);
+}
+
+if (empty($devImg)) {
+    $devImg = ImageUtility::getImagesFromPath($tertiaryFolder);
+}
+
+if (empty($devImg)) {
+    throw new \Exception('No images found in any of the demo folders.');
 }
 
 $demoImages = [];
