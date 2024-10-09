@@ -5,10 +5,14 @@ require_once '../lib/boot.php';
 use Photobooth\Collage;
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
-use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\ImageUtility;
 
-$demoFolder = PathUtility::getAbsolutePath('resources/img/demo');
-$devImg = array_diff(scandir($demoFolder), ['.', '..']);
+$demoFolder = 'resources/img/demo';
+$devImg = ImageUtility::getImagesFromPath($demoFolder);
+
+if (empty($devImg)) {
+    throw new \Exception('No images found inside demo folders.');
+}
 
 $demoImages = [];
 // Loop to select 4 random images
@@ -36,7 +40,9 @@ $collageSrcImagePaths = [];
 for ($i = 0; $i < $config['collage']['limit']; $i++) {
     $image = $demoImages[$i];
     $path = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $i . '_' . $name;
-    copy($demoFolder . DIRECTORY_SEPARATOR . $image, $path);
+    if (!copy($image, $path)) {
+        throw new \Exception('Failed to copy image.');
+    }
     $collageSrcImagePaths[] = $path;
 }
 
