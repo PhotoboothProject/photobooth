@@ -16,6 +16,7 @@ $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $languageService = LanguageService::getInstance();
 $errorMessage = '';
+
 try {
     $demoImages = ImageUtility::getDemoImages($config['collage']['limit']);
 
@@ -30,7 +31,7 @@ try {
         $collageSrcImagePaths[] = $path;
     }
 
-    $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . 'result_' . $name;
+    $filename_tmp = FolderEnum::TEST->absolute() . DIRECTORY_SEPARATOR . $name;
     if (Collage::createCollage($config, $collageSrcImagePaths, $filename_tmp, $config['filters']['defaults'])) {
         for ($k = 0; $k < $config['collage']['limit']; $k++) {
             unlink($collageSrcImagePaths[$k]);
