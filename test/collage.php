@@ -7,44 +7,7 @@ use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
 use Photobooth\Utility\ImageUtility;
 
-$primaryFolder = 'private/images/demo';
-$secondaryFolder = 'data/tmp';
-$tertiaryFolder = 'resources/img/demo';
-
-$devImg = ImageUtility::getImagesFromPath($primaryFolder);
-
-if (empty($devImg)) {
-    $devImg = ImageUtility::getImagesFromPath($secondaryFolder);
-}
-
-if (empty($devImg)) {
-    $devImg = ImageUtility::getImagesFromPath($tertiaryFolder);
-}
-
-if (empty($devImg)) {
-    throw new \Exception('No images found in any of the demo folders.');
-}
-
-$demoImages = [];
-// Loop to select random images
-for ($i = 0; $i < $config['collage']['limit']; $i++) {
-    // Check if there are any images left to select
-    if (empty($devImg)) {
-        $devImg = $demoImages;
-    }
-
-    // Select a random index from the remaining images
-    $randomIndex = array_rand($devImg);
-
-    // Add the selected image to the $demoImages array
-    $demoImages[] = $devImg[$randomIndex];
-
-    // Remove the selected image from the $devImg array to avoid selecting it again
-    unset($devImg[$randomIndex]);
-
-    // Reset array keys to ensure consecutive integer keys
-    $devImg = array_values($devImg);
-}
+$demoImages = ImageUtility::getDemoImages($config['collage']['limit']);
 
 $name = date('Ymd_His') . '.jpg';
 $collageSrcImagePaths = [];
