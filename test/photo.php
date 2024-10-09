@@ -19,7 +19,7 @@ $languageService = LanguageService::getInstance();
 $errorMessage = '';
 try {
     $name = date('Ymd_His') . '.jpg';
-    $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . 'result_' . $name;
+    $filename_tmp = FolderEnum::TEST->absolute() . DIRECTORY_SEPARATOR . $name;
     $imageHandler = new Image();
     $imageHandler->debugLevel = $config['dev']['loglevel'];
     $imageHandler->imageModified = false;
