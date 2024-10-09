@@ -121,7 +121,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
     <div class="w-full flex items-center justify-center flex-col">
         <div class="w-full max-w-xl h-144 rounded-lg p-8 bg-white flex flex-col shadow-xl">
             <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
-                Picture Test
+                <?=$languageService->translate('pictureTest')?>
             </div>
             <?php
                     if (empty($errorMessage)) {
