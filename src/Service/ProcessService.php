@@ -20,7 +20,7 @@ class ProcessService
             ProcessFactory::fromConfig([
                 'name' => 'remotebuzzer',
                 'command' => $config['commands']['nodebin'] . ' ' . PathUtility::getAbsolutePath('resources/js/remotebuzzer-server.js'),
-                'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'] || $config['remotebuzzer']['usenogpio'])),
+                'enabled' => ($config['remotebuzzer']['startserver'] && ($config['remotebuzzer']['usebuttons'] || $config['remotebuzzer']['userotary'])),
                 'killSignal' => 9,
             ]),
             ProcessFactory::fromConfig([
