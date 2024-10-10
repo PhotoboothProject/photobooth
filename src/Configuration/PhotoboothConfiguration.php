@@ -397,7 +397,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->booleanNode('usebuttons')->defaultValue(false)->end()
                 ->booleanNode('userotary')->defaultValue(false)->end()
                 ->booleanNode('enable_standalonegallery')->defaultValue(false)->end()
-                ->booleanNode('usenogpio')->defaultValue(false)->end()
+                ->booleanNode('usegpio')->defaultValue(false)->end()
                 ->booleanNode('picturebutton')->defaultValue(true)->end()
                 ->integerNode('collagetime')
                     ->defaultValue(2)
