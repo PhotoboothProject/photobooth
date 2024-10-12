@@ -165,6 +165,9 @@ function mjpeg_preview() {
 ---
 streams:
   $YAML_STREAM
+
+log:
+  exec: trace
 EOF
     fi
 
