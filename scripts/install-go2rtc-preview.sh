@@ -316,14 +316,14 @@ elif [[ $REPLY =~ ^[2]$ ]]; then
     test_command "rpicam-vid -t 5000 --codec mjpeg -o test.mjpeg"
     YAML_STREAM="photobooth: exec:rpicam-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=2"
     CAPTURE_CMD="rpicam-still"
-    CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
+    CAPTURE_ARGS="-n -q 100 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[3]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for libcamera-apps."
     test_command "libcamera-vid -t 5000 --codec mjpeg -o test.mjpeg"
     YAML_STREAM="photobooth: exec:libcamera-vid -t 0 --codec mjpeg --width 2304 --height 1296 -o -#killsignal=2"
     CAPTURE_CMD="libcamera-still"
-    CAPTURE_ARGS="-n -q 100 -t 1 -o \$1"
+    CAPTURE_ARGS="-n -q 100 -o \$1"
     NOTE="don't forget to add -o %s."
 elif [[ $REPLY =~ ^[4]$ ]]; then
     CAPTURE_CMD="sleep 1;fswebcam"
