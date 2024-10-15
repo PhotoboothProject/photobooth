@@ -65,6 +65,13 @@
     width: 100%;
     padding: 2rem;
     gap: 1rem;
+
+    #selfie-preview {
+      display: none;
+      max-width: 40vw;
+      max-height: 40vh;
+      object-fit: contain;
+    }
   }
 
   &-image {

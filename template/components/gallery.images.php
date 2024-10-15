@@ -40,7 +40,11 @@ if (empty($imagelist)) {
                 echo ' data-pswp-width="' . $imageinfo[0] . '" data-pswp-height="' . $imageinfo[1] . '"';
                 echo ' data-med="' . PathUtility::getPublicPath($filename_thumb) . '" data-med-size="' . $imageinfoThumb[0] . 'x' . $imageinfoThumb[1] . '">';
                 echo '<figure>';
-                echo '<img src="' . PathUtility::getPublicPath($filename_thumb) . '" alt="' . $image . '" loading="lazy" />';
+                echo '<img src="' . PathUtility::getPublicPath($filename_thumb) . '" alt="' . $image . '" loading="lazy"';
+                if ($imageinfo[1] > $imageinfo[0]) {
+                    echo 'style="padding-left: 25%;padding-right: 25%;"';
+                }
+                echo ' />';
                 if ($config['gallery']['figcaption']) {
                     echo '<figcaption>' . $date . '</figcaption>';
                 }
