@@ -15,6 +15,7 @@ enum FolderEnum: string
     case KEYING = 'data/keying';
     case PRINT = 'data/print';
     case QR = 'data/qrcodes';
+    case TEST = 'data/test';
     case THUMBS = 'data/thumbs';
     case TEMP = 'data/tmp';
     case LANG = 'resources/lang';
@@ -41,6 +42,7 @@ enum FolderEnum: string
             FolderEnum::KEYING => 'keying',
             FolderEnum::PRINT => 'print',
             FolderEnum::QR => 'qrcodes',
+            FolderEnum::TEST => 'test',
             FolderEnum::THUMBS => 'thumbs',
             FolderEnum::TEMP => 'tmp',
             FolderEnum::LANG => 'lang',

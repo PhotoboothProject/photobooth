@@ -25,6 +25,7 @@ FileUtility::createDirectory(FolderEnum::IMAGES->absolute());
 FileUtility::createDirectory(FolderEnum::KEYING->absolute());
 FileUtility::createDirectory(FolderEnum::PRINT->absolute());
 FileUtility::createDirectory(FolderEnum::QR->absolute());
+FileUtility::createDirectory(FolderEnum::TEST->absolute());
 FileUtility::createDirectory(FolderEnum::THUMBS->absolute());
 FileUtility::createDirectory(FolderEnum::TEMP->absolute());
 FileUtility::createDirectory(FolderEnum::PRIVATE->absolute());
@@ -34,6 +35,7 @@ FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/placeholder'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/cheese'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/demo'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/videos/background'));
 FileUtility::createDirectory(FolderEnum::VAR->absolute());
 FileUtility::createDirectory(PathUtility::getAbsolutePath('var/log'));

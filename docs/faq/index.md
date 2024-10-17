@@ -146,10 +146,10 @@ If you want to configure additional properties of the collage layout you have to
   "text_linespace": "100",
   "apply_frame": "once",
   "frame": "/resources/img/frames/frame_stone.png",
-  "background": "/resources/img/background.png",,
+  "background": "/resources/img/background.png",
   "background_color": "#FFFFFF",
   "placeholder": true,
-  "placeholderpath": "/resources/img/placeholders/01.jpg",
+  "placeholderpath": "/resources/img/background/01.jpg",
   "placeholderposition": "1",
   "layout": [ # the array from above ]
 }
@@ -563,6 +563,8 @@ If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.
 
 ## How to use a live stream as background at countdown?
 
+**Note:** Before setting up a preview please make sure your Photobooth works without as expected. If you're having problems with the preview this makes debugging a lot easier.
+
 There's different ways depending on your needs and personal setup:
 
 ### Preview _"from URL"_ (remote preview, **preferred**)
@@ -596,7 +598,11 @@ wget -O install-go2rtc-preview.sh https://raw.githubusercontent.com/PhotoboothPr
 sudo bash install-go2rtc-preview.sh
 ```
 
-Follow the instructions and choose your variant to install. Once installed successfully reboot your device and adjust your Photobooth config as mentioned above.
+Follow the instructions and choose your variant to install.
+
+**Note:** go2rtc does not work in v1.9.3 and v1.9.4 for Pi Camera!
+
+Once installed successfully reboot your device and adjust your Photobooth config as mentioned above.
 
 **Note:**
 

@@ -8,7 +8,7 @@ let buttonController;
 // eslint-disable-next-line no-unused-vars
 function initRemoteBuzzerFromDOM() {
     photoboothTools.console.logDev(
-        config.remotebuzzer.usebuttons || config.remotebuzzer.userotary || config.remotebuzzer.usenogpio
+        config.remotebuzzer.usebuttons || config.remotebuzzer.userotary
             ? 'Remote buzzer server is enabled.'
             : 'Remote buzzer server is disabled.'
     );
@@ -22,7 +22,7 @@ function initRemoteBuzzerFromDOM() {
         const api = {};
 
         api.enabled = function () {
-            return config.remotebuzzer.usebuttons || config.remotebuzzer.userotary || config.remotebuzzer.usenogpio;
+            return config.remotebuzzer.usebuttons || config.remotebuzzer.userotary;
         };
 
         api.init = function () {
@@ -225,7 +225,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.enabled = function () {
             return (
-                (config.remotebuzzer.usebuttons || config.remotebuzzer.usenogpio) &&
+                config.remotebuzzer.usebuttons &&
                 typeof onStandaloneGalleryView === 'undefined' &&
                 typeof onCaptureChromaView === 'undefined'
             );

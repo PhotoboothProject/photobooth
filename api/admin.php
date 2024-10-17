@@ -56,6 +56,7 @@ if ($action === 'reset') {
             FolderEnum::KEYING->absolute(),
             FolderEnum::PRINT->absolute(),
             FolderEnum::QR->absolute(),
+            FolderEnum::TEST->absolute(),
             FolderEnum::THUMBS->absolute(),
             FolderEnum::TEMP->absolute(),
         ];

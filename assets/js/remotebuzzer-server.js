@@ -554,7 +554,7 @@ function gpioOpSanity(gpioconfig) {
 }
 
 const Gpio = require('onoff').Gpio;
-const useGpio = Gpio.accessible && !config.remotebuzzer.usenogpio;
+const useGpio = config.remotebuzzer.usegpio && Gpio.accessible;
 
 /* BUTTON SEMAPHORE HELPER FUNCTION */
 function buttonActiveCheck(gpio, value) {
@@ -1258,7 +1258,7 @@ if (useGpio) {
             }
         }
     }
-} else if (!config.remotebuzzer.usenogpio && !Gpio.accessible) {
+} else if (config.remotebuzzer.usegpio && !Gpio.accessible) {
     log('GPIO enabled but GPIO not accessible!');
 }
 

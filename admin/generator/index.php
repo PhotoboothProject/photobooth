@@ -4,9 +4,10 @@ require_once '../../lib/boot.php';
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
-use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\FontUtility;
+use Photobooth\Utility\ImageUtility;
+use Photobooth\Utility\PathUtility;
 use Photobooth\Service\AssetService;
 
 // Login / Authentication check
@@ -41,6 +42,8 @@ if (file_exists($collageConfigFilePath)) {
         $enableWriteMessage = $languageService->translate('collage:generator:please_enable_write');
     }
 }
+
+$demoImages = ImageUtility::getDemoImages(8);
 
 $newConfiguration = '';
 if (isset($_POST['new-configuration'])) {
@@ -595,12 +598,12 @@ AdminInput::renderColor(
                 <hr>
                 <div class="images_settings flex flex-col gap-4">
                     <div id="layout_containers" class="flex gap-4 overflow-x-auto">
-                        <?php for ($i = 0; $i < 5; $i++) {
+                        <?php for ($i = 0; $i < count($demoImages); $i++) {
                             $hidden_class = 'hidden';
                             if ($i == 0) {
                                 $hidden_class = '';
                             }
-                            $computed_style = 'background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(\'/resources/img/demo/seal-station-norddeich-0' . ($i + 1) . '.jpg\')';
+                            $computed_style = 'background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(\'' . PathUtility::getPublicPath($demoImages[$i]) . '\')';
                             $computed_classes = 'image_layout relative p-3 md:p-5 grid grid-cols-[repeat(auto-fit,_minmax(100px,_1fr))] gap-2 bg-cover bg-center min-w-72 h-fit ' . $hidden_class;
                             ?>
                             <div data-picture="picture-<?=$i?>" style="<?=$computed_style?>" class="<?=$computed_classes?>">
@@ -706,26 +709,16 @@ AdminInput::renderColor(
                     <div id="collage_background" class="absolute h-full">
                         <img class="h-full hidden object-contain object-top" src="" alt="Choose the background">
                     </div>
-                    <div id="picture-0" class="absolute overflow-hidden w-full h-full">
-                        <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-01.jpg">
-                        <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
-                    </div>
-                    <div id="picture-1" class="absolute overflow-hidden w-full h-full hidden">
-                        <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-02.jpg">
-                        <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
-                    </div>
-                    <div id="picture-2" class="absolute overflow-hidden w-full h-full hidden">
-                        <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-03.jpg">
-                        <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
-                    </div>
-                    <div id="picture-3" class="absolute overflow-hidden w-full h-full hidden">
-                        <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-04.jpg">
-                        <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
-                    </div>
-                    <div id="picture-4" class="absolute overflow-hidden w-full h-full hidden">
-                        <img class="absolute object-left-top rotate-0 max-w-none" data-src="/resources/img/demo/seal-station-norddeich-05.jpg">
-                        <img class="picture-frame absolute object-left-top rotate-0 max-w-none hidden" />
-                    </div>
+                    <?php
+for ($i = 0; $i < count($demoImages); $i++) {
+    $imagePath = PathUtility::getPublicPath($demoImages[$i]);
+    $hiddenClass = $i == 0 ? '' : 'hidden';
+    echo "<div id='picture-$i' class='absolute overflow-hidden w-full h-full $hiddenClass'>
+            <img class='absolute object-left-top rotate-0 max-w-none' data-src='$imagePath'>
+            <img class='picture-frame absolute object-left-top rotate-0 max-w-none hidden' />
+          </div>";
+}
+?>
                     <div id="collage_frame" class="absolute h-full w-full">
                         <img class="h-full w-full hidden" src="" alt="Choose the frame">
                     </div>

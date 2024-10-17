@@ -2013,11 +2013,11 @@ return [
             'name' => 'remotebuzzer[userotary]',
             'value' => $config['remotebuzzer']['userotary'],
         ],
-        'remotebuzzer_usenogpio' => [
-            'view' => 'advanced',
+        'remotebuzzer_usegpio' => [
+            'view' => 'experimental',
             'type' => 'checkbox',
-            'name' => 'remotebuzzer[usenogpio]',
-            'value' => $config['remotebuzzer']['usenogpio'],
+            'name' => 'remotebuzzer[usegpio]',
+            'value' => $config['remotebuzzer']['usegpio'],
         ],
         'remotebuzzer_picturebutton' => [
             'view' => 'advanced',
