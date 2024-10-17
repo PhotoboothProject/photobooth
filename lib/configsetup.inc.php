@@ -5,6 +5,8 @@ use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 
+include PathUtility::getAbsolutePath('src/timezones.php');
+
 /*
  ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows
  **
@@ -308,6 +310,13 @@ return [
             'placeholder' => 'files_upload',
             'name' => 'FILESUPLOAD',
             'value' => 'filesupload-btn',
+        ],
+        'local_timezone' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'ui[local_timezone]',
+            'value' => $config['ui']['local_timezone'],
+            'options' => $timezones,
         ],
     ],
     'frontpage' => [
