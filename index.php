@@ -9,10 +9,6 @@ use Photobooth\Utility\PathUtility;
 
 $assetService = AssetService::getInstance();
 
-if ($config['ui']['local_timezone']) {
-    date_default_timezone_set($config['ui']['local_timezone']);
-}
-
 if (!$config['ui']['skip_welcome']) {
     if (!is_file(PathUtility::getAbsolutePath('welcome/.skip_welcome'))) {
         header('location: ' . PathUtility::getPublicPath('welcome'));
