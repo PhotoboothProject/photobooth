@@ -225,7 +225,7 @@ return [
             'placeholder' => $defaultConfig['picture']['time_to_live'],
             'name' => 'picture[time_to_live]',
             'value' => $config['picture']['time_to_live'],
-            'range_min' => 1,
+            'range_min' => 0,
             'range_max' => 90,
             'range_step' => 1,
             'unit' => 'seconds',
