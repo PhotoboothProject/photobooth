@@ -83,6 +83,9 @@ const photoBooth = (function () {
     };
 
     api.resetTimeOut = function () {
+        if (timeToLive == 0) {
+            return;
+        }
         clearTimeout(timeOut);
 
         photoboothTools.console.log('Timeout for auto reload cleared.');
