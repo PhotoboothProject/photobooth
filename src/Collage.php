@@ -137,13 +137,15 @@ class Collage
 
             unset($imageResource);
         }
+
+        if (!isset($width) || !isset($height)) {
+            throw new \Exception('Width or height not defined!');
+        }
+
         //Create Collage based on 300dpi 4x6in - Scale collages with the height
         $collage_height = intval(4 * $c->collageResolution);
         $collage_width = intval($collage_height * 1.5);
         if ($c->collageLayout === '2x4') {
-            if (!isset($width) || !isset($height)) {
-                throw new \Exception('Width or height not defined!');
-            }
             $my_collage = imagecreatetruecolor($width, $height);
         } else {
             $my_collage = imagecreatetruecolor($collage_width, $collage_height);
