@@ -137,11 +137,19 @@ class Collage
 
             unset($imageResource);
         }
+
+        if (!isset($width) || !isset($height)) {
+            throw new \Exception('Width or height not defined!');
+        }
+
         //Create Collage based on 300dpi 4x6in - Scale collages with the height
         $collage_height = intval(4 * $c->collageResolution);
         $collage_width = intval($collage_height * 1.5);
-
-        $my_collage = imagecreatetruecolor($collage_width, $collage_height);
+        if ($c->collageLayout === '2x4') {
+            $my_collage = imagecreatetruecolor($width, $height);
+        } else {
+            $my_collage = imagecreatetruecolor($collage_width, $collage_height);
+        }
 
         if (!$my_collage instanceof \GdImage) {
             throw new \Exception('Failed to create collage resource.');
@@ -149,8 +157,8 @@ class Collage
 
         if (is_array(@getimagesize($c->collageBackground))) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
-            $imageHandler->resizeMaxWidth = $collage_width;
-            $imageHandler->resizeMaxHeight = $collage_height;
+            $imageHandler->resizeMaxWidth = $c->collageLayout === '2x4' ? $width : $collage_width;
+            $imageHandler->resizeMaxHeight = $c->collageLayout === '2x4' ? $height : $collage_height;
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to create collage background image resource.');
             }
@@ -385,16 +393,6 @@ class Collage
                 }
                 break;
             case '2x4':
-                // colage size defined by image size
-                if (!isset($width) || !isset($height)) {
-                    throw new \Exception('Width or height not defined!');
-                }
-                $my_collage = imagecreatetruecolor($width, $height);
-                if (!$my_collage instanceof \GdImage) {
-                    throw new \Exception('Failed to create collage resource.');
-                }
-                $background = imagecolorallocate($my_collage, (int)$bg_r, (int)$bg_g, (int)$bg_b);
-
                 if ($landscape) {
                     $rotate_after_creation = true;
                 }
