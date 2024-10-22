@@ -4,6 +4,7 @@ namespace Photobooth\Configuration;
 
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Environment;
+use Photobooth\Utility\PathUtility;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -997,12 +998,19 @@ class PhotoboothConfiguration implements ConfigurationInterface
 
     protected function addUiNode(): NodeDefinition
     {
+        include PathUtility::getAbsolutePath('/src/timezones.php');
+        
         return (new TreeBuilder('ui'))->getRootNode()->addDefaultsIfNotSet()
             ->ignoreExtraKeys()
             ->children()
                 ->enumNode('language')
                     ->values(['cs', 'de', 'en', 'es', 'fr', 'hr', 'it', 'nl', 'pt'])
                     ->defaultValue('en')
+                    ->end()
+                ->enumNode('local_timezone')
+                    ->values(['Europe/Berlin'])
+                    ->values( $tzkeys )
+                    ->defaultValue('Europe/Berlin')
                     ->end()
                 ->integerNode('notification_timeout')
                     ->defaultValue(5)
