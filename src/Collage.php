@@ -150,11 +150,7 @@ class Collage
         //Create Collage based on 300dpi 4x6in - Scale collages with the height
         $collage_height = intval(4 * $c->collageResolution);
         $collage_width = intval($collage_height * 1.5);
-        if ($c->collageLayout === '2x4') {
-            $my_collage = imagecreatetruecolor($width, $height);
-        } else {
-            $my_collage = imagecreatetruecolor($collage_width, $collage_height);
-        }
+        $my_collage = imagecreatetruecolor($collage_width, $collage_height);
 
         if (!$my_collage instanceof \GdImage) {
             throw new \Exception('Failed to create collage resource.');
@@ -162,8 +158,8 @@ class Collage
 
         if (is_array(@getimagesize($c->collageBackground))) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
-            $imageHandler->resizeMaxWidth = $c->collageLayout === '2x4' ? $width : $collage_width;
-            $imageHandler->resizeMaxHeight = $c->collageLayout === '2x4' ? $height : $collage_height;
+            $imageHandler->resizeMaxWidth = $collage_width;
+            $imageHandler->resizeMaxHeight = $collage_height;
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to create collage background image resource.');
             }
@@ -339,60 +335,26 @@ class Collage
 
                 break;
             case '2x4':
-                if ($landscape) {
-                    $rotate_after_creation = true;
-                }
-                $drawDashedLine = true;
-
-                if (!file_exists($editImages[0])) {
-                    return false;
-                }
-
-                $tempSubImage = $imageHandler->createFromImage($editImages[0]);
-                if (!$tempSubImage instanceof \GdImage) {
-                    throw new \Exception('Failed to create tempSubImage resource.');
-                }
-
-                $tempSubImage = imagerotate($tempSubImage, 90, $bg_color_hex);
-                if (!$tempSubImage instanceof \GdImage) {
-                    throw new \Exception('Failed to rotate tempSubImage resource.');
-                }
-                $imageHandler->resizeMaxWidth = intval($height / 3.3);
-                $imageHandler->resizeMaxHeight = intval($width / 3.5);
-                $tempSubImage = $imageHandler->resizeImage($tempSubImage);
-
-                if (!$tempSubImage instanceof \GdImage) {
-                    throw new \Exception('Failed to resize tempSubImage resource.');
-                }
-                $new_width = (int)imagesx($tempSubImage);
-                $new_height = (int)imagesy($tempSubImage);
-
-                $height_offset = intval(($height / 2 - $new_height) / 2);
-                $width_offset = intval(($width - $new_width * 4) / 5);
-
-                $pictureOptions = [
-                    [$width_offset, $height_offset, $new_width, $new_height, 90],
-                    [$width_offset * 2 + $new_width, $height_offset, $new_width, $new_height, 90],
-                    [$width_offset * 3 + 2 * $new_width, $height_offset, $new_width, $new_height, 90],
-                    [$width_offset * 4 + 3 * $new_width, $height_offset, $new_width, $new_height, 90],
-                    [$width_offset, $new_height + 3 * $height_offset, $new_width, $new_height, 90],
-                    [$width_offset * 2 + $new_width, $new_height + 3 * $height_offset, $new_width, $new_height, 90],
-                    [$width_offset * 3 + 2 * $new_width, $new_height + 3 * $height_offset, $new_width, $new_height, 90],
-                    [$width_offset * 4 + 3 * $new_width, $new_height + 3 * $height_offset, $new_width, $new_height, 90],
-                ];
-                imagescale($my_collage, $width, $height);
-                unset($tempSubImage);
-
-                break;
             case '2x4-2':
             case '2x4-3':
             case '2x4-4':
                 if ($landscape) {
                     $rotate_after_creation = true;
                 }
-                $drawDashedLine = true;
+                $drawDashedLine = $c->collageLayout === '2x4' ? false : true;
 
-                if ($c->collageLayout === '2x4-2') {
+                if ($c->collageLayout === '2x4') {
+                    $widthNew = $collage_height * 0.2857;
+                    $heightNew = $widthNew * 1.5;
+
+                    $shortRatioY = 0.035129;
+                    $longRatioY = 0.532787;
+
+                    $img1RatioX = 0.046875;
+                    $img2RatioX = 0.284375;
+                    $img3RatioX = 0.521875;
+                    $img4RatioX = 0.764844;
+                } elseif ($c->collageLayout === '2x4-2') {
                     $widthNew = $collage_height * 0.2675;
                     $heightNew = $widthNew * 1.5;
 
