@@ -108,6 +108,12 @@ const photoboothTools = (function () {
             api.overlay.element.innerHTML = message;
             api.overlay.element.dataset.type = type;
         },
+        showWaiting: (message) => {
+            api.overlay.show(
+                '<div><i class="' + config.icons.spinner + '"></i></div><div>' + message + '</div>',
+                'progress'
+            );
+        },
         showSuccess: (message) => {
             api.overlay.show(message, 'success');
         },

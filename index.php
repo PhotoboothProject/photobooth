@@ -60,19 +60,24 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 <?php
 
 include PathUtility::getAbsolutePath('template/components/stage.start.php');
-include PathUtility::getAbsolutePath('template/components/stage.loader.php');
-include PathUtility::getAbsolutePath('template/components/stage.results.php');
+if (!$config['ui']['selfie_mode']) {
+    include PathUtility::getAbsolutePath('template/components/stage.loader.php');
+    include PathUtility::getAbsolutePath('template/components/stage.results.php');
+}
 
 if ($config['gallery']['enabled']) {
     include PathUtility::getAbsolutePath('template/components/gallery.php');
 }
 
-if ($config['filters']['enabled']) {
+if ($config['filters']['enabled'] && !$config['ui']['selfie_mode']) {
     include PathUtility::getAbsolutePath('template/components/filter.php');
 }
 
 include PathUtility::getAbsolutePath('template/components/main.footer.php');
 
+if ($config['ui']['selfie_mode']) {
+    echo '<script src="' . $assetService->getUrl('resources/js/selfie.js') . '"></script>';
+}
 ?>
 
 <script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
