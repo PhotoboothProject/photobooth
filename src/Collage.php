@@ -19,6 +19,63 @@ class Collage
         $landscape = true;
         $drawDashedLine = false;
         $rotate_after_creation = false;
+        $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $c->collageLayout);
+
+        if (file_exists($collageConfigFilePath)) {
+            $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
+
+            if (is_array($collageJson)) {
+                if (isset($collageJson['layout']) && !empty($collageJson['layout'])) {
+                    $layoutConfigArray = $collageJson['layout'];
+
+                    if (isset($collageJson['background_color']) && !empty($collageJson['background_color'])) {
+                        $c->collageBackgroundColor = $collageJson['background_color'];
+                    }
+
+                    if (isset($collageJson['background']) && !empty($collageJson['background'])) {
+                        $c->collageBackground = $collageJson['background'];
+                    }
+
+                    if (isset($collageJson['width']) && isset($collageJson['height'])) {
+                        $collage_width = $collageJson['width'];
+                        $collage_height = $collageJson['height'];
+                    }
+
+                    if (isset($collageJson['apply_frame']) && isset($collageJson['frame'])) {
+                        if (in_array($collageJson['apply_frame'], ['once', 'always'])) {
+                            $c->collageTakeFrame = $collageJson['apply_frame'];
+                        }
+                        $c->collageFrame = $collageJson['frame'];
+                    }
+
+                    if (isset($collageJson['placeholder']) && $collageJson['placeholder']) {
+                        $c->collagePlaceholder = $collageJson['placeholder'];
+                        $c->collagePlaceholderPosition = (int) $collageJson['placeholderposition'] - 1;
+                        $c->collagePlaceholderPath = str_starts_with($collageJson['placeholderpath'], 'http') ?
+                            $collageJson['placeholderpath'] :
+                            $_SERVER['DOCUMENT_ROOT'] . $collageJson['placeholderpath'];
+                    }
+
+                    $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;
+                    if ($c->textOnCollageEnabled) {
+                        $c->textOnCollageFontSize = isset($collageJson['text_font_size']) ? $collageJson['text_font_size'] : $c->textOnCollageFontSize;
+                        $c->textOnCollageRotation = isset($collageJson['text_rotation']) ? $collageJson['text_rotation'] : $c->textOnCollageRotation;
+                        $c->textOnCollageLocationX = isset($collageJson['text_locationx']) ? $collageJson['text_locationx'] : $c->textOnCollageLocationX;
+                        $c->textOnCollageLocationY = isset($collageJson['text_locationy']) ? $collageJson['text_locationy'] : $c->textOnCollageLocationY;
+                        $c->textOnCollageFontColor = isset($collageJson['text_font_color']) ? $collageJson['text_font_color'] : $c->textOnCollageFontColor;
+                        $c->textOnCollageFont = isset($collageJson['text_font']) ? $collageJson['text_font'] : $c->textOnCollageFont;
+                        $c->textOnCollageLine1 = array_key_exists('text_line1', $collageJson) ? $collageJson['text_line1'] : $c->textOnCollageLine1;
+                        $c->textOnCollageLine2 = array_key_exists('text_line2', $collageJson) ? $collageJson['text_line2'] : $c->textOnCollageLine2;
+                        $c->textOnCollageLine3 = array_key_exists('text_line3', $collageJson) ? $collageJson['text_line3'] : $c->textOnCollageLine3;
+                        $c->textOnCollageLinespace = isset($collageJson['text_linespace']) ? $collageJson['text_linespace'] : $c->textOnCollageLinespace;
+                    }
+                } else {
+                    $layoutConfigArray = $collageJson;
+                }
+            } else {
+                return false;
+            }
+        }
 
         if ($c->collageBackgroundColor !== null) {
             // colors for background and while rotating jpeg images
@@ -35,7 +92,7 @@ class Collage
             throw new \Exception('Cannot convert the hexadecimal collage background color to its decimal equivalent!');
         }
 
-        // dashedline color on 2x4 collage layouts
+        // dashedline color on 2x3 and 2x4 collage layouts
         if ($c->collageDashedLineColor !== null) {
             $dashedColorComponents = sscanf($c->collageDashedLineColor, '#%02x%02x%02x');
             if ($dashedColorComponents !== null) {
@@ -147,9 +204,10 @@ class Collage
             throw new \Exception('Width or height not defined!');
         }
 
-        //Create Collage based on 300dpi 4x6in - Scale collages with the height
-        $collage_height = intval(4 * $c->collageResolution);
-        $collage_width = intval($collage_height * 1.5);
+        // If no dimensions given ftom json create Collage based on 300dpi 4x6in
+        // Scale collages with the height
+        $collage_height = $collage_height ?? intval(4 * $c->collageResolution);
+        $collage_width = $collage_width ?? intval($collage_height * 1.5);
         $my_collage = imagecreatetruecolor($collage_width, $collage_height);
 
         if (!$my_collage instanceof \GdImage) {
@@ -476,93 +534,9 @@ class Collage
 
                 break;
             default:
-                $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $c->collageLayout);
-                $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
-
-                if (is_array($collageJson)) {
-                    if (array_key_exists('layout', $collageJson)) {
-                        $layoutConfigArray = $collageJson['layout'];
-
-                        if (array_key_exists('background_color', $collageJson) && !empty($collageJson['background_color'])) {
-                            $c->collageBackgroundColor = $collageJson['background_color'];
-                            $imageHandler->addPictureBgColor = $c->collageBackgroundColor;
-                        }
-
-                        if (array_key_exists('width', $collageJson) && array_key_exists('height', $collageJson)) {
-                            $collage_width = $collageJson['width'];
-                            $collage_height = $collageJson['height'];
-                            $my_collage = imagecreatetruecolor($collage_width, $collage_height);
-                            if (!$my_collage instanceof \GdImage) {
-                                throw new \Exception('Failed to create collage resource.');
-                            }
-                            $colorComponents = sscanf($c->collageBackgroundColor, '#%02x%02x%02x');
-                            if ($colorComponents !== null) {
-                                list($bg_r, $bg_g, $bg_b) = $colorComponents;
-                            } else {
-                                throw new \Exception('Collage background color: sscanf returned null!');
-                            }
-                            $background = imagecolorallocate($my_collage, (int)$bg_r, (int)$bg_g, (int)$bg_b);
-                            imagefill($my_collage, 0, 0, (int)$background);
-                        }
-
-                        if (array_key_exists('background', $collageJson) && !empty($collageJson['background'])) {
-                            $imageHandler->resizeMaxWidth = (int)$collage_width;
-                            $imageHandler->resizeMaxHeight = (int)$collage_height;
-                            $backgroundImage = $imageHandler->createFromImage($collageJson['background']);
-                            if (!$backgroundImage instanceof \GdImage) {
-                                throw new \Exception('Failed to create collage background resource.');
-                            }
-                            $backgroundImage = $imageHandler->resizeImage($backgroundImage);
-                            if (!$backgroundImage instanceof \GdImage) {
-                                throw new \Exception('Failed to resize collage background resource.');
-                            }
-                            $bg_width = imagesx($backgroundImage);
-                            $bg_height = imagesy($backgroundImage);
-                            imagecopyresampled($my_collage, $backgroundImage, 0, 0, 0, 0, $bg_width, $bg_height, $bg_width, $bg_height);
-                            $imageHandler->addPictureBgImage = $collageJson['background'];
-                            if (!str_starts_with($collageJson['background'], $_SERVER['DOCUMENT_ROOT'])) {
-                                $imageHandler->addPictureBgImage = $_SERVER['DOCUMENT_ROOT'] . $collageJson['background'];
-                            }
-                        }
-
-                        if (array_key_exists('apply_frame', $collageJson) && array_key_exists('frame', $collageJson)) {
-                            if ($collageJson['apply_frame'] === 'once' || $collageJson['apply_frame'] === 'always') {
-                                $c->collageTakeFrame = $collageJson['apply_frame'];
-                            }
-                            $c->collageFrame = $collageJson['frame'];
-                            $imageHandler->framePath = $c->collageFrame;
-                            $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' && !empty($collageJson['frame']) ? true : false;
-                        }
-
-                        if (array_key_exists('placeholder', $collageJson) && $collageJson['placeholder']) {
-                            $c->collagePlaceholder = $collageJson['placeholder'];
-                            $c->collagePlaceholderPosition = (int) $collageJson['placeholderposition'] - 1;
-                            $c->collagePlaceholderPath = str_starts_with($collageJson['placeholderpath'], 'http') ?
-                                $collageJson['placeholderpath'] :
-                                $_SERVER['DOCUMENT_ROOT'] . $collageJson['placeholderpath'];
-                            $editImages[$c->collagePlaceholderPosition] = $c->collagePlaceholderPath;
-                        }
-
-                        $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;
-                        if ($c->textOnCollageEnabled) {
-                            $c->textOnCollageFontSize = isset($collageJson['text_font_size']) ? $collageJson['text_font_size'] : $c->textOnCollageFontSize;
-                            $c->textOnCollageRotation = isset($collageJson['text_rotation']) ? $collageJson['text_rotation'] : $c->textOnCollageRotation;
-                            $c->textOnCollageLocationX = isset($collageJson['text_locationx']) ? $collageJson['text_locationx'] : $c->textOnCollageLocationX;
-                            $c->textOnCollageLocationY = isset($collageJson['text_locationy']) ? $collageJson['text_locationy'] : $c->textOnCollageLocationY;
-                            $c->textOnCollageFontColor = isset($collageJson['text_font_color']) ? $collageJson['text_font_color'] : $c->textOnCollageFontColor;
-                            $c->textOnCollageFont = isset($collageJson['text_font']) ? $collageJson['text_font'] : $c->textOnCollageFont;
-                            $c->textOnCollageLine1 = isset($collageJson['text_line1']) ? $collageJson['text_line1'] : $c->textOnCollageLine1;
-                            $c->textOnCollageLine2 = isset($collageJson['text_line2']) ? $collageJson['text_line2'] : $c->textOnCollageLine2;
-                            $c->textOnCollageLine3 = isset($collageJson['text_line3']) ? $collageJson['text_line3'] : $c->textOnCollageLine3;
-                            $c->textOnCollageLinespace = isset($collageJson['text_linespace']) ? $collageJson['text_linespace'] : $c->textOnCollageLinespace;
-                        }
-                    } else {
-                        $layoutConfigArray = $collageJson;
-                    }
-                } else {
-                    return false;
+                if (!isset($layoutConfigArray)) {
+                    throw new \Exception('Layout config does not exist!');
                 }
-
                 $pictureOptions = [];
                 foreach ($layoutConfigArray as $layoutConfig) {
                     if (!is_array($layoutConfig) || count($layoutConfig) !== 6) {
