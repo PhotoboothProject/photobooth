@@ -10,6 +10,11 @@ use Photobooth\Utility\PathUtility;
 
 class Collage
 {
+    public static int $collageHeight = 0;
+    public static int $collageWidth = 0;
+    public static bool $drawDashedLine = false;
+    public static bool $rotateAfterCreation = false;
+
     public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, CollageConfig $c = null): bool
     {
         if ($c === null) {
@@ -17,8 +22,6 @@ class Collage
         }
         $editImages = [];
         $landscape = true;
-        $drawDashedLine = false;
-        $rotate_after_creation = false;
         $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $c->collageLayout);
 
         if (file_exists($collageConfigFilePath)) {
@@ -37,8 +40,8 @@ class Collage
                     }
 
                     if (isset($collageJson['width']) && isset($collageJson['height'])) {
-                        $collage_width = $collageJson['width'];
-                        $collage_height = $collageJson['height'];
+                        self::$collageWidth = $collageJson['width'];
+                        self::$collageHeight = $collageJson['height'];
                     }
 
                     if (isset($collageJson['apply_frame']) && isset($collageJson['frame'])) {
@@ -206,18 +209,23 @@ class Collage
 
         // If no dimensions given ftom json create Collage based on 300dpi 4x6in
         // Scale collages with the height
-        $collage_height = $collage_height ?? intval(4 * $c->collageResolution);
-        $collage_width = $collage_width ?? intval($collage_height * 1.5);
-        $my_collage = imagecreatetruecolor($collage_width, $collage_height);
+        if (self::$collageHeight === 0) {
+            self::$collageHeight = intval(4 * $c->collageResolution);
+        }
 
+        if (self::$collageWidth === 0) {
+            self::$collageWidth = intval(self::$collageHeight * 1.5);
+        }
+
+        $my_collage = imagecreatetruecolor(self::$collageWidth, self::$collageHeight);
         if (!$my_collage instanceof \GdImage) {
             throw new \Exception('Failed to create collage resource.');
         }
 
         if (is_array(@getimagesize($c->collageBackground))) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
-            $imageHandler->resizeMaxWidth = $collage_width;
-            $imageHandler->resizeMaxHeight = $collage_height;
+            $imageHandler->resizeMaxWidth = self::$collageWidth;
+            $imageHandler->resizeMaxHeight = self::$collageHeight;
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to create collage background image resource.');
             }
@@ -225,14 +233,14 @@ class Collage
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to resize collage background image resource.');
             }
-            imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, $collage_width, $collage_height);
+            imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, self::$collageWidth, self::$collageHeight);
         } else {
             $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
             imagefill($my_collage, 0, 0, (int) $background);
         }
 
         if ($landscape == false) {
-            $rotate_after_creation = true;
+            self::$rotateAfterCreation = true;
         }
 
         $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
@@ -245,10 +253,10 @@ class Collage
             case '2+2':
                 // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
                 $pictureOptions = [
-                    [0, 0, $collage_width / 2, $collage_height / 2, 0],
-                    [$collage_width / 2, 0, $collage_width / 2, $collage_height / 2, 0],
-                    [0, $collage_height / 2, $collage_width / 2, $collage_height / 2, 0],
-                    [$collage_width / 2, $collage_height / 2, $collage_width / 2, $collage_height / 2, 0],
+                    [0, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                    [self::$collageWidth / 2, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                    [0, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                    [self::$collageWidth / 2, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
                 ];
 
                 break;
@@ -260,7 +268,7 @@ class Collage
                 // Distance between pictures = 2x (0.5 -heightRatio -shortRatio)
                 // Please note: We get a correct picture, if this formula adds up to exactly 1:  2x heightRatio + 2x shortRatio + distance between pictures
 
-                $heightp = $collage_height * $heightRatio;
+                $heightp = self::$collageHeight * $heightRatio;
                 $widthp = $heightp * 1.5;
 
                 //If there is a need for Text/Frame, we could specify an additional horizontal offset. E.g. widthp * 0.08
@@ -268,10 +276,10 @@ class Collage
 
                 // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
                 $pictureOptions = [
-                    [$collage_width * $shortRatio + $horizontalOffset, $collage_height * $shortRatio, $widthp, $heightp, 0],
-                    [$collage_width * $longRatio + $horizontalOffset, $collage_height * $shortRatio, $widthp, $heightp, 0],
-                    [$collage_width * $shortRatio + $horizontalOffset, $collage_height * $longRatio, $widthp, $heightp, 0],
-                    [$collage_width * $longRatio + $horizontalOffset, $collage_height * $longRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
                 ];
 
                 break;
@@ -294,17 +302,17 @@ class Collage
                 // Horizontal position of big image
                 $ratioBigPictureX = 0.4741; // 1 - shortRatioX - heightRatioBig
 
-                $heightNewBig = $collage_height * $heightRatioBig;
+                $heightNewBig = self::$collageHeight * $heightRatioBig;
                 $widthNewBig = $heightNewBig * 1.5;
 
-                $heightNewSmall = $collage_height * $heightRatioSmall;
+                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
                 $widthNewSmall = $heightNewSmall * 1.5;
 
                 $pictureOptions = [
-                    [$collage_width * $ratioBigPictureX, $collage_height * $shortRatioY, $widthNewBig, $heightNewBig, 0],
-                    [$collage_width * $shortRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [$collage_width * $mediumRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
+                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
                 ];
 
                 break;
@@ -335,17 +343,17 @@ class Collage
                 // Horizontal position of big image
                 $ratioBigPictureX = 0.0281; // shortRatioX
 
-                $heightNewBig = $collage_height * $heightRatioBig;
+                $heightNewBig = self::$collageHeight * $heightRatioBig;
                 $widthNewBig = $heightNewBig * 1.5;
 
-                $heightNewSmall = $collage_height * $heightRatioSmall;
+                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
                 $widthNewSmall = $heightNewSmall * 1.5;
 
                 $pictureOptions = [
-                    [$collage_width * $ratioBigPictureX, $collage_height * $shortRatioY, $widthNewBig, $heightNewBig, 0],
-                    [$collage_width * $shortRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [$collage_width * $mediumRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
+                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
                 ];
 
                 break;
@@ -358,16 +366,16 @@ class Collage
                 $longRatioX = 0.555;
                 $longRatioY = 0.5368;
 
-                $heightNewBig = $collage_height * $heightRatioBig;
+                $heightNewBig = self::$collageHeight * $heightRatioBig;
                 $widthNewBig = $heightNewBig * 1.5;
 
-                $heightNewSmall = $collage_height * $heightRatioSmall;
+                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
                 $widthNewSmall = $heightNewSmall * 1.5;
 
                 $pictureOptions = [
-                    [0, $collage_height * $shortRatioY, $widthNewBig, $heightNewBig, 10],
-                    [$collage_width * $longRatioX, $collage_height * $shortRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [$collage_width * $longRatioX, $collage_height * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [0, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 10],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $shortRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
                 ];
 
                 break;
@@ -382,13 +390,13 @@ class Collage
                 $shortRatioX = 0.1;
                 $longRatioX = 0.525;
 
-                $heightNew = $collage_height * $heightRatio;
+                $heightNew = self::$collageHeight * $heightRatio;
                 $widthNew = $heightNew * 1.5;
 
                 $pictureOptions = [
-                    [$collage_width * $shortRatioY, $collage_height * $shortRatioX, $widthNew, $heightNew, 0],
-                    [$collage_width * $longRatioY, $collage_height * $shortRatioX, $widthNew, $heightNew, 0],
-                    [$collage_width * $shortRatioY, $collage_height * $longRatioX, $widthNew, $heightNew, 0],
+                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
+                    [self::$collageWidth * $longRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
+                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $longRatioX, $widthNew, $heightNew, 0],
                 ];
 
                 break;
@@ -397,12 +405,12 @@ class Collage
             case '2x4-3':
             case '2x4-4':
                 if ($landscape) {
-                    $rotate_after_creation = true;
+                    self::$rotateAfterCreation = true;
                 }
-                $drawDashedLine = $c->collageLayout === '2x4' ? false : true;
+                self::$drawDashedLine = $c->collageLayout === '2x4' ? false : true;
 
                 if ($c->collageLayout === '2x4') {
-                    $widthNew = $collage_height * 0.2857;
+                    $widthNew = self::$collageHeight * 0.2857;
                     $heightNew = $widthNew * 1.5;
 
                     $shortRatioY = 0.035129;
@@ -413,7 +421,7 @@ class Collage
                     $img3RatioX = 0.521875;
                     $img4RatioX = 0.764844;
                 } elseif ($c->collageLayout === '2x4-2') {
-                    $widthNew = $collage_height * 0.2675;
+                    $widthNew = self::$collageHeight * 0.2675;
                     $heightNew = $widthNew * 1.5;
 
                     $shortRatioY = 0.05333;
@@ -424,7 +432,7 @@ class Collage
                     $img3RatioX = 0.43611;
                     $img4RatioX = 0.63667;
                 } elseif ($c->collageLayout === '2x4-3') {
-                    $widthNew = $collage_height * 0.32;
+                    $widthNew = self::$collageHeight * 0.32;
                     $heightNew = $widthNew * 1.5;
 
                     $shortRatioY = 0.01;
@@ -435,7 +443,7 @@ class Collage
                     $img3RatioX = 0.51048;
                     $img4RatioX = 0.74475;
                 } else {
-                    $widthNew = $collage_height * 0.30;
+                    $widthNew = self::$collageHeight * 0.30;
                     $heightNew = $widthNew * 1.5;
 
                     $shortRatioY = 0.025;
@@ -448,24 +456,24 @@ class Collage
                 }
 
                 $pictureOptions = [
-                    [$collage_width * $img1RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img2RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img3RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img4RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img1RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img2RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img3RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img4RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
                 ];
 
                 break;
             case '2x3':
             case '2x3-2':
                 if ($landscape) {
-                    $rotate_after_creation = true;
+                    self::$rotateAfterCreation = true;
                 }
 
-                $widthNew = intval($collage_height * 0.32);
+                $widthNew = intval(self::$collageHeight * 0.32);
                 $heightNew = intval($widthNew * 1.5);
 
                 $shortRatioY = 0.01;
@@ -473,7 +481,7 @@ class Collage
 
                 $img1RatioX = 0.04194;
                 if ($c->collageLayout === '2x3') {
-                    $drawDashedLine = true;
+                    self::$drawDashedLine = true;
                     $img2RatioX = 0.27621;
                     $img3RatioX = 0.51048;
                 } else {
@@ -482,17 +490,17 @@ class Collage
                 }
 
                 $pictureOptions = [
-                    [$collage_width * $img1RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img2RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img3RatioX, $collage_height * $shortRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img1RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img2RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
-                    [$collage_width * $img3RatioX, $collage_height * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
                 ];
 
                 if ($c->collageLayout === '2x3-2') {
-                    $centerX = $collage_width * 0.5;
-                    $centerY = $collage_height * 0.5;
+                    $centerX = self::$collageWidth * 0.5;
+                    $centerY = self::$collageHeight * 0.5;
                     $scaleFactor = 0.99;
 
                     $pictureOptions = array_map(function ($image) use ($centerX, $centerY, $scaleFactor) {
@@ -547,7 +555,7 @@ class Collage
                     for ($j = 0; $j < 6; $j++) {
                         $processed = $layoutConfig[$j];
                         if ($j !== 5) {
-                            $value = str_replace(['x', 'y'], [$collage_width, $collage_height], $layoutConfig[$j]);
+                            $value = str_replace(['x', 'y'], [self::$collageWidth, self::$collageHeight], $layoutConfig[$j]);
                             $processed = self::doMath($value);
                         }
                         $singlePictureOptions[] = $processed;
@@ -575,14 +583,14 @@ class Collage
             unset($tmpImg);
         }
 
-        if ($drawDashedLine == true) {
-            $collage_width = (int) imagesx($my_collage);
-            $collage_height = (int) imagesy($my_collage);
+        if (self::$drawDashedLine == true) {
+            self::$collageWidth = (int) imagesx($my_collage);
+            self::$collageHeight = (int) imagesy($my_collage);
             $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
-            $imageHandler->dashedLineStartX = intval($collage_width * 0.03);
-            $imageHandler->dashedLineStartY = intval($collage_height / 2);
-            $imageHandler->dashedLineEndX = intval($collage_width * 0.97);
-            $imageHandler->dashedLineEndY = intval($collage_height / 2);
+            $imageHandler->dashedLineStartX = intval(self::$collageWidth * 0.03);
+            $imageHandler->dashedLineStartY = intval(self::$collageHeight / 2);
+            $imageHandler->dashedLineEndX = intval(self::$collageWidth * 0.97);
+            $imageHandler->dashedLineEndY = intval(self::$collageHeight / 2);
             $imageHandler->drawDashedLine($my_collage);
         }
 
@@ -611,7 +619,7 @@ class Collage
         }
 
         // Rotate image if needed
-        if ($rotate_after_creation) {
+        if (self::$rotateAfterCreation) {
             $my_collage = imagerotate($my_collage, -90, $bg_color_hex);
             if (!$my_collage instanceof \GdImage) {
                 throw new \Exception('Failed to rotate collage resource after creation.');
