@@ -13,7 +13,313 @@ class Collage
     public static int $collageHeight = 0;
     public static int $collageWidth = 0;
     public static bool $drawDashedLine = false;
+    public static bool $landscape = true;
     public static bool $rotateAfterCreation = false;
+
+    public static function getPictureOptions(string $collageLayout): array
+    {
+        switch ($collageLayout) {
+            // old 2x2 are now named 2+2 as 2x means images are duplicated
+            case '2x2':
+            case '2+2':
+                // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
+                $pictureOptions = [
+                    [0, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                    [self::$collageWidth / 2, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                    [0, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                    [self::$collageWidth / 2, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                ];
+
+                break;
+            case '2x2-2':
+            case '2+2-2':
+                $heightRatio = 0.4; // 0.4 = image height ratio. Should be set below 0.5 (as we have 2 pictures). Please adapt the short/long ratio as well
+                $shortRatio = 0.08; // shortRatio, distance until the top left corner of the first image
+                $longRatio = 0.52; // longRatio = image height ratio + shortRatio + distance between the images. In this case: 0.4 + 0.08 + 0.04 = 0.52.
+                // Distance between pictures = 2x (0.5 -heightRatio -shortRatio)
+                // Please note: We get a correct picture, if this formula adds up to exactly 1:  2x heightRatio + 2x shortRatio + distance between pictures
+
+                $heightp = self::$collageHeight * $heightRatio;
+                $widthp = $heightp * 1.5;
+
+                //If there is a need for Text/Frame, we could specify an additional horizontal offset. E.g. widthp * 0.08
+                $horizontalOffset = $widthp * 0;
+
+                // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
+                $pictureOptions = [
+                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
+                ];
+
+                break;
+            case '1+3':
+                //Specify Big/Small Height Ratios - values based on previos settings
+                $heightRatioBig = 0.4978;
+                $heightRatioSmall = 0.3052;
+
+                // Vertical Positions for big and small images
+                $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
+                $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
+                // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
+
+                // Horizontal Positions for small images
+                $shortRatioX = 0.0281; // shortRatioX, horizontal width ratio distance to the left picture
+                $mediumRatioX = 0.34736; // mediumRatioX, horizontal width ratio distance to the middle image. shortRatioX + heightRatioSmall + distance between pictures
+                $longRatioX = 0.66662; //longRatioX, horizontal width ratio distance to the right image. shortRatioX + 2x heightRatioSmall + 2x distance between pictures
+                // Horzontal distance between pictures = 0.5 x shortRatioX
+
+                // Horizontal position of big image
+                $ratioBigPictureX = 0.4741; // 1 - shortRatioX - heightRatioBig
+
+                $heightNewBig = self::$collageHeight * $heightRatioBig;
+                $widthNewBig = $heightNewBig * 1.5;
+
+                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
+                $widthNewSmall = $heightNewSmall * 1.5;
+
+                $pictureOptions = [
+                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
+                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                ];
+
+                break;
+            case '1+3-2':
+            case '3+1':
+                //Specify Big/Small Height Ratios - values based on previos settings
+                $heightRatioBig = 0.4978;
+                $heightRatioSmall = 0.3052;
+
+                if ($collageLayout === '1+3-2') {
+                    // Vertical Positions for big and small images
+                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
+                    $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
+                    $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
+                } else {
+                    // Switch vertical Positions for big and small images
+                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
+                    $shortRatioY = 0.4252; // shortRatioY,  = heightRatioSmall + shortRatioY + distance between the images.
+                    $longRatioY = 0.08; // longRatio = vertical distance until the top left corner of the image
+                }
+
+                // Horizontal Positions for small images
+                $shortRatioX = 0.0281; // shortRatioX, horizontal width ratio distance to the left picture
+                $mediumRatioX = 0.34736; // mediumRatioX, horizontal width ratio distance to the middle image. shortRatioX + heightRatioSmall + distance between pictures
+                $longRatioX = 0.66662; //longRatioX, horizontal width ratio distance to the right image. shortRatioX + 2x heightRatioSmall + 2x distance between pictures
+                // Horzontal distance between pictures = 0.5 x shortRatioX
+
+                // Horizontal position of big image
+                $ratioBigPictureX = 0.0281; // shortRatioX
+
+                $heightNewBig = self::$collageHeight * $heightRatioBig;
+                $widthNewBig = $heightNewBig * 1.5;
+
+                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
+                $widthNewSmall = $heightNewSmall * 1.5;
+
+                $pictureOptions = [
+                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
+                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                ];
+
+                break;
+            case '1+2':
+                //Specify Big/Small Height Ratios - values based on previos settings
+                $heightRatioBig = 0.55546; // based on previous value / height
+                $heightRatioSmall = 0.40812;
+
+                $shortRatioY = 0.055;
+                $longRatioX = 0.555;
+                $longRatioY = 0.5368;
+
+                $heightNewBig = self::$collageHeight * $heightRatioBig;
+                $widthNewBig = $heightNewBig * 1.5;
+
+                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
+                $widthNewSmall = $heightNewSmall * 1.5;
+
+                $pictureOptions = [
+                    [0, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 10],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $shortRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                ];
+
+                break;
+            case '2+1':
+                $heightRatio = 0.375;
+
+                // Horizontal Ratio
+                $shortRatioY = 0.1;
+                $longRatioY = 0.525;
+
+                // Vertical Ratio
+                $shortRatioX = 0.1;
+                $longRatioX = 0.525;
+
+                $heightNew = self::$collageHeight * $heightRatio;
+                $widthNew = $heightNew * 1.5;
+
+                $pictureOptions = [
+                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
+                    [self::$collageWidth * $longRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
+                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $longRatioX, $widthNew, $heightNew, 0],
+                ];
+
+                break;
+            case '2x4':
+            case '2x4-2':
+            case '2x4-3':
+            case '2x4-4':
+                if (self::$landscape) {
+                    self::$rotateAfterCreation = true;
+                }
+                self::$drawDashedLine = $collageLayout === '2x4' ? false : true;
+
+                if ($collageLayout === '2x4') {
+                    $widthNew = self::$collageHeight * 0.2857;
+                    $heightNew = $widthNew * 1.5;
+
+                    $shortRatioY = 0.035129;
+                    $longRatioY = 0.532787;
+
+                    $img1RatioX = 0.046875;
+                    $img2RatioX = 0.284375;
+                    $img3RatioX = 0.521875;
+                    $img4RatioX = 0.764844;
+                } elseif ($collageLayout === '2x4-2') {
+                    $widthNew = self::$collageHeight * 0.2675;
+                    $heightNew = $widthNew * 1.5;
+
+                    $shortRatioY = 0.05333;
+                    $longRatioY = 0.54333;
+
+                    $img1RatioX = 0.03556;
+                    $img2RatioX = 0.235;
+                    $img3RatioX = 0.43611;
+                    $img4RatioX = 0.63667;
+                } elseif ($collageLayout === '2x4-3') {
+                    $widthNew = self::$collageHeight * 0.32;
+                    $heightNew = $widthNew * 1.5;
+
+                    $shortRatioY = 0.01;
+                    $longRatioY = 0.51;
+
+                    $img1RatioX = 0.04194;
+                    $img2RatioX = 0.27621;
+                    $img3RatioX = 0.51048;
+                    $img4RatioX = 0.74475;
+                } else {
+                    $widthNew = self::$collageHeight * 0.30;
+                    $heightNew = $widthNew * 1.5;
+
+                    $shortRatioY = 0.025;
+                    $longRatioY = 0.525;
+
+                    $img1RatioX = 0.02531;
+                    $img2RatioX = 0.24080;
+                    $img3RatioX = 0.45630;
+                    $img4RatioX = 0.67178;
+                }
+
+                $pictureOptions = [
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                ];
+
+                break;
+            case '2x3':
+            case '2x3-2':
+                if (self::$landscape) {
+                    self::$rotateAfterCreation = true;
+                }
+
+                $widthNew = intval(self::$collageHeight * 0.32);
+                $heightNew = intval($widthNew * 1.5);
+
+                $shortRatioY = 0.01;
+                $longRatioY = 0.51;
+
+                $img1RatioX = 0.04194;
+                if ($collageLayout === '2x3') {
+                    self::$drawDashedLine = true;
+                    $img2RatioX = 0.27621;
+                    $img3RatioX = 0.51048;
+                } else {
+                    $img2RatioX = 0.28597;
+                    $img3RatioX = 0.53;
+                }
+
+                $pictureOptions = [
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                ];
+
+                if ($collageLayout === '2x3-2') {
+                    $centerX = self::$collageWidth * 0.5;
+                    $centerY = self::$collageHeight * 0.5;
+                    $scaleFactor = 0.99;
+
+                    $pictureOptions = array_map(function ($image) use ($centerX, $centerY, $scaleFactor) {
+                        $x_top_left = $image[0];
+                        $y_top_left = $image[1];
+                        $image_width = $image[2];
+                        $image_height = $image[3];
+
+                        // Calculate the center of the current image
+                        $imageCenterX = $x_top_left + $image_width / 2;
+                        $imageCenterY = $y_top_left + $image_height / 2;
+
+                        // Calculate the vector from the group center to the image center
+                        $vectorX = $imageCenterX - $centerX;
+                        $vectorY = $imageCenterY - $centerY;
+
+                        // Scale the vector by the scale factor
+                        $vectorX *= $scaleFactor;
+                        $vectorY *= $scaleFactor;
+
+                        // Calculate the new center of the image
+                        $newImageCenterX = $centerX + $vectorX;
+                        $newImageCenterY = $centerY + $vectorY;
+
+                        // Calculate the new top left position of the image
+                        $new_x_top_left = $newImageCenterX - $image_width * $scaleFactor / 2;
+                        $new_y_top_left = $newImageCenterY - $image_height * $scaleFactor / 2;
+
+                        // Return the new position and size of the image
+                        return [
+                            $new_x_top_left,
+                            $new_y_top_left,
+                            $image_width * $scaleFactor,
+                            $image_height * $scaleFactor,
+                            90
+                        ];
+                    }, $pictureOptions);
+                }
+
+                break;
+            default:
+                $pictureOptions = [];
+
+                break;
+        }
+
+        return $pictureOptions;
+    }
 
     public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, CollageConfig $c = null): bool
     {
@@ -21,7 +327,6 @@ class Collage
             $c = CollageConfigFactory::fromConfig($config);
         }
         $editImages = [];
-        $landscape = true;
         $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $c->collageLayout);
 
         if (file_exists($collageConfigFilePath)) {
@@ -179,9 +484,9 @@ class Collage
             $height = (int) imagesy($imageResource);
 
             if ($width > $height) {
-                $landscape = true;
+                self::$landscape = true;
             } else {
-                $landscape = false;
+                self::$landscape = false;
                 $imageResource = imagerotate($imageResource, 90, $bg_color_hex);
                 if (!$imageResource instanceof \GdImage) {
                     throw new \Exception('Failed to rotate image resource.');
@@ -239,7 +544,7 @@ class Collage
             imagefill($my_collage, 0, 0, (int) $background);
         }
 
-        if ($landscape == false) {
+        if (self::$landscape == false) {
             self::$rotateAfterCreation = true;
         }
 
@@ -247,322 +552,30 @@ class Collage
         $imageHandler->addPictureBgImage = $c->collageBackground;
         $imageHandler->addPictureBgColor = $c->collageBackgroundColor;
 
-        switch ($c->collageLayout) {
-            // old 2x2 are now named 2+2 as 2x means images are duplicated
-            case '2x2':
-            case '2+2':
-                // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
-                $pictureOptions = [
-                    [0, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
-                    [self::$collageWidth / 2, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
-                    [0, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
-                    [self::$collageWidth / 2, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
-                ];
-
-                break;
-            case '2x2-2':
-            case '2+2-2':
-                $heightRatio = 0.4; // 0.4 = image height ratio. Should be set below 0.5 (as we have 2 pictures). Please adapt the short/long ratio as well
-                $shortRatio = 0.08; // shortRatio, distance until the top left corner of the first image
-                $longRatio = 0.52; // longRatio = image height ratio + shortRatio + distance between the images. In this case: 0.4 + 0.08 + 0.04 = 0.52.
-                // Distance between pictures = 2x (0.5 -heightRatio -shortRatio)
-                // Please note: We get a correct picture, if this formula adds up to exactly 1:  2x heightRatio + 2x shortRatio + distance between pictures
-
-                $heightp = self::$collageHeight * $heightRatio;
-                $widthp = $heightp * 1.5;
-
-                //If there is a need for Text/Frame, we could specify an additional horizontal offset. E.g. widthp * 0.08
-                $horizontalOffset = $widthp * 0;
-
-                // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
-                $pictureOptions = [
-                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
-                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
-                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
-                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
-                ];
-
-                break;
-            case '1+3':
-                //Specify Big/Small Height Ratios - values based on previos settings
-                $heightRatioBig = 0.4978;
-                $heightRatioSmall = 0.3052;
-
-                // Vertical Positions for big and small images
-                $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
-                $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
-                // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
-
-                // Horizontal Positions for small images
-                $shortRatioX = 0.0281; // shortRatioX, horizontal width ratio distance to the left picture
-                $mediumRatioX = 0.34736; // mediumRatioX, horizontal width ratio distance to the middle image. shortRatioX + heightRatioSmall + distance between pictures
-                $longRatioX = 0.66662; //longRatioX, horizontal width ratio distance to the right image. shortRatioX + 2x heightRatioSmall + 2x distance between pictures
-                // Horzontal distance between pictures = 0.5 x shortRatioX
-
-                // Horizontal position of big image
-                $ratioBigPictureX = 0.4741; // 1 - shortRatioX - heightRatioBig
-
-                $heightNewBig = self::$collageHeight * $heightRatioBig;
-                $widthNewBig = $heightNewBig * 1.5;
-
-                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
-                $widthNewSmall = $heightNewSmall * 1.5;
-
-                $pictureOptions = [
-                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
-                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                ];
-
-                break;
-            case '1+3-2':
-            case '3+1':
-                //Specify Big/Small Height Ratios - values based on previos settings
-                $heightRatioBig = 0.4978;
-                $heightRatioSmall = 0.3052;
-
-                if ($c->collageLayout === '1+3-2') {
-                    // Vertical Positions for big and small images
-                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
-                    $shortRatioY = 0.08; // shortRatioY, vertical distance until the top left corner of the image
-                    $longRatioY = 0.6178; // longRatio = heightRatioBig + shortRatioY + distance between the images.
-                } else {
-                    // Switch vertical Positions for big and small images
-                    // Vertical distance between pictures in this case  = 0.5 x shortRatioY.
-                    $shortRatioY = 0.4252; // shortRatioY,  = heightRatioSmall + shortRatioY + distance between the images.
-                    $longRatioY = 0.08; // longRatio = vertical distance until the top left corner of the image
+        if (isset($layoutConfigArray)) {
+            $pictureOptions = [];
+            foreach ($layoutConfigArray as $layoutConfig) {
+                if (!is_array($layoutConfig) || count($layoutConfig) !== 6) {
+                    return false;
                 }
 
-                // Horizontal Positions for small images
-                $shortRatioX = 0.0281; // shortRatioX, horizontal width ratio distance to the left picture
-                $mediumRatioX = 0.34736; // mediumRatioX, horizontal width ratio distance to the middle image. shortRatioX + heightRatioSmall + distance between pictures
-                $longRatioX = 0.66662; //longRatioX, horizontal width ratio distance to the right image. shortRatioX + 2x heightRatioSmall + 2x distance between pictures
-                // Horzontal distance between pictures = 0.5 x shortRatioX
-
-                // Horizontal position of big image
-                $ratioBigPictureX = 0.0281; // shortRatioX
-
-                $heightNewBig = self::$collageHeight * $heightRatioBig;
-                $widthNewBig = $heightNewBig * 1.5;
-
-                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
-                $widthNewSmall = $heightNewSmall * 1.5;
-
-                $pictureOptions = [
-                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
-                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                ];
-
-                break;
-            case '1+2':
-                //Specify Big/Small Height Ratios - values based on previos settings
-                $heightRatioBig = 0.55546; // based on previous value / height
-                $heightRatioSmall = 0.40812;
-
-                $shortRatioY = 0.055;
-                $longRatioX = 0.555;
-                $longRatioY = 0.5368;
-
-                $heightNewBig = self::$collageHeight * $heightRatioBig;
-                $widthNewBig = $heightNewBig * 1.5;
-
-                $heightNewSmall = self::$collageHeight * $heightRatioSmall;
-                $widthNewSmall = $heightNewSmall * 1.5;
-
-                $pictureOptions = [
-                    [0, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 10],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $shortRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                ];
-
-                break;
-            case '2+1':
-                $heightRatio = 0.375;
-
-                // Horizontal Ratio
-                $shortRatioY = 0.1;
-                $longRatioY = 0.525;
-
-                // Vertical Ratio
-                $shortRatioX = 0.1;
-                $longRatioX = 0.525;
-
-                $heightNew = self::$collageHeight * $heightRatio;
-                $widthNew = $heightNew * 1.5;
-
-                $pictureOptions = [
-                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
-                    [self::$collageWidth * $longRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
-                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $longRatioX, $widthNew, $heightNew, 0],
-                ];
-
-                break;
-            case '2x4':
-            case '2x4-2':
-            case '2x4-3':
-            case '2x4-4':
-                if ($landscape) {
-                    self::$rotateAfterCreation = true;
-                }
-                self::$drawDashedLine = $c->collageLayout === '2x4' ? false : true;
-
-                if ($c->collageLayout === '2x4') {
-                    $widthNew = self::$collageHeight * 0.2857;
-                    $heightNew = $widthNew * 1.5;
-
-                    $shortRatioY = 0.035129;
-                    $longRatioY = 0.532787;
-
-                    $img1RatioX = 0.046875;
-                    $img2RatioX = 0.284375;
-                    $img3RatioX = 0.521875;
-                    $img4RatioX = 0.764844;
-                } elseif ($c->collageLayout === '2x4-2') {
-                    $widthNew = self::$collageHeight * 0.2675;
-                    $heightNew = $widthNew * 1.5;
-
-                    $shortRatioY = 0.05333;
-                    $longRatioY = 0.54333;
-
-                    $img1RatioX = 0.03556;
-                    $img2RatioX = 0.235;
-                    $img3RatioX = 0.43611;
-                    $img4RatioX = 0.63667;
-                } elseif ($c->collageLayout === '2x4-3') {
-                    $widthNew = self::$collageHeight * 0.32;
-                    $heightNew = $widthNew * 1.5;
-
-                    $shortRatioY = 0.01;
-                    $longRatioY = 0.51;
-
-                    $img1RatioX = 0.04194;
-                    $img2RatioX = 0.27621;
-                    $img3RatioX = 0.51048;
-                    $img4RatioX = 0.74475;
-                } else {
-                    $widthNew = self::$collageHeight * 0.30;
-                    $heightNew = $widthNew * 1.5;
-
-                    $shortRatioY = 0.025;
-                    $longRatioY = 0.525;
-
-                    $img1RatioX = 0.02531;
-                    $img2RatioX = 0.24080;
-                    $img3RatioX = 0.45630;
-                    $img4RatioX = 0.67178;
-                }
-
-                $pictureOptions = [
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                ];
-
-                break;
-            case '2x3':
-            case '2x3-2':
-                if ($landscape) {
-                    self::$rotateAfterCreation = true;
-                }
-
-                $widthNew = intval(self::$collageHeight * 0.32);
-                $heightNew = intval($widthNew * 1.5);
-
-                $shortRatioY = 0.01;
-                $longRatioY = 0.51;
-
-                $img1RatioX = 0.04194;
-                if ($c->collageLayout === '2x3') {
-                    self::$drawDashedLine = true;
-                    $img2RatioX = 0.27621;
-                    $img3RatioX = 0.51048;
-                } else {
-                    $img2RatioX = 0.28597;
-                    $img3RatioX = 0.53;
-                }
-
-                $pictureOptions = [
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                ];
-
-                if ($c->collageLayout === '2x3-2') {
-                    $centerX = self::$collageWidth * 0.5;
-                    $centerY = self::$collageHeight * 0.5;
-                    $scaleFactor = 0.99;
-
-                    $pictureOptions = array_map(function ($image) use ($centerX, $centerY, $scaleFactor) {
-                        $x_top_left = $image[0];
-                        $y_top_left = $image[1];
-                        $image_width = $image[2];
-                        $image_height = $image[3];
-
-                        // Calculate the center of the current image
-                        $imageCenterX = $x_top_left + $image_width / 2;
-                        $imageCenterY = $y_top_left + $image_height / 2;
-
-                        // Calculate the vector from the group center to the image center
-                        $vectorX = $imageCenterX - $centerX;
-                        $vectorY = $imageCenterY - $centerY;
-
-                        // Scale the vector by the scale factor
-                        $vectorX *= $scaleFactor;
-                        $vectorY *= $scaleFactor;
-
-                        // Calculate the new center of the image
-                        $newImageCenterX = $centerX + $vectorX;
-                        $newImageCenterY = $centerY + $vectorY;
-
-                        // Calculate the new top left position of the image
-                        $new_x_top_left = $newImageCenterX - $image_width * $scaleFactor / 2;
-                        $new_y_top_left = $newImageCenterY - $image_height * $scaleFactor / 2;
-
-                        // Return the new position and size of the image
-                        return [
-                            $new_x_top_left,
-                            $new_y_top_left,
-                            $image_width * $scaleFactor,
-                            $image_height * $scaleFactor,
-                            90
-                        ];
-                    }, $pictureOptions);
-                }
-
-                break;
-            default:
-                if (!isset($layoutConfigArray)) {
-                    throw new \Exception('Layout config does not exist!');
-                }
-                $pictureOptions = [];
-                foreach ($layoutConfigArray as $layoutConfig) {
-                    if (!is_array($layoutConfig) || count($layoutConfig) !== 6) {
-                        return false;
+                $singlePictureOptions = [];
+                for ($j = 0; $j < 6; $j++) {
+                    $processed = $layoutConfig[$j];
+                    if ($j !== 5) {
+                        $value = str_replace(['x', 'y'], [self::$collageWidth, self::$collageHeight], $layoutConfig[$j]);
+                        $processed = self::doMath($value);
                     }
-
-                    $singlePictureOptions = [];
-                    for ($j = 0; $j < 6; $j++) {
-                        $processed = $layoutConfig[$j];
-                        if ($j !== 5) {
-                            $value = str_replace(['x', 'y'], [self::$collageWidth, self::$collageHeight], $layoutConfig[$j]);
-                            $processed = self::doMath($value);
-                        }
-                        $singlePictureOptions[] = $processed;
-                    }
-                    $pictureOptions[] = $singlePictureOptions;
+                    $singlePictureOptions[] = $processed;
                 }
-                break;
+                $pictureOptions[] = $singlePictureOptions;
+            }
+        } else {
+            $pictureOptions = self::getPictureOptions($c->collageLayout);
+        }
+
+        if (empty($pictureOptions)) {
+            throw new \Exception('Failed to get picture options.');
         }
 
         foreach ($pictureOptions as $i => $singlePictureOptions) {
