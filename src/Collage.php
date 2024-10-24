@@ -16,6 +16,15 @@ class Collage
     public static bool $landscape = true;
     public static bool $rotateAfterCreation = false;
 
+    public static function reset(): void
+    {
+        self::$collageHeight = 0;
+        self::$collageWidth = 0;
+        self::$drawDashedLine = false;
+        self::$landscape = true;
+        self::$rotateAfterCreation = false;
+    }
+
     public static function getPictureOptions(string $collageLayout): array
     {
         switch ($collageLayout) {
@@ -326,6 +335,7 @@ class Collage
         if ($c === null) {
             $c = CollageConfigFactory::fromConfig($config);
         }
+        self::reset();
         $editImages = [];
         $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $c->collageLayout);
 
