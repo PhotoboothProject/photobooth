@@ -13,7 +13,7 @@ class Collage
     public static int $collageHeight = 0;
     public static int $collageWidth = 0;
     public static bool $drawDashedLine = false;
-    public static bool $landscape = true;
+    public static string $pictureOrientation = '';
     public static bool $rotateAfterCreation = false;
 
     public static function reset(): void
@@ -21,7 +21,7 @@ class Collage
         self::$collageHeight = 0;
         self::$collageWidth = 0;
         self::$drawDashedLine = false;
-        self::$landscape = true;
+        self::$pictureOrientation = '';
         self::$rotateAfterCreation = false;
     }
 
@@ -184,7 +184,7 @@ class Collage
             case '2x4-2':
             case '2x4-3':
             case '2x4-4':
-                if (self::$landscape) {
+                if (self::$pictureOrientation === 'landscape') {
                     self::$rotateAfterCreation = true;
                 }
                 self::$drawDashedLine = $collageLayout === '2x4' ? false : true;
@@ -249,7 +249,7 @@ class Collage
                 break;
             case '2x3':
             case '2x3-2':
-                if (self::$landscape) {
+                if (self::$pictureOrientation === 'landscape') {
                     self::$rotateAfterCreation = true;
                 }
 
@@ -494,9 +494,9 @@ class Collage
             $height = (int) imagesy($imageResource);
 
             if ($width > $height) {
-                self::$landscape = true;
+                self::$pictureOrientation = 'landscape';
             } else {
-                self::$landscape = false;
+                self::$pictureOrientation = 'portrait';
                 $imageResource = imagerotate($imageResource, 90, $bg_color_hex);
                 if (!$imageResource instanceof \GdImage) {
                     throw new \Exception('Failed to rotate image resource.');
@@ -554,7 +554,7 @@ class Collage
             imagefill($my_collage, 0, 0, (int) $background);
         }
 
-        if (self::$landscape == false) {
+        if (self::$pictureOrientation === 'portrait') {
             self::$rotateAfterCreation = true;
         }
 
