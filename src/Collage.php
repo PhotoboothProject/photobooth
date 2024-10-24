@@ -565,12 +565,12 @@ class Collage
         if (isset($layoutConfigArray)) {
             $pictureOptions = [];
             foreach ($layoutConfigArray as $layoutConfig) {
-                if (!is_array($layoutConfig) || count($layoutConfig) !== 6) {
+                if (!is_array($layoutConfig) || count($layoutConfig) < 5 || count($layoutConfig) > 6) {
                     return false;
                 }
 
                 $singlePictureOptions = [];
-                for ($j = 0; $j < 6; $j++) {
+                for ($j = 0; $j < count($layoutConfig); $j++) {
                     $processed = $layoutConfig[$j];
                     if ($j !== 5) {
                         $value = str_replace(['x', 'y'], [self::$collageWidth, self::$collageHeight], $layoutConfig[$j]);
