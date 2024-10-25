@@ -30,7 +30,7 @@ class Collage
         switch ($collageLayout) {
             // old 2x2 are now named 2+2 as 2x means images are duplicated
             case '2x2':
-            case '2+2':
+            case '2+2-1':
                 self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
                 $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
 
@@ -69,7 +69,7 @@ class Collage
                 ];
 
                 break;
-            case '1+3':
+            case '1+3-1':
                 self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
                 $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
 
@@ -198,15 +198,15 @@ class Collage
                 ];
 
                 break;
-            case '2x4':
+            case '2x4-1':
             case '2x4-2':
             case '2x4-3':
             case '2x4-4':
                 self::$rotateAfterCreation = self::$pictureOrientation === 'landscape';
-                self::$drawDashedLine = $collageLayout != '2x4';
+                self::$drawDashedLine = $collageLayout != '2x4-1';
                 $pictureRotation = self::$pictureOrientation === 'landscape' ? 90 : 0;
 
-                if ($collageLayout === '2x4') {
+                if ($collageLayout === '2x4-1') {
                     $widthNew = self::$collageHeight * 0.2857;
                     $heightNew = $widthNew * 1.5;
 
@@ -264,10 +264,10 @@ class Collage
                 ];
 
                 break;
-            case '2x3':
+            case '2x3-1':
             case '2x3-2':
                 self::$rotateAfterCreation = self::$pictureOrientation === 'landscape';
-                self::$drawDashedLine = $collageLayout === '2x3';
+                self::$drawDashedLine = $collageLayout === '2x3-1';
                 $pictureRotation = self::$pictureOrientation === 'landscape' ? 90 : 0;
 
                 $widthNew = intval(self::$collageHeight * 0.32);
@@ -277,7 +277,7 @@ class Collage
                 $longRatioY = 0.51;
 
                 $img1RatioX = 0.04194;
-                if ($collageLayout === '2x3') {
+                if ($collageLayout === '2x3-1') {
                     $img2RatioX = 0.27621;
                     $img3RatioX = 0.51048;
                 } else {

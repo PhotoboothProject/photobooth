@@ -1458,8 +1458,8 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ->end()
                 ->enumNode('layout')
                     ->values([
-                        '2+2', '2+2-2', '1+3', '1+3-2', '3+1', '1+2', '2+1',
-                        '2x4', '2x4-2', '2x4-3', '2x4-4', '2x3', '2x3-2',
+                        '2+2-1', '2+2-2', '1+3-1', '1+3-2', '3+1', '1+2', '2+1',
+                        '2x4-1', '2x4-2', '2x4-3', '2x4-4', '2x3-1', '2x3-2',
                         'collage.json',
                     ])
                     ->defaultValue('2+2-2')
