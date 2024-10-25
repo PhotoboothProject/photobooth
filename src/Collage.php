@@ -31,17 +31,23 @@ class Collage
             // old 2x2 are now named 2+2 as 2x means images are duplicated
             case '2x2':
             case '2+2':
+                self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
+                $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
+
                 // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
                 $pictureOptions = [
-                    [0, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
-                    [self::$collageWidth / 2, 0, self::$collageWidth / 2, self::$collageHeight / 2, 0],
-                    [0, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
-                    [self::$collageWidth / 2, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, 0],
+                    [0, 0, self::$collageWidth / 2, self::$collageHeight / 2, $pictureRotation],
+                    [self::$collageWidth / 2, 0, self::$collageWidth / 2, self::$collageHeight / 2, $pictureRotation],
+                    [0, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, $pictureRotation],
+                    [self::$collageWidth / 2, self::$collageHeight / 2, self::$collageWidth / 2, self::$collageHeight / 2, $pictureRotation],
                 ];
 
                 break;
             case '2x2-2':
             case '2+2-2':
+                self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
+                $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
+
                 $heightRatio = 0.4; // 0.4 = image height ratio. Should be set below 0.5 (as we have 2 pictures). Please adapt the short/long ratio as well
                 $shortRatio = 0.08; // shortRatio, distance until the top left corner of the first image
                 $longRatio = 0.52; // longRatio = image height ratio + shortRatio + distance between the images. In this case: 0.4 + 0.08 + 0.04 = 0.52.
@@ -56,14 +62,17 @@ class Collage
 
                 // Set Picture Options (Start X, Start Y, Width, Height, Rotation Angle) for each picture
                 $pictureOptions = [
-                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
-                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, 0],
-                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
-                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, 0],
+                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, $pictureRotation],
+                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $shortRatio, $widthp, $heightp, $pictureRotation],
+                    [self::$collageWidth * $shortRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, $pictureRotation],
+                    [self::$collageWidth * $longRatio + $horizontalOffset, self::$collageHeight * $longRatio, $widthp, $heightp, $pictureRotation],
                 ];
 
                 break;
             case '1+3':
+                self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
+                $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
+
                 //Specify Big/Small Height Ratios - values based on previos settings
                 $heightRatioBig = 0.4978;
                 $heightRatioSmall = 0.3052;
@@ -89,15 +98,18 @@ class Collage
                 $widthNewSmall = $heightNewSmall * 1.5;
 
                 $pictureOptions = [
-                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
-                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, $pictureRotation],
+                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
+                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
                 ];
 
                 break;
             case '1+3-2':
             case '3+1':
+                self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
+                $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
+
                 //Specify Big/Small Height Ratios - values based on previos settings
                 $heightRatioBig = 0.4978;
                 $heightRatioSmall = 0.3052;
@@ -130,14 +142,17 @@ class Collage
                 $widthNewSmall = $heightNewSmall * 1.5;
 
                 $pictureOptions = [
-                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 0],
-                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [self::$collageWidth * $ratioBigPictureX, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, $pictureRotation],
+                    [self::$collageWidth * $shortRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
+                    [self::$collageWidth * $mediumRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
                 ];
 
                 break;
             case '1+2':
+                self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
+                $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
+
                 //Specify Big/Small Height Ratios - values based on previos settings
                 $heightRatioBig = 0.55546; // based on previous value / height
                 $heightRatioSmall = 0.40812;
@@ -153,13 +168,16 @@ class Collage
                 $widthNewSmall = $heightNewSmall * 1.5;
 
                 $pictureOptions = [
-                    [0, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 10],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $shortRatioY, $widthNewSmall, $heightNewSmall, 0],
-                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, 0],
+                    [0, self::$collageHeight * $shortRatioY, $widthNewBig, $heightNewBig, 10 + $pictureRotation],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $shortRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
+                    [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
                 ];
 
                 break;
             case '2+1':
+                self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
+                $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
+
                 $heightRatio = 0.375;
 
                 // Horizontal Ratio
@@ -174,9 +192,9 @@ class Collage
                 $widthNew = $heightNew * 1.5;
 
                 $pictureOptions = [
-                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
-                    [self::$collageWidth * $longRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, 0],
-                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $longRatioX, $widthNew, $heightNew, 0],
+                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $longRatioY, self::$collageHeight * $shortRatioX, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $shortRatioY, self::$collageHeight * $longRatioX, $widthNew, $heightNew, $pictureRotation],
                 ];
 
                 break;
@@ -184,10 +202,9 @@ class Collage
             case '2x4-2':
             case '2x4-3':
             case '2x4-4':
-                if (self::$pictureOrientation === 'landscape') {
-                    self::$rotateAfterCreation = true;
-                }
-                self::$drawDashedLine = $collageLayout === '2x4' ? false : true;
+                self::$rotateAfterCreation = self::$pictureOrientation === 'landscape';
+                self::$drawDashedLine = $collageLayout != '2x4';
+                $pictureRotation = self::$pictureOrientation === 'landscape' ? 90 : 0;
 
                 if ($collageLayout === '2x4') {
                     $widthNew = self::$collageHeight * 0.2857;
@@ -236,22 +253,22 @@ class Collage
                 }
 
                 $pictureOptions = [
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img4RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, $pictureRotation],
                 ];
 
                 break;
             case '2x3':
             case '2x3-2':
-                if (self::$pictureOrientation === 'landscape') {
-                    self::$rotateAfterCreation = true;
-                }
+                self::$rotateAfterCreation = self::$pictureOrientation === 'landscape';
+                self::$drawDashedLine = $collageLayout === '2x3';
+                $pictureRotation = self::$pictureOrientation === 'landscape' ? 90 : 0;
 
                 $widthNew = intval(self::$collageHeight * 0.32);
                 $heightNew = intval($widthNew * 1.5);
@@ -261,7 +278,6 @@ class Collage
 
                 $img1RatioX = 0.04194;
                 if ($collageLayout === '2x3') {
-                    self::$drawDashedLine = true;
                     $img2RatioX = 0.27621;
                     $img3RatioX = 0.51048;
                 } else {
@@ -270,12 +286,12 @@ class Collage
                 }
 
                 $pictureOptions = [
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
-                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, 90],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $shortRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img1RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img2RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, $pictureRotation],
+                    [self::$collageWidth * $img3RatioX, self::$collageHeight * $longRatioY, $widthNew, $heightNew, $pictureRotation],
                 ];
 
                 if ($collageLayout === '2x3-2') {
@@ -283,7 +299,7 @@ class Collage
                     $centerY = self::$collageHeight * 0.5;
                     $scaleFactor = 0.99;
 
-                    $pictureOptions = array_map(function ($image) use ($centerX, $centerY, $scaleFactor) {
+                    $pictureOptions = array_map(function ($image) use ($centerX, $centerY, $scaleFactor, $pictureRotation) {
                         $x_top_left = $image[0];
                         $y_top_left = $image[1];
                         $image_width = $image[2];
@@ -315,7 +331,7 @@ class Collage
                             $new_y_top_left,
                             $image_width * $scaleFactor,
                             $image_height * $scaleFactor,
-                            90
+                            $pictureRotation
                         ];
                     }, $pictureOptions);
                 }
@@ -493,18 +509,7 @@ class Collage
             $width = (int) imagesx($imageResource);
             $height = (int) imagesy($imageResource);
 
-            if ($width > $height) {
-                self::$pictureOrientation = 'landscape';
-            } else {
-                self::$pictureOrientation = 'portrait';
-                $imageResource = imagerotate($imageResource, 90, $bg_color_hex);
-                if (!$imageResource instanceof \GdImage) {
-                    throw new \Exception('Failed to rotate image resource.');
-                }
-                $width = imagesx($imageResource);
-                $height = imagesy($imageResource);
-                $imageHandler->imageModified = true;
-            }
+            self::$pictureOrientation = $width > $height ? 'landscape' : 'portrait';
 
             if ($imageHandler->imageModified) {
                 $imageHandler->saveJpeg($imageResource, $editImages[$i]);
@@ -516,10 +521,6 @@ class Collage
 
         if (strpos($c->collageLayout, '2x') === 0) {
             $editImages = array_merge($editImages, $editImages);
-        }
-
-        if (!isset($width) || !isset($height)) {
-            throw new \Exception('Width or height not defined!');
         }
 
         // If no dimensions given ftom json create Collage based on 300dpi 4x6in
@@ -552,10 +553,6 @@ class Collage
         } else {
             $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
             imagefill($my_collage, 0, 0, (int) $background);
-        }
-
-        if (self::$pictureOrientation === 'portrait') {
-            self::$rotateAfterCreation = true;
         }
 
         $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
