@@ -209,7 +209,7 @@ if ($action === 'reset') {
 
     $collageLayout = $newConfig['collage']['layout'];
     $collageConfigFilePath = PathUtility::getAbsolutePath('private/collage.json');
-    if ($collageLayout === '1+2' || $collageLayout == '2+1' || $collageLayout == '2x3') {
+    if ($collageLayout === '1+2' || $collageLayout === '2+1' || strpos($collageLayout, '2x3') === 0) {
         $newConfig['collage']['limit'] = 3;
     } elseif ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
         $collageConfig = json_decode((string)file_get_contents($collageConfigFilePath), true);
