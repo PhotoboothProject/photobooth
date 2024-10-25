@@ -168,7 +168,7 @@ class Collage
                 $widthNewSmall = $heightNewSmall * 1.5;
 
                 $pictureOptions = [
-                    [0, self::$collageHeight * $shortRatioY, $pictureRotation === 90 ? $heightNewBig : $widthNewBig, $pictureRotation === 90 ? $widthNewBig : $heightNewBig, 10 + $pictureRotation],
+                    [self::$collageHeight * $shortRatioY, self::$collageHeight * $shortRatioY, $pictureRotation === 90 ? $heightNewBig : $widthNewBig, $pictureRotation === 90 ? $widthNewBig : $heightNewBig, 10 + $pictureRotation],
                     [self::$collageWidth * $longRatioX, self::$collageHeight * $shortRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
                     [self::$collageWidth * $longRatioX, self::$collageHeight * $longRatioY, $widthNewSmall, $heightNewSmall, $pictureRotation],
                 ];
