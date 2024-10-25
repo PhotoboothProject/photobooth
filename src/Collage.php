@@ -28,8 +28,6 @@ class Collage
     public static function getPictureOptions(string $collageLayout): array
     {
         switch ($collageLayout) {
-            // old 2x2 are now named 2+2 as 2x means images are duplicated
-            case '2x2':
             case '2+2-1':
                 self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
                 $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
@@ -43,7 +41,6 @@ class Collage
                 ];
 
                 break;
-            case '2x2-2':
             case '2+2-2':
                 self::$rotateAfterCreation = self::$pictureOrientation === 'portrait';
                 $pictureRotation = self::$pictureOrientation === 'portrait' ? 90 : 0;
