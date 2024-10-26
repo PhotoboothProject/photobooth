@@ -398,7 +398,7 @@
   "manual:general:picture_retry_on_error": "Stel in hoe vaak het systeem zal proberen een foto te maken in geval van een fout. 0 = uitgeschakeld.",
   "manual:general:picture_retry_timeout": "Stel een tijd in waarna de foto-opname opnieuw wordt geprobeerd. Een melding is zichtbaar gedurende de gedefinieerde tijd. De aftelling wordt gebruikt zoals gedefinieerd voor de foto / volgende collageafbeelding. \"Opnieuw proberen een foto te maken\" moet worden ingesteld op een wGND > 0.",
   "manual:general:picture_thumb_size": "Kies de grootte van miniaturen: XS = maximaal 360px, S = maximaal 540px, M = maximaal 900px, L = maximaal 1080px, XL = maximaal 1260px",
-  "manual:general:picture_time_to_live": "Kies een tijd tussen 1 en 90 seconden. Uw afbeelding is gedurende die tijd zichtbaar op het resultaatscherm nadat u deze heeft gemaakt.",
+  "manual:general:picture_time_to_live": "Kies een tijd tussen 1 en 90 seconden. Je foto is voor die tijd zichtbaar op het resultaatscherm na het nemen ervan. Selecteer 0 om automatische herladen uit te schakelen.",
   "manual:general:reload_key": "Specificeer de toets-ID om die toets te gebruiken om de pagina opnieuw te laden (bijvoorbeeld 82 is de toets \"R\"). Gebruik bijvoorbeeld <a href=\"https://keycode.info\" target=\"_blank\">https://keycode.info</a> om de toets-ID te vinden.",
   "manual:general:start_screen_subtitle": "Voer de subtitel in die zichtbaar is op de startpagina.",
   "manual:general:start_screen_subtitle_visible": "Indien ingeschakeld, is de ingevoerde subtitel zichtbaar op het startscherm.",

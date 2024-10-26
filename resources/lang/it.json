@@ -442,7 +442,7 @@
   "manual:general:picture_retry_on_error": "Imposta quante volte il sistema proverà a riscattare una foto in caso di errore. 0 = disabilitato.",
   "manual:general:picture_retry_timeout": "Imposta un tempo dopo il quale verrà fatto un altro tentativo di scatto. Una notifica è visibile per un tempo definito. Il conto alla rovescia sarà usato come definito per l'immagine / l'immagine del collage successiva. \"Riprova a scattare una foto\" deve essere impostato su un valore > 0.",
   "manual:general:picture_thumb_size": "Scegli dimensione miniatura: XS = max 360px, S = max 540px, M = max 900px, L = max 1080px, XL = max 1260px",
-  "manual:general:picture_time_to_live": "Scegli un tempo tra 1 e 90 secondi. La tua immagine è visibile per quel tempo sullo schermo del risultato dopo averla scattata.",
+  "manual:general:picture_time_to_live": "Scegli un tempo tra 1 e 90 secondi. La tua immagine sarà visibile per quel tempo sullo schermo del risultato dopo averla scattata. Selezionare 0 per disabilitare il reload automatico.",
   "manual:general:reload_key": "Specifica quale pulsante della tastiera usare per fare un refresh (ad es. 82 è il pulsante \"R\"). Per esempio usa <a href=\"https://keycode.info\"  target=\"_blank\">https://keycode.info</a> per scoprire l'id del pulsante.",
   "manual:general:start_screen_subtitle": "Inserisci il sottotitolo visibile nella pagina iniziale.",
   "manual:general:start_screen_subtitle_visible": "Se abilitata, i sottotitoli inseriti sono visibili nella schermata iniziale.",

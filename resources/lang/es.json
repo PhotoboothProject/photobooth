@@ -382,7 +382,6 @@
   "manual:general:picture_retry_on_error": "Establezca la frecuencia con que el sistema intentará tomar una foto en caso de error. 0 = deshabilitado.",
   "manual:general:picture_retry_timeout": "Establecer el tiempo después de la cual la grabación de la foto será probada de nuevo. Una notificación es visible para el tiempo definido. La cuenta regresiva se utilizará como se define para la imagen / imagen del siguiente collage. \"Reintentar tomar una imagen\" debe establecerse en un valor > 0.",
   "manual:general:picture_thumb_size": "Elija el tamaño de la miniatura: XS = max 360px, S = max 540px, M = max 900px, L = max 1080px, XL = max 1260px",
-  "manual:general:picture_time_to_live": "Elige un tiempo entre 1 y 90 segundos. Tu foto es visible para ese tiempo en la pantalla de resultado después de tomarla.",
   "manual:general:reload_key": "Especifique el id de clave para usar esa clave para recargar la página (por ejemplo, 82 es la clave \"R\"). Por ejemplo, utilice <a href=\"https://keycode.info\"  target=\"_blank\">https://keycode.info</a> para averiguar el id de clave.",
   "manual:general:start_screen_subtitle": "Introduzca el subtítulo visible en la página de inicio.",
   "manual:general:start_screen_subtitle_visible": "Si está activado, los subtítulos introducidos son visibles en la pantalla de inicio.",
