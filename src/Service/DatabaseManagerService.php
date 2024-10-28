@@ -196,7 +196,7 @@ class DatabaseManagerService
         }
 
         usort($output, function ($a, $b) {
-            return strlen($a[0]) <=> strlen($b[0]);
+            return $a[0] <=> $b[0];
         });
 
         if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === false) {
