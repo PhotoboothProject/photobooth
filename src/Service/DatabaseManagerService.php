@@ -195,9 +195,11 @@ class DatabaseManagerService
             }
         }
 
-        usort($output, function ($a, $b) {
-            return $a[0] <=> $b[0];
-        });
+        if (!empty($output)) {
+            usort($output, function ($a, $b) {
+                return $a[0] <=> $b[0];
+            });
+        }
 
         if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === false) {
             return 'error';
