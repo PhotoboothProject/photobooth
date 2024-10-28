@@ -190,7 +190,7 @@ class DatabaseManagerService
 
         $output = [];
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->imageDirectory, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS)) as $value) {
-            if ($value->isFile()) {
+            if ($value->isFile() && strtolower(pathinfo($value->getFilename(), PATHINFO_EXTENSION)) === 'jpg') {
                 $output[] = [$value->getMTime(), $value->getFilename()];
             }
         }
