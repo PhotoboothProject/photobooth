@@ -201,10 +201,20 @@ class DatabaseManagerService
             });
         }
 
-        if (file_put_contents($this->databaseFile, json_encode(array_column($output, 1))) === false) {
-            return 'error';
-        } else {
+        try {
+            $filenames = array_column($output, 1);
+            $jsonData = json_encode($filenames);
+            if ($jsonData === false) {
+                throw new \Exception('Error: Failed to encode filenames to JSON.');
+            }
+
+            if (file_put_contents($this->databaseFile, $jsonData) === false) {
+                throw new \Exception('Error: Failed to write data to database.');
+            }
+
             return 'success';
+        } catch (\Exception $e) {
+            return 'error';
         }
     }
 
