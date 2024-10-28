@@ -1437,6 +1437,29 @@ const photoBooth = (function () {
         window.open(url, 'newwin', features);
     });
 
+    $('.print-unlock-button').on('click', function (e) {
+        e.preventDefault();
+        photoboothTools.overlay.showWaiting(photoboothTools.getTranslation('wait_message'));
+        $.ajax({
+            method: 'GET',
+            url: environment.publicFolders.api + '/printDB.php',
+            data: {
+                action: 'unlockPrint'
+            },
+            success: (data) => {
+                if (data.success) {
+                    photoboothTools.overlay.showSuccess(photoboothTools.getTranslation('success'));
+                    $(this).addClass('hidden');
+                } else {
+                    photoboothTools.overlay.showError(photoboothTools.getTranslation('error'));
+                }
+                setTimeout(function () {
+                    photoboothTools.overlay.close();
+                }, 2000);
+            }
+        });
+    });
+
     $('.fs-button').on('click', function (e) {
         e.preventDefault();
         if (document.fullscreenElement) {

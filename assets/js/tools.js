@@ -309,6 +309,7 @@ const photoboothTools = (function () {
                             config.print.locking_msg + ' (' + api.getTranslation('printed') + ' ' + data.count + ')'
                         );
                         api.resetPrintErrorMessage(cb, config.print.time);
+                        $('.print-unlock-button').removeClass('hidden');
                     } else if (data.error) {
                         api.console.log('ERROR: An error occurred: ', data.error);
                         api.overlay.showError(data.error);

@@ -1,9 +1,11 @@
 <?php
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\ComponentUtility;
 
 $languageService = LanguageService::getInstance();
+$printManager = PrintManagerService::getInstance();
 
 echo '<div class="buttonbar">';
 
@@ -36,5 +38,8 @@ if ($config['button']['show_fs']) {
 }
 if ($config['button']['show_cups']) {
     echo ComponentUtility::renderButton('cups', $config['icons']['cups'], 'cups-button');
+}
+if ($config['button']['show_printUnlock']) {
+    echo ComponentUtility::renderButton('reset_lock', $config['icons']['print'], 'print-unlock-button', true, $printManager->isPrintLocked() ? [] : ['class' => 'hidden']);
 }
 echo '</div>';

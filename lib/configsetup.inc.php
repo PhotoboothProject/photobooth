@@ -1527,6 +1527,12 @@ return [
             'name' => 'print[limit]',
             'value' => $config['print']['limit'],
         ],
+        'button_show_printUnlock' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'button[show_printUnlock]',
+            'value' => $config['button']['show_printUnlock'],
+        ],
         'print_locking_msg' => [
             'view' => 'expert',
             'type' => 'input',
