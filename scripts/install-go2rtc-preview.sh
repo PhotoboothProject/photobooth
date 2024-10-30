@@ -309,7 +309,7 @@ info ""
 ask_yes_no "Please enter your choice" "6"
 info ""
 
-if [[ "$GO2RTC_VERSION" == "1.9.2" ]]; then
+if [[ "$GO2RTC_VERSION" == "1.9.2" || "$GO2RTC_VERSION" == "1.9.3" ]]; then
     CODEC_FORMAT="--codec mjpeg"
 else
     CODEC_FORMAT="--libav-format h264"
