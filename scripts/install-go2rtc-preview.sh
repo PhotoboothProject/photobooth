@@ -343,6 +343,11 @@ elif [[ $REPLY =~ ^[5]$ ]]; then
     UPDATE_ONLY=true
     ask_version
     install_go2rtc
+    if [[ "$GO2RTC_VERSION" == "1.9.2" || "$GO2RTC_VERSION" == "1.9.3" ]]; then
+        sed -i 's/--libav-format h264/--codec mjpeg/g' /etc/go2rtc.yaml
+    else
+        sed -i 's/--codec mjpeg/--libav-format h264/g' /etc/go2rtc.yaml
+    fi
     info "Done!"
     exit 0
 elif [[ $REPLY =~ ^[6]$ ]]; then
