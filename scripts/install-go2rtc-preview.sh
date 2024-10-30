@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GO2RTC_VERSIONS=("1.9.2" "1.9.3" "1.9.4" "1.9.5" "1.9.6")
+GO2RTC_VERSIONS=("1.9.2" "1.9.4" "1.9.6")
 GO2RTC_VERSION="1.9.6"
 YAML_STREAM="photobooth: exec:gphoto2 --capture-movie --stdout#killsignal=2"
 CAPTURE_CMD="gphoto2"
@@ -309,7 +309,7 @@ info ""
 ask_yes_no "Please enter your choice" "6"
 info ""
 
-if [[ "$GO2RTC_VERSION" == "1.9.2" || "$GO2RTC_VERSION" == "1.9.3" ]]; then
+if [[ "$GO2RTC_VERSION" == "1.9.2" ]]; then
     CODEC_FORMAT="--codec mjpeg"
 else
     CODEC_FORMAT="--libav-format h264"
@@ -343,7 +343,7 @@ elif [[ $REPLY =~ ^[5]$ ]]; then
     UPDATE_ONLY=true
     ask_version
     install_go2rtc
-    if [[ "$GO2RTC_VERSION" == "1.9.2" || "$GO2RTC_VERSION" == "1.9.3" ]]; then
+    if [[ "$GO2RTC_VERSION" == "1.9.2" ]]; then
         sed -i 's/--libav-format h264/--codec mjpeg/g' /etc/go2rtc.yaml
     else
         sed -i 's/--codec mjpeg/--libav-format h264/g' /etc/go2rtc.yaml
