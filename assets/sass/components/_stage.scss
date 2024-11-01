@@ -83,6 +83,15 @@
     left: 0;
     background: center center no-repeat;
     background-size: contain;
+    &.flip-horizontal {
+      scale: -1 1;
+    }
+    &.flip-vertical {
+      scale: 1 -1;
+    }
+    &.flip-both {
+      scale: -1 -1;
+    }
   }
 
   &-code {
