@@ -372,10 +372,11 @@ class Collage
                         self::$collageHeight = $collageJson['height'];
                     }
 
-                    if (isset($collageJson['apply_frame']) && isset($collageJson['frame'])) {
-                        if (in_array($collageJson['apply_frame'], ['once', 'always'])) {
-                            $c->collageTakeFrame = $collageJson['apply_frame'];
-                        }
+                    if (isset($collageJson['apply_frame']) ) && in_array($collageJson['apply_frame'], ['once', 'always'])) {
+                        $c->collageTakeFrame = $collageJson['apply_frame'];
+                    }
+
+                    if (isset($collageJson['frame']) && !empty($collageJson['frame'])) {
                         $c->collageFrame = $collageJson['frame'];
                     }
 
