@@ -245,7 +245,7 @@ if ($action === 'reset') {
             $logger->debug('Placeholder position not in range. Placeholder disabled.');
         }
 
-        if ($newConfig['collage']['placeholderpath'] && $newConfig['collage']['placeholderpath'] === '') {
+        if ($newConfig['collage']['placeholderpath'] === '') {
             $newConfig['collage']['placeholder'] = false;
             $logger->debug('Collage Placeholder is empty. Collage Placeholder disabled.');
         }
