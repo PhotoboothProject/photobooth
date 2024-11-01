@@ -245,18 +245,9 @@ if ($action === 'reset') {
             $logger->debug('Placeholder position not in range. Placeholder disabled.');
         }
 
-        if (
-            empty($newConfig['collage']['placeholderpath']) ||
-            !is_array(
-                @getimagesize(
-                    str_starts_with($newConfig['collage']['placeholderpath'], 'http')
-                        ? $newConfig['collage']['placeholderpath']
-                        : $_SERVER['DOCUMENT_ROOT'] . $newConfig['collage']['placeholderpath']
-                )
-            )
-        ) {
+        if ($newConfig['collage']['placeholderpath'] && $newConfig['collage']['placeholderpath'] === '') {
             $newConfig['collage']['placeholder'] = false;
-            $logger->debug('Collage Placeholder does not exist or is empty. Collage Placeholder disabled.', $newConfig['collage']);
+            $logger->debug('Collage Placeholder is empty. Collage Placeholder disabled.');
         }
     }
 

@@ -13,21 +13,13 @@ class CollageConfigFactory
         $collageConfig->collageLayout = $config['collage']['layout'];
         $collageConfig->collageResolution = (int) substr($config['collage']['resolution'], 0, -3);
         $collageConfig->collageBackgroundColor = $config['collage']['background_color'];
-        $collageConfig->collageFrame = str_starts_with($config['collage']['frame'], 'http')
-            ? $config['collage']['frame']
-            : $_SERVER['DOCUMENT_ROOT'] . $config['collage']['frame'];
+        $collageConfig->collageFrame = $config['collage']['frame'];
         $collageConfig->collageTakeFrame = $config['collage']['take_frame'];
         $collageConfig->collagePlaceholder = $config['collage']['placeholder'];
         // If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
         $collageConfig->collagePlaceholderPosition = (int) $config['collage']['placeholderposition'] - 1;
-        $collageConfig->collagePlaceholderPath = str_starts_with($config['collage']['placeholderpath'], 'http')
-            ? $config['collage']['placeholderpath']
-            : $_SERVER['DOCUMENT_ROOT'] . $config['collage']['placeholderpath'];
-        $collageConfig->collageBackground = (empty($config['collage']['background'])
-            ? ''
-            : str_starts_with($config['collage']['background'], 'http'))
-                ? $config['collage']['background']
-                : $_SERVER['DOCUMENT_ROOT'] . $config['collage']['background'];
+        $collageConfig->collagePlaceholderPath = $config['collage']['placeholderpath'];
+        $collageConfig->collageBackground = $config['collage']['background'];
         $collageConfig->collageDashedLineColor = $config['collage']['dashedline_color'];
         // If a placholder image should be used, we need to increase the limit here in order to count the images correct
         $collageConfig->collageLimit = (int) ($config['collage']['placeholder'] ? $config['collage']['limit'] + 1 : $config['collage']['limit']);

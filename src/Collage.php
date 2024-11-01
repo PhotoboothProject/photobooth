@@ -382,9 +382,7 @@ class Collage
                     if (isset($collageJson['placeholder']) && $collageJson['placeholder']) {
                         $c->collagePlaceholder = $collageJson['placeholder'];
                         $c->collagePlaceholderPosition = (int) $collageJson['placeholderposition'] - 1;
-                        $c->collagePlaceholderPath = str_starts_with($collageJson['placeholderpath'], 'http') ?
-                            $collageJson['placeholderpath'] :
-                            $_SERVER['DOCUMENT_ROOT'] . $collageJson['placeholderpath'];
+                        $c->collagePlaceholderPath = $collageJson['placeholderpath'];
                     }
 
                     $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;
@@ -446,7 +444,7 @@ class Collage
         $placeholderOffset = 0;
         for ($i = 0; $i < $c->collageLimit; $i++) {
             if ($c->collagePlaceholder && $c->collagePlaceholderPosition == $i) {
-                $editImages[] = $c->collagePlaceholderPath;
+                $editImages[] = PathUtility::getAbsolutePath($c->collagePlaceholderPath);
                 $placeholderOffset = 1;
             } else {
                 if (!file_exists($srcImagePaths[$i - $placeholderOffset])) {
@@ -535,7 +533,7 @@ class Collage
             throw new \Exception('Failed to create collage resource.');
         }
 
-        if (is_array(@getimagesize($c->collageBackground))) {
+        if (!empty($c->collageBackground)) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
             $imageHandler->resizeMaxWidth = self::$collageWidth;
             $imageHandler->resizeMaxHeight = self::$collageHeight;
