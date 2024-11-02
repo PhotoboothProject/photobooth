@@ -634,21 +634,17 @@ const photoBooth = (function () {
 
                     if (config.collage.continuous) {
                         loaderMessage.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
-                        if (result.current + 1 < result.limit) {
-                            setTimeout(() => {
-                                api.clearLoaderImage();
-                                imageUrl = '';
+                        setTimeout(() => {
+                            api.clearLoaderImage();
+                            imageUrl = '';
+                            if (result.current + 1 < result.limit) {
                                 api.thrill(PhotoStyle.COLLAGE);
-                            }, continuousCollageTime);
-                        } else {
-                            currentCollageFile = '';
-                            api.nextCollageNumber = 0;
-                            setTimeout(() => {
-                                api.clearLoaderImage();
-                                imageUrl = '';
+                            } else {
+                                currentCollageFile = '';
+                                api.nextCollageNumber = 0;
                                 api.processPic(result);
-                            }, continuousCollageTime);
-                        }
+                            }
+                        }, continuousCollageTime);
                     } else {
                         // collage with interruption
                         if (result.current + 1 < result.limit) {
