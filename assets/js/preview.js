@@ -190,20 +190,19 @@ const photoboothPreview = (function () {
         if (config.commands.preview_kill) {
             api.runCmd('stop');
         }
-        if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
+        if (config.preview.mode === PreviewMode.DEVICE.valueOf() || config.preview.mode === PreviewMode.URL.valueOf()) {
             api.stopVideo();
-        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            url.removeClass('streaming');
-            url.hide();
         }
     };
 
     api.stopVideo = function () {
-        loader.css('--stage-background', null);
+        loader.css('--stage-background', config.colors.background_countdown);
         if (api.stream) {
             api.stream.getTracks()[0].stop();
             api.stream = null;
         }
+        url.removeClass('streaming');
+        url.hide();
         video.hide();
         pictureFrame.hide();
         collageFrame.hide();
