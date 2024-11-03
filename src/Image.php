@@ -199,16 +199,6 @@ class Image
     public bool $addPictureApplyFrame = false;
 
     /**
-     * The path to the background image to be used when rotating the picture to be added.
-     */
-    public string $addPictureBgImage = '';
-
-    /**
-     * The hexadecimal color code for the background color to be used when rotating the picture to be added.
-     */
-    public string $addPictureBgColor = '#0000007f';
-
-    /**
      *
      * Add dashed line Definitions
      *
@@ -401,7 +391,7 @@ class Image
     /**
      * Rotate and resize an image.
      */
-    public function rotateResizeImage(GdImage $image): GdImage|false
+    public function rotateResizeImage(GdImage $image, bool $useTransparentBackground = false): GdImage|false
     {
         try {
             $rotation = intval($this->resizeRotation);
@@ -414,40 +404,45 @@ class Image
                     throw new \Exception('Cannot rotate image.');
                 }
             } else {
-                $bg_color = $this->resizeBgColor;
-                if (strlen($bg_color) === 7) {
-                    $bg_color .= '00';
-                }
-                $colorComponents = sscanf($bg_color, '#%02x%02x%02x%02x');
-                if ($colorComponents !== null) {
-                    list($bg_r, $bg_g, $bg_b, $bg_a) = $colorComponents;
-                    $bg_r = intval($bg_r);
-                    $bg_g = intval($bg_g);
-                    $bg_b = intval($bg_b);
-                    $bg_a = intval($bg_a);
+                $old_width = imagesx($image);
+                $old_height = imagesy($image);
 
-                } else {
-                    throw new \Exception('Background color: sscanf returned null!');
-                }
-
-                // get old dimensions
-                $old_width = intval(imagesx($image));
-                $old_height = intval(imagesy($image));
-
-                // create new image with old dimensions
+                // Create a new true color image
                 $new = imagecreatetruecolor($old_width, $old_height);
                 if (!$new) {
-                    throw new \Exception('Cannot create new image.');
+                    throw new \Exception('Failed to create new image canvas.');
                 }
+                if ($useTransparentBackground) {
+                    // Enable transparency
+                    imagesavealpha($new, true);
+                    imagealphablending($new, false);
 
-                // color background as defined
-                $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
+                    // Allocate a fully transparent background
+                    $background = imagecolorallocatealpha($new, 0, 0, 0, 127);
+                } else {
+                    $bg_color = $this->resizeBgColor;
+                    if (strlen($bg_color) === 7) {
+                        $bg_color .= '00';
+                    }
+                    $colorComponents = sscanf($bg_color, '#%02x%02x%02x%02x');
+                    if ($colorComponents !== null) {
+                        list($bg_r, $bg_g, $bg_b, $bg_a) = $colorComponents;
+                        $bg_r = intval($bg_r);
+                        $bg_g = intval($bg_g);
+                        $bg_b = intval($bg_b);
+                        $bg_a = intval($bg_a);
+
+                    } else {
+                        throw new \Exception('Background color: sscanf returned null!');
+                    }
+                    // color background as defined
+                    $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
+                }
                 if (!imagefill($new, 0, 0, (int)$background)) {
                     throw new \Exception('Cannot fill image.');
                 }
 
                 // rotate the image
-                $background = imagecolorallocatealpha($image, $bg_r, $bg_g, $bg_b, $bg_a);
                 $image = imagerotate($image, $rotation, (int)$background);
                 if (!$image) {
                     throw new \Exception('Cannot rotate image.');
@@ -479,7 +474,7 @@ class Image
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($new) && $new instanceof \GdImage) {
+            if ($new instanceof \GdImage) {
                 unset($new);
             }
 
@@ -859,13 +854,8 @@ class Image
             }
 
             if ($degrees != 0) {
-                $backgroundColor = $this->addPictureBgColor;
-                if (is_file($this->addPictureBgImage)) {
-                    $backgroundColor = '#0000007f';
-                }
-                $this->resizeBgColor = $backgroundColor;
                 $this->resizeRotation = $degrees;
-                $imageResource = self::rotateResizeImage($imageResource);
+                $imageResource = self::rotateResizeImage($imageResource, true);
                 if (!$imageResource instanceof \GdImage) {
                     throw new \Exception('Failed to rotate and resize image.');
                 }

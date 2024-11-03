@@ -552,8 +552,6 @@ class Collage
         }
 
         $imageHandler->addPictureApplyFrame = $c->collageTakeFrame === 'always' ? true : false;
-        $imageHandler->addPictureBgImage = $c->collageBackground;
-        $imageHandler->addPictureBgColor = $c->collageBackgroundColor;
 
         if (isset($layoutConfigArray)) {
             $pictureOptions = [];
