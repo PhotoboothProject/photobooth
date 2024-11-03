@@ -14,25 +14,21 @@ class QrCodeUtility
 {
     public static function create(string $text, string $labelText = '', int $size = 300, int $margin = 15): ResultInterface
     {
-        $builder = Builder::create()
-            ->writer(new PngWriter())
-            ->writerOptions([])
-            ->data($text)
-            ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
-            ->size($size - (2 * $margin))
-            ->margin($margin)
-            ->roundBlockSizeMode(RoundBlockSizeMode::Margin);
+        $builder = new Builder(
+            writer: new PngWriter(),
+            writerOptions: [],
+            validateResult: false,
+            data: $text,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::Medium,
+            size: $size - (2 * $margin),
+            margin: $margin,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            labelText: $labelText,
+            labelMargin: new Margin(0, $margin, $margin, $margin)
+        );
 
-        if ($labelText !== '') {
-            $builder
-                ->labelText($labelText)
-                ->labelMargin(new Margin(0, $margin, $margin, $margin));
-        }
-
-        $result = $builder
-            ->validateResult(false)
-            ->build();
+        $result = $builder->build();
 
         return $result;
     }
