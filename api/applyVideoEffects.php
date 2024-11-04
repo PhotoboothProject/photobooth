@@ -92,9 +92,7 @@ try {
             throw new \Exception('Error creating image resource.');
         }
         $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
-        $imageHandler->resizeMaxWidth = $thumb_size;
-        $imageHandler->resizeMaxHeight = $thumb_size;
-        $thumbResource = $imageHandler->resizeImage($imageResource);
+        $thumbResource = $imageHandler->resizeImage($imageResource, $thumb_size);
         if ($thumbResource instanceof \GdImage) {
             $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
             if (!$imageHandler->saveJpeg($thumbResource, $thumbsFolder . basename($image))) {

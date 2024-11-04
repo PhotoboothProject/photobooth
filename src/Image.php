@@ -56,16 +56,6 @@ class Image
     public string $resizeBgColor = '#ffffff';
 
     /**
-     * The maximum width for image resizing.
-     */
-    public int $resizeMaxWidth = 0;
-
-    /**
-     * The maximum height for image resizing.
-     */
-    public int $resizeMaxHeight = 0;
-
-    /**
      * Determine to keep aspect ratio on resize.
      */
     public bool $keepAspectRatio = false;
@@ -449,9 +439,7 @@ class Image
                 }
 
                 // make sure width and/or height fits into old dimensions
-                $this->resizeMaxWidth = intval($old_width);
-                $this->resizeMaxHeight = intval($old_height);
-                $image = self::resizeImage($image);
+                $image = self::resizeImage($image, intval($old_width), intval($old_height));
                 if (!$image instanceof \GdImage) {
                     throw new \Exception('Failed to resize image.');
                 }
@@ -491,19 +479,18 @@ class Image
     /**
      * Resize an image based on the maximum dimensions.
      */
-    public function resizeImage(GdImage $image): GdImage|false
+    public function resizeImage(GdImage $image, int $maxWidth, int $maxHeight = null): GdImage|false
     {
+        $maxHeight = $maxHeight ?? $maxWidth;
         try {
             $old_width = imagesx($image);
             $old_height = imagesy($image);
-            $max_width = $this->resizeMaxWidth;
-            $max_height = $this->resizeMaxHeight;
 
-            if ($max_width <= 0 || $max_height <= 0) {
+            if ($maxWidth <= 0 || $maxHeight <= 0) {
                 throw new \Exception('Invalid image maximum dimensions.');
             }
 
-            $scale = min($max_width / $old_width, $max_height / $old_height);
+            $scale = min($maxWidth / $old_width, $maxHeight / $old_height);
 
             $new_width = intval(ceil($scale * $old_width));
             $new_height = intval(ceil($scale * $old_height));
@@ -530,24 +517,23 @@ class Image
     /**
      * Resize a PNG image based on the maximum dimensions.
      */
-    public function resizePngImage(GdImage $image): GdImage|false
+    public function resizePngImage(GdImage $image, int $newWidth, int $newHeight = null): GdImage|false
     {
+        $newHeight = $newHeight ?? $newWidth;
         try {
             $old_width = intval(imagesx($image));
             $old_height = intval(imagesy($image));
-            $new_width = $this->resizeMaxWidth;
-            $new_height = $this->resizeMaxHeight;
 
-            if ($new_width <= 0 || $new_height <= 0) {
+            if ($newWidth <= 0 || $newHeight <= 0) {
                 throw new \Exception('Invalid image maximum dimensions.');
             }
 
             if ($this->keepAspectRatio) {
-                $scale = min($new_width / $old_width, $new_height / $old_height);
-                $new_width = intval(ceil($scale * $old_width));
-                $new_height = intval(ceil($scale * $old_height));
+                $scale = min($newWidth / $old_width, $newHeight / $old_height);
+                $newWidth = intval(ceil($scale * $old_width));
+                $newHeight = intval(ceil($scale * $old_height));
             }
-            $new = imagecreatetruecolor((int)$new_width, (int)$new_height);
+            $new = imagecreatetruecolor((int)$newWidth, (int)$newHeight);
             if (!$new) {
                 throw new \Exception('Cannot create new image.');
             }
@@ -556,11 +542,11 @@ class Image
             imagesavealpha($new, true);
 
             if ($this->keepAspectRatio) {
-                if (!imagecopyresized($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
+                if (!imagecopyresized($new, $image, 0, 0, 0, 0, $newWidth, $newHeight, $old_width, $old_height)) {
                     throw new \Exception('Cannot resize image.');
                 }
             } else {
-                if (!imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $old_width, $old_height)) {
+                if (!imagecopyresampled($new, $image, 0, 0, 0, 0, $newWidth, $newHeight, $old_width, $old_height)) {
                     throw new \Exception('Cannot resize image.');
                 }
             }
@@ -588,25 +574,24 @@ class Image
     /**
      * Resize and crop an image by center.
      */
-    public function resizeCropImage(GdImage $source_file): GdImage
+    public function resizeCropImage(GdImage $source_file, int $maxWidth, int $maxHeight = null): GdImage
     {
+        $maxHeight = $maxHeight ?? $maxWidth;
         try {
             $old_width = intval(imagesx($source_file));
             $old_height = intval(imagesy($source_file));
-            $max_width = $this->resizeMaxWidth;
-            $max_height = $this->resizeMaxHeight;
 
-            if ($max_width <= 0 || $max_height <= 0) {
+            if ($maxWidth <= 0 || $maxHeight <= 0) {
                 throw new \Exception('Invalid image maximum dimensions.');
             }
 
-            $new_width = intval(($old_height * $max_width) / $max_height);
-            $new_height = intval(($old_width * $max_height) / $max_width);
+            $new_width = intval(($old_height * $maxWidth) / $maxHeight);
+            $new_height = intval(($old_width * $maxHeight) / $maxWidth);
 
-            settype($max_width, 'integer');
-            settype($max_height, 'integer');
+            settype($maxWidth, 'integer');
+            settype($maxHeight, 'integer');
 
-            $new = imagecreatetruecolor(intval($max_width), intval($max_height));
+            $new = imagecreatetruecolor(intval($maxWidth), intval($maxHeight));
             if (!$new) {
                 throw new \Exception('Cannot create new image.');
             }
@@ -616,13 +601,13 @@ class Image
                 // Cut point by height
                 $h_point = intval(($old_height - $new_height) / 2);
                 // Copy image
-                if (!imagecopyresampled($new, $source_file, 0, 0, 0, $h_point, $max_width, $max_height, $old_width, $new_height)) {
+                if (!imagecopyresampled($new, $source_file, 0, 0, 0, $h_point, $maxWidth, $maxHeight, $old_width, $new_height)) {
                     throw new \Exception('Cannot resize and crop image by height.');
                 }
             } else {
                 // Cut point by width
                 $w_point = intval(($old_width - $new_width) / 2);
-                if (!imagecopyresampled($new, $source_file, 0, 0, $w_point, 0, $max_width, $max_height, $new_width, $old_height)) {
+                if (!imagecopyresampled($new, $source_file, 0, 0, $w_point, 0, $maxWidth, $maxHeight, $new_width, $old_height)) {
                     throw new \Exception('Cannot resize and crop image by width.');
                 }
             }
@@ -687,9 +672,7 @@ class Image
                 throw new \Exception('Failed to create frame from image.');
             }
 
-            $this->resizeMaxWidth = $pic_width;
-            $this->resizeMaxHeight = $pic_height;
-            $frame = self::resizePngImage($frame);
+            $frame = self::resizePngImage($frame, $pic_width, $pic_height);
             if (!$frame) {
                 throw new \Exception('Cannot resize Frame.');
             }
@@ -840,13 +823,9 @@ class Image
             }
 
             if (abs($degrees) == 90) {
-                $this->resizeMaxWidth = $height;
-                $this->resizeMaxHeight = $width;
-                $imageResource = self::resizeCropImage($imageResource);
+                $imageResource = self::resizeCropImage($imageResource, $height, $width);
             } else {
-                $this->resizeMaxWidth = $width;
-                $this->resizeMaxHeight = $height;
-                $imageResource = self::resizeCropImage($imageResource);
+                $imageResource = self::resizeCropImage($imageResource, $width, $height);
             }
 
             if ($this->addPictureApplyFrame) {

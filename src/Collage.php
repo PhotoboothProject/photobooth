@@ -536,12 +536,10 @@ class Collage
 
         if (!empty($c->collageBackground)) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
-            $imageHandler->resizeMaxWidth = self::$collageWidth;
-            $imageHandler->resizeMaxHeight = self::$collageHeight;
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to create collage background image resource.');
             }
-            $backgroundImage = $imageHandler->resizeImage($backgroundImage);
+            $backgroundImage = $imageHandler->resizeImage($backgroundImage, self::$collageWidth, self::$collageHeight);
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to resize collage background image resource.');
             }

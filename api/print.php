@@ -118,9 +118,7 @@ if (!file_exists($filename_print)) {
         }
 
         if ($config['print']['crop']) {
-            $imageHandler->resizeMaxWidth = $config['print']['crop_width'];
-            $imageHandler->resizeMaxHeight = $config['print']['crop_height'];
-            $source = $imageHandler->resizeCropImage($source);
+            $source = $imageHandler->resizeCropImage($source, $config['print']['crop_width'], $config['print']['crop_height']);
             if (!$source instanceof \GdImage) {
                 throw new \Exception('Failed to crop image resource.');
             }
