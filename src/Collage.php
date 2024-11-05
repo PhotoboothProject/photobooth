@@ -489,8 +489,6 @@ class Collage
             }
 
             if ($c->pictureRotation !== '0') {
-                $imageHandler->resizeRotation = ;
-                $imageHandler->resizeBgColor = $c->collageBackgroundColor;
                 $imageResource = $imageHandler->rotateResizeImage(
                     image: $imageResource,
                     degrees: $c->collageBackgroundColor,
