@@ -820,7 +820,11 @@ class Image
             }
 
             if ($degrees != 0) {
-                $imageResource = self::rotateResizeImage($imageResource, $degrees, true);
+                $imageResource = self::rotateResizeImage(
+                    image: $imageResource,
+                    degrees: $degrees,
+                    useTransparentBackground: true
+                );
                 if (!$imageResource instanceof \GdImage) {
                     throw new \Exception('Failed to rotate and resize image.');
                 }
