@@ -41,17 +41,6 @@ class Image
 
     /**
      *
-     * Resize Image Difinitions
-     *
-     */
-
-    /**
-     * Determine to keep aspect ratio on resize.
-     */
-    public bool $keepAspectRatio = false;
-
-    /**
-     *
      * Text to Image Difinitions
      *
      */
@@ -504,7 +493,7 @@ class Image
     /**
      * Resize a PNG image based on the maximum dimensions.
      */
-    public function resizePngImage(GdImage $image, int $newWidth, int $newHeight = null): GdImage|false
+    public function resizePngImage(GdImage $image, int $newWidth, ?int $newHeight = null, bool $keepAspectRatio = false): GdImage|false
     {
         $newHeight = $newHeight ?? $newWidth;
         try {
@@ -515,7 +504,7 @@ class Image
                 throw new \Exception('Invalid image maximum dimensions.');
             }
 
-            if ($this->keepAspectRatio) {
+            if ($keepAspectRatio) {
                 $scale = min($newWidth / $old_width, $newHeight / $old_height);
                 $newWidth = intval(ceil($scale * $old_width));
                 $newHeight = intval(ceil($scale * $old_height));
@@ -528,7 +517,7 @@ class Image
             imagealphablending($new, false);
             imagesavealpha($new, true);
 
-            if ($this->keepAspectRatio) {
+            if ($keepAspectRatio) {
                 if (!imagecopyresized($new, $image, 0, 0, 0, 0, $newWidth, $newHeight, $old_width, $old_height)) {
                     throw new \Exception('Cannot resize image.');
                 }
