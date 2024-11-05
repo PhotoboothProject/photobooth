@@ -78,8 +78,10 @@ try {
     }
 
     if ($config['picture']['rotation'] !== '0') {
-        $imageHandler->resizeRotation = $config['picture']['rotation'];
-        $imageResource = $imageHandler->rotateResizeImage($imageResource);
+        $imageResource = $imageHandler->rotateResizeImage(
+            image: $imageResource,
+            degrees: $config['picture']['rotation']
+        );
         if (!$imageResource) {
             throw new \Exception('Error resizing resource.');
         }
