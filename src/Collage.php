@@ -491,7 +491,7 @@ class Collage
             if ($c->pictureRotation !== '0') {
                 $imageResource = $imageHandler->rotateResizeImage(
                     image: $imageResource,
-                    degrees: $c->collageBackgroundColor,
+                    degrees: intval($c->collageBackgroundColor),
                     bgColor: '#ff0000'
                 );
                 if (!$imageResource instanceof \GdImage) {
