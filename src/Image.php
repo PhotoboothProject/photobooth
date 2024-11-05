@@ -388,7 +388,7 @@ class Image
                     $background = imagecolorallocatealpha($new, 0, 0, 0, 127);
                 } else {
                     if (strlen($bgColor) === 7) {
-                        $bg_color .= '00';
+                        $bgColor .= '00';
                     }
                     $colorComponents = sscanf($bgColor, '#%02x%02x%02x%02x');
                     if ($colorComponents !== null) {
