@@ -46,13 +46,9 @@ try {
     die();
 }
 
-$isCollage = false;
-$isChroma = false;
-if ($_POST['style'] === 'collage') {
-    $isCollage = true;
-} elseif ($_POST['style'] === 'chroma') {
-    $isChroma = true;
-}
+$isCollage = $_POST['style'] === 'collage';
+$editSingleCollage = false;
+$isChroma = $_POST['style'] === 'chroma';
 
 $srcImages = [];
 $srcImages[] = $file;
@@ -95,7 +91,7 @@ try {
         if (!$isChroma) {
             if ($isCollage && $file != $image) {
                 $editSingleCollage = true;
-                $imageHandler->framePath = $config['collage']['frame'];
+                $imageHandler->framePath = $config['collage']['take_frame'] === 'always' ? $config['collage']['frame'] : $config['picture']['frame'];
             } else {
                 $editSingleCollage = false;
                 $imageHandler->framePath = $config['picture']['frame'];
@@ -127,7 +123,7 @@ try {
                     }
                 }
 
-                if ($config['picture']['polaroid_effect'] && !$isCollage) {
+                if ($config['picture']['polaroid_effect']) {
                     $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
                     $imageResource = $imageHandler->effectPolaroid($imageResource);
                     if (!$imageResource instanceof \GdImage) {
@@ -135,8 +131,8 @@ try {
                     }
                 }
 
-                if (($config['picture']['take_frame'] && !$isCollage) || ($editSingleCollage && $config['collage']['take_frame'] === 'always')) {
-                    if (!$isCollage) {
+                if (($config['picture']['take_frame'] && !$isCollage) || ($editSingleCollage && ($config['collage']['take_frame'] === 'always' || $config['collage']['take_frame'] !== 'always' && $config['picture']['take_frame']))) {
+                    if (!$isCollage || $config['collage']['take_frame'] !== 'always') {
                         $imageHandler->frameExtend = $config['picture']['extend_by_frame'];
                         if ($config['picture']['extend_by_frame']) {
                             $imageHandler->frameExtendLeft = $config['picture']['frame_left_percentage'];
@@ -164,6 +160,7 @@ try {
                 }
             }
         }
+
         if ($config['keying']['enabled'] || $isChroma) {
             $chroma_size = intval(substr($config['keying']['size'], 0, -2));
             $chromaCopyResource = $imageHandler->resizeImage($imageResource, $chroma_size);
@@ -180,7 +177,7 @@ try {
             }
         }
 
-        if (!$isCollage && !$isChroma && $config['textonpicture']['enabled']) {
+        if ($config['textonpicture']['enabled'] && (!$isCollage && !$isChroma || $editSingleCollage)) {
             $imageHandler->fontSize = $config['textonpicture']['font_size'];
             $imageHandler->fontRotation = $config['textonpicture']['rotation'];
             $imageHandler->fontLocationX = $config['textonpicture']['locationx'];
