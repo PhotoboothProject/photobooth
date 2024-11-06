@@ -98,6 +98,16 @@ try {
             }
 
             if (!$isCollage || $editSingleCollage) {
+                // apply filter
+                if ($filter !== null && $filter !== ImageFilterEnum::PLAIN) {
+                    try {
+                        ImageUtility::applyFilter($filter, $imageResource);
+                        $imageHandler->imageModified = true;
+                    } catch (\Exception $e) {
+                        throw new \Exception('Error applying image filter.');
+                    }
+                }
+
                 if ($config['picture']['flip'] !== 'off') {
                     try {
                         if ($config['picture']['flip'] === 'flip-horizontal') {
@@ -113,13 +123,13 @@ try {
                     }
                 }
 
-                // apply filter
-                if ($filter !== null && $filter !== ImageFilterEnum::PLAIN) {
-                    try {
-                        ImageUtility::applyFilter($filter, $imageResource);
-                        $imageHandler->imageModified = true;
-                    } catch (\Exception $e) {
-                        throw new \Exception('Error applying image filter.');
+                if ($config['picture']['rotation'] !== '0') {
+                    $imageResource = $imageHandler->rotateResizeImage(
+                        image: $imageResource,
+                        degrees: $config['picture']['rotation']
+                    );
+                    if (!$imageResource instanceof \GdImage) {
+                        throw new \Exception('Error resizing resource.');
                     }
                 }
 
@@ -146,16 +156,6 @@ try {
                     $imageResource = $imageHandler->applyFrame($imageResource);
                     if (!$imageResource instanceof \GdImage) {
                         throw new \Exception('Error applying frame to image resource.');
-                    }
-                }
-
-                if ($config['picture']['rotation'] !== '0') {
-                    $imageResource = $imageHandler->rotateResizeImage(
-                        image: $imageResource,
-                        degrees: $config['picture']['rotation']
-                    );
-                    if (!$imageResource instanceof \GdImage) {
-                        throw new \Exception('Error resizing resource.');
                     }
                 }
             }
