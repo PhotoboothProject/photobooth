@@ -314,7 +314,11 @@ function gpioSanity(gpioconfig) {
 
         const configPath = fs.existsSync('/boot/firmware/config.txt')
             ? '/boot/firmware/config.txt'
-            : '/boot/config.txt';
+            : fs.existsSync('/boot/config.txt')
+              ? '/boot/config.txt'
+              : (() => {
+                    throw new Error('Configuration file not found');
+                })();
 
         cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
         stdout = execSync(cmd).toString();
