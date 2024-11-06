@@ -23,6 +23,12 @@ function editSingleImage($config, $imageResource, $image_filter, $editSingleColl
         logErrorAndDie($errormsg);
     }
 
+    // apply filter
+    if ($image_filter) {
+        applyFilter($image_filter, $imageResource);
+        $imageModified = true;
+    }
+
     if ($config['picture']['flip'] !== 'off') {
         if ($config['picture']['flip'] === 'horizontal') {
             imageflip($imageResource, IMG_FLIP_HORIZONTAL);
@@ -34,9 +40,8 @@ function editSingleImage($config, $imageResource, $image_filter, $editSingleColl
         $imageModified = true;
     }
 
-    // apply filter
-    if ($image_filter) {
-        applyFilter($image_filter, $imageResource);
+    if ($config['picture']['rotation'] !== '0') {
+        $imageResource = rotateResizeImage($imageResource, $config['picture']['rotation']);
         $imageModified = true;
     }
 
@@ -54,10 +59,6 @@ function editSingleImage($config, $imageResource, $image_filter, $editSingleColl
         $imageModified = true;
     }
 
-    if ($config['picture']['rotation'] !== '0') {
-        $imageResource = rotateResizeImage($imageResource, $config['picture']['rotation']);
-        $imageModified = true;
-    }
     return [$imageResource, $imageModified];
 }
 
