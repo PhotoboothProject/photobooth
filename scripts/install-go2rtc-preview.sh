@@ -309,11 +309,7 @@ info ""
 ask_yes_no "Please enter your choice" "6"
 info ""
 
-if [[ "$GO2RTC_VERSION" == "1.9.2" ]]; then
-    CODEC_FORMAT="--codec mjpeg"
-else
-    CODEC_FORMAT="--libav-format h264"
-fi
+CODEC_FORMAT="--codec mjpeg"
 
 if [[ $REPLY =~ ^[1]$ ]]; then
     info "### We will install a service to set up a mjpeg stream for gphoto2."
@@ -343,11 +339,7 @@ elif [[ $REPLY =~ ^[5]$ ]]; then
     UPDATE_ONLY=true
     ask_version
     install_go2rtc
-    if [[ "$GO2RTC_VERSION" == "1.9.2" ]]; then
-        sed -i 's/--libav-format h264/--codec mjpeg/g' /etc/go2rtc.yaml
-    else
-        sed -i 's/--codec mjpeg/--libav-format h264/g' /etc/go2rtc.yaml
-    fi
+    sed -i 's/--libav-format h264/--codec mjpeg/g' /etc/go2rtc.yaml
     info "Done!"
     exit 0
 elif [[ $REPLY =~ ^[6]$ ]]; then
