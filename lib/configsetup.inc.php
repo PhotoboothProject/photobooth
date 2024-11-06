@@ -2038,7 +2038,7 @@ return [
             'value' => $config['remotebuzzer']['picturebutton'],
         ],
         'remotebuzzer_collagetime' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'range',
             'placeholder' => $defaultConfig['remotebuzzer']['collagetime'],
             'name' => 'remotebuzzer[collagetime]',
@@ -2079,7 +2079,7 @@ return [
             'value' => $config['remotebuzzer']['shutdownbutton'],
         ],
         'remotebuzzer_shutdownholdtime' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'range',
             'placeholder' => $defaultConfig['remotebuzzer']['shutdownholdtime'],
             'name' => 'remotebuzzer[shutdownholdtime]',
@@ -2108,7 +2108,7 @@ return [
             'value' => $config['remotebuzzer']['rebootbutton'],
         ],
         'remotebuzzer_rebootholdtime' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'range',
             'placeholder' => $defaultConfig['remotebuzzer']['rebootholdtime'],
             'name' => 'remotebuzzer[rebootholdtime]',
@@ -2119,7 +2119,7 @@ return [
             'unit' => 'seconds',
         ],
         'remotebuzzer_useleds' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[useleds]',
             'value' => $config['remotebuzzer']['useleds'],
@@ -2131,19 +2131,19 @@ return [
             'value' => $config['remotebuzzer']['photolight'],
         ],
         'remotebuzzer_pictureled' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[pictureled]',
             'value' => $config['remotebuzzer']['pictureled'],
         ],
         'remotebuzzer_collageled' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[collageled]',
             'value' => $config['remotebuzzer']['collageled'],
         ],
         'remotebuzzer_customled' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[customled]',
             'value' => $config['remotebuzzer']['customled'],
@@ -2155,25 +2155,25 @@ return [
             'value' => $config['remotebuzzer']['videoled'],
         ],
         'remotebuzzer_shutdownled' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[shutdownled]',
             'value' => $config['remotebuzzer']['shutdownled'],
         ],
         'remotebuzzer_rebootled' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[rebootled]',
             'value' => $config['remotebuzzer']['rebootled'],
         ],
         'remotebuzzer_printled' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[printled]',
             'value' => $config['remotebuzzer']['printled'],
         ],
         'remotebuzzer_move2usbled' => [
-            'view' => 'advanced',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[move2usbled]',
             'value' => $config['remotebuzzer']['move2usbled'],
@@ -2185,7 +2185,7 @@ return [
             'value' => $config['remotebuzzer']['enable_standalonegallery'],
         ],
         'remotebuzzer_debounce' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'range',
             'placeholder' => $defaultConfig['remotebuzzer']['debounce'],
             'name' => 'remotebuzzer[debounce]',
