@@ -846,7 +846,7 @@
   "really_delete_image": "will be deleted! This cannot be undone! Really delete picture?",
   "reboot_button": "Reboot",
   "reload": "Reload",
-  "remotebuzzer": "Hardware Button & LED feature",
+  "remotebuzzer": "Hardware buttons",
   "remotebuzzer:remotebuzzer_collagebutton": "Collage Button",
   "remotebuzzer:remotebuzzer_collagegpio": "GPIO used to take a collage",
   "remotebuzzer:remotebuzzer_collageled": "LED for Collage Button",
