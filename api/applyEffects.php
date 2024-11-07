@@ -12,6 +12,7 @@ use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
+use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
@@ -53,9 +54,17 @@ $isChroma = $_POST['style'] === 'chroma';
 $srcImages = [];
 $srcImages[] = $file;
 
-if (is_file(__DIR__ . '/../private/api/applyEffects.php')) {
+$applyEffectsPath = PathUtility::getAbsolutePath('private/api/applyEffects.php');
+if (is_file($applyEffectsPath)) {
     $logger->debug('Using private/api/applyEffects.php.');
-    include __DIR__ . '/../private/api/applyEffects.php';
+
+    try {
+        include $applyEffectsPath;
+    } catch (\Exception $e) {
+        $logger->error('Error (private applyEffects): ' . $e->getMessage());
+        echo json_encode(['error' => $e->getMessage()]);
+        die();
+    }
 }
 
 try {
