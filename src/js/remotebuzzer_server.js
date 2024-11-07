@@ -307,18 +307,19 @@ server.listen(config.remotebuzzer.port, () => {
 
 /* SANITY CHECKS */
 function gpioSanity(gpioconfig) {
+    let configPath;
     try {
         if (isNaN(gpioconfig)) {
             throw new Error(gpioconfig + ' is not a valid number');
         }
 
-        const configPath = fs.existsSync('/boot/firmware/config.txt')
-            ? '/boot/firmware/config.txt'
-            : fs.existsSync('/boot/config.txt')
-              ? '/boot/config.txt'
-              : (() => {
-                    throw new Error('Configuration file not found');
-                })();
+        if (fs.existsSync('/boot/firmware/config.txt')) {
+            configPath = '/boot/firmware/config.txt';
+        } else if (fs.existsSync('/boot/config.txt')) {
+            configPath = '/boot/config.txt';
+        } else {
+            throw new Error('Configuration file not found');
+        }
 
         cmd = 'sed -n "s/^gpio=\\(.*\\)=pu/\\1/p" ' + configPath;
         stdout = execSync(cmd).toString();
