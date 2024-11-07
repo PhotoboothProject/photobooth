@@ -2125,7 +2125,7 @@ return [
             'value' => $config['remotebuzzer']['useleds'],
         ],
         'remotebuzzer_photolight' => [
-            'view' => 'expert',
+            'view' => 'experimental',
             'type' => 'checkbox',
             'name' => 'remotebuzzer[photolight]',
             'value' => $config['remotebuzzer']['photolight'],
