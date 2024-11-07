@@ -187,16 +187,20 @@ if ($action === 'reset') {
         }
     }
 
+    if (isset($newConfig['remotebuzzer']['port']) && empty($newConfig['remotebuzzer']['port'])) {
+        $newConfig['remotebuzzer']['port'] = 14711;
+    }
+
+    if (isset($newConfig['remotebuzzer']['useleds']) && $newConfig['remotebuzzer']['useleds']) {
+        $newConfig['remotebuzzer']['useleds'] = isset($newConfig['remotebuzzer']['usegpio']) && $newConfig['remotebuzzer']['usegpio'];
+    }
+
     if (isset($newConfig['database']['file']) && empty($newConfig['database']['file'])) {
         $newConfig['database']['file'] = 'db';
     }
 
     if (isset($newConfig['mail']['file']) && empty($newConfig['mail']['file'])) {
         $newConfig['mail']['file'] = 'mail-adresses';
-    }
-
-    if (isset($newConfig['remotebuzzer']['port']) && empty($newConfig['remotebuzzer']['port'])) {
-        $newConfig['remotebuzzer']['port'] = 14711;
     }
 
     if ($newConfig['get_request']['countdown'] || $newConfig['get_request']['processed']) {
