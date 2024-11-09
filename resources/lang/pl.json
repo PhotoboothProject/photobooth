@@ -232,7 +232,6 @@
   "remotebuzzer:remotebuzzer_collagetime": "Przytrzymaj przycisk x sekund, aby wyzwolić kolaż",
   "remotebuzzer:remotebuzzer_port": "Port serwera",
   "reset": "Reset",
-  "reset:reset_remove_config": "Usuń konfigurację osobistą (my.config.inc.php)",
   "reset:reset_remove_mailtxt": "Usuń bazę danych adresów e-mail",
   "save": "Zapisz",
   "seconds": "sekunda(y)",
