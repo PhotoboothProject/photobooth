@@ -47,6 +47,19 @@ try {
     die();
 }
 
+$privatePrintApi = PathUtility::getAbsolutePath('private/api/print.php');
+if (is_file($privatePrintApi)) {
+    $logger->debug('Using private/api/print.php.');
+
+    try {
+        include $privatePrintApi;
+    } catch (\Exception $e) {
+        $logger->error('Error (private print API): ' . $e->getMessage());
+        echo json_encode(['error' => $e->getMessage()]);
+        die();
+    }
+}
+
 if (!file_exists($filename_print)) {
     try {
         $source = $imageHandler->createFromImage($filename_source);
