@@ -103,6 +103,20 @@ class Helper
     }
 
     /**
+     * Evaluates a mathematical expression represented as a string.
+     *
+     * @param string $expression The mathematical expression to evaluate.
+     *                           Only numbers, math symbols (+, -, *, /, (), .) are allowed.
+     * @return int The result of the evaluated expression as an integer.
+     */
+    public static function doMath(string $expression): int
+    {
+        $o = 0;
+        eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');
+        return intval($o);
+    }
+
+    /**
      * Navigate through the ftp folder system.
      */
     public static function cdFTPTree(Connection $conn, string $currentDir): void

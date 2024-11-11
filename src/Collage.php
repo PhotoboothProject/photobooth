@@ -565,7 +565,7 @@ class Collage
                     $processed = $layoutConfig[$j];
                     if ($j !== 5) {
                         $value = str_replace(['x', 'y'], [self::$collageWidth, self::$collageHeight], $layoutConfig[$j]);
-                        $processed = self::doMath($value);
+                        $processed = Helper::doMath($value);
                     }
                     $singlePictureOptions[] = $processed;
                 }
@@ -653,14 +653,6 @@ class Collage
         }
 
         return true;
-    }
-
-    public static function doMath(string $expression): int
-    {
-        $o = 0;
-        // eval is evil. To mitigate any attacks the allowed characters are limited to numbers and math symbols
-        eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');
-        return intval($o);
     }
 
     public static function getCollageFiles(array $collage, string $filename_tmp, string $file, array $srcImages): array
