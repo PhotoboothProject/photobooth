@@ -345,10 +345,6 @@ class Image
                 throw new \Exception('Color parsing failed: sscanf returned null.');
             }
         } catch (\Exception $e) {
-            $this->addErrorData($e->getMessage())
-            if ($this->debugLevel > 1) {
-                throw $e;
-            }
 
             return [0, 0, 0, 0];
         }
