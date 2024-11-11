@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GO2RTC_VERSIONS=("1.9.2" "1.9.4" "1.9.6")
+GO2RTC_VERSIONS=("1.9.2" "1.9.4" "1.9.6" "1.9.7")
 GO2RTC_VERSION="1.9.6"
 YAML_STREAM="photobooth: exec:gphoto2 --capture-movie --stdout#killsignal=2"
 CAPTURE_CMD="gphoto2"
