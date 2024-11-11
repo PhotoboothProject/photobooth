@@ -318,7 +318,7 @@ class Image
      * @return array An array containing the red, green, blue, and alpha components.
      * @throws \Exception If the color string is invalid or parsing fails.
      */
-    public static function getColorComponents(string $hexColor): array|false
+    public static function getColorComponents(string $hexColor): array
     {
         try {
             if (strlen($hexColor) < 3) {
