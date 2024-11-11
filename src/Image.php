@@ -312,6 +312,49 @@ class Image
     }
 
     /**
+     * Parses a hex color string and returns its RGBA components.
+     *
+     * @param string $hexColor The hex color string to parse.
+     * @return array An array containing the red, green, blue, and alpha components.
+     * @throws \Exception If the color string is invalid or parsing fails.
+     */
+    public static function getColorComponents(string $hexColor): array|false {
+        try {
+            if (strlen($hexColor) < 3) {
+                throw new \Exception('Invalid color: too short.');
+            }
+
+            if (strlen($hexColor) > 9) {
+                throw new \Exception('Invalid color: too long.');
+            }
+
+            if ($hexColor[0] !== '#') {
+                throw new \Exception('Color HEX must start with "#".');
+            }
+
+             while (strlen($hexColor) < 9) {
+                $hexColor .= '0';
+            }
+
+            $colorComponents = sscanf($hexColor, '#%02x%02x%02x%02x');
+
+            if ($colorComponents !== null) {
+                list($r, $g, $b, $a) = $colorComponents;
+                return [$r, $g, $b, $a];
+            } else {
+                throw new \Exception('Color parsing failed: sscanf returned null.');
+            }
+        } catch (\Exception $e) {
+            $this->addErrorData($e->getMessage())
+            if ($this->debugLevel > 1) {
+                throw $e;
+            }
+
+            return [0, 0, 0, 0];
+        }
+    }
+    
+    /**
      * Creates a GD image resource from an image file.
      */
     public function createFromImage(string $image): GdImage|false
@@ -387,20 +430,8 @@ class Image
                     // Allocate a fully transparent background
                     $background = imagecolorallocatealpha($new, 0, 0, 0, 127);
                 } else {
-                    if (strlen($bgColor) === 7) {
-                        $bgColor .= '00';
-                    }
-                    $colorComponents = sscanf($bgColor, '#%02x%02x%02x%02x');
-                    if ($colorComponents !== null) {
-                        list($bg_r, $bg_g, $bg_b, $bg_a) = $colorComponents;
-                        $bg_r = intval($bg_r);
-                        $bg_g = intval($bg_g);
-                        $bg_b = intval($bg_b);
-                        $bg_a = intval($bg_a);
-
-                    } else {
-                        throw new \Exception('Background color: sscanf returned null!');
-                    }
+                    $colorComponents = self::getColorComponents($bgColor);
+                    list($bg_r, $bg_g, $bg_b, $bg_a) = $colorComponents;
                     // color background as defined
                     $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
                 }
@@ -702,15 +733,8 @@ class Image
             $fontPath = PathUtility::getAbsolutePath($this->fontPath);
             $textLineSpacing = $this->textLineSpacing;
             // Convert hex color string to RGB values
-            $colorComponents = sscanf($this->fontColor, '#%02x%02x%02x');
-            if ($colorComponents !== null) {
-                list($r, $g, $b) = $colorComponents;
-            } else {
-                throw new \Exception('Font color: sscanf returned null!');
-            }
-            $r = intval($r);
-            $g = intval($g);
-            $b = intval($b);
+            $colorComponents = self::getColorComponents($this->fontColor);
+            list($r, $g, $b) = $colorComponents;
 
             // Allocate color and set font
             $color = intval(imagecolorallocate($sourceResource, $r, $g, $b));
@@ -912,15 +936,9 @@ class Image
             if ($this->qrColor != '#ffffff') {
                 $qrwidth = imagesx($qrCodeImage);
                 $qrheight = imagesy($qrCodeImage);
-                $colorComponents = sscanf($this->qrColor, '#%02x%02x%02x');
-                if ($colorComponents !== null) {
-                    list($r, $g, $b) = $colorComponents;
-                } else {
-                    throw new \Exception('QR color: sscanf returned null!');
-                }
-                $r = intval($r);
-                $g = intval($g);
-                $b = intval($b);
+                
+                $colorComponents = self::getColorComponents($this->qrColor);
+                list($r, $g, $b) = $colorComponents;
 
                 $selected = intval(imagecolorallocate($qrCodeImage, $r, $g, $b));
 
@@ -1122,15 +1140,8 @@ class Image
             }
 
             // Convert hex color string to RGB values
-            $colorComponents = sscanf($this->polaroidBgColor, '#%02x%02x%02x');
-            if ($colorComponents !== null) {
-                list($rbcc, $gbcc, $bbcc) = $colorComponents;
-            } else {
-                throw new \Exception('Polaroid color: sscanf returned null!');
-            }
-            $rbcc = intval($rbcc);
-            $gbcc = intval($gbcc);
-            $bbcc = intval($bbcc);
+            $colorComponents = self::getColorComponents($this->polaroidBgColor);
+            list($rbcc, $gbcc, $bbcc) = $colorComponents;
 
             // We rotate the image
             $background = intval(imagecolorallocate($img, $rbcc, $gbcc, $bbcc));
