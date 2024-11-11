@@ -349,6 +349,8 @@ class Collage
             $c = CollageConfigFactory::fromConfig($config);
         }
         self::reset();
+        $imageHandler = new Image();
+        $imageHandler->jpegQuality = 100;
         $editImages = [];
         $collageConfigFilePath = PathUtility::getAbsolutePath('private/' . $c->collageLayout);
 
@@ -409,12 +411,8 @@ class Collage
 
         if ($c->collageBackgroundColor !== null) {
             // colors for background and while rotating jpeg images
-            $colorComponents = sscanf($c->collageBackgroundColor, '#%02x%02x%02x');
-            if ($colorComponents !== null) {
-                list($bg_r, $bg_g, $bg_b) = $colorComponents;
-            } else {
-                throw new \Exception('Collage background color: sscanf returned null!');
-            }
+            $colorComponents = $imageHandler->getColorComponents($c->collageBackgroundColor);
+            list($bg_r, $bg_g, $bg_b) = $colorComponents;
         }
 
         $bg_color_hex = hexdec(substr($c->collageBackgroundColor, 1));
@@ -424,12 +422,8 @@ class Collage
 
         // dashedline color on 2x3 and 2x4 collage layouts
         if ($c->collageDashedLineColor !== null) {
-            $dashedColorComponents = sscanf($c->collageDashedLineColor, '#%02x%02x%02x');
-            if ($dashedColorComponents !== null) {
-                list($dashed_r, $dashed_g, $dashed_b) = $dashedColorComponents;
-            } else {
-                throw new \Exception('Collage dashed line color: sscanf returned null!');
-            }
+            $dashedColorComponents = $imageHandler->getColorComponents($c->collageDashedLineColor);
+            list($dashed_r, $dashed_g, $dashed_b) = $dashedColorComponents;
         }
 
         if (!is_array($srcImagePaths)) {
@@ -460,8 +454,6 @@ class Collage
             }
         }
 
-        $imageHandler = new Image();
-        $imageHandler->jpegQuality = 100;
         $imageHandler->framePath = $c->collageFrame;
         $imageHandler->frameExtend = false;
 
