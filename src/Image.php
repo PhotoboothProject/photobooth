@@ -333,7 +333,7 @@ class Image
                 throw new \Exception('Color HEX must start with "#".');
             }
 
-             while (strlen($hexColor) < 9) {
+            while (strlen($hexColor) < 9) {
                 $hexColor .= '0';
             }
 
