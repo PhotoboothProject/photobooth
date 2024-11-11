@@ -318,7 +318,8 @@ class Image
      * @return array An array containing the red, green, blue, and alpha components.
      * @throws \Exception If the color string is invalid or parsing fails.
      */
-    public static function getColorComponents(string $hexColor): array|false {
+    public static function getColorComponents(string $hexColor): array|false
+    {
         try {
             if (strlen($hexColor) < 3) {
                 throw new \Exception('Invalid color: too short.');
@@ -349,7 +350,7 @@ class Image
             return [0, 0, 0, 0];
         }
     }
-    
+
     /**
      * Creates a GD image resource from an image file.
      */
@@ -932,7 +933,6 @@ class Image
             if ($this->qrColor != '#ffffff') {
                 $qrwidth = imagesx($qrCodeImage);
                 $qrheight = imagesy($qrCodeImage);
-                
                 $colorComponents = self::getColorComponents($this->qrColor);
                 list($r, $g, $b) = $colorComponents;
 
