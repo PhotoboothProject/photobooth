@@ -6,6 +6,7 @@ require_once '../lib/boot.php';
 
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Image;
+use Photobooth\Processor\PrintProcessor;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
@@ -14,6 +15,7 @@ header('Content-Type: application/json');
 
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+$processor = null;
 
 try {
     if (empty($_GET['filename'])) {
@@ -27,17 +29,17 @@ try {
 
     $imageHandler = new Image();
     $imageHandler->debugLevel = $config['dev']['loglevel'];
-    $random = $imageHandler->createNewFilename('random');
-    $filename = $_GET['filename'];
-    $uniquename = substr($filename, 0, -4) . '-' . $random;
-    $filename_source = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $filename;
-    $filename_print = FolderEnum::PRINT->absolute() . DIRECTORY_SEPARATOR . $uniquename;
+    $vars['randomName'] = $imageHandler->createNewFilename('random');
+    $vars['fileName'] = $_GET['filename'];
+    $vars['uniqueName'] = substr($vars['fileName'], 0, -4) . '-' . $vars['randomName'];
+    $vars['sourceFile'] = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $vars['fileName'];
+    $vars['printFile'] = FolderEnum::PRINT->absolute() . DIRECTORY_SEPARATOR . $vars['uniqueName'];
 
     $status = false;
 
     // exit with error if file does not exist
-    if (!file_exists($filename_source)) {
-        throw new \Exception('File ' . $filename . ' not found.');
+    if (!file_exists($vars['sourceFile'])) {
+        throw new \Exception('File ' . $vars['fileName'] . ' not found.');
     }
 } catch (\Exception $e) {
     // Handle the exception
@@ -60,12 +62,19 @@ if (is_file($privatePrintApi)) {
     }
 }
 
-if (!file_exists($filename_print)) {
+if (!file_exists($vars['printFile'])) {
     try {
-        $source = $imageHandler->createFromImage($filename_source);
+        $source = $imageHandler->createFromImage($vars['sourceFile']);
         if (!$source) {
             throw new \Exception('Invalid image resource');
         }
+        if (class_exists('Photobooth\Processor\PrintProcessor')) {
+            $processor = new PrintProcessor($imageHandler, $logger, $printManager, $vars, $config);
+        }
+        if ($processor !== null && $processor instanceof PrintProcessor && method_exists($processor, 'preProcessing')) {
+            list($imageHandler, $vars, $config, $source) = $processor->preProcessing($imageHandler, $vars, $config, $source);
+        }
+
         // rotate image if needed
         if (imagesx($source) > imagesy($source) || $config['print']['no_rotate'] === true) {
             $imageHandler->qrRotate = false;
@@ -89,9 +98,9 @@ if (!file_exists($filename_print)) {
         if ($config['print']['qrcode']) {
             // create qr code
             if ($config['ftp']['enabled'] && $config['ftp']['useForQr'] && isset($config['ftp']['processedTemplate'])) {
-                $imageHandler->qrUrl = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $filename;
+                $imageHandler->qrUrl = $config['ftp']['processedTemplate'] . DIRECTORY_SEPARATOR . $vars['fileName'];
             } elseif ($config['qr']['append_filename']) {
-                $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'] . $filename, true);
+                $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'] . $vars['fileName'], true);
             } else {
                 $imageHandler->qrUrl = PathUtility::getPublicPath($config['qr']['url'], true);
             }
@@ -137,8 +146,11 @@ if (!file_exists($filename_print)) {
             }
         }
 
+        if ($processor !== null && $processor instanceof PrintProcessor && method_exists($processor, 'postProcessing')) {
+            list($imageHandler, $vars, $config, $source) = $processor->postProcessing($imageHandler, $vars, $config, $source);
+        }
         $imageHandler->jpegQuality = 100;
-        if (!$imageHandler->saveJpeg($source, $filename_print)) {
+        if (!$imageHandler->saveJpeg($source, $vars['printFile'])) {
             throw new \Exception('Cannot save print image.');
         }
 
@@ -159,12 +171,12 @@ if (!file_exists($filename_print)) {
 
 // print image
 $status = 'ok';
-$cmd = sprintf($config['commands']['print'], $filename_print);
+$cmd = sprintf($config['commands']['print'], $vars['printFile']);
 $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
 exec($cmd, $output, $returnValue);
 
-$printManager->addToPrintDb($filename, $uniquename);
+$printManager->addToPrintDb($vars['fileName'], $vars['uniqueName']);
 
 $linecount = 0;
 if ($config['print']['limit'] > 0) {

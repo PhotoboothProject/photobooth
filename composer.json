@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Photobooth\\": "src"
+            "Photobooth\\": ["src/", "private/src/"]
         }
     },
     "autoload-dev": {
