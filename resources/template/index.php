@@ -2,7 +2,7 @@
 $full_images = glob('./{,*/,*/*/,*/*/*/}*.{jpg,JPG}', GLOB_BRACE);
 $tmb_images = glob('./{,*/,*/*/,*/*/*/}tmb_*.{jpg,JPG}', GLOB_BRACE);
 $first_img = $full_images[0];
-$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]';
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://'.$_SERVER[HTTP_HOST].$_SERVER[REQUEST_URI];
 $og_image_prop = $actual_link . substr($first_img, 2);
 $total_images = count($tmb_images);
 $time_to_download = round($total_images / 60, 0);
