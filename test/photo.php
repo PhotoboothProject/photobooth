@@ -29,6 +29,17 @@ try {
     }
     $imageHandler->framePath = $config['picture']['frame'];
 
+    // apply filter
+    $image_filter = $config['filters']['defaults'];
+    if ($image_filter !== ImageFilterEnum::PLAIN) {
+        try {
+            ImageUtility::applyFilter($image_filter, $imageResource);
+            $imageHandler->imageModified = true;
+        } catch (\Exception $e) {
+            throw new \Exception('Error applying image filter.');
+        }
+    }
+
     if ($config['picture']['flip'] !== 'off') {
         try {
             if ($config['picture']['flip'] === 'flip-horizontal') {
@@ -44,14 +55,13 @@ try {
         }
     }
 
-    // apply filter
-    $image_filter = $config['filters']['defaults'];
-    if ($image_filter !== ImageFilterEnum::PLAIN) {
-        try {
-            ImageUtility::applyFilter($image_filter, $imageResource);
-            $imageHandler->imageModified = true;
-        } catch (\Exception $e) {
-            throw new \Exception('Error applying image filter.');
+    if ($config['picture']['rotation'] !== '0') {
+        $imageResource = $imageHandler->rotateResizeImage(
+            image: $imageResource,
+            degrees: $config['picture']['rotation']
+        );
+        if (!$imageResource) {
+            throw new \Exception('Error resizing resource.');
         }
     }
 
@@ -74,16 +84,6 @@ try {
         $imageResource = $imageHandler->applyFrame($imageResource);
         if (!$imageResource) {
             throw new \Exception('Error applying frame to image resource.');
-        }
-    }
-
-    if ($config['picture']['rotation'] !== '0') {
-        $imageResource = $imageHandler->rotateResizeImage(
-            image: $imageResource,
-            degrees: $config['picture']['rotation']
-        );
-        if (!$imageResource) {
-            throw new \Exception('Error resizing resource.');
         }
     }
 
