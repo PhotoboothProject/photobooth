@@ -9,6 +9,7 @@ use Photobooth\Helper;
 use Photobooth\Collage;
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Processor\ImageProcessor;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
@@ -20,6 +21,8 @@ $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $database = DatabaseManagerService::getInstance();
+
+$processor = null;
 
 try {
     if (empty($_POST['file'])) {
@@ -73,11 +76,21 @@ try {
 
     $vars['tmpFile'] = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $vars['fileName'];
 
+    if (class_exists('Photobooth\Processor\ImageProcessor')) {
+        $processor = new ImageProcessor($imageHandler, $logger, $database, $vars, $config);
+    }
+
     if ($vars['isCollage']) {
         list($vars['collageSrcImagePaths'], $vars['srcImages']) = Collage::getCollageFiles($config['collage'], $vars['tmpFile'], $vars['fileName'], $vars['srcImages']);
 
+        if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preCollageProcessing')) {
+            list($imageHandler, $vars, $config) = $processor->preCollageProcessing($imageHandler, $vars, $config);
+        }
         if (!Collage::createCollage($config, $vars['collageSrcImagePaths'], $vars['tmpFile'], $vars['imageFilter'])) {
             throw new \Exception('Error creating collage image.');
+        }
+        if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postCollageProcessing')) {
+            list($imageHandler, $vars, $config) = $processor->postCollageProcessing($imageHandler, $vars, $config);
         }
     }
 
@@ -97,6 +110,9 @@ try {
             throw new \Exception('Error creating image resource.');
         }
 
+        if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preImageProcessing')) {
+            list($imageHandler, $vars, $config, $imageResource) = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
+        }
         if (!$vars['isChroma']) {
             if ($vars['isCollage'] && $vars['fileName'] != $vars['singleImageFile']) {
                 $vars['editSingleCollage'] = true;
@@ -168,6 +184,10 @@ try {
                     }
                 }
             }
+        }
+
+        if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postImageProcessing')) {
+            list($imageHandler, $vars, $config, $imageResource) = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
         }
 
         if ($config['keying']['enabled'] || $vars['isChroma']) {
