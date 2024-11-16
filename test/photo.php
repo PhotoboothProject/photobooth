@@ -5,6 +5,7 @@ require_once '../lib/boot.php';
 use Photobooth\Image;
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Processor\ImageProcessor;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Service\ApplicationService;
@@ -16,9 +17,21 @@ $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $languageService = LanguageService::getInstance();
 $errorMessage = '';
+$processor = null;
+$database = null;
 try {
-    $name = date('Ymd_His') . '.jpg';
-    $filename_tmp = FolderEnum::TEST->absolute() . DIRECTORY_SEPARATOR . $name;
+    $vars['fileName'] = date('Ymd_His') . '.jpg';
+    $vars['style'] = 'photo';
+    $vars['imageFilter'] = $config['filters']['defaults'];
+    $vars['isCollage'] = false;
+    $vars['editSingleCollage'] = false;
+    $vars['isChroma'] = false;
+    $vars['srcImages'] = [];
+    $vars['srcImages'][] = $vars['fileName'];
+    $vars['singleImageFile'] = $vars['fileName'];
+    $vars['tmpFile'] = FolderEnum::TEST->absolute() . DIRECTORY_SEPARATOR . $vars['fileName'];
+    $vars['resultFile'] = $vars['tmpFile'];
+
     $imageHandler = new Image();
     $imageHandler->debugLevel = $config['dev']['loglevel'];
     $imageHandler->imageModified = false;
@@ -27,13 +40,18 @@ try {
     if (!$imageResource) {
         throw new \Exception('Error creating image resource.');
     }
+    if (class_exists('Photobooth\Processor\ImageProcessor')) {
+        $processor = new ImageProcessor($imageHandler, $logger, $database, $vars, $config);
+    }
+    if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preImageProcessing')) {
+        list($imageHandler, $vars, $config, $imageResource) = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
+    }
     $imageHandler->framePath = $config['picture']['frame'];
 
     // apply filter
-    $image_filter = $config['filters']['defaults'];
-    if ($image_filter !== ImageFilterEnum::PLAIN) {
+    if ($vars['imageFilter'] !== ImageFilterEnum::PLAIN) {
         try {
-            ImageUtility::applyFilter($image_filter, $imageResource);
+            ImageUtility::applyFilter($vars['imageFilter'], $imageResource);
             $imageHandler->imageModified = true;
         } catch (\Exception $e) {
             throw new \Exception('Error applying image filter.');
@@ -87,6 +105,10 @@ try {
         }
     }
 
+    if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postImageProcessing')) {
+        list($imageHandler, $vars, $config, $imageResource) = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
+    }
+
     if ($config['textonpicture']['enabled']) {
         $imageHandler->fontSize = $config['textonpicture']['font_size'];
         $imageHandler->fontRotation = $config['textonpicture']['rotation'];
@@ -104,7 +126,7 @@ try {
         }
     }
 
-    if (!$imageHandler->saveJpeg($imageResource, $filename_tmp)) {
+    if (!$imageHandler->saveJpeg($imageResource, $vars['tmpFile'])) {
         throw new \Exception('Failed to save image.');
     }
     unset($imageResource);
@@ -128,7 +150,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
             <?php
                     if (empty($errorMessage)) {
                         echo '<div class="border border-solid border-black">';
-                        echo '<img src="' . PathUtility::getPublicPath($filename_tmp) . '" alt="Test Image">';
+                        echo '<img src="' . PathUtility::getPublicPath($vars['tmpFile']) . '" alt="Test Image">';
                         echo '</div>';
                     } else {
                         echo '<div class="flex flex-col gap-2">';
