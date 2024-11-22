@@ -1347,8 +1347,8 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->scalarNode('textLeft')->defaultValue('')->end()
                 ->enumNode('symbol')
                     ->values([
-                        'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o', 'fa-heart-o',
-                        'fa-heart', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
+                        'fa-camera', 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake-o',
+                        'fa-heart', 'fa-heart-o', 'fa-heartbeat', 'fa-apple', 'fa-anchor', 'fa-glass', 'fa-gears', 'fa-users'
                     ])
                     ->defaultValue('fa-heart-o')
                     ->end()
