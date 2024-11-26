@@ -373,7 +373,7 @@ return [
                 'fa-gift' => 'Gift',
                 'fa-tree' => 'Tree',
                 'fa-snowflake' => 'Snowflake',
-                'fa-light fa-heart' => 'Heart',
+                'fa-regular fa-heart' => 'Heart',
                 'fa-solid fa-heart' => 'Heart filled',
                 'fa-solid fa-heart-pulse' => 'Heartbeat',
                 'fa-brands fa-apple' => 'Apple',
