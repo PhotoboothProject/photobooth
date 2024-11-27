@@ -171,6 +171,12 @@ if ($action === 'reset') {
         $newConfig['filters']['disabled'] = [];
     }
 
+    if (isset($newConfig['commands']['preview']) && !empty($newConfig['commands']['preview'])) {
+        if (strpos($newConfig['commands']['preview'], 'cameracontrol') !== false) {
+            $newConfig['preview']['bsm'] = strpos($newConfig['commands']['preview'], '--bsm') !== false;
+        }
+    }
+
     if ($newConfig['preview']['camTakesPic'] && $newConfig['preview']['mode'] != 'device_cam' && $newConfig['preview']['mode'] != 'gphoto') {
         $newConfig['preview']['camTakesPic'] = false;
         $logger->debug('Device cam takes picture disabled. Can take images from preview only from gphoto2 and device cam preview.');
