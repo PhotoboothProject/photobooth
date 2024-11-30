@@ -3,6 +3,7 @@
 namespace Photobooth\Configuration;
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Enum\TimezoneEnum;
 use Photobooth\Environment;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -1003,6 +1004,18 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->enumNode('language')
                     ->values(['cs', 'de', 'en', 'es', 'fr', 'hr', 'it', 'nl', 'pt'])
                     ->defaultValue('en')
+                    ->end()
+                ->enumNode('local_timezone')
+                    ->values(TimezoneEnum::cases())
+                    ->defaultValue(TimezoneEnum::EUROPE_LONDON)
+                    ->beforeNormalization()
+                        ->always(function ($value) {
+                            if (is_string($value)) {
+                                $value = TimezoneEnum::from($value);
+                            }
+                            return $value;
+                        })
+                        ->end()
                     ->end()
                 ->integerNode('notification_timeout')
                     ->defaultValue(5)

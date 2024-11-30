@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Enum\TimezoneEnum;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
@@ -97,6 +98,14 @@ return [
                 'pt' => 'PT',
             ],
             'value' => $config['ui']['language'],
+        ],
+        'local_timezone' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'ui[local_timezone]',
+            'placeholder' => $defaultConfig['ui']['local_timezone'],
+            'value' => $config['ui']['local_timezone'],
+            'options' => TimezoneEnum::cases(),
         ],
         'translate' => [
             'view' => 'basic',
