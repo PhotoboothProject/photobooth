@@ -521,6 +521,20 @@ The flag `--use-gl=egl` might only be needed on a Raspberry Pi to avoid a white 
 
 ## How to hide the mouse cursor, disable screen blanking and screen saver?
 
+**Pi OS bookworm**
+
+Applications like _unclutter_ don't work on Wayland.
+
+To hide the mouse cursor we can rename the icon to hide it:
+```
+sudo mv /usr/share/icons/PiXflat/cursors/left_ptr /usr/share/icons/PiXflat/cursors/left_ptr.bak
+```
+
+To make the mouse cursor visible again we need to rename it back to it's original name:
+```
+sudo mv /usr/share/icons/PiXflat/cursors/left_ptr.bak /usr/share/icons/PiXflat/cursors/left_ptr
+```
+
 **Pi OS Bullseye and prior only**
 
 There are two options to hide the cursor on Pi OS Bullseye and prior. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
