@@ -843,13 +843,7 @@ Now restart your Chromium browser.
 
 Open [http://localhost/phpinfo.php](http://localhost/phpinfo.php) in your browser.
 
-Take a look for "Loaded Configuration File", you need _sudo_ rights to edit the file.
-
-Page will look like this:
-
-<details><summary>CLICK ME</summary>
-<img src="../resources/img/faq/php-ini.png" alt="php.ini Screenshot">
-</details>
+Take a look for "Loaded Configuration File" to get the path of your php.ini, you need _sudo_ rights to edit the file.
 
 ---
 
