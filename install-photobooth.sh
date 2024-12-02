@@ -26,7 +26,7 @@ CHROME_FLAGS=false
 CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --touch-events=enabled --password-store=basic"
 AUTOSTART_FILE=""
 DESKTOP_OS=true
-WAYLAND_ENV=true
+WAYLAND_ENV=$(pgrep wayfire > /dev/null || pgrep labwc > /dev/null && echo true || echo false)
 PHP_VERSION="8.3"
 
 # Update
@@ -1033,14 +1033,6 @@ else
     warn "Can not check Internet connection, wget missing!"
 fi
 
-if [ "$RUNNING_ON_PI" = true ]; then
-    if [ -f "/home/$USERNAME/.config/wayfire.ini" ]; then
-        WAYLAND_ENV=true
-    else
-        WAYLAND_ENV=false
-    fi
-fi
-
 ############################################################
 #                                                          #
 # Try updating Photobooth                                  #
@@ -1061,10 +1053,12 @@ if [ "$RUN_UPDATE" = true ]; then
 
     if [ "$GIT_INSTALL" = true ]; then
         detect_browser
-        if [ -d "/etc/xdg/autostart" ] && [ "$WEBBROWSER" != "unknown" ]; then
-            ask_kiosk_mode
-        else
+        if [ "$WAYLAND_ENV" = true ]; then
+            warn "### Kiosk-Mode can't be setup automatically on wayland!"
+        elif [ "$WEBBROWSER" = "unknown" ]; then
             warn "### No supported webbrowser found!"
+        else
+            ask_kiosk_mode
         fi
         print_spaces
 
@@ -1197,14 +1191,14 @@ fi
 print_spaces
 
 detect_browser
-if [ -d "/etc/xdg/autostart" ]; then
-    if [ "$WEBBROWSER" != "unknown" ]; then
-        ask_kiosk_mode
-    else
-        warn "### No supported webbrowser found!"
-    fi
-    print_spaces
+if [ "$WAYLAND_ENV" = true ]; then
+    warn "### Kiosk-Mode can't be setup automatically on wayland!"
+elif [ "$WEBBROWSER" = "unknown" ]; then
+    warn "### No supported webbrowser found!"
+else
+    ask_kiosk_mode
 fi
+print_spaces
 
 # Pi specific setup start
 if [ "$RUNNING_ON_PI" = true ]; then
