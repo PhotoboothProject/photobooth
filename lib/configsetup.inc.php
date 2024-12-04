@@ -2697,12 +2697,6 @@ return [
                 PathUtility::getAbsolutePath('private/images/cheese'),
             ]
         ],
-        'button_show_fs' => [
-            'view' => 'basic',
-            'type' => 'checkbox',
-            'name' => 'button[show_fs]',
-            'value' => $config['button']['show_fs'],
-        ],
         'button_homescreen' => [
             'view' => 'advanced',
             'type' => 'checkbox',
