@@ -1450,16 +1450,6 @@ const photoBooth = (function () {
         });
     });
 
-    $('.fs-button').on('click', function (e) {
-        e.preventDefault();
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-        } else {
-            document.body.requestFullscreen();
-        }
-        $('#fs-button').trigger('blur');
-    });
-
     api.handleButtonPressWhileTakingPic = function () {
         if (api.nextCollageNumber > 0) {
             const btnCollageNext = $('#btnCollageNext');
