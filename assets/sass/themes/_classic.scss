@@ -53,12 +53,6 @@
       top: 2rem;
       left: 2rem;
     }
-    button[data-command='fs-button'] {
-      position: fixed;
-      top: 2rem;
-      left: 2rem;
-      translate: 0 calc(100% + 0.5rem);
-    }
     button[data-command='cups-button'] {
       position: fixed;
       bottom: 2rem;
