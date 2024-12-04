@@ -1377,7 +1377,6 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->booleanNode('force_buzzer')->defaultValue(false)->end()
                 ->scalarNode('buzzer_message')->defaultValue('Use Buzzer to take a Picture')->end()
                 ->booleanNode('show_cups')->defaultValue(false)->end()
-                ->booleanNode('show_fs')->defaultValue(false)->end()
                 ->booleanNode('show_printUnlock')->defaultValue(false)->end()
                 ->booleanNode('homescreen')->defaultValue(true)->end()
                 ->booleanNode('reload')->defaultValue(false)->end()
