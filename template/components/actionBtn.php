@@ -30,9 +30,6 @@ if ($config['button']['reload']) {
 if ($config['gallery']['enabled']) {
     echo ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery-button');
 }
-if ($config['button']['show_fs']) {
-    echo ComponentUtility::renderButton('toggleFullscreen', $config['icons']['fullscreen'], 'fs-button');
-}
 if ($config['button']['show_cups']) {
     echo ComponentUtility::renderButton('cups', $config['icons']['cups'], 'cups-button');
 }
