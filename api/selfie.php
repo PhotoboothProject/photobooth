@@ -50,14 +50,8 @@ if (isset($_FILES['images'])) {
                 throw new \Exception('Image doesn\'t exist:' . $tmp);
             }
 
-            if ($config['picture']['keep_original']) {
-                if (!copy($tmp, $filename_tmp)) {
-                    throw new \Exception('Failed to copy photo.');
-                }
-            } else {
-                if (rename($tmp, $filename_tmp)) {
-                    throw new \Exception('Failed to rename image!');
-                }
+            if (rename($tmp, $filename_tmp)) {
+                throw new \Exception('Failed to rename image!');
             }
 
             $imageResource = $imageHandler->createFromImage($filename_tmp);
