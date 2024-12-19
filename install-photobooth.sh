@@ -10,7 +10,7 @@ RUNNING_ON_PI=true
 FORCE_RASPBERRY_PI=false
 DATE=$(date +"%Y%m%d-%H-%M")
 IPADDRESS=$(hostname -I | cut -d " " -f 1)
-PHOTOBOOTH_TMP_LOG="/tmp/$DATE-photobooth.txt"
+PHOTOBOOTH_LOG="/var/log/photobooth_install.log"
 
 BRANCH="dev"
 GIT_INSTALL=true
@@ -569,8 +569,6 @@ function general_setup() {
     mkdir -p "$INSTALLFOLDERPATH"
     chown www-data:www-data "$INSTALLFOLDERPATH"
     chown www-data:www-data /var/www
-
-    PHOTOBOOTH_LOG="$INSTALLFOLDERPATH/private/install.log"
 }
 
 function add_git_remote() {
@@ -981,7 +979,6 @@ detect_photobooth_install() {
                     PHOTOBOOTH_FOUND=true
                     INSTALLFOLDERPATH="$path"
                     info "### Photobooth installation found in path ${path}."
-                    PHOTOBOOTH_LOG="$INSTALLFOLDERPATH/private/install.log"
                 fi
             fi
         fi
@@ -1128,8 +1125,6 @@ if [ "$RUN_UPDATE" = true ]; then
         info "### avoid graphical issues."
         info "###"
         info "### Have fun with your Photobooth!"
-
-        cat "$PHOTOBOOTH_TMP_LOG" >>"$PHOTOBOOTH_LOG" || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
     else
         error "ERROR: Can not Update!"
     fi
@@ -1270,8 +1265,6 @@ if [ "$SETUP_CUPS" = true ]; then
 fi
 info "###"
 info "### Have fun with your Photobooth, but first restart your device!"
-
-cat "$PHOTOBOOTH_TMP_LOG" >>"$PHOTOBOOTH_LOG" || warn "WARN: failed to add log to ${PHOTOBOOTH_LOG}"
 
 echo -e "\033[0;33m"
 ask_yes_no "### Do you like to reboot now? [y/N] " "N"
