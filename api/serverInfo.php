@@ -26,7 +26,7 @@ function handleDebugPanel(string $content, array $config): string|false
         case 'nav-bootconfig':
             return readFileContents('/boot/config.txt');
         case 'nav-installlog':
-            return readFileContents(PathUtility::getAbsolutePath('private/install.log'));
+            return readFileContents('/var/log/photobooth_install.log');
         case 'nav-githead':
             return getLatestCommits();
         case 'nav-printdb':
