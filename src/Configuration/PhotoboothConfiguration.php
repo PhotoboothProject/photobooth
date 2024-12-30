@@ -1220,7 +1220,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->booleanNode('polaroid_effect')->defaultValue(false)->end()
                 ->integerNode('polaroid_rotation')
                     ->defaultValue(0)
-                    ->min(0)
+                    ->min(-359)
                     ->max(359)
                     ->beforeNormalization()
                         ->ifString()
