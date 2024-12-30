@@ -503,10 +503,14 @@ return [
         ],
         'picture_polaroid_rotation' => [
             'view' => 'advanced',
-            'type' => 'number',
+            'type' => 'range',
             'placeholder' => $defaultConfig['picture']['polaroid_rotation'],
             'name' => 'picture[polaroid_rotation]',
             'value' => $config['picture']['polaroid_rotation'],
+            'range_min' => -45,
+            'range_max' => 45,
+            'range_step' => 1,
+            'unit' => 'degrees',
         ],
         'filters_enabled' => [
             'view' => 'advanced',
