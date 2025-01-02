@@ -3,9 +3,9 @@ const virtualKeyboard = (function () {
     const api = {};
 
     const layouts = {
-        azerty: ['0123456789-_', 'azertyuiop', 'qsdfghjklm', 'wxcvbn@.,←'],
-        qwertz: ['0123456789-_', 'qwertzuiop', 'asdfghjkl', 'yxcvbnm@.,←'],
-        qwerty: ['0123456789-_', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm@.,←']
+        azerty: ['0123456789,←', 'azertyuiop', 'qsdfghjklm', 'wxcvbn@._-'],
+        qwertz: ['0123456789,←', 'qwertzuiop', 'asdfghjkl', 'yxcvbnm@.,_-'],
+        qwerty: ['0123456789,←', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm@._-']
     };
 
     let inputElement = null;
