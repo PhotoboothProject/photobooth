@@ -1890,6 +1890,23 @@ return [
             'name' => 'mail[send_all_later]',
             'value' => $config['mail']['send_all_later'],
         ],
+        'mail_virtualKeyboard' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'mail[virtualKeyboard]',
+            'value' => $config['mail']['virtualKeyboard'],
+        ],
+        'mail_virtual_keyboardLayout' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'mail[keyboardLayout]',
+            'options' => [
+                'azerty' => 'AZERTY',
+                'qwerty' => 'QWERTY',
+                'qwertz' => 'QWERTZ',
+            ],
+            'value' => $config['mail']['keyboardLayout'],
+        ],
         'mail_subject' => [
             'view' => 'basic',
             'type' => 'input',

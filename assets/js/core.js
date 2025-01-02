@@ -1067,7 +1067,9 @@ const photoBooth = (function () {
         });
         form.appendChild(recipientInput);
 
-        virtualKeyboard.initialize('qwertz', '#send-mail-recipient', '#send-mail-form');
+        if (config.mail.virtualKeyboard) {
+            virtualKeyboard.initialize(config.mail.keyboardLayout, '#send-mail-recipient', '#send-mail-form');
+        }
 
         // Submit
         const submitLabel = config.mail.send_all_later
