@@ -1,5 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
-/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM processChromaImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools photoboothPreview */
+/* globals initPhotoSwipeFromDOM initRemoteBuzzerFromDOM processChromaImage remoteBuzzerClient rotaryController globalGalleryHandle photoboothTools photoboothPreview virtualKeyboard */
 
 const photoBooth = (function () {
     const PhotoStyle = {
@@ -1066,6 +1066,8 @@ const photoBooth = (function () {
             event.stopImmediatePropagation();
         });
         form.appendChild(recipientInput);
+
+        virtualKeyboard.initialize('#send-mail-recipient', '#send-mail-form');
 
         // Submit
         const submitLabel = config.mail.send_all_later

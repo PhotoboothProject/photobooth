@@ -1,0 +1,40 @@
+#virtual-keyboard {
+  display: grid;
+  gap: 10px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  margin: 0 auto;
+
+  .keyboard-row {
+    display: flex;
+    justify-content: center;
+
+    .keyboard-button {
+      margin: 5px;
+      padding: 15px;
+      font-size: 1.2rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 40px;
+      min-height: 40px;
+
+      &.backspace {
+        background-color: #f44336;
+        color: #fff;
+        min-width: 50px;
+      }
+
+      &.active {
+        background-color: var(--highlight-color);
+        transform: scale(0.95);
+      }
+    }
+  }
+}

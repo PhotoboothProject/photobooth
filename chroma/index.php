@@ -67,6 +67,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 <?php include PathUtility::getAbsolutePath('template/components/chroma.footer.php'); ?>
 
 <script src="<?=$assetService->getUrl('resources/js/preview.js')?>"></script>
+<script src="<?=$assetService->getUrl('resources/js/virtualKeyboard.js')?>"></script>
 <script src="<?=$assetService->getUrl('resources/js/core.js')?>"></script>
 
 <?php ProcessService::getInstance()->boot(); ?>
