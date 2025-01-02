@@ -50,7 +50,7 @@ if (isset($_FILES['images'])) {
                 throw new \Exception('Image doesn\'t exist:' . $tmp);
             }
 
-            if (rename($tmp, $filename_tmp)) {
+            if (!rename($tmp, $filename_tmp)) {
                 throw new \Exception('Failed to rename image!');
             }
 
