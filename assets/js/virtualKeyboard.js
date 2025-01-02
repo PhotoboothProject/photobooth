@@ -1,12 +1,25 @@
 // eslint-disable-next-line no-unused-vars
 const virtualKeyboard = (function () {
     const api = {};
-    const layout = ['0123456789', 'azertyuiop', 'qsdfghjklm', 'wxcvbn@.-_←'];
+
+    const layouts = {
+        azerty: ['0123456789-_', 'azertyuiop', 'qsdfghjklm', 'wxcvbn@.←'],
+        qwertz: ['0123456789-_', 'qwertzuiop', 'asdfghjkl', 'yxcvbnm@.←'],
+        qwerty: ['0123456789-_', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm@.←']
+    };
 
     let inputElement = null;
     let containerElement = null;
+    let selectedLayout = layouts.qwerty;
 
-    api.initialize = function (inputSelector, containerSelector) {
+    api.initialize = function (layoutType, inputSelector, containerSelector) {
+        if (layouts[layoutType]) {
+            selectedLayout = layouts[layoutType];
+        } else {
+            console.warn('Invalid layout type provided. Falling back to QWERTY.');
+            selectedLayout = layouts.qwerty;
+        }
+
         inputElement = document.querySelector(inputSelector);
         containerElement = document.querySelector(containerSelector);
 
@@ -49,7 +62,7 @@ const virtualKeyboard = (function () {
             setTimeout(() => button.classList.remove('active'), 100);
         };
 
-        layout.forEach((row) => {
+        selectedLayout.forEach((row) => {
             const rowContainer = document.createElement('div');
             rowContainer.className = 'keyboard-row';
 
