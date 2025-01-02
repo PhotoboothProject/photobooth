@@ -4,7 +4,7 @@
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #fafafa;
+  background-color: var(--highlight-color);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: fit-content;
   margin: 0 auto;
@@ -19,7 +19,8 @@
       font-size: 1.2rem;
       border: 1px solid #ddd;
       border-radius: 5px;
-      background-color: #fff;
+      color: var(--button-font-color);
+      background-color: var(--primary-color);
       cursor: pointer;
       transition: all 0.2s ease;
       min-width: 40px;
