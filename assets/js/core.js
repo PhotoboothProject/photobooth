@@ -1059,7 +1059,7 @@ const photoBooth = (function () {
         const recipientInput = document.createElement('input');
         recipientInput.classList.add('form-input');
         recipientInput.id = 'send-mail-recipient';
-        recipientInput.type = 'email';
+        recipientInput.type = 'text';
         recipientInput.name = 'recipient';
         recipientInput.addEventListener('focusin', (event) => {
             // workaround for photoswipe blocking input
