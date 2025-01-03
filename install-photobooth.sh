@@ -6,7 +6,7 @@ set -e
 SCRIPT_NAME="install-photobooth.sh"
 REMOTE_URL="https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/$SCRIPT_NAME"
 TEMP_FILE="/tmp/$SCRIPT_NAME"
-SCRIPT_ARGS="$@"
+SCRIPT_ARGS=("$@")
 
 USERNAME=''
 WEBSERVER="apache"
@@ -290,7 +290,7 @@ function self_update() {
         chmod +x "$0"
         info "### Installation script updated successfully."
         info "### Restarting..."
-        exec "$0" "$SCRIPT_ARGS"
+        exec "$0" "${SCRIPT_ARGS[@]}"
     else
         info "### No installation script updates available."
         rm -f "$TEMP_FILE"
