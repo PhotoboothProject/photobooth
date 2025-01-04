@@ -278,8 +278,7 @@ else
 fi
 
 function self_update() {
-    wget -q -O "$TEMP_FILE" "$REMOTE_URL"
-    if [ $? -ne 0 ]; then
+    if ! wget -q -O "$TEMP_FILE" "$REMOTE_URL"; then
         error "Unable to download the latest installation script."
         exit 1
     fi
