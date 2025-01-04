@@ -4,8 +4,8 @@
 set -e
 
 SCRIPT_NAME="install-photobooth.sh"
-REMOTE_URL="https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/$SCRIPT_NAME"
-TEMP_FILE="/tmp/$SCRIPT_NAME"
+SCRIPT_REMOTE_URL="https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/$SCRIPT_NAME"
+SCRIPT_TEMP_FILE="/tmp/$SCRIPT_NAME"
 SCRIPT_ARGS=("$@")
 
 USERNAME=''
@@ -278,21 +278,21 @@ else
 fi
 
 function self_update() {
-    if ! wget -q -O "$TEMP_FILE" "$REMOTE_URL"; then
+    if ! wget -q -O "$SCRIPT_TEMP_FILE" "$SCRIPT_REMOTE_URL"; then
         error "Unable to download the latest installation script."
         exit 1
     fi
 
-    if ! cmp -s "$TEMP_FILE" "$0"; then
+    if ! cmp -s "$SCRIPT_TEMP_FILE" "$0"; then
         info "### Update found. Updating the installation script..."
-        mv "$TEMP_FILE" "$0"
+        mv "$SCRIPT_TEMP_FILE" "$0"
         chmod +x "$0"
         info "### Installation script updated successfully."
         info "### Restarting..."
         exec "$0" "${SCRIPT_ARGS[@]}"
     else
         info "### No installation script updates available."
-        rm -f "$TEMP_FILE"
+        rm -f "$SCRIPT_TEMP_FILE"
     fi
 }
 
