@@ -284,12 +284,17 @@ function self_update() {
     fi
 
     if ! cmp -s "$SCRIPT_TEMP_FILE" "$0"; then
-        info "### Update found. Updating the installation script..."
-        mv "$SCRIPT_TEMP_FILE" "$0"
-        chmod +x "$0"
-        info "### Installation script updated successfully."
-        info "### Restarting..."
-        exec "$0" "${SCRIPT_ARGS[@]}"
+        info "### Update found."
+        if [ "$SILENT_INSTALL" = true ]; then
+            info "### Skipping update on silent install."
+        else
+            info "Updating the installation script..."
+            mv "$SCRIPT_TEMP_FILE" "$0"
+            chmod +x "$0"
+            info "### Installation script updated successfully."
+            info "### Restarting..."
+            exec "$0" "${SCRIPT_ARGS[@]}"
+        fi
     else
         info "### No installation script updates available."
         rm -f "$SCRIPT_TEMP_FILE"
