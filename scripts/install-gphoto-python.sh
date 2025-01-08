@@ -76,7 +76,7 @@ blacklist bcm2835-isp
 EOF
     # adjust current runtime
     modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
-    
+
     if lsmod | grep -q "bcm2835-isp"; then
         if rmmod bcm2835-isp; then
             info "### Removed bcm2835-isp kernel module."
