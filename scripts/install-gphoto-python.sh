@@ -76,7 +76,16 @@ blacklist bcm2835-isp
 EOF
     # adjust current runtime
     modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
-    rmmod bcm2835-isp || true
+    
+    if lsmod | grep -q "bcm2835-isp"; then
+        if rmmod bcm2835-isp; then
+            info "### Removed bcm2835-isp kernel module."
+        else
+            error "ERROR: Failed to remove bcm2835-isp module. It might still be in use."
+        fi
+    else
+        info "### bcm2835-isp kernel module is not currently loaded."
+    fi
 }
 
 function clean_service() {
@@ -170,7 +179,15 @@ blacklist bcm2835-isp
 EOF
         # adjust runtime
         modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
-        rmmod bcm2835-isp || true
+        if lsmod | grep -q "bcm2835-isp"; then
+            if rmmod bcm2835-isp; then
+                info "### Removed bcm2835-isp kernel module."
+            else
+                error "ERROR: Failed to remove bcm2835-isp module. It might still be in use."
+            fi
+        else
+            info "### bcm2835-isp kernel module is not currently loaded."
+        fi
         info "### Done!"
         info "    Please adjust your Photobooth configuration:"
         info "    Preview mode: from device cam"
@@ -185,7 +202,16 @@ EOF
 elif [[ $REPLY =~ ^[2]$ ]]; then
     info "### Stopping and removing gphoto2 webcam service."
     [[ -f /etc/modprobe.d/v4l2loopback.conf ]] && rm /etc/modprobe.d/v4l2loopback.conf
-    rmmod v4l2loopback || true
+
+    if lsmod | grep -q "v4l2loopback"; then
+        if rmmod v4l2loopback; then
+            info "### Removed v4l2loopback kernel module."
+        else
+            error "ERROR: Failed to remove v4l2loopback module. It might still be in use."
+        fi
+    else
+        info "### v4l2loopback kernel module is not currently loaded."
+    fi
     clean_service
     remove_cronjob
     info "gphoto2 webcam removed..."
