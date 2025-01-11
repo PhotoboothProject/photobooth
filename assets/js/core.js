@@ -1070,6 +1070,26 @@ const photoBooth = (function () {
             virtualKeyboard.initialize(config.mail.keyboardLayout, '#send-mail-recipient', '#send-mail-form');
         }
 
+        // add to database on send
+        if (!config.mail.send_all_later) {
+            const dbCheckboxWrapper = document.createElement('div');
+            dbCheckboxWrapper.classList.add('form-db-checkbox-wrapper');
+
+            const dbCheckbox = document.createElement('input');
+            dbCheckbox.type = 'checkbox';
+            dbCheckbox.id = 'send-mail-db-checkbox';
+            dbCheckbox.name = 'addToDb';
+            dbCheckbox.classList.add('form-db-checkbox');
+
+            const dbCheckboxLabel = document.createElement('label');
+            dbCheckboxLabel.htmlFor = 'send-mail-db-checkbox';
+            dbCheckboxLabel.textContent = ' ' + photoboothTools.getTranslation('add_to_mail_database');
+
+            dbCheckboxWrapper.appendChild(dbCheckbox);
+            dbCheckboxWrapper.appendChild(dbCheckboxLabel);
+            form.appendChild(dbCheckboxWrapper);
+        }
+
         // Submit
         const submitLabel = config.mail.send_all_later
             ? photoboothTools.getTranslation('add')
