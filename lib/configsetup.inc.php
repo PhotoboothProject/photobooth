@@ -1956,7 +1956,7 @@ return [
             'value' => htmlentities($config['mail']['password'] ?? ''),
         ],
         'mail_fromAddress' => [
-            'view' => 'advanced',
+            'view' => 'basic',
             'type' => 'input',
             'placeholder' => $defaultConfig['mail']['fromAddress'],
             'name' => 'mail[fromAddress]',
@@ -1977,7 +1977,7 @@ return [
             'value' => $config['mail']['file'],
         ],
         'mail_secure' => [
-            'view' => 'expert',
+            'view' => 'basic',
             'type' => 'select',
             'name' => 'mail[secure]',
             'placeholder' => $defaultConfig['mail']['secure'],
@@ -1985,7 +1985,7 @@ return [
             'value' => $config['mail']['secure'],
         ],
         'mail_port' => [
-            'view' => 'expert',
+            'view' => 'basic',
             'type' => 'number',
             'placeholder' => $defaultConfig['mail']['port'],
             'name' => 'mail[port]',
