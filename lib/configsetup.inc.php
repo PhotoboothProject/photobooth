@@ -1465,12 +1465,11 @@ return [
             'placeholder' => $defaultConfig['keying']['seriouslyjs_color'],
             'value' => $config['keying']['seriouslyjs_color'],
         ],
-        'keying_background_path' => [
+        'keying_private_backgrounds' => [
             'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['keying']['background_path'],
-            'name' => 'keying[background_path]',
-            'value' => htmlentities($config['keying']['background_path'] ?? ''),
+            'type' => 'checkbox',
+            'name' => 'keying[private_backgrounds]',
+            'value' => $config['keying']['private_backgrounds'],
         ],
         'keying_show_all' => [
             'view' => 'expert',

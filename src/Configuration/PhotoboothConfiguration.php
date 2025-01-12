@@ -639,7 +639,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ->defaultValue('seriouslyjs')
                     ->end()
                 ->scalarNode('seriouslyjs_color')->defaultValue('#62af74')->end()
-                ->scalarNode('background_path')->defaultValue('resources/img/background')->end()
+                ->booleanNode('private_backgrounds')->defaultValue(false)->end()
                 ->booleanNode('show_all')->defaultValue(false)->end()
             ->end();
     }
