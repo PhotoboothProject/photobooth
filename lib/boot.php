@@ -32,6 +32,7 @@ FileUtility::createDirectory(FolderEnum::PRIVATE->absolute());
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/fonts'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/background'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/frames'));
+FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/keyingBackgrounds'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/logo'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/placeholder'));
 FileUtility::createDirectory(PathUtility::getAbsolutePath('private/images/cheese'));

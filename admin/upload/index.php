@@ -64,6 +64,7 @@ if (isset($_POST['submit'])) {
                     <label class="<?= $labelClass ?>" for="folder_name"><?=$languageService->translate('upload_folder')?></label>
                     <select class="<?= $inputClass ?>" name="folder_name">
                         <option value="private/images/background" <?= $folderName === 'private/images/background' ? 'selected' : '' ?>>images/background</option>
+                        <option value="private/images/keyingBackgrounds" <?= $folderName === 'private/images/keyingBackgrounds' ? 'selected' : '' ?>>images/keyingBackgrounds</option>
                         <option value="private/images/frames" <?= $folderName === 'private/images/frames' ? 'selected' : '' ?>>images/frames</option>
                         <option value="private/images/logo" <?= $folderName === 'private/images/logo' ? 'selected' : '' ?>>images/logo</option>
                         <option value="private/images/placeholder" <?= $folderName === 'private/images/placeholder' ? 'selected' : '' ?>>images/placeholder</option>
