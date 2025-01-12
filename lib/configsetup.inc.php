@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\TimezoneEnum;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
@@ -1977,9 +1978,10 @@ return [
         ],
         'mail_secure' => [
             'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['mail']['secure'],
+            'type' => 'select',
             'name' => 'mail[secure]',
+            'placeholder' => $defaultConfig['mail']['secure'],
+            'options' => MailSecurityTypeEnum::cases(),
             'value' => $config['mail']['secure'],
         ],
         'mail_port' => [

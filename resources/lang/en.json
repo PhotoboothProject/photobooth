@@ -291,7 +291,7 @@
   "mail:mail_is_html": "HTML E-Mail",
   "mail:mail_password": "Password",
   "mail:mail_port": "Port",
-  "mail:mail_secure": "Security (tls or ssl)",
+  "mail:mail_secure": "Security",
   "mail:mail_send_all_later": "Store email addresses in file",
   "mail:mail_subject": "Subject",
   "mail:mail_text": "Text",

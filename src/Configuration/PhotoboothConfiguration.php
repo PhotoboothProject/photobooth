@@ -3,6 +3,7 @@
 namespace Photobooth\Configuration;
 
 use Photobooth\Enum\ImageFilterEnum;
+use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\TimezoneEnum;
 use Photobooth\Environment;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -109,7 +110,18 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->scalarNode('fromAddress')->defaultValue('photobooth@example.com')->end()
                 ->scalarNode('fromName')->defaultValue('Photobooth')->end()
                 ->scalarNode('file')->defaultValue('mail-adresses')->end()
-                ->scalarNode('secure')->defaultValue('tls')->end()
+                ->enumNode('secure')
+                    ->values(MailSecurityTypeEnum::cases())
+                    ->defaultValue(MailSecurityTypeEnum::TLS)
+                    ->beforeNormalization()
+                        ->always(function ($value) {
+                            if (is_string($value)) {
+                                $value = MailSecurityTypeEnum::from($value);
+                            }
+                            return $value;
+                        })
+                        ->end()
+                    ->end()
                 ->integerNode('port')
                     ->defaultValue(587)
                     ->beforeNormalization()
