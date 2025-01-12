@@ -268,12 +268,13 @@ const photoBooth = (function () {
                 } else if (api.photoStyle === PhotoStyle.COLLAGE) {
                     const labelElement = document.createElement('div');
                     labelElement.classList.add('cheese-label');
-                    labelElement.textContent =
+                    labelElement.innerHTML =
                         photoboothTools.getTranslation('cheese') +
-                        ' ' +
+                        '<br>' +
                         (api.nextCollageNumber + 1) +
                         ' / ' +
                         config.collage.limit;
+                    labelElement.style.textAlign = 'center';
                     element.appendChild(labelElement);
                 } else {
                     const labelElement = document.createElement('div');
