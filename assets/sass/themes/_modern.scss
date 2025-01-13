@@ -6,6 +6,11 @@
   .stage--start {
     .stage-inner {
       justify-content: flex-end;
+      #collageDiv {
+        background: color-mix(in srgb, var(--primary-color), transparent 75%);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+      }
     }
 
     button[data-command='cups-button'] {
