@@ -5,6 +5,7 @@
 
 require_once '../lib/boot.php';
 
+use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Environment;
 use Photobooth\Service\ConfigurationService;
@@ -217,18 +218,17 @@ if ($action === 'reset') {
         }
     }
 
-    $collageLayout = $newConfig['collage']['layout'];
+    $newConfig['collage']['limit'] = CollageLayoutEnum::getLimitByValue($newConfig['collage']['layout']);
+    if ($newConfig['collage']['limit'] === 0) {
+        $logger->debug('Collage limit = 0. Falling back to defaults.');
+        $newConfig['collage']['layout'] = CollageLayoutEnum::TWO_PLUS_TWO_2->value;
+        $newConfig['collage']['limit'] = CollageLayoutEnum::TWO_PLUS_TWO_2->limit();
+    }
+
     $collageConfigFilePath = PathUtility::getAbsolutePath('private/collage.json');
-    if ($collageLayout === '1+2' || $collageLayout === '2+1' || strpos($collageLayout, '2x3') === 0) {
-        $newConfig['collage']['limit'] = 3;
-    } elseif ($collageLayout == 'collage.json' && file_exists($collageConfigFilePath)) {
+    if ($newConfig['collage']['layout'] == 'collage.json' && file_exists($collageConfigFilePath)) {
         $collageConfig = json_decode((string)file_get_contents($collageConfigFilePath), true);
         if (is_array($collageConfig)) {
-            if (array_key_exists('layout', $collageConfig)) {
-                $newConfig['collage']['limit'] = count($collageConfig['layout']);
-            } else {
-                $newConfig['collage']['limit'] = count($collageConfig);
-            }
             if (array_key_exists('placeholder', $collageConfig)) {
                 $newConfig['collage']['placeholder'] = $collageConfig['placeholder'];
             }
@@ -238,11 +238,7 @@ if ($action === 'reset') {
             if (array_key_exists('placeholderpath', $collageConfig)) {
                 $newConfig['collage']['placeholderpath'] = $collageConfig['placeholderpath'];
             }
-        } else {
-            $newConfig['collage']['limit'] = 4;
         }
-    } else {
-        $newConfig['collage']['limit'] = 4;
     }
 
     // If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1

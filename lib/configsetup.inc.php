@@ -1,5 +1,6 @@
 <?php
 
+use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\TimezoneEnum;
@@ -770,22 +771,7 @@ return [
             'type' => 'select',
             'name' => 'collage[layout]',
             'placeholder' => $defaultConfig['collage']['layout'],
-            'options' => [
-                '2+2-1' => '2+2',
-                '2+2-2' => '2+2 (2)',
-                '1+3-1' => '1+3',
-                '1+3-2' => '1+3 (2)',
-                '3+1' => '3+1',
-                '1+2' => '1+2',
-                '2+1' => '2+1',
-                '2x4-1' => '2x4',
-                '2x4-2' => '2x4 (2)',
-                '2x4-3' => '2x4 (3)',
-                '2x4-4' => '2x4 (4)',
-                '2x3-1' => '2x3',
-                '2x3-2' => '2x3 (2)',
-                'collage.json' => 'private/collage.json',
-            ],
+            'options' => CollageLayoutEnum::cases(),
             'value' => $config['collage']['layout'],
         ],
         'layout_generator' => [

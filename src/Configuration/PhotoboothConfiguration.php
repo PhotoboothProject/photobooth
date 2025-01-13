@@ -2,6 +2,7 @@
 
 namespace Photobooth\Configuration;
 
+use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\TimezoneEnum;
@@ -1489,12 +1490,16 @@ class PhotoboothConfiguration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->enumNode('layout')
-                    ->values([
-                        '2+2-1', '2+2-2', '1+3-1', '1+3-2', '3+1', '1+2', '2+1',
-                        '2x4-1', '2x4-2', '2x4-3', '2x4-4', '2x3-1', '2x3-2',
-                        'collage.json',
-                    ])
-                    ->defaultValue('2+2-2')
+                    ->values(CollageLayoutEnum::cases())
+                    ->defaultValue(CollageLayoutEnum::TWO_PLUS_TWO_2)
+                    ->beforeNormalization()
+                        ->always(function ($value) {
+                            if (is_string($value)) {
+                                $value = CollageLayoutEnum::from($value);
+                            }
+                            return $value;
+                        })
+                        ->end()
                     ->end()
                 ->enumNode('resolution')
                     ->values(['150dpi', '300dpi', '400dpi', '600dpi'])
