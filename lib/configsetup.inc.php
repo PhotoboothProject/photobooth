@@ -491,9 +491,13 @@ return [
         ],
         'picture_rotation' => [
             'view' => 'advanced',
-            'type' => 'number',
+            'type' => 'range',
             'placeholder' => $defaultConfig['picture']['rotation'],
             'name' => 'picture[rotation]',
+            'range_min' => -359,
+            'range_max' => 359,
+            'range_step' => 1,
+            'unit' => 'degrees',
             'value' => $config['picture']['rotation'],
         ],
         'picture_polaroid_effect' => [
