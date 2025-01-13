@@ -37,6 +37,17 @@ try {
         throw new \Exception('Invalid or missing style parameter');
     }
 
+    if (isset($_POST['collageLayout'])) {
+        $config['collage']['layout'] = $_POST['collageLayout'];
+    }
+    if (isset($_POST['collageLimit'])) {
+        $config['collage']['limit'] = $_POST['collageLimit'];
+        if ($config['collage']['placeholder'] && $config['collage']['limit'] < $config['collage']['placeholderposition']) {
+            $logger->debug('Placeholder position out of range. Limit: ' . $config['collage']['limit'] . ' Position: ' . $config['collage']['placeholderposition']);
+            $config['collage']['placeholderposition'] = 1;
+        }
+    }
+
     $vars['style'] = $_POST['style'];
 
     $vars['imageFilter'] = null;
