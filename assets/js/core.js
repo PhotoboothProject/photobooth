@@ -78,6 +78,8 @@ const photoBooth = (function () {
     api.chromaimage = '';
     api.filename = '';
     api.photoStyle = '';
+    api.collageLayout = config.collage.layout;
+    api.collageLimit = config.collage.limit;
 
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -122,7 +124,6 @@ const photoBooth = (function () {
 
     api.init = function () {
         api.reset();
-
         startPage.addClass('stage--active');
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
@@ -284,7 +285,7 @@ const photoBooth = (function () {
                         '<br>' +
                         (api.nextCollageNumber + 1) +
                         ' / ' +
-                        config.collage.limit;
+                        api.collageLimit;
                     labelElement.style.textAlign = 'center';
                     element.appendChild(labelElement);
                 } else {
@@ -636,10 +637,10 @@ const photoBooth = (function () {
                     loaderImage.show();
 
                     photoboothTools.console.logDev(
-                        'Taken collage photo number: ' + (result.current + 1) + ' / ' + result.limit
+                        'Taken collage photo number: ' + (result.current + 1) + ' / ' + api.collageLimit
                     );
 
-                    if (result.current + 1 < result.limit) {
+                    if (result.current + 1 < api.collageLimit) {
                         photoboothTools.console.logDev('core: initialize Media.');
                         photoboothPreview.initializeMedia();
                         api.takingPic = false;
@@ -650,7 +651,7 @@ const photoBooth = (function () {
                         setTimeout(() => {
                             api.clearLoaderImage();
                             imageUrl = '';
-                            if (result.current + 1 < result.limit) {
+                            if (result.current + 1 < api.collageLimit) {
                                 api.thrill(PhotoStyle.COLLAGE);
                             } else {
                                 currentCollageFile = '';
@@ -660,7 +661,7 @@ const photoBooth = (function () {
                         }, continuousCollageTime);
                     } else {
                         // collage with interruption
-                        if (result.current + 1 < result.limit) {
+                        if (result.current + 1 < api.collageLimit) {
                             const takePictureButton = $(
                                 '<button type="button" class="button collageNext rotaryfocus" id="btnCollageNext">'
                             );
@@ -890,7 +891,9 @@ const photoBooth = (function () {
             data: {
                 file: result.file,
                 filter: imgFilter,
-                style: api.photoStyle
+                style: api.photoStyle,
+                collageLayout: api.collageLayout,
+                collageLimit: api.collageLimit
             },
             success: (data) => {
                 setFiltersEnabled(true);
@@ -1600,6 +1603,18 @@ const photoBooth = (function () {
             e.preventDefault();
         });
     }
+
+    document.getElementById('collageSelect').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const limit = selectedOption.dataset.limit;
+        const layout = selectedOption.value;
+
+        api.collageLayout = layout;
+        api.collageLimit = parseInt(limit, 10);
+
+        console.log('Collage layout updated:', api.collageLayout);
+        console.log('Collage limit updated:', api.collageLimit);
+    });
 
     previewVideo.on('loadedmetadata', function (ev) {
         const videoEl = ev.target;
