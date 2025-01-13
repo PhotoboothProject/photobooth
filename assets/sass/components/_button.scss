@@ -118,6 +118,37 @@
 }
 
 /**
+ * Select menu
+ */
+#collageSelect {
+  font-size: var(--button-font-size);
+  font-weight: var(--button-font-weight);
+  height: auto;
+  min-height: 2rem;
+  vertical-align: middle;
+  border: var(--button-border-width) solid var(--button-border-color);
+  background: var(--button-background);
+  color: var(--button-color);
+  padding: 0.2rem;
+  align-items: center;
+  justify-content: center;
+
+  &.focused,
+  &:hover,
+  &:focus {
+    --button-background: var(--button-focus-background);
+  }
+}
+
+[data-ui-button='classic_rounded'],
+[data-ui-button='modern'],
+[data-ui-button='modern_squared'] {
+  #collageSelect {
+    border-radius: 0.625rem;
+  }
+}
+
+/**
  * Buttonbar
  */
 .buttonbar {
