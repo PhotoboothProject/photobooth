@@ -49,6 +49,7 @@ final class CollageConfiguration
                         })
                         ->end()
                     ->end()
+                ->booleanNode('allow_selection')->defaultValue(false)->end()
                 ->arrayNode('layouts_disabled')
                     ->enumPrototype()
                         ->values(CollageLayoutEnum::cases())

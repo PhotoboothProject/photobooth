@@ -857,13 +857,19 @@ return [
             'unit' => 'seconds',
         ],
         'collage_layout' => [
-            'view' => 'advanced',
+            'view' => 'basic',
             'type' => 'select',
             'name' => 'collage[layout]',
             'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['layout'],
             'options' => CollageLayoutEnum::cases(),
             'value' => $config['collage']['layout'],
+        ],
+        'collage_allow_selection' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'collage[allow_selection]',
+            'value' => $config['collage']['allow_selection'],
         ],
         'collage_layouts_disabled' => [
             'view' => 'advanced',
