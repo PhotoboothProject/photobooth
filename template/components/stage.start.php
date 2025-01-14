@@ -39,7 +39,9 @@ if ($config['ui']['selfie_mode']) {
     include PathUtility::getAbsolutePath('template/components/selfieAction.php');
 } else {
     include PathUtility::getAbsolutePath('template/components/actionBtn.php');
-    include PathUtility::getAbsolutePath('template/components/collageSelection.php');
+    if ($config['collage']['enabled'] && $config['collage']['allow_selection']) {
+        include PathUtility::getAbsolutePath('template/components/collageSelection.php');
+    }
 }
 ?>
     </div>
