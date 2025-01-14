@@ -12,17 +12,19 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
     $html .= '<select id="collageSelect">';
 
     foreach (CollageLayoutEnum::cases() as $layout) {
-        $limit = $layout->getLimitByValue($layout->value);
+        if (!in_array($layout, $collageConfig['layouts_disabled'])) {
+            $limit = $layout->getLimitByValue($layout->value);
 
-        $selected = ($layout->value === $collageConfig['layout']) ? ' selected' : '';
+            $selected = ($layout->value === $collageConfig['layout']) ? ' selected' : '';
 
-        $html .= sprintf(
-            '<option value="%s" data-limit="%d"%s>%s</option>',
-            htmlspecialchars($layout->value, ENT_QUOTES, 'UTF-8'),
-            $limit,
-            $selected,
-            htmlspecialchars($layout->label(), ENT_QUOTES, 'UTF-8')
-        );
+            $html .= sprintf(
+                '<option value="%s" data-limit="%d"%s>%s</option>',
+                htmlspecialchars($layout->value, ENT_QUOTES, 'UTF-8'),
+                $limit,
+                $selected,
+                htmlspecialchars($layout->label(), ENT_QUOTES, 'UTF-8')
+            );
+        }
     }
 
     $html .= '</select>';
