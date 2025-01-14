@@ -1584,17 +1584,24 @@ const photoBooth = (function () {
         });
     }
 
-    document.getElementById('collageSelect').addEventListener('change', function () {
-        const selectedOption = this.options[this.selectedIndex];
-        const limit = selectedOption.dataset.limit;
-        const layout = selectedOption.value;
+    if (
+        typeof onStandaloneGalleryView === 'undefined' &&
+        typeof onCaptureChromaView === 'undefined' &&
+        config.collage.enabled &&
+        config.collage.allow_selection
+    ) {
+        document.getElementById('collageSelect').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const limit = selectedOption.dataset.limit;
+            const layout = selectedOption.value;
 
-        api.collageLayout = layout;
-        api.collageLimit = parseInt(limit, 10);
+            api.collageLayout = layout;
+            api.collageLimit = parseInt(limit, 10);
 
-        console.log('Collage layout updated:', api.collageLayout);
-        console.log('Collage limit updated:', api.collageLimit);
-    });
+            console.log('Collage layout updated:', api.collageLayout);
+            console.log('Collage limit updated:', api.collageLimit);
+        });
+    }
 
     previewVideo.on('loadedmetadata', function (ev) {
         const videoEl = ev.target;
