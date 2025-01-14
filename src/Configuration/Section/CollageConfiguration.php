@@ -49,6 +49,19 @@ final class CollageConfiguration
                         })
                         ->end()
                     ->end()
+                ->arrayNode('layouts_disabled')
+                    ->enumPrototype()
+                        ->values(CollageLayoutEnum::cases())
+                        ->beforeNormalization()
+                            ->always(function ($value) {
+                                if (is_string($value)) {
+                                    $value = CollageLayoutEnum::from($value);
+                                }
+                                return $value;
+                            })
+                            ->end()
+                        ->end()
+                    ->end()
                 ->integerNode('limit')
                     ->defaultValue(4)
                     ->min(1)

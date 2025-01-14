@@ -865,6 +865,14 @@ return [
             'options' => CollageLayoutEnum::cases(),
             'value' => $config['collage']['layout'],
         ],
+        'collage_layouts_disabled' => [
+            'view' => 'advanced',
+            'type' => 'multi-select',
+            'name' => 'collage[layouts_disabled]',
+            'placeholder' => $defaultConfig['collage']['layouts_disabled'],
+            'options' => CollageLayoutEnum::cases(),
+            'value' => $config['collage']['layouts_disabled'],
+        ],
         'collage_orientation' => [
             'view' => 'basic',
             'type' => 'select',
