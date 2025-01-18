@@ -99,7 +99,6 @@
   "mail:mail_fromName": "Nazwa nadawcy",
   "mail:mail_host": "Adres e-mail hosta",
   "mail:mail_password": "Hasło",
-  "mail:mail_secure": "Zabezpieczenie (tls lub ssl)",
   "mail:mail_send_all_later": "Aktywuj pole wyboru, aby dodać wprowadzony adres do pliku (na przykład, aby wysłać wiadomość z wszystkimi zdjęciami później)",
   "mail:mail_subject": "Temat",
   "mail:mail_text": "Tekst",

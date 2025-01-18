@@ -195,7 +195,6 @@
   "mail:mail_fromName": "Feladó neve",
   "mail:mail_password": "Jelszó",
   "mail:mail_port": "Port",
-  "mail:mail_secure": "Titkosítás (tls vagy ssl)",
   "mail:mail_subject": "Tárgy",
   "mail:mail_text": "Szöveg",
   "mail:mail_username": "Az e-mail fiók felhasználói neve",
