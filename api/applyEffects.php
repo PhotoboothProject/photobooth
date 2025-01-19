@@ -39,6 +39,26 @@ try {
 
     if (isset($_POST['collageLayout'])) {
         $config['collage']['layout'] = $_POST['collageLayout'];
+        if ($config['collage']['allow_selection']) {
+            if ($config['collage']['take_frame'] !== 'off') {
+                $collageFrame = $config['collage']['frame'];
+                $collageFrameDirectory = dirname($collageFrame);
+                $collageFrameFilename = basename($collageFrame);
+                $collageLayoutFrame = $collageFrameDirectory . '/' . $config['collage']['layout'] . '_' . $collageFrameFilename;
+                if (file_exists($collageLayoutFrame)) {
+                    $config['collage']['frame'] = $collageLayoutFrame;
+                }
+            }
+            if (!empty($config['collage']['background']) && $config['collage']['background'] !== '') {
+                $collageBackground = $config['collage']['background'];
+                $collageBackgroundDirectory = dirname($collageBackground);
+                $collageBackgroundFilename = basename($collageBackground);
+                $collageLayoutBackground = $collageBackgroundDirectory . '/' . $config['collage']['layout'] . '_' . $collageBackgroundFilename;
+                if (file_exists($collageLayoutBackground)) {
+                    $config['collage']['background'] = $collageLayoutBackground;
+                }
+            }
+        }
     }
     if (isset($_POST['collageLimit'])) {
         $config['collage']['limit'] = $_POST['collageLimit'];
