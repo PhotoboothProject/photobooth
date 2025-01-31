@@ -480,7 +480,14 @@ These trigger URLs can be used for example with [myStrom WiFi Buttons](https://m
 
 ### Autostart on Pi OS Bookworm
 
-Modify `~/.config/wayfire.ini` as stated. If there is a section [autostart] already, just add the line chromium = ... otherwise insert the complete section.
+Since late 2024 Wayland/labwc is the default on all new installations of RPiOS with desktop. Add to the user specific autostart file location: `~/.config/labwc/autostart`, though it doesn't exist by default. If there is a section [autostart] already, just add the line chromium = ... otherwise insert the complete section.
+
+```
+[autostart]
+chromium --kiosk --disable-features=Translate --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --touch-events=enabled --start-maximized http://localhost
+```
+
+If you use Wayland/Wayfire modify `~/.config/wayfire.ini` as stated. 
 
 ```
 [autostart]
