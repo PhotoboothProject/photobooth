@@ -27,7 +27,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
 <div class="w-full h-full grid place-items-center fixed bg-brand-1 overflow-x-hidden overflow-y-auto">
     <div class="w-full flex items-center justify-center flex-col px-6 py-12">
 
-        <div class="w-full max-w-xl h-144 rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl">
+        <div class="w-full max-w-xl rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl">
             <div class="w-full flex items-center pb-3 mb-3 border-b border-solid border-gray-200">
                 <a href="<?=PathUtility::getPublicPath('admin')?>" class="h-4 mr-4 flex items-center justify-center border-r border-solid border-black border-opacity-20 pr-3">
                     <span class="fa fa-chevron-left text-brand-1 text-opacity-60 text-md hover:text-opacity-100 transition-all"></span>

@@ -5,7 +5,7 @@ use Photobooth\Service\LanguageService;
 $languageService = LanguageService::getInstance();
 
 ?>
-<div class="w-full max-w-xl h-144 rounded-lg p-8 bg-white flex flex-col shadow-xl">
+<div class="w-full max-w-xl rounded-lg p-8 bg-white flex flex-col shadow-xl">
     <form method="post">
 
         <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">

@@ -47,7 +47,7 @@ class AdminKeypad
                 border border-solid border-gray-200 rounded-full
                 hover:border-brand-1 hover:text-brand-1 hover:scale-110
                 active:border-brand-1 active:bg-brand-1 active:text-white
-                outline-none focus:outline-none focus:ring-2 focus:ring-brand-1 active:ring-2 active:ring-brand-1 active:outline-none
+                outline-hidden focus:outline-hidden focus:ring-2 focus:ring-brand-1 active:ring-2 active:ring-brand-1 active:outline-hidden
             ';
 
         $content = [];
@@ -73,16 +73,16 @@ class AdminKeypad
         $containerClass = '
             keypad_keybox
             flex items-center justify-center w-10 h-14
-            border border-solid border-gray-200 bg-gray-50 rounded m-2
+            border border-solid border-gray-200 bg-gray-50 rounded-sm m-2
             [&.active]:border-brand-1
-            [&.error]:animate-error [&.error]:border-red-500 [&.error]:border-opacity-70
+            [&.error]:animate-error [&.error]:border-red-500/70
         ';
         $dotClass = '
             keypad_key
             w-3 h-3 rounded-full bg-gray-400
             [&.active]:border-2 [&.active]:border-solid [&.active]:border-brand-1 [&.active]:bg-transparent
             [&.checked]:bg-brand-1
-            [&.error]:bg-red-500 [&.error]:bg-opacity-70
+            [&.error]:bg-red-500/70
         ';
 
         $content = [];

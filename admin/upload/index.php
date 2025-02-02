@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
 
 <div class="w-full h-screen grid place-items-center absolute bg-brand-2 px-6 py-12 overflow-x-hidden overflow-y-auto">
     <div class="w-full flex items-center justify-center flex-col">
-        <div class="w-full max-w-xl h-144 rounded-lg p-8 bg-white flex flex-col shadow-xl">
+        <div class="w-full max-w-xl rounded-lg p-8 bg-white flex flex-col shadow-xl">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
                 <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
                     File uploader
@@ -82,7 +82,7 @@ if (isset($_POST['submit'])) {
                     if (count($failedFiles) > 0) {
                         echo '<div class="flex flex-col gap-2">';
                         foreach ($failedFiles as $fileName => $reason) {
-                            echo '<div class="flex flex-col justify-between p-2 rounded bg-red-300 text-red-800 border-2 border-red-800"><div class="col-span-1">' . $fileName . '</div><div class="col-span-1">' . $languageService->translate($reason) . '</div></div>';
+                            echo '<div class="flex flex-col justify-between p-2 rounded-sm bg-red-300 text-red-800 border-2 border-red-800"><div class="col-span-1">' . $fileName . '</div><div class="col-span-1">' . $languageService->translate($reason) . '</div></div>';
                         }
                         echo '</div>';
                     }

@@ -9,7 +9,7 @@ import rename from 'gulp-rename';
 import sass from 'gulp-dart-sass';
 import { promisify } from 'util';
 import { compileAsync } from 'sass'
-import tailwindcss from 'tailwindcss';
+import tailwindcss from '@tailwindcss/postcss';
 import twAdminConfig from './config/tailwind.admin.config.mjs';
 import fs from 'fs';
 import path from 'path';
