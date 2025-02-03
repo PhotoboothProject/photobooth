@@ -68,7 +68,7 @@ the wsl machine.
 Press `WIN+R` and run `shell:startup`. This will open the startup directory in your
 explorer.
 
-Create a file named `wsl.bat` with this content (adjust the `BUSID`):
+Create a file named `wsl_start.bat` with this content (adjust the `BUSID`):
 
 ```bat
 wsl --exec dbus-launch true
