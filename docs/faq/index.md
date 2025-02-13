@@ -611,7 +611,7 @@ go2rtc can be accessed at `http://localhost:1984`. Use `url("http://localhost:19
 To be able to also capture images you need to adjust the capture command.
 _"Commands"_: _"Take picture command"_: `capture %s`
 
-For preview via DSLR make sure your camera supports `--capture-movie`, for PiCamera make sure `rpicam-vid` or `libcamera-vid` works via terminal.
+For preview via DSLR first make sure `gphoto2 --capture-movie` works via terminal, for PiCamera make sure `rpicam-vid` or `libcamera-vid` works via terminal.
 
 Install go2rtc preview service:
 ```sh
