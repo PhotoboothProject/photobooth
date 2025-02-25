@@ -3199,7 +3199,7 @@ return [
             'name' => 'jpeg_quality[image]',
             'placeholder' => $defaultConfig['jpeg_quality']['image'],
             'value' => $config['jpeg_quality']['image'],
-            'range_min' => -1,
+            'range_min' => 50,
             'range_max' => 100,
             'range_step' => 1,
             'unit' => 'percent',
