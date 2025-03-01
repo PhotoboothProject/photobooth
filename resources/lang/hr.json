@@ -214,7 +214,6 @@
   "installlog": "Instalacijski zapisnik",
   "jpeg_quality": "JPEG kvaliteta",
   "jpeg_quality:jpeg_quality_chroma": "Kvaliteta JPEG-a za chroma-keying:",
-  "jpeg_quality:jpeg_quality_image": "Kvaliteta JPEG slika (-1 za onemogućavanje):",
   "jpeg_quality:jpeg_quality_thumb": "Kvaliteta JPEG prikaza slika:",
   "keying": "Chroma keying",
   "keying:chromaCapture_enabled": "Koristi snimanje boje kao početnu stranicu",

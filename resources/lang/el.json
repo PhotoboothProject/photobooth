@@ -44,7 +44,6 @@
   "insertMail": "Δώστε τη δική σας E-Mail-Adresse ein, για να στείλετε την εικόνα.",
   "jpeg_quality": "Ποιότητα JPEG",
   "jpeg_quality:jpeg_quality_chroma": "Ποιότητα JPEG για chroma-keying (10 ... 100)",
-  "jpeg_quality:jpeg_quality_image": "Ποιότητα JPEG για φωτογραφίες (-1 ... 100)",
   "jpeg_quality:jpeg_quality_thumb": "Ποιότητα JPEG για μικρογραφίες (10 ... 100)",
   "keying:keying_enabled": "Chroma-Keying επιτρέπονται",
   "mail:mail_enabled": "E-Mail Ενεργοποίηση",

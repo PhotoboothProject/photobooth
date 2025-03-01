@@ -230,7 +230,6 @@
   "installlog": "Logs de instalação",
   "jpeg_quality": "Qualidade JPEG",
   "jpeg_quality:jpeg_quality_chroma": "Chave de qualidade JPEG:",
-  "jpeg_quality:jpeg_quality_image": "Imagens de qualidade JPEG (-1 para desativar):",
   "jpeg_quality:jpeg_quality_thumb": "Miniaturas de qualidade JPEG:",
   "keying": "Chroma keying",
   "keying:chromaCapture_enabled": "Use captura de croma como página inicial",
