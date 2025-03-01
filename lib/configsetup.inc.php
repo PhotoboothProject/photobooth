@@ -98,6 +98,7 @@ return [
                 'it' => 'IT',
                 'nl' => 'NL',
                 'pt' => 'PT',
+                'tr' => 'TR',
             ],
             'value' => $config['ui']['language'],
         ],
