@@ -85,7 +85,7 @@
     "git-tag-version": "^1.4.0",
     "globals": "^15.15.0",
     "gulp-babel": "^8.0.0",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.2",
     "rimraf": "^6.0.1"
   }
 }
