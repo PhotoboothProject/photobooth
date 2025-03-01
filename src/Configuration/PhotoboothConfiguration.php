@@ -1020,7 +1020,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
             ->ignoreExtraKeys()
             ->children()
                 ->enumNode('language')
-                    ->values(['cs', 'de', 'en', 'es', 'fr', 'hr', 'it', 'nl', 'pt'])
+                    ->values(['cs', 'de', 'en', 'es', 'fr', 'hr', 'it', 'nl', 'pt', 'tr'])
                     ->defaultValue('en')
                     ->end()
                 ->enumNode('local_timezone')
