@@ -218,39 +218,44 @@ function initRemoteBuzzerFromDOM() {
         // vars
         const api = {};
         api.waitingToProcessCollage = false;
+        api.needsReload = false;
+        api.chromaCapture = typeof onCaptureChromaView !== 'undefined';
 
         api.init = function () {
             // nothing to init
         };
 
         api.enabled = function () {
-            return (
-                config.remotebuzzer.usebuttons &&
-                typeof onStandaloneGalleryView === 'undefined' &&
-                typeof onCaptureChromaView === 'undefined'
-            );
+            return config.remotebuzzer.usebuttons && typeof onStandaloneGalleryView === 'undefined';
         };
 
         api.takePicture = function () {
             if (this.enabled() && config.picture.enabled) {
-                photoBooth.thrill('photo');
+                if (api.chromaCapture) {
+                    if (!api.needsReload) {
+                        api.needsReload = true;
+                        photoBooth.thrill('chroma');
+                    }
+                } else {
+                    photoBooth.thrill('photo');
+                }
             }
         };
 
         api.takeCustom = function () {
-            if (this.enabled() && config.custom.enabled) {
+            if (this.enabled() && !api.chromaCapture && config.custom.enabled) {
                 photoBooth.thrill('custom');
             }
         };
 
         api.takeVideo = function () {
-            if (this.enabled() && config.video.enabled) {
+            if (this.enabled() && !api.chromaCapture && config.video.enabled) {
                 photoBooth.thrill('video');
             }
         };
 
         api.takeCollage = function () {
-            if (this.enabled() && config.collage.enabled) {
+            if (this.enabled() && !api.chromaCapture && config.collage.enabled) {
                 this.waitingToProcessCollage = false;
                 photoBooth.thrill('collage');
             }
@@ -267,8 +272,13 @@ function initRemoteBuzzerFromDOM() {
 
         api.print = function () {
             if ($('.stage[data-stage="result"]').is(':visible')) {
-                $('.printbtn').trigger('click');
-                $('.printbtn').trigger('blur');
+                if (api.chromaCapture) {
+                    $('[data-command="print-btn"]').trigger('click');
+                    $('[data-command="print-btn"]').trigger('blur');
+                } else {
+                    $('[data-command="printbtn"]').trigger('click');
+                    $('[data-command="printbtn"]').trigger('blur');
+                }
             } else if ($('.pswp__button--print').is(':visible')) {
                 $('.pswp__button--print').trigger('click');
             } else {
@@ -277,7 +287,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.move2usb = function () {
-            if (this.enabled()) {
+            if (this.enabled() && !api.chromaCapture) {
                 photoBooth.thrill('move2usb');
             }
         };
