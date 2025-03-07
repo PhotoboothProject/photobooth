@@ -31,8 +31,8 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
 <body class="gallery-mode--overlay ">
 
-<?php include PathUtility::getAbsolutePath('template/components/preview.php'); ?>
 <?php include PathUtility::getAbsolutePath('template/components/chroma.canvas.php'); ?>
+<?php include PathUtility::getAbsolutePath('template/components/preview.php'); ?>
 
 <div class="stage stage--chroma rotarygroup" data-stage="start">
     <div class="stage-inner">
