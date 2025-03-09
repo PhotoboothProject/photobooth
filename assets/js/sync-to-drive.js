@@ -96,15 +96,23 @@ class SyncToDrive {
             throw new Error('Error: USB device is not properly mounted.');
         }
 
-        log('Starting sync to USB drive ...');
-        const distinationPath = path.join(device.mountpoint, this.destination);
-        if (!fs.existsSync(distinationPath)) {
-            log('Creating target directory' + distinationPath);
-            fs.mkdirSync(distinationPath, { recursive: true });
+        const destinationPath = path.join(device.mountpoint, this.destination);
+        if (!fs.existsSync(destinationPath)) {
+            log(`Creating target directory ${destinationPath}`);
+            try {
+                fs.mkdirSync(destinationPath, { recursive: true });
+            } catch (err) {
+                throw new Error(`Error: Failed to create directory ${destinationPath} - ${err.message}`);
+            }
         }
 
+        if (!this.isWritable(destinationPath)) {
+            throw new Error(`Error: Destination ${destinationPath} is not writable.`);
+        }
+
+        log('Starting sync to USB drive ...');
         log('Source data folder ' + this.source);
-        log('Syncing to drive ' + device.path + ' -> ' + distinationPath);
+        log('Syncing to drive ' + device.path + ' -> ' + destinationPath);
 
         const command = [
             'rsync',
@@ -240,6 +248,16 @@ class SyncToDrive {
         }
 
         this.stop();
+    }
+
+    isWritable(directory) {
+        try {
+            fs.accessSync(directory, fs.constants.W_OK);
+            return true;
+            // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            return false;
+        }
     }
 
     fetchConfig() {
