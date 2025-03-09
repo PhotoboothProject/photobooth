@@ -25,6 +25,7 @@ if (process.platform === 'win32') {
 
 class SyncToDrive {
     constructor() {
+        this.validateRsync();
         this.config = this.fetchConfig();
         if (!this.config.synctodrive.enabled) {
             error('Sync to drive is disabled.');
@@ -45,6 +46,15 @@ class SyncToDrive {
 
         this.createProcessFile();
         this.start();
+    }
+
+    validateRsync() {
+        try {
+            execSync('command -v rsync', { stdio: 'ignore' });
+        } catch (err) {
+            log(err.message);
+            error('Error: rsync is not installed. Please install it and try again.');
+        }
     }
 
     start() {
