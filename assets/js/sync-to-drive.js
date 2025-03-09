@@ -92,6 +92,10 @@ class SyncToDrive {
             throw new Error('Folder ' + this.source + ' does not exist!');
         }
 
+        if (!device.mountpoint) {
+            throw new Error('Error: USB device is not properly mounted.');
+        }
+
         log('Starting sync to USB drive ...');
         const distinationPath = path.join(device.mountpoint, this.destination);
         if (!fs.existsSync(distinationPath)) {
