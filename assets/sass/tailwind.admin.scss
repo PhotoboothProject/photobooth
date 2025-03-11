@@ -1,5 +1,6 @@
 @use '../../node_modules/tailwindcss';
 @config "../../config/tailwind.admin.config.mjs";
+@custom-variant hover (&:hover);
 
 body {
   width: 100%;
