@@ -110,25 +110,33 @@ class SyncToDrive {
             throw new Error(`Error: Destination ${destinationPath} is not writable.`);
         }
 
-        log('Starting sync to USB drive ...');
-        log('Source data folder ' + this.source);
-        log('Syncing to drive ' + device.path + ' -> ' + destinationPath);
-
         const command = [
             'rsync',
             '-a',
-            '--delete-before',
             '-b',
+            '--delete-before',
             '--backup-dir=' + path.join(device.mountpoint, 'deleted'),
             '--ignore-existing',
-            '--include=\'*.\'{jpg,chk,gif,mp4}',
+            '--include=\'*.{jpg,chk,gif,mp4}\'',
             '--include=\'*/\'',
             '--exclude=\'*\'',
             '--prune-empty-dirs',
             this.source,
-            path.join(device.mountpoint, this.destination)
+            destinationPath
         ].join(' ');
-        log('Executing command "' + command + '"');
+
+        log('Validating rsync command...');
+        try {
+            execSync(command + ' --dry-run', { stdio: 'ignore' });
+            // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            throw new Error('Error: Rsync validation failed. Check permissions and paths.');
+        }
+
+        log('Starting sync to USB drive ...');
+        log('Source data folder ' + this.source);
+        log('Syncing to drive ' + device.path + ' -> ' + destinationPath);
+        log(`Executing command: "${command}"`);
 
         this.rsyncProcess = spawn(command, {
             shell: '/bin/bash'
@@ -140,8 +148,7 @@ class SyncToDrive {
         });
         this.rsyncProcess.on('exit', () => {
             this.rsyncProcess = null;
-            log('Sync finished');
-            log('Next run in ' + this.intervalInSeconds + 's');
+            log('Sync finished. Next run in ' + this.intervalInSeconds + 's');
             setTimeout(() => {
                 this.start();
             }, this.intervalInMilliseconds);
