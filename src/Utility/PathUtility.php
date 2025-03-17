@@ -86,4 +86,30 @@ class PathUtility
     {
         return str_replace(['\\', '//'], '/', $path);
     }
+
+    public static function resolveFilePath(string $filePath): string
+    {
+        if (self::isUrl($filePath)) {
+            return $filePath;
+        }
+
+        if (!self::isAbsolutePath($filePath)) {
+            $filePath = self::getAbsolutePath($filePath);
+        }
+
+        if (file_exists($filePath)) {
+            return $filePath;
+        }
+
+        $altPath1 = $_SERVER['DOCUMENT_ROOT'] . $filePath;
+        $altPath2 = $_SERVER['DOCUMENT_ROOT'] . '/' . $filePath;
+
+        if (file_exists($altPath1)) {
+            return $altPath1;
+        } elseif (file_exists($altPath2)) {
+            return $altPath2;
+        }
+
+        throw new \Exception('File not found: ' . $filePath);
+    }
 }

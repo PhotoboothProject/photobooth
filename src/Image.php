@@ -361,8 +361,10 @@ class Image
                 parse_str(parse_url($image)['query'] ?? '', $query);
                 $path = is_array($query['dir']) ? $query['dir']['0'] : $query['dir'];
                 $image = ImageUtility::getRandomImageFromPath($path);
-            } elseif (PathUtility::isAbsolutePath(PathUtility::getAbsolutePath($image))) {
-                $image = PathUtility::getAbsolutePath($image);
+            }
+
+            if (!file_exists($image)) {
+                $image = PathUtility::resolveFilePath($image);
             }
 
             $resource = imagecreatefromstring((string)file_get_contents($image));
@@ -723,11 +725,13 @@ class Image
     public function applyText(GdImage $sourceResource): GdImage
     {
         try {
+            $fontPath = PathUtility::getAbsolutePath($this->fontPath);
+            $tempFontPath = $_SERVER['DOCUMENT_ROOT'] . '/tempfont.ttf';
+            $isTempFont = false;
             $fontSize = $this->fontSize;
             $fontRotation = $this->fontRotation;
             $fontLocationX = $this->fontLocationX;
             $fontLocationY = $this->fontLocationY;
-            $fontPath = PathUtility::getAbsolutePath($this->fontPath);
             $textLineSpacing = $this->textLineSpacing;
             // Convert hex color string to RGB values
             $colorComponents = self::getColorComponents($this->fontColor);
@@ -736,17 +740,22 @@ class Image
             // Allocate color and set font
             $color = intval(imagecolorallocate($sourceResource, $r, $g, $b));
 
-            $localFontPath = $fontPath;
-            $tempFontPath = $_SERVER['DOCUMENT_ROOT'] . '/tempfont.ttf';
-            if (PathUtility::isUrl($fontPath)) {
-                $font = file_get_contents($fontPath);
-                file_put_contents($tempFontPath, $font);
-                $localFontPath = $tempFontPath;
+            if (PathUtility::isUrl($this->fontPath)) {
+                $font = @file_get_contents($this->fontPath);
+
+                if ($font === false) {
+                    throw new \Exception('Failed to download font from: ' . $this->fontPath);
+                }
+                file_put_contents($tempFontPath, $this->fontPath);
+                $fontPath = $tempFontPath;
+                $isTempFont = true;
+            } else {
+                $fontPath = PathUtility::resolveFilePath($this->fontPath);
             }
 
             // Add first line of text
             if (!empty($this->textLine1)) {
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $localFontPath, $this->textLine1)) {
+                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $this->textLine1)) {
                     throw new \Exception('Could not add first line of text to resource.');
                 }
             }
@@ -755,7 +764,7 @@ class Image
             if (!empty($this->textLine2)) {
                 $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing : $fontLocationY;
                 $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing;
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $localFontPath, $this->textLine2)) {
+                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $this->textLine2)) {
                     throw new \Exception('Could not add second line of text to resource.');
                 }
             }
@@ -764,13 +773,15 @@ class Image
             if (!empty($this->textLine3)) {
                 $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing * 2 : $fontLocationY;
                 $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing * 2;
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $localFontPath, $this->textLine3)) {
+                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $this->textLine3)) {
                     throw new \Exception('Could not add third line of text to resource.');
                 }
             }
 
-            if ($localFontPath !== $fontPath) {
-                unlink($tempFontPath);
+            if ($isTempFont && file_exists($tempFontPath)) {
+                if (!unlink($tempFontPath)) {
+                    $this->addErrorData('Failed to delete tmp font: ' . $tempFontPath);
+                }
             }
             $this->imageModified = true;
             // Return resource with text applied
