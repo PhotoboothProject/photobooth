@@ -231,9 +231,9 @@ function initRemoteBuzzerFromDOM() {
 
         api.takePicture = function () {
             if (this.enabled() && config.picture.enabled) {
-                if (api.chromaCapture) {
-                    if (!api.needsReload) {
-                        api.needsReload = true;
+                if (this.chromaCapture) {
+                    if (!this.needsReload) {
+                        this.needsReload = true;
                         photoBooth.thrill('chroma');
                     }
                 } else {
@@ -243,19 +243,19 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.takeCustom = function () {
-            if (this.enabled() && !api.chromaCapture && config.custom.enabled) {
+            if (this.enabled() && !this.chromaCapture && config.custom.enabled) {
                 photoBooth.thrill('custom');
             }
         };
 
         api.takeVideo = function () {
-            if (this.enabled() && !api.chromaCapture && config.video.enabled) {
+            if (this.enabled() && !this.chromaCapture && config.video.enabled) {
                 photoBooth.thrill('video');
             }
         };
 
         api.takeCollage = function () {
-            if (this.enabled() && !api.chromaCapture && config.collage.enabled) {
+            if (this.enabled() && !thie.chromaCapture && config.collage.enabled) {
                 this.waitingToProcessCollage = false;
                 photoBooth.thrill('collage');
             }
@@ -272,7 +272,7 @@ function initRemoteBuzzerFromDOM() {
 
         api.print = function () {
             if ($('.stage[data-stage="result"]').is(':visible')) {
-                if (api.chromaCapture) {
+                if (this.chromaCapture) {
                     $('[data-command="print-btn"]').trigger('click');
                     $('[data-command="print-btn"]').trigger('blur');
                 } else {
@@ -287,7 +287,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.move2usb = function () {
-            if (this.enabled() && !api.chromaCapture) {
+            if (this.enabled() && !this.chromaCapture) {
                 photoBooth.thrill('move2usb');
             }
         };
