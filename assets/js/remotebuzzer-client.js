@@ -255,7 +255,7 @@ function initRemoteBuzzerFromDOM() {
         };
 
         api.takeCollage = function () {
-            if (this.enabled() && !thie.chromaCapture && config.collage.enabled) {
+            if (this.enabled() && !this.chromaCapture && config.collage.enabled) {
                 this.waitingToProcessCollage = false;
                 photoBooth.thrill('collage');
             }
