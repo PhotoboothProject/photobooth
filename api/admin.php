@@ -259,32 +259,32 @@ if ($action === 'reset') {
 
     if ($newConfig['picture']['take_frame'] && $newConfig['picture']['frame'] === '') {
         $newConfig['picture']['take_frame'] = false;
-        $logger->debug('set picture.frame empty', [$newConfig['picture']['frame']]);
+        $logger->debug('Picture frame empty. Disabled picture frame.');
     }
 
     if ($newConfig['collage']['take_frame'] && $newConfig['collage']['frame'] === '') {
         $newConfig['collage']['take_frame'] = false;
-        $logger->debug('collage.frame empty', [$newConfig['collage']['frame']]);
+        $logger->debug('Collage frame empty. Disabled collage frame.');
     }
 
     if ($newConfig['print']['print_frame'] && $newConfig['print']['frame'] === '') {
         $newConfig['print']['print_frame'] = false;
-        $logger->debug('print.frame empty', [$newConfig['print']['frame']]);
+        $logger->debug('Print frame empty. Disabled frame on print.');
     }
 
-    if ($newConfig['textonpicture']['enabled'] && ($newConfig['textonpicture']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textonpicture']['font'])))) {
+    if ($newConfig['textonpicture']['enabled'] && $newConfig['textonpicture']['font'] === '') {
         $newConfig['textonpicture']['enabled'] = false;
-        $logger->debug('Picture font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path.', [$newConfig['textonpicture']['font']]);
+        $logger->debug('Picture font is empty. Disabled text on picture.');
     }
 
-    if ($newConfig['textoncollage']['enabled'] && ($newConfig['textoncollage']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textoncollage']['font'])))) {
+    if ($newConfig['textoncollage']['enabled'] && $newConfig['textoncollage']['font'] === '') {
         $newConfig['textoncollage']['enabled'] = false;
-        $logger->debug('Collage font does not exist or is empty. Disabled text on picture. Note: Must be an absoloute path.', [$newConfig['textoncollage']['font']]);
+        $logger->debug('Collage font is empty. Disabled text on picture.');
     }
 
-    if ($newConfig['textonprint']['enabled'] && ($newConfig['textonprint']['font'] === '' || !file_exists(PathUtility::getAbsolutePath($newConfig['textonprint']['font'])))) {
+    if ($newConfig['textonprint']['enabled'] && $newConfig['textonprint']['font'] === '') {
         $newConfig['textonprint']['enabled'] = false;
-        $logger->debug('Print font does not exist or is empty. Disabled text on print. Note: Must be an absoloute path.', [$newConfig['textonprint']['font']]);
+        $logger->debug('Print font is empty. Disabled text on print.');
     }
 
     if ($newConfig['logo']['enabled']) {
