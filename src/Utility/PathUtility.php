@@ -93,12 +93,9 @@ class PathUtility
             return $filePath;
         }
 
-        if (!self::isAbsolutePath($filePath)) {
-            $filePath = self::getAbsolutePath($filePath);
-        }
-
-        if (file_exists($filePath)) {
-            return $filePath;
+        $absolutePath = self::isAbsolutePath($filePath) ? $filePath : self::getAbsolutePath($filePath);
+        if (file_exists($absolutePath)) {
+            return $absolutePath;
         }
 
         $altPath1 = $_SERVER['DOCUMENT_ROOT'] . $filePath;
