@@ -29,7 +29,7 @@ class FontUtility
         ],
         array $attributes = [],
     ): string {
-        $absoluteFontPath = PathUtility::getAbsolutePath($fontPath);
+        $absoluteFontPath = PathUtility::resolveFilePath($fontPath);
         $lineHeight = (int) round($fontSize * 1.5);
 
         $image = imagecreatetruecolor($width, $height);
