@@ -1519,9 +1519,9 @@ return [
             'placeholder' => $defaultConfig['print']['time'],
             'name' => 'print[time]',
             'value' => $config['print']['time'],
-            'range_min' => 250,
-            'range_max' => 20000,
-            'range_step' => 250,
+            'range_min' => 500,
+            'range_max' => 60000,
+            'range_step' => 500,
             'unit' => 'milliseconds',
         ],
         'print_limit' => [
