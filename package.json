@@ -77,7 +77,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.9",
     "@babel/preset-env": "^7.26.9",
-    "@eslint/eslintrc": "^3.3.0",
+    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.21.0",
     "archiver": "^7.0.1",
     "colors": "^1.4.0",
