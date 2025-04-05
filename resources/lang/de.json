@@ -436,7 +436,7 @@
   "manual:general:delete_no_request": "Wenn aktiviert, werden Bilder ohne Bestätigungsanfrage gelöscht. Das Löschen von Bildern kann nicht rückgängig gemacht werden!",
   "manual:general:dev_debugpanel": "Öffnet das Debug Panel in einem separaten Fenster. Damit Meldungen angezeigt werden, muss der Log Level auf 1 oder höher gesetzt sein.",
   "manual:general:dev_demo_images": "Wenn aktiviert, werden Beispielbilder verwendet, anstatt ein Foto aufzunehmen.",
-  "manual:general:dev_loglevel": "Legen Sie das Loglevel fest. 0 = minimales Logging, 1 = Fortgeschrittenes Logging, 2 = Experten-Logging",
+  "manual:general:dev_loglevel": "Legen Sie das Logging-Level fest. 0 = minimales Logging, 1 = Fortgeschrittenes Logging, 2 = Experten-Logging",
   "manual:general:dev_reload_on_error": "Wenn beim Aufnehmen eines Bildes ein Fehler auftritt, wird die Photobooth nach 5 Sekunden automatisch neu geladen.",
   "manual:general:diskusage_button": "Dies zeigt die Speicherplatzauslastung durch Photobooth-Datendateien (Bilder, Datenbanken, etc.) an.",
   "manual:general:download_enabled": "Wenn diese Option aktiviert ist, ist für jedes Bild in der Galerie eine Download-Schaltfläche sichtbar.",
