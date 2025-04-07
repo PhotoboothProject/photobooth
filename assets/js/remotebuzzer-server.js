@@ -357,6 +357,24 @@ const requestListener = function (req, res) {
             log('http: GET /commands/shutdown-now');
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.shutdownbutton) {
                 sendText('SHUTTING DOWN');
+
+                if (config.get_request.processed) {
+                    const url = `${config.get_request.server}/shutdown`;
+                    const curlCommand = `curl ${url}`;
+
+                    exec(curlCommand, (error, stdout, stderr) => {
+                        if (error) {
+                            log(`Error: ${error.message}`);
+                            return;
+                        }
+                        if (stderr) {
+                            log(`Stderr: ${stderr}`);
+                            return;
+                        }
+                        log(`Response: ${stdout}`);
+                    });
+                }
+
                 /*  Initiate system shutdown */
                 const cmd = 'sudo ' + config.commands.shutdown;
                 execSync(cmd);
@@ -369,20 +387,22 @@ const requestListener = function (req, res) {
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.rebootbutton) {
                 sendText('REBOOTING NOW');
 
-                const url = `${config.getrequest_server}/reboot`;
-                const curlCommand = `curl ${url}`;
+                if (config.get_request.processed) {
+                    const url = `${config.get_request.server}/reboot`;
+                    const curlCommand = `curl ${url}`;
 
-                exec(curlCommand, (error, stdout, stderr) => {
-                    if (error) {
-                        log(`Error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        log(`Stderr: ${stderr}`);
-                        return;
-                    }
-                    log(`Response: ${stdout}`);
-                });
+                    exec(curlCommand, (error, stdout, stderr) => {
+                        if (error) {
+                            log(`Error: ${error.message}`);
+                            return;
+                        }
+                        if (stderr) {
+                            log(`Stderr: ${stderr}`);
+                            return;
+                        }
+                        log(`Response: ${stdout}`);
+                    });
+                }
 
                 /*  Initiate system shutdown */
                 const cmd = 'sudo ' + config.commands.reboot;
