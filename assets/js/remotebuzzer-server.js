@@ -16,7 +16,7 @@ let collageInProgress = false,
 
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 let rotaryClkPin, rotaryDtPin;
-const { execSync, spawnSync } = require('child_process');
+const { exec, execSync, spawnSync } = require('child_process');
 const path = require('path');
 const { pid: PID, platform: PLATFORM } = process;
 
@@ -360,7 +360,7 @@ const requestListener = function (req, res) {
 
                 if (config.get_request.processed) {
                     const url = `${config.get_request.server}/shutdown`;
-                    const curlCommand = `curl ${url}`;
+                    const curlCommand = `curl -s ${url}`;
 
                     exec(curlCommand, (error, stdout, stderr) => {
                         if (error) {
@@ -389,7 +389,7 @@ const requestListener = function (req, res) {
 
                 if (config.get_request.processed) {
                     const url = `${config.get_request.server}/reboot`;
-                    const curlCommand = `curl ${url}`;
+                    const curlCommand = `curl -s ${url}`;
 
                     exec(curlCommand, (error, stdout, stderr) => {
                         if (error) {
