@@ -368,6 +368,22 @@ const requestListener = function (req, res) {
             log('http: GET /commands/reboot-now');
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.rebootbutton) {
                 sendText('REBOOTING NOW');
+
+                const url = `${config.getrequest_server}/reboot`;
+                const curlCommand = `curl ${url}`;
+
+                exec(curlCommand, (error, stdout, stderr) => {
+                    if (error) {
+                        log(`Error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        log(`Stderr: ${stderr}`);
+                        return;
+                    }
+                    log(`Response: ${stdout}`);
+                });
+
                 /*  Initiate system shutdown */
                 const cmd = 'sudo ' + config.commands.reboot;
                 execSync(cmd);
