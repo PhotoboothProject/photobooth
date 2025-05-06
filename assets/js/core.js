@@ -423,6 +423,7 @@ const photoBooth = (function () {
         api.navbar.close();
         api.reset();
         api.closeGallery();
+        api.clearLoaderImage();
 
         remoteBuzzerClient.inProgress(photoStyle);
         api.takingPic = true;
@@ -661,7 +662,6 @@ const photoBooth = (function () {
                             takePictureButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                api.clearLoaderImage();
                                 imageUrl = '';
                                 api.thrill(PhotoStyle.COLLAGE);
                             });
@@ -681,7 +681,6 @@ const photoBooth = (function () {
                             collageProcessButton.appendTo(loaderButtonBar).on('click', (event) => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                api.clearLoaderImage();
                                 imageUrl = '';
                                 currentCollageFile = '';
                                 api.nextCollageNumber = 0;
@@ -700,7 +699,6 @@ const photoBooth = (function () {
                         retakeButton.appendTo(loaderButtonBar).on('click', (event) => {
                             event.stopPropagation();
                             event.preventDefault();
-                            api.clearLoaderImage();
                             imageUrl = '';
                             api.deleteImage(result.collage_file, () => {
                                 setTimeout(function () {
