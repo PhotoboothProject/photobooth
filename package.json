@@ -55,7 +55,7 @@
     "@tailwindcss/postcss": "^4.1.8",
     "autoprefixer": "^10.4.21",
     "github-markdown-css": "^5.8.1",
-    "gulp": "^5.0.0",
+    "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-dart-sass": "^1.1.0",
     "gulp-filter": "^9.0.1",
