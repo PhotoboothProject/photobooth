@@ -1447,16 +1447,16 @@
         },
         {
             "name": "symfony/asset",
-            "version": "v7.2.0",
+            "version": "v7.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/asset.git",
-                "reference": "cb926cd59fefa1f9b4900b3695f0f846797ba5c0"
+                "reference": "56c4d9f759247c4e07d8549e3baf7493cb9c3e4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/asset/zipball/cb926cd59fefa1f9b4900b3695f0f846797ba5c0",
-                "reference": "cb926cd59fefa1f9b4900b3695f0f846797ba5c0",
+                "url": "https://api.github.com/repos/symfony/asset/zipball/56c4d9f759247c4e07d8549e3baf7493cb9c3e4b",
+                "reference": "56c4d9f759247c4e07d8549e3baf7493cb9c3e4b",
                 "shasum": ""
             },
             "require": {
@@ -1496,7 +1496,7 @@
             "description": "Manages URL generation and versioning of web assets such as CSS stylesheets, JavaScript files and image files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/asset/tree/v7.2.0"
+                "source": "https://github.com/symfony/asset/tree/v7.3.0"
             },
             "funding": [
                 {
@@ -1512,7 +1512,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-25T15:15:23+00:00"
+            "time": "2025-03-05T10:15:41+00:00"
         },
         {
             "name": "symfony/config",
