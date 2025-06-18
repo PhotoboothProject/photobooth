@@ -81,7 +81,7 @@
     "@eslint/js": "^9.28.0",
     "archiver": "^7.0.1",
     "colors": "^1.4.0",
-    "eslint-plugin-n": "^17.19.0",
+    "eslint-plugin-n": "^17.20.0",
     "git-tag-version": "^1.4.0",
     "globals": "^16.2.0",
     "gulp-babel": "^8.0.0",
