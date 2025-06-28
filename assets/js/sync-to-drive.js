@@ -191,16 +191,26 @@ class SyncToDrive {
 
     mountDevice(device) {
         try {
-            if (!this.isDeviceMounted(device)) {
-                const command = `export LC_ALL=C; udisksctl mount -b ${device.path}; unset LC_ALL`;
-                log('Mounting device ' + device.path + ', command: "' + command + '"');
-                const mountRes = execSync(command).toString();
-                const mountPoint = mountRes
-                    .substr(mountRes.indexOf('at') + 3)
-                    .trim()
-                    .replace(/[\n.]/gu, '');
-                device.mountpoint = mountPoint;
+            if (this.isDeviceMounted(device)) {
+                log(`Device ${device.path} appears to be already mounted. Attempting to unmount...`);
+                try {
+                    const unmountCmd = `export LC_ALL=C; udisksctl unmount -b ${device.path}; unset LC_ALL`;
+                    execSync(unmountCmd);
+                    log(`Successfully unmounted ${device.path}`);
+                    // eslint-disable-next-line no-unused-vars
+                } catch (error) {
+                    throw new Error(`Unable to unmount device ${device.path} - possibly mounted by another user.`);
+                }
             }
+
+            const mountCmd = `export LC_ALL=C; udisksctl mount -b ${device.path}; unset LC_ALL`;
+            log('Mounting device ' + device.path + ', command: "' + mountCmd + '"');
+            const mountRes = execSync(mountCmd).toString();
+            const mountPoint = mountRes
+                .substr(mountRes.indexOf('at') + 3)
+                .trim()
+                .replace(/[\n.]/gu, '');
+            device.mountpoint = mountPoint;
             // eslint-disable-next-line no-unused-vars
         } catch (error) {
             throw new Error('Unable to mount device');
