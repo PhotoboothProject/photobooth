@@ -226,7 +226,7 @@ gphoto2 --set-config output=Off --capture-image-and-download
 
 ---
 
-## Cromakeying is saving without finishing saving
+## Chromakeying is saving without finishing saving
 
 Checking the browser console you'll see a `413 Request Entity Too Large` error. To fix that you'll have to update your nginx.conf
 
@@ -461,7 +461,7 @@ The available endpoints, depending on enabled features and hardware button optio
 -   `[Base Url]/commands/rotary-cw` - Focus next element
 -   `[Base Url]/commands/rotary-ccw` - Focus previous element
 -   `[Base Url]/commands/rotary-btn-press` - Triggers a click action
--   `[Base Url]/commands/'start-move2usb` - Trigger picture move to USB
+-   `[Base Url]/commands/start-move2usb` - Trigger picture move to USB
 
 These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/) (untested).
 
