@@ -245,7 +245,7 @@ const requestListener = function (req, res) {
                     if(j){
                         i = j;
                     }
-                    //Read config file and find the current prin limit
+                    //Read config file and find the current print limit
                     
                     const configPath = path.join(__dirname, '..', '..','config','my.config.inc.php');
 
