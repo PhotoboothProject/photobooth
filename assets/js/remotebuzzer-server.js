@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 /* VARIABLES */
 let collageInProgress = false,
@@ -17,7 +18,6 @@ let collageInProgress = false,
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 let rotaryClkPin, rotaryDtPin;
 const { execSync, spawnSync } = require('child_process');
-const path = require('path');
 const { pid: PID, platform: PLATFORM } = process;
 
 /* LOGGING FUNCTION */
@@ -205,6 +205,9 @@ const requestListener = function (req, res) {
         res.end(content);
     }
 
+    const urlObj = new URL(req.url,'http://localhost/'); //The consctructor requires to input a base url 
+    const queryParams = urlObj.searchParams;
+
     switch (req.url) {
         case '/':
             log('http: GET /');
@@ -232,6 +235,37 @@ const requestListener = function (req, res) {
                 'text/html'
             );
             break;
+        case '/commands/increase-print-limit':
+            log('http: GET /commands/increase-print-limit');
+            log("current directory", __dirname);
+            if(config.remotebuzzer.usebuttons){
+                if(config.print.from_result || config.print.from_gallery){
+                    let i = 1;
+                    let j = parseInt(queryParams.get('i'));
+                    if(j){
+                        i = j;
+                    }
+                    //Read config file and find the current prin limit
+                    
+                    const configPath = path.join(__dirname, '..', '..','config','my.config.inc.php');
+
+                    let config = fs.readFileSync(configPath).toString();
+                    let printSection = config.indexOf(`'print' =>`);
+                    let printLimitIndex = config.indexOf(`'limit' =>`, printSection);
+                    //Parse the current printlimit but remove the 'limit'=> part before.
+                    let printLimit = parseInt(config.substring(printLimitIndex + 10)) + i;
+                    let endPrintLimitIndex = config.indexOf(',',printLimitIndex);
+                    config = config.substring(0,printLimitIndex) + `'limit' => ${printLimit}` + config.substring(endPrintLimitIndex);
+                    fs.writeFileSync('/var/www/html/config/my.config.inc.php',config);
+                    //sendText(`INCREASED PRINT LIMIT by ${i}`);
+                    http.get('http://localhost/api/printDB.php?action=unlockPrint');
+                    sendText(config);
+                }
+            } else {
+                sendText('Please enable Hardware Button support!')
+            }
+            break;
+            
         case '/commands/start-picture':
             log('http: GET /commands/start-picture');
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.picturebutton) {
