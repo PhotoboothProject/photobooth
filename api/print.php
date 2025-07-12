@@ -17,6 +17,7 @@ header('Content-Type: application/json');
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 $processor = null;
+$data = [];
 
 try {
     if (empty($_GET['filename'])) {
@@ -36,15 +37,17 @@ try {
     $vars['sourceFile'] = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $vars['fileName'];
     $vars['printFile'] = FolderEnum::PRINT->absolute() . DIRECTORY_SEPARATOR . $vars['uniqueName'];
 
-    $status = false;
-
     // exit with error if file does not exist
     if (!file_exists($vars['sourceFile'])) {
         throw new \Exception('File ' . $vars['fileName'] . ' not found.');
     }
 } catch (\Exception $e) {
     // Handle the exception
-    $data = ['error' => $e->getMessage()];
+    $data = [
+        'status' => 'error',
+        'error' => $e->getMessage(),
+    ];
+
     $logger->error($e->getMessage());
     echo json_encode($data);
     die();
@@ -58,7 +61,11 @@ if (is_file($privatePrintApi)) {
         include $privatePrintApi;
     } catch (\Exception $e) {
         $logger->error('Error (private print API): ' . $e->getMessage());
-        echo json_encode(['error' => $e->getMessage()]);
+        $data = [
+            'status' => 'error',
+            'error' => $e->getMessage(),
+        ];
+        echo json_encode($data);
         die();
     }
 }
@@ -167,8 +174,12 @@ if (!file_exists($vars['printFile'])) {
             unset($source);
         }
 
-        $data = ['error' => $e->getMessage()];
         $logger->error($e->getMessage());
+
+        $data = [
+            'status' => 'error',
+            'error' => $e->getMessage(),
+        ];
         echo json_encode($data);
         die();
     }
@@ -176,34 +187,64 @@ if (!file_exists($vars['printFile'])) {
 
 // print image
 $status = 'ok';
+$linecount = 0;
 $cmd = sprintf($config['commands']['print'], $vars['printFile']);
 $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
 exec($cmd, $output, $returnValue);
 
-$printManager->addToPrintDb($vars['fileName'], $vars['uniqueName']);
+if ($returnValue !== 0) {
+    $status = 'error';
+    $errorMessage = implode("\n", $output);
 
-$linecount = 0;
-if ($config['print']['limit'] > 0) {
-    $linecount = $printManager->getPrintCountFromDB();
-    $linecount = $linecount ? $linecount : 0;
-    if ($linecount % $config['print']['limit'] == 0) {
-        if ($printManager->lockPrint()) {
-            $status = 'locking';
-        } else {
-            $logger->error('Error creating the file ' . $printManager->printLockFile);
-        }
+    switch ($returnValue) {
+        case 1:
+            $error = 'General error. Check printer status or file path.';
+            break;
+        case 2:
+            $error = 'Misuse of command. Possibly wrong syntax or options.';
+            break;
+        case 126:
+            $error = 'Command invoked cannot execute. Check permissions.';
+            break;
+        case 127:
+            $error = "Command not found. Check if 'lp' is installed and in PATH.";
+            break;
+        case 238:
+            $status = 'qued';
+            $error = 'Image added to print queue.';
+            break;
+        default:
+            $error = "Unknown error (exit code $returnValue).";
     }
-    file_put_contents($printManager->printCounter, $linecount);
+
+    $data['error'] = $error;
+    $logger->error($error);
 }
 
-$data = [
-    'status' => $status,
-    'count' => $linecount,
-    'msg' => $cmd,
-    'returnValue' => $returnValue,
-    'output' => $output,
-];
+if ($status === 'ok') {
+    $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName']);
+
+    if ($config['print']['limit'] > 0) {
+        $linecount = $printManager->getPrintCountFromDB();
+        $linecount = $linecount ? $linecount : 0;
+        if ($linecount % $config['print']['limit'] == 0) {
+            if ($printManager->lockPrint()) {
+                $status = 'locking';
+            } else {
+                $logger->error('Error creating the file ' . $printManager->printLockFile);
+            }
+        }
+        file_put_contents($printManager->printCounter, $linecount);
+    }
+}
+
+$data['status'] = $status;
+$data['count'] = $linecount;
+$data['msg'] = $cmd;
+$data['returnValue'] = $returnValue;
+$data['output'] = $output;
+
 $logger->debug('data', $data);
 echo json_encode($data);
 exit();
