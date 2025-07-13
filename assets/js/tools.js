@@ -310,9 +310,18 @@ const photoboothTools = (function () {
                         );
                         api.resetPrintErrorMessage(cb, config.print.time);
                         $('.print-unlock-button').removeClass('hidden');
-                    } else if (data.error) {
-                        api.console.log('ERROR: An error occurred: ', data.error);
-                        api.overlay.showError(data.error);
+                    } else if (data.status == 'qued') {
+                        api.overlay.showWarning(api.getTranslation('print_qued'));
+                        api.resetPrintErrorMessage(cb, config.print.time);
+                        $('.print-unlock-button').removeClass('hidden');
+                    } else if (data.status == 'error') {
+                        if (data.error) {
+                            api.console.log('ERROR: An error occurred: ', data.error);
+                            api.overlay.showError(data.error);
+                        } else {
+                            api.console.log('ERROR: An error occurred on print.');
+                            api.overlay.showError(api.getTranslation('error'));
+                        }
                         api.resetPrintErrorMessage(cb, config.print.time);
                     } else {
                         setTimeout(function () {
