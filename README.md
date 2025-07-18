@@ -105,7 +105,7 @@ If you're having trouble or questions please take a look at our
 [FAQ](https://photoboothproject.github.io/faq/)
 before opening a new issue.
 
-For local testing and development, the docker setup can be used with `docker-compose up --build`.
+For local testing and development, the docker setup can be used with `docker compose up --build`.
 
 ### :mag: Changelog
 
