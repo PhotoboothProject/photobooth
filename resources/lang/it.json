@@ -787,6 +787,7 @@
   "print:textonprint_locationx": "Coordinata X",
   "print:textonprint_locationy": "Coordinata Y",
   "print:textonprint_rotation": "Rotazione testo",
+  "print_qued": "Immagine aggiunta alla coda di stampa.",
   "printdb": "Database delle stampe",
   "printed": "Stampato:",
   "printing": "Stampa iniziata! Attendere prego...",
