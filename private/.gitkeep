@@ -1,0 +1,2 @@
+# This file ensures the images directory is tracked by Git
+# Git doesn't track empty directories, so this file keeps the folder structure
