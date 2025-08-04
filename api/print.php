@@ -211,7 +211,7 @@ if ($returnValue !== 0) {
             $error = "Command not found. Check if 'lp' is installed and in PATH.";
             break;
         case 238:
-            $status = 'qued';
+            $status = 'queued';
             $error = 'Image added to print queue.';
             break;
         default:
