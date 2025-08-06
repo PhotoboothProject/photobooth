@@ -489,6 +489,7 @@ const photoBooth = (function () {
             }
         }
 
+        videoBackground.hide();
         startPage.removeClass('stage--active');
         loader.addClass('stage--active');
 
@@ -596,7 +597,6 @@ const photoBooth = (function () {
                 $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
                 previewFrameCollage.hide();
                 previewFramePicture.hide();
-                videoBackground.hide();
                 if (result.error) {
                     photoboothTools.console.logDev('Error while taking picture.');
                     if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
