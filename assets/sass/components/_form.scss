@@ -12,6 +12,13 @@
   border-radius: 0.25rem;
   padding: 0.75rem 1rem;
   margin-bottom: 0.5em;
+
+  &-copies {
+    width: 20%;
+    margin-bottom: 0;
+    font-size: 2rem;
+    text-align: center;
+  }
 }
 .form-message {
   margin-bottom: 0.5em;

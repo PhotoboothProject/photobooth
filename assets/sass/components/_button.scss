@@ -164,4 +164,9 @@
   &--actions {
     justify-content: flex-end;
   }
+
+  &--print-copies {
+    flex-wrap: nowrap;
+    padding: .5rem 1rem;
+  }
 }

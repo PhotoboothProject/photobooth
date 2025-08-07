@@ -244,15 +244,15 @@ const photoboothTools = (function () {
 
             const message = document.createElement('div');
             message.classList.add('dialog-message');
-            message.textContent = api.getTranslation('choose_copies');
+            message.textContent = api.getTranslation('print:choose_copies');
             element.appendChild(message);
 
             const inputSection = document.createElement('div');
-            inputSection.classList.add('buttonbar');
+            inputSection.classList.add('buttonbar--print-copies');
             const minusButton = api.button.create('', 'fa fa-minus', 'default', '');
             const plusButton = api.button.create('', 'fa fa-plus', 'default', '');
             const inputText = document.createElement('input');
-            inputText.classList.add('form-input')
+            inputText.classList.add('form-input-copies')
             inputText.value = "1";
             minusButton.addEventListener('click', () => {
                 const oldValue = parseInt(inputText.value, 10);

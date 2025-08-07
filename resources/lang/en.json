@@ -797,6 +797,7 @@
   "print": "Print",
   "print:button_show_cups": "Show CUPS button",
   "print:button_show_printUnlock": "Show print unlock button",
+  "print:choose_copies": "Choose how many copies of this image to print",
   "print:print_auto": "Print picture immediately after taken",
   "print:print_auto_delay": "Delay printing of the image",
   "print:print_crop": "Crop picture at print",
