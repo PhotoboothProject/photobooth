@@ -255,7 +255,7 @@ function saveImage(filename, cb) {
                     if (photoboothTools.isPrinting) {
                         photoboothTools.console.log('Printing already in progress!');
                     } else {
-                        photoboothTools.printImage(resp.filename, () => {
+                        photoboothTools.printImage(resp.filename, 1, () => {
                             $('[data-command="print-btn"]').trigger('blur');
                         });
                     }
@@ -345,7 +345,7 @@ $(function () {
                     if (!resp.success) {
                         return;
                     }
-                    photoboothTools.printImage(resp.filename, () => {
+                    photoboothTools.printImage(resp.filename, 1, () => {
                         $('[data-command="print-btn"]').trigger('blur');
                     });
                 });

@@ -156,7 +156,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                         } else {
                             const img = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
 
-                            photoboothTools.printImage(img, () => {
+                            photoboothTools.printImage(img, 1, () => {
                                 if (typeof remoteBuzzerClient !== 'undefined') {
                                     remoteBuzzerClient.inProgress(false);
                                 }
