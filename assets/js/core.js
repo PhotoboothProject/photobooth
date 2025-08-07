@@ -1121,7 +1121,7 @@ const photoBooth = (function () {
 
             const copies = await photoboothTools.askCopies();
 
-            if(copies) {
+            if (copies) {
                 photoboothTools.printImage(filename, copies, () => {
                     remoteBuzzerClient.inProgress(false);
                     buttonPrint.trigger('blur');

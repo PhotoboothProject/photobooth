@@ -145,7 +145,9 @@ const photoboothTools = (function () {
             iconWrap.appendChild(icon);
             button.appendChild(iconWrap);
 
-            if(label === '') return button
+            if (label === '') {
+                return button;
+            }
 
             const labelWrap = document.createElement('span');
             labelWrap.classList.add(prefix + 'button--label');
@@ -252,20 +254,20 @@ const photoboothTools = (function () {
             const minusButton = api.button.create('', 'fa fa-minus', 'default', '');
             const plusButton = api.button.create('', 'fa fa-plus', 'default', '');
             const inputText = document.createElement('input');
-            inputText.classList.add('form-input-copies')
-            inputText.value = "1";
+            inputText.classList.add('form-input-copies');
+            inputText.value = '1';
             minusButton.addEventListener('click', () => {
                 const oldValue = parseInt(inputText.value, 10);
-                inputText.value = String(Math.max(1, oldValue - 1))
+                inputText.value = String(Math.max(1, oldValue - 1));
             })
             plusButton.addEventListener('click', () => {
                 const oldValue = parseInt(inputText.value, 10);
-                inputText.value = String(Math.min(10, oldValue + 1))
+                inputText.value = String(Math.min(10, oldValue + 1));
             })
-            inputSection.append(minusButton)
-            inputSection.append(inputText)
-            inputSection.append(plusButton)
-            element.append(inputSection)
+            inputSection.append(minusButton);
+            inputSection.append(inputText);
+            inputSection.append(plusButton);
+            element.append(inputSection);
 
             const buttonbar = document.createElement('div');
             buttonbar.classList.add('dialog-buttonbar');

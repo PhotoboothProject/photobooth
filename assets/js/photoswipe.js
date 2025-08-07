@@ -158,7 +158,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
 
                             const copies = await photoboothTools.askCopies();
 
-                            if(copies) {
+                            if (copies) {
                                 photoboothTools.printImage(img, copies, () => {
                                     if (typeof remoteBuzzerClient !== 'undefined') {
                                         remoteBuzzerClient.inProgress(false);
