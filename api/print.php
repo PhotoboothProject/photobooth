@@ -225,8 +225,9 @@ if ($returnValue !== 0) {
 }
 
 if ($status === 'ok') {
-    foreach ($vars['copies'] as $copy) {
-        $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName'] . "-" . $copy);
+    $copies = (int)$vars['copies'];
+    for($i = 1; $i <= $copies; $i++) {
+        $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName'] . "-" . $i);
     }
 
     if ($config['print']['limit'] > 0) {

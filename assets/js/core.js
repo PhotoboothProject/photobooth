@@ -1126,7 +1126,6 @@ const photoBooth = (function () {
                     remoteBuzzerClient.inProgress(false);
                     buttonPrint.trigger('blur');
                 });
-
             }
         });
 
