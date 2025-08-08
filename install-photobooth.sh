@@ -3,6 +3,9 @@
 # Stop on the first sign of trouble
 set -e
 
+export LC_ALL=C
+export LANG=C
+
 SCRIPT_NAME="install-photobooth.sh"
 SCRIPT_REMOTE_URL="https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/$SCRIPT_NAME"
 SCRIPT_TEMP_FILE="/tmp/$SCRIPT_NAME"
