@@ -489,6 +489,7 @@ function common_software() {
         add-apt-repository ppa:ondrej/php -y
         if apt-get -qq update 2>&1 | grep -q "does not have a Release file"; then
             info "### PPA ondrej/php is not valid for $OS, removing..."
+            add-apt-repository --remove ppa:ondrej/php
             rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php*.list
         fi
     fi
