@@ -324,6 +324,25 @@ function check_username() {
     fi
 }
 
+function install_pkg() {
+    local pkg="$1"
+
+    # If package is versioned (php8.3-... or libapache2-mod-php8.3), make fallback
+    if [[ "$pkg" =~ ^php[0-9]+\.[0-9]+- ]] || [[ "$pkg" =~ ^libapache2-mod-php[0-9]+\.[0-9]+$ ]]; then
+        local pkg_generic
+        pkg_generic=$(echo "$pkg" | sed -E "s/[0-9]+\.[0-9]+-/-/; s/[0-9]+\.[0-9]+$//")
+        info "### Attempting to install $pkg..."
+        if ! apt-get -qq install -y "$pkg"; then
+            info "### $pkg not found, falling back to $pkg_generic"
+            apt-get -qq install -y "$pkg_generic"
+        fi
+    else
+        # Regular package install
+        info "### Installing $pkg"
+        apt-get -qq install -y "$pkg"
+    fi
+}
+
 function check_nodejs() {
     NODE_VERSION=$(node -v || echo "0")
     IFS=. read -r -a VER <<<"${NODE_VERSION##*v}"
@@ -530,7 +549,7 @@ function common_software() {
             info "[Package]   ${package} installed already"
         else
             info "[Package]   Installing missing common package: ${package}"
-            apt-get -qq install -y "$package"
+            install_pkg "$package"
         fi
     done
 
@@ -545,7 +564,7 @@ function common_software() {
 
 function apache_webserver() {
     info "### Installing Apache Webserver..."
-    apt-get -qq install -y apache2 libapache2-mod-php"$PHP_VERSION"
+    install_pkg apache2 libapache2-mod-php"$PHP_VERSION"
     sudo systemctl enable --now apache2
 }
 
