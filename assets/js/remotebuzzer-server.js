@@ -205,10 +205,10 @@ const requestListener = function (req, res) {
         res.end(content);
     }
 
-    const urlObj = new URL(req.url,'http://localhost/'); //The consctructor requires to input a base url 
+    const urlObj = new URL(req.url, 'http://localhost/'); //The consctructor requires to input a base url
     const queryParams = urlObj.searchParams;
 
-    switch (req.url) {
+    switch (urlObj.pathname) {
         case '/':
             log('http: GET /');
             sendText(
@@ -220,6 +220,7 @@ const requestListener = function (req, res) {
                 <li>Trigger print: <a href="${baseUrl}/commands/start-print" target="_blank">${baseUrl}/commands/start-print</a></li>
                 <li>Trigger video: <a href="${baseUrl}/commands/start-video" target="_blank">${baseUrl}/commands/start-video</a></li>
                 <li>Trigger picture move to USB: <a href="${baseUrl}/commands/start-move2usb" target="_blank">${baseUrl}/commands/start-move2usb</a></li>
+                <li>Increase the printlimit by i <a href="${baseUrl}/commands/increase-print-limit?i=1" target="_blank">${baseUrl}/commands/increase-print-limit?i=1</a></li>
             </ul>
             <h1>Rotary Endpoints</h1>
             <ul>
@@ -237,35 +238,40 @@ const requestListener = function (req, res) {
             break;
         case '/commands/increase-print-limit':
             log('http: GET /commands/increase-print-limit');
-            log("current directory", __dirname);
-            if(config.remotebuzzer.usebuttons){
-                if(config.print.from_result || config.print.from_gallery){
+            log('current directory', __dirname);
+            if (config.remotebuzzer.usebuttons) {
+                if (config.print.from_result || config.print.from_gallery) {
                     let i = 1;
-                    let j = parseInt(queryParams.get('i'));
-                    if(j){
+                    let j = parseInt(queryParams.get('i'), 10);
+                    if (j) {
                         i = j;
                     }
                     //Read config file and find the current print limit
-                    
-                    const configPath = path.join(__dirname, '..', '..','config','my.config.inc.php');
+
+                    const configPath = path.join(__dirname, '..', '..', 'config', 'my.config.inc.php');
 
                     let config = fs.readFileSync(configPath).toString();
-                    let printSection = config.indexOf(`'print' =>`);
-                    let printLimitIndex = config.indexOf(`'limit' =>`, printSection);
+                    let printSection = config.indexOf('\'print\' =>');
+                    let printLimitIndex = config.indexOf('\'limit\' =>', printSection);
                     //Parse the current printlimit but remove the 'limit'=> part before.
-                    let printLimit = parseInt(config.substring(printLimitIndex + 10)) + i;
-                    let endPrintLimitIndex = config.indexOf(',',printLimitIndex);
-                    config = config.substring(0,printLimitIndex) + `'limit' => ${printLimit}` + config.substring(endPrintLimitIndex);
-                    fs.writeFileSync('/var/www/html/config/my.config.inc.php',config);
+                    let printLimit = parseInt(config.substring(printLimitIndex + 10), 10) + i;
+                    let endPrintLimitIndex = config.indexOf(',', printLimitIndex);
+                    config =
+                        config.substring(0, printLimitIndex) +
+                        `'limit' => ${printLimit}` +
+                        config.substring(endPrintLimitIndex);
+                    fs.writeFileSync(configPath, config);
                     //sendText(`INCREASED PRINT LIMIT by ${i}`);
                     http.get('http://localhost/api/printDB.php?action=unlockPrint');
-                    sendText(config);
+                    sendText(`Increased print limit by ${i}`);
+                } else {
+                    sendText('Please enable print from results screen or print from gallery.')
                 }
             } else {
-                sendText('Please enable Hardware Button support!')
+                sendText('Please enable Hardware Button support!');
             }
             break;
-            
+
         case '/commands/start-picture':
             log('http: GET /commands/start-picture');
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.picturebutton) {
