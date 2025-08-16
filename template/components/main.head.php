@@ -42,7 +42,7 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/fonts.css')?>" />
     <link rel="stylesheet" href="<?=$assetService->getUrl('resources/css/framework.css')?>" />
     <?= $photoswipe && $config['gallery']['bottom_bar'] ? '<link rel="stylesheet" href="' . $assetService->getUrl('resources/css/photoswipe-bottom.css') . '"/>' : '' ?>
-    <?= is_file(PathUtility::getAbsolutePath('private/overrides.css')) ? '<link rel="stylesheet" href="' . $assetService->getUrl('private/overrides.css') . '"/>' : '' ?>
     <?= ThemeUtility::renderCustomUserStyle($config); ?>
+    <?= is_file(PathUtility::getAbsolutePath('private/overrides.css')) ? '<link rel="stylesheet" href="' . $assetService->getUrl('private/overrides.css') . '"/>' : '' ?>
     <script src="<?=$assetService->getUrl('node_modules/jquery/dist/jquery.min.js')?>"></script>
 </head>

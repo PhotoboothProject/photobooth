@@ -99,7 +99,7 @@ const photoBooth = (function () {
     };
 
     api.reset = function () {
-        loader.css('--stage-background', config.colors.background_countdown);
+        loader.css('--stage-background', 'var(--background-countdown-color)');
         loader.removeClass('stage--active');
         loaderButtonBar.empty();
         loaderMessage.empty();
@@ -556,7 +556,7 @@ const photoBooth = (function () {
             data.file = chromaFile;
         }
 
-        loader.css('--stage-background', config.colors.background_countdown);
+        loader.css('--stage-background', 'var(--background-countdown-color)');
 
         api.callTakePicApi(data, retry);
     };
@@ -910,7 +910,7 @@ const photoBooth = (function () {
         videoSensor.hide();
         previewVideo.hide();
         videoBackground.hide();
-        loader.css('--stage-background', config.colors.background_countdown);
+        loader.css('--stage-background', 'var(--background-countdown-color)');
         loaderMessage.html(
             '<i class="' + config.icons.spinner + '"></i><br>' + photoboothTools.getTranslation('busyVideo')
         );
