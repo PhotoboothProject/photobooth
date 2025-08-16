@@ -651,7 +651,7 @@ const photoBooth = (function () {
                         // collage with interruption
                         if (result.current + 1 < result.limit) {
                             const takePictureButton = $(
-                                '<button type="button" class="button rotaryfocus" id="btnCollageNext">'
+                                '<button type="button" class="button collageNext rotaryfocus" id="btnCollageNext">'
                             );
                             takePictureButton.append(
                                 '<span class="button--icon"><i class="' + config.icons.take_picture + '"></i></span>'
@@ -668,7 +668,7 @@ const photoBooth = (function () {
                             remoteBuzzerClient.collageWaitForNext();
                         } else {
                             const collageProcessButton = $(
-                                '<button type="button" class="button rotaryfocus" id="btnCollageProcess">'
+                                '<button type="button" class="button collageProcess rotaryfocus" id="btnCollageProcess">'
                             );
                             collageProcessButton.append(
                                 '<span class="button--icon"><i class="' + config.icons.save + '"></i></span>'
@@ -689,7 +689,7 @@ const photoBooth = (function () {
                             remoteBuzzerClient.collageWaitForProcessing();
                         }
 
-                        const retakeButton = $('<button type="button" class="button rotaryfocus">');
+                        const retakeButton = $('<button type="button" class="button collageRetake rotaryfocus">');
                         retakeButton.append(
                             '<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>'
                         );
@@ -708,7 +708,7 @@ const photoBooth = (function () {
                             });
                         });
 
-                        const abortButton = $('<button type="button" class="button rotaryfocus">');
+                        const abortButton = $('<button type="button" class="button collageAbort rotaryfocus">');
                         abortButton.append(
                             '<span class="button--icon"><i class="' + config.icons.delete + '"></i></span>'
                         );
