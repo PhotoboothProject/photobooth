@@ -226,11 +226,11 @@ if ($returnValue !== 0) {
 
 if ($status === 'ok') {
     $copies = (int)$vars['copies'];
-    if($copies === 1) {
+    if ($copies === 1) {
         $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName']);
     } else {
-        for($i = 1; $i <= $copies; $i++) {
-            $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName'] . "-" . $i);
+        for ($i = 1; $i <= $copies; $i++) {
+            $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName'] . '-' . $i);
         }
     }
 
