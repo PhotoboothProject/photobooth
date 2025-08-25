@@ -262,7 +262,7 @@ const photoboothTools = (function () {
             });
             plusButton.addEventListener('click', () => {
                 const oldValue = parseInt(inputText.value, 10);
-                inputText.value = String(Math.min(10, oldValue + 1));
+                inputText.value = String(Math.min(config.print.max_multi, oldValue + 1));
             });
             inputSection.append(minusButton);
             inputSection.append(inputText);

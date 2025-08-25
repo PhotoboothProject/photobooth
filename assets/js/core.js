@@ -1119,9 +1119,9 @@ const photoBooth = (function () {
             event.preventDefault();
             event.stopPropagation();
 
-            const copies = await photoboothTools.askCopies();
+            const copies = config.print.max_multi === 1 ? 1 : await photoboothTools.askCopies();
 
-            if (copies) {
+            if (copies && !isNaN(copies)) {
                 photoboothTools.printImage(filename, copies, () => {
                     remoteBuzzerClient.inProgress(false);
                     buttonPrint.trigger('blur');
