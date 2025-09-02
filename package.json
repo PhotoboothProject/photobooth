@@ -75,7 +75,7 @@
     "tailwindcss": "^4.1.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0",
+    "@babel/core": "^7.28.3",
     "@babel/preset-env": "^7.28.3",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.34.0",
