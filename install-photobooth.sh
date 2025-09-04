@@ -496,7 +496,9 @@ function check_python() {
 function common_software() {
     info "### Updating the system"
     apt-get -qq update
-    apt-get -qq install apt-transport-https lsb-release ca-certificates software-properties-common -y
+    apt-get -qq install apt-transport-https lsb-release ca-certificates -y
+    apt-get -qq install software-properties-common -y || warn "[WARN]      Skipping installation of software-properties-common"
+
     OS=$(lsb_release -sc)
     if [[ "${DEBIAN[*]}" =~ $OS ]]; then
         wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
