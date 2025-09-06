@@ -205,7 +205,7 @@ const requestListener = function (req, res) {
         res.end(content);
     }
 
-    const urlObj = new URL(req.url, 'http://localhost/'); //The consctructor requires to input a base url
+    const urlObj = new URL(req.url, 'http://' + config.webserver.ip);
     const queryParams = urlObj.searchParams;
 
     switch (urlObj.pathname) {
@@ -238,7 +238,6 @@ const requestListener = function (req, res) {
             break;
         case '/commands/increase-print-limit':
             log('http: GET /commands/increase-print-limit');
-            log('current directory', __dirname);
             if (config.remotebuzzer.usebuttons) {
                 if (config.print.from_result || config.print.from_gallery) {
                     let i = 1;
@@ -246,26 +245,10 @@ const requestListener = function (req, res) {
                     if (j) {
                         i = j;
                     }
-                    //Read config file and find the current print limit
-
-                    const configPath = path.join(__dirname, '..', '..', 'config', 'my.config.inc.php');
-
-                    let config = fs.readFileSync(configPath).toString();
-                    let printSection = config.indexOf('\'print\' =>');
-                    let printLimitIndex = config.indexOf('\'limit\' =>', printSection);
-                    //Parse the current printlimit but remove the 'limit'=> part before.
-                    let printLimit = parseInt(config.substring(printLimitIndex + 10), 10) + i;
-                    let endPrintLimitIndex = config.indexOf(',', printLimitIndex);
-                    config =
-                        config.substring(0, printLimitIndex) +
-                        `'limit' => ${printLimit}` +
-                        config.substring(endPrintLimitIndex);
-                    fs.writeFileSync(configPath, config);
-                    //sendText(`INCREASED PRINT LIMIT by ${i}`);
-                    http.get('http://localhost/api/printDB.php?action=unlockPrint');
+                    http.get(config.webserver.url + 'api/printLimit.php?increaseCount=' + i);
                     sendText(`Increased print limit by ${i}`);
                 } else {
-                    sendText('Please enable print from results screen or print from gallery.')
+                    sendText('Please enable print from results screen or print from gallery.');
                 }
             } else {
                 sendText('Please enable Hardware Button support!');
