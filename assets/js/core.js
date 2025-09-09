@@ -824,6 +824,9 @@ const photoBooth = (function () {
                 loaderMessage.append($('<p>').text(data.error));
             }
             api.takingPic = false;
+            if (config.get_request.processed) {
+                photoboothTools.getRequest(config.get_request.server + '/error');
+            }
             remoteBuzzerClient.inProgress(false);
             photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
             if (config.dev.reload_on_error) {

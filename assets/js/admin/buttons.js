@@ -290,6 +290,9 @@ $(function () {
 
     $('#reboot-btn').on('click', function (ev) {
         ev.preventDefault();
+        if (config.get_request.processed) {
+            photoboothTools.getRequest(config.get_request.server + '/reboot');
+        }
         shellCommand('reboot');
 
         return false;
@@ -297,6 +300,9 @@ $(function () {
 
     $('#shutdown-btn').on('click', function (ev) {
         ev.preventDefault();
+        if (config.get_request.processed) {
+            photoboothTools.getRequest(config.get_request.server + '/shutdown');
+        }
         shellCommand('shutdown');
 
         return false;

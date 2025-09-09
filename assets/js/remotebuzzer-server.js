@@ -16,7 +16,7 @@ let collageInProgress = false,
 
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 let rotaryClkPin, rotaryDtPin;
-const { execSync, spawnSync } = require('child_process');
+const { exec, execSync, spawnSync } = require('child_process');
 const path = require('path');
 const { pid: PID, platform: PLATFORM } = process;
 
@@ -357,6 +357,24 @@ const requestListener = function (req, res) {
             log('http: GET /commands/shutdown-now');
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.shutdownbutton) {
                 sendText('SHUTTING DOWN');
+
+                if (config.get_request.processed) {
+                    const url = `${config.get_request.server}/shutdown`;
+                    const curlCommand = `curl -s ${url}`;
+
+                    exec(curlCommand, (error, stdout, stderr) => {
+                        if (error) {
+                            log(`Error: ${error.message}`);
+                            return;
+                        }
+                        if (stderr) {
+                            log(`Stderr: ${stderr}`);
+                            return;
+                        }
+                        log(`Response: ${stdout}`);
+                    });
+                }
+
                 /*  Initiate system shutdown */
                 const cmd = 'sudo ' + config.commands.shutdown;
                 execSync(cmd);
@@ -368,6 +386,24 @@ const requestListener = function (req, res) {
             log('http: GET /commands/reboot-now');
             if (config.remotebuzzer.usebuttons && config.remotebuzzer.rebootbutton) {
                 sendText('REBOOTING NOW');
+
+                if (config.get_request.processed) {
+                    const url = `${config.get_request.server}/reboot`;
+                    const curlCommand = `curl -s ${url}`;
+
+                    exec(curlCommand, (error, stdout, stderr) => {
+                        if (error) {
+                            log(`Error: ${error.message}`);
+                            return;
+                        }
+                        if (stderr) {
+                            log(`Stderr: ${stderr}`);
+                            return;
+                        }
+                        log(`Response: ${stdout}`);
+                    });
+                }
+
                 /*  Initiate system shutdown */
                 const cmd = 'sudo ' + config.commands.reboot;
                 execSync(cmd);
