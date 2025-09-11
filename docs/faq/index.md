@@ -300,18 +300,18 @@ The available endpoints of Photobooths Remotebuzzer server, depending on enabled
 -   `[Base Url]/commands/rotary-btn-press` - Triggers a click action
 -   `[Base Url]/commands/start-move2usb` - Trigger picture move to USB
 
-These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/), but also using a ESP32/ESP8266 or other micro controllers like the Raspberry Pi Pico / Pico W
+These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/), but also using a ESP32/ESP8266 or other micro controllers like the Raspberry Pi Pico / Pico W is possible.
 
 ### Setup a ESP32 / ESP8266 for simple web request
 Example Projects:
 
-- https://github.com/PhotoboothProject/photobooth-ino (requires Photobooths Remotebuzzer Server to be running, contributions welcome)
+- [https://github.com/PhotoboothProject/photobooth-ino](https://github.com/PhotoboothProject/photobooth-ino) (requires Photobooths Remotebuzzer Server to be running, contributions welcome)
 
 ### Setup an Raspberry Pi Pico / Pico W for simple web request
 Example Projects:
 
-- https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder
-- https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder
+- [https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder](https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder)
+- [https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder](https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder)
 
 ### Installation steps for myStrom WiFi Button
 
