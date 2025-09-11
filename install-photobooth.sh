@@ -835,8 +835,6 @@ function ask_usb_sync() {
 }
 
 function raspberry_permission() {
-    info "### Remote Buzzer Feature"
-    info "### Configure Raspberry PI GPIOs for Photobooth - please reboot in order use the Remote Buzzer Feature"
     if [ -f '/boot/firmware/config.txt' ]; then
         BOOT_CONFIG="/boot/firmware/config.txt"
     else
@@ -845,20 +843,12 @@ function raspberry_permission() {
     usermod -a -G gpio www-data
     # remove old artifacts from node-rpio library, if there was
     if [ -f '/etc/udev/rules.d/20-photobooth-gpiomem.rules' ]; then
-        info "### Remotebuzzer switched from node-rpio to onoff library. We detected an old remotebuzzer installation and will remove artifacts"
+        info "### We detected an old remotebuzzer installation and will remove artifacts"
         rm -f /etc/udev/rules.d/20-photobooth-gpiomem.rules
         sed -i '/dtoverlay=gpio-no-irq/d' "$BOOT_CONFIG"
     fi
-    # add configuration required for onoff library
+    # Cleanup old GPIO config
     sed -i '/Photobooth/,/Photobooth End/d' "$BOOT_CONFIG"
-    cat >>"$BOOT_CONFIG" <<EOF
-# Photobooth
-#IN
-gpio=5,6,7,8,16,17,20,21,22,26,27=pu
-#OUT
-gpio=9,10,11,12,18,19,23,24,25=op
-# Photobooth End
-EOF
 
     # update artifacts in user configuration from old remotebuzzer implementation
     if [ -f "$INSTALLFOLDERPATH/config/my.config.inc.php" ]; then
