@@ -121,7 +121,6 @@ function createArchive(fileName, archive) {
     archive.directory('node_modules/object.assign');
     archive.directory('node_modules/object-component');
     archive.directory('node_modules/object-keys');
-    archive.directory('node_modules/onoff');
     archive.directory('node_modules/parseqs');
     archive.directory('node_modules/parseuri');
     archive.directory('node_modules/socket.io');
