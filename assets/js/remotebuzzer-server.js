@@ -5,7 +5,7 @@ const path = require('path');
 // eslint-disable-next-line no-unused-vars
 let collageInProgress = false,
     triggerArmed = true,
-    copySucess = false;
+    copySuccess = false;
 
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 const { execSync, spawnSync } = require('child_process');
@@ -570,15 +570,15 @@ function move2usbAction() {
         log('Sync completed');
 
         if (fs.existsSync(path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk'))) {
-            copySucess = true;
+            copySuccess = true;
         } else {
             log(' ');
             log(
-                '[ERROR] Sync error, sync might be not sucessfull. Checkfile does not exist:',
+                '[ERROR] Sync error, sync might be not successfull. Checkfile does not exist:',
                 path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk')
             );
             log(' ');
-            copySucess = false;
+            copySuccess = false;
 
             return;
         }
@@ -610,7 +610,7 @@ function move2usbAction() {
 
             return;
         }
-        if (!copySucess) {
+        if (!copySuccess) {
             log('[Warning] Sync was unsuccessful. No files will be deleted.');
 
             return;
@@ -652,7 +652,7 @@ function move2usbAction() {
 
             return;
         }
-        if (!copySucess) {
+        if (!copySuccess) {
             log('[Warning] Sync was unsuccessful. No files will be deleted.');
 
             return;
@@ -705,13 +705,13 @@ function move2usbAction() {
 
     unmountDrive();
 
-    if (copySucess && config.remotebuzzer.move2usb == 'move') {
+    if (copySuccess && config.remotebuzzer.move2usb == 'move') {
         deleteFiles({ dataAbsPath: parsedConfig.dataAbsPath });
     } else {
         log('[Info] move2USB mode "copy" or Sync unsuccessful. No files will be deleted.');
     }
 
-    if (copySucess && config.remotebuzzer.move2usb == 'move') {
+    if (copySuccess && config.remotebuzzer.move2usb == 'move') {
         deleteDatabase({
             dataAbsPath: parsedConfig.dataAbsPath,
             dbName: parsedConfig.dbName
