@@ -258,6 +258,12 @@ For example use <a href="https://keycode.info" target="_blank">https://keycode.i
 
     -   Key code which triggers printing: **define**
 
+### Remotebuzzer Hardware Button & LED feature using GPIO connected hardware
+
+GPIO support was removed in September 2025. With PiOS Bookworm the used sysfs became deprecated which makes the use impossible with its current implementation.
+
+You can still use the trigger via Socket.io or simple web requests (see below).
+
 ### Remote trigger using Socket.io
 
 The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
@@ -268,14 +274,18 @@ The trigger server controls and coordinates sending commands via socket.io to th
 
 ### Remote trigger using simple web requests
 
-_Note: This feature depends on the Socket.io implementation and needs option `Hardware Button` - `Enable Hardware Buttons` to be active._
+_Note: This feature depends on the Socket.io implementation and needs option `Hardware Button` - `Enable Hardware Buttons` to be active and `Hardware Button` - `Remote buzzer Server IP`  must be defined ._
 
-Simple `GET` requests can be used to trigger single pictures or collages. Those endpoints can be found under `http://[Photobooth IP]:[Hardware Button Server Port]` where:
+Photobooth can start the Remotebuzzer server and does not depend on a different device running the Socket.io Server.
 
--   `[Photobooth IP]` needs to match the configured value under `General` - `IP address of the Photobooth web server` and
+To start the Remotebuzzer server with Photobooth, you must enable `Hardware Button` - `Start remote buzzer Server` from Adminpanel.
+
+If Photobooth is running the implemented Remotebuzzer server, simple `GET` requests can be used to trigger different actions. Those endpoints can be found under `http://[Hardware Button Server IP]:[Hardware Button Server Port]` where:
+
+-   `[Hardware Button Server IP]` needs to match the value from `Hardware Button` - `Remote buzzer Server IP` (same IP as your Photobooth) and
 -   `[Hardware Button Server Port]` the value from `Hardware Button` - `Enable Hardware Buttons`
 
-The available endpoints, depending on enabled features and hardware button options, are:
+The available endpoints of Photobooths Remotebuzzer server, depending on enabled features and hardware button options, are:
 
 -   `[Base Url]/` - Simple help page with all available endpoints
 -   `[Base Url]/commands/start-picture` - Triggers a single picture
@@ -290,7 +300,18 @@ The available endpoints, depending on enabled features and hardware button optio
 -   `[Base Url]/commands/rotary-btn-press` - Triggers a click action
 -   `[Base Url]/commands/start-move2usb` - Trigger picture move to USB
 
-These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/) (untested).
+These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/), but also using a ESP32/ESP8266 or other micro controllers like the Raspberry Pi Pico / Pico W
+
+### Setup a ESP32 / ESP8266 for simple web request
+Example Projects:
+
+- https://github.com/PhotoboothProject/photobooth-ino (requires Photobooths Remotebuzzer Server to be running, contributions welcome)
+
+### Setup an Raspberry Pi Pico / Pico W for simple web request
+Example Projects:
+
+- https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder
+- https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder
 
 ### Installation steps for myStrom WiFi Button
 
@@ -300,6 +321,19 @@ These trigger URLs can be used for example with [myStrom WiFi Buttons](https://m
     curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-picture
     curl --location -g --request POST http://[Button IP]/api/v1/action/long --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-collage
     ```
+
+### Remotebuzzer trouble shooting
+
+#### Important Notes
+Using the Remotebuzzer feature takes effect at the same time on all devices accessing Photobooth! If you trigger a picture, every connected client gets the signal to capture.
+
+Works if you access Photobooth via [http://localhost](http://localhost) or [http://your-ip-adress](#), but accessing via the loopback IP (127.0.0.1) does not work!
+
+#### Debugging
+- Set Photobooth loglevel to 1 (or above). (admin panel -> general section) and save your configuration
+- Reload the Photobooth homepage
+- Check the browser developer console for error logs
+- Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel)
 
 ---
 
