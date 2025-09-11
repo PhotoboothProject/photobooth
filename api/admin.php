@@ -198,10 +198,6 @@ if ($action === 'reset') {
         $newConfig['remotebuzzer']['port'] = 14711;
     }
 
-    if (isset($newConfig['remotebuzzer']['useleds']) && $newConfig['remotebuzzer']['useleds']) {
-        $newConfig['remotebuzzer']['useleds'] = isset($newConfig['remotebuzzer']['usegpio']) && $newConfig['remotebuzzer']['usegpio'];
-    }
-
     if (isset($newConfig['database']['file']) && empty($newConfig['database']['file'])) {
         $newConfig['database']['file'] = 'db';
     }
