@@ -580,7 +580,7 @@ const photoBooth = (function () {
             .post({
                 url: environment.publicFolders.api + '/capture.php',
                 data: data,
-                timeout: 15000
+                timeout: 25000
             })
             .done(async (result) => {
                 api.cheese.destroy();
