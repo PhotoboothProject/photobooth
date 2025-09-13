@@ -872,6 +872,7 @@ EOF
         fi
     fi
 }
+
 function set_private_acl() {
     local folder="$INSTALLFOLDERPATH/private"
     if [ ! -d "$folder" ]; then
