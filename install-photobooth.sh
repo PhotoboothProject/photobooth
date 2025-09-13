@@ -873,10 +873,44 @@ EOF
     fi
 }
 
+function set_private_acl() {
+    local folder="$INSTALLFOLDERPATH/private"
+    if [ ! -d "$folder" ]; then
+        warn "### Folder $folder does not exist."
+        return 1
+    fi
+
+    # Set default ACLs for new files/folders
+    setfacl -d -m u::rwx "$folder" >/dev/null 2>&1 || \
+        warn "### Failed to set default ACL for owner on $folder"
+    setfacl -d -m g::rwx "$folder" >/dev/null 2>&1 || \
+        warn "### Failed to set default ACL for group on $folder"
+    setfacl -d -m o::r   "$folder" >/dev/null 2>&1 || \
+        warn "### Failed to set default ACL for others on $folder"
+
+    # Apply ACLs recursively to existing files/folders
+    setfacl -R -m u::rwx "$folder" >/dev/null 2>&1 || \
+        warn "### Failed to apply ACL for owner recursively on $folder"
+    setfacl -R -m g::rwx "$folder" >/dev/null 2>&1 || \
+        warn "### Failed to apply ACL for group recursively on $folder"
+    setfacl -R -m o::r   "$folder" >/dev/null 2>&1 || \
+        warn "### Failed to apply ACL for others recursively on $folder"
+
+    info "### ACL Setup: Default and recursive ACLs applied to $folder"
+    return 0
+}
+
 function general_permissions() {
     info "### Setting permissions."
     chown -R www-data:www-data "$INSTALLFOLDERPATH"/
-    chmod g+s "$INSTALLFOLDERPATH/private"
+    chmod 2775 "$INSTALLFOLDERPATH/private"
+
+    if set_private_acl; then
+        info "### ACLs successfully applied"
+    else
+        warn "Failed to apply ACLs"
+    fi
+
     gpasswd -a www-data plugdev
     gpasswd -a www-data video
     gpasswd -a "$USERNAME" www-data
