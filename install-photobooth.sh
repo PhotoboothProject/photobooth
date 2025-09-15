@@ -85,9 +85,9 @@ EXTRA_PACKAGES=(
 INSTALL_PACKAGES=()
 
 DEBIAN=(
-    'buster'
     'bullseye'
     'bookworm'
+    'trixie'
 )
 
 function info {
