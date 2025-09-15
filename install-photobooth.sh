@@ -569,7 +569,7 @@ function common_software() {
 function apache_webserver() {
     info "### Installing Apache Webserver..."
     install_pkg apache2 libapache2-mod-php"$PHP_VERSION"
-    sudo systemctl enable --now apache2
+    sudo systemctl enable --now apache2 || true
 }
 
 function nginx_webserver() {
