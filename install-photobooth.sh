@@ -792,7 +792,7 @@ function browser_autostart() {
 
 function ask_kiosk_mode() {
     echo -e "\033[0;33m### You probably like to start $WEBBROWSER on every start."
-    ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "Y"
+    ask_yes_no "### Open $WEBBROWSER in Kiosk Mode at every boot? [y/N] " "N"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         KIOSK_MODE=true
@@ -805,7 +805,7 @@ function ask_kiosk_mode() {
 
 function ask_hide_mouse() {
     echo -e "\033[0;33m### You probably like hide the mouse cursor on every start."
-    ask_yes_no "### Hide the mouse cursor? [y/N] " "Y"
+    ask_yes_no "### Hide the mouse cursor? [y/N] " "N"
     echo -e "\033[0m"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         HIDE_MOUSE=true
@@ -1240,7 +1240,7 @@ fi
 print_spaces
 
 echo -e "\033[0;33m### You probably like to use a printer."
-ask_yes_no "### You like to install CUPS and set needing printer permissions? [y/N] " "Y"
+ask_yes_no "### You like to install CUPS and set needing printer permissions? [y/N] " "N"
 echo -e "\033[0m"
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     SETUP_CUPS=true
