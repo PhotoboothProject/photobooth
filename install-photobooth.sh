@@ -195,6 +195,9 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
     -w,  -webserver,  --webserver   Enter the webserver to use [apache, nginx].
                                     Apache is used by default.
 
+         -wayland,  --wayland       Enable Wayland features without automated Wayland detection.
+    
+
 Example to install Photobooth on a Raspberry Pi getting asked for enabled options:
 sudo bash install-photobooth.sh -u="photobooth"
 
@@ -267,6 +270,10 @@ while true; do
         shift
         WEBSERVER=$1
         info "### Webserver: $1"
+        ;;
+    --wayland)
+        WAYLAND_ENV=true
+        info "### Wayland environment enabled, skipping automatic env detection..."
         ;;
     --)
         shift
