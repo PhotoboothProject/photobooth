@@ -196,7 +196,6 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
                                     Apache is used by default.
 
          -wayland,  --wayland       Enable Wayland features without automated Wayland detection.
-    
 
 Example to install Photobooth on a Raspberry Pi getting asked for enabled options:
 sudo bash install-photobooth.sh -u="photobooth"
