@@ -189,7 +189,19 @@ if (!file_exists($vars['printFile'])) {
 // print image
 $status = 'ok';
 $linecount = 0;
-$cmd = sprintf($config['commands']['print'], $vars['copies'], $vars['printFile']);
+
+if ($vars['copies'] > 1) {
+    $cmd = sprintf(
+        $config['commands']['print'],
+        $vars['copies'],
+        $vars['printFile']
+    );
+} else {
+    $cmd = sprintf(
+        $config['commands']['print'],
+        $vars['printFile']
+    );
+}
 $logger->info($cmd);
 $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
@@ -226,12 +238,12 @@ if ($returnValue !== 0) {
 
 if ($status === 'ok') {
     $copies = (int)$vars['copies'];
-    if ($copies === 1) {
-        $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName']);
-    } else {
+    if ($copies > 1) {
         for ($i = 1; $i <= $copies; $i++) {
             $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName'] . '-' . $i);
         }
+    } else {
+        $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName']);
     }
 
     if ($config['print']['limit'] > 0) {
