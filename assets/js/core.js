@@ -1079,7 +1079,17 @@ const photoBooth = (function () {
         submitButton.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
-            form.requestSubmit();
+
+            if (typeof form.requestSubmit === 'function') {
+                form.requestSubmit();
+            } else {
+                const tmpSubmit = document.createElement('button');
+                tmpSubmit.type = 'submit';
+                tmpSubmit.style.display = 'none';
+                form.appendChild(tmpSubmit);
+                tmpSubmit.click();
+                form.removeChild(tmpSubmit);
+            }
         });
         buttonbar.insertBefore(submitButton, buttonbar.firstChild);
     };
