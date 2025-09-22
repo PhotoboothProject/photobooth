@@ -312,8 +312,7 @@ const photoboothTools = (function () {
                         $('.print-unlock-button').removeClass('hidden');
                     } else if (data.status == 'queued') {
                         api.overlay.showWarning(api.getTranslation('print_queued'));
-                        api.resetPrintErrorMessage(cb, config.print.time);
-                        $('.print-unlock-button').removeClass('hidden');
+                        api.resetPrintErrorMessage(cb, 2000);
                     } else if (data.status == 'error') {
                         if (data.error) {
                             api.console.log('ERROR: An error occurred: ', data.error);
