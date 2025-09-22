@@ -211,7 +211,7 @@ info "### The Photobooth installer for your Raspberry Pi."
 print_spaces
 info "################## Passed options #########################"
 echo ""
-options=$(getopt -l "help,branch::,php::,update,username::,raspberry,silent,verbose,webserver::" -o "hb::p::u::rsVw::" -a -- "$@")
+options=$(getopt -l "help,branch::,php::,update,username::,raspberry,silent,verbose,webserver::,wayland" -o "hb::p::u::rsVw::" -a -- "$@")
 eval set -- "$options"
 
 while true; do
