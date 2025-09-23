@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [[ $1 =~ -h|--help ]]; then
+  cat <<HELP
+This script stops go2rtc, runs gphoto2 and starts go2rtc again.
+You can use it in your photobooth as capture command.
+
+Usage:
+
+    capture <filename> [or all required gphoto2 arguments]
+
+In photobooth, usually 'capture %s' is enough. But if you want to use a more complex command,
+don't forget to add --filename=%s.
+
+HELP
+  exit 0
+fi
+
+if [[ $# -eq 1 ]]; then
+  args="--set-config output=Off --capture-image-and-download --filename=$1"
+elif [[ $# -gt 1 ]]; then
+  args="$@"
+fi
+
+if systemctl cat go2rtc.service >/dev/null; then
+  HAS_GO2RTC=1
+fi
+
+[[ -n "$HAS_GO2RTC" ]] && sudo systemctl stop go2rtc.service
+sleep 0.5
+gphoto2 $args
+[[ -n "$HAS_GO2RTC" ]] && sudo systemctl start go2rtc.service

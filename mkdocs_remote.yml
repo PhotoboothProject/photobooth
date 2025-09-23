@@ -35,6 +35,9 @@ nav:
     - Update on linux: update/update-linux.md
   - FAQ & Tutorials:
     - FAQ: faq/index.md
+    - Printer Troubleshooting: faq/printer-troubleshooting.md
+    - gphoto2 Troubleshooting: faq/gphoto2-troubleshooting.md
+    - GO2RTC Troubleshooting: faq/go2rtc-troubleshooting.md
     - Tutorials: faq/tutorials.md
   - Community & Contribution:
     - Chat on Telegram: https://t.me/PhotoboothGroup
