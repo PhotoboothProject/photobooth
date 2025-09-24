@@ -479,12 +479,11 @@ Install go2rtc preview service:
 wget -O install-go2rtc-preview.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/install-go2rtc-preview.sh
 sudo bash install-go2rtc-preview.sh
 ```
-
 Follow the instructions and choose your variant to install.
 
 **Note:** go2rtc does not work in v1.9.3 and v1.9.4 for Pi Camera!
 
-Once installed successfully reboot your device and adjust your Photobooth config as mentioned above.
+Once installed successfully reboot your device and adjust your Photobooth config as mentioned above or open [http://localhost/admin/captureconfig.php](http://localhost/admin/captureconfig.php) to apply the default suggested configuration automatically.
 
 **Note:**
 
