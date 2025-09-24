@@ -18,9 +18,7 @@ You might want to check the following information
 
 ## Problem Solving: go2rtc Preview via gphoto2
 
-### Error: could not claim the USB Device
-
-Another process is using the camera. That's what the log says. Therefore, it can't record. This issue is generally addressed in the FAQ under troubleshooting for gphoto2.
+### About the `capture` wrapper
 
 `capture` is simply a wrapper and accepts exactly the same parameters as |gphoto2`. The only difference is that the wrapper does the following:
 
@@ -35,6 +33,12 @@ That means: anything that works with the command gphoto2 will also work with cap
 What’s not covered there is a timing issue related to previewing via go2rtc.
 
 The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems.
+
+### Error: could not claim the USB Device
+
+Another process is using the camera. That's what the log says. Therefore, it can't record.
+
+This issue is generally addressed inside the troubleshooting for gphoto2, but could also happen because of timing problems.
 
 #### Delay capture
 
