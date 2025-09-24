@@ -27,7 +27,7 @@ GPhoto2 is a software that allows taking images via Photobooth. Full documentati
 7. **Set Capture Target to Memory Card**
    Sometimes, you need to manually set the capture target:
 
-   ```bash
+   ```
    gphoto2 --get-config capturetarget
    ```
 
@@ -45,7 +45,7 @@ Choice: 1 Memory card   <--- !!!
 
 Adjust your capture command:
 
-```bash
+```
 gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
 ```
 
@@ -62,7 +62,7 @@ gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
 
 1. **Test as Current User**
 
-   ```bash
+   ```
    gphoto2 --capture-image-and-download --filename=test.jpg
    ```
 
@@ -71,7 +71,7 @@ gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
 
 2. **Test as `www-data` User**
 
-   ```bash
+   ```
    cd /var/www/html
    sudo -u www-data -s
    gphoto2 --capture-image-and-download --filename=test.jpg
@@ -80,7 +80,7 @@ gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
    * Yes: Check Photobooth configuration or reset it
    * No: Fix permissions:
 
-   ```bash
+   ```
    sudo chown -R www-data:www-data /var/www/
    sudo gpasswd -a www-data plugdev
    reboot
@@ -89,14 +89,14 @@ gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
 3. **Check for Conflicting Processes**
    Disable `gvfs-gphoto2-volume-monitor` if necessary:
 
-   ```bash
+   ```
    sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
    reboot
    ```
 
 4. **Update GPhoto2 and libgphoto2**
 
-   ```bash
+   ```
    wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
    wget -O .env https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
    chmod +x gphoto2-updater.sh
@@ -111,7 +111,7 @@ gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
 
 ### Alternative Capture Commands
 
-```bash
+```
 gphoto2 --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
 gphoto2 --wait-event=300ms --capture-image-and-download --filename=%s
 gphoto2 --set-config output=Off --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
@@ -122,12 +122,12 @@ gphoto2 --set-config output=Off --wait-event=300ms --capture-image-and-download 
 
 * **EOS 1300D**
 
-  ```bash
+  ```
   gphoto2 --wait-event=300ms --capture-image-and-download --filename=%s
   ```
 
 * **EOS 2000D**
 
-  ```bash
+  ```
   gphoto2 --set-config output=Off --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
   ```
