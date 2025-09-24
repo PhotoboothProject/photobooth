@@ -1,9 +1,9 @@
-# go2rtc troubleshooting
+# go2rtc Troubleshooting
 
 ## Initial notes
 
-- make sure your camera is supported by gphoto2 or rpicam-apps
-- make sure your canera is working on Photobooth without setting up go2rtc for preview (**if not tested:** uninstall go2rtc while running the `install-go2rtc-preview.sh` script again)
+- make sure your camera is supported by gphoto2 / rpicam-apps / fswebcam
+- make sure your camera is working on Photobooth without setting up go2rtc for preview (**if not tested:** uninstall go2rtc while running the `install-go2rtc-preview.sh` script again)
 - make sure you can access [http://localhost:1984/api/stream.mjpeg?src=photobooth](http://localhost:1984/api/stream.mjpeg?src=photobooth) and having the stream available.
 
 If your camera is supported in general but not having a preview available please check go2rtc for errors.
@@ -14,31 +14,42 @@ To allow adjustments of the config via web interface adjust the permissions:
 sudo chmod 755 /etc/go2rtc.yaml
 ```
 
-You might want to check the following information
+---
 
-## Problem Solving: go2rtc Preview via gphoto2
+## About the `capture` wrapper used to capture images
 
-### About the `capture` wrapper
-
-`capture` is simply a wrapper and accepts exactly the same parameters as |gphoto2`. The only difference is that the wrapper does the following:
+`capture` is simply a wrapper and accepts exactly the same parameters as `gphoto2` / `rpicam-apps` / `fswebcam`. The only difference is that the wrapper does the following:
 
 1. Stops Go2rtc
 
-2. Executes `gphoto2` with the corresponding parameters (if only `%s` is passed, it uses by default `--set-config output=Off --capture-image-and-download --filename=%s`)
+2. Executes `gphoto2` / `rpicam-still` / `fswebcam` with the corresponding parameters.
+
+If only `%s` is passed, it uses by default the following arguments:
+- on `gphoto2`: `--set-config output=Off --capture-image-and-download --filename=%s`
+- on `rpicam-still`: `-n -q 100 -o %s`
+- on `fswebcam`: `--no-banner -d /dev/video0 -r 1280x720 %s`
+
+**Note:**: `%s` gets replaced by Photobooth with the corresponding path and filename.
+
+Run `capture --help` inside your terminal to get information about the usage of the `capture` wrapper.
 
 3. Restarts go2rtc
 
-That means: anything that works with the command gphoto2 will also work with capture, and the word can simply be replaced.
+That means: anything that works with the command gphoto2 / rpicam-still / fswebcam will also work with capture, and the word can simply be replaced.
 
 What’s not covered there is a timing issue related to previewing via go2rtc.
 
-The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems.
+---
+
+## Problem Solving: go2rtc Preview via gphoto2
 
 ### Error: could not claim the USB Device
 
 Another process is using the camera. That's what the log says. Therefore, it can't record.
 
-This issue is generally addressed inside the troubleshooting for gphoto2, but could also happen because of timing problems.
+If you're using `gphoto2` this issue is generally addressed inside the troubleshooting for gphoto2, but could also happen because of timing problems.
+
+The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems. Continue reading on [Delay capture](https://photoboothproject.github.io/faq/go2rtc-troubleshooting/#delay-capture) to know how to fix possible timing issues.
 
 #### Delay capture
 
