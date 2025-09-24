@@ -20,9 +20,9 @@ sudo chmod 755 /etc/go2rtc.yaml
 
 `capture` is simply a wrapper and accepts exactly the same parameters as `gphoto2` / `rpicam-apps` / `fswebcam`. The only difference is that the wrapper does the following:
 
-1. Stops Go2rtc
+**1 Stops Go2rtc**
 
-2. Executes `gphoto2` / `rpicam-still` / `fswebcam` with the corresponding parameters.
+**2 executes `gphoto2` / `rpicam-still` / `fswebcam` with the corresponding parameters.**
 
 If only `%s` is passed, it uses by default the following arguments:
 - on `gphoto2`: `--set-config output=Off --capture-image-and-download --filename=%s`
@@ -33,7 +33,7 @@ If only `%s` is passed, it uses by default the following arguments:
 
 Run `capture --help` inside your terminal to get information about the usage of the `capture` wrapper.
 
-3. Restarts go2rtc
+**3 Restarts go2rtc**
 
 That means: anything that works with the command gphoto2 / rpicam-still / fswebcam will also work with capture, and the word can simply be replaced.
 
