@@ -15,7 +15,7 @@ if (!(
     (!$config['protect']['localhost_admin'] && isset($_SERVER['SERVER_ADDR']) &&  $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
     (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['admin']
 )) {
-    header('location: ' . PathUtility::getPublicPath('admin'));
+    header('location: ' . PathUtility::getPublicPath('login'));
     exit();
 }
 
