@@ -40,7 +40,7 @@ By default the CUPS webinterface can only be accessed via [http://localhost:631]
 
 To remote access CUPS from other clients you need to run the following commands:
 
-```sh
+```
 sudo cupsctl --remote-any
 sudo /etc/init.d/cups restart
 ```
@@ -51,19 +51,19 @@ sudo /etc/init.d/cups restart
 
 If printing fails, make sure a **default printer** is defined. You can check or set it using:
 
-```bash
+```
 lpoptions
-````
+```
 
 If needed, you can **specify the printer** directly in the print command:
 
-```bash
+```
 lp -d <Printer_Name> <file_to_print>
 ```
 
 or using `lpr`:
 
-```bash
+```
 lpr -P <Printer_Name> <file_to_print>
 ```
 
@@ -71,15 +71,11 @@ lpr -P <Printer_Name> <file_to_print>
 
 Sometimes, the web server user (`www-data`) does not have permission to print. You can fix this by adding `www-data` to the `lp` or `lpadmin` group (depending on your system):
 
-```bash
+```
 sudo usermod -aG lp,www-data
 ```
 
-After that, you may need to **restart the web server**:
-
-```bash
-sudo systemctl restart apache2   # or nginx, depending on your setup
-```
+After that, you need to reboot once to apply.
 
 **Tips:**
 
