@@ -27,9 +27,9 @@ GPhoto2 is a software that allows taking images via Photobooth. Full documentati
 7. **Set Capture Target to Memory Card**
    Sometimes, you need to manually set the capture target:
 
-   ```
-   gphoto2 --get-config capturetarget
-   ```
+```
+gphoto2 --get-config capturetarget
+```
 
 Example output:
 
@@ -62,48 +62,48 @@ gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
 
 1. **Test as Current User**
 
-   ```
-   gphoto2 --capture-image-and-download --filename=test.jpg
-   ```
+```
+gphoto2 --capture-image-and-download --filename=test.jpg
+```
 
    * No: Recheck previous steps
    * Yes: Continue testing
 
 2. **Test as `www-data` User**
 
-   ```
-   cd /var/www/html
-   sudo -u www-data -s
-   gphoto2 --capture-image-and-download --filename=test.jpg
-   ```
+```
+cd /var/www/html
+sudo -u www-data -s
+gphoto2 --capture-image-and-download --filename=test.jpg
+```
 
    * Yes: Check Photobooth configuration or reset it
    * No: Fix permissions:
 
-   ```
-   sudo chown -R www-data:www-data /var/www/
-   sudo gpasswd -a www-data plugdev
-   reboot
-   ```
+```
+sudo chown -R www-data:www-data /var/www/
+sudo gpasswd -a www-data plugdev
+reboot
+```
 
 3. **Check for Conflicting Processes**
    Disable `gvfs-gphoto2-volume-monitor` if necessary:
 
-   ```
-   sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
-   reboot
-   ```
+```
+sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+reboot
+```
 
 4. **Update GPhoto2 and libgphoto2**
 
-   ```
-   wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
-   wget -O .env https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
-   chmod +x gphoto2-updater.sh
-   sudo ./gphoto2-updater.sh --development
-   sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
-   reboot
-   ```
+```
+wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
+wget -O .env https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
+chmod +x gphoto2-updater.sh
+sudo ./gphoto2-updater.sh --development
+sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+reboot
+```
 
 ---
 
@@ -122,12 +122,12 @@ gphoto2 --set-config output=Off --wait-event=300ms --capture-image-and-download 
 
 * **EOS 1300D**
 
-  ```
-  gphoto2 --wait-event=300ms --capture-image-and-download --filename=%s
-  ```
+```
+gphoto2 --wait-event=300ms --capture-image-and-download --filename=%s
+```
 
 * **EOS 2000D**
 
-  ```
-  gphoto2 --set-config output=Off --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
-  ```
+```
+gphoto2 --set-config output=Off --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
+```
