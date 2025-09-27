@@ -29,7 +29,7 @@ $configurationService = ConfigurationService::getInstance();
 $logger->debug('Saving Photobooth configuration for go2rtc...');
 
 $config['commands']['preview'] = '';
-$config['commands']['take_picture'] = 'capture --set-config output=Off --trigger-capture --wait-event-and-download=FILEADDED --filename=%s';
+$config['commands']['take_picture'] = 'capture %s';
 
 $config['picture']['cheese_time'] = '0';
 
