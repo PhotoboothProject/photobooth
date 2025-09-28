@@ -860,23 +860,6 @@ function raspberry_permission() {
     if [ -f "$INSTALLFOLDERPATH/config/my.config.inc.php" ]; then
         sed -i '/remotebuzzer/{n;n;s/enabled/usebuttons/}' "$INSTALLFOLDERPATH"/config/my.config.inc.php
     fi
-
-    if [ "$RUN_UPDATE" = false ]; then
-        if [ "$USB_SYNC" = true ] && [ "$DESKTOP_OS" = true ]; then
-            info "### Disabling automount for user $USERNAME."
-            mkdir -p /home/"$USERNAME"/.config/pcmanfm/LXDE-pi/
-            cat >>/home/"$USERNAME"/.config/pcmanfm/LXDE-pi/pcmanfm.conf <<EOF
-[volume]
-mount_on_startup=0
-mount_removable=0
-autorun=0
-EOF
-
-            chown -R "$USERNAME:$USERNAME" /home/"$USERNAME"/.config
-        else
-            info "### lxde is not installed. Can not add automount config for user $USERNAME."
-        fi
-    fi
 }
 
 function set_private_acl() {
@@ -942,7 +925,11 @@ EOF
     if [ "$USB_SYNC" = true ]; then
         info "### Adding polkit rule so www-data can (un)mount drives"
 
-        cat >/etc/polkit-1/localauthority/50-local.d/photobooth.pkla <<EOF
+        PKLA_DIR="/etc/polkit-1/localauthority/50-local.d"
+        RULES_DIR="/etc/polkit-1/rules.d"
+
+        if [[ -d "$PKLA_DIR" ]]; then
+            cat >"$PKLA_DIR/photobooth.pkla" <<EOF
 [Allow www-data to mount drives with udisks2]
 Identity=unix-user:www-data
 Action=org.freedesktop.udisks2.filesystem-mount*;org.freedesktop.udisks2.filesystem-unmount*
@@ -950,6 +937,71 @@ ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
 EOF
+            info "### Polkit pkla rule created."
+            RULE_CREATED=true
+        elif [[ -d "$RULES_DIR" ]]; then
+            cat >"$RULES_DIR/photobooth.rules" <<'EOF'
+polkit.addRule(function(action, subject) {
+    if (subject.isUser && subject.user == "www-data" &&
+        (action.id.indexOf("org.freedesktop.udisks2.filesystem-mount") === 0 ||
+         action.id.indexOf("org.freedesktop.udisks2.filesystem-unmount") === 0)) {
+        return polkit.Result.YES;
+    }
+});
+EOF
+            info "### Polkit rules rule created."
+            RULE_CREATED=true
+        else
+            warn "[WARN]      No polkit directory found. Skipping USB Sync rule creation."
+        fi
+
+        if $RULE_CREATED; then
+            CONFIGURED=false
+
+            if [[ -f "/etc/xdg/pcmanfm/default/pcmanfm.conf" ]]; then
+                PCMAN_CONF="/etc/xdg/pcmanfm/default/pcmanfm.conf"
+                if ! grep -q "^\[volume\]" "$PCMAN_CONF"; then
+                    echo "[volume]" >>"$PCMAN_CONF"
+                fi
+                for key in mount_on_startup mount_removable autorun; do
+                    if grep -q "^$key=" "$PCMAN_CONF"; then
+                        sed -i "s/^$key=.*/$key=0/" "$PCMAN_CONF"
+                    else
+                        echo "$key=0" >>"$PCMAN_CONF"
+                    fi
+                done
+                info "### System PCManFM config adjusted."
+                CONFIGURED=true
+            fi
+
+            USER_CONF="/home/$USERNAME/.config/pcmanfm"
+            PROFILE_FOLDER=""
+            if [[ -d "$USER_CONF" ]]; then
+                PROFILE_FOLDER=$(find "$USER_CONF" -mindepth 1 -maxdepth 1 -type d | head -n 1)
+            fi
+            if [[ -n "$PROFILE_FOLDER" && -f "$PROFILE_FOLDER/pcmanfm.conf" ]]; then
+                PCMAN_CONF="$PROFILE_FOLDER/pcmanfm.conf"
+                if ! grep -q "^\[volume\]" "$PCMAN_CONF"; then
+                    echo "[volume]" >>"$PCMAN_CONF"
+                fi
+                for key in mount_on_startup mount_removable autorun; do
+                    if grep -q "^$key=" "$PCMAN_CONF"; then
+                        sed -i "s/^$key=.*/$key=0/" "$PCMAN_CONF"
+                    else
+                        echo "$key=0" >>"$PCMAN_CONF"
+                    fi
+                done
+                chown "$USERNAME:$USERNAME" "$PCMAN_CONF" 2>/dev/null
+                info "### User PCManFM config adjusted."
+                CONFIGURED=true
+            fi
+        fi
+
+        if $CONFIGURED; then
+            info "### USB Sync Polkit rule created and auto mount disabled."
+        else
+            warn "[WARN]      USB Sync Polkit rule created, but no PCManFM config was found to disable auto mount."
+        fi
     fi
 }
 
@@ -1163,13 +1215,9 @@ if [ "$RUN_UPDATE" = true ]; then
         print_spaces
         # Pi specific setup end
 
-        if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
-            ask_usb_sync
-        else
-            info "### /etc/polkit-1/localauthority/50-local.d not found!"
-            info "### Can not setup your OS to use the USB sync file backup."
-        fi
+        ask_usb_sync
         print_spaces
+
         echo -e "\033[0;33m### While updating your system the v4l2loopback module might get broken (needed for preview from DSLR). "
         echo -e "### Instructions to fix it can be found at https://photoboothproject.github.io/Update-Photobooth"
         ask_yes_no "          Do you like to update your system and install/update needed software? [y/N] " "n"
@@ -1301,12 +1349,7 @@ if [ "$RUNNING_ON_PI" = true ]; then
 fi
 # Pi specific setup end
 
-if [ -d "/etc/polkit-1/localauthority/50-local.d" ]; then
-    ask_usb_sync
-else
-    info "### /etc/polkit-1/localauthority/50-local.d not found!"
-    info "### Can not setup your OS to use the USB sync file backup."
-fi
+ask_usb_sync
 print_spaces
 
 ############################################################
