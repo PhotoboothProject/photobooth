@@ -1197,8 +1197,8 @@ if [ "$RUN_UPDATE" = true ]; then
 
     if [ "$GIT_INSTALL" = true ]; then
         detect_browser
-        if [ "$WAYLAND_ENV" = true ]; then
-            warn "### Kiosk-Mode can't be setup automatically on wayland!"
+        if [[ ! -d /etc/xdg/autostart ]]; then
+            warn "System-wide XDG Autostart folder does not exist: /etc/xdg/autostart"
         elif [ "$WEBBROWSER" = "unknown" ]; then
             warn "### No supported webbrowser found!"
         else
@@ -1329,8 +1329,8 @@ fi
 print_spaces
 
 detect_browser
-if [ "$WAYLAND_ENV" = true ]; then
-    warn "### Kiosk-Mode can't be setup automatically on wayland!"
+if [[ ! -d /etc/xdg/autostart ]]; then
+    warn "System-wide XDG Autostart folder does not exist: /etc/xdg/autostart"
 elif [ "$WEBBROWSER" = "unknown" ]; then
     warn "### No supported webbrowser found!"
 else
