@@ -51,7 +51,7 @@
     "events"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^7.0.0",
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "@tailwindcss/postcss": "^4.1.14",
     "autoprefixer": "^10.4.21",
     "github-markdown-css": "^5.8.1",
