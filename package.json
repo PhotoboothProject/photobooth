@@ -71,7 +71,7 @@
     "sass": "^1.93.2",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",
