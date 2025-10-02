@@ -1009,6 +1009,8 @@ function hide_mouse() {
     if [ "$WAYLAND_ENV" = true ]; then
         if [ -f "/usr/share/icons/PiXflat/cursors/left_ptr" ]; then
             mv /usr/share/icons/PiXflat/cursors/left_ptr /usr/share/icons/PiXflat/cursors/left_ptr.bak
+        elif [ -f "/usr/share/icons/PiXtrix/cursors/left_ptr" ]; then
+            mv /usr/share/icons/PiXtrix/cursors/left_ptr /usr/share/icons/PiXtrix/cursors/left_ptr.bak
         fi
     else
         if [ -f "/etc/xdg/lxsession/LXDE-pi/autostart" ]; then
