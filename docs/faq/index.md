@@ -389,9 +389,21 @@ The flag `--use-gl=egl` might only be needed on a Raspberry Pi to avoid a white 
 
 ## How to hide the mouse cursor, disable screen blanking and screen saver?
 
-**Pi OS bookworm**
+**Note:** Applications like _unclutter_ don't work on Wayland!
 
-Applications like _unclutter_ don't work on Wayland.
+### Pi OS trixie
+
+To hide the mouse cursor we can rename the icon to hide it:
+```
+sudo mv /usr/share/icons/PiXtrix/cursors/left_ptr /usr/share/icons/PiXtrix/cursors/left_ptr.bak
+```
+
+To make the mouse cursor visible again we need to rename it back to it's original name:
+```
+sudo mv /usr/share/icons/PiXtrix/cursors/left_ptr.bak /usr/share/icons/PiXtrix/cursors/left_ptr
+```
+
+### Pi OS bookworm
 
 To hide the mouse cursor we can rename the icon to hide it:
 ```
@@ -403,11 +415,11 @@ To make the mouse cursor visible again we need to rename it back to it's origina
 sudo mv /usr/share/icons/PiXflat/cursors/left_ptr.bak /usr/share/icons/PiXflat/cursors/left_ptr
 ```
 
-**Pi OS Bullseye and prior only**
+### Pi OS Bullseye and X11 environment
 
 There are two options to hide the cursor on Pi OS Bullseye and prior. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
 
-### Solution A
+#### Solution A
 
 To hide the Mouse Cursor we'll use "unclutter":
 
@@ -437,7 +449,7 @@ and add the following lines:
 # Photobooth End
 ```
 
-### Solution B
+#### Solution B
 
 If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.conf` to hide the cursor permanently. Just add `xserver-command=X -nocursor` to the end of the file.
 
