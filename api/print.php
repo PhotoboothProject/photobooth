@@ -189,8 +189,9 @@ if (!file_exists($vars['printFile'])) {
 // print image
 $status = 'ok';
 $linecount = 0;
+$copies = (int)$vars['copies'];
 
-if ($vars['copies'] > 1) {
+if ($copies > 1) 
     $cmd = sprintf(
         $config['commands']['print'],
         $vars['copies'],
@@ -237,7 +238,6 @@ if ($returnValue !== 0) {
 }
 
 if ($status === 'ok') {
-    $copies = (int)$vars['copies'];
     if ($copies > 1) {
         for ($i = 1; $i <= $copies; $i++) {
             $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName'] . '-' . $i);
