@@ -191,7 +191,7 @@ $status = 'ok';
 $linecount = 0;
 $copies = (int)$vars['copies'];
 
-if ($copies > 1) 
+if ($copies > 1) {
     $cmd = sprintf(
         $config['commands']['print'],
         $vars['copies'],
