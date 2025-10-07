@@ -53,6 +53,38 @@
     --stage-color: var(--stage-result-color);
     --stage-background: var(--stage-result-background);
     --stage-background-size: var(--stage-result-scale-background);
+
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: var(--stage-background-image);
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: blur(40px);
+      transform: scale(1.1);
+      z-index: 0;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: var(--stage-background-image);
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: var(--stage-background-size);
+      z-index: 1;
+    }
+
+    > * {
+      position: relative;
+      z-index: 2;
+    }
   }
 
   &-inner {
