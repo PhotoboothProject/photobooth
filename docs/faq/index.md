@@ -578,10 +578,10 @@ or on subfolder installation of Photobooth
 python3 /var/www/html/photobooth/api/cameracontrol.py --help
 ```
 
-If you want to keep your images on the camera you need to use the same `capturetarget` config as when you were using `gphoto CLI` (see "How to keep pictures on my Camera using gphoto2?"). Set the config on the preview command like this:
+If you want to keep your images on the camera you need to use the same `capturetarget` config as when you were using `gphoto CLI` (see "How to keep pictures on my Camera using gphoto2?"). Set the config on the capture command like this:
 
 ```sh
-python3 cameracontrol.py --set-config capturetarget=1
+python3 cameracontrol.py --set-config capturetarget=1 --capture-image-and-download %s
 ```
 
 If you get errors from Photobooth and want to get more information try to run the preview command manually. The script is in Photobooth's `api` folder. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
