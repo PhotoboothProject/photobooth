@@ -145,6 +145,10 @@ const photoboothTools = (function () {
             iconWrap.appendChild(icon);
             button.appendChild(iconWrap);
 
+            if (label === '') {
+                return button;
+            }
+
             const labelWrap = document.createElement('span');
             labelWrap.classList.add(prefix + 'button--label');
             labelWrap.innerHTML = api.getTranslation(label);
@@ -234,6 +238,70 @@ const photoboothTools = (function () {
         });
     };
 
+    api.askCopies = async () => {
+        return new Promise((resolve) => {
+            const element = document.createElement('dialog');
+            element.classList.add('dialog');
+            element.classList.add('rotarygroup');
+
+            const message = document.createElement('div');
+            message.classList.add('dialog-message');
+            message.textContent = api.getTranslation('print:choose_copies');
+            element.appendChild(message);
+
+            const inputSection = document.createElement('div');
+            inputSection.classList.add('buttonbar--print-copies');
+            const minusButton = api.button.create('', 'fa fa-minus', 'default', '');
+            const plusButton = api.button.create('', 'fa fa-plus', 'default', '');
+            const inputText = document.createElement('input');
+            inputText.classList.add('form-input-copies');
+            inputText.value = '1';
+            minusButton.addEventListener('click', () => {
+                const oldValue = parseInt(inputText.value, 10);
+                inputText.value = String(Math.max(1, oldValue - 1));
+            });
+            plusButton.addEventListener('click', () => {
+                const oldValue = parseInt(inputText.value, 10);
+                inputText.value = String(Math.min(config.print.max_multi, oldValue + 1));
+            });
+            inputSection.append(minusButton);
+            inputSection.append(inputText);
+            inputSection.append(plusButton);
+            element.append(inputSection);
+
+            const buttonbar = document.createElement('div');
+            buttonbar.classList.add('dialog-buttonbar');
+            element.appendChild(buttonbar);
+
+            // confirm
+            const confirmButton = api.button.create('print', 'fa fa-check', 'default', 'dialog-');
+            confirmButton.addEventListener('click', () => {
+                element.close(true);
+                element.remove();
+                resolve(inputText.value);
+            });
+            buttonbar.appendChild(confirmButton);
+
+            // cancel
+            const cancelButton = api.button.create('cancel', 'fa fa-times', 'default', 'dialog-');
+            cancelButton.addEventListener('click', () => {
+                element.close(false);
+                element.remove();
+                resolve(false);
+            });
+            buttonbar.appendChild(cancelButton);
+
+            element.addEventListener('cancel', function () {
+                element.close(false);
+                element.remove();
+                resolve(false);
+            });
+
+            document.body.append(element);
+            element.showModal();
+        });
+    };
+
     api.reloadPage = function () {
         window.location.reload();
     };
@@ -282,7 +350,7 @@ const photoboothTools = (function () {
         }, to);
     };
 
-    api.printImage = function (imageSrc, cb) {
+    api.printImage = function (imageSrc, copies, cb) {
         if (api.isVideoFile(imageSrc)) {
             api.console.log('ERROR: An error occurred: attempt to print non printable file.');
             api.overlay.showError(api.getTranslation('no_printing'));
@@ -299,7 +367,8 @@ const photoboothTools = (function () {
                 method: 'GET',
                 url: environment.publicFolders.api + '/print.php',
                 data: {
-                    filename: imageSrc
+                    filename: imageSrc,
+                    copies: copies
                 },
                 success: (data) => {
                     api.console.log('Picture processed: ', data);

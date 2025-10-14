@@ -147,7 +147,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     isButton: true,
                     html: '<i class="' + config.icons.print + '"></i>',
 
-                    onClick: (event, el, pswp) => {
+                    onClick: async (event, el, pswp) => {
                         event.preventDefault();
                         event.stopPropagation();
 
@@ -156,12 +156,16 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                         } else {
                             const img = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
 
-                            photoboothTools.printImage(img, () => {
-                                if (typeof remoteBuzzerClient !== 'undefined') {
-                                    remoteBuzzerClient.inProgress(false);
-                                }
-                                pswp.close();
-                            });
+                            const copies = config.print.max_multi === 1 ? 1 : await photoboothTools.askCopies();
+
+                            if (copies && !isNaN(copies)) {
+                                photoboothTools.printImage(img, copies, () => {
+                                    if (typeof remoteBuzzerClient !== 'undefined') {
+                                        remoteBuzzerClient.inProgress(false);
+                                    }
+                                    pswp.close();
+                                });
+                            }
                         }
                     }
                 });

@@ -1530,6 +1530,17 @@ return [
             'range_step' => 500,
             'unit' => 'milliseconds',
         ],
+        'max_multiple_prints' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['print']['max_multi'],
+            'name' => 'print[max_multi]',
+            'value' => $config['print']['max_multi'],
+            'range_min' => 1,
+            'range_max' => 10,
+            'range_step' => 1,
+            'unit' => 'empty',
+        ],
         'print_limit' => [
             'view' => 'expert',
             'type' => 'number',
