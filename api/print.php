@@ -17,6 +17,7 @@ header('Content-Type: application/json');
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 $processor = null;
+$linecount = 0;
 $data = [];
 
 try {
@@ -33,7 +34,7 @@ try {
     $imageHandler->debugLevel = $config['dev']['loglevel'];
     $vars['randomName'] = $imageHandler->createNewFilename('random');
     $vars['fileName'] = $_GET['filename'];
-    $vars['copies'] = $_GET['copies'];
+    (int)$vars['copies'] = $_GET['copies'];
     $vars['uniqueName'] = substr($vars['fileName'], 0, -4) . '-' . $vars['randomName'];
     $vars['sourceFile'] = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $vars['fileName'];
     $vars['printFile'] = FolderEnum::PRINT->absolute() . DIRECTORY_SEPARATOR . $vars['uniqueName'];
@@ -41,6 +42,23 @@ try {
     // exit with error if file does not exist
     if (!file_exists($vars['sourceFile'])) {
         throw new \Exception('File ' . $vars['fileName'] . ' not found.');
+    }
+
+    if ($config['print']['limit'] > 0) {
+        $linecount = $printManager->getPrintCountFromDB();
+        $linecount = $linecount ? $linecount : 0;
+
+        $limit = $config['print']['limit'];
+        $newCount = $linecount + $copies;
+
+        $nextThreshold = ceil($linecount / $limit) * $limit;
+        if ($nextThreshold == 0) {
+            $nextThreshold = $limit;
+        }
+
+        if ($newCount > $nextThreshold) {
+            throw new \Exception('Unable to print ' . $copies . ' copies');
+        }
     }
 } catch (\Exception $e) {
     // Handle the exception
@@ -188,10 +206,8 @@ if (!file_exists($vars['printFile'])) {
 
 // print image
 $status = 'ok';
-$linecount = 0;
-$copies = (int)$vars['copies'];
 
-if ($copies > 1) {
+if ($config['print']['max_multi'] > 1) {
     $cmd = sprintf(
         $config['commands']['print'],
         $vars['copies'],
@@ -238,8 +254,8 @@ if ($returnValue !== 0) {
 }
 
 if ($status === 'ok') {
-    if ($copies > 1) {
-        for ($i = 1; $i <= $copies; $i++) {
+    if ($vars['copies'] > 1) {
+        for ($i = 1; $i <= $vars['copies']; $i++) {
             $printManager->addToPrintDb($vars['fileName'], $vars['uniqueName'] . '-' . $i);
         }
     } else {
