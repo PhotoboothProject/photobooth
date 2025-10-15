@@ -163,7 +163,6 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                                     if (typeof remoteBuzzerClient !== 'undefined') {
                                         remoteBuzzerClient.inProgress(false);
                                     }
-                                    pswp.close();
                                 });
                             }
                         }
