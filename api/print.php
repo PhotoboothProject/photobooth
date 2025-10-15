@@ -49,7 +49,7 @@ try {
         $linecount = $linecount ? $linecount : 0;
 
         $limit = $config['print']['limit'];
-        $newCount = $linecount + $copies;
+        $newCount = $linecount + $vars['copies'];
 
         $nextThreshold = ceil($linecount / $limit) * $limit;
         if ($nextThreshold == 0) {
@@ -57,7 +57,7 @@ try {
         }
 
         if ($newCount > $nextThreshold) {
-            throw new \Exception('Unable to print ' . $copies . ' copies');
+            throw new \Exception('Unable to print ' . $vars['copies'] . ' copies');
         }
     }
 } catch (\Exception $e) {
