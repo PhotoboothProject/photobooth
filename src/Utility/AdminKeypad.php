@@ -38,7 +38,7 @@ class AdminKeypad
         return implode(PHP_EOL, $content);
     }
 
-    protected static function renderKey(int|string $key = null): string
+    protected static function renderKey(null|int|string $key = null): string
     {
         $containerClass = 'keypad_key peer flex items-center justify-center p-2 hover:text-brand-1 transition-all';
         $keyClass = '
