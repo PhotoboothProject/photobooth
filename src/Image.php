@@ -485,7 +485,7 @@ class Image
     /**
      * Resize an image based on the maximum dimensions.
      */
-    public function resizeImage(GdImage $image, int $maxWidth, int $maxHeight = null): GdImage|false
+    public function resizeImage(GdImage $image, int $maxWidth, ?int $maxHeight = null): GdImage|false
     {
         $maxHeight = $maxHeight ?? $maxWidth;
         try {
@@ -580,7 +580,7 @@ class Image
     /**
      * Resize and crop an image by center.
      */
-    public function resizeCropImage(GdImage $source_file, int $maxWidth, int $maxHeight = null): GdImage
+    public function resizeCropImage(GdImage $source_file, int $maxWidth, ?int $maxHeight = null): GdImage
     {
         $maxHeight = $maxHeight ?? $maxWidth;
         try {

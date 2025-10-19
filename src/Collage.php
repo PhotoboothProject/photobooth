@@ -343,7 +343,7 @@ class Collage
         return $pictureOptions;
     }
 
-    public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, CollageConfig $c = null): bool
+    public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, ?CollageConfig $c = null): bool
     {
         if ($c === null) {
             $c = CollageConfigFactory::fromConfig($config);
