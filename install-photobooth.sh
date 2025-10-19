@@ -36,7 +36,7 @@ CHROME_DEFAULT_FLAGS="--noerrdialogs --disable-infobars --disable-features=Trans
 AUTOSTART_FILE=""
 DESKTOP_OS=true
 WAYLAND_ENV=$(pgrep wayfire > /dev/null || pgrep labwc > /dev/null && echo true || echo false)
-PHP_VERSION="8.3"
+PHP_VERSION="8.4"
 
 # Update
 RUN_UPDATE=false
@@ -169,7 +169,7 @@ Usage: sudo bash install-photobooth.sh -u=<YourUsername> [-b=<stable4:dev:packag
                                     By default, latest development verison (dev) will be installed.
                                     package will install latest Release from zip.
 
-    -p,  -php,        --php         Choose the PHP version to install (Default = 8.3)
+    -p,  -php,        --php         Choose the PHP version to install (Default = 8.4)
 
     -r,  -raspberry,  --raspberry   Skip Pi detection and add Pi specific adjustments.
                                     Note: only to use on Raspberry Pi OS!
@@ -499,6 +499,34 @@ function check_python() {
     fi
 }
 
+function set_php_version_apache() {
+    local version="$1"
+
+    if [[ -z "$version" ]]; then
+        error "No PHP version provided." >&2
+        return 1
+    fi
+
+    a2dismod -f php* >/dev/null 2>&1 || true
+
+    if a2enmod "php${version}"; then
+        if command -v systemctl >/dev/null 2>&1; then
+            if systemctl is-active --quiet apache2; then
+                systemctl reload apache2
+            else
+                systemctl restart apache2
+            fi
+            info "### Apache Webserver is now configured to use PHP ${version}."
+        else
+            warn "Please restart Apache or reboot your server to use PHP ${version}."
+        fi
+        return 0
+    else
+        error "Could not enable php${version} for Apache" >&2
+        return 1
+    fi
+}
+
 function common_software() {
     info "### Updating the system"
     apt-get -qq update
@@ -562,6 +590,13 @@ function common_software() {
             install_pkg "$package"
         fi
     done
+
+    if [ "$WEBSERVER" == "apache" ]; then
+        if ! set_php_version_apache "$PHP_VERSION"; then
+            error "ERROR: Failed to setup PHP $PHP_VERSION for Apache Webserver!"
+            exit 1
+        fi
+    fi
 
     if [ "$NEEDS_NODEJS_CHECK" = true ]; then
         check_nodejs
@@ -1115,7 +1150,7 @@ function commit_git_changes() {
     info "### Backup done to branch: $BACKUPBRANCH"
 }
 
-detect_photobooth_install() {
+function detect_photobooth_install() {
     for path in "${PHOTOBOOTH_PATH[@]}"; do
         info "### Checking for install at ${path}"
         if [ "$PHOTOBOOTH_FOUND" = false ]; then
