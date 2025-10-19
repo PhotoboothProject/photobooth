@@ -541,7 +541,7 @@ function common_software() {
         info "### No source lists available."
     else
         if [[ "$OS" == "jammy" ]]; then
-            echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted" >>/etc/apt/sources.lst
+            echo "deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted" >>/etc/apt/sources.list
         fi
         add-apt-repository ppa:ondrej/php -y
         if apt-get -qq update 2>&1 | grep -q "does not have a Release file"; then
