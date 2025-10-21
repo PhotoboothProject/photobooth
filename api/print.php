@@ -226,7 +226,6 @@ exec($cmd, $output, $returnValue);
 
 if ($returnValue !== 0) {
     $status = 'error';
-    $errorMessage = implode("\n", $output);
 
     switch ($returnValue) {
         case 1:
@@ -249,9 +248,13 @@ if ($returnValue !== 0) {
             $error = "Unknown error (exit code $returnValue).";
     }
 
-    $data['error'] = $error;
     $logger->error($error);
+    $data['error'] = $error;
 }
+
+$logger->debug('Print command: ' . $cmd);
+$logger->debug('Print command output: ' . $output);
+$logger->debug('Return value: ' . $returnValue);
 
 if ($status === 'ok') {
     if ($vars['copies'] > 1) {
@@ -278,9 +281,6 @@ if ($status === 'ok') {
 
 $data['status'] = $status;
 $data['count'] = $linecount;
-$data['msg'] = $cmd;
-$data['returnValue'] = $returnValue;
-$data['output'] = $output;
 
 $logger->debug('data', $data);
 echo json_encode($data);
