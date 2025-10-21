@@ -107,7 +107,7 @@ function read_csv(string $path_to_csv_file, array &$result): bool
         return false;
     }
 
-    while (false !== ($data = fgetcsv($handle, null, ','))) {
+    while (false !== ($data = fgetcsv($handle, null, ',', '\\'))) {
         $result[] = $data;
     }
 
