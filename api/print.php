@@ -253,7 +253,7 @@ if ($returnValue !== 0) {
 }
 
 $logger->debug('Print command: ' . $cmd);
-$logger->debug('Print command output: ' . $output);
+$logger->debug($output);
 $logger->debug('Return value: ' . $returnValue);
 
 if ($status === 'ok') {
