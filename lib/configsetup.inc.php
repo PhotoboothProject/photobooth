@@ -3273,6 +3273,13 @@ return [
             'name' => 'commands[take_picture]',
             'value' => htmlentities($config['commands']['take_picture'] ?? ''),
         ],
+        'take_collage_cmd' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['commands']['take_collage'],
+            'name' => 'commands[take_collage]',
+            'value' => htmlentities($config['commands']['take_collage'] ?? ''),
+        ],
         'pre_photo_cmd' => [
             'view' => 'expert',
             'type' => 'input',
