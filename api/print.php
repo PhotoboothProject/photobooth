@@ -252,8 +252,13 @@ if ($returnValue !== 0) {
     $data['error'] = $error;
 }
 
+$outputMessage = implode("\n", (array) ($output));
+if (trim($outputMessage) === '') {
+    $outputMessage = '(no output)';
+}
+
 $logger->debug('Print command: ' . $cmd);
-$logger->debug($output);
+$logger->debug('Print command output: ' . $outputMessage);
 $logger->debug('Return value: ' . $returnValue);
 
 if ($status === 'ok') {
