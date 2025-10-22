@@ -88,6 +88,8 @@ try {
     } else {
         if ($_POST['style'] === 'custom') {
             $captureHandler->captureCmd = $config['commands']['take_custom'];
+        } elseif ($_POST['style'] === 'collage' && !empty($config['commands']['take_collage'])) {
+            $captureHandler->captureCmd = $config['commands']['take_collage'];
         } else {
             $captureHandler->captureCmd = $config['commands']['take_picture'];
         }

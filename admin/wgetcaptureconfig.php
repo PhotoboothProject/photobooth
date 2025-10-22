@@ -30,6 +30,7 @@ $logger->debug('Saving Photobooth configuration for go2rtc...');
 
 $config['commands']['preview'] = '';
 $config['commands']['take_picture'] = 'wget -O %s http://' . Environment::getIp() . ':1984/api/frame.jpeg?src=photobooth';
+$config['commands']['take_collage'] = 'wget -O %s http://' . Environment::getIp() . ':1984/api/frame.jpeg?src=photobooth';
 
 $config['picture']['cheese_time'] = '0';
 

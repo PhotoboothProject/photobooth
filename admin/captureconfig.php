@@ -30,6 +30,7 @@ $logger->debug('Saving Photobooth configuration for go2rtc...');
 
 $config['commands']['preview'] = '';
 $config['commands']['take_picture'] = 'capture %s';
+$config['commands']['take_collage'] = 'capture %s';
 
 $config['picture']['cheese_time'] = '0';
 

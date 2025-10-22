@@ -13,6 +13,7 @@ final class CommandsConfiguration
         $commands = [
             'windows' => [
                 'take_picture'  => 'digicamcontrol\CameraControlCmd.exe /capture /filename %s',
+                'take_collage'  => '',
                 'take_video'    => '',
                 'take_custom'   => '',
                 'print'         => 'rundll32 C:\WINDOWS\system32\shimgvw.dll,ImageView_PrintTo %s Printer_Name',
@@ -27,6 +28,7 @@ final class CommandsConfiguration
             ],
             'linux' => [
                 'take_picture'  => 'gphoto2 --capture-image-and-download --filename=%s',
+                'take_collage'  => '',
                 'take_video'    => 'python3 cameracontrol.py -v %s --vlen 3 --vframes 4',
                 'take_custom'   => 'python3 cameracontrol.py --chromaImage=/var/www/html/resources/img/bg.jpg --chromaColor 00ff00 --chromaSensitivity 0.4 --chromaBlend 0.1 --capture-image-and-download %s',
                 'print'         => 'lp -o landscape -o fit-to-page %s',
@@ -55,6 +57,7 @@ final class CommandsConfiguration
             ->ignoreExtraKeys()
             ->children()
                 ->scalarNode('take_picture')->defaultValue($defaults['take_picture'])->end()
+                ->scalarNode('take_collage')->defaultValue($defaults['take_collage'])->end()
                 ->scalarNode('take_custom')->defaultValue($defaults['take_custom'])->end()
                 ->scalarNode('take_video')->defaultValue($defaults['take_video'])->end()
                 ->scalarNode('print')->defaultValue($defaults['print'])->end()
