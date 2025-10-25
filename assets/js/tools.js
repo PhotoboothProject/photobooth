@@ -400,7 +400,7 @@ const photoboothTools = (function () {
                     }
                 },
                 error: (jqXHR, textStatus) => {
-                    api.console.log('ERROR: An error occurred: ', textStatus);
+                    api.console.log('ERROR: Print failed: ', textStatus);
                     api.overlay.showError(api.getTranslation('error'));
                     api.resetPrintErrorMessage(cb, notificationTimeout);
                 }
