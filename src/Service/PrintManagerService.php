@@ -46,7 +46,7 @@ class PrintManagerService
             if (!$handle) {
                 throw new \Exception('Failed to open print database.');
             }
-            if (fputcsv($handle, $csvData) === false) {
+            if (fputcsv($handle, $csvData, ',', '"', '\\') === false) {
                 throw new \Exception('Failed to write to print database.');
             }
             fclose($handle);
