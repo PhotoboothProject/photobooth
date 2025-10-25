@@ -58,8 +58,10 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
     </div>
 <?php endif; ?>
 <?php
+$privateStageStart = PathUtility::getAbsolutePath('private/components/stage.start.php');
+$stageStart = PathUtility::getAbsolutePath('template/components/stage.start.php');
 
-include PathUtility::getAbsolutePath('template/components/stage.start.php');
+include file_exists($privateStageStart) ? $privateStageStart : $stageStart;
 if (!$config['ui']['selfie_mode']) {
     include PathUtility::getAbsolutePath('template/components/stage.loader.php');
     include PathUtility::getAbsolutePath('template/components/stage.results.php');
