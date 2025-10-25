@@ -34,7 +34,7 @@ try {
     $imageHandler->debugLevel = $config['dev']['loglevel'];
     $vars['randomName'] = $imageHandler->createNewFilename('random');
     $vars['fileName'] = $_GET['filename'];
-    (int)$vars['copies'] = $_GET['copies'];
+    $vars['copies'] = (int) $_GET['copies'];
     $vars['uniqueName'] = substr($vars['fileName'], 0, -4) . '-' . $vars['randomName'];
     $vars['sourceFile'] = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $vars['fileName'];
     $vars['printFile'] = FolderEnum::PRINT->absolute() . DIRECTORY_SEPARATOR . $vars['uniqueName'];
