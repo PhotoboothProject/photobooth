@@ -1365,7 +1365,7 @@ return [
         'preview_url' => [
             'type' => 'input',
             'name' => 'preview[url]',
-            'placeholder' => 'url(http://localhost:8081)',
+            'placeholder' => 'http://localhost:8081',
             'value' => htmlentities($config['preview']['url'] ?? ''),
         ],
         'preview_url_delay' => [

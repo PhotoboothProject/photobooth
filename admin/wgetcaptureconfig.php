@@ -34,7 +34,7 @@ $config['commands']['take_picture'] = 'wget -O %s http://' . Environment::getIp(
 $config['picture']['cheese_time'] = '0';
 
 $config['preview']['mode'] = 'url';
-$config['preview']['url'] = 'url("http://' . Environment::getIp() . ':1984/api/stream.mjpeg?src=photobooth")';
+$config['preview']['url'] = 'http://' . Environment::getIp() . ':1984/api/stream.mjpeg?src=photobooth';
 $config['preview']['camTakesPic'] = false;
 
 try {

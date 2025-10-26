@@ -96,7 +96,7 @@ const photoboothPreviewTest = (function () {
         if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
             photoboothPreview.stopVideo();
         } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            previewIpcam.removeClass('streaming');
+            previewIpcam.attr('src', '');
             previewIpcam.hide();
         }
 
