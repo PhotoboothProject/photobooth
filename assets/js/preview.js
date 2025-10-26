@@ -1,5 +1,22 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals photoBooth photoboothTools */
+
+function addCacheBustingParam(url) {
+    const timestamp = new Date().getTime();
+
+    if (url.includes('?')) {
+        return `${url}&t=${timestamp}`;
+    }
+
+    return `${url}?t=${timestamp}`;
+}
+
+function getRootProperty(property) {
+    const root = document.documentElement;
+    const style = getComputedStyle(root);
+    return style.getPropertyValue(property).trim();
+}
+
 const photoboothPreview = (function () {
     // vars
     const CameraDisplayMode = {
@@ -163,8 +180,8 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview at countdown from URL.');
                     setTimeout(function () {
+                        url.attr('src', addCacheBustingParam(getRootProperty('--background-preview')));
                         url.show();
-                        url.addClass('streaming');
                     }, config.preview.url_delay);
                 }
                 break;
@@ -175,8 +192,8 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview from URL.');
                     setTimeout(function () {
+                        url.attr('src', addCacheBustingParam(getRootProperty('--background-preview')));
                         url.show();
-                        url.addClass('streaming');
                     }, config.preview.url_delay);
                 }
                 break;
@@ -201,8 +218,8 @@ const photoboothPreview = (function () {
             api.stream.getTracks()[0].stop();
             api.stream = null;
         }
-        url.removeClass('streaming');
         url.hide();
+        url.attr('src', '');
         video.hide();
         pictureFrame.hide();
         collageFrame.hide();
