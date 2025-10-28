@@ -161,6 +161,11 @@ class ConfigurationService
             $config['preview']['mode'] = 'device_cam';
         }
 
+        // Migrate Preview URL
+        if (isset($config['preview']['url']) && substr($config['preview']['url'], 0, 4) === 'url(' && substr($config['preview']['url'], -1) === ')') {
+            $config['preview']['url'] = trim(substr($config['preview']['url'], 4, -1), '"\'');
+        }
+
         return $config;
     }
 
