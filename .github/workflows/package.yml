@@ -1,6 +1,11 @@
 name: Build and upload package
 
 on:
+  push:
+    branches:
+      - dev
+    paths:
+      - '.github/workflows/package.yml'
   workflow_dispatch:
 
 jobs:
