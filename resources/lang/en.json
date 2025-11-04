@@ -735,6 +735,8 @@
   "pictures:picture_polaroid_rotation": "Polaroid picture rotation",
   "pictures:picture_preserve_exif_data": "Preserve EXIF data",
   "pictures:picture_rotation": "Rotate photo after taking (in degrees)",
+  "pictures:picture_take_frame": "Take picture with frame",
+  "pictures:picture_textonpicture_enabled": "Text on picture",
   "pictures:picture_rembg_enabled": "Remove background",
   "pictures:picture_rembg_background": "Background image",
   "pictures:picture_rembg_model": "AI model",

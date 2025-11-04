@@ -681,6 +681,8 @@
   "pictures:picture_polaroid_rotation": "Polaroid Bild-Rotation",
   "pictures:picture_preserve_exif_data": "Exif-Daten erhalten",
   "pictures:picture_rotation": "Foto nach der Aufnahme drehen (in Grad)",
+  "pictures:picture_take_frame": "Bild mit Rahmen aufnehmen",
+  "pictures:picture_textonpicture_enabled": "Text auf Bild",
   "pictures:picture_rembg_enabled": "Hintergrund entfernen",
   "pictures:picture_rembg_background": "Hintergrundbild",
   "pictures:picture_rembg_model": "KI-Modell",
