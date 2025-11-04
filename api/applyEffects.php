@@ -277,9 +277,22 @@ try {
             $backgroundPath = $config['picture']['rembg_background'];
             $backgroundPath = PathUtility::getAbsolutePath(ltrim($backgroundPath, '/'));
             if (!empty($backgroundPath) && file_exists($backgroundPath)) {
+                $venvPath = PathUtility::getAbsolutePath('scripts/rembg_venv/bin/python3');
+                $scriptPath = PathUtility::getAbsolutePath('scripts/rembg_processor.py');
+                
+                // Check if venv exists and use it, otherwise fall back to system python3
+                if (file_exists($venvPath)) {
+                    $pythonCmd = $venvPath;
+                    $logger->debug('Using rembg venv python3', ['path' => $venvPath]);
+                } else {
+                    $pythonCmd = 'python3';
+                    $logger->warning('rembg venv not found, using system python3', ['venv_path' => $venvPath]);
+                }
+                
                 $cmd = sprintf(
-                    'python3 %s "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"',
-                    PathUtility::getAbsolutePath('scripts/rembg_processor.py'),
+                    '%s %s "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"',
+                    $pythonCmd,
+                    $scriptPath,
                     $vars['resultFile'],
                     $backgroundPath,
                     $config['picture']['rembg_model'],
