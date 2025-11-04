@@ -2,6 +2,8 @@
 
 namespace Photobooth\Utility;
 
+use Photobooth\Enum\FolderEnum;
+
 class FontUtility
 {
     public const supportedFileExtensionsProcessing = [
@@ -17,6 +19,21 @@ class FontUtility
         'application/octet-stream',
     ];
 
+    public static function getFontPath(string $font): string
+    {
+        $fontName = basename($font);
+        $privateFontPath = FolderEnum::PRIVATE->absolute() . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $fontName;
+        $fontPath = FolderEnum::RESOURCES->absolute() . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $fontName;
+
+        if (is_readable($privateFontPath)) {
+            return $privateFontPath;
+        } elseif (is_readable($fontPath)) {
+            return $fontPath;
+        }
+
+        return '';
+    }
+
     public static function getFontPreviewImage(
         string $fontPath,
         int $width = 300,
@@ -29,14 +46,14 @@ class FontUtility
         ],
         array $attributes = [],
     ): string {
-        $absoluteFontPath = PathUtility::resolveFilePath($fontPath);
+        $absoluteFontPath = $fontPath ? self::getFontPath($fontPath) : '';
         $lineHeight = (int) round($fontSize * 1.5);
 
         $image = imagecreatetruecolor($width, $height);
         $backgroundColor = (int) imagecolorallocate($image, 255, 255, 255);
         imagefilledrectangle($image, 0, 0, $width - 1, $height - 1, $backgroundColor);
 
-        if (is_readable($absoluteFontPath)) {
+        if ($absoluteFontPath && is_readable($absoluteFontPath)) {
             $textColor = (int) imagecolorallocate($image, 0, 0, 0);
             $x = 10;
             $y = $lineHeight;

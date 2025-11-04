@@ -3,6 +3,7 @@
 namespace Photobooth;
 
 use GdImage;
+use Photobooth\Utility\FontUtility;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\QrCodeUtility;
@@ -750,7 +751,7 @@ class Image
                 $fontPath = $tempFontPath;
                 $isTempFont = true;
             } else {
-                $fontPath = PathUtility::resolveFilePath($this->fontPath);
+                $fontPath = FontUtility::getFontPath($this->fontPath);
             }
 
             // Add first line of text

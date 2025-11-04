@@ -90,16 +90,16 @@ class PathUtility
         }
 
         $absolutePath = self::isAbsolutePath($filePath) ? $filePath : self::getAbsolutePath($filePath);
-        if (file_exists($absolutePath)) {
+        if (is_readable($absolutePath)) {
             return $absolutePath;
         }
 
         $altPath1 = $_SERVER['DOCUMENT_ROOT'] . $filePath;
         $altPath2 = $_SERVER['DOCUMENT_ROOT'] . '/' . $filePath;
 
-        if (file_exists($altPath1)) {
+        if (is_readable($altPath1)) {
             return $altPath1;
-        } elseif (file_exists($altPath2)) {
+        } elseif (is_readable($altPath2)) {
             return $altPath2;
         }
 
