@@ -7,7 +7,7 @@ export LC_ALL=C
 export LANG=C
 
 SCRIPT_NAME="install-photobooth.sh"
-SCRIPT_REMOTE_URL="https://raw.githubusercontent.com/flacoonb/photobooth4/dev/$SCRIPT_NAME"
+SCRIPT_REMOTE_URL="https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/$SCRIPT_NAME"
 SCRIPT_TEMP_FILE="/tmp/$SCRIPT_NAME"
 SCRIPT_ABS_PATH="$(realpath "$0")"
 SCRIPT_ARGS=("$@")
@@ -71,7 +71,6 @@ COMMON_PACKAGES=(
     "php${PHP_VERSION}-zip"
     "php${PHP_VERSION}-mbstring"
     'python3'
-    'python3-pip'
     'rsync'
     'udisks2'
 )
@@ -684,7 +683,7 @@ function add_git_remote() {
         fi
     else
         info "### Adding photoboothproject remote..."
-        sudo -u www-data git remote add photoboothproject https://github.com/flacoonb/photobooth4.git
+        sudo -u www-data git remote add photoboothproject https://github.com/PhotoboothProject/photobooth.git
     fi
 }
 
@@ -731,32 +730,24 @@ function start_git_install() {
     chown www-data:www-data /var/www/.cache
     sudo -u www-data npm install
     sudo -u www-data npm run build
-
-    install_python_packages
-}
-
-function install_python_packages() {
-    info "### Installing Python packages for rembg functionality."
-    sudo -u www-data pip3 install --user rembg onnxruntime
 }
 
 function start_install() {
     info "### Now we are going to install Photobooth."
     if [ "$GIT_INSTALL" = true ]; then
-        sudo -u www-data git clone https://github.com/flacoonb/photobooth4 "$INSTALLFOLDER"
+        sudo -u www-data git clone https://github.com/PhotoboothProject/photobooth "$INSTALLFOLDER"
         cd "$INSTALLFOLDERPATH"
         add_git_remote
         start_git_install
     else
         info "### We are downloading the latest release and extracting it to $INSTALLFOLDERPATH."
-        sudo -u www-data curl -s https://api.github.com/repos/flacoonb/photobooth4/releases/latest |
+        sudo -u www-data curl -s https://api.github.com/repos/PhotoboothProject/photobooth/releases/latest |
             jq '.assets[].browser_download_url | select(endswith(".tar.gz"))' |
             xargs curl -L --output /tmp/photobooth-latest.tar.gz
 
         sudo -u www-data mkdir -p "$INSTALLFOLDERPATH"
         sudo -u www-data tar -xzvf /tmp/photobooth-latest.tar.gz -C "$INSTALLFOLDERPATH"
         cd "$INSTALLFOLDERPATH"
-        install_python_packages
     fi
 }
 
@@ -937,10 +928,6 @@ function general_permissions() {
     info "### Setting permissions."
     chown -R www-data:www-data "$INSTALLFOLDERPATH"/
     chmod 2775 "$INSTALLFOLDERPATH/private"
-
-    info "### Creating backgrounds directory for rembg."
-    mkdir -p "$INSTALLFOLDERPATH/resources/img/backgrounds"
-    chown -R www-data:www-data "$INSTALLFOLDERPATH/resources/img/backgrounds"
 
     if set_private_acl; then
         info "### ACLs successfully applied"
