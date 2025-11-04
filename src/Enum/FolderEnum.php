@@ -20,6 +20,7 @@ enum FolderEnum: string
     case TEMP = 'data/tmp';
     case LANG = 'resources/lang';
     case PRIVATE = 'private';
+    case RESOURCES = 'resources';
     case VAR = 'var';
 
     public function public(): string
@@ -47,6 +48,7 @@ enum FolderEnum: string
             FolderEnum::TEMP => 'tmp',
             FolderEnum::LANG => 'lang',
             FolderEnum::PRIVATE => 'private',
+            FolderEnum::RESOURCES => 'resources',
             FolderEnum::VAR => 'var',
         };
     }
