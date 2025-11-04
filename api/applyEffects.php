@@ -271,6 +271,56 @@ try {
                 throw new \Exception('Failed to copy photo.');
             }
         }
+
+        // Apply rembg if enabled
+        if ($config['picture']['rembg_enabled'] && !$vars['isCollage'] && !$vars['isChroma']) {
+            $backgroundPath = $config['picture']['rembg_background'];
+            $backgroundPath = PathUtility::getAbsolutePath(ltrim($backgroundPath, '/'));
+            if (!empty($backgroundPath) && file_exists($backgroundPath)) {
+                $cmd = sprintf(
+                    'python3 %s "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"',
+                    PathUtility::getAbsolutePath('scripts/rembg_processor.py'),
+                    $vars['resultFile'],
+                    $backgroundPath,
+                    $config['picture']['rembg_model'],
+                    $config['picture']['rembg_alpha_matting'] ? '1' : '0',
+                    $config['picture']['rembg_max_size'],
+                    $vars['resultFile'],
+                    $config['picture']['rembg_alpha_matting_foreground_threshold'],
+                    $config['picture']['rembg_alpha_matting_background_threshold'],
+                    $config['picture']['rembg_alpha_matting_erode_size'],
+                    $config['picture']['rembg_post_processing'] ? '1' : '0'
+                );
+                exec($cmd, $output, $returnValue);
+                if ($returnValue !== 0) {
+                    $logger->error('rembg processing failed', ['cmd' => $cmd, 'output' => $output, 'returnValue' => $returnValue]);
+                    $imageHandler->addErrorData('Warning: rembg processing failed.');
+                } else {
+                    $logger->debug('Background removal applied successfully', ['output' => $output]);
+                    // Recreate thumbnail from processed image
+                    $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
+                    $processedImageResource = $imageHandler->createFromImage($vars['resultFile']);
+                    if ($processedImageResource) {
+                        $thumbResource = $imageHandler->resizeImage($processedImageResource, $thumb_size);
+                        if ($thumbResource instanceof \GdImage) {
+                            $imageHandler->jpegQuality = $config['jpeg_quality']['thumb'];
+                            if (!$imageHandler->saveJpeg($thumbResource, $vars['thumbFile'])) {
+                                $imageHandler->addErrorData('Warning: Failed to recreate thumbnail.');
+                            }
+                        } else {
+                            $imageHandler->addErrorData('Warning: Failed to resize processed thumbnail.');
+                        }
+                        if ($thumbResource instanceof \GdImage) {
+                            unset($thumbResource);
+                        }
+                        unset($processedImageResource);
+                    }
+                }
+            } else {
+                $logger->debug('rembg enabled but no background image set');
+            }
+        }
+
         unset($imageResource);
 
         // insert into database
