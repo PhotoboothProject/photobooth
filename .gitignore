@@ -51,3 +51,6 @@ tools/*/vendor
 **/.DS_Store
 
 /vendor/
+
+# rembg virtual environment
+scripts/rembg_venv/
