@@ -1030,28 +1030,28 @@ return [
     ],
     'magic_greenscreen' => [
         'view' => 'basic',
-        'picture_rembg_enabled' => [
+        'rembg_enabled' => [
             'view' => 'basic',
             'type' => 'checkbox',
-            'name' => 'picture[rembg_enabled]',
-            'value' => $config['picture']['rembg_enabled'],
+            'name' => 'rembg[enabled]',
+            'value' => $config['rembg']['enabled'],
         ],
-        'picture_rembg_background' => [
+        'rembg_background' => [
             'view' => 'basic',
             'type' => 'image',
-            'placeholder' => $defaultConfig['picture']['rembg_background'],
-            'name' => 'picture[rembg_background]',
-            'value' => htmlentities($config['picture']['rembg_background'] ?? ''),
+            'placeholder' => $defaultConfig['rembg']['background'],
+            'name' => 'rembg[background]',
+            'value' => htmlentities($config['rembg']['background'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/background'),
                 PathUtility::getAbsolutePath('private/images/background'),
             ]
         ],
-        'picture_rembg_model' => [
+        'rembg_model' => [
             'view' => 'advanced',
             'type' => 'select',
-            'name' => 'picture[rembg_model]',
-            'placeholder' => $defaultConfig['picture']['rembg_model'],
+            'name' => 'rembg[model]',
+            'placeholder' => $defaultConfig['rembg']['model'],
             'options' => [
                 'u2net' => 'u2net (Standard)',
                 'u2netp' => 'u2netp (schnell)',
@@ -1061,59 +1061,59 @@ return [
                 'isnet_general_use' => 'isnet_general_use (neu)',
                 'isnet_anime' => 'isnet_anime',
             ],
-            'value' => $config['picture']['rembg_model'],
+            'value' => $config['rembg']['model'],
         ],
-        'picture_rembg_alpha_matting' => [
+        'rembg_alpha_matting' => [
             'view' => 'advanced',
             'type' => 'checkbox',
-            'name' => 'picture[rembg_alpha_matting]',
-            'value' => $config['picture']['rembg_alpha_matting'],
+            'name' => 'rembg[alpha_matting]',
+            'value' => $config['rembg']['alpha_matting'],
         ],
-        'picture_rembg_max_size' => [
+        'rembg_max_size' => [
             'view' => 'expert',
             'type' => 'number',
-            'placeholder' => $defaultConfig['picture']['rembg_max_size'],
-            'name' => 'picture[rembg_max_size]',
-            'value' => $config['picture']['rembg_max_size'],
+            'placeholder' => $defaultConfig['rembg']['max_size'],
+            'name' => 'rembg[max_size]',
+            'value' => $config['rembg']['max_size'],
         ],
-        'picture_rembg_alpha_matting_foreground_threshold' => [
+        'rembg_alpha_matting_foreground_threshold' => [
             'view' => 'expert',
             'type' => 'range',
-            'placeholder' => $defaultConfig['picture']['rembg_alpha_matting_foreground_threshold'],
-            'name' => 'picture[rembg_alpha_matting_foreground_threshold]',
-            'value' => $config['picture']['rembg_alpha_matting_foreground_threshold'],
+            'placeholder' => $defaultConfig['rembg']['alpha_matting_foreground_threshold'],
+            'name' => 'rembg[alpha_matting_foreground_threshold]',
+            'value' => $config['rembg']['alpha_matting_foreground_threshold'],
             'range_min' => 0,
             'range_max' => 255,
             'range_step' => 1,
             'unit' => 'empty',
         ],
-        'picture_rembg_alpha_matting_background_threshold' => [
+        'rembg_alpha_matting_background_threshold' => [
             'view' => 'expert',
             'type' => 'range',
-            'placeholder' => $defaultConfig['picture']['rembg_alpha_matting_background_threshold'],
-            'name' => 'picture[rembg_alpha_matting_background_threshold]',
-            'value' => $config['picture']['rembg_alpha_matting_background_threshold'],
+            'placeholder' => $defaultConfig['rembg']['alpha_matting_background_threshold'],
+            'name' => 'rembg[alpha_matting_background_threshold]',
+            'value' => $config['rembg']['alpha_matting_background_threshold'],
             'range_min' => 0,
             'range_max' => 255,
             'range_step' => 1,
             'unit' => 'empty',
         ],
-        'picture_rembg_alpha_matting_erode_size' => [
+        'rembg_alpha_matting_erode_size' => [
             'view' => 'expert',
             'type' => 'range',
-            'placeholder' => $defaultConfig['picture']['rembg_alpha_matting_erode_size'],
-            'name' => 'picture[rembg_alpha_matting_erode_size]',
-            'value' => $config['picture']['rembg_alpha_matting_erode_size'],
+            'placeholder' => $defaultConfig['rembg']['alpha_matting_erode_size'],
+            'name' => 'rembg[alpha_matting_erode_size]',
+            'value' => $config['rembg']['alpha_matting_erode_size'],
             'range_min' => 0,
             'range_max' => 255,
             'range_step' => 1,
             'unit' => 'empty',
         ],
-        'picture_rembg_post_processing' => [
+        'rembg_post_processing' => [
             'view' => 'expert',
             'type' => 'checkbox',
-            'name' => 'picture[rembg_post_processing]',
-            'value' => $config['picture']['rembg_post_processing'],
+            'name' => 'rembg[post_processing]',
+            'value' => $config['rembg']['post_processing'],
         ],
     ],
     'video' => [

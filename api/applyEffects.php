@@ -160,14 +160,14 @@ try {
                 }
 
                 // Apply rembg if enabled
-                if ($config['picture']['rembg_enabled'] && !$vars['isCollage'] && !$vars['isChroma']) {
+                if ($config['rembg']['enabled'] && !$vars['isCollage'] && !$vars['isChroma']) {
                     // Save current image state before rembg processing
                     $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
                     if (!$imageHandler->saveJpeg($imageResource, $vars['resultFile'])) {
                         throw new \Exception('Failed to save image before rembg processing.');
                     }
 
-                    $backgroundPath = $config['picture']['rembg_background'];
+                    $backgroundPath = $config['rembg']['background'];
                     $backgroundPath = PathUtility::getAbsolutePath(ltrim($backgroundPath, '/'));
                     if (!empty($backgroundPath) && file_exists($backgroundPath)) {
                         $venvPath = PathUtility::getAbsolutePath('scripts/rembg_venv/bin/python3');
@@ -188,14 +188,14 @@ try {
                             $scriptPath,
                             $vars['resultFile'],
                             $backgroundPath,
-                            $config['picture']['rembg_model'],
-                            $config['picture']['rembg_alpha_matting'] ? '1' : '0',
-                            $config['picture']['rembg_max_size'],
+                            $config['rembg']['model'],
+                            $config['rembg']['alpha_matting'] ? '1' : '0',
+                            $config['rembg']['max_size'],
                             $vars['resultFile'],
-                            $config['picture']['rembg_alpha_matting_foreground_threshold'],
-                            $config['picture']['rembg_alpha_matting_background_threshold'],
-                            $config['picture']['rembg_alpha_matting_erode_size'],
-                            $config['picture']['rembg_post_processing'] ? '1' : '0'
+                            $config['rembg']['alpha_matting_foreground_threshold'],
+                            $config['rembg']['alpha_matting_background_threshold'],
+                            $config['rembg']['alpha_matting_erode_size'],
+                            $config['rembg']['post_processing'] ? '1' : '0'
                         );
                         exec($cmd, $output, $returnValue);
                         if ($returnValue !== 0) {
