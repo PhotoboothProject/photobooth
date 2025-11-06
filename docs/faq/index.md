@@ -991,3 +991,141 @@ For hassle-free (ssh/sftp-free) upload, you may want to use the integrated image
 -   Replace _"localhost"_ with your IP-Adress.
 -   Same thing can be applied for collage_placeholderpath so a random holder image takes place.
 -   You can specify a diffrent {FrameFolder} for collage frames if needed.
+
+---
+
+## How to use Magic Greenscreen (AI Background Removal)
+
+Magic Greenscreen is a feature that uses AI to automatically remove backgrounds from photos, creating professional-looking images with transparent or custom backgrounds. This feature is powered by the rembg library and requires Python 3.
+
+### Prerequisites
+
+- Python 3.6 or higher
+- Internet connection for initial setup
+- Sufficient disk space (approximately 200MB for the AI model)
+
+### Installation
+
+1. **Download and run the installation script:**
+   ```sh
+   cd /var/www/html/scripts
+   sudo bash install_rembg.sh
+   ```
+
+   This script will:
+   - Check for Python 3 and required packages
+   - Create a virtual environment in `scripts/rembg_venv`
+   - Install rembg and its dependencies (PIL, onnxruntime)
+   - Verify the installation
+
+2. **Alternative manual installation:**
+   If you prefer to install manually:
+   ```sh
+   # Create virtual environment
+   python3 -m venv /var/www/html/scripts/rembg_venv
+
+   # Activate virtual environment
+   source /var/www/html/scripts/rembg_venv/bin/activate
+
+   # Install dependencies
+   pip install rembg pillow onnxruntime
+   ```
+
+### Configuration
+
+1. **Open the Admin Panel:**
+   Navigate to [http://localhost/admin](http://localhost/admin)
+
+2. **Enable Magic Greenscreen:**
+   - Go to the "Magic Greenscreen" section (positioned between "Custom" and "Gallery")
+   - Check "Remove background" to enable the feature
+   - Optionally configure:
+     - **Background image:** Path to a custom background image (leave empty for transparent background)
+     - **AI model:** Choose the AI model (default: u2net)
+     - **Alpha matting:** Enable for better edge quality
+     - **Alpha matting thresholds:** Fine-tune edge detection (advanced users)
+     - **Post-processing:** Enable for improved results
+     - **Max image size:** Limit processing size for performance
+
+3. **Save Configuration:**
+   Click the "Save" button in the admin panel
+
+### Usage
+
+Once enabled, Magic Greenscreen will automatically process photos after they are taken:
+
+1. Take a photo as usual using the photobooth
+2. The AI will automatically remove the background
+3. The processed image will be saved with a transparent or custom background
+4. Both original and processed images are available in the gallery
+
+### Supported Formats
+
+- Input: JPEG, PNG, and other common image formats
+- Output: PNG (for transparency) or JPEG (with custom background)
+
+### Performance Notes
+
+- First processing may take longer as the AI model loads
+- Processing time depends on image size and complexity
+- Recommended max image size: 1024x1024 pixels for optimal performance
+- Processing happens after photo capture and doesn't delay the user experience
+
+### Troubleshooting
+
+#### "rembg virtual environment not found" error
+- Ensure the installation script completed successfully
+- Check that the virtual environment exists: `ls /var/www/html/scripts/rembg_venv`
+- Verify permissions: `sudo chown -R www-data:www-data /var/www/html/scripts/rembg_venv`
+
+#### Processing fails or takes too long
+- Check available disk space
+- Reduce max image size in configuration
+- Verify internet connection (some models may require online access)
+- Check server logs in the debug panel: [http://localhost/admin/debug](http://localhost/admin/debugpanel)
+
+#### Background not removed properly
+- Try a different AI model (u2net, u2netp, u2net_cloth_seg)
+- Enable alpha matting for better edge detection
+- Adjust alpha matting thresholds
+- Ensure good lighting and contrast in the original photo
+
+#### Permission errors
+- Ensure www-data user has access to the scripts directory
+- Run: `sudo chown -R www-data:www-data /var/www/html/scripts`
+
+#### Memory issues
+- Reduce max image size
+- Disable post-processing if memory is limited
+- Consider using a more powerful device
+
+### Advanced Configuration
+
+For advanced users, you can modify the rembg processing parameters:
+
+- **AI Models:**
+  - `u2net`: General purpose (default)
+  - `u2netp`: Portrait optimized
+  - `u2net_cloth_seg`: Clothing segmentation
+  - `silueta`: Simple backgrounds
+  - `isnet`: High quality
+
+- **Alpha Matting:** Improves edge quality around hair and fine details
+- **Post-processing:** Applies additional smoothing and refinement
+
+### File Locations
+
+- Virtual environment: `/var/www/html/scripts/rembg_venv`
+- Installation script: `/var/www/html/scripts/install_rembg.sh`
+- Processed images: `/var/www/html/data/images/` (with background removed)
+
+### Updating
+
+To update rembg to the latest version:
+
+```sh
+source /var/www/html/scripts/rembg_venv/bin/activate
+pip install --upgrade rembg
+```
+
+For additional support, check the Photobooth logs.
