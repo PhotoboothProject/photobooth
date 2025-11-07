@@ -1000,7 +1000,7 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
 
 ### Prerequisites
 
-- Python 3.6 or higher
+- Python: >=3.10, <3.14
 - Internet connection for initial setup
 - Sufficient disk space (approximately 200MB for the AI model)
 
@@ -1066,6 +1066,7 @@ Once enabled, Magic Greenscreen will automatically process photos after they are
 
 ### Performance Notes
 
+- Processing is performed on the CPU, it requires faster hardware to achieve optimal performance (not recommended for Raspberry Pi 4 or older)
 - First processing may take longer as the AI model loads
 - Processing time depends on image size and complexity
 - Recommended max image size: 1024x1024 pixels for optimal performance
