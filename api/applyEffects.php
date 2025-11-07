@@ -6,6 +6,7 @@ require_once '../lib/boot.php';
 
 use Photobooth\Image;
 use Photobooth\Collage;
+use Photobooth\Rembg;
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Processor\ImageProcessor;
@@ -159,62 +160,8 @@ try {
                     }
                 }
 
-                // Apply rembg if enabled
-                if ($config['rembg']['enabled'] && !$vars['isCollage'] && !$vars['isChroma']) {
-                    // Save current image state before rembg processing
-                    $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
-                    if (!$imageHandler->saveJpeg($imageResource, $vars['resultFile'])) {
-                        throw new \Exception('Failed to save image before rembg processing.');
-                    }
-
-                    $backgroundPath = $config['rembg']['background'];
-                    $backgroundPath = PathUtility::getAbsolutePath(ltrim($backgroundPath, '/'));
-                    if (!empty($backgroundPath) && file_exists($backgroundPath)) {
-                        $venvPath = PathUtility::getAbsolutePath('scripts/rembg_venv/bin/python3');
-                        $scriptPath = PathUtility::getAbsolutePath('scripts/rembg_processor.py');
-
-                        // Check if venv exists and use it, otherwise fall back to system python3
-                        if (file_exists($venvPath)) {
-                            $pythonCmd = $venvPath;
-                            $logger->debug('Using rembg venv python3', ['path' => $venvPath]);
-                        } else {
-                            $pythonCmd = 'python3';
-                            $logger->info('rembg venv not found, using system python3', ['venv_path' => $venvPath]);
-                        }
-
-                        $cmd = sprintf(
-                            '%s %s "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"',
-                            $pythonCmd,
-                            $scriptPath,
-                            $vars['resultFile'],
-                            $backgroundPath,
-                            $config['rembg']['model'],
-                            $config['rembg']['alpha_matting'] ? '1' : '0',
-                            $config['rembg']['max_size'],
-                            $vars['resultFile'],
-                            $config['rembg']['alpha_matting_foreground_threshold'],
-                            $config['rembg']['alpha_matting_background_threshold'],
-                            $config['rembg']['alpha_matting_erode_size'],
-                            $config['rembg']['post_processing'] ? '1' : '0'
-                        );
-                        exec($cmd, $output, $returnValue);
-                        if ($returnValue !== 0) {
-                            $logger->error('rembg processing failed', ['cmd' => $cmd, 'output' => $output, 'returnValue' => $returnValue]);
-                            $imageHandler->addErrorData('Warning: rembg processing failed.');
-                        } else {
-                            $logger->debug('Background removal applied successfully', ['output' => $output]);
-                            // Reload image resource after rembg processing
-                            $imageResource = $imageHandler->createFromImage($vars['resultFile']);
-                            if (!$imageResource) {
-                                throw new \Exception('Error reloading image resource after rembg processing.');
-                            }
-                            $imageHandler->imageModified = true;
-                        }
-                    } else {
-                        $logger->debug('rembg enabled but no background image set');
-                    }
-                }
-
+                // Apply rembg
+                list($imageHandler, $imageResource) = Rembg::process($imageHandler, $vars, $config['rembg'], $imageResource, $logger);
                 if ($config['picture']['polaroid_effect']) {
                     $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
                     $imageResource = $imageHandler->effectPolaroid($imageResource);
