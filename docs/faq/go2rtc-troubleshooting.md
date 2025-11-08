@@ -102,3 +102,26 @@ Another alternative, without starting or stopping the preview, is to pull a fram
 Open [http://localhost/admin/wgetcaptureconfig.php](http://localhost/admin/wgetcaptureconfig.php) to apply the adjusted configuration.
 
 Then try again.
+
+### Camera specific notes
+
+#### Canon EOS 500D
+
+- Camera Mode must be set to **P**
+
+If having trouble accessing the preview please adjust the go2rtc.yaml (`sudo nano /etc/go2rtc.yaml`):
+
+```
+streams:
+  photobooth:
+    - "exec:gphoto2 --capture-movie --stdout#input=mjpeg#video=h264#encoder=h264_v4l2m2m#fps=25#bitrate=2M"
+
+log:
+  exec: trace
+```
+
+Now restart go2rtc:
+```
+sudo systemctl stop go2rtc
+sudo systemctl start go2rtc
+```
