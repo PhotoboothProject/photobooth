@@ -374,7 +374,7 @@
   "manual:frontpage:button_buzzer_message": "Définit un texte personnalisé visible au lieu des boutons de déclencheur si ceux-ci sont cachés.",
   "manual:frontpage:button_force_buzzer": "Si activé, les boutons de prise de vue et de collage disparaîtront. Votre texte personnalisé sera visible à la place.",
   "manual:frontpage:event_enabled": "Si activé, vous pouvez définir un texte et choisir entre différents symboles qui sont visibles sur la page de démarrage.",
-  "manual:frontpage:event_symbol": "Choisissez un symbole qui s'affiche entre le texte entré.",
+  "manual:frontpage:event_symbol": "Choisissez un symbole qui s'affiche entre le texte de gauche et de droite.",
   "manual:frontpage:event_textLeft": "Entrez le texte lisible sur le côté gauche du symbole choisi.",
   "manual:frontpage:event_textRight": "Entrez le texte lisible sur le côté droit du symbole choisi.",
   "manual:frontpage:logo_enabled": "Si activé, le logo sera affiché sur la page principale.",
