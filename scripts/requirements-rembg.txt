@@ -1,0 +1,5 @@
+rembg
+pillow
+flask
+filetype
+watchdog
