@@ -20,11 +20,13 @@ function handleDebugPanel(string $content, array $config): string|false
             return readFileContents(PathUtility::getAbsolutePath('var/log/synctodrive.log'));
         case 'nav-remotestoragelog':
             return readFileContents(PathUtility::getAbsolutePath('var/log/remotestorage.log'));
+        case 'nav-rembglog':
+            return (string)shell_exec('journalctl -u rembg.service -n 50 --no-pager');
         case 'nav-myconfig':
-            echo implode("\n", showConfig($config));
+            echo implode('
+', showConfig($config));
             return json_encode('');
         case 'nav-serverprocesses':
-            return (string)shell_exec('/bin/ps -ef');
         case 'nav-bootconfig':
             return readFileContents('/boot/config.txt');
         case 'nav-installlog':

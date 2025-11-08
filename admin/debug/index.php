@@ -61,6 +61,7 @@ echo getNavItemDebug('myconfig');
 echo getNavItemDebug('remotebuzzerlog');
 echo getNavItemDebug('synctodrivelog');
 echo getNavItemDebug('remotestoragelog');
+echo getNavItemDebug('rembglog');
 echo getNavItemDebug('devlog');
 if (Environment::isLinux()) {
     echo getNavItemDebug('serverprocesses');

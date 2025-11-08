@@ -163,7 +163,7 @@ echo_success "pip upgraded to latest version"
 # Install rembg and dependencies
 echo_step "Installing rembg and dependencies..."
 echo_info "This may take a few minutes, especially on Raspberry Pi..."
-python3 -m pip install rembg pillow onnxruntime &
+python3 -m pip install -r "$SCRIPT_DIR/requirements-rembg.txt" &
 spinner $!
 echo_success "rembg and dependencies installed"
 
@@ -171,8 +171,7 @@ echo_success "rembg and dependencies installed"
 echo_step "Verifying installation..."
 python3 -c "import rembg; print('rembg version:', rembg.__version__)" 2>/dev/null && echo_success "rembg: $(python3 -c "import rembg; print(rembg.__version__)")" || echo_error "rembg verification failed"
 python3 -c "import PIL; print('PIL version:', PIL.__version__)" 2>/dev/null && echo_success "PIL: $(python3 -c "import PIL; print(PIL.__version__)")" || echo_error "PIL verification failed"
-python3 -c "import onnxruntime; print('onnxruntime version:', onnxruntime.__version__)" 2>/dev/null && echo_success "onnxruntime: $(python3 -c "import onnxruntime; print(onnxruntime.__version__)")" || echo_error "onnxruntime verification failed"
-
+python3 -c "import flask; print('flask version:', flask.__version__)" 2>/dev/null && echo_success "flask: $(python3 -c "import flask; print(flask.__version__)")" || echo_error "flask verification failed"
 echo ""
 echo_header "Installation completed successfully!"
 echo_info "Virtual environment: $VENV_DIR"
