@@ -1019,15 +1019,9 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
    - Verify the installation
 
 2. **Alternative manual installation:**
-   If you prefer to install manually:
    ```sh
-   # Create virtual environment
    python3 -m venv /var/www/html/scripts/rembg_venv
-
-   # Activate virtual environment
    source /var/www/html/scripts/rembg_venv/bin/activate
-
-   # Install dependencies
    pip install rembg pillow onnxruntime
    ```
 
