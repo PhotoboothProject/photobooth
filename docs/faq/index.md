@@ -1007,7 +1007,7 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
 ### Installation
 
 1. **Download and run the installation script:**
-   ```sh
+   ```
    cd /var/www/html/scripts
    sudo bash install_rembg.sh
    ```
@@ -1019,7 +1019,7 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
    - Verify the installation
 
 2. **Alternative manual installation:**
-   ```sh
+   ```
    python3 -m venv /var/www/html/scripts/rembg_venv
    source /var/www/html/scripts/rembg_venv/bin/activate
    pip install rembg pillow onnxruntime
@@ -1099,11 +1099,11 @@ Once enabled, Magic Greenscreen will automatically process photos after they are
 For advanced users, you can modify the rembg processing parameters:
 
 - **AI Models:**
-  - `u2net`: General purpose (default)
-  - `u2netp`: Portrait optimized
-  - `u2net_cloth_seg`: Clothing segmentation
-  - `silueta`: Simple backgrounds
-  - `isnet`: High quality
+  -   `u2net`: General purpose (default)
+  -   `u2netp`: Portrait optimized
+  -   `u2net_cloth_seg`: Clothing segmentation
+  -   `silueta`: Simple backgrounds
+  -   `isnet`: High quality
 
 - **Alpha Matting:** Improves edge quality around hair and fine details
 - **Post-processing:** Applies additional smoothing and refinement
@@ -1118,7 +1118,7 @@ For advanced users, you can modify the rembg processing parameters:
 
 To update rembg to the latest version:
 
-```sh
+```
 source /var/www/html/scripts/rembg_venv/bin/activate
 pip install --upgrade rembg
 ```
