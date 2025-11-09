@@ -168,7 +168,7 @@ After=network.target
 Type=simple
 User=www-data
 WorkingDirectory=/var/www/html
-ExecStart=/var/www/html/scripts/rembg_venv/bin/python3 -m rembg s --host 0.0.0.0 --port 7000 --log_level info
+ExecStart=/var/www/html/scripts/rembg_venv/bin/rembg s --host 0.0.0.0 --port 7000 --log_level info
 Restart=always
 
 [Install]
