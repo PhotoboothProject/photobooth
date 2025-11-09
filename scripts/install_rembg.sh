@@ -31,30 +31,45 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="$SCRIPT_DIR/rembg_venv"
 REQ_FILE="$SCRIPT_DIR/requirements-rembg.txt"
 
-# 1) Install system packages early and simply (without version hassle)
+# 1) Check if python3 is available
+if ! command -v python3 >/dev/null 2>&1; then
+    echo_error "python3 not found. Installing..."
+fi
+
+# 2) Install system packages early and simply (without version hassle)
 echo_step "Installing system packages (python3, python3-venv, python3-pip)…"
 if command -v apt >/dev/null 2>&1; then
   sudo apt update -y
   sudo apt install -y python3 python3-venv python3-pip php-curl
 elif command -v dnf >/dev/null 2>&1; then
-  sudo dnf install -y python3 python3-pip python3-virtualenv || true
+  sudo dnf install -y python3 python3-pip python3-virtualenv php-curl || true
 elif command -v yum >/dev/null 2>&1; then
-  sudo yum install -y python3 python3-pip python3-virtualenv || true
+  sudo yum install -y python3 python3-pip python3-virtualenv php-curl || true
 else
   echo_error "No supported package manager found (apt/dnf/yum)."
   exit 1
 fi
 echo_success "System packages installed"
+
+# Verify python3 is now available
+if ! command -v python3 >/dev/null 2>&1; then
+    echo_error "python3 installation failed"
+    exit 1
+fi
 echo_success "Python: $(python3 --version)"
 
-# 2) Prepare target directory and set ownership
+# Get Python version
+PYVER="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
+echo_info "Python version: $PYVER"
+
+# 3) Prepare target directory and set ownership
 echo_step "Preparing $SCRIPT_DIR…"
 sudo mkdir -p "$SCRIPT_DIR"
 if [ "$EUID" -eq 0 ] && [ -n "$SUDO_USER" ]; then
   sudo chown -R "$SUDO_USER":"$SUDO_USER" "$SCRIPT_DIR"
 fi
 
-# 3) Create fresh venv (as non-root)
+# 4) Create fresh venv (as non-root)
 cd "$SCRIPT_DIR"
 if [ -d "$VENV_DIR" ]; then
   echo_warning "Existing venv found → removing $VENV_DIR…"
@@ -68,11 +83,21 @@ if ! RUN_AS_USER "python3 -m venv '$VENV_DIR'"; then
 fi
 echo_success "venv created"
 
-# 4) Set venv interpreter/pip (we don't source to avoid root write permissions)
+# 5) Set venv interpreter/pip (we don't source to avoid root write permissions)
 VENV_PY="$VENV_DIR/bin/python"
 VENV_PIP="$VENV_DIR/bin/pip"
 
-# 5) Update pip in venv (as non-root)
+# Verify venv binaries exist
+if [ ! -f "$VENV_PY" ]; then
+  echo_error "Virtual environment seems broken: $VENV_PY not found"
+  exit 1
+fi
+if [ ! -f "$VENV_PIP" ]; then
+  echo_error "Virtual environment seems broken: $VENV_PIP not found"
+  exit 1
+fi
+
+# 6) Update pip in venv (as non-root)
 echo_step "Updating pip in venv…"
 if ! RUN_AS_USER "'$VENV_PY' -m pip install --upgrade pip"; then
   echo_error "pip upgrade failed"
@@ -80,7 +105,7 @@ if ! RUN_AS_USER "'$VENV_PY' -m pip install --upgrade pip"; then
 fi
 echo_success "pip updated: $(RUN_AS_USER "'$VENV_PIP' --version")"
 
-# 6) Install requirements (if file exists), otherwise minimal set
+# 7) Install requirements (if file exists), otherwise minimal set
 echo_step "Installing requirements…"
 if [ -f "$REQ_FILE" ]; then
   if ! RUN_AS_USER "'$VENV_PY' -m pip install -r '$REQ_FILE'"; then
@@ -88,15 +113,15 @@ if [ -f "$REQ_FILE" ]; then
     exit 1
   fi
 else
-  echo_warning "No $REQ_FILE found – installing base packages (rembg, flask, pillow)…"
-  if ! RUN_AS_USER "'$VENV_PY' -m pip install rembg flask pillow"; then
+  echo_warning "No $REQ_FILE found – installing base packages (rembg, pillow)…"
+  if ! RUN_AS_USER "'$VENV_PY' -m pip install rembg pillow"; then
     echo_error "Base installation failed"
     exit 1
   fi
 fi
 echo_success "Requirements installed"
 
-# 7) Ensure onnxruntime (sometimes missing in wheel/reqs)
+# 8) Ensure onnxruntime (sometimes missing in wheel/reqs)
 echo_step "Ensuring onnxruntime…"
 if ! RUN_AS_USER "'$VENV_PY' - <<'PY'
 try:
@@ -112,7 +137,7 @@ PY"; then
 fi
 echo_success "onnxruntime available"
 
-# 8) Verification
+# 9) Verification
 echo_step "Verifying installation…"
 RUN_AS_USER "'$VENV_PY' - <<'PY'
 import importlib, sys
@@ -145,20 +170,20 @@ try:
 except Exception as e:
     print('PIL_IMPORT_ERROR:', e, file=sys.stderr)
     raise
-
-# flask
-try:
-    print('flask:', v('flask'))
-except Exception as e:
-    print('FLASK_IMPORT_ERROR:', e, file=sys.stderr)
-    raise
 PY"
 
 echo ""
 
-# Install systemd service if available
+# 10) Install systemd service if available
 if command -v systemctl &> /dev/null; then
     echo_step "Installing systemd service..."
+
+    # Backup existing service if present
+    if [ -f /etc/systemd/system/rembg.service ]; then
+        echo_warning "Existing rembg.service found - backing up..."
+        sudo cp /etc/systemd/system/rembg.service /etc/systemd/system/rembg.service.bak
+    fi
+
     sudo tee /etc/systemd/system/rembg.service > /dev/null <<EOF
 [Unit]
 Description=Rembg Background Removal Service
@@ -166,25 +191,39 @@ After=network.target
 
 [Service]
 Type=simple
-User=www-data
-WorkingDirectory=/var/www/html
-ExecStart=/var/www/html/scripts/rembg_venv/bin/rembg s --host 0.0.0.0 --port 7000 --log_level info
+User=$SUDO_USER
+WorkingDirectory=$SCRIPT_DIR
+ExecStart=$VENV_DIR/bin/rembg s --host 0.0.0.0 --port 7000 --log_level info
+Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
 EOF
+
+    echo_step "Reloading systemd daemon..."
     sudo systemctl daemon-reload
-    sudo systemctl enable rembg
-    sudo systemctl start rembg
+
+    echo_step "Enabling rembg service..."
+    if ! sudo systemctl enable rembg.service; then
+        echo_error "Failed to enable rembg service"
+        exit 1
+    fi
+
+    echo_step "Starting rembg service..."
+    if ! sudo systemctl start rembg.service; then
+        echo_error "Failed to start rembg service"
+        echo_info "Check logs with: sudo journalctl -u rembg.service -n 20"
+        exit 1
+    fi
+
     echo_success "systemd service installed and started"
+    echo_info "Check status with: sudo systemctl status rembg.service"
 else
-    echo_warning "systemctl not available, skipping systemd service installation"
+    echo_warning "systemctl not found - skipping service installation"
 fi
 
-echo_header "Installation complete!"
-echo_info  "Virtual environment: $VENV_DIR"
-echo_info  "To activate manually (in terminal):"
-echo_info  "  source $VENV_DIR/bin/activate"
 echo ""
-echo_info  "Note: Make sure the script rembg_processor.py uses this virtual environment."
-echo_success "rembg can now be used in the Photobooth."
+echo_header "Installation Complete!"
+echo_success "rembg is now installed and ready to use"
+echo_info "Service endpoint: http://localhost:7000/api"
