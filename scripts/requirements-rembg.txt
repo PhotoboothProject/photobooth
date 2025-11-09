@@ -1,5 +1,4 @@
-rembg
+rembg[cpu,cli]
 pillow
-flask
 filetype
 watchdog
