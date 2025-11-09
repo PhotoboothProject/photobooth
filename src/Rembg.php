@@ -7,6 +7,15 @@ use Photobooth\Utility\PathUtility;
 
 class Rembg
 {
+    private static function log(string $message, string $level = 'INFO'): void
+    {
+        $logFile = PathUtility::getAbsolutePath('var/log/rembg.log');
+        $timestamp = date('Y-m-d H:i:s');
+        $pid = getmypid();
+        $logEntry = "[$timestamp][rembg][$level] $pid: $message\n";
+        file_put_contents($logFile, $logEntry, FILE_APPEND);
+    }
+
     public static function process(
         Image $imageHandler,
         array $vars,
@@ -20,136 +29,136 @@ class Rembg
             !empty($vars['isCollage']) ||
             !empty($vars['isChroma'])
         ) {
+            self::log('Skipped (disabled or collage/chroma mode)');
             return [$imageHandler, $imageResource];
         }
+
+        self::log('Starting background removal process via service');
+        $logger->debug('Starting rembg background removal process via service.');
+
+        // Prepare temporary files
+        $tempInput = tempnam(sys_get_temp_dir(), 'rembg_input_') . '.png';
+        $tempOutput = tempnam(sys_get_temp_dir(), 'rembg_output_') . '.png';
+
         try {
-            $logger->debug('Starting rembg background removal process via service.');
-
-            // Save current image state before rembg processing
-            $imageHandler->jpegQuality = 100;
-            if (!$imageHandler->saveJpeg($imageResource, $vars['resultFile'])) {
-                throw new \Exception('Failed to save image before rembg processing.');
+            // Save image for upload
+            if (!imagepng($imageResource, $tempInput)) {
+                throw new \Exception('Failed to save input image');
             }
+            $logger->debug('Rembg: Input image saved to ' . $tempInput);
 
-            // Use rembg service
-            $serviceUrl = 'http://localhost:7000/api/remove';
-
-            // Build query parameters from config
+            // Prepare API URL and parameters
+            $apiUrl = 'http://localhost:7000/api/remove';
             $queryParams = [];
             if (!empty($rembgConfig['model'])) {
                 $queryParams['model'] = $rembgConfig['model'];
             }
             if (!empty($rembgConfig['alpha_matting'])) {
                 $queryParams['a'] = 'true';
-            }
-            if (!empty($rembgConfig['alpha_matting_background_threshold'])) {
-                $queryParams['ab'] = $rembgConfig['alpha_matting_background_threshold'];
-            }
-            if (!empty($rembgConfig['alpha_matting_erode_size'])) {
-                $queryParams['ae'] = $rembgConfig['alpha_matting_erode_size'];
-            }
-            if (!empty($rembgConfig['alpha_matting_foreground_threshold'])) {
-                $queryParams['af'] = $rembgConfig['alpha_matting_foreground_threshold'];
+                if (!empty($rembgConfig['alpha_matting_background_threshold'])) {
+                    $queryParams['ab'] = $rembgConfig['alpha_matting_background_threshold'];
+                }
+                if (!empty($rembgConfig['alpha_matting_erode_size'])) {
+                    $queryParams['ae'] = $rembgConfig['alpha_matting_erode_size'];
+                }
+                if (!empty($rembgConfig['alpha_matting_foreground_threshold'])) {
+                    $queryParams['af'] = $rembgConfig['alpha_matting_foreground_threshold'];
+                }
             }
             if (!empty($rembgConfig['post_processing'])) {
                 $queryParams['ppm'] = 'true';
             }
 
-            // Append query parameters to URL
+            // Build query string
             if (!empty($queryParams)) {
-                $serviceUrl .= '?' . http_build_query($queryParams);
+                $apiUrl .= '?' . http_build_query($queryParams);
             }
 
-            // Prepare the curl request
+            // Log: Image sent to API + parameters
+            $paramString = json_encode($queryParams);
+            self::log("Image sent to API: $apiUrl with parameters: $paramString");
+            $logger->debug('Rembg: Sending image to API', ['url' => $apiUrl, 'params' => $queryParams]);
+
+            // cURL request
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $serviceUrl);
+            curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, [
+                'file' => new \CURLFile($tempInput, 'image/png', 'input.png')
+            ]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            // Prepare file upload
-            $cfile = new \CURLFile($vars['resultFile'], 'image/jpeg', 'image.jpg');
-            $postData = ['file' => $cfile];
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-
-            // Execute the request
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
             $response = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $error = curl_error($ch);
             curl_close($ch);
 
+            // Log: Image returned + processing success/failure
+            if ($error) {
+                self::log("Image processing failed: cURL error - $error", 'ERROR');
+                throw new \Exception('cURL error: ' . $error);
+            }
             if ($httpCode !== 200) {
-                $logger->error('rembg service request failed', [
-                    'httpCode' => $httpCode,
-                    'error' => $error,
-                    'response' => substr($response, 0, 500) // Log first 500 chars of response
-                ]);
-                $imageHandler->addErrorData('Warning: rembg service request failed.');
-            } else {
-                // Check if response is actually an image
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_buffer($finfo, $response);
-                finfo_close($finfo);
+                self::log("Image processing failed: HTTP $httpCode - Response: " . substr($response, 0, 200), 'ERROR');
+                throw new \Exception('API error: HTTP ' . $httpCode . ' - ' . $response);
+            }
 
-                if (strpos($mimeType, 'image/') !== 0) {
-                    $logger->error('rembg service returned invalid response', [
-                        'mimeType' => $mimeType,
-                        'responseStart' => substr($response, 0, 200)
-                    ]);
-                    $imageHandler->addErrorData('Warning: rembg service returned invalid image.');
-                    return [$imageHandler, $imageResource];
-                }
+            // Check MIME type
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_buffer($finfo, $response);
+            finfo_close($finfo);
+            if (!str_starts_with($mimeType, 'image/')) {
+                self::log("Invalid response: Expected image, got $mimeType - Response: " . substr($response, 0, 200), 'ERROR');
+                throw new \Exception('Invalid API response: not an image');
+            }
 
-                // Save the response to the result file
-                if (file_put_contents($vars['resultFile'], $response) === false) {
-                    throw new \Exception('Failed to save processed image from rembg service.');
-                }
+            self::log("Image successfully processed and returned from API (HTTP 200, MIME: $mimeType)");
+            $logger->debug('Rembg: API response received', ['httpCode' => $httpCode, 'mimeType' => $mimeType]);
 
-                $logger->debug('Background removal applied successfully via service');
+            // Save response as image
+            if (file_put_contents($tempOutput, $response) === false) {
+                throw new \Exception('Failed to save output image');
+            }
+            $logger->debug('Rembg: Output image saved to ' . $tempOutput);
 
-                // Reload image resource after rembg processing
-                $imageResource = $imageHandler->createFromImage($vars['resultFile']);
-                if (!$imageResource) {
-                    throw new \Exception('Error reloading image resource after rembg processing.');
-                }
-                assert($imageResource instanceof \GdImage);
+            // Load processed image
+            $processedImage = imagecreatefrompng($tempOutput);
+            if (!$processedImage) {
+                throw new \Exception('Failed to load processed image');
+            }
 
-                // Ensure alpha is preserved for transparent images
-                imagesavealpha($imageResource, true);
-
-                // Apply background if configured
-                $backgroundPath = $rembgConfig['background'] ?? '';
-                $backgroundPath = PathUtility::getAbsolutePath(ltrim($backgroundPath, '/'));
-                if (!empty($backgroundPath) && file_exists($backgroundPath)) {
-                    // Load background as base image
-                    $backgroundImage = $imageHandler->createFromImage($backgroundPath);
+            // Apply background if configured
+            if (!empty($rembgConfig['background'])) {
+                $backgroundPath = PathUtility::getAbsolutePath($rembgConfig['background']);
+                if (file_exists($backgroundPath)) {
+                    $backgroundImage = imagecreatefromstring(file_get_contents($backgroundPath));
                     if ($backgroundImage) {
-                        // Resize background to match the processed image
-                        $backgroundImage = imagescale($backgroundImage, imagesx($imageResource), imagesy($imageResource));
-                        if ($backgroundImage) {
-                            // Create new image with background
-                            $finalImage = imagecreatetruecolor(imagesx($imageResource), imagesy($imageResource));
-                            imagecopy($finalImage, $backgroundImage, 0, 0, 0, 0, imagesx($backgroundImage), imagesy($backgroundImage));
-                            imagedestroy($backgroundImage);
-
-                            // Enable alpha blending and save alpha for the final image
-                            imagealphablending($finalImage, true);
-                            imagesavealpha($finalImage, true);
-
-                            // Copy the transparent rembg image over the background
-                            imagecopy($finalImage, $imageResource, 0, 0, 0, 0, imagesx($imageResource), imagesy($imageResource));
-                            imagedestroy($imageResource);
-                            $imageResource = $finalImage;
-
-                            $logger->debug('Background image applied after rembg processing');
-                        }
+                        $newImage = imagecreatetruecolor(imagesx($processedImage), imagesy($processedImage));
+                        imagecopy($newImage, $backgroundImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
+                        imagecopy($newImage, $processedImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
+                        imagedestroy($processedImage);
+                        $processedImage = $newImage;
+                        self::log('Background image applied after rembg processing');
+                        $logger->debug('Background image applied after rembg processing');
                     }
                 }
-
-                $imageHandler->imageModified = true;
             }
+
+            self::log('Background removal applied successfully via service');
+            $logger->debug('Background removal applied successfully via service');
+
+            // Cleanup
+            unlink($tempInput);
+            unlink($tempOutput);
+
+            return [$imageHandler, $processedImage];
+
         } catch (\Exception $e) {
-            $logger->error($e->getMessage());
+            self::log('Processing failed: ' . $e->getMessage(), 'ERROR');
+            $logger->error('Rembg processing failed', ['error' => $e->getMessage()]);
+            if (file_exists($tempInput)) unlink($tempInput);
+            if (file_exists($tempOutput)) unlink($tempOutput);
+            return [$imageHandler, $imageResource]; // Fallback to original image
         }
-        return [$imageHandler, $imageResource];
     }
 }
