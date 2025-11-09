@@ -34,6 +34,35 @@ class Rembg
             // Use rembg service
             $serviceUrl = 'http://localhost:7000/api/remove';
 
+            // Build query parameters from config
+            $queryParams = [];
+            if (!empty($rembgConfig['model'])) {
+                $queryParams['model'] = $rembgConfig['model'];
+            }
+            if (!empty($rembgConfig['alpha_matting'])) {
+                $queryParams['alpha_matting'] = 'true';
+            }
+            if (!empty($rembgConfig['alpha_matting_background_threshold'])) {
+                $queryParams['alpha_matting_background_threshold'] = $rembgConfig['alpha_matting_background_threshold'];
+            }
+            if (!empty($rembgConfig['alpha_matting_erode_size'])) {
+                $queryParams['alpha_matting_erode_size'] = $rembgConfig['alpha_matting_erode_size'];
+            }
+            if (!empty($rembgConfig['alpha_matting_foreground_threshold'])) {
+                $queryParams['alpha_matting_foreground_threshold'] = $rembgConfig['alpha_matting_foreground_threshold'];
+            }
+            if (!empty($rembgConfig['post_processing'])) {
+                $queryParams['post_process'] = 'true';
+            }
+            if (!empty($rembgConfig['max_size'])) {
+                $queryParams['max_size'] = $rembgConfig['max_size'];
+            }
+
+            // Append query parameters to URL
+            if (!empty($queryParams)) {
+                $serviceUrl .= '?' . http_build_query($queryParams);
+            }
+
             // Prepare the curl request
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $serviceUrl);
@@ -73,18 +102,33 @@ class Rembg
                 }
                 assert($imageResource instanceof \GdImage);
 
+                // Ensure alpha is preserved for transparent images
+                imagesavealpha($imageResource, true);
+
                 // Apply background if configured
                 $backgroundPath = $rembgConfig['background'] ?? '';
                 $backgroundPath = PathUtility::getAbsolutePath(ltrim($backgroundPath, '/'));
                 if (!empty($backgroundPath) && file_exists($backgroundPath)) {
+                    // Load background as base image
                     $backgroundImage = $imageHandler->createFromImage($backgroundPath);
                     if ($backgroundImage) {
                         // Resize background to match the processed image
                         $backgroundImage = imagescale($backgroundImage, imagesx($imageResource), imagesy($imageResource));
                         if ($backgroundImage) {
-                            // Composite the background
-                            imagecopy($imageResource, $backgroundImage, 0, 0, 0, 0, imagesx($imageResource), imagesy($imageResource));
+                            // Create new image with background
+                            $finalImage = imagecreatetruecolor(imagesx($imageResource), imagesy($imageResource));
+                            imagecopy($finalImage, $backgroundImage, 0, 0, 0, 0, imagesx($backgroundImage), imagesy($backgroundImage));
                             imagedestroy($backgroundImage);
+
+                            // Enable alpha blending and save alpha for the final image
+                            imagealphablending($finalImage, true);
+                            imagesavealpha($finalImage, true);
+
+                            // Copy the transparent rembg image over the background
+                            imagecopy($finalImage, $imageResource, 0, 0, 0, 0, imagesx($imageResource), imagesy($imageResource));
+                            imagedestroy($imageResource);
+                            $imageResource = $finalImage;
+
                             $logger->debug('Background image applied after rembg processing');
                         }
                     }
