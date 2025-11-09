@@ -1069,13 +1069,6 @@ return [
             'name' => 'rembg[alpha_matting]',
             'value' => $config['rembg']['alpha_matting'],
         ],
-        'rembg_max_size' => [
-            'view' => 'expert',
-            'type' => 'number',
-            'placeholder' => $defaultConfig['rembg']['max_size'],
-            'name' => 'rembg[max_size]',
-            'value' => $config['rembg']['max_size'],
-        ],
         'rembg_alpha_matting_foreground_threshold' => [
             'view' => 'expert',
             'type' => 'range',

@@ -40,22 +40,19 @@ class Rembg
                 $queryParams['model'] = $rembgConfig['model'];
             }
             if (!empty($rembgConfig['alpha_matting'])) {
-                $queryParams['alpha_matting'] = 'true';
+                $queryParams['a'] = 'true';
             }
             if (!empty($rembgConfig['alpha_matting_background_threshold'])) {
-                $queryParams['alpha_matting_background_threshold'] = $rembgConfig['alpha_matting_background_threshold'];
+                $queryParams['ab'] = $rembgConfig['alpha_matting_background_threshold'];
             }
             if (!empty($rembgConfig['alpha_matting_erode_size'])) {
-                $queryParams['alpha_matting_erode_size'] = $rembgConfig['alpha_matting_erode_size'];
+                $queryParams['ae'] = $rembgConfig['alpha_matting_erode_size'];
             }
             if (!empty($rembgConfig['alpha_matting_foreground_threshold'])) {
-                $queryParams['alpha_matting_foreground_threshold'] = $rembgConfig['alpha_matting_foreground_threshold'];
+                $queryParams['af'] = $rembgConfig['alpha_matting_foreground_threshold'];
             }
             if (!empty($rembgConfig['post_processing'])) {
-                $queryParams['post_process'] = 'true';
-            }
-            if (!empty($rembgConfig['max_size'])) {
-                $queryParams['max_size'] = $rembgConfig['max_size'];
+                $queryParams['ppm'] = 'true';
             }
 
             // Append query parameters to URL

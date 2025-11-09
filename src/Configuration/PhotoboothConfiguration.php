@@ -1525,15 +1525,6 @@ class PhotoboothConfiguration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->booleanNode('post_processing')->defaultValue(false)->end()
-                ->integerNode('max_size')
-                    ->defaultValue(1024)
-                    ->min(256)
-                    ->max(4096)
-                    ->beforeNormalization()
-                        ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
-                        ->end()
-                    ->end()
             ->end();
     }
 }
