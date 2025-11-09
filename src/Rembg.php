@@ -89,7 +89,7 @@ class Rembg
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $response);
                 finfo_close($finfo);
-                
+
                 if (strpos($mimeType, 'image/') !== 0) {
                     $logger->error('rembg service returned invalid response', [
                         'mimeType' => $mimeType,
