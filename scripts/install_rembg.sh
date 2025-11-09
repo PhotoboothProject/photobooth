@@ -27,7 +27,7 @@ RUN_AS_USER() {
 # ── Start ──────────────────────────────────────────────────────────────────────
 echo_header "Installing rembg for Photobooth"
 
-SCRIPT_DIR="/var/www/html/scripts"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="$SCRIPT_DIR/rembg_venv"
 REQ_FILE="$SCRIPT_DIR/requirements-rembg.txt"
 
