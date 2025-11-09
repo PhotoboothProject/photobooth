@@ -81,10 +81,24 @@ class Rembg
                 $logger->error('rembg service request failed', [
                     'httpCode' => $httpCode,
                     'error' => $error,
-                    'response' => $response
+                    'response' => substr($response, 0, 500) // Log first 500 chars of response
                 ]);
                 $imageHandler->addErrorData('Warning: rembg service request failed.');
             } else {
+                // Check if response is actually an image
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $response);
+                finfo_close($finfo);
+                
+                if (strpos($mimeType, 'image/') !== 0) {
+                    $logger->error('rembg service returned invalid response', [
+                        'mimeType' => $mimeType,
+                        'responseStart' => substr($response, 0, 200)
+                    ]);
+                    $imageHandler->addErrorData('Warning: rembg service returned invalid image.');
+                    return [$imageHandler, $imageResource];
+                }
+
                 // Save the response to the result file
                 if (file_put_contents($vars['resultFile'], $response) === false) {
                     throw new \Exception('Failed to save processed image from rembg service.');
