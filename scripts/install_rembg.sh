@@ -155,8 +155,37 @@ except Exception as e:
 PY"
 
 echo ""
+
+# Install systemd service if available
+if command -v systemctl &> /dev/null; then
+    echo_step "Installing systemd service..."
+    sudo tee /etc/systemd/system/rembg.service > /dev/null <<EOF
+[Unit]
+Description=Rembg Background Removal Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/html
+ExecStart=/var/www/html/scripts/rembg_venv/bin/python3 -m rembg s --host 0.0.0.0 --port 7000 --log_level info
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    sudo systemctl daemon-reload
+    sudo systemctl enable rembg
+    sudo systemctl start rembg
+    echo_success "systemd service installed and started"
+else
+    echo_warning "systemctl not available, skipping systemd service installation"
+fi
+
 echo_header "Installation abgeschlossen!"
 echo_info  "Virtual environment: $VENV_DIR"
 echo_info  "Manuell aktivieren (im Terminal):"
 echo_info  "  source $VENV_DIR/bin/activate"
+echo ""
+echo_info  "Hinweis: Stelle sicher, dass das Skript rembg_processor.py diese virtuelle Umgebung nutzt."
 echo_success "rembg kann jetzt im Photobooth genutzt werden."
