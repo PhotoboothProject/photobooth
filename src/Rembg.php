@@ -2,7 +2,6 @@
 
 namespace Photobooth;
 
-use Photobooth\Logger\NamedLogger;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\PathUtility;
 
@@ -12,22 +11,20 @@ class Rembg
         Image $imageHandler,
         array $vars,
         array $rembgConfig,
-        \GdImage $imageResource,
-        NamedLogger $logger
+        \GdImage $imageResource
     ): array {
-        $rembgLogger = LoggerService::getInstance()->getLogger('rembg');
+        $logger = LoggerService::getInstance()->getLogger('rembg');
         // Only process if rembg is enabled and not in collage/chroma mode
         if (
             empty($rembgConfig['enabled']) ||
             !empty($vars['isCollage']) ||
             !empty($vars['isChroma'])
         ) {
-            $rembgLogger->info('Skipped (disabled or collage/chroma mode)');
+            $logger->info('Skipped (disabled or collage/chroma mode)');
             return [$imageHandler, $imageResource];
         }
 
-        $rembgLogger->info('Starting background removal process via service');
-        $logger->debug('Starting rembg background removal process via service.');
+        $logger->debug('Starting background removal process via service');
 
         // Prepare temporary files
         $tempInput = tempnam(sys_get_temp_dir(), 'rembg_input_') . '.png';
@@ -38,7 +35,6 @@ class Rembg
             if (!imagepng($imageResource, $tempInput)) {
                 throw new \Exception('Failed to save input image');
             }
-            $logger->debug('Rembg: Input image saved to ' . $tempInput);
 
             // Prepare API URL and parameters
             $apiUrl = 'http://localhost:7000/api/remove';
@@ -69,8 +65,7 @@ class Rembg
 
             // Log: Image sent to API + parameters
             $paramString = json_encode($queryParams);
-            $rembgLogger->info("Image sent to API: $apiUrl with parameters: $paramString");
-            $logger->debug('Rembg: Sending image to API', ['url' => $apiUrl, 'params' => $queryParams]);
+            $logger->debug("Image sent to API: $apiUrl with parameters: $paramString");
 
             // cURL request
             $ch = curl_init();
@@ -88,12 +83,12 @@ class Rembg
 
             // Log: Image returned + processing success/failure
             if ($error) {
-                $rembgLogger->error("Image processing failed: cURL error - $error");
+                $logger->error("Image processing failed: cURL error - $error");
                 throw new \Exception('cURL error: ' . $error);
             }
             if ($httpCode !== 200) {
                 $responsePreview = is_string($response) ? substr($response, 0, 200) : 'no response';
-                $rembgLogger->error("Image processing failed: HTTP $httpCode - Response: " . $responsePreview);
+                $logger->error("Image processing failed: HTTP $httpCode - Response: " . $responsePreview);
                 throw new \Exception('API error: HTTP ' . $httpCode . ' - ' . $responsePreview);
             }
 
@@ -109,18 +104,16 @@ class Rembg
             finfo_close($finfo);
             if ($mimeType === false || !str_starts_with($mimeType, 'image/')) {
                 $mimeDisplay = $mimeType !== false ? $mimeType : 'unknown';
-                $rembgLogger->error("Invalid response: Expected image, got $mimeDisplay - Response: " . substr($response, 0, 200));
+                $logger->error("Invalid response: Expected image, got $mimeDisplay - Response: " . substr($response, 0, 200));
                 throw new \Exception('Invalid API response: not an image');
             }
 
-            $rembgLogger->info("Image successfully processed and returned from API (HTTP 200, MIME: $mimeType)");
-            $logger->debug('Rembg: API response received', ['httpCode' => $httpCode, 'mimeType' => $mimeType]);
+            $logger->debug("Image successfully processed and returned from API (HTTP 200, MIME: $mimeType)");
 
             // Save response as image
             if (file_put_contents($tempOutput, $response) === false) {
                 throw new \Exception('Failed to save output image');
             }
-            $logger->debug('Rembg: Output image saved to ' . $tempOutput);
 
             // Load processed image
             $processedImage = imagecreatefrompng($tempOutput);
@@ -143,14 +136,12 @@ class Rembg
                             imagecopy($newImage, $processedImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
                             imagedestroy($processedImage);
                             $processedImage = $newImage;
-                            $rembgLogger->info('Background image applied after rembg processing');
                             $logger->debug('Background image applied after rembg processing');
                         }
                     }
                 }
             }
 
-            $rembgLogger->info('Background removal applied successfully via service');
             $logger->debug('Background removal applied successfully via service');
 
             // Cleanup
@@ -160,8 +151,7 @@ class Rembg
             return [$imageHandler, $processedImage];
 
         } catch (\Exception $e) {
-            $rembgLogger->error('Processing failed: ' . $e->getMessage());
-            $logger->error('Rembg processing failed', ['error' => $e->getMessage()]);
+            $logger->error('Processing failed: ' . $e->getMessage());
             if (file_exists($tempInput)) {
                 unlink($tempInput);
             }

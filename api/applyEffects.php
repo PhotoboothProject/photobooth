@@ -161,7 +161,7 @@ try {
                 }
 
                 // Apply rembg
-                list($imageHandler, $imageResource) = Rembg::process($imageHandler, $vars, $config['rembg'], $imageResource, $logger);
+                list($imageHandler, $imageResource) = Rembg::process($imageHandler, $vars, $config['rembg'], $imageResource);
                 if ($config['picture']['polaroid_effect']) {
                     $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
                     $imageResource = $imageHandler->effectPolaroid($imageResource);
