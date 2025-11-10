@@ -92,16 +92,24 @@ class Rembg
                 throw new \Exception('cURL error: ' . $error);
             }
             if ($httpCode !== 200) {
-                $rembgLogger->error("Image processing failed: HTTP $httpCode - Response: " . substr($response, 0, 200));
-                throw new \Exception('API error: HTTP ' . $httpCode . ' - ' . $response);
+                $responsePreview = is_string($response) ? substr($response, 0, 200) : 'no response';
+                $rembgLogger->error("Image processing failed: HTTP $httpCode - Response: " . $responsePreview);
+                throw new \Exception('API error: HTTP ' . $httpCode . ' - ' . $responsePreview);
             }
 
             // Check MIME type
+            if (!is_string($response)) {
+                throw new \Exception('Invalid API response: expected string');
+            }
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            if ($finfo === false) {
+                throw new \Exception('Failed to initialize fileinfo');
+            }
             $mimeType = finfo_buffer($finfo, $response);
             finfo_close($finfo);
-            if (!str_starts_with($mimeType, 'image/')) {
-                $rembgLogger->error("Invalid response: Expected image, got $mimeType - Response: " . substr($response, 0, 200));
+            if ($mimeType === false || !str_starts_with($mimeType, 'image/')) {
+                $mimeDisplay = $mimeType !== false ? $mimeType : 'unknown';
+                $rembgLogger->error("Invalid response: Expected image, got $mimeDisplay - Response: " . substr($response, 0, 200));
                 throw new \Exception('Invalid API response: not an image');
             }
 
@@ -116,7 +124,7 @@ class Rembg
 
             // Load processed image
             $processedImage = imagecreatefrompng($tempOutput);
-            if (!$processedImage) {
+            if ($processedImage === false) {
                 throw new \Exception('Failed to load processed image');
             }
 
@@ -124,15 +132,20 @@ class Rembg
             if (!empty($rembgConfig['background'])) {
                 $backgroundPath = PathUtility::getAbsolutePath($rembgConfig['background']);
                 if (file_exists($backgroundPath)) {
-                    $backgroundImage = imagecreatefromstring(file_get_contents($backgroundPath));
-                    if ($backgroundImage) {
-                        $newImage = imagecreatetruecolor(imagesx($processedImage), imagesy($processedImage));
-                        imagecopy($newImage, $backgroundImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
-                        imagecopy($newImage, $processedImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
-                        imagedestroy($processedImage);
-                        $processedImage = $newImage;
-                        $rembgLogger->info('Background image applied after rembg processing');
-                        $logger->debug('Background image applied after rembg processing');
+                    $backgroundContent = file_get_contents($backgroundPath);
+                    if ($backgroundContent === false) {
+                        $logger->error('Failed to read background image file');
+                    } else {
+                        $backgroundImage = imagecreatefromstring($backgroundContent);
+                        if ($backgroundImage !== false) {
+                            $newImage = imagecreatetruecolor(imagesx($processedImage), imagesy($processedImage));
+                            imagecopy($newImage, $backgroundImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
+                            imagecopy($newImage, $processedImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
+                            imagedestroy($processedImage);
+                            $processedImage = $newImage;
+                            $rembgLogger->info('Background image applied after rembg processing');
+                            $logger->debug('Background image applied after rembg processing');
+                        }
                     }
                 }
             }
