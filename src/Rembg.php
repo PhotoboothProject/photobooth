@@ -149,8 +149,12 @@ class Rembg
         } catch (\Exception $e) {
             $rembgLogger->error('Processing failed: ' . $e->getMessage());
             $logger->error('Rembg processing failed', ['error' => $e->getMessage()]);
-            if (file_exists($tempInput)) unlink($tempInput);
-            if (file_exists($tempOutput)) unlink($tempOutput);
+            if (file_exists($tempInput)) {
+                unlink($tempInput);
+            }
+            if (file_exists($tempOutput)) {
+                unlink($tempOutput);
+            }
             return [$imageHandler, $imageResource]; // Fallback to original image
         }
     }
