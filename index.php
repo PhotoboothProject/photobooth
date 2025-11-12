@@ -24,6 +24,7 @@ if ($config['chromaCapture']['enabled']) {
 // Login / Authentication check
 if (
     !$config['login']['enabled'] ||
+    in_array($_SERVER['REMOTE_ADDR'] ?? '', $config['protect']['ip_whitelist'] ?? [], true) ||
     (!$config['protect']['localhost_index'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) ||
     ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['index'])
 ) {
