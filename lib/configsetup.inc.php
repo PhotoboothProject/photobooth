@@ -2493,6 +2493,13 @@ return [
             'name' => 'protect[localhost_manual]',
             'value' => $config['protect']['localhost_manual'],
         ],
+        'protect_ip_whitelist' => [
+            'view' => 'expert',
+            'type' => 'list',
+            'name' => 'protect[ip_whitelist]',
+            'placeholder' => implode(',', $defaultConfig['protect']['ip_whitelist'] ?? []),
+            'value' => $config['protect']['ip_whitelist'] ?? [],
+        ],
     ],
     'userinterface' => [
         'view' => 'basic',
