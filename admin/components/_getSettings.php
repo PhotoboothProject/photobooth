@@ -78,6 +78,9 @@ foreach ($configsetup as $section => $fields) {
             case 'video':
                 echo AdminInput::renderVideoSelect($setting, $i18ntag);
                 break;
+            case 'list':
+                echo AdminInput::renderList($setting, $i18ntag);
+                break;
         }
 
         echo '</div>';

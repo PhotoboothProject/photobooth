@@ -557,4 +557,66 @@ class AdminInput
             </div>
         ';
     }
+
+    public static function renderList(array $setting, string $label): string
+    {
+        $languageService = LanguageService::getInstance();
+        $items = is_array($setting['value']) ? $setting['value'] : [];
+        $name = $setting['name'] . '[]';
+        $placeholder = $setting['placeholder'] ?? '';
+
+        $html = self::renderHeadline($label) . '
+        <div class="adminList" data-name="' . $setting['name'] . '">
+            <div class="adminList-items flex flex-col gap-2">';
+
+        foreach ($items as $value) {
+            $value = htmlspecialchars($value, ENT_QUOTES);
+            $html .= '
+            <div class="adminList-item flex gap-2">
+                <input type="text"
+                       name="' . $name . '"
+                       value="' . $value . '"
+                       class="w-full h-10 border-2 border-gray-300 rounded-md px-3"/>
+                <button type="button"
+                        class="adminList-remove bg-red-500 text-white px-3 rounded-md"
+                        onclick="this.parentElement.remove()">
+                    ×
+                </button>
+            </div>';
+        }
+
+        $html .= '
+            </div>
+
+            <button type="button"
+                    class="adminList-add mt-3 bg-brand-1 text-white px-4 h-10 rounded-md"
+                    onclick="adminListAdd(this)">
+                + ' . $languageService->translate('add_entry') . '
+            </button>
+        </div>
+
+        <script>
+        function adminListAdd(button) {
+            const container = button.parentElement.querySelector(".adminList-items");
+            const name = button.parentElement.dataset.name + "[]";
+            const item = document.createElement("div");
+            item.className = "adminList-item flex gap-2";
+            item.innerHTML = `
+                <input type="text"
+                       name="` + name + `"
+                       value=""
+                       class="w-full h-10 border-2 border-gray-300 rounded-md px-3"/>
+                <button type="button"
+                        class="adminList-remove bg-red-500 text-white px-3 rounded-md"
+                        onclick="this.parentElement.remove()">
+                    ×
+                </button>
+            `;
+            container.appendChild(item);
+        }
+        </script>
+    ';
+
+        return $html;
+    }
 }
