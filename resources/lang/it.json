@@ -1,6 +1,7 @@
 {
   "abort": "Annulla",
   "add": "Aggiungi",
+  "add_entry": "Aggiungi elemento",
   "add_image": "Aggiungi immagine",
   "admin_panel": "Pannello di amministrazione",
   "adminpanel_back": "Indietro",
@@ -17,6 +18,7 @@
   "authentication:protect_admin": "Proteggi pannello amministratore",
   "authentication:protect_index": "Proteggi lo schermo iniziale",
   "authentication:protect_index_redirect": "Destinazione dalla schermata iniziale quando non si è loggati",
+  "authentication:protect_ip_whitelist": "IP-Whitelist per accedere alla schermata iniziale",
   "authentication:protect_localhost_admin": "Proteggi il pannello di amministrazione sull'accesso localhost",
   "authentication:protect_localhost_index": "Proteggi la schermata iniziale sull'accesso localhost",
   "authentication:protect_localhost_manual": "Proteggi il manuale e le FAQ sull'accesso da localhost",
@@ -324,6 +326,7 @@
   "manual:authentication:protect_admin": "Se abilitata, è possibile accedere al pannello di amministrazione solo se viene inserito un nome utente e una password.",
   "manual:authentication:protect_index": "Se abilitata, è possibile accedere alla schermata iniziale solo se viene inserito un nome utente e una password.",
   "manual:authentication:protect_index_redirect": "Imposta la pagina a cui l'utente viene reindirizzato, se \"proteggi indice\" è abilitato e l'utente non è connesso.",
+  "manual:authentication:protect_ip_whitelist": "Gli indirizzi IP aggiunti alla whitelist possono accedere alla schermata iniziale senza autenticazione.",
   "manual:authentication:protect_localhost_admin": "Se disabilitato, è possibile accedere al pannello di amministrazione senza nome utente e password da localhost.",
   "manual:authentication:protect_localhost_index": "Se disabilitata, è possibile accedere alla schermata iniziale senza nome utente e password da localhost.",
   "manual:authentication:protect_localhost_manual": "Se disabilitato, è possibile accedere al manuale e alle FAQ senza nome utente e password da localhost.",
