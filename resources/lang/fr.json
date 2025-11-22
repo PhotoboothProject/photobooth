@@ -309,6 +309,7 @@
   "manual:authentication:protect_admin": "Si activé, le panneau administrateur n'est accessible que si un nom d'utilisateur et un mot de passe sont définis.",
   "manual:authentication:protect_index": "Si activé, le panneau administrateur n'est accessible que si un nom d'utilisateur et un mot de passe sont définis.",
   "manual:authentication:protect_index_redirect": "Définit la page vers laquelle l'utilisateur est redirigé, si l'index de protection est activé et que l'utilisateur n'est pas connecté.",
+  "manual:authentication:protect_ip_whitelist": "Les adresses IP ajoutées à la liste blanche peuvent accéder à l'écran de démarrage sans authentification.",
   "manual:authentication:protect_localhost_admin": "Si désactivé, le panneau administrateur est accessible sans nom d'utilisateur et mot de passe de localhost.",
   "manual:authentication:protect_localhost_index": "Si désactivé, le panneau administrateur est accessible sans nom d'utilisateur et mot de passe de localhost.",
   "manual:authentication:protect_localhost_manual": "Si désactivé, le manuel et la FAQ peuvent être accédés sans nom d'utilisateur et mot de passe de localhost.",
