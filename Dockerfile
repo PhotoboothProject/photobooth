@@ -26,11 +26,8 @@ COPY . .
 
 RUN chown -R application:application /app
 
-# switch to application user
-USER application
-
 # Install and build
 RUN git config --global --add safe.directory /app \
     && git submodule update --init \
-    && npm install \
+    && npm ci \
     && npm run build
