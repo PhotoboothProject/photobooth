@@ -1,10 +1,13 @@
-version: "3.9"
-
 services:
   photobooth:
     build: .
     ports:
-      - "80:80"
-      - "443:443"
+        - "${HTTP_PORT:-80}:80"
+        - "${HTTPS_PORT:-443}:443"
     environment:
       - COMPOSER_VERSION=2
+    volumes:
+      - ./private:/app/private
+      - ./config:/app/config
+      - ./data:/app/data
+      - ./var:/app/var
