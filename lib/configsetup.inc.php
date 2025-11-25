@@ -1392,6 +1392,7 @@ return [
                 'none' => 'None',
                 'device_cam' => 'from device cam (no remote preview)',
                 'url' => 'from URL (remote preview)',
+                'webrtc' => 'from WebRTC (remote preview)',
             ],
             'value' => $config['preview']['mode'],
         ],

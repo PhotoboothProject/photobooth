@@ -28,7 +28,8 @@ const photoboothPreview = (function () {
         PreviewMode = {
             NONE: 'none',
             DEVICE: 'device_cam',
-            URL: 'url'
+            URL: 'url',
+            WEBRTC: 'webrtc'
         },
         webcamConstraints = {
             audio: false,
@@ -46,7 +47,85 @@ const photoboothPreview = (function () {
         url,
         pictureFrame,
         collageFrame,
-        retryGetMedia = 3;
+        retryGetMedia = 3,
+        webrtcPeer = null;
+
+    function startGo2rtcWebRTC(srcName) {
+        const webrtcUrl = srcName;
+        const videoEl = video.get(0);
+
+        // Close previous peer if any
+        if (webrtcPeer) {
+            try {
+                webrtcPeer.getSenders().forEach((s) => s.track && s.track.stop());
+                webrtcPeer.close();
+            } catch (e) {
+                photoboothTools.console.logDev('Preview: startGo2rtcWebRTC error ' + JSON.stringify(e));
+            }
+            webrtcPeer = null;
+        }
+
+        const pc = new RTCPeerConnection({
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        });
+
+        webrtcPeer = pc;
+
+        const inboundStream = new MediaStream();
+        videoEl.srcObject = inboundStream;
+
+        pc.addTransceiver('video', { direction: 'recvonly' });
+
+        pc.ontrack = function (ev) {
+            inboundStream.addTrack(ev.track);
+        };
+
+        function waitForIceComplete() {
+            return new Promise((resolve) => {
+                if (pc.iceGatheringState === 'complete') {
+                    resolve();
+                } else {
+                    const checkState = () => {
+                        if (pc.iceGatheringState === 'complete') {
+                            pc.removeEventListener('icegatheringstatechange', checkState);
+                            resolve();
+                        }
+                    };
+                    pc.addEventListener('icegatheringstatechange', checkState);
+                }
+            });
+        }
+
+        return pc
+            .createOffer()
+            .then((offer) => pc.setLocalDescription(offer))
+            .then(waitForIceComplete)
+            .then(() =>
+                fetch(webrtcUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'offer',
+                        sdp: pc.localDescription.sdp
+                    })
+                })
+            )
+            .then((resp) => {
+                if (!resp.ok) {
+                    throw new Error('error go2rtc HTTP ' + resp.status);
+                }
+                return resp.json();
+            })
+            .then((answer) => pc.setRemoteDescription(answer))
+            .then(() =>
+                videoEl.play().catch(() => {
+                    photoboothTools.console.logDev('Preview: Safari requires user gesture before play()');
+                })
+            )
+            .catch((err) => {
+                photoboothTools.console.log('ERROR: Preview WebRTC failed:', err);
+            });
+    }
 
     api.changeVideoMode = function (mode) {
         photoboothTools.console.logDev('Preview: Changing video mode: ' + mode);
@@ -66,7 +145,8 @@ const photoboothPreview = (function () {
         if (
             !navigator.mediaDevices ||
             config.preview.mode === PreviewMode.NONE.valueOf() ||
-            config.preview.mode === PreviewMode.URL.valueOf()
+            config.preview.mode === PreviewMode.URL.valueOf() ||
+            config.preview.mode === PreviewMode.WEBRTC.valueOf() // NEW: skip gUM for WebRTC
         ) {
             photoboothTools.console.logDev('Preview: No preview from device cam or no webcam available!');
 
@@ -141,7 +221,9 @@ const photoboothPreview = (function () {
     api.startVideo = function (mode, retry = 0, maxGetMediaRetry = 3) {
         retryGetMedia = maxGetMediaRetry;
         photoboothTools.console.log('Preview: startVideo mode: ' + mode);
-        if (config.preview.mode !== PreviewMode.URL.valueOf()) {
+
+        // Only require mediaDevices for DEVICE mode
+        if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
             if (!navigator.mediaDevices || config.preview.mode === PreviewMode.NONE.valueOf()) {
                 return;
             }
@@ -161,7 +243,14 @@ const photoboothPreview = (function () {
                     photoboothTools.console.logDev('Preview: Running preview cmd (BACKGROUND).');
                     api.runCmd('start');
                 }
-                api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
+
+                if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
+                    api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
+                } else if (config.preview.mode === PreviewMode.WEBRTC.valueOf()) {
+                    photoboothTools.console.logDev('Preview: BACKGROUND preview via WebRTC.');
+                    video.show();
+                    startGo2rtcWebRTC(config.preview.url);
+                }
                 break;
             case CameraDisplayMode.COUNTDOWN:
                 if (config.commands.preview) {
@@ -183,6 +272,10 @@ const photoboothPreview = (function () {
                         url.attr('src', addCacheBustingParam(getRootProperty('--background-preview')));
                         url.show();
                     }, config.preview.url_delay);
+                } else if (config.preview.mode === PreviewMode.WEBRTC.valueOf()) {
+                    photoboothTools.console.logDev('Preview: Preview at countdown via WebRTC.');
+                    video.show();
+                    startGo2rtcWebRTC(config.preview.url);
                 }
                 break;
             case CameraDisplayMode.TEST:
@@ -195,6 +288,10 @@ const photoboothPreview = (function () {
                         url.attr('src', addCacheBustingParam(getRootProperty('--background-preview')));
                         url.show();
                     }, config.preview.url_delay);
+                } else if (config.preview.mode === PreviewMode.WEBRTC.valueOf()) {
+                    photoboothTools.console.logDev('Preview: Preview from WebRTC.');
+                    video.show();
+                    startGo2rtcWebRTC(config.preview.url);
                 }
                 break;
             default:
@@ -207,7 +304,11 @@ const photoboothPreview = (function () {
         if (config.commands.preview_kill) {
             api.runCmd('stop');
         }
-        if (config.preview.mode === PreviewMode.DEVICE.valueOf() || config.preview.mode === PreviewMode.URL.valueOf()) {
+        if (
+            config.preview.mode === PreviewMode.DEVICE.valueOf() ||
+            config.preview.mode === PreviewMode.URL.valueOf() ||
+            config.preview.mode === PreviewMode.WEBRTC.valueOf()
+        ) {
             api.stopVideo();
         }
     };
@@ -215,8 +316,30 @@ const photoboothPreview = (function () {
     api.stopVideo = function () {
         loader.css('--stage-background', 'var(--background-countdown-color)');
         if (api.stream) {
-            api.stream.getTracks()[0].stop();
+            api.stream.getTracks().forEach((track) => track.stop());
             api.stream = null;
+        }
+
+        // stop WebRTC
+        if (webrtcPeer) {
+            try {
+                webrtcPeer.getSenders().forEach((sender) => sender.track && sender.track.stop());
+                webrtcPeer.close();
+            } catch (e) {
+                photoboothTools.console.logDev('Preview: stop webrtc error ' + JSON.stringify(e));
+            }
+            webrtcPeer = null;
+        }
+
+        const videoEl = video.get(0);
+        if (videoEl) {
+            videoEl.srcObject = null;
+            videoEl.removeAttribute('src');
+            try {
+                videoEl.load();
+            } catch (e) {
+                photoboothTools.console.logDev('Preview: stop videoEl error ' + JSON.stringify(e));
+            }
         }
         url.hide();
         url.attr('src', '');
