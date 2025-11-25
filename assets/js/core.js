@@ -201,16 +201,18 @@ const photoBooth = (function () {
 
             return new Promise((resolve) => {
                 const stop =
-                    seconds > parseInt(config.preview.stop_time, 10)
-                        ? seconds - parseInt(config.preview.stop_time, 10)
-                        : seconds;
+                    parseInt(config.preview.stop_time, 10) > seconds ? 0 : parseInt(config.preview.stop_time, 10);
+                photoboothTools.console.logDev('Preview: core: stop at ' + stop);
                 const interval = setInterval(() => {
-                    const numberElement = document.createElement('div');
-                    numberElement.classList.add('countdown-number');
-                    numberElement.textContent = Number(seconds).toString();
-                    api.countdown.element.innerHtml = '';
-                    api.countdown.element.appendChild(numberElement);
-
+                    photoboothTools.console.logDev('Preview: core: countdown seconds ' + seconds);
+                    api.countdown.element.innerHTML = '';
+                    if (seconds > 0) {
+                        // dont show the 0 as countdown number
+                        const numberElement = document.createElement('div');
+                        numberElement.classList.add('countdown-number');
+                        numberElement.textContent = Number(seconds).toString();
+                        api.countdown.element.appendChild(numberElement);
+                    }
                     if (config.sound.enabled && config.sound.countdown_enabled) {
                         const soundfile = photoboothTools.getSound('counter-' + Number(seconds).toString());
                         if (soundfile !== null) {
@@ -221,19 +223,21 @@ const photoBooth = (function () {
                         }
                     }
 
-                    seconds--;
-
-                    if (seconds === stop && config.commands.preview_kill && !config.preview.camTakesPic) {
+                    // stop second hit
+                    if (seconds === stop && !config.preview.camTakesPic) {
                         photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
                         photoboothPreview.stopPreview();
                     }
 
-                    if (seconds < 0) {
-                        api.countdown.destroy();
-                        clearInterval(interval);
+                    // after 1 is faded out, on second 0
+                    if (seconds <= 0) {
                         photoboothTools.console.log('Countdown finished.');
+                        clearInterval(interval);
+                        api.countdown.destroy();
                         resolve();
                     }
+
+                    seconds--;
                 }, 1000);
             });
         }
