@@ -6,13 +6,11 @@ class ArrayUtility
 {
     public static function mergeRecursive(array $array, array $overrule): array
     {
-        foreach ($overrule as $key => $_) {
-            if (isset($array[$key]) && is_array($array[$key])) {
-                if (is_array($overrule[$key])) {
-                    $array[$key] = self::mergeRecursive($array[$key], $overrule[$key]);
-                }
+        foreach ($overrule as $key => $overruleValue) {
+            if (isset($array[$key]) && is_array($array[$key]) && is_array($overruleValue)) {
+                $array[$key] = self::mergeRecursive($array[$key], $overruleValue);
             } else {
-                $array[$key] = $overrule[$key];
+                $array[$key] = $overruleValue;
             }
         }
         reset($array);
