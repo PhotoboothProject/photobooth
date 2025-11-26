@@ -10,6 +10,7 @@ use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\FileDelete;
 use Photobooth\PhotoboothCapture;
 use Photobooth\Service\DatabaseManagerService;
+use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 
@@ -62,6 +63,10 @@ if ($saveCopy) {
             $delete = new FileDelete($_POST['file'], $paths);
             $delete->deleteFiles();
             $logger->debug('delete', $delete->getLogData());
+
+            // Remove cached metadata for this file and its thumb, if present
+            ImageMetadataCacheService::getInstance()->remove(FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $_POST['file']);
+            ImageMetadataCacheService::getInstance()->remove(FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $_POST['file']);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace Photobooth;
 
 use GdImage;
+use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Utility\FontUtility;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
@@ -423,6 +424,11 @@ class Image
             if (!imagejpeg($sourceResource, $destination, $this->jpegQuality)) {
                 throw new \Exception('Error saving image.');
             }
+
+            // Cache image dimensions for gallery/PhotoSwipe performance
+            $width = imagesx($sourceResource);
+            $height = imagesy($sourceResource);
+            ImageMetadataCacheService::getInstance()->set($destination, $width, $height);
 
             return true;
         } catch (\Exception $e) {
