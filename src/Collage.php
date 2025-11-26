@@ -409,15 +409,19 @@ class Collage
             }
         }
 
+        $bg_r = 255;
+        $bg_g = 255;
+        $bg_b = 255;
+        $bg_color_hex = 0xFFFFFF;
+
         if ($c->collageBackgroundColor !== null) {
             // colors for background and while rotating jpeg images
             $colorComponents = $imageHandler->getColorComponents($c->collageBackgroundColor);
             list($bg_r, $bg_g, $bg_b) = $colorComponents;
-        }
-
-        $bg_color_hex = hexdec(substr($c->collageBackgroundColor, 1));
-        if (!is_int($bg_color_hex)) {
-            throw new \Exception('Cannot convert the hexadecimal collage background color to its decimal equivalent!');
+            $bg_color_hex = hexdec(substr($c->collageBackgroundColor, 1));
+            if (!is_int($bg_color_hex)) {
+                throw new \Exception('Cannot convert the hexadecimal collage background color to its decimal equivalent!');
+            }
         }
 
         // dashedline color on 2x3 and 2x4 collage layouts
@@ -442,10 +446,11 @@ class Collage
                 $editImages[] = PathUtility::getAbsolutePath($c->collagePlaceholderPath);
                 $placeholderOffset = 1;
             } else {
-                if (!file_exists($srcImagePaths[$i - $placeholderOffset])) {
-                    throw new \Exception('The file ' . $srcImagePaths[$i] . ' does not exist.');
+                $srcIndex = $i - $placeholderOffset;
+                if (!isset($srcImagePaths[$srcIndex]) || !file_exists($srcImagePaths[$srcIndex])) {
+                    throw new \Exception('The file ' . ($srcImagePaths[$srcIndex] ?? 'undefined') . ' does not exist.');
                 }
-                $singleimage = substr($srcImagePaths[$i - $placeholderOffset], 0, -4);
+                $singleimage = substr($srcImagePaths[$srcIndex], 0, -4);
                 $editfilename = $singleimage . '-edit.jpg';
                 if (!copy($srcImagePaths[$i - $placeholderOffset], $editfilename)) {
                     throw new \Exception('Failed to copy image for editing.');
