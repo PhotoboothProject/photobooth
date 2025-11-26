@@ -9,7 +9,11 @@ class PathUtility
 {
     public static function getRootPath(): string
     {
-        $path = realpath(__DIR__ . '/../../');
+        static $path = null;
+
+        if ($path === null) {
+            $path = realpath(__DIR__ . '/../../');
+        }
         if ($path === false) {
             throw new InvalidArgumentException('Rootpath could not be resolved.');
         }
