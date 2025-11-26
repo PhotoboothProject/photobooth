@@ -359,8 +359,16 @@ class Image
     {
         try {
             if (str_contains($image, '/api/randomImg.php')) {
+                $query = [];
                 parse_str(parse_url($image)['query'] ?? '', $query);
-                $path = is_array($query['dir']) ? $query['dir']['0'] : $query['dir'];
+                $dirParam = $query['dir'] ?? null;
+                if ($dirParam === null) {
+                    throw new \Exception('Missing "dir" parameter for random image path.');
+                }
+                $path = is_array($dirParam) ? $dirParam[0] ?? '' : $dirParam;
+                if ($path === '') {
+                    throw new \Exception('Invalid "dir" parameter for random image path.');
+                }
                 $image = ImageUtility::getRandomImageFromPath($path);
             }
 
@@ -368,7 +376,11 @@ class Image
                 $image = PathUtility::resolveFilePath($image);
             }
 
-            $resource = imagecreatefromstring((string)file_get_contents($image));
+            $contents = file_get_contents($image);
+            if ($contents === false) {
+                throw new \Exception('Can\'t read image file: ' . $image);
+            }
+            $resource = imagecreatefromstring((string)$contents);
             if (!$resource) {
                 throw new \Exception('Can\'t create GD resource.');
             }
@@ -405,6 +417,7 @@ class Image
      */
     public function rotateResizeImage(GdImage $image, int $degrees, string $bgColor = '#ffffff', bool $useTransparentBackground = false): GdImage|false
     {
+        $new = $image;
         try {
             // simple rotate if possible and ignore changed dimensions (doesn't need to care about background color)
             $simple_rotate = [-180, -90, 0, 180, 90, 360];
