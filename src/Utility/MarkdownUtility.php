@@ -9,7 +9,7 @@ class MarkdownUtility
     public static function render(string $path): string
     {
         $path = PathUtility::getAbsolutePath($path);
-        if (!file_exists(PathUtility::getAbsolutePath($path))) {
+        if (!file_exists($path)) {
             throw new \Exception('File cannot be found: ' . $path);
         }
 
@@ -23,6 +23,6 @@ class MarkdownUtility
             'allow_unsafe_links' => false,
         ]);
 
-        return $converter->convert($content);
+        return (string) $converter->convert($content);
     }
 }
