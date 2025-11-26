@@ -6,6 +6,8 @@ use Photobooth\Utility\PathUtility;
 
 class ApplicationService
 {
+    private const DEV_PLACEHOLDER_VERSION = '4.99.0';
+
     protected string $version;
 
     public function __construct()
@@ -38,7 +40,7 @@ class ApplicationService
             throw new \Exception('Error decoding package file: ' . json_last_error_msg());
         }
 
-        if ($package['version'] === '4.99.0') {
+        if ($package['version'] === self::DEV_PLACEHOLDER_VERSION) {
             $version = '';
             $gitVersion = $this->getGitVersion();
         } else {
