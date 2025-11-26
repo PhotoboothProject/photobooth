@@ -27,7 +27,12 @@ class Environment implements \JsonSerializable
 
     public static function getIp(): string
     {
-        return self::isLinux() ? shell_exec('hostname -I | cut -d " " -f 1') : $_SERVER['HTTP_HOST'];
+        if (self::isLinux()) {
+            $ip = shell_exec('hostname -I | cut -d " " -f 1') ?: '';
+            return trim((string) $ip);
+        }
+
+        return isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '';
     }
 
     public static function getPublicFolders(): array
