@@ -3,6 +3,7 @@
 class DebugPanel {
     constructor() {
         this.autorefresh = false;
+        this.autorefreshIntervalId = null;
         this.currentNavigationId = null;
 
         this.buttons = document.querySelectorAll('.debugNavItem');
@@ -18,11 +19,17 @@ class DebugPanel {
         this.autoRefreshInput.addEventListener('change', (event) => {
             this.autorefresh = event.target.checked;
             if (event.target.checked) {
-                setInterval(() => {
+                if (this.autorefreshIntervalId !== null) {
+                    clearInterval(this.autorefreshIntervalId);
+                }
+                this.autorefreshIntervalId = setInterval(() => {
                     this.refreshContent();
                 }, 1000);
             } else {
-                clearInterval();
+                if (this.autorefreshIntervalId !== null) {
+                    clearInterval(this.autorefreshIntervalId);
+                    this.autorefreshIntervalId = null;
+                }
             }
         });
 
