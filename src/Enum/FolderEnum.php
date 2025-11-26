@@ -23,6 +23,8 @@ enum FolderEnum: string
     case RESOURCES = 'resources';
     case VAR = 'var';
 
+    case SASS = 'sass';
+
     public function public(): string
     {
         return PathUtility::getPublicPath($this->value);
@@ -50,6 +52,7 @@ enum FolderEnum: string
             FolderEnum::PRIVATE => 'private',
             FolderEnum::RESOURCES => 'resources',
             FolderEnum::VAR => 'var',
+            FolderEnum::SASS => 'sass',
         };
     }
 }

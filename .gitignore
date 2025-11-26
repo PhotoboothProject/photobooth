@@ -54,6 +54,3 @@ tools/*/vendor
 
 # rembg virtual environment
 scripts/rembg_venv/
-
-# ignore user custom sass file
-/assets/sass/_custom.scss

@@ -22,7 +22,12 @@ gulp.task('sass', async function () {
     const scssDir = './assets/sass';
     const outputDir = './resources/css';
 
-    const optionalCustomCss = path.join(scssDir, '_custom.scss');
+    const privateScssDir = './private/sass';
+
+    // Ensure the private sass directory exists
+    fs.mkdirSync(privateScssDir, { recursive: true });
+    // Create an optional _custom.scss file if it doesn't exist
+    const optionalCustomCss = path.join(privateScssDir, '_custom.scss');
     if (!fs.existsSync(optionalCustomCss)) {
       fs.writeFileSync(
         optionalCustomCss,
