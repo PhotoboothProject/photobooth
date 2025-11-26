@@ -376,11 +376,32 @@ class Image
                 $image = PathUtility::resolveFilePath($image);
             }
 
-            $contents = file_get_contents($image);
-            if ($contents === false) {
-                throw new \Exception('Can\'t read image file: ' . $image);
+            $extension = strtolower(pathinfo($image, PATHINFO_EXTENSION));
+            $resource = false;
+            switch ($extension) {
+                case 'jpg':
+                case 'jpeg':
+                    $resource = @imagecreatefromjpeg($image);
+                    break;
+                case 'png':
+                    $resource = @imagecreatefrompng($image);
+                    break;
+                case 'gif':
+                    $resource = @imagecreatefromgif($image);
+                    break;
+                case 'webp':
+                    if (function_exists('imagecreatefromwebp')) {
+                        $resource = @imagecreatefromwebp($image);
+                    }
+                    break;
+                default:
+                    $contents = file_get_contents($image);
+                    if ($contents === false) {
+                        throw new \Exception('Can\'t read image file: ' . $image);
+                    }
+                    $resource = @imagecreatefromstring((string)$contents);
+                    break;
             }
-            $resource = imagecreatefromstring((string)$contents);
             if (!$resource) {
                 throw new \Exception('Can\'t create GD resource.');
             }
