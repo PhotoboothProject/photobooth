@@ -74,7 +74,7 @@ const photoboothPreviewTest = (function () {
         photoboothPreview.startVideo(CameraDisplayMode.TEST);
 
         setTimeout(() => {
-            if (photoboothPreview.stream) {
+            if (photoboothPreview.stream || config.preview.mode === PreviewMode.URL.valueOf()) {
                 buttonStopPreview.show();
             } else {
                 buttonStartPreview.show();
