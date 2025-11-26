@@ -32,6 +32,9 @@ class FileUtility
 
     public static function getErrorMessage(int $errorCode): string
     {
+        if(array_key_exists($errorCode, self::FILE_UPLOAD_ERROR_MESSAGES) === false) {
+            return 'file_upload:error_unknown';
+        }
         return self::FILE_UPLOAD_ERROR_MESSAGES[$errorCode];
     }
 }
