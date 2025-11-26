@@ -110,7 +110,13 @@ class DatabaseManagerService
 
         if (!in_array($content, $currContent)) {
             $currContent[] = $content;
-            file_put_contents($this->databaseFile, json_encode($currContent));
+            $encoded = json_encode($currContent);
+            if ($encoded === false) {
+                throw new \Exception('Failed to encode database content to JSON: ' . json_last_error_msg());
+            }
+            if (file_put_contents($this->databaseFile, $encoded) === false) {
+                throw new \Exception('Failed to write database file: ' . $this->databaseFile);
+            }
         }
     }
 
@@ -131,7 +137,13 @@ class DatabaseManagerService
 
         if (in_array($content, $currContent)) {
             unset($currContent[array_search($content, $currContent)]);
-            file_put_contents($this->databaseFile, json_encode(array_values($currContent)));
+            $encoded = json_encode(array_values($currContent));
+            if ($encoded === false) {
+                throw new \Exception('Failed to encode database content to JSON: ' . json_last_error_msg());
+            }
+            if (file_put_contents($this->databaseFile, $encoded) === false) {
+                throw new \Exception('Failed to write database file: ' . $this->databaseFile);
+            }
         }
 
         if (file_exists($this->databaseFile) && empty($currContent)) {
