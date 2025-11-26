@@ -9,6 +9,7 @@ use Symfony\Component\Asset\Packages;
 class AssetService
 {
     protected Packages $packages;
+    protected ?string $extraVersion = null;
 
     public function __construct()
     {
@@ -18,7 +19,19 @@ class AssetService
 
     public function getUrl(string $path): string
     {
-        return $this->packages->getUrl($path);
+        $url = $this->packages->getUrl($path);
+
+        if ($this->extraVersion !== null && $this->extraVersion !== '') {
+            $separator = str_contains($url, '?') ? '&' : '?';
+            $url .= $separator . 'r=' . rawurlencode($this->extraVersion);
+        }
+
+        return $url;
+    }
+
+    public function setExtraVersion(?string $version): void
+    {
+        $this->extraVersion = $version;
     }
 
     public static function getInstance(): self

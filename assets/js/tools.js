@@ -303,7 +303,9 @@ const photoboothTools = (function () {
     };
 
     api.reloadPage = function () {
-        window.location.reload();
+        const url = new URL(window.location.href);
+        url.searchParams.set('refresh', '1');
+        window.location.href = url.toString();
     };
 
     api.getRequest = function (url) {
