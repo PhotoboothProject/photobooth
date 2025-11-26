@@ -30,10 +30,14 @@ class MailService
 
     private function loadDatabase(): array
     {
-        if (is_file($this->databaseFile) && $data = file_get_contents($this->databaseFile)) {
+        if (is_file($this->databaseFile)) {
+            $data = file_get_contents($this->databaseFile);
+            if ($data === false) {
+                throw new \Exception('Failed to read the database ' . $this->databaseFile);
+            }
             $addresses = json_decode($data, true);
-            if ($addresses === null) {
-                throw new \Exception('Failed to decode the database ' . $this->databaseFile);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Failed to decode the database ' . $this->databaseFile . ': ' . json_last_error_msg());
             }
         } else {
             $addresses = [];
