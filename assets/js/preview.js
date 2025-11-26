@@ -231,7 +231,8 @@ const photoboothPreview = (function () {
     api.stopVideo = function () {
         loader.css('--stage-background', 'var(--background-countdown-color)');
         if (api.stream) {
-            api.stream.getTracks()[0].stop();
+            const tracks = api.stream.getTracks();
+            tracks.forEach((track) => track.stop());
             api.stream = null;
         }
         url.hide();
