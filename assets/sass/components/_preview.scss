@@ -92,3 +92,9 @@
     scale: 1 -1;
   }
 }
+
+#preview--ipcam {
+  &.streaming {
+    background-image: var(--background-preview);
+  }
+}

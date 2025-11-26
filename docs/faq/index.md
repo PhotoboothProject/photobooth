@@ -476,7 +476,7 @@ If you like to have the same preview independent of the device you access Photob
 Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
 
 -   Admin panel config _"Preview mode"_: `from URL`
--   Admin panel config _"Preview-URL"_ example (add needed IP address instead): `http://192.168.0.2:8081`
+-   Admin panel config _"Preview-URL"_ example (add needed IP address instead): `url(http://192.168.0.2:8081)`
 
 **Note**
 
@@ -488,7 +488,7 @@ Make sure to have a stream available you can use (e.g. from your Webcam, Smartph
 
 If you want to use a stream from your DSLR or Pi Camera, install go2rtc and setup needed service to use.
 
-go2rtc can be accessed at `http://localhost:1984`. Use `http://localhost:1984/api/stream.mjpeg?src=photobooth` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
+go2rtc can be accessed at `http://localhost:1984`. Use `url("http://localhost:1984/api/stream.mjpeg?src=photobooth")` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
 To be able to also capture images you need to adjust the capture command.
 _"Commands"_: _"Take picture command"_: `capture %s`
 
