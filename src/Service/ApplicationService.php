@@ -40,8 +40,9 @@ class ApplicationService
             throw new \Exception('Error decoding package file: ' . json_last_error_msg());
         }
 
+        $gitVersion = '';
+        $version = '';
         if ($package['version'] === self::DEV_PLACEHOLDER_VERSION) {
-            $version = '';
             $gitVersion = $this->getGitVersion();
         } else {
             $version = $package['version'] ?? 'unknown';
