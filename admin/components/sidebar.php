@@ -13,6 +13,7 @@ if (isset($sidebarHeadline)) {
 <div class="w-full flex md:hidden px-5 pb-5 items-center">
     <div class="w-full flex flex-col">
         <span class="text-2xl text-white"><?=$headline ?></span>
+        <span class="text-xs text-white"><?=$appVersion ?></span>
         <span class="text-white/60 flex items-center">
             <span class="fa fa-location-arrow text-white/60 text-sm flex items-center mr-1"></span>
             <span id="activeTabLabel" class="capitalize">General</span>
@@ -30,7 +31,10 @@ if (isset($sidebarHeadline)) {
             <a href="<?=PathUtility::getPublicPath('login')?>" class="h-4 mr-4 flex items-center justify-center border-r border-solid border-white/20 px-3">
                 <span class="fa fa-home text-white/60 text-2xl hover:text-white/100 transition-all"></span>
             </a>
-            <h1 class="text-white font-bold"><?=$headline ?></h1>
+            <div class="flex flex-col w-full">
+              <h1 class="text-white font-bold"><?=$headline ?></h1>
+              <h6 class="text-white text-xs"><?= $appVersion ?></h6>
+            </div>
             <div class="w-12 h-12 ml-auto text white cursor-pointer flex items-center justify-center md:hidden" onclick="toggleAdminNavi()">
                 <span class="text-white !text-2xl fa fa-close"></span>
             </div>
