@@ -1479,6 +1479,20 @@ return [
             'placeholder' => $defaultConfig['preview']['videoHeight'],
             'value' => $config['preview']['videoHeight'],
         ],
+        'preview_videoWidth_collage'  => [
+            'view'        => 'expert',
+            'type'        => 'number',
+            'name'        => 'preview[videoWidth_collage]',
+            'placeholder' => $defaultConfig['preview']['videoWidth_collage'],
+            'value'       => $config['preview']['videoWidth_collage'],
+        ],
+        'preview_videoHeight_collage' => [
+            'view'        => 'expert',
+            'type'        => 'number',
+            'name'        => 'preview[videoHeight_collage]',
+            'placeholder' => $defaultConfig['preview']['videoHeight_collage'],
+            'value'       => $config['preview']['videoHeight_collage'],
+        ],
         'preview_camera_mode' => [
             'type' => 'select',
             'name' => 'preview[camera_mode]',

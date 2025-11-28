@@ -30,14 +30,6 @@ const photoboothPreview = (function () {
             DEVICE: 'device_cam',
             URL: 'url'
         },
-        webcamConstraints = {
-            audio: false,
-            video: {
-                width: config.preview.videoWidth,
-                height: config.preview.videoHeight,
-                facingMode: config.preview.camera_mode
-            }
-        },
         api = {};
 
     let pid,
@@ -83,6 +75,30 @@ const photoboothPreview = (function () {
 
             return;
         }
+
+        const videoWidthDefault = config.preview.videoWidth;
+        const videoHeightDefault = config.preview.videoHeight;
+        let videoWidth = videoWidthDefault;
+        let videoHeight = videoHeightDefault;
+
+        // Support diffrent preview video sizes for collage mode
+        if (photoBooth.photoStyle === 'collage') {
+            if (config.preview.videoWidth_collage > 0) {
+                videoWidth = config.preview.videoWidth_collage;
+            }
+            if (config.preview.videoHeight_collage > 0) {
+                videoHeight = config.preview.videoHeight_collage;
+            }
+        }
+
+        const webcamConstraints = {
+            audio: false,
+            video: {
+                width: videoWidth,
+                height: videoHeight,
+                facingMode: config.preview.camera_mode
+            }
+        };
 
         getMedia
             .call(navigator.mediaDevices, webcamConstraints)

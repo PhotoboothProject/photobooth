@@ -601,6 +601,24 @@ class PhotoboothConfiguration implements ConfigurationInterface
                     ->end()
                 ->integerNode('videoHeight')
                     ->defaultValue(720)
+            ->beforeNormalization()
+            ->ifString()
+            ->then(function (string $value): int {
+                return intval($value);
+            })
+            ->end()
+            ->end()
+            ->integerNode('videoWidth_collage')
+            ->defaultValue(1280)
+            ->beforeNormalization()
+            ->ifString()
+            ->then(function (string $value): int {
+                return intval($value);
+            })
+            ->end()
+            ->end()
+            ->integerNode('videoHeight_collage')
+            ->defaultValue(720)
                     ->beforeNormalization()
                         ->ifString()
                         ->then(function (string $value): int { return intval($value); })
