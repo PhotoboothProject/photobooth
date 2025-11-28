@@ -57,8 +57,9 @@ _*1 Capture from webcam is possible using third party software e.g. [fswebcam](h
 -   Access login via [localhost/login](http://localhost/login).
 -   Offline manual with settings explained at [localhost/manual](http://localhost/manual).
 -   Offline FAQ at [localhost/manual/faq](http://localhost/manual/faq).
--   Disk usage page, access via admin panel or directly at [localhost/admin/diskusage](http://localhost/admin/diskusage).
--   Settings can be changed via Admin Panel at ([localhost/admin](http://localhost/admin)):
+- Disk usage page, access via admin panel or directly at [localhost/admin/diskusage](http://localhost/admin/diskusage) (
+  or [localhost/photobooth/admin/diskusage](http://localhost/photobooth/admin/diskusage)).
+- Settings can be changed via Admin Panel at ([localhost/admin](http://localhost/admin)) (or [localhost/photobooth/admin](http://localhost/photobooth/admin)):
     -   Multi-language support:
         -   [Translate on Crowdin](https://crowdin.com/project/photobooth)
     -   Login to protect Admin Panel, Start page and/or Manual & FAQ can be enabled.

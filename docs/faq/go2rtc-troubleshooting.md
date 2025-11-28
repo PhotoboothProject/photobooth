@@ -91,7 +91,8 @@ Didn’t work? Then continue...
 
 #### Set the default go2rtc config correctly
 
-Open [http://localhost/admin/captureconfig.php](http://localhost/admin/captureconfig.php) to apply the default suggested configuration automatically.
+Open [http://localhost/admin/captureconfig.php](http://localhost/admin/captureconfig.php) (
+or [http://localhost/photobooth/admin/captureconfig.php](http://localhost/photobooth/admin/captureconfig.php)) to apply the default suggested configuration automatically.
 
 Then try again.
 
@@ -99,7 +100,8 @@ Then try again.
 
 Another alternative, without starting or stopping the preview, is to pull a frame directly from go2rtc.
 
-Open [http://localhost/admin/wgetcaptureconfig.php](http://localhost/admin/wgetcaptureconfig.php) to apply the adjusted configuration.
+Open [http://localhost/admin/wgetcaptureconfig.php](http://localhost/admin/wgetcaptureconfig.php) (
+or [http://localhost/photobooth/admin/wgetcaptureconfig.php](http://localhost/photobooth/admin/wgetcaptureconfig.php)) to apply the adjusted configuration.
 
 Then try again.
 
