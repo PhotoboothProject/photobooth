@@ -118,6 +118,57 @@ if ($action === 'reset') {
     $logger->debug('Saving Photobooth configuration...');
     $newConfig = ArrayUtility::mergeRecursive($defaultConfig, $data);
 
+    // Normalize stored paths: strip base URL and host so config contains project-relative paths only
+    $baseUrl  = PathUtility::getBaseUrl();
+    $hostBase = '';
+    if (isset($_SERVER['HTTP_HOST'])) {
+        $scheme   = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+        $hostBase = $scheme . '://' . $_SERVER['HTTP_HOST'] . $baseUrl;
+    }
+
+    $normalizePath = static function (?string $path) use ($baseUrl, $hostBase): ?string {
+        if ($path === null || $path === '') {
+            return $path;
+        }
+        // Remove full host+base prefix, e.g. "https://host/photobooth/"
+        if ($hostBase !== '' && str_starts_with($path, $hostBase)) {
+            $path = substr($path, strlen($hostBase));
+        }
+        // Remove base URL prefix, e.g. "/photobooth/"
+        if ($baseUrl !== '' && str_starts_with($path, $baseUrl)) {
+            $path = substr($path, strlen($baseUrl));
+        }
+
+        // If path still contains a known project-relative marker, strip everything before it
+        foreach (['/private/', '/resources/'] as $marker) {
+            $pos = strpos($path, $marker);
+            if ($pos !== false) {
+                $path = substr($path, $pos);
+                break;
+            }
+        }
+
+        return $path;
+    };
+
+    // Logo and UI images
+    $newConfig['logo']['path']             = $normalizePath($newConfig['logo']['path'] ?? null);
+    $newConfig['ui']['shutter_cheese_img'] = $normalizePath($newConfig['ui']['shutter_cheese_img'] ?? null);
+
+    // Frames and backgrounds which may be selected via image picker
+    $newConfig['picture']['frame']       = $normalizePath($newConfig['picture']['frame'] ?? null);
+    $newConfig['collage']['frame']       = $normalizePath($newConfig['collage']['frame'] ?? null);
+    $newConfig['background']['defaults'] = $normalizePath($newConfig['background']['defaults'] ?? null);
+    $newConfig['background']['admin']    = $normalizePath($newConfig['background']['admin'] ?? null);
+    $newConfig['background']['chroma']   = $normalizePath($newConfig['background']['chroma'] ?? null);
+    $newConfig['collage']['placeholderpath'] = $normalizePath($newConfig['collage']['placeholderpath'] ?? null);
+
+    // Fonts selected via font picker
+    $newConfig['textonpicture']['font'] = $normalizePath($newConfig['textonpicture']['font'] ?? null);
+    $newConfig['textoncollage']['font'] = $normalizePath($newConfig['textoncollage']['font'] ?? null);
+    $newConfig['textonprint']['font']   = $normalizePath($newConfig['textonprint']['font'] ?? null);
+    $newConfig['print']['frame']        = $normalizePath($newConfig['print']['frame'] ?? null);
+
     if (isset($newConfig['login']['enabled']) && $newConfig['login']['enabled'] == true) {
         if ((isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) || $newConfig['login']['keypad']) {
             if ($newConfig['login']['keypad'] && strlen($newConfig['login']['pin']) != 4) {
@@ -285,21 +336,39 @@ if ($action === 'reset') {
 
     if ($newConfig['logo']['enabled']) {
         $logoPath = $newConfig['logo']['path'];
-        if (empty($logoPath) || !file_exists($_SERVER['DOCUMENT_ROOT'] . $logoPath)) {
+
+        if (empty($logoPath)) {
             $newConfig['logo']['enabled'] = false;
-            $logger->debug('Logo file path does not exist or is empty. Logo disabled.', $newConfig['logo']);
+            $logger->debug('Logo path empty. Logo disabled.', $newConfig['logo']);
         } else {
-            $newConfig['logo']['path'] = PathUtility::fixFilePath($logoPath);
-            $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
-            if ($ext === 'svg') {
-                $logger->debug('Logo file is SVG, path saved.', $newConfig['logo']);
-            } else {
-                $imageInfo = @getimagesize($_SERVER['DOCUMENT_ROOT'] . $logoPath);
-                if ($imageInfo === false) {
-                    $newConfig['logo']['enabled'] = false;
-                    $logger->debug('Logo file is not a supported image type [' . $ext . ']. Logo disabled.', $newConfig['logo']);
+            try {
+                $absoluteLogoPath = PathUtility::resolveFilePath($logoPath);
+            } catch (\Exception $e) {
+                $newConfig['logo']['enabled'] = false;
+                $logger->debug('Logo file path does not exist or is not readable. Logo disabled.', [
+                    'logo'  => $newConfig['logo'],
+                    'error' => $e->getMessage(),
+                ]);
+                $absoluteLogoPath = null;
+            }
+
+            if ($absoluteLogoPath !== null) {
+                $newConfig['logo']['path'] = PathUtility::fixFilePath($logoPath);
+                $ext                       = pathinfo($absoluteLogoPath, PATHINFO_EXTENSION);
+
+                if ($ext === 'svg') {
+                    $logger->debug('Logo file is SVG, path saved.', $newConfig['logo']);
                 } else {
-                    $logger->debug('Logo file is a supported image type [' . $ext . '], path saved.', $newConfig['logo']);
+                    $imageInfo = @getimagesize($absoluteLogoPath);
+                    if ($imageInfo === false) {
+                        $newConfig['logo']['enabled'] = false;
+                        $logger->debug(
+                            'Logo file is not a supported image type [' . $ext . ']. Logo disabled.',
+                            $newConfig['logo'],
+                        );
+                    } else {
+                        $logger->debug('Logo file is a supported image type [' . $ext . '], path saved.', $newConfig['logo']);
+                    }
                 }
             }
         }

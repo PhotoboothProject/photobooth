@@ -6,6 +6,12 @@ class ThemeUtility
 {
     public static function renderCustomUserStyle(array $config): string
     {
+        $backgroundDefault = $config['background']['defaults'] ?? '';
+        $backgroundChroma  = $config['background']['chroma'] ?? '';
+
+        $backgroundDefaultCss = self::buildBackgroundCssValue($backgroundDefault);
+        $backgroundChromaCss  = self::buildBackgroundCssValue($backgroundChroma);
+
         $properties = [
             '--ui-scale' => $config['ui']['scale'] ? $config['ui']['scale'] . '%' : '__UNSET__',
             '--primary-color' => $config['colors']['primary'] ?? '__UNSET__',
@@ -22,8 +28,8 @@ class ThemeUtility
             '--border-color' => $config['colors']['border'] ?? '__UNSET__',
             '--box-color' => $config['colors']['box'] ?? '__UNSET__',
             '--gallery-button-color' => $config['colors']['gallery_button'] ?? '__UNSET__',
-            '--background-default' => $config['background']['defaults'] ?? '__UNSET__',
-            '--background-chroma' => $config['background']['chroma'] ?? '__UNSET__',
+            '--background-default' => $backgroundDefaultCss,
+            '--background-chroma'  => $backgroundChromaCss,
             '--background-preview' => $config['preview']['url'] ?? '__UNSET__',
             '--font-color' => $config['colors']['font'] ?? '__UNSET__',
             '--preview-rotation' => $config['preview']['rotation'] ?? '__UNSET__',
@@ -44,5 +50,23 @@ class ThemeUtility
         $output .= '</style>' . PHP_EOL;
 
         return $output;
+    }
+
+    protected static function buildBackgroundCssValue(string $value): string
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return '__UNSET__';
+        }
+
+        // Keep already wrapped values for backwards compatibility
+        if (str_starts_with($value, 'url(')) {
+            return $value;
+        }
+
+        // Build a full public URL from a relative or absolute path
+        $publicPath = PathUtility::getPublicPath($value);
+
+        return 'url(' . $publicPath . ')';
     }
 }

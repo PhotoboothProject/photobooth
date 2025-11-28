@@ -241,14 +241,18 @@ class AdminInput
 
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             foreach ($setting['paths'] as $path) {
+                $relativeBase = str_replace(PathUtility::getRootPath(), '', $path);
+                if (!str_starts_with($relativeBase, '/')) {
+                    $relativeBase = '/' . $relativeBase;
+                }
+
                 $images .= '
                 <div class="col-span-3">
-                    <h2 class="font-bold">' . PathUtility::getPublicPath($path) . '</h2>
+                    <h2 class="font-bold">' . $relativeBase . '</h2>
                 </div>
             ';
                 try {
                     $files = ImageUtility::getImagesFromPath($path, false);
-                    $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
                     if (count($files) === 0) {
                         $images .= '
                         <div class="col-span-3">
@@ -257,7 +261,12 @@ class AdminInput
                     ';
                     }
                     foreach ($files as $file) {
-                        $origin = $file;
+                        $publicPath = PathUtility::getPublicPath($file);
+                        $origin     = str_replace(PathUtility::getRootPath(), '', $file);
+                        if (!str_starts_with($origin, '/')) {
+                            $origin = '/' . $origin;
+                        }
+
                         if (str_contains($setting['value'], 'url(')) {
                             $origin = 'url(' . $origin . ')';
                         }
@@ -267,8 +276,8 @@ class AdminInput
                                 onclick="adminImageSelect(this, \'' . $setting['name'] . '\');"
                                 data-origin="' . $origin . '"
                                 class="w-full h-full left-0 top-0 absolute object-contain"
-                                src="' . $file . '"
-                                title="' . $file . '"
+                                src="' . $publicPath . '"
+                                title="' . $publicPath . '"
                             >
                         </div>
                     ';
@@ -296,12 +305,13 @@ class AdminInput
             $selectedImage = substr($setting['value'], strlen($_SERVER['DOCUMENT_ROOT']));
         }
         $selectedImage = preg_replace('#/+#', '/', $selectedImage);
+        $selectedImagePublic = $selectedImage !== '' ? PathUtility::getPublicPath($selectedImage) : '';
 
         return '
             <div class="adminImageSelection group">
                 <div class="w-full flex items-start">
                     <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer ' . $hiddenPreview . '" onclick="openAdminImageSelect(this)">
-                        <img class="adminImageSelection-preview object-contain" src="' . $selectedImage . '">
+                        <img class="adminImageSelection-preview object-contain" src="' . $selectedImagePublic . '">
                     </div>
                     <div class="w-full flex flex-col">
                         ' . self::renderHeadline($label) . '
@@ -348,15 +358,19 @@ class AdminInput
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             $pathIndex = 0;
             foreach ($setting['paths'] as $path) {
+                $relativeBase = str_replace(PathUtility::getRootPath(), '', $path);
+                if (!str_starts_with($relativeBase, '/')) {
+                    $relativeBase = '/' . $relativeBase;
+                }
+
                 $fonts .= '
                 <div class="col-span-3">
-                    <h2 class="font-bold">' . PathUtility::getPublicPath($path) . '</h2>
+                    <h2 class="font-bold">' . $relativeBase . '</h2>
                 </div>
             ';
                 $fontClassName = 'font-' . $pathIndex;
                 try {
                     $files = FontUtility::getFontsFromPath($path, false);
-                    $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
                     if (count($files) === 0) {
                         $fonts .= '
                         <div class="col-span-3">
@@ -365,16 +379,23 @@ class AdminInput
                     ';
                     }
                     $fontIndex = 0;
-                    foreach ($files as $name => $path) {
+                    foreach ($files as $name => $fontPath) {
                         $fontClassName .= '-' . $fontIndex;
+                        // Public URL for preview image
+                        $publicPath = PathUtility::getPublicPath($fontPath);
+                        // Project-relative path to be stored in config
+                        $origin = str_replace(PathUtility::getRootPath(), '', $fontPath);
+                        if (!str_starts_with($origin, '/')) {
+                            $origin = '/' . $origin;
+                        }
                         $imageAttributes = [
                             'onClick' => 'adminFontSelect(this, "' . $setting['name'] . '", "' . $fontClassName . '");',
-                            'data-origin' => $path,
+                            'data-origin' => $origin,
                             'title' => $name,
                             'class' => 'w-full h-full left-0 top-0 absolute object-contain cursor-pointer',
                         ];
                         $fonts .= '<style>.' . $fontClassName . ' {font-family:"' . $name . '"}</style>';
-                        $fonts .= '<div class="w-full relative h-0 pb-2/3">' . FontUtility::getFontPreviewImage(fontPath: $path, attributes: $imageAttributes) . '</div>';
+                        $fonts           .= '<div class="w-full relative h-0 pb-2/3">' . FontUtility::getFontPreviewImage(fontPath: $publicPath, attributes: $imageAttributes) . '</div>';
                         $fontIndex++;
                     }
                 } catch (\Exception $e) {
