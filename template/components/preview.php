@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
 $previewFlipClass = $config['preview']['flip'];
@@ -49,10 +50,10 @@ echo '<div id="preview--none">' . $languageService->translate('no_preview') . '<
 echo '</div></div>';
 
 if ($previewShowPictureFrame) {
-    echo '<img id="previewframe--picture" class="' . $previewFlipClass . '" src="' . $config['picture']['frame'] . '" alt="pictureFrame" />';
+    echo '<img id="previewframe--picture" class="' . $previewFlipClass . '" src="' . PathUtility::getPublicPath($config['picture']['frame']) . '" alt="pictureFrame" />';
 }
 if ($previewShowCollageFrame) {
-    echo '<img id="previewframe--collage" class="' . $previewFlipClass . '" src="' . $config['collage']['frame'] . '" alt="collageFrame" />';
+    echo '<img id="previewframe--collage" class="' . $previewFlipClass . '" src="' . PathUtility::getPublicPath($config['collage']['frame']) . '" alt="collageFrame" />';
 }
 
 echo '</div>';

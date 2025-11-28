@@ -64,7 +64,10 @@ class PathUtility
         }
 
         if (self::isAbsolutePath($path)) {
-            $path = str_replace(self::getRootPath(), '', $path);
+            $rootPath = self::getRootPath();
+            if (str_starts_with($path, $rootPath)) {
+                $path = str_replace($rootPath, '', $path);
+            }
         }
 
         $path = self::fixFilePath(self::getBaseUrl() . $path);
