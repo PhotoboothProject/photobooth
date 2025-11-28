@@ -15,7 +15,6 @@ if (!isset($_SESSION['asset_extra_version'])) {
 }
 
 if ($noCacheFlag) {
-    // neuen Hash erzeugen und merken
     $_SESSION['asset_extra_version'] = (string) time();
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
