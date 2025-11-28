@@ -6,12 +6,12 @@ Photobooth uses a small SCSS build pipeline based on `gulp` and `sass`. You can 
 
 This means:
 
--   If `assets/sass/_custom.scss` exists, it is automatically imported into `framework.scss`.
+-   If `private/sass/_custom.scss` exists, it is automatically imported into `framework.scss`.
 -   No template changes are needed – your styles are bundled into `resources/css/framework.css`, which is already loaded by Photobooth.
 
 To use this:
 
-1. Create a new file called `_custom.scss` in `assets/sass`.
+1. Create a new file called `_custom.scss` in `private/sass`.
 2. Add your overrides or additional styles to this file.
 
 ## Building the CSS
