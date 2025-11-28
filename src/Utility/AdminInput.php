@@ -4,17 +4,38 @@ namespace Photobooth\Utility;
 
 use Photobooth\Enum\Interface\LabelInterface;
 use Photobooth\Service\LanguageService;
+use Photobooth\Service\ThemeService;
 
 class AdminInput
 {
-    public static function renderInput(array $setting, string $label): string
+    protected static bool $themeField = false;
+
+    public static function setThemeFieldFlag(bool $isThemeField): void
+    {
+        self::$themeField = $isThemeField;
+    }
+    protected static function buildAttributes(array $setting): string
     {
         $attributes = '';
+
         if (isset($setting['attributes'])) {
             foreach ($setting['attributes'] as $key => $prop) {
                 $attributes .= $key . '="' . $prop . '" ';
             }
         }
+
+        foreach ($setting as $key => $value) {
+            if (str_starts_with($key, 'data-')) {
+                $attributes .= $key . '="' . $value . '" ';
+            }
+        }
+
+        return $attributes;
+    }
+
+    public static function renderInput(array $setting, string $label): string
+    {
+        $attributes = self::buildAttributes($setting);
 
         return self::renderHeadline($label) . '
             <input
@@ -93,12 +114,7 @@ class AdminInput
             "w-11 h-6 bg-gray-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600";
         $init = $setting['value'];
 
-        $attributes = '';
-        if (isset($setting['attributes'])) {
-            foreach ($setting['attributes'] as $key => $prop) {
-                $attributes .= $key . '="' . $prop . '" ';
-            }
-        }
+        $attributes = self::buildAttributes($setting);
 
         return self::renderHeadline($label) . '
             <label class="adminCheckbox relative inline-flex items-center cursor-pointer mt-auto">
@@ -116,12 +132,7 @@ class AdminInput
     public static function renderColor(array $setting, string $label): string
     {
         $languageService = LanguageService::getInstance();
-        $attributes = '';
-        if (isset($setting['attributes'])) {
-            foreach ($setting['attributes'] as $key => $prop) {
-                $attributes .= $key . '="' . $prop . '" ';
-            }
-        }
+        $attributes = self::buildAttributes($setting);
 
         return '
             <label class="mb-3">' . $languageService->translate($label) . '</label>
@@ -154,12 +165,7 @@ class AdminInput
     {
         $languageService = LanguageService::getInstance();
         $inputClass = 'adminRangeInput w-full h-2 mb-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700';
-        $attributes = '';
-        if (isset($setting['attributes'])) {
-            foreach ($setting['attributes'] as $key => $prop) {
-                $attributes .= $key . '="' . $prop . '" ';
-            }
-        }
+        $attributes = self::buildAttributes($setting);
 
         return self::renderHeadline($label) . '
             <div class="w-full flex flex-col mt-auto">
@@ -193,12 +199,7 @@ class AdminInput
         $settingName = $setting['name'] . '' . ($setting['type'] === 'multi-select' ? '[]' : '');
         $options = '';
 
-        $attributes = '';
-        if (isset($setting['attributes'])) {
-            foreach ($setting['attributes'] as $key => $prop) {
-                $attributes .= $key . '="' . $prop . '" ';
-            }
-        }
+        $attributes = self::buildAttributes($setting);
 
         foreach ($setting['options'] as $value => $option) {
             $optionLabel = $option;
@@ -236,12 +237,7 @@ class AdminInput
         $languageService = LanguageService::getInstance();
         $images = '';
 
-        $attributes = '';
-        if (isset($setting['attributes'])) {
-            foreach ($setting['attributes'] as $key => $prop) {
-                $attributes .= $key . '="' . $prop . '" ';
-            }
-        }
+        $attributes = self::buildAttributes($setting);
 
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             foreach ($setting['paths'] as $path) {
@@ -347,12 +343,7 @@ class AdminInput
         $languageService = LanguageService::getInstance();
         $fonts = '';
 
-        $attributes = '';
-        if (isset($setting['attributes'])) {
-            foreach ($setting['attributes'] as $key => $prop) {
-                $attributes .= $key . '="' . $prop . '" ';
-            }
-        }
+        $attributes = self::buildAttributes($setting);
 
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             $pathIndex = 0;
@@ -442,6 +433,80 @@ class AdminInput
                     value="' . $setting['value'] . '"
 					' . $attributes . '
                 />
+            </div>
+        ';
+    }
+
+    public static function renderTheme(array $setting, string $label): string
+    {
+        $languageService = LanguageService::getInstance();
+        $currentTheme = $setting['current'] ?? '';
+
+        $themes = ThemeService::getInstance()->getAll();
+        $themeNames = array_keys($themes);
+        sort($themeNames);
+
+        $options = '
+            <option value="">
+                ' . $languageService->translate('theme_choose') . '
+            </option>
+        ';
+        foreach ($themeNames as $name) {
+            $options .= '<option value="' . htmlspecialchars($name, ENT_QUOTES) . '">' . htmlspecialchars($name, ENT_QUOTES) . '</option>';
+        }
+
+        return '
+            ' . self::renderHeadline($label) . '
+            <div class="flex flex-col gap-2">
+                <div class="flex flex-col md:flex-row gap-2 items-stretch md:items-center">
+                    <input
+                        type="hidden"
+                        name="theme[current]"
+                        value="' . htmlspecialchars($currentTheme, ENT_QUOTES) . '"
+                    />
+                    <input
+                        id="theme-name"
+                        type="text"
+                        class="flex-1 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
+                        placeholder="' . $languageService->translate('theme_name_placeholder') . '"
+                    />
+                    <select
+                        id="theme-select"
+                        class="flex-1 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
+                    >
+                        ' . $options . '
+                    </select>
+                </div>
+                <div class="flex flex-row gap-2 items-center justify-between">
+                    <div class="flex flex-row gap-2">
+                        <button
+                            id="theme-save-btn"
+                            type="button"
+                            class="h-8 w-8 flex items-center justify-center rounded-full bg-brand-1 text-white border border-solid border-brand-1 hover:bg-content-1 hover:text-brand-1 transition text-[10px] font-bold"
+                            title="' . $languageService->translate('theme_save') . '"
+                        >
+                            <i class="fa fa-save"></i>
+                        </button>
+                    </div>
+                    <div class="flex flex-row gap-2">
+                        <button
+                            id="theme-load-btn"
+                            type="button"
+                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
+                            title="' . $languageService->translate('theme_load') . '"
+                        >
+                            <i class="fa fa-download"></i>
+                        </button>
+                        <button
+                            id="theme-delete-btn"
+                            type="button"
+                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-red-600 border border-solid border-red-600 hover:bg-red-600 hover:text-white transition text-[10px] font-bold"
+                            title="' . $languageService->translate('theme_delete') . '"
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         ';
     }
@@ -547,9 +612,12 @@ class AdminInput
             peer-hover:flex
         ';
 
+        $isThemeField = self::$themeField;
+
         return '
-            <div class="tooltip mb-3 relative">
+            <div class="tooltip mb-3 relative flex items-center justify-between gap-2">
                 <label class="peer text-black text-md font-bold">' . $languageService->translate($label) . '</label>
+                ' . ($isThemeField ? '<span class="text-[10px] font-semibold uppercase tracking-wide text-brand-1">Theme</span>' : '') . '
                 <span class="' . $tooltipClass . '">
                     <div class="absolute left-5 -top-[10px] h-0 w-0 border-x-8 border-x-transparent border-b-[10px] border-gray-900"></div>
                     ' . $languageService->translate('manual:' . $label) . '

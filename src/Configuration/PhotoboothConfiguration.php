@@ -67,6 +67,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->append($this->addMail())
                 ->append($this->addSound())
                 ->append($this->addRembg())
+                ->append($this->addTheme())
             ->end();
 
         return $treeBuilder;
@@ -1525,6 +1526,15 @@ class PhotoboothConfiguration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->booleanNode('post_processing')->defaultValue(false)->end()
+            ->end();
+    }
+
+    protected function addTheme(): NodeDefinition
+    {
+        return (new TreeBuilder('theme'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
+            ->children()
+                ->scalarNode('current')->defaultValue('')->end()
             ->end();
     }
 }

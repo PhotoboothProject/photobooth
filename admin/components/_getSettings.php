@@ -40,6 +40,8 @@ foreach ($configsetup as $section => $fields) {
         echo '<!-- ' . strtoupper($setting['type']) . ' ' . strtoupper($setting['name']) . ' -->';
         echo '<div class="flex flex-col rounded-xl p-3 shadow-xl bg-white ' . $hidden . '" id="' . $i18ntag . '">';
 
+        AdminInput::setThemeFieldFlag(($setting['data-theme-field'] ?? '') === 'true');
+
         // Populate setting elements by type
 
         switch ($setting['type']) {
@@ -80,6 +82,9 @@ foreach ($configsetup as $section => $fields) {
                 break;
             case 'list':
                 echo AdminInput::renderList($setting, $i18ntag);
+                break;
+            case 'theme':
+                echo AdminInput::renderTheme($setting, 'theme_title');
                 break;
         }
 
