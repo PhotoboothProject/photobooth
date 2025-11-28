@@ -23,7 +23,8 @@ sudo gpasswd -a www-data video
 reboot
 ```
 
-Once done you need to adjust the configuration. Open the admin panel in your browser [localhost/admin](http://localhost/admin) and make the following changes:
+Once done you need to adjust the configuration. Open the admin panel in your browser [localhost/admin](http://localhost/admin) (or [localhost/photobooth/admin](http://localhost/photobooth/admin)) and
+make the following changes:
 
 **"Take picture command on Pi OS based on bookworm":**
 
@@ -66,14 +67,14 @@ sudo rm /var/www/html/admin/config.json
 
 ## How do I change the configuration?
 
-Open `http://localhost/admin` in your Webbrowser and change the configuration for your personal needs.
+Open `http://localhost/admin` in your Webbrowser (or `http://localhost/photobooth/admin`) and change the configuration for your personal needs.
 Changed options are stored inside `config/my.config.inc.php` to prevent sharing personal data on Github by accident and to make an update of Photobooth easier.
 
 ---
 
 ## How to change the language?
 
-Open `http://localhost/admin` in your Webbrowser and change the configuration for your personal needs.
+Open `http://localhost/admin` in your Webbrowser (or `http://localhost/photobooth/admin`) and change the configuration for your personal needs.
 
 ---
 
@@ -103,7 +104,9 @@ Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in y
 
 ## How can setup a custom collage design?
 
-In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file could be created manually or by using the collage generator at [http://localhost/admin/generator/index.php](http://localhost/admin/generator/index.php) via the button next to it.
+In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file could be created manually or by
+using the collage generator at [http://localhost/admin/generator/index.php](http://localhost/admin/generator/index.php) (
+or [http://localhost/photobooth/admin/generator/index.php](http://localhost/photobooth/admin/generator/index.php)) via the button next to it.
 
 Photobooth config **must** be saved again via Admin panel after `private/collage.json` was modified!
 
@@ -333,7 +336,8 @@ Works if you access Photobooth via [http://localhost](http://localhost) or [http
 - Set Photobooth loglevel to 1 (or above). (admin panel -> general section) and save your configuration
 - Reload the Photobooth homepage
 - Check the browser developer console for error logs
-- Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel)
+- Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel) (
+  or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel)).
 
 ---
 
@@ -494,7 +498,8 @@ sudo bash install-go2rtc-preview.sh
 
 Follow the instructions and choose your variant to install.
 
-Once installed successfully reboot your device and adjust your Photobooth config as mentioned above or open [http://localhost/admin/captureconfig.php](http://localhost/admin/captureconfig.php) to apply the default suggested configuration automatically.
+Once installed successfully reboot your device and adjust your Photobooth config as mentioned above or open [http://localhost/admin/captureconfig.php](http://localhost/admin/captureconfig.php) (
+or [http://localhost/photobooth/admin/captureconfig.php](http://localhost/photobooth/admin/captureconfig.php)) to apply the default suggested configuration automatically.
 
 **Note:**
 - go2rtc does not work in v1.9.3 and v1.9.4 for Pi Camera!
@@ -653,7 +658,8 @@ If you're still having trouble feel free to join us at Telegram to get further s
 
 Yes you can. Using the file uploader you can add your video into the `/private/videos/background` folder.
 
-Once done go to [User interface](http://localhost/admin/#userinterface), switch from `image` to `video` as background and choose your video in "Background video path".
+Once done go to [User interface](http://localhost/admin/#userinterface) (or [User interface](http://localhost/photobooth/admin/#userinterface)), switch from `image` to `video` as background and choose
+your video in "Background video path".
 
 You can also use a youtube video/livestream!\
 In the background video path put the link pulled from youtube. Note that the link should be in the following format: `https://www.youtube.com/embed/<video_id>`.\
@@ -758,7 +764,8 @@ A USB drive / stick can be identified either by the USB stick label (e.g. `photo
 
 Pictures will be synced to the USB stick matched by the pattern, as long as it is mounted (aka USB stick is plugged in)
 
-Debugging: Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel)
+Debugging: Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel) (
+or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel)).
 
 ---
 
@@ -883,9 +890,11 @@ In the end you can enable the `delete` functionality that will delete photos (an
 
 There's different reasons if you get the error "Something went wrong. Please try it again. Photobooth reloads automatically." while taking an image.
 
-First of all, please set the **Loglevel** to **2** via admin panel (GENERAL section, [http://localhost/admin](http://localhost/admin)) and try again. You'll still see the error message, but we make sure to log enough information to see what's wrong.
+First of all, please set the **Loglevel** to **2** via admin panel (GENERAL section, [http://localhost/admin](http://localhost/admin)
+or [http://localhost/photobooth/admin](http://localhost/photobooth/admin)) and try again. You'll still see the error message, but we make sure to log enough information to see what's wrong.
 
-Now open the Debug panel ([http://localhost/admin/debugpanel](http://localhost/admin/debugpanel)) and check the Photobooth log for error messages. You should see something like this:
+Now open the Debug panel ([http://localhost/admin/debugpanel](http://localhost/admin/debugpanel) or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel))) and
+check the Photobooth log for error messages. You should see something like this:
 
 ```
 2023-01-03T08:34:37+01:00:
@@ -967,7 +976,8 @@ You can now use the URL with which you can access your remote server from the in
 ## How to use the image randomizer
 
 To use the image randomizer images must be placed inside private/images/{folderName}.
-For hassle-free (ssh/sftp-free) upload, you may want to use the integrated images uploader: [http://localhost/admin/upload](http://localhost/admin/upload).
+For hassle-free (ssh/sftp-free) upload, you may want to use the integrated images uploader: [http://localhost/admin/upload](http://localhost/admin/upload) (
+or [http://localhost/photobooth/admin/upload](http://localhost/photobooth/admin/upload)).
 
 ### Use for PICTURE FRAMES:
 
@@ -1028,7 +1038,7 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
 ### Configuration
 
 1. **Open the Admin Panel:**
-   Navigate to [http://localhost/admin](http://localhost/admin)
+   Navigate to [http://localhost/admin](http://localhost/admin) (or [http://localhost/photobooth/admin](http://localhost/photobooth/admin))
 
 2. **Enable Magic Greenscreen:**
    - Go to the "Magic Greenscreen" section (positioned between "Custom" and "Gallery")
@@ -1077,7 +1087,8 @@ Once enabled, Magic Greenscreen will automatically process photos after they are
 - Check available disk space
 - Reduce max image size in configuration
 - Verify internet connection (some models may require online access)
-- Check server logs in the debug panel: [http://localhost/admin/debug](http://localhost/admin/debugpanel)
+- Check server logs in the debug panel: [http://localhost/admin/debug](http://localhost/admin/debugpanel) (
+  or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel)).
 
 #### Background not removed properly
 - Try a different AI model (u2net, u2netp, u2net_cloth_seg)

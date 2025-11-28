@@ -704,7 +704,8 @@ sudo bash enable-usb-sync.sh
   and
   2) also well positioned to help people with less experience on the server administration and Unix / Raspberry Pi OS side of things.
 
-  Access to the debug panel is available through the admin panel (switch to expert view) or via direct URL [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php).
+  Access to the debug panel is available through the admin panel (switch to expert view) or via direct URL [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php) (
+  or [http://localhost/photobooth/admin/debugpanel.php](http://localhost/photobooth/admin/debugpanel.php)).
 - Removed unneeded file-type checks all around the Photobooth api (we check for jpeg images already inside the api/applyEffects.php)
 - result screen: smaller QR code & smaller font-size
 
@@ -750,7 +751,8 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
 
 **Breaking changes**
 - The configuration setup has changed completely on Photobooth v3 and some config options have been removed!
-  **Please note:** Your old config (Photobooth v2.x and older) won't work, **you must** setup your configuration via [adminpanel](http://localhost/admin) again!
+  **Please note:** Your old config (Photobooth v2.x and older) won't work, **you must** setup your configuration via [adminpanel](http://localhost/admin) (
+  or [adminpanel](http://localhost/photobooth/admin)) again!
 
 **Bugfixes**
 - Chromakeying:
@@ -815,7 +817,8 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
     - Advanced View: Features and elements used more often - i.e. Printing, Frames for Pictures, Chroma-Keying, etc. - maybe around 50% of all options on top. This should be sufficient for most of the users.
     - Expert View: Dev-Setting, Data folders, Commands, etc. - the remaining 20-30% of options are mapped to this view. Geeks right here.
   - Admin panel option to hide / show panel headings by Operating System
-  - Allow to download data folder as zip from [http://localhost/admin/diskusage.php](http://localhost/admin/diskusage.php)
+  - Allow to download data folder as zip from [http://localhost/admin/diskusage.php](http://localhost/admin/diskusage.php) (
+    or [http://localhost/photobooth/admin/diskusage.php](http://localhost/photobooth/admin/diskusage.php)).
 - Installation:
   - Installation [Instructions for Windows](https://github.com/andi34/photobooth/wiki/Installation-on-Windows) added to Wiki
   - install-raspbian.sh script:
@@ -911,7 +914,8 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
   - only use thumbnails if thumbnail exist and is readable, fallback to full-sized images if not
 - gallery: update picture counter font-size
 - Crop on print: set image quality to 100% by default
-- added disk usage page, access via admin panel or at [localhost/admin/diskusage.php](http://localhost/admin/diskusage.php).
+- added disk usage page, access via admin panel or at [localhost/admin/diskusage.php](http://localhost/admin/diskusage.php) (
+  or [localhost/photobooth/admin/diskusage.php](http://localhost/photobooth/admin/diskusage.php)).
 - Updated [PhotoSwipe](https://github.com/andi34/PhotoSwipe)
 - added `private/` to .gitignore, can be used e.g. to store own background images
 - install-raspbian.sh:
