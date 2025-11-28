@@ -60,6 +60,59 @@ $(function () {
             return elements;
         }
 
+        function parseFieldName(name) {
+            const parts = [];
+            const regex = /([^[]+)|\[([^\]]*)\]/g;
+            let match;
+
+            while ((match = regex.exec(name)) !== null) {
+                const key = match[1] || match[2];
+                if (key !== '') {
+                    parts.push(key);
+                }
+            }
+
+            return parts;
+        }
+
+        function setNestedValue(target, path, value) {
+            if (!Array.isArray(path) || path.length === 0) {
+                return;
+            }
+
+            let current = target;
+            for (let i = 0; i < path.length - 1; i++) {
+                const key = path[i];
+                if (
+                    !Object.prototype.hasOwnProperty.call(current, key) ||
+                    typeof current[key] !== 'object' ||
+                    current[key] === null
+                ) {
+                    current[key] = {};
+                }
+                current = current[key];
+            }
+
+            current[path[path.length - 1]] = value;
+        }
+
+        function getNestedValue(source, path) {
+            if (!Array.isArray(path) || path.length === 0) {
+                return undefined;
+            }
+
+            let current = source;
+            for (let i = 0; i < path.length; i++) {
+                const key = path[i];
+                if (!current || !Object.prototype.hasOwnProperty.call(current, key)) {
+                    return undefined;
+                }
+                current = current[key];
+            }
+
+            return current;
+        }
+
         function collectCurrentTheme() {
             const elements = getThemeElements();
             const data = {};
@@ -71,17 +124,25 @@ $(function () {
                     return;
                 }
 
+                const path = parseFieldName(name);
+                if (!path.length) {
+                    return;
+                }
+
+                let value;
                 if (el.tagName === 'INPUT') {
                     if ($el.attr('type') === 'checkbox') {
-                        data[name] = $el.is(':checked') ? 'true' : 'false';
+                        value = $el.is(':checked') ? 'true' : 'false';
                     } else {
-                        data[name] = $el.val();
+                        value = $el.val();
                     }
                 } else if (el.tagName === 'SELECT') {
-                    data[name] = $el.val();
+                    value = $el.val();
                 } else if (el.tagName === 'TEXTAREA') {
-                    data[name] = $el.val();
+                    value = $el.val();
                 }
+
+                setNestedValue(data, path, value);
             });
 
             return data;
@@ -97,11 +158,21 @@ $(function () {
             elements.forEach((el) => {
                 const $el = $(el);
                 const name = $el.attr('name');
-                if (!name || !Object.prototype.hasOwnProperty.call(theme, name)) {
+                if (!name) {
                     return;
                 }
 
-                const value = theme[name];
+                const path = parseFieldName(name);
+                let value = getNestedValue(theme, path);
+
+                // Fallback for older flat themes
+                if (typeof value === 'undefined' && Object.prototype.hasOwnProperty.call(theme, name)) {
+                    value = theme[name];
+                }
+
+                if (typeof value === 'undefined') {
+                    return;
+                }
 
                 if (el.tagName === 'INPUT') {
                     if ($el.attr('type') === 'checkbox') {
