@@ -2,7 +2,7 @@
 
 ![](resources/img/logo/banner.png)
 
-A Photobooth web interface for Linux and Windows.
+A Photobooth web interface for Linux and Windows (often also called a "photo box" in some languages/regions).
 
 Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).
 In 2019 Andreas Blaesius picked up the work and continued to work on the source.

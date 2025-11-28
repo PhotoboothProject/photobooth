@@ -18,6 +18,19 @@ _Latest development version:_
 
 A Photobooth web interface for Linux and Windows.
 
+Photobooth is (often also called a "photo box" in some languages/regions):
+
+- Self‑hosted software that runs on your own device (e.g. Raspberry Pi, PC, mini‑PC) and turns a connected camera + screen into an interactive photo booth.
+- Focused on local, event‑style usage (weddings, parties, trade shows) with features like countdown, live preview, photo/collage workflows, filters, printing and gallery.
+- Designed to work offline once installed and configured, without relying on any cloud service or account.
+
+Photobooth is **not**:
+
+- A hosted online service or website where guests upload photos from home.
+- A permanent online photo album or cloud gallery for long-term storage of all your pictures.
+- A replacement for your camera firmware or a full image editor.
+- A one‑click kiosk appliance – it still needs a supported OS, web server/PHP environment and basic configuration.
+
 Photobooth was initially developped by Andre Rinas to use on a Raspberry Pi, you can find his source [here](https://github.com/andreknieriem/photobooth).
 In 2019 Andreas Skomski picked up the work and continued to work on the source.
 With the help of the community Photobooth grew to a powerfull Photobooth software with a lot of features and possibilities.
