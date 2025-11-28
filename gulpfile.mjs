@@ -21,6 +21,20 @@ gulp.task('sass', async function () {
   try {
     const scssDir = './assets/sass';
     const outputDir = './resources/css';
+
+    const privateScssDir = './private/sass';
+
+    // Ensure the private sass directory exists
+    fs.mkdirSync(privateScssDir, { recursive: true });
+    // Create an optional _custom.scss file if it doesn't exist
+    const optionalCustomCss = path.join(privateScssDir, '_custom.scss');
+    if (!fs.existsSync(optionalCustomCss)) {
+      fs.writeFileSync(
+        optionalCustomCss,
+        '// auto-generated stub for optional custom overrides\n'
+      );
+    }
+
     const files = fs.readdirSync(scssDir);
 
     const scssFiles = files.filter(file => path.extname(file) === '.scss' && file !== 'tailwind.admin.scss');

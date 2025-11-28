@@ -39,6 +39,10 @@ nav:
     - gphoto2 Troubleshooting: faq/gphoto2-troubleshooting.md
     - GO2RTC Troubleshooting: faq/go2rtc-troubleshooting.md
     - Tutorials: faq/tutorials.md
+  - Customizing:
+    - Overview: customizing/index.md
+    - Sounds: customizing/sounds.md
+    - CSS styles: customizing/styles.md
   - Community & Contribution:
     - Chat on Telegram: https://t.me/PhotoboothGroup
     - Contributor Covenant Code of Conduct: code_of_conduct.md

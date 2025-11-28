@@ -34,3 +34,6 @@
 // Themes
 @use 'themes/classic';
 @use 'themes/modern';
+
+// Custom CSS
+@use '../../private/sass/custom';

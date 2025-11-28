@@ -1,3 +1,0 @@
-# Configuration
-
-## [Sounds](sounds.md)
