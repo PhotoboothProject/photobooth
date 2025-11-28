@@ -8,6 +8,19 @@ use Photobooth\Service\ProcessService;
 use Photobooth\Utility\PathUtility;
 
 $assetService = AssetService::getInstance();
+$noCacheFlag = !empty($_GET['refresh']);
+
+if (!isset($_SESSION['asset_extra_version'])) {
+    $_SESSION['asset_extra_version'] = '';
+}
+
+if ($noCacheFlag) {
+    $_SESSION['asset_extra_version'] = (string) time();
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+}
+
+$assetService->setExtraVersion($_SESSION['asset_extra_version'] ?: null);
 
 if (!$config['ui']['skip_welcome']) {
     if (!is_file(PathUtility::getAbsolutePath('welcome/.skip_welcome'))) {
@@ -89,5 +102,19 @@ if ($config['ui']['selfie_mode']) {
 
 <?php include PathUtility::getAbsolutePath('template/components/start.adminshortcut.php'); ?>
 <?php ProcessService::getInstance()->boot(); ?>
+
+<?php if ($noCacheFlag): ?>
+<script>
+    (function () {
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('refresh');
+            window.history.replaceState(null, '', url.toString());
+        } catch (e) {
+            // ignore
+        }
+    })();
+</script>
+<?php endif; ?>
 </body>
 </html>
