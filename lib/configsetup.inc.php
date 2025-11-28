@@ -58,6 +58,7 @@ use Photobooth\Utility\PathUtility;
  **     * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
  **                          the section is shown or not. Missing parameter defaults to 'expert'.
  **     * 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
+ **     * 'data-theme-field'
  **     * 'type': Values are 'input', 'number', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
  **               input type in the admin panel for this setting.
  **     * 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
@@ -171,12 +172,14 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['start_screen']['title'],
             'name' => 'start_screen[title]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['start_screen']['title'] ?? ''),
         ],
         'start_screen_title_visible' => [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'start_screen[title_visible]',
+            'data-theme-field' => 'true',
             'value' => $config['start_screen']['title_visible'],
         ],
         'start_screen_subtitle' => [
@@ -184,12 +187,14 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['start_screen']['subtitle'],
             'name' => 'start_screen[subtitle]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['start_screen']['subtitle'] ?? ''),
         ],
         'start_screen_subtitle_visible' => [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'start_screen[subtitle_visible]',
+            'data-theme-field' => 'true',
             'value' => $config['start_screen']['subtitle_visible'],
         ],
         'picture_thumb_size' => [
@@ -333,6 +338,12 @@ return [
             'name' => 'FILESUPLOAD',
             'value' => 'filesupload-btn',
         ],
+        'theme_manager' => [
+            'view' => 'basic',
+            'type' => 'theme',
+            'name' => 'theme[manager]',
+            'current' => $config['theme']['current'] ?? '',
+        ],
     ],
     'frontpage' => [
         'view' => 'basic',
@@ -370,6 +381,7 @@ return [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'event[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['event']['enabled'],
         ],
         'event_textLeft' => [
@@ -377,6 +389,7 @@ return [
             'type' => 'input',
             'placeholder' => 'Text Left',
             'name' => 'event[textLeft]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['event']['textLeft'] ?? ''),
         ],
         'event_symbol' => [
@@ -400,6 +413,7 @@ return [
                 'fa-gears' => 'Gears',
                 'fa-users' => 'People',
             ],
+            'data-theme-field' => 'true',
             'value' => $config['event']['symbol'],
         ],
         'event_textRight' => [
@@ -407,6 +421,7 @@ return [
             'type' => 'input',
             'placeholder' => 'Text Right',
             'name' => 'event[textRight]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['event']['textRight'] ?? ''),
         ],
         'button_force_buzzer' => [
@@ -420,12 +435,14 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['button']['buzzer_message'],
             'name' => 'button[buzzer_message]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['button']['buzzer_message'] ?? ''),
         ],
         'logo_enabled' => [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'logo[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['logo']['enabled'],
         ],
         'logo_path' => [
@@ -433,6 +450,7 @@ return [
             'type' => 'image',
             'placeholder' => $defaultConfig['logo']['enabled'],
             'name' => 'logo[path]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['logo']['path'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/logo'),
@@ -450,6 +468,7 @@ return [
                 'bottom_right' => 'Bottom Right',
                 'bottom_left' => 'Bottom Left',
             ],
+            'data-theme-field' => 'true',
             'value' => $config['logo']['position'],
         ],
     ],
@@ -512,6 +531,7 @@ return [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'picture[polaroid_effect]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['polaroid_effect'],
         ],
         'picture_polaroid_rotation' => [
@@ -519,6 +539,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['picture']['polaroid_rotation'],
             'name' => 'picture[polaroid_rotation]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['polaroid_rotation'],
             'range_min' => -45,
             'range_max' => 45,
@@ -529,12 +550,14 @@ return [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'filters[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['filters']['enabled'],
         ],
         'filters_defaults' => [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'filters[defaults]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['filters']['defaults'],
             'options' => ImageFilterEnum::cases(),
             'value' => $config['filters']['defaults'],
@@ -543,6 +566,7 @@ return [
             'view' => 'expert',
             'type' => 'multi-select',
             'name' => 'filters[disabled]',
+            'data-theme-field' => 'true',
             'options' => ImageFilterEnum::cases(),
             'value' => $config['filters']['disabled'],
         ],
@@ -550,6 +574,7 @@ return [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'picture[take_frame]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['take_frame'],
         ],
         'picture_frame' => [
@@ -557,6 +582,7 @@ return [
             'type' => 'image',
             'placeholder' => $defaultConfig['picture']['frame'],
             'name' => 'picture[frame]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['picture']['frame'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/frames'),
@@ -567,6 +593,7 @@ return [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'picture[extend_by_frame]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['extend_by_frame'],
         ],
         'picture_frame_left_percentage' => [
@@ -574,6 +601,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['picture']['frame_left_percentage'],
             'name' => 'picture[frame_left_percentage]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['frame_left_percentage'],
             'range_min' => 0,
             'range_max' => 40,
@@ -585,6 +613,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['picture']['frame_right_percentage'],
             'name' => 'picture[frame_right_percentage]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['frame_right_percentage'],
             'range_min' => 0,
             'range_max' => 40,
@@ -596,6 +625,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['picture']['frame_top_percentage'],
             'name' => 'picture[frame_top_percentage]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['frame_top_percentage'],
             'range_min' => 0,
             'range_max' => 40,
@@ -607,6 +637,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['picture']['frame_bottom_percentage'],
             'name' => 'picture[frame_bottom_percentage]',
+            'data-theme-field' => 'true',
             'value' => $config['picture']['frame_bottom_percentage'],
             'range_min' => 0,
             'range_max' => 40,
@@ -624,6 +655,7 @@ return [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'picture[naming]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['picture']['naming'],
             'options' => [
                 'dateformatted' => 'Date formatted',
@@ -660,12 +692,14 @@ return [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'textonpicture[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['textonpicture']['enabled'],
         ],
         'textonpicture_line1' => [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonpicture']['line1'],
+            'data-theme-field' => 'true',
             'name' => 'textonpicture[line1]',
             'value' => htmlentities($config['textonpicture']['line1'] ?? ''),
         ],
@@ -673,6 +707,7 @@ return [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonpicture']['line2'],
+            'data-theme-field' => 'true',
             'name' => 'textonpicture[line2]',
             'value' => htmlentities($config['textonpicture']['line2'] ?? ''),
         ],
@@ -680,6 +715,7 @@ return [
             'view' => 'advanced',
             'type' => 'input',
             'placeholder' => $defaultConfig['textonpicture']['line3'],
+            'data-theme-field' => 'true',
             'name' => 'textonpicture[line3]',
             'value' => htmlentities($config['textonpicture']['line3'] ?? ''),
         ],
@@ -688,6 +724,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textonpicture']['locationx'],
             'name' => 'textonpicture[locationx]',
+            'data-theme-field' => 'true',
             'value' => $config['textonpicture']['locationx'],
         ],
         'textonpicture_locationy' => [
@@ -695,6 +732,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textonpicture']['locationy'],
             'name' => 'textonpicture[locationy]',
+            'data-theme-field' => 'true',
             'value' => $config['textonpicture']['locationy'],
         ],
         'textonpicture_rotation' => [
@@ -702,6 +740,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['textonpicture']['rotation'],
             'name' => 'textonpicture[rotation]',
+            'data-theme-field' => 'true',
             'value' => $config['textonpicture']['rotation'],
             'range_min' => -180,
             'range_max' => 180,
@@ -713,6 +752,7 @@ return [
             'type' => 'font',
             'placeholder' => $defaultConfig['textonpicture']['font'],
             'name' => 'textonpicture[font]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textonpicture']['font'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/fonts'),
@@ -722,6 +762,7 @@ return [
         'textonpicture_font_color' => [
             'view' => 'expert',
             'type' => 'color',
+            'data-theme-field' => 'true',
             'name' => 'textonpicture[font_color]',
             'placeholder' => $defaultConfig['textonpicture']['font_color'],
             'value' => $config['textonpicture']['font_color'],
@@ -729,6 +770,7 @@ return [
         'textonpicture_font_size' => [
             'view' => 'advanced',
             'type' => 'number',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['textonpicture']['font_size'],
             'name' => 'textonpicture[font_size]',
             'value' => $config['textonpicture']['font_size'],
@@ -736,6 +778,7 @@ return [
         'textonpicture_linespace' => [
             'view' => 'expert',
             'type' => 'number',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['textonpicture']['linespace'],
             'name' => 'textonpicture[linespace]',
             'value' => $config['textonpicture']['linespace'],
@@ -781,6 +824,7 @@ return [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'collage[layout]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['layout'],
             'options' => CollageLayoutEnum::cases(),
             'value' => $config['collage']['layout'],
@@ -796,6 +840,7 @@ return [
             'view' => 'expert',
             'type' => 'select',
             'name' => 'collage[resolution]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['resolution'],
             'options' => [
                 '150dpi' => '150 dpi',
@@ -809,6 +854,7 @@ return [
             'view' => 'advanced',
             'type' => 'color',
             'name' => 'collage[dashedline_color]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['dashedline_color'],
             'value' => $config['collage']['dashedline_color'],
         ],
@@ -816,6 +862,7 @@ return [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'collage[keep_single_images]',
+            'data-theme-field' => 'true',
             'value' => $config['collage']['keep_single_images'],
         ],
         'collage_key' => [
@@ -829,6 +876,7 @@ return [
             'view' => 'basic',
             'type' => 'color',
             'name' => 'collage[background_color]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['background_color'],
             'value' => $config['collage']['background_color'],
         ],
@@ -836,6 +884,7 @@ return [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'collage[take_frame]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['take_frame'],
             'options' => [
                 'off' => 'Off',
@@ -849,6 +898,7 @@ return [
             'type' => 'image',
             'placeholder' => $defaultConfig['collage']['frame'],
             'name' => 'collage[frame]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['collage']['frame'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/frames'),
@@ -860,6 +910,7 @@ return [
             'type' => 'image',
             'placeholder' => $defaultConfig['collage']['background'],
             'name' => 'collage[background]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['collage']['background'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/background'),
@@ -870,6 +921,7 @@ return [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'collage[placeholder]',
+            'data-theme-field' => 'true',
             'value' => $config['collage']['placeholder'],
         ],
         'collage_placeholderposition' => [
@@ -877,6 +929,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['collage']['placeholderposition'],
             'name' => 'collage[placeholderposition]',
+            'data-theme-field' => 'true',
             'value' => $config['collage']['placeholderposition'],
         ],
         'collage_placeholderpath' => [
@@ -884,6 +937,7 @@ return [
             'type' => 'image',
             'placeholder' => $defaultConfig['collage']['placeholderpath'],
             'name' => 'collage[placeholderpath]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['collage']['placeholderpath'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/demo'),
@@ -894,6 +948,7 @@ return [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'textoncollage[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['textoncollage']['enabled'],
         ],
         'textoncollage_line1' => [
@@ -901,6 +956,7 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['textoncollage']['line1'],
             'name' => 'textoncollage[line1]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textoncollage']['line1'] ?? ''),
         ],
         'textoncollage_line2' => [
@@ -908,6 +964,7 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['textoncollage']['line2'],
             'name' => 'textoncollage[line2]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textoncollage']['line2'] ?? ''),
         ],
         'textoncollage_line3' => [
@@ -915,6 +972,7 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['textoncollage']['line3'],
             'name' => 'textoncollage[line3]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textoncollage']['line3'] ?? ''),
         ],
         'textoncollage_locationx' => [
@@ -922,6 +980,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['locationx'],
             'name' => 'textoncollage[locationx]',
+            'data-theme-field' => 'true',
             'value' => $config['textoncollage']['locationx'],
         ],
         'textoncollage_locationy' => [
@@ -929,6 +988,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['locationy'],
             'name' => 'textoncollage[locationy]',
+            'data-theme-field' => 'true',
             'value' => $config['textoncollage']['locationy'],
         ],
         'textoncollage_rotation' => [
@@ -936,6 +996,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['textoncollage']['rotation'],
             'name' => 'textoncollage[rotation]',
+            'data-theme-field' => 'true',
             'value' => $config['textoncollage']['rotation'],
             'range_min' => -180,
             'range_max' => 180,
@@ -947,6 +1008,7 @@ return [
             'type' => 'font',
             'placeholder' => $defaultConfig['textoncollage']['font'],
             'name' => 'textoncollage[font]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textoncollage']['font'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/fonts'),
@@ -957,6 +1019,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'textoncollage[font_color]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['textoncollage']['font_color'],
             'value' => $config['textoncollage']['font_color'],
         ],
@@ -965,6 +1028,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['font_size'],
             'name' => 'textoncollage[font_size]',
+            'data-theme-field' => 'true',
             'value' => $config['textoncollage']['font_size'],
         ],
         'textoncollage_linespace' => [
@@ -972,6 +1036,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textoncollage']['linespace'],
             'name' => 'textoncollage[linespace]',
+            'data-theme-field' => 'true',
             'value' => $config['textoncollage']['linespace'],
         ],
         'collage_limit' => [
@@ -1013,6 +1078,7 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['custom']['btn_text'],
             'name' => 'custom[btn_text]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['custom']['btn_text'] ?? ''),
         ],
         'get_request_custom' => [
@@ -1024,6 +1090,7 @@ return [
         'icons_take_custom' => [
             'type' => 'icon',
             'name' => 'icons[take_custom]',
+            'data-theme-field' => 'true',
             'placeholder' => htmlentities($defaultConfig['icons']['take_custom'] ?? ''),
             'value' => htmlentities($config['icons']['take_custom'] ?? ''),
         ],
@@ -1562,6 +1629,7 @@ return [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'keying[private_backgrounds]',
+            'data-theme-field' => 'true',
             'value' => $config['keying']['private_backgrounds'],
         ],
         'keying_show_all' => [
@@ -1687,6 +1755,7 @@ return [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'print[qrcode]',
+            'data-theme-field' => 'true',
             'value' => $config['print']['qrcode'],
         ],
         'print_qrSize' => [
@@ -1698,6 +1767,7 @@ return [
             'range_min' => 4,
             'range_max' => 10,
             'range_step' => 2,
+            'data-theme-field' => 'true',
             'unit' => 'empty',
         ],
         'print_qrPosition' => [
@@ -1713,6 +1783,7 @@ return [
                 'bottomRight' => 'bottom right',
                 'bottom' => 'bottom',
                 'bottomLeft' => 'bottom left',
+                'data-theme-field' => 'true',
                 'left' => 'left',
             ],
             'value' => $config['print']['qrPosition'],
@@ -1722,6 +1793,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['print']['qrOffset'],
             'name' => 'print[qrOffset]',
+            'data-theme-field' => 'true',
             'value' => $config['print']['qrOffset'],
         ],
         'print_qrMargin' => [
@@ -1733,12 +1805,14 @@ return [
             'range_min' => 0,
             'range_max' => 10,
             'range_step' => 1,
+            'data-theme-field' => 'true',
             'unit' => 'empty',
         ],
         'print_qrBgColor' => [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'print[qrBgColor]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['print']['qrBgColor'],
             'value' => $config['print']['qrBgColor'],
         ],
@@ -1746,6 +1820,7 @@ return [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'print[print_frame]',
+            'data-theme-field' => 'true',
             'value' => $config['print']['print_frame'],
         ],
         'print_frame' => [
@@ -1753,6 +1828,7 @@ return [
             'type' => 'image',
             'placeholder' => $defaultConfig['print']['frame'],
             'name' => 'print[frame]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['print']['frame'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/frames'),
@@ -1783,6 +1859,7 @@ return [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'textonprint[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['textonprint']['enabled'],
         ],
         'textonprint_line1' => [
@@ -1790,6 +1867,7 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['textonprint']['line1'],
             'name' => 'textonprint[line1]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textonprint']['line1'] ?? ''),
         ],
         'textonprint_line2' => [
@@ -1797,6 +1875,7 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['textonprint']['line2'],
             'name' => 'textonprint[line2]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textonprint']['line2'] ?? ''),
         ],
         'textonprint_line3' => [
@@ -1804,6 +1883,7 @@ return [
             'type' => 'input',
             'placeholder' => $defaultConfig['textonprint']['line3'],
             'name' => 'textonprint[line3]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textonprint']['line3'] ?? ''),
         ],
         'textonprint_locationx' => [
@@ -1811,6 +1891,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['locationx'],
             'name' => 'textonprint[locationx]',
+            'data-theme-field' => 'true',
             'value' => $config['textonprint']['locationx'],
         ],
         'textonprint_locationy' => [
@@ -1818,6 +1899,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['locationy'],
             'name' => 'textonprint[locationy]',
+            'data-theme-field' => 'true',
             'value' => $config['textonprint']['locationy'],
         ],
         'textonprint_rotation' => [
@@ -1825,6 +1907,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['textonprint']['rotation'],
             'name' => 'textonprint[rotation]',
+            'data-theme-field' => 'true',
             'value' => $config['textonprint']['rotation'],
             'range_min' => -180,
             'range_max' => 180,
@@ -1836,6 +1919,7 @@ return [
             'type' => 'font',
             'placeholder' => $defaultConfig['textonprint']['font'],
             'name' => 'textonprint[font]',
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['textonprint']['font'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/fonts'),
@@ -1846,6 +1930,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'textonprint[font_color]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['textonprint']['font_color'],
             'value' => $config['textonprint']['font_color'],
         ],
@@ -1854,6 +1939,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['font_size'],
             'name' => 'textonprint[font_size]',
+            'data-theme-field' => 'true',
             'value' => $config['textonprint']['font_size'],
         ],
         'textonprint_linespace' => [
@@ -1861,6 +1947,7 @@ return [
             'type' => 'number',
             'placeholder' => $defaultConfig['textonprint']['linespace'],
             'name' => 'textonprint[linespace]',
+            'data-theme-field' => 'true',
             'value' => $config['textonprint']['linespace'],
         ],
     ],
@@ -1916,6 +2003,7 @@ return [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'qr[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['qr']['enabled'],
         ],
         'qr_url' => [
@@ -1947,6 +2035,7 @@ return [
         'qr_result' => [
             'type' => 'select',
             'name' => 'qr[result]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['qr']['result'],
             'options' => [
                 'hidden' => 'hidden',
@@ -1964,6 +2053,7 @@ return [
         'qr_pswp' => [
             'type' => 'select',
             'name' => 'qr[pswp]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['qr']['pswp'],
             'options' => [
                 'hidden' => 'hidden',
@@ -2514,6 +2604,7 @@ return [
             'view' => 'basic',
             'type' => 'select',
             'name' => 'ui[style]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['ui']['style'],
             'options' => [
                 'classic' => 'classic',
@@ -2527,6 +2618,7 @@ return [
             'view' => 'basic',
             'type' => 'select',
             'name' => 'ui[button]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['ui']['button'],
             'options' => [
                 'classic' => 'classic',
@@ -2541,6 +2633,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['ui']['scale'],
             'name' => 'ui[scale]',
+            'data-theme-field' => 'true',
             'value' => $config['ui']['scale'],
             'range_min' => 100,
             'range_max' => 200,
@@ -2552,6 +2645,7 @@ return [
             'type' => 'range',
             'placeholder' => $defaultConfig['ui']['scale_resultImage'],
             'name' => 'ui[scale_resultImage]',
+            'data-theme-field' => 'true',
             'value' => $config['ui']['scale_resultImage'],
             'range_min' => 10,
             'range_max' => 100,
@@ -2562,6 +2656,7 @@ return [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'ui[shutter_animation]',
+            'data-theme-field' => 'true',
             'value' => $config['ui']['shutter_animation'],
         ],
         'ui_shutter_cheese_img' => [
@@ -2569,6 +2664,7 @@ return [
             'type' => 'image',
             'name' => 'ui[shutter_cheese_img]',
             'placeholder' => $defaultConfig['ui']['shutter_cheese_img'],
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['ui']['shutter_cheese_img'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/cheese'),
@@ -2597,6 +2693,7 @@ return [
             'view' => 'advanced',
             'type' => 'color',
             'name' => 'colors[countdown]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['countdown'],
             'value' => $config['colors']['countdown'],
         ],
@@ -2604,6 +2701,7 @@ return [
             'view' => 'advanced',
             'type' => 'color',
             'name' => 'colors[background_countdown]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['background_countdown'],
             'value' => $config['colors']['background_countdown'],
         ],
@@ -2611,6 +2709,7 @@ return [
             'view' => 'advanced',
             'type' => 'color',
             'name' => 'colors[cheese]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['cheese'],
             'value' => $config['colors']['cheese'],
         ],
@@ -2618,6 +2717,7 @@ return [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'background[type]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['background']['type'],
             'options' => [
                 'image' => 'image',
@@ -2630,6 +2730,7 @@ return [
             'type' => 'video',
             'name' => 'background[video]',
             'placeholder' => $defaultConfig['background']['video'],
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['background']['video'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/videos/background'),
@@ -2641,6 +2742,7 @@ return [
             'type' => 'image',
             'name' => 'background[defaults]',
             'placeholder' => $defaultConfig['background']['defaults'],
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['background']['defaults'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/background'),
@@ -2652,6 +2754,7 @@ return [
             'type' => 'image',
             'name' => 'background[chroma]',
             'placeholder' => $defaultConfig['background']['chroma'],
+            'data-theme-field' => 'true',
             'value' => htmlentities($config['background']['chroma'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/background'),
@@ -2662,12 +2765,14 @@ return [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'ui[decore_lines]',
+            'data-theme-field' => 'true',
             'value' => $config['ui']['decore_lines'],
         ],
         'colors_primary' => [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[primary]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['primary'],
             'value' => $config['colors']['primary'],
         ],
@@ -2675,6 +2780,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[primary_light]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['primary_light'],
             'value' => $config['colors']['primary_light'],
         ],
@@ -2682,6 +2788,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[secondary]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['secondary'],
             'value' => $config['colors']['secondary'],
         ],
@@ -2689,6 +2796,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[highlight]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['highlight'],
             'value' => $config['colors']['highlight'],
         ],
@@ -2696,6 +2804,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[font]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['font'],
             'value' => $config['colors']['font'],
         ],
@@ -2703,6 +2812,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[font_secondary]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['font_secondary'],
             'value' => $config['colors']['font_secondary'],
         ],
@@ -2710,6 +2820,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[button_font]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['button_font'],
             'value' => $config['colors']['button_font'],
         ],
@@ -2717,6 +2828,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[start_font]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['start_font'],
             'value' => $config['colors']['start_font'],
         ],
@@ -2724,6 +2836,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[panel]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['panel'],
             'value' => $config['colors']['panel'],
         ],
@@ -2731,6 +2844,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[border]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['border'],
             'value' => $config['colors']['border'],
         ],
@@ -2738,6 +2852,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[box]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['box'],
             'value' => $config['colors']['box'],
         ],
@@ -2745,6 +2860,7 @@ return [
             'view' => 'expert',
             'type' => 'color',
             'name' => 'colors[gallery_button]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['colors']['gallery_button'],
             'value' => $config['colors']['gallery_button'],
         ],
