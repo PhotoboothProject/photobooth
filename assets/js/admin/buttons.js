@@ -1,6 +1,20 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals photoboothTools shellCommand */
 $(function () {
+    // Highlight save button on form changes
+    const $saveButton = $('#save-admin-btn');
+    const initialSerialized = $('form').serialize();
+
+    $(document).on('change input', 'form :input', function () {
+        const currentSerialized = $('form').serialize();
+
+        if (currentSerialized !== initialSerialized) {
+            $saveButton.addClass('isDirty');
+        } else {
+            $saveButton.removeClass('isDirty');
+        }
+    });
+
     $('#reset-btn').on('click', function (e) {
         e.preventDefault();
         const msg = photoboothTools.getTranslation('really_delete');
