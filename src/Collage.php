@@ -463,7 +463,10 @@ class Collage
                 throw new \Exception('Failed to create image resource.');
             }
 
-            if ($c->pictureFlip !== 'off') {
+            if (
+                $c->pictureFlip !== 'off'
+                && (!$c->collagePlaceholder || $c->collagePlaceholderPosition !== $i)
+            ) {
                 if ($c->pictureFlip === 'flip-horizontal') {
                     imageflip($imageResource, IMG_FLIP_HORIZONTAL);
                 } elseif ($c->pictureFlip === 'flip-vertical') {
