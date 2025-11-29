@@ -1,27 +1,8 @@
 # Automated installation on Raspberry Pi OS (previously called Raspbian) and on Debian / Debian based distributions:
 
-To make the installation as simple as possible, we have created the "Photobooth Setup Wizard" for you. It can setup your Raspberry Pi, Computer or Laptop as a full blown Photobooth (using Apache Webserver). This means, Photobooth and all needed packages and dependencies get installed and the automatic camera mount is disabled.
+To start the installation, simply run the [Photobooth Setup Wizard](install/photobooth-setup-wizard).
 
 If you encounter any issues or want more freedom to configure your Pi, Computer or Laptop, we recommend you look at the detailed installation instruction below.
-
-The installation script is intendet to work on Raspberry Pi OS based on Debian bullseye, but it should also work on Raspberry Pi OS based on Debian buster.
-
-A valid username is needed to run the Setup Wizard. Your OS username must be passed by the `-username` flag to the installer.
-
-```sh
-wget -O install-photobooth.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
-sudo bash install-photobooth.sh -username='<YourUsername>'
-```
-
-For the user "pi", the command to install Photobooth needs to be:
-
-```sh
-sudo bash install-photobooth.sh -username='pi'
-```
-
-By default Apache is used for an easy and no-hassle setup.
-- Adjust your installation setup if needed: 1 Installation configuration
-- To get to know all options you can simply run `sudo bash install-photobooth.sh -help`.
 
 # Manually install Photobooth on Raspberry Pi OS (previously called Raspbian) and on Debian / Debian based distributions:
 

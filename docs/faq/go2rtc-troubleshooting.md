@@ -3,7 +3,7 @@
 ## Initial notes
 
 - make sure your camera is supported by gphoto2 / rpicam-apps / fswebcam
-- make sure your camera is working on Photobooth without setting up go2rtc for preview (**if not tested:** uninstall go2rtc while running the Photobooth Setup Wizard again: 4 go2rtc -> 6 Uninstall go2rtc and the related services).
+- make sure your camera is working on Photobooth without setting up go2rtc for preview (**if not tested:** uninstall go2rtc while running the [Photobooth Setup Wizard](install/photobooth-setup-wizard)  again: 4 go2rtc -> 6 Uninstall go2rtc and the related services).
 - make sure you can access [http://localhost:1984/api/stream.mjpeg?src=photobooth](http://localhost:1984/api/stream.mjpeg?src=photobooth) and having the stream available.
 
 If your camera is supported in general but not having a preview available please check go2rtc for errors.

@@ -28,6 +28,7 @@ nav:
   - Install:
     - Prerequisites: install/prerequisites.md
     - Supported Platforms and Cameras: install/supported_platformscand_cameras.md
+    - Photobooth Setup Wizard: install/setup_wizard.md
     - Install on Debian: install/install-debian.md
     - Enable PHP in nginx: install/install-nginx.md
     - Install on Windows: install/install-windows.md
