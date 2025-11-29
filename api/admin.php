@@ -118,37 +118,21 @@ if ($action === 'reset') {
     $logger->debug('Saving Photobooth configuration...');
     $newConfig = ArrayUtility::mergeRecursive($defaultConfig, $data);
 
-    // Normalize stored paths: strip base URL and host so config contains project-relative paths only
-    $baseUrl  = PathUtility::getBaseUrl();
-    $hostBase = '';
-    if (isset($_SERVER['HTTP_HOST'])) {
-        $scheme   = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
-        $hostBase = $scheme . '://' . $_SERVER['HTTP_HOST'] . $baseUrl;
-    }
+    $rootPath = PathUtility::getRootPath();
 
-    $normalizePath = static function (?string $path) use ($baseUrl, $hostBase): ?string {
+    $normalizePath = static function (?string $path) use ($rootPath): ?string {
         if ($path === null || $path === '') {
             return $path;
         }
-        // Remove full host+base prefix, e.g. "https://host/photobooth/"
-        if ($hostBase !== '' && str_starts_with($path, $hostBase)) {
-            $path = substr($path, strlen($hostBase));
-        }
-        // Remove base URL prefix, e.g. "/photobooth/"
-        if ($baseUrl !== '' && str_starts_with($path, $baseUrl)) {
-            $path = substr($path, strlen($baseUrl));
+
+        // Strip installation root from absolute filesystem paths written by the file chooser
+        if ($rootPath !== '' && str_starts_with($path, $rootPath)) {
+            $path = substr($path, strlen($rootPath));
         }
 
-        // If path still contains a known project-relative marker, strip everything before it
-        foreach (['/private/', '/resources/'] as $marker) {
-            $pos = strpos($path, $marker);
-            if ($pos !== false) {
-                $path = substr($path, $pos);
-                break;
-            }
-        }
-
-        return $path;
+        // Trim leading slashes so we store project-relative paths like
+        // "private/..." or "resources/..." instead of "/private/...".
+        return ltrim($path, '/');
     };
 
     // Logo and UI images

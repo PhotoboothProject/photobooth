@@ -5,22 +5,52 @@ namespace Photobooth\Utility;
 use InvalidArgumentException;
 use Photobooth\Environment;
 
+/**
+ * Utility class for resolving and normalizing filesystem paths and public URLs
+ * within the Photobooth project.
+ *
+ * Always pass a relative path when possible and use this utility to resolve it.
+ */
 class PathUtility
 {
+    /**
+     * Cached project root path with trailing directory separator.
+     *
+     * @var string|null
+     */
+    public static $rootPathCache = null;
+
+    /**
+     * Returns the absolute filesystem path to the project root directory.
+     *
+     * The result is cached for subsequent calls and always includes a trailing
+     * directory separator.
+     *
+     * @throws InvalidArgumentException If the root path cannot be resolved.
+     */
     public static function getRootPath(): string
     {
-        static $path = null;
-
-        if ($path === null) {
-            $path = realpath(__DIR__ . '/../../');
+        if (self::$rootPathCache === null) {
+            self::$rootPathCache = realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR;
         }
-        if ($path === false) {
+        if (!self::$rootPathCache) {
             throw new InvalidArgumentException('Rootpath could not be resolved.');
         }
 
-        return $path;
+        return self::$rootPathCache;
     }
 
+    /**
+     * Resolves a project-relative path to an absolute filesystem path.
+     *
+     * If an absolute path inside the project root is passed, it is returned as is.
+     * If resolution via `realpath` fails, a best-effort concatenation with the
+     * document root is returned.
+     *
+     * @param  string  $path  Relative or absolute path inside the project root.
+     *
+     * @return string Absolute filesystem path.
+     */
     public static function getAbsolutePath(string $path = ''): string
     {
         if ($path === '') {
@@ -34,15 +64,24 @@ class PathUtility
             return $path;
         }
 
-        $absolutePath = $documentRoot . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+        $absolutePath = $documentRoot . ltrim($path, DIRECTORY_SEPARATOR);
         $absolutePath = preg_replace('#' . DIRECTORY_SEPARATOR . '+#', DIRECTORY_SEPARATOR, (string) realpath($absolutePath));
         if ($absolutePath && strpos($absolutePath, $documentRoot) === 0) {
             return $absolutePath;
         }
 
-        return $documentRoot . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+        return $documentRoot . ltrim($path, DIRECTORY_SEPARATOR);
     }
 
+    /**
+     * Checks whether a path is an absolute filesystem path.
+     *
+     * On Windows, drive-prefixed paths (e.g. `C:\`) are detected.
+     *
+     * @param  string  $path  Path to inspect.
+     *
+     * @return bool `true` if the path is absolute, `false` otherwise.
+     */
     public static function isAbsolutePath(string $path): bool
     {
         if (Environment::isWindows() && (substr($path, 1, 2) === ':/' || substr($path, 1, 2) === ':\\')) {
@@ -52,11 +91,32 @@ class PathUtility
         return str_starts_with($path, '/');
     }
 
+    /**
+     * Checks whether a given path string looks like a URL.
+     *
+     * @param  string  $path  Path or URL to check.
+     *
+     * @return bool `true` if the value starts with `http`, `false` otherwise.
+     */
     public static function isUrl(string $path): bool
     {
         return str_starts_with($path, 'http');
     }
 
+    /**
+     * Builds a public URL (relative or absolute) from a given path.
+     *
+     * - If a URL is passed, it is returned unchanged.
+     * - If an absolute path inside the project root is passed, it is converted
+     *   to a path relative to the web root.
+     * - Otherwise the path is appended to the Photobooth base URL.
+     *
+     * @param  string  $path      Relative path, absolute path or URL.
+     * @param  bool    $absolute  When `true`, a fully qualified URL including
+     *                            scheme and host is returned.
+     *
+     * @return string Public URL to the requested resource.
+     */
     public static function getPublicPath(string $path = '', bool $absolute = false): string
     {
         if (self::isUrl($path)) {
@@ -78,18 +138,53 @@ class PathUtility
         return $path;
     }
 
+    /**
+     * Returns the base URL of the Photobooth installation relative to the
+     * current web server document root.
+     *
+     * The returned string always ends with a trailing slash and is normalized
+     * to use forward slashes.
+     *
+     * @return string Base URL of the installation.
+     */
     public static function getBaseUrl(): string
     {
-        $documentRoot = (string) realpath($_SERVER['DOCUMENT_ROOT']);
+        $documentRoot = (string)realpath($_SERVER['DOCUMENT_ROOT']);
         $rootPath = self::getRootPath();
+
         return self::fixFilePath(str_replace($documentRoot, '', $rootPath) . '/');
     }
 
+    /**
+     * Normalizes a filesystem or URL path to use forward slashes and removes
+     * duplicate slashes.
+     *
+     * @param  string  $path  Path to normalize.
+     *
+     * @return string Normalized path string.
+     */
     public static function fixFilePath(string $path): string
     {
         return str_replace(['\\', '//'], '/', $path);
     }
 
+    /**
+     * Resolves a file path or URL to a readable absolute filesystem path.
+     *
+     * Resolution strategy:
+     * - URLs are returned unchanged.
+     * - Absolute paths are checked directly.
+     * - Relative paths are resolved using `getAbsolutePath`.
+     * - If unresolved, fall back to a project-relative path.
+     * - As a last resort, two variants based on `$_SERVER['DOCUMENT_ROOT']`
+     *   are tried.
+     *
+     * @param  string  $filePath  Relative path, absolute path or URL to a file.
+     *
+     * @return string Absolute, readable filesystem path or the original URL.
+     *
+     * @throws \Exception If the file cannot be found or is not readable.
+     */
     public static function resolveFilePath(string $filePath): string
     {
         if (self::isUrl($filePath)) {
@@ -99,6 +194,12 @@ class PathUtility
         $absolutePath = self::isAbsolutePath($filePath) ? $filePath : self::getAbsolutePath($filePath);
         if (is_readable($absolutePath)) {
             return $absolutePath;
+        }
+
+        //fallback if absolute path is not resolvable, try relative path with root path
+        $projectRelative = self::getAbsolutePath(ltrim($filePath, '/'));
+        if (is_readable($projectRelative)) {
+            return $projectRelative;
         }
 
         $altPath1 = $_SERVER['DOCUMENT_ROOT'] . $filePath;
