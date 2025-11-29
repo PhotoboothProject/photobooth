@@ -343,6 +343,9 @@ Works if you access Photobooth via [http://localhost](http://localhost) or [http
 
 ## How do I enable Kiosk Mode to automatically start Photobooth in full screen?
 
+Please run the Photobooth Setup Wizard:
+- 7 Misc -> 1 Autostart and shortcut
+
 ### Autostart on Pi OS Bookworm
 
 Since late 2024 Wayland/labwc is the default on all new installations of RPiOS with desktop. Add to the user specific autostart file location: `~/.config/labwc/autostart`, though it doesn't exist by default. If there is a section [autostart] already, just add the line chromium --... otherwise insert the complete section.
@@ -490,13 +493,8 @@ _"Commands"_: _"Take picture command"_: `capture %s`
 
 For preview via DSLR first make sure `gphoto2 --capture-movie` works via terminal, for PiCamera make sure `rpicam-vid` or `libcamera-vid` works via terminal.
 
-Install go2rtc preview service:
-```sh
-wget -O install-go2rtc-preview.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/install-go2rtc-preview.sh
-sudo bash install-go2rtc-preview.sh
-```
-
-Follow the instructions and choose your variant to install.
+Install go2rtc preview service running the Photobooth Setup Wizare:
+- 4 go2rtc -> choose your variant to install
 
 Once installed successfully reboot your device and adjust your Photobooth config as mentioned above or open [http://localhost/admin/captureconfig.php](http://localhost/admin/captureconfig.php) (
 or [http://localhost/photobooth/admin/captureconfig.php](http://localhost/photobooth/admin/captureconfig.php)) to apply the default suggested configuration automatically.
@@ -530,12 +528,8 @@ The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed usi
 
 **From Photobooth v4.1.0 a preview from DSLR depends on the _"Preview from device cam"_ config**
 
-To use `gphoto-python`, first execute the `install-gphoto-python.sh` if you have not already installed "a service to set up a virtual webcam that gphoto2 can stream video to" while using the Photobooth installer on initial installation:
-
-```sh
-wget -O install-gphoto-python.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/install-gphoto-python.sh
-sudo bash install-gphoto-python.sh
-```
+To use `gphoto-python`, first execute the Photobooth Setup Wizard.
+- 5 gphoto2 webcam -> install with service (recommended) or cronjob
 
 Change your Photobooth configuration:
 
@@ -747,16 +741,10 @@ Take a look for "Loaded Configuration File" to get the path of your php.ini, you
 
 ## Automatic picture syncing to USB stick
 
-This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick. Currently works on Raspberry PI OS only.
+This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick
 
-Use the `install-photobooth.sh` script to get the operating system setup in place.
-
-**Note:** If you have declined the question to enable the USB sync file backup while running the `install-photobooth.sh` you need to run the following commands to get the operating system setup done:
-
-```sh
-wget -O enable-usb-sync.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/scripts/enable-usb-sync.sh
-sudo bash enable-usb-sync.sh -username='<YourUsername>'
-```
+Use the Photobooth Setup Wizatd to get the operating system setup in place.
+- 6. Permissions -> USB Sync policy
 
 The target USB device is selected through the admin panel.
 
