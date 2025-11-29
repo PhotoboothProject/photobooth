@@ -29,14 +29,16 @@ class VideoUtility
     ];
 
     public static function getVideoPreview(
-        string $videoPath = '',
+        string $relativeVideoPath = '',
         array $attributes = [],
     ): string {
-        $absoluteVideoPath = PathUtility::getAbsolutePath($videoPath);
-
-        if (is_readable($absoluteVideoPath)) {
-            $attributes['src'] = $videoPath;
+        $relativeVideoPath = PathUtility::getAbsolutePath($relativeVideoPath);
+        if (!file_exists($relativeVideoPath)) {
+            return 'Video not found';
         }
+
+        $videoPathPublic   = PathUtility::getPublicPath($relativeVideoPath);
+        $attributes['src'] = $videoPathPublic;
 
         return '<video autoplay muted loop playsinline ' . ComponentUtility::renderAttributes($attributes) . '></video>';
     }

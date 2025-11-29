@@ -61,9 +61,9 @@ class ConfigurationService
 
     protected function addDefaults(array $config): array
     {
-        $default_font = PathUtility::getPublicPath('resources/fonts/GreatVibes-Regular.ttf');
-        $default_frame = PathUtility::getPublicPath('resources/img/frames/frame.png');
-        $random_frame = PathUtility::getPublicPath('api/randomImg.php?dir=demoframes');
+        $default_font  = 'resources/fonts/GreatVibes-Regular.ttf';
+        $default_frame = 'resources/img/frames/frame.png';
+        $random_frame  = 'api/randomImg.php?dir=demoframes';
 
         if (empty($config['picture']['frame'])) {
             $config['picture']['frame'] = $random_frame;

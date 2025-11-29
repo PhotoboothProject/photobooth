@@ -242,10 +242,8 @@ class AdminInput
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             foreach ($setting['paths'] as $path) {
                 $relativeBase = str_replace(PathUtility::getRootPath(), '', $path);
-                if (!str_starts_with($relativeBase, '/')) {
-                    $relativeBase = '/' . $relativeBase;
-                }
 
+                // Heading for each path in file selector
                 $images .= '
                 <div class="col-span-3">
                     <h2 class="font-bold">' . $relativeBase . '</h2>
@@ -262,23 +260,24 @@ class AdminInput
                     }
                     foreach ($files as $file) {
                         $publicPath = PathUtility::getPublicPath($file);
-                        $origin     = str_replace(PathUtility::getRootPath(), '', $file);
-                        if (!str_starts_with($origin, '/')) {
-                            $origin = '/' . $origin;
-                        }
+                        // Store project relative path
+                        $relativeImagePathToStore = str_replace(PathUtility::getRootPath(), '', $file);
+                        $filename                 = basename($file);
 
-                        if (str_contains($setting['value'], 'url(')) {
-                            $origin = 'url(' . $origin . ')';
-                        }
                         $images .= '
-                        <div class="w-full relative h-0 pb-2/3">
-                            <img
-                                onclick="adminImageSelect(this, \'' . $setting['name'] . '\');"
-                                data-origin="' . $origin . '"
-                                class="w-full h-full left-0 top-0 absolute object-contain"
-                                src="' . $publicPath . '"
-                                title="' . $publicPath . '"
-                            >
+                        <div class="w-full">
+                            <div class="relative h-0 pb-2/3 cursor-pointer hover:shadow-lg" >
+                                <img
+                                    onclick="adminImageSelect(this, \'' . $setting['name'] . '\');"
+                                    data-origin="' . $relativeImagePathToStore . '"
+                                    class="w-full h-full left-0 top-0 absolute object-contain"
+                                    src="' . $publicPath . '"
+                                    title="' . $publicPath . '"
+                                >
+                            </div>
+                            <div class="w-full text-center text-xs text-gray-700 truncate">
+                                ' . $filename . '
+                            </div>
                         </div>
                     ';
                     }
@@ -298,20 +297,13 @@ class AdminInput
         }
 
         $selectedImage = $setting['value'];
-        if (str_contains($setting['value'], 'url(')) {
-            $selectedImage = substr($setting['value'], 4, -1);
-        }
-        if (str_contains($setting['value'], $_SERVER['DOCUMENT_ROOT'])) {
-            $selectedImage = substr($setting['value'], strlen($_SERVER['DOCUMENT_ROOT']));
-        }
-        $selectedImage = preg_replace('#/+#', '/', $selectedImage);
         $selectedImagePublic = $selectedImage !== '' ? PathUtility::getPublicPath($selectedImage) : '';
 
         return '
             <div class="adminImageSelection group">
                 <div class="w-full flex items-start">
                     <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer ' . $hiddenPreview . '" onclick="openAdminImageSelect(this)">
-                        <img class="adminImageSelection-preview object-contain" src="' . $selectedImagePublic . '">
+                        <img class="adminImageSelection-preview object-contain border border-brand-1  hover:shadow-lg" src="' . $selectedImagePublic . '">
                     </div>
                     <div class="w-full flex flex-col">
                         ' . self::renderHeadline($label) . '
@@ -359,9 +351,6 @@ class AdminInput
             $pathIndex = 0;
             foreach ($setting['paths'] as $path) {
                 $relativeBase = str_replace(PathUtility::getRootPath(), '', $path);
-                if (!str_starts_with($relativeBase, '/')) {
-                    $relativeBase = '/' . $relativeBase;
-                }
 
                 $fonts .= '
                 <div class="col-span-3">
@@ -383,16 +372,14 @@ class AdminInput
                         $fontClassName .= '-' . $fontIndex;
                         // Public URL for preview image
                         $publicPath = PathUtility::getPublicPath($fontPath);
-                        // Project-relative path to be stored in config
+                        // Project-relative path (no installation root, no leading slash) to be stored in config
                         $origin = str_replace(PathUtility::getRootPath(), '', $fontPath);
-                        if (!str_starts_with($origin, '/')) {
-                            $origin = '/' . $origin;
-                        }
+                        $origin = ltrim($origin, '/');
                         $imageAttributes = [
                             'onClick' => 'adminFontSelect(this, "' . $setting['name'] . '", "' . $fontClassName . '");',
                             'data-origin' => $origin,
                             'title' => $name,
-                            'class' => 'w-full h-full left-0 top-0 absolute object-contain cursor-pointer',
+                            'class' => 'w-full h-full left-0 top-0 absolute object-contain cursor-pointer hover:shadow-lg',
                         ];
                         $fonts .= '<style>.' . $fontClassName . ' {font-family:"' . $name . '"}</style>';
                         $fonts           .= '<div class="w-full relative h-0 pb-2/3">' . FontUtility::getFontPreviewImage(fontPath: $publicPath, attributes: $imageAttributes) . '</div>';
@@ -410,17 +397,11 @@ class AdminInput
         }
 
         $selectedFont = $setting['value'];
-        if (str_contains($setting['value'], 'url(')) {
-            $selectedFont = substr($setting['value'], 4, -1);
-        }
-        if (str_contains($setting['value'], $_SERVER['DOCUMENT_ROOT'])) {
-            $selectedFont = substr($setting['value'], strlen($_SERVER['DOCUMENT_ROOT']));
-        }
 
         return '
             <div class="adminFontSelection group">
                 <div class="w-full flex items-start">
-                    <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer" onclick="openAdminFontSelect(this)">
+                    <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer border border-brand-1  hover:shadow-lg" onclick="openAdminFontSelect(this)">
                         ' . FontUtility::getFontPreviewImage(fontPath: $selectedFont, attributes: ['class' => 'adminFontSelection-preview object-contain']) . '
                     </div>
                     <div class="w-full flex flex-col">
@@ -538,16 +519,16 @@ class AdminInput
         $videos = '';
 
         if (isset($setting['paths']) && is_array($setting['paths'])) {
-            $pathIndex = 0;
             foreach ($setting['paths'] as $path) {
+                $relativeBase = str_replace(PathUtility::getRootPath(), '', $path);
+
                 $videos .= '
                 <div class="col-span-3">
-                    <h2 class="font-bold">' . PathUtility::getPublicPath($path) . '</h2>
+                    <h2 class="font-bold">' . $relativeBase . '</h2>
                 </div>
             ';
                 try {
                     $files = VideoUtility::getVideosFromPath($path, false);
-                    $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
                     if (count($files) === 0) {
                         $videos .= '
                         <div class="col-span-3">
@@ -556,13 +537,25 @@ class AdminInput
                     ';
                     }
                     foreach ($files as $file) {
+                        // Store project relative path
+                        $relativeVideoPath = str_replace(PathUtility::getRootPath(), '', $file);
+                        $filename          = basename($file);
                         $videoAttributes = [
                             'onClick' => 'adminVideoSelect(this, "' . $setting['name'] . '");',
-                            'data-origin' => $file,
+                            'data-origin' => $relativeVideoPath,
                             'title' => $file,
-                            'class' => 'w-full h-full left-0 top-0 absolute object-contain cursor-pointer'
+                            'class'       => 'w-full h-full left-0 top-0 absolute object-contain cursor-pointer hover:shadow-lg',
                         ];
-                        $videos .= '<div class="w-full relative h-0 pb-2/3">' . VideoUtility::getVideoPreview(videoPath: $file, attributes: $videoAttributes) . '</div>';
+                        $videos            .= '
+                            <div class="w-full">
+                                <div class="relative h-0 pb-2/3 cursor-pointer hover:shadow-lg">' .
+                                              VideoUtility::getVideoPreview($relativeVideoPath, $videoAttributes) . '
+                                </div>
+                                <div class="w-full text-center text-xs text-gray-700 truncate">
+                                    ' . $filename . '
+                                </div>
+                            </div>
+                        ';
                     }
                 } catch (\Exception $e) {
                     $videos .= '
@@ -571,23 +564,16 @@ class AdminInput
                     </div>
                 ';
                 }
-                $pathIndex++;
             }
         }
 
         $selectedVideo = $setting['value'];
-        if (str_contains($setting['value'], 'url(')) {
-            $selectedVideo = substr($setting['value'], 4, -1);
-        }
-        if (str_contains($setting['value'], $_SERVER['DOCUMENT_ROOT'])) {
-            $selectedVideo = substr($setting['value'], strlen($_SERVER['DOCUMENT_ROOT']));
-        }
 
         return '
             <div class="adminVideoSelection group">
                 <div class="w-full flex items-start">
-                    <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer" onclick="openAdminVideoSelect(this)">
-                        ' . VideoUtility::getVideoPreview(videoPath: $selectedVideo, attributes: ['class' => 'adminVideoSelection-preview object-contain']) . '
+                    <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer border border-brand-1  hover:shadow-lg" onclick="openAdminVideoSelect(this)">
+                        ' . VideoUtility::getVideoPreview($selectedVideo, ['class' => 'adminVideoSelection-preview object-contain']) . '
                     </div>
                     <div class="w-full flex flex-col">
                         ' . self::renderHeadline($label) . '

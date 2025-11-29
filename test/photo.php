@@ -44,9 +44,9 @@ try {
         $processor = new ImageProcessor($imageHandler, $logger, $database, $vars, $config);
     }
     if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preImageProcessing')) {
-        list($imageHandler, $vars, $config, $imageResource) = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
+        [$imageHandler, $vars, $config, $imageResource] = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
     }
-    $imageHandler->framePath = $config['picture']['frame'];
+    $imageHandler->framePath = PathUtility::getPublicPath($config['picture']['frame']);
 
     // apply filter
     if ($vars['imageFilter'] !== ImageFilterEnum::PLAIN) {
@@ -106,7 +106,7 @@ try {
     }
 
     if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postImageProcessing')) {
-        list($imageHandler, $vars, $config, $imageResource) = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
+        [$imageHandler, $vars, $config, $imageResource] = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
     }
 
     if ($config['textonpicture']['enabled']) {
