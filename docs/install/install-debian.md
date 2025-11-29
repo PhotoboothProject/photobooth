@@ -1,6 +1,6 @@
 # Automated installation on Raspberry Pi OS (previously called Raspbian) and on Debian / Debian based distributions:
 
-To start the installation, simply run the [Photobooth Setup Wizard](install/photobooth-setup-wizard).
+To start the installation, simply run the [Photobooth Setup Wizard](photobooth-setup-wizard).
 
 If you encounter any issues or want more freedom to configure your Pi, Computer or Laptop, we recommend you look at the detailed installation instruction below.
 
