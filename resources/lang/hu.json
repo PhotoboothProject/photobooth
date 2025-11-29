@@ -213,6 +213,12 @@
   "selectFilter": "Képszűrő",
   "send": "Küldés",
   "test_update_available": "Teszt frissítés elérhető",
+  "theme_title": "Témák",
+  "theme_name_placeholder": "Téma neve",
+  "theme_save": "Téma mentése",
+  "theme_load": "Téma betöltése",
+  "theme_delete": "Téma törlése",
+  "theme_choose": "Téma kiválasztása",
   "update_available": "Frissítés elérhető.",
   "using_latest_version": "A fotófülke legfrissebb verzióját használod."
 }

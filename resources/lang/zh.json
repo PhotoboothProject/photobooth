@@ -1,1 +1,8 @@
-{}
+{
+  "theme_title": "主题",
+  "theme_name_placeholder": "主题名称",
+  "theme_save": "保存主题",
+  "theme_load": "加载主题",
+  "theme_delete": "删除主题",
+  "theme_choose": "选择主题"
+}

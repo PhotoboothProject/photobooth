@@ -1,1 +1,8 @@
-{}
+{
+  "theme_title": "Chủ đề",
+  "theme_name_placeholder": "Tên chủ đề",
+  "theme_save": "Lưu chủ đề",
+  "theme_load": "Tải chủ đề",
+  "theme_delete": "Xóa chủ đề",
+  "theme_choose": "Chọn chủ đề"
+}

@@ -336,4 +336,11 @@
   "manual:pictures:picture_frame_right_percentage": "Postotak desne granice okvira u odnosu na ukupnu širinu",
   "manual:pictures:picture_frame_top_percentage": "Postotak gornje granice okvira u odnosu na ukupnu visinu",
   "manual:pictures:picture_keep_original": "Ako je omogućeno, originalne slike će biti sačuvane unutar privremene mape."
+,
+  "theme_title": "Teme",
+  "theme_name_placeholder": "Naziv teme",
+  "theme_save": "Spremi temu",
+  "theme_load": "Učitaj temu",
+  "theme_delete": "Izbriši temu",
+  "theme_choose": "Odaberi temu"
 }

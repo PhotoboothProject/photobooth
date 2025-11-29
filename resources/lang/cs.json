@@ -114,5 +114,11 @@
   "video:video_effects": "Video efekt",
   "video:video_enabled": "Povolit pořizování krátkých videí",
   "video:video_gif": "Video jako GIF",
-  "video:video_qr": "Zobrazit jako QR kód"
+  "video:video_qr": "Zobrazit jako QR kód",
+  "theme_title": "Témata",
+  "theme_name_placeholder": "Název tématu",
+  "theme_save": "Uložit téma",
+  "theme_load": "Načíst téma",
+  "theme_delete": "Smazat téma",
+  "theme_choose": "Vyberte téma"
 }

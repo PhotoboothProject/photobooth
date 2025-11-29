@@ -302,5 +302,11 @@
   "manual:ftp:title": "Título da sub-pasta. Será anexado à pasta. Se o site estiver ativado, ele será usado na etiqueta do título html e no cabeçalho da página.",
   "manual:ftp:urlTemplate": "Defina o modelo de url para gerar o código qr. Os locais são '%website', '%pastaBase', '%pasta', '%título' (como slug) e '%data'. O nome do arquivo é anexado no final.",
   "manual:ftp:useForQr": "Se habilitado, a saída recebida do servidor FTP depois de armazenar a imagem que será usada como entrada para a geração do código QR (sempre verifique a configuração do servidor ftp).",
-  "manual:ftp:username": "Em combinação com a senha para autenticar o usuário que envia o arquivo no servidor."
+  "manual:ftp:username": "Em combinação com a senha para autenticar o usuário que envia o arquivo no servidor.",
+  "theme_title": "Temas",
+  "theme_name_placeholder": "Nome do tema",
+  "theme_save": "Salvar tema",
+  "theme_load": "Carregar tema",
+  "theme_delete": "Excluir tema",
+  "theme_choose": "Escolher tema"
 }

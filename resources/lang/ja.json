@@ -19,5 +19,11 @@
   "choose_image": "画像を選ぶ",
   "click_element": "クリック",
   "close": "閉じる",
-  "collage:collage_background": "バックグラウンド"
+  "collage:collage_background": "バックグラウンド",
+  "theme_title": "テーマ",
+  "theme_name_placeholder": "テーマ名",
+  "theme_save": "テーマを保存",
+  "theme_load": "テーマを読み込む",
+  "theme_delete": "テーマを削除",
+  "theme_choose": "テーマを選択"
 }
