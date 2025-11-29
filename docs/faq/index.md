@@ -343,7 +343,7 @@ Works if you access Photobooth via [http://localhost](http://localhost) or [http
 
 ## How do I enable Kiosk Mode to automatically start Photobooth in full screen?
 
-Please run the Photobooth Setup Wizard:
+Please run the [Photobooth Setup Wizard](install/photobooth-setup-wizard):
 - 7 Misc -> 1 Autostart and shortcut
 
 ### Autostart on Pi OS Bookworm
