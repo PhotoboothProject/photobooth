@@ -343,7 +343,7 @@ Works if you access Photobooth via [http://localhost](http://localhost) or [http
 
 ## How do I enable Kiosk Mode to automatically start Photobooth in full screen?
 
-Please run the [Photobooth Setup Wizard](../install/photobooth-setup-wizard):
+Please run the [Photobooth Setup Wizard](../install/setup_wizard):
 
 - 7 Misc --> 1 Autostart and shortcut
 
@@ -494,7 +494,7 @@ _"Commands"_: _"Take picture command"_: `capture %s`
 
 For preview via DSLR first make sure `gphoto2 --capture-movie` works via terminal, for PiCamera make sure `rpicam-vid` or `libcamera-vid` works via terminal.
 
-Install go2rtc preview service running the [Photobooth Setup Wizard](../install/photobooth-setup-wizard):
+Install go2rtc preview service running the [Photobooth Setup Wizard](../install/setup_wizard):
 
 - 4 go2rtc --> choose your variant to install
 
@@ -530,7 +530,7 @@ The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed usi
 
 **From Photobooth v4.1.0 a preview from DSLR depends on the _"Preview from device cam"_ config**
 
-To use `gphoto-python`, first execute the hotobooth Setup Wizard](../install/photobooth-setup-wizard).
+To use `gphoto-python`, first execute the hotobooth Setup Wizard](../install/setup_wizard).
 
 - 5 gphoto2 webcam --> install with service (recommended) or cronjob
 
