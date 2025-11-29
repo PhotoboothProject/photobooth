@@ -1,10 +1,18 @@
-version: "3.9"
-
 services:
   photobooth:
     build: .
+    image: photobox:latest
     ports:
       - "80:80"
       - "443:443"
     environment:
       - COMPOSER_VERSION=2
+    volumes:
+      - ./private/data:/var/www/html/data
+      - ./private/private:/var/www/html/private
+      - ./scripts/configure_printer.sh:/usr/local/bin/configure_printer.sh
+    devices:
+      - /dev/bus/usb:/dev/bus/usb  # Mount USB devices for gphoto2
+    network_mode: host  
+    privileged: true  # Grant elevated privileges for device access
+    restart: always
