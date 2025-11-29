@@ -51,5 +51,11 @@
   "gallery": "Galleri",
   "gallery:gallery_allow_delete": "Tillat sletting av bilder fra galleri",
   "takeCollage": "Collage",
-  "takePhoto": "Bilde"
+  "takePhoto": "Bilde",
+  "theme_title": "Temaer",
+  "theme_name_placeholder": "Temanavn",
+  "theme_save": "Lagre tema",
+  "theme_load": "Last inn tema",
+  "theme_delete": "Slett tema",
+  "theme_choose": "Velg tema"
 }

@@ -1,1 +1,8 @@
-{}
+{
+  "theme_title": "Teman",
+  "theme_name_placeholder": "Temanamn",
+  "theme_save": "Spara tema",
+  "theme_load": "Ladda tema",
+  "theme_delete": "Ta bort tema",
+  "theme_choose": "Välj tema"
+}

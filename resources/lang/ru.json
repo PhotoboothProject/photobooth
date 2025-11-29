@@ -1,1 +1,8 @@
-{}
+{
+  "theme_title": "Темы",
+  "theme_name_placeholder": "Название темы",
+  "theme_save": "Сохранить тему",
+  "theme_load": "Загрузить тему",
+  "theme_delete": "Удалить тему",
+  "theme_choose": "Выберите тему"
+}

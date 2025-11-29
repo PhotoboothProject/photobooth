@@ -1,1 +1,8 @@
-{}
+{
+  "theme_title": "테마",
+  "theme_name_placeholder": "테마 이름",
+  "theme_save": "테마 저장",
+  "theme_load": "테마 불러오기",
+  "theme_delete": "테마 삭제",
+  "theme_choose": "테마 선택"
+}
