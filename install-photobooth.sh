@@ -100,6 +100,22 @@ GPHOTO2_WEBCAM_EXTRA_PACKAGES=(
     "python3-zmq"
 )
 
+# rembg
+REMBG_PACKAGES=(
+    "python3"
+    "python3-pip"
+    "python3-venv"
+    "php${PHP_VERSION}-curl"
+)
+
+REMBG_PIP_PACKAGES=(
+    "rembg[cpu,cli]"
+    "pillow"
+    "filetype"
+    "watchdog"
+    "aiohttp"
+)
+
 # ==================================================
 # Logging / helper functions
 # ==================================================
@@ -2332,6 +2348,110 @@ function remove_gphoto_webcam() {
 }
 
 # ==================================================
+# Rembg
+# ==================================================
+function rembg_install() {
+    local script_dir="/var/www/rembg"
+    local venv_dir="$script_dir/rembg_venv"
+
+    mkdir -p "$script_dir"
+    chown -R www-data:www-data "$script_dir"
+
+    info "Rembg" "Installing dependencies..."
+    if command -v apt >/dev/null 2>&1; then
+        if ! install_packages "${REMBG_PACKAGES[@]}"; then
+            return 1
+        fi
+    else
+        error "Rembg: Unsupported package manager."
+        return 2
+    fi
+
+    rm -rf "$venv_dir"
+
+    info "Rembg" "Creating virtual environment..."
+    sudo -u www-data bash -lc "python3 -m venv '$venv_dir'" || return 3
+
+    local venv_py="$venv_dir/bin/python"
+
+    info "Rembg" "Upgrading pip..."
+    sudo -u www-data bash -lc "'$venv_py' -m pip install --upgrade pip >/dev/null 2>&1" || return 4
+
+    info "Rembg" "Installing Python dependencies..."
+    local pkg
+    for pkg in "${REMBG_PIP_PACKAGES[@]}"; do
+        sudo -u www-data bash -lc "'$venv_py' -m pip install \"$pkg\" >/dev/null 2>&1" || return 5
+    done
+
+    info "Rembg" "Installing systemd service..."
+    cat >/etc/systemd/system/rembg.service <<EOF
+[Unit]
+Description=Rembg Background Removal Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=$script_dir
+ExecStart=$venv_dir/bin/rembg s --host 0.0.0.0 --port 7000 --log_level info
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    if [[ "$HAS_SYSTEMD" == true ]]; then
+        systemctl daemon-reload >/dev/null 2>&1
+        systemctl enable rembg.service >/dev/null 2>&1 || return 6
+        systemctl start rembg.service >/dev/null 2>&1 || return 7
+
+    else
+        local symlink="/etc/systemd/system/multi-user.target.wants/rembg.service"
+
+        if [[ -L "$symlink" ]]; then
+            rm -f "$symlink" && info "Rembg" "Removed old symlink: $symlink"
+        fi
+
+        if [[ -d "/etc/systemd/system/multi-user.target.wants" ]]; then
+            ln -s ../rembg.service "$symlink" \
+            && info "Rembg" "Created symlink: $symlink"
+        else
+            info "Rembg" "Symlink directory missing, skipping manual enable."
+        fi
+    fi
+
+    confirm "Rembg Installation" "Rembg installed successfully."
+    return 0
+}
+
+function rembg_remove() {
+    local script_dir="$INSTALLFOLDERPATH/rembg"
+
+    if [[ "$HAS_SYSTEMD" == true ]]; then
+        if systemctl is-active --quiet rembg.service 2>/dev/null; then
+            systemctl stop rembg.service >/dev/null 2>&1 || true
+        fi
+
+        if systemctl is-enabled --quiet rembg.service 2>/dev/null; then
+            systemctl disable rembg.service >/dev/null 2>&1 || true
+        fi
+        systemctl daemon-reload >/dev/null 2>&1
+
+    else
+        local SYMLINK="/etc/systemd/system/multi-user.target.wants/rembg.service"
+
+        [[ -L "$SYMLINK" ]] && rm -f "$SYMLINK"
+    fi
+
+    rm -f /etc/systemd/system/rembg.service
+    rm -rf "$script_dir"
+
+    confirm "Rembg Removal" "Rembg and its service were removed."
+    return 0
+}
+
+# ==================================================
 # Installation / update functions
 # ==================================================
 
@@ -3717,6 +3837,38 @@ function misc_menu() {
     done
 }
 
+# ==================================================
+# Rembg Setup Menu
+# ==================================================
+function rembg_setup_menu() {
+    while true; do
+        local choice
+
+        choice=$(whiptail --title "Rembg Setup" \
+            --menu "Choose an option:" 20 60 10 \
+            --ok-button Select --cancel-button Back \
+            "1" "Install rembg (background removal)" \
+            "2" "Remove rembg" \
+            3>&1 1>&2 2>&3)
+
+        local status=$?
+        [[ $status -ne 0 ]] && return 0
+
+        case "$choice" in
+            1)
+                if ! rembg_install; then
+                    confirm "Rembg" "Installation failed. Check logs and try again."
+                fi
+                ;;
+            2)
+                if ! rembg_remove; then
+                    confirm "Rembg" "Removal failed."
+                fi
+                ;;
+        esac
+    done
+}
+
 function start_page() {
     if photobooth_installed; then
         check_git_install
@@ -3744,7 +3896,8 @@ function start_page() {
             "4" "go2rtc"
             "5" "gphoto2 webcam"
             "6" "Permissions"
-            "7" "Misc"
+            "7" "Rembg Setup"
+            "8" "Misc"
         )
 
         if ! CHOICE=$(whiptail --title "Photobooth Setup Wizard" \
@@ -3793,6 +3946,9 @@ function start_page() {
                 manage_permissions
                 ;;
             7)
+                rembg_setup_menu
+                ;;
+            8)
                 misc_menu
                 ;;
             *)
