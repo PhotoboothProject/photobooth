@@ -1,5 +1,0 @@
-rembg[cpu,cli]
-pillow
-filetype
-watchdog
-aiohttp
