@@ -23,7 +23,7 @@ sudo gpasswd -a www-data video
 reboot
 ```
 
-Once done you need to adjust the configuration. Open the admin panel in your browser [localhost/admin](http://localhost/admin) (or [localhost/photobooth/admin](http://localhost/photobooth/admin)) and
+Once done you need to adjust the configuration. Open the admin panel in your browser  [localhost/admin](http://localhost/admin) (or [localhost/photobooth/admin](http://localhost/photobooth/admin)) and
 make the following changes:
 
 **"Take picture command on Pi OS based on bookworm":**
@@ -1007,24 +1007,16 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
 
 ### Installation
 
-1. **Download and run the installation script:**
-   ```
-   cd /var/www/html/scripts
-   sudo bash install_rembg.sh
-   ```
+1. **Download and run the the [Photobooth Setup Wizard](../install/setup_wizard)**
+
+   Choose __8 Rembg Setup__
 
    This script will:
    - Check for Python 3 and required packages
-   - Create a virtual environment in `scripts/rembg_venv`
+   - Create a virtual environment in `/var/www/rembg/rembg_venv`
    - Install rembg and its dependencies (PIL, onnxruntime)
    - Verify the installation
-
-2. **Alternative manual installation:**
-   ```
-   python3 -m venv /var/www/html/scripts/rembg_venv
-   source /var/www/html/scripts/rembg_venv/bin/activate
-   pip install rembg pillow onnxruntime
-   ```
+   - start rembg server via a system service on port 7000 (API endpoints are used by Photobooth), access rembg server at [localhost:7000](http://localhost:7000)).
 
 ### Configuration
 
@@ -1040,7 +1032,6 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
      - **Alpha matting:** Enable for better edge quality
      - **Alpha matting thresholds:** Fine-tune edge detection (advanced users)
      - **Post-processing:** Enable for improved results
-     - **Max image size:** Limit processing size for performance
 
 3. **Save Configuration:**
    Click the "Save" button in the admin panel
@@ -1064,19 +1055,22 @@ Once enabled, Magic Greenscreen will automatically process photos after they are
 - Processing is performed on the CPU, it requires faster hardware to achieve optimal performance (not recommended for Raspberry Pi 4 or older)
 - First processing may take longer as the AI model loads
 - Processing time depends on image size and complexity
-- Recommended max image size: 1024x1024 pixels for optimal performance
 - Processing happens after photo capture and doesn't delay the user experience
 
 ### Troubleshooting
 
+First, make sure the rembg server is avalable ([localhost:7000](http://localhost:7000)).
+
+In case you're unable to access the rembg server, check the rembg server status:
+```
+sudo systemctl status rembg.service
+```
+
 #### "rembg virtual environment not found" error
-- Ensure the installation script completed successfully
-- Check that the virtual environment exists: `ls /var/www/html/scripts/rembg_venv`
-- Verify permissions: `sudo chown -R www-data:www-data /var/www/html/scripts/rembg_venv`
+- Ensure the installation completed successfully
 
 #### Processing fails or takes too long
 - Check available disk space
-- Reduce max image size in configuration
 - Verify internet connection (some models may require online access)
 - Check server logs in the debug panel: [http://localhost/admin/debug](http://localhost/admin/debugpanel) (
   or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel)).
@@ -1087,12 +1081,7 @@ Once enabled, Magic Greenscreen will automatically process photos after they are
 - Adjust alpha matting thresholds
 - Ensure good lighting and contrast in the original photo
 
-#### Permission errors
-- Ensure www-data user has access to the scripts directory
-- Run: `sudo chown -R www-data:www-data /var/www/html/scripts`
-
 #### Memory issues
-- Reduce max image size
 - Disable post-processing if memory is limited
 - Consider using a more powerful device
 
@@ -1112,16 +1101,16 @@ For advanced users, you can modify the rembg processing parameters:
 
 ### File Locations
 
-- Virtual environment: `/var/www/html/scripts/rembg_venv`
-- Installation script: `/var/www/html/scripts/install_rembg.sh`
+- Virtual environment: `/var/www/rembg/rembg_venv`
 - Processed images: `/var/www/html/data/images/` (with background removed)
+- Installation and uninstall: Run the [Photobooth Setup Wizard](../install/setup_wizard)
 
 ### Updating
 
 To update rembg to the latest version:
 
 ```
-source /var/www/html/scripts/rembg_venv/bin/activate
+source /var/www/rembg/rembg_venv/bin/activate
 pip install --upgrade rembg
 ```
 
