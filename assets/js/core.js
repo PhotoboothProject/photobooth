@@ -899,6 +899,28 @@ const photoBooth = (function () {
                 } else {
                     api.renderPic(data.file, data.images);
                 }
+
+                // Trigger background upload
+                if (config.ftp && config.ftp.enabled) {
+                    photoboothTools.console.log('Starting background upload for:', data.images);
+                    data.images.forEach(function(imageFile) {
+                        $.ajax({
+                            method: 'POST',
+                            url: environment.publicFolders.api + '/uploadToFtp.php',
+                            data: {
+                                file: imageFile
+                            },
+                            success: (uploadData) => {
+                                photoboothTools.console.log('Background upload success', uploadData);
+                            },
+                            error: (jqXHR, textStatus) => {
+                                photoboothTools.console.log('Background upload failed', textStatus);
+                            }
+                        });
+                    });
+                } else {
+                    photoboothTools.console.log('Background upload skipped (disabled or config missing)');
+                }
             },
             error: (jqXHR, textStatus) => {
                 api.errorPic({

@@ -10,7 +10,7 @@ $remoteStorage = RemoteStorageService::getInstance();
 if (!$remoteStorage->testConnection()) {
     echo json_encode([
         'response' => 'error',
-        'message' => 'ftp:no_connection',
+        'message' => $remoteStorage->getLastError() ?? 'ftp:no_connection',
         'missing' => [],
     ]);
     exit();

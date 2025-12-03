@@ -11,6 +11,7 @@ use League\Flysystem\PhpseclibV3\SftpAdapter;
 use League\Flysystem\PhpseclibV3\SftpConnectionProvider;
 use League\Flysystem\UnableToListContents;
 use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use Photobooth\Enum\RemoteStorageTypeEnum;
 use Photobooth\Logger\NamedLogger;
@@ -23,6 +24,7 @@ class RemoteStorageService
     protected array $config;
     protected NamedLogger $logger;
     protected Filesystem $filesystem;
+    protected ?string $lastError = null;
 
     public function __construct()
     {
@@ -80,9 +82,16 @@ class RemoteStorageService
     public function getWebpageUri(): string
     {
         $template = (string) $this->config['urlTemplate'];
+
+        if (!empty($this->config['baseFolder']) && !str_contains($template, '%baseFolder%')) {
+            $template = str_replace('%folder%', '%baseFolder%/%folder%', $template);
+        }
+
         $template = str_replace('%website%', $this->config['website'], $template);
         $template = str_replace('%folder%', $this->config['folder'], $template);
         $template = str_replace('%title%', SlugUtility::create($this->config['title']), $template);
+        $template = str_replace('%baseFolder%', $this->config['baseFolder'], $template);
+        $template = str_replace('%date%', date('Y/m/d'), $template);
 
         return $template;
     }
@@ -90,6 +99,11 @@ class RemoteStorageService
     public function getStorageFolder(): string
     {
         $storageFolder = SlugUtility::create($this->config['folder']) . '/' . SlugUtility::create($this->config['title']);
+
+        if (!empty($this->config['baseFolder'])) {
+            $baseFolder = rtrim($this->config['baseFolder'], '/');
+            $storageFolder = $baseFolder . '/' . $storageFolder;
+        }
 
         return $storageFolder;
     }
@@ -99,10 +113,16 @@ class RemoteStorageService
         return $this->filesystem->fileExists($location);
     }
 
-    public function write(string $location, string $contents): void
+    public function write(string $location, string $contents): bool
     {
         $this->logger->debug('Uploading...', [$location]);
-        $this->filesystem->write($location, $contents);
+        try {
+            $this->filesystem->write($location, $contents);
+            return true;
+        } catch (FilesystemException | UnableToWriteFile $exception) {
+            $this->logger->error('Upload failed.', ['exception' => $exception->getMessage()]);
+            return false;
+        }
     }
 
     public function delete(string $location): void
@@ -116,19 +136,26 @@ class RemoteStorageService
     public function testConnection(): bool
     {
         $this->logger->debug('Testing upload connection.');
+        $this->lastError = null;
         try {
             $files = [];
-            $contents = $this->filesystem->listContents('/', false);
+            $contents = $this->filesystem->listContents('', false);
             foreach ($contents as $object) {
                 $files[] = $object->path();
             }
             $this->logger->debug('Connection established.', [$files]);
             return true;
         } catch (FilesystemException | UnableToListContents | UnableToReadFile $exception) {
+            $this->lastError = $exception->getMessage();
             $this->logger->error('Connection failed.', ['exception' => $exception->getMessage()]);
         }
 
         return false;
+    }
+
+    public function getLastError(): ?string
+    {
+        return $this->lastError;
     }
 
     protected function getAdapter(array $config): FilesystemAdapter
@@ -147,10 +174,13 @@ class RemoteStorageService
         return new FtpAdapter(
             FtpConnectionOptions::fromArray([
                 'host' => $config['baseURL'],
-                'root' => '/' . $config['baseFolder'],
+                'root' => '',
                 'username' => $config['username'],
                 'password' => $config['password'],
                 'port' => $config['port'],
+                'ssl' => $config['ssl'] ?? false,
+                'passive' => $config['passive'] ?? true,
+                'timeout' => 10,
             ])
         );
     }
@@ -164,7 +194,7 @@ class RemoteStorageService
                 'password' => $config['password'],
                 'port' => $config['port']
             ]),
-            '/' . $config['baseFolder'],
+            '/',
             PortableVisibilityConverter::fromArray([
                 'file' => [
                     'public' => 0664,

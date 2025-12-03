@@ -810,6 +810,8 @@ class PhotoboothConfiguration implements ConfigurationInterface
                         ->then(function (string $value): int { return intval($value); })
                         ->end()
                     ->end()
+                ->booleanNode('ssl')->defaultValue(false)->end()
+                ->booleanNode('passive')->defaultValue(true)->end()
                 ->scalarNode('username')->defaultValue('')->end()
                 ->scalarNode('password')->defaultValue('')->end()
                 ->scalarNode('baseFolder')->defaultValue('')->end()

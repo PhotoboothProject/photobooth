@@ -283,15 +283,6 @@ try {
             }
         }
 
-        // Store images on remote storage
-        if ($config['ftp']['enabled']) {
-            $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $vars['singleImageFile'], (string) file_get_contents($vars['resultFile']));
-            $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $vars['singleImageFile'], (string) file_get_contents($vars['thumbFile']));
-            if ($config['ftp']['create_webpage']) {
-                $remoteStorage->createWebpage();
-            }
-        }
-
         // Change permissions
         $picture_permissions = $config['picture']['permissions'];
         if (!chmod($vars['resultFile'], (int)octdec($picture_permissions))) {

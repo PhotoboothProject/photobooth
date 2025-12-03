@@ -2321,6 +2321,18 @@ return [
             'name' => 'ftp[port]',
             'value' => $config['ftp']['port'],
         ],
+        'ssl' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'ftp[ssl]',
+            'value' => $config['ftp']['ssl'],
+        ],
+        'passive' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'ftp[passive]',
+            'value' => $config['ftp']['passive'],
+        ],
         'username' => [
             'view' => 'advanced',
             'type' => 'input',
