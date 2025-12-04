@@ -915,6 +915,8 @@ const photoBooth = (function () {
                             },
                             error: (jqXHR, textStatus) => {
                                 photoboothTools.console.log('Background upload failed', textStatus);
+                                photoboothTools.overlay.showWarning('FTP Upload Failed');
+                                setTimeout(() => photoboothTools.overlay.close(), 5000);
                             }
                         });
                     });

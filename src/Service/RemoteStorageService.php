@@ -35,7 +35,7 @@ class RemoteStorageService
 
     public function createWebpage(): void
     {
-        if ($this->fileExists($this->getStorageFolder() . '/index.php') && $this->fileExists($this->getStorageFolder() . '/config.php')) {
+        if ($this->fileExists($this->getStorageFolder() . '/index.php') && $this->fileExists($this->getStorageFolder() . '/config.inc.php')) {
             return;
         }
 

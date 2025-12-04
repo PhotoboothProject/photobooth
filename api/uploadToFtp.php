@@ -49,13 +49,20 @@ try {
     }
 
     // Store images on remote storage
-    $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $fileName, (string) file_get_contents($resultFile));
+    $uploadSuccess = $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $fileName, (string) file_get_contents($resultFile));
     
-    if (file_exists($thumbFile)) {
-        $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName, (string) file_get_contents($thumbFile));
+    if (!$uploadSuccess) {
+        throw new \Exception('Failed to upload image: ' . $fileName);
     }
     
-    if ($config['ftp']['create_webpage']) {
+    if (file_exists($thumbFile)) {
+        $thumbSuccess = $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName, (string) file_get_contents($thumbFile));
+        if (!$thumbSuccess) {
+            $logger->warning('Failed to upload thumbnail: ' . $fileName);
+        }
+    }
+    
+    if ($config['ftp']['create_webpage'] && !preg_match('/-\d+\.jpg$/', $fileName)) {
         $remoteStorage->createWebpage();
     }
 
