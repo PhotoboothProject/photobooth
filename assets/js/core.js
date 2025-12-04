@@ -903,7 +903,7 @@ const photoBooth = (function () {
                 // Trigger background upload
                 if (config.ftp && config.ftp.enabled) {
                     photoboothTools.console.log('Starting background upload for:', data.images);
-                    data.images.forEach(function(imageFile) {
+                    data.images.forEach(function (imageFile) {
                         $.ajax({
                             method: 'POST',
                             url: environment.publicFolders.api + '/uploadToFtp.php',

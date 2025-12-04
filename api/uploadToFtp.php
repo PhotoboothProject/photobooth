@@ -58,7 +58,7 @@ try {
     if (file_exists($thumbFile)) {
         $thumbSuccess = $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName, (string) file_get_contents($thumbFile));
         if (!$thumbSuccess) {
-            $logger->warning('Failed to upload thumbnail: ' . $fileName);
+            $logger->error('Failed to upload thumbnail: ' . $fileName);
         }
     }
 
