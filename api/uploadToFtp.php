@@ -41,7 +41,7 @@ try {
                     $thumbFile = $demoImage;
                 }
             } else {
-                 throw new \Exception('Demo image not found: ' . $demoImage);
+                throw new \Exception('Demo image not found: ' . $demoImage);
             }
         } else {
             throw new \Exception('Image does not exist: ' . $resultFile);
@@ -50,18 +50,18 @@ try {
 
     // Store images on remote storage
     $uploadSuccess = $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $fileName, (string) file_get_contents($resultFile));
-    
+
     if (!$uploadSuccess) {
         throw new \Exception('Failed to upload image: ' . $fileName);
     }
-    
+
     if (file_exists($thumbFile)) {
         $thumbSuccess = $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName, (string) file_get_contents($thumbFile));
         if (!$thumbSuccess) {
             $logger->warning('Failed to upload thumbnail: ' . $fileName);
         }
     }
-    
+
     if ($config['ftp']['create_webpage'] && !preg_match('/-\d+\.jpg$/', $fileName)) {
         $remoteStorage->createWebpage();
     }
