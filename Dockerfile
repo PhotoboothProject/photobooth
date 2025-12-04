@@ -1,4 +1,4 @@
-FROM webdevops/php-apache:8.3
+FROM webdevops/php-apache:8.4
 
 # Adjust LimitRequestLine and
 # update and install dependencies
