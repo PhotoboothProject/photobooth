@@ -105,6 +105,12 @@
   "no_printing": "Tento typ souboru nelze vytisknout.",
   "showPictureFrame": "Zobrazit rámeček obrázku",
   "takeVideo": "Video",
+  "theme_title": "Témata",
+  "theme_name_placeholder": "Název tématu",
+  "theme_save": "Uložit téma",
+  "theme_load": "Načíst téma",
+  "theme_delete": "Smazat téma",
+  "theme_choose": "Vyberte téma",
   "userinterface:icons_take_video": "Ikona nahrávání videa",
   "video:video_animation": "Video animace",
   "video:video_cheese": "Zpráva \"Řekni sýr\" pro video",
@@ -114,11 +120,5 @@
   "video:video_effects": "Video efekt",
   "video:video_enabled": "Povolit pořizování krátkých videí",
   "video:video_gif": "Video jako GIF",
-  "video:video_qr": "Zobrazit jako QR kód",
-  "theme_title": "Témata",
-  "theme_name_placeholder": "Název tématu",
-  "theme_save": "Uložit téma",
-  "theme_load": "Načíst téma",
-  "theme_delete": "Smazat téma",
-  "theme_choose": "Vyberte téma"
+  "video:video_qr": "Zobrazit jako QR kód"
 }
