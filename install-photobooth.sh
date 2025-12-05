@@ -708,8 +708,9 @@ function prepare_php_environment() {
     # Add PHP repository based on OS
     if [[ "${DEBIAN[*]}" =~ $OS_CODENAME ]]; then
         info "PHP preparation" "Adding Sury PHP repository for Debian."
-        wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-        echo "deb https://packages.sury.org/php/ $OS_CODENAME main" | tee /etc/apt/sources.list.d/php.list
+        wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg >/dev/null 2>&1
+        echo "deb https://packages.sury.org/php/ $OS_CODENAME main" \
+            | tee /etc/apt/sources.list.d/php.list >/dev/null 2>&1
     elif [[ "$OS_CODENAME" == "mantic" ]]; then
         info "PHP preparation" "No source lists available for 'mantic'."
     else
