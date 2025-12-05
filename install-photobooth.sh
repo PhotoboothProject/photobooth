@@ -861,8 +861,12 @@ function toggle_skip_python() {
 #
 # ==================================================
 function detect_browser() {
-    local browser
-    browser=$(update-alternatives --display x-www-browser | grep 'currently' | awk -F/ '{print $4}')
+    local browser=""
+
+    if update-alternatives --query x-www-browser &>/dev/null; then
+        browser=$(update-alternatives --display x-www-browser \
+            | grep 'currently' | awk -F/ '{print $4}')
+    fi
 
     case "$browser" in
         chromium-browser|chromium|google-chrome|google-chrome-stable|google-chrome-beta)
@@ -874,6 +878,14 @@ function detect_browser() {
             CHROME_FLAGS=false
             ;;
         *)
+            for b in chromium chromium-browser google-chrome google-chrome-stable google-chrome-beta firefox firefox-esr; do
+                if command -v "$b" >/dev/null; then
+                    WEBBROWSER="$b"
+                    [[ "$b" =~ chrome|chromium ]] && CHROME_FLAGS=true || CHROME_FLAGS=false
+                    return
+                fi
+            done
+
             WEBBROWSER="unknown"
             CHROME_FLAGS=false
             ;;
