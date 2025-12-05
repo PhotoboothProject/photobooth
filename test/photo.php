@@ -42,9 +42,9 @@ try {
     }
     if (class_exists('Photobooth\Processor\ImageProcessor')) {
         $processor = new ImageProcessor($imageHandler, $logger, $database, $vars, $config);
-    }
-    if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preImageProcessing')) {
-        [$imageHandler, $vars, $config, $imageResource] = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
+        if (method_exists($processor, 'preImageProcessing')) {
+            [$imageHandler, $vars, $config, $imageResource] = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
+        }
     }
     $imageHandler->framePath = PathUtility::getPublicPath($config['picture']['frame']);
 
@@ -73,10 +73,10 @@ try {
         }
     }
 
-    if ($config['picture']['rotation'] !== '0') {
+    if ((int)$config['picture']['rotation'] !== 0) {
         $imageResource = $imageHandler->rotateResizeImage(
             image: $imageResource,
-            degrees: $config['picture']['rotation']
+            degrees: (int)$config['picture']['rotation'],
         );
         if (!$imageResource) {
             throw new \Exception('Error resizing resource.');

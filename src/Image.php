@@ -438,6 +438,11 @@ class Image
      */
     public function rotateResizeImage(GdImage $image, int $degrees, string $bgColor = '#ffffff', bool $useTransparentBackground = false): GdImage|false
     {
+        if ($degrees % 360 === 0) {
+            // No rotation needed for 0, 360, -360, etc.
+            return $image;
+        }
+
         $new = $image;
         try {
             // simple rotate if possible and ignore changed dimensions (doesn't need to care about background color)
@@ -447,6 +452,8 @@ class Image
                 if (!$new) {
                     throw new \Exception('Cannot rotate image.');
                 }
+                // without, 0 degree rotation would loose alpha blending, results in black image
+                imagealphablending($new, true);
             } else {
                 $old_width = imagesx($image);
                 $old_height = imagesy($image);
@@ -465,7 +472,7 @@ class Image
                     $background = imagecolorallocatealpha($new, 0, 0, 0, 127);
                 } else {
                     $colorComponents = self::getColorComponents($bgColor);
-                    list($bg_r, $bg_g, $bg_b, $bg_a) = $colorComponents;
+                    [$bg_r, $bg_g, $bg_b, $bg_a] = $colorComponents;
                     // color background as defined
                     $background = imagecolorallocatealpha($new, $bg_r, $bg_g, $bg_b, $bg_a);
                 }
