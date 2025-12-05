@@ -150,10 +150,10 @@ try {
                     }
                 }
 
-                if ($config['picture']['rotation'] !== '0') {
+                if ((int)$config['picture']['rotation'] !== 0) {
                     $imageResource = $imageHandler->rotateResizeImage(
                         image: $imageResource,
-                        degrees: $config['picture']['rotation']
+                        degrees: (int)$config['picture']['rotation'],
                     );
                     if (!$imageResource instanceof \GdImage) {
                         throw new \Exception('Error resizing resource.');
@@ -161,7 +161,7 @@ try {
                 }
 
                 // Apply rembg
-                list($imageHandler, $imageResource) = Rembg::process($imageHandler, $vars, $config['rembg'], $imageResource);
+                [$imageHandler, $imageResource] = Rembg::process($imageHandler, $vars, $config['rembg'], $imageResource);
                 if ($config['picture']['polaroid_effect']) {
                     $imageHandler->polaroidRotation = $config['picture']['polaroid_rotation'];
                     $imageResource = $imageHandler->effectPolaroid($imageResource);

@@ -121,10 +121,10 @@ try {
             }
         }
 
-        if ($config['picture']['rotation'] !== '0') {
+        if ((int)$config['picture']['rotation'] !== 0) {
             $imageResource = $imageHandler->rotateResizeImage(
                 image: $imageResource,
-                degrees: $config['picture']['rotation']
+                degrees: (int)$config['picture']['rotation'],
             );
             if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Error resizing resource.');
