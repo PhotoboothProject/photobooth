@@ -4088,6 +4088,10 @@ if [ "$SILENT" = true ]; then
     check_photobooth_version
     install_system_icon || warn "Failed to install Photobooth system icon"
     exit
+else
+    # NON-SILENT MODE: Only whiptail visible.
+    # Hide ALL stdout/stderr so echo and commands are invisible.
+    exec >>"$LOGFILE" 2>&1
 fi
 
 detect_browser
