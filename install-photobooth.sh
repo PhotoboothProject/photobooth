@@ -147,7 +147,7 @@ function info() {
     if [ "$SILENT" = true ]; then
         echo "$title: $message"
     else
-        whiptail --title "$title" --infobox "$message" "$height" "$width"
+        whiptail --title "$title" --infobox "$message" "$height" "$width"  < /dev/tty > /dev/tty 2>&1
     fi
 }
 
@@ -4089,9 +4089,9 @@ if [ "$SILENT" = true ]; then
     install_system_icon || warn "Failed to install Photobooth system icon"
     exit
 else
-    # NON-SILENT MODE: Only whiptail visible.
-    # Hide ALL stdout/stderr so echo and commands are invisible.
-    exec >>"$LOGFILE" 2>&1
+    # Non-silent mode → whiptail only
+    # Preserve terminal for interactive menus
+    exec 3>&1 4>&2
 fi
 
 detect_browser
