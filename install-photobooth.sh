@@ -149,6 +149,7 @@ function info() {
     else
         whiptail --title "$title" --infobox "$message" "$height" "$width"  < /dev/tty > /dev/tty 2>&1
     fi
+    sleep 1
 }
 
 function warn() {
