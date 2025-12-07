@@ -257,7 +257,7 @@ const photoBooth = (function () {
                 const element = document.createElement('div');
                 element.classList.add('cheese');
 
-                if (config.ui.shutter_cheese_img !== '') {
+                if (config.ui.shutter_cheese_img != null && config.ui.shutter_cheese_img !== '') {
                     const image = document.createElement('img');
                     image.src = config.ui.shutter_cheese_img;
                     const imageElement = document.createElement('div');
