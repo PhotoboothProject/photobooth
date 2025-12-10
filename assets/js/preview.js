@@ -1,4 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
+
 /* globals photoBooth photoboothTools */
 
 function getPreviewUrlWithCacheBusting() {
@@ -203,8 +204,7 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview at countdown from URL.');
                     setTimeout(function () {
-                        url.css('background-image',
-                            'url("' + getPreviewUrlWithCacheBusting() + '")');
+                        url.css('background-image', 'url("' + getPreviewUrlWithCacheBusting() + '")');
                         url.show();
                         url.addClass('streaming');
                     }, config.preview.url_delay);
@@ -217,8 +217,7 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview from URL.');
                     setTimeout(function () {
-                        url.css('background-image',
-                            'url("' + getPreviewUrlWithCacheBusting() + '")');
+                        url.css('background-image', 'url("' + getPreviewUrlWithCacheBusting() + '")');
                         url.show();
                         url.addClass('streaming');
                     }, config.preview.url_delay);
