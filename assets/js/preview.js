@@ -1,7 +1,7 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals photoBooth photoboothTools */
 
-function addCacheBustingParam() {
+function getPreviewUrlWithCacheBusting() {
     const url = getBasePreviewUrl();
     const timestamp = new Date().getTime();
 
@@ -18,6 +18,7 @@ function getBasePreviewUrl() {
     }
 
     const raw = config.preview.url;
+    //remove url("") if present
     const match = raw.match(/^url\((['"]?)(.+?)\1\)$/);
 
     return match ? match[2] : raw;
@@ -202,7 +203,8 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview at countdown from URL.');
                     setTimeout(function () {
-                        url.css('background-image', 'url("' + addCacheBustingParam() + '")');
+                        url.css('background-image',
+                            'url("' + getPreviewUrlWithCacheBusting() + '")');
                         url.show();
                         url.addClass('streaming');
                     }, config.preview.url_delay);
@@ -215,7 +217,8 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview from URL.');
                     setTimeout(function () {
-                        url.css('background-image', 'url("' + addCacheBustingParam() + '")');
+                        url.css('background-image',
+                            'url("' + getPreviewUrlWithCacheBusting() + '")');
                         url.show();
                         url.addClass('streaming');
                     }, config.preview.url_delay);
