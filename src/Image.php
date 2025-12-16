@@ -1150,8 +1150,34 @@ class Image
     public function effectPolaroid(GdImage $resource): GdImage
     {
         try {
+            // Get resolution of the input image
+            $resourceWidth = imagesx($resource);
+            $resourceHight = imagesy($resource);
+
+            // Reference dimensions of the original demo images, for which the polaroid effect was optimized
+            $referenceDemoWidth = 1024;
+            // $referenceDemoHeight = 682; // Not strictly needed for width-based scaling
+
+            // Calculate scaling factor based on the current image's width relative to the reference width
+            $scalingFactor = $resourceWidth / $referenceDemoWidth;
+
+            // --- SCALE ORIGINAL FIXED PIXEL VALUES ---
+            // Original fixed values (from initial implementation), scaled for the current image
+            $scaledBorderWidthAdd = (int) round(25 * $scalingFactor); // +25 for overall width
+            $scaledBorderHeightAdd = (int) round(80 * $scalingFactor); // +80 for overall height
+
+            $scaledImageOffsetX = (int) round(11 * $scalingFactor); // X-offset for copying the image
+            $scaledImageOffsetY = (int) round(11 * $scalingFactor); // Y-offset for copying the image
+
+            // Define minimum pixel values for borders/offsets to prevent them from disappearing
+            $minBorderPx = 5;
+            $scaledBorderWidthAdd = max($minBorderPx * 2, $scaledBorderWidthAdd);    // Min 10px for both side borders combined
+            $scaledBorderHeightAdd = max($minBorderPx * 2, $scaledBorderHeightAdd);  // Min 10px for top and bottom borders combined
+            $scaledImageOffsetX = max($minBorderPx, $scaledImageOffsetX);           // Min 5px for image X-offset
+            $scaledImageOffsetY = max($minBorderPx, $scaledImageOffsetY);           // Min 5px for image Y-offset
+
             // We create a new image
-            $img = imagecreatetruecolor(imagesx($resource) + 25, imagesy($resource) + 80);
+            $img = imagecreatetruecolor($resourceWidth + $scaledBorderWidthAdd, $resourceHight + $scaledBorderHeightAdd);
             if (!$img) {
                 throw new \Exception('Cannot create new image.');
             }
@@ -1163,37 +1189,75 @@ class Image
             }
 
             // We copy the image to which we want to apply the polariod effect in our new image.
-            if (!imagecopy($img, $resource, 11, 11, 0, 0, imagesx($resource), imagesy($resource))) {
+            if (!imagecopy($img, $resource, $scaledImageOffsetX, $scaledImageOffsetY, 0, 0, $resourceWidth, $resourceHight)) {
                 unset($img);
                 throw new \Exception('Cannot copy image.');
             }
 
+            // --- Removed Inner Gray Border ---
+            // The subtle gray border around the image itself (inside the white polaroid frame) has been commented out.
+            // Reasoning:
+            // 1. **Minimal visual impact:** Similar to the shadow effect, this thin border (originally 4 pixels wide)
+            //    is often barely noticeable on larger, high-resolution images relative to the overall composition.
+            // 2. **Design simplification:** Removing it contributes to a cleaner, less cluttered aesthetic,
+            //    putting full focus on the main image and the white polaroid frame.
+            //
+            // If an inner border is desired in the future, it might require a more distinct implementation.
+            /*
             // Border color
             $color = intval(imagecolorallocate($img, 192, 192, 192));
-            // We put a gray border to our image.
-            if (!imagerectangle($img, 0, 0, imagesx($img) - 4, imagesy($img) - 4, $color)) {
-                unset($img);
-                throw new \Exception('Cannot add border.');
-            }
 
+            // We put a gray border to our image.
+            // Scaling original -4px offset from the image edge
+            $scaledOuterBorderOffset = max(2, (int) round(4 * $scalingFactor)); // Min 2px border offset
+            if (!imagerectangle($img, 0, 0, imagesx($img) - $scaledOuterBorderOffset, imagesy($img) - $scaledOuterBorderOffset, $color)) {
+                unset($img); // Clean up on failure
+                throw new \Exception('Cannot add border.');
+            }*/
+
+            // --- Removed Shadow Effect ---
+            // The shadow effect (originally consisting of multiple gray lines) has been commented out.
+            // Reasoning:
+            // 1. **Perceptibility on larger images:** When images are scaled up, the subtle shadow lines (originally 1-6 pixels wide)
+            //    become proportionally larger but are often still too thin relative to the overall image size to be
+            //    noticeable or to add significant visual depth.
+            // 2. **Performance optimization:** Removing these `imageline()` calls slightly improves performance,
+            //    especially when processing many images.
+            //
+            // If a shadow effect is desired in the future, it might require a different, more pronounced implementation.
+            /*
             // Shade Colors
             $gris1 = intval(imagecolorallocate($img, 208, 208, 208));
             $gris2 = intval(imagecolorallocate($img, 224, 224, 224));
             $gris3 = intval(imagecolorallocate($img, 240, 240, 240));
 
             // We add a small shadow
+            // Scaling original shadow line offsets based on their pixel values
+            $scaledOffset_1px = max(1, (int) round(1 * $scalingFactor)); // for imagesy($img) - 1, imagesx($img) - 1
+            $scaledOffset_2px = max(1, (int) round(2 * $scalingFactor)); // for x1=2, y1=2, imagesy($img) - 2, imagesx($img) - 2
+            $scaledOffset_3px = max(1, (int) round(3 * $scalingFactor)); // for imagesy($img) - 3, imagesx($img) - 3
+            $scaledOffset_4px = max(2, (int) round(4 * $scalingFactor)); // for x1=4, y1=4, imagesy($img) - 4, imagesx($img) - 4
+            $scaledOffset_6px = max(3, (int) round(6 * $scalingFactor)); // for x1=6, y1=6
             if (
-                !imageline($img, 2, imagesy($img) - 3, imagesx($img) - 1, imagesy($img) - 3, $gris1) ||
-                !imageline($img, 4, imagesy($img) - 2, imagesx($img) - 1, imagesy($img) - 2, $gris2) ||
-                !imageline($img, 6, imagesy($img) - 1, imagesx($img) - 1, imagesy($img) - 1, $gris3) ||
-                !imageline($img, imagesx($img) - 3, 2, imagesx($img) - 3, imagesy($img) - 4, $gris1) ||
-                !imageline($img, imagesx($img) - 2, 4, imagesx($img) - 2, imagesy($img) - 4, $gris2) ||
-                !imageline($img, imagesx($img) - 1, 6, imagesx($img) - 1, imagesy($img) - 4, $gris3)
+                 // Line 1: $gris1, original (2, imagesy($img) - 3) to (imagesx($img) - 1, imagesy($img) - 3)
+                !imageline($img, $scaledOffset_2px, imagesy($img) - $scaledOffset_3px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_3px, $gris1) ||
+                // Line 2: $gris2, original (4, imagesy($img) - 2) to (imagesx($img) - 1, imagesy($img) - 2)
+                !imageline($img, $scaledOffset_4px, imagesy($img) - $scaledOffset_2px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_2px, $gris2) ||
+                // Line 3: $gris3, original (6, imagesy($img) - 1) to (imagesx($img) - 1, imagesy($img) - 1)
+                !imageline($img, $scaledOffset_6px, imagesy($img) - $scaledOffset_1px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_1px, $gris3) ||
+
+                // Right shadow lines (vertical lines near the right edge)
+                // Line 1: $gris1, original (imagesx($img) - 3, 2) to (imagesx($img) - 3, imagesy($img) - 4)
+                !imageline($img, imagesx($img) - $scaledOffset_3px, $scaledOffset_2px, imagesx($img) - $scaledOffset_3px, imagesy($img) - $scaledOffset_4px, $gris1) ||
+                // Line 2: $gris2, original (imagesx($img) - 2, 4) to (imagesx($img) - 2, imagesy($img) - 4)
+                !imageline($img, imagesx($img) - $scaledOffset_2px, $scaledOffset_4px, imagesx($img) - $scaledOffset_2px, imagesy($img) - $scaledOffset_4px, $gris2) ||
+                // Line 3: $gris3, original (imagesx($img) - 1, 6) to (imagesx($img) - 1, imagesy($img) - 4)
+                !imageline($img, imagesx($img) - $scaledOffset_1px, $scaledOffset_6px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_4px, $gris3)
             ) {
                 unset($img);
                 throw new \Exception('Cannot add shadow.');
             }
-
+            */
             // Convert hex color string to RGB values
             $colorComponents = self::getColorComponents($this->polaroidBgColor);
             list($rbcc, $gbcc, $bbcc) = $colorComponents;
