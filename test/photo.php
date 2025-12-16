@@ -36,7 +36,7 @@ try {
     $imageHandler->debugLevel = $config['dev']['loglevel'];
     $imageHandler->imageModified = false;
 
-    $imageResource = $imageHandler->createFromImage(ImageUtility::getRandomImageFromPath('resources/img/demo'));
+    $imageResource = $imageHandler->createFromImage(ImageUtility::getDemoImages(1)[0]);
     if (!$imageResource) {
         throw new \Exception('Error creating image resource.');
     }
