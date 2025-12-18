@@ -1126,11 +1126,13 @@ return [
             'view' => 'basic',
             'type' => 'checkbox',
             'name' => 'rembg[enabled]',
+            'data-theme-field' => 'true',
             'value' => $config['rembg']['enabled'],
         ],
         'rembg_background' => [
             'view' => 'basic',
             'type' => 'image',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['rembg']['background'],
             'name' => 'rembg[background]',
             'value' => htmlentities($config['rembg']['background'] ?? ''),
@@ -1159,11 +1161,13 @@ return [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'rembg[alpha_matting]',
+            'data-theme-field' => 'true',
             'value' => $config['rembg']['alpha_matting'],
         ],
         'rembg_alpha_matting_foreground_threshold' => [
             'view' => 'expert',
             'type' => 'range',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['rembg']['alpha_matting_foreground_threshold'],
             'name' => 'rembg[alpha_matting_foreground_threshold]',
             'value' => $config['rembg']['alpha_matting_foreground_threshold'],
@@ -1175,6 +1179,7 @@ return [
         'rembg_alpha_matting_background_threshold' => [
             'view' => 'expert',
             'type' => 'range',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['rembg']['alpha_matting_background_threshold'],
             'name' => 'rembg[alpha_matting_background_threshold]',
             'value' => $config['rembg']['alpha_matting_background_threshold'],
@@ -1186,6 +1191,7 @@ return [
         'rembg_alpha_matting_erode_size' => [
             'view' => 'expert',
             'type' => 'range',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['rembg']['alpha_matting_erode_size'],
             'name' => 'rembg[alpha_matting_erode_size]',
             'value' => $config['rembg']['alpha_matting_erode_size'],
