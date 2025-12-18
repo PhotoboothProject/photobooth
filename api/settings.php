@@ -25,6 +25,9 @@ if (!empty($config['ui']['shutter_cheese_img'])) {
 if (!empty($config['picture']['frame'])) {
     $config['picture']['frame'] = PathUtility::getPublicPath($config['picture']['frame']);
 }
+if (!empty($config['collage']['background'])) {
+    $config['collage']['background'] = PathUtility::getPublicPath($config['collage']['background']);
+}
 if (!empty($config['collage']['frame'])) {
     $config['collage']['frame'] = PathUtility::getPublicPath($config['collage']['frame']);
 }

@@ -3,6 +3,7 @@
 namespace Photobooth;
 
 use Photobooth\Enum\FolderEnum;
+use Photobooth\Utility\PathUtility;
 
 class Environment implements \JsonSerializable
 {
@@ -63,11 +64,17 @@ class Environment implements \JsonSerializable
         return $data;
     }
 
+    /**
+     * Config for frontend
+     *
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         return [
             'operatingSystem' => self::getOperatingSystem(),
             'ip' => self::getIp(),
+            'baseUrl' => PathUtility::getBaseUrl(),
             'publicFolders' => self::getPublicFolders(),
             'absoluteFolders' => self::getAbsoluteFolders(),
         ];

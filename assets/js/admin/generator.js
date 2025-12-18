@@ -13,7 +13,19 @@ $(window).on('resize', changeGeneralSetting);
 $('[data-trigger=\'general\']').change(changeGeneralSetting);
 $('[data-trigger=\'image\']').change(handleInputUpdate);
 $('#loadCurrentConfiguration').click(loadCurrentConfig);
+function toPublicUrl(path) {
+    if (!path) {
+        return '';
+    }
+    if (path.startsWith('http') || path.startsWith('//')) {
+        return path;
+    }
 
+    // remove trailing slash from baseUrl
+    const baseUrl = environment.baseUrl.replace(/\/$/, '');
+    // remove leading slash from requested path and concatenate with baseUrl
+    return `${baseUrl}/${path.replace(/^\//, '')}`;
+}
 function loadCurrentConfig() {
     //loading the configuration just like in the backend
     const current_config = JSON.parse($('#current_config').val());
@@ -79,14 +91,14 @@ function loadCurrentConfig() {
     $('input[name=\'generator-background\']')
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
-        .attr('src', backgroundImage);
+        .attr('src', toPublicUrl(backgroundImage));
     $('input[name=\'show-background\'][data-trigger=\'general\']').prop('checked', show_bg);
 
     $('input[name=\'generator-frame\']').attr('value', frameImage);
     $('input[name=\'generator-frame\']')
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
-        .attr('src', frameImage);
+        .attr('src', toPublicUrl(frameImage));
     $('input[name=\'show-frame\'][data-trigger=\'general\']').prop('checked', show_frame);
 
     $('select[name=\'apply_frame\']').val(applyFrame);
@@ -97,7 +109,7 @@ function loadCurrentConfig() {
     $('input[name=\'placeholder_image\']')
         .parents('.adminImageSelection')
         .find('.adminImageSelection-preview')
-        .attr('src', placeholderpath);
+        .attr('src', toPublicUrl(placeholderpath));
     $('input[name=\'enable_placeholder_image\'][data-trigger=\'general\']').prop('checked', placeholder);
 
     //text
@@ -152,6 +164,8 @@ function changeGeneralSetting() {
     const c_bg_color = $('input[name=\'background_color\']').val();
     const c_bg = $('input[name=\'generator-background\']').val();
     const c_frame = $('input[name=\'generator-frame\']').val();
+    const c_bg_public = toPublicUrl(c_bg);
+    const c_frame_public = toPublicUrl(c_frame);
     const c_apply_frame = $('select[name=\'apply_frame\']').val();
     const c_show_frame = $('input[name=\'show-frame\'][data-trigger=\'general\']').is(':checked');
     const c_show_background = $('input[name=\'show-background\'][data-trigger=\'general\']').is(':checked');
@@ -176,7 +190,7 @@ function changeGeneralSetting() {
 
     canvasDOM.css('aspect-ratio', aspect_ratio);
     canvasDOM.css('background-color', c_bg_color);
-    canvasDOM.find('div#collage_background img').attr('src', c_bg);
+    canvasDOM.find('div#collage_background img').attr('src', c_bg_public);
     canvasDOM.find('div#collage_background img').addClass('hidden');
 
     if (c_show_background) {
@@ -187,7 +201,7 @@ function changeGeneralSetting() {
     let pictureFrameImgs = canvasDOM.find('img.picture-frame');
     let allImgs = collageImgs.add(pictureFrameImgs);
 
-    allImgs.attr('src', c_frame).addClass('hidden');
+    allImgs.attr('src', c_frame_public).addClass('hidden');
 
     if (c_show_frame) {
         allImgs.removeClass('hidden');
@@ -295,7 +309,7 @@ function changeImageSetting(new_value, prop_name, index, isPlaceholder) {
     let contImages = img_container.find('img');
     let firstImg = contImages.first();
     if (isPlaceholder) {
-        firstImg.attr('src', $('input[name=\'placeholder_image\']').val());
+        firstImg.attr('src', toPublicUrl($('input[name=\'placeholder_image\']').val()));
     } else {
         firstImg.attr('src', firstImg.data('src'));
     }

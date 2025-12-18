@@ -2,7 +2,7 @@
 /* globals photoboothTools */
 $(function () {
     function initThemes() {
-        const apiBase = '../api/themes.php';
+        const apiBase = environment.publicFolders.api + '/themes.php';
 
         const $nameInput = $('#theme-name');
         const $saveButton = $('#theme-save-btn');
