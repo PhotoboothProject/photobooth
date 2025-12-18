@@ -587,6 +587,17 @@ return [
             'options' => ImageFilterEnum::cases(),
             'value' => $config['filters']['defaults'],
         ],
+        'filters_process_size' => [
+            'view' => 'expert',
+            'type' => 'range',
+            'name' => 'filters[process_size]',
+            'placeholder' => $defaultConfig['filters']['process_size'],
+            'value' => $config['filters']['process_size'],
+            'range_min' => 0,
+            'range_max' => 5000,
+            'range_step' => 50,
+            'unit' => 'px',
+        ],
         'filters_disabled' => [
             'view' => 'expert',
             'type' => 'multi-select',

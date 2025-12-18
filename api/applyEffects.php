@@ -125,13 +125,35 @@ try {
             }
 
             if (!$vars['isCollage'] || $vars['editSingleCollage']) {
-                // apply filter
+                // apply filter (optionally downscale first for performance)
                 if ($vars['imageFilter'] !== null && $vars['imageFilter'] !== ImageFilterEnum::PLAIN) {
+                    $originalWidth = imagesx($imageResource);
+                    $originalHeight = imagesy($imageResource);
+                    $filterResource = $imageResource;
+
+                    $filterProcessSize = intval($config['filters']['process_size'] ?? 0);
+                    if ($filterProcessSize > 0 && ($originalWidth > $filterProcessSize || $originalHeight > $filterProcessSize)) {
+                        $downscaled = $imageHandler->resizeImage($imageResource, $filterProcessSize);
+                        if ($downscaled instanceof \GdImage) {
+                            $filterResource = $downscaled;
+                        }
+                    }
+
                     try {
-                        ImageUtility::applyFilter($vars['imageFilter'], $imageResource);
+                        ImageUtility::applyFilter($vars['imageFilter'], $filterResource);
                         $imageHandler->imageModified = true;
                     } catch (\Exception $e) {
                         throw new \Exception('Error applying image filter.');
+                    }
+
+                    if ($filterResource !== $imageResource) {
+                        $restored = $imageHandler->resizeImage($filterResource, $originalWidth, $originalHeight);
+                        if ($restored instanceof \GdImage) {
+                            if ($filterResource instanceof \GdImage) {
+                                unset($filterResource);
+                            }
+                            $imageResource = $restored;
+                        }
                     }
                 }
 
