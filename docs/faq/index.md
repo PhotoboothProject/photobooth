@@ -476,7 +476,7 @@ If you like to have the same preview independent of the device you access Photob
 Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
 
 -   Admin panel config _"Preview mode"_: `from URL`
--   Admin panel config _"Preview-URL"_ example (add needed IP address instead): `url(http://192.168.0.2:8081)`
+-   Admin panel config _"Preview-URL"_ example (add needed IP address instead): `http://192.168.0.2:8081`
 
 **Note**
 
