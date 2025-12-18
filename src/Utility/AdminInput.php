@@ -40,7 +40,7 @@ class AdminInput
         return self::renderHeadline($label) . '
             <input
                 class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto"
-                type="' . ($setting['type'] === 'number' ? 'number' : 'text') . '"
+                type="' . $setting['type'] . '"
                 name="' . $setting['name'] . '"
                 value="' . $setting['value'] . '"
                 placeholder="' . $setting['placeholder'] . '"
