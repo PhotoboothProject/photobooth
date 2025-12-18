@@ -5,8 +5,10 @@ use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\RemoteStorageTypeEnum;
 use Photobooth\Enum\TimezoneEnum;
+use Photobooth\Service\ApplicationService;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
+use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
 
 /*
@@ -80,6 +82,48 @@ use Photobooth\Utility\PathUtility;
 $configurationService = ConfigurationService::getInstance();
 $defaultConfig = $configurationService->getDefaultConfiguration();
 $config = $configurationService->getConfiguration();
+$appVersion = ApplicationService::getInstance()->getVersion();
+$countMediaFiles = static function (string $path): int {
+    if (!is_dir($path)) {
+        return 0;
+    }
+
+    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'mp4'];
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS));
+    $count = 0;
+    /** @var SplFileInfo $file */
+    foreach ($iterator as $file) {
+        if (!$file->isFile()) {
+            continue;
+        }
+        $ext = strtolower($file->getExtension());
+        if (in_array($ext, $extensions, true)) {
+            $count++;
+        }
+    }
+
+    return $count;
+};
+$mediaCounts = [
+    'images' => $countMediaFiles(PathUtility::getAbsolutePath('data/images')),
+    'print' => $countMediaFiles(PathUtility::getAbsolutePath('data/print')),
+    'tmp' => $countMediaFiles(PathUtility::getAbsolutePath('data/tmp')),
+    'videos' => $countMediaFiles(PathUtility::getAbsolutePath('private/videos')),
+];
+$mailAddressesCount = 0;
+$mailDb = PathUtility::getAbsolutePath('data/mail_addresses.json');
+if (is_file($mailDb)) {
+    $mailRaw = file_get_contents($mailDb);
+    if ($mailRaw !== false) {
+        $mailDecoded = json_decode($mailRaw, true);
+        if (is_array($mailDecoded)) {
+            $mailAddressesCount = count($mailDecoded);
+        }
+    }
+}
+$printManager = PrintManagerService::getInstance();
+$printDbCount = $printManager->getPrintCountFromDB() ?? 0;
+$languageService = LanguageService::getInstance();
 
 return [
     'general' => [
@@ -3307,23 +3351,32 @@ return [
             'type' => 'checkbox',
             'name' => 'reset[remove_media]',
             'value' => false,
+            'note' => sprintf(
+                $languageService->translate('reset:media_counts'),
+                $mediaCounts['images'],
+                $mediaCounts['print'],
+                $mediaCounts['tmp'],
+                $mediaCounts['videos']
+            ),
         ],
         'reset_remove_mailtxt' => [
             'view' => 'advanced',
             'type' => 'checkbox',
             'name' => 'reset[remove_mail_db]',
             'value' => false,
-        ],
-        'reset_remove_config' => [
-            'view' => 'expert',
-            'type' => 'checkbox',
-            'name' => 'reset[remove_config]',
-            'value' => false,
+            'note' => $languageService->translate('reset:stored_mail_addresses') . ': ' . $mailAddressesCount,
         ],
         'reset_remove_print_db' => [
             'view' => 'expert',
             'type' => 'checkbox',
             'name' => 'reset[remove_print_db]',
+            'value' => false,
+            'note' => $languageService->translate('reset:print_db_entries') . ': ' . $printDbCount,
+        ],
+        'reset_remove_config' => [
+            'view' => 'expert',
+            'type' => 'checkbox',
+            'name' => 'reset[remove_config]',
             'value' => false,
         ],
         'reset_button' => [
