@@ -407,7 +407,11 @@ $font_styles .= '</style>';
             'name' => 'placeholder_image_position',
             'value' => '1',
             'placeholder' => 'placehoder image position',
-            'attributes' => ['data-trigger' => 'general']
+            'attributes' => [
+                'min' => '1',
+                'max' => '8',
+                'data-trigger' => 'general'
+            ]
         ],
         'collage:collage_placeholderposition'
     )
