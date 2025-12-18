@@ -131,11 +131,10 @@ class AdminInput
 
     public static function renderColor(array $setting, string $label): string
     {
-        $languageService = LanguageService::getInstance();
         $attributes = self::buildAttributes($setting);
 
         return '
-            <label class="mb-3">' . $languageService->translate($label) . '</label>
+            <label class="mb-3">' . self::renderHeadline($label) . '</label>
             <input
                 class="w-full h-10 border-2 border-gray-300 border-solid rounded-lg overflow-hidden p-1 mt-auto"
                 type="color"
@@ -292,6 +291,9 @@ class AdminInput
         }
 
         $hiddenPreview = '';
+        if (empty($setting['value'])) {
+            $hiddenPreview = 'hidden';
+        }
         if (str_starts_with($setting['value'], 'http')) {
             $hiddenPreview = 'hidden';
         }
@@ -303,7 +305,7 @@ class AdminInput
             <div class="adminImageSelection group">
                 <div class="w-full flex items-start">
                     <div class="w-24 flex mb-3 mr-3 shrink-0 cursor-pointer ' . $hiddenPreview . '" onclick="openAdminImageSelect(this)">
-                        <img class="adminImageSelection-preview object-contain border border-brand-1  hover:shadow-lg" src="' . $selectedImagePublic . '">
+                        <img class="adminImageSelection-preview object-contain border border-brand-1 hover:shadow-lg" src="' . $selectedImagePublic . '">
                     </div>
                     <div class="w-full flex flex-col">
                         ' . self::renderHeadline($label) . '

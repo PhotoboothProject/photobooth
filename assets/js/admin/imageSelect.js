@@ -11,8 +11,29 @@ function adminImageSelect(element, path) {
     textElement.textContent = origin;
     inputElement.value = origin;
 
+    if (src !== '') {
+        previewElement.parentElement.classList.remove('hidden');
+    } else {
+        previewElement.parentElement.classList.add('hidden');
+    }
+
     const event = new Event('change');
     inputElement.dispatchEvent(event);
+
+    const toggleGeneralCheckbox = (checkboxName) => {
+        const checkbox = document.querySelector(`input[name='${checkboxName}'][data-trigger='general']`);
+        if (checkbox && checkbox.checked === false) {
+            checkbox.checked = true;
+            checkbox.dispatchEvent(new Event('change'));
+        }
+    };
+
+    if (path === 'generator-background') {
+        toggleGeneralCheckbox('show-background');
+    }
+    if (path === 'generator-frame') {
+        toggleGeneralCheckbox('show-frame');
+    }
     parent.classList.remove('isOpen');
 }
 
