@@ -2,8 +2,11 @@
 
 namespace Photobooth\Utility;
 
+use DirectoryIterator;
 use InvalidArgumentException;
+use IteratorIterator;
 use Photobooth\Environment;
+use SplFileInfo;
 
 /**
  * Utility class for resolving and normalizing filesystem paths and public URLs
@@ -212,5 +215,24 @@ class PathUtility
         }
 
         throw new \Exception('File not found: ' . $filePath);
+    }
+
+    public static function countFilesInDirectory(string $path): int
+    {
+        if (!is_dir($path)) {
+            return 0;
+        }
+
+        $iterator = new IteratorIterator(new DirectoryIterator($path));
+        $count = 0;
+        /** @var SplFileInfo $file */
+        foreach ($iterator as $file) {
+            if (!$file->isFile()) {
+                continue;
+            }
+            $count++;
+        }
+
+        return $count;
     }
 }

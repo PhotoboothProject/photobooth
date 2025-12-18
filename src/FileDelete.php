@@ -2,6 +2,9 @@
 
 namespace Photobooth;
 
+use Photobooth\Enum\FolderEnum;
+use Photobooth\Utility\FileUtility;
+
 /**
  * Class FileDelete.
  */
@@ -22,16 +25,20 @@ class FileDelete
     /** @var bool Whether or not the deletion of the filess was successful. */
     private $success = true;
 
+    /** @var bool Archive temp files instead of deleting. */
+    private bool $archiveTempFiles;
+
     /**
      * FileDelete constructor.
      *
      * @param string $file The filename of the file.
      * @param array $paths The file paths of the files.
      */
-    public function __construct($file, $paths)
+    public function __construct($file, $paths, bool $archiveTempFiles = false)
     {
         $this->file = $file;
         $this->paths = $paths;
+        $this->archiveTempFiles = $archiveTempFiles;
     }
 
     /**
@@ -43,6 +50,10 @@ class FileDelete
             $file = $path . DIRECTORY_SEPARATOR . $this->file;
             try {
                 if (is_readable($file)) {
+                    if ($path === FolderEnum::TEMP->absolute() && $this->archiveTempFiles) {
+                        FileUtility::moveToDeleted($file);
+                        continue;
+                    }
                     if (!unlink($file)) {
                         $this->success = false;
                         $this->failedFiles[] = $file;
