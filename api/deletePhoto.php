@@ -30,32 +30,57 @@ try {
 }
 
 $file = $_POST['file'];
+$fileBaseName = pathinfo($file, PATHINFO_FILENAME);
+$filesToDelete = [$file];
 $paths = [
     FolderEnum::IMAGES->absolute(),
     FolderEnum::THUMBS->absolute(),
     FolderEnum::KEYING->absolute(),
 ];
 
-if (!$config['picture']['keep_original']) {
-    $paths[] = FolderEnum::TEMP->absolute();
+$paths[] = FolderEnum::TEMP->absolute();
+
+// Collect possible single images belonging to the collage
+// Catch any single images that match the base pattern, even if keep_single_images is off or limit changed
+foreach ($paths as $path) {
+    $matches = glob($path . DIRECTORY_SEPARATOR . $fileBaseName . '-*.jpg');
+    if ($matches !== false) {
+        foreach ($matches as $matchedFile) {
+            $filesToDelete[] = basename($matchedFile);
+        }
+    }
 }
 
-$delete = new FileDelete($file, $paths);
-$delete->deleteFiles();
-$logData = $delete->getLogData();
+$filesToDelete = array_values(array_unique($filesToDelete));
 
-if ($config['database']['enabled']) {
-    $database = DatabaseManagerService::getInstance();
-    $database->deleteContentFromDB($file);
-}
+$logData = [
+    'success' => true,
+    'file' => $file,
+    'files' => [],
+];
 
 // Remove cached metadata for this file and its thumb, if present
 ImageMetadataCacheService::getInstance()->remove(FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $file);
 ImageMetadataCacheService::getInstance()->remove(FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $file);
 
-if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
-    $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $file);
-    $remoteStorage->delete($remoteStorage->getStorageFolder() . '/thumbs/' . $file);
+foreach ($filesToDelete as $fileName) {
+    $delete = new FileDelete($fileName, $paths, (bool) $config['picture']['keep_original']);
+    $delete->deleteFiles();
+    $singleLogData = $delete->getLogData();
+    $logData['files'][$fileName] = $singleLogData;
+    if (!$singleLogData['success']) {
+        $logData['success'] = false;
+    }
+
+    if ($config['database']['enabled']) {
+        $database = DatabaseManagerService::getInstance();
+        $database->deleteContentFromDB($fileName);
+    }
+
+    if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
+        $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $fileName);
+        $remoteStorage->delete($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName);
+    }
 }
 
 if (!$logData['success'] || $config['dev']['loglevel'] > 1) {

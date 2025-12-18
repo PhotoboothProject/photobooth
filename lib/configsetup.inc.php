@@ -83,32 +83,13 @@ $configurationService = ConfigurationService::getInstance();
 $defaultConfig = $configurationService->getDefaultConfiguration();
 $config = $configurationService->getConfiguration();
 $appVersion = ApplicationService::getInstance()->getVersion();
-$countMediaFiles = static function (string $path): int {
-    if (!is_dir($path)) {
-        return 0;
-    }
 
-    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'mp4'];
-    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS));
-    $count = 0;
-    /** @var SplFileInfo $file */
-    foreach ($iterator as $file) {
-        if (!$file->isFile()) {
-            continue;
-        }
-        $ext = strtolower($file->getExtension());
-        if (in_array($ext, $extensions, true)) {
-            $count++;
-        }
-    }
-
-    return $count;
-};
 $mediaCounts = [
-    'images' => $countMediaFiles(PathUtility::getAbsolutePath('data/images')),
-    'print' => $countMediaFiles(PathUtility::getAbsolutePath('data/print')),
-    'tmp' => $countMediaFiles(PathUtility::getAbsolutePath('data/tmp')),
-    'videos' => $countMediaFiles(PathUtility::getAbsolutePath('private/videos')),
+    'original' => PathUtility::countFilesInDirectory(PathUtility::getAbsolutePath('data/tmp')),
+    'deleted' => PathUtility::countFilesInDirectory(PathUtility::getAbsolutePath('data/tmp/deleted')),
+    'framed' => PathUtility::countFilesInDirectory(PathUtility::getAbsolutePath('data/images')),
+    'printed' => PathUtility::countFilesInDirectory(PathUtility::getAbsolutePath('data/print')),
+    'videos' => PathUtility::countFilesInDirectory(PathUtility::getAbsolutePath('private/videos')),
 ];
 $mailAddressesCount = 0;
 $mailDb = PathUtility::getAbsolutePath('data/mail_addresses.json');
@@ -3353,9 +3334,10 @@ return [
             'value' => false,
             'note' => sprintf(
                 $languageService->translate('reset:media_counts'),
-                $mediaCounts['images'],
-                $mediaCounts['print'],
-                $mediaCounts['tmp'],
+                $mediaCounts['original'],
+                $mediaCounts['deleted'],
+                $mediaCounts['framed'],
+                $mediaCounts['printed'],
                 $mediaCounts['videos']
             ),
         ],
