@@ -7,6 +7,7 @@ require_once '../lib/boot.php';
 use Photobooth\Enum\FolderEnum;
 use Photobooth\FileDelete;
 use Photobooth\Service\DatabaseManagerService;
+use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\RemoteStorageService;
 
@@ -47,6 +48,10 @@ if ($config['database']['enabled']) {
     $database = DatabaseManagerService::getInstance();
     $database->deleteContentFromDB($file);
 }
+
+// Remove cached metadata for this file and its thumb, if present
+ImageMetadataCacheService::getInstance()->remove(FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $file);
+ImageMetadataCacheService::getInstance()->remove(FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $file);
 
 if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
     $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $file);

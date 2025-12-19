@@ -10,6 +10,7 @@ use Photobooth\Enum\FolderEnum;
 use Photobooth\Environment;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\DatabaseManagerService;
+use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
@@ -78,6 +79,10 @@ if ($action === 'reset') {
             unlink($database->databaseFile);
             $logger->debug($database->databaseFile . ' deleted.');
         }
+
+        // Clear gallery image metadata cache as media has been removed
+        ImageMetadataCacheService::getInstance()->clear();
+        $logger->debug('Image metadata cache cleared.');
     }
 
     // Remove print database
