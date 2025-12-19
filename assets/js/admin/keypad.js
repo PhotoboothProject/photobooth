@@ -53,11 +53,18 @@ function keypadClear() {
 }
 
 document.addEventListener('keydown', function (event) {
-    if (event.which >= 48 && event.which <= 57) {
-        keypadAdd(event.which - 48);
-    } else if (event.which == 27) {
+    const keypadPinElement = document.getElementById('keypad_pin');
+    if (!keypadPinElement) {
+        return;
+    }
+
+    const key = event.key || String.fromCharCode(event.which || event.keyCode);
+
+    if (/^[0-9]$/.test(key)) {
+        keypadAdd(parseInt(key, 10));
+    } else if (key === 'Escape') {
         keypadClear();
-    } else if (event.which == 8) {
+    } else if (key === 'Backspace' || key === 'Delete') {
         keypadRemoveLastValue();
     }
 });
