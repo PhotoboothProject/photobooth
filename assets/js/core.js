@@ -897,7 +897,9 @@ const photoBooth = (function () {
                 photoboothTools.console.log(api.photoStyle + ' processed', data);
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
-                photoboothTools.console.logDev('Processing ' + api.photoStyle + ' took ' + totalTime + 'ms');
+                photoboothTools.console.logDev(
+                    'Processing ' + api.photoStyle + ' took ' + totalTime + 'ms for filter `' + imgFilter + '`'
+                );
                 photoboothTools.console.logDev('Images:', data.images);
 
                 if (config.get_request.processed) {
