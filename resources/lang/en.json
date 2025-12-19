@@ -622,6 +622,7 @@
   "manual:remotebuzzer:remotebuzzer_usebuttons": "This feature enables HTTP endpoints for button support. IMPORTANT: For WLAN connected screens you must make sure to configure the IP address of the remote buzzer server, for this feature to work properly.",
   "manual:remotebuzzer:remotebuzzer_userotary": "Enable Rotary Encoder HTTP endpoints to navigate the screen. IMPORTANT: For WLAN connected screens you must make sure to configure the IP address of the remote buzzer server, for this feature to work properly.",
   "manual:remotebuzzer:remotebuzzer_videobutton": "If enabled, video can.be triggered via HTTP request.",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Linux input device for hardware triggers (e.g. /dev/input/by-id/...). Uses the per-action key codes (picture/collage/custom/print/video) to map incoming key events.",
   "manual:reset:reset_button": "Will execute reset for selected options.",
   "manual:reset:reset_remove_config": "If enabled, personal config gets removed on reset.",
   "manual:reset:reset_remove_mailtxt": "If enabled, mail database gets removed on reset.",

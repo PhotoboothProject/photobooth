@@ -2237,6 +2237,13 @@ return [
             'name' => 'remotebuzzer[port]',
             'value' => $config['remotebuzzer']['port'],
         ],
+        'remotebuzzer_input_device' => [
+            'view' => 'expert',
+            'type' => 'input',
+            'name' => 'remotebuzzer[input_device]',
+            'placeholder' => '/dev/input/by-id/...',
+            'value' => $config['remotebuzzer']['input_device'],
+        ],
         'remotebuzzer_usebuttons' => [
             'view' => 'advanced',
             'type' => 'checkbox',
