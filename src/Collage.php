@@ -499,8 +499,8 @@ class Collage
                 }
             }
 
-            if ($c->picturePolaroidEffect === 'enabled') {
-                $imageHandler->polaroidRotation = $c->picturePolaroidRotation;
+            if ($c->collagePolaroidEffect === 'enabled') {
+                $imageHandler->polaroidRotation = $c->collagePolaroidRotation;
                 $imageResource = $imageHandler->effectPolaroid($imageResource);
             }
 
