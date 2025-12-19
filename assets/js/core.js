@@ -91,7 +91,7 @@ const photoBooth = (function () {
         photoboothTools.console.log('Timeout for auto reload cleared.');
 
         if (!api.takingPic) {
-            photoboothTools.console.logDev('Timeout for auto reload set to' + timeToLive + ' milliseconds.');
+            photoboothTools.console.logDev('Timeout for auto reload set to ' + timeToLive + ' milliseconds.');
             timeOut = setTimeout(function () {
                 photoboothTools.reloadPage();
             }, timeToLive);
@@ -850,6 +850,9 @@ const photoBooth = (function () {
 
     api.processPic = function (result) {
         startTime = new Date().getTime();
+        loader.addClass('stage--active');
+        startPage.removeClass('stage--active');
+        resultPage.removeClass('stage--active');
         loaderMessage.html(
             '<i class="' +
                 config.icons.spinner +
