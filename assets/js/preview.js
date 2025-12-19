@@ -1,7 +1,9 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
+
 /* globals photoBooth photoboothTools */
 
-function addCacheBustingParam(url) {
+function getPreviewUrlWithCacheBusting() {
+    const url = getBasePreviewUrl();
     const timestamp = new Date().getTime();
 
     if (url.includes('?')) {
@@ -11,10 +13,16 @@ function addCacheBustingParam(url) {
     return `${url}?t=${timestamp}`;
 }
 
-function getRootProperty(property) {
-    const root = document.documentElement;
-    const style = getComputedStyle(root);
-    return style.getPropertyValue(property).trim();
+function getBasePreviewUrl() {
+    if (!config.preview || !config.preview.url) {
+        return '';
+    }
+
+    const raw = config.preview.url;
+    //remove url("") if present
+    const match = raw.match(/^url\((['"]?)(.+?)\1\)$/);
+
+    return match ? match[2] : raw;
 }
 
 const photoboothPreview = (function () {
@@ -196,8 +204,9 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview at countdown from URL.');
                     setTimeout(function () {
-                        url.attr('src', addCacheBustingParam(getRootProperty('--background-preview')));
+                        url.css('background-image', 'url("' + getPreviewUrlWithCacheBusting() + '")');
                         url.show();
+                        url.addClass('streaming');
                     }, config.preview.url_delay);
                 }
                 break;
@@ -208,8 +217,9 @@ const photoboothPreview = (function () {
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview from URL.');
                     setTimeout(function () {
-                        url.attr('src', addCacheBustingParam(getRootProperty('--background-preview')));
+                        url.css('background-image', 'url("' + getPreviewUrlWithCacheBusting() + '")');
                         url.show();
+                        url.addClass('streaming');
                     }, config.preview.url_delay);
                 }
                 break;
@@ -235,8 +245,9 @@ const photoboothPreview = (function () {
             tracks.forEach((track) => track.stop());
             api.stream = null;
         }
+        url.removeClass('streaming');
         url.hide();
-        url.attr('src', '');
+        url.css('background-image', 'none');
         video.hide();
         pictureFrame.hide();
         collageFrame.hide();
