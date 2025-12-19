@@ -41,10 +41,8 @@ Permissions
 udev rule example
 
 - Create `/etc/udev/rules.d/99-photobooth-input.rules` (adjust as needed):
-  - General rule (applies to all input event nodes; only use if you’re okay with that scope):
-    ```
-    KERNEL=="event*", SUBSYSTEM=="input", MODE="660", GROUP="input"
-    ```
+  - General rule (applies to all input event nodes):
+    - `KERNEL=="event*", SUBSYSTEM=="input", MODE="660", GROUP="input"`
 
 - Apply: `sudo udevadm control --reload && sudo udevadm trigger`
 - Ensure your Photobooth user is in the chosen group (e.g. `input`) or change GROUP to your service user.
@@ -88,19 +86,17 @@ Notes
 - IP/Port notes:
   - `[Hardware Button Server IP]` must match Hardware Button → Remote buzzer Server IP (typically the Photobooth host IP).
   - `[Hardware Button Server Port]` is the Hardware Button → Enable Hardware Buttons value.
-- Common hardware for HTTP triggers: myStrom WiFi Button (https://mystrom.com/wifi-button/), Shelly Button (https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/), ESP32/ESP8266, Raspberry Pi Pico/Pico W (see examples below).
+- Common hardware for HTTP triggers: [myStrom WiFi Button](https://mystrom.com/wifi-button/), [Shelly Button](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/), ESP32/ESP8266, Raspberry Pi Pico/Pico W (see examples below).
 
 ## 5) Hardware button examples (HTTP)
 
 - myStrom WiFi Button:
-  ```sh
-  curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Port]/commands/start-picture
-  curl --location -g --request POST http://[Button IP]/api/v1/action/long   --data-raw get://[Photobooth IP]:[Port]/commands/start-collage
-  ```
-- ESP32/ESP8266: https://github.com/PhotoboothProject/photobooth-ino
+    - `curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Port]/commands/start-picture`
+    - `curl --location -g --request POST http://[Button IP]/api/v1/action/long   --data-raw get://[Photobooth IP]:[Port]/commands/start-collage`
+- ESP32/ESP8266: [github.com/PhotoboothProject/photobooth-ino](https://github.com/PhotoboothProject/photobooth-ino)
 - Raspberry Pi Pico / Pico W:
-  - https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder
-  - https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder
+  - [github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder](https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder)
+  - [github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder](https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder)
 
 ## Troubleshooting
 
