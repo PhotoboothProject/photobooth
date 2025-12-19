@@ -11,7 +11,7 @@ This means:
 ## Running the Photobooth Setup Wizard
 
 Download latest Setup Wizard and execute it:
-```sh
+```
 wget -O install-photobooth.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
 sudo bash install-photobooth.sh
 ```

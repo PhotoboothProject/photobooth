@@ -23,30 +23,40 @@ extra_css:
 
 nav:
   - Home: index.md
-  - Changelog: changelog.md
-  - Security Policy: security.md
-  - Install:
+  - News & Releases: news.md
+  - Install & Setup:
+    - Overview: install/index.md
     - Prerequisites: install/prerequisites.md
     - Supported Platforms and Cameras: install/supported_platformscand_cameras.md
     - Photobooth Setup Wizard: install/setup_wizard.md
     - Install on Debian: install/install-debian.md
     - Enable PHP in nginx: install/install-nginx.md
     - Install on Windows: install/install-windows.md
-  - Update:
-    - Update on linux: update/update-linux.md
-  - FAQ & Tutorials:
+  - Upgrade & Maintenance:
+    - Overview: update/index.md
+    - Update on Linux: update/update-linux.md
+    - Changelog: changelog.md
+    - Security Policy: security.md
+  - Troubleshooting & Tutorials:
     - FAQ: faq/index.md
+    - Preview and live background: faq/preview.md
+    - Pi Camera setup: faq/pi-camera.md
+    - Custom collage design: faq/custom-collage.md
+    - Kiosk mode: faq/kiosk-mode.md
+    - Hide cursor & screen blanking: faq/hide-cursor.md
+    - Tutorials: faq/tutorials.md
+    - Remote Buttons: faq/remote-button.md
     - Printer Troubleshooting: faq/printer-troubleshooting.md
     - gphoto2 Troubleshooting: faq/gphoto2-troubleshooting.md
     - GO2RTC Troubleshooting: faq/go2rtc-troubleshooting.md
-    - Remote Buttons: faq/remote-button.md
-    - Tutorials: faq/tutorials.md
-  - Customizing:
+  - Customize & Extend:
     - Overview: customizing/index.md
     - Sounds: customizing/sounds.md
+    - Themes: customizing/themes.md
     - CSS styles: customizing/styles.md
-  - Community & Contribution:
+  - Community:
     - Chat on Telegram: https://t.me/PhotoboothGroup
     - Contributor Covenant Code of Conduct: code_of_conduct.md
     - Translate Photobooth: https://crowdin.com/project/photobooth
+    - Contribute to the docs: contributing-docs.md
   - Donation: donation.md

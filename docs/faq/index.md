@@ -12,37 +12,7 @@ Some DSLR and Compact Cameras are not supported by this project. Please check fo
 
 ## Is Pi Camera supported?
 
-Yes it is.
-
-If you're able to capture a picture via `raspistill` / `libcamera-still` / `rpicam-still` from terminal you're good to go!
-
-You need to allow the webserver to use `raspistill` / `libcamera-still` / `rpicam-still`. You need add the webserver user to video group and reboot once:
-
-```sh
-sudo gpasswd -a www-data video
-reboot
-```
-
-Once done you need to adjust the configuration. Open the admin panel in your browser  [localhost/admin](http://localhost/admin) (or [localhost/photobooth/admin](http://localhost/photobooth/admin)) and
-make the following changes:
-
-**"Take picture command on Pi OS based on bookworm":**
-
-`rpicam-still -n -o %s -q 100 -t 1 | echo Done`
-
-**"Take picture command on Pi OS based on bullseye":**
-
-`libcamera-still -n -o %s -q 100 -t 1 | echo Done`
-
-**"Take picture command on Pi OS based on buster":**
-
-`raspistill -n -o %s -q 100 -t 1 | echo Done`
-
-`raspistill` / `libcamera-still` / `rpicam-still` does not give any feedback after the picture was taken, workaround for that with "echo".
-
-(Thanks to Andreas Maier for that information)
-
-You've the possibility to add more parameters if needed (define ISO, exposure, white balance etc.). Type `raspistill -?` / `libcamera-still -?` / `rpicam-still -?` in your terminal to get information about possible parameters / settings.
+Yes. See the dedicated steps in [Pi Camera setup](pi-camera.md).
 
 ---
 
@@ -54,12 +24,9 @@ Please take a look at the issue page [here](https://github.com/PhotoboothProject
 
 ## I've a white page after updating to latest Source, how can I solve this?
 
-On v1.9.0 and older:
+If you updated from v1.9.0 or older and get a white page, your old `admin/config.json` may be incompatible. Remove the legacy file and retry; current versions store changes in `config/my.config.inc.php`:
 
-It could be your local `config.json` file doesn't match latest source. This file is generated if you've used the admin panel to change your config.
-Remove the file and try again!
-
-```sh
+```
 sudo rm /var/www/html/admin/config.json
 ```
 
@@ -104,81 +71,7 @@ Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in y
 
 ## How can setup a custom collage design?
 
-In the collage settings you can select the layout `private/collage.json`. This references a file with the given name in the photobooth's `private` folder. This file could be created manually or by
-using the collage generator at [http://localhost/admin/generator/index.php](http://localhost/admin/generator/index.php) (
-or [http://localhost/photobooth/admin/generator/index.php](http://localhost/photobooth/admin/generator/index.php)) via the button next to it.
-
-Photobooth config **must** be saved again via Admin panel after `private/collage.json` was modified!
-
-Content of the file is an array of arrays. The outer array defines the number of images, the inner array defines the horizontal position, vertical position, width, height, rotation and add frame (in that order) of one image.
-For calculation of the values the variables x and y get converted to the width and height of the collage respectively, additionally math operations +, -, \*, / and () can be used to calculate values.
-The following example should look exactly like the 1+2 layout with only the first and the third image framed (this layout looks more complicated than it is due to the decimal places).
-
-```
-[
-[ "0",                     "y * 0.055",           "1.5 * y * 0.55546",   "y * 0.55546",   "10",         true       ],
-[ "x * 0.555",             "y * 0.055",           "1.5 * y * 0.40812",   "y * 0.40812",   "0",          false      ],
-[ "x * 0.555",             "y * 0.5368",          "1.5 * y * 0.40812",   "y * 0.40812",   "0",          true       ]
-]
-```
-
-```
-[ "horizontal position",   "vertical position",   "width",               "height",        "rotation",   "apply frame" ]
-```
-
-Please note that if the number of images in a collage design was changed the admin page has to be saved again to calculate the correct number of photos to be used for a collage.
-Other value changes can be checked on the collage test page immediately with a simple reload - so it's quite easy to configure a layout with the help of [http://localhost/test/collage.php](http://localhost/test/collage.php).
-The file `collage.json` needs to be a well-formed json array and something like a missing quotation or a trailing comma can be enough to make a design fail.
-
-If you want to configure additional properties of the collage layout you have to wrap this array in a json object like this (**requires Photobooth v4.99 or newer**):
-
-```
-{
-  "width": "1800",
-  "height": "1200",
-  "text_custom_style": true,
-  "text_font_size": "50",
-  "text_rotation": "10",
-  "text_locationx": "200",
-  "text_locationy": "220",
-  "text_font_color": "#420C09",
-  "text_font": "/resources/fonts/GreatVibes-Regular.ttf",
-  "text_line1": "This is",
-  "text_line2": "a",
-  "text_line3": "Custom Collage",
-  "text_linespace": "100",
-  "apply_frame": "once",
-  "frame": "/resources/img/frames/frame_stone.png",
-  "background": "/resources/img/background.png",
-  "background_color": "#FFFFFF",
-  "placeholder": true,
-  "placeholderpath": "/resources/img/background/01.jpg",
-  "placeholderposition": "1",
-  "layout": [ # the array from above ]
-}
-```
-
-`width` and `height` (optional) can be defined in pixel to change the resolution of the collage. **Note:** both dimensions must be defined, else the default collage configuration will be used.
-`text_custom_style` set to `true` if you want to apply text, `false` to disable. The following properties can override the config from Adminpanel, else the text on collage configuration will be used from Photobooth:
-
--   `text_font_size`
--   `text_rotation`
--   `text_locationx`
--   `text_locationy`
--   `text_font_color`
--   `text_font` (real path to font)
--   `text_line1` (text, can also be empty)
--   `text_line2`(text, can also be empty)
--   `text_line`(text, can also be empty)
--   `text_linespace`
-
-`frame` (optional) the real path to the frame to be used, else the default collage frame configuration will be used.
-`apply_frame` needed if `frame` is defined. Needs `once` or `always` to be defined, else the default collage configuration will be used.
-`background` (optional) the real path to the background image to be used.
-
-The single framed images work only if the property `apply_frame` is set to `always` otherwise it will not apply any frame (when it's set to `off`) or apply only once (when it's set to `once`).
-
-The `placeholder` works just like the property in the admin: if enabled the image set into `placeholderpath` will be applied at the position set into `placeholderposition`.
+See the detailed walkthrough in [Custom collage design](custom-collage.md).
 
 ---
 
@@ -186,19 +79,19 @@ The `placeholder` works just like the property in the admin: if enabled the imag
 
 Add `--keep` (or `--keep-raw` to keep only the raw version on camera) option for gphoto2 via admin panel:
 
-```sh
+```
 gphoto2 --capture-image-and-download --keep --filename=%s
 ```
 
 On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use `--set-config capturetarget=X` option for gphoto2 (replace "X" with the target of your choice):
 
-```sh
+```
 gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s
 ```
 
 To know which capturetarget needs to be defined you need to run:
 
-```sh
+```
 gphoto2 --get-config capturetarget
 ```
 
@@ -251,312 +144,19 @@ Yes. See the dedicated page [Remote Buttons & Triggers](remote-button.md) for:
 
 ## How do I enable Kiosk Mode to automatically start Photobooth in full screen?
 
-Please run the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard):
-
-- 7 Misc --> 1 Autostart and shortcut
-
-### Autostart on Pi OS Bookworm
-
-Since late 2024 Wayland/labwc is the default on all new installations of RPiOS with desktop. Add to the user specific autostart file location: `~/.config/labwc/autostart`, though it doesn't exist by default. If there is a section [autostart] already, just add the line chromium --... otherwise insert the complete section.
-
-```
-[autostart]
-chromium --kiosk --disable-features=Translate --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --touch-events=enabled --start-maximized http://localhost
-```
-
-If you use Wayland/Wayfire modify `~/.config/wayfire.ini` as stated.
-
-```
-[autostart]
-chromium = chromium-browser --kiosk --disable-features=Translate --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --touch-events=enabled --start-maximized http://localhost
-```
-
-### Autostart on Pi OS Bullseye and prior
-
-Add the autostart file:
-
-```sh
-sudo nano /etc/xdg/autostart/photobooth.desktop
-```
-
-now add the following lines:
-
-```
-[Desktop Entry]
-Version=1.3
-Terminal=false
-Type=Application
-Name=Photobooth
-Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://localhost --touch-events=enabled --use-gl=egl
-Icon=/var/www/html/resources/img/favicon-96x96.png
-StartupNotify=false
-Terminal=false
-```
-
-save the file.
-
-**NOTE:**
-
-If you have installed Photobooth inside a subdirectory (e.g. to `/var/www/html/photobooth`), make sure you adjust the kiosk url (e.g. to `http://localhost/photobooth`) and the Icon path (e.g. to `/var/www/html/photobooth/resources/img/favicon-96x96.png`).
-
-The flag `--use-gl=egl` might only be needed on a Raspberry Pi to avoid a white browser window on the first start of kiosk mode! If you're facing issues while using Photobooth on a different device, please remove that flag.
+Use the [kiosk mode guide](kiosk-mode.md).
 
 ---
 
 ## How to hide the mouse cursor, disable screen blanking and screen saver?
 
-**Note:** Applications like _unclutter_ don't work on Wayland!
-
-### Pi OS trixie
-
-To hide the mouse cursor we can rename the icon to hide it:
-```
-sudo mv /usr/share/icons/PiXtrix/cursors/left_ptr /usr/share/icons/PiXtrix/cursors/left_ptr.bak
-```
-
-To make the mouse cursor visible again we need to rename it back to it's original name:
-```
-sudo mv /usr/share/icons/PiXtrix/cursors/left_ptr.bak /usr/share/icons/PiXtrix/cursors/left_ptr
-```
-
-### Pi OS bookworm
-
-To hide the mouse cursor we can rename the icon to hide it:
-```
-sudo mv /usr/share/icons/PiXflat/cursors/left_ptr /usr/share/icons/PiXflat/cursors/left_ptr.bak
-```
-
-To make the mouse cursor visible again we need to rename it back to it's original name:
-```
-sudo mv /usr/share/icons/PiXflat/cursors/left_ptr.bak /usr/share/icons/PiXflat/cursors/left_ptr
-```
-
-### Pi OS Bullseye and X11 environment
-
-There are two options to hide the cursor on Pi OS Bullseye and prior. The first approach allows you to show the cursor for a short period of time (helpful if you use a mouse and just want to hide the cursor of some time of inactivity), or to hide it permanently.
-
-#### Solution A
-
-To hide the Mouse Cursor we'll use "unclutter":
-
-```sh
-sudo apt-get install unclutter
-```
-
-Edit the LXDE Autostart Script:
-
-```sh
-sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
-```
-
-and add the following lines:
-
-```
-# Photobooth
-# turn off display power management system
-@xset -dpms
-# turn off screen blanking
-@xset s noblank
-# turn off screen saver
-@xset s off
-
-# Hide mousecursor (3 describes the time after which the cursor should be hidden)
-@unclutter -idle 3
-# Photobooth End
-```
-
-#### Solution B
-
-If you are using LightDM as display manager, you can edit `/etc/lightdm/lightdm.conf` to hide the cursor permanently. Just add `xserver-command=X -nocursor` to the end of the file.
+See [Hide cursor, screen blanking and screen saver](hide-cursor.md) for Pi OS-specific steps.
 
 ---
 
 ## How to use a live stream as background at countdown?
 
-**Note:** Before setting up a preview please make sure your Photobooth works without as expected. If you're having problems with the preview this makes debugging a lot easier.
-
-There's different ways depending on your needs and personal setup:
-
-### Preview _"from URL"_ (remote preview, **preferred**)
-
-If you like to have the same preview independent of the device you access Photobooth from:
-
-Make sure to have a stream available you can use (e.g. from your Webcam, Smartphone Camera or Raspberry Pi Camera)
-
--   Admin panel config _"Preview mode"_: `from URL`
--   Admin panel config _"Preview-URL"_ example (add needed IP address instead): `http://192.168.0.2:8081`
-
-**Note**
-
--   Do NOT enable _"Capture screenshot (preview "from device cam" only)"_ in admin panel config!
--   Capture from Pi Camera won't work if motion is installed!
--   Requires Photobooth v2.2.1 or later!
-
-### Setting up a preview stream from your DSLR or PiCamera
-
-If you want to use a stream from your DSLR or Pi Camera, install go2rtc and setup needed service to use.
-
-go2rtc can be accessed at `http://localhost:1984`. Use `http://localhost:1984/api/stream.mjpeg?src=photobooth` as _"Preview-URL"_ (replace `localhost` with Photobooths IP for remote access).
-To be able to also capture images you need to adjust the capture command.
-_"Commands"_: _"Take picture command"_: `capture %s`
-
-For preview via DSLR first make sure `gphoto2 --capture-movie` works via terminal, for PiCamera make sure `rpicam-vid` or `libcamera-vid` works via terminal.
-
-Install go2rtc preview service running the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard):
-
-- 4 go2rtc --> choose your variant to install
-
-Once installed successfully reboot your device and adjust your Photobooth config as mentioned above or open [http://localhost/admin/captureconfig.php](http://localhost/admin/captureconfig.php) (
-or [http://localhost/photobooth/admin/captureconfig.php](http://localhost/photobooth/admin/captureconfig.php)) to apply the default suggested configuration automatically.
-
-**Note:**
-
-- go2rtc does not work in v1.9.3 and v1.9.4 for Pi Camera!
-- For PiCamera default width is set to _2304px_ and height to _1296px_ for the preview stream generation. If needed, adjust the width and height inside `/etc/go2rtc.yaml` (needs root access!) to your personal needs.
-
-### Preview _"from device cam"_ (no remote preview)
-
-If you access Photobooth on your Raspberry Pi you could use a Raspberry Pi Camera. Raspberry Pi Camera will be detected as "device cam" on PiOS bookworm inside Firefox which is shipped with the OS.
-
--   Admin panel config "Preview mode": `from device cam`
-
-**Note:**
-
--   Preview `"from device cam"` will always use the camera of the device where Photobooth get opened in a Browser (e.g. on a tablet it will always show the tablet camera while on a smartphone it will always show the smartphone camera instead)!
--   Pi Camera: capturing via `raspistill` / `libcamera-still` / `rpicam-still` does not work!
--   Secure origin or exception required!
-    -   [Prefer Secure Origins For Powerful New Features](https://medium.com/@Carmichaelize/enabling-the-microphone-camera-in-chrome-for-local-unsecure-origins-9c90c3149339)
-    -   [Enabling the Microphone/Camera in Chrome for (Local) Unsecure Origins](https://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features)
--   Admin panel config _"Capture screenshot (preview "from device cam" only)"_ can be used to take a picture from this preview instead using gphoto / digicamcontrol / raspistill / libcamera-still / rpicam-still.
-
-### Preview from DSLR via _"from device cam"_ preview option (no remote preview)
-
-By now the DSLR handling of Photobooth on Linux was done exclusively using `gphoto2 CLI` (command line interface). When taking pictures while using preview video from the same camera one command has to be stopped and another one is run after that.
-
-The computer terminates the connection to the camera just to reconnect immediately. Because of that there was an ugly video gap and the noises of the camera could be irritating as stopping the video sounded very similar to taking a picture. But most cameras can shoot quickly from live-view.
-
-The underlying libery of `gphoto2 CLI` is `libgphoto` and it can be accessed using several programming languages. Because of this we can have a python script that handles both preview and taking pictures without terminating the connection to the camera in between.
-
-**From Photobooth v4.1.0 a preview from DSLR depends on the _"Preview from device cam"_ config**
-
-To use `gphoto-python`, first execute the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard).
-
-- 5 gphoto2 webcam --> install with service (recommended) or cronjob
-
-Change your Photobooth configuration:
-
--   _"Live Preview_": _"Preview Mode"_: _"from device cam"_
--   _"Commands_": _"Execute start command for preview on take picture/collage"_:
-    -   if **enabled**:
-        _"Commands"_: _"Command to generate a live preview"_: `python3 cameracontrol.py --bsm`
-    -   if **disabled**:
-        _"Commands"_: _"Command to generate a live preview"_: `python3 cameracontrol.py`
--   _"Commands"_: _"Take picture command"_: `python3 cameracontrol.py --capture-image-and-download %s`
-
-**Further information**:
-
-The _"Command to generate a live preview"_ is only executed if the _"Preview Mode"_ is set to _"from device cam"_.
-
-There's no need to define the _"Command to kill live preview"_ while using the _cameracontrol.py_, so just empty that field. The _"Command to kill live preview"_ is only executed if defined.
-
-If you want to use the DSLR view as background video, enable _"Use stream for live preview as background"_ and disable the _"Execute start command for preview on take picture/collage"_ setting of Photobooth, which is enabled by default.
-
-If you're worried about the sensor of your DSLR but still want to use background video you can use `--bsmtime`.
-
-```sh
-python3 cameracontrol.py --bsmtime 1
-```
-
-With the parameter `--bsmtime` you can define a number of minutes after which the camera preview ends. Please note the last image of the preview stays for a few seconds before the background turns to black. Additionally you should add `python3 cameracontrol.py` to the _pre-photo command_ to restart the preview if it got disabled by the timeout. Restarting the preview takes a few seconds.
-
-If you don't want to use the DSLR view as background video enable the _Execute start command for preview on take picture/collage_ setting of Photobooth and make sure `--bsm` was added to the preview command.
-
-```sh
-python3 cameracontrol.py --bsm
-```
-
-If _Execute start command for preview on take picture/collage_ is enabled, the preview video is activated when the countdown for a photo starts and after taking a picture the video is deactivated while waiting for the next photo.
-
-As you possibly noticed the params of the script are designed to be similar to the ones of `gphoto2 CLI` but with some shortcuts like `-c` for `--capture-image-and-download`. If you want to know more check out the help of the script by running:
-
-```sh
-python3 /var/www/html/api/cameracontrol.py --help
-```
-
-or on subfolder installation of Photobooth
-
-```sh
-python3 /var/www/html/photobooth/api/cameracontrol.py --help
-```
-
-If you want to keep your images on the camera you need to use the same `capturetarget` config as when you were using `gphoto CLI` (see "How to keep pictures on my Camera using gphoto2?"). Set the config on the capture command like this:
-
-```sh
-python3 cameracontrol.py --set-config capturetarget=1 --capture-image-and-download %s
-```
-
-If you get errors from Photobooth and want to get more information try to run the preview command manually. The script is in Photobooth's `api` folder. To do so end all running services that potentially try to access the camera with `killall gphoto2` and `killall python3` (if you added any other python scripts manually you might have to be a bit more selective than this command).
-
-Finally if you just run `venv/bin/python3 cameracontrol.py --capture-image-and-download %s` as take picture command without having a preview started it only takes a picture without starting any kind of preview and ends the script immediately after the picture.
-
-In theory `cameracontrol.py` might be able to completely replace `gphoto2 CLI` for all DSLR connection handling in the future.
-
-**Note**
-
--   Liveview **must** be supported for your camera model, [check here](http://gphoto.org/proj/libgphoto2/support.php)
--   Give permissions to /dev/video\*: `sudo gpasswd -a www-data video` (this was done automatically if you used the installation script) and reboot once.
--   Requires Photobooth v4.1.0 or later! (Instructions for older versions have been removed from the FAQ, but an FAQ with instructions matching your installed Photobooth version can always be found at [http://localhost/faq](http://localhost/faq)).
--   You need to access Photobooth directly via [http://localhost](http://localhost), you won't be able to see the preview on a different device (e.g. Tablet).
--   There's a delay of about 3 seconds until the preview starts, to avoid that disable the `Execute start command for preview on take picture/collage` option to generate a preview in background. **This results in a high battery usage and also a general slowdown.**
--   Chromium sometimes has trouble, if there is another webcam like `bcm2835-isp`, it will take it by default instead. Disable other webcams, e.g. `sudo rmmod bcm2835-isp`.
--   Make sure the countdown is long enough to start the preview, for best user experience the countdown should be set at least to 8 seconds.
-
-**Troubleshooting**
-
-In some cases, the v4l2loopback doesn't seem to be working after an update and breaking the preview from DSLR.
-
-Run `v4l2-ctl --list-devices` from your terminal to see if everything is fine.
-
-If it works you get the following output:
-
-```
-GPhoto2 Webcam (platform:v4l2loopback-000):
-        /dev/video0
-```
-
-If it doesn't work:
-
-```
-Cannot open device /dev/video0, exiting
-```
-
-If it doesn't work, you might need to compile the v4l2loopback Module yourself by running the following commands:
-
-```sh
-curl -LO https://github.com/umlaeute/v4l2loopback/archive/refs/tags/v0.12.7.tar.gz
-tar xzf v0.12.7.tar.gz && cd v4l2loopback-0.12.7
-make && sudo make install
-sudo depmod -a
-sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
-```
-
-Now again check if everything is fine (`v4l2-ctl --list-devices`).
-
-If you having problems with this version (`v0.12.7`), especially if you see these errors:
-
-```bash
-[video4linux2,v4l2 @ 0x641d7f294f00] ioctl(VIDIOC_G_FMT): Invalid argument
-[out#0/video4linux2,v4l2 @ 0x641d7f287e00] Could not write header (incorrect codec parameters ?): Invalid argument
-Error while filtering: Invalid argument
-[out#0/video4linux2,v4l2 @ 0x641d7f287e00] Nothing was written into output file, because at least one of its streams received no packets.
-```
-
-Then please try using version `v0.12.5` or even the latest (untagged) version of the github repo.
-
-Another problem could be, that your system has `secure boot` enabled.
-Disable `secure boot` in the BIOS and try again.
-
-If you're still having trouble feel free to join us at Telegram to get further support.
+See the dedicated [Preview and live background](preview.md) guide for:
 
 ---
 
@@ -584,9 +184,9 @@ Yes you can. There's different ways depending on your needs and personal setup:
 2. You need to change the background URL path via config or admin panel. Replace `url(../img/bg.jpg)` with your IP-Adress and port (if needed) as URL.
    Example:
 
-    ```sh
-    -   url(../img/bg.jpg)
-    +   url(http://192.168.0.2:8081)
+    ```
+    -   /img/bg.jpg
+    +   http://192.168.0.2:8081
     ```
 
     To use an DSLR or an Raspberry Pi Camera module see _Setting up a preview stream from your DSLR or PiCamera_ above.
@@ -720,7 +320,7 @@ xinput set-prop 6 --type=float 136 0.3478260869565217 0 0 0.55555555555556 0 0 0
 
 Now unfortunately the settings are only valid for the current session. So create the following desktop startup file with your own values:
 
-```sh
+```
 nano ~/.config/autostart/touch.desktop
 ```
 
@@ -738,7 +338,7 @@ Terminal=false
 
 If you want to use the touchscreen as photobooth and the second monitor for the standalone slideshow for example, open the autostart file:
 
-```sh
+```
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 ```
 
@@ -847,7 +447,7 @@ You have a remote server (e.g. with your website on it) or another Raspberry Pi 
 -   The command is being executed after the picture has been taken and gets the picture’s name as an attribute.
 -   Command:
 
-```sh
+```
 scp /var/www/html/photobooth/data/images/%s [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures_on_the_remote_host]
 ```
 
@@ -855,19 +455,19 @@ scp /var/www/html/photobooth/data/images/%s [username@remotehost]:/[path_to_wher
 
 1. Create a public/private key-pair for the www-data user on the source machine (why for that user? The www-data user is executing the Post-photo script/command in the background) – Do not enter a passphrase when prompted.
 
-```sh
+```
 sudo -u www-data ssh-keygen -t rsa
 ```
 
 2. Copy the public key to the remote (destination) server
 
-```sh
+```
 sudo -u www-data ssh-copy-id [username@remotehost]
 ```
 
 3. You can now manually test whether the connection works. Try to copy anything to the remote server and change the file in the below example to a file that you actually have on your source machine. You shouldn’t be prompted with a password, but the copy and transfer should complete successfully just with the following command. If that is going to be successful, copying your pictures automatically should work now.
 
-```sh
+```
 sudo -u www-data scp /var/www/html/photobooth/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
 ```
 
