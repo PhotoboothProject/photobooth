@@ -61,24 +61,23 @@ Notes
 - Enable Hardware Buttons and set Remotebuzzer IP/Port.
 - Base URL: `http://[Server IP]:[Port]`
 - Available endpoints (depending on enabled features and buttons):
-  - `/` (lists available endpoints)
-  - `/commands/start-picture`
-  - `/commands/start-collage`
-  - `/commands/start-custom`
-  - `/commands/start-print`
-  - `/commands/start-video`
-  - `/commands/start-move2usb`
-  - `/commands/reboot-now`
-  - `/commands/shutdown-now`
-  - `/commands/rotary-cw`
-  - `/commands/rotary-ccw`
-  - `/commands/rotary-btn-press`
-  Root `/` lists available endpoints.
+  - `[Base URL]/` Simple help page with all available endpoints
+  - `[Base URL]/commands/start-picture`
+  - `[Base URL]/commands/start-collage`
+  - `[Base URL]/commands/start-custom`
+  - `[Base URL]/commands/start-print`
+  - `[Base URL]/commands/start-video`
+  - `[Base URL]/commands/start-move2usb`
+  - `[Base URL]/commands/reboot-now`
+  - `[Base URL]/commands/shutdown-now`
+  - `[Base URL]/commands/rotary-cw`
+  - `[Base URL]/commands/rotary-ccw`
+  - `[Base URL]/commands/rotary-btn-press`
 - Example: `curl http://<IP>:<PORT>/commands/start-picture`
 - IP/Port notes:
   - `[Hardware Button Server IP]` must match Hardware Button → Remote buzzer Server IP (typically the Photobooth host IP).
   - `[Hardware Button Server Port]` is the Hardware Button → Enable Hardware Buttons value.
-- Common hardware for HTTP triggers: myStrom WiFi Button, Shelly, ESP32/ESP8266, Raspberry Pi Pico/Pico W (see examples below).
+- Common hardware for HTTP triggers: myStrom WiFi Button (https://mystrom.com/wifi-button/), Shelly Button (https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/), ESP32/ESP8266, Raspberry Pi Pico/Pico W (see examples below).
 
 ## 5) Hardware button examples (HTTP)
 - myStrom WiFi Button:

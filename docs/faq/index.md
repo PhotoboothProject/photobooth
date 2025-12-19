@@ -239,105 +239,13 @@ Follow the steps mentioned here: [How to Fix NGINX 413 Request Entity Too Large 
 
 ## Can I use Hardware Button to take a Picture?
 
-Yes, there's different ways!
+Yes. See the dedicated page [Remote Buttons & Triggers](remote-button.md) for:
 
-### Key code using connected HID devices
-
-An HID device connected to your hardware can trigger different actions on your device. The HID device must be connected to the device you're accessing Photobooth from!
-
-For example use <a href="https://keycode.info" target="_blank">https://keycode.info</a> to find out the key id of the button you like to use.
-
--   Related configuration:
-
-    **PICTURE section**:
-
-    -   Key code which triggers a picture: **define**
-
-    **COLLAGE section**:
-
-    -   Key code which triggers a collage: **define**
-
-    **PRINT section**:
-
-    -   Key code which triggers printing: **define**
-
-### Remotebuzzer Hardware Button & LED feature using GPIO connected hardware
-
-GPIO support was removed in September 2025. With PiOS Bookworm the used sysfs became deprecated which makes the use impossible with its current implementation.
-
-You can still use the trigger via Socket.io or simple web requests (see below).
-
-### Remote trigger using Socket.io
-
-The trigger server controls and coordinates sending commands via socket.io to the photobooth client. Next to a hardware button, any socket.io client can connect to the trigger server over the network, and send a trigger command. This gives full flexibility to integrate other backend systems for trigger signals.
-
--   Channel: `photobooth-socket`
--   Commands: `start-picture`, `start-collage`, `collage-next`, `start-custom`, `start-video`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`, `move2usb`
--   Response: `completed` will be emitted to the client, once photobooth finished the task
-
-### Remote trigger using simple web requests
-
-_Note: This feature depends on the Socket.io implementation and needs option `Hardware Button` - `Enable Hardware Buttons` to be active and `Hardware Button` - `Remote buzzer Server IP`  must be defined ._
-
-Photobooth can start the Remotebuzzer server and does not depend on a different device running the Socket.io Server.
-
-To start the Remotebuzzer server with Photobooth, you must enable `Hardware Button` - `Start remote buzzer Server` from Adminpanel.
-
-If Photobooth is running the implemented Remotebuzzer server, simple `GET` requests can be used to trigger different actions. Those endpoints can be found under `http://[Hardware Button Server IP]:[Hardware Button Server Port]` where:
-
--   `[Hardware Button Server IP]` needs to match the value from `Hardware Button` - `Remote buzzer Server IP` (same IP as your Photobooth) and
--   `[Hardware Button Server Port]` the value from `Hardware Button` - `Enable Hardware Buttons`
-
-The available endpoints of Photobooths Remotebuzzer server, depending on enabled features and hardware button options, are:
-
--   `[Base Url]/` - Simple help page with all available endpoints
--   `[Base Url]/commands/start-picture` - Triggers a single picture
--   `[Base Url]/commands/start-collage` - Triggers a collage
--   `[Base Url]/commands/start-custom` - Triggers custom button action
--   `[Base Url]/commands/start-print` - Triggers print
--   `[Base Url]/commands/start-video` - Triggers a video capture
--   `[Base Url]/commands/reboot-now` - Triggers reboot command
--   `[Base Url]/commands/shutdown-now` - Triggers shutdown command
--   `[Base Url]/commands/rotary-cw` - Focus next element
--   `[Base Url]/commands/rotary-ccw` - Focus previous element
--   `[Base Url]/commands/rotary-btn-press` - Triggers a click action
--   `[Base Url]/commands/start-move2usb` - Trigger picture move to USB
-
-These trigger URLs can be used for example with [myStrom WiFi Buttons](https://mystrom.com/wifi-button/) or [Shelly Buttons](https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/), but also using a ESP32/ESP8266 or other micro controllers like the Raspberry Pi Pico / Pico W is possible.
-
-### Setup a ESP32 / ESP8266 for simple web request
-Example Projects:
-
-- [https://github.com/PhotoboothProject/photobooth-ino](https://github.com/PhotoboothProject/photobooth-ino) (requires Photobooths Remotebuzzer Server to be running, contributions welcome)
-
-### Setup an Raspberry Pi Pico / Pico W for simple web request
-Example Projects:
-
-- [https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder](https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder)
-- [https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder](https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder)
-
-### Installation steps for myStrom WiFi Button
-
--   Be sure to connect the button to the same network as the photobooth
--   The button can be configured using the following commands
-    ```sh
-    curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-picture
-    curl --location -g --request POST http://[Button IP]/api/v1/action/long --data-raw get://[Photobooth IP]:[Hardware Button Server Port]/commands/start-collage
-    ```
-
-### Remotebuzzer trouble shooting
-
-#### Important Notes
-Using the Remotebuzzer feature takes effect at the same time on all devices accessing Photobooth! If you trigger a picture, every connected client gets the signal to capture.
-
-Works if you access Photobooth via [http://localhost](http://localhost) or [http://your-ip-adress](#), but accessing via the loopback IP (127.0.0.1) does not work!
-
-#### Debugging
-- Set Photobooth loglevel to 1 (or above). (admin panel -> general section) and save your configuration
-- Reload the Photobooth homepage
-- Check the browser developer console for error logs
-- Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel) (
-  or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel)).
+- Browser hotkeys (HID to focused browser)
+- Direct USB HID on the Photobooth host (no browser focus)
+- Socket.io triggers
+- Simple HTTP triggers and example devices (ESP, Pico, myStrom, Shelly)
+- Troubleshooting tips
 
 ---
 
