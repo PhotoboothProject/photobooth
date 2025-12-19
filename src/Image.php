@@ -1205,6 +1205,9 @@ class Image
             if (!$rotatedImg) {
                 throw new \Exception('Cannot rotate image.');
             }
+
+            // Keep alpha
+            imagealphablending($rotatedImg, true);
         } catch (\Exception $e) {
             $this->addErrorData($e->getMessage());
 
