@@ -78,7 +78,7 @@ class ConfigurationService
         }
 
         if (empty($config['collage']['placeholderpath'])) {
-            $config['collage']['placeholderpath'] = PathUtility::getPublicPath('resources/img/background/01.jpg');
+            $config['collage']['placeholderpath'] = 'resources/img/background/01.jpg';
         }
 
         if (empty($config['textoncollage']['font'])) {
@@ -98,8 +98,7 @@ class ConfigurationService
         }
 
         $bg_path = 'resources/img/background.png';
-        $logo_url = PathUtility::getPublicPath('resources/img/logo/logo-qrcode-text.png');
-
+        $logo_url = 'resources/img/logo/logo-qrcode-text.png';
         if (empty($config['logo']['path'])) {
             $config['logo']['path'] = $logo_url;
         }
@@ -121,7 +120,7 @@ class ConfigurationService
         }
 
         if (empty($config['qr']['url'])) {
-            $config['qr']['url'] = PathUtility::getPublicPath('api/download.php?image=');
+            $config['qr']['url'] = 'api/download.php?image=';
         }
 
         return $config;
