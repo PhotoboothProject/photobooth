@@ -67,6 +67,7 @@ const photoBooth = (function () {
         chromaFile = '',
         currentCollageFile = '',
         imgFilter = config.filters.defaults,
+        isProcessingEffects = false,
         command,
         startTime,
         endTime,
@@ -152,6 +153,12 @@ const photoBooth = (function () {
                 rotaryController.focusSet(filternav);
             }
         }
+    };
+
+    const setFiltersEnabled = (enabled) => {
+        isProcessingEffects = !enabled;
+        filternav.css('pointer-events', enabled ? '' : 'none');
+        filternav.toggleClass('filters--disabled', !enabled);
     };
 
     api.stopPreviewAndCaptureFromVideo = () => {
@@ -811,6 +818,7 @@ const photoBooth = (function () {
         setTimeout(function () {
             api.cheese.destroy();
             api.shutter.destroy();
+            setFiltersEnabled(true);
 
             loaderMessage.empty();
             loaderButtonBar.empty();
@@ -853,6 +861,7 @@ const photoBooth = (function () {
         loader.addClass('stage--active');
         startPage.removeClass('stage--active');
         resultPage.removeClass('stage--active');
+        setFiltersEnabled(false);
         loaderMessage.html(
             '<i class="' +
                 config.icons.spinner +
@@ -884,6 +893,7 @@ const photoBooth = (function () {
                 style: api.photoStyle
             },
             success: (data) => {
+                setFiltersEnabled(true);
                 photoboothTools.console.log(api.photoStyle + ' processed', data);
                 endTime = new Date().getTime();
                 totalTime = endTime - startTime;
@@ -904,6 +914,7 @@ const photoBooth = (function () {
                 }
             },
             error: (jqXHR, textStatus) => {
+                setFiltersEnabled(true);
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
@@ -1363,6 +1374,10 @@ const photoBooth = (function () {
     });
 
     $('.sidenav-list-item[data-filter]').on('click', function () {
+        if (isProcessingEffects) {
+            photoboothTools.console.logDev('Ignoring filter click: processing in progress.');
+            return;
+        }
         $('.sidenav').find('.sidenav-list-item--active').removeClass('sidenav-list-item--active');
         $(this).addClass('sidenav-list-item--active');
 
