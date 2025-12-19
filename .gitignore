@@ -54,3 +54,5 @@ tools/*/vendor
 
 # rembg virtual environment
 scripts/rembg_venv/
+/.venv
+/site

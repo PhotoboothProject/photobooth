@@ -11,7 +11,7 @@ If your camera is supported in general but not having a preview available please
 Access go2rtc via [http://localhost:1984](http://localhost:1984) and, maybe, adjust the config if needed.
 
 To allow adjustments of the config via web interface adjust the permissions:
-```shell
+```ell
 sudo chmod 755 /etc/go2rtc.yaml
 ```
 
@@ -55,7 +55,7 @@ The preview is created using gphoto2 and streamed by go2rtc. In some rare cases,
 #### Delay capture
 
 We can use a tiny pause between stopping the preview and starting the capture to work around this:
-```shell
+```ell
 sudo wget -O /usr/local/bin/capture https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/scripts/capture-gphoto2
 sudo chmod +x /usr/local/bin/capture
 ```
@@ -68,7 +68,7 @@ Didn’t work? Then continue...
 #### Force the camera to exit Live View
 
 It may be necessary to manually take the camera out of Live View mode. Adjust the capture command (this doesn't work with all cameras!):
-```shell
+```ell
 capture --set-config movie=0 --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
 ```
 Now try again!
@@ -77,11 +77,11 @@ Didn’t work? Then continue...
 
 #### More alternative capture commands
 
-```shell
+```ell
 capture --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
 ```
 Or:
-```shell
+```ell
 capture --wait-event=300ms --capture-image-and-download --filename=%s
 ```
 For some cameras, this can also noticeably speed up the capture process.

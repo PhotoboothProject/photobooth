@@ -1,7 +1,7 @@
 # Additional needed steps to enable PHP in NGINX
 
 Once NGINX is installed we need to enable PHP in NGINX. If you haven't made any changes to your NGINX config you can run the following commands:
-```sh
+```
 sudo cp /etc/nginx/sites-enabled/default ~/nginx-default.bak
 sudo sed -i 's/^\(\s*\)index index\.html\(.*\)/\1index index\.php index\.html\2/g' /etc/nginx/sites-available/default
 sudo sed -i '/location ~ \\.php$ {/s/^\(\s*\)#/\1/g' /etc/nginx/sites-available/default
@@ -11,7 +11,7 @@ sudo sed -i '/.*fastcgi_pass unix:\/run\/php\//,// { /}/s/^\(\s*\)#/\1/g; }' /et
 ```
 
 If you've made changes by hand already to `/etc/nginx/sites-enabled/default` you have to do all changes by hand:
-```sh
+```
 sudo nano /etc/nginx/sites-enabled/default
 ```
 
@@ -46,7 +46,7 @@ It should look like this:
 
 
 Test the config once `/etc/nginx/sites-enabled/default` was changed:
-```sh
+```
 sudo /usr/sbin/nginx -t -c /etc/nginx/nginx.conf &>/dev/null && echo 'config test ok' || echo 'config test failed'
 ```
 
@@ -56,6 +56,6 @@ If you get the response
 ```
 
 then it is time to restart the server with:
-```sh
+```
 sudo systemctl reload nginx
 ```

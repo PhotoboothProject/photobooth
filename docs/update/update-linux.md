@@ -45,7 +45,7 @@ Cannot open device /dev/video0, exiting
 
 If it doesn't work, you might need to compile the v4l2loopback Module yourself by running the following commands:
 
-```sh
+```
 curl -LO https://github.com/umlaeute/v4l2loopback/archive/refs/tags/v0.12.7.tar.gz
 tar xzf v0.12.7.tar.gz && cd v4l2loopback-0.12.7
 make && sudo make install

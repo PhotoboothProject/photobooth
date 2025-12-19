@@ -10,7 +10,7 @@ The steps below were tested on "Raspberry Pi OS with desktop" based on Debian Bu
 
 ## Update your system
 
-```sh
+```
 sudo apt update
 sudo apt dist-upgrade
 ```
@@ -23,13 +23,13 @@ NGINX has a smaller memory footprint and typically better performance, which is 
 
 ### Install Apache & PHP
 
-```sh
+```
 sudo apt install -y libapache2-mod-php
 ```
 
 ### or Install NGINX & PHP
 
-```sh
+```
 sudo apt install -y nginx php-fpm
 ```
 
@@ -37,13 +37,13 @@ sudo apt install -y nginx php-fpm
 
 ## Install dependencies
 
-```sh
+```
 sudo apt install -y curl gcc g++ make git ffmpeg gphoto2 libimage-exiftool-perl nodejs php-xml php-gd php-zip php-mbstring python3 python3-gphoto2 python3-psutil python3-zmq rsync udisks2 v4l2loopback-dkms v4l-utils
 ```
 
 **Optional:** If you have a new camera, you can also install the latest version of libgphoto2 directly from the maintainer. Choose "Install last stable release":
 
-```sh
+```
 wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
 wget -O .env https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
 chmod +x gphoto2-updater.sh
@@ -54,13 +54,13 @@ sudo ./gphoto2-updater.sh
 
 Give our webserver user access to `/var/www/`:
 
-```sh
+```
 sudo chown -R www-data:www-data /var/www/
 ```
 
 Get the Photobooth source:
 
-```sh
+```
 cd /var/www/
 sudo -u www-data -s
 rm -r html/*
@@ -76,19 +76,19 @@ exit
 
 Next we have to give our webserver user access to the USB device:
 
-```sh
+```
 sudo gpasswd -a www-data plugdev
 ```
 
 If you like to use a printer you need to have `CUPS` installed. On Raspbian `CUPS` is not installed by default:
 
-```sh
+```
 sudo apt install -y cups
 ```
 
 Next you also have to add your webserver user to the `lp` and `lpadmin` group:
 
-```sh
+```
 sudo gpasswd -a www-data lp
 sudo gpasswd -a www-data lpadmin
 ```
@@ -97,7 +97,7 @@ By default the CUPS webinterface can only be accessed via [http://localhost:631]
 
 To remote access CUPS from other clients you need to run the following commands:
 
-```sh
+```
 sudo cupsctl --remote-any
 sudo /etc/init.d/cups restart
 ```
@@ -112,20 +112,20 @@ Please follow the steps mentioned in the FAQ:
 
 Now you should restart your Raspberry Pi to apply those settings:
 
-```sh
+```
 reboot
 ```
 
 Please use the following to test if your Webserver is able to take pictures (gphoto must be executed in a dir with write permission):
 
-```sh
+```
 cd /var/www/html
 sudo -u www-data gphoto2 --capture-image
 ```
 
 If it is not working, your operation system probably automatically mounted your camera. You can unmount it, or remove execution permission for gphoto2 Volume Monitor to ensure that the camera is not mounted anymore:
 
-```sh
+```
 sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 ```
 
