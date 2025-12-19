@@ -73,6 +73,10 @@
   height: var(--sidenav-close-height);
   border: none;
   line-height: 1;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background: var(--highlight-color);
