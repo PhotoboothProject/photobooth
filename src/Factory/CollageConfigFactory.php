@@ -28,8 +28,8 @@ class CollageConfigFactory
         $collageConfig->collageLimit = (int) ($config['collage']['placeholder'] ? $config['collage']['limit'] + 1 : $config['collage']['limit']);
         $collageConfig->pictureFlip = $config['picture']['flip'];
         $collageConfig->pictureRotation = (int) $config['picture']['rotation'];
-        $collageConfig->picturePolaroidEffect = $config['picture']['polaroid_effect'] === true ? 'enabled' : 'disabled';
-        $collageConfig->picturePolaroidRotation = (int) $config['picture']['polaroid_rotation'];
+        $collageConfig->collagePolaroidEffect = $config['collage']['polaroid_effect'] === true ? 'enabled' : 'disabled';
+        $collageConfig->collagePolaroidRotation = (int) $config['collage']['polaroid_rotation'];
         $collageConfig->textOnCollageEnabled = $config['textoncollage']['enabled'] === true ? 'enabled' : 'disabled';
         $collageConfig->textOnCollageLine1 = $config['textoncollage']['line1'];
         $collageConfig->textOnCollageLine2 = $config['textoncollage']['line2'];

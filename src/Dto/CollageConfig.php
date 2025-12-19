@@ -17,8 +17,8 @@ class CollageConfig
     public int $collageLimit;
     public string $pictureFlip;
     public int $pictureRotation;
-    public string $picturePolaroidEffect;
-    public int $picturePolaroidRotation;
+    public string $collagePolaroidEffect;
+    public int $collagePolaroidRotation;
     public string $textOnCollageEnabled;
     public string $textOnCollageLine1;
     public string $textOnCollageLine2;

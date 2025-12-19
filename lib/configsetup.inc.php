@@ -930,6 +930,25 @@ return [
                 PathUtility::getAbsolutePath('private/images/frames'),
             ]
         ],
+        'collage_polaroid_effect' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'collage[polaroid_effect]',
+            'data-theme-field' => 'true',
+            'value' => $config['collage']['polaroid_effect'],
+        ],
+        'collage_polaroid_rotation' => [
+            'view' => 'advanced',
+            'type' => 'range',
+            'placeholder' => $defaultConfig['collage']['polaroid_rotation'],
+            'name' => 'collage[polaroid_rotation]',
+            'data-theme-field' => 'true',
+            'value' => $config['collage']['polaroid_rotation'],
+            'range_min' => -45,
+            'range_max' => 45,
+            'range_step' => 1,
+            'unit' => 'degrees',
+        ],
         'collage_background' => [
             'view' => 'expert',
             'type' => 'image',
