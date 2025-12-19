@@ -432,6 +432,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->booleanNode('picturebutton')->defaultValue(true)->end()
                 ->booleanNode('collagebutton')->defaultValue(false)->end()
                 ->booleanNode('printbutton')->defaultValue(false)->end()
+                ->scalarNode('input_device')->defaultValue('')->end()
                 ->booleanNode('shutdownbutton')->defaultValue(false)->end()
                 ->booleanNode('videobutton')->defaultValue(false)->end()
                 ->booleanNode('rebootbutton')->defaultValue(false)->end()

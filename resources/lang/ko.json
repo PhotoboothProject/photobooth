@@ -4,5 +4,7 @@
   "theme_save": "테마 저장",
   "theme_load": "테마 불러오기",
   "theme_delete": "테마 삭제",
-  "theme_choose": "테마 선택"
+  "theme_choose": "테마 선택",
+  "remotebuzzer:remotebuzzer_input_device": "입력 장치",
+  "manual:remotebuzzer:remotebuzzer_input_device": "하드웨어 트리거용 Linux 입력 장치(예: /dev/input/by-id/...). 작업별 키코드(사진/콜라주/사용자 지정/인쇄/비디오)로 이벤트를 매핑합니다."
 }

@@ -120,5 +120,7 @@
   "video:video_effects": "Video efekt",
   "video:video_enabled": "Povolit pořizování krátkých videí",
   "video:video_gif": "Video jako GIF",
-  "video:video_qr": "Zobrazit jako QR kód"
+  "video:video_qr": "Zobrazit jako QR kód",
+  "remotebuzzer:remotebuzzer_input_device": "Vstupní zařízení",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Vstupní zařízení Linux pro hardwarové spouštěče (např. /dev/input/by-id/...). Používá kódy kláves podle akce (foto/koláž/vlastní/tisk/video) pro mapování událostí."
 }

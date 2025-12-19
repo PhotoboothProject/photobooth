@@ -5,11 +5,13 @@ const path = require('path');
 // eslint-disable-next-line no-unused-vars
 let collageInProgress = false,
     triggerArmed = true,
-    copySuccess = false;
+    copySuccess = false,
+    rearmTimer = null;
 
 const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
 const { execSync, spawnSync } = require('child_process');
 const { pid: PID, platform: PLATFORM } = process;
+const REARM_TIMEOUT_MS = 60000; // Fallback to re-arm trigger if no completion arrives
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
@@ -27,6 +29,9 @@ const config = JSON.parse(stdoutConfig);
 const cmdEnvironmentg = 'bin/photobooth photobooth:environment:list json';
 const stdoutEnvironment = execSync(cmdEnvironmentg).toString();
 const environment = JSON.parse(stdoutEnvironment);
+
+/* USB INPUT LISTENER CONFIG */
+const inputDevicePath = config.remotebuzzer.input_device;
 
 /* WRITE PROCESS PID FILE */
 const writePIDFile = (filename) => {
@@ -59,24 +64,171 @@ process.on('uncaughtException', function (err) {
 const baseUrl = 'http://' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port;
 log('Server starting on ' + baseUrl);
 
+function triggerPictureFromInput() {
+    if (!config.remotebuzzer.usebuttons || !config.remotebuzzer.picturebutton) {
+        log('USB input ignored, hardware buttons or picture button disabled in config');
+
+        return;
+    }
+
+    if (!triggerArmed) {
+        log('USB input ignored, trigger not armed');
+
+        return;
+    }
+
+    if (!config.picture.enabled) {
+        log('USB input ignored, taking pictures disabled');
+
+        return;
+    }
+
+    photoboothAction('picture');
+}
+
+function triggerActionFromInput(action) {
+    switch (action) {
+        case 'picture':
+            triggerPictureFromInput();
+            break;
+        case 'collage':
+            if (!config.remotebuzzer.usebuttons || !config.remotebuzzer.collagebutton) {
+                log('USB input ignored, hardware buttons or collage button disabled in config');
+            } else if (!triggerArmed) {
+                log('USB input ignored, trigger not armed');
+            } else if (!config.collage.enabled) {
+                log('USB input ignored, collage disabled');
+            } else {
+                photoboothAction('collage');
+            }
+            break;
+        case 'custom':
+            if (!config.remotebuzzer.usebuttons || !config.remotebuzzer.custombutton) {
+                log('USB input ignored, hardware buttons or custom button disabled in config');
+            } else if (!triggerArmed) {
+                log('USB input ignored, trigger not armed');
+            } else if (!config.custom.enabled) {
+                log('USB input ignored, custom action disabled');
+            } else {
+                photoboothAction('custom');
+            }
+            break;
+        case 'video':
+            if (!config.remotebuzzer.usebuttons || !config.remotebuzzer.videobutton) {
+                log('USB input ignored, hardware buttons or video button disabled in config');
+            } else if (!triggerArmed) {
+                log('USB input ignored, trigger not armed');
+            } else if (!config.video.enabled) {
+                log('USB input ignored, video disabled');
+            } else {
+                photoboothAction('video');
+            }
+            break;
+        case 'print':
+            if (!config.remotebuzzer.usebuttons || !config.remotebuzzer.printbutton) {
+                log('USB input ignored, hardware buttons or print button disabled in config');
+            } else if (!triggerArmed) {
+                log('USB input ignored, trigger not armed');
+            } else {
+                photoboothAction('print');
+            }
+            break;
+        default:
+            log(`USB input ignored, unsupported action [${action}]`);
+    }
+}
+
+function startUsbInputListener() {
+    const bindings = [];
+
+    const keyToInt = (key) => (key ? parseInt(key, 10) : 0);
+
+    const pushBinding = (code, action) => {
+        if (code && !Number.isNaN(code)) {
+            bindings.push({ code, action });
+        }
+    };
+
+    pushBinding(keyToInt(config.picture.key), 'picture');
+    pushBinding(keyToInt(config.collage.key), 'collage');
+    pushBinding(keyToInt(config.custom.key), 'custom');
+    pushBinding(keyToInt(config.video.key), 'video');
+    pushBinding(keyToInt(config.print.key), 'print');
+
+    if (!inputDevicePath || bindings.length === 0) {
+        return;
+    }
+
+    const EVENT_SIZE = 24; // timeval (16 bytes) + type (2) + code (2) + value (4)
+    const stream = fs.createReadStream(inputDevicePath, { highWaterMark: EVENT_SIZE * 8 });
+
+    stream.on('data', (chunk) => {
+        for (let offset = 0; offset + EVENT_SIZE <= chunk.length; offset += EVENT_SIZE) {
+            const type = chunk.readUInt16LE(offset + 16);
+            const code = chunk.readUInt16LE(offset + 18);
+            const value = chunk.readInt32LE(offset + 20);
+
+            // EV_KEY press events use type 1, value 1 for key down, 0 for up
+            if (type === 1 && value === 1) {
+                const binding = bindings.find((b) => b.code === code);
+                if (binding) {
+                    log(`USB input matched keycode ${code}, triggering action [${binding.action}]`);
+                    triggerActionFromInput(binding.action);
+                }
+            }
+        }
+    });
+
+    stream.on('error', (err) => {
+        log(`USB input listener error on [${inputDevicePath}]: ${err.message}`);
+    });
+
+    const codes = bindings.map((b) => b.code).join(', ');
+    log(`Listening for USB input on [${inputDevicePath}] keycodes [${codes}]`);
+}
+
+if (inputDevicePath) {
+    startUsbInputListener();
+}
+
+function armTrigger() {
+    triggerArmed = true;
+    if (rearmTimer) {
+        clearTimeout(rearmTimer);
+        rearmTimer = null;
+    }
+}
+
+function disarmTrigger() {
+    triggerArmed = false;
+    if (rearmTimer) {
+        clearTimeout(rearmTimer);
+    }
+    rearmTimer = setTimeout(() => {
+        triggerArmed = true;
+        log(`Re-arming trigger after timeout (${REARM_TIMEOUT_MS}ms)`);
+        rearmTimer = null;
+    }, REARM_TIMEOUT_MS);
+}
+
 function photoboothAction(type) {
     switch (type) {
         case 'picture':
-            triggerArmed = false;
+            disarmTrigger();
             collageInProgress = false;
             log('Photobooth trigger PICTURE : [ photobooth-socket ] => [ All Clients ]: command [ picture ]');
             ioServer.emit('photobooth-socket', 'start-picture');
             break;
 
         case 'custom':
-            triggerArmed = false;
+            disarmTrigger();
             collageInProgress = false;
             log('Photobooth trigger CUSTOM : [ photobooth-socket ]  => [ All Clients ]: command [ custom ]');
             ioServer.emit('photobooth-socket', 'start-custom');
             break;
 
         case 'video':
-            triggerArmed = false;
+            disarmTrigger();
             collageInProgress = false;
             log('Photobooth trigger VIDEO : [ photobooth-socket ]  => [ All Clients ]: command [ video ]');
             ioServer.emit('photobooth-socket', 'start-video');
@@ -90,7 +242,7 @@ function photoboothAction(type) {
             break;
 
         case 'collage':
-            triggerArmed = false;
+            disarmTrigger();
             collageInProgress = true;
             log('Photobooth trigger COLLAGE : [ photobooth-socket ]  => [ All Clients ]: command [ collage ]');
             ioServer.emit('photobooth-socket', 'start-collage');
@@ -102,14 +254,14 @@ function photoboothAction(type) {
             break;
 
         case 'completed':
-            triggerArmed = true;
+            armTrigger();
             collageInProgress = false;
             log('Photobooth activity completed : [ photobooth-socket ] => [ All Clients ]: command [ completed ]');
             ioServer.emit('photobooth-socket', 'completed');
             break;
 
         case 'print':
-            triggerArmed = false;
+            disarmTrigger();
             log('Photobooth trigger PRINT : [ photobooth-socket ]  => [ All Clients ]: command [ print ]');
             ioServer.emit('photobooth-socket', 'print');
             break;
@@ -393,7 +545,7 @@ ioServer.on('connection', function (client) {
                 break;
 
             case 'collage-wait-for-next':
-                triggerArmed = true;
+                armTrigger();
                 break;
 
             default:
