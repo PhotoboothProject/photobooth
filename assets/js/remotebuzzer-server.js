@@ -544,7 +544,7 @@ ioServer.on('connection', function (client) {
                 photoboothAction('move2usb');
                 break;
 
-        case 'collage-wait-for-next':
+            case 'collage-wait-for-next':
                 armTrigger();
                 break;
 
