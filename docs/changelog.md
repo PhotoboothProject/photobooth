@@ -9,6 +9,28 @@ An updated FAQ can always be found at [localhost/faq](http://localhost/faq).
 Please read the license notice [here](https://github.com/PhotoboothProject/photobooth/blob/dev/LICENSE_NOTICE).
 <hr>
 
+## 4.x development
+
+**Features**
+
+- Virtual keyboard for email (layouts/colors, toggle), multi-recipient email, and configurable email fields.
+- Uploadable/optional private keying backgrounds; configurable rotation ranges; CollageLayoutEnum; adjustable collage video previews; collage color presets; auto-enable background/frame and preview toggles; placeholder limits.
+- Tailwind CSS v4 migration and dependency bumps; Turkish language option; JPEG quality floor raised.
+- Printing: copy prompt, new print-limit endpoint, longer print timeout, multi-print fixes, queued message timing, hardware button photo support, hardware keyboard for admin PIN, Remotebuzzer on chroma capture.
+- Rembg as built-in service with advanced options, logging, compositing fixes, and install script.
+- Theme management with categories/docs, custom CSS, git version indicator, clear-cache button, custom `stage.start.php`, optional result blur, gallery dimension caching, preview URL migration.
+- Setup: whiptail-based Setup Wizard, PHP 8.4 requirement, install_rembg improvements, USB sync hardening, installer self-update tweaks.
+
+**Bug fixes**
+
+- Selfie rename robustness; chroma preview visibility; loader clearing; hide video background during capture.
+- Installer fixes: PHP PPA validation, permissions/source lists/Wayland flag, unavailable PPA removal, software-properties-common fallback.
+- Printing: copy casting and deprecations, rotate error surfacing, stop-second timing, iOS preview fixes, admin tooltip/label fixes, default path corrections.
+- Rembg typing/logging/error handling; collage/theme path fixes; preview caching; safer uploads/video background handling; collage defaults tightening.
+- Docs/link cleanups and various deprecation warnings addressed.
+
+<hr>
+
 ## 4.5.1 (17.09.2024)
 
 **General**
