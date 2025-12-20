@@ -341,7 +341,5 @@
   "theme_save": "Spremi temu",
   "theme_load": "Učitaj temu",
   "theme_delete": "Izbriši temu",
-  "theme_choose": "Odaberi temu",
-  "remotebuzzer:remotebuzzer_input_device": "Ulazni uređaj",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux ulazni uređaj za hardverske triggere (npr. /dev/input/by-id/...). Koristi keycode po akciji (foto/kolaž/prilagođeno/ispis/video) za mapiranje događaja."
+  "theme_choose": "Odaberi temu"
 }

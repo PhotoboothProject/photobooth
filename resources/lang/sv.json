@@ -4,7 +4,5 @@
   "theme_save": "Spara tema",
   "theme_load": "Ladda tema",
   "theme_delete": "Ta bort tema",
-  "theme_choose": "Välj tema",
-  "remotebuzzer:remotebuzzer_input_device": "Inmatningsenhet",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux-inmatningsenhet för hårdvarutriggers (t.ex. /dev/input/by-id/...). Använder per-aktions tangentskoder (foto/collage/egen/skriv ut/video) för att mappa inkommande händelser."
+  "theme_choose": "Välj tema"
 }

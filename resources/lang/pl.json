@@ -260,7 +260,5 @@
   "userinterface:colors_primary": "Kolor podstawowy",
   "userinterface:colors_secondary": "Kolor Dodatkowy",
   "userinterface:colors_start_font": "Kolor czcionki ekranu startowego",
-  "using_latest_version": "Używasz najnowszej dostępnej wersji Fotobudki.",
-  "remotebuzzer:remotebuzzer_input_device": "Urządzenie wejściowe",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Urządzenie wejściowe Linux dla wyzwalaczy sprzętowych (np. /dev/input/by-id/...). Używa kodów klawiszy na akcję (zdjęcie/kolaż/niestandardowe/druk/wideo) do mapowania zdarzeń."
+  "using_latest_version": "Używasz najnowszej dostępnej wersji Fotobudki."
 }

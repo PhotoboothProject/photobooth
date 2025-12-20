@@ -57,7 +57,5 @@
   "theme_save": "Lagre tema",
   "theme_load": "Last inn tema",
   "theme_delete": "Slett tema",
-  "theme_choose": "Velg tema",
-  "remotebuzzer:remotebuzzer_input_device": "Inndataenhet",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux-inndataenhet for maskinvaretriggere (f.eks. /dev/input/by-id/...). Bruker tastekoder per handling (foto/kollasje/egen/skriv ut/video) for å mappe hendelser."
+  "theme_choose": "Velg tema"
 }

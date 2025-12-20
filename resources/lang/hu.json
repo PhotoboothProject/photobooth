@@ -220,7 +220,5 @@
   "theme_delete": "Téma törlése",
   "theme_choose": "Téma kiválasztása",
   "update_available": "Frissítés elérhető.",
-  "using_latest_version": "A fotófülke legfrissebb verzióját használod.",
-  "remotebuzzer:remotebuzzer_input_device": "Bemeneti eszköz",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux bemeneti eszköz hardveres triggerekhez (pl. /dev/input/by-id/...). Az akciónkénti billentyűkódokat használja a bejövő események leképezéséhez (fénykép/kollázs/egyéni/nyomtatás/videó)."
+  "using_latest_version": "A fotófülke legfrissebb verzióját használod."
 }

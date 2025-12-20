@@ -102,7 +102,5 @@
   "userinterface": "διεπαφή χρήστη",
   "userinterface:background_admin": "Διαδρομή εικόνας φόντου διαχειριστή",
   "userinterface:background_defaults": "διαδρομή εικόνας φόντου",
-  "using_latest_version": "Το Photobooth είναι ενημερωμένο.",
-  "remotebuzzer:remotebuzzer_input_device": "Input device (Linux event node)",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux input device for hardware triggers (e.g. /dev/input/by-id/...). Uses the per-action key codes (picture/collage/custom/print/video) to map incoming key events."
+  "using_latest_version": "Το Photobooth είναι ενημερωμένο."
 }

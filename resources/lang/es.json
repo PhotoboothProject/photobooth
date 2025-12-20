@@ -722,7 +722,6 @@
   "remotebuzzer:remotebuzzer_printbutton": "Botón de imprimir",
   "remotebuzzer:remotebuzzer_rebootbutton": "Botón de reinicio",
   "remotebuzzer:remotebuzzer_serverip": "IP del servidor del pulsador remoto",
-  "remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada",
   "remotebuzzer:remotebuzzer_shutdownbutton": "Botón de apagado",
   "remotebuzzer:remotebuzzer_startserver": "Iniciar servidor del pulsador remoto",
   "remotebuzzer:remotebuzzer_usebuttons": "Habilitar botones físicos",
@@ -863,6 +862,5 @@
   "video:video_enabled": "Permitir tomar videos cortos",
   "video:video_gif": "Video como GIF",
   "video:video_qr": "Mostrar código QR de vídeo",
-  "wait_message": "Por favor, espere...",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada Linux para disparadores de hardware (p. ej. /dev/input/by-id/...). Usa los códigos de tecla por acción (foto/collage/personalizada/imprimir/vídeo) para asignar eventos entrantes."
+  "wait_message": "Por favor, espere..."
 }
