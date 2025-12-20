@@ -1152,119 +1152,77 @@ class Image
         try {
             // Get resolution of the input image
             $resourceWidth = imagesx($resource);
-            $resourceHight = imagesy($resource);
+            $resourceHeight = imagesy($resource);
 
-            // Reference dimensions of the original demo images, for which the polaroid effect was optimized
-            $referenceDemoWidth = 1024;
-            // $referenceDemoHeight = 682; // Not strictly needed for width-based scaling
+            // Determine the shorter side of the original image, used as a reference for border thickness
+            $resourceShortSide = min($resourceWidth, $resourceHeight);
 
-            // Calculate scaling factor based on the current image's width relative to the reference width
-            $scalingFactor = $resourceWidth / $referenceDemoWidth;
+            // Define base border thickness parameters. These could eventually be configurable in the Admin Panel.
+            $borderThinPercentage = 2; // Percentage of the original short side for thin borders (left, right, top)
+            $factorBottomBorder = 6;   // Multiplier for the bottom border thickness relative to the thin borders
 
-            // --- SCALE ORIGINAL FIXED PIXEL VALUES ---
-            // Original fixed values (from initial implementation), scaled for the current image
-            $scaledBorderWidthAdd = (int) round(25 * $scalingFactor); // +25 for overall width
-            $scaledBorderHeightAdd = (int) round(80 * $scalingFactor); // +80 for overall height
+            // Calculate actual pixel thickness
+            $borderThinPx = (int) round($borderThinPercentage * $resourceShortSide / 100); // for the thin borders
+            $borderBottomPx = $factorBottomBorder * $borderThinPx; // for the thick bottom border
 
-            $scaledImageOffsetX = (int) round(11 * $scalingFactor); // X-offset for copying the image
-            $scaledImageOffsetY = (int) round(11 * $scalingFactor); // Y-offset for copying the image
+            // Calculate dimensions for the final Polaroid image.
+            $finalPolaroidWidth = $resourceWidth + (2 * $borderThinPx);
+            // The final Polaroid height is calculated to maintain the original image's aspect ratio (width/height).
+            $finalPolaroidHeight = (int) round($finalPolaroidWidth / ($resourceWidth / $resourceHeight));
 
-            // Define minimum pixel values for borders/offsets to prevent them from disappearing
-            $minBorderPx = 5;
-            $scaledBorderWidthAdd = max($minBorderPx * 2, $scaledBorderWidthAdd);    // Min 10px for both side borders combined
-            $scaledBorderHeightAdd = max($minBorderPx * 2, $scaledBorderHeightAdd);  // Min 10px for top and bottom borders combined
-            $scaledImageOffsetX = max($minBorderPx, $scaledImageOffsetX);           // Min 5px for image X-offset
-            $scaledImageOffsetY = max($minBorderPx, $scaledImageOffsetY);           // Min 5px for image Y-offset
+            // Calculate the target height for the image *content* within the Polaroid frame.
+            $targetImageContentHeight = $finalPolaroidHeight - $borderThinPx - $borderBottomPx;
 
-            // We create a new image
-            $img = imagecreatetruecolor($resourceWidth + $scaledBorderWidthAdd, $resourceHight + $scaledBorderHeightAdd);
-            if (!$img) {
-                throw new \Exception('Cannot create new image.');
-            }
-            $white = intval(imagecolorallocate($img, 255, 255, 255));
-
-            // We fill in the new white image
-            if (!imagefill($img, 0, 0, $white)) {
-                throw new \Exception('Cannot fill image.');
+            // Error handling: Ensure there is enough vertical space for the image content after borders.
+            if ($targetImageContentHeight <= 0) {
+                throw new \Exception('Polaroid borders are too large, no space left for image content. Please adjust border settings.');
             }
 
-            // We copy the image to which we want to apply the polariod effect in our new image.
-            if (!imagecopy($img, $resource, $scaledImageOffsetX, $scaledImageOffsetY, 0, 0, $resourceWidth, $resourceHight)) {
-                unset($img);
-                throw new \Exception('Cannot copy image.');
+            // Calculate the amount of pixels to be cropped from the original image's height.
+            // This 'cropAmount' is distributed evenly on the top and bottom of the original image.
+            $cropAmountTotal = $resourceHeight - $targetImageContentHeight;
+            // Calculate the offset from the top (and bottom) of the original image for the crop.
+            $cropYOffset = (int) round($cropAmountTotal / 2);
+
+            // Create a new GD image resource for the final Polaroid output.
+            // This canvas will have the calculated final dimensions and serve as the base for the Polaroid.
+            $polaroidCanvas = imagecreatetruecolor($finalPolaroidWidth, $finalPolaroidHeight);
+            if (!$polaroidCanvas) {
+                throw new \Exception('Failed to create new image canvas for Polaroid effect.');
+            }
+            $white = intval(imagecolorallocate($polaroidCanvas, 255, 255, 255));
+
+            // Fill the entire canvas with white. This forms the base for all white borders.
+            if (!imagefill($polaroidCanvas, 0, 0, $white)) {
+                throw new \Exception('Failed to fill Polaroid canvas with white color.');
             }
 
-            // --- Removed Inner Gray Border ---
-            // The subtle gray border around the image itself (inside the white polaroid frame) has been commented out.
-            // Reasoning:
-            // 1. **Minimal visual impact:** Similar to the shadow effect, this thin border (originally 4 pixels wide)
-            //    is often barely noticeable on larger, high-resolution images relative to the overall composition.
-            // 2. **Design simplification:** Removing it contributes to a cleaner, less cluttered aesthetic,
-            //    putting full focus on the main image and the white polaroid frame.
-            //
-            // If an inner border is desired in the future, it might require a more distinct implementation.
-            /*
-            // Border color
-            $color = intval(imagecolorallocate($img, 192, 192, 192));
-
-            // We put a gray border to our image.
-            // Scaling original -4px offset from the image edge
-            $scaledOuterBorderOffset = max(2, (int) round(4 * $scalingFactor)); // Min 2px border offset
-            if (!imagerectangle($img, 0, 0, imagesx($img) - $scaledOuterBorderOffset, imagesy($img) - $scaledOuterBorderOffset, $color)) {
-                unset($img); // Clean up on failure
-                throw new \Exception('Cannot add border.');
-            }*/
-
-            // --- Removed Shadow Effect ---
-            // The shadow effect (originally consisting of multiple gray lines) has been commented out.
-            // Reasoning:
-            // 1. **Perceptibility on larger images:** When images are scaled up, the subtle shadow lines (originally 1-6 pixels wide)
-            //    become proportionally larger but are often still too thin relative to the overall image size to be
-            //    noticeable or to add significant visual depth.
-            // 2. **Performance optimization:** Removing these `imageline()` calls slightly improves performance,
-            //    especially when processing many images.
-            //
-            // If a shadow effect is desired in the future, it might require a different, more pronounced implementation.
-            /*
-            // Shade Colors
-            $gris1 = intval(imagecolorallocate($img, 208, 208, 208));
-            $gris2 = intval(imagecolorallocate($img, 224, 224, 224));
-            $gris3 = intval(imagecolorallocate($img, 240, 240, 240));
-
-            // We add a small shadow
-            // Scaling original shadow line offsets based on their pixel values
-            $scaledOffset_1px = max(1, (int) round(1 * $scalingFactor)); // for imagesy($img) - 1, imagesx($img) - 1
-            $scaledOffset_2px = max(1, (int) round(2 * $scalingFactor)); // for x1=2, y1=2, imagesy($img) - 2, imagesx($img) - 2
-            $scaledOffset_3px = max(1, (int) round(3 * $scalingFactor)); // for imagesy($img) - 3, imagesx($img) - 3
-            $scaledOffset_4px = max(2, (int) round(4 * $scalingFactor)); // for x1=4, y1=4, imagesy($img) - 4, imagesx($img) - 4
-            $scaledOffset_6px = max(3, (int) round(6 * $scalingFactor)); // for x1=6, y1=6
-            if (
-                 // Line 1: $gris1, original (2, imagesy($img) - 3) to (imagesx($img) - 1, imagesy($img) - 3)
-                !imageline($img, $scaledOffset_2px, imagesy($img) - $scaledOffset_3px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_3px, $gris1) ||
-                // Line 2: $gris2, original (4, imagesy($img) - 2) to (imagesx($img) - 1, imagesy($img) - 2)
-                !imageline($img, $scaledOffset_4px, imagesy($img) - $scaledOffset_2px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_2px, $gris2) ||
-                // Line 3: $gris3, original (6, imagesy($img) - 1) to (imagesx($img) - 1, imagesy($img) - 1)
-                !imageline($img, $scaledOffset_6px, imagesy($img) - $scaledOffset_1px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_1px, $gris3) ||
-
-                // Right shadow lines (vertical lines near the right edge)
-                // Line 1: $gris1, original (imagesx($img) - 3, 2) to (imagesx($img) - 3, imagesy($img) - 4)
-                !imageline($img, imagesx($img) - $scaledOffset_3px, $scaledOffset_2px, imagesx($img) - $scaledOffset_3px, imagesy($img) - $scaledOffset_4px, $gris1) ||
-                // Line 2: $gris2, original (imagesx($img) - 2, 4) to (imagesx($img) - 2, imagesy($img) - 4)
-                !imageline($img, imagesx($img) - $scaledOffset_2px, $scaledOffset_4px, imagesx($img) - $scaledOffset_2px, imagesy($img) - $scaledOffset_4px, $gris2) ||
-                // Line 3: $gris3, original (imagesx($img) - 1, 6) to (imagesx($img) - 1, imagesy($img) - 4)
-                !imageline($img, imagesx($img) - $scaledOffset_1px, $scaledOffset_6px, imagesx($img) - $scaledOffset_1px, imagesy($img) - $scaledOffset_4px, $gris3)
-            ) {
-                unset($img);
-                throw new \Exception('Cannot add shadow.');
+            // Copy the original image onto the Polaroid canvas.
+            // The image is copied without scaling. Vertical cropping is achieved by specifying
+            // the source's Y-offset ($cropYOffset) and the source's effective height ($targetImageContentHeight).
+            // The destination X/Y positions ($borderThinPx, $borderThinPx) define the top-left
+            // corner of where the (cropped) image content starts within the Polaroid canvas.
+            if (!imagecopy(
+                $polaroidCanvas,             // Destination image resource
+                $resource,                   // Source image resource
+                $borderThinPx,               // Destination X-coordinate (left border)
+                $borderThinPx,               // Destination Y-coordinate (top border)
+                0,                           // Source X-coordinate (start from left of original image)
+                $cropYOffset,                // Source Y-coordinate (start from Y-offset within original image for cropping)
+                $resourceWidth,              // Width of the source rectangle to copy (full original width)
+                $targetImageContentHeight    // Height of the source rectangle to copy (cropped height from original)
+            )) {
+                unset($polaroidCanvas);
+                throw new \Exception('Failed to copy image onto Polaroid canvas.');
             }
-            */
+
             // Convert hex color string to RGB values
             $colorComponents = self::getColorComponents($this->polaroidBgColor);
             list($rbcc, $gbcc, $bbcc) = $colorComponents;
 
             // We rotate the image
-            $background = intval(imagecolorallocate($img, $rbcc, $gbcc, $bbcc));
-            $rotatedImg = imagerotate($img, $this->polaroidRotation, $background);
+            $rotationBackgroundColor = intval(imagecolorallocate($polaroidCanvas, $rbcc, $gbcc, $bbcc));
+            $rotatedImg = imagerotate($polaroidCanvas, $this->polaroidRotation, $rotationBackgroundColor);
 
             if (!$rotatedImg) {
                 throw new \Exception('Cannot rotate image.');
@@ -1273,8 +1231,8 @@ class Image
             $this->addErrorData($e->getMessage());
 
             // Try to clear cache
-            if (isset($img) && $img instanceof GdImage) {
-                unset($img);
+            if (isset($polaroidCanvas) && $polaroidCanvas instanceof GdImage) {
+                unset($polaroidCanvas);
             }
 
             // Re-throw exception on loglevel > 1
@@ -1287,7 +1245,7 @@ class Image
         }
         $this->imageModified = true;
         // We destroy the image we have been working with
-        unset($img);
+        unset($polaroidCanvas);
 
         // We return the rotated image
         return $rotatedImg;
