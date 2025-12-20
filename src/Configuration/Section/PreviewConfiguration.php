@@ -1,0 +1,98 @@
+<?php
+
+namespace Photobooth\Configuration\Section;
+
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
+final class PreviewConfiguration
+{
+    public static function getNode(): NodeDefinition
+    {
+        return (new TreeBuilder('preview'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
+            ->children()
+                ->enumNode('mode')
+                    ->values(['none', 'device_cam', 'url'])
+                    ->defaultValue('none')
+                    ->end()
+                ->booleanNode('camTakesPic')->defaultValue(false)->end()
+                ->enumNode('style')
+                    ->values(['none', 'device_cam', 'url'])
+                    ->defaultValue('none')
+                    ->end()
+                ->integerNode('stop_time')
+                    ->defaultValue(2)
+                    ->min(0)
+                    ->max(10)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+                ->enumNode('style')
+                    ->values(['fill', 'contain', 'cover', 'none', 'scale-down'])
+                    ->defaultValue('scale-down')
+                    ->end()
+                ->enumNode('flip')
+                    ->values(['off', 'flip-horizontal', 'flip-vertical'])
+                    ->defaultValue('off')
+                    ->end()
+                ->enumNode('rotation')
+                    ->values(['0deg', '90deg', '-90deg', '180deg', '45deg', '-45deg'])
+                    ->defaultValue('0deg')
+                    ->end()
+                ->scalarNode('url')->defaultValue('')->end()
+                ->integerNode('url_delay')
+                    ->defaultValue(1000)
+                    ->min(0)
+                    ->max(30000)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+                ->integerNode('videoWidth')
+                    ->defaultValue(1280)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+                ->integerNode('videoHeight')
+                    ->defaultValue(720)
+            ->beforeNormalization()
+            ->ifString()
+            ->then(function (string $value): int {
+                return intval($value);
+            })
+            ->end()
+            ->end()
+            ->integerNode('videoWidth_collage')
+            ->defaultValue(1280)
+            ->beforeNormalization()
+            ->ifString()
+            ->then(function (string $value): int {
+                return intval($value);
+            })
+            ->end()
+            ->end()
+            ->integerNode('videoHeight_collage')
+            ->defaultValue(720)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+                ->enumNode('camera_mode')
+                    ->values(['user', 'environment'])
+                    ->defaultValue('user')
+                    ->end()
+                ->booleanNode('asBackground')->defaultValue(false)->end()
+                ->booleanNode('showFrame')->defaultValue(false)->end()
+                ->booleanNode('extend_by_frame')->defaultValue(false)->end()
+                ->booleanNode('simpleExec')->defaultValue(true)->end()
+                ->booleanNode('bsm')->defaultValue(true)->end()
+            ->end();
+    }
+}
