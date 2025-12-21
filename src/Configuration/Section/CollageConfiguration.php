@@ -1,0 +1,83 @@
+<?php
+
+namespace Photobooth\Configuration\Section;
+
+use Photobooth\Enum\CollageLayoutEnum;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
+final class CollageConfiguration
+{
+    public static function getNode(): NodeDefinition
+    {
+        return (new TreeBuilder('collage'))->getRootNode()->addDefaultsIfNotSet()
+            ->ignoreExtraKeys()
+            ->children()
+                ->booleanNode('enabled')->defaultValue(true)->end()
+                ->integerNode('cntdwn_time')
+                    ->defaultValue(3)
+                    ->min(0)
+                    ->max(10)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+                ->booleanNode('continuous')->defaultValue(true)->end()
+                ->integerNode('continuous_time')
+                    ->defaultValue(5)
+                    ->min(0)
+                    ->max(20)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+                ->enumNode('layout')
+                    ->values(CollageLayoutEnum::cases())
+                    ->defaultValue(CollageLayoutEnum::TWO_PLUS_TWO_2)
+                    ->beforeNormalization()
+                        ->always(function ($value) {
+                            if (is_string($value)) {
+                                $value = CollageLayoutEnum::from($value);
+                            }
+                            return $value;
+                        })
+                        ->end()
+                    ->end()
+                ->enumNode('resolution')
+                    ->values(['150dpi', '300dpi', '400dpi', '600dpi'])
+                    ->defaultValue('300dpi')
+                    ->end()
+                ->scalarNode('dashedline_color')->defaultValue('#000000')->end()
+                ->booleanNode('keep_single_images')->defaultValue(false)->end()
+                ->scalarNode('key')
+                    ->info('specify key id (e.g. 13 is the enter key) to use that key to reload the page, use for example https://keycode.info to get the key code')
+                    ->defaultValue('')
+                    ->end()
+                ->scalarNode('background_color')->defaultValue('#ffffff')->end()
+                ->enumNode('take_frame')
+                    ->values(['off', 'always', 'once'])
+                    ->defaultValue('off')
+                    ->end()
+                ->scalarNode('frame')->defaultValue('')->end()
+                ->booleanNode('placeholder')->defaultValue(false)->end()
+                ->integerNode('placeholderposition')
+                    ->defaultValue(1)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+                ->scalarNode('placeholderpath')->defaultValue('')->end()
+                ->scalarNode('background')->defaultValue('')->end()
+                ->integerNode('limit')
+                    ->defaultValue(4)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int { return intval($value); })
+                        ->end()
+                    ->end()
+            ->end();
+    }
+}

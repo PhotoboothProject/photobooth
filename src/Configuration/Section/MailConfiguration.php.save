@@ -1,0 +1,15 @@
+<?php
+
+namespace Photobooth\Configuration\Section;
+
+use Photobooth\Enum\MailSecurityTypeEnum;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
+final class MailConfiguration
+{
+    public static function getNode(): NodeDefinition
+    {
+
+    }
+}
