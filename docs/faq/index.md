@@ -156,7 +156,7 @@ See [Hide cursor, screen blanking and screen saver](hide-cursor.md) for Pi OS-sp
 
 ## How to use a live stream as background at countdown?
 
-See the dedicated [Preview and live background](preview.md) guide for:
+See the dedicated [Preview and live background](preview.md) guide.
 
 ---
 
@@ -195,7 +195,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
 
 ## I've trouble setting up E-Mail config. How do I solve my problem?
 
-If connection fails some help can be found [here](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
+If connection fails some help can be found inside the official [PHPMailer Wiki](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
 
 -   Should be obvious but the photobooth must be connected to WIFI/internet to send photos live.
 
@@ -445,10 +445,10 @@ You have a remote server (e.g. with your website on it) or another Raspberry Pi 
 -   You should have a remote server with an SSH login. Know your username and password: (e.g.: [username.strato-hosting.eu]@ssh.strato.de)
 -   We will be using the Post-photo script / command of the Photobox which you can find in the admin panel in the section Commands.
 -   The command is being executed after the picture has been taken and gets the picture’s name as an attribute.
--   Command:
+-   Command (adjust path if needed):
 
 ```
-scp /var/www/html/photobooth/data/images/%s [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures_on_the_remote_host]
+scp /var/www/html/data/images/%s [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures_on_the_remote_host]
 ```
 
 -   If we keep it like that the remote server would require the source server to type in a password each time a picture is being copied to the remote server. An SSH connection using a private/public SSH key needs to be established:
@@ -468,7 +468,7 @@ sudo -u www-data ssh-copy-id [username@remotehost]
 3. You can now manually test whether the connection works. Try to copy anything to the remote server and change the file in the below example to a file that you actually have on your source machine. You shouldn’t be prompted with a password, but the copy and transfer should complete successfully just with the following command. If that is going to be successful, copying your pictures automatically should work now.
 
 ```
-sudo -u www-data scp /var/www/html/photobooth/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
+sudo -u www-data scp /var/www/html/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
 ```
 
 You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server.
