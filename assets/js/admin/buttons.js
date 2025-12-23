@@ -1,5 +1,98 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals photoboothTools shellCommand csrf */
+
+
+/* Saves the admin settings via the API.
+ * Displays a loader during the saving process.
+ *
+ * @param {object} [options] - Configuration options for the save operation.
+ * @param {boolean} [options.reloadOnSuccess=false] - If true, reloads the page on successful save.
+ * @param {boolean} [options.reloadOnError=true] - If true, reloads the page on save failure.
+ * @returns {Promise<Object>} A Promise that resolves with the API response data on success,
+ *                            or rejects with an Error object on failure.
+ */
+function saveAdminSettings(options = {}) {
+    const defaultOptions = {
+        reloadOnSuccess: true,
+        reloadOnError: false
+    };
+    const currentOptions = { ...defaultOptions, ...options }; // Merge default with provided options
+
+    // Show loader
+    $('.pageLoader').addClass('isActive');
+    $('.pageLoader').find('label').html(photoboothTools.getTranslation('saving'));
+
+    const data = new FormData(document.querySelector('form'));
+    data.append('type', 'config');
+
+    return fetch('../api/admin.php', {
+        method: 'POST',
+        body: data
+    })
+    .then((response) => {
+        // Hide loader after the fetch request completes, regardless of success or failure
+        $('.pageLoader').removeClass('isActive');
+
+        if (!response.ok) {
+            // If the HTTP response is not OK (e.g., 404, 500), throw an error
+            return response.json().then(errorData => {
+                const errorMessage = errorData.message || `HTTP error! status: ${response.status}`;
+                photoboothTools.console.logDev(errorMessage);
+                throw new Error(errorMessage);
+            }).catch(() => {
+                // Handle cases where response is not JSON or parsing fails
+                const errorMessage = `HTTP error! status: ${response.status}`;
+                photoboothTools.console.logDev(errorMessage);
+                throw new Error(errorMessage);
+            });
+        }
+        return response.json(); // Parse JSON from the response
+    })
+    .then((responseData) => {
+        // Process the JSON response data
+        if (responseData.status === 'success') {
+            // After successful save, if the form was dirty, reset it to clean state.
+            $('#save-admin-btn').removeClass('isDirty');
+            // Also, update the initial serialized state to the newly saved state
+            // to correctly detect future changes without a full page reload.
+            $('form').data('initialSerialized', $('form').serialize());
+            if (currentOptions.reloadOnSuccess) {
+                window.location.reload();
+                // We return a pending Promise here, as reload will prevent subsequent .then() from running
+                return new Promise(() => {});
+            }
+            return responseData; // Saving successful, resolve with response data
+        } else {
+            // API returned a non-success status, but HTTP fetch was successful
+            const errorMessage = responseData.message || 'Saving failed with API error';
+            photoboothTools.console.logDev(errorMessage);
+            throw new Error(errorMessage); // Reject with a specific error
+        }
+    })
+    .catch((error) => {
+        // Catch any errors during the fetch, JSON parsing, or from API non-success status
+        photoboothTools.console.logDev('Error during admin settings save:', error);
+
+        // Ensure loader is hidden in case of unexpected errors (already done above, but good safeguard)
+        $('.pageLoader').removeClass('isActive');
+
+        if (currentOptions.reloadOnError) {
+            window.location.reload();
+            // We return a pending Promise here, as reload will prevent subsequent .catch() from running
+            return new Promise(() => {});
+        }
+        throw error; // Re-throw the error to be caught by the calling handlers
+    });
+}
+
+/* Checks if the admin settings form has pending changes that need to be saved.
+ * Relies on the 'isDirty' class being added to the #save-admin-btn by the form change listener.
+ *
+ * @returns {boolean} True if there are unsaved changes (i.e., the save button has 'isDirty' class), false otherwise.
+ */
+function hasPendingAdminChanges() {
+    return $('#save-admin-btn').hasClass('isDirty');
+}
 $(function () {
     // Highlight save button on form changes
     const $saveButton = $('#save-admin-btn');
@@ -56,6 +149,15 @@ $(function () {
     $('#save-admin-btn').on('click', function (e) {
         e.preventDefault();
 
+        if (!hasPendingAdminChanges()) {
+            //TODO: move this to saveAdminSettings
+
+            // console.log('No pending changes to save. Save button clicked, but form is clean.');
+            // Optional: Display a toast message like "Nothing to save."
+            // photoboothTools.openToast(photoboothTools.getTranslation('no_changes_to_save'), 'info', 3000);
+            return; // Exit if no changes
+        }
+
         // show loader
         $('.pageLoader').addClass('isActive');
         $('.pageLoader').find('label').html(photoboothTools.getTranslation('saving'));
@@ -66,21 +168,17 @@ $(function () {
             data.append(csrf.key, csrf.token);
         }
 
-        fetch('../api/admin.php', {
-            method: 'POST',
-            body: data
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.status === 'success') {
-                    window.location.reload();
-                } else {
-                    photoboothTools.console.logDev(data.message);
-                    window.location.reload();
-                }
+        // The admin save button should always reload the page on success or failure
+        saveAdminSettings({ reloadOnSuccess: true, reloadOnError: true })
+            .then(() => {
+                // This block will theoretically not be reached due to reloadOnSuccess,
+                // but is kept for structural completeness if options change.
+                console.log('Admin settings saved successfully via button (page reloaded).');
             })
             .catch((error) => {
-                photoboothTools.console.logDev('Error:', error);
+                // This block will theoretically not be reached due to reloadOnError,
+                // but is kept for structural completeness if options change.
+                console.error('Failed to save admin settings via button (page reloaded):', error);
             });
     });
 
@@ -90,9 +188,42 @@ $(function () {
         return false;
     });
 
-    $('#layout-generator').on('click', function (ev) {
+    $('#collage-designer').on('click', function (ev) {
         ev.preventDefault();
-        window.open('../admin/generator');
+
+        if (!hasPendingAdminChanges()) {
+            //TODO: move this to saveAdminSettings
+
+            console.log('No pending changes detected. Navigating directly to Collage Designer.');
+            // If no changes, directly navigate without saving
+            const designerUrl = '../admin/collage-designer';
+            const currentHash = window.location.hash ? window.location.hash.substring(1) : '';
+            let targetUrl = designerUrl;
+            if (currentHash) {
+                targetUrl += '?from=' + currentHash;
+            }
+            window.location.href = targetUrl;
+            return; // Exit after navigation
+        }
+
+        // If there are pending changes, save them first
+        saveAdminSettings({ reloadOnSuccess: false, reloadOnError: false }) // No reload here
+            .then(() => {
+                // Saving successful: Navigate to the Collage Designer
+                const designerUrl = '../admin/collage-designer';
+                const currentHash = window.location.hash ? window.location.hash.substring(1) : '';
+                let targetUrl = designerUrl;
+                if (currentHash) {
+                    targetUrl += '?from=' + currentHash;
+                }
+                window.location.href = targetUrl;
+            })
+            .catch((error) => {
+                // Saving failed: Handle error (e.g., display a toast, do not navigate)
+                console.error('Failed to save admin settings before navigating to Collage Designer:', error);
+                // Optional: photoboothTools.openToast(photoboothTools.getTranslation('saving_failed_before_designer'), 'error', 5000);
+                // We do not navigate to the designer if saving fails.
+            });
 
         return false;
     });

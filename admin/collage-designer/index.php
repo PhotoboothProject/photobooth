@@ -1,0 +1,156 @@
+<?php
+require_once '../../lib/boot.php';
+
+use Photobooth\Service\ApplicationService;
+use Photobooth\Service\ConfigurationService;
+use Photobooth\Service\LanguageService;
+use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\FontUtility;
+use Photobooth\Utility\ImageUtility;
+use Photobooth\Service\AssetService;
+
+// Login / Authentication check
+if (!(
+    !$config['login']['enabled'] ||
+    (!$config['protect']['localhost_admin'] && isset($_SERVER['SERVER_ADDR']) &&  $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
+    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['admin']
+)) {
+    header('location: ' . PathUtility::getPublicPath('login'));
+    exit();
+}
+
+// =============================================================
+// Designer-specific initializing
+// Here we load the relevant services and helperclasses
+// =============================================================
+$configurationService = ConfigurationService::getInstance();
+$languageService = LanguageService::getInstance();
+$assetService = AssetService::getInstance();
+
+// Example: Load Demo Pictures for the preview
+$demoImages = ImageUtility::getDemoImages(8);
+
+// Example: Load available fonts
+$font_paths = [
+    PathUtility::getAbsolutePath('resources/fonts'),
+    PathUtility::getAbsolutePath('private/fonts')
+];
+$font_styles = '<style>';
+$font_family_options = [];
+foreach ($font_paths as $path) {
+    try {
+        $files = FontUtility::getFontsFromPath($path, false);
+        $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
+        if (count($files) > 0) {
+            foreach ($files as $name => $path) {
+                $font_styles .= '@font-face { font-family: "' . $name . '"; src: url(' . $path . ') format("truetype"); }';
+                $font_family_options[$path] = $name;
+            }
+        }
+    } catch (\Exception $e) { /* Handle error or log */ }
+}
+$font_styles .= '</style>';
+
+// Optional: Initial loading of a default collage design or empty design
+// This could later be controlled by the CollageManager
+$initialCollageJson = '{"general": {"final_width": 1500, "final_height": 1000}, "elements": []}'; // Minimal JSON
+
+// =============================================================
+// Standard Admin Panel Head & Body
+// =============================================================
+$pageTitle = 'Collage Designer - ' . ApplicationService::getInstance()->getTitle();
+include PathUtility::getAbsolutePath('admin/components/head.admin.php');
+include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g. getMenuBtn
+
+?>
+
+<div class="w-full h-screen bg-brand-2 px-3 md:px-6 py-6 md:py-12 overflow-x-hidden overflow-y-auto">
+    <?= $font_styles ?>
+     <!-- Modal styles and other general designer styles go here -->
+    <style>
+        /* Your modal and other general designer styles */
+    </style>
+    <style id="fontselectedStyle"></style>
+
+    <div class="w-full flex items-center justify-center flex-col">
+        <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center relative">
+            <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
+                <?= $languageService->translate('collage_designer_title') ?>
+            </div>
+
+            <!-- Main designer area -->
+            <div class="main_editor_area mt-4 w-full flex flex-col gap-4">
+                <!-- 1 DESIGN SELECTOR -->
+                <div class="design-selector-container w-full p-2 md:p-4 border border-gray-200 rounded-md flex flex-col gap-4">
+                    <?php
+                        include 'components/design-selector.php';
+                    ?>
+                </div> <!-- End design-selector-container -->
+
+                 <!-- Main design area with two columns for settings and preview -->
+                <div class="main-design-panel w-full flex flex-col md:flex-row gap-4">
+                    <!-- LEFT PANEL: Element-specific settings and managers -->
+                    <div class="left-panel w-full flex-1 flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
+                        <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
+                            <?= $languageService->translate('element_settings_title') ?>
+                        </span>
+                        <?php
+                            // Include components relevant to element-specific adjustments
+                            include 'components/element-settings-panel.php'; // Dynamic settings for active element
+                            include 'components/text-fields-manager.php';  // Text fields management
+                            include 'components/image-placeholders-manager.php'; // Image placeholders management
+                        ?>
+                    </div><!-- End left-panel -->
+
+                    <!-- RIGHT PANEL: PREVIEW -->
+                    <div class="right-panel w-full flex-1 lg:flex-[2_1_0%] flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
+                        <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
+                            <?= $languageService->translate('preview_title') ?>
+                        </span>
+                        <?php include 'components/preview-canvas.php'; // Contains #result_canvas ?>
+                    </div><!-- End right-panel -->
+                </div> <!-- End main-design-panel -->
+
+                <!-- BOTTOM PANEL: General and placeholder settings (if not element-specific) -->
+                <div class="bottom-panel w-full flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
+                    <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
+                        <?= $languageService->translate('general_placeholder_settings_title') ?>
+                    </span>
+                    <?php
+                        include 'components/general-settings.php';     // General settings
+                        include 'components/placeholder-settings.php'; // Placeholder settings
+                    ?>
+                </div> <!-- End bottom-panel -->
+
+            </div> <!-- End main_editor_area -->
+
+            <form id="configuration_form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data" class="hidden">
+                <input type="hidden" name="new-configuration" value="" />
+                <input type="hidden" name="current-design-name" value="" />
+            </form>
+        </div>
+        <div class="my-4"></div>
+        <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
+                <?php
+                    echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
+                    echo getMenuBtn(PathUtility::getPublicPath('test/collage.php'), 'collageTest', $config['icons']['take_collage'], true);
+                    if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
+                        echo getMenuBtn(PathUtility::getPublicPath('login/logout.php'), 'logout', $config['icons']['logout']);
+                    }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/designer.js') . '"></script>'; // Your main JS
+// Optional: Specific toasts/messages depending on PHP processing
+if (isset($_SESSION['designer_message'])) {
+    echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';
+    unset($_SESSION['designer_message']);
+}
+include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
+?>

@@ -1017,12 +1017,12 @@ return [
             ],
             'value' => $config['collage']['orientation'],
         ],
-        'layout_generator' => [
+        'collage_designer' => [
             'view' => 'expert',
             'type' => 'button',
-            'placeholder' => 'layout_generator',
-            'name' => 'LAYOUTGENERATOR',
-            'value' => 'layout-generator',
+            'placeholder' => 'collage-designer',
+            'name' => 'COLLAGEDESIGNER',
+            'value' => 'collage-designer',
         ],
         'collage_dashedline_color' => [
             'view' => 'advanced',

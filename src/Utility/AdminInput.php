@@ -466,46 +466,144 @@ class AdminInput
         $themeNames = array_keys($themes);
         sort($themeNames);
 
-        $options = '
+        $optionsHtml = '
             <option value="">
                 ' . $languageService->translate('theme_choose') . '
             </option>
         ';
         foreach ($themeNames as $name) {
-            $options .= '<option value="' . htmlspecialchars($name, ENT_QUOTES) . '">' . htmlspecialchars($name, ENT_QUOTES) . '</option>';
+            $selected = ($name === $currentTheme) ? ' selected="selected"' : '';
+            $optionsHtml .= '<option value="' . htmlspecialchars($name, ENT_QUOTES) . '"' . $selected . '>' . htmlspecialchars($name, ENT_QUOTES) . '</option>';
         }
 
+        // Prepare the settings array for renderConfigManager
+        $configManagerSetting = [
+            'name_input_id' => 'theme-name',
+            'name_input_placeholder' => 'theme_name_placeholder', // Language key
+            'select_id' => 'theme-select',
+            'select_label_headline' => $label, // Use the provided label for the headline
+            'select_options_html' => $optionsHtml,
+            'current_name_hidden_field_name' => 'theme[current]',
+            'current_name_hidden_field_value' => $currentTheme,
+
+            'save_btn_id' => 'theme-save-btn',
+            'save_btn_title_label_key' => 'theme_save', // Language key for title
+            'save_btn_onclick' => 'adminThemeSave();',
+
+            'load_btn_id' => 'theme-load-btn',
+            'load_btn_title_label_key' => 'theme_load', // Language key for title
+            'load_btn_onclick' => 'adminThemeLoad();',
+
+            'delete_btn_id' => 'theme-delete-btn',
+            'delete_btn_title_label_key' => 'theme_delete', // Language key for title
+            'delete_btn_onclick' => 'adminThemeDelete();',
+        ];
+
+        return self::renderConfigManager($configManagerSetting);
+    }
+
+    /* Renders a generic configuration management UI component.
+     * This includes a dropdown for selection, an input for naming, and buttons for save, load, and delete.
+     * The structure and button styling are derived from the theme management UI.
+     *
+     * @param array $setting Configuration array for the component. Expected keys (with defaults):
+     *   - 'name_input_id': HTML ID for the name input field.
+     *   - 'name_input_placeholder': Placeholder text for the name input field (language key).
+     *   - 'select_id': HTML ID for the select dropdown.
+     *   - 'select_label_headline': Headline label for the select dropdown (language key).
+     *   - 'select_options_html': HTML string for the <option> tags inside the select.
+     *   - 'current_name_hidden_field_name': Name attribute for the hidden input field that stores the current active configuration.
+     *   - 'current_name_hidden_field_value': Value for the hidden input field.
+     *
+     *   - 'save_btn_id': HTML ID for the save button.
+     *   - 'save_btn_title_label_key': Language key for the save button's title/tooltip.
+     *   - 'save_btn_onclick': JavaScript function to call on save.
+     *   - 'save_btn_classes': Additional CSS classes for the save button (e.g., specific colors, hover states).
+     *   - 'save_btn_icon_class': Font Awesome class for the save button's icon.
+     *
+     *   - 'load_btn_id': HTML ID for the load button.
+     *   - 'load_btn_title_label_key': Language key for the load button's title/tooltip.
+     *   - 'load_btn_onclick': JavaScript function to call on load.
+     *   - 'load_btn_classes': Additional CSS classes for the load button.
+     *   - 'load_btn_icon_class': Font Awesome class for the load button's icon.
+     *
+     *   - 'delete_btn_id': HTML ID for the delete button.
+     *   - 'delete_btn_title_label_key': Language key for the delete button's title/tooltip.
+     *   - 'delete_btn_onclick': JavaScript function to call on delete.
+     *   - 'delete_btn_classes': Additional CSS classes for the delete button.
+     *   - 'delete_btn_icon_class': Font Awesome class for the delete button's icon.
+     *
+     * @return string The rendered HTML.
+     */
+    public static function renderConfigManager(array $setting): string
+    {
+        $languageService = LanguageService::getInstance();
+
+        // Fallback for default values to make usage easier
+        $setting = array_merge([
+            'name_input_id' => 'config-name-input',
+            'name_input_placeholder' => 'Enter name', // Language key expected
+            'select_id' => 'config-select',
+            'select_label_headline' => 'Select Configuration', // Language key expected for headline
+            'select_options_html' => '<option value="">' . $languageService->translate('New Configuration') . '</option>',
+            'current_name_hidden_field_name' => 'config[current]',
+            'current_name_hidden_field_value' => '',
+
+            'save_btn_id' => 'config-save-btn',
+            'save_btn_title_label_key' => 'Save', // Language key expected for title
+            'save_btn_onclick' => 'saveConfig();',
+            'save_btn_classes' => 'bg-brand-1 text-white border-brand-1 hover:bg-content-1 hover:text-brand-1',
+            'save_btn_icon_class' => 'fa fa-save',
+
+            'load_btn_id' => 'config-load-btn',
+            'load_btn_title_label_key' => 'Load', // Language key expected for title
+            'load_btn_onclick' => 'loadConfig();',
+            'load_btn_classes' => 'bg-content-1 text-brand-1 border-brand-1 hover:bg-brand-1 hover:text-white',
+            'load_btn_icon_class' => 'fa fa-refresh',
+
+            'delete_btn_id' => 'config-delete-btn',
+            'delete_btn_title_label_key' => 'Delete', // Language key expected for title
+            'delete_btn_onclick' => 'deleteConfig();',
+            'delete_btn_classes' => 'bg-content-1 text-red-600 border-red-600 hover:bg-red-600 hover:text-white',
+            'delete_btn_icon_class' => 'fa fa-trash',
+        ], $setting);
+
+        // Define common base classes for the icon buttons, which are not customizable per button
+        $iconButtonBaseClasses = "h-8 w-8 flex items-center justify-center rounded-full transition text-[10px] font-bold border border-solid";
+
         return '
-            ' . self::renderHeadline($label) . '
+            ' . self::renderHeadline($setting['select_label_headline']) . '
             <div class="flex flex-col gap-2">
                 <div class="flex flex-col md:flex-row gap-2 items-stretch md:items-center">
                     <input
                         type="hidden"
-                        name="theme[current]"
-                        value="' . htmlspecialchars($currentTheme, ENT_QUOTES) . '"
+                        name="' . htmlspecialchars($setting['current_name_hidden_field_name'], ENT_QUOTES) . '"
+                        value="' . htmlspecialchars($setting['current_name_hidden_field_value'], ENT_QUOTES) . '"
                     />
                     <input
-                        id="theme-name"
+                        id="' . htmlspecialchars($setting['name_input_id'], ENT_QUOTES) . '"
                         type="text"
                         class="flex-1 min-w-0 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
-                        placeholder="' . $languageService->translate('theme_name_placeholder') . '"
+                        placeholder="' . $languageService->translate($setting['name_input_placeholder']) . '"
                     />
                     <select
-                        id="theme-select"
-                        class="flex-1 min-w-0 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
+                        id="' . htmlspecialchars($setting['select_id'], ENT_QUOTES) . '"
+                        class="flex-1 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
+                        onchange="' . htmlspecialchars($setting['load_btn_onclick'], ENT_QUOTES) . '" <!-- Call load function on change -->
                     >
-                        ' . $options . '
+                        ' . $setting['select_options_html'] . '
                     </select>
                 </div>
                 <div class="flex flex-row gap-2 items-center justify-between">
                     <div class="flex flex-row gap-2">
                         <button
-                            id="theme-save-btn"
+                            id="' . htmlspecialchars($setting['save_btn_id'], ENT_QUOTES) . '"
                             type="button"
-                            class="h-8 w-8 flex items-center justify-center rounded-full bg-brand-1 text-white border border-solid border-brand-1 hover:bg-content-1 hover:text-brand-1 transition text-[10px] font-bold"
-                            title="' . $languageService->translate('theme_save') . '"
+                            class="' . htmlspecialchars($iconButtonBaseClasses . ' ' . $setting['save_btn_classes'], ENT_QUOTES) . '"
+                            title="' . $languageService->translate($setting['save_btn_title_label_key']) . '"
+                            onclick="' . htmlspecialchars($setting['save_btn_onclick'], ENT_QUOTES) . '"
                         >
-                            <i class="fa fa-save"></i>
+                            <i class="' . htmlspecialchars($setting['save_btn_icon_class'], ENT_QUOTES) . '"></i>
                         </button>
                     </div>
                     <div class="flex flex-row gap-2">
@@ -527,20 +625,22 @@ class AdminInput
                         </button>
                         <input id="theme-import-input" type="file" class="hidden" accept=".zip" />
                         <button
-                            id="theme-load-btn"
+                            id="' . htmlspecialchars($setting['load_btn_id'], ENT_QUOTES) . '"
                             type="button"
-                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
-                            title="' . $languageService->translate('theme_load') . '"
+                            class="' . htmlspecialchars($iconButtonBaseClasses . ' ' . $setting['load_btn_classes'], ENT_QUOTES) . '"
+                            title="' . $languageService->translate($setting['load_btn_title_label_key']) . '"
+                            onclick="' . htmlspecialchars($setting['load_btn_onclick'], ENT_QUOTES) . '"
                         >
-                            <i class="fa fa-refresh"></i>
+                            <i class="' . htmlspecialchars($setting['load_btn_icon_class'], ENT_QUOTES) . '"></i>
                         </button>
                         <button
-                            id="theme-delete-btn"
+                            id="' . htmlspecialchars($setting['delete_btn_id'], ENT_QUOTES) . '"
                             type="button"
-                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-red-600 border border-solid border-red-600 hover:bg-red-600 hover:text-white transition text-[10px] font-bold"
-                            title="' . $languageService->translate('theme_delete') . '"
+                            class="' . htmlspecialchars($iconButtonBaseClasses . ' ' . $setting['delete_btn_classes'], ENT_QUOTES) . '"
+                            title="' . $languageService->translate($setting['delete_btn_title_label_key']) . '"
+                            onclick="' . htmlspecialchars($setting['delete_btn_onclick'], ENT_QUOTES) . '"
                         >
-                            <i class="fa fa-trash"></i>
+                            <i class="' . htmlspecialchars($setting['delete_btn_icon_class'], ENT_QUOTES) . '"></i>
                         </button>
                     </div>
                 </div>
