@@ -10,6 +10,19 @@ $(function () {
         const $deleteButton = $('#theme-delete-btn');
         const $select = $('#theme-select');
         const $currentInput = $('input[name="theme[current]"]');
+        let lastAppliedThemeSnapshot = null;
+
+        function snapshotTheme() {
+            lastAppliedThemeSnapshot = JSON.stringify(collectCurrentTheme());
+        }
+
+        function hasUnsavedChanges() {
+            if (lastAppliedThemeSnapshot === null) {
+                return false;
+            }
+
+            return JSON.stringify(collectCurrentTheme()) !== lastAppliedThemeSnapshot;
+        }
 
         function updateLoadButtonState() {
             if ($loadButton.length === 0 || $deleteButton.length === 0) {
@@ -220,6 +233,9 @@ $(function () {
                     }
 
                     updateLoadButtonState();
+                    if (lastAppliedThemeSnapshot === null) {
+                        snapshotTheme();
+                    }
                 })
                 .fail(() => {
                     photoboothTools.overlay.showError(photoboothTools.getTranslation('error'));
@@ -266,6 +282,7 @@ $(function () {
                     $nameInput.val(name);
                     refreshSelect();
                     updateLoadButtonState();
+                    snapshotTheme();
                 })
                 .fail(() => {
                     photoboothTools.overlay.showError(photoboothTools.getTranslation('error'));
@@ -276,6 +293,14 @@ $(function () {
             const selected = $select.val();
             if (!selected) {
                 return;
+            }
+
+            if (hasUnsavedChanges()) {
+                const confirmMessage = photoboothTools.getTranslation('theme_unsaved_confirm');
+                const confirmed = window.confirm(confirmMessage);
+                if (!confirmed) {
+                    return;
+                }
             }
 
             $.getJSON(apiBase, {
@@ -292,6 +317,7 @@ $(function () {
                         if ($nameInput.length) {
                             $nameInput.val(selected);
                         }
+                        snapshotTheme();
                         updateLoadButtonState();
                     }
                 })

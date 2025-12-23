@@ -922,6 +922,7 @@
   "theme_delete": "Theme löschen",
   "theme_choose": "Theme auswählen",
   "theme_override_confirm": "Theme \"%s\" wird überschrieben. Fortfahren?",
+  "theme_unsaved_confirm": "Es gibt ungespeicherte Theme-Änderungen. Laden verwirft sie. Fortfahren?",
   "text_settings": "Text-Einstellungen",
   "toggleFullscreen": "Vollbildmodus umschalten",
   "translate": "Übersetzen",
