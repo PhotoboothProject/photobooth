@@ -8,13 +8,6 @@ on:
       - 'docs/**'
       - 'assets/**'
       - 'mkdocs_remote.yml'
-  pull_request:
-    branches:
-      - dev
-    paths:
-      - 'docs/**'
-      - 'assets/**'
-      - 'mkdocs_remote.yml'
   workflow_dispatch:
 
 permissions:
@@ -50,6 +43,4 @@ jobs:
           fi
       - name: Push changes to dev
         if: steps.commit.outputs.created == 'true'
-        env:
-          TARGET_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || 'dev' }}
-        run: git push origin "$TARGET_BRANCH"
+        run: git push origin dev
