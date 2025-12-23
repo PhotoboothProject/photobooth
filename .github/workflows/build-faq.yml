@@ -1,0 +1,55 @@
+name: Build FAQ site
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'docs/**'
+      - 'assets/**'
+      - 'mkdocs_remote.yml'
+  pull_request:
+    branches:
+      - dev
+    paths:
+      - 'docs/**'
+      - 'assets/**'
+      - 'mkdocs_remote.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install MkDocs
+        run: pip install mkdocs
+      - name: Build docs into faq
+        run: mkdocs build --config-file mkdocs_remote.yml --site-dir faq
+      - name: Commit built FAQ
+        id: commit
+        run: |
+          if git status --porcelain faq | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add faq
+            git commit -m "chore: build FAQ site [skip ci]"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Push changes to dev
+        if: steps.commit.outputs.created == 'true'
+        env:
+          TARGET_BRANCH: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || 'dev' }}
+        run: git push origin "$TARGET_BRANCH"
