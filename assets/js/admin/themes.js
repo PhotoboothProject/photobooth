@@ -236,6 +236,15 @@ $(function () {
                 return;
             }
 
+            const themeExists = Array.from($select.find('option')).some((opt) => opt.value === name);
+            if (themeExists) {
+                const confirmMessage = photoboothTools.getTranslation('theme_override_confirm').replace('%s', name);
+                const confirmed = window.confirm(confirmMessage);
+                if (!confirmed) {
+                    return;
+                }
+            }
+
             const payload = {
                 action: 'save',
                 name: name,

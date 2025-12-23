@@ -921,6 +921,7 @@
   "theme_load": "Theme laden",
   "theme_delete": "Theme löschen",
   "theme_choose": "Theme auswählen",
+  "theme_override_confirm": "Theme \"%s\" wird überschrieben. Fortfahren?",
   "text_settings": "Text-Einstellungen",
   "toggleFullscreen": "Vollbildmodus umschalten",
   "translate": "Übersetzen",
