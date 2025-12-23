@@ -485,12 +485,12 @@ class AdminInput
                     <input
                         id="theme-name"
                         type="text"
-                        class="flex-1 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
+                        class="flex-1 min-w-0 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
                         placeholder="' . $languageService->translate('theme_name_placeholder') . '"
                     />
                     <select
                         id="theme-select"
-                        class="flex-1 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
+                        class="flex-1 min-w-0 h-9 border border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm"
                     >
                         ' . $options . '
                     </select>
