@@ -32,13 +32,20 @@ class VideoUtility
         string $relativeVideoPath = '',
         array $attributes = [],
     ): string {
-        $relativeVideoPath = PathUtility::getAbsolutePath($relativeVideoPath);
-        if (!file_exists($relativeVideoPath)) {
-            return 'Video not found';
-        }
 
-        $videoPathPublic   = PathUtility::getPublicPath($relativeVideoPath);
-        $attributes['src'] = $videoPathPublic;
+        if (!empty($relativeVideoPath)) {
+            $absolutePath = PathUtility::getRootPath() . $relativeVideoPath;
+
+            //check on fs if video exists
+            if (!file_exists($absolutePath)) {
+                $attributes['alt'] = 'Video not found: ' . htmlspecialchars($relativeVideoPath);
+            } else {
+                $videoPathPublic   = PathUtility::getPublicPath($relativeVideoPath);
+                $attributes['src'] = $videoPathPublic;
+            }
+        } else {
+            $attributes['alt'] = 'No video specified';
+        }
 
         return '<video autoplay muted loop playsinline ' . ComponentUtility::renderAttributes($attributes) . '></video>';
     }
