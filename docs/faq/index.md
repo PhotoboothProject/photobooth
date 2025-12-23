@@ -2,7 +2,7 @@
 
 FAQ on [https://photoboothproject.github.io/](https://photoboothproject.github.io/) always matches latest development version of Photobooth. Some options might not be available on older version or might be handled different.
 
-An FAQ matching your installed version can be found at [http://localhost/faq](http://localhost/faq).
+An FAQ matching your installed version can be found at [http://localhost/faq](http://localhost/faq) (or [http://localhost/photobooth/faq](http://localhost/photobooth/faq) ).
 
 ## Is my Camera supported?
 
