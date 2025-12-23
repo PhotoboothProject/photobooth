@@ -928,6 +928,7 @@
   "theme_delete": "Delete theme",
   "theme_choose": "Choose theme",
   "theme_override_confirm": "Saving will override theme \"%s\". Continue?",
+  "theme_unsaved_confirm": "You have unsaved theme changes. Loading will discard them. Continue?",
   "text_settings": "Text settings",
   "toggleFullscreen": "Toggle Fullscreen",
   "translate": "Translate",
