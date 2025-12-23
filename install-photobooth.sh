@@ -2892,7 +2892,7 @@ function install_or_update_photobooth() {
                 setup_apache=true
                 ;;
             2)
-                comfirm "Webserver" "Nginx is installed and running. Please configure your Webserver manually if needed."
+                confirm "Webserver" "Nginx is installed and running. Please configure your Webserver manually if needed."
                 setup_apache=false
                 ;;
             3)
