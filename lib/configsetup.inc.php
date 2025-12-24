@@ -861,20 +861,6 @@ return [
             'name' => 'LAYOUTGENERATOR',
             'value' => 'layout-generator',
         ],
-        'collage_resolution' => [
-            'view' => 'expert',
-            'type' => 'select',
-            'name' => 'collage[resolution]',
-            'data-theme-field' => 'true',
-            'placeholder' => $defaultConfig['collage']['resolution'],
-            'options' => [
-                '150dpi' => '150 dpi',
-                '300dpi' => '300 dpi',
-                '400dpi' => '400 dpi',
-                '600dpi' => '600 dpi',
-            ],
-            'value' => $config['collage']['resolution'],
-        ],
         'collage_dashedline_color' => [
             'view' => 'advanced',
             'type' => 'color',
