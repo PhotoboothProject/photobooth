@@ -2,6 +2,7 @@
 // admin/collage-designer/components/preview-canvas.php
 
 use Photobooth\Utility\PathUtility;
+
 ?>
 <div class="result_images w-full md:max-h-[70vh] flex-1 relative p-4 md:p-8 bg-slate-300">
     <div id="result_canvas" class="relative m-0 left-[50%] top-[50%] right-0 bottom-0 translate-y-[-50%] translate-x-[-50%] max-w-full max-h-full shadow-xl aspect-video bg-white">
@@ -19,7 +20,7 @@ use Photobooth\Utility\PathUtility;
                     <img class='picture-frame absolute object-left-top rotate-0 max-w-none hidden' draggable='false' />
                   </div>";
         }
-        ?>
+?>
         <div id="collage_frame" class="absolute h-full w-full">
             <img class="h-full w-full hidden" src="" alt="Choose the frame" draggable="false">
         </div>

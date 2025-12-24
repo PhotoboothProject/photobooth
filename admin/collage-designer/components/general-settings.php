@@ -3,6 +3,7 @@
 
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\PathUtility;
+
 ?>
 
 <div class="general_settings flex flex-col gap-4 p-4 border border-gray-200 rounded-md">
@@ -21,7 +22,7 @@ use Photobooth\Utility\PathUtility;
                     ],
                     'collage:collage_background_color'
                 )
-            ?>
+?>
         </div>
         <div class="col-span-2 flex flex-col">
             <?= AdminInput::renderImageSelect(
@@ -36,93 +37,93 @@ use Photobooth\Utility\PathUtility;
                 ],
                 'collage:collage_background'
             )
-            ?>
+?>
         </div>
         <div class="col-span-2 flex flex-col">
             <?=
-                AdminInput::renderImageSelect(
-                    [
-                        'name' => 'generator-frame',
-                        'value' => '',
-                        'paths' => [
-                            PathUtility::getAbsolutePath('resources/img/frames'),
-                            PathUtility::getAbsolutePath('private/images/frames'),
-                        ],
-                        'attributes' => ['data-trigger' => 'general']
-                    ],
-                    'collage:collage_frame'
-                )
-            ?>
+    AdminInput::renderImageSelect(
+        [
+            'name' => 'generator-frame',
+            'value' => '',
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/frames'),
+                PathUtility::getAbsolutePath('private/images/frames'),
+            ],
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        'collage:collage_frame'
+    )
+?>
         </div>
         <div class="flex flex-col">
             <?=
-                AdminInput::renderInput(
-                    [
-                        'type' => 'number',
-                        'name' => 'final_width',
-                        'value' => '1500',
-                        'placeholder' => 'collage width',
-                        'attributes' => ['data-trigger' => 'general']
-                    ],
-                    'collage:generator:final_width'
-                )
-            ?>
+    AdminInput::renderInput(
+        [
+            'type' => 'number',
+            'name' => 'final_width',
+            'value' => '1500',
+            'placeholder' => 'collage width',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        'collage:generator:final_width'
+    )
+?>
         </div>
         <div class="flex flex-col">
             <?=
-                AdminInput::renderInput(
-                    [
-                        'type' => 'number',
-                        'name' => 'final_height',
-                        'value' => '1000',
-                        'placeholder' => 'collage height',
-                        'attributes' => ['data-trigger' => 'general']
-                    ],
-                    'collage:generator:final_height'
-                )
-            ?>
+    AdminInput::renderInput(
+        [
+            'type' => 'number',
+            'name' => 'final_height',
+            'value' => '1000',
+            'placeholder' => 'collage height',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        'collage:generator:final_height'
+    )
+?>
         </div>
         <div class="col-span-2 flex flex-col">
             <?=
-                AdminInput::renderSelect(
-                    [
-                        'type' => 'select',
-                        'name' => 'apply_frame',
-                        'options' => [
-                            'off' => 'Off',
-                            'always' => 'Always',
-                            'once' => 'Once',
-                        ],
-                        'value' => 'once',
-                        'attributes' => ['data-trigger' => 'general']
-                    ],
-                    'collage:collage_take_frame'
-                )
-            ?>
+    AdminInput::renderSelect(
+        [
+            'type' => 'select',
+            'name' => 'apply_frame',
+            'options' => [
+                'off' => 'Off',
+                'always' => 'Always',
+                'once' => 'Once',
+            ],
+            'value' => 'once',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        'collage:collage_take_frame'
+    )
+?>
         </div>
         <div class="flex flex-col">
             <?=
-                AdminInput::renderCheckbox(
-                    [
-                        'name' => 'show-background',
-                        'value' => 'false',
-                        'attributes' => ['data-trigger' => 'general']
-                    ],
-                    'collage:generator:show_background'
-                )
-            ?>
+    AdminInput::renderCheckbox(
+        [
+            'name' => 'show-background',
+            'value' => 'false',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        'collage:generator:show_background'
+    )
+?>
         </div>
         <div class="flex flex-col">
             <?=
-                AdminInput::renderCheckbox(
-                    [
-                        'name' => 'show-frame',
-                        'value' => 'false',
-                        'attributes' => ['data-trigger' => 'general']
-                    ],
-                    'collage:generator:show_frame'
-                )
-            ?>
+    AdminInput::renderCheckbox(
+        [
+            'name' => 'show-frame',
+            'value' => 'false',
+            'attributes' => ['data-trigger' => 'general']
+        ],
+        'collage:generator:show_frame'
+    )
+?>
         </div>
     </div>
 </div>

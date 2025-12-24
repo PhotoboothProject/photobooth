@@ -569,7 +569,7 @@ class AdminInput
         ], $setting);
 
         // Define common base classes for the icon buttons, which are not customizable per button
-        $iconButtonBaseClasses = "h-8 w-8 flex items-center justify-center rounded-full transition text-[10px] font-bold border border-solid";
+        $iconButtonBaseClasses = 'h-8 w-8 flex items-center justify-center rounded-full transition text-[10px] font-bold border border-solid';
 
         return '
             ' . self::renderHeadline($setting['select_label_headline']) . '
@@ -832,6 +832,67 @@ class AdminInput
     ';
 
         return $html;
+    }
+
+    /* Renders a standardized "Back" button for admin sub-pages.
+     * It determines the appropriate return URL based on URL parameters and HTTP_REFERER,
+     * and uses styling consistent with other admin buttons.
+     *
+     * @param array $attributes Additional attributes for the <a> tag of the button.
+     *                          Commonly used for positioning classes like ['class' => 'absolute top-8 left-4 z-10 w-auto h-auto'].
+     * @param string|null $defaultBackPath Optional path to return to if no specific origin is found. Defaults to 'admin'.
+     * @return string The HTML for the "Back" button.
+     */
+    public static function renderBackButton(array $attributes = [], ?string $defaultBackPath = null): string
+    {
+        $languageService = LanguageService::getInstance();
+        global $config; // Access global config for icons
+
+        $backToOriginLink = PathUtility::getPublicPath($defaultBackPath ?? 'admin'); // Default: back to admin panel
+
+        // 'from' GET parameter
+        if (isset($_GET['from']) && !empty($_GET['from'])) {
+            $fromParam = htmlspecialchars($_GET['from']);
+            // If 'from' parameter looks like an admin hash segment (e.g., 'collage', 'gallery')
+            if (strpos($fromParam, '/') === false && strpos($fromParam, '#') === false) {
+                $backToOriginLink = PathUtility::getPublicPath('admin') . '#' . $fromParam;
+            } else {
+                // If 'from' contains a slash or hash, it might be a more complex path.
+                // For security, ensure it's still within our application's public path.
+                $publicPath = PathUtility::getPublicPath();
+                if (strpos($fromParam, $publicPath) === 0) { // Simple check if it starts with our public path
+                    $backToOriginLink = $fromParam;
+                } else {
+                    // If 'from' is suspicious, fallback to default admin path.
+                    $backToOriginLink = PathUtility::getPublicPath('admin');
+                }
+            }
+        }
+
+        // Define default classes for the button,
+        $finalClasses = 'btn bg-brand-1'; // Adjust this to your actual standard button classes
+
+        if (isset($attributes['class'])) {
+            $finalClasses .= ' ' . $attributes['class'];
+            unset($attributes['class']); // Remove 'class' to avoid duplication in $finalAttrs string
+        }
+
+        $finalAttrs = '';
+        foreach ($attributes as $key => $value) {
+            $finalAttrs .= ' ' . htmlspecialchars($key) . '="' . htmlspecialchars($value) . '"';
+        }
+
+        $iconHtml = $config['icons']['back'] ?? 'fa fa-arrow-left'; // Fallback icon
+        $iconHtml = '<i class="' . htmlspecialchars($iconHtml) . '"></i>';
+
+        $translatedText = $languageService->translate('back');
+
+        return <<<HTML
+            <a href="{$backToOriginLink}" id="backButton" class="{$finalClasses}" {$finalAttrs}>
+                {$iconHtml}
+                <span>{$translatedText}</span>
+            </a>
+        HTML;
     }
 
     public static function renderToggleButtonGroupModal(array $setting, string $label): string

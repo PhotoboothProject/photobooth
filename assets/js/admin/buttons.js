@@ -29,60 +29,65 @@ function saveAdminSettings(options = {}) {
         method: 'POST',
         body: data
     })
-    .then((response) => {
-        // Hide loader after the fetch request completes, regardless of success or failure
-        $('.pageLoader').removeClass('isActive');
+        .then((response) => {
+            // Hide loader after the fetch request completes, regardless of success or failure
+            $('.pageLoader').removeClass('isActive');
 
-        if (!response.ok) {
-            // If the HTTP response is not OK (e.g., 404, 500), throw an error
-            return response.json().then(errorData => {
-                const errorMessage = errorData.message || `HTTP error! status: ${response.status}`;
+            if (!response.ok) {
+                // If the HTTP response is not OK (e.g., 404, 500), throw an error
+                return response
+                    .json()
+                    .then((errorData) => {
+                        const errorMessage = errorData.message || `HTTP error! status: ${response.status}`;
+                        photoboothTools.console.logDev(errorMessage);
+                        throw new Error(errorMessage);
+                    })
+                    .catch(() => {
+                        // Handle cases where response is not JSON or parsing fails
+                        const errorMessage = `HTTP error! status: ${response.status}`;
+                        photoboothTools.console.logDev(errorMessage);
+                        throw new Error(errorMessage);
+                    });
+            }
+            return response.json(); // Parse JSON from the response
+        })
+        .then((responseData) => {
+            // Process the JSON response data
+            if (responseData.status === 'success') {
+                // After successful save, if the form was dirty, reset it to clean state.
+                $('#save-admin-btn').removeClass('isDirty');
+                // Also, update the initial serialized state to the newly saved state
+                // to correctly detect future changes without a full page reload.
+                $('form').data('initialSerialized', $('form').serialize());
+                if (currentOptions.reloadOnSuccess) {
+                    window.location.reload();
+                    // We return a pending Promise here, as reload will prevent subsequent .then() from running
+                    // eslint-disable-next-line no-empty-function
+                    return new Promise(() => {});
+                }
+                return responseData; // Saving successful, resolve with response data
+            } else {
+                // API returned a non-success status, but HTTP fetch was successful
+                const errorMessage = responseData.message || 'Saving failed with API error';
                 photoboothTools.console.logDev(errorMessage);
-                throw new Error(errorMessage);
-            }).catch(() => {
-                // Handle cases where response is not JSON or parsing fails
-                const errorMessage = `HTTP error! status: ${response.status}`;
-                photoboothTools.console.logDev(errorMessage);
-                throw new Error(errorMessage);
-            });
-        }
-        return response.json(); // Parse JSON from the response
-    })
-    .then((responseData) => {
-        // Process the JSON response data
-        if (responseData.status === 'success') {
-            // After successful save, if the form was dirty, reset it to clean state.
-            $('#save-admin-btn').removeClass('isDirty');
-            // Also, update the initial serialized state to the newly saved state
-            // to correctly detect future changes without a full page reload.
-            $('form').data('initialSerialized', $('form').serialize());
-            if (currentOptions.reloadOnSuccess) {
+                throw new Error(errorMessage); // Reject with a specific error
+            }
+        })
+        .catch((error) => {
+            // Catch any errors during the fetch, JSON parsing, or from API non-success status
+            photoboothTools.console.logDev('Error during admin settings save:', error);
+
+            // Ensure loader is hidden in case of unexpected errors (already done above, but good safeguard)
+            $('.pageLoader').removeClass('isActive');
+
+            if (currentOptions.reloadOnError) {
                 window.location.reload();
-                // We return a pending Promise here, as reload will prevent subsequent .then() from running
+                // We return a pending Promise here, as reload will prevent subsequent .catch() from running
+                // eslint-disable-next-line no-empty-function
                 return new Promise(() => {});
             }
-            return responseData; // Saving successful, resolve with response data
-        } else {
-            // API returned a non-success status, but HTTP fetch was successful
-            const errorMessage = responseData.message || 'Saving failed with API error';
-            photoboothTools.console.logDev(errorMessage);
-            throw new Error(errorMessage); // Reject with a specific error
-        }
-    })
-    .catch((error) => {
-        // Catch any errors during the fetch, JSON parsing, or from API non-success status
-        photoboothTools.console.logDev('Error during admin settings save:', error);
-
-        // Ensure loader is hidden in case of unexpected errors (already done above, but good safeguard)
-        $('.pageLoader').removeClass('isActive');
-
-        if (currentOptions.reloadOnError) {
-            window.location.reload();
-            // We return a pending Promise here, as reload will prevent subsequent .catch() from running
-            return new Promise(() => {});
-        }
-        throw error; // Re-throw the error to be caught by the calling handlers
-    });
+            throw error; // Re-throw the error to be caught by the calling handlers
+        });
 }
 
 /* Checks if the admin settings form has pending changes that need to be saved.

@@ -2,6 +2,7 @@
 // admin/collage-designer/components/text-fields-manager.php
 
 use Photobooth\Utility\AdminInput;
+
 ?>
 
 <div class="text_fields_manager flex flex-col gap-4 p-4 border border-gray-200 rounded-md">

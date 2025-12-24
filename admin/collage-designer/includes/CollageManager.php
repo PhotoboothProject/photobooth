@@ -1,4 +1,5 @@
 <?php
+
 namespace Photobooth\CollageDesigner\Includes;
 
 use Photobooth\Utility\PathUtility;
@@ -76,7 +77,7 @@ class CollageManager
 
             // Update index
             $designs = $this->getAvailableDesigns();
-            $designs = array_filter($designs, fn($design) => $design['filename'] !== $filename);
+            $designs = array_filter($designs, fn ($design) => $design['filename'] !== $filename);
             file_put_contents($this->indexFile, json_encode(array_values($designs), JSON_PRETTY_PRINT)); // array_values um Indizes zurückzusetzen
 
             return true;

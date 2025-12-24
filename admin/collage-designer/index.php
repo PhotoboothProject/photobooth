@@ -47,7 +47,8 @@ foreach ($font_paths as $path) {
                 $font_family_options[$path] = $name;
             }
         }
-    } catch (\Exception $e) { /* Handle error or log */ }
+    } catch (\Exception $e) { // Handle error or log
+    }
 }
 $font_styles .= '</style>';
 
@@ -74,17 +75,22 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
 
     <div class="w-full flex items-center justify-center flex-col">
         <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center relative">
-            <div class="w-full text-center flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">
-                <?= $languageService->translate('collage_designer_title') ?>
+
+            <div class="w-full flex items-center justify-center relative">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 ml-4 md:ml-8">
+                    <?= getBackBtn(false, false); ?>
+                </div>
+                <div class="text-center text-2xl font-bold text-brand-1 mb-2">
+                    <?= $languageService->translate('collage_designer_title') ?>
+                </div>
             </div>
 
             <!-- Main designer area -->
             <div class="main_editor_area mt-4 w-full flex flex-col gap-4">
-                <!-- 1 DESIGN SELECTOR -->
-                <div class="design-selector-container w-full p-2 md:p-4 border border-gray-200 rounded-md flex flex-col gap-4">
+                 <div class="design-selector-container w-full p-2 md:p-4 border border-gray-200 rounded-md flex flex-col gap-4">
                     <?php
                         include 'components/design-selector.php';
-                    ?>
+?>
                 </div> <!-- End design-selector-container -->
 
                  <!-- Main design area with two columns for settings and preview -->
@@ -95,11 +101,11 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
                             <?= $languageService->translate('element_settings_title') ?>
                         </span>
                         <?php
-                            // Include components relevant to element-specific adjustments
-                            include 'components/element-settings-panel.php'; // Dynamic settings for active element
-                            include 'components/text-fields-manager.php';  // Text fields management
-                            include 'components/image-placeholders-manager.php'; // Image placeholders management
-                        ?>
+        // Include components relevant to element-specific adjustments
+        include 'components/element-settings-panel.php'; // Dynamic settings for active element
+include 'components/text-fields-manager.php';  // Text fields management
+include 'components/image-placeholders-manager.php'; // Image placeholders management
+?>
                     </div><!-- End left-panel -->
 
                     <!-- RIGHT PANEL: PREVIEW -->
@@ -107,7 +113,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
                         <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
                             <?= $languageService->translate('preview_title') ?>
                         </span>
-                        <?php include 'components/preview-canvas.php'; // Contains #result_canvas ?>
+                        <?php include 'components/preview-canvas.php'; // Contains #result_canvas?>
                     </div><!-- End right-panel -->
                 </div> <!-- End main-design-panel -->
 
@@ -117,9 +123,9 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
                         <?= $languageService->translate('general_placeholder_settings_title') ?>
                     </span>
                     <?php
-                        include 'components/general-settings.php';     // General settings
-                        include 'components/placeholder-settings.php'; // Placeholder settings
-                    ?>
+include 'components/general-settings.php';     // General settings
+include 'components/placeholder-settings.php'; // Placeholder settings
+?>
                 </div> <!-- End bottom-panel -->
 
             </div> <!-- End main_editor_area -->
@@ -133,12 +139,12 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
         <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
                 <?php
-                    echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
-                    echo getMenuBtn(PathUtility::getPublicPath('test/collage.php'), 'collageTest', $config['icons']['take_collage'], true);
-                    if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
-                        echo getMenuBtn(PathUtility::getPublicPath('login/logout.php'), 'logout', $config['icons']['logout']);
-                    }
-                ?>
+echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
+echo getMenuBtn(PathUtility::getPublicPath('test/collage.php'), 'collageTest', $config['icons']['take_collage'], true);
+if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
+    echo getMenuBtn(PathUtility::getPublicPath('login/logout.php'), 'logout', $config['icons']['logout']);
+}
+?>
             </div>
         </div>
     </div>

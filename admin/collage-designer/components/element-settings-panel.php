@@ -3,6 +3,7 @@
 
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\PathUtility;
+
 ?>
 
 <div id="element_settings_panel" class="flex flex-col gap-4 p-4 border border-gray-200 rounded-md hidden">
@@ -62,20 +63,20 @@ use Photobooth\Utility\PathUtility;
                         'collage:textoncollage_font', // Keep original language key
                         $font_family_options // Pass available font options
                     )
-                ?>
+?>
             </div>
             <div>
                 <?=
-                    AdminInput::renderColor(
-                        [
-                            'name' => 'text_font_color_current',
-                            'value' => '#000000',
-                            'placeholder' => 'text font color',
-                            'attributes' => ['data-trigger' => 'current_text_element', 'id' => 'text_font_color_current', 'data-setting-prop' => 'font_color']
-                        ],
-                        'collage:textoncollage_font_color' // Keep original language key
-                    )
-                ?>
+    AdminInput::renderColor(
+        [
+            'name' => 'text_font_color_current',
+            'value' => '#000000',
+            'placeholder' => 'text font color',
+            'attributes' => ['data-trigger' => 'current_text_element', 'id' => 'text_font_color_current', 'data-setting-prop' => 'font_color']
+        ],
+        'collage:textoncollage_font_color' // Keep original language key
+    )
+?>
             </div>
             <div>
                 <label for="text_font_size_current" class="block text-sm font-medium text-gray-700">Font Size (%)</label>
@@ -94,15 +95,15 @@ use Photobooth\Utility\PathUtility;
         <div class="grid gap-2 mb-4 grid-cols-2">
             <div>
                 <?=
-                    AdminInput::renderCheckbox(
-                        [
-                            'name' => 'picture_show_frame_current',
-                            'value' => 'false',
-                            'attributes' => ['data-trigger' => 'current_image_element', 'id' => 'picture_show_frame_current', 'data-setting-prop' => 'show_frame']
-                        ],
-                        'collage:generator:show_single_frame' // Keep original language key
-                    )
-                ?>
+    AdminInput::renderCheckbox(
+        [
+            'name' => 'picture_show_frame_current',
+            'value' => 'false',
+            'attributes' => ['data-trigger' => 'current_image_element', 'id' => 'picture_show_frame_current', 'data-setting-prop' => 'show_frame']
+        ],
+        'collage:generator:show_single_frame' // Keep original language key
+    )
+?>
             </div>
             <!-- Additional image-specific settings can go here -->
         </div>

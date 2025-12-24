@@ -1,12 +1,12 @@
 <?php
 
+require_once '../lib/boot.php';
+
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\SlugUtility;
-
-require_once '../lib/boot.php';
 
 $config = $configurationService = ConfigurationService::getInstance()->getConfiguration();
 $languageService = LanguageService::getInstance();
