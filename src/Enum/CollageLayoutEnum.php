@@ -13,9 +13,9 @@ enum CollageLayoutEnum: string implements LabelInterface
     case TWO_PLUS_TWO_2 = '2+2-2';
     case ONE_PLUS_THREE_1 = '1+3-1';
     case ONE_PLUS_THREE_2 = '1+3-2';
-    case THREE_PLUS_ONE = '3+1';
-    case ONE_PLUS_TWO = '1+2';
-    case TWO_PLUS_ONE = '2+1';
+    case THREE_PLUS_ONE_1 = '3+1-1';
+    case ONE_PLUS_TWO_1 = '1+2-1';
+    case TWO_PLUS_ONE_1 = '2+1-1';
     case TWO_X_FOUR_1 = '2x4-1';
     case TWO_X_FOUR_2 = '2x4-2';
     case TWO_X_FOUR_3 = '2x4-3';
@@ -31,9 +31,9 @@ enum CollageLayoutEnum: string implements LabelInterface
             self::TWO_PLUS_TWO_2 => '2+2 Layout (Option 2)',
             self::ONE_PLUS_THREE_1 => '1+3 Layout (Option 1)',
             self::ONE_PLUS_THREE_2 => '1+3 Layout (Option 2)',
-            self::THREE_PLUS_ONE => '3+1 Layout',
-            self::ONE_PLUS_TWO => '1+2 Layout',
-            self::TWO_PLUS_ONE => '2+1 Layout',
+            self::THREE_PLUS_ONE_1 => '3+1 Layout',
+            self::ONE_PLUS_TWO_1 => '1+2 Layout',
+            self::TWO_PLUS_ONE_1 => '2+1 Layout',
             self::TWO_X_FOUR_1 => '2x4 Layout (Option 1)',
             self::TWO_X_FOUR_2 => '2x4 Layout (Option 2)',
             self::TWO_X_FOUR_3 => '2x4 Layout (Option 3)',
@@ -51,14 +51,14 @@ enum CollageLayoutEnum: string implements LabelInterface
             self::TWO_PLUS_TWO_2,
             self::ONE_PLUS_THREE_1,
             self::ONE_PLUS_THREE_2,
-            self::THREE_PLUS_ONE,
+            self::THREE_PLUS_ONE_1,
             self::TWO_X_FOUR_1,
             self::TWO_X_FOUR_2,
             self::TWO_X_FOUR_3,
             self::TWO_X_FOUR_4 => 4,
 
-            self::ONE_PLUS_TWO,
-            self::TWO_PLUS_ONE,
+            self::ONE_PLUS_TWO_1,
+            self::TWO_PLUS_ONE_1,
             self::TWO_X_THREE_1,
             self::TWO_X_THREE_2 => 3,
 
