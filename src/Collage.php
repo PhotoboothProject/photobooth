@@ -257,11 +257,11 @@ class Collage
         // If no dimensions given ftom json create Collage based on 300dpi 4x6in
         // Scale collages with the height
         if (self::$collageHeight === 0) {
-            self::$collageHeight = intval(4 * $c->collageResolution);
+            self::$collageHeight = 1200;
         }
 
         if (self::$collageWidth === 0) {
-            self::$collageWidth = intval(self::$collageHeight * 1.5);
+            self::$collageWidth = 1800;
         }
 
         $my_collage = imagecreatetruecolor(self::$collageWidth, self::$collageHeight);

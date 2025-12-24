@@ -31,9 +31,8 @@ function loadCurrentConfig() {
     const current_config = JSON.parse($('#current_config').val());
     const collageConfig = config.collage;
     const textConfig = config.textoncollage;
-    const resolution = parseInt(collageConfig.resolution.slice(0, -3), 10);
-    let collage_height = 4 * resolution;
-    let collage_width = collage_height * 1.5;
+    let collage_height = 1200;
+    let collage_width = 1800;
     let layout = current_config;
     let backgroundImage = collageConfig.background;
     let show_bg = backgroundImage ? true : false;
