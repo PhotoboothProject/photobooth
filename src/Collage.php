@@ -54,8 +54,8 @@ class Collage
         $relativePaths = [
             'private/' . $collageLayout,
             'private/collage/' . $collageLayout,
-            'resources/collage/' . $collageLayout,
             'resources/collage/' . $pictureOrientation . '/' . $collageLayout,
+            'resources/collage/' . $collageLayout,
         ];
 
         foreach ($relativePaths as $relativePath) {
