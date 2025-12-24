@@ -88,8 +88,8 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
             <!-- Main designer area -->
             <div class="main_editor_area mt-4 w-full flex flex-col gap-4">
                  <div class="design-selector-container w-full p-2 md:p-4 border border-gray-200 rounded-md flex flex-col gap-4">
-                    <?php
-                        include 'components/design-selector.php';
+<?php
+include 'components/design-selector.php';
 ?>
                 </div> <!-- End design-selector-container -->
 
@@ -100,9 +100,9 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
                         <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
                             <?= $languageService->translate('element_settings_title') ?>
                         </span>
-                        <?php
-        // Include components relevant to element-specific adjustments
-        include 'components/element-settings-panel.php'; // Dynamic settings for active element
+<?php
+// Include components relevant to element-specific adjustments
+include 'components/element-settings-panel.php'; // Dynamic settings for active element
 include 'components/text-fields-manager.php';  // Text fields management
 include 'components/image-placeholders-manager.php'; // Image placeholders management
 ?>
@@ -122,7 +122,7 @@ include 'components/image-placeholders-manager.php'; // Image placeholders manag
                     <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
                         <?= $languageService->translate('general_placeholder_settings_title') ?>
                     </span>
-                    <?php
+<?php
 include 'components/general-settings.php';     // General settings
 include 'components/placeholder-settings.php'; // Placeholder settings
 ?>
@@ -138,7 +138,7 @@ include 'components/placeholder-settings.php'; // Placeholder settings
         <div class="my-4"></div>
         <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 ">
-                <?php
+<?php
 echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
 echo getMenuBtn(PathUtility::getPublicPath('test/collage.php'), 'collageTest', $config['icons']['take_collage'], true);
 if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {

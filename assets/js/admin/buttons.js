@@ -1,7 +1,6 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals photoboothTools shellCommand csrf */
 
-
 /* Saves the admin settings via the API.
  * Displays a loader during the saving process.
  *
@@ -201,12 +200,7 @@ $(function () {
 
             console.log('No pending changes detected. Navigating directly to Collage Designer.');
             // If no changes, directly navigate without saving
-            const designerUrl = '../admin/collage-designer';
-            const currentHash = window.location.hash ? window.location.hash.substring(1) : '';
-            let targetUrl = designerUrl;
-            if (currentHash) {
-                targetUrl += '?from=' + currentHash;
-            }
+            let targetUrl = '../admin/collage-designer';
             window.location.href = targetUrl;
             return; // Exit after navigation
         }
