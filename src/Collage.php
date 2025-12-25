@@ -45,7 +45,6 @@ class Collage
         self::$drawDashedLine =
             $collageLayout === '2x4-2' ||
             $collageLayout === '2x4-3' ||
-            $collageLayout === '2x4-4' ||
             $collageLayout === '2x3-1';
 
         if (!str_ends_with($collageLayout, '.json')) {
