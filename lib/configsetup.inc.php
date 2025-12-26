@@ -854,6 +854,18 @@ return [
             'options' => CollageLayoutEnum::cases(),
             'value' => $config['collage']['layout'],
         ],
+        'collage_orientation' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'collage[orientation]',
+            'data-theme-field' => 'true',
+            'placeholder' => $defaultConfig['collage']['orientation'],
+            'options' => [
+                'landscape' => 'Landscape image capture',
+                'portrait' => 'Portrait image capture',
+            ],
+            'value' => $config['collage']['orientation'],
+        ],
         'layout_generator' => [
             'view' => 'expert',
             'type' => 'button',
