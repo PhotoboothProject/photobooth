@@ -52,9 +52,9 @@ class Collage
         }
 
         $relativePaths = [
-            'private/' . $collageLayout,
             'private/collage/' . $pictureOrientation . '/' . $collageLayout,
             'private/collage/' . $collageLayout,
+            'private/' . $collageLayout,
             'template/collage/' . $pictureOrientation . '/' . $collageLayout,
             'template/collage/' . $collageLayout,
         ];
