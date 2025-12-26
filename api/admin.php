@@ -305,6 +305,10 @@ if ($action === 'reset') {
                 $logger->debug('No valid collage json found. Collage disabled.');
             }
         }
+        if ($newConfig['collage']['limit'] < 1) {
+            $newConfig['collage']['enabled'] = false;
+            $logger->debug('Invalid collage limit, must be 1 or greater. Collage disabled.');
+        }
     }
 
     if ($newConfig['picture']['take_frame'] && $newConfig['picture']['frame'] === '') {
