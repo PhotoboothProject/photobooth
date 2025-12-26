@@ -14,6 +14,7 @@ class CollageConfigFactory
         $collageConfig->collageLayout = $config['collage']['layout'] instanceof CollageLayoutEnum
             ? $config['collage']['layout']->value
             : (string) $config['collage']['layout'];
+        $collageConfig->collageOrientation = $config['collage']['orientation'];
         $collageConfig->collageBackgroundColor = $config['collage']['background_color'];
         $collageConfig->collageFrame = $config['collage']['frame'];
         $collageConfig->collageTakeFrame = $config['collage']['take_frame'];

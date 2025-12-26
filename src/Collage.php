@@ -27,19 +27,6 @@ class Collage
         self::$layoutPath = '';
     }
 
-    private static function detectPictureOrientation(string $imagePath): string
-    {
-        $size = getimagesize($imagePath);
-
-        if ($size === false) {
-            throw new \Exception("Invalid image: {$imagePath}");
-        }
-
-        [$width, $height] = $size;
-
-        return $width > $height ? 'landscape' : 'portrait';
-    }
-
     public static function getCollageConfigPath(string $collageLayout, string $pictureOrientation): ?string
     {
         self::$drawDashedLine =
@@ -82,11 +69,7 @@ class Collage
         $editImages = [];
         $firstImagePath = $srcImagePaths[0] ?? null;
 
-        if ($firstImagePath !== null && file_exists($firstImagePath)) {
-            self::$pictureOrientation = self::detectPictureOrientation($firstImagePath);
-        } else {
-            throw new \Exception('Failed to get picture orientation.');
-        }
+        self::$pictureOrientation = $c->collageOrientation;
 
         $collageConfigFilePath = self::getCollageConfigPath($c->collageLayout, self::$pictureOrientation);
 
