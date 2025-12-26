@@ -5,6 +5,7 @@ namespace Photobooth\Dto;
 class CollageConfig
 {
     public string $collageLayout;
+    public string $collageOrientation;
     public int $collageResolution;
     public string $collageBackgroundColor;
     public string $collageFrame;
