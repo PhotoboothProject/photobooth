@@ -765,8 +765,8 @@ function set_php_version_cli() {
     local priority
     priority=$(echo "$version" | tr -d '.')
 
-    update-alternatives --install /usr/bin/php php "$php_bin" "$priority" >/dev/null 2>&1
-    update-alternatives --set php "$php_bin" >/dev/null 2>&1
+    update-alternatives --install /usr/bin/php php "$php_bin" "$priority" >/dev/null 2>&1 || warn "Failed to install PHP via update-alternatives."
+    update-alternatives --set php "$php_bin" >/dev/null 2>&1 || error "Failed to set default PHP CLI version."
 
     info "PHP CLI" "CLI php now points to: $(php -v | head -n1)"
     return 0
@@ -783,7 +783,15 @@ function set_php_version_apache() {
     a2dismod -f php* >/dev/null 2>&1 || true
 
     if a2enmod "php${version}" >/dev/null 2>&1; then
-        confirm "Apache Webserver" "Apache is now configured to use PHP ${version} (Note: Apache will apply this on next boot!)."
+        confirm "Apache Webserver" "Apache is now configured to use PHP ${version} "
+        if [[ "$HAS_SYSTEMD" == true ]]; then
+            if systemctl is-active --quiet apache2; then
+                # Restart if already running
+                if ! systemctl restart apache2 &>/dev/null; then
+                    confirm "Apache Webserver" "Failed to restart Apache Webserver. Please reboot to apply."
+                fi
+            fi
+        fi
         return 0
     else
         error "Could not enable php${version} for Apache" >&2
