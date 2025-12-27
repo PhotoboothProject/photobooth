@@ -6,6 +6,7 @@ Custom collage designes of the community can be contributed here.
 
 | Field | Description | Type |
 |-------|-------------|------|
+| name | Display name for the layout in the selection UI | String |
 | author | Name of the creator or source of the layout | String |
 | aspect_ratio | Intended aspect ratio of the canvas or individual photo slots | String (format: "W:H") |
 | width | Width of the canvas in pixels | Number |
