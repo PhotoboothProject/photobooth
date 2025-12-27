@@ -1,22 +1,53 @@
 <?php
-// admin/collage-designer/components/design-selector.php
 
 use Photobooth\Utility\AdminInput;
 use Photobooth\Service\LanguageService;
+use Photobooth\Enum\CollageLayoutEnum;
+use Photobooth\Utility\CollageLayoutScanner;
 
 $languageService = LanguageService::getInstance();
 
-// --- PLACEHOLDER: Fetching data for the Collage Designer ---
-// This will be filled with actual logic later.
-// For now, we simulate empty values or a few mock options.
 $currentDesign = '';
+
+$designes = CollageLayoutScanner::scanLayouts();
+
 $optionsHtml = '
-    <option value="">
-        ' . $languageService->translate('collage_choose_new_design') . '
-    </option>
-    <option value="mock_design_1">Mock Design 1</option>
-    <option value="mock_design_2" selected>Mock Design 2</option> <!-- Example: one option pre-selected -->
-';
+            <option value="">
+                ' . $languageService->translate('collage_choose_new_design') . '
+            </option>';
+
+foreach ($designes as $mainGroupTitle => $subGroups) { // Iteriere über Hauptgruppen (z.B. "Standard Layouts", "Custom Layouts")
+    $optionsHtml .= '<optgroup label="' . htmlspecialchars($mainGroupTitle, ENT_QUOTES) . '">';
+    
+    // Sortiere die Untergruppen nach ihren übersetzten Titeln, um eine konsistente Reihenfolge zu gewährleisten
+    // Hier ist eine einfache Sortierung nach Key (dem übersetzten Namen)
+    ksort($subGroups);
+
+    foreach ($subGroups as $subGroupTitle => $layouts) { // Iteriere über Untergruppen (z.B. "Portrait Layouts", "Community Layouts")
+        // Füge eine (deaktivierte) Option als Überschrift für die Untergruppe hinzu
+        if (!empty($subGroupTitle)) {
+            $optionsHtml .= '<option disabled>' . str_repeat('&nbsp;', 4) . '--- ' . htmlspecialchars($subGroupTitle, ENT_QUOTES) . ' ---</option>';
+        }
+
+        // Sortiere die Layouts innerhalb der Untergruppe nach ihrem Namen
+        uasort($layouts, function($a, $b) {
+            return strcmp($a['name'] ?? $a['id'], $b['name'] ?? $b['id']);
+        });
+
+        foreach ($layouts as $layoutId => $layoutData) { // Jetzt sind hier die tatsächlichen Layout-Daten
+            $selected = ($layoutId === $currentDesign) ? ' selected="selected"' : '';
+            
+            // Verwende den Null-Coalescing-Operator für "name", um Deprecated-Warnungen zu vermeiden
+            // und den "id" als Fallback, falls "name" fehlen sollte (was der Scanner bereits beheben sollte)
+            $displayName = htmlspecialchars($layoutData['name'] ?? $layoutData['id'] ?? '', ENT_QUOTES);
+
+            $optionsHtml .= '<option value="' . htmlspecialchars($layoutId, ENT_QUOTES) . '"' . $selected . '>';
+            $optionsHtml .= str_repeat('&nbsp;', 8); // Zusätzliche Einrückung für Layout-Elemente
+            $optionsHtml .= $displayName . '</option>';
+        }
+    }
+    $optionsHtml .= '</optgroup>';
+}
 
 // --- Preparing the $configManagerSetting array (structure only, with real values later) ---
 $configManagerSetting = [
@@ -31,17 +62,14 @@ $configManagerSetting = [
     'save_btn_id' => 'collage-save-btn',
     'save_btn_title_label_key' => 'collage_save', // Language key for the title
     'save_btn_onclick' => 'adminCollageSave();', // JavaScript function for saving (to be implemented later)
-    'save_btn_icon_class' => 'fa fa-save',
 
     'load_btn_id' => 'collage-load-btn',
     'load_btn_title_label_key' => 'collage_load',
     'load_btn_onclick' => 'adminCollageLoad();', // JavaScript function for loading (to be implemented later)
-    'load_btn_icon_class' => 'fa fa-download',
 
     'delete_btn_id' => 'collage-delete-btn',
     'delete_btn_title_label_key' => 'collage_delete',
     'delete_btn_onclick' => 'adminCollageDelete();', // JavaScript function for deleting (to be implemented later)
-    'delete_btn_icon_class' => 'fa fa-trash',
 ];
 ?>
 

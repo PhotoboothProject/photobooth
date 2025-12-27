@@ -502,7 +502,8 @@ class AdminInput
         return self::renderConfigManager($configManagerSetting);
     }
 
-    /* Renders a generic configuration management UI component.
+    /**
+     * Renders a generic configuration management UI component.
      * This includes a dropdown for selection, an input for naming, and buttons for save, load, and delete.
      * The structure and button styling are derived from the theme management UI.
      *
