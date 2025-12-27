@@ -1,9 +1,10 @@
 {
+  "name": "1x1 Polaroid like collage for landscape images",
   "author": "Morgan from Photobooth Telegram Community",
   "aspect_ratio": "2:3",
   "width": "1200",
   "height": "1800",
   "layout": [
-    [ "100", "100", "1.8 * y * 0.3146",  "y * 0.65", "0" ]
+    ["x*0.08333", "y*0.05556", "x*0.84942", "y*0.65", "0"]
   ]
 }
