@@ -53,7 +53,6 @@
   "collage:collage_placeholder": "Koristi prilagođeno rezervirano mjesto",
   "collage:collage_placeholderpath": "Putanja do slike za rezervirano. mjesto",
   "collage:collage_placeholderposition": "Broj slike u kolažu za zamjenu",
-  "collage:collage_resolution": "Izaberite rezoluciju kolaža:",
   "collage:collage_take_frame": "Snimite kolaž s okvirom",
   "collage:textoncollage_enabled": "Tekst na kolažu",
   "collage:textoncollage_font": "Font",
@@ -266,7 +265,6 @@
   "manual:collage:collage_placeholder": "Ako je omogućeno, slika kolaža na određenom položaju bit će zamijenjena prilagođenom slikom s putanje rezerviranog mjesta",
   "manual:collage:collage_placeholderpath": "Navedite putanju do slike za držač mjesta. Slika treba biti u formatu .jpg.",
   "manual:collage:collage_placeholderposition": "Definirajte položaj kolaža koji treba zamijeniti prilagođenom slikom. Navedite vrijednost između 1 i maksimalnog broja slika u kolažu, ovisno o rasporedu.",
-  "manual:collage:collage_resolution": "Izaberite razlučivost kolaža u dpi. Više vrijednosti mogu usporiti proces izrade kolaža. 300 dpi je dobar zadan za format 4x6 inča / 10x15 cm. Koristite višu vrijednost za visokokvalitetne printere.",
   "manual:collage:collage_take_frame": "Ako je omogućeno, definirani okvir bit će primijenjen na vaš kolaž nakon što ga napravite.",
   "manual:collage:textoncollage_enabled": "Ako je omogućeno, možete dodati tekst na svoj kolaž.",
   "manual:collage:textoncollage_font": "Unesite putanju do fonta koji će se koristiti za primjenu teksta na vaš kolaž.",
@@ -336,12 +334,12 @@
   "manual:pictures:picture_frame_right_percentage": "Postotak desne granice okvira u odnosu na ukupnu širinu",
   "manual:pictures:picture_frame_top_percentage": "Postotak gornje granice okvira u odnosu na ukupnu visinu",
   "manual:pictures:picture_keep_original": "Ako je omogućeno, originalne slike će biti sačuvane unutar privremene mape.",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Linux ulazni uređaj za hardverske triggere (npr. /dev/input/by-id/...). Koristi keycode po akciji (foto/kolaž/prilagođeno/ispis/video) za mapiranje događaja.",
+  "remotebuzzer:remotebuzzer_input_device": "Ulazni uređaj",
   "theme_title": "Teme",
   "theme_name_placeholder": "Naziv teme",
   "theme_save": "Spremi temu",
   "theme_load": "Učitaj temu",
   "theme_delete": "Izbriši temu",
-  "theme_choose": "Odaberi temu",
-  "remotebuzzer:remotebuzzer_input_device": "Ulazni uređaj",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux ulazni uređaj za hardverske triggere (npr. /dev/input/by-id/...). Koristi keycode po akciji (foto/kolaž/prilagođeno/ispis/video) za mapiranje događaja."
+  "theme_choose": "Odaberi temu"
 }

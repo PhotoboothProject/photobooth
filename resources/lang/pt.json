@@ -55,7 +55,6 @@
   "collage:collage_placeholder": "Usar espaço reservado personalizado",
   "collage:collage_placeholderpath": "Local do caminho da imagem",
   "collage:collage_placeholderposition": "Número de imagem da colagem para substituir",
-  "collage:collage_resolution": "Escolha a resolução da colagem:",
   "collage:collage_take_frame": "Fotografar colagem com moldura",
   "collage:textoncollage_enabled": "Texto na colagem",
   "collage:textoncollage_font": "Fonte",
@@ -303,12 +302,12 @@
   "manual:ftp:urlTemplate": "Defina o modelo de url para gerar o código qr. Os locais são '%website', '%pastaBase', '%pasta', '%título' (como slug) e '%data'. O nome do arquivo é anexado no final.",
   "manual:ftp:useForQr": "Se habilitado, a saída recebida do servidor FTP depois de armazenar a imagem que será usada como entrada para a geração do código QR (sempre verifique a configuração do servidor ftp).",
   "manual:ftp:username": "Em combinação com a senha para autenticar o usuário que envia o arquivo no servidor.",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada Linux para disparos de hardware (ex. /dev/input/by-id/...). Usa os códigos de tecla por ação (foto/colagem/personalizado/imprimir/vídeo) para mapear eventos recebidos.",
+  "remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada",
   "theme_title": "Temas",
   "theme_name_placeholder": "Nome do tema",
   "theme_save": "Salvar tema",
   "theme_load": "Carregar tema",
   "theme_delete": "Excluir tema",
-  "theme_choose": "Escolher tema",
-  "remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada Linux para disparos de hardware (ex. /dev/input/by-id/...). Usa os códigos de tecla por ação (foto/colagem/personalizado/imprimir/vídeo) para mapear eventos recebidos."
+  "theme_choose": "Escolher tema"
 }

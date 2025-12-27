@@ -26,7 +26,6 @@
   "collage:collage_frame": "Ramka",
   "collage:collage_key": "Kod klawisza, który wyzwala kolaż",
   "collage:collage_layout": "Wybierz układ kolażu:",
-  "collage:collage_resolution": "Wybierz rozdzielczość kolażu:",
   "collage:collage_take_frame": "Zrób kolaż z ramką",
   "collage:textoncollage_enabled": "Tekst na kolażu",
   "collage:textoncollage_font": "Font",
@@ -178,6 +177,7 @@
   "manual:print:textonprint_linespace": "Wprowadź wartość przerwy pomiędzy wierszami podczas drukowania tekstu na zdjęciu.",
   "manual:print:textonprint_locationx": "Współrzędne X tekstu podczas drukowania tekstu na zdjęciu.",
   "manual:print:textonprint_locationy": "Współrzędne Y tekstu podczas drukowania tekstu na zdjęciu.",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Urządzenie wejściowe Linux dla wyzwalaczy sprzętowych (np. /dev/input/by-id/...). Używa kodów klawiszy na akcję (zdjęcie/kolaż/niestandardowe/druk/wideo) do mapowania zdarzeń.",
   "manual:slideshow:slideshow_randomPicture": "Jeśli włączone, losowe zdjęcia będą wyświetlane na galerii samodzielnej.",
   "milliseconds": "milisekundy",
   "newCollage": "Nowy kolaż",
@@ -227,6 +227,7 @@
   "qr": "Kod QR",
   "qrHelp": "Aby pobrać zdjęcie na swój smartfon, połącz się z WiFi:",
   "remotebuzzer:remotebuzzer_port": "Port serwera",
+  "remotebuzzer:remotebuzzer_input_device": "Urządzenie wejściowe",
   "reset": "Reset",
   "reset:reset_remove_mailtxt": "Usuń bazę danych adresów e-mail",
   "save": "Zapisz",
@@ -260,7 +261,5 @@
   "userinterface:colors_primary": "Kolor podstawowy",
   "userinterface:colors_secondary": "Kolor Dodatkowy",
   "userinterface:colors_start_font": "Kolor czcionki ekranu startowego",
-  "using_latest_version": "Używasz najnowszej dostępnej wersji Fotobudki.",
-  "remotebuzzer:remotebuzzer_input_device": "Urządzenie wejściowe",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Urządzenie wejściowe Linux dla wyzwalaczy sprzętowych (np. /dev/input/by-id/...). Używa kodów klawiszy na akcję (zdjęcie/kolaż/niestandardowe/druk/wideo) do mapowania zdarzeń."
+  "using_latest_version": "Używasz najnowszej dostępnej wersji Fotobudki."
 }

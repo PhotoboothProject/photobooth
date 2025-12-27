@@ -1,10 +1,10 @@
 {
+  "manual:remotebuzzer:remotebuzzer_input_device": "用于硬件触发的 Linux 输入设备（例如 /dev/input/by-id/...）。使用按操作的按键代码（照片/拼贴/自定义/打印/视频）来映射输入事件。",
+  "remotebuzzer:remotebuzzer_input_device": "输入设备",
   "theme_title": "主题",
   "theme_name_placeholder": "主题名称",
   "theme_save": "保存主题",
   "theme_load": "加载主题",
   "theme_delete": "删除主题",
-  "theme_choose": "选择主题",
-  "remotebuzzer:remotebuzzer_input_device": "输入设备",
-  "manual:remotebuzzer:remotebuzzer_input_device": "用于硬件触发的 Linux 输入设备（例如 /dev/input/by-id/...）。使用按操作的按键代码（照片/拼贴/自定义/打印/视频）来映射输入事件。"
+  "theme_choose": "选择主题"
 }

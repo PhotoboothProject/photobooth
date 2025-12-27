@@ -95,6 +95,7 @@
   "mailSent": "E-mail odeslán",
   "manual:general:adminpanel_experimental_settings": "Zobrazit nedostatečně otestované a experimentální možnosti.",
   "manual:general:adminpanel_view": "Umožňuje nastavit různá zobrazení v panelu správce s více (Expertní zobrazení) nebo méně (Základní zobrazení) dostupnými možnostmi.",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Vstupní zařízení Linux pro hardwarové spouštěče (např. /dev/input/by-id/...). Používá kódy kláves podle akce (foto/koláž/vlastní/tisk/video) pro mapování událostí.",
   "manual:userinterface:icons_take_video": "Plánované",
   "manual:video:video_animation": "Během nahrávání videa přehrát animaci.",
   "manual:video:video_cheese": "Nastavení zprávy \"řekni sýr\" při nahrávání videa.",
@@ -103,6 +104,7 @@
   "manual:video:video_qr": "Zobrazení kódu QR s odkazem na video na obrazovce.",
   "newVideo": "Nové Video",
   "no_printing": "Tento typ souboru nelze vytisknout.",
+  "remotebuzzer:remotebuzzer_input_device": "Vstupní zařízení",
   "showPictureFrame": "Zobrazit rámeček obrázku",
   "takeVideo": "Video",
   "theme_title": "Témata",
@@ -120,7 +122,5 @@
   "video:video_effects": "Video efekt",
   "video:video_enabled": "Povolit pořizování krátkých videí",
   "video:video_gif": "Video jako GIF",
-  "video:video_qr": "Zobrazit jako QR kód",
-  "remotebuzzer:remotebuzzer_input_device": "Vstupní zařízení",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Vstupní zařízení Linux pro hardwarové spouštěče (např. /dev/input/by-id/...). Používá kódy kláves podle akce (foto/koláž/vlastní/tisk/video) pro mapování událostí."
+  "video:video_qr": "Zobrazit jako QR kód"
 }
