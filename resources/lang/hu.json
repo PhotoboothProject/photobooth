@@ -55,7 +55,6 @@
   "collage:collage_placeholder": "Egyéni helyőrző",
   "collage:collage_placeholderpath": "Helyőrző kép elérési útvonala",
   "collage:collage_placeholderposition": "Kollázskép száma a cseréhez",
-  "collage:collage_resolution": "Válassza ki a kollázs felbontását:",
   "collage:collage_take_frame": "Kollázs készítése kerettel",
   "collage:textoncollage_enabled": "Szöveg a kollázson",
   "collage:textoncollage_font": "Betűtípus",
@@ -199,6 +198,7 @@
   "mailSaved": "E-mail cím sikeresen elmentve",
   "mailSent": "E-mail elküldve",
   "manual:ftp:port": "FTP-Server port.",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Linux bemeneti eszköz hardveres triggerekhez (pl. /dev/input/by-id/...). Az akciónkénti billentyűkódokat használja a bejövő események leképezéséhez (fénykép/kollázs/egyéni/nyomtatás/videó).",
   "newCollage": "Új kollázs",
   "newPhoto": "Új fénykép",
   "nextPhoto": "Következő fénykép",
@@ -209,6 +209,7 @@
   "qr": "QR-Kód",
   "qrHelp": "Csatlakozz a <strong>Fotófülke</strong> Wi-Fi hálózatához, hogy le tudd tölteni a képet a telefonodra. (SSID: Photobooth)",
   "remotebuzzer:remotebuzzer_picturebutton": "Kép gomb",
+  "remotebuzzer:remotebuzzer_input_device": "Bemeneti eszköz",
   "save": "Mentés",
   "selectFilter": "Képszűrő",
   "send": "Küldés",
@@ -220,7 +221,5 @@
   "theme_delete": "Téma törlése",
   "theme_choose": "Téma kiválasztása",
   "update_available": "Frissítés elérhető.",
-  "using_latest_version": "A fotófülke legfrissebb verzióját használod.",
-  "remotebuzzer:remotebuzzer_input_device": "Bemeneti eszköz",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux bemeneti eszköz hardveres triggerekhez (pl. /dev/input/by-id/...). Az akciónkénti billentyűkódokat használja a bejövő események leképezéséhez (fénykép/kollázs/egyéni/nyomtatás/videó)."
+  "using_latest_version": "A fotófülke legfrissebb verzióját használod."
 }

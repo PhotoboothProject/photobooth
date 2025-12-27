@@ -1,10 +1,10 @@
 {
+  "manual:remotebuzzer:remotebuzzer_input_device": "Thiết bị nhập Linux cho kích hoạt phần cứng (vd /dev/input/by-id/...). Dùng keycode theo từng hành động (ảnh/collage/tùy chỉnh/in/video) để ánh xạ sự kiện.",
+  "remotebuzzer:remotebuzzer_input_device": "Thiết bị nhập",
   "theme_title": "Chủ đề",
   "theme_name_placeholder": "Tên chủ đề",
   "theme_save": "Lưu chủ đề",
   "theme_load": "Tải chủ đề",
   "theme_delete": "Xóa chủ đề",
-  "theme_choose": "Chọn chủ đề",
-  "remotebuzzer:remotebuzzer_input_device": "Thiết bị nhập",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Thiết bị nhập Linux cho kích hoạt phần cứng (vd /dev/input/by-id/...). Dùng keycode theo từng hành động (ảnh/collage/tùy chỉnh/in/video) để ánh xạ sự kiện."
+  "theme_choose": "Chọn chủ đề"
 }

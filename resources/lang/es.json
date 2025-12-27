@@ -55,7 +55,6 @@
   "collage:collage_placeholder": "Usar descripción personalizada",
   "collage:collage_placeholderpath": "Ruta de la imagen",
   "collage:collage_placeholderposition": "Número de imagen de collage a reemplazar",
-  "collage:collage_resolution": "Elegir resolución del collage:",
   "collage:collage_take_frame": "Tomar collage con marco",
   "collage:textoncollage_enabled": "Texto en el collage",
   "collage:textoncollage_font": "Fuente",
@@ -280,7 +279,6 @@
   "manual:collage:collage_placeholder": "Si está activado, la imagen del collage en la posición especificada será reemplazada por la imagen personalizada de la ruta marcada",
   "manual:collage:collage_placeholderpath": "Especifique la ruta a la imagen. La imagen debe ser un .jpg.",
   "manual:collage:collage_placeholderposition": "Defina la posición del collage que debe ser reemplazada por la imagen personalizada. Por favor, especifique un valor entre 1 y el número máximo de imagen de collage dependiendo del diseño.",
-  "manual:collage:collage_resolution": "Elige la resolución del collage en dpi. Valores más altos podrían ralentizar el proceso de creación del collage. 300 dpi es un buen valor por defecto para impresoras de 4x6in / 10x15cm. Utilice un valor más alto para impresoras de alta calidad.",
   "manual:collage:collage_take_frame": "Si está activado, el marco definido se aplicará a su collage después de tomarlo.",
   "manual:collage:textoncollage_enabled": "Si está habilitado, puede añadir texto a su collage.",
   "manual:collage:textoncollage_font": "Introduzca la ruta de acceso a la fuente utilizada para imprimir texto en la imagen.",
@@ -505,6 +503,7 @@
   "manual:remotebuzzer:remotebuzzer_port": "Puerto TCP Servidor - ejemplo 14711.",
   "manual:remotebuzzer:remotebuzzer_serverip": "Por favor, defina la dirección IP del buzzer del servidor remoto.",
   "manual:remotebuzzer:remotebuzzer_startserver": "Si está habilitado, el servidor del pulsador remoto se inicia al acceder a Photobooth. Si está deshabilitado, Photobooth aún puede conectarse como cliente a un servidor del pulsador remoto ubicado diferente dependiendo de las opciones del pulsador remoto habilitadas. <b>Nota:</b>Si está conectado como cliente, solo las funciones Move2USB, Reiniciar y Apagar no se ejecutarán en Photobooth; en cambio, se activarán directamente en el servidor del pulsador remoto",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada Linux para disparadores de hardware (p. ej. /dev/input/by-id/...). Usa los códigos de tecla por acción (foto/collage/personalizada/imprimir/vídeo) para asignar eventos entrantes.",
   "manual:reset:reset_remove_config": "Si está habilitado, la configuración personal se elimina al restablecer.",
   "manual:reset:reset_remove_mailtxt": "Si está habilitada, la base de datos de correo se elimina al restablecer.",
   "manual:reset:reset_remove_print_db": "Si está activado, la base de datos de impresión se elimina al restablecer.",
@@ -863,6 +862,5 @@
   "video:video_enabled": "Permitir tomar videos cortos",
   "video:video_gif": "Video como GIF",
   "video:video_qr": "Mostrar código QR de vídeo",
-  "wait_message": "Por favor, espere...",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Dispositivo de entrada Linux para disparadores de hardware (p. ej. /dev/input/by-id/...). Usa los códigos de tecla por acción (foto/collage/personalizada/imprimir/vídeo) para asignar eventos entrantes."
+  "wait_message": "Por favor, espere..."
 }

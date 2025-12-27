@@ -57,6 +57,7 @@
   "mail:mail_username": "Όνομα χρήστη του E-Mail",
   "mailError": "Σφάλμα κατά την αποστολή του E-Mail",
   "mailSent": "E-Mail αποστέλλονται",
+  "manual:remotebuzzer:remotebuzzer_input_device": "Linux input device for hardware triggers (e.g. /dev/input/by-id/...). Uses the per-action key codes (picture/collage/custom/print/video) to map incoming key events.",
   "newCollage": "Νέο κολάζ",
   "newPhoto": "Νέα εικόνα",
   "nextPhoto": "Επόμενη εικόνα",
@@ -86,6 +87,7 @@
   "print:textonprint_rotation": "Περιστροφή κείμενο",
   "printing": "Η εργασία εκτύπωσης ξεκίνησε! Παρακαλώ περιμένετε...",
   "qr": "QR Κώδικας",
+  "remotebuzzer:remotebuzzer_input_device": "Input device (Linux event node)",
   "reset": "απόδοση",
   "save": "Ασφαλής",
   "selectFilter": "Φίλτρα φωτογραφιών",
@@ -102,7 +104,5 @@
   "userinterface": "διεπαφή χρήστη",
   "userinterface:background_admin": "Διαδρομή εικόνας φόντου διαχειριστή",
   "userinterface:background_defaults": "διαδρομή εικόνας φόντου",
-  "using_latest_version": "Το Photobooth είναι ενημερωμένο.",
-  "remotebuzzer:remotebuzzer_input_device": "Input device (Linux event node)",
-  "manual:remotebuzzer:remotebuzzer_input_device": "Linux input device for hardware triggers (e.g. /dev/input/by-id/...). Uses the per-action key codes (picture/collage/custom/print/video) to map incoming key events."
+  "using_latest_version": "Το Photobooth είναι ενημερωμένο."
 }
