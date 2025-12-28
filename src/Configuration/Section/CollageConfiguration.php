@@ -2,7 +2,7 @@
 
 namespace Photobooth\Configuration\Section;
 
-use Photobooth\Enum\CollageLayoutEnum;
+use Photobooth\Utility\CollageLayoutScanner;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
@@ -56,16 +56,17 @@ final class CollageConfiguration
                     ->values(['landscape', 'portrait'])
                     ->defaultValue('landscape')
                     ->end()
-                ->enumNode('layout')
-                    ->values(CollageLayoutEnum::cases())
-                    ->defaultValue(CollageLayoutEnum::TWO_PLUS_TWO_2)
-                    ->beforeNormalization()
-                        ->always(function ($value) {
-                            if (is_string($value)) {
-                                $value = CollageLayoutEnum::from($value);
+                ->scalarNode('layout')
+                    ->defaultValue('template/collage/landscape/1+2-1')
+                    ->validate()
+                        ->ifTrue(function ($value) {
+                            if (!is_string($value) || empty($value)) {
+                                return true; 
                             }
-                            return $value;
+                            $absolutePath = CollageLayoutScanner::getCollageConfigPath($value); 
+                            return $absolutePath === null;
                         })
+                        ->thenInvalid('The collage layout "%s" does not exist or is invalid.')
                         ->end()
                     ->end()
                 ->booleanNode('allow_selection')->defaultValue(false)->end()

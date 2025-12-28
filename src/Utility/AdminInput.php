@@ -212,27 +212,32 @@ class AdminInput
         $className = $setting['type'] === 'multi-select' ? 'min-h-[30px] h-32 resize-y ' : '';
         $className .= 'w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 mt-auto';
         $settingName = $setting['name'] . '' . ($setting['type'] === 'multi-select' ? '[]' : '');
-        $options = '';
+        $optionsHtmlContent = ''; // Renamed $options to $optionsHtmlContent for clarity when injecting generated HTML
 
         $attributes = self::buildAttributes($setting);
 
-        foreach ($setting['options'] as $value => $option) {
-            $optionLabel = $option;
-            $optionValue = $value;
-            if ($option instanceof \BackedEnum) {
-                $optionLabel = ($option instanceof LabelInterface) ? $option->label() : $option->name;
-                $optionValue = $option;
-            }
+        if (isset($setting['options_html'])) {
+            // If 'options_html' is provided, directly inject it (it's already pre-rendered HTML)
+            $optionsHtmlContent .= $setting['options_html'];
+        } else {
+            foreach ($setting['options'] ?? [] as $value => $option) { // Added ?? [] to ensure it's iterable
+                $optionLabel = $option;
+                $optionValue = $value;
+                if ($option instanceof \BackedEnum) {
+                    $optionLabel = ($option instanceof LabelInterface) ? $option->label() : $option->name;
+                    $optionValue = $option;
+                }
 
-            $selected = '';
-            if ((is_array($setting['value']) && in_array($optionValue, $setting['value'])) || $optionValue === $setting['value']) {
-                $selected = ' selected="selected"';
+                $selected = '';
+                if ((is_array($setting['value']) && in_array($optionValue, $setting['value'])) || $optionValue === $setting['value']) {
+                    $selected = ' selected="selected"';
+                }
+                $styles = '';
+                if ($settingName === 'text_font_family') {
+                    $styles = 'style="font-family:' . $optionLabel . '"';
+                }
+                $optionsHtmlContent .= '<option ' . $selected . ' value="' . ($optionValue instanceof \BackedEnum ? $optionValue->value : $optionValue) . '"' . $styles . '>' . $optionLabel . '</option>';
             }
-            $styles = '';
-            if ($settingName === 'text_font_family') {
-                $styles = 'style="font-family:' . $optionLabel . '"';
-            }
-            $options .= '<option ' . $selected . ' value="' . ($optionValue instanceof \BackedEnum ? $optionValue->value : $optionValue) . '"' . $styles . '>' . $optionLabel . '</option>';
         }
 
         return self::renderHeadline($label) . '
@@ -242,7 +247,7 @@ class AdminInput
                 ' . ($setting['type'] === 'multi-select' ? ' multiple="multiple"' : '') . '
 				        ' . $attributes . '
             >
-                ' . $options . '
+                ' . $optionsHtmlContent . '
             </select>
         ';
     }

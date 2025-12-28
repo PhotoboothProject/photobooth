@@ -6,47 +6,14 @@ use Photobooth\Utility\CollageLayoutScanner;
 
 $languageService = LanguageService::getInstance();
 
-$currentDesign = '';
-
-$designes = CollageLayoutScanner::scanLayouts();
+$currentDesign = $config['collage']['layout'];
 
 $optionsHtml = '
             <option value="">
                 ' . $languageService->translate('collage_choose_new_design') . '
             </option>';
 
-foreach ($designes as $mainGroupTitle => $subGroups) { // Iterate over main groups (e.g., "Standard Layouts", "Custom Layouts")
-    $optionsHtml .= '<optgroup label="' . htmlspecialchars($mainGroupTitle, ENT_QUOTES) . '">';
-    
-    // Sort subgroups by their translated titles to ensure consistent order
-    // This is a simple key sort (by the translated name)
-    ksort($subGroups);
-
-    foreach ($subGroups as $subGroupTitle => $layouts) { // Iterate over subgroups (e.g., "Portrait Layouts", "Community Layouts")
-        // Add a disabled option as a heading for the subgroup
-        if (!empty($subGroupTitle)) {
-            $optionsHtml .= '<option disabled>' . str_repeat('&nbsp;', 4) . '--- ' . htmlspecialchars($subGroupTitle, ENT_QUOTES) . ' ---</option>';
-        }
-
-        // Sort the layouts within the subgroup by their name
-        uasort($layouts, function($a, $b) {
-            return strcmp($a['name'] ?? $a['id'], $b['name'] ?? $b['id']);
-        });
-
-        foreach ($layouts as $layoutId => $layoutData) { // Now these are the actual layout data
-            $selected = ($layoutId === $currentDesign) ? ' selected="selected"' : '';
-            
-            // Use the null coalescing operator for "name" to avoid Deprecated warnings
-            // and use "id" as a fallback if "name" should be missing (which the scanner should already handle)
-            $displayName = htmlspecialchars($layoutData['name'] ?? $layoutData['id'] ?? '', ENT_QUOTES);
-
-            $optionsHtml .= '<option value="' . htmlspecialchars($layoutId, ENT_QUOTES) . '"' . $selected . '>';
-            $optionsHtml .= str_repeat('&nbsp;', 8); // Additional indentation for layout elements
-            $optionsHtml .= $displayName . '</option>';
-        }
-    }
-    $optionsHtml .= '</optgroup>';
-}
+$optionsHtml .= CollageLayoutScanner::getLayoutSelectOptionsHtml($currentDesign);
 
 // --- Preparing the $configManagerSetting array (structure only, with real values later) ---
 $configManagerSetting = [

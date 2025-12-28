@@ -20,6 +20,7 @@ use Photobooth\Utility\AdminKeypad;
 use Photobooth\Utility\PathUtility;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Photobooth\Utility\CollageLayoutScanner;
 
 header('Content-Type: application/json');
 $loggerService = LoggerService::getInstance();
@@ -279,14 +280,14 @@ if ($action === 'reset') {
     }
 
     // Collage json config
+    // TODO: check still working after merge?
     $newConfig['collage']['limit'] = $newConfig['collage']['limit'] ?? $defaultConfig['collage']['limit'];
     if ($newConfig['collage']['enabled']) {
         $limitData = Collage::calculateLimit($newConfig['collage'], $logger);
         $newConfig['collage']['limit'] = $limitData['limit'];
         $newConfig['collage']['placeholder'] = $limitData['placeholderEnabled'];
-        if ($newConfig['collage']['limit'] < 1) {
-            $newConfig['collage']['enabled'] = false;
-        }
+    if ($newConfig['collage']['limit'] < 1) {
+        $newConfig['collage']['enabled'] = false;
     }
 
     if ($newConfig['picture']['take_frame'] && $newConfig['picture']['frame'] === '') {

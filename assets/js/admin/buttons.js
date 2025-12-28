@@ -1,7 +1,8 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 /* globals photoboothTools shellCommand csrf */
 
-/* Saves the admin settings via the API.
+/**
+ * Saves the admin settings via the API.
  * Displays a loader during the saving process.
  *
  * @param {object} [options] - Configuration options for the save operation.
@@ -89,7 +90,8 @@ function saveAdminSettings(options = {}) {
         });
 }
 
-/* Checks if the admin settings form has pending changes that need to be saved.
+/**
+ * Checks if the admin settings form has pending changes that need to be saved.
  * Relies on the 'isDirty' class being added to the #save-admin-btn by the form change listener.
  *
  * @returns {boolean} True if there are unsaved changes (i.e., the save button has 'isDirty' class), false otherwise.
