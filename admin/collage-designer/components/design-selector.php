@@ -2,7 +2,6 @@
 
 use Photobooth\Utility\AdminInput;
 use Photobooth\Service\LanguageService;
-use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Utility\CollageLayoutScanner;
 
 $languageService = LanguageService::getInstance();
@@ -16,33 +15,33 @@ $optionsHtml = '
                 ' . $languageService->translate('collage_choose_new_design') . '
             </option>';
 
-foreach ($designes as $mainGroupTitle => $subGroups) { // Iteriere über Hauptgruppen (z.B. "Standard Layouts", "Custom Layouts")
+foreach ($designes as $mainGroupTitle => $subGroups) { // Iterate over main groups (e.g., "Standard Layouts", "Custom Layouts")
     $optionsHtml .= '<optgroup label="' . htmlspecialchars($mainGroupTitle, ENT_QUOTES) . '">';
     
-    // Sortiere die Untergruppen nach ihren übersetzten Titeln, um eine konsistente Reihenfolge zu gewährleisten
-    // Hier ist eine einfache Sortierung nach Key (dem übersetzten Namen)
+    // Sort subgroups by their translated titles to ensure consistent order
+    // This is a simple key sort (by the translated name)
     ksort($subGroups);
 
-    foreach ($subGroups as $subGroupTitle => $layouts) { // Iteriere über Untergruppen (z.B. "Portrait Layouts", "Community Layouts")
-        // Füge eine (deaktivierte) Option als Überschrift für die Untergruppe hinzu
+    foreach ($subGroups as $subGroupTitle => $layouts) { // Iterate over subgroups (e.g., "Portrait Layouts", "Community Layouts")
+        // Add a disabled option as a heading for the subgroup
         if (!empty($subGroupTitle)) {
             $optionsHtml .= '<option disabled>' . str_repeat('&nbsp;', 4) . '--- ' . htmlspecialchars($subGroupTitle, ENT_QUOTES) . ' ---</option>';
         }
 
-        // Sortiere die Layouts innerhalb der Untergruppe nach ihrem Namen
+        // Sort the layouts within the subgroup by their name
         uasort($layouts, function($a, $b) {
             return strcmp($a['name'] ?? $a['id'], $b['name'] ?? $b['id']);
         });
 
-        foreach ($layouts as $layoutId => $layoutData) { // Jetzt sind hier die tatsächlichen Layout-Daten
+        foreach ($layouts as $layoutId => $layoutData) { // Now these are the actual layout data
             $selected = ($layoutId === $currentDesign) ? ' selected="selected"' : '';
             
-            // Verwende den Null-Coalescing-Operator für "name", um Deprecated-Warnungen zu vermeiden
-            // und den "id" als Fallback, falls "name" fehlen sollte (was der Scanner bereits beheben sollte)
+            // Use the null coalescing operator for "name" to avoid Deprecated warnings
+            // and use "id" as a fallback if "name" should be missing (which the scanner should already handle)
             $displayName = htmlspecialchars($layoutData['name'] ?? $layoutData['id'] ?? '', ENT_QUOTES);
 
             $optionsHtml .= '<option value="' . htmlspecialchars($layoutId, ENT_QUOTES) . '"' . $selected . '>';
-            $optionsHtml .= str_repeat('&nbsp;', 8); // Zusätzliche Einrückung für Layout-Elemente
+            $optionsHtml .= str_repeat('&nbsp;', 8); // Additional indentation for layout elements
             $optionsHtml .= $displayName . '</option>';
         }
     }
