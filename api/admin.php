@@ -255,6 +255,7 @@ if ($action === 'reset') {
     }
 
     // Collage json config
+    $newConfig['collage']['limit'] = $newConfig['collage']['limit'] ?? $defaultConfig['collage']['limit'];
     if ($newConfig['collage']['enabled']) {
         $collageConfigFilePath = Collage::getCollageConfigPath($newConfig['collage']['layout'], $newConfig['collage']['orientation']);
 
@@ -307,6 +308,7 @@ if ($action === 'reset') {
         }
         if ($newConfig['collage']['limit'] < 1) {
             $newConfig['collage']['enabled'] = false;
+            $newConfig['collage']['limit'] = $defaultConfig['collage']['limit'];
             $logger->debug('Invalid collage limit, must be 1 or greater. Collage disabled.');
         }
     }
