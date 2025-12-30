@@ -154,7 +154,14 @@ class ThemeService
 
         // add theme config file at its project-relative location
         $themeRelativePath = 'private/themes/' . $safeName . '.theme.config.json';
-        $zip->addFromString($themeRelativePath, json_encode($theme, JSON_PRETTY_PRINT));
+        $themeJson = json_encode($theme, JSON_PRETTY_PRINT);
+        if ($themeJson === false) {
+            return [
+                'success' => false,
+                'message' => 'Unable to encode theme',
+            ];
+        }
+        $zip->addFromString($themeRelativePath, $themeJson);
 
         // add referenced assets using their project-relative paths
         $assets = $this->collectAssetCandidates($theme);
@@ -202,9 +209,10 @@ class ThemeService
         $themeFilename = null;
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $stat = $zip->statIndex($i);
-            if (!$stat || !isset($stat['name'])) {
+            if (!is_array($stat)) {
                 continue;
             }
+            /** @var array{name:string} $stat */
             $nameInZip = $stat['name'];
             if (str_ends_with($nameInZip, '.theme.config.json')) {
                 $themeFileIndex = $i;
@@ -247,10 +255,10 @@ class ThemeService
         $root = PathUtility::getRootPath();
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $stat = $zip->statIndex($i);
-            if (!$stat || !isset($stat['name'])) {
+            if (!is_array($stat)) {
                 continue;
             }
-
+            /** @var array{name:string} $stat */
             $entryName = $stat['name'];
             // Normalize
             $entryName = PathUtility::fixFilePath($entryName);
@@ -320,6 +328,9 @@ class ThemeService
     private function getSafeName(string $name): string
     {
         $safeName = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $name);
+        if ($safeName === null) {
+            $safeName = '';
+        }
         if ($safeName === '') {
             $safeName = 'theme';
         }
