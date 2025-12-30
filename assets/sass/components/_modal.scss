@@ -8,7 +8,8 @@
   --modal-font-size: 1rem;
   --modal-line-height: 1.2;
   --modal-padding: 2rem;
-  --modal-spacing: 2rem;
+  --modal-spacing: 1.5rem;
+  --modal-max-width: 960px;
 
   --modal-button-color: var(--button-font-color);
   --modal-button-background: var(--primary-color);
@@ -45,11 +46,14 @@
     position: relative;
     color: var(--modal-color);
     background: var(--modal-background);
-    max-width: calc(100dvw - var(--modal-spacing) * 2);
+    width: min(var(--modal-max-width), calc(100dvw - var(--modal-spacing) * 2));
+    max-width: min(var(--modal-max-width), calc(100dvw - var(--modal-spacing) * 2));
+    min-width: min(640px, calc(100dvw - var(--modal-spacing) * 2));
     max-height: calc(100dvh - var(--modal-spacing) * 2);
   }
 
   &-body {
+    width: 100%;
     text-align: center;
     overflow-y: scroll;
     font-size: var(--modal-font-size);
