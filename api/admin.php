@@ -30,7 +30,7 @@ $configurationService = ConfigurationService::getInstance();
 $defaultConfig = $configurationService->getDefaultConfiguration();
 
 $data = ArrayUtility::replaceBooleanValues($_POST);
-$action = isset($data['type']) ? $data['type'] : null;
+$action = $data['type'] ?? null;
 
 // Reset
 if ($action === 'reset') {
@@ -257,59 +257,11 @@ if ($action === 'reset') {
     // Collage json config
     $newConfig['collage']['limit'] = $newConfig['collage']['limit'] ?? $defaultConfig['collage']['limit'];
     if ($newConfig['collage']['enabled']) {
-        $collageConfigFilePath = Collage::getCollageConfigPath($newConfig['collage']['layout'], $newConfig['collage']['orientation']);
-
-        if ($collageConfigFilePath !== null) {
-            $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
-
-            if (is_array($collageJson)) {
-                if (isset($collageJson['layout']) && !empty($collageJson['layout'])) {
-                    $layoutConfigArray = $collageJson['layout'];
-
-                    if (array_key_exists('placeholder', $collageJson)) {
-                        $newConfig['collage']['placeholder'] = $collageJson['placeholder'];
-                    }
-                    if (array_key_exists('placeholderposition', $collageJson)) {
-                        $newConfig['collage']['placeholderposition'] = $collageJson['placeholderposition'];
-                    }
-                    if (array_key_exists('placeholderpath', $collageJson)) {
-                        $newConfig['collage']['placeholderpath'] = $collageJson['placeholderpath'];
-                    }
-                } else {
-                    $layoutConfigArray = $collageJson;
-                }
-
-                // Calculate collage limit
-                if (str_starts_with($newConfig['collage']['layout'], '2x')) {
-                    $newConfig['collage']['limit'] = (int) ceil(count($layoutConfigArray) / 2);
-                } else {
-                    $newConfig['collage']['limit'] = count($layoutConfigArray);
-                }
-
-                // If there is a collage placeholder whithin the correct range (0 < placeholderposition <= collage limit), we need to decrease the collage limit by 1
-                if ($newConfig['collage']['placeholder']) {
-                    $collagePlaceholderPosition = (int) $newConfig['collage']['placeholderposition'];
-                    if ($collagePlaceholderPosition > 0 && $collagePlaceholderPosition <= $newConfig['collage']['limit']) {
-                        $newConfig['collage']['limit'] = $newConfig['collage']['limit'] - 1;
-                    } else {
-                        $newConfig['collage']['placeholder'] = false;
-                        $logger->debug('Placeholder position not in range. Placeholder disabled.');
-                    }
-
-                    if ($newConfig['collage']['placeholderpath'] === '') {
-                        $newConfig['collage']['placeholder'] = false;
-                        $logger->debug('Collage Placeholder is empty. Collage Placeholder disabled.');
-                    }
-                }
-            } else {
-                $newConfig['collage']['enabled'] = false;
-                $logger->debug('No valid collage json found. Collage disabled.');
-            }
-        }
+        $limitData = Collage::calculateLimit($newConfig['collage'], $logger);
+        $newConfig['collage']['limit'] = $limitData['limit'];
+        $newConfig['collage']['placeholder'] = $limitData['placeholderEnabled'];
         if ($newConfig['collage']['limit'] < 1) {
             $newConfig['collage']['enabled'] = false;
-            $newConfig['collage']['limit'] = $defaultConfig['collage']['limit'];
-            $logger->debug('Invalid collage limit, must be 1 or greater. Collage disabled.');
         }
     }
 
