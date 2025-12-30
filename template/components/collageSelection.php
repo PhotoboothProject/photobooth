@@ -8,9 +8,12 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
 {
     $languageService = LanguageService::getInstance();
 
-    $html = '<div id="collageDiv">';
-    $html .= '<p>' . $languageService->translate('selectCollageLayout') . '</p>';
-    $html .= '<select id="collageSelect">';
+    $html = '<div id="collageSelector">';
+    $html .= '<div class="modal hidden" id="collageSelectorModal" aria-hidden="true" role="dialog" aria-labelledby="collageSelectorTitle">';
+    $html .= '<div class="modal-inner">';
+    $html .= '<div class="modal-body">';
+    $html .= '<h3 id="collageSelectorTitle">' . $languageService->translate('selectCollageLayout') . '</h3>';
+    $html .= '<div class="collageSelector__options">';
 
     foreach (CollageLayoutEnum::cases() as $layout) {
         if (in_array($layout, $collageConfig['layouts_enabled'])) {
@@ -18,19 +21,26 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
             $limitData = Collage::calculateLimit($collageConfig);
             $limit = $limitData['limit'];
 
-            $selected = ($layout->value === $collageConfig['layout']) ? ' selected' : '';
-
             $html .= sprintf(
-                '<option value="%s" data-limit="%d"%s>%s</option>',
-                htmlspecialchars($layout->value, ENT_QUOTES, 'UTF-8'),
+                '<button type="button" class="collageSelector__option cursor-pointer" data-layout="%s" data-limit="%d">' .
+                '%s' .
+                '<span class="collageSelector__limit">' .
+                $languageService->translate('pictures') . ': %d' .
+                '</span>' .
+                '</button>',
+                $layout->value,
                 $limit,
-                $selected,
-                htmlspecialchars($layout->label(), ENT_QUOTES, 'UTF-8')
+                $layout->label(),
+                $limit
             );
         }
     }
 
-    $html .= '</select>';
+    $html .= '</div>'; // options
+    $html .= '</div>'; // body
+    $html .= '<div class="modal-buttonbar">';
+    $html .= '<button type="button" class="modal-button" id="collageSelectorClose">' . htmlspecialchars($languageService->translate('close'), ENT_QUOTES, 'UTF-8') . '</button>';
+    $html .= '</div></div></div>';
     $html .= '</div>';
 
     return $html;
