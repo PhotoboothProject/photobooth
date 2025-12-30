@@ -4,7 +4,7 @@
 
 To use a preview of the upcoming Version you need to install the `Install last development version` using the `install-photobooth.sh` installer (now also works on all devices running debian / a debian based OS).
 Last development version is installed by default! You can check the commit history for changes made since your installation [here](https://github.com/PhotoboothProject/photobooth/commits/dev).
-An updated FAQ can always be found at [localhost/faq](http://localhost/faq).
+An updated FAQ can always be found at [localhost/faq](http://localhost/faq) (or [http://localhost/photobooth/faq](http://localhost/photobooth/faq)).
 
 Please read the license notice [here](https://github.com/PhotoboothProject/photobooth/blob/dev/LICENSE_NOTICE).
 <hr>
@@ -52,7 +52,7 @@ This release keeps the stable Photobooth v4 compatible with latest Photobooth in
 
 * update script locations
 * Update build dependencies
-* Move welcome page to http://localhost/welcome for automated testing of installation script
+* Move welcome page to http://localhost/welcome (or http://localhost/photobooth/welcome) for automated testing of installation script
 * Add workflow for automated release on push to v* tags
 * Use own fork of Onoff library
 
@@ -327,13 +327,13 @@ This release keeps the stable Photobooth v4 compatible with latest Photobooth in
 * New options for the QR Code on print by @fmiccolis in  [#65](https://github.com/PhotoboothProject/photobooth/pull/65)
 * Feature: make icons adjustable by @andi34 in  [#74](https://github.com/PhotoboothProject/photobooth/pull/74)
 * Show frame over the preview by @fmiccolis in  [#45](https://github.com/PhotoboothProject/photobooth/pull/45)
-* feature: add simple trigger ( [http://localhost/trigger.php](http://localhost/trigger.php) ) for remotebuzzer server by @andi34 in  [#66](https://github.com/PhotoboothProject/photobooth/pull/66)
+* feature: add simple trigger ( [http://localhost/trigger.php](http://localhost/trigger.php) or [http://localhost/photobooth/trigger.php](http://localhost/photobooth/trigger.php) ) for remotebuzzer server by @andi34 in  [#66](https://github.com/PhotoboothProject/photobooth/pull/66)
 
 **General**
 
 * allow collage background images to be in any filetype gd understands by @up-87 in [#63](https://github.com/PhotoboothProject/photobooth/pull/63)
 * core(navbar): restructure navbar function by @andi34 in [#64](https://github.com/PhotoboothProject/photobooth/pull/64)
-* Restructure preview handling, add testpage for preview settings  ( [http://localhost/test/preview.php](http://localhost/test/preview.php) ) by @andi34 in  [#61](https://github.com/PhotoboothProject/photobooth/pull/61)
+* Restructure preview handling, add testpage for preview settings  ( [http://localhost/test/preview.php](http://localhost/test/preview.php) or [http://localhost/photobooth/test/preview.php](http://localhost/photobooth/test/preview.php) ) by @andi34 in  [#61](https://github.com/PhotoboothProject/photobooth/pull/61)
 * make collage handling more configurable, fix collages and the retry mechanism by @up-87 in  [#69](https://github.com/PhotoboothProject/photobooth/pull/69)
 * cleanup: remove experimental updater & dependencies checker by @andi34 in  [#84](https://github.com/PhotoboothProject/photobooth/pull/84)
 * cleanup: api, also improve random image naming by @andi34 in  [#87](https://github.com/PhotoboothProject/photobooth/pull/87)
@@ -726,8 +726,7 @@ sudo bash enable-usb-sync.sh
   and
   2) also well positioned to help people with less experience on the server administration and Unix / Raspberry Pi OS side of things.
 
-  Access to the debug panel is available through the admin panel (switch to expert view) or via direct URL [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php) (
-  or [http://localhost/photobooth/admin/debugpanel.php](http://localhost/photobooth/admin/debugpanel.php)).
+  Access to the debug panel is available through the admin panel (switch to expert view) or via direct URL [http://localhost/admin/debugpanel.php](http://localhost/admin/debugpanel.php) (or [http://localhost/photobooth/admin/debugpanel.php](http://localhost/photobooth/admin/debugpanel.php)) (
 - Removed unneeded file-type checks all around the Photobooth api (we check for jpeg images already inside the api/applyEffects.php)
 - result screen: smaller QR code & smaller font-size
 
@@ -773,8 +772,7 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
 
 **Breaking changes**
 - The configuration setup has changed completely on Photobooth v3 and some config options have been removed!
-  **Please note:** Your old config (Photobooth v2.x and older) won't work, **you must** setup your configuration via [adminpanel](http://localhost/admin) (
-  or [adminpanel](http://localhost/photobooth/admin)) again!
+  **Please note:** Your old config (Photobooth v2.x and older) won't work, **you must** setup your configuration via [adminpanel](http://localhost/admin) (or [adminpanel](http://localhost/photobooth/admin)) again!
 
 **Bugfixes**
 - Chromakeying:
@@ -796,12 +794,12 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
   - allow to deactivate standalone picture [Fix #155](https://github.com/andi34/photobooth/issues/155)
   - new collage layouts: 1+3, 1+3 (2), 1+2 & 2x2 (2)
   - remove use of background images, user should apply frames instead
-  - test your collage settings accessing [localhost/test/collage.php](http://localhost/test/collage.php)
+  - test your collage settings accessing [localhost/test/collage.php](http://localhost/test/collage.php) (or [http://localhost/photobooth/test/collage.php](http://localhost/photobooth/test/collage.php))
 - Chroma keying:
   - Allow to switch between MarvinJ and Seriously.js algorithm for chroma keying [#123](https://github.com/andi34/photobooth/pull/123)
   - Seriously.js: use color picker to define keyed color, use Seriously.js by default [#213](https://github.com/andi34/photobooth/pull/213)
   - allow to define background path used for chroma keying, place your own backgrounds inside a subfolder of your Photobooth, e.g. inside `private/backgrounds` and define it via admin panel
-  - added "live chroma keying" (choose a background -> take a picture -> get the keyed image with choosen background), access via [http://localhost/livechroma.php](http://localhost/livechroma.php) or use the config option to use it as default start page [#157](https://github.com/andi34/photobooth/pull/157)
+  - added "live chroma keying" (choose a background -> take a picture -> get the keyed image with choosen background), access via [http://localhost/livechroma.php](http://localhost/livechroma.php) or [http://localhost/photobooth/livechroma.php](http://localhost/photobooth/livechroma.php) or use the config option to use it as default start page [#157](https://github.com/andi34/photobooth/pull/157)
   - Make imagesize for chromakeying adjustable
     - S = max 1000px
     - M = max 1500px (default like before)
@@ -839,8 +837,7 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
     - Advanced View: Features and elements used more often - i.e. Printing, Frames for Pictures, Chroma-Keying, etc. - maybe around 50% of all options on top. This should be sufficient for most of the users.
     - Expert View: Dev-Setting, Data folders, Commands, etc. - the remaining 20-30% of options are mapped to this view. Geeks right here.
   - Admin panel option to hide / show panel headings by Operating System
-  - Allow to download data folder as zip from [http://localhost/admin/diskusage.php](http://localhost/admin/diskusage.php) (
-    or [http://localhost/photobooth/admin/diskusage.php](http://localhost/photobooth/admin/diskusage.php)).
+  - Allow to download data folder as zip from [http://localhost/admin/diskusage.php](http://localhost/admin/diskusage.php) (or [http://localhost/photobooth/admin/diskusage.php](http://localhost/photobooth/admin/diskusage.php)) (
 - Installation:
   - Installation [Instructions for Windows](https://github.com/andi34/photobooth/wiki/Installation-on-Windows) added to Wiki
   - install-raspbian.sh script:
@@ -1038,7 +1035,7 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
 <hr>
 
 **General changes**
-- Add offline FAQ, access directly via [http://localhost/manual/faq.html](http://localhost/manual/faq.html)
+- Add offline FAQ, access directly via [http://localhost/manual/faq.html](http://localhost/manual/faq.html) (or [http://localhost/photobooth/manual/faq.html](http://localhost/photobooth/manual/faq.html))
 - Update jQuery to v3.5.1
 
 <hr>
@@ -1072,7 +1069,7 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
 
 ## 2.4.0
 **New Options**
-- offline manual with settings explained under [localhost/manual](http://localhost/manual) (https://github.com/andi34/photobooth/pull/59)
+- offline manual with settings explained under [localhost/manual](http://localhost/manual) (or [http://localhost/photobooth/manual](http://localhost/photobooth/manual)) (https://github.com/andi34/photobooth/pull/59)
 - define collage frame seperately (https://github.com/andi34/photobooth/pull/63)
 - event specific database: You can now rename the picture and email database via Adminpanel. Only pictures inside the defined database are visible via gallery. (https://github.com/andi34/photobooth/pull/61)
 - Preview/Stream from device cam as background on start page (https://github.com/andi34/photobooth/pull/58)
@@ -1148,8 +1145,8 @@ Photobooth UI has changed to a modern look on most pages and our Admin panel and
 **General changes**
 - install-raspbian: use Apache2 webserver by default again
 - added Slideshow option to Gallery
-- standalone slideshow [localhost/slideshow](http://localhost/slideshow)
-- access login via [localhost/login](http://localhost/login) instead [localhost/login.php](http://localhost/login.php)
+- standalone slideshow [localhost/slideshow](http://localhost/slideshow) (or [http://localhost/photobooth/slideshow](http://localhost/photobooth/slideshow))
+- access login via [localhost/login](http://localhost/login) (or [http://localhost/photobooth/login](http://localhost/photobooth/login)) instead [localhost/login.php](http://localhost/login.php)
 - fix windows compatibility
 - fix check for image filter
 - performance improvement (https://github.com/andreknieriem/photobooth/pull/226)

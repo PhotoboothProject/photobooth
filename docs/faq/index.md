@@ -59,13 +59,13 @@ Your language is missing? Don't worry, create a [localization request here](http
 
 ## How can I test my current photo settings?
 
-Open [http://localhost/test/photo.php](http://localhost/test/photo.php) in your Webbrowser and a you can find a photo that is created with your current settings.
+Open [http://localhost/test/photo.php](http://localhost/test/photo.php) (or [http://localhost/photobooth/test/photo.php](http://localhost/photobooth/test/photo.php)) in your Webbrowser and you can find a photo that is created with your current settings.
 
 ---
 
 ## How can I test my current collage settings?
 
-Open [http://localhost/test/collage.php](http://localhost/test/collage.php) in your Webbrowser and a you can find a collage that is created with your current settings.
+Open [http://localhost/test/collage.php](http://localhost/test/collage.php) (or [http://localhost/photobooth/test/collage.php](http://localhost/photobooth/test/collage.php)) in your Webbrowser and you can find a collage that is created with your current settings.
 
 ---
 
@@ -229,7 +229,7 @@ Tested working setup:
 
 ## How to only open the gallery to avoid people taking pictures?
 
-Open [http://localhost/gallery](http://localhost/gallery) in your browser (you can replace `localhost` with your IP adress).
+Open [http://localhost/gallery](http://localhost/gallery) (or [http://localhost/photobooth/gallery](http://localhost/photobooth/gallery)) in your browser (you can replace `localhost` with your IP adress).
 
 ---
 
@@ -245,7 +245,7 @@ Now restart your Chromium browser.
 
 ## How to adjust the `php.ini` file?
 
-Open [http://localhost/phpinfo.php](http://localhost/phpinfo.php) in your browser.
+Open [http://localhost/phpinfo.php](http://localhost/phpinfo.php) (or [http://localhost/photobooth/phpinfo.php](http://localhost/photobooth/phpinfo.php)) in your browser.
 
 Take a look for "Loaded Configuration File" to get the path of your php.ini, you need _sudo_ rights to edit the file.
 
@@ -346,7 +346,9 @@ and enter/adjust the @chromium-browser entries as followed (adjust the value _19
 
 ```
 @chromium-browser --new-window --start-fullscreen --kiosk http://localhost --window-position=1920,0 --user-data-dir=Default
+@chromium-browser --new-window --start-fullscreen --kiosk http://localhost/photobooth --window-position=1920,0 --user-data-dir=Default
 @chromium-browser --new-window --start-fullscreen --kiosk http://localhost/slideshow/ --window-position=0,0 --user-data-dir='Profile 1'
+@chromium-browser --new-window --start-fullscreen --kiosk http://localhost/photobooth/slideshow/ --window-position=0,0 --user-data-dir='Profile 1'
 ```
 
 ---
@@ -483,18 +485,18 @@ or [http://localhost/photobooth/admin/upload](http://localhost/photobooth/admin/
 
 1. Upload / Copy all the (transparent) frames you want to private/images/{FrameFolder}
 2. Enable picture_take_frame
-3. specify picture_frame url : http://localhost/api/randomImg.php?dir={FrameFolder}
+3. specify picture_frame url : http://localhost/api/randomImg.php?dir={FrameFolder} (or http://localhost/photobooth/api/randomImg.php?dir={FrameFolder})
 
 ### Use for COLLAGE FRAMES:
 
 1. Upload / Copy all the (transparent) frames you want to private/images/{FrameFolder}
 2. Enable collage_take_frame (always or once)
-3. specify collage_frame url : http://localhost/api/randomImg.php?dir={FrameFolder}
+3. specify collage_frame url : http://localhost/api/randomImg.php?dir={FrameFolder} (or http://localhost/photobooth/api/randomImg.php?dir={FrameFolder})
 
 ### Use for BACKGROUNDS:
 
 1. Upload / Copy all the backgrounds you want to private/images/{BgFolder}
-2. specify collage_background url : http://localhost/api/randomImg.php?dir={BgFolder}
+2. specify collage_background url : http://localhost/api/randomImg.php?dir={BgFolder} (or http://localhost/photobooth/api/randomImg.php?dir={BgFolder})
 
 **NOTES:**
 
