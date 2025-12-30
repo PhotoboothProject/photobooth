@@ -50,7 +50,7 @@ final class CollageConfiguration
                         ->end()
                     ->end()
                 ->booleanNode('allow_selection')->defaultValue(false)->end()
-                ->arrayNode('layouts_disabled')
+                ->arrayNode('layouts_enabled')
                     ->enumPrototype()
                         ->values(CollageLayoutEnum::cases())
                         ->beforeNormalization()
