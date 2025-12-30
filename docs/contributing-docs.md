@@ -23,14 +23,14 @@ Help improve the Photobooth docs by following these steps.
 
 - From the repo root, build the docs and start the preview server:
   ```
-  mkdocs build --config-file mkdocs_remote.yml --site-dir faq
+  mkdocs build --config-file mkdocs_remote.yml
   mkdocs serve -f mkdocs_remote.yml
   ```
 - Open the URL shown in the terminal (typically `http://127.0.0.1:8000`) to review your changes live.
 
 ## 4) Edit guidelines
 
-- Don't commit changes to the `faq/` directory directly; it's generated from the `docs/` source files during the build step.
+- Don't commit changes to the `faq/` directory directly; it's generated from the `docs/` source files during the build step. Your local build files are stored inside `site/` and not tracked by git.
 - Keep text concise and practical; prefer short paragraphs and bullet lists.
 - Use relative links to other docs pages (e.g. `faq/index.md`), and ensure new pages are added to `mkdocs_remote.yml`.
 - Place new images in `docs/assets/` and reference them with relative paths.
