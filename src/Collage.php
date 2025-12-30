@@ -5,8 +5,10 @@ namespace Photobooth;
 use Photobooth\Dto\CollageConfig;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Factory\CollageConfigFactory;
+use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
+use Psr\Log\LoggerInterface;
 
 class Collage
 {
@@ -25,6 +27,73 @@ class Collage
         self::$pictureOrientation = '';
         self::$rotateAfterCreation = false;
         self::$layoutPath = '';
+    }
+
+    /**
+     * Calculate collage limit based on layout definition and placeholder settings.
+     *
+     * @return array{limit:int, placeholderEnabled:bool}
+     */
+    public static function calculateLimit(
+        array $collageConfig,
+        ?LoggerInterface $logger = null
+    ): array {
+        $layout = (string) ($collageConfig['layout'] ?? '');
+        $orientation = (string) ($collageConfig['orientation'] ?? 'landscape');
+        $placeholderEnabled = (bool) ($collageConfig['placeholder'] ?? false);
+        $placeholderPosition = (int) ($collageConfig['placeholderposition'] ?? 0);
+        $placeholderPath = $collageConfig['placeholderpath'] ?? null;
+
+        $fallbackLimit = (int) ($collageConfig['limit'] ?? 1);
+        if ($fallbackLimit < 1) {
+            $fallbackLimit = 1;
+        }
+        $limit = $fallbackLimit;
+        $logger = $logger ?? LoggerService::getInstance()->getLogger('main');
+
+        $collageConfigFilePath = self::getCollageConfigPath($layout, $orientation);
+
+        if ($collageConfigFilePath !== null) {
+            $collageJson = json_decode((string) file_get_contents($collageConfigFilePath), true);
+            if (is_array($collageJson)) {
+                $layoutConfigArray = !empty($collageJson['layout'])
+                    ? $collageJson['layout']
+                    : $collageJson;
+
+                if (str_starts_with($layout, '2x')) {
+                    $limit = (int) ceil(count($layoutConfigArray) / 2);
+                } else {
+                    $limit = count($layoutConfigArray);
+                }
+
+                if ($placeholderEnabled) {
+                    if ($placeholderPosition > 0 && $placeholderPosition <= $limit) {
+                        $limit--;
+                    } else {
+                        $placeholderEnabled = false;
+                        $logger->debug('Placeholder position not in range. Placeholder disabled.');
+                    }
+
+                    if ($placeholderPath === null || $placeholderPath === '') {
+                        $placeholderEnabled = false;
+                        $logger->debug('Collage Placeholder is empty. Collage Placeholder disabled.');
+                    }
+                }
+            } else {
+                $logger->debug('No valid collage json found. Collage disabled.');
+            }
+        }
+
+        if ($limit < 1) {
+            $limit = $fallbackLimit;
+            $placeholderEnabled = false;
+            $logger->debug('Invalid collage limit, must be 1 or greater. Collage disabled.');
+        }
+
+        return [
+            'limit' => $limit,
+            'placeholderEnabled' => $placeholderEnabled,
+        ];
     }
 
     public static function getCollageConfigPath(string $collageLayout, string $pictureOrientation): ?string

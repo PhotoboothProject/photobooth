@@ -2,6 +2,7 @@
 
 use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Service\LanguageService;
+use Photobooth\Collage;
 
 function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
 {
@@ -13,7 +14,9 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
 
     foreach (CollageLayoutEnum::cases() as $layout) {
         if (in_array($layout, $collageConfig['layouts_enabled'])) {
-            $limit = $layout->getLimitByValue($layout->value);
+            $collageConfig['layout'] = $layout->value;
+            $limitData = Collage::calculateLimit($collageConfig);
+            $limit = $limitData['limit'];
 
             $selected = ($layout->value === $collageConfig['layout']) ? ' selected' : '';
 
