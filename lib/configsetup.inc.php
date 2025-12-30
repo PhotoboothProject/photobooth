@@ -871,13 +871,13 @@ return [
             'name' => 'collage[allow_selection]',
             'value' => $config['collage']['allow_selection'],
         ],
-        'collage_layouts_disabled' => [
+        'collage_layouts_enabled' => [
             'view' => 'advanced',
             'type' => 'multi-select',
-            'name' => 'collage[layouts_disabled]',
-            'placeholder' => $defaultConfig['collage']['layouts_disabled'],
+            'name' => 'collage[layouts_enabled]',
+            'placeholder' => $defaultConfig['collage']['layouts_enabled'],
             'options' => CollageLayoutEnum::cases(),
-            'value' => $config['collage']['layouts_disabled'],
+            'value' => $config['collage']['layouts_enabled'],
         ],
         'collage_orientation' => [
             'view' => 'basic',

@@ -12,7 +12,7 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
     $html .= '<select id="collageSelect">';
 
     foreach (CollageLayoutEnum::cases() as $layout) {
-        if (!in_array($layout, $collageConfig['layouts_disabled'])) {
+        if (in_array($layout, $collageConfig['layouts_enabled'])) {
             $limit = $layout->getLimitByValue($layout->value);
 
             $selected = ($layout->value === $collageConfig['layout']) ? ' selected' : '';
