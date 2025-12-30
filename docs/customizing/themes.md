@@ -5,7 +5,7 @@ Themes allow you to save and restore groups of visual and event‑related settin
 ## Where to find it
 
 - Open the admin panel.
-- Go to the *Genral* section and look for the **Themes** card.
+- Go to the *General* section and look for the **Themes** card.
 
 ## What gets saved
 
