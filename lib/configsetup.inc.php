@@ -985,7 +985,7 @@ return [
             'type' => 'select',
             'name' => 'collage[layout]',
             'data-theme-field' => 'true',
-            'options_html' => CollageLayoutScanner::getLayoutSelectOptionsHtml($config['collage']['layout'] ?? $defaultConfig['collage']['layout']), 
+            'options_html' => CollageLayoutScanner::getLayoutSelectOptionsHtml($config['collage']['layout'] ?? $defaultConfig['collage']['layout']),
         ],
         'collage_allow_selection' => [
             'view' => 'advanced',

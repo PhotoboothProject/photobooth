@@ -299,8 +299,6 @@ class Collage
                 } else {
                     $layoutConfigArray = $collageJson;
                 }
-            } else {
-                return false;
             }
         }
 

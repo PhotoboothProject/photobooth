@@ -2,7 +2,6 @@
 
 namespace Photobooth\Utility;
 
-use Photobooth\Utility\PathUtility;
 use Photobooth\Service\LanguageService;
 
 class CollageLayoutScanner
@@ -29,15 +28,15 @@ class CollageLayoutScanner
 
             // Initialize the main group key in $layoutFiles early
             $layoutFiles[$mainGroupKey] = [];
-            
+
             // Ensure the base directory exists, create if it's a 'private' one and missing
             if (!is_dir($absoluteBaseDir)) {
-                if ($mainGroupKey === 'private') { 
+                if ($mainGroupKey === 'private') {
                     try {
                         mkdir($absoluteBaseDir, 0777, true);
                     } catch (\Exception $e) {
                         error_log('CollageLayoutScanner: Failed to create base directory: ' . $absoluteBaseDir . ' - ' . $e->getMessage());
-                        continue; 
+                        continue;
                     }
                 } else {
                     continue; // Skip if 'template' base dir doesn't exist (expected to be present)
@@ -52,18 +51,18 @@ class CollageLayoutScanner
 
                 // Ensure the subdirectory exists, create if it's in a 'private' context and missing
                 if (!is_dir($subDirPath)) {
-                    if ($mainGroupKey === 'private') { 
+                    if ($mainGroupKey === 'private') {
                         try {
                             mkdir($subDirPath, 0777, true);
                         } catch (\Exception $e) {
                             error_log('CollageLayoutScanner: Failed to create subdirectory: ' . $subDirPath . ' - ' . $e->getMessage());
-                            continue; 
+                            continue;
                         }
                     } else {
                         continue; // Skip if 'template' subdir doesn't exist (expected to be present)
                     }
                 }
-                
+
                 // If directory exists (or was created), scan it
                 // Pass the mainGroupKey AND the subGroupName to build the nested structure
                 self::scanDirectory($subDirPath, $layoutFiles[$mainGroupKey], $subGroupName, $mainGroupKey);
@@ -84,6 +83,10 @@ class CollageLayoutScanner
     private static function scanDirectory(string $directory, array &$layoutFiles, string $subGroupKey, string $mainGroupKey): void
     {
         $files = glob($directory . DIRECTORY_SEPARATOR . '*.json');
+        if ($files === false) {
+            return;
+        }
+
         foreach ($files as $filePath) {
             $fileContent = file_get_contents($filePath);
             if ($fileContent === false) {
@@ -97,8 +100,8 @@ class CollageLayoutScanner
                 continue;
             }
 
-            $layoutId = basename($filePath, '.json'); 
-            
+            $layoutId = basename($filePath, '.json');
+
             $layoutName = $layoutConfig['name'] ?? $layoutId;
 
             $refFilePath = $mainGroupKey . '/collage/' . $subGroupKey . '/' . $layoutId;
@@ -108,9 +111,9 @@ class CollageLayoutScanner
             $layoutFiles[$subGroupKey][$layoutId] = [
                 'id' => $layoutId,
                 'name' => $layoutName,
-                'description' => $layoutConfig['description'] ?? '', 
+                'description' => $layoutConfig['description'] ?? '',
                 'author' => $layoutConfig['author'] ?? 'Unknown',
-                'ref_file_path' => $refFilePath, 
+                'ref_file_path' => $refFilePath,
                 'aspect_ratio' => $layoutConfig['aspect_ratio'] ?? '',
                 'width' => $layoutConfig['width'] ?? '',
                 'height' => $layoutConfig['height'] ?? '',
@@ -164,7 +167,7 @@ class CollageLayoutScanner
                 }
             }
         }
-        
+
         return $groupedLayouts;
     }
 
@@ -179,6 +182,10 @@ class CollageLayoutScanner
     {
         $AbsFilePath = self::getCollageConfigPath($logicalReferencePath);
 
+        if ($AbsFilePath === null) {
+            return null;
+        }
+
         $fileContent = file_get_contents($AbsFilePath);
 
         if ($fileContent === false) {
@@ -192,17 +199,16 @@ class CollageLayoutScanner
             return [];
         }
 
-        $layoutId = basename($AbsFilePath, '.json'); 
-            
-        $layoutName = $layoutConfig['name'] ?? $layoutId; 
+        $layoutId = basename($AbsFilePath, '.json');
 
-        
+        $layoutName = $layoutConfig['name'] ?? $layoutId;
+
         $layoutData = [
                 'id' => $layoutId,
                 'name' => $layoutName,
-                'ref_file_path' => $logicalReferencePath, 
+                'ref_file_path' => $logicalReferencePath,
             ];
-        
+
         $layoutData = array_merge($layoutConfig, $layoutData);
 
         return $layoutData;
@@ -223,7 +229,7 @@ class CollageLayoutScanner
 
         foreach ($designes as $mainGroupTitle => $subGroups) {
             $optionsHtml .= '<optgroup label="' . htmlspecialchars($mainGroupTitle, ENT_QUOTES) . '">';
-            
+
             // Sort subgroups by their translated titles to ensure consistent order
             ksort($subGroups);
 
@@ -234,13 +240,13 @@ class CollageLayoutScanner
                 }
 
                 // Sort the layouts within the subgroup by their name
-                uasort($layouts, function($a, $b) {
+                uasort($layouts, function ($a, $b) {
                     return strcmp($a['name'] ?? $a['id'], $b['name'] ?? $b['id']);
                 });
 
                 foreach ($layouts as $layoutId => $layoutData) {
                     $selected = ($layoutData['ref_file_path'] === $currentSelectedPath) ? ' selected="selected"' : '';
-                    
+
                     $displayName = htmlspecialchars($layoutData['name'] ?? $layoutData['id'] ?? '', ENT_QUOTES);
 
                     $optionsHtml .= '<option value="' . htmlspecialchars($layoutData['ref_file_path'], ENT_QUOTES) . '"' . $selected . '>';
@@ -265,14 +271,14 @@ class CollageLayoutScanner
     {
         // Add the .json extension
         $fullPathWithExtension = $logicalReferencePath . '.json';
-        
+
         // Let PathUtility build the absolute path
         $absolutePath = PathUtility::getAbsolutePath($fullPathWithExtension);
 
         if (file_exists($absolutePath)) {
             return $absolutePath;
         }
-        
+
         // Log, falls die Datei nicht gefunden wird, hilfreich für Debugging
         error_log('DEBUG: CollageLayoutScanner::getCollageConfigPath - Layout JSON file not found at: ' . $absolutePath);
         return null;

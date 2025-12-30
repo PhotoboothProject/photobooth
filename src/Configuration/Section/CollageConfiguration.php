@@ -61,9 +61,9 @@ final class CollageConfiguration
                     ->validate()
                         ->ifTrue(function ($value) {
                             if (!is_string($value) || empty($value)) {
-                                return true; 
+                                return true;
                             }
-                            $absolutePath = CollageLayoutScanner::getCollageConfigPath($value); 
+                            $absolutePath = CollageLayoutScanner::getCollageConfigPath($value);
                             return $absolutePath === null;
                         })
                         ->thenInvalid('The collage layout "%s" does not exist or is invalid.')

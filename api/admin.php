@@ -286,8 +286,9 @@ if ($action === 'reset') {
         $limitData = Collage::calculateLimit($newConfig['collage'], $logger);
         $newConfig['collage']['limit'] = $limitData['limit'];
         $newConfig['collage']['placeholder'] = $limitData['placeholderEnabled'];
-    if ($newConfig['collage']['limit'] < 1) {
-        $newConfig['collage']['enabled'] = false;
+        if ($newConfig['collage']['limit'] < 1) {
+            $newConfig['collage']['enabled'] = false;
+        }
     }
 
     if ($newConfig['picture']['take_frame'] && $newConfig['picture']['frame'] === '') {
