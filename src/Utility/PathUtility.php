@@ -172,6 +172,31 @@ class PathUtility
     }
 
     /**
+     * Converts a path to a project-relative, forward-slashed form.
+     *
+     * Behavior:
+     * - URLs are returned unchanged.
+     * - Absolute paths inside the project root are stripped to project-relative.
+     * - Absolute paths outside the project are returned as-is.
+     * - Relative paths are normalized (slashes fixed) and returned.
+     */
+    public static function toProjectRelative(string $path): string
+    {
+        if (self::isUrl($path)) {
+            return $path;
+        }
+
+        $normalized = self::fixFilePath($path);
+        $root = self::getRootPath();
+
+        if (self::isAbsolutePath($normalized) && str_starts_with($normalized, $root)) {
+            return self::fixFilePath(substr($normalized, strlen($root)));
+        }
+
+        return $normalized;
+    }
+
+    /**
      * Resolves a file path or URL to a readable absolute filesystem path.
      *
      * Resolution strategy:

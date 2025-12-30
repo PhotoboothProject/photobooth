@@ -4,9 +4,13 @@ require_once '../lib/boot.php';
 
 use Photobooth\Service\ThemeService;
 
-header('Content-Type: application/json');
-
 $themeService = ThemeService::getInstance();
+
+$sendJson = static function (array $payload): void {
+    header('Content-Type: application/json');
+    echo json_encode($payload);
+    exit();
+};
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $query = $_GET;
@@ -16,36 +20,80 @@ if ($method === 'GET') {
 
     if ($action === 'list') {
         $all = $themeService->getAll();
-        echo json_encode([
+        $sendJson([
             'status' => 'success',
             'themes' => array_keys($all),
         ]);
-        exit();
     }
 
     if ($action === 'get') {
         $name = (string)($query['name'] ?? '');
         $theme = $themeService->get($name);
         if ($theme === null) {
-            echo json_encode([
+            $sendJson([
                 'status' => 'error',
                 'message' => 'Theme not found',
             ]);
-            exit();
         }
 
-        echo json_encode([
+        $sendJson([
             'status' => 'success',
             'theme' => $theme,
         ]);
+    }
+
+    if ($action === 'export') {
+        $name = (string)($query['name'] ?? '');
+        $result = $themeService->exportTheme($name);
+        if (!$result['success'] || !isset($result['file'])) {
+            $sendJson([
+                'status' => 'error',
+                'message' => $result['message'] ?? 'Failed to export theme',
+            ]);
+        }
+
+        $downloadName = isset($result['downloadName']) ? basename($result['downloadName']) : 'theme.zip';
+        $filePath = $result['file'];
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . $downloadName . '"');
+        header('Content-Length: ' . filesize($filePath));
+        readfile($filePath);
+        @unlink($filePath);
         exit();
     }
 
-    echo json_encode([
+    $sendJson([
         'status' => 'error',
         'message' => 'Unknown action',
     ]);
-    exit();
+}
+
+// Handle multipart/form-data import first
+$postAction = $_POST['action'] ?? null;
+if ($postAction === 'import') {
+    if (!isset($_FILES['theme_zip']) || !is_uploaded_file($_FILES['theme_zip']['tmp_name']) || $_FILES['theme_zip']['error'] !== UPLOAD_ERR_OK) {
+        $sendJson([
+            'status' => 'error',
+            'message' => 'No theme zip provided',
+        ]);
+    }
+
+    $targetName = isset($_POST['name']) ? (string)$_POST['name'] : null;
+    $tmpFile = $_FILES['theme_zip']['tmp_name'];
+
+    $result = $themeService->importTheme($tmpFile, $targetName);
+    if (!$result['success']) {
+        $sendJson([
+            'status' => 'error',
+            'message' => $result['message'] ?? 'Import failed',
+        ]);
+    }
+
+    $sendJson([
+        'status' => 'success',
+        'name' => $result['name'] ?? '',
+        'theme' => $result['theme'] ?? [],
+    ]);
 }
 
 $rawBody = file_get_contents('php://input');
@@ -62,44 +110,39 @@ if ($action === 'save') {
     $data = isset($body['theme']) && is_array($body['theme']) ? $body['theme'] : [];
 
     if ($name === '') {
-        echo json_encode([
+        $sendJson([
             'status' => 'error',
             'message' => 'Missing theme name',
         ]);
-        exit();
     }
 
     $themeService->save($name, $data);
 
-    echo json_encode([
+    $sendJson([
         'status' => 'success',
         'message' => 'Theme saved',
     ]);
-    exit();
 }
 
 if ($action === 'delete') {
     $name = isset($body['name']) ? (string)$body['name'] : '';
 
     if ($name === '') {
-        echo json_encode([
+        $sendJson([
             'status' => 'error',
             'message' => 'Missing theme name',
         ]);
-        exit();
     }
 
     $themeService->delete($name);
 
-    echo json_encode([
+    $sendJson([
         'status' => 'success',
         'message' => 'Theme deleted',
     ]);
-    exit();
 }
 
-echo json_encode([
+$sendJson([
     'status' => 'error',
     'message' => 'Unknown action',
 ]);
-exit();

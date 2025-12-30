@@ -508,12 +508,29 @@ class AdminInput
                     </div>
                     <div class="flex flex-row gap-2">
                         <button
+                            id="theme-export-btn"
+                            type="button"
+                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
+                            title="' . $languageService->translate('theme_export') . '"
+                        >
+                            <i class="fa fa-download"></i>
+                        </button>
+                        <button
+                            id="theme-import-btn"
+                            type="button"
+                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
+                            title="' . $languageService->translate('theme_import') . '"
+                        >
+                            <i class="fa fa-upload"></i>
+                        </button>
+                        <input id="theme-import-input" type="file" class="hidden" accept=".zip" />
+                        <button
                             id="theme-load-btn"
                             type="button"
                             class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
                             title="' . $languageService->translate('theme_load') . '"
                         >
-                            <i class="fa fa-download"></i>
+                            <i class="fa fa-refresh"></i>
                         </button>
                         <button
                             id="theme-delete-btn"

@@ -62,6 +62,21 @@ In the **Themes** card you can:
     - Click **Save theme**.
     - A JSON file is created or updated in `private/themes`.
 
+- **Export** a theme
+    - Select a theme from the dropdown.
+    - Click **Export**.
+    - A ZIP is downloaded containing:
+        - `private/themes/<theme-name>.theme.config.json`
+        - All files referenced by the theme (for example background images, frames, logos) from `private/` and `resources/`.
+        - The folder structure inside the ZIP preserves the paths relative to the project root.
+
+- **Import** a theme
+    - Click **Import** and choose a ZIP created by the export feature.
+    - The theme name is taken from the `.theme.config.json` filename inside the ZIP.
+    - If a theme with the same name already exists, it is overwritten.
+    - The ZIP is unpacked into the project preserving its contained folder structure (only `private/` and `resources/` are written).
+    - The imported theme shows up in the dropdown and will be applied immediately.
+
 - **Load** a theme
     - Select a theme from the dropdown.
     - Click **Load theme**.

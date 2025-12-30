@@ -3,10 +3,13 @@
 namespace Photobooth\Service;
 
 use Photobooth\Utility\PathUtility;
+use ZipArchive;
 
 class ThemeService
 {
     private string $themeDirectory;
+    /** @var string[] */
+    private array $imageExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'avif', 'heic', 'bmp'];
 
     public function __construct()
     {
@@ -115,15 +118,312 @@ class ThemeService
         if (is_file($file)) {
             @unlink($file);
         }
+
+        $this->removeAssetsDirectory($name);
+    }
+
+    /**
+     * @return array{success:bool,message?:string,file?:string,downloadName?:string}
+     */
+    public function exportTheme(string $name): array
+    {
+        $theme = $this->get($name);
+        if ($theme === null) {
+            return [
+                'success' => false,
+                'message' => 'Theme not found',
+            ];
+        }
+
+        $safeName = $this->getSafeName($name);
+        $tempZip = tempnam(sys_get_temp_dir(), 'theme_export_');
+        if ($tempZip === false) {
+            return [
+                'success' => false,
+                'message' => 'Unable to create temporary file',
+            ];
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($tempZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return [
+                'success' => false,
+                'message' => 'Unable to open archive',
+            ];
+        }
+
+        // add theme config file at its project-relative location
+        $themeRelativePath = 'private/themes/' . $safeName . '.theme.config.json';
+        $zip->addFromString($themeRelativePath, json_encode($theme, JSON_PRETTY_PRINT));
+
+        // add referenced assets using their project-relative paths
+        $assets = $this->collectAssetCandidates($theme);
+        foreach ($assets as $asset) {
+            $absolutePath = $asset['absolute'];
+            $relativePath = $asset['relative'];
+
+            if (!is_readable($absolutePath)) {
+                continue;
+            }
+
+            $zip->addFile($absolutePath, $relativePath);
+        }
+
+        $zip->close();
+
+        $downloadName = sprintf(
+            'photobooth_theme_%s_%s.zip',
+            $safeName,
+            date('Ymd_His')
+        );
+
+        return [
+            'success' => true,
+            'file' => $tempZip,
+            'downloadName' => $downloadName,
+        ];
+    }
+
+    /**
+     * @return array{success:bool,message?:string,name?:string,theme?:array<string,mixed>}
+     */
+    public function importTheme(string $zipPath, ?string $targetName = null): array
+    {
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath) !== true) {
+            return [
+                'success' => false,
+                'message' => 'Could not open archive',
+            ];
+        }
+
+        // Find theme config in zip
+        $themeFileIndex = null;
+        $themeFilename = null;
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $stat = $zip->statIndex($i);
+            if (!$stat || !isset($stat['name'])) {
+                continue;
+            }
+            $nameInZip = $stat['name'];
+            if (str_ends_with($nameInZip, '.theme.config.json')) {
+                $themeFileIndex = $i;
+                $themeFilename = $nameInZip;
+                break;
+            }
+        }
+
+        if ($themeFileIndex === null || $themeFilename === null) {
+            $zip->close();
+            return [
+                'success' => false,
+                'message' => 'Archive does not contain a theme config',
+            ];
+        }
+
+        $themeContent = $zip->getFromIndex($themeFileIndex);
+        if ($themeContent === false) {
+            $zip->close();
+            return [
+                'success' => false,
+                'message' => 'Unable to read theme config',
+            ];
+        }
+
+        $themeData = json_decode($themeContent, true);
+        if (!is_array($themeData)) {
+            $zip->close();
+            return [
+                'success' => false,
+                'message' => 'Invalid theme config JSON',
+            ];
+        }
+
+        $themeName = basename($themeFilename, '.theme.config.json');
+        $safeName = $this->getSafeName($themeName);
+
+        // extract allowed files preserving structure
+        $allowedPrefixes = ['private/', 'resources/'];
+        $root = PathUtility::getRootPath();
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $stat = $zip->statIndex($i);
+            if (!$stat || !isset($stat['name'])) {
+                continue;
+            }
+
+            $entryName = $stat['name'];
+            // Normalize
+            $entryName = PathUtility::fixFilePath($entryName);
+
+            $isAllowed = false;
+            foreach ($allowedPrefixes as $prefix) {
+                if (str_starts_with($entryName, $prefix)) {
+                    $isAllowed = true;
+                    break;
+                }
+            }
+
+            if (!$isAllowed) {
+                continue;
+            }
+
+            $targetPath = $root . ltrim($entryName, '/');
+            $targetPath = PathUtility::fixFilePath($targetPath);
+
+            // guard against directory traversal
+            if (!str_starts_with($targetPath, $root)) {
+                continue;
+            }
+
+            if (str_ends_with($entryName, '/')) {
+                if (!is_dir($targetPath)) {
+                    @mkdir($targetPath, 0775, true);
+                }
+                continue;
+            }
+
+            $dir = dirname($targetPath);
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0775, true);
+            }
+
+            $stream = $zip->getStream($stat['name']);
+            if ($stream === false) {
+                continue;
+            }
+            $content = stream_get_contents($stream);
+            fclose($stream);
+            if ($content === false) {
+                continue;
+            }
+            @file_put_contents($targetPath, $content);
+        }
+
+        $this->save($safeName, $themeData);
+
+        $zip->close();
+
+        return [
+            'success' => true,
+            'name' => $safeName,
+            'theme' => $themeData,
+        ];
     }
 
     private function getFilePath(string $name): string
+    {
+        $safeName = $this->getSafeName($name);
+
+        return $this->themeDirectory . DIRECTORY_SEPARATOR . $safeName . '.theme.config.json';
+    }
+
+    private function getSafeName(string $name): string
     {
         $safeName = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $name);
         if ($safeName === '') {
             $safeName = 'theme';
         }
 
-        return $this->themeDirectory . DIRECTORY_SEPARATOR . $safeName . '.theme.config.json';
+        return $safeName;
+    }
+
+    /**
+     * @param array<string,mixed> $theme
+     * @return array<int,array{original:string,absolute:string,relative:string}>
+     */
+    private function collectAssetCandidates(array $theme): array
+    {
+        $results = [];
+        $this->walkThemeValues($theme, function (string $value) use (&$results) {
+            $trimmed = trim($value);
+            $pathPart = explode('?', $trimmed)[0];
+            $extension = strtolower(pathinfo($pathPart, PATHINFO_EXTENSION));
+            if ($extension === '' || !in_array($extension, $this->imageExtensions, true)) {
+                return;
+            }
+
+            if (PathUtility::isUrl($pathPart)) {
+                return;
+            }
+
+            try {
+                $absolute = PathUtility::resolveFilePath($pathPart);
+                $rootPath = PathUtility::getRootPath();
+                if (!is_readable($absolute) || !str_starts_with($absolute, $rootPath)) {
+                    return;
+                }
+            } catch (\Throwable) {
+                return;
+            }
+
+            foreach ($results as $existing) {
+                if ($existing['original'] === $value) {
+                    return;
+                }
+            }
+
+            $results[] = [
+                'original' => $value,
+                'absolute' => $absolute,
+                'relative' => PathUtility::toProjectRelative($absolute),
+            ];
+        });
+
+        return $results;
+    }
+
+    private function getAssetsDirectory(string $name): string
+    {
+        $safeName = $this->getSafeName($name);
+
+        return $this->themeDirectory . DIRECTORY_SEPARATOR . $safeName . DIRECTORY_SEPARATOR . 'assets';
+    }
+
+    private function removeAssetsDirectory(string $name): void
+    {
+        $assetsDir = $this->getAssetsDirectory($name);
+        if (!is_dir($assetsDir)) {
+            return;
+        }
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($assetsDir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($files as $fileinfo) {
+            if ($fileinfo->isDir()) {
+                @rmdir($fileinfo->getRealPath());
+            } else {
+                @unlink($fileinfo->getRealPath());
+            }
+        }
+
+        @rmdir($assetsDir);
+        $themeDir = dirname($assetsDir);
+        $children = glob($themeDir . DIRECTORY_SEPARATOR . '*');
+        if (is_dir($themeDir) && ($children === false || count($children) === 0)) {
+            @rmdir($themeDir);
+        }
+    }
+
+    /**
+     * Walk nested theme array and call callback for each string value.
+     *
+     * @param array<string,mixed> $data
+     * @param callable(string):void $callback
+     */
+    private function walkThemeValues(array $data, callable $callback): void
+    {
+        foreach ($data as $value) {
+            if (is_array($value)) {
+                $this->walkThemeValues($value, $callback);
+                continue;
+            }
+
+            if (is_string($value)) {
+                $callback($value);
+            }
+        }
     }
 }
