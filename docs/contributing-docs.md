@@ -24,7 +24,7 @@ Help improve the Photobooth docs by following these steps.
 - From the repo root, build the docs and start the preview server:
   ```
   mkdocs build --config-file mkdocs_remote.yml --site-dir faq
-  mkdocs serve -f mkdocs_remote.yml  --site-dir faq
+  mkdocs serve -f mkdocs_remote.yml
   ```
 - Open the URL shown in the terminal (typically `http://127.0.0.1:8000`) to review your changes live.
 
