@@ -8,6 +8,7 @@ use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\FontUtility;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Service\AssetService;
+use Photobooth\Utility\CollageLayoutScanner;
 
 // Login / Authentication check
 if (!(
@@ -52,9 +53,19 @@ foreach ($font_paths as $path) {
 }
 $font_styles .= '</style>';
 
-// Optional: Initial loading of a default collage design or empty design
-// This could later be controlled by the CollageManager
-$initialCollageJson = '{"general": {"final_width": 1500, "final_height": 1000}, "elements": []}'; // Minimal JSON
+// Initial loading of a collage layout or empty design
+$currentLayout = $config['collage']['layout'];
+$currentLayoutData = null;
+if ($currentLayout) {
+    $currentLayoutData = CollageLayoutScanner::getLayoutData($currentLayout);
+} else {
+    // Fallback: Lade ein Standard-Layout oder ein leeres Layout, falls keines konfiguriert ist
+    $currentLayoutData = CollageLayoutScanner::getLayoutData('private/collages/1+3-1.json');
+}
+// convert JSON to JavaScript-Variable
+echo '<script type="text/javascript">';
+echo 'const initialCollageLayout = ' . json_encode($currentLayoutData) . ';';
+echo '</script>';
 
 // =============================================================
 // Standard Admin Panel Head & Body
@@ -152,7 +163,7 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
 
 <?php
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
-echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/designer.js') . '"></script>'; // Your main JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/collage-designer.js') . '"></script>'; // Your main JS
 // Optional: Specific toasts/messages depending on PHP processing
 if (isset($_SESSION['designer_message'])) {
     echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';
