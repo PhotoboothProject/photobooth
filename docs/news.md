@@ -6,13 +6,17 @@ Updates, announcements and release notes from the Photobooth team.
 
 2025 was a big year—more polish, smarter tools, and plenty of community-driven wins. We folded in long-requested features, hardened the setup path, and smoothed rough edges across capture, printing, and theming so the booth feels faster and friendlier. Here’s what landed.
 
-- **Background magic**: rembg became native with advanced controls, logging, safer installs, and smarter compositing.
-- **Look & feel**: Theme management (with docs), custom CSS, collage color presets, virtual keyboard layouts/colors, git version indicator, clearer admin hints, and uploadable keying backgrounds.
-- **Collages & media**: New layout enum, rotation range control, video preview sizing, safer placeholders, auto bg/frame toggles, preview caching and `preview.url` migration, gallery dimension caching, optional result blur, iOS preview fixes, and custom `stage.start.php`.
-- **Printing & sharing**: Copy prompts and print-limit endpoint, longer timeouts, multi-print fixes, queued message timing, multi-recipient email with virtual keyboard, higher JPEG quality floor, configurable email fields, and Turkish language support.
-- **Hardware & inputs**: Hardware photo button, hardware keyboard for admin PIN, Remotebuzzer on chroma, support for all input types, IP whitelisting, and refreshed keypad interactions.
-- **Setup & reliability**: Tailwind v4 and PHP 8.4, new whiptail Setup Wizard, sturdier install_rembg, hardened USB sync, reset box info, safer uploads/video backgrounds, cached IP/host resolution, tighter collage defaults, smoother installer updates.
-- **Bug fixes**: More resilient selfies and chroma preview, loader clearing, video background hiding during capture, validated PHP PPAs/flags/permissions, multi-print casting/deprecations, explicit rotate errors, stronger rembg typing/logging/error handling, stop-second timing, collage/theme path and placeholder limits, iOS preview fixes, admin tooltip/label and default path fixes, and many doc/link cleanups.
+- **Custom collage refresh** — Simplified, customizable collage flow with a new 2+1 layout, per-slot placeholders, and clearer guidance so layouts can be built without hand-editing JSON.
+- **Documentation cleanup** — Streamlined navigation, refreshed guides, and general restructuring for easier browsing and search.
+- **New Setup Wizard** — The whiptail-based wizard now logs stdout/stderr, avoids screen flashing, and guides kiosk/autostart and permission setup with saner defaults.
+- **Background magic** — Native rembg integration with advanced controls, logging, safer installation, and improved compositing.
+- **Look & feel** — Theme management (with documentation), custom CSS, collage color presets, virtual keyboard layouts and colors, Git version indicator, clearer admin hints, and uploadable keying backgrounds.
+- **Collages & media** — New layout enum, rotation range control, video preview sizing, safer placeholders, automatic background/frame toggles, preview caching, gallery dimension caching, optional result blur, iOS preview fixes, and custom `stage.start.php` support.
+- **Printing & sharing** — Copy prompts and print-limit endpoint, longer timeouts, multi-print fixes, queued message timing improvements, multi-recipient email with virtual keyboard support, higher minimum JPEG quality, configurable email fields, and Turkish language support.
+- **Hardware & inputs** — Hardware photo button support, improved USB HID hardware-button handling, hardware keyboard for admin PIN entry, remote buzzer on chroma, support for all input types, IP whitelisting, and refreshed keypad interactions.
+- **Setup & reliability** — Tailwind v4 and PHP 8.4 upgrades, more robust `install_rembg`, hardened USB sync, resettable box info, safer uploads and video backgrounds, cached IP/host resolution, tighter collage defaults, and smoother installer updates.
+- **Bug fixes** — More resilient selfie and chroma previews, loader cleanup, proper hiding of video backgrounds during capture, validated PHP PPAs/flags/permissions, fixed multi-print casting and deprecations, explicit rotate errors, stronger rembg typing/logging/error handling, corrected stop-second timing, fixed collage/theme paths and placeholder limits, iOS preview fixes, admin tooltip/label and default path corrections, and extensive documentation/link cleanups.
+and many doc/link cleanups.
 
 Thank you for all the contributions, testing, and thoughtful feedback that shaped these releases. Keep sharing what you build and what you need—we’ll keep pushing Photobooth forward. See you in 2026!
 
