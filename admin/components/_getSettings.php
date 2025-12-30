@@ -38,7 +38,7 @@ foreach ($configsetup as $section => $fields) {
         $i18ntag = $section . ':' . $key;
 
         echo '<!-- ' . strtoupper($setting['type']) . ' ' . strtoupper($setting['name']) . ' -->';
-        echo '<div class="flex flex-col rounded-xl p-3 shadow-xl bg-white ' . $hidden . '" id="' . $i18ntag . '">';
+        echo '<div class="adminSettingCard relative flex flex-col rounded-xl p-3 shadow-xl bg-white ' . $hidden . '" id="' . $i18ntag . '">';
 
         $isThemeField = ($setting['data-theme-field'] ?? '') === 'true' || ($setting['data-theme-field'] ?? false) === true;
         AdminInput::setThemeFieldFlag($isThemeField);

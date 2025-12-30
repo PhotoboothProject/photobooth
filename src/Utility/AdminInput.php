@@ -648,20 +648,20 @@ class AdminInput
 
         $tooltipClass = '
             absolute z-20 hidden flex-col px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-lg
-            w-80 max-w-[calc(100vw-4rem)] left-0 top-full mt-2 break-words
+            w-80 max-w-[calc(100vw-4rem)] left-0 top-full break-words
             peer-hover:flex peer-focus:flex
         ';
 
         $isThemeField = self::$themeField;
 
         return '
-            <div class="tooltip mb-3 relative flex items-center justify-between gap-2">
+            <div class="tooltip adminSettingCard-header mb-3 relative flex items-center justify-between gap-2 pr-10 min-h-[32px]">
                 <label class="peer text-black text-md font-bold inline-flex items-center gap-2 cursor-help">
                     <span>' . $languageService->translate($label) . '</span>
                 </label>
                 ' . ($isThemeField ? '<span class="text-[10px] font-semibold uppercase tracking-wide text-brand-1">Theme</span>' : '') . '
                 <span class="' . $tooltipClass . '">
-                    <div class="absolute left-4 -top-[10px] h-0 w-0 border-x-8 border-x-transparent border-b-[10px] border-gray-900"></div>
+                    <div class="absolute left-4 -top-[9px] h-0 w-0 border-x-8 border-x-transparent border-b-[10px] border-gray-900"></div>
                     ' . $languageService->translate('manual:' . $label) . '
                 </span>
             </div>

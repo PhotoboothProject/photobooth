@@ -30,7 +30,7 @@ Themes are stored as JSON files in `private/themes`.
   "event": {
     "symbol": "fa-birthday-cake",
     "textLeft": "Lisa & Tom",
-    "textRight": "01.01.2026"
+    "textRight": "01.01."
   },
   "colors": {
     "primary": "#4a7c1f",
@@ -39,7 +39,7 @@ Themes are stored as JSON files in `private/themes`.
     "countdown": "#5b7d4a"
   },
   "picture": {
-    "frame": "/private/images/frames/birthday.png",
+    "frame": "private/images/frames/birthday.png",
     "extend_by_frame": "false"
   },
   "collage": {
