@@ -37,6 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const BORDER_WIDTH = 2;         // Width of layout box borders
     const SELECTION_COLOR = 'rgba(0, 123, 255, 0.7)'; // Color for selected element border
 
+    // ---Configuration for Resizing Handles ---
+    const HANDLE_SIZE = 10;         // Size of the square handles
+    const HANDLE_COLOR = '#FFFFFF'; // Color of the handle fill
+    const HANDLE_STROKE_COLOR = SELECTION_COLOR; // Border color of the handle
+    const HANDLE_BORDER_WIDTH = 2;  // Border width of the handle
+    // End: Configuration for Resizing Handles ---
+
     let currentLayout = initialCollageLayout;
     let demoImagePaths = initialDemoImagePaths;
     let loadedImages = []; // Cache for loaded demo images
@@ -47,6 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDragging = false;
     let dragStartX, dragStartY; // Mouse position where drag started
     let elementStartX, elementStartY; // Element position when drag started
+
+    // Variables for Resizing ---
+    let isResizing = false;
+    let resizeHandle = null; // Stores which handle is being dragged ('top-left', 'bottom-right' etc.)
+    let initialElementWidth, initialElementHeight; // Original dimensions when resizing started
+    let initialElementX, initialElementY; // Original position when resizing started
+    // End: Variables for Resizing ---
 
     /**
      * Represents an interactive element (e.g., a picture box) on the collage canvas.
@@ -303,6 +317,27 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.strokeStyle = (element === activeElement) ? SELECTION_COLOR : BORDER_COLOR;
             ctx.lineWidth = BORDER_WIDTH;
             ctx.strokeRect(x, y, width, height);
+
+             // --- Draw Resizing Handles if element is active ---
+            if (element === activeElement) {
+                // Define handle positions (corners)
+                const handles = [
+                    { x: x,             y: y,              cursor: 'nwse-resize', name: 'top-left' },
+                    { x: x + width,     y: y,              cursor: 'nesw-resize', name: 'top-right' },
+                    { x: x,             y: y + height,     cursor: 'nesw-resize', name: 'bottom-left' },
+                    { x: x + width,     y: y + height,     cursor: 'nwse-resize', name: 'bottom-right' }
+                ];
+
+                handles.forEach(handle => {
+                    ctx.fillStyle = HANDLE_COLOR;
+                    ctx.strokeStyle = HANDLE_STROKE_COLOR;
+                    ctx.lineWidth = HANDLE_BORDER_WIDTH;
+                    // Draw a square handle centered at the calculated position
+                    ctx.fillRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
+                    ctx.strokeRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
+                });
+            }
+            // --- END: Draw Resizing Handles ---
             // --- END LOGIC ---
         });
     }
@@ -323,13 +358,54 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    /**
+/**
      * Event handler for mouse down.
      * @param {MouseEvent} event
      */
     function handleMouseDown(event) {
         const mouse = getMousePos(event);
 
+        // Check for handle hit FIRST, if an element is active
+        if (activeElement) {
+            const handles = [
+                { x: activeElement.x,               y: activeElement.y,                 name: 'top-left' },
+                { x: activeElement.x + activeElement.width, y: activeElement.y,         name: 'top-right' },
+                { x: activeElement.x,               y: activeElement.y + activeElement.height,  name: 'bottom-left' },
+                { x: activeElement.x + activeElement.width, y: activeElement.y + activeElement.height, name: 'bottom-right' }
+            ];
+
+            for (const handle of handles) {
+                // Check if mouse is within the handle's clickable area
+                if (mouse.x >= handle.x - HANDLE_SIZE / 2 && mouse.x <= handle.x + HANDLE_SIZE / 2 &&
+                    mouse.y >= handle.y - HANDLE_SIZE / 2 && mouse.y <= handle.y + HANDLE_SIZE / 2) {
+                    
+                    isResizing = true;
+                    resizeHandle = handle.name;
+                    dragStartX = mouse.x;
+                    dragStartY = mouse.y;
+                    initialElementWidth = activeElement.width;
+                    initialElementHeight = activeElement.height;
+                    initialElementX = activeElement.x;
+                    initialElementY = activeElement.y;
+                    
+                    // Set cursor based on handle
+                    switch(resizeHandle) {
+                        case 'top-left':
+                        case 'bottom-right':
+                            collageCanvas.style.cursor = 'nwse-resize';
+                            break;
+                        case 'top-right':
+                        case 'bottom-left':
+                            collageCanvas.style.cursor = 'nesw-resize';
+                            break;
+                    }
+                    drawCollage(); // Redraw to potentially update cursor visually if needed (though browser does this)
+                    return; // Handle clicked, don't proceed to drag logic
+                }
+            }
+        }
+
+        // If no handle was clicked, proceed with element dragging logic
         // Iterate elements in reverse order to select topmost
         for (let i = collageElements.length - 1; i >= 0; i--) {
             const element = collageElements[i];
@@ -341,45 +417,170 @@ document.addEventListener('DOMContentLoaded', () => {
                 elementStartX = element.x;
                 elementStartY = element.y;
                 collageCanvas.style.cursor = 'grabbing'; // Change cursor
-                drawCollage(); // Redraw to show selection border
+                drawCollage(); // Redraw to show selection border and handles
                 return; // Only select one element
             }
         }
         activeElement = null; // Deselect if no element was hit
-        drawCollage(); // Redraw to remove selection border
+        drawCollage(); // Redraw to remove selection border and handles
     }
 
-    /**
+/**
      * Event handler for mouse move.
      * @param {MouseEvent} event
      */
     function handleMouseMove(event) {
-        if (!isDragging || !activeElement) return;
-
         const mouse = getMousePos(event);
-        const dx = mouse.x - dragStartX;
-        const dy = mouse.y - dragStartY;
 
-        activeElement.x = elementStartX + dx;
-        activeElement.y = elementStartY + dy;
+        // --- NEW: Cursor hover for handles ---
+        let cursorChanged = false;
+        if (activeElement && !isDragging && !isResizing) { // Only change cursor if not dragging/resizing
+            const handles = [
+                { x: activeElement.x,               y: activeElement.y,                 cursor: 'nwse-resize', name: 'top-left' },
+                { x: activeElement.x + activeElement.width, y: activeElement.y,         cursor: 'nesw-resize', name: 'top-right' },
+                { x: activeElement.x,               y: activeElement.y + activeElement.height,  cursor: 'nesw-resize', name: 'bottom-left' },
+                { x: activeElement.x + activeElement.width, y: activeElement.y + activeElement.height, cursor: 'nwse-resize', name: 'bottom-right' }
+            ];
+            for (const handle of handles) {
+                if (mouse.x >= handle.x - HANDLE_SIZE / 2 && mouse.x <= handle.x + HANDLE_SIZE / 2 &&
+                    mouse.y >= handle.y - HANDLE_SIZE / 2 && mouse.y <= handle.y + HANDLE_SIZE / 2) {
+                    collageCanvas.style.cursor = handle.cursor;
+                    cursorChanged = true;
+                    break;
+                }
+            }
+        }
+        if (!cursorChanged && !isDragging && !isResizing) {
+            // Restore default cursor if not over a handle and not dragging/resizing
+            collageCanvas.style.cursor = 'grab'; // Default cursor for draggable elements
+        }
+        // --- END NEW: Cursor hover for handles ---
 
-        // Immediately redraw for smooth dragging feedback
-        drawCollage();
+        if (isResizing && activeElement) {
+            const dx = mouse.x - dragStartX;
+            const dy = mouse.y - dragStartY;
+
+            let newWidth = initialElementWidth;
+            let newHeight = initialElementHeight;
+            let newX = initialElementX;
+            let newY = initialElementY;
+
+            const aspectRatio = initialElementWidth / initialElementHeight;
+
+            switch (resizeHandle) {
+                case 'top-left':
+                    newWidth = initialElementWidth - dx;
+                    newHeight = initialElementHeight - dy;
+                    if (event.shiftKey) { // Maintain aspect ratio
+                        if (Math.abs(dx) > Math.abs(dy)) { // Adjust based on larger movement
+                            newHeight = newWidth / aspectRatio;
+                        } else {
+                            newWidth = newHeight * aspectRatio;
+                        }
+                    }
+                    newX = initialElementX + (initialElementWidth - newWidth);
+                    newY = initialElementY + (initialElementHeight - newHeight);
+                    break;
+                case 'top-right':
+                    newWidth = initialElementWidth + dx;
+                    newHeight = initialElementHeight - dy;
+                    if (event.shiftKey) { // Maintain aspect ratio
+                        if (Math.abs(dx) > Math.abs(dy)) {
+                            newHeight = newWidth / aspectRatio;
+                        } else {
+                            newWidth = newHeight * aspectRatio;
+                        }
+                    }
+                    newY = initialElementY + (initialElementHeight - newHeight);
+                    break;
+                case 'bottom-left':
+                    newWidth = initialElementWidth - dx;
+                    newHeight = initialElementHeight + dy;
+                    if (event.shiftKey) { // Maintain aspect ratio
+                        if (Math.abs(dx) > Math.abs(dy)) {
+                            newHeight = newWidth / aspectRatio;
+                        } else {
+                            newWidth = newHeight * aspectRatio;
+                        }
+                    }
+                    newX = initialElementX + (initialElementWidth - newWidth);
+                    break;
+                case 'bottom-right':
+                    newWidth = initialElementWidth + dx;
+                    newHeight = initialElementHeight + dy;
+                    if (event.shiftKey) { // Maintain aspect ratio
+                        if (Math.abs(dx) > Math.abs(dy)) {
+                            newHeight = newWidth / aspectRatio;
+                        } else {
+                            newWidth = newHeight * aspectRatio;
+                        }
+                    }
+                    break;
+            }
+
+            // Apply minimum size constraint
+            const MIN_SIZE = 20; // Example minimum size
+            if (newWidth < MIN_SIZE) {
+                newWidth = MIN_SIZE;
+                if (event.shiftKey) newHeight = newWidth / aspectRatio;
+                // Recalculate X if resizing from left
+                if (resizeHandle.includes('left')) newX = initialElementX + (initialElementWidth - newWidth);
+            }
+            if (newHeight < MIN_SIZE) {
+                newHeight = MIN_SIZE;
+                if (event.shiftKey) newWidth = newHeight * aspectRatio;
+                // Recalculate Y if resizing from top
+                if (resizeHandle.includes('top')) newY = initialElementY + (initialElementHeight - newHeight);
+            }
+            
+            activeElement.x = newX;
+            activeElement.y = newY;
+            activeElement.width = newWidth;
+            activeElement.height = newHeight;
+
+            drawCollage();
+            return; // Resizing, so don't proceed to drag logic
+        }
+
+        if (isDragging && activeElement) {
+            const dx = mouse.x - dragStartX;
+            const dy = mouse.y - dragStartY;
+
+            activeElement.x = elementStartX + dx;
+            activeElement.y = elementStartY + dy;
+
+            drawCollage();
+            return; // Dragging, so done
+        }
+
+        // If neither resizing nor dragging, just update cursor based on hover
+        // (This part is handled by the new cursor hover block at the beginning)
     }
 
-    /**
+/**
      * Event handler for mouse up.
      * @param {MouseEvent} event
      */
     function handleMouseUp(event) {
         if (isDragging) {
             isDragging = false;
-            collageCanvas.style.cursor = 'grab'; // Restore cursor
-            // TODO: Here we would update the currentLayout.layout array with the new element position
-            // and trigger an API call if we were using server-side rendering.
-            // For now, the internal `activeElement.x` and `activeElement.y` are updated.
+            // TODO: Update the currentLayout.layout array with the new element position
+            // (Only if changes should persist, for now internal `activeElement.x/y` are updated).
         }
-        activeElement = null; // Deselect after drag is finished
+        if (isResizing) {
+            isResizing = false;
+            // TODO: Update the currentLayout.layout array with the new element size/position
+            // (Only if changes should persist, for now internal `activeElement.width/height/x/y` are updated).
+        }
+        
+        // Restore default cursor, but first check if still over an element that could be grabbed
+        if (activeElement) {
+            collageCanvas.style.cursor = 'grab'; // Restore grab cursor if an element is active
+        } else {
+            collageCanvas.style.cursor = 'default'; // Or default if nothing is active
+        }
+        // No need to deselect activeElement here, as it might still be selected for further interaction
+        // If you want to deselect after every drag/resize, move 'activeElement = null;' here.
         drawCollage(); // Final redraw
     }
 
