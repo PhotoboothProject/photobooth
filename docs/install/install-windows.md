@@ -190,7 +190,7 @@ If you need to stop the webserver (e.g. if you like to change the `php.ini`):
 
 ### Test your Webserver & PHP
 
-Open [http://localhost/info.php](http://localhost/info.php) in your Browser,
+Open [http://localhost/info.php](http://localhost/info.php) (or [http://localhost/photobooth/info.php](http://localhost/photobooth/info.php)) in your Browser,
 you should see the PHP Information page.
 
 ### Install Digicamcontrol
@@ -209,4 +209,4 @@ your "_take picture command_" (inside the "_Commands_" section):
 
 ## Enjoy
 
-You should now be able to [access photobooth](http://localhost/) on your Windows machine!
+You should now be able to [access photobooth](http://localhost/) (or [http://localhost/photobooth/](http://localhost/photobooth/)) on your Windows machine!
