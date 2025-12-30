@@ -37,12 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const BORDER_WIDTH = 2;         // Width of layout box borders
     const SELECTION_COLOR = 'rgba(0, 123, 255, 0.7)'; // Color for selected element border
 
-    // ---Configuration for Resizing Handles ---
+    // Configuration for Resizing Handles ---
     const HANDLE_SIZE = 10;         // Size of the square handles
     const HANDLE_COLOR = '#FFFFFF'; // Color of the handle fill
     const HANDLE_STROKE_COLOR = SELECTION_COLOR; // Border color of the handle
     const HANDLE_BORDER_WIDTH = 2;  // Border width of the handle
     // End: Configuration for Resizing Handles ---
+
+    // Configuration for Rotation Handle ---
+    const ROTATION_HANDLE_SIZE = 16; // Size of the rotation handle (e.g., diameter of a circle)
+    const ROTATION_HANDLE_OFFSET = 20; // Distance from the top center of the element box
+    const ROTATION_HANDLE_COLOR = '#FFFFFF';
+    const ROTATION_HANDLE_STROKE_COLOR = SELECTION_COLOR;
+    const ROTATION_HANDLE_ICON = '\u21BA'; // Unicode for a counter-clockwise arrow (↺) or use another icon
+    const ROTATION_HANDLE_ICON_FONT_SIZE = '12px Arial';
+    // End: Configuration for Rotation Handle ---
 
     let currentLayout = initialCollageLayout;
     let demoImagePaths = initialDemoImagePaths;
@@ -61,6 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let initialElementWidth, initialElementHeight; // Original dimensions when resizing started
     let initialElementX, initialElementY; // Original position when resizing started
     // End: Variables for Resizing ---
+
+    // Variables for Rotation ---
+    let isRotating = false;
+    let rotationStartAngle = 0;     // Angle from element center to mouse start when rotation began
+    let initialElementRotation = 0; // Original rotation of the element when rotation began
+    // End: Variables for Rotation ---
 
     /**
      * Represents an interactive element (e.g., a picture box) on the collage canvas.
@@ -336,6 +351,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.fillRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
                     ctx.strokeRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
                 });
+
+                 // --- Draw Rotation Handle ---
+                const rotationHandleX = x + width / 2; // Center top of the box
+                const rotationHandleY = y - ROTATION_HANDLE_OFFSET; // Offset upwards
+
+                ctx.beginPath();
+                ctx.arc(rotationHandleX, rotationHandleY, ROTATION_HANDLE_SIZE / 2, 0, Math.PI * 2); // Circle
+                ctx.fillStyle = ROTATION_HANDLE_COLOR;
+                ctx.fill();
+                ctx.strokeStyle = ROTATION_HANDLE_STROKE_COLOR;
+                ctx.lineWidth = HANDLE_BORDER_WIDTH;
+                ctx.stroke();
+
+                // Draw the rotation icon (optional, using unicode character)
+                ctx.fillStyle = ROTATION_HANDLE_STROKE_COLOR;
+                ctx.font = ROTATION_HANDLE_ICON_FONT_SIZE;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
+                // --- END: Draw Rotation Handle ---
             }
             // --- END: Draw Resizing Handles ---
             // --- END LOGIC ---
@@ -358,12 +393,37 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-/**
+    /**
      * Event handler for mouse down.
      * @param {MouseEvent} event
      */
     function handleMouseDown(event) {
         const mouse = getMousePos(event);
+
+         // --- Check for Rotation Handle hit FIRST ---
+        if (activeElement) {
+            const rotationHandleX = activeElement.x + activeElement.width / 2;
+            const rotationHandleY = activeElement.y - ROTATION_HANDLE_OFFSET;
+
+            // Calculate distance from mouse to center of rotation handle
+            const dist = Math.sqrt(
+                Math.pow(mouse.x - rotationHandleX, 2) +
+                Math.pow(mouse.y - rotationHandleY, 2)
+            );
+
+            if (dist <= ROTATION_HANDLE_SIZE / 2) { // Mouse hit the rotation handle
+                isRotating = true;
+                // Calculate the angle from the element's center to the mouse position
+                const elementCenterX = activeElement.x + activeElement.width / 2;
+                const elementCenterY = activeElement.y + activeElement.height / 2;
+                rotationStartAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
+                initialElementRotation = activeElement.rotation;
+                collageCanvas.style.cursor = 'grabbing'; // Or a specific rotate cursor
+                drawCollage();
+                return; // Rotation handle clicked, don't proceed further
+            }
+        }
+        // --- END: Check for Rotation Handle hit ---
 
         // Check for handle hit FIRST, if an element is active
         if (activeElement) {
@@ -425,15 +485,29 @@ document.addEventListener('DOMContentLoaded', () => {
         drawCollage(); // Redraw to remove selection border and handles
     }
 
-/**
+    /**
      * Event handler for mouse move.
      * @param {MouseEvent} event
      */
     function handleMouseMove(event) {
         const mouse = getMousePos(event);
 
-        // --- NEW: Cursor hover for handles ---
+        // --- Cursor hover for handles ---
+        // --- Cursor hover for Rotation Handle ---
         let cursorChanged = false;
+        if (activeElement && !isDragging && !isResizing && !isRotating) {
+            const rotationHandleX = activeElement.x + activeElement.width / 2;
+            const rotationHandleY = activeElement.y - ROTATION_HANDLE_OFFSET;
+            const dist = Math.sqrt(
+                Math.pow(mouse.x - rotationHandleX, 2) +
+                Math.pow(mouse.y - rotationHandleY, 2)
+            );
+            if (dist <= ROTATION_HANDLE_SIZE / 2) {
+                collageCanvas.style.cursor = 'grab'; // Or specific 'ew-resize' / 'grabbing' for rotation
+                cursorChanged = true;
+            }
+        }
+        // --- Cursor hover for scale Handle ---
         if (activeElement && !isDragging && !isResizing) { // Only change cursor if not dragging/resizing
             const handles = [
                 { x: activeElement.x,               y: activeElement.y,                 cursor: 'nwse-resize', name: 'top-left' },
@@ -450,12 +524,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        if (!cursorChanged && !isDragging && !isResizing) {
+        if (!cursorChanged && !isDragging && !isResizing && !isRotating) {
             // Restore default cursor if not over a handle and not dragging/resizing
             collageCanvas.style.cursor = 'grab'; // Default cursor for draggable elements
         }
-        // --- END NEW: Cursor hover for handles ---
+        // --- END: Cursor hover for handles ---
 
+        // --- Rotation Logic ---
+        if (isRotating && activeElement) {
+            const elementCenterX = activeElement.x + activeElement.width / 2;
+            const elementCenterY = activeElement.y + activeElement.height / 2;
+
+            // Calculate current angle from element center to mouse position
+            const currentAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
+
+            // Calculate the difference in angle since rotation started
+            let angleDiff = (rotationStartAngle - currentAngle) * 180 / Math.PI; // Convert to degrees
+
+            // Apply rotation (snap to 15-degree increments if Shift is pressed)
+            let newRotation = initialElementRotation + angleDiff;
+            if (event.shiftKey) {
+                newRotation = Math.round(newRotation / 15) * 15;
+            }
+            // Normalize rotation to be within 0-360 degrees if desired, or allow negative
+            activeElement.rotation = (newRotation % 360 + 360) % 360; 
+
+            drawCollage();
+            return; // Rotation is active, don't proceed to resizing/dragging
+        }
+        // --- END: Rotation Logic ---
+
+        // --- Scaling Logic ---
         if (isResizing && activeElement) {
             const dx = mouse.x - dragStartX;
             const dy = mouse.y - dragStartY;
@@ -541,7 +640,9 @@ document.addEventListener('DOMContentLoaded', () => {
             drawCollage();
             return; // Resizing, so don't proceed to drag logic
         }
+        // --- END: Scaling Logic ---
 
+        // --- Dragging Logic ---
         if (isDragging && activeElement) {
             const dx = mouse.x - dragStartX;
             const dy = mouse.y - dragStartY;
@@ -552,12 +653,13 @@ document.addEventListener('DOMContentLoaded', () => {
             drawCollage();
             return; // Dragging, so done
         }
+        // --- END: Dragging Logic ---
 
         // If neither resizing nor dragging, just update cursor based on hover
         // (This part is handled by the new cursor hover block at the beginning)
     }
 
-/**
+    /**
      * Event handler for mouse up.
      * @param {MouseEvent} event
      */
@@ -571,6 +673,10 @@ document.addEventListener('DOMContentLoaded', () => {
             isResizing = false;
             // TODO: Update the currentLayout.layout array with the new element size/position
             // (Only if changes should persist, for now internal `activeElement.width/height/x/y` are updated).
+        }
+        if (isRotating) {
+            isRotating = false;
+            // TODO: Update currentLayout.layout for rotation
         }
         
         // Restore default cursor, but first check if still over an element that could be grabbed
