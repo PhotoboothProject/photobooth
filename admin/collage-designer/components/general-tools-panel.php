@@ -1,5 +1,14 @@
 <!-- components/general-tools-panel.php -->
 <div class="flex flex-wrap gap-2 h-min">
+    <!-- Undo/Redo Buttons -->
+    <button id="undoBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('undo') ?>">
+        <i class="material-icons">undo</i>
+    </button>
+    <button id="redoBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('redo') ?>">
+        <i class="material-icons">redo</i>
+    </button>    
+    <!-- Separator -->
+    <div class="border-l border-gray-300 h-6 mx-2"></div> <!-- with vertical line, just spacing: <div class="w-4"></div> -->
     <!-- Alignment Buttons -->
     <button id="alignLeftBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('align_left') ?>">
         <i class="material-icons">align_horizontal_left</i>

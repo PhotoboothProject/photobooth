@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let rotationStartAngle = 0;
     let initialElementRotation = 0;
 
+    // --- Undo/Redo History ---
+    let undoStack = [];
+    let redoStack = [];
+    const MAX_HISTORY_SIZE = 50; // Limit the history to prevent excessive memory usage
+
     // --- Utility Functions for Loading Overlay ---
     function showLoadingOverlay() {
         if (window.loadingOverlay) {
@@ -223,6 +228,93 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // --- Undo/Redo Functions ---
+
+    /**
+     * Creates a snapshot of the current state of all collage elements.
+     * Only stores properties that can change (x, y, width, height, rotation, isSelected).
+     * @returns {Array<object>} A deep copy of the relevant element states.
+     */
+    function createSnapshot() {
+        return window.collageElements.map(el => ({
+            id: el.id, // Keep ID for matching
+            x: el.x,
+            y: el.y,
+            width: el.width,
+            height: el.height,
+            rotation: el.rotation,
+            isSelected: el.isSelected,
+            // image and originalLayoutDataIndex do not change, no need to store
+        }));
+    }
+
+    /**
+     * Restores the state of collage elements from a given snapshot.
+     * @param {Array<object>} snapshot The snapshot to restore.
+     */
+    function restoreSnapshot(snapshot) {
+        // Clear current selection
+        window.collageElements.forEach(el => el.isSelected = false);
+        window.activeElement = null;
+
+        snapshot.forEach(snapEl => {
+            const currentEl = window.collageElements.find(el => el.id === snapEl.id);
+            if (currentEl) {
+                currentEl.x = snapEl.x;
+                currentEl.y = snapEl.y;
+                currentEl.width = snapEl.width;
+                currentEl.height = snapEl.height;
+                currentEl.rotation = snapEl.rotation;
+                currentEl.isSelected = snapEl.isSelected; // Restore selection state too
+                if (snapEl.isSelected) { // If an element was selected in the snapshot, make it active if it's the only one
+                    if (snapshot.filter(s => s.isSelected).length === 1) {
+                         window.activeElement = currentEl;
+                    } else if (window.activeElement && window.activeElement.id === currentEl.id) {
+                        // If multiple selected, try to restore the active element
+                        window.activeElement = currentEl;
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Saves the current state to the undoStack and clears the redoStack.
+     */
+    window.saveState = function() {
+        const currentState = createSnapshot();
+        // Only save if the current state is different from the last state
+        // This prevents saving redundant states from continuous actions like dragging.
+        // For continuous actions, the state is saved ONCE at mousedown,
+        // and then the final state is saved on mouseup.
+        if (undoStack.length > 0) {
+            const lastState = undoStack[undoStack.length - 1];
+            // Simple comparison: check if stringified versions are different
+            // For complex objects, a deep comparison function would be better.
+            if (JSON.stringify(currentState) === JSON.stringify(lastState)) {
+                return; // State hasn't changed meaningfully
+            }
+        }
+        
+        undoStack.push(currentState);
+        if (undoStack.length > MAX_HISTORY_SIZE) {
+            undoStack.shift(); // Remove the oldest state
+        }
+        redoStack = []; // Any new action clears the redo stack
+        window.updateUndoRedoButtonStates();
+    }
+
+    /**
+     * Updates the enabled/disabled state of the Undo/Redo buttons.
+     */
+    window.updateUndoRedoButtonStates = function() {
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+
+        if (undoBtn) undoBtn.disabled = undoStack.length <= 1; // Always need at least 1 state to undo from
+        if (redoBtn) redoBtn.disabled = redoStack.length === 0;
+    }
+
     window.drawCanvas = function() {
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
 
@@ -353,6 +445,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleMouseDown(event) {
         const mouse = getMousePos(event);
+
+        const prevSelectedState = createSnapshot(); // create Snapshot before Snapshot for possible selection changes
 
         // Reset interaction flags
         isResizing = false;
@@ -492,6 +586,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.collageElements.forEach(el => el.isSelected = false);
                 window.activeElement = null;
             }
+        }
+
+        // Save state if there was any change in selection
+        if (isRotating || isResizing || isDragging || JSON.stringify(prevSelectedState) !== JSON.stringify(createSnapshot())) {
+         window.saveState(); 
         }
         window.drawCanvas();
     }
@@ -806,5 +905,30 @@ document.addEventListener('DOMContentLoaded', () => {
     window.collageCanvas.addEventListener('mouseup', handleMouseUp);
     window.collageCanvas.addEventListener('mouseout', handleMouseUp); // End interaction if mouse leaves canvas
 
-    initDesigner();
+    // Undo/Redo Buttons
+    document.getElementById('undoBtn').addEventListener('click', () => {
+        if (undoStack.length > 1) { // Need at least the initial state and one action to undo
+            const currentState = undoStack.pop(); // Remove current state from undo stack
+            redoStack.push(currentState); // Push it to redo stack
+            restoreSnapshot(undoStack[undoStack.length - 1]); // Load the previous state
+            window.drawCanvas();
+            updateUndoRedoButtonStates();
+        }
+    });
+
+    document.getElementById('redoBtn').addEventListener('click', () => {
+        if (redoStack.length > 0) {
+            const nextState = redoStack.pop(); // Get next state from redo stack
+            undoStack.push(nextState); // Push it back to undo stack
+            restoreSnapshot(nextState); // Load this state
+            window.drawCanvas();
+            window.updateUndoRedoButtonStates();
+        }
+    });
+
+    // Initialize the designer and save the very first state
+    initDesigner().then(() => {
+        window.saveState(); // Save initial state after everything is loaded
+        window.updateUndoRedoButtonStates(); // Update button states based on initial stack
+    });
 });

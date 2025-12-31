@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Align selected elements to the left edge (Canvas / Leftmost of Group / Active Element's left)
     document.getElementById('alignLeftBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         const elementsToAlign = getSelectedElements();
         if (elementsToAlign.length === 0) {
             console.log('No elements selected for left alignment.');
@@ -125,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Align selected elements to the horizontal center (Canvas / Active Element's center)
     document.getElementById('alignCenterHBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         const elementsToAlign = getSelectedElements();
         if (elementsToAlign.length === 0) {
             console.log('No elements selected for horizontal center alignment.');
@@ -154,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Align selected elements to the right edge (Canvas / Rightmost of Group / Active Element's right)
     document.getElementById('alignRightBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         const elementsToAlign = getSelectedElements();
         if (elementsToAlign.length === 0) {
             console.log('No elements selected for right alignment.');
@@ -183,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Align selected elements to the top edge (Canvas / Topmost of Group / Active Element's top)
     document.getElementById('alignTopBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         const elementsToAlign = getSelectedElements();
         if (elementsToAlign.length === 0) {
             console.log('No elements selected for top alignment.');
@@ -210,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Align selected elements to the vertical middle (Canvas / Active Element's middle)
     document.getElementById('alignMiddleVBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         const elementsToAlign = getSelectedElements();
         if (elementsToAlign.length === 0) {
             console.log('No elements selected for vertical middle alignment.');
@@ -239,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Align selected elements to the bottom edge (Canvas / Bottommost of Group / Active Element's bottom)
     document.getElementById('alignBottomBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         const elementsToAlign = getSelectedElements();
         if (elementsToAlign.length === 0) {
             console.log('No elements selected for bottom alignment.');
@@ -268,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Distribute selected elements horizontally
     document.getElementById('distributeHBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         let elementsToDistribute = getSelectedElements();
 
         if (elementsToDistribute.length < 3) {
@@ -318,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Distribute selected elements vertically
     document.getElementById('distributeVBtn').addEventListener('click', () => {
+        window.saveState(); // Save state for undo functionality
         let elementsToDistribute = getSelectedElements();
 
         if (elementsToDistribute.length < 3) {
