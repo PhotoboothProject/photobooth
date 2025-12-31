@@ -926,6 +926,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Keyboard Shortcuts for Undo/Redo ---
+    document.addEventListener('keydown', (event) => {
+        // Check for Ctrl (Windows/Linux) or Cmd (macOS) key
+        const isCtrlCmd = event.ctrlKey || event.metaKey; 
+
+        if (isCtrlCmd) {
+            if (event.key === 'z' || event.key === 'Z') {
+                event.preventDefault(); // Prevent default browser undo (e.g., in text fields)
+                document.getElementById('undoBtn').click(); // Simulate click on undo button
+            } else if (event.key === 'y' || event.key === 'Y') {
+                event.preventDefault(); // Prevent default browser redo
+                document.getElementById('redoBtn').click(); // Simulate click on redo button
+            }
+        }
+    });
+
     // Initialize the designer and save the very first state
     initDesigner().then(() => {
         window.saveState(); // Save initial state after everything is loaded
