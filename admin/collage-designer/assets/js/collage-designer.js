@@ -195,6 +195,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+     /**
+     * Calculates the bounding box for all currently selected elements.
+     * @returns {{x: number, y: number, width: number, height: number}|null} The bounding box or null if no elements are selected.
+     */
+    function getSelectionBoundingBox() {
+        const selectedElements = window.collageElements.filter(el => el.isSelected);
+        if (selectedElements.length === 0) {
+            return null;
+        }
+
+        let minX = Infinity, minY = Infinity;
+        let maxX = -Infinity, maxY = -Infinity;
+
+        selectedElements.forEach(el => {
+            minX = Math.min(minX, el.x);
+            minY = Math.min(minY, el.y);
+            maxX = Math.max(maxX, el.x + el.width);
+            maxY = Math.max(maxY, el.y + el.height);
+        });
+
+        return {
+            x: minX,
+            y: minY,
+            width: maxX - minX,
+            height: maxY - minY
+        };
+    }
+
     window.drawCanvas = function() {
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
 
@@ -233,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Draw selection border for ALL selected elements
-            if (element.isSelected) { // <--- KORREKTUR: Selection border für alle isSelected Elemente
+            if (element.isSelected) { 
                 window.ctx.strokeStyle = SELECTION_COLOR;
                 window.ctx.lineWidth = BORDER_WIDTH;
                 window.ctx.strokeRect(x, y, width, height);
@@ -243,39 +271,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.ctx.lineWidth = BORDER_WIDTH;
                 window.ctx.strokeRect(x, y, width, height);
             }
-
-            // --- Draw Resizing Handles and Rotation Handle ONLY FOR THE ACTIVE ELEMENT ---
-            if (element === window.activeElement) { // <--- KORREKTUR: Handles nur für activeElement
-                const handles = [
-                    { x: x,             y: y,              cursor: 'nwse-resize', name: 'top-left' },
-                    { x: x + width,     y: y,              cursor: 'nesw-resize', name: 'top-right' },
-                    { x: x,             y: y + height,     cursor: 'nesw-resize', name: 'bottom-left' },
-                    { x: x + width,     y: y + height,     cursor: 'nwse-resize', name: 'bottom-right' }
-                ];
-                handles.forEach(handle => {
-                    window.ctx.fillStyle = HANDLE_COLOR;
-                    window.ctx.strokeStyle = HANDLE_STROKE_COLOR;
-                    window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
-                    window.ctx.fillRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
-                    window.ctx.strokeRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
-                });
-
-                const rotationHandleX = x + width / 2;
-                const rotationHandleY = y - ROTATION_HANDLE_OFFSET;
-                window.ctx.beginPath();
-                window.ctx.arc(rotationHandleX, rotationHandleY, ROTATION_HANDLE_SIZE / 2, 0, Math.PI * 2);
-                window.ctx.fillStyle = ROTATION_HANDLE_COLOR;
-                window.ctx.fill();
-                window.ctx.strokeStyle = ROTATION_HANDLE_STROKE_COLOR;
-                window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
-                window.ctx.stroke();
-                window.ctx.fillStyle = ROTATION_HANDLE_STROKE_COLOR;
-                window.ctx.font = ROTATION_HANDLE_ICON_FONT_SIZE;
-                window.ctx.textAlign = 'center';
-                window.ctx.textBaseline = 'middle';
-                window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
-            }
         });
+
+        // --- Draw Resizing Handles for active element OR group bounding box ---
+        // --- Draw Rotation Handle ONLY FOR THE ACTIVE ELEMENT ---
+        const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+
+        let targetForHandles = null; // Either activeElement or groupBoundingBox for resizing
+        let targetX = 0, targetY = 0, targetWidth = 0, targetHeight = 0;
+
+        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
+            targetForHandles = window.activeElement;
+            targetX = targetForHandles.x;
+            targetY = targetForHandles.y;
+            targetWidth = targetForHandles.width;
+            targetHeight = targetForHandles.height;
+        } else if (selectedElementsCount > 1) {
+            targetForHandles = getSelectionBoundingBox(); // This is for resizing the group
+            if (targetForHandles) {
+                targetX = targetForHandles.x;
+                targetY = targetForHandles.y;
+                targetWidth = targetForHandles.width;
+                targetHeight = targetForHandles.height;
+            }
+        }
+
+        // Draw Resizing Handles
+        if (targetForHandles && targetWidth > 0 && targetHeight > 0) { // Check for valid dimensions
+            // Optional: Draw a dashed border around the group bounding box if multiple elements are selected
+            if (selectedElementsCount > 1) {
+                window.ctx.strokeStyle = SELECTION_COLOR;
+                window.ctx.lineWidth = BORDER_WIDTH;
+                window.ctx.setLineDash([5, 5]); // Dashed line
+                window.ctx.strokeRect(targetX, targetY, targetWidth, targetHeight);
+                window.ctx.setLineDash([]); // Reset to solid line
+            }
+
+            const handles = [
+                { x: targetX,               y: targetY,              cursor: 'nwse-resize', name: 'top-left' },
+                { x: targetX + targetWidth, y: targetY,              cursor: 'nesw-resize', name: 'top-right' },
+                { x: targetX,               y: targetY + targetHeight,     cursor: 'nesw-resize', name: 'bottom-left' },
+                { x: targetX + targetWidth, y: targetY + targetHeight,     cursor: 'nwse-resize', name: 'bottom-right' }
+            ];
+            handles.forEach(handle => {
+                window.ctx.fillStyle = HANDLE_COLOR;
+                window.ctx.strokeStyle = HANDLE_STROKE_COLOR;
+                window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
+                window.ctx.fillRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
+                window.ctx.strokeRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
+            });
+        }
+        
+        // Draw Rotation Handle ONLY FOR THE ACTIVE ELEMENT
+        if (window.activeElement && window.activeElement.isSelected) { // Check if it's selected and active
+            const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
+            const rotationHandleY = window.activeElement.y - ROTATION_HANDLE_OFFSET;
+            window.ctx.beginPath();
+            window.ctx.arc(rotationHandleX, rotationHandleY, ROTATION_HANDLE_SIZE / 2, 0, Math.PI * 2);
+            window.ctx.fillStyle = ROTATION_HANDLE_COLOR;
+            window.ctx.fill();
+            window.ctx.strokeStyle = ROTATION_HANDLE_STROKE_COLOR;
+            window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
+            window.ctx.stroke();
+            window.ctx.fillStyle = ROTATION_HANDLE_STROKE_COLOR;
+            window.ctx.font = ROTATION_HANDLE_ICON_FONT_SIZE;
+            window.ctx.textAlign = 'center';
+            window.ctx.textBaseline = 'middle';
+            window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
+        }
     };
 
     function getMousePos(event) {
@@ -296,36 +359,58 @@ document.addEventListener('DOMContentLoaded', () => {
         isRotating = false;
         isDragging = false;
 
-        // Save current active element before potentially changing it
-        const prevActiveElement = window.activeElement;
+        const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+
+        let currentInteractionTarget = null; // The object or bounding box currently being interacted with via handles
+        let currentTargetX = 0, currentTargetY = 0, currentTargetWidth = 0, currentTargetHeight = 0;
+
+        // Determine the target for handle interaction (single active element or group bounding box)
+        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
+            currentInteractionTarget = window.activeElement;
+            currentTargetX = currentInteractionTarget.x;
+            currentTargetY = currentInteractionTarget.y;
+            currentTargetWidth = currentInteractionTarget.width;
+            currentTargetHeight = currentInteractionTarget.height;
+        } else if (selectedElementsCount > 1) {
+            currentInteractionTarget = getSelectionBoundingBox(); // This is for resizing the group
+            if (currentInteractionTarget) {
+                currentTargetX = currentInteractionTarget.x;
+                currentTargetY = currentInteractionTarget.y;
+                currentTargetWidth = currentInteractionTarget.width;
+                currentTargetHeight = currentInteractionTarget.height;
+            }
+        }
 
         // --- Check for Rotation Handle hit FIRST ---
-        if (prevActiveElement && prevActiveElement.isSelected) { // Check if it's selected and active
-            const rotationHandleX = prevActiveElement.x + prevActiveElement.width / 2;
-            const rotationHandleY = prevActiveElement.y - ROTATION_HANDLE_OFFSET;
+        // Rotation handle is ALWAYS on the activeElement, even if multiple are selected.
+        if (window.activeElement && window.activeElement.isSelected) {
+            const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
+            const rotationHandleY = window.activeElement.y - ROTATION_HANDLE_OFFSET;
             const dist = Math.sqrt(
                 Math.pow(mouse.x - rotationHandleX, 2) +
                 Math.pow(mouse.y - rotationHandleY, 2)
             );
+
             if (dist <= ROTATION_HANDLE_SIZE / 2) {
                 isRotating = true;
-                const elementCenterX = prevActiveElement.x + prevActiveElement.width / 2;
-                const elementCenterY = prevActiveElement.y + prevActiveElement.height / 2;
+                const elementCenterX = window.activeElement.x + window.activeElement.width / 2;
+                const elementCenterY = window.activeElement.y + window.activeElement.height / 2;
                 rotationStartAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
-                initialElementRotation = prevActiveElement.rotation;
+                initialElementRotation = window.activeElement.rotation; // Store active element's rotation as start reference
                 window.collageCanvas.style.cursor = ROTATION_CURSOR_URL;
                 window.drawCanvas();
                 return; // Rotation handle clicked, don't proceed further
             }
         }
 
-        // Check for handle hit SECOND (Resizing Handles)
-        if (prevActiveElement && prevActiveElement.isSelected) { // Check if it's selected and active
+        // --- Check for Resize Handle hit SECOND ---
+        // Handles are on activeElement (if single selected) or group bounding box (if multiple selected)
+        if (currentInteractionTarget && currentTargetWidth > 0 && currentTargetHeight > 0) { // Check for valid dimensions to prevent errors
             const handles = [
-                { x: prevActiveElement.x, y: prevActiveElement.y, name: 'top-left' },
-                { x: prevActiveElement.x + prevActiveElement.width, y: prevActiveElement.y, name: 'top-right' },
-                { x: prevActiveElement.x, y: prevActiveElement.y + prevActiveElement.height, name: 'bottom-left' },
-                { x: prevActiveElement.x + prevActiveElement.width, y: prevActiveElement.y + prevActiveElement.height, name: 'bottom-right' }
+                { x: currentTargetX,               y: currentTargetY,                 name: 'top-left' },
+                { x: currentTargetX + currentTargetWidth, y: currentTargetY,                 name: 'top-right' },
+                { x: currentTargetX,               y: currentTargetY + currentTargetHeight,  name: 'bottom-left' },
+                { x: currentTargetX + currentTargetWidth, y: currentTargetY + currentTargetHeight, name: 'bottom-right' }
             ];
 
             for (const handle of handles) {
@@ -336,12 +421,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     resizeHandle = handle.name;
                     dragStartX = mouse.x;
                     dragStartY = mouse.y;
-                    initialElementWidth = prevActiveElement.width;
-                    initialElementHeight = prevActiveElement.height;
-                    initialElementX = prevActiveElement.x;
-                    initialElementY = prevActiveElement.y;
-
-                    switch(resizeHandle) {
+                    // Store initial state for resizing relative to the group/element
+                    initialElementWidth = currentTargetWidth;
+                    initialElementHeight = currentTargetHeight;
+                    initialElementX = currentTargetX;
+                    initialElementY = currentTargetY;
+                    
+                    switch(resizeHandle) { 
                         case 'top-left': case 'bottom-right': window.collageCanvas.style.cursor = 'nwse-resize'; break;
                         case 'top-right': case 'bottom-left': window.collageCanvas.style.cursor = 'nesw-resize'; break;
                     }
@@ -351,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- Handle Clicks on Elements for Selection/Dragging ---
+        // --- Handle Clicks on Elements for Selection/Dragging (if no handles hit) ---
         let clickedOnElement = false;
         let elementClicked = null;
 
@@ -377,36 +463,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } else {
                 // Single selection: deselect all others, then select this one
-                if (window.activeElement !== elementClicked) { // Only deselect if a different element is clicked
-                    window.collageElements.forEach(el => el.isSelected = false);
+                if (window.activeElement !== elementClicked || !elementClicked.isSelected) { 
+                     window.collageElements.forEach(el => el.isSelected = false);
                 }
                 elementClicked.isSelected = true;
                 window.activeElement = elementClicked; // The clicked element becomes the active one
             }
+            
             isDragging = true;
             dragStartX = mouse.x;
             dragStartY = mouse.y;
-            elementStartX = window.activeElement.x;
-            elementStartY = window.activeElement.y;
+            // elementStartX/Y for dragging needs to be the initial position of the active element
+            // or the top-left of the group bounding box for consistent dragging behavior.
+            if (selectedElementsCount > 1) { // If multiple elements, drag the group
+                const groupBoundingBox = getSelectionBoundingBox();
+                if (groupBoundingBox) {
+                    elementStartX = groupBoundingBox.x;
+                    elementStartY = groupBoundingBox.y;
+                }
+            } else if (window.activeElement) { // Single element drag
+                elementStartX = window.activeElement.x;
+                elementStartY = window.activeElement.y;
+            }
             window.collageCanvas.style.cursor = 'grabbing';
         } else {
             // No element was clicked
-            if (!event.ctrlKey && !event.metaKey) { // If no multi-selection key, deselect all
+            if (!event.ctrlKey && !event.metaKey) {
                 window.collageElements.forEach(el => el.isSelected = false);
                 window.activeElement = null;
             }
         }
-        window.drawCanvas(); // Redraw to reflect selection/deselection and active element handles
+        window.drawCanvas();
     }
 
     function handleMouseMove(event) {
         const mouse = getMousePos(event);
 
-        // --- Cursor hover for handles ---
+        // --- Cursor hover for handles (adjust for group vs. single) ---
         let cursorChanged = false;
         if (!isDragging && !isResizing && !isRotating) { // Only change cursor if not interacting
-            // Check rotation handle hover
-            if (window.activeElement && window.activeElement.isSelected) { // Check active element for handles
+            const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+            let currentTargetForHover = null;
+            let currentTargetX = 0, currentTargetY = 0, currentTargetWidth = 0, currentTargetHeight = 0;
+
+            // Determine target for hover (single active element or group bounding box)
+            if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
+                currentTargetForHover = window.activeElement;
+                currentTargetX = currentTargetForHover.x;
+                currentTargetY = currentTargetForHover.y;
+                currentTargetWidth = currentTargetForHover.width;
+                currentTargetHeight = currentTargetForHover.height;
+            } else if (selectedElementsCount > 1) {
+                currentTargetForHover = getSelectionBoundingBox();
+                if (currentTargetForHover) {
+                    currentTargetX = currentTargetForHover.x;
+                    currentTargetY = currentTargetForHover.y;
+                    currentTargetWidth = currentTargetForHover.width;
+                    currentTargetHeight = currentTargetForHover.height;
+                }
+            }
+
+            // Check rotation handle hover (ALWAYS on activeElement)
+            if (window.activeElement && window.activeElement.isSelected) {
                 const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
                 const rotationHandleY = window.activeElement.y - ROTATION_HANDLE_OFFSET;
                 const dist = Math.sqrt(
@@ -419,13 +537,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Check resize handles hover
-            if (window.activeElement && window.activeElement.isSelected && !cursorChanged) { // Check active element for handles
+            // Check resize handles hover (on currentTargetForHover if it exists and not already hovering rotation handle)
+            if (currentTargetForHover && !cursorChanged && currentTargetForHover.width > 0 && currentTargetForHover.height > 0) { 
                 const handles = [
-                    { x: window.activeElement.x,               y: window.activeElement.y,                 cursor: 'nwse-resize', name: 'top-left' },
-                    { x: window.activeElement.x + window.activeElement.width, y: window.activeElement.y,         cursor: 'nesw-resize', name: 'top-right' },
-                    { x: window.activeElement.x,               y: window.activeElement.y + window.activeElement.height,  cursor: 'nesw-resize', name: 'bottom-left' },
-                    { x: window.activeElement.x + window.activeElement.width, y: window.activeElement.y + window.activeElement.height, cursor: 'nwse-resize', name: 'bottom-right' }
+                    { x: currentTargetX,               y: currentTargetY,                 cursor: 'nwse-resize', name: 'top-left' },
+                    { x: currentTargetX + currentTargetWidth, y: currentTargetY,         cursor: 'nesw-resize', name: 'top-right' },
+                    { x: currentTargetX,               y: currentTargetY + currentTargetHeight,  cursor: 'nesw-resize', name: 'bottom-left' },
+                    { x: currentTargetX + currentTargetWidth, y: currentTargetY + currentTargetHeight, cursor: 'nwse-resize', name: 'bottom-right' }
                 ];
                 for (const handle of handles) {
                     if (mouse.x >= handle.x - HANDLE_SIZE / 2 && mouse.x <= handle.x + HANDLE_SIZE / 2 &&
@@ -451,96 +569,199 @@ document.addEventListener('DOMContentLoaded', () => {
             window.collageCanvas.style.cursor = overSelectable ? 'grab' : 'default';
         }
 
-        // --- Rotation Logic ---
+        // --- Rotation Logic (now applies to all selected elements, driven by activeElement's handle) ---
         if (isRotating && window.activeElement) {
-            const elementCenterX = window.activeElement.x + window.activeElement.width / 2;
-            const elementCenterY = window.activeElement.y + window.activeElement.height / 2;
-            const currentAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
+            const selected = window.collageElements.filter(el => el.isSelected);
+            if (selected.length === 0) { // Should not happen if activeElement is set and selected
+                isRotating = false; 
+                return;
+            }
+
+            const activeElementCenterX = window.activeElement.x + window.activeElement.width / 2;
+            const activeElementCenterY = window.activeElement.y + window.activeElement.height / 2;
+
+            const currentAngle = Math.atan2(mouse.y - activeElementCenterY, mouse.x - activeElementCenterX);
             let angleDiff = (rotationStartAngle - currentAngle) * 180 / Math.PI;
-            let newRotation = initialElementRotation + angleDiff;
+
             if (event.shiftKey) {
-                newRotation = Math.round(newRotation / 15) * 15;
+                angleDiff = Math.round(angleDiff / 20) * 30;
             }
-            window.activeElement.rotation = (newRotation % 360 + 360) % 360; 
+            
+            selected.forEach(element => {
+                element.rotation = (element.rotation + angleDiff % 360 + 360) % 360; 
+            });
+
+            // Update rotationStartAngle for the next mousemove step
+            rotationStartAngle = currentAngle; 
+
             window.drawCanvas();
             return;
         }
 
-        // --- Scaling Logic ---
-        if (isResizing && window.activeElement) {
-            const dx = mouse.x - dragStartX;
-            const dy = mouse.y - dragStartY;
+        // --- Scaling Logic (UNIFIED for single and group, with correct Shift behavior) ---
+        if (isResizing) {
+            const selectedElements = window.collageElements.filter(el => el.isSelected);
+            if (selectedElements.length === 0) {
+                isResizing = false;
+                return;
+            }
 
-            let newWidth = initialElementWidth;
-            let newHeight = initialElementHeight;
-            let newX = initialElementX;
-            let newY = initialElementY;
+            // initialBoundingBox: represents the initial bounding box of the target (single element or group)
+            // These are the values stored in handleMouseDown in initialElementX/Y/Width/Height.
+            const initialBoundingBox = { 
+                x: initialElementX, y: initialElementY,
+                width: initialElementWidth, height: initialElementHeight
+            };
 
-            const aspectRatio = initialElementWidth / initialElementHeight;
+            const mouseCurrent = mouse; // current mouse position
+            const mouseStart = { x: dragStartX, y: dragStartY }; // mouse position at the start of resize
 
+            const initialAspectRatio = initialBoundingBox.width / initialBoundingBox.height;
+
+            // anchorpoint (opposite corner of the handle)
+            let anchorX, anchorY;
             switch (resizeHandle) {
-                case 'top-left':
-                    newWidth = initialElementWidth - dx;
-                    newHeight = initialElementHeight - dy;
-                    if (event.shiftKey) { 
-                        if (Math.abs(dx) > Math.abs(dy)) { newHeight = newWidth / aspectRatio; } else { newWidth = newHeight * aspectRatio; }
-                    }
-                    newX = initialElementX + (initialElementWidth - newWidth);
-                    newY = initialElementY + (initialElementHeight - newHeight);
-                    break;
-                case 'top-right':
-                    newWidth = initialElementWidth + dx;
-                    newHeight = initialElementHeight - dy;
-                    if (event.shiftKey) {
-                        if (Math.abs(dx) > Math.abs(dy)) { newHeight = newWidth / aspectRatio; } else { newWidth = newHeight * aspectRatio; }
-                    }
-                    newY = initialElementY + (initialElementHeight - newHeight);
-                    break;
-                case 'bottom-left':
-                    newWidth = initialElementWidth - dx;
-                    newHeight = initialElementHeight + dy;
-                    if (event.shiftKey) {
-                        if (Math.abs(dx) > Math.abs(dy)) { newHeight = newWidth / aspectRatio; } else { newWidth = newHeight * aspectRatio; }
-                    }
-                    newX = initialElementX + (initialElementWidth - newWidth);
-                    break;
-                case 'bottom-right':
-                    newWidth = initialElementWidth + dx;
-                    newHeight = initialElementHeight + dy;
-                    if (event.shiftKey) {
-                        if (Math.abs(dx) > Math.abs(dy)) { newHeight = newWidth / aspectRatio; } else { newWidth = newHeight * aspectRatio; }
-                    }
-                    break;
+                case 'top-left':     anchorX = initialBoundingBox.x + initialBoundingBox.width;  anchorY = initialBoundingBox.y + initialBoundingBox.height; break;
+                case 'top-right':    anchorX = initialBoundingBox.x;                             anchorY = initialBoundingBox.y + initialBoundingBox.height; break;
+                case 'bottom-left':  anchorX = initialBoundingBox.x + initialBoundingBox.width;  anchorY = initialBoundingBox.y;                             break;
+                case 'bottom-right': anchorX = initialBoundingBox.x;                             anchorY = initialBoundingBox.y;                             break;
             }
 
+            let finalWidth, finalHeight, finalX, finalY;
+
+            //if (event.shiftKey) { //not working properly for unproportional resize yet
+                // scale proportionally from the anchor point, based on the dominant axis.
+
+                // Current distance of the mouse from the anchor point
+                const currentRelX = mouseCurrent.x - anchorX;
+                const currentRelY = mouseCurrent.y - anchorY;
+
+                // Original distance of the mouse from the anchor point (as reference for Delta)
+                const startRelX = mouseStart.x - anchorX;
+                const startRelY = mouseStart.y - anchorY;
+
+                // Calculation of the "Delta" change in X and Y relative to the anchor point
+                // This reflects the movement of the handle
+                const deltaMovementX = currentRelX - startRelX;
+                const deltaMovementY = currentRelY - startRelY;
+
+                // Calculate the new width/height, if it were scaled proportionally from the start
+                // We use initialBoundingBox to maintain the original aspect ratio
+                let potentialNewWidth = initialBoundingBox.width + (resizeHandle.includes('left') ? -deltaMovementX : deltaMovementX);
+                let potentialNewHeight = initialBoundingBox.height + (resizeHandle.includes('top') ? -deltaMovementY : deltaMovementY);
+
+                // Determine the effective scaling factor based on the dominant axis
+                // (the axis, which was scaled proportionally the furthest)
+                let scaleFactorFromWidth = potentialNewWidth / initialBoundingBox.width;
+                let scaleFactorFromHeight = potentialNewHeight / initialBoundingBox.height;
+
+                let effectiveScaleFactor;
+                if (Math.abs(scaleFactorFromWidth) > Math.abs(scaleFactorFromHeight)) {
+                    effectiveScaleFactor = scaleFactorFromWidth;
+                } else {
+                    effectiveScaleFactor = scaleFactorFromHeight;
+                }
+
+                // Apply the effective scaling factor to the original dimensions
+                finalWidth = initialBoundingBox.width * effectiveScaleFactor;
+                finalHeight = initialBoundingBox.height * effectiveScaleFactor;
+
+                // Calculate the final position based on anchor point and new proportional dimensions
+                finalX = anchorX;
+                finalY = anchorY;
+
+                if (resizeHandle.includes('left')) finalX = anchorX - finalWidth;
+                if (resizeHandle.includes('top')) finalY = anchorY - finalHeight;
+
+            /*} else {
+                // no shift: scale unproportional.
+                // The dx/dy values are the total mouse movement since the start of the click.
+                // finalWidth/Height are directly calculated from initialBoundingBox + dx/dy.
+                finalWidth = initialBoundingBox.width + (resizeHandle.includes('left') ? -dx : dx);
+                finalHeight = initialBoundingBox.height + (resizeHandle.includes('top') ? -dy : dy);
+
+                // finalX/Y are directly calculated from initialBoundingBox + dx/dy.
+                finalX = initialBoundingBox.x;
+                finalY = initialBoundingBox.y;
+
+                if (resizeHandle.includes('left')) finalX = initialBoundingBox.x + dx;
+                if (resizeHandle.includes('top')) finalY = initialBoundingBox.y + dy;
+            }*/
+
+            // --- apply minimum size restriction ---
             const MIN_SIZE = 20;
-            if (newWidth < MIN_SIZE) {
-                newWidth = MIN_SIZE;
-                if (event.shiftKey) newHeight = newWidth / aspectRatio;
-                if (resizeHandle.includes('left')) newX = initialElementX + (initialElementWidth - newWidth);
+
+            if (finalWidth < MIN_SIZE) {
+                finalWidth = MIN_SIZE;
+                if (event.shiftKey) finalHeight = MIN_SIZE / initialAspectRatio; // while shift: height proportional adjust
             }
-            if (newHeight < MIN_SIZE) {
-                newHeight = MIN_SIZE;
-                if (event.shiftKey) newWidth = newHeight * aspectRatio;
-                if (resizeHandle.includes('top')) newY = initialElementY + (initialElementHeight - newHeight);
+            if (finalHeight < MIN_SIZE) {
+                finalHeight = MIN_SIZE;
+                if (event.shiftKey) finalWidth = MIN_SIZE * initialAspectRatio; // while shift: width proportional adjust
             }
 
-            window.activeElement.x = newX;
-            window.activeElement.y = newY;
-            window.activeElement.width = newWidth;
-            window.activeElement.height = newHeight;
+            // position after resizing, to avoid jumps
+            if (resizeHandle.includes('left') && finalWidth === MIN_SIZE && initialBoundingBox.width > MIN_SIZE) {
+                finalX = anchorX - MIN_SIZE;
+            }
+            if (resizeHandle.includes('top') && finalHeight === MIN_SIZE && initialBoundingBox.height > MIN_SIZE) {
+                finalY = anchorY - MIN_SIZE;
+            }
+
+            // to avoid errors, if finalWidth/Height become 0 (shouldn't happen due to MIN_SIZE)
+            if (finalWidth === 0) finalWidth = 1;
+            if (finalHeight === 0) finalHeight = 1;
+
+
+            // scale factors from initial bounding box to final bounding box
+            const scaleX = finalWidth / initialBoundingBox.width;
+            const scaleY = finalHeight / initialBoundingBox.height;
+
+            // apply transformation on each selected element
+            selectedElements.forEach(element => {
+                // position of the element relative to the anchor point of the initial bounding box
+                // This is crucial for the "sticky" behavior
+                const relativeXToAnchor = element.x - anchorX;
+                const relativeYToAnchor = element.y - anchorY;
+
+                // Scale relative position
+                const newRelativeXToAnchor = relativeXToAnchor * scaleX;
+                const newRelativeYToAnchor = relativeYToAnchor * scaleY;
+
+                // new Position and Dimensions of the element
+                element.x = anchorX + newRelativeXToAnchor;
+                element.y = anchorY + newRelativeYToAnchor;
+                element.width = element.width * scaleX;
+                element.height = element.height * scaleY;
+            });
+
+            // dragStartX/Y for continuous resizing update
+            dragStartX = mouseCurrent.x;
+            dragStartY = mouseCurrent.y;
 
             window.drawCanvas();
             return;
         }
 
-        // --- Dragging Logic ---
-        if (isDragging && window.activeElement) {
+        // --- Dragging Logic (now applies to all selected elements) ---
+        if (isDragging) {
+            const selected = window.collageElements.filter(el => el.isSelected);
+            if (selected.length === 0) {
+                isDragging = false;
+                return;
+            }
+
             const dx = mouse.x - dragStartX;
             const dy = mouse.y - dragStartY;
 
-            window.activeElement.x = elementStartX + dx;
-            window.activeElement.y = elementStartY + dy;
+            selected.forEach(element => {
+                element.x += dx;
+                element.y += dy;
+            });
+
+            // dragStartX/Y for continuous dragging without accumulation update
+            dragStartX = mouse.x;
+            dragStartY = mouse.y;
 
             window.drawCanvas();
             return;
