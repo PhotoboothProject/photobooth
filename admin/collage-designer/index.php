@@ -123,13 +123,25 @@ include 'components/image-placeholders-manager.php'; // Image placeholders manag
 ?>
                     </div><!-- End left-panel -->
 
-                    <!-- RIGHT PANEL: PREVIEW -->
-                    <div class="right-panel w-full flex-1 lg:flex-[2_1_0%] flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
-                        <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
-                            <?= $languageService->translate('preview_title') ?>
-                        </span>
-                        <?php include 'components/preview-canvas.php'; // Contains #result_canvas?>
-                    </div><!-- End right-panel -->
+                    <!-- RIGHT PANEL -->
+                      <!-- Container for Tools and Preview -->
+                    <div class="right-column-container w-full flex-1 lg:flex-[2_1_0%] flex flex-col gap-2">
+
+                        <!-- Tool Buttons -->
+                        <div class="w-full py-2 md:py-3 border border-gray-200 rounded-md flex justify-center">
+                            <?php include 'components/general-tools-panel.php'; // General tools like alignment ?>
+                        </div>
+
+                        <!-- RIGHT PANEL: PREVIEW -->
+                        <div class="right-panel w-full flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
+                            <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
+                                <?= $languageService->translate('preview_title') ?>
+                            </span>
+                            <?php include 'components/preview-canvas.php'; // Contains #result_canvas?>
+                        </div><!-- End right-panel -->
+
+                    </div><!-- End right-column-container -->
+
                 </div> <!-- End main-design-panel -->
 
                 <!-- BOTTOM PANEL: General and placeholder settings (if not element-specific) -->
