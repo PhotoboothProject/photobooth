@@ -183,7 +183,8 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
 
 <?php
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
-echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/collage-designer.js') . '"></script>'; // Your main JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer.js') . '"></script>'; // Your main JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-tools.js') . '"></script>'; // Tools JS
 // Optional: Specific toasts/messages depending on PHP processing
 if (isset($_SESSION['designer_message'])) {
     echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';
