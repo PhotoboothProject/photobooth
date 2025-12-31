@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const collageCanvasWrapper = document.getElementById('collageCanvasWrapper');
     const loadingOverlay = document.getElementById('loadingOverlay');
 
+    const BASE_URL = typeof window.AppBaseUrl !== 'undefined' ? window.AppBaseUrl : './';
+
     // --- Utility Functions for Loading Overlay ---
     function showLoadingOverlay() {
         if (loadingOverlay) {
@@ -51,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const ROTATION_HANDLE_STROKE_COLOR = SELECTION_COLOR;
     const ROTATION_HANDLE_ICON = '\u21BA'; // Unicode for a counter-clockwise arrow (↺) or use another icon
     const ROTATION_HANDLE_ICON_FONT_SIZE = '12px Arial';
+    const ROTATION_CURSOR_RELATIVE_PATH = 'assets/icons/rotate-cw.svg';
+    const ROTATION_CURSOR_URL = `url("${BASE_URL}${ROTATION_CURSOR_RELATIVE_PATH}") 12 12, auto`;
     // End: Configuration for Rotation Handle ---
 
     let currentLayout = initialCollageLayout;
@@ -418,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const elementCenterY = activeElement.y + activeElement.height / 2;
                 rotationStartAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
                 initialElementRotation = activeElement.rotation;
-                collageCanvas.style.cursor = 'grabbing'; // Or a specific rotate cursor
+                collageCanvas.style.cursor = ROTATION_CURSOR_URL; // Or a specific rotate cursor
                 drawCollage();
                 return; // Rotation handle clicked, don't proceed further
             }
@@ -503,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Math.pow(mouse.y - rotationHandleY, 2)
             );
             if (dist <= ROTATION_HANDLE_SIZE / 2) {
-                collageCanvas.style.cursor = 'grab'; // Or specific 'ew-resize' / 'grabbing' for rotation
+                collageCanvas.style.cursor = ROTATION_CURSOR_URL; // Or specific 'ew-resize' / 'grabbing' for rotation
                 cursorChanged = true;
             }
         }

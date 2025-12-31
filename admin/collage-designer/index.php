@@ -67,6 +67,10 @@ echo '<script type="text/javascript">';
 echo 'const initialCollageLayout = ' . json_encode($currentLayoutData) . ';';
 echo '</script>';
 
+// Base URL for the designer (for AJAX calls etc.)
+$designerUrl = PathUtility::getPublicPath('admin/collage-designer');
+$designerUrl = rtrim($designerUrl, '/') . '/'; // make sure, the path ends with a slash
+
 // =============================================================
 // Standard Admin Panel Head & Body
 // =============================================================
@@ -160,6 +164,10 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
         </div>
     </div>
 </div>
+
+<script>
+    window.AppBaseUrl = <?php echo json_encode($designerUrl); ?>; 
+</script>
 
 <?php
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
