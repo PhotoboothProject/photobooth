@@ -264,7 +264,103 @@ document.addEventListener('DOMContentLoaded', () => {
         window.drawCanvas();
     });
 
-    // Distribution buttons will be implemented later, as they are more complex.
-    // document.getElementById('distributeHBtn').addEventListener('click', () => { /* ... */ });
-    // document.getElementById('distributeVBtn').addEventListener('click', () => { /* ... */ });
+    // --- Distribution Functions ---
+
+    // Distribute selected elements horizontally
+    document.getElementById('distributeHBtn').addEventListener('click', () => {
+        let elementsToDistribute = getSelectedElements();
+
+        if (elementsToDistribute.length < 3) {
+            console.log('Select at least 3 elements for horizontal distribution.');
+            return;
+        }
+
+        // Sort elements by their x-coordinate to ensure proper distribution order
+        elementsToDistribute.sort((a, b) => a.x - b.x);
+
+        const firstElement = elementsToDistribute[0];
+        const lastElement = elementsToDistribute[elementsToDistribute.length - 1];
+
+        // Determine the total width of all elements combined
+        const totalElementsWidth = elementsToDistribute.reduce((sum, el) => sum + el.width, 0);
+
+        // Determine the total available space between the first and last element's outer edges
+        const availableSpace = (lastElement.x + lastElement.width) - firstElement.x;
+
+        // Calculate the space to be distributed between elements
+        // This is the total space minus the space occupied by the elements themselves
+        const spaceBetweenElements = availableSpace - totalElementsWidth;
+
+        // Calculate the actual gap size that needs to be inserted between each element
+        // There are (n-1) gaps for n elements
+        const numGaps = elementsToDistribute.length - 1;
+        if (numGaps <= 0) { // Should not happen with length < 3 check, but for safety
+             window.drawCanvas();
+             return;
+        }
+        const uniformGap = spaceBetweenElements / numGaps;
+
+        // Apply new positions
+        let currentX = firstElement.x; // Start from the first element's x-position
+        elementsToDistribute.forEach((element, index) => {
+            if (index === 0) {
+                // First element stays at its sorted position (x)
+                element.x = firstElement.x;
+            } else {
+                // Position subsequent elements based on the previous element's width and the uniform gap
+                currentX += elementsToDistribute[index - 1].width + uniformGap;
+                element.x = currentX;
+            }
+        });
+
+        window.drawCanvas();
+    });
+
+    // Distribute selected elements vertically
+    document.getElementById('distributeVBtn').addEventListener('click', () => {
+        let elementsToDistribute = getSelectedElements();
+
+        if (elementsToDistribute.length < 3) {
+            console.log('Select at least 3 elements for vertical distribution.');
+            return;
+        }
+
+        // Sort elements by their y-coordinate
+        elementsToDistribute.sort((a, b) => a.y - b.y);
+
+        const firstElement = elementsToDistribute[0];
+        const lastElement = elementsToDistribute[elementsToDistribute.length - 1];
+
+        // Determine the total height of all elements combined
+        const totalElementsHeight = elementsToDistribute.reduce((sum, el) => sum + el.height, 0);
+
+        // Determine the total available space between the first and last element's outer edges
+        const availableSpace = (lastElement.y + lastElement.height) - firstElement.y;
+
+        // Calculate the space to be distributed between elements
+        const spaceBetweenElements = availableSpace - totalElementsHeight;
+
+        // Calculate the actual gap size
+        const numGaps = elementsToDistribute.length - 1;
+        if (numGaps <= 0) {
+             window.drawCanvas();
+             return;
+        }
+        const uniformGap = spaceBetweenElements / numGaps;
+
+        // Apply new positions
+        let currentY = firstElement.y; // Start from the first element's y-position
+        elementsToDistribute.forEach((element, index) => {
+            if (index === 0) {
+                // First element stays at its sorted position (y)
+                element.y = firstElement.y;
+            } else {
+                // Position subsequent elements based on the previous element's height and the uniform gap
+                currentY += elementsToDistribute[index - 1].height + uniformGap;
+                element.y = currentY;
+            }
+        });
+
+        window.drawCanvas();
+    });
 });

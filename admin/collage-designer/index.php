@@ -129,7 +129,7 @@ include 'components/image-placeholders-manager.php'; // Image placeholders manag
 
                         <!-- Tool Buttons -->
                         <div class="w-full py-2 md:py-3 border border-gray-200 rounded-md flex justify-center">
-                            <?php include 'components/general-tools-panel.php'; // General tools like alignment ?>
+                            <?php include 'components/general-tools-panel.php'; // General tools like alignment?>
                         </div>
 
                         <!-- RIGHT PANEL: PREVIEW -->
