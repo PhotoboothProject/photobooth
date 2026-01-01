@@ -167,8 +167,10 @@ Yes you can. Using the file uploader you can add your video into the `/private/v
 Once done go to [User interface](http://localhost/admin/#userinterface) (or [User interface](http://localhost/photobooth/admin/#userinterface)), switch from `image` to `video` as background and choose
 your video in "Background video path".
 
-You can also use a youtube video/livestream!\
-In the background video path put the link pulled from youtube. Note that the link should be in the following format: `https://www.youtube.com/embed/<video_id>`.\
+You can also use a youtube video/livestream!
+
+In the background video path put the link pulled from youtube. Note that the link should be in the following format: `https://www.youtube.com/embed/<video_id>`.
+
 To get a link like that you have to choose your youtube video/livestream and click on the "share" button. Then by choosing "incorporate" it will be shown an HTML code `<iframe />` you have to copy the content of the "src" property from the start till the first question mark `?` in order to resemble the format.
 
 ---
@@ -395,7 +397,7 @@ There's different reasons if you get the error "Something went wrong. Please try
 First of all, please set the **Loglevel** to **2** via admin panel (GENERAL section, [http://localhost/admin](http://localhost/admin)
 or [http://localhost/photobooth/admin](http://localhost/photobooth/admin)) and try again. You'll still see the error message, but we make sure to log enough information to see what's wrong.
 
-Now open the Debug panel ([http://localhost/admin/debugpanel](http://localhost/admin/debugpanel) or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel))) and
+Now open the Debug panel ([http://localhost/admin/debugpanel](http://localhost/admin/debugpanel) or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel)) and
 check the Photobooth log for error messages. You should see something like this:
 
 ```
@@ -444,7 +446,7 @@ You have a remote server (e.g. with your website on it) or another Raspberry Pi 
 
 ### How to:
 
--   You should have a remote server with an SSH login. Know your username and password: (e.g.: [username.strato-hosting.eu]@ssh.strato.de)
+-   You should have a remote server with an SSH login. Know your username and password: (e.g.: `[username.strato-hosting.eu]@ssh.strato.de`)
 -   We will be using the Post-photo script / command of the Photobox which you can find in the admin panel in the section Commands.
 -   The command is being executed after the picture has been taken and gets the picture’s name as an attribute.
 -   Command (adjust path if needed):
@@ -455,7 +457,7 @@ scp /var/www/html/data/images/%s [username@remotehost]:/[path_to_where_you_want_
 
 -   If we keep it like that the remote server would require the source server to type in a password each time a picture is being copied to the remote server. An SSH connection using a private/public SSH key needs to be established:
 
-1. Create a public/private key-pair for the www-data user on the source machine (why for that user? The www-data user is executing the Post-photo script/command in the background) – Do not enter a passphrase when prompted.
+1. Create a public/private key-pair for the **www-data** user on the source machine (why for that user? The www-data user is executing the Post-photo script/command in the background) – Do not enter a passphrase when prompted.
 
 ```
 sudo -u www-data ssh-keygen -t rsa
@@ -477,26 +479,26 @@ You can now use the URL with which you can access your remote server from the in
 
 ## How to use the image randomizer
 
-To use the image randomizer images must be placed inside private/images/{folderName}.
+To use the image randomizer images must be placed inside `private/images/{folderName}`.
 For hassle-free (ssh/sftp-free) upload, you may want to use the integrated images uploader: [http://localhost/admin/upload](http://localhost/admin/upload) (
 or [http://localhost/photobooth/admin/upload](http://localhost/photobooth/admin/upload)).
 
 ### Use for PICTURE FRAMES:
 
-1. Upload / Copy all the (transparent) frames you want to private/images/{FrameFolder}
+1. Upload / Copy all the (transparent) frames you want to `private/images/{FrameFolder}`
 2. Enable picture_take_frame
-3. specify picture_frame url : http://localhost/api/randomImg.php?dir={FrameFolder} (or http://localhost/photobooth/api/randomImg.php?dir={FrameFolder})
+3. specify picture_frame url : `http://localhost/api/randomImg.php?dir={FrameFolder}` (or `http://localhost/photobooth/api/randomImg.php?dir={FrameFolder}`)
 
 ### Use for COLLAGE FRAMES:
 
-1. Upload / Copy all the (transparent) frames you want to private/images/{FrameFolder}
+1. Upload / Copy all the (transparent) frames you want to `private/images/{FrameFolder}`
 2. Enable collage_take_frame (always or once)
-3. specify collage_frame url : http://localhost/api/randomImg.php?dir={FrameFolder} (or http://localhost/photobooth/api/randomImg.php?dir={FrameFolder})
+3. specify collage_frame url : `http://localhost/api/randomImg.php?dir={FrameFolder}` (or `http://localhost/photobooth/api/randomImg.php?dir={FrameFolder}`)
 
 ### Use for BACKGROUNDS:
 
-1. Upload / Copy all the backgrounds you want to private/images/{BgFolder}
-2. specify collage_background url : http://localhost/api/randomImg.php?dir={BgFolder} (or http://localhost/photobooth/api/randomImg.php?dir={BgFolder})
+1. Upload / Copy all the backgrounds you want to `private/images/{BgFolder}`
+2. specify collage_background url : `http://localhost/api/randomImg.php?dir={BgFolder}` (or `http://localhost/photobooth/api/randomImg.php?dir={BgFolder}`)
 
 **NOTES:**
 
