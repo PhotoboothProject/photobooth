@@ -60,16 +60,16 @@ gphoto2 --set-config capturetarget=1 --capture-image-and-download --filename=%s
 
 ## Permission Issues
 
-1. **Test as Current User**
+**1. Test as Current User**
 
 ```
 gphoto2 --capture-image-and-download --filename=test.jpg
 ```
 
-   * No: Recheck previous steps
-   * Yes: Continue testing
+* No: Recheck previous steps
+* Yes: Continue testing
 
-2. **Test as `www-data` User**
+**2. Test as `www-data` User**
 
 ```
 cd /var/www/html
@@ -77,8 +77,8 @@ sudo -u www-data -s
 gphoto2 --capture-image-and-download --filename=test.jpg
 ```
 
-   * Yes: Check Photobooth configuration or reset it
-   * No: Fix permissions:
+* Yes: Check Photobooth configuration or reset it
+* No: Fix permissions:
 
 ```
 sudo chown -R www-data:www-data /var/www/
@@ -86,15 +86,15 @@ sudo gpasswd -a www-data plugdev
 reboot
 ```
 
-3. **Check for Conflicting Processes**
-   Disable `gvfs-gphoto2-volume-monitor` if necessary:
+**3. Check for Conflicting Processes**
+Disable `gvfs-gphoto2-volume-monitor` if necessary:
 
 ```
 sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 reboot
 ```
 
-4. **Update GPhoto2 and libgphoto2**
+**4. Update GPhoto2 and libgphoto2**
 
 ```
 wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
