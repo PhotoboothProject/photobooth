@@ -1,19 +1,20 @@
-
 # go2rtc Troubleshooting
 
 ## Initial notes
 
-- make sure your camera is supported by gphoto2 / rpicam-apps / fswebcam
-- make sure your camera is working on Photobooth without setting up go2rtc for preview (**if not tested:** uninstall go2rtc while running the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard)  again: 4 go2rtc -> 6 Uninstall go2rtc and the related services).
+- make sure your camera is supported by one of the following libraries:
+  - `gphoto2`
+  - `rpicam-apps`
+  - `fswebcam`
+
+- make sure your camera is working on Photobooth **without** setting up go2rtc for preview
+  - **if not tested:** uninstall go2rtc while running the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard) again (4  go2rtc --> 6 Uninstall go2rtc and the related services).
+
 - make sure you can access [http://localhost:1984/api/stream.mjpeg?src=photobooth](http://localhost:1984/api/stream.mjpeg?src=photobooth) and having the stream available.
 
 If your camera is supported in general but not having a preview available please check go2rtc for errors.
-Access go2rtc via [http://localhost:1984](http://localhost:1984) and, maybe, adjust the config if needed.
 
-To allow adjustments of the config via web interface adjust the permissions:
-```ell
-sudo chmod 755 /etc/go2rtc.yaml
-```
+Access go2rtc via [http://localhost:1984](http://localhost:1984) and, maybe, adjust the config if needed.
 
 ---
 
@@ -36,7 +37,7 @@ Run `capture --help` inside your terminal to get information about the usage of 
 
 **3 Restarts go2rtc**
 
-That means: anything that works with the command gphoto2 / rpicam-still / fswebcam will also work with capture, and the word can simply be replaced.
+That means: anything that works with the command `gphoto2` / `rpicam-still` / `fswebcam` will also work with capture, and the word can simply be replaced.
 
 What’s not covered there is a timing issue related to previewing via go2rtc.
 
@@ -50,7 +51,7 @@ Another process is using the camera. That's what the log says. Therefore, it can
 
 If you're using `gphoto2` this issue is generally addressed inside the troubleshooting for gphoto2, but could also happen because of timing problems.
 
-The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems. Continue reading on [Delay capture](https://photoboothproject.github.io/faq/go2rtc-troubleshooting/#delay-capture) to know how to fix possible timing issues.
+The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems. Continue reading on [Delay capture](#delay-capture) to know how to fix possible timing issues.
 
 #### Delay capture
 
@@ -104,13 +105,53 @@ Open [http://localhost/admin/wgetcaptureconfig.php](http://localhost/admin/wgetc
 
 Then try again.
 
-### Camera specific notes
+---
 
-#### Canon EOS 500D
+## Adjusting the go2rtc configuration
+
+It might be needed to update the go2rtc configuration for personal needs or because of camera specific needed changes.
+
+To allow adjustments of the config via web interface adjust the permissions:
+
+```ell
+sudo chmod 755 /etc/go2rtc.yaml
+```
+
+Access go2rtc via [http://localhost:1984](http://localhost:1984).
+
+
+**Alternative:**
+
+Open the corresponding configuration file with root privileges:
+
+```ell
+sudo nano /etc/go2rtc.yaml
+```
+
+Make your changes and save them, after that restart go2rtc to apply:
+
+```ell
+sudo systemctl stop go2rtc
+sudo systemctl start go2rtc
+```
+
+The full configuration documentation can be found [here](https://github.com/AlexxIT/go2rtc?tab=readme-ov-file#configuration) inside the go2rtc GitHub repository.
+
+---
+
+## Camera specific notes
+
+While setting up go2rtc using the Photobooth Setup Wizard we're creating a default configuration which covers a wide range of devices. It might be, that your camera does not work out of the box with the default configuration and requires some extra work to be used on Photobooth. You're always welcome to contribute camera specific notes not listed below.
+
+### Raspberry Pi Camera Modules
+
+- Default preview width and height match the Pi Camera v3. You might need to adjust the width and height inside the go2rtc configuration to matching values for your camera module.
+
+### Canon EOS 500D
 
 - Camera Mode must be set to **P**
 
-If having trouble accessing the preview please adjust the go2rtc.yaml (`sudo nano /etc/go2rtc.yaml`):
+If still having trouble accessing the preview please adjust the go2rtc configuration:
 
 ```
 streams:
@@ -121,8 +162,9 @@ log:
   exec: trace
 ```
 
-Now restart go2rtc:
-```
+Now restart go2rtc to apply your changes:
+
+```ell
 sudo systemctl stop go2rtc
 sudo systemctl start go2rtc
 ```
