@@ -81,11 +81,25 @@ function getLayoutPreviewSvg(CollageLayoutEnum $layout): string
         // Scale factor for SVG preview (typically /10 for nice numbers)
         $scale = 0.1;
 
+        // Check if this is a photostrip layout (2x4 or 2x3) where photos are duplicated
+        $isPhotostrip = in_array($layout, [
+            CollageLayoutEnum::TWO_X_FOUR_1,
+            CollageLayoutEnum::TWO_X_FOUR_2,
+            CollageLayoutEnum::TWO_X_FOUR_3,
+            CollageLayoutEnum::TWO_X_FOUR_4,
+            CollageLayoutEnum::TWO_X_THREE_1,
+            CollageLayoutEnum::TWO_X_THREE_2,
+        ]);
+
+        // Calculate how many unique photos (half of total for photostrips)
+        $layoutCount = count($layoutData['layout']);
+        $uniquePhotoCount = $isPhotostrip ? (int)($layoutCount / 2) : $layoutCount;
+
         // Process each photo position from layout array
         $positions = [];
         $photoNum = 1;
 
-        foreach ($layoutData['layout'] as $photoLayout) {
+        foreach ($layoutData['layout'] as $index => $photoLayout) {
             // photoLayout format: [x, y, width, height, rotation, ?frame]
             if (count($photoLayout) < 4) {
                 continue;
@@ -96,16 +110,27 @@ function getLayoutPreviewSvg(CollageLayoutEnum $layout): string
             $w = evaluateLayoutExpression($photoLayout[2], $width, $height);
             $h = evaluateLayoutExpression($photoLayout[3], $width, $height);
 
+
+            // For photostrips: reset numbering after first half
+            $displayNum = $isPhotostrip && $index >= $uniquePhotoCount
+                ? ($index - $uniquePhotoCount + 1)
+                : $photoNum;
+
             // Scale to SVG coordinates
             $positions[] = [
                 'x' => $x * $scale,
                 'y' => $y * $scale,
                 'w' => $w * $scale,
                 'h' => $h * $scale,
-                'num' => $photoNum,
+                'num' => $displayNum,
             ];
 
-            $photoNum++;
+            // Only increment if not in second half of photostrip
+            if (!$isPhotostrip || $index < $uniquePhotoCount - 1) {
+                $photoNum++;
+            } elseif ($index === $uniquePhotoCount - 1) {
+                $photoNum = 1; // Reset for second half
+            }
         }
     }
 
