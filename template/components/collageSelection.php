@@ -58,10 +58,10 @@ function loadCollageLayoutFromJson(CollageLayoutEnum $layout, string $orientatio
 /**
  * Generate SVG preview for collage layout (dynamically from JSON)
  */
-function getLayoutPreviewSvg(CollageLayoutEnum $layout): string
+function getLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'landscape'): string
 {
     // Try to load layout from JSON
-    $layoutData = loadCollageLayoutFromJson($layout, 'landscape');
+    $layoutData = loadCollageLayoutFromJson($layout, $orientation);
 
     if (!$layoutData) {
         // Fallback to simple 2x2 grid if JSON can't be loaded
@@ -212,6 +212,9 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
     $html .= '<h3 id="collageSelectorTitle">' . $languageService->translate('selectCollageLayout') . '</h3>';
     $html .= '<div class="collageSelector__options">';
 
+    // Get orientation from config (landscape or portrait)
+    $orientation = $collageConfig['orientation'] ?? 'landscape';
+
     foreach (CollageLayoutEnum::cases() as $layout) {
         if (in_array($layout, $collageConfig['layouts_enabled'])) {
             $collageConfig['layout'] = $layout->value;
@@ -225,7 +228,7 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
                 '</button>',
                 htmlspecialchars($layout->value),
                 $limit,
-                getLayoutPreviewSvg($layout),
+                getLayoutPreviewSvg($layout, $orientation),
                 htmlspecialchars($layout->label())
             );
         }
