@@ -14,9 +14,9 @@ Yes, Pi Cameras are supported. Make sure your Pi can capture an image from the t
   ```
 
 ## Configure Photobooth commands
-Open the admin panel (`http://localhost/admin` or `http://localhost/photobooth/admin`) and set the capture command that matches your OS:
+Open the adminpanel ([http://localhost/admin](http://localhost/admin) or [http://localhost/photobooth/admin](http://localhost/photobooth/admin)) and set the capture command that matches your OS:
 
-- Pi OS (Bookworm): `rpicam-still -n -o %s -q 100 -t 1 | echo Done`
+- Pi OS (Bookworm and newer): `rpicam-still -n -o %s -q 100 -t 1 | echo Done`
 - Pi OS (Bullseye): `libcamera-still -n -o %s -q 100 -t 1 | echo Done`
 - Pi OS (Buster): `raspistill -n -o %s -q 100 -t 1 | echo Done`
 
