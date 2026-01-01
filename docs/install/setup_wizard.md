@@ -18,4 +18,4 @@ sudo bash install-photobooth.sh
 
 On Photobooth installation by default Apache is used for an easy and no-hassle setup.
 - Adjust your installation setup if needed: 1 Installation configuration
-- To get to know all options you can simply run `sudo bash install-photobooth.sh -help`.
+- To get to know all options you can simply run `sudo bash install-photobooth.sh --help`.
