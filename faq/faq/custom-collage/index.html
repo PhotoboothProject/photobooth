@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/faq/custom-collage/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Custom collage design - Photobooth Project</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Custom collage design";
+        var mkdocs_page_input_path = "faq/custom-collage.md";
+        var mkdocs_page_url = "/faq/custom-collage/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Custom collage design</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#collage-layout-json-lookup">Collage Layout JSON Lookup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#file-name">File Name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lookup-order">Lookup Order</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-private-orientation-specific">1. Private, orientation-specific</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-private-collage-root">2. Private, collage root</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-private-global-root">3. Private, global root</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-template-orientation-specific">4. Template, orientation-specific</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5-template-collage-root">5. Template, collage root</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lookup-rules">Lookup Rules</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#basic-layout-format">Basic layout format</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#extended-collage-object-v499">Extended collage object (v4.99+)</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Troubleshooting & Tutorials</li>
+      <li class="breadcrumb-item active">Custom collage design</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/faq/custom-collage.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="custom-collage-design">Custom collage design</h1>
+<p>Use a custom collage layout by pointing the collage setting to <code>private/collage.json</code>. You can create the file manually or with the generator at <code>http://localhost/admin/generator/index.php</code> (or <code>http://localhost/photobooth/admin/generator/index.php</code>). Save the admin panel after modifying the file so Photobooth recalculates the number of photos.</p>
+<h2 id="collage-layout-json-lookup">Collage Layout JSON Lookup</h2>
+<p>This document describes how the application searches for a collage layout <code>.json</code> file.</p>
+<p>The lookup process follows a <strong>strict priority order</strong>.
+<strong>Once a file is found, the search stops immediately.</strong></p>
+<hr />
+<h2 id="file-name">File Name</h2>
+<p>The lookup is performed for a layout file defined by Photobooth.
+Possible file names:</p>
+<ul>
+<li><code>1+2-1.json</code></li>
+<li><code>1+3-1.json</code></li>
+<li><code>1+3-2.json</code></li>
+<li><code>2+1-1.json</code></li>
+<li><code>2+2-1.json</code></li>
+<li><code>2+2-2.json</code></li>
+<li><code>2x3-1.json</code></li>
+<li><code>2x3-2.json</code></li>
+<li><code>2x4-1.json</code></li>
+<li><code>2x4-2.json</code></li>
+<li><code>2x4-3.json</code></li>
+<li><code>2x4-4.json</code></li>
+<li><code>3+1-1.json</code></li>
+<li><code>collage.json</code></li>
+</ul>
+<hr />
+<h2 id="lookup-order">Lookup Order</h2>
+<p>The application searches the following locations in order:</p>
+<h3 id="1-private-orientation-specific">1. Private, orientation-specific</h3>
+<ul>
+<li><code>private/collage/portrait/xxx.json</code></li>
+<li><code>private/collage/landscape/xxx.json</code></li>
+</ul>
+<hr />
+<h3 id="2-private-collage-root">2. Private, collage root</h3>
+<ul>
+<li><code>private/collage/xxx.json</code></li>
+</ul>
+<hr />
+<h3 id="3-private-global-root">3. Private, global root</h3>
+<ul>
+<li><code>private/xxx.json</code></li>
+</ul>
+<hr />
+<h3 id="4-template-orientation-specific">4. Template, orientation-specific</h3>
+<ul>
+<li><code>template/collage/landscape/xxx.json</code></li>
+<li><code>template/collage/portrait/xxx.json</code></li>
+</ul>
+<hr />
+<h3 id="5-template-collage-root">5. Template, collage root</h3>
+<ul>
+<li><code>template/collage/xxx.json</code></li>
+</ul>
+<hr />
+<h2 id="lookup-rules">Lookup Rules</h2>
+<ul>
+<li>The search is performed <strong>sequentially</strong> in the order listed above.</li>
+<li>As soon as a matching file is found, it is <strong>loaded and returned</strong>.</li>
+<li><strong>No further locations are checked</strong> after a successful match.</li>
+<li>If no file is found in any location, the layout is considered <strong>not available</strong>.</li>
+</ul>
+<h2 id="basic-layout-format">Basic layout format</h2>
+<p><code>collage.json</code> must be a valid JSON array; each inner array defines one photo position:</p>
+<pre><code>[
+[ &quot;0&quot;,                     &quot;y * 0.055&quot;,           &quot;1.5 * y * 0.55546&quot;,   &quot;y * 0.55546&quot;,   &quot;10&quot;,         true       ],
+[ &quot;x * 0.555&quot;,             &quot;y * 0.055&quot;,           &quot;1.5 * y * 0.40812&quot;,   &quot;y * 0.40812&quot;,   &quot;0&quot;,          false      ],
+[ &quot;x * 0.555&quot;,             &quot;y * 0.5368&quot;,          &quot;1.5 * y * 0.40812&quot;,   &quot;y * 0.40812&quot;,   &quot;0&quot;,          true       ]
+]
+</code></pre>
+<pre><code>[ &quot;horizontal position&quot;,   &quot;vertical position&quot;,   &quot;width&quot;,               &quot;height&quot;,        &quot;rotation&quot;,   &quot;apply frame&quot; ]
+</code></pre>
+<p>To test changes, reload <code>http://localhost/test/collage.php</code> (or <code>http://localhost/photobooth/test/collage.php</code> when installed in a subfolder). A malformed JSON (missing quotes, trailing commas) will break the layout.</p>
+<h2 id="extended-collage-object-v499">Extended collage object (v4.99+)</h2>
+<p>Wrap the layout array in an object to set resolution, text, frames and backgrounds:</p>
+<pre><code>{
+  &quot;width&quot;: &quot;1800&quot;,
+  &quot;height&quot;: &quot;1200&quot;,
+  &quot;text_custom_style&quot;: true,
+  &quot;text_font_size&quot;: &quot;50&quot;,
+  &quot;text_rotation&quot;: &quot;10&quot;,
+  &quot;text_locationx&quot;: &quot;200&quot;,
+  &quot;text_locationy&quot;: &quot;220&quot;,
+  &quot;text_font_color&quot;: &quot;#420C09&quot;,
+  &quot;text_font&quot;: &quot;/resources/fonts/GreatVibes-Regular.ttf&quot;,
+  &quot;text_line1&quot;: &quot;This is&quot;,
+  &quot;text_line2&quot;: &quot;a&quot;,
+  &quot;text_line3&quot;: &quot;Custom Collage&quot;,
+  &quot;text_linespace&quot;: &quot;100&quot;,
+  &quot;apply_frame&quot;: &quot;once&quot;,
+  &quot;frame&quot;: &quot;/resources/img/frames/frame_stone.png&quot;,
+  &quot;background&quot;: &quot;/resources/img/background.png&quot;,
+  &quot;background_color&quot;: &quot;#FFFFFF&quot;,
+  &quot;placeholder&quot;: true,
+  &quot;placeholderpath&quot;: &quot;/resources/img/background/01.jpg&quot;,
+  &quot;placeholderposition&quot;: &quot;1&quot;,
+  &quot;layout&quot;: [ ...layout array from above... ]
+}
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Define both <code>width</code> and <code>height</code> to override the default resolution.</li>
+<li><code>text_custom_style</code> toggles text; the other text properties override admin settings.</li>
+<li><code>frame</code> requires <code>apply_frame</code> set to <code>once</code> or <code>always</code>.</li>
+<li><code>placeholder</code> uses <code>placeholderpath</code> at <code>placeholderposition</code>.</li>
+</ul>
+<p>Single framed images only work when <code>apply_frame</code> is <code>always</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../pi-camera/" class="btn btn-neutral float-left" title="Pi Camera setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../kiosk-mode/" class="btn btn-neutral float-right" title="Kiosk mode">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../pi-camera/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../kiosk-mode/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

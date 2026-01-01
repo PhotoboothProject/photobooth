@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/install/install-debian/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Install on Debian - Photobooth Project</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Install on Debian";
+        var mkdocs_page_input_path = "install/install-debian.md";
+        var mkdocs_page_url = "/install/install-debian/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Install on Debian</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Install & Setup</li>
+      <li class="breadcrumb-item active">Install on Debian</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/install/install-debian.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="automated-installation-on-raspberry-pi-os-previously-called-raspbian-and-on-debian-debian-based-distributions">Automated installation on Raspberry Pi OS (previously called Raspbian) and on Debian / Debian based distributions:</h1>
+<p>To start the installation, simply run the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a>.</p>
+<p>If you encounter any issues or want more freedom to configure your Pi, Computer or Laptop, we recommend you look at the detailed installation instruction below.</p>
+<h1 id="manually-install-photobooth-on-raspberry-pi-os-previously-called-raspbian-and-on-debian-debian-based-distributions">Manually install Photobooth on Raspberry Pi OS (previously called Raspbian) and on Debian / Debian based distributions:</h1>
+<p>The steps below were tested on "Raspberry Pi OS with desktop" based on Debian Buster, but should work for Debian and all Debian based distributions. Photobooth can also be used on any other PC/Laptop running a supported OS.</p>
+<h2 id="update-your-system">Update your system</h2>
+<pre><code>sudo apt update
+sudo apt dist-upgrade
+</code></pre>
+<h2 id="install-a-webserver">Install a Webserver</h2>
+<p>Currently NGINX and Apache Webserver are supported.
+For an easy and no-hassle setup you should install Apache Webserver.
+NGINX has a smaller memory footprint and typically better performance, which is especially important on the Raspberry Pis, but it needs some additional steps until you're good to go.</p>
+<h3 id="install-apache-php">Install Apache &amp; PHP</h3>
+<pre><code>sudo apt install -y libapache2-mod-php
+</code></pre>
+<h3 id="or-install-nginx-php">or Install NGINX &amp; PHP</h3>
+<pre><code>sudo apt install -y nginx php-fpm
+</code></pre>
+<p><a href="../install-nginx/">Additional needed steps to enable PHP in NGINX</a></p>
+<h2 id="install-dependencies">Install dependencies</h2>
+<pre><code>sudo apt install -y curl gcc g++ make git ffmpeg gphoto2 libimage-exiftool-perl nodejs php-xml php-gd php-zip php-mbstring python3 python3-gphoto2 python3-psutil python3-zmq rsync udisks2 v4l2loopback-dkms v4l-utils
+</code></pre>
+<p><strong>Optional:</strong> If you have a new camera, you can also install the latest version of libgphoto2 directly from the maintainer. Choose "Install last stable release":</p>
+<pre><code>wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
+wget -O .env https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/.env
+chmod +x gphoto2-updater.sh
+sudo ./gphoto2-updater.sh
+</code></pre>
+<h2 id="install-photobooth">Install photobooth</h2>
+<p>Give our webserver user access to <code>/var/www/</code>:</p>
+<pre><code>sudo chown -R www-data:www-data /var/www/
+</code></pre>
+<p>Get the Photobooth source:</p>
+<pre><code>cd /var/www/
+sudo -u www-data -s
+rm -r html/*
+git clone https://github.com/PhotoboothProject/photobooth html
+cd /var/www/html
+git submodule update --init
+npm install
+npm run build
+exit
+</code></pre>
+<p><strong>Please note:</strong> depending on your hardware <code>npm install</code> and <code>npm run build</code> takes up to 15min! Node.js is needed in v20 or later!</p>
+<p>Next we have to give our webserver user access to the USB device:</p>
+<pre><code>sudo gpasswd -a www-data plugdev
+</code></pre>
+<p>If you like to use a printer you need to have <code>CUPS</code> installed. On Raspbian <code>CUPS</code> is not installed by default:</p>
+<pre><code>sudo apt install -y cups
+</code></pre>
+<p>Next you also have to add your webserver user to the <code>lp</code> and <code>lpadmin</code> group:</p>
+<pre><code>sudo gpasswd -a www-data lp
+sudo gpasswd -a www-data lpadmin
+</code></pre>
+<p>By default the CUPS webinterface can only be accessed via <a href="http://localhost:631">http://localhost:631</a> from your local machine.</p>
+<p>To remote access CUPS from other clients you need to run the following commands:</p>
+<pre><code>sudo cupsctl --remote-any
+sudo /etc/init.d/cups restart
+</code></pre>
+<h2 id="install-remote-buzzer-support">Install Remote Buzzer support</h2>
+<p>Please follow the steps mentioned in the FAQ:</p>
+<p><strong>Q:</strong> <a href="../../faq/#can-i-use-hardware-button-to-take-a-picture">Can I use Hardware Button to take a Picture?</a></p>
+<h2 id="try-it-out">Try it out</h2>
+<p>Now you should restart your Raspberry Pi to apply those settings:</p>
+<pre><code>reboot
+</code></pre>
+<p>Please use the following to test if your Webserver is able to take pictures (gphoto must be executed in a dir with write permission):</p>
+<pre><code>cd /var/www/html
+sudo -u www-data gphoto2 --capture-image
+</code></pre>
+<p>If it is not working, your operation system probably automatically mounted your camera. You can unmount it, or remove execution permission for gphoto2 Volume Monitor to ensure that the camera is not mounted anymore:</p>
+<pre><code>sudo chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+</code></pre>
+<p>Now reboot or unmount your camera with the following commands (you get a list of mounted cameras with <code>gio mount -l</code>):</p>
+<pre><code>gio mount -u gphoto2://YOUR-CAMERA
+</code></pre>
+<p>Now try again.</p>
+<p>If everything is working, open the IP address (you get it via <code>ip addr</code>) of your Raspberry Pi, or if you open it on your machine, type <a href="http://localhost">http://localhost</a> in your browser.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../setup_wizard/" class="btn btn-neutral float-left" title="Photobooth Setup Wizard"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../install-nginx/" class="btn btn-neutral float-right" title="Enable PHP in nginx">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../setup_wizard/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../install-nginx/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

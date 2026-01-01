@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/contributing-docs/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Contribute to the docs - Photobooth Project</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Contribute to the docs";
+        var mkdocs_page_input_path = "contributing-docs.md";
+        var mkdocs_page_url = "/contributing-docs/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Contribute to the docs</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-fork-and-clone">1) Fork and clone</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-set-up-a-docs-environment">2) Set up a docs environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-run-the-docs-locally">3) Run the docs locally</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-edit-guidelines">4) Edit guidelines</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-open-a-pull-request">5) Open a pull request</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Community</li>
+      <li class="breadcrumb-item active">Contribute to the docs</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/contributing-docs.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="contribute-to-the-documentation">Contribute to the documentation</h1>
+<p>Help improve the Photobooth docs by following these steps.</p>
+<h2 id="1-fork-and-clone">1) Fork and clone</h2>
+<ul>
+<li>Fork the repository on GitHub, then clone your fork.</li>
+<li>Work from the <code>dev</code> branch for documentation changes.</li>
+</ul>
+<h2 id="2-set-up-a-docs-environment">2) Set up a docs environment</h2>
+<ul>
+<li>Create and activate a virtual environment:
+  <code>python3 -m venv .venv
+  source .venv/bin/activate</code></li>
+<li>Install MkDocs and the theme:
+  <code>pip install mkdocs mkdocs-material</code></li>
+</ul>
+<h2 id="3-run-the-docs-locally">3) Run the docs locally</h2>
+<ul>
+<li>From the repo root, build the docs and start the preview server:
+  <code>mkdocs build --config-file mkdocs_remote.yml
+  mkdocs serve -f mkdocs_remote.yml</code></li>
+<li>Open the URL shown in the terminal (typically <code>http://127.0.0.1:8000</code>) to review your changes live.</li>
+</ul>
+<h2 id="4-edit-guidelines">4) Edit guidelines</h2>
+<ul>
+<li>Don't commit changes to the <code>faq/</code> directory directly; it's generated from the <code>docs/</code> source files during the build step. Your local build files are stored inside <code>site/</code> and not tracked by git.</li>
+<li>Keep text concise and practical; prefer short paragraphs and bullet lists.</li>
+<li>Use relative links to other docs pages (e.g. <code>faq/index.md</code>), and ensure new pages are added to <code>mkdocs_remote.yml</code>.</li>
+<li>Place new images in <code>docs/assets/</code> and reference them with relative paths.</li>
+<li>Stick to ASCII unless an existing page already uses extended characters.</li>
+<li>Check for build warnings (missing nav entries, broken links) before opening a PR.</li>
+</ul>
+<h2 id="5-open-a-pull-request">5) Open a pull request</h2>
+<ul>
+<li>Commit your changes to a feature branch on your fork.</li>
+<li>Open a PR against <code>PhotoboothProject/photobooth</code> targeting the <code>dev</code> branch.</li>
+<li>Include a brief summary of what you changed and how you tested the docs (e.g. <code>mkdocs serve</code> build output).</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../code_of_conduct/" class="btn btn-neutral float-left" title="Contributor Covenant Code of Conduct"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../donation/" class="btn btn-neutral float-right" title="Donation">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../code_of_conduct/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../donation/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

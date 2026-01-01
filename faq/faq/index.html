@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/faq/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>FAQ - Photobooth Project</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "FAQ";
+        var mkdocs_page_input_path = "faq/index.md";
+        var mkdocs_page_url = "/faq/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">FAQ</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#is-my-camera-supported">Is my Camera supported?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#is-pi-camera-supported">Is Pi Camera supported?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ive-found-a-bug-how-can-i-report">I've found a bug, how can I report?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ive-a-white-page-after-updating-to-latest-source-how-can-i-solve-this">I've a white page after updating to latest Source, how can I solve this?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-do-i-change-the-configuration">How do I change the configuration?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-change-the-language">How to change the language?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-update-or-add-translations">How to update or add translations?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-can-i-test-my-current-photo-settings">How can I test my current photo settings?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-can-i-test-my-current-collage-settings">How can I test my current collage settings?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-can-setup-a-custom-collage-design">How can setup a custom collage design?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-keep-pictures-on-my-camera-using-gphoto2">How to keep pictures on my Camera using gphoto2?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#my-external-flash-is-not-working-after-using-the-live-preview">My external flash is not working after using the live preview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#chromakeying-is-saving-without-finishing-saving">Chromakeying is saving without finishing saving</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#can-i-use-hardware-button-to-take-a-picture">Can I use Hardware Button to take a Picture?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-do-i-enable-kiosk-mode-to-automatically-start-photobooth-in-full-screen">How do I enable Kiosk Mode to automatically start Photobooth in full screen?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-hide-the-mouse-cursor-disable-screen-blanking-and-screen-saver">How to hide the mouse cursor, disable screen blanking and screen saver?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-use-a-live-stream-as-background-at-countdown">How to use a live stream as background at countdown?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#can-i-use-a-video-as-background">Can I use a video as background?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#can-i-use-a-live-stream-as-background">Can I use a live stream as background?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem">I've trouble setting up E-Mail config. How do I solve my problem?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-only-open-the-gallery-to-avoid-people-taking-pictures">How to only open the gallery to avoid people taking pictures?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#chromakeying-isnt-working-if-i-access-the-photobooth-page-on-my-raspberry-pi-but-it-works-if-i-access-photobooth-from-an-external-device-eg-mobile-phone-or-tablet-how-can-i-solve-the-problem">Chromakeying isn't working if I access the Photobooth page on my Raspberry Pi, but it works if I access Photobooth from an external device (e.g. mobile phone or tablet). How can I solve the problem?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-adjust-the-phpini-file">How to adjust the php.ini file?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#automatic-picture-syncing-to-usb-stick">Automatic picture syncing to USB stick</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#raspberry-touchpanel-dsi-simultaneously-with-hdmi">Raspberry Touchpanel DSI simultaneously with HDMI</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-does-the-connection-to-the-ftp-server-work">How does the connection to the FTP server work?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#i-get-the-error-message-something-went-wrong-while-taking-a-picure-what-can-i-do">I get the error message "Something went wrong." while taking a picure, what can i do?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-upload-pictures-to-a-remote-server-after-picture-has-been-taken">How to upload pictures to a remote server after picture has been taken?</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#goal">Goal:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usecase">Usecase:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#how-to">How to:</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-use-the-image-randomizer">How to use the image randomizer</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#use-for-picture-frames">Use for PICTURE FRAMES:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#use-for-collage-frames">Use for COLLAGE FRAMES:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#use-for-backgrounds">Use for BACKGROUNDS:</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-use-magic-greenscreen-ai-background-removal">How to use Magic Greenscreen (AI Background Removal)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#supported-formats">Supported Formats</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#performance-notes">Performance Notes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#rembg-virtual-environment-not-found-error">"rembg virtual environment not found" error</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#processing-fails-or-takes-too-long">Processing fails or takes too long</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#background-not-removed-properly">Background not removed properly</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#memory-issues">Memory issues</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#advanced-configuration">Advanced Configuration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#file-locations">File Locations</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#updating">Updating</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Troubleshooting & Tutorials</li>
+      <li class="breadcrumb-item active">FAQ</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/faq/index.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="faq-frequently-asked-questions">FAQ - Frequently asked questions</h1>
+<p>FAQ on <a href="https://photoboothproject.github.io/">https://photoboothproject.github.io/</a> always matches latest development version of Photobooth. Some options might not be available on older version or might be handled different.</p>
+<p>An FAQ matching your installed version can be found at <a href="http://localhost/faq">http://localhost/faq</a> (or <a href="http://localhost/photobooth/faq">http://localhost/photobooth/faq</a> ).</p>
+<h2 id="is-my-camera-supported">Is my Camera supported?</h2>
+<p>Some DSLR and Compact Cameras are not supported by this project. Please check for your specific model <a href="http://gphoto.org/proj/libgphoto2/support.php">here</a>.</p>
+<hr />
+<h2 id="is-pi-camera-supported">Is Pi Camera supported?</h2>
+<p>Yes. See the dedicated steps in <a href="pi-camera/">Pi Camera setup</a>.</p>
+<hr />
+<h2 id="ive-found-a-bug-how-can-i-report">I've found a bug, how can I report?</h2>
+<p>Please take a look at the issue page <a href="https://github.com/PhotoboothProject/photobooth/issues">here</a>, if your bug isn't mentioned already you can create a new issue. Please give informations detailed as possible to reproduce and analyse the problem.</p>
+<hr />
+<h2 id="ive-a-white-page-after-updating-to-latest-source-how-can-i-solve-this">I've a white page after updating to latest Source, how can I solve this?</h2>
+<p>If you updated from v1.9.0 or older and get a white page, your old <code>admin/config.json</code> may be incompatible. Remove the legacy file and retry; current versions store changes in <code>config/my.config.inc.php</code>:</p>
+<pre><code>sudo rm /var/www/html/admin/config.json
+</code></pre>
+<hr />
+<h2 id="how-do-i-change-the-configuration">How do I change the configuration?</h2>
+<p>Open <a href="http://localhost/admin">http://localhost/admin</a> (
+or <a href="http://localhost/photobooth/admin">http://localhost/photobooth/admin</a>) in your Webbrowser and change the configuration for your personal needs.
+Changed options are stored inside <code>config/my.config.inc.php</code> to prevent sharing personal data on Github by accident and to make an update of Photobooth easier.</p>
+<hr />
+<h2 id="how-to-change-the-language">How to change the language?</h2>
+<p>Open <a href="http://localhost/admin">http://localhost/admin</a> (
+or <a href="http://localhost/photobooth/admin">http://localhost/photobooth/admin</a>) in your Webbrowser and change the configuration for your personal needs.</p>
+<hr />
+<h2 id="how-to-update-or-add-translations">How to update or add translations?</h2>
+<p>Photobooth joined Crowdin as localization manager, <a href="https://crowdin.com/project/photobooth">join here</a> to translate Photobooth.</p>
+<p>Crowdin gives a nice webinterface to make translating easy as possible. If there's different translations for a string, translator can use the vote function on suggested translations.</p>
+<p>With Crowdin and your help translating we're able to get high-quality translations for all supported languages. Also it's easy to support a wider range of languages!</p>
+<p>Your language is missing? Don't worry, create a <a href="https://github.com/PhotoboothProject/photobooth/issues/new/choose">localization request here</a> and we'll add it to the project.</p>
+<hr />
+<h2 id="how-can-i-test-my-current-photo-settings">How can I test my current photo settings?</h2>
+<p>Open <a href="http://localhost/test/photo.php">http://localhost/test/photo.php</a> (or <a href="http://localhost/photobooth/test/photo.php">http://localhost/photobooth/test/photo.php</a>) in your Webbrowser and you can find a photo that is created with your current settings.</p>
+<hr />
+<h2 id="how-can-i-test-my-current-collage-settings">How can I test my current collage settings?</h2>
+<p>Open <a href="http://localhost/test/collage.php">http://localhost/test/collage.php</a> (or <a href="http://localhost/photobooth/test/collage.php">http://localhost/photobooth/test/collage.php</a>) in your Webbrowser and you can find a collage that is created with your current settings.</p>
+<hr />
+<h2 id="how-can-setup-a-custom-collage-design">How can setup a custom collage design?</h2>
+<p>See the detailed walkthrough in <a href="custom-collage/">Custom collage design</a>.</p>
+<hr />
+<h2 id="how-to-keep-pictures-on-my-camera-using-gphoto2">How to keep pictures on my Camera using gphoto2?</h2>
+<p>Add <code>--keep</code> (or <code>--keep-raw</code> to keep only the raw version on camera) option for gphoto2 via admin panel:</p>
+<pre><code>gphoto2 --capture-image-and-download --keep --filename=%s
+</code></pre>
+<p>On some cameras you also need to define the capturetarget because Internal RAM is used to store captured picture. To do this use <code>--set-config capturetarget=X</code> option for gphoto2 (replace "X" with the target of your choice):</p>
+<pre><code>gphoto2 --set-config capturetarget=1 --capture-image-and-download --keep --filename=%s
+</code></pre>
+<p>To know which capturetarget needs to be defined you need to run:</p>
+<pre><code>gphoto2 --get-config capturetarget
+</code></pre>
+<p>Example:</p>
+<pre><code>pi@raspberrypi:~ $ gphoto2 --get-config capturetarget
+Label: Capture Target
+Readonly: 0
+Type: RADIO
+Current: Internal RAM
+Choice: 0 Internal RAM
+Choice: 1 Memory card
+</code></pre>
+<hr />
+<h2 id="my-external-flash-is-not-working-after-using-the-live-preview">My external flash is not working after using the live preview</h2>
+<p>The reason for this might be that the camera is still in PC mode.</p>
+<p>Try setting the output setting to <code>Off</code> in your capture command,
+for example like this:</p>
+<pre><code class="language-bash">gphoto2 --set-config output=Off --capture-image-and-download
+</code></pre>
+<hr />
+<h2 id="chromakeying-is-saving-without-finishing-saving">Chromakeying is saving without finishing saving</h2>
+<p>Checking the browser console you'll see a <code>413 Request Entity Too Large</code> error. To fix that you'll have to update your nginx.conf</p>
+<p>Follow the steps mentioned here: <a href="https://datanextsolutions.com/blog/how-to-fix-nginx-413-request-entity-too-large-error/">How to Fix NGINX 413 Request Entity Too Large Error</a></p>
+<hr />
+<h2 id="can-i-use-hardware-button-to-take-a-picture">Can I use Hardware Button to take a Picture?</h2>
+<p>Yes. See the dedicated page <a href="remote-button/">Remote Buttons &amp; Triggers</a> for:</p>
+<ul>
+<li>Browser hotkeys (HID to focused browser)</li>
+<li>Direct USB HID on the Photobooth host (no browser focus)</li>
+<li>Socket.io triggers</li>
+<li>Simple HTTP triggers and example devices (ESP, Pico, myStrom, Shelly)</li>
+<li>Troubleshooting tips</li>
+</ul>
+<hr />
+<h2 id="how-do-i-enable-kiosk-mode-to-automatically-start-photobooth-in-full-screen">How do I enable Kiosk Mode to automatically start Photobooth in full screen?</h2>
+<p>Use the <a href="kiosk-mode/">kiosk mode guide</a>.</p>
+<hr />
+<h2 id="how-to-hide-the-mouse-cursor-disable-screen-blanking-and-screen-saver">How to hide the mouse cursor, disable screen blanking and screen saver?</h2>
+<p>See <a href="hide-cursor/">Hide cursor, screen blanking and screen saver</a> for Pi OS-specific steps.</p>
+<hr />
+<h2 id="how-to-use-a-live-stream-as-background-at-countdown">How to use a live stream as background at countdown?</h2>
+<p>See the dedicated <a href="preview/">Preview and live background</a> guide.</p>
+<hr />
+<h2 id="can-i-use-a-video-as-background">Can I use a video as background?</h2>
+<p>Yes you can. Using the file uploader you can add your video into the <code>/private/videos/background</code> folder.</p>
+<p>Once done go to <a href="http://localhost/admin/#userinterface">User interface</a> (or <a href="http://localhost/photobooth/admin/#userinterface">User interface</a>), switch from <code>image</code> to <code>video</code> as background and choose
+your video in "Background video path".</p>
+<p>You can also use a youtube video/livestream!</p>
+<p>In the background video path put the link pulled from youtube. Note that the link should be in the following format: <code>https://www.youtube.com/embed/&lt;video_id&gt;</code>.</p>
+<p>To get a link like that you have to choose your youtube video/livestream and click on the "share" button. Then by choosing "incorporate" it will be shown an HTML code <code>&lt;iframe /&gt;</code> you have to copy the content of the "src" property from the start till the first question mark <code>?</code> in order to resemble the format.</p>
+<hr />
+<h2 id="can-i-use-a-live-stream-as-background">Can I use a live stream as background?</h2>
+<p>Yes you can. There's different ways depending on your needs and personal setup:</p>
+<ol>
+<li>
+<p>On Photobooth v2.4.0 and newer you can use the option "Use stream from device cam as background" inside admin panel.</p>
+<ul>
+<li>If enabled, a stream from your device cam is used as background on start screen. It's still possible to use preview from your device cam as background on countdown. It is <strong>not possible</strong> capturing via <code>raspistill</code> / <code>libcamera-still</code> / <code>rpicam-still</code> for Pi Camera.</li>
+</ul>
+</li>
+<li>
+<p>You need to change the background URL path via config or admin panel. Replace <code>url(../img/bg.jpg)</code> with your IP-Adress and port (if needed) as URL.
+   Example:</p>
+<p><code>-   /img/bg.jpg
++   http://192.168.0.2:8081</code></p>
+<p>To use an DSLR or an Raspberry Pi Camera module see <em>Setting up a preview stream from your DSLR or PiCamera</em> above.</p>
+</li>
+</ol>
+<hr />
+<h2 id="ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem">I've trouble setting up E-Mail config. How do I solve my problem?</h2>
+<p>If connection fails some help can be found inside the official <a href="https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting">PHPMailer Wiki</a>, especially gmail needs some special config.</p>
+<ul>
+<li>
+<p>Should be obvious but the photobooth must be connected to WIFI/internet to send photos live.</p>
+<p>Otherwise, tell them to check the box to send them the photo later and it will add everyone's email to a list for you.</p>
+</li>
+<li>
+<p>For gmail you need to generate an app password if you have 2-factor authentication on.</p>
+</li>
+</ul>
+<p>Tested working setup:</p>
+<ul>
+<li>
+<p>gmail.com</p>
+<ul>
+<li>Email host adress: <code>smtp.gmail.com</code></li>
+<li>Username: <code>*****@gmail.com</code></li>
+<li>Port: <code>587</code></li>
+<li>Security: <code>TLS</code></li>
+</ul>
+</li>
+<li>
+<p>gmx.de</p>
+<ul>
+<li>Email host adress: <code>mail.gmx.net</code></li>
+<li>Username: <code>*****@gmx.de</code></li>
+<li>Port: <code>587</code></li>
+<li>Security: <code>TLS</code></li>
+</ul>
+</li>
+<li>
+<p>web.de</p>
+<ul>
+<li>Email host adress: <code>smtp.web.de</code></li>
+<li>Username: <code>*****</code> (@web.de is not needed in your username)</li>
+<li>Port: <code>587</code></li>
+<li>Security: <code>TLS</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="how-to-only-open-the-gallery-to-avoid-people-taking-pictures">How to only open the gallery to avoid people taking pictures?</h2>
+<p>Open <a href="http://localhost/gallery">http://localhost/gallery</a> (or <a href="http://localhost/photobooth/gallery">http://localhost/photobooth/gallery</a>) in your browser (you can replace <code>localhost</code> with your IP adress).</p>
+<hr />
+<h2 id="chromakeying-isnt-working-if-i-access-the-photobooth-page-on-my-raspberry-pi-but-it-works-if-i-access-photobooth-from-an-external-device-eg-mobile-phone-or-tablet-how-can-i-solve-the-problem">Chromakeying isn't working if I access the Photobooth page on my Raspberry Pi, but it works if I access Photobooth from an external device (e.g. mobile phone or tablet). How can I solve the problem?</h2>
+<p>Open <code>chrome://flags</code> in your browser.</p>
+<p>Look for <em>"Accelerated 2D canvas"</em> and change it to <code>"disabled"</code>.</p>
+<p>Now restart your Chromium browser.</p>
+<hr />
+<h2 id="how-to-adjust-the-phpini-file">How to adjust the <code>php.ini</code> file?</h2>
+<p>Open <a href="http://localhost/phpinfo.php">http://localhost/phpinfo.php</a> (or <a href="http://localhost/photobooth/phpinfo.php">http://localhost/photobooth/phpinfo.php</a>) in your browser.</p>
+<p>Take a look for "Loaded Configuration File" to get the path of your php.ini, you need <em>sudo</em> rights to edit the file.</p>
+<hr />
+<h2 id="automatic-picture-syncing-to-usb-stick">Automatic picture syncing to USB stick</h2>
+<p>This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick</p>
+<p>Use the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a> to get the operating system setup in place.
+- 6. Permissions -&gt; USB Sync policy</p>
+<p>The target USB device is selected through the admin panel.</p>
+<p>A USB drive / stick can be identified either by the USB stick label (e.g. <code>photobooth</code>), the operating system specific USB device name (e.g. <code>/dev/sda1</code>) or the USB device system subsystem name (e.g. <code>sda</code>). The preferred method would be the USB stick label (for use of a single USB stick) or the very specific USB device name, for different USB stick use. The default config will look for a drive with the label photobooth. The script only supports one single USB stick connected at a time</p>
+<p>Pictures will be synced to the USB stick matched by the pattern, as long as it is mounted (aka USB stick is plugged in)</p>
+<p>Debugging: Check the server logs for errors at the Debug panel: <a href="http://localhost/admin/debugpanel">http://localhost/admin/debugpanel</a> (
+or <a href="http://localhost/photobooth/admin/debugpanel">http://localhost/photobooth/admin/debugpanel</a>).</p>
+<hr />
+<h2 id="raspberry-touchpanel-dsi-simultaneously-with-hdmi">Raspberry Touchpanel DSI simultaneously with HDMI</h2>
+<p>When using a touchscreen on DSI and an HDMI screen simultaneously, the touch input is offset. This is because both monitors are recognized as one screen.</p>
+<p>The remedy is the following:</p>
+<pre><code>xinput list
+</code></pre>
+<p>remember the device id=[X] of the touchscreen.</p>
+<pre><code>xinput list-props &quot;Device Name&quot;
+</code></pre>
+<p>Get the ID in brackets (Y) of Coordinate Transformation Matrix</p>
+<pre><code>xinput set-prop [X] --type=float [Y] c0 0 c1 0 c2 c3 0 0 1
+</code></pre>
+<p>adjust the coding c0 0 c1 0 c2 c3 0 0 1 with your own data.</p>
+<p>You can get the values of your screens with the following command:</p>
+<pre><code>xrandr | grep \* # xrandr uses &quot;*&quot;
+</code></pre>
+<p>to identify the screen being used</p>
+<pre><code>c0 = touch_area_width / total_width
+(width of touch screen divided by width of both screens)
+c2 = touch_area_height / total_height
+(height touch screen divided by height of both screens)
+c1 = touch_area_x_offset / total_width
+c3 = touch_area_y_offset / total_height
+</code></pre>
+<p>and execute the above command again with your own coding!</p>
+<p>Example:</p>
+<pre><code>xinput set-prop 6 --type=float 136 0.3478260869565217 0 0 0.55555555555556 0 0 0 1
+</code></pre>
+<p>Now unfortunately the settings are only valid for the current session. So create the following desktop startup file with your own values:</p>
+<pre><code>nano ~/.config/autostart/touch.desktop
+</code></pre>
+<p>Example:</p>
+<pre><code>[Desktop Entry]
+Name=TouchSettingsAutostart
+Comment=Set up touch screen setting when starting desktop
+Type=Application
+## Adapt command to own values
+Exec=xinput set-prop 6 --type=float 136 0.3478260869565217 0 0 0 0.55555555555556 0 0 0 1
+Terminal=false
+</code></pre>
+<p>If you want to use the touchscreen as photobooth and the second monitor for the standalone slideshow for example, open the autostart file:</p>
+<pre><code>sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+</code></pre>
+<p>and enter/adjust the @chromium-browser entries as followed (adjust the value <em>1920</em> to your own resolution and URL if necessary):</p>
+<pre><code>@chromium-browser --new-window --start-fullscreen --kiosk http://localhost --window-position=1920,0 --user-data-dir=Default
+@chromium-browser --new-window --start-fullscreen --kiosk http://localhost/photobooth --window-position=1920,0 --user-data-dir=Default
+@chromium-browser --new-window --start-fullscreen --kiosk http://localhost/slideshow/ --window-position=0,0 --user-data-dir='Profile 1'
+@chromium-browser --new-window --start-fullscreen --kiosk http://localhost/photobooth/slideshow/ --window-position=0,0 --user-data-dir='Profile 1'
+</code></pre>
+<hr />
+<h2 id="how-does-the-connection-to-the-ftp-server-work">How does the connection to the FTP server work?</h2>
+<p>The connection to the FTP server needs 4 distinct properties.</p>
+<ul>
+<li><code>baseURL</code> which is the url where all requests will be made</li>
+<li><code>port</code> for ssl connection (the default value is 21)</li>
+<li><code>username</code> the username of the user authorized to interact to the FTP server</li>
+<li><code>password</code> the password of the user</li>
+</ul>
+<p>With these four variables you can test the connection to the FTP server to check if everything is alright.</p>
+<p>The next variables are for the place where you want the pictures to be stored:</p>
+<ul>
+<li><code>baseFolder</code> is the folder of your website (if you have multiple websites living on the server with this property you can choose on which of these the file should be stored)</li>
+<li><code>folder</code> the folder dedicated to the upload of the files</li>
+<li><code>title</code> if you are doing an event you can set the title of the event to create another folder (the system will slugify the string)</li>
+</ul>
+<p>In the end the processed picture, and the thumbnails, will be uploaded in the folder according to these variables.</p>
+<p>If you have a website, you can use the following variables to generate the qr codes that will point to the photos uploaded to the ftp server</p>
+<ul>
+<li><code>useForQr</code> to enable this functionality</li>
+<li><code>website</code> accessible from the internet, it will be the base of the qr code link</li>
+<li><code>urlTemplate</code> starting from the previous set of variables, you have to define the template which will be used to generate the qrcode link (each variable should be written whit '%' before e.g. %website/%folder/%date)</li>
+</ul>
+<p>Last but not least you can upload a php file on the <code>title</code> folder on the FTP server to create an online gallery which is updated with every new picture (and collage) taken.
+The variable to manage this feature are the following:</p>
+<ul>
+<li><code>create_webpage</code> to enable this functionality</li>
+<li><code>template_location</code> which is the location of the index.php file, which is formatted with the title of the current event and uploaded to the FTP server</li>
+</ul>
+<p>In the end you can enable the <code>delete</code> functionality that will delete photos (and collages) from the ftp server when they are deleted from the photobooth gallery (no admin reset)</p>
+<hr />
+<h2 id="i-get-the-error-message-something-went-wrong-while-taking-a-picure-what-can-i-do">I get the error message "Something went wrong." while taking a picure, what can i do?</h2>
+<p>There's different reasons if you get the error "Something went wrong. Please try it again. Photobooth reloads automatically." while taking an image.</p>
+<p>First of all, please set the <strong>Loglevel</strong> to <strong>2</strong> via admin panel (GENERAL section, <a href="http://localhost/admin">http://localhost/admin</a>
+or <a href="http://localhost/photobooth/admin">http://localhost/photobooth/admin</a>) and try again. You'll still see the error message, but we make sure to log enough information to see what's wrong.</p>
+<p>Now open the Debug panel (<a href="http://localhost/admin/debugpanel">http://localhost/admin/debugpanel</a> or <a href="http://localhost/photobooth/admin/debugpanel">http://localhost/photobooth/admin/debugpanel</a>) and
+check the Photobooth log for error messages. You should see something like this:</p>
+<pre><code>2023-01-03T08:34:37+01:00:
+Array
+(
+    [error] =&gt; Take picture command returned an error code
+    [cmd] =&gt; gphoto2 --capture-image-and-download --filename=/var/www/html/data/tmp/20230103_083437.jpg 2&gt;&amp;1
+    [returnValue] =&gt; 1
+    [output] =&gt; Array
+        (
+            [0] =&gt;
+            [1] =&gt; *** Error ***
+            [2] =&gt; Could not detect any camera
+            [3] =&gt; *** Error (-105: 'Unknown model') ***
+            [4] =&gt;
+            [5] =&gt; For debugging messages, please use the --debug option.
+            [6] =&gt; Debugging messages may help finding a solution to your problem.
+            [7] =&gt; If you intend to send any error or debug messages to the gphoto
+            [8] =&gt; developer mailing list , please run
+            [9] =&gt; gphoto2 as follows:
+            [10] =&gt;
+            [11] =&gt;     env LANG=C gphoto2 --debug --debug-logfile=my-logfile.txt --capture-image-and-download --filename=/var/www/html/testa/data/tmp/20230103_083437.jpg
+            [12] =&gt;
+            [13] =&gt; Please make sure there is sufficient quoting around the arguments.
+            [14] =&gt;
+        )
+
+    [php] =&gt; takePic.php
+)
+</code></pre>
+<p>Most of the time the error messages are self explained (in our case no camera was detected, the cable wasn't plugged in), if you're still having trouble you can check the troubleshooting section.</p>
+<hr />
+<h2 id="how-to-upload-pictures-to-a-remote-server-after-picture-has-been-taken">How to upload pictures to a remote server after picture has been taken?</h2>
+<h3 id="goal">Goal:</h3>
+<p>After a picture is taken with the photobox upload it automatically to a remote server.</p>
+<h3 id="usecase">Usecase:</h3>
+<p>You have a remote server (e.g. with your website on it) or another Raspberry Pi to which you’d like instantly synchronizing your taken pictures. Also you could upload the pictures to a remote server and make them available through the QR code over the internet. By this you would not require people to access a local Wifi to download the picture from your local device which is running your Photobox.</p>
+<h3 id="how-to">How to:</h3>
+<ul>
+<li>You should have a remote server with an SSH login. Know your username and password: (e.g.: <code>[username.strato-hosting.eu]@ssh.strato.de</code>)</li>
+<li>We will be using the Post-photo script / command of the Photobox which you can find in the admin panel in the section Commands.</li>
+<li>The command is being executed after the picture has been taken and gets the picture’s name as an attribute.</li>
+<li>Command (adjust path if needed):</li>
+</ul>
+<pre><code>scp /var/www/html/data/images/%s [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures_on_the_remote_host]
+</code></pre>
+<ul>
+<li>
+<p>If we keep it like that the remote server would require the source server to type in a password each time a picture is being copied to the remote server. An SSH connection using a private/public SSH key needs to be established:</p>
+</li>
+<li>
+<p>Create a public/private key-pair for the <strong>www-data</strong> user on the source machine (why for that user? The www-data user is executing the Post-photo script/command in the background) – Do not enter a passphrase when prompted.</p>
+</li>
+</ul>
+<pre><code>sudo -u www-data ssh-keygen -t rsa
+</code></pre>
+<ol>
+<li>Copy the public key to the remote (destination) server</li>
+</ol>
+<pre><code>sudo -u www-data ssh-copy-id [username@remotehost]
+</code></pre>
+<ol>
+<li>You can now manually test whether the connection works. Try to copy anything to the remote server and change the file in the below example to a file that you actually have on your source machine. You shouldn’t be prompted with a password, but the copy and transfer should complete successfully just with the following command. If that is going to be successful, copying your pictures automatically should work now.</li>
+</ol>
+<pre><code>sudo -u www-data scp /var/www/html/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
+</code></pre>
+<p>You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server.</p>
+<h2 id="how-to-use-the-image-randomizer">How to use the image randomizer</h2>
+<p>To use the image randomizer images must be placed inside <code>private/images/{folderName}</code>.
+For hassle-free (ssh/sftp-free) upload, you may want to use the integrated images uploader: <a href="http://localhost/admin/upload">http://localhost/admin/upload</a> (
+or <a href="http://localhost/photobooth/admin/upload">http://localhost/photobooth/admin/upload</a>).</p>
+<h3 id="use-for-picture-frames">Use for PICTURE FRAMES:</h3>
+<ol>
+<li>Upload / Copy all the (transparent) frames you want to <code>private/images/{FrameFolder}</code></li>
+<li>Enable picture_take_frame</li>
+<li>specify picture_frame url : <code>http://localhost/api/randomImg.php?dir={FrameFolder}</code> (or <code>http://localhost/photobooth/api/randomImg.php?dir={FrameFolder}</code>)</li>
+</ol>
+<h3 id="use-for-collage-frames">Use for COLLAGE FRAMES:</h3>
+<ol>
+<li>Upload / Copy all the (transparent) frames you want to <code>private/images/{FrameFolder}</code></li>
+<li>Enable collage_take_frame (always or once)</li>
+<li>specify collage_frame url : <code>http://localhost/api/randomImg.php?dir={FrameFolder}</code> (or <code>http://localhost/photobooth/api/randomImg.php?dir={FrameFolder}</code>)</li>
+</ol>
+<h3 id="use-for-backgrounds">Use for BACKGROUNDS:</h3>
+<ol>
+<li>Upload / Copy all the backgrounds you want to <code>private/images/{BgFolder}</code></li>
+<li>specify collage_background url : <code>http://localhost/api/randomImg.php?dir={BgFolder}</code> (or <code>http://localhost/photobooth/api/randomImg.php?dir={BgFolder}</code>)</li>
+</ol>
+<p><strong>NOTES:</strong></p>
+<ul>
+<li>Replace <em>"localhost"</em> with your IP-Adress.</li>
+<li>Same thing can be applied for collage_placeholderpath so a random holder image takes place.</li>
+<li>You can specify a diffrent {FrameFolder} for collage frames if needed.</li>
+</ul>
+<hr />
+<h2 id="how-to-use-magic-greenscreen-ai-background-removal">How to use Magic Greenscreen (AI Background Removal)</h2>
+<p>Magic Greenscreen is a feature that uses AI to automatically remove backgrounds from photos, creating professional-looking images with transparent or custom backgrounds. This feature is powered by the rembg library and requires Python 3.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Python: &gt;=3.10, &lt;3.14</li>
+<li>Internet connection for initial setup</li>
+<li>Sufficient disk space (approximately 200MB for the AI model)</li>
+</ul>
+<h3 id="installation">Installation</h3>
+<ol>
+<li><strong>Download and run the the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a></strong></li>
+</ol>
+<p>Choose <strong>8 Rembg Setup</strong></p>
+<p>This script will:
+   - Check for Python 3 and required packages
+   - Create a virtual environment in <code>/var/www/rembg/rembg_venv</code>
+   - Install rembg and its dependencies (PIL, onnxruntime)
+   - Verify the installation
+   - start rembg server via a system service on port 7000 (API endpoints are used by Photobooth), access rembg server at <a href="http://localhost:7000">localhost:7000</a>).</p>
+<h3 id="configuration">Configuration</h3>
+<ol>
+<li>
+<p><strong>Open the Admin Panel:</strong>
+   Navigate to <a href="http://localhost/admin">http://localhost/admin</a> (or <a href="http://localhost/photobooth/admin">http://localhost/photobooth/admin</a>)</p>
+</li>
+<li>
+<p><strong>Enable Magic Greenscreen:</strong></p>
+</li>
+<li>Go to the "Magic Greenscreen" section (positioned between "Custom" and "Gallery")</li>
+<li>Check "Remove background" to enable the feature</li>
+<li>
+<p>Optionally configure:</p>
+<ul>
+<li><strong>Background image:</strong> Path to a custom background image (leave empty for transparent background)</li>
+<li><strong>AI model:</strong> Choose the AI model (default: u2net)</li>
+<li><strong>Alpha matting:</strong> Enable for better edge quality</li>
+<li><strong>Alpha matting thresholds:</strong> Fine-tune edge detection (advanced users)</li>
+<li><strong>Post-processing:</strong> Enable for improved results</li>
+</ul>
+</li>
+<li>
+<p><strong>Save Configuration:</strong>
+   Click the "Save" button in the admin panel</p>
+</li>
+</ol>
+<h3 id="usage">Usage</h3>
+<p>Once enabled, Magic Greenscreen will automatically process photos after they are taken:</p>
+<ol>
+<li>Take a photo as usual using the photobooth</li>
+<li>The AI will automatically remove the background</li>
+<li>The processed image will be saved with a transparent or custom background</li>
+<li>Both original and processed images are available in the gallery</li>
+</ol>
+<h3 id="supported-formats">Supported Formats</h3>
+<ul>
+<li>Input: JPEG, PNG, and other common image formats</li>
+<li>Output: PNG (for transparency) or JPEG (with custom background)</li>
+</ul>
+<h3 id="performance-notes">Performance Notes</h3>
+<ul>
+<li>Processing is performed on the CPU, it requires faster hardware to achieve optimal performance (not recommended for Raspberry Pi 4 or older)</li>
+<li>First processing may take longer as the AI model loads</li>
+<li>Processing time depends on image size and complexity</li>
+<li>Processing happens after photo capture and doesn't delay the user experience</li>
+</ul>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p>First, make sure the rembg server is avalable (<a href="http://localhost:7000">localhost:7000</a>).</p>
+<p>In case you're unable to access the rembg server, check the rembg server status:</p>
+<pre><code>sudo systemctl status rembg.service
+</code></pre>
+<h4 id="rembg-virtual-environment-not-found-error">"rembg virtual environment not found" error</h4>
+<ul>
+<li>Ensure the installation completed successfully</li>
+</ul>
+<h4 id="processing-fails-or-takes-too-long">Processing fails or takes too long</h4>
+<ul>
+<li>Check available disk space</li>
+<li>Verify internet connection (some models may require online access)</li>
+<li>Check server logs in the debug panel: <a href="http://localhost/admin/debugpanel">http://localhost/admin/debug</a> (
+  or <a href="http://localhost/photobooth/admin/debugpanel">http://localhost/photobooth/admin/debugpanel</a>).</li>
+</ul>
+<h4 id="background-not-removed-properly">Background not removed properly</h4>
+<ul>
+<li>Try a different AI model (u2net, u2netp, u2net_cloth_seg)</li>
+<li>Enable alpha matting for better edge detection</li>
+<li>Adjust alpha matting thresholds</li>
+<li>Ensure good lighting and contrast in the original photo</li>
+</ul>
+<h4 id="memory-issues">Memory issues</h4>
+<ul>
+<li>Disable post-processing if memory is limited</li>
+<li>Consider using a more powerful device</li>
+</ul>
+<h3 id="advanced-configuration">Advanced Configuration</h3>
+<p>For advanced users, you can modify the rembg processing parameters:</p>
+<ul>
+<li><strong>AI Models:</strong></li>
+<li><code>u2net</code>: General purpose (default)</li>
+<li><code>u2netp</code>: Portrait optimized</li>
+<li><code>u2net_cloth_seg</code>: Clothing segmentation</li>
+<li><code>silueta</code>: Simple backgrounds</li>
+<li>
+<p><code>isnet</code>: High quality</p>
+</li>
+<li>
+<p><strong>Alpha Matting:</strong> Improves edge quality around hair and fine details</p>
+</li>
+<li><strong>Post-processing:</strong> Applies additional smoothing and refinement</li>
+</ul>
+<h3 id="file-locations">File Locations</h3>
+<ul>
+<li>Virtual environment: <code>/var/www/rembg/rembg_venv</code></li>
+<li>Processed images: <code>/var/www/html/data/images/</code> (with background removed)</li>
+<li>Installation and uninstall: Run the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a></li>
+</ul>
+<h3 id="updating">Updating</h3>
+<p>To update rembg to the latest version:</p>
+<pre><code>source /var/www/rembg/rembg_venv/bin/activate
+pip install --upgrade rembg
+</code></pre>
+<p>For additional support, check the Photobooth logs.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../security/" class="btn btn-neutral float-left" title="Security Policy"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="preview/" class="btn btn-neutral float-right" title="Preview and live background">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../security/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="preview/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

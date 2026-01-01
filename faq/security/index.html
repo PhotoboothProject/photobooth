@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/security/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Security Policy - Photobooth Project</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Security Policy";
+        var mkdocs_page_input_path = "security.md";
+        var mkdocs_page_url = "/security/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Security Policy</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#security-advice">Security advice</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Upgrade & Maintenance</li>
+      <li class="breadcrumb-item active">Security Policy</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/security.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="security-policy">Security Policy</h1>
+<h2 id="security-advice">Security advice</h2>
+<p>Photobooth is not hardened against any kind of targeted attacks.
+It uses user defined commands for tasks like taking photos and is allowed to replace its own files for easy updating.</p>
+<p>Because of this it's not advised to operate Photobooth in an untrusted network and <strong>you should absolutely not make Photobooth accessible through the internet without heavy modifications!</strong></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../changelog/" class="btn btn-neutral float-left" title="Changelog"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../faq/" class="btn btn-neutral float-right" title="FAQ">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../changelog/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../faq/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

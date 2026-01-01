@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/faq/go2rtc-troubleshooting/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>GO2RTC Troubleshooting - Photobooth Project</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "GO2RTC Troubleshooting";
+        var mkdocs_page_input_path = "faq/go2rtc-troubleshooting.md";
+        var mkdocs_page_url = "/faq/go2rtc-troubleshooting/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">GO2RTC Troubleshooting</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#initial-notes">Initial notes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#about-the-capture-wrapper-used-to-capture-images">About the capture wrapper used to capture images</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#problem-solving-go2rtc-preview-via-gphoto2">Problem Solving: go2rtc Preview via gphoto2</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#error-could-not-claim-the-usb-device">Error: could not claim the USB Device</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#delay-capture">Delay capture</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#force-the-camera-to-exit-live-view">Force the camera to exit Live View</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#more-alternative-capture-commands">More alternative capture commands</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-the-default-go2rtc-config-correctly">Set the default go2rtc config correctly</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#capture-frame-directly-from-preview">Capture frame directly from preview</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#adjusting-the-go2rtc-configuration">Adjusting the go2rtc configuration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#camera-specific-notes">Camera specific notes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#raspberry-pi-camera-modules">Raspberry Pi Camera Modules</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#canon-eos-500d">Canon EOS 500D</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Troubleshooting & Tutorials</li>
+      <li class="breadcrumb-item active">GO2RTC Troubleshooting</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/faq/go2rtc-troubleshooting.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="go2rtc-troubleshooting">go2rtc Troubleshooting</h1>
+<h2 id="initial-notes">Initial notes</h2>
+<ul>
+<li>make sure your camera is supported by one of the following libraries:</li>
+<li><code>gphoto2</code></li>
+<li><code>rpicam-apps</code></li>
+<li>
+<p><code>fswebcam</code></p>
+</li>
+<li>
+<p>make sure your camera is working on Photobooth <strong>without</strong> setting up go2rtc for preview</p>
+</li>
+<li>
+<p><strong>if not tested:</strong> uninstall go2rtc while running the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a> again (4  go2rtc --&gt; 6 Uninstall go2rtc and the related services).</p>
+</li>
+<li>
+<p>make sure you can access <a href="http://localhost:1984/api/stream.mjpeg?src=photobooth">http://localhost:1984/api/stream.mjpeg?src=photobooth</a> and having the stream available.</p>
+</li>
+</ul>
+<p>If your camera is supported in general but not having a preview available please check go2rtc for errors.</p>
+<p>Access go2rtc via <a href="http://localhost:1984">http://localhost:1984</a> and, maybe, adjust the config if needed.</p>
+<hr />
+<h2 id="about-the-capture-wrapper-used-to-capture-images">About the <code>capture</code> wrapper used to capture images</h2>
+<p><code>capture</code> is simply a wrapper and accepts exactly the same parameters as <code>gphoto2</code> / <code>rpicam-apps</code> / <code>fswebcam</code>. The only difference is that the wrapper does the following:</p>
+<p><strong>1 Stops Go2rtc</strong></p>
+<p><strong>2 executes <code>gphoto2</code> / <code>rpicam-still</code> / <code>fswebcam</code> with the corresponding parameters.</strong></p>
+<p>If only <code>%s</code> is passed, it uses by default the following arguments:
+- on <code>gphoto2</code>: <code>--set-config output=Off --capture-image-and-download --filename=%s</code>
+- on <code>rpicam-still</code>: <code>-n -q 100 -o %s</code>
+- on <code>fswebcam</code>: <code>--no-banner -d /dev/video0 -r 1280x720 %s</code></p>
+<p><strong>Note:</strong>: <code>%s</code> gets replaced by Photobooth with the corresponding path and filename.</p>
+<p>Run <code>capture --help</code> inside your terminal to get information about the usage of the <code>capture</code> wrapper.</p>
+<p><strong>3 Restarts go2rtc</strong></p>
+<p>That means: anything that works with the command <code>gphoto2</code> / <code>rpicam-still</code> / <code>fswebcam</code> will also work with capture, and the word can simply be replaced.</p>
+<p>What’s not covered there is a timing issue related to previewing via go2rtc.</p>
+<hr />
+<h2 id="problem-solving-go2rtc-preview-via-gphoto2">Problem Solving: go2rtc Preview via gphoto2</h2>
+<h3 id="error-could-not-claim-the-usb-device">Error: could not claim the USB Device</h3>
+<p>Another process is using the camera. That's what the log says. Therefore, it can't record.</p>
+<p>If you're using <code>gphoto2</code> this issue is generally addressed inside the troubleshooting for gphoto2, but could also happen because of timing problems.</p>
+<p>The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems. Continue reading on <a href="#delay-capture">Delay capture</a> to know how to fix possible timing issues.</p>
+<h4 id="delay-capture">Delay capture</h4>
+<p>We can use a tiny pause between stopping the preview and starting the capture to work around this:</p>
+<pre><code class="language-ell">sudo wget -O /usr/local/bin/capture https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/scripts/capture-gphoto2
+sudo chmod +x /usr/local/bin/capture
+</code></pre>
+<p>The updated wrapper includes a half-second pause after stopping the preview and before triggering the capture.</p>
+<p>Now try again!</p>
+<p>Didn’t work? Then continue...</p>
+<h4 id="force-the-camera-to-exit-live-view">Force the camera to exit Live View</h4>
+<p>It may be necessary to manually take the camera out of Live View mode. Adjust the capture command (this doesn't work with all cameras!):</p>
+<pre><code class="language-ell">capture --set-config movie=0 --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
+</code></pre>
+<p>Now try again!</p>
+<p>Didn’t work? Then continue...</p>
+<h4 id="more-alternative-capture-commands">More alternative capture commands</h4>
+<pre><code class="language-ell">capture --trigger-capture --wait-event-and-download=FILEADDED --filename=%s
+</code></pre>
+<p>Or:</p>
+<pre><code class="language-ell">capture --wait-event=300ms --capture-image-and-download --filename=%s
+</code></pre>
+<p>For some cameras, this can also noticeably speed up the capture process.</p>
+<p>Now try again!</p>
+<p>Didn’t work? Then continue...</p>
+<h4 id="set-the-default-go2rtc-config-correctly">Set the default go2rtc config correctly</h4>
+<p>Open <a href="http://localhost/admin/captureconfig.php">http://localhost/admin/captureconfig.php</a> (or <a href="http://localhost/photobooth/admin/captureconfig.php">http://localhost/photobooth/admin/captureconfig.php</a>) to apply the default suggested configuration automatically.</p>
+<p>Then try again.</p>
+<h4 id="capture-frame-directly-from-preview">Capture frame directly from preview</h4>
+<p>Another alternative, without starting or stopping the preview, is to pull a frame directly from go2rtc.</p>
+<p>Open <a href="http://localhost/admin/wgetcaptureconfig.php">http://localhost/admin/wgetcaptureconfig.php</a> (or <a href="http://localhost/photobooth/admin/wgetcaptureconfig.php">http://localhost/photobooth/admin/wgetcaptureconfig.php</a>) to apply the adjusted configuration.</p>
+<p>Then try again.</p>
+<hr />
+<h2 id="adjusting-the-go2rtc-configuration">Adjusting the go2rtc configuration</h2>
+<p>It might be needed to update the go2rtc configuration for personal needs or because of camera specific needed changes.</p>
+<p>To allow adjustments of the config via web interface adjust the permissions:</p>
+<pre><code class="language-ell">sudo chmod 755 /etc/go2rtc.yaml
+</code></pre>
+<p>Access go2rtc via <a href="http://localhost:1984">http://localhost:1984</a>.</p>
+<p><strong>Alternative:</strong></p>
+<p>Open the corresponding configuration file with root privileges:</p>
+<pre><code class="language-ell">sudo nano /etc/go2rtc.yaml
+</code></pre>
+<p>Make your changes and save them, after that restart go2rtc to apply:</p>
+<pre><code class="language-ell">sudo systemctl stop go2rtc
+sudo systemctl start go2rtc
+</code></pre>
+<p>The full configuration documentation can be found <a href="https://github.com/AlexxIT/go2rtc?tab=readme-ov-file#configuration">here</a> inside the go2rtc GitHub repository.</p>
+<hr />
+<h2 id="camera-specific-notes">Camera specific notes</h2>
+<p>While setting up go2rtc using the Photobooth Setup Wizard we're creating a default configuration which covers a wide range of devices. It might be, that your camera does not work out of the box with the default configuration and requires some extra work to be used on Photobooth. You're always welcome to contribute camera specific notes not listed below.</p>
+<h3 id="raspberry-pi-camera-modules">Raspberry Pi Camera Modules</h3>
+<ul>
+<li>Default preview width and height match the Pi Camera v3. You might need to adjust the width and height inside the go2rtc configuration to matching values for your camera module.</li>
+</ul>
+<h3 id="canon-eos-500d">Canon EOS 500D</h3>
+<ul>
+<li>Camera Mode must be set to <strong>P</strong></li>
+</ul>
+<p>If still having trouble accessing the preview please adjust the go2rtc configuration:</p>
+<pre><code>streams:
+  photobooth:
+    - &quot;exec:gphoto2 --capture-movie --stdout#input=mjpeg#video=h264#encoder=h264_v4l2m2m#fps=25#bitrate=2M&quot;
+
+log:
+  exec: trace
+</code></pre>
+<p>Now restart go2rtc to apply your changes:</p>
+<pre><code class="language-ell">sudo systemctl stop go2rtc
+sudo systemctl start go2rtc
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../gphoto2-troubleshooting/" class="btn btn-neutral float-left" title="gphoto2 Troubleshooting"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../customizing/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../gphoto2-troubleshooting/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../customizing/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

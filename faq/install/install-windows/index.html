@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/install/install-windows/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Install on Windows - Photobooth Project</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Install on Windows";
+        var mkdocs_page_input_path = "install/install-windows.md";
+        var mkdocs_page_url = "/install/install-windows/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Install on Windows</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#which-installation-method-to-use">Which installation method to use</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-in-the-windows-subsystem-method-1">Installation in the windows subsystem (method 1)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#step-1-activating-the-windows-subsystem-for-linux">Step 1: Activating the windows subsystem for linux</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#step-2-installing-the-required-additional-tools">Step 2: Installing the required additional tools</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#step-3-configuring-windows-to-automatically-start">Step 3: Configuring windows to automatically start</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#step-4-installing-photobooth-in-the-subsystem">Step 4: Installing photobooth in the subsystem</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-installation-on-windows-method-2">Direct installation on windows (method 2)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#download-needed-files">Download needed files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#install-extract-needed-software">Install &amp; extract needed Software</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#prepare-apache-http-server">Prepare Apache HTTP Server</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#prepare-php">Prepare PHP</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#start-apache-server">Start Apache Server</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#test-your-webserver-php">Test your Webserver &amp; PHP</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#install-digicamcontrol">Install Digicamcontrol</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#setup-photobooth">Setup Photobooth</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#enjoy">Enjoy</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Install & Setup</li>
+      <li class="breadcrumb-item active">Install on Windows</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/install/install-windows.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="installation-on-windows">Installation on Windows</h1>
+<p>There are two supported installation methods for windows.</p>
+<ol>
+<li>Installation in the windows subsystem for linux (wsl) <strong>Recommended</strong></li>
+<li>Direct installation on the windows host</li>
+</ol>
+<h2 id="which-installation-method-to-use">Which installation method to use</h2>
+<p>Both variants work, but only with the first you will be able to use <strong>gphoto2</strong>
+to capture images with your camera.
+The corresponding windows tool <strong>digicamcontrol</strong>, which will be
+used in the second method, does it job, but is not maintained anymore
+and has <a href="https://github.com/dukus/digiCamControl/issues">many open issues</a>.</p>
+<h2 id="installation-in-the-windows-subsystem-method-1">Installation in the windows subsystem (method 1)</h2>
+<p>The first methods covers the following steps:</p>
+<ul>
+<li>Activating the windows subsystem for linux</li>
+<li>Installing the required additional tools</li>
+<li>Configuring windows to automatically start</li>
+<li>Installing photobooth in the subsystem</li>
+</ul>
+<h3 id="step-1-activating-the-windows-subsystem-for-linux">Step 1: Activating the windows subsystem for linux</h3>
+<p>Open a powershell and run:</p>
+<pre><code class="language-powershell">wsl --install
+</code></pre>
+<p>This will enable the required windows features, install ubuntu and sets the default
+version of wsl to version 2.</p>
+<p>If something goes wrong here, check out this <a href="https://learn.microsoft.com/en-us/windows/wsl/install">page</a>.</p>
+<p>Do not restart the computer yet.</p>
+<h3 id="step-2-installing-the-required-additional-tools">Step 2: Installing the required additional tools</h3>
+<p>We'll need <a href="https://github.com/dorssel/usbipd-win">usbipd-win</a> to make the dslr
+camera inside of wsl available. Here are the steps you'll need to do:</p>
+<p>Open a powershell and run the installation command:</p>
+<pre><code class="language-powershell">winget install --exact dorssel.usbipd-win
+</code></pre>
+<p>Now connect your camera via usb.</p>
+<p>Next open a powershell with admin privileges and run:</p>
+<pre><code class="language-powershell"># get the busid of your camera
+usbipd list
+
+# now bind the camera
+usbipd bind --busid=&lt;BUSID&gt;
+</code></pre>
+<p>Now we can use <code>usbipd attach -a --wsl --busid=&lt;BUSID&gt;</code> to attach the camera to
+the wsl machine.</p>
+<h3 id="step-3-configuring-windows-to-automatically-start">Step 3: Configuring windows to automatically start</h3>
+<p>Press <code>WIN+R</code> and run <code>shell:startup</code>. This will open the startup directory in your
+explorer.</p>
+<p>Create a file named <code>wsl_start.bat</code> with this content (adjust the <code>BUSID</code>):</p>
+<pre><code class="language-bat">wsl --exec dbus-launch true
+:loop
+usbipd attach -a --wsl --busid=&lt;BUSID&gt;
+timeout 1
+goto loop
+</code></pre>
+<p>The wsl command will startup the ubuntu machine and keeps it running.
+The usbipd command will attach the camera to the ubuntu machine as soon as
+you plug it in.</p>
+<p>Now restart your computer.</p>
+<h3 id="step-4-installing-photobooth-in-the-subsystem">Step 4: Installing photobooth in the subsystem</h3>
+<p>Open a powershell and run <code>wsl</code>. This will open a shell to the ubuntu machine.
+It will ask you for a username and password. You can choose anything you want.
+After creating the account, run these commands:</p>
+<pre><code class="language-bash">wget -O install-photobooth.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
+sudo bash install-photobooth.sh --username='&lt;YourUsername&gt;' --silent
+</code></pre>
+<p>Enjoy your Photobooth installation!</p>
+<h2 id="direct-installation-on-windows-method-2">Direct installation on windows (method 2)</h2>
+<h3 id="download-needed-files">Download needed files</h3>
+<ul>
+<li>Download Apache2 and Visual C++ Redistributable for Visual Studio: <a href="https://www.apachelounge.com/download">https://www.apachelounge.com/download</a></li>
+<li>Download PHP 8.4 (Thread Safe): <a href="https://windows.php.net/download">https://windows.php.net/download</a></li>
+<li>Download Digicamcontrol: <a href="http://digicamcontrol.com/download">http://digicamcontrol.com/download</a></li>
+<li>Download Notepad++: <a href="https://notepad-plus-plus.org/downloads">https://notepad-plus-plus.org/downloads</a></li>
+<li>Download latest Photobooth release (<em>photobooth-4.x.x.zip</em> or <em>photobooth-4.x.x.tar.gz</em>
+    <strong>Note:</strong> the <em>Source code</em> files won't work!): <a href="https://github.com/PhotoboothProject/photobooth/releases">https://github.com/PhotoboothProject/photobooth/releases</a></li>
+</ul>
+<h3 id="install-extract-needed-software">Install &amp; extract needed Software</h3>
+<ul>
+<li>Install Notepad++</li>
+<li>Install Visual C++ Redistributable for Visual Studio</li>
+<li>Extract the Apache2 ZIP (<em>httpd-2.4.X-winXX-XXXX.zip</em>) to C:/</li>
+<li>Extract the PHP ZIP to C:/php</li>
+</ul>
+<h3 id="prepare-apache-http-server">Prepare Apache HTTP Server</h3>
+<p>Edit <code>C:\Apache24\conf\httpd.conf</code> using <strong>Notepad++</strong>
+Find the following text (~ on line 284):</p>
+<pre><code class="language-apacheconf">&lt;IfModule dir_module&gt;
+    DirectoryIndex index.html
+&lt;/IfModule&gt;
+</code></pre>
+<p>And change it to</p>
+<pre><code class="language-apacheconf">&lt;IfModule dir_module&gt;
+    DirectoryIndex index.html index.php
+&lt;/IfModule&gt;
+</code></pre>
+<p>To the end of the file add the following:</p>
+<pre><code class="language-apacheconf">LoadModule php_module &quot;C:/php/php8apache2_4.dll&quot;
+&lt;FilesMatch \.php$&gt;
+    SetHandler application/x-httpd-php
+&lt;/FilesMatch&gt;
+
+PHPIniDir &quot;C:/php&quot;
+</code></pre>
+<p>For reference see <a href="https://github.com/PhotoboothProject/photobooth/commit/f260b49d2029825d33eb9d35ceda3f19423418db">f260b49</a></p>
+<p>Inside <code>C:\Apache24\htdocs</code> add a new file called <code>info.php</code>
+and add the following content:</p>
+<pre><code class="language-php">&lt;?php
+phpinfo();
+?&gt;
+</code></pre>
+<p>Inside <code>C:\Apache24</code> create a new file called <code>cmd.bat</code> and add the following content:</p>
+<pre><code class="language-bat">cd &quot;C:\Apache24\bin&quot;
+cmd
+</code></pre>
+<h3 id="prepare-php">Prepare PHP</h3>
+<p>Go to <code>C:\php</code> and rename the <code>php.ini-production</code> to <code>php.ini</code>.</p>
+<p>Edit the <code>php.ini</code> using <strong>Notepad++</strong> to enable the GD library:
+Find <code>;extension=fileinfo</code> and remove the <code>;</code> in front of the line.
+Find <code>;extension=gd</code> and remove the <code>;</code> in front of the line.
+Find <code>;extension=mbstring</code> and remove the <code>;</code> in front of the line.
+Find <code>;extension_dir = "ext"</code> and remove the <code>;</code> in front of the
+line and change it to <code>extension_dir = "C:/php/ext"</code>.</p>
+<p>For reference see <a href="https://github.com/PhotoboothProject/photobooth/commit/ff4259aece2094922c1d9b8fc2825fb44a710560">ff4259a</a></p>
+<h3 id="start-apache-server">Start Apache Server</h3>
+<p>Go to <code>C:\Apache24</code> and right click on the cmd.bat, choose "Run as administrator":
+To start the Webserver on boot automatically, type <code>httpd.exe -k install</code>.</p>
+<p>Once that's done, lets start our webserver:
+<code>httpd.exe -k start</code></p>
+<p>If you need to stop the webserver (e.g. if you like to change the <code>php.ini</code>):
+<code>httpd.exe -k stop</code></p>
+<h3 id="test-your-webserver-php">Test your Webserver &amp; PHP</h3>
+<p>Open <a href="http://localhost/info.php">http://localhost/info.php</a> (or <a href="http://localhost/photobooth/info.php">http://localhost/photobooth/info.php</a>) in your Browser,
+you should see the PHP Information page.</p>
+<h3 id="install-digicamcontrol">Install Digicamcontrol</h3>
+<p>Install Digicamcontrol to <code>C:\Apache24\htdocs\digicamcontrol\</code></p>
+<h3 id="setup-photobooth">Setup Photobooth</h3>
+<p>Remove all files inside <code>C:\Apache24\htdocs\</code>.
+Next you need to extract the Photobooth Release-ZIP to <code>C:\Apache24\htdocs\</code>.</p>
+<p>Open <a href="http://localhost/admin">http://localhost/admin</a> (or <a href="http://localhost/photobooth/admin">http://localhost/photobooth/admin</a>) in your Browser and adjust
+your "<em>take picture command</em>" (inside the "<em>Commands</em>" section):</p>
+<p><code>C:\Apache24\htdocs\digicamcontrol\CameraControlCmd.exe /capture /filename %s</code></p>
+<h2 id="enjoy">Enjoy</h2>
+<p>You should now be able to <a href="http://localhost/">access photobooth</a> (or <a href="http://localhost/photobooth/">http://localhost/photobooth/</a>) on your Windows machine!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../install-nginx/" class="btn btn-neutral float-left" title="Enable PHP in nginx"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../update/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../install-nginx/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../update/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

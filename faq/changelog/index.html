@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/changelog/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Changelog - Photobooth Project</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Changelog";
+        var mkdocs_page_input_path = "changelog.md";
+        var mkdocs_page_url = "/changelog/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Changelog</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#upcoming-photobooth-release">Upcoming Photobooth release</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4x-development">4.x development</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#451-17092024">4.5.1 (17.09.2024)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#450-17092024">4.5.0 (17.09.2024)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#441-19022024">4.4.1 (19.02.2024)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#440-09012024">4.4.0 (09.01.2024)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#431-06122022">4.3.1 (06.12.2022)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#430-29112022">4.3.0 (29.11.2022)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#420-16102022">4.2.0 (16.10.2022)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#410-30092022">4.1.0 (30.09.2022)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#400-10092022">4.0.0 (10.09.2022)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#330-16012022">3.3.0 (16.01.2022)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#321">3.2.1</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#320">3.2.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#310">3.1.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#300">3.0.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2100">2.10.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#290">2.9.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#280">2.8.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#272">2.7.2</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#271">2.7.1</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#270">2.7.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#261">2.6.1</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#260">2.6.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#250">2.5.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#240">2.4.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#233">2.3.3</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#232">2.3.2</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#231">2.3.1</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#230">2.3.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#221">2.2.1</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#220">2.2.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#210">2.1.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#202">2.0.2:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#201">2.0.1:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#200">2.0.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#190">1.9.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#183">1.8.3:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#182">1.8.2:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#181">1.8.1:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#180">1.8.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#170">1.7.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#163">1.6.3:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#162">1.6.2:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#161">1.6.1:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#160">1.6.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#153">1.5.3:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#152">1.5.2:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#151">1.5.1:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#150">1.5.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#140">1.4.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#132">1.3.2:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#131">1.3.1:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#130">1.3.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#120">1.2.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#111">1.1.1:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#110">1.1.0:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#100">1.0.0:</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Upgrade & Maintenance</li>
+      <li class="breadcrumb-item active">Changelog</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/changelog.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="changelog">Changelog</h1>
+<h2 id="upcoming-photobooth-release">Upcoming Photobooth release</h2>
+<p>To use a preview of the upcoming Version you need to install the <code>Install last development version</code> using the <code>install-photobooth.sh</code> installer (now also works on all devices running debian / a debian based OS).
+Last development version is installed by default! You can check the commit history for changes made since your installation <a href="https://github.com/PhotoboothProject/photobooth/commits/dev">here</a>.
+An updated FAQ can always be found at <a href="http://localhost/faq">localhost/faq</a> (or <a href="http://localhost/photobooth/faq">http://localhost/photobooth/faq</a>).</p>
+<p>Please read the license notice <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/LICENSE_NOTICE">here</a>.</p>
+<hr>
+
+<h2 id="4x-development">4.x development</h2>
+<p><strong>Features</strong></p>
+<ul>
+<li>Virtual keyboard for email (layouts/colors, toggle), multi-recipient email, and configurable email fields.</li>
+<li>Uploadable/optional private keying backgrounds; configurable rotation ranges; CollageLayoutEnum; adjustable collage video previews; collage color presets; auto-enable background/frame and preview toggles; placeholder limits.</li>
+<li>Tailwind CSS v4 migration and dependency bumps; Turkish language option; JPEG quality floor raised.</li>
+<li>Printing: copy prompt, new print-limit endpoint, longer print timeout, multi-print fixes, queued message timing, hardware button photo support, hardware keyboard for admin PIN, Remotebuzzer on chroma capture.</li>
+<li>Rembg as built-in service with advanced options, logging, compositing fixes, and install script.</li>
+<li>Theme management with categories/docs, custom CSS, git version indicator, clear-cache button, custom <code>stage.start.php</code>, optional result blur, gallery dimension caching, preview URL migration.</li>
+<li>Setup: whiptail-based Setup Wizard, PHP 8.4 requirement, install_rembg improvements, USB sync hardening, installer self-update tweaks.</li>
+</ul>
+<p><strong>Bug fixes</strong></p>
+<ul>
+<li>Selfie rename robustness; chroma preview visibility; loader clearing; hide video background during capture.</li>
+<li>Installer fixes: PHP PPA validation, permissions/source lists/Wayland flag, unavailable PPA removal, software-properties-common fallback.</li>
+<li>Printing: copy casting and deprecations, rotate error surfacing, stop-second timing, iOS preview fixes, admin tooltip/label fixes, default path corrections.</li>
+<li>Rembg typing/logging/error handling; collage/theme path fixes; preview caching; safer uploads/video background handling; collage defaults tightening.</li>
+<li>Docs/link cleanups and various deprecation warnings addressed.</li>
+</ul>
+<hr>
+
+<h2 id="451-17092024">4.5.1 (17.09.2024)</h2>
+<p><strong>General</strong></p>
+<ul>
+<li>sass: fix deprecated build warning by @andi34 in https://github.com/PhotoboothProject/photobooth/pull/863</li>
+</ul>
+<p><strong>Full Changelog</strong></p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.5.0...v4.5.1">https://github.com/PhotoboothProject/photobooth/compare/v4.5.0...v4.5.1</a></p>
+<hr>
+
+<h2 id="450-17092024">4.5.0 (17.09.2024)</h2>
+<p>This release keeps the stable Photobooth v4 compatible with latest Photobooth installer and allows automated tests via GitHub actions.</p>
+<p><strong>General</strong></p>
+<ul>
+<li>update script locations</li>
+<li>Update build dependencies</li>
+<li>Move welcome page to http://localhost/welcome (or http://localhost/photobooth/welcome) for automated testing of installation script</li>
+<li>Add workflow for automated release on push to v* tags</li>
+<li>Use own fork of Onoff library</li>
+</ul>
+<p><strong>Full Changelog</strong></p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.4.1...v4.5.0">https://github.com/PhotoboothProject/photobooth/compare/v4.4.1...v4.5.0</a></p>
+<hr>
+
+<h2 id="441-19022024">4.4.1 (19.02.2024)</h2>
+<p><strong>General</strong></p>
+<ul>
+<li>task: /boot/config.txt is not an symlink anymore by @andi34 in https://github.com/PhotoboothProject/photobooth/pull/618</li>
+</ul>
+<p><strong>Full Changelog</strong></p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.4.0...v4.4.1">https://github.com/PhotoboothProject/photobooth/compare/v4.4.0...v4.4.1</a></p>
+<hr>
+
+<h2 id="440-09012024">4.4.0 (09.01.2024)</h2>
+<p><strong>Breaking changes</strong></p>
+<ul>
+<li>requires Node.js v18.17.0 or newer</li>
+<li>requires npm 9.6.7 or newer</li>
+</ul>
+<p><strong>General</strong></p>
+<ul>
+<li>api: get rid of deleteTmpPhoto</li>
+<li>cameracontrol.py: don't fail capturing images using Sony Cameras</li>
+<li>result screen: reload after all files have been deleted</li>
+<li>core: simplify print message handling</li>
+<li>core: define tempImageUrl if and where needed</li>
+<li>core: improve logging</li>
+<li>api (takePic): only log return value issues on loglevel &gt; 1</li>
+<li>core/gallery: central QR modal handling</li>
+<li>config: move preview bsm to commands section</li>
+<li>preview: remove arrow functions</li>
+<li>config(cleanup): remove unused success messages</li>
+<li>api(previewCamera): use play or stop string instead true and false</li>
+<li>preview: combine api.startWebcam and api.stopPreviewVideo functions</li>
+<li>preview: adjust logging</li>
+<li>preview: fix preview TEST mode</li>
+<li>preview: fix checking for frame config</li>
+<li>test(preview): fix preview with cmd</li>
+<li>core(print): remove unneeded delay</li>
+<li>optimized keyboard trigger</li>
+<li>Remove fake buttons to trigger actions, use global functions instead</li>
+<li>core: simplify check to.clear timeout</li>
+<li>core: blur picture / collage buttons as needed</li>
+<li>core: we already blur printBtn after print</li>
+<li>livechroma: add notification via modal message on trigger via keyCode</li>
+<li>livechroma: adjust keyCode trigger handling</li>
+<li>core: adjust keyCode trigger handling</li>
+<li>logging: adjust some console log messages</li>
+<li>core: remove unneded focusSet on QR btn click</li>
+<li>config: remove collage only config, allow to enable/disable picture instead</li>
+<li>configsetup: define remotebuzzer server port first</li>
+<li>lib(applyText): remove unneeded if-else statements</li>
+<li>lib(applyText): add error handling, return unmodified resource on error</li>
+<li>lib(applyText): throw Exception if text can't be applied</li>
+<li>lib(applyFrame): add error handling, return unmodified resource on error</li>
+<li>lib(applyFrame): throw Exceptions if needed</li>
+<li>lib(polaroid): return unmodified resource on error</li>
+<li>lib(polaroid): throw exceptions if needed</li>
+<li>lib(resize): add try-catch-block to rotateResizeImage function</li>
+<li>lib(resize): throw exceptions on rotateResizeImage if needed</li>
+<li>lib(resize): add try-catch-block to resizeImage function</li>
+<li>lib(resize): throw exceptions where needed on resizeImage</li>
+<li>lib(resize): validate dimensions</li>
+<li>lib(resize): add try-catch-block to resizePngImage function</li>
+<li>lib(resize): validate dimensions on resizePngImage function</li>
+<li>lib(resize): throw exceptions where needed on resizePngImage function</li>
+<li>lib(resize): add try-catch-block to resizeCropImage function</li>
+<li>lib(resize): validate dimensions on resizeCropImage function</li>
+<li>lib(resize): try to clear cache on error</li>
+<li>lib(resize): adjust check if resize was possible</li>
+<li>lib (collage): only test file if needed</li>
+<li>js(tools): add print image function to reuse</li>
+<li>gulp: updated with ECMAScript Modules (ESM) syntax</li>
+<li>task: bind docker do port 80 and 443</li>
+<li>task: bump node version to v18 LTS and drop yarn</li>
+<li>task: only limit node and npm version by minimum versions</li>
+<li>package: switch to marked to formatt faq</li>
+<li>remotebuzzer server: log earlier</li>
+<li>remotebuzzer-server: update sanity check, only check if needed</li>
+<li>remotebuzzer-server: allow GPIO to be any number <a href="https://github.com/PhotoboothProject/photobooth/pull/529"></a></li>
+</ul>
+<p><strong>Bugfix</strong></p>
+<ul>
+<li>fix: start shutter animation independent of cheese image</li>
+<li>cameracontrol.py: don't fail capturing images using Sony Cameras</li>
+<li>core: fix Test value for CameraDisplayMode</li>
+<li>test preview: fix Test value for CameraDisplayMode</li>
+<li>UI<ul>
+<li>UI: use highlight color for hover</li>
+<li>gallery: respect button and font color</li>
+<li>Prettier display delete status</li>
+<li>ui: adjust modal transparency and font-weight</li>
+<li>core: use own div for general different modal messages</li>
+<li>delete: adjust delete notification messages</li>
+<li>style: use secondary color for backgrounds where needed</li>
+<li>task: fix colors while processing images <a href="https://github.com/PhotoboothProject/photobooth/pull/375"></a></li>
+<li>ui(gallery): only show 3 images in a row on mobile phones</li>
+</ul>
+</li>
+<li>core: fix delete on collage with interruption</li>
+<li>Check if images array is empty</li>
+<li>Standalone Gallerie: add missing js file</li>
+<li>core(fix): init PhotoSwipe after remoteBuzzer</li>
+<li>api (takePic): only abort if file was not created</li>
+<li>preview: respect offset to hide preview</li>
+<li>preview: respect offset to hide preview from URL</li>
+<li>slideshow: clear timeout to prevent from running timeout multiple times</li>
+<li>remotebuzzer server: Determine whether or not GPIO access is possible<ul>
+<li>remotebuzzer server: fix checking for gpio config</li>
+</ul>
+</li>
+<li>welcome: use index.php instead of detected URL</li>
+<li>api (admin): don't reset log on preview config error</li>
+<li>core(preview): remove preview mode check if image is captured from preview</li>
+<li>core: check for preview stream instead use of demo images</li>
+<li>core(preview): stop preview on countdown slightly earlier</li>
+<li>remotebuzzer server: fix for Node.js v16</li>
+<li>submodules: ignore dirty state</li>
+<li>core: hide result screen on reset</li>
+<li>remotebuzzer client: fix log</li>
+<li>Revert "stabilized rotary encoder handling"</li>
+<li>remotebuzzer client: handle QR in gallery</li>
+<li>remotebuzzer client: close qr modals directly if needed</li>
+<li>added explicit int conversion</li>
+<li>gallery: Collage only config was removed</li>
+<li>sync-to-drive: fix for Node.js v16<ul>
+<li>Sync more Filetypes</li>
+</ul>
+</li>
+<li>lib(config): adjust print command for Windows</li>
+<li>api (previewCamera): $config is not available, remove logging for now</li>
+<li>remotebuzzer: respect config also on get request trigger</li>
+<li>remotebuzzer: don't trigger a different action if disabled</li>
+<li>remotebuzzer client: check if taking pictures is enabled</li>
+<li>trigger.php: add missing options, respect hardware button config</li>
+<li>lib (db): fix for PHP 8</li>
+<li>api(admin): check if fonts, frames and collage placeholder are valid</li>
+<li>core: clear/reset timeout on keyup <a href="https://github.com/PhotoboothProject/photobooth/pull/226"></a></li>
+<li>lib (image): fix applying text to images, fail if text CAN NOT be applied</li>
+<li>lib(image): don't keep aspect ratio while resizing PNG</li>
+<li>bugfix: supprress error messages on getimagesize function</li>
+<li>api(admin): image filter depends on images in tmp folder</li>
+<li>fix hiding/showing home button independent of button bar on result screen</li>
+<li>index (frame): respect preview frame config</li>
+<li>core: don't add images to gallery if gallery is disabled</li>
+<li>core: print &amp; qr code only if enabled</li>
+<li>bugfix: update dockerfile<ul>
+<li>add missing python3</li>
+</ul>
+</li>
+<li>lib(resize): fix rotating images on PHP8</li>
+</ul>
+<p><strong>Feature</strong></p>
+<ul>
+<li>config: make time adjustable a notification is visible</li>
+<li>preview: allow to delay the visibility of the preview from URL</li>
+<li>preview: allow execution of start/stop cmd without validation<ul>
+<li>config: run preview CMD's without validation by default</li>
+</ul>
+</li>
+<li>preview: run preview cmd &amp; stop cmd independent of preview mode</li>
+<li>remotebuzzer: make print and rotary functions available via get request</li>
+<li>remotebuzzer: Reboot Button</li>
+<li>remotebuzzer: make shutdown and reboot available via get request</li>
+<li>task: enable lazy loading for gallery images <a href="https://github.com/PhotoboothProject/photobooth/pull/383"></a></li>
+</ul>
+<p><strong>FAQ</strong></p>
+<ul>
+<li>FAQ: add note to fix broken v4l2loopback module <a href="https://github.com/PhotoboothProject/photobooth/pull/109"></a></li>
+<li>FAQ: add notes about issues while taking a picture</li>
+<li>faq: a username is needed while running enable-usb-sync.sh</li>
+<li>Updated FAQ - how to upload pictures to remote server <a href="https://github.com/PhotoboothProject/photobooth/pull/127"></a></li>
+<li>FAQ: preview bsm was moved</li>
+<li>FAQ: no need for success message</li>
+<li>FAQ: add instructions to update gphoto2 &amp; libgphoto</li>
+<li>FAQ: adjust PiCamera information <a href="https://github.com/PhotoboothProject/photobooth/pull/417"></a></li>
+<li>FAQ: Add possible preview error because of secure boot <a href="https://github.com/PhotoboothProject/photobooth/pull/437"></a></li>
+<li>FAQ: adjust GPIO setup for PiOS Bookworm</li>
+<li>FAQ: adjust GPIO information for Raspberry Pi 5; adjust for Pi OS versions</li>
+</ul>
+<p><strong>Install</strong></p>
+<ul>
+<li>install: adjust PolKit rule naming</li>
+<li>install-photobooth: allow to add PolKit rule on all linux distros</li>
+<li>install-photobooth: PolKit rule doesn't depend on update</li>
+<li>install-photobooth: make system update optional on photobooth update</li>
+<li>install-photobooth: fix permissions on yarn folder</li>
+<li>install-photobooth: easy access to private folder</li>
+<li>install-photobooth: always ignore filemode changes on git</li>
+<li>install-photobooth: allow Node.js minor version to match or be newer</li>
+<li>install-photobooth: be flexible on Node.js version</li>
+<li>install: yarn: use of apt-key is deprecated</li>
+<li>install-photobooth: use PHP 8.2 by default</li>
+<li>install-photobooth: PHP8 sources needed earlier</li>
+<li>install-photobooth: add https://packages.sury.org/php/ only if distro is supported</li>
+<li>install: also run apt autoremove while removing nodejs</li>
+<li>install: switch to latest development version of Gphoto2</li>
+<li>install: fix PHP8 install in Ubuntu 20</li>
+<li>install-photobooth: improve/fix PHP8 install on Ubuntu</li>
+<li>install-photobooth: fix missing sources.lst on Ubuntu 22.04</li>
+<li>install-photobooth: install npm on Raspberry Pi<ul>
+<li>bugfix: correct installer</li>
+</ul>
+</li>
+<li>install: add ppa for PHP on all Debian based distributions</li>
+<li>install: run commands as www-data user</li>
+<li>install: install needed packages for gphoto2 webcam service only if needed</li>
+<li>install: use wget to check internet connection</li>
+<li>install: update nodejs install</li>
+<li>install: suppress most progress infos, only display essential output</li>
+<li>install: fix permissions for www-data user on install</li>
+<li>install: check for npm on all devices</li>
+<li>install: remove npm from packages, uninstall libnode72 if installed</li>
+<li>install: update npm to latest</li>
+<li>install: fix Download of node-install (Raspberry Pi)</li>
+<li>install: also check NODEJS_MINOR version</li>
+<li>install: always install nodejs from official node source</li>
+<li>install: only fail on Node.js below v18, recheck version if update is skipped</li>
+<li>install: proof npm version, abort if needed</li>
+<li>install: fix checking npm version</li>
+<li>install: check for Firefox browser first</li>
+<li>install: also check for firefox-esr</li>
+<li>install-photobooth: remove autostart and hide mouse<ul>
+<li>installer: remove leftover from removed questions/features</li>
+</ul>
+</li>
+<li>install-photobooth: don't compile gphoto2 and libgphoto2 <a href="https://github.com/PhotoboothProject/photobooth/pull/439"></a></li>
+<li>install: check if /boot/config.txt is a symlink <a href="https://github.com/PhotoboothProject/photobooth/pull/465"></a></li>
+<li>install-photobooth: adjust Update for www-data user <a href="https://github.com/PhotoboothProject/photobooth/pull/498"></a></li>
+<li>install-photobooth: install npm 9.6.7 if needed <a href="https://github.com/PhotoboothProject/photobooth/pull/531"></a></li>
+</ul>
+<p><strong>Full Changelog</strong>:</p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.3.1...v4.4.0">https://github.com/PhotoboothProject/photobooth/compare/v4.3.1...v4.4.0</a></p>
+<hr>
+
+<h2 id="431-06122022">4.3.1 (06.12.2022)</h2>
+<p><strong>Bugfixes</strong></p>
+<ul>
+<li>core: improve timings while taking an image by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/95">#95</a></li>
+<li>Adjust the code to start taking an image before the Cheeeeeese message disappears
+  (the Cheese-Message can be used to "hide" the delay we have until the camera triggers).</li>
+<li>Also adjust the code to respect the defined offset while taking an image. The take picture action now runs independent of the visible running countdown.</li>
+<li>Stop the shutter animation after 500ms which should look more fluid and also make sure we can't forget to stop it. If cheese is enabled cheese time will be used instead.</li>
+<li>Don't run shutter animation twice if an cheese image is used and cheese enabled.</li>
+</ul>
+<p><strong>General</strong></p>
+<ul>
+<li>build(deps): bump sass from 1.55.0 to 1.56.1 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/93">#93</a></li>
+<li>build(deps-dev): bump @babel/preset-env from 7.19.4 to 7.20.2 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/94">#94</a></li>
+<li>build(deps-dev): bump eslint from 8.26.0 to 8.28.0 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/92">#92</a></li>
+<li>build(deps): bump socket.io from 4.5.3 to 4.5.4 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/90">#90</a></li>
+<li>build(deps-dev): bump @prettier/plugin-php from 0.19.1 to 0.19.2 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/91">#91</a></li>
+</ul>
+<p><strong>Full Changelog</strong></p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.3.0...v4.3.1">https://github.com/PhotoboothProject/photobooth/compare/v4.3.0...v4.3.1</a></p>
+<hr>
+
+<h2 id="430-29112022">4.3.0 (29.11.2022)</h2>
+<p><strong>Bugfixes</strong></p>
+<ul>
+<li>FAQ: fix small typo by @modularTaco in  <a href="https://github.com/PhotoboothProject/photobooth/pull/68">#68</a></li>
+<li>fix(documentation): remove reference to dev mode by @modularTaco in  <a href="https://github.com/PhotoboothProject/photobooth/pull/71">#71</a></li>
+<li>fix(gallery): respect clickToCloseNonZoomable PhotoSwipe config by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/72">#72</a></li>
+<li>fix(gallery): fix click on close button while an image is opened by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/73">#73</a></li>
+<li>install-photobooth: also check for "chromium" package by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/86">#86</a></li>
+</ul>
+<p><strong>New Options</strong></p>
+<ul>
+<li>New options for the QR Code on print by @fmiccolis in  <a href="https://github.com/PhotoboothProject/photobooth/pull/65">#65</a></li>
+<li>Feature: make icons adjustable by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/74">#74</a></li>
+<li>Show frame over the preview by @fmiccolis in  <a href="https://github.com/PhotoboothProject/photobooth/pull/45">#45</a></li>
+<li>feature: add simple trigger ( <a href="http://localhost/trigger.php">http://localhost/trigger.php</a> or <a href="http://localhost/photobooth/trigger.php">http://localhost/photobooth/trigger.php</a> ) for remotebuzzer server by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/66">#66</a></li>
+</ul>
+<p><strong>General</strong></p>
+<ul>
+<li>allow collage background images to be in any filetype gd understands by @up-87 in <a href="https://github.com/PhotoboothProject/photobooth/pull/63">#63</a></li>
+<li>core(navbar): restructure navbar function by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/64">#64</a></li>
+<li>Restructure preview handling, add testpage for preview settings  ( <a href="http://localhost/test/preview.php">http://localhost/test/preview.php</a> or <a href="http://localhost/photobooth/test/preview.php">http://localhost/photobooth/test/preview.php</a> ) by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/61">#61</a></li>
+<li>make collage handling more configurable, fix collages and the retry mechanism by @up-87 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/69">#69</a></li>
+<li>cleanup: remove experimental updater &amp; dependencies checker by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/84">#84</a></li>
+<li>cleanup: api, also improve random image naming by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/87">#87</a></li>
+<li>crowdin: translation import by @andi34 in  <a href="https://github.com/PhotoboothProject/photobooth/pull/88">#88</a></li>
+</ul>
+<p><strong>New Contributors</strong></p>
+<ul>
+<li>@fmiccolis made their first contribution in  <a href="https://github.com/PhotoboothProject/photobooth/pull/65">#65</a></li>
+<li>@modularTaco made their first contribution in  <a href="https://github.com/PhotoboothProject/photobooth/pull/68">#68</a></li>
+</ul>
+<p><strong>Full Changelog</strong>:</p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.2.0...v4.3.0">https://github.com/PhotoboothProject/photobooth/compare/v4.2.0...v4.3.0</a></p>
+<hr>
+
+<h2 id="420-16102022">4.2.0 (16.10.2022)</h2>
+<p><strong>Bugfixes</strong></p>
+<ul>
+<li>fix(admin): show 3rd line text of text on * in advanced view by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/52">#52</a></li>
+<li>(fix) Stop shutter on fail, respect retry settings on fail by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/54">#54</a></li>
+<li>api(takePic): fix flipping image taken from device cam preview, fix <a href="https://github.com/PhotoboothProject/photobooth/issues/55">Issue 55</a> by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/57">#57</a></li>
+<li>core(api.initializeMedia): retry every second by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/56">#56</a></li>
+<li>tools(api.getRequest): don't use JSON.parse while getting a response</li>
+<li>install-photobooth: iputils-ping is needed to check Internet connection</li>
+<li>install-photobooth: fix placing Install log inside Photobooth folder</li>
+</ul>
+<p><strong>General</strong></p>
+<ul>
+<li>build(deps): bump sass from 1.54.8 to 1.55.0 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/47">#47</a></li>
+<li>build(deps-dev): bump eslint from 8.23.0 to 8.24.0 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/48">#48</a></li>
+<li>build(deps-dev): bump @babel/preset-env from 7.18.10 to 7.19.3 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/49">#49</a></li>
+<li>build(deps-dev): bump @prettier/plugin-php from 0.18.9 to 0.19.1 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/50">#50</a></li>
+<li>build(deps-dev): bump @babel/core from 7.18.13 to 7.19.3 by @dependabot in <a href="https://github.com/PhotoboothProject/photobooth/pull/51">#51</a></li>
+<li>crowdin: translation import by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/58">#58</a></li>
+<li>vendor(PHPMailer): update to v6.6.5 by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/59">#59</a></li>
+<li>core(preview): remove unneeded checks on preview handling</li>
+</ul>
+<p><strong>Full Changelog:</strong></p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.1.0...v4.2.0">https://github.com/PhotoboothProject/photobooth/compare/v4.1.0...v4.2.0</a></p>
+<hr>
+
+<h2 id="410-30092022">4.1.0 (30.09.2022)</h2>
+<p><strong>Bugfixes</strong></p>
+<ul>
+<li>fix(UI): don't run shutter animation twice by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/32">#32</a></li>
+<li>fix(ui): add version tag to own stylesheets by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/33">#33</a></li>
+<li>fix(ui): add version tag to own javascripts by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/36">#36</a></li>
+<li>fix(admin): don't remove images from archives and private folder by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/42">#42</a></li>
+<li>fix(admin): respect changed config before executing an reset by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/43">#43</a></li>
+</ul>
+<p><strong>New Options</strong></p>
+<ul>
+<li>feature(collage): add background to collage for easier template creation. closes <a href="https://github.com/PhotoboothProject/photobooth/issues/28">Issue #28</a> by @up-87 in <a href="https://github.com/PhotoboothProject/photobooth/pull/31">#31</a></li>
+<li>feature(debugpanel): add access to installation log by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/37">#37</a></li>
+<li>feature(ui): allow to define language resource path, also fix path for javascript folders on subfolder installation by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/38">#38</a></li>
+<li>feature(preview): allow to rotate all preview options by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/44">#44</a></li>
+<li>rework(preview): remove gphoto preview option by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/46">#46</a></li>
+</ul>
+<p><strong>General</strong></p>
+<ul>
+<li>lib(configsetup): make more settings available on basic view by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/35">#35</a></li>
+<li>api(debug): log information from admin.php on config changes and reset by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/41">#41</a></li>
+<li>crowdin: translation import by @andi34 in <a href="https://github.com/PhotoboothProject/photobooth/pull/39">#39</a></li>
+</ul>
+<p><strong>Full Changelog:</strong></p>
+<p><a href="https://github.com/PhotoboothProject/photobooth/compare/v4.0.0...v4.1.0">https://github.com/PhotoboothProject/photobooth/compare/v4.0.0...v4.1.0</a></p>
+<hr>
+
+<h2 id="400-10092022">4.0.0 (10.09.2022)</h2>
+<p>Source code moved to <a href="https://github.com/PhotoboothProject/photobooth">https://github.com/PhotoboothProject/photobooth</a>,
+old Releases etc. will still be available at <a href="https://github.com/andi34/photobooth">https://github.com/andi34/photobooth</a></p>
+<p><strong>Security</strong>
+  - Security advice added to the README and welcome page <a href="https://github.com/andi34/photobooth/pull/376">#376</a>
+  - PHPMailer: update to v6.6.4</p>
+<p><strong>Breaking changes</strong></p>
+<ul>
+<li>QR code is now printed onto the image instead on the right side to not break the image ratio,
+    new options have been added for best user experience (see <strong>New Options</strong> for details)</li>
+<li>Remove Greek, Polish and Spanish from Language options
+    because they aren't maintained (<a href="https://github.com/andi34/photobooth/issues/64#issuecomment-1025126230">further information</a>)</li>
+<li>Collage: layout's changed slightly (positions and image size now get calculated depending on defined dpi). Existing frames might not fit anymore and need to be updated.</li>
+<li>vendor: remove rpihotspot from repo (it's still available on github, but we don't need it as a direct dependencie for Photobooth)</li>
+</ul>
+<p><strong>Bugfixes</strong>
+  - chromium: fix white screen of death on first start in kiosk mode (Raspberry Pi only)
+  - livechroma: fix text formatting on error/retry
+  - api(takePic):
+    - fix error message, take picture command can be anything
+    - check if picture exists: If a picture exists already, rename it before using the same filename for a new picture. This might fix an issue on collage where a retaken image isn't saved / used and should also prevent overriding an existing image by accident.
+  - fix print with QR Code
+  - Video preview <a href="https://github.com/andi34/photobooth/pull/448">#448</a>, <a href="https://github.com/andi34/photobooth/pull/476">#476</a>:
+    - Fix gphoto preview on retry / next collage image.
+    - fix taking pictures from gphoto preview <a href="https://github.com/PhotoboothProject/photobooth/pull/24">#24</a> (<strong>Note:</strong> Gphoto won't be used, it's more like taking a screenshot of the Preview. Since Gphoto won't be used there's no flash light of the camera!)
+    - hide video preview in background of interrupted collage
+    - fixed possible DSLR preview stop time bug
+    - fixed bug: preview['flip'] was saved but not reloaded. So if the correct setting should be retained it needed to be set every time.
+    - fixed bug: in the background of the continuos collage image preview the gphoto2 preview (without bsm) continued to run visibly
+    - Improve preview handling <a href="https://github.com/PhotoboothProject/photobooth/pull/6">#6</a>
+  - core:
+    - respect retry timeout:
+      The timeout should not be a new countdown, it should be a timeout as it's name says. Retry notification will now be visible for defined time. Countdown for picture/next collage image is not touched and will be used as defined.
+    - fix get request at countdown
+    - handle errors on get requests<a href="https://github.com/PhotoboothProject/photobooth/pull/15">#15</a>
+  - welcome.php: use detected URL to start Photobooth
+  - FAQ: fix command to execute setup-network.sh for hotspot
+  - frame/font: again allow to be located outside of photobooth source
+  - config(print): add fallback to defaults if print font/frame is not defined
+  - collage:
+    - Continue collage with keypress <a href="https://github.com/andi34/photobooth/pull/408">#408</a>
+    - prevent caching of collage images with unique image name <a href="https://github.com/andi34/photobooth/pull/425">#425</a>
+    - use collage countdown timer on first collage image <a href="https://github.com/PhotoboothProject/photobooth/pull/22">#22</a>
+  - installation script:
+    - fix permissions on www-data users cachefolder and .yarnrc if exists
+    - fix and improve use of lighttpd and nginx <a href="https://github.com/andi34/photobooth/pull/477">#477</a>
+    - install <code>curl</code> (and <code>raspberrypi-kernel-headers</code> for PiOS) early enough to be used
+  - stabilized rotary encoder handling <a href="https://github.com/andi34/photobooth/pull/449">#449</a>
+  - email:
+    - fix wrong button text if "Store email addresses in file" is enabled <a href="https://github.com/andi34/photobooth/pull/462">#462</a> (fixes <a href="https://github.com/andi34/photobooth/issues/461">Issue #461</a>)
+    - stop spinning loader icon once the email has been sent (fixes <a href="https://github.com/andi34/photobooth/issues/453">Issue #453</a>)
+  - language:
+    - fix mixed up german translation for pre- and post-photo command (fixes <a href="https://github.com/andi34/photobooth/issues/451">Issue #451</a>)
+  - PHP8:
+    - fix Deprecated Passing null to parameter error
+    - fix Implicit conversion from float (number) to int loses precision</p>
+<p><strong>New Options</strong>
+  - Add traslate button to Adminpanel, opens Photobooth project on Crowdin
+  - UI:
+    - Shutter animation, enabled by default <a href="https://github.com/andi34/photobooth/pull/368">#368</a>
+    - add config to define highlight color used on round buttons (modern style)
+    - make UI and button style independent <a href="https://github.com/andi34/photobooth/pull/442">#442</a>
+    - add modern squared design by @Moarqi <a href="https://github.com/andi34/photobooth/pull/440">#440</a>
+  - QR <a href="https://github.com/andi34/photobooth/pull/371">#371</a>:
+    - Error correction level adjustable
+  - Gallery:
+    - Add config option to enable/disable the figure caption in the gallery view <a href="https://github.com/andi34/photobooth/pull/398">#398</a>
+    - Add config option to enable/disable action button footer (photo, collage)
+  - Collage:
+    - added simple 2+1 style that is to be used with a frame that fills the open space <a href="https://github.com/andi34/photobooth/pull/424">#424</a>
+    - Added an option to set a placeholder (eg custom image / graphic) for one image of the collage <a href="https://github.com/andi34/photobooth/pull/436">#424</a>
+    - simple customizable collage config with a json file <a href="https://github.com/PhotoboothProject/photobooth/pull/26">#26</a>
+  - Preview:
+    - config: allow to adjust the time to stop the gphoto preview
+    - choose to flip the preview along the X or Y axis <a href="https://github.com/andi34/photobooth/pull/465">#465</a>, fixup <a href="https://github.com/andi34/photobooth/pull/476">#476</a>
+    - specify how the preview should be resized to fit:
+      This setting uses the css <em>object-fit</em> property which is used to specify how the preview should be resized to fit.
+      The following options are available:
+      - <em>fill</em> - The image is resized to fill the given dimension. If necessary, the image will be stretched or squished to fit.
+      - <em>contain</em> - The image keeps its aspect ratio, but is resized to fit within the given dimension.
+      - <em>cover</em> - The image keeps its aspect ratio and fills the given dimension. The image will be clipped to fit.
+      - <em>none</em> - The image is not resized.
+      - <em>scale-down</em>- the image is scaled down to the smallest version of none or contain.
+    - allow to set <em>background-size</em> to <em>cover</em> on URL preview
+  - Print:
+    - Always print the QR onto the image instead in the right side (see <strong>Breaking Changes</strong>)
+    - QR size adjustable
+    - QR offset adjustable
+    - QR position adjustable
+    - allow to disable rotation before print
+  - Countdown:
+    - allow using a customizable image instead of cheese message if shutter animation is used <a href="https://github.com/PhotoboothProject/photobooth/pull/4">#4</a>
+  - Post picture command:
+    - Passes the Filename (doesn't include the full path!) to the <em>post-cmd</em>. This can be used e.g. to manipulate the Image (e.g. with Imagemagick) after the Picture was taken.</p>
+<p><strong>General</strong>
+  - restore windows compatibility <a href="https://github.com/PhotoboothProject/photobooth/pull/23">#23</a>
+  - Import latest Crowdin translations
+  - Cleanup core.js <a href="https://github.com/andi34/photobooth/pull/369">#369</a>:
+    - remove unneeded if checks
+    - improve readability
+    - Let's start the picture process from beginning on retry.
+      Also start all previews like defined at countdown.
+    - Centralized preview start/stop functions, this helps getting a better overview of the code.
+    - log error messages to console from api.errorPic
+    - optimize error messages
+    - time configurations moved to constants
+    - move more ID selector to constants
+  - Collage:
+    - Collage code cleanup (can most likely still be improved by using php classes but this should be okay)
+    - rename some collage styles (2+2 instead of 2x2 as x now always indicates pictures are reused - old name still works) <a href="https://github.com/andi34/photobooth/pull/424">#424</a>
+    - Collage Images will be dynamically scaled based on a given resolution (eg 300dpi etc)<a href="https://github.com/andi34/photobooth/pull/436">#424</a>
+  - configsetup:
+    - add <code>&lt;input type="number"&gt;</code> and use where possible to avoid issues on input
+  - install script:
+    - install-raspbian: rename to install-photobooth.sh, photobooth works fine on debian and other debian based distributions
+    - pass options to the script (run <code>sudo bash install-photobooth.sh -h</code> to see all options)
+    - ask to install Gutenprint drivers
+    - make sure a new question is recognized
+    - always mention the setup choice
+    - adjust warning messages
+    - fix git installation message
+    - install latest development version via git by default (latest stable3 version can be passed to the installer via option)
+    - prevent double entry in autostart while re-running the installer
+    - allow to install gphoto2 Webcam Service
+    - create installation log inside <code>/tmp/photobooth</code>
+    - always install latest stable gphoto2
+    - adjust package array handling
+    - Add new parameter to setup the php version <a href="https://github.com/andi34/photobooth/pull/477">#477</a>
+    - Webserver <a href="https://github.com/andi34/photobooth/pull/477">#477</a>:
+      - Apply PHP Version for nginx and lighttpd
+      - Fix (improve) nginx / lighttpd service startup
+      - Fix client_max_body_size problems on nginx
+    - detect installed webbrowser and create autostart file depending on it
+      - The following browser can be detected: <em>chromium-browser</em> , <em>google-chrome</em> , <em>google-chrome-stable</em> , <em>google-chrome-beta</em> , <em>firefox</em>
+    - skip Desktop related config if <em>lxde</em> is not installed
+    - avoid Chrome/Chromium asking for password to unlock keyring
+    - run apt upgrade instead apt dist-upgrade:
+      Users might have come to rely on packages that were installed implicitly because of other (explicitly installed) packages' dependency on them. Thus the packaging system cannot be aware of a user/administrator desire to retain certain functionality that might otherwise be removed via dist-upgrade.
+    - fix permission on hidden files and folder
+    - seperate general and pi specific permissions
+    - ignore filemode changes on git install
+    - Check for internet connection (we can't install without an internet connection)
+    - <em>allow to run an update on git installation:</em>
+      - to update to latest development version please run <code>sudo bash install-photobooth.sh --update</code>
+      If local changes are detected, the installer can try to apply those changes after the update was completed. If the changes can not be applied after update, your local changes will be kept inside a backup branch and can be applied manually again (you might need to resolve conflicts because of source changes).
+      If local changes are detected, the installer will abort on silent install. You can re-run the update-process without the <code>-s</code> flag and confirm backing up your local changes for update.
+    - mention to clear Browser Cache on Update
+  - enable-usb-sync.sh
+    - Disable reboot for silent mode (fixes <a href="https://github.com/andi34/photobooth/issues/450">Issue #450</a>)
+    - support other users (fixes <a href="https://github.com/andi34/photobooth/issues/423">Issue #423</a>)
+  - gphoto:
+    - Added another way to control dslr cameras with cameracontrol.py <a href="https://github.com/andi34/photobooth/pull/386">#386</a>, <a href="https://github.com/andi34/photobooth/pull/387">#387</a>, <a href="https://github.com/andi34/photobooth/pull/393">#393</a>
+  - Add a docker setup for local testing and development <a href="https://github.com/andi34/photobooth/pull/397">#397</a>
+  - Remote buzzer:
+    - Add simple GET endpoints to trigger photos / collages (to support WiFi hardware buttons) <a href="https://github.com/andi34/photobooth/pull/400">#400</a>
+    - Rework option to use remotebuzzer server without GPIO and remove hidden faulty HID and softbutton implementation
+  - UI:
+    - sass(button): convert button size from px to em
+    - sass(modern button): adjust font awesome icon size
+    - Dark UI Style by @Moarqi
+    - replace default background image
+    - add clouds background images
+  - Email:
+    - hide checkbox to add email to database, adjust information text
+  - debloat:
+    - remove outdated update-booth.sh
+  - Video preview:
+    - minor change: don't display "please wait" text for interrupted collage when the selection is shown on screen <a href="https://github.com/andi34/photobooth/pull/476">#476</a>
+    - Improve preview handling <a href="https://github.com/PhotoboothProject/photobooth/pull/6">#6</a>
+  - sass/css:
+    - video preview:
+      - simplify rules
+      - adjust position and video handling
+  - scripts(pack-build):
+    - remove unavailable files
+    - add missing node_modules dependencies
+  - admin:
+    - hide experimental updater, instead use the <em>install-photobooth.sh</em> to update
+  - pass filename to post cmd <a href="https://github.com/PhotoboothProject/photobooth/pull/7">#7</a>
+  - Overhaul Photobooth logging <a href="https://github.com/PhotoboothProject/photobooth/pull/14">#14</a>
+  - more code-cleanup in various places</p>
+<hr>
+
+<h2 id="330-16012022">3.3.0 (16.01.2022)</h2>
+<p><strong>Breaking changes</strong>
+  - If you are using an older version of Rasperry Pi OS or Debian / Debian based distribution make sure Node.js v12.22.x is installed!
+    Check your Node.js version while running <code>node -v</code> from your terminal.
+  - (config) Switch from milliseconds to seconds the image is visible on result screen
+    <em>Please adjust your configuration if you've changed the default setting on previous version. If you've not changed the default setting there's nothing to do.</em>
+  - vendor: phpqrcode as submodule
+  - config: Webserver IP should not contain subfolder/subpages, IP should be detected if not defined. QR now needs it's own URL defined (see new Options).</p>
+<p><strong>Bugfixes</strong>
+  - standalone slideshow: fix auto refresh
+  - hide inner navigation panel if thrill is triggered from result page
+  - remotebuzzer:
+    - fix hang of remotebuzzer server on error
+    - bugfix for hardware button to trigger collage mode <a href="https://github.com/andi34/photobooth/pull/351">#351</a> (fixes <a href="https://github.com/andi34/photobooth/issues/300">Issue #300</a>)
+    - fix socket.io Server on Photobooth subfolder installation <a href="https://github.com/andi34/photobooth/pull/364">#364</a> (fixes <a href="https://github.com/andi34/photobooth/issues/360">Issue #360</a>)
+  - picture and mail database always need a name, add fallback to default if empty
+  - configsetup: add event option to basic view (fixes <a href="https://github.com/andi34/photobooth/issues/320">Issue #320</a>)
+  - build: fix build failing on macOS (fixes <a href="https://github.com/andi34/photobooth/issues/318">Issue #318</a>)
+  - Fix Typo in admin.php while using a custom style <a href="https://github.com/andi34/photobooth/pull/322">#322</a>
+  - Fix preview from gphoto as background if BSM is disabled (thanks to Uwe Pieper), <strong>note:</strong> This is not recommended for a Raspberry Pi as it requires faster hardware!</p>
+<p><strong>New Options</strong>
+  - remotebuzzer:
+    - Allow to configure GPIO debouce delay through admin panel <a href="https://github.com/andi34/photobooth/pull/294">#294</a>
+  - ui: add option to show / hide button bar on result screen
+  - general: add config to use sample pictures instead taking a picture, dev-mode now only enables advanced logging for debugging purpose
+  - add button for reboot and shutdown on linux
+  - collage:
+    - continuous collage: allow to disable single images being visible
+    - allow to define collage background color <a href="https://github.com/andi34/photobooth/pull/324">#324</a>
+    - add option to add all images from collage to gallery <a href="https://github.com/andi34/photobooth/pull/307">#307</a> (fixes <a href="https://github.com/andi34/photobooth/issues/269">Issue #269</a>)
+    - add cutting lines on 2x4 collage layouts
+  - feature: allow sending a GET request at countdown and/or after processing <a href="https://github.com/andi34/photobooth/pull/308">#308</a>
+  - text on {picture,collage,print}: use color picker - This gives the possibility to use any color instead choosing one out of three defined colors! <a href="https://github.com/andi34/photobooth/pull/312">#312</a>
+  - QR:
+    - Add close button to QR <a href="https://github.com/andi34/photobooth/pull/316">#316</a> (fixes <a href="https://github.com/andi34/photobooth/issues/315">Issue #315</a>)
+    - Own QR menu entry <a href="https://github.com/andi34/photobooth/pull/325">#325</a>:
+      - Enable/Disable QR-Code
+      - Allow to define a own URL used for the QR-Code
+        - Add fallback to default setting if not defined
+      - Decide whether to append the filename to defined URL
+      - Allow to define a own help text visible below the QR-Code
+  - optional retry to take a picture on error <a href="https://github.com/andi34/photobooth/pull/366">#366</a></p>
+<p><strong>General</strong>
+  - Add welcome screen on first access <a href="https://github.com/andi34/photobooth/pull/296">#296</a>, add config to skip by default
+  - Add experimental Photobooth Updater and dependencies checker <a href="https://github.com/andi34/photobooth/pull/285">#285</a>
+  - install-raspbian.sh:
+    - ask all questions before installing anything
+    - allow silent installation (<code>sudo bash install-raspbian.sh WEBSERVER silent</code>)
+    - don't delete INSTALLFOLDERPATH if exists, make a backup instead
+    - inform about URL to access Photobooth
+    - ask if remote access to CUPS should be enabled
+    - install Node.js v12.22 if needed (for Debian buster compatibility)
+  - update-booth.sh:
+    - also copy hidden files and folder
+  - adjust default chromium flags
+  - build: add "clean" task
+  - style: allow adjustments via <code>private/overrides.css</code> (automatically used if the file exist)
+  - debugpanel: show latest git changes of installation
+  - Add script to disable automount and add polkit rules for USB Sync (Only needed if you have declined the question to enable the USB sync file backup while running the <code>install-raspbian.sh</code> and like to use the USB Sync feature.):</p>
+<pre><code>wget https://raw.githubusercontent.com/andi34/photobooth/dev/enable-usb-sync.sh
+sudo bash enable-usb-sync.sh
+</code></pre>
+<ul>
+<li>disabled version checker on dev branch</li>
+<li>add tools.js with central access to common functions</li>
+<li>Adjust and optimize different API endpoints</li>
+<li>Updated build dependencies</li>
+<li>general jquery improvements (thanks to Uwe Pieper)</li>
+<li>retry getting preview via gphoto if failed (thanks to Uwe Pieper)</li>
+<li>retry taking a picture if failed (thanks to Uwe Pieper)</li>
+<li>crowdin: translation import</li>
+<li>config: try to dectect Webserver IP if not defined</li>
+</ul>
+<p><strong>FAQ</strong>
+  - adjust chromium flags
+  - Raspberry Touchpanel DSI simultaneously with HDMI
+  - How to administer CUPS remotely using the web interface?</p>
+<hr>
+
+<h2 id="321">3.2.1</h2>
+<p><strong>Bugfixes</strong>
+- fix collage without filter/effect applied to single images</p>
+<hr>
+
+<p><a href="https://github.com/andi34/photobooth/compare/v3.2.0...v3.2.1">Compare changes with v3.2.0</a>.</p>
+<h2 id="320">3.2.0</h2>
+<p><strong>Security</strong>
+- api: don't show mail password and sensible login data <a href="https://github.com/andi34/photobooth/pull/274">#274</a>
+- api: Bugfix for server-side node scripts to correctly parse the config file
+- Temporary removed numbered image naming option to prevent overriding existing images. For details see <a href="https://github.com/andi34/photobooth/issues/291">Issue 291</a>.</p>
+<p><strong>Bugfixes</strong>
+- sync-to-drive: bugfix for depreciated handling of type error - cannot read property of undefined
+- collage: Apply defined effect(s) and/or filter to the single images instead of the final collage (partially <a href="https://github.com/andi34/photobooth/pull/290">#290</a>)
+- core: new timeout only if no activity in progress <a href="https://github.com/andi34/photobooth/pull/273">#273</a>, fixes Issue <a href="https://github.com/andi34/photobooth/pull/272">#272</a></p>
+<p><strong>New Options</strong>
+- countdown offset to compensate shutter-delay and cheese time <a href="https://github.com/andi34/photobooth/pull/286">#286</a>
+- Remote-buzzer:
+  - allow to enable/disable rotary control for standalone gallery <a href="https://github.com/andi34/photobooth/pull/261">#261</a>
+  - allow parallel use of buttons- and rotary control <a href="https://github.com/andi34/photobooth/pull/262">#262</a></p>
+<p><strong>General</strong>
+- Updated build dependencies
+- Collage: Always show image after taken <a href="https://github.com/andi34/photobooth/pull/271">#271</a>, partially <a href="https://github.com/andi34/photobooth/pull/290">#290</a>
+- Debug Panel <a href="https://github.com/andi34/photobooth/pull/27">#275</a> and better logging on issues while taking a picture <a href="https://github.com/andi34/photobooth/pull/277">#277</a> and post-processing (partially <a href="https://github.com/andi34/photobooth/pull/290">#290</a>):
+  Implements a panel for to help debugging in case of issues. Focus is to be able to access through the browser key configuration and log files on the server side.
+  This feature is
+  1) for fast and efficient debugging iterations
+  and
+  2) also well positioned to help people with less experience on the server administration and Unix / Raspberry Pi OS side of things.</p>
+<p>Access to the debug panel is available through the admin panel (switch to expert view) or via direct URL <a href="http://localhost/admin/debugpanel.php">http://localhost/admin/debugpanel.php</a> (or <a href="http://localhost/photobooth/admin/debugpanel.php">http://localhost/photobooth/admin/debugpanel.php</a>) (
+- Removed unneeded file-type checks all around the Photobooth api (we check for jpeg images already inside the api/applyEffects.php)
+- result screen: smaller QR code &amp; smaller font-size</p>
+<p><a href="https://github.com/andi34/photobooth/compare/v3.1.0...v3.2.0">Compare changes with v3.1.0</a>.</p>
+<hr>
+
+<h2 id="310">3.1.0</h2>
+<p><strong>Bugfixes</strong>
+- fix horizontal flip of preview on some browser
+- fix decore line config <a href="https://github.com/andi34/photobooth/pull/257">#257</a>
+- fix rotary button support for standalone gallery <a href="https://github.com/andi34/photobooth/pull/253">#253</a>
+- core: fix background from device cam
+- login: protect Live keying if index is protected via login
+- lang (en): fix delete request</p>
+<p><strong>New Options</strong>
+- Pre- / Post- Command <a href="https://github.com/andi34/photobooth/pull/232">#232</a>:
+  - execute a shell command before a picture is taken (pre-command)
+  - execute a shell command after processing is is completed (post-command)
+- Add HTML capability to E-Mail text <a href="https://github.com/andi34/photobooth/pull/231">#231</a>
+- Hide home button on results screen <a href="https://github.com/andi34/photobooth/pull/256">#256</a></p>
+<p><strong>General</strong>
+- updated build dependencies
+- hidden adminshortcut: direct to login panel
+- login panel:
+  - allow to access Live keying
+  - add link to Telegram Community</p>
+<p><a href="https://github.com/andi34/photobooth/compare/v3.0.0...v3.1.0">Compare changes with v3.0.0</a>.</p>
+<hr>
+
+<h2 id="300">3.0.0</h2>
+<p>A lot of changes have been applied to Photobooth! We're proud to tell that some bugs have been fixed and a lot of user wishes could be realized!
+We have added a lot of new options to make Photobooth adjustable for much more use cases.
+A big thanks goes to <a href="https://github.com/jacques42">jacques42@GitHub</a> (who was involved a lot for this Release) and everyone who helped on making Photobooth this powerfull!
+Photobooth UI has changed to a modern look on most pages and our Admin panel and configuration setup has changed completely (please read the following Changelog).</p>
+<p><strong>Breaking changes</strong>
+- The configuration setup has changed completely on Photobooth v3 and some config options have been removed!
+  <strong>Please note:</strong> Your old config (Photobooth v2.x and older) won't work, <strong>you must</strong> setup your configuration via <a href="http://localhost/admin">adminpanel</a> (or <a href="http://localhost/photobooth/admin">adminpanel</a>) again!</p>
+<p><strong>Bugfixes</strong>
+- Chromakeying:
+  - respect thumnail config
+- Delete:
+  - fix removing deleted images from database
+- Translations:
+  - fix translation fallback on all *.js files
+- E-Mail:
+  - fix small bug for mail subject and text templates to be applied
+- Compatibility:
+  - adjust default background URL setup to fix backgrounds on iOS (don't use relative path)
+  - qr: also display correct url on subfolder installation <a href="https://github.com/andi34/photobooth/issues/204">Fix #204</a></p>
+<p><strong>New Options</strong>
+- Standalone gallery:
+  - continous check for new pictures <a href="https://github.com/andi34/photobooth/pull/121">#121</a>
+- Collage:
+  - allow to deactivate standalone picture <a href="https://github.com/andi34/photobooth/issues/155">Fix #155</a>
+  - new collage layouts: 1+3, 1+3 (2), 1+2 &amp; 2x2 (2)
+  - remove use of background images, user should apply frames instead
+  - test your collage settings accessing <a href="http://localhost/test/collage.php">localhost/test/collage.php</a> (or <a href="http://localhost/photobooth/test/collage.php">http://localhost/photobooth/test/collage.php</a>)
+- Chroma keying:
+  - Allow to switch between MarvinJ and Seriously.js algorithm for chroma keying <a href="https://github.com/andi34/photobooth/pull/123">#123</a>
+  - Seriously.js: use color picker to define keyed color, use Seriously.js by default <a href="https://github.com/andi34/photobooth/pull/213">#213</a>
+  - allow to define background path used for chroma keying, place your own backgrounds inside a subfolder of your Photobooth, e.g. inside <code>private/backgrounds</code> and define it via admin panel
+  - added "live chroma keying" (choose a background -&gt; take a picture -&gt; get the keyed image with choosen background), access via <a href="http://localhost/livechroma.php">http://localhost/livechroma.php</a> or <a href="http://localhost/photobooth/livechroma.php">http://localhost/photobooth/livechroma.php</a> or use the config option to use it as default start page <a href="https://github.com/andi34/photobooth/pull/157">#157</a>
+  - Make imagesize for chromakeying adjustable
+    - S = max 1000px
+    - M = max 1500px (default like before)
+    - L = max 2000px
+    - XL = max 2500px
+- Userinterface:
+  - feature: Allow custom index, add new index layout by Mathias Fiege <a href="https://github.com/andi34/photobooth/pull/159">#159</a>
+  - allow to hide decore lines on start screen <a href="https://github.com/andi34/photobooth/pull/165">Partially #165</a>
+  - allow to hide title and subtitle on start screen <a href="https://github.com/andi34/photobooth/pull/165">Partially #165</a>
+- Backup:
+  - Allow syncing of new pictures to USB device using rsync <a href="https://github.com/andi34/photobooth/pull/158">#158</a>
+- Preview:
+  - Options "See preview by device cam" and "Preview from URL" have been replaced by a select menu
+  - live preview from gphoto2 <a href="https://github.com/andi34/photobooth/pull/131">#131</a>
+- Athentication:
+  - allow to protect FAQ and manual <a href="https://github.com/andi34/photobooth/pull/212">#212</a>
+  - allow to access login-protected pages without login on localhost access
+- Database:
+  - make database optional, add button to (re)generate database to admin panel <a href="https://github.com/andi34/photobooth/pull/203">#203</a>
+- Remotebuzzer:
+  - Add rotary switch support <a href="https://github.com/andi34/photobooth/pull/202">#202</a>, <a href="https://github.com/andi34/photobooth/pull/221">#221</a>
+- What else:
+  - allow delete of images without request <a href="https://github.com/andi34/photobooth/pull/215">#215</a>
+  - allow to take pictures right after the countdown, "Cheese" will be skipped <a href="https://github.com/andi34/photobooth/pull/129">#129</a>
+  - allow to flip image after taken <a href="https://github.com/andi34/photobooth/pull/209">#209</a>
+  - allow to add text to picture and/or collage <a href="https://github.com/andi34/photobooth/pull/210">#210</a></p>
+<p><strong>General</strong>
+- User Interface:
+  - Switch to modern styling by default
+- Adminpanel
+  - new adminpanel design <a href="https://github.com/andi34/photobooth/pull/162">#162</a>
+  - choose between <code>Basic View</code>, <code>Advanced View</code> and <code>Expert View</code>:
+    - Basic View: Show config elements relevant for most simple and most common use-case. Default settings are largely sufficient. Maybe 20-30 % of all config options. The focus are entry-level user, who start to get their feet wet.
+    - Advanced View: Features and elements used more often - i.e. Printing, Frames for Pictures, Chroma-Keying, etc. - maybe around 50% of all options on top. This should be sufficient for most of the users.
+    - Expert View: Dev-Setting, Data folders, Commands, etc. - the remaining 20-30% of options are mapped to this view. Geeks right here.
+  - Admin panel option to hide / show panel headings by Operating System
+  - Allow to download data folder as zip from <a href="http://localhost/admin/diskusage.php">http://localhost/admin/diskusage.php</a> (or <a href="http://localhost/photobooth/admin/diskusage.php">http://localhost/photobooth/admin/diskusage.php</a>) (
+- Installation:
+  - Installation <a href="https://github.com/andi34/photobooth/wiki/Installation-on-Windows">Instructions for Windows</a> added to Wiki
+  - install-raspbian.sh script:
+    - Ask if a Raspberry Pi (HQ) camera is used, if yes setup personal config with needed changes
+    - allow to install from all devices running debian/debian based OS <a href="https://github.com/andi34/photobooth/pull/181">#181</a>
+- Error handling:
+  - api (applyEffects): check if GD library is loaded
+  - check if frames and font are valid
+- Lanugage support:
+  - Add Italian to supported languages
+- Collage:
+  - Rotate collage images and final collage if needed (Fix <a href="https://github.com/andi34/photobooth/issues/156">#156</a>)  <a href="https://github.com/andi34/photobooth/pull/63">#63</a>
+  - Allow to retake a single picture on collage with interruption (Fix <a href="https://github.com/andi34/photobooth/issues/166">#166</a>)
+- Remotebuzzer <a href="https://github.com/andi34/photobooth/pull/201">#201</a>, <a href="https://github.com/andi34/photobooth/pull/202">#202</a>:
+  - replace gpio by onoff library
+  - Add additional button support for collage, print and shutdown
+- Code style:
+  - Add prettier-php plugin (and slightly adjust prettier config for php files) to force one codestyle <a href="https://github.com/andi34/photobooth/pull/124">#124</a>
+- Robustness and improvements:
+  - don't use relative paths for font, frames and background images
+  - folders are always part of data folder (besides data folder itself and archives folder)
+    - e.g. images folder config before: <code>data/images</code>
+      now: <code>images</code> (this will also point to <code>data/images</code>)
+  - use 100% picture quality while processing images to not lower given configured jpeg quality for the final image
+- Authentication:
+  - handle login check earlier to protect other api endpoints <a href="https://github.com/andi34/photobooth/pull/205">#205</a></p>
+<hr>
+
+<h2 id="2100">2.10.0</h2>
+<p><strong>Bugfixes</strong>
+- check if we're already printing to avoid double printing
+- deletePhoto: also delete keying and tmp pictures
+- add back fallback to english if translation is missing</p>
+<p><strong>New Options</strong>
+- allow to use thumnails for download
+- Choose thumbnail size:
+  - XS = max 360px
+  - S = max 540px
+  - M = max 900px
+  - L = max 1080px
+  - XL = max 1260px"
+- Advanced printing functions <a href="https://github.com/andi34/photobooth/pull/109">#109</a>:
+  - Auto print function
+  - allow to delay auto print
+  - allow to adjust time "Started printing! Please wait..." is visible
+  - allow to trigger print via defined key
+  - options to show the print button independent (e.g. can be only visible on gallery)
+- Advanced collage options <a href="https://github.com/andi34/photobooth/pull/108">#108</a>:
+  - Choose collage layout:
+    - 2x2
+    - 2x4
+    - 2x4 + background image
+  - Collage: apply frame once after taking or to every picture of the collage</p>
+<p><strong>General</strong>
+- reordered folder setup
+- Crowdin translation import
+- add Polish to supported languages</p>
+<hr>
+
+<h2 id="290">2.9.0</h2>
+<p><strong>Bugfixes</strong>
+- fix saving images on chroma keying</p>
+<p><strong>New Options</strong>
+- allow to adjust PhotoSwipe (Gallery) config via Adminpanel, also allow to use some PhotoSwipe functions and make more PhotoSwipe settings available (settings explained inside the manual):
+  - Mouse click on image should close the gallery (enable/disable)
+  - Close gallery if clicked outside of the image (enable/disable)
+  - Close picture on page scroll (enable/disable)
+  - Close gallery when dragging vertically and when image is not zoomed (enable/disable)
+  - Show image counter (enable/disable)
+  - Show PhotoSwipe fullscreen button (enable/disable)
+  - Show PhotoSwipe zoom button (enable/disable)
+  - PhotoSwipe history module (enable/disable)
+  - Pinch to close gallery (enable/disable)
+  - Toggle visibility of controls/buttons by tap (enable/disable)
+  - allow to adjust PhotoSwipe background opacity (0-1)
+  - Loop images (enable/disable)
+  - Slide transition effect (enable/disable)
+  - Swiping to change slides (enable/disable)
+- gallery: add button to delete an image, enable by default
+- Remote Buzzer Server based on io sockets
+  - Enables a GPIO pin connected hardware button / buzzer for a setup where the display / screen is connected via WLAN / network to the photobooth webserver (e.g. iPad).</p>
+<p><strong>General</strong>
+- check for supported mime types on API files (print, chromakeying, applyEffects, deletePhoto)
+- core/chromakeying: Handle print.php API errors
+- Standalone slideshow &amp; Gallery:
+  - only use pictures if they exist and if they are readable
+  - only use thumbnails if thumbnail exist and is readable, fallback to full-sized images if not
+- gallery: update picture counter font-size
+- Crop on print: set image quality to 100% by default
+- added disk usage page, access via admin panel or at <a href="http://localhost/admin/diskusage.php">localhost/admin/diskusage.php</a> (
+  or <a href="http://localhost/photobooth/admin/diskusage.php">localhost/photobooth/admin/diskusage.php</a>).
+- Updated <a href="https://github.com/andi34/PhotoSwipe">PhotoSwipe</a>
+- added <code>private/</code> to .gitignore, can be used e.g. to store own background images
+- install-raspbian.sh:
+  - check if gvfs-gphoto2-volume-monitor exists
+  - remove unneeded "sudo" on yarn installation
+  - make sure webserver is defined
+  - Add missing common "nodejs" package
+  - allow to choose between stable and development version
+- update build dependencies to it's latest versions
+- Photobooth joined Crowdin as localization manager, <a href="https://crowdin.com/project/photobooth">join here</a> to translate Photobooth</p>
+<p><strong>Workflow</strong>
+- github: add pull request template
+- github: don't allow empty issues, emojis to issue template names</p>
+<hr>
+
+<h2 id="280">2.8.0</h2>
+<p><strong>Bugfixes</strong>
+- fix install-raspbian.sh
+- add missing units for crop on print values (fixes <a href="https://github.com/andi34/photobooth/issues/91">Issue #91</a>)
+- exit slideshow on close if running
+- takeCollage: fix button size on small screens</p>
+<p><strong>General</strong>
+- simple-translator updated to v2.0.2
+- updated PHPMailer to latest version</p>
+<p><strong>Behind the scenes</strong>
+- Add GitHub contribution doc
+- run <code>yarn eslint</code> once changes to our JavaScripts get pushed to GitHub or if a Pullrequest contains changes on them
+- run <code>gulp sass</code> once changes to our SCSS files get pushed to GitHub or if a Pullrequest contains changes on them</p>
+<p><strong>New build pipeline and improved JavaScript</strong>
+(special thanks to <a href="https://github.com/andreasremdt">Andreas Remdt</a>) <a href="https://github.com/andi34/photobooth/pull/90">#90</a></p>
+<ul>
+<li>added Prettier to have consistent formatting for both JavaScript &amp; SCSS</li>
+<li>Support older browser (should fix <a href="https://github.com/andi34/photobooth/issues/47">Issue #47</a>)</li>
+<li>javascript transpiled to es5 to support older browsers (e.g. Safari 9)</li>
+<li>use "whatwg-fetch" polyfill which should enable Safari 9 to use simple translator</li>
+</ul>
+<hr>
+
+<h2 id="272">2.7.2</h2>
+<p><strong>Bugfixes</strong>
+- use htmlentities on input type configuration (allows to load config containing quotes)</p>
+<p><strong>General changes</strong>
+- Handle -1 &amp; 100% picture quality the same way</p>
+<p><strong>Changed default config</strong>
+- 100% picture quality by default
+- Don't print QR Code by default
+- Allow collage by default
+  - Use collage without interruption by default
+- Show date below pictures inside Gallery by default
+- Disable Chromakeying by default</p>
+<hr>
+
+<h2 id="271">2.7.1</h2>
+<p><strong>Bugfixes</strong>
+- Fix taking photo collage</p>
+<p><strong>General changes</strong>
+- simple-translator updated to v1.2.0</p>
+<hr>
+
+<h2 id="270">2.7.0</h2>
+<p><strong>New options</strong>
+- Add option to use numbered image names
+- Allow to change picture permissons while taking a photo
+  - usefully if you e.g. like to delete pictures as different user</p>
+<hr>
+
+<p><strong>General changes</strong>
+- Add database name to picture name if database changed from default name
+- Show "Photobooth Gallery" if using date formatted images but no date available
+- Add rpihotspot repo as submodule:
+  - FAQ contains instructions to turn Photobooth into a WIFI Hotspot</p>
+<p><strong>Bugfixes</strong>
+- Fix "Cheeeeese" on Apple devices
+- Fix loading language resources
+- Only take Photos if we aren't already</p>
+<hr>
+
+<h2 id="261">2.6.1</h2>
+<p><strong>Bugfixes</strong>
+- Fix video--sensor canvas
+- Update Style for 5inch Display (800x480px)
+- Attempt to fix taking Pictures and Collage via defined keys</p>
+<hr>
+
+<p><strong>General changes</strong>
+- Add offline FAQ, access directly via <a href="http://localhost/manual/faq.html">http://localhost/manual/faq.html</a> (or <a href="http://localhost/photobooth/manual/faq.html">http://localhost/photobooth/manual/faq.html</a>)
+- Update jQuery to v3.5.1</p>
+<hr>
+
+<h2 id="260">2.6.0</h2>
+<p><strong>New options</strong>
+- Automatically reload Photobooth if an error occurs while taking a photo/collage (enabled by default)</p>
+<p><strong>Bugfixes</strong>
+- Fix FC on Standalone Gallery if a keycode is defined to take a photo/collage
+- Close gallery if a keycode is defined to take a photo/collage</p>
+<p><strong>General changes</strong>
+- update PHPMailer to latest version</p>
+<hr>
+
+<h2 id="250">2.5.0</h2>
+<p><strong>New options</strong>
+- buttons inside gallery on bottom (can be put back on top via admin panel) <a href="https://github.com/andi34/photobooth/pull/66">#66</a>
+- define SSID used for QR on result page via admin panel <a href="https://github.com/andi34/photobooth/pull/70">#70</a></p>
+<p><strong>Bugfixes</strong>
+- Fix Start Screen on devices with max-width @ 1024px <a href="https://github.com/andi34/photobooth/pull/68">#68</a></p>
+<p><strong>General changes</strong>
+- install-raspbian: install recommended via git (easier update of Photobooth)
+- mention personal fork additions inside README</p>
+<hr>
+
+<h2 id="240">2.4.0</h2>
+<p><strong>New Options</strong>
+- offline manual with settings explained under <a href="http://localhost/manual">localhost/manual</a> (or <a href="http://localhost/photobooth/manual">http://localhost/photobooth/manual</a>) (https://github.com/andi34/photobooth/pull/59)
+- define collage frame seperately (https://github.com/andi34/photobooth/pull/63)
+- event specific database: You can now rename the picture and email database via Adminpanel. Only pictures inside the defined database are visible via gallery. (https://github.com/andi34/photobooth/pull/61)
+- Preview/Stream from device cam as background on start page (https://github.com/andi34/photobooth/pull/58)</p>
+<hr>
+
+<h2 id="233">2.3.3</h2>
+<p><strong>Bugfixes</strong>
+- qr code: no need to define width for the text</p>
+<p><strong>General changes</strong>
+- index: remove unused "blurred" class
+- Remove focus on "New Picture" and "New Collage" buttons
+- update-booth.sh: delete old files if exist
+- result screen: don't reload page after print</p>
+<hr>
+
+<h2 id="232">2.3.2</h2>
+<p><strong>Bugfixes</strong>
+- chromakeying: add favicon, add apple meta tags</p>
+<p><strong>New options</strong>
+- Allow to rotate preview from URL</p>
+<p><strong>General changes</strong>
+- Bump jquery from 3.4.1 to 3.5.0 (fixes a security vulnerability)
+- .gitignore changes:
+  - config folder: ignore everything but not "config.inc.php"
+  - ignore the whole css folder instead defining every .css seperately
+- Down-sized QR code
+- adjust countdown and cheese colors for default blue-gray theme</p>
+<hr>
+
+<h2 id="231">2.3.1</h2>
+<p><strong>Bugfixes</strong>
+- Fix loading language files if Photobooth is installed in a subfolder</p>
+<p><strong>General changes</strong>
+- add license files for node modules on packed builds
+- Installer: Allow using latest prebuild package again</p>
+<hr>
+
+<h2 id="230">2.3.0</h2>
+<p><strong>General changes</strong>
+- Switch to blue-gray color theme by default
+- Admin panel: switch to range config and use toggles instead checkboxes
+- Switch to <code>simple-translator</code> for translations, use english as fallback language if a translation is missing. This also gives the possibility to easily translate Photobooth. ( <a href="https://github.com/andi34/photobooth/wiki/FAQ#how-to-update-or-add-translations">How to update or add translations?</a> )</p>
+<p><strong>New Options</strong>
+- Show/Hide button to toggle fullscreen mode</p>
+<p><strong>Bugfixes</strong>
+- Fix placeholder for preview from stream URL</p>
+<hr>
+
+<h2 id="221">2.2.1</h2>
+<p><strong>New Options</strong>
+- Allow to rotate photo after taking
+- Allow using a stream from URL at countdown for preview</p>
+<p><strong>General changes</strong>
+- Remove unused resources/fonts/style.css
+- language: use correkt ISO 639-1 Language Code for Greek
+- Optimize picture size on result screen</p>
+<hr>
+
+<h2 id="220">2.2.0</h2>
+<p><strong>General changes</strong>
+- install-raspbian: use Apache2 webserver by default again
+- added Slideshow option to Gallery
+- standalone slideshow <a href="http://localhost/slideshow">localhost/slideshow</a> (or <a href="http://localhost/photobooth/slideshow">http://localhost/photobooth/slideshow</a>)
+- access login via <a href="http://localhost/login">localhost/login</a> (or <a href="http://localhost/photobooth/login">http://localhost/photobooth/login</a>) instead <a href="http://localhost/login.php">localhost/login.php</a>
+- fix windows compatibility
+- fix check for image filter
+- performance improvement (https://github.com/andreknieriem/photobooth/pull/226)
+- Improved width of admin- and login-panel (partially https://github.com/andreknieriem/photobooth/pull/221)
+- general bug-fixes if device cam is used to take pictures (https://github.com/andreknieriem/photobooth/pull/220)</p>
+<p><strong>New options</strong>
+- Option to disable the delete button (https://github.com/andreknieriem/photobooth/pull/228)
+- Option to keep original images in tmp folder
+- Configurable image preview while post-processing
+- Adjustable time a image is shown after capture
+- Optional EXIF data preservation (disabled by default)</p>
+<hr>
+
+<h2 id="210">2.1.0</h2>
+<p><strong>Optimize performance:</strong>
+- separate trigger and post-process task
+- if possible use faster method to resize a picture</p>
+<p><strong>Many new features and options added:</strong>
+- new options:
+  - Make collage countdown timer adjustable
+  - enable/disable real error messages
+  - Allow setting a default filter
+  - allow to disable filter
+  - JPEG quality configurable
+  - enable/disable download button in gallery
+  - Allow defining a background via admin panel:
+    This also gives the possibility to define a livestream URL (e.g. http://192.168.239.77:8081
+    if motion is used ) to use a livestream as background.
+  - Allow admins to choose what gets deleted at reset (inspired by https://github.com/andreknieriem/photobooth/issues/178)
+    - always:
+      - delete db.txt
+    - optional (but enabled by default):
+      - delete images
+      - delete "mail-addresses.txt
+      - delete personal config (my.config.inc.php)
+  - Allow defining Photobooth web server IP to fix image download via QR-Code if Photobooth is accessed via localhost/127.0.0.1
+  - Allow choosing a frame at take pic
+  - Frames and font adjustable
+  - allow protection of admin panel and index with password
+  - allow using device cam to take pictures (save origin (localhost/127.0.0.1 if accessed on server, else HTTPS) needed!
+  - define Photobooth colors using colorpicker
+  - allow more elements to change color
+  - allow defining default font size
+  - optional rounded edges style
+- admin panel style:
+  - change weeding config to event config and add several new symbols to choose
+  - own printer submenu
+- Added raspi reset script
+- allow to abort collage creation
+- improve installation script
+  - make kiosk mode optional
+  - don't delete /var/www/html without request
+  - use NGINX by default, optional allow to install Apache or Lighttpd
+  - fix printer permissions and install CUPS by default</p>
+<p><strong>General changes:</strong>
+- README: update formatting and cleanup
+- Fix undefined placeholder warnings
+- take picture: red error messages
+- choose a filter after picture was taken instead before
+- Display collage count before taking photo
+- Handle take photo error cases</p>
+<hr>
+
+<h2 id="202">2.0.2:</h2>
+<ul>
+<li>fix saving of chroma keying results, style for chroma keying, style of gallery caption, datetime string on images without date info</li>
+</ul>
+<hr>
+
+<h2 id="201">2.0.1:</h2>
+<ul>
+<li>fix deletion of db file, fix config changes via admin settings</li>
+</ul>
+<hr>
+
+<h2 id="200">2.0.0:</h2>
+<ul>
+<li>Overhaul: reorganized all source files, completely overhaul coding</li>
+<li>New features: gallery standalone (localhost/gallery.php), add button to delete the picture after it was taken and displayed on the screen, change style via admin panel, add trigger keys via config, add option to force the use of a buzzer, add option to enable CUPS button, add option to resize and crop image by center at print, use same printing settings/options for chromakeying as for normal prints, take pictures for collage one after the other with or without interruption, add version checker to admin page, add greek, add option to specify data folder</li>
+<li>Some more bugfixes and improvements as usually</li>
+</ul>
+<hr>
+
+<h2 id="190">1.9.0:</h2>
+<ul>
+<li>Responsive Layout. Use relative paths to allow running Photobooth in a subfolder. Fix config.json being ignored on chromakeying. Adjustments on blue-gray theme. Some more small adjustments and bugfixes.</li>
+</ul>
+<hr>
+
+<h2 id="183">1.8.3:</h2>
+<ul>
+<li>Adjust scrollbar config and add blue-gray scrollbar theme, allow using Pi Cam for preview and to take pictures, add hidden shortcut for admin settings, add polaroid effect, add print confirmation dialogue</li>
+</ul>
+<hr>
+
+<h2 id="182">1.8.2:</h2>
+<ul>
+<li>Added spanish as supported language, print text on picture feature, optional blue-gray theme, adjust admin panel. Small bugfixes and improvements as always.</li>
+</ul>
+<hr>
+
+<h2 id="181">1.8.1:</h2>
+<ul>
+<li>Small bugfixes and improvements. New Features: enable/disable printing QR-Code, enable/disable photo collage function, enable/disable printing a frame on your picture</li>
+</ul>
+<hr>
+
+<h2 id="180">1.8.0:</h2>
+<ul>
+<li>Update jQuery, GSAP and PhotoSwipe to latest versions, add chroma keying feature (green screen keying)</li>
+</ul>
+<hr>
+
+<h2 id="170">1.7.0:</h2>
+<ul>
+<li>Add possibillity to choose an image filter before taking a picture</li>
+</ul>
+<hr>
+
+<h2 id="163">1.6.3:</h2>
+<ul>
+<li>Add config and instructions to use a GPIO Button to take a picture (address https://github.com/andreknieriem/photobooth/issues/10), translate sucess and error messages while sending images via mail</li>
+</ul>
+<hr>
+
+<h2 id="162">1.6.2:</h2>
+<ul>
+<li>Add wedding specific config, fix gallery settings not being saved from admin panel</li>
+</ul>
+<hr>
+
+<h2 id="161">1.6.1:</h2>
+<ul>
+<li>Add possibillity to disable mobile view, update Kiosk Mode instruction</li>
+</ul>
+<hr>
+
+<h2 id="160">1.6.0:</h2>
+<ul>
+<li>Button to send image via mail (uses <a href="https://github.com/PHPMailer/PHPMailer">PHPMailer</a> ), add use of "my.config.inc.php" for personal use to prevent sharing personal data (e.g. E-Mail password and username) on Github by accident</li>
+</ul>
+<hr>
+
+<h2 id="153">1.5.3:</h2>
+<ul>
+<li>Several new options (disable gallery via config, set countdown timer via config, set cheeeese! Timer via config, ability to show the date/time in the caption of the images in the gallery), all config changes now available in admin page, complete french translation, add empty Gallery message, Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen, StartScreen message is an option in config/admin page now, add instructions for Kiosk Mode, should fix #11, and #2, improve instructions in README, some more small Bugfixes and improvements. Merged pull-request #53 which includes updated pull-requests #52 &amp; #54</li>
+</ul>
+<hr>
+
+<h2 id="152">1.5.2:</h2>
+<ul>
+<li>Bugfixing QR-Code from gallery and live-preview position. Merged pull #45</li>
+</ul>
+<hr>
+
+<h2 id="151">1.5.1:</h2>
+<ul>
+<li>Bugfixing</li>
+</ul>
+<hr>
+
+<h2 id="150">1.5.0:</h2>
+<ul>
+<li>Added Options page under /admin. Bugfix for homebtn. Added option for device webcam preview on countdown</li>
+</ul>
+<hr>
+
+<h2 id="140">1.4.0:</h2>
+<ul>
+<li>Merged several pull requests</li>
+</ul>
+<hr>
+
+<h2 id="132">1.3.2:</h2>
+<ul>
+<li>Bugfix for QR Code on result page</li>
+</ul>
+<hr>
+
+<h2 id="131">1.3.1:</h2>
+<ul>
+<li>Merged pull-request #6,#15 and #16</li>
+</ul>
+<hr>
+
+<h2 id="130">1.3.0:</h2>
+<ul>
+<li>Option for QR and Print Butons, code rework, gulp-sass feature enabled</li>
+</ul>
+<hr>
+
+<h2 id="120">1.2.0:</h2>
+<ul>
+<li>Printing feature, code rework, bugfixes</li>
+</ul>
+<hr>
+
+<h2 id="111">1.1.1:</h2>
+<ul>
+<li>Bugix - QR not working on touch devices</li>
+</ul>
+<hr>
+
+<h2 id="110">1.1.0:</h2>
+<ul>
+<li>Added QR Code to Gallery</li>
+</ul>
+<hr>
+
+<h2 id="100">1.0.0:</h2>
+<ul>
+<li>Initial Release</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../update/update-linux/" class="btn btn-neutral float-left" title="Update on Linux"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../security/" class="btn btn-neutral float-right" title="Security Policy">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../update/update-linux/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../security/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

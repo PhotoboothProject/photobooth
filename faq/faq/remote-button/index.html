@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/faq/remote-button/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Remote Buttons - Photobooth Project</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Remote Buttons";
+        var mkdocs_page_input_path = "faq/remote-button.md";
+        var mkdocs_page_url = "/faq/remote-button/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Remote Buttons</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-local-browser-hotkeys-simple-hid-to-browser">1) Local browser hotkeys (simple HID to browser)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-direct-usb-hid-on-the-photobooth-host-no-browser-focus">2) Direct USB HID on the Photobooth host (no browser focus)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-remote-trigger-via-socketio">3) Remote trigger via Socket.io</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-remote-trigger-via-simple-web-requests-http">4) Remote trigger via simple web requests (HTTP)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-hardware-button-examples-http">5) Hardware button examples (HTTP)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Troubleshooting & Tutorials</li>
+      <li class="breadcrumb-item active">Remote Buttons</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/faq/remote-button.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="remote-buttons-triggers">Remote Buttons &amp; Triggers</h1>
+<p>Everything about triggering Photobooth via hardware buttons or remote calls.</p>
+<h2 id="1-local-browser-hotkeys-simple-hid-to-browser">1) Local browser hotkeys (simple HID to browser)</h2>
+<ul>
+<li>Connect the HID to the device running the browser.</li>
+<li>Adminpanel → set per-action key codes: Picture/Collage/Print/Video/Custom → “Key code which triggers …”.</li>
+<li>Browser window must be focused; Photobooth listens for JavaScript <code>keyup</code> keyCode.</li>
+</ul>
+<h2 id="2-direct-usb-hid-on-the-photobooth-host-no-browser-focus">2) Direct USB HID on the Photobooth host (no browser focus)</h2>
+<p>The remotebuzzer server reads a Linux input device and maps <code>EV_KEY</code> codes to your action key codes.</p>
+<p>How it works</p>
+<ul>
+<li>Remotebuzzer opens <code>/dev/input/...</code> (e.g. <code>/dev/input/by-id/...-event-kbd</code>).</li>
+<li>Incoming key codes are matched against <code>picture.key</code>, <code>collage.key</code>, <code>print.key</code>, <code>video.key</code>, <code>custom.key</code>.</li>
+<li>On match, the corresponding action is triggered for all connected clients.</li>
+</ul>
+<p>Requirements</p>
+<ul>
+<li>Remotebuzzer server enabled (Adminpanel → Hardware Button → Start remote buzzer Server).</li>
+<li>Hardware Buttons enabled and the target action enabled.</li>
+<li>HID device visible under <code>/dev/input/...</code> and readable by the remotebuzzer process.</li>
+</ul>
+<p>Configure</p>
+<p>1) Find device: <code>ls -l /dev/input/by-id</code> → choose the <code>-event-kbd</code> (or your HID).
+2) Set <code>Hardware Button → Input device</code> to that path.
+3) Set per-action key codes (Linux key codes, e.g. <code>sudo showkey -k</code> → 108).
+4) Save and restart the remotebuzzer server.</p>
+<p>Permissions</p>
+<ul>
+<li>Many devices are <code>root:input</code> with <code>crw-r-----</code>. Give the Photobooth user read access:</li>
+<li>add user to <code>input</code> group (<code>sudo usermod -a -G input www-data</code> + restart), or</li>
+<li>udev rule to set group/mode for this device</li>
+<li>find the device under <code>/dev/input/by-id</code> (e.g. <code>ls -l /dev/input/by-id | grep event</code>) and pick the matching <code>-event-kbd</code> (keyboard-like HID) symlink</li>
+</ul>
+<p>udev rule example</p>
+<ul>
+<li>Create <code>/etc/udev/rules.d/99-photobooth-input.rules</code> (adjust as needed):</li>
+<li>
+<p>General rule (applies to all input event nodes):</p>
+<ul>
+<li><code>KERNEL=="event*", SUBSYSTEM=="input", MODE="660", GROUP="input"</code></li>
+</ul>
+</li>
+<li>
+<p>Apply: <code>sudo udevadm control --reload &amp;&amp; sudo udevadm trigger</code></p>
+</li>
+<li>Ensure your Photobooth user is in the chosen group (e.g. <code>input</code>) or change GROUP to your service user.</li>
+</ul>
+<p>Test</p>
+<ul>
+<li>Remotebuzzer log: <code>Listening for USB input on [...] keycodes [...]</code>.</li>
+<li>Press button → log <code>triggering action [picture]</code> → workflow starts.</li>
+</ul>
+<p>Notes</p>
+<ul>
+<li>Remotebuzzer must be running and trigger must be armed (not already taking a picture).</li>
+<li>Uses key <strong>press</strong> (value 1); key repeat will also trigger.</li>
+</ul>
+<h2 id="3-remote-trigger-via-socketio">3) Remote trigger via Socket.io</h2>
+<ul>
+<li>Channel: <code>photobooth-socket</code></li>
+<li>Commands: <code>start-picture</code>, <code>start-collage</code>, <code>collage-next</code>, <code>start-custom</code>, <code>start-video</code>, <code>print</code>, <code>rotary-cw</code>, <code>rotary-ccw</code>, <code>rotary-btn-press</code>, <code>move2usb</code></li>
+<li>Response: <code>completed</code> after the workflow finishes.</li>
+</ul>
+<h2 id="4-remote-trigger-via-simple-web-requests-http">4) Remote trigger via simple web requests (HTTP)</h2>
+<ul>
+<li>Depends on the socket.io implementation; requires Hardware Button → Enable Hardware Buttons and Hardware Button → Remote buzzer Server IP to be set.</li>
+<li>Photobooth can start the Remotebuzzer server itself (enable Hardware Button → Start remote buzzer Server in Adminpanel).</li>
+<li>Enable Hardware Buttons and set Remotebuzzer IP/Port.</li>
+<li>Base URL: <code>http://[Server IP]:[Port]</code></li>
+<li>Available endpoints (depending on enabled features and buttons):</li>
+<li><code>[Base URL]/</code> Simple help page with all available endpoints</li>
+<li><code>[Base URL]/commands/start-picture</code></li>
+<li><code>[Base URL]/commands/start-collage</code></li>
+<li><code>[Base URL]/commands/start-custom</code></li>
+<li><code>[Base URL]/commands/start-print</code></li>
+<li><code>[Base URL]/commands/start-video</code></li>
+<li><code>[Base URL]/commands/start-move2usb</code></li>
+<li><code>[Base URL]/commands/reboot-now</code></li>
+<li><code>[Base URL]/commands/shutdown-now</code></li>
+<li><code>[Base URL]/commands/rotary-cw</code></li>
+<li><code>[Base URL]/commands/rotary-ccw</code></li>
+<li><code>[Base URL]/commands/rotary-btn-press</code></li>
+<li>Example: <code>curl http://&lt;IP&gt;:&lt;PORT&gt;/commands/start-picture</code></li>
+<li>IP/Port notes:</li>
+<li><code>[Hardware Button Server IP]</code> must match Hardware Button → Remote buzzer Server IP (typically the Photobooth host IP).</li>
+<li><code>[Hardware Button Server Port]</code> is the Hardware Button → Enable Hardware Buttons value.</li>
+<li>Common hardware for HTTP triggers: <a href="https://mystrom.com/wifi-button/">myStrom WiFi Button</a>, <a href="https://shelly.cloud/products/shelly-button-1-smart-home-automation-device/">Shelly Button</a>, ESP32/ESP8266, Raspberry Pi Pico/Pico W (see examples below).</li>
+</ul>
+<h2 id="5-hardware-button-examples-http">5) Hardware button examples (HTTP)</h2>
+<ul>
+<li>myStrom WiFi Button:<ul>
+<li><code>curl --location -g --request POST http://[Button IP]/api/v1/action/single --data-raw get://[Photobooth IP]:[Port]/commands/start-picture</code></li>
+<li><code>curl --location -g --request POST http://[Button IP]/api/v1/action/long   --data-raw get://[Photobooth IP]:[Port]/commands/start-collage</code></li>
+</ul>
+</li>
+<li>ESP32/ESP8266: <a href="https://github.com/PhotoboothProject/photobooth-ino">github.com/PhotoboothProject/photobooth-ino</a></li>
+<li>Raspberry Pi Pico / Pico W:</li>
+<li><a href="https://github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder">github.com/frogro/PhotoboothProject_Pico_as_HID_Button_and_rotary_encoder</a></li>
+<li><a href="https://github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder">github.com/frogro/PhotoboothProject_Pico_W_as_remote_button_and_rotary_encoder</a></li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+<li>Remotebuzzer running and reachable; avoid 127.0.0.1 for remote clients—use the host IP.</li>
+<li>Trigger affects all connected clients simultaneously.</li>
+<li>Increase Photobooth loglevel (Adminpanel → General) and check Debugpanel; for HTTP/web triggers also check the browser console/network tab.</li>
+<li>Fallback re-arms after a timeout if no <code>completed</code> arrives (fixed 60s; not configurable via UI).</li>
+<li>Avoid loopback for cross-device use; use host IP/hostname. Every trigger hits all connected clients at once—plan accordingly.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../tutorials/" class="btn btn-neutral float-left" title="Tutorials"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../printer-troubleshooting/" class="btn btn-neutral float-right" title="Printer Troubleshooting">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../tutorials/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../printer-troubleshooting/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
