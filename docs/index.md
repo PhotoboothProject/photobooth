@@ -38,8 +38,6 @@ Overall the code got optimized and cleaned up. There's also a lot of new options
 
 Photobooth is now again compatible with Windows, also PHP8 won't cause trouble.
 
-The full Changelog can be found [here](changelog.md).
-
 If you find a bug you're welcome to report it on the [GitHub issue page](https://github.com/PhotoboothProject/photobooth/issues).
 
 [Update instructions](update/index.md) have been updated, you can now easily update your existing git installation of Photobooth using the photobooth installer!
