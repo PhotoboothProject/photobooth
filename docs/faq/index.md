@@ -34,14 +34,16 @@ sudo rm /var/www/html/admin/config.json
 
 ## How do I change the configuration?
 
-Open `http://localhost/admin` in your Webbrowser (or `http://localhost/photobooth/admin`) and change the configuration for your personal needs.
+Open [http://localhost/admin](http://localhost/admin) (
+or [http://localhost/photobooth/admin](http://localhost/photobooth/admin)) in your Webbrowser and change the configuration for your personal needs.
 Changed options are stored inside `config/my.config.inc.php` to prevent sharing personal data on Github by accident and to make an update of Photobooth easier.
 
 ---
 
 ## How to change the language?
 
-Open `http://localhost/admin` in your Webbrowser (or `http://localhost/photobooth/admin`) and change the configuration for your personal needs.
+Open [http://localhost/admin](http://localhost/admin) (
+or [http://localhost/photobooth/admin](http://localhost/photobooth/admin)) in your Webbrowser and change the configuration for your personal needs.
 
 ---
 
