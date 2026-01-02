@@ -46,6 +46,63 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // --- Element Management Functions ---
+
+    /**
+     * Adds a new placeholder element to the canvas.
+     * @param {number} x Optional x-coordinate. Defaults to center of canvas if not provided.
+     * @param {number} y Optional y-coordinate. Defaults to center of canvas if not provided.
+     * @param {number} width Optional width. Defaults to a standard size.
+     * @param {number} height Optional height. Defaults to a standard size.
+     * @param {number} rotation Optional rotation. Defaults to 0.
+     * @param {string} id Optional ID. If not provided, a new unique ID is generated.
+     * @returns {CollageElement} The newly created element.
+     */
+    window.addNewElement = function(x, y, width, height, rotation = 0, id) {
+        // Save current state BEFORE adding the element for Undo
+        window.saveState(); 
+
+        const canvasWidth = window.collageCanvas.width;
+        const canvasHeight = window.collageCanvas.height;
+
+        const defaultWidth = canvasWidth / 2; // Z.B. halbe Canvas-Breite
+        const defaultHeight = canvasHeight / 2; // Z.B. halbe Canvas-Höhe
+        // Kleiner Versatz, damit neue Elemente bei mehrfachem Hinzufügen gestapelt sichtbar sind
+        const offset = window.collageElements.filter(el => el.originalLayoutDataIndex === -1).length * 10; 
+
+        // Calculate default position: centered, but slightly offset if id is generated (for stacking duplicates)
+        let finalX = x !== undefined ? x : (canvasWidth / 2) - (defaultWidth / 2) + offset;
+        let finalY = y !== undefined ? y : (canvasHeight / 2) - (defaultHeight / 2) + offset;
+
+        // Generate unique ID if not provided
+        const newId = id || `element-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        
+        // Create new CollageElement instance
+        const newElement = new CollageElement(
+            newId,
+            finalX,
+            finalY,
+            width !== undefined ? width : defaultWidth,
+            height !== undefined ? height : defaultHeight,
+            rotation,
+            -1 // -1 indicates it's not from originalLayoutData (a placeholder)
+        );
+
+        // Add it to our global collection
+        window.collageElements.push(newElement);
+
+        // Deselect all other elements and select the new one
+        window.collageElements.forEach(el => el.isSelected = false);
+        newElement.isSelected = true;
+        window.activeElement = newElement;
+
+        // Redraw canvas to show the new element
+        window.drawCanvas();
+        window.updateUndoRedoButtonStates(); // Update button states after adding element
+
+        return newElement;
+    };
+
     // --- Alignment Functions ---
 
     // General alignment logic function to avoid repetition

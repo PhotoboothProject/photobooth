@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ROTATION_CURSOR_RELATIVE_PATH = 'assets/icons/rotate-cw.svg';
     const ROTATION_CURSOR_URL = `url("${BASE_URL}${ROTATION_CURSOR_RELATIVE_PATH}") 12 12, auto`;
 
-    class CollageElement {
+    window.CollageElement = class CollageElement {
         constructor(id, x, y, width, height, rotation, originalLayoutDataIndex) {
             this.id = id;
             this.x = x;
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Only stores properties that can change (x, y, width, height, rotation, isSelected).
      * @returns {Array<object>} A deep copy of the relevant element states.
      */
-    function createSnapshot() {
+    window.createSnapshot = function() { 
         return window.collageElements.map(el => ({
             id: el.id, // Keep ID for matching
             x: el.x,
@@ -244,7 +244,8 @@ document.addEventListener('DOMContentLoaded', () => {
             height: el.height,
             rotation: el.rotation,
             isSelected: el.isSelected,
-            // image and originalLayoutDataIndex do not change, no need to store
+            image: el.image,
+            originalLayoutDataIndex: el.originalLayoutDataIndex,
         }));
     }
 
@@ -252,37 +253,72 @@ document.addEventListener('DOMContentLoaded', () => {
      * Restores the state of collage elements from a given snapshot.
      * @param {Array<object>} snapshot The snapshot to restore.
      */
-    function restoreSnapshot(snapshot) {
+    window.restoreSnapshot = function(snapshot) { 
         // Clear current selection
         window.collageElements.forEach(el => el.isSelected = false);
         window.activeElement = null;
 
+        // Create a new array for the elements, incorporating changes
+        const newCollageElements = [];
+        const snapshotElementIds = new Set(snapshot.map(el => el.id));
+
+        // 2. Update existing elements and add elements from snapshot that are new to current state
         snapshot.forEach(snapEl => {
             const currentEl = window.collageElements.find(el => el.id === snapEl.id);
             if (currentEl) {
+                // Element exists, update its properties
                 currentEl.x = snapEl.x;
                 currentEl.y = snapEl.y;
                 currentEl.width = snapEl.width;
                 currentEl.height = snapEl.height;
                 currentEl.rotation = snapEl.rotation;
-                currentEl.isSelected = snapEl.isSelected; // Restore selection state too
-                if (snapEl.isSelected) { // If an element was selected in the snapshot, make it active if it's the only one
-                    if (snapshot.filter(s => s.isSelected).length === 1) {
-                         window.activeElement = currentEl;
-                    } else if (window.activeElement && window.activeElement.id === currentEl.id) {
-                        // If multiple selected, try to restore the active element
-                        window.activeElement = currentEl;
-                    }
-                }
+                currentEl.isSelected = snapEl.isSelected;
+                newCollageElements.push(currentEl);
+            } else {
+                // Element exists in snapshot but not in current window.collageElements, so it was "added"
+                // Recreate the element.
+                const recreatedElement = new window.CollageElement(
+                    snapEl.id,
+                    snapEl.x,
+                    snapEl.y,
+                    snapEl.width,
+                    snapEl.height,
+                    snapEl.rotation,
+                    snapEl.originalLayoutDataIndex !== undefined ? snapEl.originalLayoutDataIndex : -1, // Use -1 as default for added elements
+                    snapEl.image || null // Assume image can be null for placeholders
+                );
+                recreatedElement.isSelected = snapEl.isSelected;
+                newCollageElements.push(recreatedElement);
             }
         });
-    }
+
+        // 3. Elements that are in window.collageElements but NOT in the snapshot should be removed.
+        // By creating newCollageElements based only on the snapshot, this is implicitly handled.
+        // We just need to replace the global array.
+        window.collageElements = newCollageElements; // Replace the old array with the new one
+
+        // 4. Update activeElement based on the restored selection
+        const selected = window.collageElements.filter(el => el.isSelected);
+        if (selected.length === 1) {
+            window.activeElement = selected[0];
+        } else if (selected.length > 1) {
+            // If multiple elements were selected, the activeElement should be one of them.
+            // We might try to restore the original activeElement if its ID is among the selected ones.
+            if (window.activeElement && selected.some(el => el.id === window.activeElement.id)) {
+                // Keep activeElement if it's still selected
+            } else {
+                window.activeElement = selected[0]; // Otherwise, pick the first selected
+            }
+        } else {
+            window.activeElement = null; // No selection
+        }
+    };
 
     /**
      * Saves the current state to the undoStack and clears the redoStack.
      */
     window.saveState = function() {
-        const currentState = createSnapshot();
+        const currentState = window.createSnapshot();
         // Only save if the current state is different from the last state
         // This prevents saving redundant states from continuous actions like dragging.
         // For continuous actions, the state is saved ONCE at mousedown,
@@ -446,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleMouseDown(event) {
         const mouse = getMousePos(event);
 
-        const prevSelectedState = createSnapshot(); // create Snapshot before Snapshot for possible selection changes
+        const prevSelectedState = window.createSnapshot(); // create Snapshot before Snapshot for possible selection changes
 
         // Reset interaction flags
         isResizing = false;
@@ -589,7 +625,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Save state if there was any change in selection
-        if (isRotating || isResizing || isDragging || JSON.stringify(prevSelectedState) !== JSON.stringify(createSnapshot())) {
+        if (isRotating || isResizing || isDragging || JSON.stringify(prevSelectedState) !== JSON.stringify(window.createSnapshot())) {
          window.saveState(); 
         }
         window.drawCanvas();
@@ -910,7 +946,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (undoStack.length > 1) { // Need at least the initial state and one action to undo
             const currentState = undoStack.pop(); // Remove current state from undo stack
             redoStack.push(currentState); // Push it to redo stack
-            restoreSnapshot(undoStack[undoStack.length - 1]); // Load the previous state
+            window.restoreSnapshot(undoStack[undoStack.length - 1]); // Load the previous state
             window.drawCanvas();
             updateUndoRedoButtonStates();
         }
@@ -920,7 +956,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (redoStack.length > 0) {
             const nextState = redoStack.pop(); // Get next state from redo stack
             undoStack.push(nextState); // Push it back to undo stack
-            restoreSnapshot(nextState); // Load this state
+            window.restoreSnapshot(nextState); // Load this state
             window.drawCanvas();
             window.updateUndoRedoButtonStates();
         }
@@ -940,6 +976,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('redoBtn').click(); // Simulate click on redo button
             }
         }
+    });
+
+    // add / remove buttons
+    document.getElementById('addBtn').addEventListener('click', () => {
+        // When clicking the button, add a new element
+        window.addNewElement(); // Calls the function to add a new element with default parameters
     });
 
     // Initialize the designer and save the very first state

@@ -1,12 +1,21 @@
 <!-- components/general-tools-panel.php -->
 <div class="flex flex-wrap gap-2 h-min">
-    <!-- Undo/Redo Buttons -->
+     <!-- Undo/Redo Buttons -->
     <button id="undoBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('undo') ?>">
         <i class="material-icons">undo</i>
     </button>
     <button id="redoBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('redo') ?>">
         <i class="material-icons">redo</i>
     </button>    
+    <!-- Separator -->
+    <div class="border-l border-gray-300 h-6 mx-2"></div> <!-- with vertical line, just spacing: <div class="w-4"></div> -->
+    <!-- Add / Remove Buttons (Img) -->
+    <button id="addBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('add') ?>">
+        <i class="material-icons">add_photo_alternate</i>
+    </button>
+    <button id="removeBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('remove') ?>">
+        <i class="material-icons">delete</i>
+    </button>
     <!-- Separator -->
     <div class="border-l border-gray-300 h-6 mx-2"></div> <!-- with vertical line, just spacing: <div class="w-4"></div> -->
     <!-- Alignment Buttons -->
