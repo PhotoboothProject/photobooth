@@ -1,5 +1,5 @@
 ---
-name: Build
+name: Build and check formatting compliance
 
 on:
   push:
