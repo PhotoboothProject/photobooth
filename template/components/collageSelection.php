@@ -110,7 +110,6 @@ function getLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'l
             $w = evaluateLayoutExpression($photoLayout[2], $width, $height);
             $h = evaluateLayoutExpression($photoLayout[3], $width, $height);
 
-
             // For photostrips: reset numbering after first half
             $displayNum = $isPhotostrip && $index >= $uniquePhotoCount
                 ? ($index - $uniquePhotoCount + 1)
