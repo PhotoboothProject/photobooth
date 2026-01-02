@@ -52,7 +52,7 @@
   ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
-    "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/postcss": "^4.1.18",
     "autoprefixer": "^10.4.22",
     "github-markdown-css": "^5.8.1",
     "gulp": "^5.0.1",
