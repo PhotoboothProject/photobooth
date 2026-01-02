@@ -12,7 +12,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(name: 'photobooth:config:list', description: 'Returns the Photobooth config as JSON')]
+#[AsCommand(
+    name: 'photobooth:config:list',
+    description: 'Returns the Photobooth config as JSON'
+)]
 class ConfigListCommand extends Command
 {
     protected array $photoboothConfig = [];
@@ -23,12 +26,12 @@ class ConfigListCommand extends Command
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Return the config as JSON');
         $this->setDefinition(
             new InputDefinition([
-                new InputArgument('format', InputArgument::REQUIRED)
+                new InputArgument('format', InputArgument::REQUIRED),
             ])
         );
     }
@@ -37,13 +40,13 @@ class ConfigListCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $format = $input->getArgument('format');
-        if ($format !== 'json') {
+        if ($input->getArgument('format') !== 'json') {
             $io->error('No valid format provided! Example: photobooth photobooth:config:list json');
-            return 1;
+            return Command::FAILURE;
         }
 
-        echo json_encode($this->photoboothConfig);
-        return 0;
+        $json = json_encode($this->photoboothConfig, JSON_THROW_ON_ERROR);
+        $output->writeln($json);
+        return Command::SUCCESS;
     }
 }

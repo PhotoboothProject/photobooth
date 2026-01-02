@@ -8,6 +8,9 @@ use Photobooth\Command;
 use Photobooth\Service\ApplicationService;
 use Symfony\Component\Console\Application as BaseApplication;
 
+/**
+ * @method void add(\Symfony\Component\Console\Command\Command $command)
+ */
 class Application extends BaseApplication
 {
     protected array $photoboothConfig = [];

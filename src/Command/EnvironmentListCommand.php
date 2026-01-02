@@ -13,15 +13,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(name: 'photobooth:environment:list', description: 'Returns the Photobooth environment as JSON')]
+#[AsCommand(
+    name: 'photobooth:environment:list',
+    description: 'Returns the Photobooth environment as JSON'
+)]
 class EnvironmentListCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Return the config as JSON');
         $this->setDefinition(
             new InputDefinition([
-                new InputArgument('format', InputArgument::REQUIRED)
+                new InputArgument('format', InputArgument::REQUIRED),
             ])
         );
     }
@@ -30,13 +33,15 @@ class EnvironmentListCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $format = $input->getArgument('format');
-        if ($format !== 'json') {
-            $io->error('No valid format provided! Example: photobooth photobooth:environment:list json');
-            return 1;
+        if ($input->getArgument('format') !== 'json') {
+            $io->error(
+                'No valid format provided! Example: photobooth photobooth:environment:list json'
+            );
+            return Command::FAILURE;
         }
 
-        echo json_encode((new Environment()));
-        return 0;
+        $json = json_encode(new Environment(), JSON_THROW_ON_ERROR);
+        $output->writeln($json);
+        return Command::SUCCESS;
     }
 }
