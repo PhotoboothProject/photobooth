@@ -31,4 +31,5 @@ class CollageConfig
     public string $textOnCollageFontColor;
     public int $textOnCollageFontSize;
     public int $textOnCollageLinespace;
+    public bool $collageAllowSelection;
 }

@@ -13,5 +13,21 @@
     ["x*0.532787", "y*0.284375", "x*0.42855", "y*0.19047", "0", false],
     ["x*0.532787", "y*0.521875", "x*0.42855", "y*0.19047", "0", false],
     ["x*0.532787", "y*0.764844", "x*0.42855", "y*0.19047", "0", false]
-  ]
+  ],
+  "text_alignment": {
+    "mode": "zone",
+    "x": 96,
+    "y": 36,
+    "w": 408,
+    "h": 180,
+    "align": "center",
+    "valign": "middle",
+    "rotation": 0,
+    "fontSize": 54,
+    "minFontSize": 14,
+    "lineHeight": 108,
+    "maxLines": 2,
+    "padding": 0
+  },
+  "text_disabled": true
 }

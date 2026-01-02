@@ -8,6 +8,7 @@ use Photobooth\Factory\CollageConfigFactory;
 use Photobooth\Service\LoggerService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
+use Photobooth\Helper;
 use Psr\Log\LoggerInterface;
 
 class Collage
@@ -188,6 +189,86 @@ class Collage
                         $c->textOnCollageLine2 = array_key_exists('text_line2', $collageJson) ? $collageJson['text_line2'] : $c->textOnCollageLine2;
                         $c->textOnCollageLine3 = array_key_exists('text_line3', $collageJson) ? $collageJson['text_line3'] : $c->textOnCollageLine3;
                         $c->textOnCollageLinespace = isset($collageJson['text_linespace']) ? $collageJson['text_linespace'] : $c->textOnCollageLinespace;
+                    }
+
+                    if ($c->collageAllowSelection) {
+                        if (isset($collageJson['text_disabled']) && $collageJson['text_disabled'] === true) {
+                            $c->textOnCollageEnabled = 'disabled';
+                        } elseif (isset($collageJson['text_alignment']) && is_array($collageJson['text_alignment'])) {
+                            $ta = $collageJson['text_alignment'];
+                            $c->textOnCollageEnabled = 'enabled';
+
+                            $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
+                            $zoneX = Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['x'] ?? '0'));
+                            $zoneY = Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['y'] ?? '0'));
+                            $zoneW = isset($ta['w']) ? Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['w'])) : 0;
+                            $zoneH = isset($ta['h']) ? Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['h'])) : 0;
+
+                            if (isset($ta['fontSize'])) {
+                                $c->textOnCollageFontSize = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['fontSize']));
+                            }
+
+                            if (isset($ta['rotation'])) {
+                                $c->textOnCollageRotation = (int) $ta['rotation'];
+                            }
+
+                            if (isset($ta['lineHeight'])) {
+                                $c->textOnCollageLinespace = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['lineHeight']));
+                            }
+
+                            $align = $ta['align'] ?? 'start';
+                            $valign = $ta['valign'] ?? 'top';
+
+                            if ($align === 'center' || $valign === 'middle') {
+                                $textLines = [];
+                                if (!empty($c->textOnCollageLine1)) $textLines[] = $c->textOnCollageLine1;
+                                if (!empty($c->textOnCollageLine2)) $textLines[] = $c->textOnCollageLine2;
+                                if (!empty($c->textOnCollageLine3)) $textLines[] = $c->textOnCollageLine3;
+
+                                if (count($textLines) > 0 && file_exists($c->textOnCollageFont)) {
+                                    $maxWidth = 0;
+                                    $totalHeight = 0;
+                                    foreach ($textLines as $index => $line) {
+                                        $bbox = imagettfbbox($c->textOnCollageFontSize, $c->textOnCollageRotation, $c->textOnCollageFont, $line);
+                                        // bbox: 0=lower left X, 1=lower left Y, 2=lower right X, 3=lower right Y, 4=upper right X, 5=upper right Y, 6=upper left X, 7=upper left Y
+                                        if ($bbox) {
+                                            $width = abs($bbox[2] - $bbox[0]);
+                                            if ($width > $maxWidth) $maxWidth = $width;
+
+                                            // Height approximation: fontSize + spacing?
+                                            // Ideally measure height. For simplicity use line spacing or approximate.
+                                            // The first line height is roughly fontSize. Subsequent lines add lineSpacing.
+                                        }
+                                    }
+                                    // Total height: (count - 1) * spacing + fontSize (approx)
+                                    // OR use the difference between top of first line and bottom of last line?
+                                    // For simplicity:
+                                    $totalHeight = count($textLines) * $c->textOnCollageFontSize + (count($textLines) - 1) * ($c->textOnCollageLinespace - $c->textOnCollageFontSize);
+                                    // Better: use the defined linespace as the deltaY between baselines.
+                                    // totalHeight = fontSize (first line) + (count-1) * linespace.
+                                    $totalHeight = $c->textOnCollageFontSize + (count($textLines) - 1) * $c->textOnCollageLinespace;
+
+                                    if ($align === 'center') {
+                                        $c->textOnCollageLocationX = (int) ($zoneX + ($zoneW - $maxWidth) / 2);
+                                    } else {
+                                        $c->textOnCollageLocationX = (int) $zoneX;
+                                    }
+
+                                    if ($valign === 'middle') {
+                                         $c->textOnCollageLocationY = (int) ($zoneY + ($zoneH - $totalHeight) / 2 + $c->textOnCollageFontSize); // +fontSize because Y is baseline
+                                    } else {
+                                         $c->textOnCollageLocationY = (int) ($zoneY + $c->textOnCollageFontSize);
+                                    }
+                                } else {
+                                    // Fallback if font missing or no text
+                                    $c->textOnCollageLocationX = (int) $zoneX;
+                                    $c->textOnCollageLocationY = (int) $zoneY;
+                                }
+                            } else {
+                                $c->textOnCollageLocationX = (int) $zoneX;
+                                $c->textOnCollageLocationY = (int) $zoneY;
+                            }
+                        }
                     }
                 } else {
                     $layoutConfigArray = $collageJson;
@@ -420,6 +501,20 @@ class Collage
             $my_collage = $imageHandler->applyText($my_collage);
             if (!$my_collage instanceof \GdImage) {
                 throw new \Exception('Failed to apply text to collage resource.');
+            }
+
+            // If this is a 2x* layout (images duplicated horizontally) also draw the text
+            // on the right half so both sides show the same caption. Skip if text is disabled.
+            if (strpos($c->collageLayout, '2x') === 0 && self::$pictureOrientation === 'landscape') {
+                $origX = $imageHandler->fontLocationX;
+                $shift = (int) (self::$collageWidth / 2);
+                $imageHandler->fontLocationX = $origX + $shift;
+                $my_collage = $imageHandler->applyText($my_collage);
+                if (!$my_collage instanceof \GdImage) {
+                    throw new \Exception('Failed to apply duplicated text to collage resource.');
+                }
+                // restore original X
+                $imageHandler->fontLocationX = $origX;
             }
         }
 
