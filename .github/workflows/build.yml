@@ -1,5 +1,5 @@
 ---
-name: Build and check formatting compliance
+name: Build and check git status
 
 on:
   push:
