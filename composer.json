@@ -20,7 +20,7 @@
         "symfony/console": "^8.0",
         "symfony/filesystem": "^7.0",
         "symfony/finder": "^7.0",
-        "symfony/translation": "^7.0"
+        "symfony/translation": "^8.0"
     },
     "config": {
         "bin-dir": "bin",
