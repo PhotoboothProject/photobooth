@@ -19,6 +19,10 @@ try {
         throw new \Exception('No style provided');
     }
 
+    if (isset($_POST['collageLimit'])) {
+        $config['collage']['limit'] = $_POST['collageLimit'];
+    }
+
     if (!empty($_POST['file']) && (preg_match('/^[a-z0-9_]+\.jpg$/', $_POST['file']) || preg_match('/^[a-z0-9_]+\.(mp4)$/', $_POST['file']))) {
         $file = $_POST['file'];
     } else {

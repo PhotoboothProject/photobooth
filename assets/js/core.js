@@ -562,6 +562,7 @@ const photoBooth = (function () {
         if (api.photoStyle === PhotoStyle.COLLAGE) {
             data.file = currentCollageFile;
             data.collageNumber = api.nextCollageNumber;
+            data.collageLimit = api.collageLimit;
         }
 
         if (api.photoStyle === PhotoStyle.CHROMA) {
