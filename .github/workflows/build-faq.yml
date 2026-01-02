@@ -25,10 +25,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name: Install MkDocs
-        run: pip install mkdocs
+      - name: Install MkDocs and pre-commit
+        run: pip install mkdocs pre-commit
       - name: Build docs into faq
         run: mkdocs build --config-file mkdocs_remote.yml --site-dir faq
+      - name: Run pre-commit
+        run: |
+          pre-commit run --all-files || true
       - name: Commit built FAQ
         id: commit
         run: |
