@@ -661,7 +661,7 @@ class AdminInput
                 </label>
                 ' . ($isThemeField ? '<span class="text-[10px] font-semibold uppercase tracking-wide text-brand-1">Theme</span>' : '') . '
                 <span class="' . $tooltipClass . '">
-                    <div class="absolute left-4 -top-[9px] h-0 w-0 border-x-8 border-x-transparent border-b-[10px] border-gray-900"></div>
+                    <div class="absolute left-4 -top-[10px] h-0 w-0 border-x-8 border-x-transparent border-b-[10px] border-gray-900"></div>
                     ' . $languageService->translate('manual:' . $label) . '
                 </span>
             </div>
