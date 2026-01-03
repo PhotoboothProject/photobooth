@@ -10,9 +10,5 @@
     ["x*0.08", "y*0.52", "x*0.4", "y*0.4", "0"],
     ["x*0.52", "y*0.52", "x*0.4", "y*0.4", "0"]
   ],
-  "text_alignment": {
-    "text_alignment": "bottom-center",
-    "offset_x": 0,
-    "offset_y": 50
-  }
+  "text_disabled": true
 }

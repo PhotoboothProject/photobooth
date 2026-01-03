@@ -14,20 +14,5 @@
     ["x*0.51", "y*0.51048", "x*0.48", "y*0.21333", "0"],
     ["x*0.51", "y*0.74475", "x*0.48", "y*0.21333", "0"]
   ],
-  "text_alignment": {
-    "mode": "zone",
-    "x": 96,
-    "y": 36,
-    "w": 408,
-    "h": 180,
-    "align": "center",
-    "valign": "middle",
-    "rotation": 0,
-    "fontSize": 54,
-    "minFontSize": 14,
-    "lineHeight": 108,
-    "maxLines": 2,
-    "padding": 0
-  },
   "text_disabled": true
 }

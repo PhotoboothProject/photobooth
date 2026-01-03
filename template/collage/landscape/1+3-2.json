@@ -12,17 +12,13 @@
   ],
   "text_alignment": {
     "mode": "zone",
-    "x": 1150,
-    "y": 250,
-    "w": 432,
-    "h": 240,
+    "x": "x*0.55",
+    "y": "y*0.1",
+    "w": "x*0.42",
+    "h": "y*0.42",
     "align": "center",
     "valign": "middle",
     "rotation": 0,
-    "fontSize": 84,
-    "minFontSize": 20,
-    "lineHeight": 108,
-    "maxLines": 3,
     "padding": 0
   }
 }

@@ -1,98 +1,189 @@
+<?php
+require_once __DIR__ . '/../lib/boot.php';
+
+use Photobooth\Collage;
+use Photobooth\Helper;
+
+// ---- Config holen (versionssicher) ----
+$config = null;
+
+if (isset($config) && is_array($config)) {
+    // boot.php hat $config gesetzt
+} elseif (isset($GLOBALS['config']) && is_array($GLOBALS['config'])) {
+    $config = $GLOBALS['config'];
+} elseif (class_exists('\Photobooth\Service\ConfigurationService')) {
+    $config = \Photobooth\Service\ConfigurationService::getInstance()->getConfiguration();
+} else {
+    die('Keine Config-Quelle gefunden.');
+}
+
+// ---- Orientation aus Config ----
+$orientation = $config['collage']['orientation']
+    ?? $config['collage']['format']
+    ?? 'landscape';
+
+$orientation = strtolower((string)$orientation);
+if (!in_array($orientation, ['landscape','portrait'], true)) {
+    $orientation = 'landscape';
+}
+
+// ---- Text aktivieren (aus Config) ----
+$config['textoncollage']['enabled'] = true;
+
+// Sicherstellen dass kein Placeholder aktiv ist (wuerde das Limit aendern)
+$config['collage']['placeholder'] = false;
+
+// Font setzen falls nicht vorhanden
+$font = __DIR__ . '/../resources/fonts/GreatVibes-Regular.ttf';
+if (file_exists($font) && empty($config['textoncollage']['font'])) {
+    $config['textoncollage']['font'] = $font;
+}
+
+function createTestImage(array $rgb, int $w, int $h, string $name): string {
+    $img = imagecreatetruecolor($w,$h);
+    $c = imagecolorallocate($img,$rgb[0],$rgb[1],$rgb[2]);
+    imagefill($img,0,0,$c);
+    $black = imagecolorallocate($img,0,0,0);
+    imagestring($img,5,(int)($w/2-30),(int)($h/2-8),$name,$black);
+    $file = __DIR__ . '/../data/tmp/'.$name.'.jpg';
+    imagejpeg($img,$file,90);
+    imagedestroy($img);
+    return $file;
+}
+
+$colors = [
+    [255,100,100],
+    [100,255,100],
+    [100,100,255],
+    [255,255,100],
+];
+
+// Alle verfuegbaren Layouts (landscape + portrait)
+$layouts = [
+    '1+3-1', '1+3-2', '3+1-1', '1+2-1', '2+1-1',
+    '2+2-1', '2+2-2',
+    '2x4-1', '2x4-2', '2x4-3', '2x4-4',
+    '2x3-1', '2x3-2',
+];
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Text Position Test</title>
+    <meta charset="utf-8">
+    <title>Collage Vorschau</title>
     <style>
-        body { font-family: Arial; margin: 20px; background: #f0f0f0; }
-        .layout { display: inline-block; margin: 10px; text-align: center; vertical-align: top; }
-        .layout img { max-width: 400px; border: 2px solid #333; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .layout-name { font-weight: bold; margin-top: 5px; }
-        h1 { color: #333; }
-        .error { color: red; padding: 10px; background: #ffe0e0; margin: 10px; font-size: 12px; }
+        body { font-family: Arial; margin:20px; background:#f0f0f0; }
+        .header { margin-bottom: 15px; }
+        .layout { display:inline-block; margin:12px; vertical-align:top; text-align:center; }
+        img { max-width:420px; border:2px solid #333; background:#fff; }
+        .name { font-weight:bold; margin-bottom:6px; }
+        .info { font-size: 11px; color: #666; margin-top: 4px; }
+        .zone-badge { color: #ff00ff; font-weight: bold; }
+        .pill { display:inline-block; padding:4px 8px; background:#fff; border:1px solid #ccc; border-radius:999px; font-size:12px; margin-right: 8px; }
+        .legend { margin: 10px 0; padding: 8px 12px; background: #fff; border: 1px solid #ccc; border-radius: 4px; display: inline-block; }
+        .legend-color { display: inline-block; width: 16px; height: 16px; background: rgba(255,0,255,0.5); border: 1px solid #333; vertical-align: middle; margin-right: 5px; }
     </style>
 </head>
 <body>
-    <h1>Text Position Test - Alle Layouts</h1>
+<div class="header">
+    <div class="pill">Orientation: <strong><?=htmlspecialchars($orientation)?></strong></div>
+    <div class="legend"><span class="legend-color"></span> Text-Zone (mode="zone")</div>
+</div>
 
-    <?php
-    // Autoloader zuerst
-    require_once __DIR__ . '/../vendor/autoload.php';
+<?php
+foreach ($layouts as $layout) {
+    $tmp = [];
 
-    // Config laden
-    $configFile = __DIR__ . '/../config/my.config.inc.php';
-    if (file_exists($configFile)) {
-        $config = require $configFile;
-    } else {
-        die('Config file not found');
+    // Config fuer dieses Layout vorbereiten
+    $testConfig = $config;
+    $testConfig['collage']['layout'] = $layout;
+    $testConfig['collage']['orientation'] = $orientation;
+    $testConfig['collage']['format'] = $orientation;
+    $testConfig['collage']['allow_selection'] = true;
+    $testConfig['collage']['placeholder'] = false;
+
+    // Template-Pfad pruefen
+    $templatePath = Collage::getCollageConfigPath($layout, $orientation);
+    if (!$templatePath || !file_exists($templatePath)) {
+        echo '<div class="layout">';
+        echo '<div class="name">'.htmlspecialchars($layout).'</div>';
+        echo '<div style="color:#999">Nicht verfuegbar fuer '.$orientation.'</div>';
+        echo '</div>';
+        continue;
     }
 
-    // Config Setup
-    require_once __DIR__ . '/../lib/configsetup.inc.php';
+    // Korrekte Bildanzahl berechnen (fuer 2x Layouts: count/2)
+    $calcResult = Collage::calculateLimit($testConfig['collage']);
+    $imageCount = $calcResult['limit'];
 
-    use Photobooth\Collage;
+    // WICHTIG: limit in Config setzen damit CollageConfigFactory den richtigen Wert verwendet
+    $testConfig['collage']['limit'] = $imageCount;
 
-    // Erstelle 4 Test-Bilder
-    $testImages = [];
-    for ($i = 1; $i <= 4; $i++) {
-        $img = imagecreatetruecolor(800, 600);
-        $colors = [
-            imagecolorallocate($img, 255, 100, 100),
-            imagecolorallocate($img, 100, 255, 100),
-            imagecolorallocate($img, 100, 100, 255),
-            imagecolorallocate($img, 255, 255, 100),
-        ];
-        imagefill($img, 0, 0, $colors[$i-1]);
-        imagestring($img, 5, 350, 280, "Photo $i", imagecolorallocate($img, 0, 0, 0));
+    // Template laden fuer Zone-Visualisierung
+    $json = json_decode(file_get_contents($templatePath), true);
 
-        $filename = __DIR__ . "/../data/tmp/test_$i.jpg";
-        imagejpeg($img, $filename);
-        imagedestroy($img);
-        $testImages[] = $filename;
+    $w = $orientation === 'portrait' ? 600 : 800;
+    $h = $orientation === 'portrait' ? 800 : 600;
+
+    for ($i = 0; $i < $imageCount; $i++) {
+        $tmp[] = createTestImage($colors[$i % 4], $w, $h, $layout.'_'.$i.'_'.$orientation);
     }
 
-    // Alle Layouts testen
-    $layouts = ['1+3-1', '1+3-2', '3+1-1', '1+2-1', '2+1-1', '2x4-1', '2x4-2', '2x4-3', '2x4-4', '2x3-1', '2x3-2'];
+    $dest = __DIR__ . '/../data/images/preview_'.$layout.'_'.$orientation.'.jpg';
 
-    foreach ($layouts as $layout) {
-        try {
-            $destFile = __DIR__ . '/../data/images/test_collage_' . str_replace('+', '_', $layout) . '.jpg';
+    $ok = Collage::createCollage($testConfig, $tmp, $dest);
 
-            // Config vorbereiten
-            $testConfig = $config;
-            $testConfig['collage']['layout'] = $layout;
-            $testConfig['collage']['take_frame'] = false;
-            $testConfig['textonpicture']['enabled'] = true;
-            $testConfig['textonpicture']['line1'] = 'Event Title 2026';
-            $testConfig['textonpicture']['line2'] = 'Location Name';
-            $testConfig['textonpicture']['line3'] = '';
-            $testConfig['textonpicture']['rotation'] = 0;
+    // Zone visualisieren falls vorhanden
+    $hasZone = false;
+    if ($ok && file_exists($dest)) {
+        if (isset($json['text_alignment']) && ($json['text_alignment']['mode'] ?? '') === 'zone') {
+            $hasZone = true;
+            $img = imagecreatefromjpeg($dest);
 
-            $success = Collage::createCollage($testConfig, $testImages, $destFile);
+            if ($img) {
+                $width = imagesx($img);
+                $height = imagesy($img);
+                $ta = $json['text_alignment'];
 
-            if ($success) {
-                $relPath = 'data/images/' . basename($destFile);
-                echo '<div class="layout">';
-                echo '<div class="layout-name">' . htmlspecialchars($layout) . '</div>';
-                echo '<img src="/' . htmlspecialchars($relPath) . '?' . time() . '">';
-                echo '</div>';
-            } else {
-                echo '<div class="layout">';
-                echo '<div class="layout-name">' . htmlspecialchars($layout) . '</div>';
-                echo '<div class="error">Error: Failed to create collage</div>';
-                echo '</div>';
+                // Zone-Koordinaten berechnen
+                $rep = ['x' => $width, 'y' => $height];
+                $zoneX = isset($ta['x']) ? (int) Helper::doMath(str_replace(array_keys($rep), array_values($rep), (string)$ta['x'])) : 0;
+                $zoneY = isset($ta['y']) ? (int) Helper::doMath(str_replace(array_keys($rep), array_values($rep), (string)$ta['y'])) : 0;
+                $zoneW = isset($ta['w']) ? (int) Helper::doMath(str_replace(array_keys($rep), array_values($rep), (string)$ta['w'])) : 0;
+                $zoneH = isset($ta['h']) ? (int) Helper::doMath(str_replace(array_keys($rep), array_values($rep), (string)$ta['h'])) : 0;
+
+                // Magenta Zone zeichnen
+                imagesavealpha($img, true);
+                $fill = imagecolorallocatealpha($img, 255, 0, 255, 80);
+                $border = imagecolorallocate($img, 255, 255, 255);
+                imagefilledrectangle($img, $zoneX, $zoneY, $zoneX + $zoneW, $zoneY + $zoneH, $fill);
+                imagerectangle($img, $zoneX, $zoneY, $zoneX + $zoneW, $zoneY + $zoneH, $border);
+                imagerectangle($img, $zoneX+1, $zoneY+1, $zoneX+$zoneW-1, $zoneY+$zoneH-1, $border);
+
+                imagejpeg($img, $dest, 90);
+                imagedestroy($img);
             }
-        } catch (Exception $e) {
-            echo '<div class="layout">';
-            echo '<div class="layout-name">' . htmlspecialchars($layout) . '</div>';
-            echo '<div class="error">Exception: ' . htmlspecialchars($e->getMessage()) . '</div>';
-            echo '</div>';
         }
     }
 
-    // Cleanup
-    foreach ($testImages as $img) {
-        @unlink($img);
+    echo '<div class="layout">';
+    echo '<div class="name">'.htmlspecialchars($layout).'</div>';
+    if ($ok && file_exists($dest)) {
+        echo '<img src="/data/images/'.htmlspecialchars(basename($dest)).'?'.time().'">';
+        $size = getimagesize($dest);
+        echo '<div class="info">'.$size[0].'x'.$size[1];
+        if ($hasZone) {
+            echo ' | <span class="zone-badge">Zone</span>';
+        }
+        echo '</div>';
+    } else {
+        echo '<div style="color:red">Fehler beim Erstellen</div>';
     }
-    ?>
+    echo '</div>';
+
+    foreach ($tmp as $f) @unlink($f);
+}
+?>
 </body>
 </html>

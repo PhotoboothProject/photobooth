@@ -10,9 +10,5 @@
     ["0", "y/2", "x/2", "y/2", "0"],
     ["x/2", "y/2", "x/2", "y/2", "0"]
   ],
-  "text_alignment": {
-    "text_alignment": "bottom-center",
-    "offset_x": 0,
-    "offset_y": 50
-  }
+  "text_disabled": true
 }
