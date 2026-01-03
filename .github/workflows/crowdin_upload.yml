@@ -1,4 +1,4 @@
-name: Crowdin Translation Upload
+name: Crowdin Upload Sources
 
 on:
   push:
