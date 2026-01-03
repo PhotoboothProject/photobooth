@@ -31,4 +31,16 @@ class CollageConfig
     public string $textOnCollageFontColor;
     public int $textOnCollageFontSize;
     public int $textOnCollageLinespace;
+    public bool $collageAllowSelection;
+
+    // Zone-based text alignment properties (when template uses text_alignment.mode = "zone")
+    public bool $textZoneMode = false;
+    public float $textZoneX = 0;
+    public float $textZoneY = 0;
+    public float $textZoneW = 0;
+    public float $textZoneH = 0;
+    public float $textZonePadding = 0;
+    public string $textZoneAlign = 'center';
+    public string $textZoneValign = 'middle';
+    public int $textZoneRotation = 0;
 }

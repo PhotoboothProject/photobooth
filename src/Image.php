@@ -98,6 +98,51 @@ class Image
     public int $textLineSpacing = 90;
 
     /**
+     * Zone-based text alignment mode (when template uses text_alignment.mode = "zone")
+     */
+    public bool $textZoneMode = false;
+
+    /**
+     * X-coordinate of the text zone (pixels)
+     */
+    public float $textZoneX = 0;
+
+    /**
+     * Y-coordinate of the text zone (pixels)
+     */
+    public float $textZoneY = 0;
+
+    /**
+     * Width of the text zone (pixels)
+     */
+    public float $textZoneW = 0;
+
+    /**
+     * Height of the text zone (pixels)
+     */
+    public float $textZoneH = 0;
+
+    /**
+     * Padding inside the text zone (pixels)
+     */
+    public float $textZonePadding = 0;
+
+    /**
+     * Horizontal alignment within the zone: 'left', 'center', 'right'
+     */
+    public string $textZoneAlign = 'center';
+
+    /**
+     * Vertical alignment within the zone: 'top', 'middle', 'bottom'
+     */
+    public string $textZoneValign = 'middle';
+
+    /**
+     * Rotation angle for zone text (currently only 0 supported)
+     */
+    public int $textZoneRotation = 0;
+
+    /**
      *
      * Apply Frame to Image Difinitions
      *
@@ -776,11 +821,7 @@ class Image
             $fontPath = PathUtility::getAbsolutePath($this->fontPath);
             $tempFontPath = $_SERVER['DOCUMENT_ROOT'] . '/tempfont.ttf';
             $isTempFont = false;
-            $fontSize = $this->fontSize;
-            $fontRotation = $this->fontRotation;
-            $fontLocationX = $this->fontLocationX;
-            $fontLocationY = $this->fontLocationY;
-            $textLineSpacing = $this->textLineSpacing;
+
             // Convert hex color string to RGB values
             $colorComponents = self::getColorComponents($this->fontColor);
             list($r, $g, $b) = $colorComponents;
@@ -801,29 +842,13 @@ class Image
                 $fontPath = FontUtility::getFontPath($this->fontPath);
             }
 
-            // Add first line of text
-            if (!empty($this->textLine1)) {
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $this->textLine1)) {
-                    throw new \Exception('Could not add first line of text to resource.');
-                }
-            }
-
-            // Add second line of text
-            if (!empty($this->textLine2)) {
-                $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing : $fontLocationY;
-                $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing;
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $this->textLine2)) {
-                    throw new \Exception('Could not add second line of text to resource.');
-                }
-            }
-
-            // Add third line of text
-            if (!empty($this->textLine3)) {
-                $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing * 2 : $fontLocationY;
-                $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing * 2;
-                if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $this->textLine3)) {
-                    throw new \Exception('Could not add third line of text to resource.');
-                }
+            // Check if zone mode is enabled
+            if ($this->textZoneMode) {
+                // Zone-based text rendering
+                $this->applyTextInZone($sourceResource, $fontPath, $color);
+            } else {
+                // Legacy text rendering (original behavior)
+                $this->applyTextLegacy($sourceResource, $fontPath, $color);
             }
 
             if ($isTempFont && file_exists($tempFontPath)) {
@@ -844,6 +869,175 @@ class Image
 
             // Return unmodified resource
             return $sourceResource;
+        }
+    }
+
+    /**
+     * Legacy text rendering (original behavior when not in zone mode)
+     */
+    private function applyTextLegacy(GdImage $sourceResource, string $fontPath, int $color): void
+    {
+        $fontSize = $this->fontSize;
+        $fontRotation = $this->fontRotation;
+        $fontLocationX = $this->fontLocationX;
+        $fontLocationY = $this->fontLocationY;
+        $textLineSpacing = $this->textLineSpacing;
+
+        // Add first line of text
+        if (!empty($this->textLine1)) {
+            if (!imagettftext($sourceResource, $fontSize, $fontRotation, $fontLocationX, $fontLocationY, $color, $fontPath, $this->textLine1)) {
+                throw new \Exception('Could not add first line of text to resource.');
+            }
+        }
+
+        // Add second line of text
+        if (!empty($this->textLine2)) {
+            $line2Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing : $fontLocationY;
+            $line2X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing;
+            if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line2X, $line2Y, $color, $fontPath, $this->textLine2)) {
+                throw new \Exception('Could not add second line of text to resource.');
+            }
+        }
+
+        // Add third line of text
+        if (!empty($this->textLine3)) {
+            $line3Y = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationY + $textLineSpacing * 2 : $fontLocationY;
+            $line3X = $fontRotation < 45 && $fontRotation > -45 ? $fontLocationX : $fontLocationX + $textLineSpacing * 2;
+            if (!imagettftext($sourceResource, $fontSize, $fontRotation, $line3X, $line3Y, $color, $fontPath, $this->textLine3)) {
+                throw new \Exception('Could not add third line of text to resource.');
+            }
+        }
+    }
+
+    /**
+     * Zone-based text rendering with auto-fit, proper alignment and baseline correction
+     */
+    private function applyTextInZone(GdImage $sourceResource, string $fontPath, int $color): void
+    {
+        // Collect non-empty text lines
+        $lines = [];
+        if (!empty(trim($this->textLine1))) {
+            $lines[] = trim($this->textLine1);
+        }
+        if (!empty(trim($this->textLine2))) {
+            $lines[] = trim($this->textLine2);
+        }
+        if (!empty(trim($this->textLine3))) {
+            $lines[] = trim($this->textLine3);
+        }
+
+        // Nothing to draw if no lines
+        if (count($lines) === 0) {
+            return;
+        }
+
+        // Calculate zone with padding
+        $padding = $this->textZonePadding;
+        $zoneX = $this->textZoneX + $padding;
+        $zoneY = $this->textZoneY + $padding;
+        $zoneW = $this->textZoneW - (2 * $padding);
+        $zoneH = $this->textZoneH - (2 * $padding);
+
+        // Ensure zone has positive dimensions
+        if ($zoneW <= 0 || $zoneH <= 0) {
+            return;
+        }
+
+        // Calculate line height factor from admin settings
+        $lineHeightFactor = $this->textLineSpacing > 0 && $this->fontSize > 0
+            ? $this->textLineSpacing / $this->fontSize
+            : 1.2;
+
+        // Auto-fit: find the largest font size that fits all text in the zone
+        $fontSize = $this->fontSize > 0 ? $this->fontSize : 50;
+        $minFontSize = 10; // Absolute minimum
+        $preferredMinFontSize = 18; // Preferred minimum for readability
+
+        $fitsInZone = false;
+        while ($fontSize >= $minFontSize && !$fitsInZone) {
+            $lineHeight = (int)($fontSize * $lineHeightFactor);
+            $maxLineWidth = 0;
+
+            // Measure all lines at current font size
+            foreach ($lines as $line) {
+                $bbox = @imagettfbbox($fontSize, 0, $fontPath, $line);
+                if ($bbox !== false) {
+                    $lineWidth = abs($bbox[2] - $bbox[0]);
+                    if ($lineWidth > $maxLineWidth) {
+                        $maxLineWidth = $lineWidth;
+                    }
+                }
+            }
+
+            // Calculate total block height
+            // Height = (n-1) * lineHeight + fontSize (last line doesn't need spacing below)
+            $blockHeight = (count($lines) - 1) * $lineHeight + $fontSize;
+
+            // Check if it fits
+            if ($maxLineWidth <= $zoneW && $blockHeight <= $zoneH) {
+                $fitsInZone = true;
+            } else {
+                $fontSize--;
+            }
+        }
+
+        // If even minimum font size doesn't fit, use minimum anyway
+        if (!$fitsInZone) {
+            $fontSize = $minFontSize;
+        }
+
+        // Recalculate with final font size
+        $lineHeight = (int)($fontSize * $lineHeightFactor);
+        $blockHeight = (count($lines) - 1) * $lineHeight + $fontSize;
+
+        // Get ascent for baseline correction
+        // The ascent is the distance from baseline to top of tallest character
+        $ascentBbox = @imagettfbbox($fontSize, 0, $fontPath, 'HgjpqyÄÖÜ');
+        $ascent = $ascentBbox !== false ? abs($ascentBbox[7]) : $fontSize;
+
+        // Calculate vertical start position based on valign
+        switch ($this->textZoneValign) {
+            case 'bottom':
+                $startTopY = $zoneY + $zoneH - $blockHeight;
+                break;
+            case 'middle':
+                $startTopY = $zoneY + ($zoneH - $blockHeight) / 2;
+                break;
+            case 'top':
+            default:
+                $startTopY = $zoneY;
+                break;
+        }
+
+        // Draw each line with individual horizontal alignment
+        foreach ($lines as $index => $line) {
+            // Measure this specific line
+            $bbox = @imagettfbbox($fontSize, 0, $fontPath, $line);
+            $lineWidth = $bbox !== false ? abs($bbox[2] - $bbox[0]) : 0;
+
+            // Calculate X position based on align
+            switch ($this->textZoneAlign) {
+                case 'right':
+                    $drawX = (int)($zoneX + $zoneW - $lineWidth);
+                    break;
+                case 'center':
+                    $drawX = (int)($zoneX + ($zoneW - $lineWidth) / 2);
+                    break;
+                case 'left':
+                default:
+                    $drawX = (int)$zoneX;
+                    break;
+            }
+
+            // Calculate Y position (baseline position)
+            // First line: startTopY + ascent (to position top of text at startTopY)
+            // Subsequent lines: add lineHeight for each
+            $drawY = (int)($startTopY + $ascent + ($index * $lineHeight));
+
+            // Draw the text (rotation is 0 for zone mode)
+            if (!imagettftext($sourceResource, $fontSize, 0, $drawX, $drawY, $color, $fontPath, $line)) {
+                throw new \Exception('Could not add line ' . ($index + 1) . ' of text to resource.');
+            }
         }
     }
 
@@ -879,17 +1073,17 @@ class Image
             }
 
             if (abs($degrees) == 90) {
-                $imageResource = self::resizeCropImage($imageResource, $height, $width);
+                $imageResource = $this->resizeCropImage($imageResource, $height, $width);
             } else {
-                $imageResource = self::resizeCropImage($imageResource, $width, $height);
+                $imageResource = $this->resizeCropImage($imageResource, $width, $height);
             }
 
             if ($this->addPictureApplyFrame) {
-                $imageResource = self::applyFrame($imageResource);
+                $imageResource = $this->applyFrame($imageResource);
             }
 
             if ($degrees != 0) {
-                $imageResource = self::rotateResizeImage(
+                $imageResource = $this->rotateResizeImage(
                     image: $imageResource,
                     degrees: $degrees,
                     useTransparentBackground: true
