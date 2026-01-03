@@ -543,6 +543,12 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
    - Check "Remove background" to enable the feature
    - Optionally configure:
      - **Background image:** Path to a custom background image (leave empty for transparent background)
+     - **Background scaling mode:** How the background image is scaled/cropped (default: scale-fill)
+       - `scale-fill` (recommended): Covers entire canvas, preserves aspect ratio, may crop edges
+       - `scale-fit`: Fits inside canvas, preserves aspect ratio, may have black bars
+       - `crop-center`: Crops from center to exact canvas size
+       - `stretch`: Stretches to fit (may distort)
+       - `none`: Direct copy without scaling (original behavior)
      - **AI model:** Choose the AI model (default: u2net)
      - **Alpha matting:** Enable for better edge quality
      - **Alpha matting thresholds:** Fine-tune edge detection (advanced users)
