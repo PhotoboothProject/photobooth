@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/../lib/boot.php';
 
+use Photobooth\Service\ApplicationService;
+use Photobooth\Service\LanguageService;
+use Photobooth\Utility\PathUtility;
+
+$languageService = LanguageService::getInstance();
 use Photobooth\Collage;
 use Photobooth\Helper;
 
@@ -60,6 +65,10 @@ $colors = [
 ];
 
 // Alle verfuegbaren Layouts (landscape + portrait)
+$pageTitle = 'Collage Text Positions - ' . ApplicationService::getInstance()->getTitle();
+include PathUtility::getAbsolutePath('admin/components/head.admin.php');
+include PathUtility::getAbsolutePath('admin/helper/index.php');
+
 $layouts = [
     '1+3-1', '1+3-2', '3+1-1', '1+2-1', '2+1-1',
     '2+2-1', '2+2-2',
@@ -68,29 +77,22 @@ $layouts = [
 ];
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Collage Vorschau</title>
-    <style>
-        body { font-family: Arial; margin:20px; background:#f0f0f0; }
-        .header { margin-bottom: 15px; }
-        .layout { display:inline-block; margin:12px; vertical-align:top; text-align:center; }
-        img { max-width:420px; border:2px solid #333; background:#fff; }
-        .name { font-weight:bold; margin-bottom:6px; }
-        .info { font-size: 11px; color: #666; margin-top: 4px; }
-        .zone-badge { color: #ff00ff; font-weight: bold; }
-        .pill { display:inline-block; padding:4px 8px; background:#fff; border:1px solid #ccc; border-radius:999px; font-size:12px; margin-right: 8px; }
-        .legend { margin: 10px 0; padding: 8px 12px; background: #fff; border: 1px solid #ccc; border-radius: 4px; display: inline-block; }
-        .legend-color { display: inline-block; width: 16px; height: 16px; background: rgba(255,0,255,0.5); border: 1px solid #333; vertical-align: middle; margin-right: 5px; }
-    </style>
-</head>
-<body>
-<div class="header">
-    <div class="pill">Orientation: <strong><?=htmlspecialchars($orientation)?></strong></div>
-    <div class="legend"><span class="legend-color"></span> Text-Zone (mode="zone")</div>
-</div>
+<div class="w-full h-screen absolute bg-brand-2 px-6 py-12 overflow-x-hidden overflow-y-auto">
+    <div class="w-full flex items-center justify-center flex-col">
+        <div class="w-full max-w-7xl rounded-lg p-8 bg-white flex flex-col shadow-xl mb-8">
+            <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-4">
+                <?=$languageService->translate('testTextPositions')?>
+            </div>
+            <div class="text-center mb-4">
+                <span class="inline-block px-3 py-1 bg-gray-100 rounded-full text-sm mr-2">
+                    <strong>Orientation:</strong> <?=htmlspecialchars($orientation)?>
+                </span>
+                <span class="inline-block px-3 py-1 bg-purple-100 rounded-full text-sm">
+                    <span style="display:inline-block; width:12px; height:12px; background:rgba(255,0,255,0.5); border:1px solid #333; vertical-align:middle; margin-right:4px;"></span>
+                    <strong>Text-Zone</strong> (mode="zone")
+                </span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
 <?php
 foreach ($layouts as $layout) {
@@ -107,8 +109,8 @@ foreach ($layouts as $layout) {
     // Template-Pfad pruefen
     $templatePath = Collage::getCollageConfigPath($layout, $orientation);
     if (!$templatePath || !file_exists($templatePath)) {
-        echo '<div class="layout">';
-        echo '<div class="name">' . htmlspecialchars($layout) . '</div>';
+        echo '<div class="flex flex-col bg-white border border-gray-200 rounded-lg p-4 shadow-sm">';
+        echo '<div class="text-lg font-bold text-brand-1 mb-2">' . htmlspecialchars($layout) . '</div>';
         echo '<div style="color:#999">Nicht verfuegbar fuer ' . $orientation . '</div>';
         echo '</div>';
         continue;
@@ -168,14 +170,14 @@ foreach ($layouts as $layout) {
         }
     }
 
-    echo '<div class="layout">';
-    echo '<div class="name">' . htmlspecialchars($layout) . '</div>';
+    echo '<div class="flex flex-col bg-white border border-gray-200 rounded-lg p-4 shadow-sm">';
+    echo '<div class="text-lg font-bold text-brand-1 mb-2">' . htmlspecialchars($layout) . '</div>';
     if ($ok && file_exists($dest)) {
-        echo '<img src="/data/images/' . htmlspecialchars(basename($dest)) . '?' . time() . '">';
+        echo '<img src="/data/images/' . htmlspecialchars(basename($dest)) . '?' . time() . '" class="w-full h-auto rounded border border-gray-300">';
         $size = getimagesize($dest);
-        echo '<div class="info">' . $size[0] . 'x' . $size[1];
+        echo '<div class="text-xs text-gray-600 mt-2">' . $size[0] . 'x' . $size[1];
         if ($hasZone) {
-            echo ' | <span class="zone-badge">Zone</span>';
+            echo ' | <span class="text-purple-600 font-bold">Zone</span>';
         }
         echo '</div>';
     } else {
@@ -188,5 +190,24 @@ foreach ($layouts as $layout) {
     }
 }
 ?>
-</body>
-</html>
+
+            </div>
+        </div>
+
+        <div class="w-full max-w-xl my-12 border-b border-solid border-white border-opacity-20"></div>
+
+        <div class="w-full max-w-xl rounded-lg py-8 bg-white flex flex-col shadow-xl relative">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
+            <?php
+echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
+echo getMenuBtn(PathUtility::getPublicPath('test'), 'testMenu', $config['icons']['admin']);
+echo getMenuBtn(PathUtility::getPublicPath('admin/generator'), 'layout_generator', $config['icons']['take_collage']);
+?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
+include PathUtility::getAbsolutePath('admin/components/footer.admin.php');
