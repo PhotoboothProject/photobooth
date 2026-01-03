@@ -1169,6 +1169,21 @@ return [
                 PathUtility::getAbsolutePath('private/images/background'),
             ]
         ],
+        'rembg_backgroundMode' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'rembg[backgroundMode]',
+            'placeholder' => $defaultConfig['rembg']['backgroundMode'],
+            'data-theme-field' => 'true',
+            'options' => [
+                'scale-fill' => 'Scale Fill (Cover canvas, preserve ratio)',
+                'scale-fit' => 'Scale Fit (Fit inside, black bars)',
+                'crop-center' => 'Crop Center (Cut from center)',
+                'stretch' => 'Stretch (Distort to fit)',
+                'none' => 'None (Direct copy, no scaling)',
+            ],
+            'value' => $config['rembg']['backgroundMode'],
+        ],
         'rembg_model' => [
             'view' => 'advanced',
             'type' => 'select',

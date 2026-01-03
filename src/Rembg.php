@@ -130,11 +130,17 @@ class Rembg
                         $logger->error('Failed to read background image file');
                     } else {
                         $backgroundImage = imagecreatefromstring($backgroundContent);
+                        $backgroundImage = imagecreatefromstring($backgroundContent);
                         if ($backgroundImage !== false) {
-                            $newImage = imagecreatetruecolor(imagesx($processedImage), imagesy($processedImage));
-                            imagecopy($newImage, $backgroundImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
-                            imagecopy($newImage, $processedImage, 0, 0, 0, 0, imagesx($processedImage), imagesy($processedImage));
+                            $backgroundMode = $rembgConfig['backgroundMode'] ?? 'scale-fill';
+                            $newImage = self::applyBackgroundWithMode(
+                                $processedImage,
+                                $backgroundImage,
+                                $backgroundMode,
+                                $logger
+                            );
                             imagedestroy($processedImage);
+                            imagedestroy($backgroundImage);
                             $processedImage = $newImage;
                             $logger->debug('Background image applied after rembg processing');
                         }
@@ -160,5 +166,114 @@ class Rembg
             }
             return [$imageHandler, $imageResource]; // Fallback to original image
         }
+    }
+
+    /**
+     * Apply background image with different scaling/cropping modes
+     *
+     * @param \GdImage $foreground The transparent foreground image
+     * @param \GdImage $background The background image
+     * @param string $mode The mode: 'none', 'scale-fit', 'scale-fill', 'crop-center', 'stretch'
+     * @param \Photobooth\Logger\NamedLogger $logger Logger instance
+     * @return \GdImage The composited image
+     */
+    private static function applyBackgroundWithMode(
+        \GdImage $foreground,
+        \GdImage $background,
+        string $mode,
+        \Photobooth\Logger\NamedLogger $logger
+    ): \GdImage {
+        $canvasWidth = imagesx($foreground);
+        $canvasHeight = imagesy($foreground);
+        $bgWidth = imagesx($background);
+        $bgHeight = imagesy($background);
+
+        $canvas = imagecreatetruecolor($canvasWidth, $canvasHeight);
+
+        $logger->debug("Applying background with mode: {$mode} (Canvas: {$canvasWidth}x{$canvasHeight}, BG: {$bgWidth}x{$bgHeight})");
+
+        switch ($mode) {
+            case 'none':
+                // Original behavior: direct copy, no scaling
+                imagecopy($canvas, $background, 0, 0, 0, 0, $bgWidth, $bgHeight);
+                break;
+
+            case 'scale-fit':
+                // Scale background to fit inside canvas (preserve aspect ratio, may have black bars)
+                $scale = min($canvasWidth / $bgWidth, $canvasHeight / $bgHeight);
+                $scaledWidth = (int)($bgWidth * $scale);
+                $scaledHeight = (int)($bgHeight * $scale);
+                $offsetX = (int)(($canvasWidth - $scaledWidth) / 2);
+                $offsetY = (int)(($canvasHeight - $scaledHeight) / 2);
+
+                $black = imagecolorallocate($canvas, 0, 0, 0);
+                if ($black !== false) {
+                    imagefill($canvas, 0, 0, $black);
+                }
+                imagecopyresampled(
+                    $canvas,
+                    $background,
+                    $offsetX,
+                    $offsetY,
+                    0,
+                    0,
+                    $scaledWidth,
+                    $scaledHeight,
+                    $bgWidth,
+                    $bgHeight
+                );
+                break;
+
+            case 'scale-fill':
+                // Scale background to cover entire canvas (preserve aspect ratio, may crop)
+                $scale = max($canvasWidth / $bgWidth, $canvasHeight / $bgHeight);
+                $scaledWidth = (int)($bgWidth * $scale);
+                $scaledHeight = (int)($bgHeight * $scale);
+                $offsetX = (int)(($canvasWidth - $scaledWidth) / 2);
+                $offsetY = (int)(($canvasHeight - $scaledHeight) / 2);
+
+                imagecopyresampled(
+                    $canvas,
+                    $background,
+                    $offsetX,
+                    $offsetY,
+                    0,
+                    0,
+                    $scaledWidth,
+                    $scaledHeight,
+                    $bgWidth,
+                    $bgHeight
+                );
+                break;
+
+            case 'crop-center':
+                // Crop background from center to match canvas size
+                if ($bgWidth < $canvasWidth || $bgHeight < $canvasHeight) {
+                    // Background too small, scale up first
+                    $scale = max($canvasWidth / $bgWidth, $canvasHeight / $bgHeight);
+                    $scaledBg = imagecreatetruecolor((int)($bgWidth * $scale), (int)($bgHeight * $scale));
+                    imagecopyresampled($scaledBg, $background, 0, 0, 0, 0, imagesx($scaledBg), imagesy($scaledBg), $bgWidth, $bgHeight);
+                    $cropX = (int)((imagesx($scaledBg) - $canvasWidth) / 2);
+                    $cropY = (int)((imagesy($scaledBg) - $canvasHeight) / 2);
+                    imagecopy($canvas, $scaledBg, 0, 0, $cropX, $cropY, $canvasWidth, $canvasHeight);
+                    imagedestroy($scaledBg);
+                } else {
+                    $cropX = (int)(($bgWidth - $canvasWidth) / 2);
+                    $cropY = (int)(($bgHeight - $canvasHeight) / 2);
+                    imagecopy($canvas, $background, 0, 0, $cropX, $cropY, $canvasWidth, $canvasHeight);
+                }
+                break;
+
+            case 'stretch':
+            default:
+                // Stretch background to exact canvas size (may distort)
+                imagecopyresampled($canvas, $background, 0, 0, 0, 0, $canvasWidth, $canvasHeight, $bgWidth, $bgHeight);
+                break;
+        }
+
+        // Merge transparent foreground onto background
+        imagecopy($canvas, $foreground, 0, 0, 0, 0, $canvasWidth, $canvasHeight);
+
+        return $canvas;
     }
 }
