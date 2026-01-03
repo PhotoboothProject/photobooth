@@ -41,6 +41,7 @@ class CollageConfigFactory
         $collageConfig->textOnCollageFontColor = $config['textoncollage']['font_color'];
         $collageConfig->textOnCollageFontSize = (int) $config['textoncollage']['font_size'];
         $collageConfig->textOnCollageLinespace = (int) $config['textoncollage']['linespace'];
+        $collageConfig->collageAllowSelection = $config['collage']['allow_selection'] === true;
 
         return $collageConfig;
     }

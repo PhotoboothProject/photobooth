@@ -110,7 +110,6 @@ function getLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'l
             $w = evaluateLayoutExpression($photoLayout[2], $width, $height);
             $h = evaluateLayoutExpression($photoLayout[3], $width, $height);
 
-
             // For photostrips: reset numbering after first half
             $displayNum = $isPhotostrip && $index >= $uniquePhotoCount
                 ? ($index - $uniquePhotoCount + 1)
@@ -177,18 +176,35 @@ function getLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'l
         $layout === CollageLayoutEnum::TWO_X_THREE_2
     ) {
         // Dashed line in middle showing where it will be cut
-        $middleX = $viewBoxWidth / 2;
-        $svg .= sprintf(
-            '<line x1="%s" y1="0" x2="%s" y2="%s" stroke="#FF0000" stroke-width="2" stroke-dasharray="5,5" opacity="0.8"/>',
-            number_format($middleX, 1, '.', ''),
-            number_format($middleX, 1, '.', ''),
-            number_format($viewBoxHeight, 1, '.', '')
-        );
-        // Scissors icon or text at middle
-        $svg .= sprintf(
-            '<text x="%s" y="6" text-anchor="middle" fill="#FF0000" font-size="8" font-weight="bold">✂</text>',
-            number_format($middleX, 1, '.', '')
-        );
+        if ($width > $height) {
+            // Landscape layout (e.g. 1800x1200) -> Horizontal cut
+            $middleY = $viewBoxHeight / 2;
+            $svg .= sprintf(
+                '<line x1="0" y1="%s" x2="%s" y2="%s" stroke="#FF0000" stroke-width="2" stroke-dasharray="5,5" opacity="0.8"/>',
+                number_format($middleY, 1, '.', ''),
+                number_format($viewBoxWidth, 1, '.', ''),
+                number_format($middleY, 1, '.', '')
+            );
+            // Scissors icon or text
+            $svg .= sprintf(
+                '<text x="6" y="%s" text-anchor="middle" dominant-baseline="middle" fill="#FF0000" font-size="8" font-weight="bold">✂</text>',
+                number_format($middleY, 1, '.', '')
+            );
+        } else {
+            // Portrait layout (e.g. 1200x1800) -> Vertical cut
+            $middleX = $viewBoxWidth / 2;
+            $svg .= sprintf(
+                '<line x1="%s" y1="0" x2="%s" y2="%s" stroke="#FF0000" stroke-width="2" stroke-dasharray="5,5" opacity="0.8"/>',
+                number_format($middleX, 1, '.', ''),
+                number_format($middleX, 1, '.', ''),
+                number_format($viewBoxHeight, 1, '.', '')
+            );
+            // Scissors icon or text at middle
+            $svg .= sprintf(
+                '<text x="%s" y="6" text-anchor="middle" fill="#FF0000" font-size="8" font-weight="bold">✂</text>',
+                number_format($middleX, 1, '.', '')
+            );
+        }
     }
 
     // Add outer border to show final photo format
@@ -235,10 +251,13 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
     }
 
     $html .= '</div>'; // .collageSelector__options
-    $html .= '<button type="button" class="modal__close" data-modal-close aria-label="' . $languageService->translate('close') . '">';
-    $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-    $html .= '</button>';
     $html .= '</div>'; // .modal-body
+    $html .= '<div class="modal-buttonbar">';
+    $html .= '<button type="button" class="modal-button" id="collageSelectorClose" data-modal-close>';
+    $html .= '<span class="modal-button--icon"><i class="fa fa-times"></i></span>';
+    $html .= '<span class="modal-button--label">' . $languageService->translate('close') . '</span>';
+    $html .= '</button>';
+    $html .= '</div>'; // .modal-buttonbar
     $html .= '</div>'; // .modal-inner
     $html .= '</div>'; // .modal
     $html .= '</div>'; // #collageSelector
