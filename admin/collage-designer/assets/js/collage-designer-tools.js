@@ -138,6 +138,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return newElement;
     };
 
+    /**
+     * removes all selected Collage-Elemente.
+     */
+    window.deleteSelectedElements = function() {
+        const selectedElements = window.collageElements.filter(el => el.isSelected);
+        if (selectedElements.length === 0) {
+            return; // nothing to remove
+        }
+
+        window.saveState(); 
+
+        // removes selected elements from the main array
+        window.collageElements = window.collageElements.filter(el => !el.isSelected);
+
+        // resets activeElement, if it was deleted
+        if (window.activeElement && !window.collageElements.includes(window.activeElement)) {
+            window.activeElement = null;
+        }
+
+        window.drawCanvas();
+        window.updateUndoRedoButtonStates();
+    };
+
     //=================================================================================
     // --- Alignment Functions ---
     //=================================================================================

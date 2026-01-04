@@ -293,6 +293,17 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    /**
+     * updates the enabled/disabled state of the Remove Button.
+     */
+    window.updateRemoveButtonState = function() {
+        const removeBtn = document.getElementById('removeBtn');
+        if (removeBtn) {
+            const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+            removeBtn.disabled = selectedElementsCount === 0; // Deaktiviert, wenn nichts ausgewählt ist
+        }
+    };
+
     //=================================================================================
     // --- Undo/Redo Functionality ---
     //=================================================================================
@@ -538,7 +549,32 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        // Draw Rotation Handle ONLY FOR THE ACTIVE ELEMENT
+        // --- Draw Delete Handle ONLY FOR THE ACTIVE ELEMENT (if single element selected) ---
+        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
+            const deleteHandleSize = 16; // size of the delete handles
+            const deleteHandleOffset = 10; // distance from element border
+            
+            // Position of the handle (top right of the active element)
+            const deleteHandleX = window.activeElement.x + window.activeElement.width - deleteHandleOffset;
+            const deleteHandleY = window.activeElement.y + deleteHandleOffset;
+
+            // draw the circle for the handle
+            window.ctx.beginPath();
+            window.ctx.arc(deleteHandleX, deleteHandleY, deleteHandleSize / 2, 0, Math.PI * 2);
+            window.ctx.fillStyle = '#dc3545';
+            window.ctx.fill();
+            window.ctx.strokeStyle = '#FFFFFF';
+            window.ctx.lineWidth = 2;
+            window.ctx.stroke();
+
+            // draw the X-Symbol in the handle
+            window.ctx.fillStyle = '#FFFFFF';
+            window.ctx.font = `${deleteHandleSize * 0.7}px Arial`;
+            window.ctx.textAlign = 'center';
+            window.ctx.textBaseline = 'middle';
+            window.ctx.fillText('X', deleteHandleX, deleteHandleY);
+        }
+
         if (window.activeElement && window.activeElement.isSelected) { // Check if it's selected and active
             const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
             const rotationHandleY = window.activeElement.y - ROTATION_HANDLE_OFFSET;
@@ -555,6 +591,8 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ctx.textBaseline = 'middle';
             window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
         }
+        
+        window.updateRemoveButtonState();
     };
 
 
@@ -655,8 +693,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         case 'top-right': case 'bottom-left': window.collageCanvas.style.cursor = 'nesw-resize'; break;
                     }
                     window.drawCanvas();
-                    return; // Handle clicked, don't proceed to drag logic
+                    return; // Handle clicked, don't proceed further
                 }
+            }
+        }
+
+        // --- Check for Delete Handle hit (only if single element selected) ---
+        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
+            const deleteHandleSize = 16;
+            const deleteHandleOffset = 10;
+            const deleteHandleX = window.activeElement.x + window.activeElement.width - deleteHandleOffset;
+            const deleteHandleY = window.activeElement.y + deleteHandleOffset;
+
+            const distToDeleteHandle = Math.sqrt(
+                Math.pow(mouse.x - deleteHandleX, 2) +
+                Math.pow(mouse.y - deleteHandleY, 2)
+            );
+
+            if (distToDeleteHandle <= deleteHandleSize / 2) {
+                event.preventDefault(); // prevent that the click executes other interactions
+                window.deleteSelectedElements(); // remove active element
+                return; // Handle clicked, don't proceed further
             }
         }
 
@@ -1077,6 +1134,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addBtn').addEventListener('click', () => {
         // When clicking the button, add a new element
         window.addNewElement(); // Calls the function to add a new element with default parameters
+    });
+    // Remove Button
+    document.getElementById('removeBtn').addEventListener('click', () => {
+        window.deleteSelectedElements();
+    });
+
+    // --- Keyboard Shortcut for Delete ---
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Delete' || event.key === 'Backspace') { // 'Delete' für Entf, 'Backspace' für Rücktaste (oft auch zum Löschen verwendet)
+            const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+            if (selectedElementsCount > 0) {
+                event.preventDefault(); // Verhindere Standard-Browserverhalten (z.B. zurück im Browser)
+                window.deleteSelectedElements(); // Lösche die ausgewählten Elemente
+            }
+        }
     });
 
     //=================================================================================
