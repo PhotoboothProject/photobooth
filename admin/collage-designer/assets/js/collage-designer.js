@@ -311,17 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * updates the enabled/disabled state of the Remove Button.
-     */
-    window.updateRemoveButtonState = function() {
-        const removeBtn = document.getElementById('removeBtn');
-        if (removeBtn) {
-            const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
-            removeBtn.disabled = selectedElementsCount === 0; // Deaktiviert, wenn nichts ausgewählt ist
-        }
-    };
-
-    /**
      * calculates the current visual scaling factor of the Canvas element.
      * This is the CSS scaling factor that influences the perceived size of the handles.
      * @returns {number} The scaling factor (e.g., 1.0 for original size, 0.5 for half size, 2.0 for double size).
@@ -335,6 +324,89 @@ document.addEventListener('DOMContentLoaded', () => {
         // If it's displayed 1800px wide, the scaling factor is 2.0.
         return rect.width / window.collageCanvas.width; 
     }
+
+    //=================================================================================
+    // --- update Buttons ---
+    //=================================================================================
+
+    /**
+     * Updates the enabled/disabled state of the Undo/Redo buttons.
+     */
+    window.updateUndoRedoButtonStates = function() {
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+
+        if (undoBtn) undoBtn.disabled = undoStack.length <= 1; // Always need at least 1 state to undo from
+        if (redoBtn) redoBtn.disabled = redoStack.length === 0;
+    }
+
+    /**
+     * updates the enabled/disabled state of the Remove Button.
+     */
+    window.updateRemoveButtonState = function() {
+        const removeBtn = document.getElementById('removeBtn');
+        if (removeBtn) {
+            const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+            removeBtn.disabled = selectedElementsCount === 0; // Deaktiviert, wenn nichts ausgewählt ist
+        }
+    };
+
+    /**
+     * Updates the enabled/disabled state of the layering buttons.
+     */
+    window.updateLayerButtonStates = function() {
+        const selectedElements = window.collageElements.filter(el => el.isSelected);
+        const sendToBackBtn = document.getElementById('sendToBackBtn');
+        const sendBackwardBtn = document.getElementById('sendBackwardBtn');
+        const bringForwardBtn = document.getElementById('bringForwardBtn');
+        const bringToFrontBtn = document.getElementById('bringToFrontBtn');
+
+        if (selectedElements.length === 0) {
+            // No elements selected, disable all layering buttons
+            if (sendToBackBtn) sendToBackBtn.disabled = true;
+            if (sendBackwardBtn) sendBackwardBtn.disabled = true;
+            if (bringForwardBtn) bringForwardBtn.disabled = true;
+            if (bringToFrontBtn) bringToFrontBtn.disabled = true;
+            return;
+        }
+
+        // Determine min/max index of selected elements
+        let minSelectedIndex = Infinity;
+        let maxSelectedIndex = -Infinity;
+
+        selectedElements.forEach(selectedEl => {
+            const index = window.collageElements.indexOf(selectedEl);
+            if (index !== -1) {
+                minSelectedIndex = Math.min(minSelectedIndex, index);
+                maxSelectedIndex = Math.max(maxSelectedIndex, index);
+            }
+        });
+
+        // Check if any selected element can be moved further back
+        let canSendBackward = false;
+        for (let i = 0; i < minSelectedIndex; i++) {
+            if (!selectedElements.includes(window.collageElements[i])) { // Is there an unselected element further back?
+                canSendBackward = true;
+                break;
+            }
+        }
+        
+        // Check if any selected element can be moved further forward
+        let canBringForward = false;
+        for (let i = maxSelectedIndex + 1; i < window.collageElements.length; i++) {
+            if (!selectedElements.includes(window.collageElements[i])) { // Is there an unselected element further forward?
+                canBringForward = true;
+                break;
+            }
+        }
+
+        // Update button states
+        if (sendToBackBtn) sendToBackBtn.disabled = (minSelectedIndex === 0);
+        if (sendBackwardBtn) sendBackwardBtn.disabled = !canSendBackward;
+        if (bringForwardBtn) bringForwardBtn.disabled = !canBringForward;
+        if (bringToFrontBtn) bringToFrontBtn.disabled = (maxSelectedIndex === window.collageElements.length - 1);
+    };
+
 
     //=================================================================================
     // --- Undo/Redo Functionality ---
@@ -465,17 +537,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         redoStack = []; // Any new action clears the redo stack
         window.updateUndoRedoButtonStates();
-    }
-
-    /**
-     * Updates the enabled/disabled state of the Undo/Redo buttons.
-     */
-    window.updateUndoRedoButtonStates = function() {
-        const undoBtn = document.getElementById('undoBtn');
-        const redoBtn = document.getElementById('redoBtn');
-
-        if (undoBtn) undoBtn.disabled = undoStack.length <= 1; // Always need at least 1 state to undo from
-        if (redoBtn) redoBtn.disabled = redoStack.length === 0;
     }
 
     //=================================================================================
@@ -637,6 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         window.updateRemoveButtonState();
+        window.updateLayerButtonStates();
     };
 
 
@@ -1223,6 +1285,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.deleteSelectedElements(); // Lösche die ausgewählten Elemente
             }
         }
+    });
+
+    // --- Layering Buttons ---
+    document.getElementById('sendToBackBtn').addEventListener('click', () => {
+        window.changeZOrder('back');
+    });
+    document.getElementById('sendBackwardBtn').addEventListener('click', () => {
+        window.changeZOrder('backward');
+    });
+    document.getElementById('bringForwardBtn').addEventListener('click', () => {
+        window.changeZOrder('forward');
+    });
+    document.getElementById('bringToFrontBtn').addEventListener('click', () => {
+        window.changeZOrder('front');
     });
 
     //=================================================================================

@@ -13,7 +13,7 @@
     <button id="addBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('add') ?>">
         <i class="material-icons">add_photo_alternate</i>
     </button>
-    <button id="removeBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('remove') ?>">
+    <button id="removeBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('delete') ?>">
         <i class="material-icons">delete</i>
     </button>
     <!-- Separator -->
@@ -43,6 +43,21 @@
     </button>
     <button id="distributeVBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('distribute_vertical') ?>">
         <i class="material-icons">vertical_distribute</i>
+    </button>
+    <!-- Separator -->
+    <div class="border-l border-gray-300 h-6 mx-2"></div> <!-- with vertical line, just spacing: <div class="w-4"></div> -->
+    <!-- Layering controls -->
+    <button id="sendToBackBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" disabled title="<?= $languageService->translate('Send to Back') ?>">
+        <i class="fas fa-level-down-alt"></i>
+    </button>
+    <button id="sendBackwardBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" disabled title="<?= $languageService->translate('Send Backward') ?>">
+        <i class="fas fa-chevron-down"></i>
+    </button>
+    <button id="bringForwardBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" disabled title="<?= $languageService->translate('Bring Forward') ?>">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    <button id="bringToFrontBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" disabled title="<?= $languageService->translate('Bring to Front') ?>">
+        <i class="fas fa-level-up-alt"></i>
     </button>
     <!-- Placeholder for other tools (e.g., text specific) -->
 </div>

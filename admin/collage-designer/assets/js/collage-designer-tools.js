@@ -490,4 +490,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.drawCanvas();
     });
+
+    //=================================================================================
+    // --- z-order functions ---
+    //=================================================================================
+
+     /**
+     * Moves selected elements within the window.collageElements array to change their Z-order.
+     *
+     * @param {string} direction 'front', 'back', 'forward', 'backward'
+     */
+    window.changeZOrder = function(direction) {
+        const selectedElements = window.collageElements.filter(el => el.isSelected);
+        if (selectedElements.length === 0) {
+            return; // Nothing selected to move
+        }
+
+        window.saveState(); // Save state before modifying Z-order
+
+        // Create a copy of the current elements array
+        let currentElements = [...window.collageElements];
+
+        // Filter out selected elements from their current positions
+        const nonSelectedElements = currentElements.filter(el => !selectedElements.includes(el));
+
+        if (direction === 'front') {
+            // All selected elements to the very end of the array
+            window.collageElements = [...nonSelectedElements, ...selectedElements];
+        } else if (direction === 'back') {
+            // All selected elements to the very beginning of the array
+            window.collageElements = [...selectedElements, ...nonSelectedElements];
+        } else if (direction === 'forward') {
+            // Move selected elements one position forward (towards the end)
+            // Iterate from the back to allow moving elements without affecting earlier indices in the same loop
+            for (let i = window.collageElements.length - 1; i >= 0; i--) {
+                const element = window.collageElements[i];
+                if (selectedElements.includes(element)) {
+                    const currentIndex = i;
+                    // If the element is not the last one in the array
+                    // AND the element directly after it is NOT also selected (to preserve internal order)
+                    if (currentIndex < window.collageElements.length - 1 && !selectedElements.includes(window.collageElements[currentIndex + 1])) {
+                        // Swap with the element directly after it
+                        [window.collageElements[currentIndex], window.collageElements[currentIndex + 1]] = 
+                        [window.collageElements[currentIndex + 1], window.collageElements[currentIndex]];
+                    }
+                }
+            }
+        } else if (direction === 'backward') {
+            // Move selected elements one position backward (towards the beginning)
+            // Iterate from the front to allow moving elements without affecting later indices in the same loop
+            for (let i = 0; i < window.collageElements.length; i++) {
+                const element = window.collageElements[i];
+                if (selectedElements.includes(element)) {
+                    const currentIndex = i;
+                    // If the element is not the first one in the array
+                    // AND the element directly before it is NOT also selected (to preserve internal order)
+                    if (currentIndex > 0 && !selectedElements.includes(window.collageElements[currentIndex - 1])) {
+                        // Swap with the element directly before it
+                        [window.collageElements[currentIndex], window.collageElements[currentIndex - 1]] = 
+                        [window.collageElements[currentIndex - 1], window.collageElements[currentIndex]];
+                    }
+                }
+            }
+        }
+
+        window.drawCanvas(); // Redraw canvas to reflect new Z-order
+        window.updateLayerButtonStates(); // Update button states
+    };
 });
