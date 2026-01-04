@@ -3,7 +3,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Collage Designer JS loaded.');
 
+    //=================================================================================
     // --- Global Variables (exposed via window for external scripts) ---
+    //=================================================================================
     window.collageCanvas = document.getElementById('collageCanvas');
     window.collageCanvasWrapper = document.getElementById('collageCanvasWrapper');
     window.loadingOverlay = document.getElementById('loadingOverlay');
@@ -15,12 +17,36 @@ document.addEventListener('DOMContentLoaded', () => {
     window.textFields = [];
     window.imagePlaceholders = [];
 
+    // --- Global Fallback for Images (loaded from PHP) ---
+    window.phpFallbackImageUrl = (initialDemoImagePaths && initialDemoImagePaths.length > 0) ? initialDemoImagePaths[0] : null; 
+
+
+    // --- Global Function to fetch Demo Image URLs ---
+    window.fetchDemoImageUrls = async function(count = 1) {
+        try {
+            const response = await fetch(`../../api/demo-images.php?count=${count}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const imageUrls = await response.json();
+            if (!Array.isArray(imageUrls) || imageUrls.length === 0) {
+                console.warn('fetchDemoImageUrls: Received empty or invalid image URLs from backend, using fallback.');
+                return [window.phpFallbackImageUrl];
+            }
+            return imageUrls;
+        } catch (error) {
+            console.error('Failed to fetch demo images:', error);
+            // Return a generic fallback URL in case of error
+            return [window.phpFallbackImageUrl];
+        }
+    };
+
+    //=================================================================================
     // --- Local Variables (not exposed globally) ---
+    //=================================================================================
     const BASE_URL = typeof window.AppBaseUrl !== 'undefined' ? window.AppBaseUrl : './';
 
     let currentLayout = initialCollageLayout;
-    let demoImagePaths = initialDemoImagePaths;
-    let loadedImages = [];
 
     let isDragging = false;
     let dragStartX, dragStartY;
@@ -40,7 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let redoStack = [];
     const MAX_HISTORY_SIZE = 50; // Limit the history to prevent excessive memory usage
 
+    //=================================================================================
     // --- Utility Functions for Loading Overlay ---
+    //=================================================================================
     function showLoadingOverlay() {
         if (window.loadingOverlay) {
             window.loadingOverlay.style.display = 'flex';
@@ -53,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (!window.collageCanvas || !window.collageCanvasWrapper || !initialCollageLayout || !initialDemoImagePaths) {
+    if (!window.collageCanvas || !window.collageCanvasWrapper || !initialCollageLayout || typeof initialDemoImagePaths === 'undefined') {
         console.error('Required elements or data not found for collage designer.');
         return;
     }
@@ -63,7 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    //=================================================================================
     // --- Configuration Constants ---
+    //=================================================================================
     const BORDER_COLOR = '#000000';
     const BORDER_WIDTH = 2;
     const SELECTION_COLOR = 'rgba(0, 123, 255, 0.7)';
@@ -83,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ROTATION_CURSOR_URL = `url("${BASE_URL}${ROTATION_CURSOR_RELATIVE_PATH}") 12 12, auto`;
 
     window.CollageElement = class CollageElement {
-        constructor(id, x, y, width, height, rotation, originalLayoutDataIndex) {
+        constructor(id, x, y, width, height, rotation, originalLayoutDataIndex, image = null) {
             this.id = id;
             this.x = x;
             this.y = y;
@@ -91,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.height = height;
             this.rotation = rotation;
             this.originalLayoutDataIndex = originalLayoutDataIndex;
-            this.image = null;
+            this.image = image;
             this.isSelected = false; // Tracks if element is part of a selection (multi or single)
         }
 
@@ -100,6 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
                    mouseY >= this.y && mouseY <= this.y + this.height;
         }
     }
+
+    //=================================================================================
+    // --- Utility Functions ---
+    //=================================================================================
 
     function prepareRotatedImage(originalImage, degrees, targetWidth, targetHeight) {
         const tempCanvas = document.createElement('canvas');
@@ -153,29 +187,59 @@ document.addEventListener('DOMContentLoaded', () => {
         window.collageCanvasWrapper.style.aspectRatio = aspect_ratio.replace(':', ' / ');
     }
 
-    function loadDemoImages() {
+    async function loadDemoImages() {
         showLoadingOverlay();
-        const imagePromises = demoImagePaths.map((path, index) => {
+        let fetchedPaths = [];
+        let loadedImagesLocal = [];
+
+        try {
+            // Request enough images for all layout elements
+            // Assumption: currentLayout.layout.length indicates the number of images needed
+            // If no layout elements are present, we request 1 image for the fallback
+            const numImagesNeeded = currentLayout.layout ? currentLayout.layout.length : 1;
+            fetchedPaths = await window.fetchDemoImageUrls(numImagesNeeded);
+        } catch (error) {
+            console.error("Failed to fetch dynamic demo images for initial layout, using PHP fallback.", error);
+            // If fetching fails, we fill with the PHP fallback
+            const numImagesNeeded = currentLayout.layout ? currentLayout.layout.length : 1;
+            for (let i = 0; i < numImagesNeeded; i++) {
+                fetchedPaths.push(window.phpFallbackImageUrl);
+            }
+        }
+        
+        // Use the fetched paths instead of static demoImagePaths
+        const imagePromises = fetchedPaths.map((path, index) => {
             return new Promise((resolve, reject) => {
                 const img = new Image();
+                img.crossOrigin = "anonymous"; // Important for CORS with external images
                 img.onload = () => {
-                    loadedImages[index] = img;
+                    loadedImagesLocal[index] = img;
                     resolve();
                 };
                 img.onerror = () => {
-                    console.warn(`Failed to load image: ${path}. Using placeholder.`);
-                    loadedImages[index] = null;
-                    resolve();
+                    console.warn(`Failed to load image: ${path}. Using fallback.`);
+                    // Here, you could also assign an empty image placeholder or phpFallbackImageUrl
+                    const fallbackImg = new Image();
+                    fallbackImg.crossOrigin = "anonymous";
+                    fallbackImg.src = window.phpFallbackImageUrl;
+                    fallbackImg.onload = () => {
+                        loadedImagesLocal[index] = fallbackImg;
+                        resolve();
+                    };
+                    fallbackImg.onerror = () => { // If even the fallback fails to load
+                        loadedImagesLocal[index] = null; // Or a specific "broken" image
+                        resolve();
+                    }
                 };
                 img.src = path;
             });
         });
-        return Promise.all(imagePromises).finally(() => {
+        return Promise.all(imagePromises).then(() => loadedImagesLocal).finally(() => {
             hideLoadingOverlay();
         });
     }
 
-    function updateCollageElements() {
+    function updateCollageElements(loadedImagesArray) {
         window.collageElements = [];
         const canvasWidth = window.collageCanvas.width;
         const canvasHeight = window.collageCanvas.height;
@@ -194,8 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 x, y, width, height, rotation,
                 index
             );
-            const demoImageIndex = index % loadedImages.length;
-            element.image = loadedImages[demoImageIndex];
+            // Use the passed loadedImagesArray
+            const demoImageIndex = index % loadedImagesArray.length;
+            element.image = loadedImagesArray[demoImageIndex];
             window.collageElements.push(element);
         });
     }
@@ -228,7 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- Undo/Redo Functions ---
+    //=================================================================================
+    // --- Undo/Redo Functionality ---
+    //=================================================================================
 
     /**
      * Creates a snapshot of the current state of all collage elements.
@@ -236,17 +303,19 @@ document.addEventListener('DOMContentLoaded', () => {
      * @returns {Array<object>} A deep copy of the relevant element states.
      */
     window.createSnapshot = function() { 
-        return window.collageElements.map(el => ({
-            id: el.id, // Keep ID for matching
-            x: el.x,
-            y: el.y,
-            width: el.width,
-            height: el.height,
-            rotation: el.rotation,
-            isSelected: el.isSelected,
-            image: el.image,
-            originalLayoutDataIndex: el.originalLayoutDataIndex,
-        }));
+        return window.collageElements.map(el => {
+            return { 
+                id: el.id, // Keep ID for matching
+                x: el.x,
+                y: el.y,
+                width: el.width,
+                height: el.height,
+                rotation: el.rotation,
+                isSelected: el.isSelected,
+                imageSrc: el.image ? el.image.src : null,
+                originalLayoutDataIndex: el.originalLayoutDataIndex,
+            };
+        });
     }
 
     /**
@@ -260,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Create a new array for the elements, incorporating changes
         const newCollageElements = [];
-        const snapshotElementIds = new Set(snapshot.map(el => el.id));
 
         // 2. Update existing elements and add elements from snapshot that are new to current state
         snapshot.forEach(snapEl => {
@@ -273,10 +341,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentEl.height = snapEl.height;
                 currentEl.rotation = snapEl.rotation;
                 currentEl.isSelected = snapEl.isSelected;
+                if (snapEl.imageSrc !== (currentEl.image ? currentEl.image.src : null)) {
+                    const newImage = new Image();
+                    newImage.crossOrigin = "anonymous";
+                    newImage.src = snapEl.imageSrc || window.phpFallbackImageUrl; // use Fallback
+                    newImage.onload = window.drawCanvas;
+                    newImage.onerror = () => { console.error(`Failed to load restored image: ${newImage.src}`); window.drawCanvas(); };
+                    currentEl.image = newImage;
+                }
                 newCollageElements.push(currentEl);
             } else {
                 // Element exists in snapshot but not in current window.collageElements, so it was "added"
                 // Recreate the element.
+                const recreatedImage = new Image();
+                recreatedImage.crossOrigin = "anonymous";
+                recreatedImage.src = snapEl.imageSrc || window.phpFallbackImageUrl; // Fallback
+                recreatedImage.onload = window.drawCanvas;
+                recreatedImage.onerror = () => { console.error(`Failed to load recreated image: ${recreatedImage.src}`); window.drawCanvas(); };
+
                 const recreatedElement = new window.CollageElement(
                     snapEl.id,
                     snapEl.x,
@@ -285,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     snapEl.height,
                     snapEl.rotation,
                     snapEl.originalLayoutDataIndex !== undefined ? snapEl.originalLayoutDataIndex : -1, // Use -1 as default for added elements
-                    snapEl.image || null // Assume image can be null for placeholders
+                    recreatedImage
                 );
                 recreatedElement.isSelected = snapEl.isSelected;
                 newCollageElements.push(recreatedElement);
@@ -312,6 +394,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             window.activeElement = null; // No selection
         }
+        window.drawCanvas(); // Initial draw of the restored state
+        window.updateUndoRedoButtonStates(); // Update button states after restore
     };
 
     /**
@@ -350,6 +434,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (undoBtn) undoBtn.disabled = undoStack.length <= 1; // Always need at least 1 state to undo from
         if (redoBtn) redoBtn.disabled = redoStack.length === 0;
     }
+
+    //=================================================================================
+    // --- Canvas Drawing Function ---
+    //=================================================================================
 
     window.drawCanvas = function() {
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
@@ -468,6 +556,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
         }
     };
+
+
+    //=================================================================================
+    // --- Mouse Event Handlers ---
+    //=================================================================================
 
     function getMousePos(event) {
         const rect = window.collageCanvas.getBoundingClientRect();
@@ -928,14 +1021,20 @@ document.addEventListener('DOMContentLoaded', () => {
         window.drawCanvas();
     }
 
+    //=================================================================================
+    // --- Initialization Function ---
+    //=================================================================================
+
     async function initDesigner() {
         setupCanvasDimensions();
-        await loadDemoImages();
-        updateCollageElements();
+        const loadedImagesArray = await loadDemoImages();
+        updateCollageElements(loadedImagesArray);
         window.drawCanvas();
     }
 
+    //=================================================================================
     // --- Event Listeners ---
+    //=================================================================================
     window.collageCanvas.addEventListener('mousedown', handleMouseDown);
     window.collageCanvas.addEventListener('mousemove', handleMouseMove);
     window.collageCanvas.addEventListener('mouseup', handleMouseUp);
@@ -947,8 +1046,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentState = undoStack.pop(); // Remove current state from undo stack
             redoStack.push(currentState); // Push it to redo stack
             window.restoreSnapshot(undoStack[undoStack.length - 1]); // Load the previous state
-            window.drawCanvas();
-            updateUndoRedoButtonStates();
         }
     });
 
@@ -957,8 +1054,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const nextState = redoStack.pop(); // Get next state from redo stack
             undoStack.push(nextState); // Push it back to undo stack
             window.restoreSnapshot(nextState); // Load this state
-            window.drawCanvas();
-            window.updateUndoRedoButtonStates();
         }
     });
 
@@ -984,7 +1079,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addNewElement(); // Calls the function to add a new element with default parameters
     });
 
-    // Initialize the designer and save the very first state
+    //=================================================================================
+    // --- Initialize the designer and save the very first state
+    //=================================================================================
     initDesigner().then(() => {
         window.saveState(); // Save initial state after everything is loaded
         window.updateUndoRedoButtonStates(); // Update button states based on initial stack

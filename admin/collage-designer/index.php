@@ -6,7 +6,6 @@ use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\FontUtility;
-use Photobooth\Utility\ImageUtility;
 use Photobooth\Service\AssetService;
 use Photobooth\Utility\CollageLayoutScanner;
 
@@ -27,9 +26,6 @@ if (!(
 $configurationService = ConfigurationService::getInstance();
 $languageService = LanguageService::getInstance();
 $assetService = AssetService::getInstance();
-
-// Example: Load Demo Pictures for the preview
-$demoImages = ImageUtility::getDemoImages(8);
 
 // Example: Load available fonts
 $font_paths = [
@@ -119,7 +115,7 @@ include 'components/design-selector.php';
 // Include components relevant to element-specific adjustments
 include 'components/element-settings-panel.php'; // Dynamic settings for active element
 include 'components/text-fields-manager.php';  // Text fields management
-include 'components/image-placeholders-manager.php'; // Image placeholders management
+//include 'components/image-placeholders-manager.php'; // Image placeholders management
 ?>
                     </div><!-- End left-panel -->
 

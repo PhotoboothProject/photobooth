@@ -2,12 +2,19 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check if main designer variables/functions are available
-    if (typeof window.collageCanvas === 'undefined' || typeof window.drawCanvas === 'undefined' || typeof window.collageElements === 'undefined' || typeof window.activeElement === 'undefined') {
+    if (typeof window.collageCanvas === 'undefined' || typeof window.drawCanvas === 'undefined' ||
+        typeof window.collageElements === 'undefined' || typeof window.activeElement === 'undefined' ||
+        typeof window.CollageElement === 'undefined' || typeof window.createSnapshot === 'undefined' ||
+        typeof window.restoreSnapshot === 'undefined' || typeof window.saveState === 'undefined' ||
+        typeof window.phpFallbackImageUrl === 'undefined' || typeof window.fetchDemoImageUrls === 'undefined'
+    ) {
         console.error('collage-designer-tools.js: Dependent main designer variables/functions not found. Ensure collage-designer.js is loaded first and exposes necessary variables globally.');
         return;
     }
 
+    //=================================================================================
     // --- Helper Functions ---
+    //=================================================================================
 
     /**
      * Gets currently selected elements from all known element arrays.
@@ -46,7 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    //=================================================================================
     // --- Element Management Functions ---
+    //=================================================================================
 
     /**
      * Adds a new placeholder element to the canvas.
@@ -58,16 +67,16 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} id Optional ID. If not provided, a new unique ID is generated.
      * @returns {CollageElement} The newly created element.
      */
-    window.addNewElement = function(x, y, width, height, rotation = 0, id) {
+    window.addNewElement = async function(x, y, width, height, rotation = 0, id) {
         // Save current state BEFORE adding the element for Undo
         window.saveState(); 
 
         const canvasWidth = window.collageCanvas.width;
         const canvasHeight = window.collageCanvas.height;
 
-        const defaultWidth = canvasWidth / 2; // Z.B. halbe Canvas-Breite
-        const defaultHeight = canvasHeight / 2; // Z.B. halbe Canvas-Höhe
-        // Kleiner Versatz, damit neue Elemente bei mehrfachem Hinzufügen gestapelt sichtbar sind
+        const defaultWidth = canvasWidth / 2;
+        const defaultHeight = canvasHeight / 2;
+        // small Offset, so new Elements are stacked when multiple are added
         const offset = window.collageElements.filter(el => el.originalLayoutDataIndex === -1).length * 10; 
 
         // Calculate default position: centered, but slightly offset if id is generated (for stacking duplicates)
@@ -77,6 +86,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Generate unique ID if not provided
         const newId = id || `element-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
         
+         let imageUrl = null;
+        try {
+            // call global function from collage-designer.js
+            const fetchedUrls = await window.fetchDemoImageUrls(1);
+            imageUrl = fetchedUrls[0];
+        } catch (error) {
+            console.error('Could not fetch demo image for new element, using fallback.', error);
+            imageUrl = window.phpFallbackImageUrl; // Globalen Fallback nutzen
+        }
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = imageUrl;
+
         // Create new CollageElement instance
         const newElement = new CollageElement(
             newId,
@@ -85,7 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
             width !== undefined ? width : defaultWidth,
             height !== undefined ? height : defaultHeight,
             rotation,
-            -1 // -1 indicates it's not from originalLayoutData (a placeholder)
+            -1, // -1 indicates it's not from originalLayoutData (a placeholder)
+            img
         );
 
         // Add it to our global collection
@@ -98,12 +122,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Redraw canvas to show the new element
         window.drawCanvas();
-        window.updateUndoRedoButtonStates(); // Update button states after adding element
-
+        
+        // When the image loads, redraw the canvas to display it and save the final state
+        img.onload = () => {
+            window.drawCanvas(); // Redraw once the image is ready
+            window.saveState(); // Save state again after image has loaded to reflect its presence
+        };
+        img.onerror = () => {
+            console.error(`Failed to load image for element ${newId}: ${imageUrl}`);
+            window.drawCanvas(); // Redraw to show text placeholder if image failed
+            window.saveState(); // Save state even if image failed to load
+        };
+        window.saveState(); // Save state after adding the element
+        
         return newElement;
     };
 
+    //=================================================================================
     // --- Alignment Functions ---
+    //=================================================================================
 
     // General alignment logic function to avoid repetition
     function applyAlignment(property, targetValueFn, useActiveElementAsReference = false) {
@@ -327,7 +364,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.drawCanvas();
     });
 
+    //=================================================================================
     // --- Distribution Functions ---
+    //=================================================================================
 
     // Distribute selected elements horizontally
     document.getElementById('distributeHBtn').addEventListener('click', () => {

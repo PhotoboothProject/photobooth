@@ -1,6 +1,7 @@
 <?php
 // admin/collage-designer/components/preview-canvas.php
 
+use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
 // The PHP part that provides demo images remains relevant.
@@ -22,7 +23,8 @@ use Photobooth\Utility\PathUtility;
 <?php
 // PHP code to export demo images as a JavaScript array.
 // This is the direct way to pass image paths to the frontend.
-// Later, we could replace these with the user's actual images.
+// used as a fallback in case the API call fails.
+$demoImages = ImageUtility::getDemoImages(1);
 $jsDemoImages = json_encode(array_map(fn ($img) => PathUtility::getPublicPath($img), $demoImages));
 echo '<script type="text/javascript">';
 echo 'const initialDemoImagePaths = ' . $jsDemoImages . ';';
