@@ -98,19 +98,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const BORDER_WIDTH = 2;
     const SELECTION_COLOR = 'rgba(0, 123, 255, 0.7)';
 
-    const HANDLE_SIZE = 10;
+    // Globale basevalues for all handles
+    const BASE_HANDLE_SIZE = 24;
     const HANDLE_COLOR = '#FFFFFF';
     const HANDLE_STROKE_COLOR = SELECTION_COLOR;
     const HANDLE_BORDER_WIDTH = 2;
 
-    const ROTATION_HANDLE_SIZE = 16;
+    // RESIZE HANDLES
+    const RESIZE_HANDLE_SIZE = BASE_HANDLE_SIZE;
+    const RESIZE_HANDLE_COLOR = HANDLE_COLOR;
+    const RESIZE_HANDLE_STROKE_COLOR = HANDLE_STROKE_COLOR;
+    const RESIZE_HANDLE_BORDER_WIDTH = HANDLE_BORDER_WIDTH;
+
+    // ROTATION HANDLE
+    const ROTATION_HANDLE_SIZE = BASE_HANDLE_SIZE;
     const ROTATION_HANDLE_OFFSET = 20;
-    const ROTATION_HANDLE_COLOR = '#FFFFFF';
-    const ROTATION_HANDLE_STROKE_COLOR = SELECTION_COLOR;
+    const ROTATION_HANDLE_COLOR = HANDLE_COLOR;
+    const ROTATION_HANDLE_STROKE_COLOR = HANDLE_STROKE_COLOR;
     const ROTATION_HANDLE_ICON = '\u21BA';
-    const ROTATION_HANDLE_ICON_FONT_SIZE = '12px Arial';
+    const ROTATION_HANDLE_ICON_FONT_SIZE = `${ROTATION_HANDLE_SIZE * 0.7}px Arial`;
     const ROTATION_CURSOR_RELATIVE_PATH = 'assets/icons/rotate-cw.svg';
     const ROTATION_CURSOR_URL = `url("${BASE_URL}${ROTATION_CURSOR_RELATIVE_PATH}") 12 12, auto`;
+
+    // DELETE HANDLE
+    const DELETE_HANDLE_SIZE = BASE_HANDLE_SIZE;
+    const DELETE_HANDLE_OFFSET = 10; 
+    const DELETE_HANDLE_COLOR = '#dc3545';
+    const DELETE_HANDLE_STROKE_COLOR = '#FFFFFF';
+    const DELETE_HANDLE_ICON_FONT_SIZE = `${DELETE_HANDLE_SIZE * 0.7}px Arial`;
+    const DELETE_CURSOR_RELATIVE_PATH = 'assets/icons/trash.svg';
+    const DELETE_CURSOR_URL = `url("${BASE_URL}${DELETE_CURSOR_RELATIVE_PATH}") 12 12, auto`;
 
     window.CollageElement = class CollageElement {
         constructor(id, x, y, width, height, rotation, originalLayoutDataIndex, image = null) {
@@ -304,6 +321,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /**
+     * calculates the current visual scaling factor of the Canvas element.
+     * This is the CSS scaling factor that influences the perceived size of the handles.
+     * @returns {number} The scaling factor (e.g., 1.0 for original size, 0.5 for half size, 2.0 for double size).
+     */
+    function getCanvasVisualScale() {
+        const rect = window.collageCanvas.getBoundingClientRect();
+        // The scaling factor is the ratio of the actual HTML width to the CSS width
+        // window.collageCanvas.width is the rendered width (pixels)
+        // rect.width is the visual width (CSS pixels)
+        // If the canvas (e.g., 900px wide) is in a div that is 450px wide, the scaling factor is 0.5.
+        // If it's displayed 1800px wide, the scaling factor is 2.0.
+        return rect.width / window.collageCanvas.width; 
+    }
+
     //=================================================================================
     // --- Undo/Redo Functionality ---
     //=================================================================================
@@ -453,6 +485,19 @@ document.addEventListener('DOMContentLoaded', () => {
     window.drawCanvas = function() {
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
 
+        // calculate the current visual scaling factor to adjust handle sizes
+        const visualScale = getCanvasVisualScale();
+        const inverseScale = 1 / visualScale; // This is our multiplier for the canvas handle sizes
+
+        // Calculate the effective handle sizes in canvas coordinates
+        const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
+        const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
+        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale;
+
+        // Pass the offset for rotation handle to ensure it always has a constant *visual* distance
+        const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
+        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
+
         window.collageElements.forEach((element) => {
             const { x, y, width, height, rotation, image } = element;
 
@@ -541,52 +586,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 { x: targetX + targetWidth, y: targetY + targetHeight,     cursor: 'nwse-resize', name: 'bottom-right' }
             ];
             handles.forEach(handle => {
-                window.ctx.fillStyle = HANDLE_COLOR;
-                window.ctx.strokeStyle = HANDLE_STROKE_COLOR;
-                window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
-                window.ctx.fillRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
-                window.ctx.strokeRect(handle.x - HANDLE_SIZE / 2, handle.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
+                window.ctx.fillStyle = RESIZE_HANDLE_COLOR;
+                window.ctx.strokeStyle = RESIZE_HANDLE_STROKE_COLOR;
+                window.ctx.lineWidth = RESIZE_HANDLE_BORDER_WIDTH;
+                window.ctx.fillRect(handle.x - effectiveResizeHandleSize / 2, handle.y - effectiveResizeHandleSize / 2, effectiveResizeHandleSize, effectiveResizeHandleSize);
+                window.ctx.strokeRect(handle.x - effectiveResizeHandleSize / 2, handle.y - effectiveResizeHandleSize / 2, effectiveResizeHandleSize, effectiveResizeHandleSize);
             });
         }
         
         // --- Draw Delete Handle ONLY FOR THE ACTIVE ELEMENT (if single element selected) ---
         if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
-            const deleteHandleSize = 16; // size of the delete handles
-            const deleteHandleOffset = 10; // distance from element border
             
             // Position of the handle (top right of the active element)
-            const deleteHandleX = window.activeElement.x + window.activeElement.width - deleteHandleOffset;
-            const deleteHandleY = window.activeElement.y + deleteHandleOffset;
+            const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
+            const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
 
             // draw the circle for the handle
             window.ctx.beginPath();
-            window.ctx.arc(deleteHandleX, deleteHandleY, deleteHandleSize / 2, 0, Math.PI * 2);
-            window.ctx.fillStyle = '#dc3545';
+            window.ctx.arc(deleteHandleX, deleteHandleY, effectiveDeleteHandleSize / 2, 0, Math.PI * 2);
+            window.ctx.fillStyle = DELETE_HANDLE_COLOR;
             window.ctx.fill();
-            window.ctx.strokeStyle = '#FFFFFF';
-            window.ctx.lineWidth = 2;
+            window.ctx.strokeStyle = DELETE_HANDLE_STROKE_COLOR;
+            window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
             window.ctx.stroke();
 
             // draw the X-Symbol in the handle
-            window.ctx.fillStyle = '#FFFFFF';
-            window.ctx.font = `${deleteHandleSize * 0.7}px Arial`;
+            window.ctx.fillStyle = DELETE_HANDLE_STROKE_COLOR;
+            window.ctx.font = `${effectiveDeleteHandleSize * 0.7}px Arial`;
             window.ctx.textAlign = 'center';
             window.ctx.textBaseline = 'middle';
             window.ctx.fillText('X', deleteHandleX, deleteHandleY);
         }
 
+        // Draw Rotation Handle
         if (window.activeElement && window.activeElement.isSelected) { // Check if it's selected and active
             const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
-            const rotationHandleY = window.activeElement.y - ROTATION_HANDLE_OFFSET;
+            const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
             window.ctx.beginPath();
-            window.ctx.arc(rotationHandleX, rotationHandleY, ROTATION_HANDLE_SIZE / 2, 0, Math.PI * 2);
+            window.ctx.arc(rotationHandleX, rotationHandleY, effectiveRotationHandleSize / 2, 0, Math.PI * 2);
             window.ctx.fillStyle = ROTATION_HANDLE_COLOR;
             window.ctx.fill();
             window.ctx.strokeStyle = ROTATION_HANDLE_STROKE_COLOR;
             window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
             window.ctx.stroke();
             window.ctx.fillStyle = ROTATION_HANDLE_STROKE_COLOR;
-            window.ctx.font = ROTATION_HANDLE_ICON_FONT_SIZE;
+            window.ctx.font = `${effectiveRotationHandleSize * 0.7}px Arial`;
             window.ctx.textAlign = 'center';
             window.ctx.textBaseline = 'middle';
             window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
@@ -625,6 +669,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentInteractionTarget = null; // The object or bounding box currently being interacted with via handles
         let currentTargetX = 0, currentTargetY = 0, currentTargetWidth = 0, currentTargetHeight = 0;
 
+        // calculate the effective handle sizes for hit detection
+        const visualScale = getCanvasVisualScale();
+        const inverseScale = 1 / visualScale;
+        const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
+        const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
+        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale;
+        const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
+        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
+
         // Determine the target for handle interaction (single active element or group bounding box)
         if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
             currentInteractionTarget = window.activeElement;
@@ -646,13 +699,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Rotation handle is ALWAYS on the activeElement, even if multiple are selected.
         if (window.activeElement && window.activeElement.isSelected) {
             const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
-            const rotationHandleY = window.activeElement.y - ROTATION_HANDLE_OFFSET;
+            const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
             const dist = Math.sqrt(
                 Math.pow(mouse.x - rotationHandleX, 2) +
                 Math.pow(mouse.y - rotationHandleY, 2)
             );
 
-            if (dist <= ROTATION_HANDLE_SIZE / 2) {
+            if (dist <= effectiveRotationHandleSize / 2) {
                 isRotating = true;
                 const elementCenterX = window.activeElement.x + window.activeElement.width / 2;
                 const elementCenterY = window.activeElement.y + window.activeElement.height / 2;
@@ -675,8 +728,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ];
 
             for (const handle of handles) {
-                if (mouse.x >= handle.x - HANDLE_SIZE / 2 && mouse.x <= handle.x + HANDLE_SIZE / 2 &&
-                    mouse.y >= handle.y - HANDLE_SIZE / 2 && mouse.y <= handle.y + HANDLE_SIZE / 2) {
+                if (mouse.x >= handle.x - effectiveResizeHandleSize / 2 && mouse.x <= handle.x + effectiveResizeHandleSize / 2 &&
+                    mouse.y >= handle.y - effectiveResizeHandleSize / 2 && mouse.y <= handle.y + effectiveResizeHandleSize / 2) {
                     
                     isResizing = true;
                     resizeHandle = handle.name;
@@ -700,17 +753,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Check for Delete Handle hit (only if single element selected) ---
         if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
-            const deleteHandleSize = 16;
-            const deleteHandleOffset = 10;
-            const deleteHandleX = window.activeElement.x + window.activeElement.width - deleteHandleOffset;
-            const deleteHandleY = window.activeElement.y + deleteHandleOffset;
+            const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
+            const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
 
             const distToDeleteHandle = Math.sqrt(
                 Math.pow(mouse.x - deleteHandleX, 2) +
                 Math.pow(mouse.y - deleteHandleY, 2)
             );
 
-            if (distToDeleteHandle <= deleteHandleSize / 2) {
+            if (distToDeleteHandle <= effectiveDeleteHandleSize / 2) {
                 event.preventDefault(); // prevent that the click executes other interactions
                 window.deleteSelectedElements(); // remove active element
                 return; // Handle clicked, don't proceed further
@@ -784,6 +835,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleMouseMove(event) {
         const mouse = getMousePos(event);
 
+        // calculate the effective handle sizes for hit detection
+        const visualScale = getCanvasVisualScale();
+        const inverseScale = 1 / visualScale;
+        const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
+        const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
+        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale;
+        const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
+        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
+
         // --- Cursor hover for handles (adjust for group vs. single) ---
         let cursorChanged = false;
         if (!isDragging && !isResizing && !isRotating) { // Only change cursor if not interacting
@@ -811,13 +871,27 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check rotation handle hover (ALWAYS on activeElement)
             if (window.activeElement && window.activeElement.isSelected) {
                 const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
-                const rotationHandleY = window.activeElement.y - ROTATION_HANDLE_OFFSET;
+                const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
                 const dist = Math.sqrt(
                     Math.pow(mouse.x - rotationHandleX, 2) +
                     Math.pow(mouse.y - rotationHandleY, 2)
                 );
-                if (dist <= ROTATION_HANDLE_SIZE / 2) {
+                if (dist <= effectiveRotationHandleSize / 2) {
                     window.collageCanvas.style.cursor = ROTATION_CURSOR_URL;
+                    cursorChanged = true;
+                }
+            }
+
+            // Check rotation handle hover (ALWAYS on activeElement)
+            if (window.activeElement && window.activeElement.isSelected) {
+                const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
+                const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
+                const dist = Math.sqrt(
+                    Math.pow(mouse.x - deleteHandleX, 2) +
+                    Math.pow(mouse.y - deleteHandleY, 2)
+                );
+                if (dist <= effectiveDeleteHandleSize / 2) {
+                    window.collageCanvas.style.cursor = DELETE_CURSOR_URL;
                     cursorChanged = true;
                 }
             }
@@ -831,8 +905,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     { x: currentTargetX + currentTargetWidth, y: currentTargetY + currentTargetHeight, cursor: 'nwse-resize', name: 'bottom-right' }
                 ];
                 for (const handle of handles) {
-                    if (mouse.x >= handle.x - HANDLE_SIZE / 2 && mouse.x <= handle.x + HANDLE_SIZE / 2 &&
-                        mouse.y >= handle.y - HANDLE_SIZE / 2 && mouse.y <= handle.y + HANDLE_SIZE / 2) {
+                    if (mouse.x >= handle.x - effectiveResizeHandleSize / 2 && mouse.x <= handle.x + effectiveResizeHandleSize / 2 &&
+                        mouse.y >= handle.y - effectiveResizeHandleSize / 2 && mouse.y <= handle.y + effectiveResizeHandleSize / 2) {
                         window.collageCanvas.style.cursor = handle.cursor;
                         cursorChanged = true;
                         break;
