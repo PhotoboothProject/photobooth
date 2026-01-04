@@ -113,4 +113,24 @@ class Helper
         eval('$o = ' . preg_replace('/[^0-9\+\-\*\/\(\)\.]/', '', $expression) . ';');
         return intval($o);
     }
+
+    /**
+     * Returns the prefixed filename if it exists
+     *
+     * @param string $filePath Original file path
+     * @param string $prefix   Prefix to add to the filename
+     * @return string          Prefixed file path if it exists, else original
+     */
+    public static function getPrefixedFile(string $filePath, string $prefix): string
+    {
+        if (empty($filePath) || !file_exists($filePath)) {
+            return $filePath;
+        }
+
+        $directory = dirname($filePath);
+        $filename = basename($filePath);
+        $prefixedFile = $directory . '/' . $prefix . '_' . $filename;
+
+        return file_exists($prefixedFile) ? $prefixedFile : $filePath;
+    }
 }
