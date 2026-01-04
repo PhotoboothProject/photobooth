@@ -479,6 +479,13 @@ sudo -u www-data scp /var/www/html/data/images/20230129_125148.jpg [username@rem
 
 You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server.
 
+## How do I use QR codes for downloads?
+
+- Touch-friendly viewer page: `view.php?image=<filename>` shows the photo/video with a large download button.
+- Direct file download (no UI): `api/download.php?image=<filename>`.
+- Set the QR target in the admin config under `qr[url]`; a good default is `view.php?image=` so guests open the viewer after scanning.
+- Network reminder: guests must reach the URL in the QR. Either put them on the same Wi-Fi/LAN as the Photobooth (no internet needed) or point the QR to a public endpoint that serves the image.
+
 ## How to use the image randomizer
 
 To use the image randomizer images must be placed inside `private/images/{folderName}`.
