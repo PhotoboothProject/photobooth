@@ -341,7 +341,7 @@ class Collage
             }
         }
 
-        $imageHandler->framePath = $c->collageFrame;
+        $imageHandler->framePath = Helper::getPrefixedFile($c->collageFrame, $c->collageLayout);
         $imageHandler->frameExtend = false;
 
         for ($i = 0; $i < $c->collageLimit; $i++) {
@@ -416,6 +416,7 @@ class Collage
             throw new \Exception('Failed to create collage resource.');
         }
 
+        $c->collageBackground = Helper::getPrefixedFile($c->collageBackground, $c->collageLayout);
         if (!empty($c->collageBackground)) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
             if (!$backgroundImage instanceof \GdImage) {
