@@ -251,7 +251,7 @@ class ThemeService
         $safeName = $this->getSafeName($themeName);
 
         // extract allowed files preserving structure
-        $allowedPrefixes = ['private/', 'resources/'];
+        $allowedPrefixes = ['private/'];
         $root = PathUtility::getRootPath();
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $stat = $zip->statIndex($i);
@@ -373,10 +373,17 @@ class ThemeService
                 }
             }
 
+            $projectRelative = PathUtility::toProjectRelative($absolute);
+
+            // Skip generated assets living in resources/ per export policy
+            if (str_starts_with($projectRelative, 'resources/')) {
+                return;
+            }
+
             $results[] = [
                 'original' => $value,
                 'absolute' => $absolute,
-                'relative' => PathUtility::toProjectRelative($absolute),
+                'relative' => $projectRelative,
             ];
         });
 
