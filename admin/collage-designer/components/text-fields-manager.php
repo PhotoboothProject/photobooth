@@ -5,7 +5,7 @@ use Photobooth\Utility\AdminInput;
 
 ?>
 
-<div class="text_fields_manager flex flex-col gap-4 p-4 border border-gray-200 rounded-md">
+<div id="text_fields_manager" class="flex flex-col gap-4 p-4 rounded-md bg-white w-full">
     <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
         Manage Text Fields
     </span>

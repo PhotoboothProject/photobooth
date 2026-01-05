@@ -699,6 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         window.updateRemoveButtonState();
         window.updateLayerButtonStates();
+        window.updateElementSettingsPanel();
     };
 
 
@@ -845,6 +846,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (clickedOnElement) {
+            const wasElementSelectedBeforeClick = elementClicked.isSelected;
+            
             // If Ctrl/Cmd is pressed, toggle selection for the clicked element
             if (event.ctrlKey || event.metaKey) {
                 elementClicked.isSelected = !elementClicked.isSelected;
@@ -863,22 +866,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.activeElement = elementClicked; // The clicked element becomes the active one
             }
             
-            isDragging = true;
-            dragStartX = mouse.x;
-            dragStartY = mouse.y;
-            // elementStartX/Y for dragging needs to be the initial position of the active element
-            // or the top-left of the group bounding box for consistent dragging behavior.
-            if (selectedElementsCount > 1) { // If multiple elements, drag the group
-                const groupBoundingBox = getSelectionBoundingBox();
-                if (groupBoundingBox) {
-                    elementStartX = groupBoundingBox.x;
-                    elementStartY = groupBoundingBox.y;
+            if (wasElementSelectedBeforeClick) {
+                isDragging = true;
+                dragStartX = mouse.x;
+                dragStartY = mouse.y;
+
+                // elementStartX/Y for dragging needs to be the initial position of the active element
+                // or the top-left of the group bounding box for consistent dragging behavior.
+                if (selectedElementsCount > 1) { // If multiple elements, drag the group
+                    const groupBoundingBox = getSelectionBoundingBox();
+                    if (groupBoundingBox) {
+                        elementStartX = groupBoundingBox.x;
+                        elementStartY = groupBoundingBox.y;
+                    }
+                } else if (window.activeElement) { // Single element drag
+                    elementStartX = window.activeElement.x;
+                    elementStartY = window.activeElement.y;
                 }
-            } else if (window.activeElement) { // Single element drag
-                elementStartX = window.activeElement.x;
-                elementStartY = window.activeElement.y;
             }
-            window.collageCanvas.style.cursor = 'grabbing';
+            window.collageCanvas.style.cursor = window.activeElement ? 'grab' : 'default';
         } else {
             // No element was clicked
             if (!event.ctrlKey && !event.metaKey) {

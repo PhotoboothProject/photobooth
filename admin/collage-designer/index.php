@@ -97,7 +97,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
             </div>
 
             <!-- Main designer area -->
-            <div class="main_editor_area mt-4 w-full flex flex-col gap-4">
+            <div class="main_editor_area mt-4 w-full flex flex-col gap-2">
                  <div class="design-selector-container w-full p-2 md:p-4 border border-gray-200 rounded-md flex flex-col gap-4">
 <?php
 include 'components/design-selector.php';
@@ -105,12 +105,15 @@ include 'components/design-selector.php';
                 </div> <!-- End design-selector-container -->
 
                  <!-- Main design area with two columns for settings and preview -->
-                <div class="main-design-panel w-full flex flex-col md:flex-row gap-4">
+                <div class="main-design-panel w-full flex flex-col md:flex-row gap-2">
                     <!-- LEFT PANEL: Element-specific settings and managers -->
-                    <div class="left-panel w-full flex-1 flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
-                        <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
-                            <?= $languageService->translate('element_settings_title') ?>
-                        </span>
+                    <div class="left-panel w-full flex-1 flex flex-col gap-2 border border-gray-200 rounded-md">
+                        <div class="flex flex-col w-full px-4 pt-4">
+                            <span class="w-full flex flex-col items-center text-xl font-bold text-brand-1">
+                                <?= $languageService->translate('element_settings_panel') ?>
+                            </span>
+                            <div class="border-t border-gray-200 w-full my-6"></div>
+                        </div>
 <?php
 // Include components relevant to element-specific adjustments
 include 'components/element-settings-panel.php'; // Dynamic settings for active element
@@ -129,8 +132,8 @@ include 'components/text-fields-manager.php';  // Text fields management
                         </div>
 
                         <!-- RIGHT PANEL: PREVIEW -->
-                        <div class="right-panel w-full flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
-                            <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
+                        <div class="right-panel w-full flex flex-col gap-2 rounded-md">
+                            <span class="w-full flex flex-col items-center text-xl font-bold text-brand-1 mb-2">
                                 <?= $languageService->translate('preview_title') ?>
                             </span>
                             <?php include 'components/preview-canvas.php'; // Contains #result_canvas?>
@@ -181,6 +184,7 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer.js') . '"></script>'; // Your main JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-tools.js') . '"></script>'; // Tools JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-elemntSetPnl.js') . '"></script>'; // Element Settings Panel JS
 // Optional: Specific toasts/messages depending on PHP processing
 if (isset($_SESSION['designer_message'])) {
     echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';
