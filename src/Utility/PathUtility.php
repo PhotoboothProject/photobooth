@@ -103,7 +103,7 @@ class PathUtility
      */
     public static function isUrl(string $path): bool
     {
-        return str_starts_with($path, 'http');
+        return str_starts_with(strtolower($path), 'http');
     }
 
     /**
