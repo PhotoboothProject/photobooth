@@ -1284,11 +1284,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Keyboard Shortcut for Delete ---
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Delete' || event.key === 'Backspace') { // 'Delete' für Entf, 'Backspace' für Rücktaste (oft auch zum Löschen verwendet)
+        if (event.key === 'Delete') {
             const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
             if (selectedElementsCount > 0) {
-                event.preventDefault(); // Verhindere Standard-Browserverhalten (z.B. zurück im Browser)
-                window.deleteSelectedElements(); // Lösche die ausgewählten Elemente
+                event.preventDefault(); // prevents default browser behavior (e.g., navigating back in browser)
+                window.deleteSelectedElements(); // Delete the selected elements
             }
         }
     });
