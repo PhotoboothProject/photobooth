@@ -16,6 +16,24 @@ document.addEventListener('DOMContentLoaded', () => {
     //=================================================================================
 
     /**
+     * Clamps a percentage value between 0 and 100.
+     * @param {number} value The value to clamp.
+     * @returns {number} The clamped value.
+     */
+    function clampPercentage(value) {
+        return Math.max(0, Math.min(100, value));
+    }
+
+    /**
+     * Clamps a rotation value between -180 and 180 degrees.
+     * @param {number} value The value to clamp.
+     * @returns {number} The clamped value.
+     */
+    function clampRotation(value) {
+        return Math.max(-180, Math.min(180, value));
+    }
+
+    /**
      * Updates the element settings panel based on the current selection.
      * Deactivates the panel if no or multiple elements are selected.
      * Activates and populates the panel if exactly one element is selected.
@@ -127,8 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (isNaN(value)) value = 0;
 
                     if (prop === 'rotation') {
+                        value = clampRotation(value);
                         window.activeElement[prop] = value;
                     } else {
+                        value = clampPercentage(value);
                         const canvasDimension = (dimension === 'width') ? window.collageCanvas.width : window.collageCanvas.height;
                         // Ensure minimum size for width/height
                         if ((prop === 'width' || prop === 'height') && value <= 0) value = 0.1; 
@@ -157,8 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (isNaN(value)) value = 0;
 
                     if (prop === 'rotation') {
+                        value = clampRotation(value);
                         window.activeElement[prop] = value;
                     } else {
+                        value = clampPercentage(value);
                         const canvasDimension = (dimension === 'width') ? window.collageCanvas.width : window.collageCanvas.height;
                         // Ensure minimum size for width/height
                         if ((prop === 'width' || prop === 'height') && value <= 0) value = 0.1;
