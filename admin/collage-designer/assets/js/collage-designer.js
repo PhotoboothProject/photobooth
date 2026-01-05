@@ -1012,6 +1012,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (event.shiftKey) {
                 angleDiff = Math.round(angleDiff / 20) * 30;
+            } else {
+                angleDiff = Math.round(angleDiff);
             }
             
             selected.forEach(element => {
