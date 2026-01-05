@@ -195,7 +195,7 @@ Typical examples include:</p>
   &quot;event&quot;: {
     &quot;symbol&quot;: &quot;fa-birthday-cake&quot;,
     &quot;textLeft&quot;: &quot;Lisa &amp; Tom&quot;,
-    &quot;textRight&quot;: &quot;01.01.2026&quot;
+    &quot;textRight&quot;: &quot;01.01.&quot;
   },
   &quot;colors&quot;: {
     &quot;primary&quot;: &quot;#4a7c1f&quot;,
@@ -204,7 +204,7 @@ Typical examples include:</p>
     &quot;countdown&quot;: &quot;#5b7d4a&quot;
   },
   &quot;picture&quot;: {
-    &quot;frame&quot;: &quot;/private/images/frames/birthday.png&quot;,
+    &quot;frame&quot;: &quot;private/images/frames/birthday.png&quot;,
     &quot;extend_by_frame&quot;: &quot;false&quot;
   },
   &quot;collage&quot;: {
@@ -227,6 +227,29 @@ Typical examples include:</p>
 <li>Enter a name in the theme name input.</li>
 <li>Click <strong>Save theme</strong>.</li>
 <li>A JSON file is created or updated in <code>private/themes</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Export</strong> a theme</p>
+<ul>
+<li>Select a theme from the dropdown.</li>
+<li>Click <strong>Export</strong>.</li>
+<li>A ZIP is downloaded containing:<ul>
+<li><code>private/themes/&lt;theme-name&gt;.theme.config.json</code></li>
+<li>All files referenced by the theme (for example background images, frames, logos) from <code>private/</code> and <code>resources/</code>.</li>
+<li>The folder structure inside the ZIP preserves the paths relative to the project root.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Import</strong> a theme</p>
+<ul>
+<li>Click <strong>Import</strong> and choose a ZIP created by the export feature.</li>
+<li>The theme name is taken from the <code>.theme.config.json</code> filename inside the ZIP.</li>
+<li>If a theme with the same name already exists, it is overwritten.</li>
+<li>The ZIP is unpacked into the project preserving its contained folder structure (only <code>private/</code> and <code>resources/</code> are written).</li>
+<li>The imported theme shows up in the dropdown and will be applied immediately.</li>
 </ul>
 </li>
 <li>
