@@ -30,7 +30,7 @@ Themes are stored as JSON files in `private/themes`.
   "event": {
     "symbol": "fa-birthday-cake",
     "textLeft": "Lisa & Tom",
-    "textRight": "01.01.2026"
+    "textRight": "01.01."
   },
   "colors": {
     "primary": "#4a7c1f",
@@ -39,7 +39,7 @@ Themes are stored as JSON files in `private/themes`.
     "countdown": "#5b7d4a"
   },
   "picture": {
-    "frame": "/private/images/frames/birthday.png",
+    "frame": "private/images/frames/birthday.png",
     "extend_by_frame": "false"
   },
   "collage": {
@@ -61,6 +61,21 @@ In the **Themes** card you can:
     - Enter a name in the theme name input.
     - Click **Save theme**.
     - A JSON file is created or updated in `private/themes`.
+
+- **Export** a theme
+    - Select a theme from the dropdown.
+    - Click **Export**.
+    - A ZIP is downloaded containing:
+        - `private/themes/<theme-name>.theme.config.json`
+        - All files referenced by the theme (for example background images, frames, logos) from `private/` and `resources/`.
+        - The folder structure inside the ZIP preserves the paths relative to the project root.
+
+- **Import** a theme
+    - Click **Import** and choose a ZIP created by the export feature.
+    - The theme name is taken from the `.theme.config.json` filename inside the ZIP.
+    - If a theme with the same name already exists, it is overwritten.
+    - The ZIP is unpacked into the project preserving its contained folder structure (only `private/` and `resources/` are written).
+    - The imported theme shows up in the dropdown and will be applied immediately.
 
 - **Load** a theme
     - Select a theme from the dropdown.

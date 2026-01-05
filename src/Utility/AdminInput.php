@@ -508,12 +508,29 @@ class AdminInput
                     </div>
                     <div class="flex flex-row gap-2">
                         <button
+                            id="theme-export-btn"
+                            type="button"
+                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
+                            title="' . $languageService->translate('theme_export') . '"
+                        >
+                            <i class="fa fa-download"></i>
+                        </button>
+                        <button
+                            id="theme-import-btn"
+                            type="button"
+                            class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
+                            title="' . $languageService->translate('theme_import') . '"
+                        >
+                            <i class="fa fa-upload"></i>
+                        </button>
+                        <input id="theme-import-input" type="file" class="hidden" accept=".zip" />
+                        <button
                             id="theme-load-btn"
                             type="button"
                             class="h-8 w-8 flex items-center justify-center rounded-full bg-content-1 text-brand-1 border border-solid border-brand-1 hover:bg-brand-1 hover:text-white transition text-[10px] font-bold"
                             title="' . $languageService->translate('theme_load') . '"
                         >
-                            <i class="fa fa-download"></i>
+                            <i class="fa fa-refresh"></i>
                         </button>
                         <button
                             id="theme-delete-btn"
@@ -631,14 +648,14 @@ class AdminInput
 
         $tooltipClass = '
             absolute z-20 hidden flex-col px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-lg
-            w-80 max-w-[calc(100vw-4rem)] left-0 top-full mt-2 break-words
+            w-80 max-w-[calc(100vw-4rem)] left-0 top-full break-words
             peer-hover:flex peer-focus:flex
         ';
 
         $isThemeField = self::$themeField;
 
         return '
-            <div class="tooltip mb-3 relative flex items-center justify-between gap-2">
+            <div class="tooltip adminSettingCard-header mb-3 relative flex items-center justify-between gap-2 pr-10 min-h-[32px]">
                 <label class="peer text-black text-md font-bold inline-flex items-center gap-2 cursor-help">
                     <span>' . $languageService->translate($label) . '</span>
                 </label>

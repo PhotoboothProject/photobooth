@@ -8,6 +8,9 @@ $(function () {
         const $saveButton = $('#theme-save-btn');
         const $loadButton = $('#theme-load-btn');
         const $deleteButton = $('#theme-delete-btn');
+        const $exportButton = $('#theme-export-btn');
+        const $importButton = $('#theme-import-btn');
+        const $importInput = $('#theme-import-input');
         const $select = $('#theme-select');
         const $currentInput = $('input[name="theme[current]"]');
         let lastAppliedThemeSnapshot = null;
@@ -25,7 +28,7 @@ $(function () {
         }
 
         function updateLoadButtonState() {
-            if ($loadButton.length === 0 || $deleteButton.length === 0) {
+            if ($loadButton.length === 0 || $deleteButton.length === 0 || $exportButton.length === 0) {
                 return;
             }
 
@@ -49,14 +52,15 @@ $(function () {
                 $loadButton.removeClass('opacity-40 cursor-not-allowed');
             }
 
-            // Disable delete button when no theme is selected
-            if (!selected) {
-                $deleteButton.prop('disabled', true);
-                $deleteButton.addClass('opacity-40 cursor-not-allowed');
-            } else {
-                $deleteButton.prop('disabled', false);
-                $deleteButton.removeClass('opacity-40 cursor-not-allowed');
-            }
+            const disabledClasses = 'opacity-40 cursor-not-allowed';
+
+            const toggleButton = (button, isDisabled) => {
+                button.prop('disabled', isDisabled);
+                button.toggleClass(disabledClasses, isDisabled);
+            };
+
+            toggleButton($deleteButton, !selected);
+            toggleButton($exportButton, !selected);
         }
 
         function getThemeElements() {
@@ -203,9 +207,10 @@ $(function () {
             });
         }
 
-        function refreshSelect() {
+        function refreshSelect(desiredSelection = null) {
             const current = $currentInput.length ? $currentInput.val() : '';
             const previousSelected = $select.val();
+            const targetSelection = desiredSelection ?? previousSelected;
 
             $.getJSON(apiBase, { action: 'list', _: Date.now() })
                 .done((data) => {
@@ -224,12 +229,16 @@ $(function () {
                             $('<option>', {
                                 value: key,
                                 text: key,
-                                selected: key === previousSelected
+                                selected: key === previousSelected || key === targetSelection
                             }).appendTo($select);
                         });
 
                     if (current && $nameInput.length) {
                         $nameInput.val(current);
+                    }
+
+                    if (targetSelection) {
+                        $select.val(targetSelection);
                     }
 
                     updateLoadButtonState();
@@ -350,6 +359,80 @@ $(function () {
                 })
                 .fail(() => {
                     photoboothTools.overlay.showError(photoboothTools.getTranslation('error'));
+                });
+        });
+
+        $exportButton.on('click', () => {
+            const selected = $select.val();
+            if (!selected) {
+                return;
+            }
+
+            const url = `${apiBase}?action=export&name=${encodeURIComponent(selected)}&_=${Date.now()}`;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${selected}.zip`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        $importButton.on('click', () => {
+            if ($importInput.length) {
+                $importInput.trigger('click');
+            }
+        });
+
+        $importInput.on('change', function onImportChange() {
+            const file = this.files ? this.files[0] : null;
+            if (!file) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'import');
+            formData.append('theme_zip', file);
+
+            const desiredName = $nameInput.length ? $nameInput.val().trim() : '';
+            if (desiredName) {
+                formData.append('name', desiredName);
+            }
+
+            $.ajax({
+                url: apiBase,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json'
+            })
+                .done((data) => {
+                    if (data.status !== 'success') {
+                        photoboothTools.overlay.showError(photoboothTools.getTranslation('error'));
+                        return;
+                    }
+
+                    const importedName = data.name || desiredName;
+                    if (data.theme) {
+                        applyTheme(data.theme);
+                        snapshotTheme();
+                    }
+
+                    if ($currentInput.length && importedName) {
+                        $currentInput.val(importedName);
+                    }
+                    if ($nameInput.length && importedName) {
+                        $nameInput.val(importedName);
+                    }
+
+                    refreshSelect(importedName);
+                    updateLoadButtonState();
+                })
+                .fail(() => {
+                    photoboothTools.overlay.showError(photoboothTools.getTranslation('error'));
+                })
+                .always(() => {
+                    $importInput.val('');
                 });
         });
         refreshSelect();

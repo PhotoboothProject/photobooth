@@ -937,6 +937,7 @@
   "theme_choose": "Choose theme",
   "theme_override_confirm": "Saving will override theme \"%s\". Continue?",
   "theme_unsaved_confirm": "You have unsaved theme changes. Loading will discard them. Continue?",
+  "manual:theme_title": "Use the Themes box to save current theme fields, load another, export a ZIP (config + referenced images), or import that ZIP to install a theme. Import or save will overwrite an existing theme with the same name.",
   "text_settings": "Text settings",
   "toggleFullscreen": "Toggle Fullscreen",
   "translate": "Translate",
