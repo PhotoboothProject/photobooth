@@ -6,6 +6,7 @@
   --button-background: var(--primary-color);
   --button-font-size: 1rem;
   --button-font-weight: 400;
+  --button-font-family: 'DefaultFont', 'Dosis', sans-serif;
   --button-icon-size: 1rem;
   --button-padding-y: 1rem;
   --button-padding-x: 1rem;
@@ -34,6 +35,8 @@
   gap: var(--button-gap);
   font-size: var(--button-font-size);
   font-weight: var(--button-font-weight);
+  font-family: var(--font-family-button, --font-family-default), 'Dosis', sans-serif;
+  font-style: var(--button-font-style, normal);
   color: var(--button-color);
   text-align: center;
   text-decoration: none;

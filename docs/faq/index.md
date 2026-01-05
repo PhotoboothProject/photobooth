@@ -40,6 +40,12 @@ Changed options are stored inside `config/my.config.inc.php` to prevent sharing 
 
 ---
 
+## How do I set up the screensaver?
+
+Use the Admin Panel → General → Screensaver and follow [Screensaver function](screensaver.md) for modes, file locations, and timing tips.
+
+---
+
 ## How to change the language?
 
 Open [http://localhost/admin](http://localhost/admin) (

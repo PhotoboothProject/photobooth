@@ -6,7 +6,7 @@
   --stage-background: transparent;
   --stage-background-image: none;
   --stage-background-size: contain;
-  --stage-start-color: var(--start-font-color);
+  --stage-start-color: var(--start-text-color);
   --stage-start-background: transparent;
   --stage-chroma-color: inherit;
   --stage-chroma-background: var(--background-chroma);
@@ -208,4 +208,24 @@
       color: var(--success-color);
     }
   }
+}
+
+.stage--start .names .start-text {
+  font-family: var(--font-family-start-text, --font-family-default), 'Dosis', sans-serif;
+  color: var(--start-text-color, inherit);
+  font-weight: var(--start-text-weight, 400);
+  font-style: var(--start-text-style, normal);
+}
+
+.stage--start .names .event-text {
+  font-family: var(--font-family-event-text, --font-family-default), 'Dosis', sans-serif;
+  color: var(--event-text-color, inherit);
+  font-weight: var(--event-text-weight, 400);
+  font-style: var(--event-text-style, normal);
+}
+
+/* Respect iOS safe areas when viewport-fit=cover hides the status bar */
+body,
+.stage {
+  padding-top: env(safe-area-inset-top, 0);
 }

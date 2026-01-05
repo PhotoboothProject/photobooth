@@ -1,0 +1,81 @@
+.screensaver-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  background-size: contain;
+  background-position: center;
+  z-index: 20;
+  cursor: pointer;
+
+  &--active {
+    display: flex;
+  }
+
+  &--gallery {
+    display: flex;
+    flex-direction: column;
+    padding: 6vh 0;
+    box-sizing: border-box;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: none;
+  }
+
+  &__text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: var(--screensaver-text-color, #ffffff);
+    font-family: var(--font-family-screensaver-text, --font-family-default), 'Dosis', sans-serif;
+    font-weight: var(--screensaver-text-weight, 400);
+    font-style: var(--screensaver-text-style, normal);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1.2;
+    box-sizing: border-box;
+    padding: 0.75rem 1.25rem;
+    background: rgba(32, 32, 32, 0.55);
+    backdrop-filter: blur(3px);
+
+    &--top {
+      top: 3rem;
+    }
+
+    &--center {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &--bottom {
+      bottom: 3rem;
+    }
+  }
+
+  &--gallery {
+    .screensaver-overlay__image {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 50vh;
+      object-fit: contain;
+      display: none;
+    }
+  }
+}

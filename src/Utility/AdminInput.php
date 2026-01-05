@@ -77,7 +77,7 @@ class AdminInput
         }
 
         return '
-            <button class="w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-content-1 hover:text-brand-1 transition font-bold [&.isDirty]:bg-amber-500 [&.isDirty]:border-amber-500 [&.isDirty]:text-black" id="' . $btnId . '">
+            <button type="button" class="w-full h-12 rounded-full bg-brand-1 text-white flex items-center justify-center relative ml-auto border-2 border-solid border-brand-1 hover:bg-content-1 hover:text-brand-1 transition font-bold [&.isDirty]:bg-amber-500 [&.isDirty]:border-amber-500 [&.isDirty]:text-black" id="' . $btnId . '">
                 <span class="save">
                     ' . $languageService->translate($label) . '
                 </span>

@@ -21,7 +21,7 @@
       color-mix(in srgb, var(--viewer-background), var(--primary-color, #2196f3) 35%),
       var(--primary-color, #2196f3)
     );
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'DefaultFont', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   color: var(--viewer-foreground);
   display: flex;
   align-items: center;

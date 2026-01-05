@@ -217,6 +217,31 @@ class ConfigurationService
             $config['preview']['url'] = trim(substr($config['preview']['url'], 4, -1), '"\'');
         }
 
+        // Migrate button font color from old colors config
+        if (!empty($config['colors']['button_font']) && empty($config['fonts']['button_font_color'])) {
+            $config['fonts']['button_font_color'] = $config['colors']['button_font'];
+        }
+
+        // Migrate countdown color from colors to fonts section
+        if (!empty($config['colors']['countdown']) && empty($config['fonts']['countdown_text_color'])) {
+            $config['fonts']['countdown_text_color'] = $config['colors']['countdown'];
+        }
+
+        // Migrate start font color to new font slots if empty
+        if (!empty($config['colors']['start_font'])) {
+            if (empty($config['fonts']['start_screen_title_color'])) {
+                $config['fonts']['start_screen_title_color'] = $config['colors']['start_font'];
+            }
+            if (empty($config['fonts']['event_text_color'])) {
+                $config['fonts']['event_text_color'] = $config['colors']['start_font'];
+            }
+        }
+
+        // Migrate general font color to default font color
+        if (!empty($config['colors']['font']) && empty($config['fonts']['default_color'])) {
+            $config['fonts']['default_color'] = $config['colors']['font'];
+        }
+
         // Migrate Background URLs
         if (isset($config['background']) && is_array($config['background'])) {
             $baseUrl = PathUtility::getBaseUrl();

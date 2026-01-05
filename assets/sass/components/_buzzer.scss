@@ -1,4 +1,8 @@
 .buzzer-message {
+  font-family: var(--font-family-button_buzzer_message, --font-family-default), 'Dosis', sans-serif;
+  font-weight: var(--buzzer-message-font-weight, var(--font-weight, 400));
+  font-style: var(--buzzer-message-font-style, var(--font-style, normal));
+  color: var(--buzzer-message-font-color, var(--font-color));
   font-size: 1.125rem;
   line-height: 1.75rem;
 
