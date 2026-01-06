@@ -120,7 +120,7 @@ class ConfigurationService
         }
 
         if (empty($config['qr']['url'])) {
-            $config['qr']['url'] = 'api/download.php?image=';
+            $config['qr']['url'] = 'view.php?image=';
         }
 
         return $config;
