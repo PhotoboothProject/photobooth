@@ -130,11 +130,11 @@ Notes:
 
 Single framed images only work when `apply_frame` is `always`.
 
+---
+
 ## Collage Frames and Backgrounds: Name Changes
 
 This guide explains how layout-specific frames and backgrounds are applied automatically if they exist. The system supports **default templates** with specific layout prefixes.
-
----
 
 ### How Name Changes Work
 
@@ -150,8 +150,8 @@ If the layout-specific file exists, it replaces the default. If it does **not ex
 - Default frame: `basic.png`
 - Layout: `1+2-1`
 - System checks for: `1+2-1_basic.png`
-  - If exists → used automatically
-  - If not → falls back to `basic.png`
+    - If exists → used automatically
+    - If not → falls back to `basic.png`
 
 ---
 
@@ -172,22 +172,20 @@ The following prefixes can be used when naming layout-specific frame or backgrou
 - `2x4-3`
 - `2x4-4`
 - `3+1-1`
-- `collage`
+- `collage.json`
 
 ---
 
 ### User Guidelines
 
-1. **Upload layout-specific files** using the pattern: `<layout>_<filename>`
-   Example: `2+2-1_frame.png` or `2+4-2_background.jpg`
-
-2. **Keep default files** in place for fallback.
-   Example: `frame.png`, `background.jpg`
-
-3. **Automatic selection:**
-   - When a layout is selected, the system checks if a layout-specific file exists.
-   - If it exists, it replaces the default automatically.
-   - If not, the default is used.
+- **Upload layout-specific files** using the pattern: `<layout>_<filename>`
+    - Example: `2+2-1_frame.png` or `2+4-2_background.jpg` or `collage.json_background.jpg`
+- **Keep default files** in place for fallback.
+    - Example: `frame.png`, `background.jpg`
+- **Automatic selection:**
+    - When a layout is selected, the system checks if a layout-specific file exists.
+        - If it exists, it replaces the default automatically.
+        - If not, the default is used.
 
 ---
 
@@ -199,4 +197,4 @@ The following prefixes can be used when naming layout-specific frame or backgrou
 | `2x4-2`         | `basic.png`   | `2x4-2_basic.png`         |
 
 - Backgrounds follow the **same naming convention**.
-  Example: `2x3-1_white.png` replaces `white.png` if it exists.
+    - Example: `2x3-1_white.png` replaces `white.png` if it exists.
