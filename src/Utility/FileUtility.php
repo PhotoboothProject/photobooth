@@ -4,7 +4,7 @@ namespace Photobooth\Utility;
 
 class FileUtility
 {
-    public const DIRECTORY_PERMISSIONS = 0755;
+    public const DIRECTORY_PERMISSIONS = 0775;
 
     public const FILE_UPLOAD_ERROR_MESSAGES = [
         UPLOAD_ERR_OK => 'file_upload:no_error',
