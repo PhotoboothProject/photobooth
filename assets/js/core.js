@@ -1405,15 +1405,12 @@ const photoBooth = (function () {
 
     $('.takeCollage, .newcollage').on('click', function (e) {
         e.preventDefault();
-        console.log('Collage button clicked');
         if (config.collage.enabled && config.collage.allow_selection && $('#collageSelectorModal').length) {
-            console.log('Opening collage selector modal');
             $('#collageSelectorModal').data('pending-start', true);
             $('#collageSelectorModal').removeClass('hidden').attr('aria-hidden', 'false');
             $(this).trigger('blur');
             return;
         }
-        console.log('Starting collage without selection');
         api.thrill(PhotoStyle.COLLAGE);
         $(this).trigger('blur');
     });
