@@ -146,6 +146,8 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-do-i-use-qr-codes-for-downloads">How do I use QR codes for downloads?</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#how-to-use-the-image-randomizer">How to use the image randomizer</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#use-for-picture-frames">Use for PICTURE FRAMES:</a>
@@ -597,6 +599,13 @@ Array
 <pre><code>sudo -u www-data scp /var/www/html/data/images/20230129_125148.jpg [username@remotehost]:/[path_to_where_you_want_to_store_the_pictures]
 </code></pre>
 <p>You can now use the URL with which you can access your remote server from the internet and paste it into the QR code field in the Photobox admin panel. Now using the QR code your pictures can be downloaded from your remote server.</p>
+<h2 id="how-do-i-use-qr-codes-for-downloads">How do I use QR codes for downloads?</h2>
+<ul>
+<li>Touch-friendly viewer page: <code>view.php?image=&lt;filename&gt;</code> shows the photo/video with a large download button.</li>
+<li>Direct file download (no UI): <code>api/download.php?image=&lt;filename&gt;</code>.</li>
+<li>Set the QR target in the admin config under <code>qr[url]</code>; a good default is <code>view.php?image=</code> so guests open the viewer after scanning.</li>
+<li>Network reminder: guests must reach the URL in the QR. Either put them on the same Wi-Fi/LAN as the Photobooth (no internet needed) or point the QR to a public endpoint that serves the image.</li>
+</ul>
 <h2 id="how-to-use-the-image-randomizer">How to use the image randomizer</h2>
 <p>To use the image randomizer images must be placed inside <code>private/images/{folderName}</code>.
 For hassle-free (ssh/sftp-free) upload, you may want to use the integrated images uploader: <a href="http://localhost/admin/upload">http://localhost/admin/upload</a> (
