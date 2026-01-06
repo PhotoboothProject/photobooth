@@ -8,7 +8,7 @@ Is this **your first time** contributing to a different project? You might be in
 
 1. Fork and clone the repo
 2. Run `npm install` to install all dependencies
-3. Install submodules `git submodule update --init`
+3. To install all needed submodules `git submodule update --init`
 4. Create a branch for your PR with `git checkout -b pr/your-branch-name`
 
 If you want to build the project, run `npm run build`.
@@ -33,9 +33,10 @@ If you want to build the project, run `npm run build`.
 Please make sure to run `npm run build`, `npm run eslint` and `npm run composer:cgl`  before you commit your changes. Running `npm run eslint:fix` might be able to fix general issues on `*.js` files for you.
 
 **General Notes**
+
 - [Contribute to the documentation](contributing-docs.md)
-- changes to the css-files need to be done inside [assets/sass/](assets/sass/) (Information can be found [here](resources/css/README.md))
-- changes to the js-files need to be done inside [assets/js/](assets/js/) (Information can be found [here](resources/js/README.md))
+- changes to the css-files need to be done inside `assets/sass/`
+- changes to the js-files need to be done inside `assets/js/`
 - translation need to be done on [Crowdin](https://crowdin.com/project/photobooth)
 
 ## Help needed
