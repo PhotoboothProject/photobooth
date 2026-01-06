@@ -1,10 +1,5 @@
-_Latest stable release:_
-[![Lint](https://github.com/PhotoboothProject/photobooth/actions/workflows/lint.yml/badge.svg?branch=stable4)](https://github.com/PhotoboothProject/photobooth/actions/workflows/lint.yml)
-[![gulp-sass](https://github.com/PhotoboothProject/photobooth/actions/workflows/gulp_sass.yml/badge.svg?branch=stable4)](https://github.com/PhotoboothProject/photobooth/actions/workflows/gulp_sass.yml)
-[![Build](https://github.com/PhotoboothProject/photobooth/actions/workflows/build.yml/badge.svg?branch=stable4)](https://github.com/PhotoboothProject/photobooth/actions/workflows/build.yml)
-
 _Latest development version:_
-[![Lint](https://github.com/PhotoboothProject/photobooth/actions/workflows/lint.yml/badge.svg)](https://github.com/PhotoboothProject/photobooth/actions/workflows/lint.yml)
+[![Lint](https://github.com/PhotoboothProject/photobooth/actions/workflows/linters.yaml/badge.svg)](https://github.com/PhotoboothProject/photobooth/actions/workflows/lint.yaml)
 [![gulp-sass](https://github.com/PhotoboothProject/photobooth/actions/workflows/gulp_sass.yml/badge.svg)](https://github.com/PhotoboothProject/photobooth/actions/workflows/gulp_sass.yml)
 [![Build](https://github.com/PhotoboothProject/photobooth/actions/workflows/build.yml/badge.svg)](https://github.com/PhotoboothProject/photobooth/actions/workflows/build.yml)
 
