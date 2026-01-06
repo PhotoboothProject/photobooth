@@ -112,6 +112,20 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#extended-collage-object-v499">Extended collage object (v4.99+)</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#collage-frames-and-backgrounds-name-changes">Collage Frames and Backgrounds: Name Changes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-name-changes-work">How Name Changes Work</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#supported-layout-prefixes-default-templates">Supported Layout Prefixes / Default Templates</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#user-guidelines">User Guidelines</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#example-workflow">Example Workflow</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../kiosk-mode/">Kiosk mode</a>
@@ -290,6 +304,94 @@ Possible file names:</p>
 <li><code>placeholder</code> uses <code>placeholderpath</code> at <code>placeholderposition</code>.</li>
 </ul>
 <p>Single framed images only work when <code>apply_frame</code> is <code>always</code>.</p>
+<hr />
+<h2 id="collage-frames-and-backgrounds-name-changes">Collage Frames and Backgrounds: Name Changes</h2>
+<p>This guide explains how layout-specific frames and backgrounds are applied automatically if they exist. The system supports <strong>default templates</strong> with specific layout prefixes.</p>
+<h3 id="how-name-changes-work">How Name Changes Work</h3>
+<p>When you select a collage layout, the system looks for <strong>layout-specific files</strong>:</p>
+<ul>
+<li><strong>Frames:</strong> <code>&lt;layout&gt;_&lt;frame_filename&gt;</code></li>
+<li><strong>Backgrounds:</strong> <code>&lt;layout&gt;_&lt;background_filename&gt;</code></li>
+</ul>
+<p>If the layout-specific file exists, it replaces the default. If it does <strong>not exist</strong>, the system uses the default file.</p>
+<p><strong>Example:</strong></p>
+<ul>
+<li>Default frame: <code>basic.png</code></li>
+<li>Layout: <code>1+2-1</code></li>
+<li>System checks for: <code>1+2-1_basic.png</code><ul>
+<li>If exists → used automatically</li>
+<li>If not → falls back to <code>basic.png</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="supported-layout-prefixes-default-templates">Supported Layout Prefixes / Default Templates</h3>
+<p>The following prefixes can be used when naming layout-specific frame or background files (based on default available templates):</p>
+<ul>
+<li><code>1+2-1</code></li>
+<li><code>1+3-1</code></li>
+<li><code>1+3-2</code></li>
+<li><code>2+1-1</code></li>
+<li><code>2+2-1</code></li>
+<li><code>2+2-2</code></li>
+<li><code>2x3-1</code></li>
+<li><code>2x3-2</code></li>
+<li><code>2x4-1</code></li>
+<li><code>2x4-2</code></li>
+<li><code>2x4-3</code></li>
+<li><code>2x4-4</code></li>
+<li><code>3+1-1</code></li>
+<li><code>collage.json</code></li>
+</ul>
+<hr />
+<h3 id="user-guidelines">User Guidelines</h3>
+<ul>
+<li><strong>Upload layout-specific files</strong> using the pattern: <code>&lt;layout&gt;_&lt;filename&gt;</code><ul>
+<li>Example: <code>2+2-1_frame.png</code> or <code>2+4-2_background.jpg</code> or <code>collage.json_background.jpg</code></li>
+</ul>
+</li>
+<li><strong>Keep default files</strong> in place for fallback.<ul>
+<li>Example: <code>frame.png</code>, <code>background.jpg</code></li>
+</ul>
+</li>
+<li><strong>Automatic selection:</strong><ul>
+<li>When a layout is selected, the system checks if a layout-specific file exists.<ul>
+<li>If it exists, it replaces the default automatically.</li>
+<li>If not, the default is used.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="example-workflow">Example Workflow</h4>
+<table>
+<thead>
+<tr>
+<th>Selected Layout</th>
+<th>Default Frame</th>
+<th>Layout-Specific Frame Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>2+2-1</code></td>
+<td><code>basic.png</code></td>
+<td><code>2+2-1_basic.png</code></td>
+</tr>
+<tr>
+<td><code>2x4-2</code></td>
+<td><code>basic.png</code></td>
+<td><code>2x4-2_basic.png</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Backgrounds follow the <strong>same naming convention</strong>.<ul>
+<li>Example: <code>2x3-1_white.png</code> replaces <code>white.png</code> if it exists.</li>
+</ul>
+</li>
+</ul>
               
             </div>
           </div><footer>
