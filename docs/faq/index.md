@@ -188,10 +188,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
 2. You need to change the background URL path via config or admin panel. Replace `url(../img/bg.jpg)` with your IP-Adress and port (if needed) as URL.
    Example:
 
-    ```
-    -   /img/bg.jpg
-    +   http://192.168.0.2:8081
-    ```
+   Use `http://192.168.0.2:8081` (or your own stream URL) in place of `/img/bg.jpg`.
 
     To use an DSLR or an Raspberry Pi Camera module see _Setting up a preview stream from your DSLR or PiCamera_ above.
 
@@ -200,6 +197,7 @@ Yes you can. There's different ways depending on your needs and personal setup:
 ## I've trouble setting up E-Mail config. How do I solve my problem?
 
 If connection fails some help can be found inside the official [PHPMailer Wiki](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting), especially gmail needs some special config.
+
 
 -   Should be obvious but the photobooth must be connected to WIFI/internet to send photos live.
 
@@ -260,6 +258,7 @@ Take a look for "Loaded Configuration File" to get the path of your php.ini, you
 This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick
 
 Use the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard) to get the operating system setup in place.
+
 - 6. Permissions -> USB Sync policy
 
 The target USB device is selected through the admin panel.
@@ -534,6 +533,7 @@ Magic Greenscreen is a feature that uses AI to automatically remove backgrounds 
    Choose __8 Rembg Setup__
 
    This script will:
+
    - Check for Python 3 and required packages
    - Create a virtual environment in `/var/www/rembg/rembg_venv`
    - Install rembg and its dependencies (PIL, onnxruntime)
