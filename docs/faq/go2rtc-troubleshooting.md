@@ -27,6 +27,7 @@ Access go2rtc via [http://localhost:1984](http://localhost:1984) and, maybe, adj
 **2 executes `gphoto2` / `rpicam-still` / `fswebcam` with the corresponding parameters.**
 
 If only `%s` is passed, it uses by default the following arguments:
+
 - on `gphoto2`: `--set-config output=Off --capture-image-and-download --filename=%s`
 - on `rpicam-still`: `-n -q 100 -o %s`
 - on `fswebcam`: `--no-banner -d /dev/video0 -r 1280x720 %s`

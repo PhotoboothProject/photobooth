@@ -14,6 +14,7 @@ Help improve the Photobooth docs by following these steps.
   python3 -m venv .venv
   source .venv/bin/activate
   ```
+
 - Install MkDocs and the theme:
   ```
   pip install mkdocs mkdocs-material
@@ -26,6 +27,7 @@ Help improve the Photobooth docs by following these steps.
   mkdocs build --config-file mkdocs_remote.yml
   mkdocs serve -f mkdocs_remote.yml
   ```
+
 - Open the URL shown in the terminal (typically `http://127.0.0.1:8000`) to review your changes live.
 
 ## 4) Edit guidelines

@@ -3,6 +3,7 @@
 > Note: Tools like `unclutter` do not work on Wayland.
 
 ## Pi OS Trixie (Wayland)
+
 - Hide the cursor by renaming the pointer icon:
   ```
   sudo mv /usr/share/icons/PiXtrix/cursors/left_ptr /usr/share/icons/PiXtrix/cursors/left_ptr.bak
@@ -17,6 +18,7 @@
   ```
   sudo mv /usr/share/icons/PiXflat/cursors/left_ptr /usr/share/icons/PiXflat/cursors/left_ptr.bak
   ```
+
 - Disable screen blanking:
   ```
   sudo raspi-config nonint do_blanking 1
@@ -25,6 +27,7 @@
   ```
   sudo raspi-config nonint do_blanking 0
   ```
+
 - Turn off the screensaver by editing `/etc/xdg/lxsession/LXDE-pi/autostart` and removing `@xscreensaver -no-splash`.
 - Prevent DPMS screen blanking by creating `/etc/X11/xorg.conf.d/99-dpms.conf`:
   ```
@@ -39,6 +42,7 @@
   ```
 
 ## Pi OS Bullseye and earlier (X11)
+
 - Disable screensaver and screen blanking with `sudo raspi-config`:
   - 1 System Options → S6 Boot / Auto Login → choose desktop auto-login.
   - 1 System Options → S6 Screen Blanking → disable.

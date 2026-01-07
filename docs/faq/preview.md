@@ -51,11 +51,13 @@ Keeps the DSLR connection alive for preview + capture on Linux.
 
 ## Troubleshooting
 
+
 - Check v4l2loopback after updates:
   ```
   v4l2-ctl --list-devices
   ```
   Expected: `GPhoto2 Webcam (platform:v4l2loopback-000): /dev/video0`
+
 - If missing, rebuild v4l2loopback:
   ```
   curl -LO https://github.com/umlaeute/v4l2loopback/archive/refs/tags/v0.12.7.tar.gz
@@ -64,6 +66,7 @@ Keeps the DSLR connection alive for preview + capture on Linux.
   sudo depmod -a
   sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"
   ```
+
 - Chromium may pick the wrong webcam (e.g. `bcm2835-isp`); disable other webcams if needed.
 - Long preview startup? Increase countdown (e.g. 8s) or run preview continuously (higher battery/CPU).
 - For command help: `python3 /var/www/html/api/cameracontrol.py --help` (adjust path if installed in a subfolder).

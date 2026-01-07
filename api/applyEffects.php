@@ -134,17 +134,20 @@ try {
             }
 
             if (!$vars['isCollage'] || $vars['editSingleCollage']) {
+                $filterProcessSize = intval($config['filters']['process_size'] ?? 0);
+                $downscaledForFilter = false;
+
                 // apply filter (optionally downscale first for performance)
                 if ($vars['imageFilter'] !== null && $vars['imageFilter'] !== ImageFilterEnum::PLAIN) {
                     $originalWidth = imagesx($imageResource);
                     $originalHeight = imagesy($imageResource);
                     $filterResource = $imageResource;
 
-                    $filterProcessSize = intval($config['filters']['process_size'] ?? 0);
                     if ($filterProcessSize > 0 && ($originalWidth > $filterProcessSize || $originalHeight > $filterProcessSize)) {
                         $downscaled = $imageHandler->resizeImage($imageResource, $filterProcessSize);
                         if ($downscaled instanceof \GdImage) {
                             $filterResource = $downscaled;
+                            $downscaledForFilter = true;
                         }
                     }
 
@@ -191,6 +194,18 @@ try {
                     );
                     if (!$imageResource instanceof \GdImage) {
                         throw new \Exception('Error resizing resource.');
+                    }
+                }
+
+                // Apply rembg (downscale first if filters_process_size is set and not already downscaled for filters)
+                if ($filterProcessSize > 0 && !$downscaledForFilter) {
+                    $width = imagesx($imageResource);
+                    $height = imagesy($imageResource);
+                    if ($width > $filterProcessSize || $height > $filterProcessSize) {
+                        $downscaled = $imageHandler->resizeImage($imageResource, $filterProcessSize);
+                        if ($downscaled instanceof \GdImage) {
+                            $imageResource = $downscaled;
+                        }
                     }
                 }
 

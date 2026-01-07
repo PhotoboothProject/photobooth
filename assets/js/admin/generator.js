@@ -115,8 +115,9 @@ function loadCurrentConfig() {
     $('input[name=\'text_enabled\'][data-trigger=\'general\']').prop('checked', text_enabled);
     $('input[name=\'text_font_family\']').val(font_family);
     $('input[name=\'text_font_family\']')[0].setAttribute('data-fontclass', 'font-selected');
+    const font_family_public = toPublicUrl(font_family);
     $('#fontselectedStyle').html(
-        `@font-face{font-family:"fontselected";src:url(${font_family}) format("truetype");} .font-selected{font-family:"fontselected",Verdena,Tahoma;}`
+        `@font-face{font-family:"fontselected";src:url(${font_family_public}) format("truetype");} .font-selected{font-family:"fontselected",Verdena,Tahoma;}`
     );
     $('input[name=\'text_font_color\']').attr('value', font_color);
     $('input[name=\'text_font_size\']').attr('value', font_size);
@@ -172,7 +173,7 @@ function changeGeneralSetting() {
     const c_text_enabled = $('input[name=\'text_enabled\'][data-trigger=\'general\']').is(':checked');
     let c_text_font = $('input[name=\'text_font_family\']')[0].getAttribute('data-fontclass');
     let c_text_font_unique_id = $('input[name=\'text_font_family\']').data('unique-id');
-    let c_text_font_value = $('input[name=\'text_font_family\']').val();
+    let c_text_font_value = toPublicUrl($('input[name=\'text_font_family\']').val());
     const c_font_color = $('input[name=\'text_font_color\']').val();
     const c_font_size = $('input[name=\'text_font_size\']').val();
     const c_text_1 = $('input[name=\'text_line_1\']').val();
