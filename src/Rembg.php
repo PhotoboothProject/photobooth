@@ -20,7 +20,7 @@ class Rembg
             !empty($vars['isCollage']) ||
             !empty($vars['isChroma'])
         ) {
-            $logger->info('Skipped (disabled or collage/chroma mode)');
+            $logger->debug('Skipped (disabled or collage/chroma mode)');
             return [$imageHandler, $imageResource];
         }
 
