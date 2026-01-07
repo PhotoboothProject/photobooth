@@ -107,16 +107,16 @@ $font_styles = '<style>';
 foreach ($font_paths as $path) {
     try {
         $files = FontUtility::getFontsFromPath($path, false);
+        $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
         if (count($files) > 0) {
-            foreach ($files as $name => $fontPath) {
-                $publicPath = PathUtility::getPublicPath($fontPath);
+            foreach ($files as $name => $path) {
                 $font_styles .= '
 					@font-face {
 						font-family: "' . $name . '";
-						src: url(' . $publicPath . ') format("truetype");
+						src: url(' . $path . ') format("truetype");
 					}
 				';
-                $font_family_options[$publicPath] = $name;
+                $font_family_options[$path] = $name;
             }
         }
     } catch (\Exception $e) {
