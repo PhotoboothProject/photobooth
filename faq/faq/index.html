@@ -379,11 +379,11 @@ your video in "Background video path".</p>
 <li>
 <p>You need to change the background URL path via config or admin panel. Replace <code>url(../img/bg.jpg)</code> with your IP-Adress and port (if needed) as URL.
    Example:</p>
-<p><code>-   /img/bg.jpg
-+   http://192.168.0.2:8081</code></p>
-<p>To use an DSLR or an Raspberry Pi Camera module see <em>Setting up a preview stream from your DSLR or PiCamera</em> above.</p>
 </li>
 </ol>
+<p>Use <code>http://192.168.0.2:8081</code> (or your own stream URL) in place of <code>/img/bg.jpg</code>.</p>
+<pre><code>To use an DSLR or an Raspberry Pi Camera module see _Setting up a preview stream from your DSLR or PiCamera_ above.
+</code></pre>
 <hr />
 <h2 id="ive-trouble-setting-up-e-mail-config-how-do-i-solve-my-problem">I've trouble setting up E-Mail config. How do I solve my problem?</h2>
 <p>If connection fails some help can be found inside the official <a href="https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting">PHPMailer Wiki</a>, especially gmail needs some special config.</p>
@@ -441,8 +441,14 @@ your video in "Background video path".</p>
 <hr />
 <h2 id="automatic-picture-syncing-to-usb-stick">Automatic picture syncing to USB stick</h2>
 <p>This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick</p>
-<p>Use the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a> to get the operating system setup in place.
-- 6. Permissions -&gt; USB Sync policy</p>
+<p>Use the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a> to get the operating system setup in place.</p>
+<ul>
+<li>
+<ol>
+<li>Permissions -&gt; USB Sync policy</li>
+</ol>
+</li>
+</ul>
 <p>The target USB device is selected through the admin panel.</p>
 <p>A USB drive / stick can be identified either by the USB stick label (e.g. <code>photobooth</code>), the operating system specific USB device name (e.g. <code>/dev/sda1</code>) or the USB device system subsystem name (e.g. <code>sda</code>). The preferred method would be the USB stick label (for use of a single USB stick) or the very specific USB device name, for different USB stick use. The default config will look for a drive with the label photobooth. The script only supports one single USB stick connected at a time</p>
 <p>Pictures will be synced to the USB stick matched by the pattern, as long as it is mounted (aka USB stick is plugged in)</p>
@@ -647,12 +653,14 @@ or <a href="http://localhost/photobooth/admin/upload">http://localhost/photoboot
 <li><strong>Download and run the the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a></strong></li>
 </ol>
 <p>Choose <strong>8 Rembg Setup</strong></p>
-<p>This script will:
-   - Check for Python 3 and required packages
-   - Create a virtual environment in <code>/var/www/rembg/rembg_venv</code>
-   - Install rembg and its dependencies (PIL, onnxruntime)
-   - Verify the installation
-   - start rembg server via a system service on port 7000 (API endpoints are used by Photobooth), access rembg server at <a href="http://localhost:7000">localhost:7000</a>).</p>
+<p>This script will:</p>
+<ul>
+<li>Check for Python 3 and required packages</li>
+<li>Create a virtual environment in <code>/var/www/rembg/rembg_venv</code></li>
+<li>Install rembg and its dependencies (PIL, onnxruntime)</li>
+<li>Verify the installation</li>
+<li>start rembg server via a system service on port 7000 (API endpoints are used by Photobooth), access rembg server at <a href="http://localhost:7000">localhost:7000</a>).</li>
+</ul>
 <h3 id="configuration">Configuration</h3>
 <ol>
 <li>

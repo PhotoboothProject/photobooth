@@ -177,13 +177,19 @@
 </ul>
 <h2 id="pi-os-bookworm-wayland">Pi OS Bookworm (Wayland)</h2>
 <ul>
-<li>Hide the cursor:
-  <code>sudo mv /usr/share/icons/PiXflat/cursors/left_ptr /usr/share/icons/PiXflat/cursors/left_ptr.bak</code></li>
-<li>Disable screen blanking:
+<li>
+<p>Hide the cursor:
+  <code>sudo mv /usr/share/icons/PiXflat/cursors/left_ptr /usr/share/icons/PiXflat/cursors/left_ptr.bak</code></p>
+</li>
+<li>
+<p>Disable screen blanking:
   <code>sudo raspi-config nonint do_blanking 1</code>
   Re-enable:
-  <code>sudo raspi-config nonint do_blanking 0</code></li>
-<li>Turn off the screensaver by editing <code>/etc/xdg/lxsession/LXDE-pi/autostart</code> and removing <code>@xscreensaver -no-splash</code>.</li>
+  <code>sudo raspi-config nonint do_blanking 0</code></p>
+</li>
+<li>
+<p>Turn off the screensaver by editing <code>/etc/xdg/lxsession/LXDE-pi/autostart</code> and removing <code>@xscreensaver -no-splash</code>.</p>
+</li>
 <li>Prevent DPMS screen blanking by creating <code>/etc/X11/xorg.conf.d/99-dpms.conf</code>:
   <code>Section "Monitor"
       Identifier "HDMI-1"

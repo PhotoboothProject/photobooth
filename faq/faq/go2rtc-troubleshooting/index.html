@@ -216,10 +216,12 @@
 <p><code>capture</code> is simply a wrapper and accepts exactly the same parameters as <code>gphoto2</code> / <code>rpicam-apps</code> / <code>fswebcam</code>. The only difference is that the wrapper does the following:</p>
 <p><strong>1 Stops Go2rtc</strong></p>
 <p><strong>2 executes <code>gphoto2</code> / <code>rpicam-still</code> / <code>fswebcam</code> with the corresponding parameters.</strong></p>
-<p>If only <code>%s</code> is passed, it uses by default the following arguments:
-- on <code>gphoto2</code>: <code>--set-config output=Off --capture-image-and-download --filename=%s</code>
-- on <code>rpicam-still</code>: <code>-n -q 100 -o %s</code>
-- on <code>fswebcam</code>: <code>--no-banner -d /dev/video0 -r 1280x720 %s</code></p>
+<p>If only <code>%s</code> is passed, it uses by default the following arguments:</p>
+<ul>
+<li>on <code>gphoto2</code>: <code>--set-config output=Off --capture-image-and-download --filename=%s</code></li>
+<li>on <code>rpicam-still</code>: <code>-n -q 100 -o %s</code></li>
+<li>on <code>fswebcam</code>: <code>--no-banner -d /dev/video0 -r 1280x720 %s</code></li>
+</ul>
 <p><strong>Note:</strong>: <code>%s</code> gets replaced by Photobooth with the corresponding path and filename.</p>
 <p>Run <code>capture --help</code> inside your terminal to get information about the usage of the <code>capture</code> wrapper.</p>
 <p><strong>3 Restarts go2rtc</strong></p>

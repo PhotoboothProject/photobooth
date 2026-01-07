@@ -215,16 +215,22 @@
 </ul>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <ul>
-<li>Check v4l2loopback after updates:
+<li>
+<p>Check v4l2loopback after updates:
   <code>v4l2-ctl --list-devices</code>
-  Expected: <code>GPhoto2 Webcam (platform:v4l2loopback-000): /dev/video0</code></li>
-<li>If missing, rebuild v4l2loopback:
+  Expected: <code>GPhoto2 Webcam (platform:v4l2loopback-000): /dev/video0</code></p>
+</li>
+<li>
+<p>If missing, rebuild v4l2loopback:
   <code>curl -LO https://github.com/umlaeute/v4l2loopback/archive/refs/tags/v0.12.7.tar.gz
   tar xzf v0.12.7.tar.gz &amp;&amp; cd v4l2loopback-0.12.7
   make &amp;&amp; sudo make install
   sudo depmod -a
-  sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"</code></li>
-<li>Chromium may pick the wrong webcam (e.g. <code>bcm2835-isp</code>); disable other webcams if needed.</li>
+  sudo modprobe v4l2loopback exclusive_caps=1 card_label="GPhoto2 Webcam"</code></p>
+</li>
+<li>
+<p>Chromium may pick the wrong webcam (e.g. <code>bcm2835-isp</code>); disable other webcams if needed.</p>
+</li>
 <li>Long preview startup? Increase countdown (e.g. 8s) or run preview continuously (higher battery/CPU).</li>
 <li>For command help: <code>python3 /var/www/html/api/cameracontrol.py --help</code> (adjust path if installed in a subfolder).</li>
 </ul>
