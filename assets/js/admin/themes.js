@@ -187,20 +187,18 @@ $(function () {
                     value = theme[name];
                 }
 
-                if (typeof value === 'undefined') {
-                    return;
-                }
-
                 if (el.tagName === 'INPUT') {
-                    if ($el.attr('type') === 'checkbox') {
-                        $el.prop('checked', value === true || value === 'true');
+                    const isCheckbox = $el.attr('type') === 'checkbox';
+                    const normalized = typeof value === 'undefined' ? (isCheckbox ? false : '') : value;
+                    if (isCheckbox) {
+                        $el.prop('checked', normalized === true || normalized === 'true');
                     } else {
-                        $el.val(value);
+                        $el.val(normalized);
                     }
                 } else if (el.tagName === 'SELECT') {
-                    $el.val(value).trigger('change');
+                    $el.val(typeof value === 'undefined' ? '' : value).trigger('change');
                 } else if (el.tagName === 'TEXTAREA') {
-                    $el.val(value);
+                    $el.val(typeof value === 'undefined' ? '' : value);
                 }
 
                 $el.trigger('change');
