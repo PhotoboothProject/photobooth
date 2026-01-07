@@ -550,6 +550,7 @@ class AdminInput
     {
         $languageService = LanguageService::getInstance();
         $videos = '';
+        $attributes = self::buildAttributes($setting);
 
         if (isset($setting['paths']) && is_array($setting['paths'])) {
             foreach ($setting['paths'] as $path) {
@@ -637,6 +638,7 @@ class AdminInput
                     class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto"
                     name="' . $setting['name'] . '"
                     value="' . $setting['value'] . '"
+                    ' . $attributes . '
                 />
             </div>
         ';
