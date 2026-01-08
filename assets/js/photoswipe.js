@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* globals photoBooth photoboothTools rotaryController remoteBuzzerClient */
+/* globals photoBooth photoboothTools rotaryController remoteBuzzerClient csrf */
 
 // eslint-disable-next-line no-unused-vars
 let globalGalleryHandle;

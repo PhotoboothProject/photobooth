@@ -1,4 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
+/* globals csrf */
 
 class DebugPanel {
     constructor() {

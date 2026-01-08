@@ -1,5 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
-/* globals photoboothTools */
+/* globals photoboothTools csrf */
 $(function () {
     function initThemes() {
         const apiBase = environment.publicFolders.api + '/themes.php';

@@ -1,5 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
-/* globals photoboothTools shellCommand */
+/* globals photoboothTools shellCommand csrf */
 $(function () {
     // Highlight save button on form changes
     const $saveButton = $('#save-admin-btn');

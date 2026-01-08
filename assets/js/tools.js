@@ -1,5 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
-/* globals remoteBuzzerClient */
+/* globals remoteBuzzerClient csrf */
 const photoboothTools = (function () {
     // vars
     const notificationTimeout = config.ui.notification_timeout * 1000,

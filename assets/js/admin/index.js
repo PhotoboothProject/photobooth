@@ -1,4 +1,4 @@
-/* globals photoboothTools */
+/* globals photoboothTools csrf */
 $(function () {
     initDirtyTracking();
 
