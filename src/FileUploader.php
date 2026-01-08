@@ -113,7 +113,18 @@ class FileUploader
             if ($fileError === UPLOAD_ERR_OK) {
                 $fileTmpName = $this->uploadedFiles['tmp_name'][$index];
                 $fileType = $this->uploadedFiles['type'][$index];
+
+                // Normalize and guard against path traversal
                 $sanitizedFileName = preg_replace('/\s+/', '_', $fileName);
+                $sanitizedFileName = str_replace(['\\', '/'], '_', $sanitizedFileName);
+                $sanitizedFileName = basename($sanitizedFileName);
+
+                // Reject if filename becomes empty or contains disallowed chars
+                if ($sanitizedFileName === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $sanitizedFileName)) {
+                    $this->addError($fileName, 'upload_wrong_type');
+                    continue;
+                }
+
                 $filePath = $this->folderPath . '/' . $sanitizedFileName;
 
                 $this->logger->debug('Processing file', [$fileName]);
