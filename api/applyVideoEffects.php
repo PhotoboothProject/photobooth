@@ -23,7 +23,10 @@ try {
         throw new \Exception('No file provided');
     }
 
-    $file = $_POST['file'];
+    $file = basename((string)$_POST['file']);
+    if ($file === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $file)) {
+        throw new \Exception('Invalid file name provided.');
+    }
 
     $tmpFolder = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR;
     $imageFolder = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR;
@@ -177,6 +180,7 @@ try {
             $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
         }
 
+        // Build ffmpeg command with safe args
         $cmd = sprintf(
             'ffmpeg -i %s %s %s %s',
             escapeshellarg($filenameTmp),
