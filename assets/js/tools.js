@@ -370,7 +370,8 @@ const photoboothTools = (function () {
                 url: environment.publicFolders.api + '/print.php',
                 data: {
                     filename: imageSrc,
-                    copies: copies
+                    copies: copies,
+                    [csrf.key]: csrf.token
                 },
                 success: (data) => {
                     api.console.log('Picture processed: ', data);

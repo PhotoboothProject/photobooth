@@ -20,12 +20,21 @@ $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
     || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
 
+// Longer-lived sessions for kiosk use
+ini_set('session.gc_maxlifetime', 172800);   // 48h server-side lifetime
+ini_set('session.cookie_lifetime', 172800);  // 48h client cookie lifetime
+
 session_set_cookie_params([
     'httponly' => true,
     'samesite' => 'Lax',
     'secure' => $isHttps,
 ]);
 session_start();
+
+// Ensure a CSRF token exists for client-side requests
+if (!isset($_SESSION['csrf']) || !is_string($_SESSION['csrf']) || $_SESSION['csrf'] === '') {
+    $_SESSION['csrf'] = bin2hex(random_bytes(32));
+}
 
 // Ensure login attempt tracking structure exists to avoid notices on fresh sessions
 if (!isset($_SESSION['login_attempts']) || !is_array($_SESSION['login_attempts'])) {

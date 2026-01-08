@@ -16,11 +16,33 @@ header('Content-Type: application/json');
 
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+$session         = $_SESSION;
+$csrfKey         = 'csrf';
+$csrfToken       = $_SESSION[$csrfKey] ?? '';
+$rateLimitWindow = 60;
+$rateLimitMax    = 10;
 $processor = null;
 $linecount = 0;
 $data = [];
 
 try {
+    $incomingToken = $_GET[$csrfKey] ?? '';
+    if (!hash_equals((string)$csrfToken, (string)$incomingToken)) {
+        throw new \Exception('Invalid CSRF token');
+    }
+
+    // Simple per-session rate limit for print requests
+    $now = time();
+    if (!isset($_SESSION['print']) || !is_array($_SESSION['print'])) {
+        $_SESSION['print'] = ['count' => 0, 'window' => $now];
+    }
+    if (($now - ($_SESSION['print']['window'] ?? 0)) > $rateLimitWindow) {
+        $_SESSION['print'] = ['count' => 0, 'window' => $now];
+    }
+    if (($_SESSION['print']['count'] ?? 0) >= $rateLimitMax) {
+        throw new \Exception('Rate limit exceeded, please wait a moment and retry');
+    }
+
     if (empty($_GET['filename'])) {
         throw new \Exception('No file provided!');
     }
@@ -63,6 +85,9 @@ try {
             throw new \Exception('Unable to print ' . $vars['copies'] . ' copies');
         }
     }
+
+    // record successful validation for rate limiting
+    $_SESSION['print']['count'] = ($_SESSION['print']['count'] ?? 0) + 1;
 } catch (\Exception $e) {
     // Handle the exception
     $data = [
@@ -102,7 +127,7 @@ if (!file_exists($vars['printFile'])) {
             $processor = new PrintProcessor($imageHandler, $logger, $printManager, $vars, $config);
         }
         if ($processor !== null && $processor instanceof PrintProcessor && method_exists($processor, 'preProcessing')) {
-            list($imageHandler, $vars, $config, $source) = $processor->preProcessing($imageHandler, $vars, $config, $source);
+            [$imageHandler, $vars, $config, $source] = $processor->preProcessing($imageHandler, $vars, $config, $source);
         }
 
         // rotate image if needed
@@ -181,7 +206,7 @@ if (!file_exists($vars['printFile'])) {
         }
 
         if ($processor !== null && $processor instanceof PrintProcessor && method_exists($processor, 'postProcessing')) {
-            list($imageHandler, $vars, $config, $source) = $processor->postProcessing($imageHandler, $vars, $config, $source);
+            [$imageHandler, $vars, $config, $source] = $processor->postProcessing($imageHandler, $vars, $config, $source);
         }
         $imageHandler->jpegQuality = 100;
         if (!$imageHandler->saveJpeg($source, $vars['printFile'])) {
