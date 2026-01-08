@@ -64,6 +64,12 @@ if ($method === 'GET') {
 
         $downloadName = isset($result['downloadName']) ? basename($result['downloadName']) : 'theme.zip';
         $filePath = $result['file'];
+        if (!is_file($filePath) || !is_readable($filePath)) {
+            $sendJson([
+                'status' => 'error',
+                'message' => 'Export file not found',
+            ]);
+        }
         header('Content-Type: application/zip');
         header('Content-Disposition: attachment; filename="' . $downloadName . '"');
         header('Content-Length: ' . filesize($filePath));
