@@ -31,7 +31,10 @@ try {
         throw new \Exception('No file provided');
     }
 
-    $vars['fileName'] = $_POST['file'];
+    $vars['fileName'] = basename((string)$_POST['file']);
+    if ($vars['fileName'] === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $vars['fileName'])) {
+        throw new \Exception('Invalid file name provided');
+    }
 
     if (!isset($_POST['style']) || !in_array($_POST['style'], ['photo', 'collage', 'custom', 'chroma'])) {
         throw new \Exception('Invalid or missing style parameter');
