@@ -16,6 +16,26 @@ header('Content-Type: application/json');
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
+// Simple per-session rate limiting to curb abuse (unauthenticated use)
+$windowSeconds = 60; // 1 minute
+$maxPerWindow  = 10; // max 10 requests per window
+$now           = time();
+if (!isset($_SESSION['sendpic'])) {
+    $_SESSION['sendpic'] = ['count' => 0, 'window' => $now];
+}
+if (($now - $_SESSION['sendpic']['window']) > $windowSeconds) {
+    $_SESSION['sendpic'] = ['count' => 0, 'window' => $now];
+}
+if ($_SESSION['sendpic']['count'] >= $maxPerWindow) {
+    $data = [
+        'success' => false,
+        'error'   => 'Rate limit exceeded. Please wait a few minutes and try again.',
+    ];
+    $logger->info('message', $data);
+    echo json_encode($data);
+    exit();
+}
+
 // Validate email addresses (comma-separated)
 if (empty($_POST['recipient'])) {
     $data = [
@@ -29,6 +49,8 @@ if (empty($_POST['recipient'])) {
 
 // Split the comma-separated email addresses
 $recipients = array_map('trim', explode(',', $_POST['recipient']));
+// enforce reasonable recipient cap
+$recipients = array_slice($recipients, 0, 10);
 $invalidEmails = [];
 
 // Check each email address
@@ -69,6 +91,15 @@ if (empty($_POST['image'])) {
 }
 
 $postImage = basename($_POST['image']);
+if ($postImage === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $postImage)) {
+    $data = [
+        'success' => false,
+        'error'   => 'Invalid image name',
+    ];
+    $logger->debug('message', $data);
+    echo json_encode($data);
+    exit();
+}
 $database = DatabaseManagerService::getInstance();
 if (!$database->isInDB($postImage)) {
     $data = [
@@ -148,5 +179,6 @@ foreach ($recipients as $recipient) {
 }
 
 // If all emails are sent successfully
+$_SESSION['sendpic']['count']++;
 echo json_encode(['success' => true]);
 exit();
