@@ -39,6 +39,9 @@ if (isset($_POST['controller']) and $_POST['controller'] == 'keypadLogin') {
         } else {
             $ipAttempts['count']++;
             usleep(300000); // 0.3s delay
+            if ($ipAttempts['count'] >= $maxAttempts) {
+                $blocked = true;
+            }
         }
     }
 
@@ -54,9 +57,16 @@ if (isset($_POST['controller']) and $_POST['controller'] == 'keypadLogin') {
     $allAttempts[$ip] = $ipAttempts;
     @file_put_contents($throttleFile, json_encode($allAttempts), LOCK_EX);
 
+    $retryAfter = max(0, $windowSeconds - ($now - ($ipAttempts['window'] ?? 0)));
+
     $data = [
-        'state' => !$blocked && $state === true
+        'state'       => !$blocked && $state === true,
+        'blocked'     => $blocked,
+        'retry_after' => $blocked ? $retryAfter : 0,
     ];
+    if ($blocked) {
+        $data['message'] = 'Too many attempts. Please wait ' . $retryAfter . ' seconds.';
+    }
     echo json_encode($data);
     exit();
 }

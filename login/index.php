@@ -84,7 +84,8 @@ if ($config['login']['enabled'] && !(isset($_SESSION['auth']) && $_SESSION['auth
                 <form method="post">
                     <div class="w-full flex flex-col items-center justify-center text-2xl font-bold text-brand-1 mb-2">Login</div>
                     <div class="w-full text-center text-gray-500 mb-8">' . $languageService->translate('login_pin_request') . '</div>
-                    <div class="w-full text-center text-gray-500 mb-8">' . AdminKeypad::renderIndicator(AdminKeypad::pinLength($config['login']['pin'])) . '</div>
+                    <div class="w-full text-center text-gray-500 mb-4">' . AdminKeypad::renderIndicator(AdminKeypad::pinLength($config['login']['pin'])) . '</div>
+                    <div id="keypad_message" class="text-center text-red-600 font-semibold mb-4 min-h-[1.5rem]"></div>
                     <div class="w-full text-center text-gray-500">' . AdminKeypad::render() . '</div>
                     <div id="keypad_pin" class="hidden"></div>
                     <div class="keypadLoader w-full h-full absolute top-0 left-0 flex-col items-center justify-center bg-white/90 hidden">' . getLoader('sm') . '</div>
