@@ -1,19 +1,28 @@
 #!/usr/bin/env node
-const fs = require("fs");
+const fs = require('fs');
+const path = require('path');
 
-const file = process.argv[2];
-if (!file) {
-  console.error("Usage: node sort-json.js <file.json>");
-  process.exit(1);
+const input = process.argv[2];
+if (!input) {
+    console.error('Usage: node sort-json.js <file.json>');
+    process.exit(1);
 }
 
-const data = JSON.parse(fs.readFileSync(file, "utf8"));
+const baseDir = process.cwd();
+const resolvedPath = path.resolve(baseDir, input);
 
-const sorted = Object.keys(data)
-  .sort((a, b) => a.localeCompare(b))
-  .reduce((acc, key) => {
-    acc[key] = data[key];
-    return acc;
-  }, {});
+if (!resolvedPath.startsWith(baseDir + path.sep) || path.extname(resolvedPath).toLowerCase() !== '.json') {
+    console.error('Error: Invalid file path or file type.');
+    process.exit(1);
+}
 
-fs.writeFileSync(file, JSON.stringify(sorted, null, 2) + "\n");
+try {
+    const data = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+    const sorted = Object.fromEntries(
+        Object.entries(data).sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+    );
+    fs.writeFileSync(resolvedPath, JSON.stringify(sorted, null, 2) + '\n');
+} catch (err) {
+    console.error('Error processing JSON file:', err.message);
+    process.exit(1);
+}
