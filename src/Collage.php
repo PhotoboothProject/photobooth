@@ -142,6 +142,9 @@ class Collage
 
         $collageConfigFilePath = self::getCollageConfigPath($c->collageLayout, self::$pictureOrientation);
 
+        // Save the original admin setting for text on collage
+        $adminTextOnCollageEnabled = $c->textOnCollageEnabled;
+
         if ($collageConfigFilePath !== null) {
             $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
 
@@ -176,7 +179,11 @@ class Collage
                         $c->collagePlaceholderPath = $collageJson['placeholderpath'];
                     }
 
-                    $c->textOnCollageEnabled = isset($collageJson['text_custom_style']) ? ($collageJson['text_custom_style'] ? 'enabled' : 'disabled') : $c->textOnCollageEnabled;
+                    // JSON can only override if admin setting allows text
+                    if ($adminTextOnCollageEnabled === 'enabled' && isset($collageJson['text_custom_style'])) {
+                        $c->textOnCollageEnabled = $collageJson['text_custom_style'] ? 'enabled' : 'disabled';
+                    }
+
                     if ($c->textOnCollageEnabled === 'enabled') {
                         $c->textOnCollageFontSize = isset($collageJson['text_font_size']) ? $collageJson['text_font_size'] : $c->textOnCollageFontSize;
                         $c->textOnCollageRotation = isset($collageJson['text_rotation']) ? $collageJson['text_rotation'] : $c->textOnCollageRotation;
@@ -191,94 +198,97 @@ class Collage
                     }
 
                     if ($c->collageAllowSelection) {
-                        if (isset($collageJson['text_disabled']) && $collageJson['text_disabled'] === true) {
-                            $c->textOnCollageEnabled = 'disabled';
-                        } elseif (isset($collageJson['text_alignment']) && is_array($collageJson['text_alignment'])) {
-                            $ta = $collageJson['text_alignment'];
-                            $c->textOnCollageEnabled = 'enabled';
+                        // JSON layout can only disable or customize text if admin has enabled it
+                        if ($adminTextOnCollageEnabled === 'enabled') {
+                            if (isset($collageJson['text_disabled']) && $collageJson['text_disabled'] === true) {
+                                $c->textOnCollageEnabled = 'disabled';
+                            } elseif (isset($collageJson['text_alignment']) && is_array($collageJson['text_alignment'])) {
+                                $ta = $collageJson['text_alignment'];
+                                $c->textOnCollageEnabled = 'enabled';
 
-                            $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
+                                $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
 
-                            // Check if zone mode
-                            if (isset($ta['mode']) && $ta['mode'] === 'zone') {
-                                // Zone mode: store zone parameters for Image::applyTextInZone()
-                                $c->textZoneMode = true;
-                                $c->textZoneX = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['x'] ?? '0'));
-                                $c->textZoneY = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['y'] ?? '0'));
-                                $c->textZoneW = isset($ta['w']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['w'])) : 0;
-                                $c->textZoneH = isset($ta['h']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['h'])) : 0;
-                                $c->textZonePadding = isset($ta['padding']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['padding'])) : 0;
-                                $c->textZoneAlign = $ta['align'] ?? 'center';
-                                $c->textZoneValign = $ta['valign'] ?? 'middle';
-                                $c->textZoneRotation = isset($ta['rotation']) ? (int) $ta['rotation'] : 0;
+                                // Check if zone mode
+                                if (isset($ta['mode']) && $ta['mode'] === 'zone') {
+                                    // Zone mode: store zone parameters for Image::applyTextInZone()
+                                    $c->textZoneMode = true;
+                                    $c->textZoneX = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['x'] ?? '0'));
+                                    $c->textZoneY = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['y'] ?? '0'));
+                                    $c->textZoneW = isset($ta['w']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['w'])) : 0;
+                                    $c->textZoneH = isset($ta['h']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['h'])) : 0;
+                                    $c->textZonePadding = isset($ta['padding']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['padding'])) : 0;
+                                    $c->textZoneAlign = $ta['align'] ?? 'center';
+                                    $c->textZoneValign = $ta['valign'] ?? 'middle';
+                                    $c->textZoneRotation = isset($ta['rotation']) ? (int) $ta['rotation'] : 0;
 
-                                // In zone mode: ignore admin X/Y/Rotation values
-                                // Keep admin font, color, text lines, fontSize (as start), lineHeight (as factor)
-                            } else {
-                                // Legacy mode: calculate X/Y position based on alignment
-                                $zoneX = Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['x'] ?? '0'));
-                                $zoneY = Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['y'] ?? '0'));
-                                $zoneW = isset($ta['w']) ? Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['w'])) : 0;
-                                $zoneH = isset($ta['h']) ? Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['h'])) : 0;
+                                    // In zone mode: ignore admin X/Y/Rotation values
+                                    // Keep admin font, color, text lines, fontSize (as start), lineHeight (as factor)
+                                } else {
+                                    // Legacy mode: calculate X/Y position based on alignment
+                                    $zoneX = Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['x'] ?? '0'));
+                                    $zoneY = Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['y'] ?? '0'));
+                                    $zoneW = isset($ta['w']) ? Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['w'])) : 0;
+                                    $zoneH = isset($ta['h']) ? Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['h'])) : 0;
 
-                                if (isset($ta['fontSize'])) {
-                                    $c->textOnCollageFontSize = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['fontSize']));
-                                }
-
-                                if (isset($ta['rotation'])) {
-                                    $c->textOnCollageRotation = (int) $ta['rotation'];
-                                }
-
-                                if (isset($ta['lineHeight'])) {
-                                    $c->textOnCollageLinespace = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['lineHeight']));
-                                }
-
-                                $align = $ta['align'] ?? 'start';
-                                $valign = $ta['valign'] ?? 'top';
-
-                                if ($align === 'center' || $valign === 'middle') {
-                                    $textLines = [];
-                                    if (!empty($c->textOnCollageLine1)) {
-                                        $textLines[] = $c->textOnCollageLine1;
-                                    }
-                                    if (!empty($c->textOnCollageLine2)) {
-                                        $textLines[] = $c->textOnCollageLine2;
-                                    }
-                                    if (!empty($c->textOnCollageLine3)) {
-                                        $textLines[] = $c->textOnCollageLine3;
+                                    if (isset($ta['fontSize'])) {
+                                        $c->textOnCollageFontSize = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['fontSize']));
                                     }
 
-                                    if (count($textLines) > 0 && file_exists($c->textOnCollageFont)) {
-                                        $maxWidth = 0;
-                                        foreach ($textLines as $line) {
-                                            $bbox = imagettfbbox($c->textOnCollageFontSize, $c->textOnCollageRotation, $c->textOnCollageFont, $line);
-                                            if ($bbox) {
-                                                $width = abs($bbox[2] - $bbox[0]);
-                                                if ($width > $maxWidth) {
-                                                    $maxWidth = $width;
+                                    if (isset($ta['rotation'])) {
+                                        $c->textOnCollageRotation = (int) $ta['rotation'];
+                                    }
+
+                                    if (isset($ta['lineHeight'])) {
+                                        $c->textOnCollageLinespace = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['lineHeight']));
+                                    }
+
+                                    $align = $ta['align'] ?? 'start';
+                                    $valign = $ta['valign'] ?? 'top';
+
+                                    if ($align === 'center' || $valign === 'middle') {
+                                        $textLines = [];
+                                        if (!empty($c->textOnCollageLine1)) {
+                                            $textLines[] = $c->textOnCollageLine1;
+                                        }
+                                        if (!empty($c->textOnCollageLine2)) {
+                                            $textLines[] = $c->textOnCollageLine2;
+                                        }
+                                        if (!empty($c->textOnCollageLine3)) {
+                                            $textLines[] = $c->textOnCollageLine3;
+                                        }
+
+                                        if (count($textLines) > 0 && file_exists($c->textOnCollageFont)) {
+                                            $maxWidth = 0;
+                                            foreach ($textLines as $line) {
+                                                $bbox = imagettfbbox($c->textOnCollageFontSize, $c->textOnCollageRotation, $c->textOnCollageFont, $line);
+                                                if ($bbox) {
+                                                    $width = abs($bbox[2] - $bbox[0]);
+                                                    if ($width > $maxWidth) {
+                                                        $maxWidth = $width;
+                                                    }
                                                 }
                                             }
-                                        }
-                                        $totalHeight = $c->textOnCollageFontSize + (count($textLines) - 1) * $c->textOnCollageLinespace;
+                                            $totalHeight = $c->textOnCollageFontSize + (count($textLines) - 1) * $c->textOnCollageLinespace;
 
-                                        if ($align === 'center') {
-                                            $c->textOnCollageLocationX = (int) ($zoneX + ($zoneW - $maxWidth) / 2);
+                                            if ($align === 'center') {
+                                                $c->textOnCollageLocationX = (int) ($zoneX + ($zoneW - $maxWidth) / 2);
+                                            } else {
+                                                $c->textOnCollageLocationX = (int) $zoneX;
+                                            }
+
+                                            if ($valign === 'middle') {
+                                                $c->textOnCollageLocationY = (int) ($zoneY + ($zoneH - $totalHeight) / 2 + $c->textOnCollageFontSize);
+                                            } else {
+                                                $c->textOnCollageLocationY = (int) ($zoneY + $c->textOnCollageFontSize);
+                                            }
                                         } else {
                                             $c->textOnCollageLocationX = (int) $zoneX;
-                                        }
-
-                                        if ($valign === 'middle') {
-                                            $c->textOnCollageLocationY = (int) ($zoneY + ($zoneH - $totalHeight) / 2 + $c->textOnCollageFontSize);
-                                        } else {
-                                            $c->textOnCollageLocationY = (int) ($zoneY + $c->textOnCollageFontSize);
+                                            $c->textOnCollageLocationY = (int) $zoneY;
                                         }
                                     } else {
                                         $c->textOnCollageLocationX = (int) $zoneX;
                                         $c->textOnCollageLocationY = (int) $zoneY;
                                     }
-                                } else {
-                                    $c->textOnCollageLocationX = (int) $zoneX;
-                                    $c->textOnCollageLocationY = (int) $zoneY;
                                 }
                             }
                         }
