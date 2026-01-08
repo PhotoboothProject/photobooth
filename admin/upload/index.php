@@ -83,17 +83,17 @@ if (isset($_POST['submit'])) {
                         if (isset($errors['csrf'])) {
                             echo '<div class="flex flex-col justify-between p-2 rounded-sm bg-red-300 text-red-800 border-2 border-red-800">' . $languageService->translate('invalid_session') . '</div>';
                         }
-                    ?>
+?>
                 </div>
 
                 <?php
-                    if (count($failedFiles) > 0) {
-                        echo '<div class="flex flex-col gap-2">';
-                        foreach ($failedFiles as $fileName => $reason) {
-                            echo '<div class="flex flex-col justify-between p-2 rounded-sm bg-red-300 text-red-800 border-2 border-red-800"><div class="col-span-1">' . $fileName . '</div><div class="col-span-1">' . $languageService->translate($reason) . '</div></div>';
-                        }
-                        echo '</div>';
-                    }
+if (count($failedFiles) > 0) {
+    echo '<div class="flex flex-col gap-2">';
+    foreach ($failedFiles as $fileName => $reason) {
+        echo '<div class="flex flex-col justify-between p-2 rounded-sm bg-red-300 text-red-800 border-2 border-red-800"><div class="col-span-1">' . $fileName . '</div><div class="col-span-1">' . $languageService->translate($reason) . '</div></div>';
+    }
+    echo '</div>';
+}
 ?>
 
                 <div class="mt-6">

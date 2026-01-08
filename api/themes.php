@@ -18,12 +18,6 @@ $query = $_GET;
 if ($method === 'GET') {
     $action = $query['action'] ?? 'list';
 
-    // Require auth for any theme access
-    if (!$isAuthorized) {
-        http_response_code(403);
-        $sendJson(['status' => 'error', 'message' => 'Unauthorized']);
-    }
-
     if ($action === 'list') {
         $all = $themeService->getAll();
         $sendJson([
@@ -49,10 +43,6 @@ if ($method === 'GET') {
     }
 
     if ($action === 'export') {
-        if (!$isAuthorized) {
-            http_response_code(403);
-            $sendJson(['status' => 'error', 'message' => 'Unauthorized']);
-        }
         $name = (string)($query['name'] ?? '');
         $result = $themeService->exportTheme($name);
         if (!$result['success'] || !isset($result['file'])) {

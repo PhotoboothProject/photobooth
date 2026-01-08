@@ -27,6 +27,11 @@ session_set_cookie_params([
 ]);
 session_start();
 
+// Ensure login attempt tracking structure exists to avoid notices on fresh sessions
+if (!isset($_SESSION['login_attempts']) || !is_array($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = ['count' => 0, 'window' => time()];
+}
+
 // Basic security headers
 header('X-Frame-Options: SAMEORIGIN');
 header('X-Content-Type-Options: nosniff');

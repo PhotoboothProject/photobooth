@@ -108,6 +108,12 @@ class FileUploader
         $uploadedFileNames = [];
 
         foreach ($this->uploadedFiles['name'] as $index => $fileName) {
+            if (!is_string($fileName)) {
+                // Skip malformed entries where filename is not a string
+                $this->addError((string)$index, 'upload_wrong_type');
+                continue;
+            }
+
             $fileError = $this->uploadedFiles['error'][$index];
 
             if ($fileError === UPLOAD_ERR_OK) {
@@ -116,6 +122,11 @@ class FileUploader
 
                 // Normalize and guard against path traversal
                 $sanitizedFileName = preg_replace('/\s+/', '_', $fileName);
+                if ($sanitizedFileName === null) {
+                    $this->addError($fileName, 'upload_wrong_type');
+                    continue;
+                }
+
                 $sanitizedFileName = str_replace(['\\', '/'], '_', $sanitizedFileName);
                 $sanitizedFileName = basename($sanitizedFileName);
 
