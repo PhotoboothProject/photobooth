@@ -24,6 +24,22 @@ if (empty($mode)) {
 }
 
 // Allow pre/post without admin auth; protect dangerous actions.
+// If login is enabled, require auth for administrative modes (e.g., reboot/shutdown).
+if (
+    ($config['login']['enabled'] ?? false)
+    && (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true)
+    && !in_array($mode, ['pre-command', 'post-command'], true)
+) {
+    $data = [
+        'success' => 'false',
+        'mode' => 'Unauthorized',
+    ];
+    $logger->debug('message', $data);
+    echo json_encode($data);
+    die();
+}
+
+// Allow pre/post without admin auth; protect dangerous actions.
 switch ($mode) {
     case 'pre-command':
         $cmd = sprintf($config['commands']['pre_photo']);
