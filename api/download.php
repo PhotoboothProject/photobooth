@@ -8,7 +8,14 @@ require_once '../lib/boot.php';
 
 $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : false;
 if ($image) {
-    $path = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $image;
+    $basename = basename($image);
+    if ($basename === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $basename)) {
+        http_response_code(400);
+        echo 'Invalid image name.';
+        exit();
+    }
+
+    $path = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $basename;
 
     if (!is_file($path)) {
         http_response_code(404);
