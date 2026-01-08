@@ -96,10 +96,15 @@ $GLOBALS[ProcessService::class] = new ProcessService();
 $GLOBALS[RemoteStorageService::class] = new RemoteStorageService();
 
 $config = ConfigurationService::getInstance()->getConfiguration();
+// Collect errors; only display when dev loglevel > 0
 if ($config['dev']['loglevel'] > 0) {
+    error_reporting(E_ALL);
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+} else {
+    error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
 }
 
 date_default_timezone_set((string)$config['ui']['local_timezone']->value);
