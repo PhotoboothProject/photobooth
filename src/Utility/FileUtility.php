@@ -61,4 +61,27 @@ class FileUtility
 
         return @rename($fromFile, $target);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public static function getFilesFromPath(string $path, array $allowedExtensions = []): array
+    {
+        if (!PathUtility::isAbsolutePath($path)) {
+            $path = PathUtility::getAbsolutePath($path);
+        }
+        if (!PathUtility::isAbsolutePath($path)) {
+            throw new \Exception('Path ' . $path . ' does not exist.');
+        }
+
+        $files = [];
+        foreach (new \DirectoryIterator($path) as $file) {
+            if (!$file->isFile() || !in_array(strtolower($file->getExtension()), $allowedExtensions)) {
+                continue;
+            }
+            $files[] = $path . '/' . $file->getFilename();
+        }
+
+        return $files;
+    }
 }

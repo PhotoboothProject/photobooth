@@ -24,12 +24,16 @@ class FileUploader
     private array $failedFiles = [];
     // Logger instance for debugging
     private Logger\NamedLogger $logger;
+    // Hard size limit per file (bytes) to prevent abuse; capped below php.ini limits
+    private int $maxFileSize = 100 * 1024 * 1024; // 100 MB
+
     // Predefined error messages for various scenarios
     private array $errorMessages = [
         'upload_wrong_type' => 'The file is not in the correct type list',
         'upload_file_already_exists' => 'The file already exists in the folder',
         'upload_unable_to_write_folder' => 'Unable to upload the file to the folder. Enable write access!',
-        'upload_folder_invalid' => 'The folder is not valid'
+        'upload_folder_invalid' => 'The folder is not valid',
+        'upload_file_too_large' => 'The file is too large or the size is missing',
     ];
 
     public function __construct(string $folderName, array $uploadedFiles, Logger\NamedLogger $logger)
@@ -128,7 +132,36 @@ class FileUploader
 
     private function validateFile(string $fileName, string $fileType, string $filePath): bool
     {
-        if (!in_array($fileType, $this->typeChecker[$this->folderName])) {
+        // Enforce size limit early using the provided size field
+        $index    = array_search($fileName, $this->uploadedFiles['name'], true);
+        $fileSize = $index !== false && isset($this->uploadedFiles['size'][$index]) ? (int)$this->uploadedFiles['size'][$index] : 0;
+        if ($fileSize <= 0 || $fileSize > $this->maxFileSize) {
+            $this->addError($fileName, 'upload_file_too_large');
+
+            return false;
+        }
+
+        $tmpPath = $index !== false && isset($this->uploadedFiles['tmp_name'][$index]) ? $this->uploadedFiles['tmp_name'][$index] : '';
+
+        // Extension check aligned with allowed list
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!in_array($extension, $this->getAllowedExtensionsForFolder($this->folderName), true)) {
+            $this->addError($fileName, 'upload_wrong_type');
+
+            return false;
+        }
+
+        // Trusted MIME via finfo
+        $detectedMime = null;
+        if ($tmpPath && function_exists('finfo_open')) {
+            $finfo        = finfo_open(FILEINFO_MIME_TYPE);
+            $detectedMime = $finfo ? finfo_file($finfo, $tmpPath) : null;
+            if ($finfo) {
+                finfo_close($finfo);
+            }
+        }
+
+        if (!$detectedMime || !in_array($detectedMime, $this->typeChecker[$this->folderName], true)) {
             $this->addError($fileName, 'upload_wrong_type');
             return false;
         }
@@ -168,6 +201,29 @@ class FileUploader
             'uploadedFiles' => $uploadedFileNames,
             'failedFiles' => $failedFiles
         ];
+    }
+
+    private function isImageFolder(string $folderName): bool
+    {
+        return str_starts_with($folderName, 'data/tmp') || str_starts_with($folderName, 'private/images/');
+    }
+
+    private function getAllowedExtensionsForFolder(string $folderName): array
+    {
+        if ($this->isImageFolder($folderName)) {
+            return ImageUtility::supportedFileExtensionsSelect;
+        }
+
+        if ($folderName === 'private/videos/background') {
+            return VideoUtility::supportedFileExtensionsSelect;
+        }
+
+        if ($folderName === 'private/fonts') {
+            return FontUtility::supportedFileExtensionsSelect;
+        }
+
+        // Fallback: images only
+        return ImageUtility::supportedFileExtensionsSelect;
     }
 
     private function getFileErrorMessage(int $errorCode): string
