@@ -22,6 +22,16 @@ use Symfony\Component\Finder\Finder;
 
 header('Content-Type: application/json');
 
+$isAuthorized = isset($_SESSION['auth']) && $_SESSION['auth'] === true;
+if (!$isAuthorized) {
+    http_response_code(403);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Unauthorized',
+    ]);
+    exit();
+}
+
 $loggerService = LoggerService::getInstance();
 $logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
