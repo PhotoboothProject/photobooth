@@ -137,6 +137,30 @@
   &-code {
     position: absolute;
     width: 10rem;
+    box-sizing: border-box;
+    text-align: center;
+    color: #000;
+    background: #fff;
+    padding: 0.6rem;
+    border-radius: var(--button-border-radius, 0.8rem);
+    box-shadow: 0 0.6rem 1.6rem rgba(0, 0, 0, 0.16);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__image {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    &__caption {
+      margin: 0;
+      display: inline-block;
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0;
+    }
     &.left {
       left: 2rem;
       &--top {

@@ -15,6 +15,7 @@ final class QrConfiguration
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->scalarNode('url')->defaultValue('')->end()
                 ->booleanNode('append_filename')->defaultValue(true)->end()
+            ->scalarNode('short_text')->defaultValue('')->end()
                 ->booleanNode('custom_text')->defaultValue(false)->end()
                 ->scalarNode('text')->defaultValue('')->end()
                 ->enumNode('result')

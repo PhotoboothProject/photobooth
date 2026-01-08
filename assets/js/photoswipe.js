@@ -184,15 +184,28 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                                 if (document.getElementById('pswpQR')) {
                                     document.getElementById('pswpQR').remove();
                                 }
+                                const qrWrapper = document.createElement('div');
+                                qrWrapper.id = 'pswpQR';
+                                qrWrapper.setAttribute('class', 'pswp-qrcode ' + config.qr.pswp);
                                 const qrImage = document.createElement('img');
+
                                 qrImage.src =
                                     environment.publicFolders.api +
                                     '/qrcode.php?filename=' +
                                     pswp.currSlide.data.src.split('\\').pop().split('/').pop();
                                 qrImage.alt = 'qr code';
-                                qrImage.id = 'pswpQR';
-                                qrImage.setAttribute('class', 'pswp-qrcode ' + config.qr.pswp);
-                                $('.pswp').append(qrImage);
+                                qrImage.classList.add('pswp-qrcode__image');
+                                qrWrapper.append(qrImage);
+
+                                const qrShortText = config.qr.short_text;
+                                if (qrShortText && qrShortText.length > 0) {
+                                    const qrCaption = document.createElement('p');
+                                    qrCaption.classList.add('pswp-qrcode__caption');
+                                    qrCaption.textContent = qrShortText;
+                                    qrWrapper.append(qrCaption);
+                                }
+
+                                $('.pswp').append(qrWrapper);
                             });
                         }
                     },
