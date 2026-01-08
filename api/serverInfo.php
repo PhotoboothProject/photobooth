@@ -9,6 +9,13 @@ use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
+// Protect server info: only authenticated admin sessions allowed
+if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Unauthorized']);
+    exit();
+}
+
 function handleDebugPanel(string $content, array $config): string|false
 {
     switch ($content) {
@@ -23,8 +30,7 @@ function handleDebugPanel(string $content, array $config): string|false
         case 'nav-rembglog':
             return readFileContents(PathUtility::getAbsolutePath('var/log/rembg.log'));
         case 'nav-myconfig':
-            echo implode("\n", showConfig($config));
-            return json_encode('');
+            return json_encode(maskedConfig($config), JSON_PRETTY_PRINT);
         case 'nav-serverprocesses':
             return (string)shell_exec('/bin/ps -ef');
         case 'nav-bootconfig':
@@ -197,6 +203,30 @@ function generateTableHtml(array $columns, array $result): string
     $html .= '    </tbody>' . "\r\n";
     $html .= '</table>' . "\r\n";
     return $html;
+}
+
+function maskedConfig(array $config): array
+{
+    $sensitiveKeys = ['password', 'pin', 'username', 'api_key', 'secret'];
+
+    $maskRecursive = function ($value) use (&$maskRecursive, $sensitiveKeys) {
+        if (is_array($value)) {
+            $result = [];
+            foreach ($value as $k => $v) {
+                if (is_string($k) && in_array(strtolower($k), $sensitiveKeys, true)) {
+                    $result[$k] = '***';
+                } else {
+                    $result[$k] = $maskRecursive($v);
+                }
+            }
+
+            return $result;
+        }
+
+        return $value;
+    };
+
+    return $maskRecursive($config);
 }
 
 if (!empty($_GET['content'])) {
