@@ -26,6 +26,8 @@ $loggerService = LoggerService::getInstance();
 $logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
+checkCsrfOrFail($_POST);
+
 $configurationService = ConfigurationService::getInstance();
 $defaultConfig = $configurationService->getDefaultConfiguration();
 

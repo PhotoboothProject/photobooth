@@ -203,7 +203,8 @@ function saveImage(filename, cb) {
         url: environment.publicFolders.api + '/chromakeying/save.php',
         data: {
             imgData: dataURL,
-            file: filename
+            file: filename,
+            [csrf.key]: csrf.token
         },
         success: (resp) => {
             if (typeof onCaptureChromaView === 'undefined') {

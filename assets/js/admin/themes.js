@@ -271,7 +271,8 @@ $(function () {
             const payload = {
                 action: 'save',
                 name: name,
-                theme: collectCurrentTheme()
+                theme: collectCurrentTheme(),
+                [csrf.key]: csrf.token
             };
 
             $.ajax({
@@ -313,7 +314,8 @@ $(function () {
             $.getJSON(apiBase, {
                 action: 'get',
                 name: selected,
-                _: Date.now()
+                _: Date.now(),
+                [csrf.key]: csrf.token
             })
                 .done((data) => {
                     if (data.status === 'success' && data.theme) {
@@ -341,7 +343,8 @@ $(function () {
 
             const payload = {
                 action: 'delete',
-                name: selected
+                name: selected,
+                [csrf.key]: csrf.token
             };
 
             $.ajax({
@@ -367,8 +370,10 @@ $(function () {
             }
 
             const url = `${apiBase}?action=export&name=${encodeURIComponent(selected)}&_=${Date.now()}`;
+            const sep = url.includes('?') ? '&' : '?';
+            const csrfUrl = `${url}${sep}${csrf.key}=${encodeURIComponent(csrf.token)}`;
             const link = document.createElement('a');
-            link.href = url;
+            link.href = csrfUrl;
             link.download = `${selected}.zip`;
             document.body.appendChild(link);
             link.click();
@@ -390,6 +395,7 @@ $(function () {
             const formData = new FormData();
             formData.append('action', 'import');
             formData.append('theme_zip', file);
+            formData.append(csrf.key, csrf.token);
 
             const desiredName = $nameInput.length ? $nameInput.val().trim() : '';
             if (desiredName) {

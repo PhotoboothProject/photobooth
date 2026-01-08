@@ -8,6 +8,7 @@ use Photobooth\Utility\AdminKeypad;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
+checkCsrfOrFail($_POST);
 
 // KEYPAD LOGIN
 if (isset($_POST['controller']) and $_POST['controller'] == 'keypadLogin') {

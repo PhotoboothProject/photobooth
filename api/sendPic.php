@@ -16,6 +16,8 @@ header('Content-Type: application/json');
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
+checkCsrfOrFail($_POST);
+
 // Simple per-session rate limiting to curb abuse (unauthenticated use)
 $windowSeconds = 60; // 1 minute
 $maxPerWindow  = 10; // max 10 requests per window

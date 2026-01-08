@@ -79,7 +79,8 @@ function checkKeypadPin(pin) {
         type: 'POST',
         data: {
             controller: 'keypadLogin',
-            pin: pin
+            pin: pin,
+            [csrf.key]: csrf.token
         },
 
         success: (data) => {
