@@ -16,6 +16,7 @@ use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\ProcessService;
 use Photobooth\Utility\ArrayUtility;
+use Photobooth\Utility\AdminKeypad;
 use Photobooth\Utility\PathUtility;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -168,17 +169,30 @@ if ($action === 'reset') {
     $newConfig['textonprint']['font']   = $normalizePath($newConfig['textonprint']['font'] ?? null);
     $newConfig['print']['frame']        = $normalizePath($newConfig['print']['frame'] ?? null);
 
+    $existingLoginPin   = $config['login']['pin'] ?? null;
+    $existingRentalPin  = $config['login']['rental_pin'] ?? null;
+    // If inputs are left blank, keep existing hashed PINs
+    if (($newConfig['login']['pin'] ?? '') === '' && $existingLoginPin !== null) {
+        $newConfig['login']['pin'] = $existingLoginPin;
+    }
+    if (($newConfig['login']['rental_pin'] ?? '') === '' && $existingRentalPin !== null) {
+        $newConfig['login']['rental_pin'] = $existingRentalPin;
+    }
+
     if (isset($newConfig['login']['enabled']) && $newConfig['login']['enabled'] == true) {
-        if ((isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) || $newConfig['login']['keypad']) {
-            if ($newConfig['login']['keypad'] && strlen($newConfig['login']['pin']) != 4) {
+        $loginPinIsHashed = AdminKeypad::isHashedPin($newConfig['login']['pin'] ?? null);
+        if ((isset($newConfig['login']['password']) && $newConfig['login']['password'] !== '') || $newConfig['login']['keypad']) {
+            if ($newConfig['login']['keypad'] && !$loginPinIsHashed && strlen($newConfig['login']['pin']) != 4) {
                 $logger->debug('Keypad pin reset.');
                 $logger->debug('Length: ' . strlen($newConfig['login']['pin']) . ' Expected length: 4', $newConfig['login']);
                 $newConfig['login']['enabled'] = false;
                 $newConfig['login']['keypad'] = false;
                 $newConfig['login']['pin'] = '';
             }
-            if (isset($newConfig['login']['password']) && !empty($newConfig['login']['password'])) {
-                // allow login via password, but we might have disabled because the PIN length did not match our requirements
+            // Handle password: if left empty, keep existing hash; if new value provided, hash it
+            if (array_key_exists('password', $newConfig['login']) && $newConfig['login']['password'] === '' && $config['login']['password'] ?? null) {
+                $newConfig['login']['password'] = $config['login']['password'];
+            } elseif (isset($newConfig['login']['password']) && $newConfig['login']['password'] !== '') {
                 $newConfig['login']['enabled'] = true;
                 if ($newConfig['login']['password'] != $config['login']['password']) {
                     $hashing = password_hash($newConfig['login']['password'], PASSWORD_DEFAULT);
@@ -203,7 +217,8 @@ if ($action === 'reset') {
     }
 
     if (isset($newConfig['login']['rental_keypad']) && $newConfig['login']['rental_keypad'] == true) {
-        if (strlen($newConfig['login']['rental_pin']) != 4 || $newConfig['login']['rental_pin'] === $newConfig['login']['pin']) {
+        $rentalPinIsHashed = AdminKeypad::isHashedPin($newConfig['login']['rental_pin'] ?? null);
+        if ((!$rentalPinIsHashed && strlen($newConfig['login']['rental_pin']) != 4) || $newConfig['login']['rental_pin'] === $newConfig['login']['pin']) {
             $logger->debug('Rental keypad pin reset.', $newConfig['login']);
             $logger->debug('Length: ' . strlen($newConfig['login']['rental_pin']) . ' Expected length: 4', $newConfig['login']);
             if ($newConfig['login']['rental_pin'] === $newConfig['login']['pin']) {
@@ -308,6 +323,13 @@ if ($action === 'reset') {
     if ($newConfig['textonprint']['enabled'] && $newConfig['textonprint']['font'] === '') {
         $newConfig['textonprint']['enabled'] = false;
         $logger->debug('Print font is empty. Disabled text on print.');
+    }
+
+    // Hash PINs just before save to ensure storage never keeps plain values
+    foreach (['pin', 'rental_pin'] as $pinField) {
+        if (!empty($newConfig['login'][$pinField]) && !AdminKeypad::isHashedPin($newConfig['login'][$pinField])) {
+            $newConfig['login'][$pinField] = password_hash($newConfig['login'][$pinField], PASSWORD_DEFAULT);
+        }
     }
 
     if ($newConfig['logo']['enabled']) {
