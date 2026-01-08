@@ -278,7 +278,6 @@
   "general:reload_key": "Key code which triggers a reload",
   "general:start_screen_subtitle": "Start screen (subtitle)",
   "general:start_screen_subtitle_visible": "Show subtitle on start screen",
-  "screensaver": "Screensaver",
   "general:start_screen_title": "Start screen (title)",
   "general:start_screen_title_visible": "Show title on start screen",
   "general:theme_manager": "Themes",
@@ -626,6 +625,7 @@
   "manual:fonts:fonts_screensaver_text_bold": "Use bold for screensaver text.",
   "manual:fonts:fonts_screensaver_text_italic": "Use italic for screensaver text.",
   "manual:fonts:fonts_screensaver_text_color": "Color for screensaver text.",
+  "manual:general:theme_manager": "Theme management: save, load, export or import themes.",
   "manual:general:translate": "Open Photobooth Project on Crowdin. With Crowdin and your help translating we're able to get high-quality translations for all supported languages.",
   "manual:general:ui_language": "Choose interface language.<p>If you're missing a language or like to help improving translations visit the <a href=\"https://photoboothproject.github.io/FAQ#how-to-update-or-add-translations\"  target=\"_blank\">\"How to update or add translations?\"</a> inside the Photobooth FAQ for instructions.</p>",
   "manual:general:ui_notification_timeout": "Define the time a notification on success or error (delete, print) is visible. On delete Photobooth reloads after defined time.",
@@ -886,7 +886,6 @@
   "manual:userinterface:icons_update": "Defines the icon class used for the update button.",
   "manual:userinterface:icons_update_git": "Defines the icon class used for the Git update button.",
   "manual:userinterface:icons_zoom": "Defines the icon class used for the zoom button.",
-  "manual:userinterface:colors_status_bar": "Color used for the browser/status bar (theme-color) on mobile.",
   "manual:userinterface:ui_button": "Choose your desired button style.",
   "manual:userinterface:ui_decore_lines": "If enabled, decorate lines will be visible on start page.",
   "manual:userinterface:ui_result_buttons": "If enabled, post-processing buttons will be visible on the on result screen. If disabled the whole button bar will be hidden.",
@@ -1171,7 +1170,6 @@
   "userinterface:colors_background_countdown": "Countdown background color",
   "userinterface:colors_border": "Border color",
   "userinterface:colors_box": "Field color",
-  "userinterface:colors_status_bar": "Status bar color",
   "userinterface:colors_button_font": "Buttons font color",
   "userinterface:colors_cheese": "Cheese color",
   "userinterface:colors_countdown": "Countdown color",
@@ -1319,5 +1317,8 @@
   "manual:screensaver:screensaver_text_position": "Select where the screensaver text is placed.",
   "manual:screensaver:screensaver_preview": "Open a new tab and show the screensaver immediately with the current settings.",
   "manual:screensaver:screensaver_timeout_minutes": "Minutes of inactivity before the screensaver starts.",
-  "manual:screensaver:screensaver_switch_minutes": "Minutes between image/video changes in the screensaver."
+  "manual:screensaver:screensaver_switch_minutes": "Minutes between image/video changes in the screensaver.",
+  "viewer_photo_title": "Your photo",
+  "viewer_video_fallback": "Your browser can’t play this video.",
+  "wait_message": "Please wait..."
 }
