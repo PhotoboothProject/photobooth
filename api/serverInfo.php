@@ -2,19 +2,12 @@
 
 /** @var array $config */
 
-require_once '../lib/boot.php';
+require_once __DIR__ . '/../admin/admin_boot.php';
 
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
-
-// Protect server info: only authenticated admin sessions allowed
-if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true) {
-    http_response_code(403);
-    echo json_encode(['error' => 'Unauthorized']);
-    exit();
-}
 
 function handleDebugPanel(string $content, array $config): string|false
 {

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../lib/boot.php';
+require_once __DIR__ . '/../admin/admin_boot.php';
 
 use Photobooth\Service\ThemeService;
 
@@ -17,6 +17,12 @@ $query = $_GET;
 
 if ($method === 'GET') {
     $action = $query['action'] ?? 'list';
+
+    // Require auth for any theme access
+    if (!$isAuthorized) {
+        http_response_code(403);
+        $sendJson(['status' => 'error', 'message' => 'Unauthorized']);
+    }
 
     if ($action === 'list') {
         $all = $themeService->getAll();
@@ -43,6 +49,10 @@ if ($method === 'GET') {
     }
 
     if ($action === 'export') {
+        if (!$isAuthorized) {
+            http_response_code(403);
+            $sendJson(['status' => 'error', 'message' => 'Unauthorized']);
+        }
         $name = (string)($query['name'] ?? '');
         $result = $themeService->exportTheme($name);
         if (!$result['success'] || !isset($result['file'])) {
@@ -71,6 +81,10 @@ if ($method === 'GET') {
 // Handle multipart/form-data import first
 $postAction = $_POST['action'] ?? null;
 if ($postAction === 'import') {
+    if (!$isAuthorized) {
+        http_response_code(403);
+        $sendJson(['status' => 'error', 'message' => 'Unauthorized']);
+    }
     if (!isset($_FILES['theme_zip']) || !is_uploaded_file($_FILES['theme_zip']['tmp_name']) || $_FILES['theme_zip']['error'] !== UPLOAD_ERR_OK) {
         $sendJson([
             'status' => 'error',
@@ -106,6 +120,10 @@ if (!is_array($body)) {
 $action = $body['action'] ?? null;
 
 if ($action === 'save') {
+    if (!$isAuthorized) {
+        http_response_code(403);
+        $sendJson(['status' => 'error', 'message' => 'Unauthorized']);
+    }
     $name = isset($body['name']) ? (string)$body['name'] : '';
     $data = isset($body['theme']) && is_array($body['theme']) ? $body['theme'] : [];
 
@@ -125,6 +143,10 @@ if ($action === 'save') {
 }
 
 if ($action === 'delete') {
+    if (!$isAuthorized) {
+        http_response_code(403);
+        $sendJson(['status' => 'error', 'message' => 'Unauthorized']);
+    }
     $name = isset($body['name']) ? (string)$body['name'] : '';
 
     if ($name === '') {

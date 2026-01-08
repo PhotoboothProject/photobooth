@@ -3,7 +3,7 @@
 /** @var array $config */
 /** @var array $defaultConfig */
 
-require_once '../lib/boot.php';
+require_once __DIR__ . '/../admin/admin_boot.php';
 
 use Photobooth\Collage;
 use Photobooth\Enum\FolderEnum;
@@ -21,17 +21,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 header('Content-Type: application/json');
-
-$isAuthorized = isset($_SESSION['auth']) && $_SESSION['auth'] === true;
-if (!$isAuthorized) {
-    http_response_code(403);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Unauthorized',
-    ]);
-    exit();
-}
-
 $loggerService = LoggerService::getInstance();
 $logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
