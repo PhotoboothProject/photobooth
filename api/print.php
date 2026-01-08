@@ -33,8 +33,11 @@ try {
     $imageHandler = new Image();
     $imageHandler->debugLevel = $config['dev']['loglevel'];
     $vars['randomName'] = $imageHandler->createNewFilename('random');
-    $vars['fileName'] = $_GET['filename'];
-    $vars['copies'] = (int) $_GET['copies'];
+    $vars['fileName'] = basename($_GET['filename']);
+    if ($vars['fileName'] === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $vars['fileName'])) {
+        throw new \Exception('Invalid filename provided.');
+    }
+    $vars['copies'] = max(1, (int) $_GET['copies']);
     $vars['uniqueName'] = substr($vars['fileName'], 0, -4) . '-' . $vars['randomName'];
     $vars['sourceFile'] = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $vars['fileName'];
     $vars['printFile'] = FolderEnum::PRINT->absolute() . DIRECTORY_SEPARATOR . $vars['uniqueName'];
@@ -210,13 +213,13 @@ $status = 'ok';
 if ($config['print']['max_multi'] > 1) {
     $cmd = sprintf(
         $config['commands']['print'],
-        $vars['copies'],
-        $vars['printFile']
+        (int) $vars['copies'],
+        escapeshellarg($vars['printFile'])
     );
 } else {
     $cmd = sprintf(
         $config['commands']['print'],
-        $vars['printFile']
+        escapeshellarg($vars['printFile'])
     );
 }
 $logger->info($cmd);
