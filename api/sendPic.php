@@ -20,13 +20,13 @@ $logger->debug(basename($_SERVER['PHP_SELF']));
 $windowSeconds = 60; // 1 minute
 $maxPerWindow  = 10; // max 10 requests per window
 $now           = time();
-if (!isset($_SESSION['sendpic'])) {
+if (!isset($_SESSION['sendpic']) || !is_array($_SESSION['sendpic'])) {
     $_SESSION['sendpic'] = ['count' => 0, 'window' => $now];
 }
-if (($now - $_SESSION['sendpic']['window']) > $windowSeconds) {
+if (($now - ($_SESSION['sendpic']['window'] ?? 0)) > $windowSeconds) {
     $_SESSION['sendpic'] = ['count' => 0, 'window' => $now];
 }
-if ($_SESSION['sendpic']['count'] >= $maxPerWindow) {
+if (($_SESSION['sendpic']['count'] ?? 0) >= $maxPerWindow) {
     $data = [
         'success' => false,
         'error'   => 'Rate limit exceeded. Please wait a few minutes and try again.',
@@ -48,7 +48,7 @@ if (empty($_POST['recipient'])) {
 }
 
 // Split the comma-separated email addresses
-$recipients = array_map('trim', explode(',', $_POST['recipient']));
+$recipients = array_filter(array_map('trim', explode(',', $_POST['recipient'])));
 // enforce reasonable recipient cap
 $recipients = array_slice($recipients, 0, 10);
 $invalidEmails = [];
