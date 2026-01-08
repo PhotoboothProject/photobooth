@@ -190,7 +190,12 @@ if ($action === 'reset') {
                 $newConfig['login']['pin'] = '';
             }
             // Handle password: if left empty, keep existing hash; if new value provided, hash it
-            if (array_key_exists('password', $newConfig['login']) && $newConfig['login']['password'] === '' && $config['login']['password'] ?? null) {
+            if (
+                array_key_exists('password', $newConfig['login'])
+                && $newConfig['login']['password'] === ''
+                && isset($config['login']['password'])
+                && $config['login']['password'] !== null
+            ) {
                 $newConfig['login']['password'] = $config['login']['password'];
             } elseif (isset($newConfig['login']['password']) && $newConfig['login']['password'] !== '') {
                 $newConfig['login']['enabled'] = true;
