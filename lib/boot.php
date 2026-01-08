@@ -27,6 +27,11 @@ session_set_cookie_params([
 ]);
 session_start();
 
+// Basic security headers
+header('X-Frame-Options: SAMEORIGIN');
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: same-origin');
+
 // Autoload
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
