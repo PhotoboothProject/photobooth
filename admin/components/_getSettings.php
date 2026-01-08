@@ -36,7 +36,6 @@ foreach ($configsetup as $section => $fields) {
         }
 
         $i18ntag = $section . ':' . $key;
-
         echo '<!-- ' . strtoupper($setting['type']) . ' ' . strtoupper($setting['name']) . ' -->';
         echo '<div class="adminSettingCard relative flex flex-col rounded-xl p-3 shadow-xl bg-white ' . $hidden . '" id="' . $i18ntag . '">';
 
@@ -64,6 +63,12 @@ foreach ($configsetup as $section => $fields) {
                 break;
             case 'checkbox':
                 echo AdminInput::renderCheckbox($setting, $i18ntag);
+                break;
+            case 'toggle-button-group':
+                echo AdminInput::renderToggleButtonGroup($setting, $i18ntag);
+                break;
+            case 'toggle-button-group-modal':
+                echo AdminInput::renderToggleButtonGroupModal($setting, $i18ntag);
                 break;
             case 'multi-select':
             case 'select':

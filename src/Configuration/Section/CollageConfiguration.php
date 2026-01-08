@@ -12,6 +12,25 @@ final class CollageConfiguration
     {
         return (new TreeBuilder('collage'))->getRootNode()->addDefaultsIfNotSet()
             ->ignoreExtraKeys()
+            ->validate()
+                ->always(function (array $value): array {
+                    $layouts = $value['layouts_enabled'] ?? [];
+                    $layouts = is_array($layouts) ? $layouts : [];
+
+                    $layoutValues = array_map(
+                        static fn ($l): string => $l instanceof \BackedEnum ? (string) $l->value : (string) $l,
+                        $layouts
+                    );
+
+                    $uniqueCount = count(array_unique($layoutValues));
+
+                    if (($value['allow_selection'] ?? false) && $uniqueCount < 2) {
+                        $value['allow_selection'] = false;
+                    }
+
+                    return $value;
+                })
+                ->end()
             ->children()
                 ->booleanNode('enabled')->defaultValue(true)->end()
                 ->integerNode('cntdwn_time')

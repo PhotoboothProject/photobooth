@@ -2,6 +2,8 @@
 
 namespace Photobooth\Utility;
 
+use Photobooth\Collage;
+use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Enum\Interface\LabelInterface;
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\LanguageService;
@@ -731,4 +733,442 @@ class AdminInput
 
         return $html;
     }
+
+    public static function renderToggleButtonGroupModal(array $setting, string $label): string
+    {
+        $languageService = LanguageService::getInstance();
+
+        $settingName = $setting['name'];
+        $options = $setting['options'];
+
+        $selectedValues = is_array($setting['value']) ? $setting['value'] : [];
+        $selectedStringValues = array_map(
+            static fn ($v): string => $v instanceof \BackedEnum ? (string) $v->value : (string) $v,
+            $selectedValues
+        );
+
+        $previewOrientation = (string) ($setting['preview_orientation'] ?? 'landscape');
+        $buttonLabel = (string) ($setting['button_label'] ?? 'Auswählen');
+
+        $uniqueId = 'toggle-modal-' . md5($settingName . microtime());
+        $gridId = $uniqueId . '-grid';
+        $attributes = self::buildAttributes($setting);
+
+        $buttons = '';
+        foreach ($options as $value => $option) {
+            $optionLabel = $option;
+            $optionValue = $value;
+
+            if ($option instanceof \BackedEnum) {
+                $optionLabel = ($option instanceof LabelInterface) ? $option->label() : $option->name;
+                $optionValue = $option;
+            }
+
+            $actualValue = $optionValue instanceof \BackedEnum ? (string) $optionValue->value : (string) $optionValue;
+            $isSelected = in_array($actualValue, $selectedStringValues, true);
+            $activeClass = $isSelected
+                ? 'bg-brand-1 text-white border-brand-1'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-1';
+
+            $previewSvg = '';
+            if ($optionValue instanceof CollageLayoutEnum) {
+                $previewSvg = self::renderCollageLayoutPreviewSvg($optionValue, $previewOrientation);
+            }
+
+            $buttonBaseClasses = 'toggle-button px-3 py-1.5 border text-sm rounded-md text-center transition-all ' . $activeClass;
+            $buttonInnerHtml = htmlspecialchars((string) $optionLabel, ENT_QUOTES);
+
+            if ($previewSvg !== '') {
+                $buttonBaseClasses = 'toggle-button p-1 border rounded-md transition-all flex flex-col ' . $activeClass;
+                $buttonInnerHtml =
+                    '<div class="mb-1 rounded bg-white p-1">' . $previewSvg . '</div>' .
+                    '<div class="text-xs leading-tight font-semibold text-center">' . htmlspecialchars((string) $optionLabel, ENT_QUOTES) . '</div>';
+            }
+
+            $buttons .= '
+                <label class="relative cursor-pointer">
+                    <input
+                        type="checkbox"
+                        name="' . $settingName . '[]"
+                        value="' . htmlspecialchars($actualValue, ENT_QUOTES) . '"
+                        class="hidden toggle-checkbox"
+                        ' . ($isSelected ? 'checked' : '') . '
+                        ' . $attributes . '
+                    />
+                    <div class="' . $buttonBaseClasses . '">
+                        ' . $buttonInnerHtml . '
+                    </div>
+                </label>
+            ';
+        }
+
+        $gridClass = 'grid gap-2 mt-2';
+
+        return self::renderHeadline($label) . '
+            <div id="' . $uniqueId . '" class="group">
+                <button type="button"
+                    class="w-full mb-2 h-9 bg-brand-1 text-white flex items-center justify-center rounded-full text-sm"
+                    onclick="document.getElementById(\'' . $uniqueId . '\').classList.add(\'isOpen\')">
+                    ' . htmlspecialchars($languageService->translate($buttonLabel), ENT_QUOTES) . '
+                </button>
+
+                <div class="hidden group-[&.isOpen]:grid w-full h-full fixed left-0 top-0 z-50 place-items-center">
+                    <div class="w-full h-full left-0 top-0 z-10 absolute bg-black/60 cursor-pointer"
+                        onclick="document.getElementById(\'' . $uniqueId . '\').classList.remove(\'isOpen\')"></div>
+
+                    <div class="w-full max-w-full bg-white p-2 pt-2 rounded-sm relative z-20 flex flex-col overflow-hidden" style="max-height:98vh; max-width:1400px; width:calc(100vw - 2rem);">
+                        <div class="w-full flex items-center">
+                            <h2 class="flex text-brand-1 font-bold">' . htmlspecialchars($languageService->translate($label), ENT_QUOTES) . '</h2>
+                            <div class="ml-auto flex items-center justify-center p-2 text-lg fa fa-close cursor-pointer"
+                                onclick="document.getElementById(\'' . $uniqueId . '\').classList.remove(\'isOpen\')"></div>
+                        </div>
+
+                        <div class="flex w-full h-full flex-col overflow-y-auto">
+                            <div id="' . $gridId . '" class="' . $gridClass . '" style="grid-template-columns:repeat(auto-fill,minmax(192px,1fr));">
+                                ' . $buttons . '
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            (function() {
+                const container = document.getElementById("' . $gridId . '");
+                container.querySelectorAll(".toggle-checkbox").forEach(checkbox => {
+                    checkbox.addEventListener("change", function() {
+                        const button = this.nextElementSibling;
+                        if (this.checked) {
+                            button.classList.remove("bg-white", "text-gray-700", "border-gray-300", "hover:border-brand-1");
+                            button.classList.add("bg-brand-1", "text-white", "border-brand-1");
+                        } else {
+                            button.classList.remove("bg-brand-1", "text-white", "border-brand-1");
+                            button.classList.add("bg-white", "text-gray-700", "border-gray-300", "hover:border-brand-1");
+                        }
+                    });
+
+                    const button = checkbox.nextElementSibling;
+                    button.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        checkbox.click();
+                    });
+                });
+
+                const allowSelection = document.querySelector(`input[type="checkbox"][name="collage[allow_selection]"]`);
+                if (allowSelection) {
+                    const allowWrapper = allowSelection.closest(".adminCheckbox");
+                    const warningId = "collage-allow-selection-warning";
+                    let warning = document.getElementById(warningId);
+
+                    if (!warning && allowWrapper) {
+                        warning = document.createElement("div");
+                        warning.id = warningId;
+                        warning.className = "mt-2 text-xs text-red-600";
+                        warning.style.display = "none";                        warning.textContent = ' . json_encode($languageService->translate('collage_select_min_two_layouts'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ';
+                        allowWrapper.insertAdjacentElement("afterend", warning);
+                    }
+
+                    const syncAllowToggleText = function(isChecked) {
+                        if (!allowWrapper) return;
+                        const onLabel = allowWrapper.querySelector(".adminCheckbox-true");
+                        const offLabel = allowWrapper.querySelector(".adminCheckbox-false");
+                        if (onLabel && offLabel) {
+                            if (isChecked) {
+                                onLabel.classList.remove("hidden");
+                                offLabel.classList.add("hidden");
+                            } else {
+                                onLabel.classList.add("hidden");
+                                offLabel.classList.remove("hidden");
+                            }
+                        }
+                    };
+
+                    const getUniqueSelectedLayoutCount = function() {
+                        const checked = document.querySelectorAll(`input[type="checkbox"][name="collage[layouts_enabled][]"]:checked`);
+                        const values = new Set();
+                        checked.forEach(cb => values.add(cb.value));
+                        return values.size;
+                    };
+
+                    const guardAllowSelection = function() {
+                        const count = getUniqueSelectedLayoutCount();
+                        if (warning) {
+                            warning.style.display = count < 2 ? "block" : "none";
+                        }
+
+                        if (allowSelection.checked && count < 2) {
+                            allowSelection.checked = false;
+                            syncAllowToggleText(false);
+                        }
+                    };
+
+                    allowSelection.addEventListener("change", guardAllowSelection);
+                    container.querySelectorAll(".toggle-checkbox").forEach(cb => cb.addEventListener("change", guardAllowSelection));
+                    guardAllowSelection();
+                }
+            })();
+            </script>
+        ';
+    }
+    public static function renderToggleButtonGroup(array $setting, string $label): string
+    {
+        $settingName = $setting['name'];
+        $options = $setting['options'];
+
+        $selectedValues = is_array($setting['value']) ? $setting['value'] : [];
+        $selectedStringValues = array_map(
+            static fn ($v): string => $v instanceof \BackedEnum ? (string) $v->value : (string) $v,
+            $selectedValues
+        );
+
+        $previewOrientation = (string) ($setting['preview_orientation'] ?? 'landscape');
+
+        $uniqueId = 'toggle-group-' . md5($settingName . microtime());
+        $attributes = self::buildAttributes($setting);
+
+        $hasPreviews = false;
+        foreach ($options as $option) {
+            if ($option instanceof CollageLayoutEnum) {
+                $hasPreviews = true;
+                break;
+            }
+        }
+
+        $buttons = '';
+        foreach ($options as $value => $option) {
+            $optionLabel = $option;
+            $optionValue = $value;
+
+            if ($option instanceof \BackedEnum) {
+                $optionLabel = ($option instanceof LabelInterface) ? $option->label() : $option->name;
+                $optionValue = $option;
+            }
+
+            $actualValue = $optionValue instanceof \BackedEnum ? (string) $optionValue->value : (string) $optionValue;
+            $isSelected = in_array($actualValue, $selectedStringValues, true);
+            $activeClass = $isSelected
+                ? 'bg-brand-1 text-white border-brand-1'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-brand-1';
+
+            $previewSvg = '';
+            if ($optionValue instanceof CollageLayoutEnum) {
+                $previewSvg = self::renderCollageLayoutPreviewSvg($optionValue, $previewOrientation);
+            }
+
+            $buttonBaseClasses = 'toggle-button px-3 py-1.5 border text-sm rounded-md text-center transition-all ' . $activeClass;
+            $buttonInnerHtml = htmlspecialchars((string) $optionLabel, ENT_QUOTES);
+
+            if ($previewSvg !== '') {
+                $buttonBaseClasses = 'toggle-button p-1 border rounded-md transition-all flex flex-col ' . $activeClass;
+                $buttonInnerHtml =
+                    '<div class="mb-1 rounded bg-white p-1">' . $previewSvg . '</div>' .
+                    '<div class="text-xs font-semibold text-center">' . htmlspecialchars((string) $optionLabel, ENT_QUOTES) . '</div>';
+            }
+
+            $buttons .= '
+                <label class="relative cursor-pointer">
+                    <input
+                        type="checkbox"
+                        name="' . $settingName . '[]"
+                        value="' . htmlspecialchars($actualValue, ENT_QUOTES) . '"
+                        class="hidden toggle-checkbox"
+                        ' . ($isSelected ? 'checked' : '') . '
+                        ' . $attributes . '
+                    />
+                    <div class="' . $buttonBaseClasses . '">
+                        ' . $buttonInnerHtml . '
+                    </div>
+                </label>
+            ';
+        }
+
+        $gridClass = $hasPreviews
+            ? 'grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mt-2 grid-flow-dense'
+            : 'grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2';
+
+        return self::renderHeadline($label) . '
+            <div id="' . $uniqueId . '" class="' . $gridClass . '">
+                ' . $buttons . '
+            </div>
+            <script>
+            (function() {
+                const container = document.getElementById("' . $uniqueId . '");
+                container.querySelectorAll(".toggle-checkbox").forEach(checkbox => {
+                    checkbox.addEventListener("change", function() {
+                        const button = this.nextElementSibling;
+                        if (this.checked) {
+                            button.classList.remove("bg-white", "text-gray-700", "border-gray-300", "hover:border-brand-1");
+                            button.classList.add("bg-brand-1", "text-white", "border-brand-1");
+                        } else {
+                            button.classList.remove("bg-brand-1", "text-white", "border-brand-1");
+                            button.classList.add("bg-white", "text-gray-700", "border-gray-300", "hover:border-brand-1");
+                        }
+                    });
+
+                    const button = checkbox.nextElementSibling;
+                    button.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        checkbox.click();
+                    });
+                });
+            })();
+            </script>
+        ';
+    }
+
+    private static function evaluateLayoutExpression(mixed $expr, float $x, float $y): float
+    {
+        if (is_int($expr) || is_float($expr)) {
+            return (float) $expr;
+        }
+
+        $exprString = str_replace(['x', 'y'], [(string) $x, (string) $y], (string) $expr);
+
+        try {
+            if (preg_match('/^[\d\.\+\-\*\/\(\)\s]+$/', $exprString)) {
+                return (float) eval("return $exprString;");
+            }
+        } catch (\Throwable $e) {
+            return 0.0;
+        }
+
+        return (float) $exprString;
+    }
+
+    private static function renderCollageLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'landscape', ?float &$aspectRatio = null): string
+    {
+        $width = 1800.0;
+        $height = 1200.0;
+        $scale = 0.1;
+        $layoutArray = null;
+
+        $jsonPath = Collage::getCollageConfigPath($layout->value, $orientation);
+        if ($jsonPath !== null && is_file($jsonPath)) {
+            $decoded = json_decode((string) file_get_contents($jsonPath), true);
+            if (is_array($decoded)) {
+                if (isset($decoded['width']) && isset($decoded['height'])) {
+                    $width = (float) $decoded['width'];
+                    $height = (float) $decoded['height'];
+                }
+                $layoutArray = !empty($decoded['layout']) ? $decoded['layout'] : $decoded;
+            }
+        }
+
+        if ($height > 0) {
+            $aspectRatio = $width / $height;
+        }
+
+        if (!is_array($layoutArray) || $layoutArray === []) {
+            $positions = [
+                ['x' => 0, 'y' => 0, 'w' => 90, 'h' => 60, 'num' => 1],
+                ['x' => 90, 'y' => 0, 'w' => 90, 'h' => 60, 'num' => 2],
+                ['x' => 0, 'y' => 60, 'w' => 90, 'h' => 60, 'num' => 3],
+                ['x' => 90, 'y' => 60, 'w' => 90, 'h' => 60, 'num' => 4],
+            ];
+        } else {
+            $isPhotostrip = in_array($layout, [
+                CollageLayoutEnum::TWO_X_FOUR_1,
+                CollageLayoutEnum::TWO_X_FOUR_2,
+                CollageLayoutEnum::TWO_X_FOUR_3,
+                CollageLayoutEnum::TWO_X_FOUR_4,
+                CollageLayoutEnum::TWO_X_THREE_1,
+                CollageLayoutEnum::TWO_X_THREE_2,
+            ], true);
+
+            $layoutCount = count($layoutArray);
+            $uniquePhotoCount = $isPhotostrip ? (int) ($layoutCount / 2) : $layoutCount;
+
+            $positions = [];
+            $photoNum = 1;
+            foreach ($layoutArray as $index => $photoLayout) {
+                if (!is_array($photoLayout) || count($photoLayout) < 4) {
+                    continue;
+                }
+
+                $x = self::evaluateLayoutExpression($photoLayout[0], $width, $height);
+                $y = self::evaluateLayoutExpression($photoLayout[1], $width, $height);
+                $w = self::evaluateLayoutExpression($photoLayout[2], $width, $height);
+                $h = self::evaluateLayoutExpression($photoLayout[3], $width, $height);
+
+                $displayNum = $isPhotostrip && $index >= $uniquePhotoCount
+                    ? ((int) $index - $uniquePhotoCount + 1)
+                    : $photoNum;
+
+                $positions[] = [
+                    'x' => $x * $scale,
+                    'y' => $y * $scale,
+                    'w' => $w * $scale,
+                    'h' => $h * $scale,
+                    'num' => $displayNum,
+                ];
+
+                if (!$isPhotostrip || $index < $uniquePhotoCount - 1) {
+                    $photoNum++;
+                } elseif ($index === $uniquePhotoCount - 1) {
+                    $photoNum = 1;
+                }
+            }
+        }
+
+        $viewBoxWidth = (int) round($width * $scale);
+        $viewBoxHeight = (int) round($height * $scale);
+
+        $svg = sprintf(
+            '<svg class="w-full h-auto block" style="max-height:112px" viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">',
+            $viewBoxWidth,
+            $viewBoxHeight
+        );
+
+        foreach ($positions as $pos) {
+            $svg .= sprintf(
+                '<rect x="%s" y="%s" width="%s" height="%s" fill="#4A90E2" stroke="#FFFFFF" stroke-width="2" rx="2"/>',
+                number_format($pos['x'] + 2, 1, '.', ''),
+                number_format($pos['y'] + 2, 1, '.', ''),
+                number_format($pos['w'] - 4, 1, '.', ''),
+                number_format($pos['h'] - 4, 1, '.', '')
+            );
+
+            $centerX = $pos['x'] + $pos['w'] / 2;
+            $centerY = $pos['y'] + $pos['h'] / 2;
+            $svg .= sprintf(
+                '<text x="%s" y="%s" text-anchor="middle" dominant-baseline="middle" fill="#FFFFFF" font-size="28" font-weight="bold" font-family="Arial, sans-serif">%d</text>',
+                number_format($centerX, 1, '.', ''),
+                number_format($centerY + 2, 1, '.', ''),
+                (int) $pos['num']
+            );
+        }
+
+        $drawDashedLine = in_array($layout->value, ['2x4-2', '2x4-3', '2x3-1'], true);
+        if ($drawDashedLine) {
+            if ($orientation === 'portrait') {
+                $x1 = $viewBoxWidth * 0.03;
+                $x2 = $viewBoxWidth * 0.97;
+                $y1 = $viewBoxHeight / 2;
+                $y2 = $viewBoxHeight / 2;
+            } else {
+                $x1 = $viewBoxWidth / 2;
+                $x2 = $viewBoxWidth / 2;
+                $y1 = 0;
+                $y2 = $viewBoxHeight;
+            }
+
+            $svg .= sprintf(
+                '<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="#000000" stroke-width="2" stroke-dasharray="10 10" opacity="0.6" />',
+                number_format($x1, 1, '.', ''),
+                number_format($y1, 1, '.', ''),
+                number_format($x2, 1, '.', ''),
+                number_format($y2, 1, '.', '')
+            );
+        }
+
+        $svg .= sprintf(
+            '<rect x="0" y="0" width="%s" height="%s" fill="none" stroke="#666666" stroke-width="1" rx="2"/>',
+            number_format((float) $viewBoxWidth, 1, '.', ''),
+            number_format((float) $viewBoxHeight, 1, '.', '')
+        );
+        $svg .= '</svg>';
+
+        return $svg;
+    }
+
 }
