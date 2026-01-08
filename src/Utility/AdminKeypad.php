@@ -7,9 +7,11 @@ class AdminKeypad
     public static function login(string $userPin, array $login): bool
     {
         if ($userPin === $login['pin']) {
+            session_regenerate_id(true);
             $_SESSION['auth'] = true;
             return true;
         } elseif ($login['rental_keypad'] && $userPin == $login['rental_pin']) {
+            session_regenerate_id(true);
             $_SESSION['rental'] = true;
             return true;
         }
