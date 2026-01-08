@@ -28,6 +28,9 @@ $(function () {
 
             const data = new FormData(document.querySelector('form'));
             data.append('type', 'reset');
+            if (typeof csrf !== 'undefined') {
+                data.append(csrf.key, csrf.token);
+            }
 
             fetch('../api/admin.php', {
                 method: 'POST',
@@ -59,6 +62,9 @@ $(function () {
 
         const data = new FormData(document.querySelector('form'));
         data.append('type', 'config');
+        if (typeof csrf !== 'undefined') {
+            data.append(csrf.key, csrf.token);
+        }
 
         fetch('../api/admin.php', {
             method: 'POST',
@@ -102,7 +108,13 @@ $(function () {
         $.ajax({
             url: '../api/testFtpConnection.php',
             dataType: 'json',
-            data: $('form').serialize(),
+            data: (function () {
+                const formData = $('form').serializeArray();
+                if (typeof csrf !== 'undefined') {
+                    formData.push({ name: csrf.key, value: csrf.token });
+                }
+                return formData;
+            })(),
             type: 'post',
             success: (resp) => {
                 photoboothTools.console.log('resp', resp);

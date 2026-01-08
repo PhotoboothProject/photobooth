@@ -449,6 +449,9 @@ const photoBooth = (function () {
             mode: cmd,
             filename: file
         };
+        if (typeof csrf !== 'undefined') {
+            command[csrf.key] = csrf.token;
+        }
 
         photoboothTools.console.log('Run', cmd);
 
@@ -1086,9 +1089,13 @@ const photoBooth = (function () {
             form.appendChild(message);
             const submitButton = document.querySelector('#send-mail-submit');
             submitButton.disabled = true;
+            const fd = new FormData(form);
+            if (typeof csrf !== 'undefined') {
+                fd.append(csrf.key, csrf.token);
+            }
             fetch(environment.publicFolders.api + '/sendPic.php', {
                 method: 'post',
-                body: new FormData(form)
+                body: fd
             })
                 .then((response) => response.json())
                 .then((data) => {

@@ -1,17 +1,21 @@
 includes:
-	- tools/phpstan/vendor/phpstan/phpstan-symfony/extension.neon
+    - tools/phpstan/vendor/phpstan/phpstan-symfony/extension.neon
 
 parameters:
-	level: 8
-	reportUnmatchedIgnoredErrors: false
+    level: 8
+    reportUnmatchedIgnoredErrors: false
 
-	ignoreErrors:
-		- identifier: missingType.iterableValue
+    ignoreErrors:
+        - identifier: missingType.iterableValue
 
-	bootstrapFiles:
-		- tools/phpunit/vendor/autoload.php
+    bootstrapFiles:
+        - %currentWorkingDirectory%/tools/phpunit/vendor/autoload.php
 
-	paths:
-	- %currentWorkingDirectory%/api/
-	- %currentWorkingDirectory%/src/
-	- %currentWorkingDirectory%/tests/
+    scanFiles:
+        - %currentWorkingDirectory%/lib/boot.php
+        - %currentWorkingDirectory%/admin/admin_boot.php
+
+    paths:
+        - %currentWorkingDirectory%/api/
+        - %currentWorkingDirectory%/src/
+        - %currentWorkingDirectory%/tests/

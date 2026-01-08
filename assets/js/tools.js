@@ -9,12 +9,28 @@ const photoboothTools = (function () {
     api.sounds = null;
     api.isPrinting = false;
 
+    const addCsrfToUrl = function (url) {
+        if (typeof csrf === 'undefined') {
+            return url;
+        }
+        const u = new URL(url, window.location.origin);
+        u.searchParams.set(csrf.key, csrf.token);
+        return u.toString();
+    };
+
+    // Attach CSRF to all jQuery AJAX calls
+    if (typeof $ !== 'undefined' && typeof csrf !== 'undefined') {
+        $.ajaxSetup({
+            data: { [csrf.key]: csrf.token }
+        });
+    }
+
     api.initialize = async function () {
-        const resultTranslations = await fetch(environment.publicFolders.api + '/translations.php', {
+        const resultTranslations = await fetch(addCsrfToUrl(environment.publicFolders.api + '/translations.php'), {
             cache: 'no-store'
         });
         this.translations = await resultTranslations.json();
-        const resultSounds = await fetch(environment.publicFolders.api + '/sounds.php', {
+        const resultSounds = await fetch(addCsrfToUrl(environment.publicFolders.api + '/sounds.php'), {
             cache: 'no-store'
         });
         this.sounds = await resultSounds.json();
@@ -310,7 +326,7 @@ const photoboothTools = (function () {
 
     api.getRequest = function (url) {
         api.console.log('Sending GET request to: ' + url);
-        fetch(new Request(url), {
+        fetch(new Request(addCsrfToUrl(url)), {
             method: 'GET',
             mode: 'cors',
             credentials: 'same-origin'

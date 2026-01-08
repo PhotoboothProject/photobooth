@@ -7,6 +7,7 @@ require_once '../lib/boot.php';
 use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
+checkCsrfOrFail($_POST);
 
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));

@@ -147,7 +147,8 @@ const photoboothPreview = (function () {
     api.runCmd = function (mode) {
         const dataVideo = {
             play: mode,
-            pid: pid
+            pid: pid,
+            [csrf.key]: csrf.token
         };
 
         jQuery

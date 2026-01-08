@@ -7,9 +7,11 @@ require_once '../lib/boot.php';
 use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
-
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+
+checkCsrfOrFail($_POST);
+
 $simpleExec = $config['preview']['simpleExec'];
 
 function isRunning(int $pid, Photobooth\Logger\NamedLogger $logger): bool

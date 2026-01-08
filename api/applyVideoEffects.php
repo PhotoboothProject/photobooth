@@ -11,10 +11,11 @@ use Photobooth\Image;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 
-header('Content-Type: application/json');
-
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+header('Content-Type: application/json');
+
+checkCsrfOrFail($_POST);
 
 $database = DatabaseManagerService::getInstance();
 

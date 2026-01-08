@@ -18,6 +18,8 @@ use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
+checkCsrfOrFail($_POST);
+
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
@@ -95,16 +97,16 @@ try {
     }
 
     if ($vars['isCollage']) {
-        list($vars['collageSrcImagePaths'], $vars['srcImages']) = Collage::getCollageFiles($config['collage'], $vars['tmpFile'], $vars['fileName'], $vars['srcImages']);
+        [$vars['collageSrcImagePaths'], $vars['srcImages']] = Collage::getCollageFiles($config['collage'], $vars['tmpFile'], $vars['fileName'], $vars['srcImages']);
 
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preCollageProcessing')) {
-            list($imageHandler, $vars, $config) = $processor->preCollageProcessing($imageHandler, $vars, $config);
+            [$imageHandler, $vars, $config] = $processor->preCollageProcessing($imageHandler, $vars, $config);
         }
         if (!Collage::createCollage($config, $vars['collageSrcImagePaths'], $vars['tmpFile'], $vars['imageFilter'])) {
             throw new \Exception('Error creating collage image.');
         }
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postCollageProcessing')) {
-            list($imageHandler, $vars, $config) = $processor->postCollageProcessing($imageHandler, $vars, $config);
+            [$imageHandler, $vars, $config] = $processor->postCollageProcessing($imageHandler, $vars, $config);
         }
     }
 
@@ -125,7 +127,7 @@ try {
         }
 
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preImageProcessing')) {
-            list($imageHandler, $vars, $config, $imageResource) = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
+            [$imageHandler, $vars, $config, $imageResource] = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
         }
         if (!$vars['isChroma']) {
             if ($vars['isCollage'] && $vars['fileName'] != $vars['singleImageFile']) {
@@ -234,7 +236,7 @@ try {
         }
 
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postImageProcessing')) {
-            list($imageHandler, $vars, $config, $imageResource) = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
+            [$imageHandler, $vars, $config, $imageResource] = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
         }
 
         if ($config['keying']['enabled'] || $vars['isChroma']) {

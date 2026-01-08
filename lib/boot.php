@@ -36,6 +36,32 @@ if (!isset($_SESSION['csrf']) || !is_string($_SESSION['csrf']) || $_SESSION['csr
     $_SESSION['csrf'] = bin2hex(random_bytes(32));
 }
 
+if (!function_exists('checkCsrfOrFail')) {
+    /**
+     * Validate a CSRF token from request data and exit with 403 on mismatch.
+     *
+     * @param  array   $source  Typically $_POST or $_GET
+     * @param  string  $key     CSRF field name (defaults to session key)
+     */
+    function checkCsrfOrFail(array $source, string $key = 'csrf'): void
+    {
+        $sessionToken  = $_SESSION[$key] ?? '';
+        $incomingToken = $source[$key] ?? '';
+        if (!hash_equals((string)$sessionToken, (string)$incomingToken)) {
+            $logger = Photobooth\Service\LoggerService::getInstance()->getLogger('main');
+            $logger->debug('CSRF validation failed', [
+                'expected' => $sessionToken,
+                'provided' => $incomingToken,
+                'path'     => $_SERVER['REQUEST_URI'] ?? '',
+                'method'   => $_SERVER['REQUEST_METHOD'] ?? '',
+            ]);
+            http_response_code(403);
+            echo json_encode(['error' => 'Invalid CSRF token']);
+            exit();
+        }
+    }
+}
+
 // Ensure login attempt tracking structure exists to avoid notices on fresh sessions
 if (!isset($_SESSION['login_attempts']) || !is_array($_SESSION['login_attempts'])) {
     $_SESSION['login_attempts'] = ['count' => 0, 'window' => time()];
