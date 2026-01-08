@@ -25,7 +25,7 @@ class FileUploader
     // Logger instance for debugging
     private Logger\NamedLogger $logger;
     // Hard size limit per file (bytes) to prevent abuse; capped below php.ini limits
-    private int $maxFileSize = 100 * 1024 * 1024; // 100 MB
+    private int $maxFileSize = 50 * 1024 * 1024; // 50 MB
 
     // Predefined error messages for various scenarios
     private array $errorMessages = [
