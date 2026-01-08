@@ -13,7 +13,19 @@ require_once '../lib/boot.php';
 
 $directory = 'demoframes';
 if (isset($_GET['dir']) && !empty($_GET['dir'])) {
-    $directory = $_GET['dir'];
+    $candidate = $_GET['dir'];
+    // Strip traversal and normalize
+    $candidate = str_replace(['..', '\\'], '', $candidate);
+    $candidate = ltrim($candidate, '/');
+
+    // Allow only paths under private/, resources/, or data/
+    if (str_starts_with($candidate, 'private/')
+        || str_starts_with($candidate, 'resources/')
+        || str_starts_with($candidate, 'data/')
+        || $candidate === 'demoframes'
+    ) {
+        $directory = $candidate;
+    }
 }
 
 $filename = ImageUtility::getRandomImageFromPath($directory);
