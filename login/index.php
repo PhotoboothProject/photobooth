@@ -11,15 +11,56 @@ require_once '../lib/boot.php';
 $username = $config['login']['username'];
 $hashed_password = $config['login']['password'];
 $error = false;
+$now = time();
+
+// Per-IP throttle persisted on disk to survive session clearing
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$throttleFile = PathUtility::getAbsolutePath('var/run/login_throttle.json');
+$windowSeconds = 300; // 5 minutes
+$maxAttempts = 10;
+
+$ipAttempts = ['count' => 0, 'window' => $now];
+if (is_readable($throttleFile)) {
+    $raw = file_get_contents($throttleFile);
+    $decoded = json_decode((string)$raw, true);
+    if (is_array($decoded) && isset($decoded[$ip]) && is_array($decoded[$ip])) {
+        $ipAttempts = $decoded[$ip];
+    }
+}
+if (($now - ($ipAttempts['window'] ?? 0)) > $windowSeconds) {
+    $ipAttempts = ['count' => 0, 'window' => $now];
+}
 
 if (isset($_POST['submit'])) {
-    if (isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && password_verify($_POST['password'], $hashed_password)) {
+    if ($_SESSION['login_attempts']['count'] >= $maxAttempts || $ipAttempts['count'] >= $maxAttempts) {
+        $error = true;
+    }
+
+    if (!$error && isset($_POST['username']) && $_POST['username'] == $username && isset($_POST['password']) && password_verify($_POST['password'], $hashed_password)) {
         //IF USERNAME AND PASSWORD ARE CORRECT SET THE LOG-IN SESSION
         $_SESSION['auth'] = true;
+        $_SESSION['login_attempts'] = ['count' => 0, 'window' => $now];
+        $ipAttempts = ['count' => 0, 'window' => $now];
     } else {
         // DISPLAY FORM WITH ERROR
         $error = true;
+        $_SESSION['login_attempts']['count']++;
+        $ipAttempts['count']++;
+        // small delay to slow brute force even if session is cleared
+        usleep(300000); // 0.3s
     }
+
+    // Persist IP attempts
+    $allAttempts = [];
+    if (is_readable($throttleFile)) {
+        $raw = file_get_contents($throttleFile);
+        $decoded = json_decode((string)$raw, true);
+        if (is_array($decoded)) {
+            $allAttempts = $decoded;
+        }
+    }
+    $allAttempts[$ip] = $ipAttempts;
+    @file_put_contents($throttleFile, json_encode($allAttempts), LOCK_EX);
 }
 // END LOGIN
 
