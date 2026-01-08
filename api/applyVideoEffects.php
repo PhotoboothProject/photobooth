@@ -151,8 +151,11 @@ try {
         if ($config['video']['effects'] !== 'None') {
             if ($config['video']['effects'] === 'boomerang') {
                 // get second to last frame to prevent frame duplication
-                $frames = shell_exec("ffprobe -v error -select_streams v:0 -count_packets \
-        -show_entries stream=nb_read_packets -of csv=p=0 $filenameTmp");
+                $ffprobeCmd = sprintf(
+                    'ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 %s',
+                    escapeshellarg($filenameTmp)
+                );
+                $frames = shell_exec($ffprobeCmd);
                 $secondToLastFrame = intval($frames) - 1;
                 $logger->info('Seconds to last frame: ' . $secondToLastFrame);
                 $cfilter[] = "[0]trim=start_frame=1:end_frame=$secondToLastFrame,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
@@ -174,7 +177,13 @@ try {
             $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
         }
 
-        $cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenameOutput";
+        $cmd = sprintf(
+            'ffmpeg -i %s %s %s %s',
+            escapeshellarg($filenameTmp),
+            $filterComplex,
+            $additionalParams,
+            escapeshellarg($filenameOutput)
+        );
         exec($cmd, $output, $returnValue);
 
         if (!$config['picture']['keep_original']) {
