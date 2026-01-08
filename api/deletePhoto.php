@@ -22,6 +22,10 @@ try {
     if (empty($_POST['file'])) {
         throw new \Exception('No file provided');
     }
+    $file = basename((string)$_POST['file']);
+    if ($file === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $file)) {
+        throw new \Exception('Invalid file name provided');
+    }
 } catch (\Exception $e) {
     // Handle the exception
     $logger->error($e->getMessage(), $_POST);
@@ -29,7 +33,6 @@ try {
     die();
 }
 
-$file = $_POST['file'];
 $fileBaseName = pathinfo($file, PATHINFO_FILENAME);
 $filesToDelete = [$file];
 $paths = [
