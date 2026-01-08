@@ -1472,6 +1472,26 @@ return [
             'name' => 'gallery[use_slideshow]',
             'value' => $config['gallery']['use_slideshow'],
         ],
+        'gallery_use_thumb' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'gallery[use_thumb]',
+            'value' => $config['gallery']['use_thumb'],
+        ],
+        'gallery_picture_width' => [
+            'view' => 'expert',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['gallery']['picture_width'],
+            'name' => 'gallery[picture_width]',
+            'value' => $config['gallery']['picture_width'],
+        ],
+        'gallery_picture_height' => [
+            'view' => 'expert',
+            'type' => 'number',
+            'placeholder' => $defaultConfig['gallery']['picture_height'],
+            'name' => 'gallery[picture_height]',
+            'value' => $config['gallery']['picture_height'],
+        ],
         'gallery_pictureTime' => [
             'view' => 'advanced',
             'type' => 'number',
