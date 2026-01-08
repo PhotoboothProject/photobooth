@@ -987,10 +987,12 @@ return [
         ],
         'collage_layouts_enabled' => [
             'view' => 'advanced',
-            'type' => 'multi-select',
+            'type' => 'toggle-button-group-modal',
             'name' => 'collage[layouts_enabled]',
+            'button_label' => 'choose_layouts',
             'placeholder' => $defaultConfig['collage']['layouts_enabled'],
             'options' => CollageLayoutEnum::cases(),
+            'preview_orientation' => $config['collage']['orientation'] ?? 'landscape',
             'value' => $config['collage']['layouts_enabled'],
         ],
         'collage_orientation' => [
