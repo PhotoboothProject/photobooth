@@ -11,7 +11,7 @@ header('Content-Type: application/json');
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
-$mode = $_POST['mode'];
+$mode = $_POST['mode'] ?? '';
 
 if (empty($mode)) {
     $data = [
@@ -23,18 +23,39 @@ if (empty($mode)) {
     die();
 }
 
+// Allow pre/post without admin auth; protect dangerous actions.
 switch ($mode) {
     case 'pre-command':
         $cmd = sprintf($config['commands']['pre_photo']);
         break;
     case 'post-command':
-        $cmd = sprintf($config['commands']['post_photo'], $_POST['filename']);
+        $filename = $_POST['filename'] ?? '';
+        $filename = basename(str_replace(['\\', '/'], '_', $filename));
+        if ($filename === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $filename)) {
+            $data = [
+                'success' => 'false',
+                'mode' => 'Invalid filename',
+            ];
+            $logger->debug('message', $data);
+            echo json_encode($data);
+            die();
+        }
+        $cmd = sprintf($config['commands']['post_photo'], escapeshellarg($filename));
         break;
     case 'reboot':
-        $cmd = 'sudo ' . sprintf($config['commands']['reboot']);
-        break;
     case 'shutdown':
-        $cmd = 'sudo ' . sprintf($config['commands']['shutdown']);
+        // Require authenticated admin session for system-level actions
+        if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true) {
+            $data = [
+                'success' => 'false',
+                'mode' => 'Unauthorized',
+            ];
+            $logger->debug('message', $data);
+            echo json_encode($data);
+            die();
+        }
+        $sudoCmd = $mode === 'reboot' ? $config['commands']['reboot'] : $config['commands']['shutdown'];
+        $cmd = 'sudo ' . sprintf($sudoCmd);
         break;
     default:
         $data = [
