@@ -20,6 +20,7 @@
     "eslint:fix": "eslint assets/js/{,*/**/}*.js --fix",
     "format": "npm-run-all format:* eslint:fix",
     "format:js": "prettier assets/js/{,*/**/}*.js --write",
+    "format:lang": "node scripts/sort-json.js resources/lang/en.json",
     "format:scss": "prettier assets/sass/{,*/**/}*.scss --write",
     "pack:build": "npm-run-all --serial eslint build pack:zip",
     "pack:zip": "node scripts/pack-build.js",
