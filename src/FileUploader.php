@@ -188,7 +188,9 @@ class FileUploader
     private function moveFile(string $fileTmpName, string $filePath): void
     {
         if (move_uploaded_file($fileTmpName, $filePath)) {
-            chmod($filePath, 0644);
+            if (!@chmod($filePath, 0644)) {
+                $this->logger->debug('Warning: Failed to change moved file permissions', [$filePath]);
+            }
             $this->logger->debug('File uploaded successfully', [$filePath]);
         } else {
             $this->addError(basename($filePath), 'Failed to move the file to the target folder.');
