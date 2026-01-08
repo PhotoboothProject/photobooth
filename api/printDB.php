@@ -18,6 +18,31 @@ if (!in_array($action, $validActions)) {
     die(json_encode($LogData));
 }
 
+$csrfKey = 'csrf';
+$csrfToken = $_SESSION[$csrfKey] ?? '';
+$rateLimitWindow = 60;
+$rateLimitMax = 10;
+
+// CSRF protection
+$incomingToken = $_GET[$csrfKey] ?? ($_POST[$csrfKey] ?? '');
+if (!hash_equals((string)$csrfToken, (string)$incomingToken)) {
+    http_response_code(403);
+    die(json_encode(['error' => 'Invalid CSRF token']));
+}
+
+// Simple per-session rate limit
+$now = time();
+if (!isset($_SESSION['printdb']) || !is_array($_SESSION['printdb'])) {
+    $_SESSION['printdb'] = ['count' => 0, 'window' => $now];
+}
+if (($now - ($_SESSION['printdb']['window'] ?? 0)) > $rateLimitWindow) {
+    $_SESSION['printdb'] = ['count' => 0, 'window' => $now];
+}
+if (($_SESSION['printdb']['count'] ?? 0) >= $rateLimitMax) {
+    http_response_code(429);
+    die(json_encode(['error' => 'Rate limit exceeded, please wait']));
+}
+
 $printManager = PrintManagerService::getInstance();
 
 try {
@@ -41,6 +66,7 @@ try {
             ];
             break;
     }
+    $_SESSION['printdb']['count'] = ($_SESSION['printdb']['count'] ?? 0) + 1;
 } catch (\Exception $e) {
     $LogData = [
         'error' => 'Internal server error.',
