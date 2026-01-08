@@ -2638,7 +2638,6 @@ function start_git_install() {
         else
             error "Failed to reapply local changes."
             sudo -u www-data git am --abort >/dev/null 2>&1
-            return 2
         fi
 
         sudo -u www-data mv "0001-backup-changes.patch" "$INSTALLFOLDERPATH/private/$(date +%Y%m%d%H%M%S)-backup-changes.patch" >/dev/null 2>&1
