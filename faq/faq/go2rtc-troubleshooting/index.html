@@ -109,6 +109,8 @@
     <li class="toctree-l2"><a class="reference internal" href="#problem-solving-go2rtc-preview-via-gphoto2">Problem Solving: go2rtc Preview via gphoto2</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#error-could-not-claim-the-usb-device">Error: could not claim the USB Device</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-device-is-busy">Error: Device is busy</a>
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#delay-capture">Delay capture</a>
     </li>
@@ -132,6 +134,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#canon-eos-500d">Canon EOS 500D</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#canon-eos-eos40d">Canon EOS EOS40D</a>
+    </li>
         </ul>
     </li>
     </ul>
@@ -146,6 +150,8 @@
                   <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../scripts/">Scripts</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Community</span></p>
@@ -233,6 +239,15 @@
 <p>Another process is using the camera. That's what the log says. Therefore, it can't record.</p>
 <p>If you're using <code>gphoto2</code> this issue is generally addressed inside the troubleshooting for gphoto2, but could also happen because of timing problems.</p>
 <p>The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems. Continue reading on <a href="#delay-capture">Delay capture</a> to know how to fix possible timing issues.</p>
+<h3 id="error-device-is-busy">Error: Device is busy</h3>
+<p>If the preview is running, the camera may be busy when trying to capture an image. This can lead to errors like "Device is busy" or "Could not claim the USB device". There is a bug in go2rtc startingF
+by version 1.9.10 which keeps the camera in use even after stopping the preview.
+Try to downgrade to version 1.9.9 as a workaround:</p>
+<pre><code>sudo bash install-photobooth.sh
+choose 4 go2rtc
+choose 5 updat or downgrade go2rtc only
+chose 1.9.9
+</code></pre>
 <h4 id="delay-capture">Delay capture</h4>
 <p>We can use a tiny pause between stopping the preview and starting the capture to work around this:</p>
 <pre><code class="language-ell">sudo wget -O /usr/local/bin/capture https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/scripts/capture-gphoto2
@@ -282,6 +297,10 @@ sudo systemctl start go2rtc
 <hr />
 <h2 id="camera-specific-notes">Camera specific notes</h2>
 <p>While setting up go2rtc using the Photobooth Setup Wizard we're creating a default configuration which covers a wide range of devices. It might be, that your camera does not work out of the box with the default configuration and requires some extra work to be used on Photobooth. You're always welcome to contribute camera specific notes not listed below.</p>
+<p>Dont forget to restart go2rtc after changing the configuration!</p>
+<pre><code class="language-ell">sudo systemctl stop go2rtc
+sudo systemctl start go2rtc
+</code></pre>
 <h3 id="raspberry-pi-camera-modules">Raspberry Pi Camera Modules</h3>
 <ul>
 <li>Default preview width and height match the Pi Camera v3. You might need to adjust the width and height inside the go2rtc configuration to matching values for your camera module.</li>
@@ -298,9 +317,13 @@ sudo systemctl start go2rtc
 log:
   exec: trace
 </code></pre>
-<p>Now restart go2rtc to apply your changes:</p>
-<pre><code class="language-ell">sudo systemctl stop go2rtc
-sudo systemctl start go2rtc
+<h3 id="canon-eos-eos40d">Canon EOS EOS40D</h3>
+<pre><code>streams:
+photobooth:
+- &quot;exec:gphoto2 --capture-movie --stdout#input=mjpeg#fps=8#scale=640:480#pause-on-snapshot=true&quot;
+
+log:
+exec: trace
 </code></pre>
               
             </div>
