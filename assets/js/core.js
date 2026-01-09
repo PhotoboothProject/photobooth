@@ -1225,12 +1225,24 @@ const photoBooth = (function () {
                 if (document.getElementById('resultQR')) {
                     document.getElementById('resultQR').remove();
                 }
+                const qrWrapper = document.createElement('div');
+                qrWrapper.id = 'resultQR';
+                qrWrapper.setAttribute('class', 'stage-code ' + config.qr.result);
+
                 const qrResultImage = document.createElement('img');
                 qrResultImage.src = environment.publicFolders.api + '/qrcode.php?filename=' + filename;
                 qrResultImage.alt = 'qr code';
-                qrResultImage.id = 'resultQR';
-                qrResultImage.setAttribute('class', 'stage-code ' + config.qr.result);
-                resultPage.append(qrResultImage);
+                qrResultImage.classList.add('stage-code__image');
+                qrWrapper.append(qrResultImage);
+
+                const qrShortText = config.qr.short_text;
+                if (qrShortText && qrShortText.length > 0) {
+                    const qrCaption = document.createElement('p');
+                    qrCaption.classList.add('stage-code__caption');
+                    qrCaption.textContent = qrShortText;
+                    qrWrapper.append(qrCaption);
+                }
+                resultPage.append(qrWrapper);
             }
 
             if (!filternav.hasClass('sidenav--open')) {
