@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/faq/pi-camera/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/faq/screensaver/" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Pi Camera setup - Photobooth Project</title>
+    <title>Screensaver - Photobooth Project</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,9 +13,9 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Pi Camera setup";
-        var mkdocs_page_input_path = "faq/pi-camera.md";
-        var mkdocs_page_url = "/faq/pi-camera/";
+        var mkdocs_page_name = "Screensaver";
+        var mkdocs_page_input_path = "faq/screensaver.md";
+        var mkdocs_page_url = "/faq/screensaver/";
       </script>
     
     <!--[if lt IE 9]>
@@ -84,13 +84,7 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../preview/">Preview and live background</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Pi Camera setup</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#verify-your-camera-works">Verify your camera works</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#configure-photobooth-commands">Configure Photobooth commands</a>
-    </li>
-    </ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../pi-camera/">Pi Camera setup</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../custom-collage/">Custom collage design</a>
                   </li>
@@ -98,7 +92,15 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../hide-cursor/">Hide cursor & screen blanking</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../screensaver/">Screensaver</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Screensaver</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-it-can-show">What it can show</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#text-overlay-and-styling">Text overlay and styling</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#timing">Timing</a>
+    </li>
+    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a>
                   </li>
@@ -156,9 +158,9 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Troubleshooting & Tutorials</li>
-      <li class="breadcrumb-item active">Pi Camera setup</li>
+      <li class="breadcrumb-item active">Screensaver</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/faq/pi-camera.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/faq/screensaver.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -166,32 +168,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="pi-camera-setup">Pi Camera setup</h1>
-<p>Yes, Pi Cameras are supported. Make sure your Pi can capture an image from the terminal before using Photobooth.</p>
-<h2 id="verify-your-camera-works">Verify your camera works</h2>
+                <h1 id="screensaver-function">Screensaver function</h1>
+<p>The screensaver keeps the start screen fresh and prevents burn‑in when guests are idle. Configure it in the Admin Panel under <strong>General → Screensaver</strong>.</p>
+<h2 id="what-it-can-show">What it can show</h2>
 <ul>
-<li>Try a capture command that matches your Pi OS version:</li>
-<li>Bookworm: <code>rpicam-still -n -o test.jpg -q 100 -t 1</code></li>
-<li>Bullseye: <code>libcamera-still -n -o test.jpg -q 100 -t 1</code></li>
-<li>Buster and earlier: <code>raspistill -n -o test.jpg -q 100 -t 1</code></li>
-<li>Add the web server user to the <code>video</code> group and reboot:
-  <code>sudo gpasswd -a www-data video
-  reboot</code></li>
+<li><strong>Image</strong>: Display a single image. Use <code>Screensaver image path</code>.</li>
+<li><strong>Video</strong>: Loop a single video. Use <code>Screensaver video path</code>.</li>
+<li><strong>Folder</strong>: Cycle through files in <code>private/screensavers/</code>. Supported: <code>.jpg</code>, <code>.png</code>, <code>.gif</code>, <code>.mp4</code>, <code>.webm</code>.</li>
+<li><strong>Gallery</strong>: Cycle through gallery photos guests already took; falls back to the image path if the gallery is empty.</li>
 </ul>
-<h2 id="configure-photobooth-commands">Configure Photobooth commands</h2>
-<p>Open the adminpanel (<a href="http://localhost/admin">http://localhost/admin</a> or <a href="http://localhost/photobooth/admin">http://localhost/photobooth/admin</a>) and set the capture command that matches your OS:</p>
+<h2 id="text-overlay-and-styling">Text overlay and styling</h2>
 <ul>
-<li>Pi OS (Bookworm and newer): <code>rpicam-still -n -o %s -q 100 -t 1 | echo Done</code></li>
-<li>Pi OS (Bullseye): <code>libcamera-still -n -o %s -q 100 -t 1 | echo Done</code></li>
-<li>Pi OS (Buster): <code>raspistill -n -o %s -q 100 -t 1 | echo Done</code></li>
+<li>Optional <strong>Screensaver text</strong> shows on top of the media.</li>
+<li>Choose <strong>Text position</strong> (<code>top</code>, <code>bottom</code>, <code>center</code>) to avoid covering key visuals.</li>
+<li>Adjust <strong>Text backdrop color</strong> and <strong>Backdrop opacity</strong> (0 = fully transparent, 1 = solid) if the text needs contrast; set opacity to <code>0</code> to turn the backdrop off.</li>
+<li>Use <strong>Text color</strong> and <strong>Custom font file</strong> for branding; upload fonts into <code>private/fonts/</code> and select them from the picker.</li>
+<li>In Gallery mode the overlay alternates between your text and event text to avoid screen burn.</li>
 </ul>
-<p>The <code>echo</code> ensures Photobooth sees a response after the capture finishes. You can append extra parameters (ISO, exposure, white balance, etc.); run the command with <code>-?</code> to list options.</p>
+<h2 id="timing">Timing</h2>
+<ul>
+<li><strong>Timeout before screensaver</strong>: minutes of no interaction before it starts. Set to <code>0</code> to keep the screensaver off even if enabled.</li>
+<li><strong>Slide change interval</strong>: minutes between media switches in Folder or Gallery mode (minimum <code>1</code>). Has no effect for single image/video modes.</li>
+<li>Any click or touch hides the screensaver and resets the timer.</li>
+</ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../preview/" class="btn btn-neutral float-left" title="Preview and live background"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../custom-collage/" class="btn btn-neutral float-right" title="Custom collage design">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../hide-cursor/" class="btn btn-neutral float-left" title="Hide cursor & screen blanking"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../tutorials/" class="btn btn-neutral float-right" title="Tutorials">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -218,10 +223,10 @@
         </span>
     
     
-      <span><a href="../preview/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../hide-cursor/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../custom-collage/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../tutorials/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
