@@ -1230,8 +1230,6 @@ const photoBooth = (function () {
                 qrWrapper.setAttribute('class', 'stage-code ' + config.qr.result);
 
                 const qrResultImage = document.createElement('img');
-                const qrShortText = config.qr.short_text;
-
                 qrResultImage.addEventListener('load', () => {
                     resultPage.append(qrWrapper);
                 });
