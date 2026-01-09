@@ -1,4 +1,4 @@
-/* globals photoboothTools */
+/* globals photoboothTools csrf */
 $(function () {
     initDirtyTracking();
 
@@ -26,6 +26,9 @@ const shellCommand = function ($mode, $filename = '') {
         mode: $mode,
         filename: $filename
     };
+    if (typeof csrf !== 'undefined') {
+        command[csrf.key] = csrf.token;
+    }
 
     photoboothTools.console.log('Run' + $mode);
 

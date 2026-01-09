@@ -1,5 +1,5 @@
 /* exported initPhotoSwipeFromDOM */
-/* globals photoBooth photoboothTools rotaryController remoteBuzzerClient */
+/* globals photoBooth photoboothTools rotaryController remoteBuzzerClient csrf */
 
 // eslint-disable-next-line no-unused-vars
 let globalGalleryHandle;
@@ -84,7 +84,8 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                             method: 'GET',
                             url: 'api/printDB.php',
                             data: {
-                                action: 'getPrintCount'
+                                action: 'getPrintCount',
+                                [csrf.key]: csrf.token
                             },
                             success: (data) => {
                                 el.innerText = photoboothTools.getTranslation('printed') + ' ' + data.count;

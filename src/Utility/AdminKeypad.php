@@ -6,15 +6,33 @@ class AdminKeypad
 {
     public static function login(string $userPin, array $login): bool
     {
-        if ($userPin === $login['pin']) {
+        if (self::isValidPin($userPin, $login['pin'] ?? null)) {
+            session_regenerate_id(true);
             $_SESSION['auth'] = true;
             return true;
-        } elseif ($login['rental_keypad'] && $userPin == $login['rental_pin']) {
+        } elseif (($login['rental_keypad'] ?? false) && self::isValidPin($userPin, $login['rental_pin'] ?? null)) {
+            session_regenerate_id(true);
             $_SESSION['rental'] = true;
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Validate user PIN against stored (plain or hashed) value.
+     */
+    protected static function isValidPin(string $userPin, ?string $storedPin): bool
+    {
+        if ($storedPin === null || $storedPin === '') {
+            return false;
+        }
+
+        if (self::isHashedPin($storedPin)) {
+            return password_verify($userPin, $storedPin);
+        }
+
+        return hash_equals($storedPin, $userPin);
     }
 
     public static function render(): string
@@ -101,5 +119,30 @@ class AdminKeypad
         $content[] = '</div>';
 
         return implode(PHP_EOL, $content);
+    }
+
+    /**
+     * Detects if a PIN string is password_hash output.
+     */
+    public static function isHashedPin(?string $storedPin): bool
+    {
+        if ($storedPin === null || $storedPin === '') {
+            return false;
+        }
+
+        $info = password_get_info($storedPin);
+        return ($info['algo'] ?? 0) !== 0;
+    }
+
+    /**
+     * Return display length: real length for plain PIN, 4 for hashed.
+     */
+    public static function pinLength(?string $storedPin): int
+    {
+        if ($storedPin === null || $storedPin === '') {
+            return 0;
+        }
+
+        return self::isHashedPin($storedPin) ? 4 : strlen($storedPin);
     }
 }

@@ -11,10 +11,11 @@ use Photobooth\Image;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 
-header('Content-Type: application/json');
-
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+header('Content-Type: application/json');
+
+checkCsrfOrFail($_POST);
 
 $database = DatabaseManagerService::getInstance();
 
@@ -23,7 +24,10 @@ try {
         throw new \Exception('No file provided');
     }
 
-    $file = $_POST['file'];
+    $file = basename((string)$_POST['file']);
+    if ($file === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $file)) {
+        throw new \Exception('Invalid file name provided.');
+    }
 
     $tmpFolder = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR;
     $imageFolder = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR;
@@ -151,8 +155,11 @@ try {
         if ($config['video']['effects'] !== 'None') {
             if ($config['video']['effects'] === 'boomerang') {
                 // get second to last frame to prevent frame duplication
-                $frames = shell_exec("ffprobe -v error -select_streams v:0 -count_packets \
-        -show_entries stream=nb_read_packets -of csv=p=0 $filenameTmp");
+                $ffprobeCmd = sprintf(
+                    'ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 %s',
+                    escapeshellarg($filenameTmp)
+                );
+                $frames = shell_exec($ffprobeCmd);
                 $secondToLastFrame = intval($frames) - 1;
                 $logger->info('Seconds to last frame: ' . $secondToLastFrame);
                 $cfilter[] = "[0]trim=start_frame=1:end_frame=$secondToLastFrame,setpts=PTS-STARTPTS,reverse[r];[0][r]concat=n=2:v=1:a=0";
@@ -174,7 +181,14 @@ try {
             $filterComplex = '-filter_complex "' . implode(',', $cfilter) . '"';
         }
 
-        $cmd = "ffmpeg -i $filenameTmp $filterComplex $additionalParams $filenameOutput";
+        // Build ffmpeg command with safe args
+        $cmd = sprintf(
+            'ffmpeg -i %s %s %s %s',
+            escapeshellarg($filenameTmp),
+            $filterComplex,
+            $additionalParams,
+            escapeshellarg($filenameOutput)
+        );
         exec($cmd, $output, $returnValue);
 
         if (!$config['picture']['keep_original']) {

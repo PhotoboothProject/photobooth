@@ -1,3 +1,5 @@
+/* globals photoboothTools csrf */
+
 function keypadAdd(value) {
     const keypadPin = $('#keypad_pin').html();
     const newPin = keypadPin + value;
@@ -79,10 +81,23 @@ function checkKeypadPin(pin) {
         type: 'POST',
         data: {
             controller: 'keypadLogin',
-            pin: pin
+            pin: pin,
+            [csrf.key]: csrf.token
         },
 
         success: (data) => {
+            if (data.blocked) {
+                const waitSeconds = data.retry_after || 0;
+                $('.keypadLoader').addClass('hidden').removeClass('flex');
+                const msg = data.message || photoboothTools.getTranslation('error');
+                $('#keypad_message').text(msg + (waitSeconds ? ' (' + waitSeconds + 's)' : ''));
+                $('.keypad_keybox').addClass('error');
+                $('.keypad_key').addClass('error');
+                // Keep message visible; user must wait out the window
+                keypadClear();
+                return;
+            }
+
             if (data.state == true) {
                 window.location.href = '../admin';
             } else {

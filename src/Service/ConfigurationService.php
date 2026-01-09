@@ -288,6 +288,25 @@ class ConfigurationService
         $config['textonprint']['font']        = $normalizePath($config['textonprint']['font'] ?? null);
         $config['print']['frame']             = $normalizePath($config['print']['frame'] ?? null);
 
+        // Hash legacy plain-text login pins
+        $hashPinIfNeeded = static function (?string $pin): ?string {
+            if ($pin === null || $pin === '') {
+                return $pin;
+            }
+            $info = password_get_info($pin);
+            if (($info['algo'] ?? 0) !== 0) {
+                return $pin;
+            }
+
+            return password_hash($pin, PASSWORD_DEFAULT);
+        };
+        if (array_key_exists('pin', $config['login'])) {
+            $config['login']['pin'] = $hashPinIfNeeded($config['login']['pin']);
+        }
+        if (array_key_exists('rental_pin', $config['login'])) {
+            $config['login']['rental_pin'] = $hashPinIfNeeded($config['login']['rental_pin']);
+        }
+
         return $config;
     }
 

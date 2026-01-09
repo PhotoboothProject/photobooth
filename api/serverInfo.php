@@ -2,7 +2,7 @@
 
 /** @var array $config */
 
-require_once '../lib/boot.php';
+require_once __DIR__ . '/../admin/admin_boot.php';
 
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
@@ -23,8 +23,7 @@ function handleDebugPanel(string $content, array $config): string|false
         case 'nav-rembglog':
             return readFileContents(PathUtility::getAbsolutePath('var/log/rembg.log'));
         case 'nav-myconfig':
-            echo implode("\n", showConfig($config));
-            return json_encode('');
+            return json_encode(maskedConfig($config), JSON_PRETTY_PRINT);
         case 'nav-serverprocesses':
             return (string)shell_exec('/bin/ps -ef');
         case 'nav-bootconfig':
@@ -197,6 +196,30 @@ function generateTableHtml(array $columns, array $result): string
     $html .= '    </tbody>' . "\r\n";
     $html .= '</table>' . "\r\n";
     return $html;
+}
+
+function maskedConfig(array $config): array
+{
+    $sensitiveKeys = ['password', 'pin', 'username', 'api_key', 'secret'];
+
+    $maskRecursive = function ($value) use (&$maskRecursive, $sensitiveKeys) {
+        if (is_array($value)) {
+            $result = [];
+            foreach ($value as $k => $v) {
+                if (is_string($k) && in_array(strtolower($k), $sensitiveKeys, true)) {
+                    $result[$k] = '***';
+                } else {
+                    $result[$k] = $maskRecursive($v);
+                }
+            }
+
+            return $result;
+        }
+
+        return $value;
+    };
+
+    return $maskRecursive($config);
 }
 
 if (!empty($_GET['content'])) {

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../lib/boot.php';
+require_once __DIR__ . '/../admin/admin_boot.php';
 
 use Photobooth\Service\ThemeService;
 
@@ -54,6 +54,12 @@ if ($method === 'GET') {
 
         $downloadName = isset($result['downloadName']) ? basename($result['downloadName']) : 'theme.zip';
         $filePath = $result['file'];
+        if (!is_file($filePath) || !is_readable($filePath)) {
+            $sendJson([
+                'status' => 'error',
+                'message' => 'Export file not found',
+            ]);
+        }
         header('Content-Type: application/zip');
         header('Content-Disposition: attachment; filename="' . $downloadName . '"');
         header('Content-Length: ' . filesize($filePath));
@@ -70,6 +76,9 @@ if ($method === 'GET') {
 
 // Handle multipart/form-data import first
 $postAction = $_POST['action'] ?? null;
+if ($postAction !== null) {
+    checkCsrfOrFail($_POST);
+}
 if ($postAction === 'import') {
     if (!isset($_FILES['theme_zip']) || !is_uploaded_file($_FILES['theme_zip']['tmp_name']) || $_FILES['theme_zip']['error'] !== UPLOAD_ERR_OK) {
         $sendJson([
@@ -106,6 +115,7 @@ if (!is_array($body)) {
 $action = $body['action'] ?? null;
 
 if ($action === 'save') {
+    checkCsrfOrFail($body);
     $name = isset($body['name']) ? (string)$body['name'] : '';
     $data = isset($body['theme']) && is_array($body['theme']) ? $body['theme'] : [];
 
@@ -125,6 +135,7 @@ if ($action === 'save') {
 }
 
 if ($action === 'delete') {
+    checkCsrfOrFail($body);
     $name = isset($body['name']) ? (string)$body['name'] : '';
 
     if ($name === '') {

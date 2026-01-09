@@ -1,23 +1,13 @@
 <?php
 
 /** @var array $config */
-require_once '../lib/boot.php';
+require_once __DIR__ . '/admin_boot.php';
 
 use Photobooth\Environment;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\ProcessService;
 use Photobooth\Utility\PathUtility;
-
-// Login / Authentication check
-if (!(
-    !$config['login']['enabled'] ||
-    (!$config['protect']['localhost_admin'] && isset($_SERVER['SERVER_ADDR']) &&  $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) ||
-    (isset($_SESSION['auth']) && $_SESSION['auth'] === true) || !$config['protect']['admin']
-)) {
-    header('location: ' . PathUtility::getPublicPath('login'));
-    exit();
-}
 
 header('Content-Type: application/json');
 

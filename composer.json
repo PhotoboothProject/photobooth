@@ -8,6 +8,7 @@
         "ext-mbstring": "*",
         "ext-xml": "*",
         "ext-zip": "*",
+        "ext-fileinfo": "*",
         "endroid/qr-code": "^6.0",
         "league/commonmark": "^2.4",
         "league/flysystem": "^3.29",

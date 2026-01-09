@@ -2,6 +2,8 @@
 
 namespace Photobooth\Utility;
 
+use Exception;
+
 class VideoUtility
 {
     public const supportedFileExtensionsProcessing = [
@@ -50,23 +52,13 @@ class VideoUtility
         return '<video autoplay muted loop playsinline ' . ComponentUtility::renderAttributes($attributes) . '></video>';
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getVideosFromPath(string $path, bool $processing = true): array
     {
-        if (!PathUtility::isAbsolutePath($path)) {
-            $path = PathUtility::getAbsolutePath($path);
-        }
-        if (!PathUtility::isAbsolutePath($path)) {
-            throw new \Exception('Path ' . $path . ' does not exist.');
-        }
+        $allowedExtensions = $processing ? self::supportedFileExtensionsProcessing : self::supportedFileExtensionsSelect;
 
-        $files = [];
-        foreach (new \DirectoryIterator($path) as $file) {
-            if (!$file->isFile() || !in_array(strtolower($file->getExtension()), $processing ? self::supportedFileExtensionsProcessing : self::supportedFileExtensionsSelect)) {
-                continue;
-            }
-            $files[] = $path . '/' . $file->getFilename();
-        }
-
-        return $files;
+        return FileUtility::getFilesFromPath($path, $allowedExtensions);
     }
 }

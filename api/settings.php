@@ -67,3 +67,4 @@ if (empty($config['screensaver']['text_position'])) {
 
 echo 'const config = ' . json_encode($config) . ';';
 echo 'const environment = ' . json_encode(new Environment()) . ';';
+echo 'const csrf = { key: "csrf", token: "' . $_SESSION['csrf'] . '" };';

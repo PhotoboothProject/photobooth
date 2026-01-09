@@ -18,6 +18,8 @@ use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
 
+checkCsrfOrFail($_POST);
+
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
@@ -31,7 +33,10 @@ try {
         throw new \Exception('No file provided');
     }
 
-    $vars['fileName'] = $_POST['file'];
+    $vars['fileName'] = basename((string)$_POST['file']);
+    if ($vars['fileName'] === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $vars['fileName'])) {
+        throw new \Exception('Invalid file name provided');
+    }
 
     if (!isset($_POST['style']) || !in_array($_POST['style'], ['photo', 'collage', 'custom', 'chroma'])) {
         throw new \Exception('Invalid or missing style parameter');
@@ -92,16 +97,16 @@ try {
     }
 
     if ($vars['isCollage']) {
-        list($vars['collageSrcImagePaths'], $vars['srcImages']) = Collage::getCollageFiles($config['collage'], $vars['tmpFile'], $vars['fileName'], $vars['srcImages']);
+        [$vars['collageSrcImagePaths'], $vars['srcImages']] = Collage::getCollageFiles($config['collage'], $vars['tmpFile'], $vars['fileName'], $vars['srcImages']);
 
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preCollageProcessing')) {
-            list($imageHandler, $vars, $config) = $processor->preCollageProcessing($imageHandler, $vars, $config);
+            [$imageHandler, $vars, $config] = $processor->preCollageProcessing($imageHandler, $vars, $config);
         }
         if (!Collage::createCollage($config, $vars['collageSrcImagePaths'], $vars['tmpFile'], $vars['imageFilter'])) {
             throw new \Exception('Error creating collage image.');
         }
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postCollageProcessing')) {
-            list($imageHandler, $vars, $config) = $processor->postCollageProcessing($imageHandler, $vars, $config);
+            [$imageHandler, $vars, $config] = $processor->postCollageProcessing($imageHandler, $vars, $config);
         }
     }
 
@@ -122,7 +127,7 @@ try {
         }
 
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'preImageProcessing')) {
-            list($imageHandler, $vars, $config, $imageResource) = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
+            [$imageHandler, $vars, $config, $imageResource] = $processor->preImageProcessing($imageHandler, $vars, $config, $imageResource);
         }
         if (!$vars['isChroma']) {
             if ($vars['isCollage'] && $vars['fileName'] != $vars['singleImageFile']) {
@@ -231,7 +236,7 @@ try {
         }
 
         if ($processor !== null && $processor instanceof ImageProcessor && method_exists($processor, 'postImageProcessing')) {
-            list($imageHandler, $vars, $config, $imageResource) = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
+            [$imageHandler, $vars, $config, $imageResource] = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
         }
 
         if ($config['keying']['enabled'] || $vars['isChroma']) {

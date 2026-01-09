@@ -522,6 +522,27 @@ or [http://localhost/photobooth/admin/upload](http://localhost/photobooth/admin/
 
 ---
 
+## How do I reset keypad login attempts?
+
+If the keypad is blocked after too many wrong PINs, clear the throttle file to reset attempts:
+
+1. Open a shell on the photobooth host.
+2. Delete the throttle JSON that stores attempt counts:
+
+Path may vary based on your installation:
+
+   ```
+   rm /var/www/html/photobooth/var/run/login_throttle.json
+   ```
+
+or
+
+   ```
+   rm /var/www/html/var/run/login_throttle.json
+   ```
+
+---
+
 ## How to use Magic Greenscreen (AI Background Removal)
 
 Magic Greenscreen is a feature that uses AI to automatically remove backgrounds from photos, creating professional-looking images with transparent or custom backgrounds. This feature is powered by the rembg library and requires Python 3.

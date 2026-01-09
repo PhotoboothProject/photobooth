@@ -1,4 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
+/* globals csrf */
 
 class DebugPanel {
     constructor() {
@@ -58,7 +59,15 @@ class DebugPanel {
     }
 
     async fetchContent() {
-        return fetch(environment.publicFolders.api + '/serverInfo.php?content=' + this.currentNavigationId)
+        return fetch(
+            environment.publicFolders.api +
+                '/serverInfo.php?content=' +
+                this.currentNavigationId +
+                '&' +
+                csrf.key +
+                '=' +
+                csrf.token
+        )
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');

@@ -1,5 +1,5 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
-/* globals photoboothTools shellCommand */
+/* globals photoboothTools shellCommand csrf */
 $(function () {
     // Highlight save button on form changes
     const $saveButton = $('#save-admin-btn');
@@ -28,6 +28,9 @@ $(function () {
 
             const data = new FormData(document.querySelector('form'));
             data.append('type', 'reset');
+            if (typeof csrf !== 'undefined') {
+                data.append(csrf.key, csrf.token);
+            }
 
             fetch('../api/admin.php', {
                 method: 'POST',
@@ -59,6 +62,9 @@ $(function () {
 
         const data = new FormData(document.querySelector('form'));
         data.append('type', 'config');
+        if (typeof csrf !== 'undefined') {
+            data.append(csrf.key, csrf.token);
+        }
 
         fetch('../api/admin.php', {
             method: 'POST',
@@ -102,7 +108,13 @@ $(function () {
         $.ajax({
             url: '../api/testFtpConnection.php',
             dataType: 'json',
-            data: $('form').serialize(),
+            data: (function () {
+                const formData = $('form').serializeArray();
+                if (typeof csrf !== 'undefined') {
+                    formData.push({ name: csrf.key, value: csrf.token });
+                }
+                return formData;
+            })(),
             type: 'post',
             success: (resp) => {
                 photoboothTools.console.log('resp', resp);
@@ -156,6 +168,7 @@ $(function () {
 
         $.ajax({
             url: '../api/rebuildImageDB.php',
+            data: { [csrf.key]: csrf.token },
             // eslint-disable-next-line no-unused-vars
             success: function (resp) {
                 $('.pageLoader').removeClass('isActive');
@@ -181,6 +194,7 @@ $(function () {
         $.ajax({
             url: '../api/checkVersion.php',
             method: 'GET',
+            data: { [csrf.key]: csrf.token },
             success: (data) => {
                 $('#checkVersion').empty();
                 photoboothTools.console.log('data', data);
@@ -232,7 +246,8 @@ $(function () {
             method: 'GET',
             url: '../api/printDB.php',
             data: {
-                action: 'unlockPrint'
+                action: 'unlockPrint',
+                [csrf.key]: csrf.token
             },
             success: (data) => {
                 $('.pageLoader').removeClass('isActive');

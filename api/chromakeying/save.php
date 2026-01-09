@@ -16,6 +16,9 @@ use Photobooth\Utility\ImageUtility;
 
 header('Content-Type: application/json');
 
+$csrfSource = $_POST + $_GET;
+checkCsrfOrFail($csrfSource);
+
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 

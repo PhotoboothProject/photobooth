@@ -10,6 +10,12 @@ require_once '../lib/boot.php';
 
 $filename = (isset($_GET['filename']) && $_GET['filename']) != '' ? $_GET['filename'] : false;
 if ($filename) {
+    $filename = basename((string)$filename);
+    if ($filename === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $filename)) {
+        http_response_code(400);
+        echo 'Invalid filename.';
+        exit();
+    }
     $url = $config['qr']['url'];
     if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
         $remoteStorageService = RemoteStorageService::getInstance();
