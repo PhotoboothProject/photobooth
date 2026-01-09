@@ -54,6 +54,7 @@ nav:
     - Sounds: customizing/sounds.md
     - Themes: customizing/themes.md
     - CSS styles: customizing/styles.md
+    - Scripts: scripts/index.md
   - Community:
     - Chat on Telegram: https://t.me/PhotoboothGroup
     - Contributor Covenant Code of Conduct: code_of_conduct.md
