@@ -23,6 +23,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 - QR-Code short text option on result screen and gallery for better understanding, configurable in admin settings.
 - Introduced a new Screensaver feature with image/video/folder/gallery modes, configurable start timeout and slide interval.
 - Added a font configuration section for UI texts so fonts/colors can be set centrally ( fixes #986 )
+- Configurable fixed size for gallery detail images and add toogle to use thumbs in gallery for better loading times
 
 **Bug fixes**
 
