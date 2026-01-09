@@ -1320,12 +1320,15 @@ const photoBooth = (function () {
         if (!config.gallery.enabled) {
             return;
         }
+        const useThumb = config.gallery.use_thumb;
         const thumbImg = new Image();
         const bigImg = new Image();
         let thumbSize = '';
         let bigSize = '';
         let bigSizeW = '';
         let bigSizeH = '';
+        const maxSizeW = config.gallery.picture_width || 800;
+        const maxSizeH = config.gallery.picture_height || 600;
 
         let imgtoLoad = 2;
 
@@ -1340,13 +1343,37 @@ const photoBooth = (function () {
             bigSizeW = this.width;
             bigSizeH = this.height;
             bigSize = bigSizeW + 'x' + bigSizeH;
+            // Calculate PSWP dimensions to max 800x600 while keeping aspect ratio
+            let aspectRatio = bigSizeW / bigSizeH;
+            if (aspectRatio >= 1) {
+                // Landscape or square
+                if (bigSizeW > maxSizeW) {
+                    bigSizeW = maxSizeW;
+                    bigSizeH = Math.round(bigSizeW / aspectRatio);
+                } else if (bigSizeH > maxSizeH) {
+                    bigSizeH = maxSizeH;
+                    bigSizeW = Math.round(bigSizeH * aspectRatio);
+                }
+            } else {
+                // Portrait
+                if (bigSizeH > maxSizeH) {
+                    bigSizeH = maxSizeH;
+                    bigSizeW = Math.round(bigSizeH * aspectRatio);
+                } else if (bigSizeW > maxSizeW) {
+                    bigSizeW = maxSizeW;
+                    bigSizeH = Math.round(bigSizeW / aspectRatio);
+                }
+            }
+
             if (--imgtoLoad === 0) {
                 allLoaded();
             }
         };
 
         bigImg.src = environment.publicFolders.images + '/' + imageName;
-        thumbImg.src = environment.publicFolders.thumbs + '/' + imageName;
+        const thumbUrl =
+            (useThumb ? environment.publicFolders.thumbs : environment.publicFolders.images) + '/' + imageName;
+        thumbImg.src = thumbUrl;
 
         function allLoaded() {
             const linkElement = $('<a>').html(thumbImg);
@@ -1356,7 +1383,7 @@ const photoBooth = (function () {
             linkElement.attr('data-pswp-width', bigSizeW);
             linkElement.attr('data-pswp-height', bigSizeH);
             linkElement.attr('href', environment.publicFolders.images + '/' + imageName);
-            linkElement.attr('data-med', environment.publicFolders.thumbs + '/' + imageName);
+            linkElement.attr('data-med', thumbUrl);
             linkElement.attr('data-med-size', thumbSize);
 
             if (config.gallery.newest_first) {
