@@ -9,7 +9,27 @@ class ThemeService
 {
     private string $themeDirectory;
     /** @var string[] */
-    private array $imageExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'avif', 'heic', 'bmp'];
+    private array $assetExtensions = [
+        'png',
+        'jpg',
+        'jpeg',
+        'gif',
+        'webp',
+        'svg',
+        'avif',
+        'heic',
+        'bmp',
+        // video assets (e.g. screensaver video)
+        'mp4',
+        'webm',
+        'm4v',
+        'mov',
+        // font assets
+        'ttf',
+        'otf',
+        'woff',
+        'woff2',
+    ];
 
     public function __construct()
     {
@@ -349,7 +369,7 @@ class ThemeService
             $trimmed = trim($value);
             $pathPart = explode('?', $trimmed)[0];
             $extension = strtolower(pathinfo($pathPart, PATHINFO_EXTENSION));
-            if ($extension === '' || !in_array($extension, $this->imageExtensions, true)) {
+            if ($extension === '' || !in_array($extension, $this->assetExtensions, true)) {
                 return;
             }
 
