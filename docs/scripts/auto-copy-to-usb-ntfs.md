@@ -286,5 +286,3 @@ Create auto-refresh script to redirect to status page when copy is running
   check();
 })();
 ```
-
-
