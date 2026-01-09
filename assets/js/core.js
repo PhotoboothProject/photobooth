@@ -1235,7 +1235,7 @@ const photoBooth = (function () {
                 });
 
                 qrResultImage.src = environment.publicFolders.api + '/qrcode.php?filename=' + filename;
-                qrResultImage.alt = 'qr code';
+                qrResultImage.alt = 'QR-Code';
                 qrResultImage.classList.add('stage-code__image');
                 qrWrapper.append(qrResultImage);
 

@@ -196,7 +196,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                                     environment.publicFolders.api +
                                     '/qrcode.php?filename=' +
                                     pswp.currSlide.data.src.split('\\').pop().split('/').pop();
-                                qrImage.alt = 'QRCode';
+                                qrImage.alt = 'QR-Code';
                                 qrImage.classList.add('pswp-qrcode__image');
                                 qrWrapper.append(qrImage);
 
