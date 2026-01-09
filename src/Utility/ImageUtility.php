@@ -37,7 +37,8 @@ class ImageUtility
     public const resourcePaths = [
         'resources/img/background',
         'resources/img/frames',
-        'resources/img/demo'
+        'resources/img/demo',
+        'data/images',
     ];
 
     public static function getImagesFromPath(string $path, bool $processing = true): array

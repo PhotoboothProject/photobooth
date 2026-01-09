@@ -17,9 +17,10 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
 <head>
 
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="msapplication-TileColor" content="<?= $config['colors']['primary'] ?>">
-    <meta name="theme-color" content="<?= $config['colors']['primary'] ?>">
+    <meta name="theme-color" content="<?= $config['colors']['status_bar'] ?? '#000000' ?>">
 
     <title><?= $pageTitle ?></title>
 
@@ -32,7 +33,7 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
 
     <!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/normalize.css/normalize.css')?>" />
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/@fortawesome/fontawesome-free/css/all.min.css')?>" />

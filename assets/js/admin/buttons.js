@@ -78,6 +78,12 @@ $(function () {
             });
     });
 
+    $('#screensaver-preview-btn').on('click', function (e) {
+        e.preventDefault();
+        window.open('../?screensaverPreview=1', '_blank');
+        return false;
+    });
+
     $('#layout-generator').on('click', function (ev) {
         ev.preventDefault();
         window.open('../admin/generator');

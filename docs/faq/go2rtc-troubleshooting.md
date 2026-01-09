@@ -193,4 +193,3 @@ photobooth:
 log:
 exec: trace
 ```
-

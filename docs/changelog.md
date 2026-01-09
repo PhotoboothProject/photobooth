@@ -20,6 +20,9 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 - Rembg as built-in service with advanced options, logging, compositing fixes, and install script.
 - Theme management with categories/docs, custom CSS, git version indicator, clear-cache button, custom `stage.start.php`, optional result blur, gallery dimension caching, preview URL migration.
 - Setup: whiptail-based Setup Wizard, PHP 8.4 requirement, install_rembg improvements, USB sync hardening, installer self-update tweaks.
+- QR-Code short text option on result screen and gallery for better understanding, configurable in admin settings.
+- Introduced a new Screensaver feature with image/video/folder/gallery modes, configurable start timeout and slide interval.
+- Added a font configuration section for UI texts so fonts/colors can be set centrally ( fixes #986 )
 
 **Bug fixes**
 

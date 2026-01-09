@@ -52,6 +52,10 @@
     flex-grow: 1;
     h1 {
       margin: 0;
+      font-family: var(--font-family-gallery-title, --font-family-default), 'Dosis', sans-serif;
+      color: var(--gallery-title-color, inherit);
+      font-weight: var(--gallery-title-weight, 400);
+      font-style: var(--gallery-title-style, normal);
     }
   }
 }

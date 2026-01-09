@@ -9,7 +9,10 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
-  color: var(--countdown-color);
+  color: var(--countdown-font-color);
+  font-family: var(--font-family-countdown, --font-family-default), 'Dosis', sans-serif;
+  font-weight: var(--countdown-font-weight, 700);
+  font-style: var(--countdown-font-style, normal);
   display: flex;
   justify-content: center;
   align-items: center;
