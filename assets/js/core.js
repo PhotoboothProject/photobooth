@@ -1246,7 +1246,6 @@ const photoBooth = (function () {
                     qrCaption.textContent = qrShortText;
                     qrWrapper.append(qrCaption);
                 }
-                resultPage.append(qrWrapper);
             }
 
             if (!filternav.hasClass('sidenav--open')) {
