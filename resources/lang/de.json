@@ -854,6 +854,7 @@
   "qr:qr_short_text": "Kurzer QR-Text (unter dem Code)",
   "qr:qr_text": "Eigener Hilfetext",
   "qr:qr_url": "URL für QR-Code",
+  "qrScanToDownload": "Zum Herunterladen scannen",
   "qrHelp": "Um das Bild auf Ihr Handy herunterzuladen, verbinden Sie sich mit dem WLAN:",
   "share": "Teilen",
   "viewer_photo_title": "Dein Foto",

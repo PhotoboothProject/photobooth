@@ -54,6 +54,19 @@ If you're using `gphoto2` this issue is generally addressed inside the troublesh
 
 The preview is created using gphoto2 and streamed by go2rtc. In some rare cases, the preview may not be fully stopped when the capture is triggered. Usually, it's just milliseconds that cause problems. Continue reading on [Delay capture](#delay-capture) to know how to fix possible timing issues.
 
+### Error: Device is busy
+
+If the preview is running, the camera may be busy when trying to capture an image. This can lead to errors like "Device is busy" or "Could not claim the USB device". There is a bug in go2rtc startingF
+by version 1.9.10 which keeps the camera in use even after stopping the preview.
+Try to downgrade to version 1.9.9 as a workaround:
+
+```
+sudo bash install-photobooth.sh
+choose 4 go2rtc
+choose 5 updat or downgrade go2rtc only
+chose 1.9.9
+```
+
 #### Delay capture
 
 We can use a tiny pause between stopping the preview and starting the capture to work around this:
@@ -144,6 +157,13 @@ The full configuration documentation can be found [here](https://github.com/Alex
 
 While setting up go2rtc using the Photobooth Setup Wizard we're creating a default configuration which covers a wide range of devices. It might be, that your camera does not work out of the box with the default configuration and requires some extra work to be used on Photobooth. You're always welcome to contribute camera specific notes not listed below.
 
+Dont forget to restart go2rtc after changing the configuration!
+
+```ell
+sudo systemctl stop go2rtc
+sudo systemctl start go2rtc
+```
+
 ### Raspberry Pi Camera Modules
 
 - Default preview width and height match the Pi Camera v3. You might need to adjust the width and height inside the go2rtc configuration to matching values for your camera module.
@@ -163,9 +183,14 @@ log:
   exec: trace
 ```
 
-Now restart go2rtc to apply your changes:
+### Canon EOS EOS40D
 
-```ell
-sudo systemctl stop go2rtc
-sudo systemctl start go2rtc
 ```
+streams:
+photobooth:
+- "exec:gphoto2 --capture-movie --stdout#input=mjpeg#fps=8#scale=640:480#pause-on-snapshot=true"
+
+log:
+exec: trace
+```
+

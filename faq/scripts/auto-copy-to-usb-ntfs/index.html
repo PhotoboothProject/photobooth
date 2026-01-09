@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/scripts/auto-copy-to-usb-ntfs/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Auto copy zu USB NTFS formatiert - Photobooth Project</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Auto copy zu USB NTFS formatiert";
+        var mkdocs_page_input_path = "scripts/auto-copy-to-usb-ntfs.md";
+        var mkdocs_page_url = "/scripts/auto-copy-to-usb-ntfs/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../">Scripts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing/">Contribute to Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Auto copy zu USB NTFS formatiert</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/scripts/auto-copy-to-usb-ntfs.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="auto-copy-zu-usb-ntfs-formatiert">Auto copy zu USB NTFS formatiert</h1>
+<p>Auto copy script to copy images and temp files to an USB drive formatted with NTFS when plugged in.
+This script uses <code>rsync</code> to copy files from the Photobooth data folder to the USB drive when it is plugged in. It also creates a status file that can be used to monitor the copy progress via a web
+page.
+The script is triggered via a udev rule when an USB drive with NTFS filesystem is plugged in.</p>
+<h2 id="requires">Requires:</h2>
+<ul>
+<li>python3</li>
+<li>rsync</li>
+<li>ntfs-3g</li>
+<li>udev</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p><code>sudo touch /usr/local/bin/fotobox-copy.sh</code>
+<code>sudo chmod +x /usr/local/bin/fotobox-copy.sh</code>
+<code>sudo nano /usr/local/bin/fotobox-copy.sh</code></p>
+<pre><code>#!/usr/bin/env bash
+set -Eeuo pipefail
+
+# Configuration
+
+PART=&quot;${1}&quot;                   # e.g. sdb1
+DEV=&quot;/dev/${PART}&quot;
+SRC=&quot;/var/www/html/data&quot;
+SUB1=&quot;images&quot;
+SUB2=&quot;tmp&quot;
+STATUS=&quot;/var/www/html/private/copystatus.json&quot;
+
+# ---------- Status helper ----------
+
+write_status() {
+local state=&quot;$1&quot; pct=&quot;$2&quot; msg=&quot;$3&quot;
+local tmp=&quot;${STATUS}.tmp&quot;
+
+# Create JSON safely
+
+printf '{&quot;state&quot;:&quot;%s&quot;,&quot;percent&quot;:%s,&quot;message&quot;:%s}\n' \
+&quot;$state&quot; &quot;$pct&quot; &quot;$(python3 -c &quot;import json; print(json.dumps('$msg'))&quot;)&quot; | sudo tee &quot;$tmp&quot; &gt;/dev/null
+
+sudo mv &quot;$tmp&quot; &quot;$STATUS&quot;
+}
+
+fail() {
+local code=&quot;$1&quot;
+local line=&quot;$2&quot;
+write_status &quot;error&quot; 0 &quot;Error (code ${code}) in line ${line}.&quot;
+exit &quot;$code&quot;
+}
+
+trap 'fail $? $LINENO' ERR
+
+# ---------- Start ----------
+
+write_status &quot;starting&quot; 0 &quot;USB detected: ${DEV}. Prepare...&quot;
+
+# Check if device exists
+
+if [[ ! -b &quot;$DEV&quot; ]]; then
+write_status &quot;error&quot; 0 &quot;Device ${DEV} not found.&quot;
+exit 1
+fi
+
+# Mount device if not already mounted
+
+MNT=&quot;$(lsblk -no MOUNTPOINT &quot;$DEV&quot; | head -n1 || true)&quot;
+if [[ -z &quot;${MNT}&quot; ]]; then
+sudo mkdir -p /mnt/usbdrive
+
+# mount mit 'flush' Option für exFAT hilft, Puffer schneller zu leeren
+
+sudo mount -o flush &quot;$DEV&quot; /mnt/usbdrive
+MNT=&quot;/mnt/usbdrive&quot;
+fi
+
+DEST=&quot;${MNT}/images&quot;
+sudo mkdir -p &quot;$DEST&quot;
+
+# Existenz der Quellordner prüfen
+
+[[ -d &quot;${SRC}/${SUB1}&quot; ]] || { write_status &quot;error&quot; 0 &quot;Source ${SUB1} missing&quot;; exit 2; }
+[[ -d &quot;${SRC}/${SUB2}&quot; ]] || { write_status &quot;error&quot; 0 &quot;Source ${SUB2} missing&quot;; exit 2; }
+
+# ---------- Prepare Rsync ----------
+
+# --no-inc-recursive: No jumping progress percentage
+# --info=progress2: Compact progress output
+
+RSYNC_OPTS=(
+-rltD
+--info=progress2
+--no-inc-recursive
+--no-owner --no-group --no-perms
+--no-acls --no-xattrs
+--omit-dir-times
+--modify-window=2
+)
+
+write_status &quot;copying&quot; 1 &quot;Calculate copy size...&quot;
+
+# Run rdync in dry-run to get total size
+
+# stdbuf &amp; tr to handle progress output line by line
+
+set +e
+sudo stdbuf -oL rsync &quot;${RSYNC_OPTS[@]}&quot; \
+&quot;${SRC}/${SUB1}&quot; &quot;${SRC}/${SUB2}&quot; \
+&quot;$DEST/&quot; 2&gt;&amp;1 | tr '\r' '\n' | while IFS= read -r line; do
+
+    if [[ &quot;$line&quot; =~ ([0-9]{1,3})% ]]; then
+      p=&quot;${BASH_REMATCH[1]}&quot;
+
+      # Scale to 95% to leave room for final sync step
+      # Prevents user from thinking it hung at 100%
+      display_p=$(( p * 95 / 100 ))
+
+      # Only update every percent to reduce writes
+      write_status &quot;copying&quot; &quot;$display_p&quot; &quot;Copied ${p}%...&quot;
+    fi
+
+done
+RSYNC_EXIT=${PIPESTATUS[0]}
+set -e
+
+if [ &quot;$RSYNC_EXIT&quot; -ne 0 ] &amp;&amp; [ &quot;$RSYNC_EXIT&quot; -ne 24 ]; then
+fail &quot;$RSYNC_EXIT&quot; &quot;rsync failed&quot;
+fi
+
+# ---------- Final sync ----------
+
+write_status &quot;syncing&quot; 96 &quot;Finalise copy...&quot;
+
+# Sync to ensure all data is written to stick to avoid corruption
+
+sync
+
+write_status &quot;done&quot; 100 &quot;Done. You can remove the USB drive now.&quot;
+
+# Unmount only if we mounted it
+
+if [[ &quot;${MNT}&quot; == &quot;/mnt/usbdrive&quot; ]]; then
+
+# Give some time to ensure all writes are done
+
+sleep 1
+sudo umount /mnt/usbdrive || sudo umount -l /mnt/usbdrive
+fi
+
+exit 0
+
+</code></pre>
+<p>Setup udev rule</p>
+<pre><code>echo 'ACTION==&quot;add&quot;, SUBSYSTEM==&quot;block&quot;, ENV{DEVTYPE}==&quot;partition&quot;, ENV{ID_FS_TYPE}==&quot;ntfs&quot;, RUN+=&quot;/usr/local/bin/fotobox-copy.sh %k&quot;' | sudo tee /etc/udev/rules.d/99-fotobox-autocopy.rules
+
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+</code></pre>
+<p>Create status file and set permissions</p>
+<pre><code>sudo touch /var/www/html/private/copystatus.json
+sudo chown root:www-data /var/www/html/private/copystatus.json
+sudo chmod 664 /var/www/html/private/copystatus.json
+sudo chown -R www-data:www-data /var/www/html/private
+</code></pre>
+<p>Create status page to monitor progress in folder <code>private</code>
+<code>sudo -u www-data nano /var/www/html/private/status.php</code></p>
+<pre><code>&lt;?php
+?&gt;
+&lt;!doctype html&gt;
+&lt;html lang=&quot;de&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;Kopiervorgang…&lt;/title&gt;
+&lt;/head&gt;
+&lt;body style=&quot;
+  background-image: url('/private/images/background/Copy_Background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+  overflow-x:hidden;
+  overflow-y:hidden;&quot;&gt;
+
+&lt;div id=&quot;wrap&quot; style=&quot;min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;&quot;&gt;
+  &lt;div style=&quot;background:#fff; padding:20px; border-radius:12px; width:min(520px,90vw); box-shadow:0 10px 30px rgba(0,0,0,.3);&quot;&gt;
+    &lt;div id=&quot;copyMsg&quot; style=&quot;margin-bottom:10px;&quot;&gt;Warte auf Status…&lt;/div&gt;
+    &lt;div style=&quot;height:18px; background:#eee; border-radius:10px; overflow:hidden;&quot;&gt;
+      &lt;div id=&quot;copyBar&quot; style=&quot;height:100%; width:0%; background:#3b82f6;&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;copyPct&quot; style=&quot;margin-top:8px; font-size:14px; opacity:.8;&quot;&gt;0%&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+(async function(){
+  const bar = document.getElementById('copyBar');
+  const msg = document.getElementById('copyMsg');
+  const pct = document.getElementById('copyPct');
+
+  // Passe ggf. den Pfad an:
+  const STATUS_URL = '/private/copystatus.json';
+  const BACK_URL   = '../index.php';
+
+  async function poll(){
+    try {
+      const r = await fetch(STATUS_URL, { cache: 'no-store' });
+      if(!r.ok) throw new Error('Status page not reachable: ' + r.status);
+      const s = await r.json();
+
+      const state = (s.state || '').toLowerCase();
+      const p = Math.max(0, Math.min(100, Number(s.percent ?? 0)));
+
+      bar.style.width = p + '%';
+      msg.textContent = s.message || (state ? ('Status: ' + state) : 'Kopiere ');
+      pct.textContent = p + '%';
+
+      if (state === 'done') {
+        bar.style.width = '100%';
+        msg.textContent = s.message || 'Fertig.';
+        pct.textContent = '100%';
+        setTimeout(() =&gt; window.location.href = BACK_URL, 3000);
+        return;
+      }
+
+      // Optional: handle error state
+      if (state === 'error') {
+        msg.textContent = s.message || 'Copy error.';
+        return;
+      }
+
+    } catch(e) {
+      msg.textContent = 'No status available.';
+      // do not jump to status page, it will flicker otherwise
+    } finally {
+      setTimeout(poll, 400);
+    }
+  }
+
+  poll();
+})();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Create auto-refresh script to redirect to status page when copy is running
+<code>sudo nano /var/www/html/private/copyrun.js</code></p>
+<pre><code>(async function(){
+  const STATUS_URL  = '/private/copystatus.json';
+  const STATUS_PAGE = '/private/status.php';
+
+  async function check(){
+    try {
+      const r = await fetch(STATUS_URL + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) throw new Error('no status');
+      const s = await r.json();
+      const state = (s.state || '').toLowerCase();
+
+      if (state === 'starting' || state === 'copying') {
+        // &gt;&gt;&gt; HIER passiert der Sprung &lt;&lt;&lt;
+        window.location.href = STATUS_PAGE;
+        return;
+      }
+    } catch(e) {
+      // no status file or error - do nothing
+    }
+    setTimeout(check, 600);
+  }
+
+  check();
+})();
+</code></pre>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
