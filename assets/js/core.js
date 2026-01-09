@@ -1230,14 +1230,12 @@ const photoBooth = (function () {
                 qrWrapper.setAttribute('class', 'stage-code ' + config.qr.result);
 
                 const qrResultImage = document.createElement('img');
-                const qrShortText = config.qr.short_text;
-
                 qrResultImage.addEventListener('load', () => {
                     resultPage.append(qrWrapper);
                 });
 
                 qrResultImage.src = environment.publicFolders.api + '/qrcode.php?filename=' + filename;
-                qrResultImage.alt = 'qr code';
+                qrResultImage.alt = 'QR-Code';
                 qrResultImage.classList.add('stage-code__image');
                 qrWrapper.append(qrResultImage);
 
@@ -1248,7 +1246,6 @@ const photoBooth = (function () {
                     qrCaption.textContent = qrShortText;
                     qrWrapper.append(qrCaption);
                 }
-                resultPage.append(qrWrapper);
             }
 
             if (!filternav.hasClass('sidenav--open')) {
