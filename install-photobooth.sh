@@ -1737,19 +1737,29 @@ function update_php_ini() {
     local bu_date
     bu_date=$(date +%Y%m%d%H%M%S)
 
-    # If no path provided OR file doesn't exist → auto-detect
+    # If no path provided OR file doesn't exist --> auto-detect
     if [ -z "$php_ini" ] || [ ! -f "$php_ini" ]; then
         if [ ! -f "$php_ini" ]; then
             warn "The file '$php_ini' does not exist. Trying to auto-detect..."
         fi
         local php_version
         php_version=$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
-        php_ini="/etc/php/$php_version/apache2/php.ini"
+        local php_base="/etc/php/$php_version"
+        local candidates=(
+            "$php_base/apache2/php.ini"
+            "$php_base/fpm/php.ini"
+        )
 
-        if [ -f "$php_ini" ]; then
-            info "PHP INI Update" "Auto-detected php.ini at '$php_ini'."
-        else
-            warn "Could not locate php.ini (tried '$php_ini')."
+        for candidate in "${candidates[@]}"; do
+            if [ -f "$candidate" ]; then
+                php_ini="$candidate"
+                info "PHP INI Update" "Auto-detected php.ini at '$php_ini'."
+                break
+            fi
+        done
+
+        if [ -z "$php_ini" ] || [ ! -f "$php_ini" ]; then
+            warn "Could not locate php.ini (checked apache2 and fpm)."
             return 2
         fi
     fi
@@ -1780,15 +1790,13 @@ function update_php_ini() {
     fi
 
     if [[ "$HAS_SYSTEMD" == true ]]; then
-        # Restart the apache2 service
-        if systemctl restart apache2 >/dev/null 2>&1; then
-            info "PHP INI Update" "Restarted Apache2 service successfully."
+        if [[ "$php_ini" == *"/apache2/"* ]]; then
+            systemctl restart apache2 && info "PHP INI Update" "Restarted Apache2."
+        elif [[ "$php_ini" == *"/fpm/"* ]]; then
+            systemctl restart php"$php_version"-fpm && info "PHP INI Update" "Restarted PHP-FPM."
         else
-            warn "Failed to restart the Apache2 service."
-            return 6
+            warn "No service restart performed."
         fi
-    else
-        warn "Can not restart the Apache2 service, systemctl unavailable."
     fi
 
     return 0
