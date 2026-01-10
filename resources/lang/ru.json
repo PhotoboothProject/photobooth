@@ -1,10 +1,10 @@
 {
   "manual:remotebuzzer:remotebuzzer_input_device": "Устройство ввода Linux для аппаратных триггеров (например, /dev/input/by-id/...). Использует коды клавиш для действий (фото/коллаж/пользовательское/печать/видео) для сопоставления событий.",
   "remotebuzzer:remotebuzzer_input_device": "Устройство ввода",
-  "theme_title": "Темы",
+  "theme_choose": "Выберите тему",
+  "theme_delete": "Удалить тему",
+  "theme_load": "Загрузить тему",
   "theme_name_placeholder": "Название темы",
   "theme_save": "Сохранить тему",
-  "theme_load": "Загрузить тему",
-  "theme_delete": "Удалить тему",
-  "theme_choose": "Выберите тему"
+  "theme_title": "Темы"
 }

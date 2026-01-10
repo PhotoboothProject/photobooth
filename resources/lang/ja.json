@@ -22,10 +22,10 @@
   "collage:collage_background": "バックグラウンド",
   "manual:remotebuzzer:remotebuzzer_input_device": "ハードウェアトリガー用のLinux入力デバイス（例: /dev/input/by-id/...）。アクションごとのキーコード（写真/コラージュ/カスタム/印刷/ビデオ）を使ってイベントをマッピングします。",
   "remotebuzzer:remotebuzzer_input_device": "入力デバイス",
-  "theme_title": "テーマ",
+  "theme_choose": "テーマを選択",
+  "theme_delete": "テーマを削除",
+  "theme_load": "テーマを読み込む",
   "theme_name_placeholder": "テーマ名",
   "theme_save": "テーマを保存",
-  "theme_load": "テーマを読み込む",
-  "theme_delete": "テーマを削除",
-  "theme_choose": "テーマを選択"
+  "theme_title": "テーマ"
 }
