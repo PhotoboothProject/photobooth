@@ -53,10 +53,10 @@
   "remotebuzzer:remotebuzzer_input_device": "Inndataenhet",
   "takeCollage": "Collage",
   "takePhoto": "Bilde",
-  "theme_title": "Temaer",
+  "theme_choose": "Velg tema",
+  "theme_delete": "Slett tema",
+  "theme_load": "Last inn tema",
   "theme_name_placeholder": "Temanavn",
   "theme_save": "Lagre tema",
-  "theme_load": "Last inn tema",
-  "theme_delete": "Slett tema",
-  "theme_choose": "Velg tema"
+  "theme_title": "Temaer"
 }
