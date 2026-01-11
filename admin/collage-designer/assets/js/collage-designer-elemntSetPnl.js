@@ -34,6 +34,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * Applies a new value to an element property, respecting aspect ratio lock if active.
+     * This function encapsulates the common logic for updating x, y, width, height, rotation.
+     * @param {string} prop The property name (e.g., 'width', 'height', 'x', 'y', 'rotation').
+     * @param {number} rawValue The raw numerical value from the input/slider.
+     * @param {string} [dimension=''] The canvas dimension relevant for percentage conversion ('width' or 'height').
+     */
+    function applyPanelValueToElement(prop, rawValue, dimension = '') {
+        if (!window.activeElement) return;
+
+        let value = parseFloat(rawValue);
+        if (isNaN(value)) value = 0;
+
+        if (prop === 'rotation') {
+            value = clampRotation(value);
+            window.activeElement[prop] = value;
+        } else {
+            const canvasDimension = (dimension === 'width') ? window.collageCanvas.width : window.collageCanvas.height;
+            value = clampPercentage(value); // Clamp percentage value (0-100)
+            let newDimensionValuePx = (value / 100) * canvasDimension; // Convert to pixel value
+
+            if ((prop === 'width' || prop === 'height') && window.globalLockAspectRatio) {
+                // Use the current aspect ratio of the element for locking
+                const originalAspectRatio = window.activeElement.width / window.activeElement.height;
+                
+                if (prop === 'width') {
+                    window.activeElement.width = newDimensionValuePx;
+                    window.activeElement.height = window.activeElement.width / originalAspectRatio;
+                } else { // prop === 'height'
+                    window.activeElement.height = newDimensionValuePx;
+                    window.activeElement.width = window.activeElement.height * originalAspectRatio;
+                }
+                
+                // Clamp both dimensions to canvas limits (pixel values)
+                window.activeElement.width = Math.max(0.1 * window.collageCanvas.width / 100, Math.min(window.collageCanvas.width, window.activeElement.width));
+                window.activeElement.height = Math.max(0.1 * window.collageCanvas.height / 100, Math.min(window.collageCanvas.height, window.activeElement.height));
+
+            } else {
+                // Normal behavior without aspect ratio lock
+                // Ensure minimum size for width/height when not locked (value is already clamped percentage 0-100)
+                if ((prop === 'width' || prop === 'height') && value <= 0) {
+                    newDimensionValuePx = (0.1 / 100) * canvasDimension; // Convert 0.1% to pixel
+                }
+                window.activeElement[prop] = newDimensionValuePx;
+            }
+        }
+        window.drawCanvas(); // Draw after applying value
+    }
+
+    /**
      * Updates the element settings panel based on the current selection.
      * Deactivates the panel if no or multiple elements are selected.
      * Activates and populates the panel if exactly one element is selected.
@@ -48,11 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         const lockAspectRatioCheckbox = document.getElementById('lock_aspect_ratio'); // Separate handling for this checkbox
 
+        if (lockAspectRatioCheckbox) {
+                lockAspectRatioCheckbox.disabled = false; // Enable if it should be interactive
+                lockAspectRatioCheckbox.checked = window.globalLockAspectRatio; // Reflect global setting
+            }
+
         if (selectedElements.length === 1 && window.activeElement) {
             // Activate panel
             elementSettingsPanel.classList.remove('opacity-50', 'pointer-events-none');
             interactiveElements.forEach(el => el.disabled = false);
-            if (lockAspectRatioCheckbox) lockAspectRatioCheckbox.disabled = false; // Enable if it should be interactive
 
             const activeEl = window.activeElement;
 
@@ -110,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Deactivate panel
             elementSettingsPanel.classList.add('opacity-50', 'pointer-events-none');
             interactiveElements.forEach(el => el.disabled = true);
-            if (lockAspectRatioCheckbox) lockAspectRatioCheckbox.disabled = true; // Disable if it should be inactive
             
             // Clear basic info (optional, but good for clarity)
             document.getElementById('selected_element_type_display').textContent = '';
@@ -141,24 +193,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!window.activeElement) return;
                     window.saveState(); // Save state on change for number input
 
-                    let value = parseFloat(event.target.value);
-                    if (isNaN(value)) value = 0;
-
-                    if (prop === 'rotation') {
-                        value = clampRotation(value);
-                        window.activeElement[prop] = value;
-                    } else {
-                        value = clampPercentage(value);
-                        const canvasDimension = (dimension === 'width') ? window.collageCanvas.width : window.collageCanvas.height;
-                        // Ensure minimum size for width/height
-                        if ((prop === 'width' || prop === 'height') && value <= 0) value = 0.1; 
-                        window.activeElement[prop] = (value / 100) * canvasDimension;
-                    }
+                    applyPanelValueToElement(prop, event.target.value, dimension);
                     
-                    // Update corresponding slider
-                    if (sliderInput) sliderInput.value = value;
+                    /// Update corresponding slider
+                    if (sliderInput) {
+                        sliderInput.value = (prop === 'rotation') ? window.activeElement[prop].toFixed(0) : 
+                                            ((window.activeElement[prop] / ((dimension === 'width') ? window.collageCanvas.width : window.collageCanvas.height)) * 100).toFixed(1);
+                    }
 
-                    window.drawCanvas();
                     window.updateElementSettingsPanel(); // Re-populate to ensure consistency and handle potential rounding
                 });
             }
@@ -173,25 +215,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 sliderInput.addEventListener('input', (event) => {
                     if (!window.activeElement || !isChanging) return; // Only update if actively dragging
 
-                    let value = parseFloat(event.target.value);
-                    if (isNaN(value)) value = 0;
-
-                    if (prop === 'rotation') {
-                        value = clampRotation(value);
-                        window.activeElement[prop] = value;
-                    } else {
-                        value = clampPercentage(value);
-                        const canvasDimension = (dimension === 'width') ? window.collageCanvas.width : window.collageCanvas.height;
-                        // Ensure minimum size for width/height
-                        if ((prop === 'width' || prop === 'height') && value <= 0) value = 0.1;
-                        window.activeElement[prop] = (value / 100) * canvasDimension;
-                    }
+                    applyPanelValueToElement(prop, event.target.value, dimension);
                     
                     // Update corresponding number input
-                    if (numberInput) numberInput.value = value.toFixed(1); // Keep one decimal for X,Y,W,H
-                    if (prop === 'rotation') numberInput.value = value.toFixed(0); // No decimals for rotation
-
-                    window.drawCanvas();
+                    if (numberInput) {
+                        numberInput.value = (prop === 'rotation') ? window.activeElement[prop].toFixed(0) :
+                                            ((window.activeElement[prop] / ((dimension === 'width') ? window.collageCanvas.width : window.collageCanvas.height)) * 100).toFixed(1);
+                    }
                 });
 
                 sliderInput.addEventListener('mouseup', () => {
@@ -203,6 +233,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         });
+
+        // Event listener for the lock aspect ratio checkbox
+        const lockAspectRatioCheckbox = document.getElementById('lock_aspect_ratio');
+        if (lockAspectRatioCheckbox) {
+            lockAspectRatioCheckbox.addEventListener('change', () => {
+                window.globalLockAspectRatio = lockAspectRatioCheckbox.checked;
+                window.updateElementSettingsPanel();
+            });
+        }
 
         // Event listener for the delete button inside the panel
         const deleteElementBtn = document.getElementById('panelDeleteElementBtn'); // Use the ID we gave it

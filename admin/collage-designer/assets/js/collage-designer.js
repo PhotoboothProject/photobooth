@@ -17,9 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.textFields = [];
     window.imagePlaceholders = [];
 
+    // Global setting for aspect ratio lock during resizing
+    window.globalLockAspectRatio = false; // standard locked
+
     // --- Global Fallback for Images (loaded from PHP) ---
     window.phpFallbackImageUrl = (initialDemoImagePaths && initialDemoImagePaths.length > 0) ? initialDemoImagePaths[0] : null; 
-
 
     // --- Global Function to fetch Demo Image URLs ---
     window.fetchDemoImageUrls = async function(count = 1) {
@@ -729,7 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
 
-        let currentInteractionTarget = null; // The object or bounding box currently being interacted with via handles
+        let currentInteractionTarget = null; // The element or bounding box currently being interacted with via handles
         let currentTargetX = 0, currentTargetY = 0, currentTargetWidth = 0, currentTargetHeight = 0;
 
         // calculate the effective handle sizes for hit detection
@@ -775,7 +777,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 rotationStartAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
                 initialElementRotation = window.activeElement.rotation; // Store active element's rotation as start reference
                 window.collageCanvas.style.cursor = ROTATION_CURSOR_URL;
-                window.drawCanvas();
                 return; // Rotation handle clicked, don't proceed further
             }
         }
@@ -784,10 +785,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handles are on activeElement (if single selected) or group bounding box (if multiple selected)
         if (currentInteractionTarget && currentTargetWidth > 0 && currentTargetHeight > 0) { // Check for valid dimensions to prevent errors
             const handles = [
-                { x: currentTargetX,               y: currentTargetY,                 name: 'top-left' },
-                { x: currentTargetX + currentTargetWidth, y: currentTargetY,                 name: 'top-right' },
-                { x: currentTargetX,               y: currentTargetY + currentTargetHeight,  name: 'bottom-left' },
-                { x: currentTargetX + currentTargetWidth, y: currentTargetY + currentTargetHeight, name: 'bottom-right' }
+                { x: currentTargetX,                        y: currentTargetY,                          name: 'top-left' },
+                { x: currentTargetX + currentTargetWidth,   y: currentTargetY,                          name: 'top-right' },
+                { x: currentTargetX,                        y: currentTargetY + currentTargetHeight,    name: 'bottom-left' },
+                { x: currentTargetX + currentTargetWidth,   y: currentTargetY + currentTargetHeight,    name: 'bottom-right' }
             ];
 
             for (const handle of handles) {
@@ -808,7 +809,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         case 'top-left': case 'bottom-right': window.collageCanvas.style.cursor = 'nwse-resize'; break;
                         case 'top-right': case 'bottom-left': window.collageCanvas.style.cursor = 'nesw-resize'; break;
                     }
-                    window.drawCanvas();
                     return; // Handle clicked, don't proceed further
                 }
             }
@@ -845,8 +845,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        const wasElementSelectedBeforeClick = clickedOnElement ? elementClicked.isSelected : false;
+
         if (clickedOnElement) {
-            const wasElementSelectedBeforeClick = elementClicked.isSelected;
             
             // If Ctrl/Cmd is pressed, toggle selection for the clicked element
             if (event.ctrlKey || event.metaKey) {
@@ -908,9 +909,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const inverseScale = 1 / visualScale;
         const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
         const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
-        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale;
+        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale; // Not used in mousemove but good to keep for consistency
         const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
-        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
+        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale; // Not used in mousemove but good to keep for consistency
 
         // --- Cursor hover for handles (adjust for group vs. single) ---
         let cursorChanged = false;
@@ -964,13 +965,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Check resize handles hover (on currentTargetForHover if it exists and not already hovering rotation handle)
+            // Check resize handles hover (on currentTargetForHover if it exists and not already hovering another handle)
             if (currentTargetForHover && !cursorChanged && currentTargetForHover.width > 0 && currentTargetForHover.height > 0) { 
                 const handles = [
-                    { x: currentTargetX,               y: currentTargetY,                 cursor: 'nwse-resize', name: 'top-left' },
-                    { x: currentTargetX + currentTargetWidth, y: currentTargetY,         cursor: 'nesw-resize', name: 'top-right' },
-                    { x: currentTargetX,               y: currentTargetY + currentTargetHeight,  cursor: 'nesw-resize', name: 'bottom-left' },
-                    { x: currentTargetX + currentTargetWidth, y: currentTargetY + currentTargetHeight, cursor: 'nwse-resize', name: 'bottom-right' }
+                    { x: currentTargetX,                        y: currentTargetY,                          cursor: 'nwse-resize', name: 'top-left' },
+                    { x: currentTargetX + currentTargetWidth,   y: currentTargetY,                          cursor: 'nesw-resize', name: 'top-right' },
+                    { x: currentTargetX,                        y: currentTargetY + currentTargetHeight,    cursor: 'nesw-resize', name: 'bottom-left' },
+                    { x: currentTargetX + currentTargetWidth,   y: currentTargetY + currentTargetHeight,    cursor: 'nwse-resize', name: 'bottom-right' }
                 ];
                 for (const handle of handles) {
                     if (mouse.x >= handle.x - effectiveResizeHandleSize / 2 && mouse.x <= handle.x + effectiveResizeHandleSize / 2 &&
@@ -1027,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- Scaling Logic (UNIFIED for single and group, with correct Shift behavior) ---
+        // --- Scaling Logic ---
         if (isResizing) {
             const selectedElements = window.collageElements.filter(el => el.isSelected);
             if (selectedElements.length === 0) {
@@ -1042,10 +1043,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 width: initialElementWidth, height: initialElementHeight
             };
 
-            const mouseCurrent = mouse; // current mouse position
-            const mouseStart = { x: dragStartX, y: dragStartY }; // mouse position at the start of resize
+            const mouseStart = { x: dragStartX, y: dragStartY };
 
-            const initialAspectRatio = initialBoundingBox.width / initialBoundingBox.height;
+            const applyAspectRatioLock = event.shiftKey || window.globalLockAspectRatio;
 
             // anchorpoint (opposite corner of the handle)
             let anchorX, anchorY;
@@ -1056,139 +1056,106 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'bottom-right': anchorX = initialBoundingBox.x;                             anchorY = initialBoundingBox.y;                             break;
             }
 
-            let finalWidth, finalHeight, finalX, finalY;
+            // Calculate current mouse movement since drag started
+            const deltaX = mouse.x - mouseStart.x;
+            const deltaY = mouse.y - mouseStart.y;
 
-            //if (event.shiftKey) { //not working properly for unproportional resize yet
-                // scale proportionally from the anchor point, based on the dominant axis.
+            // Adjust delta values based on the handle for correct direction
+            let effectiveDeltaX = resizeHandle.includes('left') ? -deltaX : deltaX;
+            let effectiveDeltaY = resizeHandle.includes('top') ? -deltaY : deltaY;
 
-                // Current distance of the mouse from the anchor point
-                const currentRelX = mouseCurrent.x - anchorX;
-                const currentRelY = mouseCurrent.y - anchorY;
+            let finalWidth, finalHeight;
 
-                // Original distance of the mouse from the anchor point (as reference for Delta)
-                const startRelX = mouseStart.x - anchorX;
-                const startRelY = mouseStart.y - anchorY;
+            const aspectRatioToUse = applyAspectRatioLock && initialBoundingBox.height !== 0 ?
+                         initialBoundingBox.width / initialBoundingBox.height :
+                         null;
 
-                // Calculation of the "Delta" change in X and Y relative to the anchor point
-                // This reflects the movement of the handle
-                const deltaMovementX = currentRelX - startRelX;
-                const deltaMovementY = currentRelY - startRelY;
-
-                // Calculate the new width/height, if it were scaled proportionally from the start
-                // We use initialBoundingBox to maintain the original aspect ratio
-                let potentialNewWidth = initialBoundingBox.width + (resizeHandle.includes('left') ? -deltaMovementX : deltaMovementX);
-                let potentialNewHeight = initialBoundingBox.height + (resizeHandle.includes('top') ? -deltaMovementY : deltaMovementY);
-
-                // Determine the effective scaling factor based on the dominant axis
-                // (the axis, which was scaled proportionally the furthest)
-                let scaleFactorFromWidth = potentialNewWidth / initialBoundingBox.width;
-                let scaleFactorFromHeight = potentialNewHeight / initialBoundingBox.height;
-
-                let effectiveScaleFactor;
-                if (Math.abs(scaleFactorFromWidth) > Math.abs(scaleFactorFromHeight)) {
-                    effectiveScaleFactor = scaleFactorFromWidth;
+            if (aspectRatioToUse !== null) { // Proportional scaling
+                // When AR lock is active, maintain the determined aspectRatioToUse.
+                
+                // Assume the dominant movement controls the dimension.
+                if (Math.abs(effectiveDeltaX) > Math.abs(effectiveDeltaY)) {
+                    finalWidth = initialBoundingBox.width + effectiveDeltaX;
+                    finalHeight = finalWidth / aspectRatioToUse;
                 } else {
-                    effectiveScaleFactor = scaleFactorFromHeight;
+                    finalHeight = initialBoundingBox.height + effectiveDeltaY;
+                    finalWidth = finalHeight * aspectRatioToUse;
                 }
-
-                // Apply the effective scaling factor to the original dimensions
-                finalWidth = initialBoundingBox.width * effectiveScaleFactor;
-                finalHeight = initialBoundingBox.height * effectiveScaleFactor;
-
-                // Calculate the final position based on anchor point and new proportional dimensions
-                finalX = anchorX;
-                finalY = anchorY;
-
-                if (resizeHandle.includes('left')) finalX = anchorX - finalWidth;
-                if (resizeHandle.includes('top')) finalY = anchorY - finalHeight;
-
-            /*} else {
-                // no shift: scale unproportional.
-                // The dx/dy values are the total mouse movement since the start of the click.
-                // finalWidth/Height are directly calculated from initialBoundingBox + dx/dy.
-                finalWidth = initialBoundingBox.width + (resizeHandle.includes('left') ? -dx : dx);
-                finalHeight = initialBoundingBox.height + (resizeHandle.includes('top') ? -dy : dy);
-
-                // finalX/Y are directly calculated from initialBoundingBox + dx/dy.
-                finalX = initialBoundingBox.x;
-                finalY = initialBoundingBox.y;
-
-                if (resizeHandle.includes('left')) finalX = initialBoundingBox.x + dx;
-                if (resizeHandle.includes('top')) finalY = initialBoundingBox.y + dy;
-            }*/
-
-            // --- apply minimum size restriction ---
-            const MIN_SIZE = 20;
-
-            if (finalWidth < MIN_SIZE) {
-                finalWidth = MIN_SIZE;
-                if (event.shiftKey) finalHeight = MIN_SIZE / initialAspectRatio; // while shift: height proportional adjust
-            }
-            if (finalHeight < MIN_SIZE) {
-                finalHeight = MIN_SIZE;
-                if (event.shiftKey) finalWidth = MIN_SIZE * initialAspectRatio; // while shift: width proportional adjust
+                
+            } else { // Free scaling
+                finalWidth = initialBoundingBox.width + effectiveDeltaX;
+                finalHeight = initialBoundingBox.height + effectiveDeltaY;
             }
 
-            // position after resizing, to avoid jumps
-            if (resizeHandle.includes('left') && finalWidth === MIN_SIZE && initialBoundingBox.width > MIN_SIZE) {
-                finalX = anchorX - MIN_SIZE;
+            // --- Apply minimum size restriction ---
+            const MIN_SIZE_PX = 100;
+
+            if (finalWidth < MIN_SIZE_PX) {
+                finalWidth = MIN_SIZE_PX;
+                if (aspectRatioToUse !== null) { // Only adjust if Aspect Ratio Lock is active
+                    finalHeight = MIN_SIZE_PX / aspectRatioToUse; 
+                }
             }
-            if (resizeHandle.includes('top') && finalHeight === MIN_SIZE && initialBoundingBox.height > MIN_SIZE) {
-                finalY = anchorY - MIN_SIZE;
+            if (finalHeight < MIN_SIZE_PX) {
+                finalHeight = MIN_SIZE_PX;
+                if (aspectRatioToUse !== null) { // Only adjust if Aspect Ratio Lock is active
+                    finalWidth = MIN_SIZE_PX * aspectRatioToUse; 
+                }
             }
 
-            // to avoid errors, if finalWidth/Height become 0 (shouldn't happen due to MIN_SIZE)
-            if (finalWidth === 0) finalWidth = 1;
-            if (finalHeight === 0) finalHeight = 1;
+            // Calculate new top-left corner of the bounding box based on anchor point and new dimensions
+            let newBoundingBoxX, newBoundingBoxY;
+            switch (resizeHandle) {
+                case 'top-left':
+                    newBoundingBoxX = anchorX - finalWidth;
+                    newBoundingBoxY = anchorY - finalHeight;
+                    break;
+                case 'top-right':
+                    newBoundingBoxX = anchorX;
+                    newBoundingBoxY = anchorY - finalHeight;
+                    break;
+                case 'bottom-left':
+                    newBoundingBoxX = anchorX - finalWidth;
+                    newBoundingBoxY = anchorY;
+                    break;
+                case 'bottom-right':
+                    newBoundingBoxX = anchorX;
+                    newBoundingBoxY = anchorY;
+                    break;
+            }
 
+            // Calculate overall displacement and scaling for each selected element
+            const displacementX = newBoundingBoxX - initialBoundingBox.x;
+            const displacementY = newBoundingBoxY - initialBoundingBox.y;
 
-            // scale factors from initial bounding box to final bounding box
-            const scaleX = finalWidth / initialBoundingBox.width;
-            const scaleY = finalHeight / initialBoundingBox.height;
+            let scaleFactorX, scaleFactorY;
+            if (aspectRatioToUse !== null) { // Proportional scaling
+                // When AR lock is active, use a single scaling factor for both dimensions.
+                // This ensures each element within the selection scales uniformly, retaining its own AR.
+                scaleFactorX = finalWidth / initialBoundingBox.width;
+                scaleFactorY = scaleFactorX; // Both dimensions scale with the SAME factor
+            } else {
+                // For free scaling, use potentially different scaling factors for width and height.
+                scaleFactorX = finalWidth / initialBoundingBox.width;
+                scaleFactorY = finalHeight / initialBoundingBox.height;
+            }
 
-            // apply transformation on each selected element
+            // Apply transformation on each selected element
             selectedElements.forEach(element => {
-                // position of the element relative to the anchor point of the initial bounding box
-                // This is crucial for the "sticky" behavior
-                const relativeXToAnchor = element.x - anchorX;
-                const relativeYToAnchor = element.y - anchorY;
+                // Position of the element relative to the BoundingBox's initial top-left corner
+                const relativeXToBoundingBox = element.x - initialBoundingBox.x;
+                const relativeYToBoundingBox = element.y - initialBoundingBox.y;
 
-                // Scale relative position
-                const newRelativeXToAnchor = relativeXToAnchor * scaleX;
-                const newRelativeYToAnchor = relativeYToAnchor * scaleY;
-
-                // new Position and Dimensions of the element
-                element.x = anchorX + newRelativeXToAnchor;
-                element.y = anchorY + newRelativeYToAnchor;
-                element.width = element.width * scaleX;
-                element.height = element.height * scaleY;
+                // Scale relative position and dimensions
+                element.x = newBoundingBoxX + relativeXToBoundingBox * scaleFactorX; 
+                element.y = newBoundingBoxY + relativeYToBoundingBox * scaleFactorY; 
+                
+                element.width = element.width * scaleFactorX;
+                element.height = element.height * scaleFactorY;
+                // console.log("handleMouseMove: Element ID:", element.id, "new dimensions:", element.width, "x", element.height, "AR:", element.width / element.height);
             });
 
-            // dragStartX/Y for continuous resizing update
-            dragStartX = mouseCurrent.x;
-            dragStartY = mouseCurrent.y;
-
-            window.drawCanvas();
-            return;
-        }
-
-        // --- Dragging Logic (now applies to all selected elements) ---
-        if (isDragging) {
-            const selected = window.collageElements.filter(el => el.isSelected);
-            if (selected.length === 0) {
-                isDragging = false;
-                return;
-            }
-
-            const dx = mouse.x - dragStartX;
-            const dy = mouse.y - dragStartY;
-
-            selected.forEach(element => {
-                element.x += dx;
-                element.y += dy;
-            });
-
-            // dragStartX/Y for continuous dragging without accumulation update
+            // Update dragStartX/Y to current mouse position for continuous resizing
             dragStartX = mouse.x;
             dragStartY = mouse.y;
 
