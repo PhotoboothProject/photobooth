@@ -65,7 +65,7 @@
   "collage:collage_layout": "Choose collage layout:",
   "collage:collage_layouts_enabled": "available layouts for selection",
   "collage:collage_limit": "Collage limit",
-  "collage:collage_orientation": "Bildausrichtung",
+  "collage:collage_orientation": "Image orientation",
   "collage:collage_placeholder": "Use custom placeholder",
   "collage:collage_placeholderpath": "Placeholder image path",
   "collage:collage_placeholderposition": "Collage image number to replace",
