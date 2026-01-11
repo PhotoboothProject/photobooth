@@ -9,8 +9,6 @@ use Photobooth\Service\LoggerService;
 use Photobooth\Service\ProcessService;
 use Photobooth\Utility\PathUtility;
 
-header('Content-Type: application/json');
-
 $loggerService = LoggerService::getInstance();
 $logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
@@ -30,22 +28,33 @@ $config['preview']['camTakesPic'] = false;
 
 try {
     $configurationService->update($config);
-    $logger->debug('New config saved.');
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'New config saved.',
-    ]);
+    $message = 'New config saved.';
+    $status = 'success';
 } catch (\Exception $exception) {
-    $logger->error('ERROR: Config can not be saved!');
-    echo json_encode([
-        'status' => 'error',
-            'message' => $exception->getMessage(),
-    ]);
+    $message = $exception->getMessage();
+    $status = 'error';
 }
 
 // Kill service daemons after config has changed
 ProcessService::getInstance()->shutdown();
+?>
 
-// return to Adminpanel
-header('location: ' . PathUtility::getPublicPath('admin'));
-exit();
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="2;url=<?= PathUtility::getPublicPath('admin') ?>">
+    <style>
+        body { font-family: sans-serif; padding: 2rem; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="<?= $status ?>">
+        <?= htmlspecialchars($message) ?>
+    </div>
+    <p>Redirecting…</p>
+</body>
+</html>
+<?php
+exit;
