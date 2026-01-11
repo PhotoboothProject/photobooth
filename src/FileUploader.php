@@ -140,7 +140,7 @@ class FileUploader
 
                 $this->logger->debug('Processing file', [$fileName]);
 
-                if ($this->validateFile($sanitizedFileName, $fileType, $filePath)) {
+                if ($this->validateFile($fileName, $fileType, $filePath)) {
                     $this->moveFile($fileTmpName, $filePath);
                     $uploadedFileNames[] = $sanitizedFileName;
                 }
