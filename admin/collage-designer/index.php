@@ -116,9 +116,9 @@ include 'components/design-selector.php';
                         </div>
 <?php
 // Include components relevant to element-specific adjustments
-include 'components/element-settings-panel.php'; // Dynamic settings for active element
-include 'components/text-fields-manager.php';  // Text fields management
-//include 'components/image-placeholders-manager.php'; // Image placeholders management
+include 'components/element-settings-panel.php';    // Dynamic settings for active element
+include 'components/img-settings-panel.php';        // Image settings management
+include 'components/txt-settings-panel.php';       // Text fields management
 ?>
                     </div><!-- End left-panel -->
 
@@ -185,6 +185,7 @@ include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer.js') . '"></script>'; // Your main JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-tools.js') . '"></script>'; // Tools JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-elemntSetPnl.js') . '"></script>'; // Element Settings Panel JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-imgSetPnl.js') . '"></script>'; // Image Settings Panel JS
 // Optional: Specific toasts/messages depending on PHP processing
 if (isset($_SESSION['designer_message'])) {
     echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';

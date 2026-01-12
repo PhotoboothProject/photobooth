@@ -2,7 +2,6 @@
 // admin/collage-designer/components/element-settings-panel.php
 
 use Photobooth\Utility\AdminInput;
-use Photobooth\Utility\PathUtility;
 
 // Placeholder for actual font options, adjust as needed based on your PHP logic
 $font_family_options = [
@@ -68,7 +67,7 @@ $font_family_options = [
                     </div>
                 </div>
             </div>
-             <!-- Lock Aspect Ratio (future feature) -->
+            <!-- Lock Aspect Ratio -->
             <div class="mt-4 flex items-center justify-start">
                 <?=
                     AdminInput::renderCheckbox(
@@ -94,76 +93,4 @@ $font_family_options = [
             </div>
         </div>
     </div>
-
-    <!-- Specific Settings for Text (Hidden for now) -->
-    <div id="text_specific_settings" class="hidden border-t border-gray-200 pt-4 mt-4">
-        <span class="w-full flex flex-col text-lg font-bold text-brand-1 mb-2">
-            <?= $languageService->translate('text_settings') ?>
-        </span>
-        <textarea id="text_content" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" rows="3" placeholder="<?= $languageService->translate('your_text_content') ?>" data-setting-prop="content"></textarea>
-        <div class="grid gap-2 mb-4 grid-cols-2 mt-2">
-            <div>
-                <?=
-    AdminInput::renderFontSelect(
-        [
-            'name' => 'text_font_family_current',
-            'value' => '',
-            'paths' => [
-                PathUtility::getAbsolutePath('resources/fonts'),
-                PathUtility::getAbsolutePath('private/fonts'),
-            ],
-            'attributes' => ['data-trigger' => 'current_text_element', 'id' => 'text_font_family_current', 'data-setting-prop' => 'font_family']
-        ],
-        'collage:textoncollage_font', // Keep original language key
-        $font_family_options // Pass available font options
-    )
-?>
-            </div>
-            <div>
-                <?=
-    AdminInput::renderColor(
-        [
-            'name' => 'text_font_color_current',
-            'value' => '#000000',
-            'placeholder' => 'text font color',
-            'attributes' => ['data-trigger' => 'current_text_element', 'id' => 'text_font_color_current', 'data-setting-prop' => 'font_color']
-        ],
-        'collage:textoncollage_font_color' // Keep original language key
-    )
-?>
-            </div>
-            <div>
-                <label for="text_font_size_current" class="block text-sm font-medium text-gray-700"><?= $languageService->translate('font_size') ?> (%)</label>
-                <input type="range" id="text_font_size_current_slider" min="0.1" max="10" step="0.1" value="2" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm" data-setting-prop="font_size">
-                <input type="number" id="text_font_size_current" value="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm" placeholder="<?= $languageService->translate('font_size_in_percent') ?>" data-setting-prop="font_size">
-            </div>
-            <!-- Additional text-specific settings can go here -->
-        </div>
-    </div>
-
-    <!-- Specific Settings for Images (Hidden for now, unless you add specific image-cropping controls here later) -->
-    <div id="image_specific_settings" class="hidden border-t border-gray-200 pt-4 mt-4">
-        <span class="w-full flex flex-col text-lg font-bold text-brand-1 mb-2">
-            <?= $languageService->translate('image_settings') ?>
-        </span>
-        <div class="grid gap-2 mb-4 grid-cols-2">
-            <div>
-                <?=
-    AdminInput::renderCheckbox(
-        [
-            'name' => 'picture_show_frame_current',
-            'value' => 'false',
-            'attributes' => ['data-trigger' => 'current_image_element', 'id' => 'picture_show_frame_current', 'data-setting-prop' => 'show_frame']
-        ],
-        'collage:generator:show_single_frame' // Keep original language key
-    )
-?>
-            </div>
-            <!-- Additional image-specific settings can go here -->
-        </div>
-    </div>
-    
-    <button id="panelDeleteElementBtn" class="w-fit self-end btn btn-sm bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition flex items-center gap-2">
-        <i class="material-icons">delete</i> <?= $languageService->translate('delete') ?>
-    </button>
 </div>
