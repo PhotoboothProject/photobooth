@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+# Start the lightweight GET request receiver used by Photobooth callbacks.
+GETSERVER_PORT=${GETSERVER_PORT:-9100}
+export GETSERVER_PORT
+
+node .ddev/scripts/getserver.js

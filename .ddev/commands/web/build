@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+# Run project build inside web container
+npm install
+npm run build

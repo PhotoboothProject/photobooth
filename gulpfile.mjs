@@ -144,3 +144,8 @@ gulp.task('default', gulp.series(
     gulp.parallel('sass', 'js', 'js-admin', 'tailwind-admin'),
     generateAssetRevisions
 ));
+
+gulp.task('watch', function () {
+  gulp.watch(['assets/js/**/*.js'], gulp.series('js', 'js-admin', generateAssetRevisions));
+  gulp.watch(['assets/sass/**/*.scss', 'private/sass/**/*.scss', 'config/tailwind.admin.config.mjs'], gulp.series('sass', 'tailwind-admin', generateAssetRevisions));
+});

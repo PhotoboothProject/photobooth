@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Run npm commands inside the ddev web container, reusing npm cache volume
+ddev .npm-cache >/dev/null 2>&1 || true
+ddev ssh --service web -d /var/www/html -c "npm $@"

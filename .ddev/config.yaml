@@ -1,0 +1,49 @@
+name: photobooth
+type: php
+docroot: .
+php_version: "8.4"
+webserver_type: apache-fpm
+router_http_port: "9080"
+router_https_port: "9443"
+xdebug_enabled: false
+additional_hostnames: [ ]
+additional_fqdns: [ ]
+omit_containers: [ db, dba ]
+nfs_mount_enabled: false
+mutagen_enabled: false
+composer_version: ""
+use_dns_when_possible: true
+upload_dir: uploads
+webimage_extra_packages: [ ]
+nodejs_version: ""
+webimage_build:
+  dockerfile: .ddev/web-build/Dockerfile
+hooks:
+  post-start:
+    - name: Ensure Node.js 20 for frontend build
+      exec: |
+        if ! command -v node >/dev/null 2>&1 || [ "$(node -v | cut -c2- | cut -d. -f1)" -lt 20 ]; then
+          curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+          apt-get update && apt-get install -y nodejs
+        fi
+    - name: Install npm deps if missing
+      exec: |
+        if [ ! -d node_modules ]; then
+          npm install
+        fi
+    - name: One-time frontend build
+      exec: |
+        if [ ! -f .ddev/.built ]; then
+          npm run build
+          touch .ddev/.built
+        fi
+    - name: Start GET request helper (9100)
+      exec: |
+        if ! pgrep -f ".ddev/scripts/getserver.js" >/dev/null; then
+          GETSERVER_PORT=9100 node .ddev/scripts/getserver.js >/tmp/ddev-getserver.log 2>&1 &
+        fi
+    - name: Start gulp watch (assets) in background
+      exec: |
+        if ! pgrep -f "gulp watch" >/dev/null; then
+          npm run watch:gulp >/tmp/ddev-gulp-watch.log 2>&1 &
+        fi
