@@ -1,0 +1,7 @@
+services:
+  web:
+    ports:
+      # Remotebuzzer server (default 14711) exposed to host/router
+      - "14711:14711"
+      # GET request test server (default 9100) exposed for callbacks
+      - "9100:9100"

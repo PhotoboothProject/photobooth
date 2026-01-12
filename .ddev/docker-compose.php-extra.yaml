@@ -1,0 +1,11 @@
+services:
+  web:
+    volumes:
+      # persist npm cache for faster installs
+      - npm-cache:/home/node/.npm
+    environment:
+      COMPOSER_ALLOW_SUPERUSER: "1"
+      PHP_IDE_CONFIG: "serverName=photobooth.ddev.site"
+
+volumes:
+  npm-cache:

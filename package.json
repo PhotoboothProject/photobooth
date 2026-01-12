@@ -29,7 +29,9 @@
     "composer:lint": "php bin/composer lint",
     "composer:update": "php bin/composer update -w",
     "composer:self-update": "php bin/composer self-update",
-    "tw:admin": "gulp tailwind-admin"
+    "tw:admin": "gulp tailwind-admin",
+    "watch:gulp": "gulp watch",
+    "watch:lint": "npm-run-all --parallel watch:gulp eslint -- --watch"
   },
   "author": "Andreas Blaesius <andi@unlegacy-android.org>",
   "license": "MIT",

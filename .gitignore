@@ -43,7 +43,6 @@ tools/*/vendor
 .phpunit.result.cache
 
 # ignore some IDE and OS files
-.ddev/
 *.iml
 *.ipr
 *.iws
@@ -51,6 +50,7 @@ tools/*/vendor
 **/.DS_Store
 
 /vendor/
+/.ddev/.built
 
 # rembg virtual environment
 scripts/rembg_venv/

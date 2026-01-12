@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+
+# Host helper to run the project build inside DDEV (replacement for docker exec ... npm run build)
+ddev build

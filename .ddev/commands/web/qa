@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+
+# Run full PHP QA suite inside the web container (composer cgl+lint+phpstan+phpunit).
+composer cgl && composer lint && composer phpstan && composer phpunit

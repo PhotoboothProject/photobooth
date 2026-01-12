@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euo pipefail
+
+# Run standard pre-commit checks inside DDEV.
+# Order: JS lint -> build -> PHP QA suite.
+
+ddev npm run eslint
+ddev build
+ddev qa
