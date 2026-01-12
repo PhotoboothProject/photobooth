@@ -253,42 +253,64 @@ const photoBooth = (function () {
                 const stop =
                     parseInt(config.preview.stop_time, 10) > seconds ? 0 : parseInt(config.preview.stop_time, 10);
                 photoboothTools.console.logDev('Preview: core: stop at ' + stop);
-                const interval = setInterval(() => {
-                    photoboothTools.console.logDev('Preview: core: countdown seconds ' + seconds);
-                    api.countdown.element.innerHTML = '';
-                    if (seconds > 0) {
-                        // dont show the 0 as countdown number
-                        const numberElement = document.createElement('div');
-                        numberElement.classList.add('countdown-number');
-                        numberElement.textContent = Number(seconds).toString();
-                        api.countdown.element.appendChild(numberElement);
-                    }
-                    if (config.sound.enabled && config.sound.countdown_enabled) {
-                        const soundfile = photoboothTools.getSound('counter-' + Number(seconds).toString());
-                        if (soundfile !== null) {
-                            api.countdown.audioElement.src = soundfile;
-                            api.countdown.audioElement.play().catch((error) => {
-                                photoboothTools.console.log('Error with audio.play: ' + error);
-                            });
+                const startTime = performance.now();
+                const targetTime = startTime + seconds * 1000;
+                let lastSecondShown = null;
+
+                const tick = () => {
+                    const now = performance.now();
+                    const remainingSeconds = Math.ceil((targetTime - now) / 1000);
+
+                    // Only update when we moved to the next integer second
+                    if (remainingSeconds !== lastSecondShown) {
+                        lastSecondShown = remainingSeconds;
+                        photoboothTools.console.logDev('Preview: core: countdown seconds ' + remainingSeconds);
+                        api.countdown.element.innerHTML = '';
+                        if (remainingSeconds > 0) {
+                            // dont show the 0 as countdown number
+                            const numberElement = document.createElement('div');
+                            numberElement.classList.add('countdown-number');
+                            numberElement.textContent = Number(remainingSeconds).toString();
+                            api.countdown.element.appendChild(numberElement);
+                        }
+                        if (config.sound.enabled && config.sound.countdown_enabled) {
+                            const soundfile = photoboothTools.getSound(
+                                'counter-' + Number(remainingSeconds).toString()
+                            );
+                            if (soundfile !== null) {
+                                api.countdown.audioElement.src = soundfile;
+                                api.countdown.audioElement.play().catch((error) => {
+                                    photoboothTools.console.log('Error with audio.play: ' + error);
+                                });
+                            }
+                        }
+
+                        // stop second hit
+                        if (remainingSeconds === stop && !config.preview.camTakesPic) {
+                            photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
+                            photoboothPreview.stopPreview();
+                        }
+
+                        // after 1 is faded out, on second 0
+                        if (remainingSeconds <= 0) {
+                            photoboothTools.console.log('Countdown finished.');
+                            api.countdown.destroy();
+                            resolve();
+
+                            return;
                         }
                     }
 
-                    // stop second hit
-                    if (seconds === stop && !config.preview.camTakesPic) {
-                        photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
-                        photoboothPreview.stopPreview();
+                    if (remainingSeconds > 0) {
+                        if (typeof window.requestAnimationFrame === 'function') {
+                            window.requestAnimationFrame(tick);
+                        } else {
+                            setTimeout(tick, 50);
+                        }
                     }
+                };
 
-                    // after 1 is faded out, on second 0
-                    if (seconds <= 0) {
-                        photoboothTools.console.log('Countdown finished.');
-                        clearInterval(interval);
-                        api.countdown.destroy();
-                        resolve();
-                    }
-
-                    seconds--;
-                }, 1000);
+                tick();
             });
         }
     };
