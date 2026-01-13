@@ -599,6 +599,16 @@ return [
             'range_step'  => 1,
             'unit'        => 'min',
         ],
+        'screensaver_gallery_width'  => [
+            'view'        => 'basic',
+            'type'        => 'number',
+            'name'        => 'screensaver[gallery_width]',
+            'placeholder' => $defaultConfig['screensaver']['gallery_width'],
+            'value'       => $config['screensaver']['gallery_width'],
+            'range_min'   => 1,
+            'range_step'  => 1,
+            'unit'        => 'px',
+        ],
         'screensaver_switch_seconds'  => [
             'view'        => 'basic',
             'type'        => 'number',
