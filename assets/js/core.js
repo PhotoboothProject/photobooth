@@ -77,7 +77,7 @@ const photoBooth = (function () {
                 screensaverMode === 'folder' ||
                 (screensaverMode === 'video' ? !!config.screensaver.video_source : !!config.screensaver.image_source)),
         screensaverTimeoutMs = (config.screensaver.timeout_minutes || 0) * 60000,
-        screensaverSwitchMs = (config.screensaver.switch_minutes || 1) * 60000,
+        screensaverSwitchMs = (config.screensaver.switch_seconds || 60) * 1000,
         urlSafe = (src) => (src ? encodeURI(src) : '');
 
     let timeOut,

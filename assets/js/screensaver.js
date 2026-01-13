@@ -234,8 +234,11 @@
 
             if (mode === 'gallery') {
                 overlay.addClass('screensaver-overlay--gallery');
+                const width = config.screensaver.gallery_width || 800;
+                imageEl.css('width', width + 'px');
             } else {
                 overlay.removeClass('screensaver-overlay--gallery');
+                imageEl.css('width', '');
             }
 
             const source = api.resolveSource();

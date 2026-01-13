@@ -155,8 +155,8 @@ if ($action === 'reset') {
     $newConfig['collage']['placeholderpath'] = $normalizePath($newConfig['collage']['placeholderpath'] ?? null);
     $newConfig['screensaver']['image_source']   = $normalizePath($newConfig['screensaver']['image_source'] ?? null);
     $newConfig['screensaver']['video_source']   = $normalizePath($newConfig['screensaver']['video_source'] ?? null);
-    if (isset($newConfig['screensaver']['switch_minutes'])) {
-        $newConfig['screensaver']['switch_minutes'] = (int)$newConfig['screensaver']['switch_minutes'];
+    if (isset($newConfig['screensaver']['switch_seconds'])) {
+        $newConfig['screensaver']['switch_seconds'] = (int)$newConfig['screensaver']['switch_seconds'];
     }
     if (isset($newConfig['screensaver']['timeout_minutes'])) {
         $newConfig['screensaver']['timeout_minutes'] = (int)$newConfig['screensaver']['timeout_minutes'];

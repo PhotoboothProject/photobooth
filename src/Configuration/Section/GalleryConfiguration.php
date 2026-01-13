@@ -21,7 +21,7 @@ final class GalleryConfiguration
                 ->min(1)
                 ->beforeNormalization()
                     ->ifString()
-                    ->then(static fn (string $value): int => intval($value))
+            ->then(static fn (string $value): int => intval($value))
                 ->end()
             ->end()
             ->integerNode('picture_height')
