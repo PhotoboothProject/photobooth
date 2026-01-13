@@ -599,16 +599,16 @@ return [
             'range_step'  => 1,
             'unit'        => 'min',
         ],
-        'screensaver_switch_minutes'  => [
+        'screensaver_switch_seconds'  => [
             'view'        => 'basic',
             'type'        => 'number',
-            'name'        => 'screensaver[switch_minutes]',
-            'placeholder' => $defaultConfig['screensaver']['switch_minutes'],
-            'value'       => $config['screensaver']['switch_minutes'],
+            'name'        => 'screensaver[switch_seconds]',
+            'placeholder' => $defaultConfig['screensaver']['switch_seconds'],
+            'value'       => $config['screensaver']['switch_seconds'],
             'range_min'   => 1,
-            'range_max'   => 120,
+            'range_max'   => 7200,
             'range_step'  => 1,
-            'unit'        => 'min',
+            'unit'        => 'sec',
         ],
     ],
     'pictures' => [

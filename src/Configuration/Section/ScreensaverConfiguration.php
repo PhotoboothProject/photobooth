@@ -26,7 +26,7 @@ final class ScreensaverConfiguration
                     ->values(['top-center', 'center', 'bottom-center'])
                     ->defaultValue('center')
                 ->end()
-                ->integerNode('switch_minutes')->min(1)->defaultValue(1)->end()
+                ->integerNode('switch_seconds')->min(1)->defaultValue(60)->end()
                 ->integerNode('timeout_minutes')->min(0)->defaultValue(3)->end()
             ->end();
     }

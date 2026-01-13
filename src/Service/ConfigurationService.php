@@ -217,6 +217,14 @@ class ConfigurationService
             $config['preview']['url'] = trim(substr($config['preview']['url'], 4, -1), '"\'');
         }
 
+        // Migrate screensaver switch interval from minutes to seconds
+        if (isset($config['screensaver'])) {
+            if (isset($config['screensaver']['switch_minutes']) && !isset($config['screensaver']['switch_seconds'])) {
+                $config['screensaver']['switch_seconds'] = (int)$config['screensaver']['switch_minutes'] * 60;
+            }
+            unset($config['screensaver']['switch_minutes']);
+        }
+
         // Migrate button font color from old colors config
         if (!empty($config['colors']['button_font']) && empty($config['fonts']['button_font_color'])) {
             $config['fonts']['button_font_color'] = $config['colors']['button_font'];
