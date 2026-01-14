@@ -35,5 +35,5 @@
 
 #### AI used to create this Pull Request?
 <!--
-If AI was used to create this Pull Request please tell about the impact in detail.
+If AI was used to create this Pull Request please tell about the impact to submitted changes in detail.
 -->
