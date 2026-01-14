@@ -189,6 +189,7 @@ $(function () {
         saveAdminSettings({ reloadOnSuccess: false, reloadOnError: false }) // No reload here
             .then(() => {
                 // Saving successful: Navigate to the Collage Designer
+                photoboothTools.console.logDev('Admin settings saved successfully, navigating to Collage Designer.');
                 const designerUrl = '../admin/collage-designer';
                 const currentHash = window.location.hash ? window.location.hash.substring(1) : '';
                 let targetUrl = designerUrl;
@@ -200,7 +201,7 @@ $(function () {
             .catch((error) => {
                 // Saving failed: Handle error (e.g., display a toast, do not navigate)
                 console.error('Failed to save admin settings before navigating to Collage Designer:', error);
-                photoboothTools.console.logDev('Saving failed, not navigating to Collage Designer.');
+                photoboothTools.console.logDev('Saving failed, not navigating to Collage Designer.', error);
                 // Optional: photoboothTools.openToast(photoboothTools.getTranslation('saving_failed_before_designer'), 'error', 5000);
                 // We do not navigate to the designer if saving fails.
             });
