@@ -197,7 +197,7 @@ class PathUtility
     }
 
     /**
-     * @return void
+     * @return string
      * @deprecated Use getRelativePath() instead.
      */
     public static function toProjectRelative(string $path): string
