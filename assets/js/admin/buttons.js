@@ -12,6 +12,11 @@
  *                            or rejects with an Error object on failure.
  */
 function saveAdminSettings(options = {}) {
+    if (!hasPendingAdminChanges()) {
+        photoboothTools.console.logDev('No changes detected in admin settings. Save operation skipped.');
+        return new Promise(() => {}); // Exit if no changes
+    }
+
     const defaultOptions = {
         reloadOnSuccess: true,
         reloadOnError: false
@@ -24,6 +29,9 @@ function saveAdminSettings(options = {}) {
 
     const data = new FormData(document.querySelector('form'));
     data.append('type', 'config');
+    if (typeof csrf !== 'undefined') {
+        data.append(csrf.key, csrf.token);
+    }
 
     return fetch('../api/admin.php', {
         method: 'POST',
@@ -155,25 +163,6 @@ $(function () {
     $('#save-admin-btn').on('click', function (e) {
         e.preventDefault();
 
-        if (!hasPendingAdminChanges()) {
-            //TODO: move this to saveAdminSettings
-
-            // console.log('No pending changes to save. Save button clicked, but form is clean.');
-            // Optional: Display a toast message like "Nothing to save."
-            // photoboothTools.openToast(photoboothTools.getTranslation('no_changes_to_save'), 'info', 3000);
-            return; // Exit if no changes
-        }
-
-        // show loader
-        $('.pageLoader').addClass('isActive');
-        $('.pageLoader').find('label').html(photoboothTools.getTranslation('saving'));
-
-        const data = new FormData(document.querySelector('form'));
-        data.append('type', 'config');
-        if (typeof csrf !== 'undefined') {
-            data.append(csrf.key, csrf.token);
-        }
-
         // The admin save button should always reload the page on success or failure
         saveAdminSettings({ reloadOnSuccess: true, reloadOnError: true })
             .then(() => {
@@ -197,17 +186,6 @@ $(function () {
     $('#collage-designer').on('click', function (ev) {
         ev.preventDefault();
 
-        if (!hasPendingAdminChanges()) {
-            //TODO: move this to saveAdminSettings
-
-            console.log('No pending changes detected. Navigating directly to Collage Designer.');
-            // If no changes, directly navigate without saving
-            let targetUrl = '../admin/collage-designer';
-            window.location.href = targetUrl;
-            return; // Exit after navigation
-        }
-
-        // If there are pending changes, save them first
         saveAdminSettings({ reloadOnSuccess: false, reloadOnError: false }) // No reload here
             .then(() => {
                 // Saving successful: Navigate to the Collage Designer
@@ -222,6 +200,7 @@ $(function () {
             .catch((error) => {
                 // Saving failed: Handle error (e.g., display a toast, do not navigate)
                 console.error('Failed to save admin settings before navigating to Collage Designer:', error);
+                photoboothTools.console.logDev('Saving failed, not navigating to Collage Designer.');
                 // Optional: photoboothTools.openToast(photoboothTools.getTranslation('saving_failed_before_designer'), 'error', 5000);
                 // We do not navigate to the designer if saving fails.
             });
