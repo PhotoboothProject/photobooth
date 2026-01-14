@@ -14,7 +14,7 @@
 function saveAdminSettings(options = {}) {
     if (!hasPendingAdminChanges()) {
         photoboothTools.console.logDev('No changes detected in admin settings. Save operation skipped.');
-        return new Promise(() => {}); // Exit if no changes
+        return Promise.resolve({ skipped: true });
     }
 
     const defaultOptions = {
@@ -190,7 +190,7 @@ $(function () {
             .then(() => {
                 // Saving successful: Navigate to the Collage Designer
                 photoboothTools.console.logDev('Admin settings saved successfully, navigating to Collage Designer.');
-                const designerUrl = '../admin/collage-designer';
+                const designerUrl = '../admin/collage-designer/';
                 const currentHash = window.location.hash ? window.location.hash.substring(1) : '';
                 let targetUrl = designerUrl;
                 if (currentHash) {
