@@ -180,7 +180,7 @@ class PathUtility
      * - Absolute paths outside the project are returned as-is.
      * - Relative paths are normalized (slashes fixed) and returned.
      */
-    public static function toProjectRelative(string $path): string
+    public static function getRelativePath(string $path): string
     {
         if (self::isUrl($path)) {
             return $path;
@@ -194,6 +194,15 @@ class PathUtility
         }
 
         return $normalized;
+    }
+
+    /**
+     * @return void
+     * @deprecated Use getRelativePath() instead.
+     */
+    public static function toProjectRelative(string $path): string
+    {
+        return self::getRelativePath($path);
     }
 
     /**
