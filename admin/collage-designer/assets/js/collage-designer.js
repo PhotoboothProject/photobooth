@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ROTATION_HANDLE_STROKE_COLOR = HANDLE_STROKE_COLOR;
     const ROTATION_HANDLE_ICON = '\u21BA';
     const ROTATION_HANDLE_ICON_FONT_SIZE = `${ROTATION_HANDLE_SIZE * 0.7}px Arial`;
-    const ROTATION_CURSOR_RELATIVE_PATH = 'assets/icons/rotate-cw.svg';
+    const ROTATION_CURSOR_RELATIVE_PATH = 'assets/icons/rotate-ccw.svg';
     const ROTATION_CURSOR_URL = `url("${BASE_URL}${ROTATION_CURSOR_RELATIVE_PATH}") 12 12, auto`;
 
     // DELETE HANDLE
