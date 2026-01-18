@@ -20,10 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyAspectRatioBtn = document.getElementById('apply_aspect_ratio_btn');
     const showFrameCheckbox = document.getElementById('picture_show_frame_current');
 
-    // Store the last custom ratio values locally to persist them when switching away from 'custom'
-    // Initialize with a common aspect ratio, e.g., 16:9
+    // Store the last custom ratio values locally. Initialized to a common aspect ratio.
     let lastCustomRatioX = 16;
     let lastCustomRatioY = 9;
+
+    // A flag to indicate if 'custom' was explicitly selected by the user.
+    // This prevents updateImageSettingsPanel from overriding user's 'custom' choice.
+    let userSelectedCustom = false;
+    
+    // Store the ID of the last active image element
+    let lastActiveImageElementId = null;
 
     /**
      * Calculates the greatest common divisor (GCD) of two numbers.
@@ -57,49 +63,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         imageSettingsPanel.classList.remove('hidden');
-
         document.getElementById('selected_image_element_id_display').textContent = `ID: ${window.activeElement.id}`;
 
-        // --- Update Aspect Ratio settings ---
+        // --- IMPORTANT: Reset userSelectedCustom flag if a new image element is selected ---
+        if (window.activeElement.id !== lastActiveImageElementId) {
+            userSelectedCustom = false; // Reset if a different image is now active
+            lastActiveImageElementId = window.activeElement.id;
+        }
+
         const currentWidth = window.activeElement.width;
         const currentHeight = window.activeElement.height;
         const currentAspectRatio = currentWidth / currentHeight;
 
-        let presetFound = false;
-        let selectedPresetValue = 'custom'; // Default to 'custom'
+        let presetMatchesCurrentElement = false;
+        let matchedPresetValue = '';
 
         // Check if current AR matches any preset
         for (const option of aspectRatioPresetSelect.options) {
             if (option.value !== 'original' && option.value !== 'custom') {
                 const [ratioW, ratioH] = option.value.split(':').map(Number);
-                if (ratioH !== 0 && Math.abs((ratioW / ratioH) - currentAspectRatio) < 0.001) { // More precise float comparison
-                    selectedPresetValue = option.value;
-                    presetFound = true;
+                if (ratioH !== 0 && Math.abs((ratioW / ratioH) - currentAspectRatio) < 0.001) {
+                    matchedPresetValue = option.value;
+                    presetMatchesCurrentElement = true;
                     break;
                 }
             }
         }
-        
-        aspectRatioPresetSelect.value = selectedPresetValue;
 
-        // If 'custom' is selected (or no preset matches), populate custom inputs
+        // --- Logic for setting the dropdown value ---
+        if (userSelectedCustom) {
+            // If user explicitly chose 'custom', respect that choice.
+            aspectRatioPresetSelect.value = 'custom';
+        } else if (presetMatchesCurrentElement) {
+            // If no explicit 'custom' choice, but element matches a preset, select that preset.
+            aspectRatioPresetSelect.value = matchedPresetValue;
+        } else {
+            // If no explicit 'custom' choice and no preset matches, default to 'custom'.
+            aspectRatioPresetSelect.value = 'custom';
+        }
+
+        // --- Update Custom Aspect Ratio Inputs (based on dropdown value) ---
         if (aspectRatioPresetSelect.value === 'custom') {
             customAspectRatioInputsDiv.classList.remove('hidden');
 
-            // Calculate current element's ratio in simplest integer form (e.g., 622:777 -> 2:3 or 5:6)
-            const commonDivisor = gcd(Math.round(currentWidth), Math.round(currentHeight));
-            const displayRatioX = Math.round(currentWidth / commonDivisor);
-            const displayRatioY = Math.round(currentHeight / commonDivisor);
-
-            // Update lastCustomRatioX/Y with the element's actual ratio for persistence
-            lastCustomRatioX = displayRatioX;
-            lastCustomRatioY = displayRatioY;
-
-            customRatioXInput.value = displayRatioX;
-            customRatioYInput.value = displayRatioY;
-            customRatioXSlider.value = displayRatioX;
-            customRatioYSlider.value = displayRatioY;
-
+            // Load last user-entered custom values. If custom was never used for this session,
+            // lastCustomRatioX/Y will be their default (16:9).
+            customRatioXInput.value = lastCustomRatioX;
+            customRatioYInput.value = lastCustomRatioY;
+            customRatioXSlider.value = lastCustomRatioX;
+            customRatioYSlider.value = lastCustomRatioY;
         } else {
             customAspectRatioInputsDiv.classList.add('hidden');
         }
@@ -159,12 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!window.activeElement || window.activeElement.type !== 'image') return;
 
             const selectedValue = aspectRatioPresetSelect.value;
-            customAspectRatioInputsDiv.classList.toggle('hidden', selectedValue !== 'custom');
+            userSelectedCustom = (selectedValue === 'custom'); // Set flag based on user's choice
+
+            customAspectRatioInputsDiv.classList.toggle('hidden', !userSelectedCustom);
             updateApplyButtonVisibility(); // Update button visibility immediately
 
-            if (selectedValue === 'custom') {
-                // When switching to custom, ensure current element's ratio is displayed
-                window.updateImageSettingsPanel(); // This will recalculate and set custom fields
+            if (userSelectedCustom) {
+                // When switching TO custom, populate with last *user-entered* custom values.
+                // updateImageSettingsPanel will handle loading lastCustomRatioX/Y into inputs.
+                window.updateImageSettingsPanel(); 
             } else {
                 // For 'original' or presets, immediately apply the ratio.
                 if (selectedValue === 'original') {
@@ -185,18 +200,17 @@ document.addEventListener('DOMContentLoaded', () => {
         ].forEach(({ slider, input, prop }) => {
             slider.addEventListener('input', () => {
                 input.value = slider.value;
-                // Store last custom value
+                // Store last custom value when user interacts
                 if (prop === 'x') lastCustomRatioX = parseInt(slider.value);
                 if (prop === 'y') lastCustomRatioY = parseInt(slider.value);
             });
             input.addEventListener('input', () => {
                 let val = parseInt(input.value);
-                // Ensure input value is within slider's min/max and is a valid number
                 if (isNaN(val) || val < parseInt(slider.min)) val = parseInt(slider.min);
                 if (val > parseInt(slider.max)) val = parseInt(slider.max);
                 input.value = val;
                 slider.value = val;
-                // Store last custom value
+                // Store last custom value when user interacts
                 if (prop === 'x') lastCustomRatioX = val;
                 if (prop === 'y') lastCustomRatioY = val;
             });
@@ -216,8 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applyAspectRatio('custom', ratioW, ratioH);
         });
         
-        // No initial setTimeout needed anymore, updateImageSettingsPanel will call updateApplyButtonVisibility
-        // right after setting the dropdown value.
+        // No initial setTimeout needed anymore, updateImageSettingsPanel will handle button visibility.
     }
 
     /**
@@ -229,9 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!window.activeElement || window.activeElement.type !== 'image') return;
                 
                 window.saveState(); // Save state BEFORE applying changes
-
                 window.activeElement.show_frame = showFrameCheckbox.checked;
-                
                 window.drawCanvas(); // Draw after applying value
                 window.updateElementSettingsPanel(); // Update general panel to reflect UI changes (if any)
             });
