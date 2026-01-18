@@ -58,8 +58,8 @@ $currentLayoutData = null;
 if ($currentLayout) {
     $currentLayoutData = CollageLayoutScanner::getLayoutData($currentLayout);
 } else {
-    // Fallback: Lade ein Standard-Layout oder ein leeres Layout, falls keines konfiguriert ist
-    $currentLayoutData = CollageLayoutScanner::getLayoutData('template/collage/landscape/1+3-1');
+    // Fallback: load a standard layout or an empty layout, if none is configured
+    $currentLayoutData = CollageLayoutScanner::getLayoutData('private/collages/1+3-1');
 }
 // convert JSON to JavaScript-Variable
 echo '<script type="text/javascript">';

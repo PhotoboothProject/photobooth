@@ -23,22 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function getSelectedElements() {
         const selected = [];
         // Add elements from window.collageElements (your image boxes)
-        if (window.collageElements) {
-            window.collageElements.forEach(el => {
-                if (el.isSelected) selected.push(el);
-            });
-        }
-        // Add elements from other global arrays if they exist and are selected
-        if (window.textFields) { // Assuming textFields have an isSelected property
-            window.textFields.forEach(tf => {
-                if (tf.isSelected) selected.push(tf);
-            });
-        }
-        if (window.imagePlaceholders) { // Assuming imagePlaceholders (if different from collageElements) have an isSelected property
-            window.imagePlaceholders.forEach(ip => {
-                if (ip.isSelected) selected.push(ip);
-            });
-        }
+        window.collageElements.forEach(el => {
+            if (el.isSelected) selected.push(el);
+        });
         return selected;
     }
 
