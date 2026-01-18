@@ -10,7 +10,7 @@ use Photobooth\Utility\AdminInput;
         <span class="flex items-baseline gap-1">
             <?= $languageService->translate('img_settings_title') ?>
         </span>
-        <span id="selected_image_element_id_display" class="text-sm font-normal text-gray-500"></span>
+        <span id="selected_image_element_id_display" class="text-sm font-normal text-gray-500 hidden"></span>
     </span>
 
     <!-- Aspect Ratio Section for Images -->

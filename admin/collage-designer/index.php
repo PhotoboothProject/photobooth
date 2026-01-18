@@ -51,12 +51,15 @@ $font_styles .= '</style>';
 
 // Initial loading of a collage layout or empty design
 $currentLayout = $config['collage']['layout'];
+//TEST:
+$currentLayout = 'private/collage/landscape/1+2-1';
+//
 $currentLayoutData = null;
 if ($currentLayout) {
     $currentLayoutData = CollageLayoutScanner::getLayoutData($currentLayout);
 } else {
     // Fallback: Lade ein Standard-Layout oder ein leeres Layout, falls keines konfiguriert ist
-    $currentLayoutData = CollageLayoutScanner::getLayoutData('private/collages/1+3-1.json');
+    $currentLayoutData = CollageLayoutScanner::getLayoutData('template/collage/landscape/1+3-1');
 }
 // convert JSON to JavaScript-Variable
 echo '<script type="text/javascript">';

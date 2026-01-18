@@ -64,11 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {number} width Optional width. Defaults to a standard size.
      * @param {number} height Optional height. Defaults to a standard size.
      * @param {number} rotation Optional rotation. Defaults to 0.
-     * @param {string} id Optional ID. If not provided, a new unique ID is generated.
+     * @param {string} type Type of the element ('image', 'text', etc.). Defaults to 'image'.
+     * @param {object} data Additional data specific to the element type.
      * @returns {CollageElement} The newly created element.
      */
-    window.addNewElement = async function(x, y, width, height, rotation = 0, id) {
-        // Save current state BEFORE adding the element for Undo
+    window.addNewElement = async function(x, y, width, height, rotation = 0, type = 'image', data = {}) { // Added type and data
         window.saveState(); 
 
         const canvasWidth = window.collageCanvas.width;
@@ -76,31 +76,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const defaultWidth = canvasWidth / 2;
         const defaultHeight = canvasHeight / 2;
-        // small Offset, so new Elements are stacked when multiple are added
         const offset = window.collageElements.filter(el => el.originalLayoutDataIndex === -1).length * 10; 
 
-        // Calculate default position: centered, but slightly offset if id is generated (for stacking duplicates)
         let finalX = x !== undefined ? x : (canvasWidth / 2) - (defaultWidth / 2) + offset;
         let finalY = y !== undefined ? y : (canvasHeight / 2) - (defaultHeight / 2) + offset;
 
-        // Generate unique ID if not provided
-        const newId = id || `element-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        const newId = `element-${type}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
         
-         let imageUrl = null;
-        try {
-            // call global function from collage-designer.js
-            const fetchedUrls = await window.fetchDemoImageUrls(1);
-            imageUrl = fetchedUrls[0];
-        } catch (error) {
-            console.error('Could not fetch demo image for new element, using fallback.', error);
-            imageUrl = window.phpFallbackImageUrl; // Globalen Fallback nutzen
+        // Type-specific data preparation
+        let elementData = { ...data }; // Copy any passed data
+
+        switch (type) {
+            case 'image':
+                let imageUrl = null;
+                try {
+                    const fetchedUrls = await window.fetchDemoImageUrls(1);
+                    imageUrl = fetchedUrls[0];
+                } catch (error) {
+                    console.error('Could not fetch demo image for new element, using fallback.', error);
+                    imageUrl = window.phpFallbackImageUrl;
+                }
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.src = imageUrl;
+                elementData.image = img;
+                elementData.originalLayoutDataIndex = -1; // Indicates it's an added element
+                elementData.show_frame = false; // Default for new image element
+                break;
+            case 'text':
+                elementData.content = elementData.content || photoboothTools.getTranslation('new_text_element'); // New translation key
+                elementData.font_family = elementData.font_family || 'Arial'; // Default or from global settings
+                elementData.font_color = elementData.font_color || '#000000';
+                elementData.font_size = elementData.font_size !== undefined ? elementData.font_size : 2; // Default font size
+                break;
+            // Add more cases for other types as needed
         }
 
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = imageUrl;
-
-        // Create new CollageElement instance
         const newElement = new CollageElement(
             newId,
             finalX,
@@ -108,32 +119,32 @@ document.addEventListener('DOMContentLoaded', () => {
             width !== undefined ? width : defaultWidth,
             height !== undefined ? height : defaultHeight,
             rotation,
-            -1, // -1 indicates it's not from originalLayoutData (a placeholder)
-            img
+            type, // Pass the element type
+            elementData // Pass the prepared data object
         );
 
-        // Add it to our global collection
         window.collageElements.push(newElement);
 
-        // Deselect all other elements and select the new one
         window.collageElements.forEach(el => el.isSelected = false);
         newElement.isSelected = true;
         window.activeElement = newElement;
 
-        // Redraw canvas to show the new element
         window.drawCanvas();
         
-        // When the image loads, redraw the canvas to display it and save the final state
-        img.onload = () => {
-            window.drawCanvas(); // Redraw once the image is ready
-            window.saveState(); // Save state again after image has loaded to reflect its presence
-        };
-        img.onerror = () => {
-            console.error(`Failed to load image for element ${newId}: ${imageUrl}`);
-            window.drawCanvas(); // Redraw to show text placeholder if image failed
-            window.saveState(); // Save state even if image failed to load
-        };
-        window.saveState(); // Save state after adding the element
+        // For images, we need to redraw after loading
+        if (type === 'image' && newElement.image) {
+            newElement.image.onload = () => {
+                window.drawCanvas();
+                window.saveState();
+            };
+            newElement.image.onerror = () => {
+                console.error(`Failed to load image for element ${newId}: ${newElement.image.src}`);
+                window.drawCanvas();
+                window.saveState();
+            };
+        } else {
+            window.saveState(); // Save state immediately for text/other elements
+        }
         
         return newElement;
     };

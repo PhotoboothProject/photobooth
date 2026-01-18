@@ -4,12 +4,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Basic check to ensure main designer variables/functions are available
     // These are expected to be globally exposed by collage-designer.js
     if (typeof window.collageCanvas === 'undefined' || typeof window.drawCanvas === 'undefined' ||
-        typeof window.collageElements === 'undefined' || typeof window.activeElement === 'undefined' ||
+        typeof window.collageElements === 'undefined' ||
         typeof window.saveState === 'undefined' || typeof window.deleteSelectedElements === 'undefined'
     ) {
         console.error('collage-designer-elemntSetPnl.js: Dependent main designer variables/functions not found. Ensure collage-designer.js is loaded first and exposes necessary variables globally.');
         return;
     }
+
+
+    // --- DOM Elements (Defined once at load) ---
+    const elementSettingsPanel = document.getElementById('element_settings_panel');
+    const noElementSelectedMessage = document.getElementById('no_element_selected_message'); // Stellen Sie sicher, dass diese ID in Ihrem HTML existiert
+    const imageSpecificSettingsPanel = document.getElementById('image_specific_settings_panel'); // KORRIGIERT!
+    const textSpecificSettingsPanel = document.getElementById('text_specific_settings_panel');   // Annahme: ID für Text-Panel (falls vorhanden)
+    const lockAspectRatioCheckbox = document.getElementById('lock_aspect_ratio');
+
+    // All other panel input elements should be defined here as well, 
+    // or accessed dynamically inside updateElementSettingsPanel to avoid many global const.
+    // For now, let's keep them here as they are accessed in setupPanelEventListeners
+
+    const elementXPosition = document.getElementById('element_x_position');
+    const elementXPositionSlider = document.getElementById('element_x_position_slider');
+    const elementYPosition = document.getElementById('element_y_position');
+    const elementYPositionSlider = document.getElementById('element_y_position_slider');
+    const elementWidth = document.getElementById('element_width');
+    const elementWidthSlider = document.getElementById('element_width_slider');
+    const elementHeight = document.getElementById('element_height');
+    const elementHeightSlider = document.getElementById('element_height_slider');
+    const elementRotation = document.getElementById('element_rotation');
+    const elementRotationSlider = document.getElementById('element_rotation_slider');
 
     //=================================================================================
     // --- Element Settings Panel Management ---
@@ -88,14 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
      * Activates and populates the panel if exactly one element is selected.
      */
     window.updateElementSettingsPanel = function() {
-        const elementSettingsPanel = document.getElementById('element_settings_panel');
         const selectedElements = window.collageElements.filter(el => el.isSelected);
 
         // Find all interactive elements within the panel (inputs, sliders, buttons)
         const interactiveElements = elementSettingsPanel.querySelectorAll(
             'input:not([type="checkbox"]), textarea, select, button' // Exclude checkboxes if they should always be active for "lock aspect ratio" etc.
         );
-        const lockAspectRatioCheckbox = document.getElementById('lock_aspect_ratio'); // Separate handling for this checkbox
 
         if (lockAspectRatioCheckbox) {
                 lockAspectRatioCheckbox.disabled = false; // Enable if it should be interactive
@@ -106,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Activate panel
             elementSettingsPanel.classList.remove('opacity-50', 'pointer-events-none');
             interactiveElements.forEach(el => el.disabled = false);
+            if (noElementSelectedMessage) noElementSelectedMessage.classList.add('hidden'); // Check for existence
 
             const activeEl = window.activeElement;
 
@@ -123,50 +145,53 @@ document.addEventListener('DOMContentLoaded', () => {
             const heightPercent = (activeEl.height / canvasHeight) * 100;
 
             // Update X position
-            const elementXPosition = document.getElementById('element_x_position');
-            const elementXPositionSlider = document.getElementById('element_x_position_slider');
             if (elementXPosition) elementXPosition.value = xPercent.toFixed(1);
             if (elementXPositionSlider) elementXPositionSlider.value = xPercent.toFixed(1);
 
             // Update Y position
-            const elementYPosition = document.getElementById('element_y_position');
-            const elementYPositionSlider = document.getElementById('element_y_position_slider');
             if (elementYPosition) elementYPosition.value = yPercent.toFixed(1);
             if (elementYPositionSlider) elementYPositionSlider.value = yPercent.toFixed(1);
 
             // Update Width
-            const elementWidth = document.getElementById('element_width');
-            const elementWidthSlider = document.getElementById('element_width_slider');
             if (elementWidth) elementWidth.value = widthPercent.toFixed(1);
             if (elementWidthSlider) elementWidthSlider.value = widthPercent.toFixed(1);
 
             // Update Height
-            const elementHeight = document.getElementById('element_height');
-            const elementHeightSlider = document.getElementById('element_height_slider');
             if (elementHeight) elementHeight.value = heightPercent.toFixed(1);
             if (elementHeightSlider) elementHeightSlider.value = heightPercent.toFixed(1);
 
             // Update Rotation
-            const elementRotation = document.getElementById('element_rotation');
-            const elementRotationSlider = document.getElementById('element_rotation_slider');
             if (elementRotation) elementRotation.value = activeEl.rotation.toFixed(0);
             if (elementRotationSlider) elementRotationSlider.value = activeEl.rotation.toFixed(0);
 
-            // Hide text-specific settings for now
-            const textSpecificSettings = document.getElementById('text_specific_settings');
-            if (textSpecificSettings) textSpecificSettings.classList.add('hidden');
-            // Hide image-specific settings
-            const imageSpecificSettings = document.getElementById('image_specific_settings');
-            if (imageSpecificSettings) imageSpecificSettings.classList.add('hidden');
+            // --- update specific panels and show / hide them ---
+            if (activeEl.type === 'image') {
+                if (window.updateImageSettingsPanel) window.updateImageSettingsPanel();
+                if (imageSpecificSettingsPanel) imageSpecificSettingsPanel.classList.remove('hidden'); // Jetzt sollte es gehen!
+                if (textSpecificSettingsPanel) textSpecificSettingsPanel.classList.add('hidden');
+            } else if (activeEl.type === 'text') {
+                if (window.updateTextSettingsPanel) window.updateTextSettingsPanel();
+                if (textSpecificSettingsPanel) textSpecificSettingsPanel.classList.remove('hidden');
+                if (imageSpecificSettingsPanel) imageSpecificSettingsPanel.classList.add('hidden');
+            } else {
+                // Typ unbekannt oder kein spezifisches Panel
+                if (imageSpecificSettingsPanel) imageSpecificSettingsPanel.classList.add('hidden');
+                if (textSpecificSettingsPanel) textSpecificSettingsPanel.classList.add('hidden');
+            }
             
         } else {
-            // Deactivate panel
+            // none or multiple elements selected
             elementSettingsPanel.classList.add('opacity-50', 'pointer-events-none');
             interactiveElements.forEach(el => el.disabled = true);
             
-            // Clear basic info (optional, but good for clarity)
+            // Clear basic info
             document.getElementById('selected_element_type_display').textContent = '';
             document.getElementById('selected_element_id_display').textContent = 'ID: ';
+
+            // hide all specific panels
+            if (noElementSelectedMessage) noElementSelectedMessage.classList.remove('hidden'); // Check for existence
+            if (imageSpecificSettingsPanel) imageSpecificSettingsPanel.classList.add('hidden');
+            if (textSpecificSettingsPanel) textSpecificSettingsPanel.classList.add('hidden');
         }
     };
 
@@ -235,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Event listener for the lock aspect ratio checkbox
-        const lockAspectRatioCheckbox = document.getElementById('lock_aspect_ratio');
         if (lockAspectRatioCheckbox) {
             lockAspectRatioCheckbox.addEventListener('change', () => {
                 window.globalLockAspectRatio = lockAspectRatioCheckbox.checked;
@@ -244,11 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Event listener for the delete button inside the panel
-        const deleteElementBtn = document.getElementById('panelDeleteElementBtn'); // Use the ID we gave it
+        const deleteElementBtn = document.getElementById('panelDeleteElementBtn');
         if (deleteElementBtn) {
             deleteElementBtn.addEventListener('click', () => {
                 if (window.activeElement) {
-                    window.deleteSelectedElements(); // Call the existing function
+                    window.deleteSelectedElements();
                 }
             });
         }

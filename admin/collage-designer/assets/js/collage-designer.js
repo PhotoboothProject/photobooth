@@ -132,16 +132,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const DELETE_CURSOR_URL = `url("${BASE_URL}${DELETE_CURSOR_RELATIVE_PATH}") 12 12, auto`;
 
     window.CollageElement = class CollageElement {
-        constructor(id, x, y, width, height, rotation, originalLayoutDataIndex, image = null) {
+        constructor(id, x, y, width, height, rotation, type = 'image', data = {}) { // Added type and generic data object
             this.id = id;
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
             this.rotation = rotation;
-            this.originalLayoutDataIndex = originalLayoutDataIndex;
-            this.image = image;
-            this.isSelected = false; // Tracks if element is part of a selection (multi or single)
+            this.isSelected = false;
+            this.type = type; // 'image', 'text', 'shape', etc.
+
+            // Type-specific properties
+            switch (this.type) {
+                case 'image':
+                    this.image = data.image || null; // HTMLImageElement
+                    this.originalLayoutDataIndex = data.originalLayoutDataIndex !== undefined ? data.originalLayoutDataIndex : -1; // -1 for dynamically added images
+                    this.show_frame = data.show_frame || false; // New property for image frames
+                    // Potentially: aspect_ratio, original_aspect_ratio, etc. (if stored per element)
+                    break;
+                case 'text':
+                    this.content = data.content || ''; // The actual text string
+                    this.font_family = data.font_family || 'Arial';
+                    this.font_color = data.font_color || '#000000';
+                    this.font_size = data.font_size !== undefined ? data.font_size : 2; // Default font size (e.g., in %)
+                    // Potentially: text_align, line_height, etc.
+                    break;
+                // Add more cases for other types if needed (e.g., 'background', 'shape')
+                default:
+                    console.warn(`CollageElement created with unknown type: ${type}`);
+                    break;
+            }
         }
 
         isHit(mouseX, mouseY) {
@@ -211,24 +231,24 @@ document.addEventListener('DOMContentLoaded', () => {
         let fetchedPaths = [];
         let loadedImagesLocal = [];
 
+        // Determine how many images are actually needed from the new 'elements' array
+        // We only count elements of type 'image'
+        const numImageElements = currentLayout.elements ? currentLayout.elements.filter(el => el.type === 'image').length : 0;
+        // Request at least 1 image for fallback if no image elements are present
+        const numImagesNeeded = Math.max(numImageElements, 1);
+
         try {
-            // Request enough images for all layout elements
-            // Assumption: currentLayout.layout.length indicates the number of images needed
-            // If no layout elements are present, we request 1 image for the fallback
-            const numImagesNeeded = currentLayout.layout ? currentLayout.layout.length : 1;
             fetchedPaths = await window.fetchDemoImageUrls(numImagesNeeded);
         } catch (error) {
             console.error("Failed to fetch dynamic demo images for initial layout, using PHP fallback.", error);
             // If fetching fails, we fill with the PHP fallback
-            const numImagesNeeded = currentLayout.layout ? currentLayout.layout.length : 1;
             for (let i = 0; i < numImagesNeeded; i++) {
                 fetchedPaths.push(window.phpFallbackImageUrl);
             }
         }
         
-        // Use the fetched paths instead of static demoImagePaths
         const imagePromises = fetchedPaths.map((path, index) => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => { // Removed reject, as we handle errors with fallback
                 const img = new Image();
                 img.crossOrigin = "anonymous"; // Important for CORS with external images
                 img.onload = () => {
@@ -237,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 img.onerror = () => {
                     console.warn(`Failed to load image: ${path}. Using fallback.`);
-                    // Here, you could also assign an empty image placeholder or phpFallbackImageUrl
                     const fallbackImg = new Image();
                     fallbackImg.crossOrigin = "anonymous";
                     fallbackImg.src = window.phpFallbackImageUrl;
@@ -247,12 +266,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                     fallbackImg.onerror = () => { // If even the fallback fails to load
                         loadedImagesLocal[index] = null; // Or a specific "broken" image
+                        console.error(`Fallback image also failed to load for path: ${path}.`);
                         resolve();
-                    }
+                    };
                 };
                 img.src = path;
             });
         });
+
         return Promise.all(imagePromises).then(() => loadedImagesLocal).finally(() => {
             hideLoadingOverlay();
         });
@@ -262,24 +283,68 @@ document.addEventListener('DOMContentLoaded', () => {
         window.collageElements = [];
         const canvasWidth = window.collageCanvas.width;
         const canvasHeight = window.collageCanvas.height;
-        if (!currentLayout.layout || currentLayout.layout.length === 0) {
-            return;
+
+        // Check if currentLayout has the new 'elements' array
+        if (!currentLayout.elements || !Array.isArray(currentLayout.elements) || currentLayout.elements.length === 0) {
+            console.warn('Current layout does not contain a valid "elements" array in the new JSON format. No elements will be loaded.');
+            // If no elements in new format, ensure existing window.collageElements is empty and redraw.
+            window.collageElements = [];
+            return; 
         }
-        currentLayout.layout.forEach((boxCoords, index) => {
-            const [xExpr, yExpr, widthExpr, heightExpr, rotationDegreesExpr = '0'] = boxCoords; 
-            const x = eval(xExpr.replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
-            const y = eval(yExpr.replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
-            const width = eval(widthExpr.replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
-            const height = eval(heightExpr.replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
-            const rotation = parseFloat(rotationDegreesExpr);
+
+        let imagePlaceholderCount = 0; // To correctly map demo images to image elements
+
+        currentLayout.elements.forEach((elementData) => {
+            // Parse x, y, width, height, rotation - assuming they might still contain 'x'/'y' placeholders or be strings
+            const x = eval(String(elementData.x).replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
+            const y = eval(String(elementData.y).replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
+            const width = eval(String(elementData.width).replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
+            const height = eval(String(elementData.height).replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
+            const rotation = parseFloat(elementData.rotation || 0);
+            
+            // Prepare data object for CollageElement constructor
+            let data = {};
+
+            switch (elementData.type) {
+                case 'image':
+                    // Assign a demo image to the placeholder for display in the designer
+                    // We cycle through loadedImagesArray for each image element found in the JSON
+                    const demoImageIndex = imagePlaceholderCount % loadedImagesArray.length;
+                    const imgElement = loadedImagesArray[demoImageIndex];
+
+                    data = {
+                        image: imgElement, // Assign the loaded demo image
+                        // The 'src' property from JSON might still exist for potential future specific placeholders
+                        // or for the *final* image path which would be set by the backend.
+                        // For now, in the designer, we always use the demo image for visualization.
+                        originalLayoutDataIndex: imagePlaceholderCount, // Use this for consistent demo image assignment
+                        show_frame: elementData.apply_frame || false // Using apply_frame from new JSON
+                    };
+                    imagePlaceholderCount++; // Increment for the next image element
+                    break;
+
+                case 'text':
+                    data = {
+                        content: elementData.content || '',
+                        font_family: elementData.font_family || 'Arial',
+                        font_color: elementData.font_color || '#000000',
+                        font_size: elementData.font_size !== undefined ? parseFloat(elementData.font_size) : 2, // Ensure number
+                        text_align: elementData.text_align || 'center' // Assuming text_align in new JSON
+                    };
+                    break;
+
+                // Add cases for other types (e.g., 'shape', 'background') if they also exist in your JSON
+                default:
+                    console.warn(`Attempted to load unsupported element type from JSON: ${elementData.type}`);
+                    return; // Skip unsupported elements
+            }
+
             const element = new CollageElement(
-                `element-${index}`,
+                elementData.id || `element-${elementData.type}-${Date.now()}-${Math.floor(Math.random() * 1000)}`, // Ensure ID is present or generated
                 x, y, width, height, rotation,
-                index
+                elementData.type,
+                data
             );
-            // Use the passed loadedImagesArray
-            const demoImageIndex = index % loadedImagesArray.length;
-            element.image = loadedImagesArray[demoImageIndex];
             window.collageElements.push(element);
         });
     }
@@ -421,17 +486,31 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     window.createSnapshot = function() { 
         return window.collageElements.map(el => {
-            return { 
-                id: el.id, // Keep ID for matching
+            const snapshotEl = { 
+                id: el.id,
                 x: el.x,
                 y: el.y,
                 width: el.width,
                 height: el.height,
                 rotation: el.rotation,
                 isSelected: el.isSelected,
-                imageSrc: el.image ? el.image.src : null,
-                originalLayoutDataIndex: el.originalLayoutDataIndex,
+                type: el.type // Crucial: save element type
             };
+
+            switch (el.type) {
+                case 'image':
+                    snapshotEl.imageSrc = el.image ? el.image.src : null;
+                    snapshotEl.originalLayoutDataIndex = el.originalLayoutDataIndex;
+                    snapshotEl.show_frame = el.show_frame;
+                    break;
+                case 'text':
+                    snapshotEl.content = el.content;
+                    snapshotEl.font_family = el.font_family;
+                    snapshotEl.font_color = el.font_color;
+                    snapshotEl.font_size = el.font_size;
+                    break;
+            }
+            return snapshotEl;
         });
     }
 
@@ -458,24 +537,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentEl.height = snapEl.height;
                 currentEl.rotation = snapEl.rotation;
                 currentEl.isSelected = snapEl.isSelected;
-                if (snapEl.imageSrc !== (currentEl.image ? currentEl.image.src : null)) {
-                    const newImage = new Image();
-                    newImage.crossOrigin = "anonymous";
-                    newImage.src = snapEl.imageSrc || window.phpFallbackImageUrl; // use Fallback
-                    newImage.onload = window.drawCanvas;
-                    newImage.onerror = () => { console.error(`Failed to load restored image: ${newImage.src}`); window.drawCanvas(); };
-                    currentEl.image = newImage;
+                currentEl.type = snapEl.type; // Ensure type is restored
+
+                switch (snapEl.type) {
+                    case 'image':
+                        if (snapEl.imageSrc !== (currentEl.image ? currentEl.image.src : null)) {
+                            const newImage = new Image();
+                            newImage.crossOrigin = "anonymous";
+                            newImage.src = snapEl.imageSrc || window.phpFallbackImageUrl;
+                            newImage.onload = window.drawCanvas;
+                            newImage.onerror = () => { console.error(`Failed to load restored image: ${newImage.src}`); window.drawCanvas(); };
+                            currentEl.image = newImage;
+                        }
+                        currentEl.originalLayoutDataIndex = snapEl.originalLayoutDataIndex;
+                        currentEl.show_frame = snapEl.show_frame;
+                        break;
+                    case 'text':
+                        currentEl.content = snapEl.content;
+                        currentEl.font_family = snapEl.font_family;
+                        currentEl.font_color = snapEl.font_color;
+                        currentEl.font_size = snapEl.font_size;
+                        break;
                 }
                 newCollageElements.push(currentEl);
             } else {
                 // Element exists in snapshot but not in current window.collageElements, so it was "added"
-                // Recreate the element.
-                const recreatedImage = new Image();
-                recreatedImage.crossOrigin = "anonymous";
-                recreatedImage.src = snapEl.imageSrc || window.phpFallbackImageUrl; // Fallback
-                recreatedImage.onload = window.drawCanvas;
-                recreatedImage.onerror = () => { console.error(`Failed to load recreated image: ${recreatedImage.src}`); window.drawCanvas(); };
+                let recreatedData = {};
+                let recreatedImage = null;
 
+                switch (snapEl.type) {
+                    case 'image':
+                        recreatedImage = new Image();
+                        recreatedImage.crossOrigin = "anonymous";
+                        recreatedImage.src = snapEl.imageSrc || window.phpFallbackImageUrl;
+                        recreatedImage.onload = window.drawCanvas;
+                        recreatedImage.onerror = () => { console.error(`Failed to load recreated image: ${recreatedImage.src}`); window.drawCanvas(); };
+                        recreatedData = {
+                            image: recreatedImage,
+                            originalLayoutDataIndex: snapEl.originalLayoutDataIndex !== undefined ? snapEl.originalLayoutDataIndex : -1,
+                            show_frame: snapEl.show_frame
+                        };
+                        break;
+                    case 'text':
+                        recreatedData = {
+                            content: snapEl.content,
+                            font_family: snapEl.font_family,
+                            font_color: snapEl.font_color,
+                            font_size: snapEl.font_size
+                        };
+                        break;
+                }
+                
                 const recreatedElement = new window.CollageElement(
                     snapEl.id,
                     snapEl.x,
@@ -483,8 +595,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     snapEl.width,
                     snapEl.height,
                     snapEl.rotation,
-                    snapEl.originalLayoutDataIndex !== undefined ? snapEl.originalLayoutDataIndex : -1, // Use -1 as default for added elements
-                    recreatedImage
+                    snapEl.type, // Pass the type
+                    recreatedData // Pass the type-specific data
                 );
                 recreatedElement.isSelected = snapEl.isSelected;
                 newCollageElements.push(recreatedElement);
@@ -562,49 +674,85 @@ document.addEventListener('DOMContentLoaded', () => {
         const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
 
         window.collageElements.forEach((element) => {
-            const { x, y, width, height, rotation, image } = element;
+            const { x, y, width, height, rotation, type } = element;
 
-            if (image) {
-                if (rotation !== 0) {
-                    const preparedImageCanvas = prepareRotatedImage(image, rotation, width, height);
-                    window.ctx.drawImage(preparedImageCanvas, x, y, width, height);
-                } else {
-                    const imgAspectRatio = image.width / image.height;
-                    const boxAspectRatio = width / height;
-                    let sx, sy, sWidth, sHeight;
-                    if (imgAspectRatio > boxAspectRatio) {
-                        sHeight = image.height;
-                        sWidth = sHeight * boxAspectRatio;
-                        sx = (image.width - sWidth) / 2;
-                        sy = 0;
+            if (type === 'image') {
+                const { image, show_frame } = element;
+                if (image) {
+                    if (rotation !== 0) {
+                        const preparedImageCanvas = prepareRotatedImage(image, rotation, width, height);
+                        window.ctx.drawImage(preparedImageCanvas, x, y, width, height);
                     } else {
-                        sWidth = image.width;
-                        sHeight = sWidth / boxAspectRatio;
-                        sx = 0;
-                        sy = (image.height - sHeight) / 2;
+                        const imgAspectRatio = image.width / image.height;
+                        const boxAspectRatio = width / height;
+                        let sx, sy, sWidth, sHeight;
+                        if (imgAspectRatio > boxAspectRatio) {
+                            sHeight = image.height;
+                            sWidth = sHeight * boxAspectRatio;
+                            sx = (image.width - sWidth) / 2;
+                            sy = 0;
+                        } else {
+                            sWidth = image.width;
+                            sHeight = sWidth / boxAspectRatio;
+                            sx = 0;
+                            sy = (image.height - sHeight) / 2;
+                        }
+                        window.ctx.drawImage(image, sx, sy, sWidth, sHeight, x, y, width, height);
                     }
-                    window.ctx.drawImage(image, sx, sy, sWidth, sHeight, x, y, width, height);
+                } else {
+                    window.ctx.fillStyle = '#CCCCCC';
+                    window.ctx.fillRect(x, y, width, height);
+                    window.ctx.fillStyle = '#666666';
+                    window.ctx.font = `${Math.min(width, height) * 0.1}px Arial`;
+                    window.ctx.textAlign = 'center';
+                    window.ctx.textBaseline = 'middle';
+                    window.ctx.fillText(`Image ${element.originalLayoutDataIndex + 1}`, x + width / 2, y + height / 2);
                 }
-            } else {
-                window.ctx.fillStyle = '#CCCCCC';
-                window.ctx.fillRect(x, y, width, height);
-                window.ctx.fillStyle = '#666666';
-                window.ctx.font = `${Math.min(width, height) * 0.1}px Arial`;
-                window.ctx.textAlign = 'center';
-                window.ctx.textBaseline = 'middle';
-                window.ctx.fillText(`Image ${element.originalLayoutDataIndex + 1}`, x + width / 2, y + height / 2);
+
+                if (show_frame) {
+                    // Placeholder for drawing the actual frame
+                    window.ctx.strokeStyle = 'red'; // Example frame color
+                    window.ctx.lineWidth = 5;
+                    window.ctx.strokeRect(x, y, width, height);
+                }
+
+            } else if (type === 'text') {
+                const { content, font_family, font_color, font_size } = element;
+                if (content) {
+                    window.ctx.fillStyle = font_color;
+                    // Font size should be calculated relative to canvas/element height
+                    // font_size is a percentage (e.g., 2% of canvas height or element height)
+                    const effectiveFontSizePx = (font_size / 100) * window.collageCanvas.height; // Or relative to element.height if element.height is fixed for text
+                    window.ctx.font = `${effectiveFontSizePx}px ${font_family}`;
+                    window.ctx.textAlign = 'center';
+                    window.ctx.textBaseline = 'middle';
+                    // Need to consider wrapping for long text content. For now, single line.
+                    window.ctx.fillText(content, x + width / 2, y + height / 2);
+                } else {
+                    // Fallback for empty text content
+                    window.ctx.fillStyle = '#AAAAAA';
+                    window.ctx.fillRect(x, y, width, height);
+                    window.ctx.fillStyle = '#FFFFFF';
+                    window.ctx.font = `${Math.min(width, height) * 0.1}px Arial`;
+                    window.ctx.textAlign = 'center';
+                    window.ctx.textBaseline = 'middle';
+                    window.ctx.fillText(`Text Placeholder`, x + width / 2, y + height / 2);
+                }
             }
+            window.ctx.restore(); // Restore context to original state before next element
 
             // Draw selection border for ALL selected elements
             if (element.isSelected) { 
                 window.ctx.strokeStyle = SELECTION_COLOR;
                 window.ctx.lineWidth = BORDER_WIDTH;
                 window.ctx.strokeRect(x, y, width, height);
-            } else {
-                // Only draw default border if not selected
-                window.ctx.strokeStyle = BORDER_COLOR;
-                window.ctx.lineWidth = BORDER_WIDTH;
-                window.ctx.strokeRect(x, y, width, height);
+             } else {
+                // Only draw default border if not selected and not a text element (text usually has no default border)
+                if (type === 'image') { // Only draw border for images by default
+                    window.ctx.strokeStyle = BORDER_COLOR;
+                    window.ctx.lineWidth = BORDER_WIDTH;
+                    window.ctx.strokeRect(x, y, width, height);
+                }
             }
         });
 
@@ -772,6 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (dist <= effectiveRotationHandleSize / 2) {
                 isRotating = true;
+                window.saveState(); // Save state at start of rotation
                 const elementCenterX = window.activeElement.x + window.activeElement.width / 2;
                 const elementCenterY = window.activeElement.y + window.activeElement.height / 2;
                 rotationStartAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
@@ -796,6 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     mouse.y >= handle.y - effectiveResizeHandleSize / 2 && mouse.y <= handle.y + effectiveResizeHandleSize / 2) {
                     
                     isResizing = true;
+                    window.saveState(); // Save state at start of resizing
                     resizeHandle = handle.name;
                     dragStartX = mouse.x;
                     dragStartY = mouse.y;
@@ -869,6 +1019,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (wasElementSelectedBeforeClick) {
                 isDragging = true;
+                window.saveState(); // Save state at start of dragging
                 dragStartX = mouse.x;
                 dragStartY = mouse.y;
 
@@ -894,10 +1045,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Save state if there was any change in selection
-        if (isRotating || isResizing || isDragging || JSON.stringify(prevSelectedState) !== JSON.stringify(window.createSnapshot())) {
-         window.saveState(); 
-        }
         window.drawCanvas();
     }
 
@@ -1162,6 +1309,29 @@ document.addEventListener('DOMContentLoaded', () => {
             window.drawCanvas();
             return;
         }
+
+        // --- Dragging Logic (now applies to all selected elements) ---
+        if (isDragging) {
+            const selected = window.collageElements.filter(el => el.isSelected);
+            if (selected.length === 0) {
+                isDragging = false;
+                return;
+            }
+            const dx = mouse.x - dragStartX;
+            const dy = mouse.y - dragStartY;
+
+            selected.forEach(element => {
+                element.x += dx;
+                element.y += dy;
+            });
+
+            // Update dragStartX/Y to current mouse position for continuous resizing
+            dragStartX = mouse.x;
+            dragStartY = mouse.y;
+
+            window.drawCanvas();
+            return;
+        }
     }
 
     function handleMouseUp(event) {
@@ -1186,7 +1356,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         window.collageCanvas.style.cursor = overSelectable ? 'grab' : 'default';
-        window.drawCanvas();
     }
 
     //=================================================================================
