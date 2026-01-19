@@ -14,8 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.collageElements = [];
     window.activeElement = null; // Represents the *single* element currently being interacted with (dragged, resized, rotated)
 
-    window.textFields = [];
-    window.imagePlaceholders = [];
 
     // Global setting for aspect ratio lock during resizing
     window.globalLockAspectRatio = false; // standard locked
@@ -174,12 +172,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Utility Functions ---
     //=================================================================================
 
-    function prepareRotatedImage(originalImage, degrees, targetWidth, targetHeight) {
+    function prepareRotatedImage(backgroundImg, degrees, targetWidth, targetHeight) {
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
         const canvasRotationDegrees = -degrees;
-        const imgWidth = originalImage.width;
-        const imgHeight = originalImage.height;
+        const imgWidth = backgroundImg.width;
+        const imgHeight = backgroundImg.height;
         const absCos = Math.abs(Math.cos(canvasRotationDegrees * Math.PI / 180));
         const absSin = Math.abs(Math.sin(canvasRotationDegrees * Math.PI / 180));
         const rotatedBoundingWidth = imgWidth * absCos + imgHeight * absSin;
@@ -189,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tempCtx.save();
         tempCtx.translate(rotatedBoundingWidth / 2, rotatedBoundingHeight / 2);
         tempCtx.rotate(canvasRotationDegrees * Math.PI / 180);
-        tempCtx.drawImage(originalImage, -imgWidth / 2, -imgHeight / 2, imgWidth, imgHeight);
+        tempCtx.drawImage(backgroundImg, -imgWidth / 2, -imgHeight / 2, imgWidth, imgHeight);
         tempCtx.restore();
 
         const finalCanvas = document.createElement('canvas');
@@ -212,6 +210,40 @@ document.addEventListener('DOMContentLoaded', () => {
         return finalCanvas;
     }
 
+    function combineImages(backgroundImg, frontImg, width, height) {
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+
+        // 1. draw first image (full size)
+        // This must use the same scaling and cropping logic as in the `else` branch of your `drawCanvas`
+        // for unrotated images, so that the image fits correctly within the frame.
+        const imgAspectRatio = backgroundImg.width / backgroundImg.height;
+        const boxAspectRatio = width / height; // Box is the tempCanvas
+        let sx, sy, sWidth, sHeight; // Source in original image
+
+        if (imgAspectRatio > boxAspectRatio) {
+            sHeight = backgroundImg.height;
+            sWidth = sHeight * boxAspectRatio;
+            sx = (backgroundImg.width - sWidth) / 2;
+            sy = 0;
+        } else {
+            sWidth = backgroundImg.width;
+            sHeight = sWidth / boxAspectRatio;
+            sx = 0;
+            sy = (backgroundImg.height - sHeight) / 2;
+        }
+        tempCtx.drawImage(backgroundImg, sx, sy, sWidth, sHeight, 0, 0, width, height);
+
+        // 2. draw second image over the first image
+        if (frontImg && frontImg.complete) {
+            tempCtx.drawImage(frontImg, 0, 0, width, height);
+        }
+        return tempCanvas;
+    }
+
     function setupCanvasDimensions() {
         const { width, height, aspect_ratio } = currentLayout;
         if (!width || !height || !aspect_ratio) {
@@ -224,6 +256,42 @@ document.addEventListener('DOMContentLoaded', () => {
         window.collageCanvas.width = parseInt(width, 10);
         window.collageCanvas.height = parseInt(height, 10);
         window.collageCanvasWrapper.style.aspectRatio = aspect_ratio.replace(':', ' / ');
+    }
+
+    window.loadedFrames = {}; // Globaler Cache for frame images
+
+    function loadFrameImg() { 
+        const frameId = 'global_frame';
+
+        // 'config'-object is globally available, because api/settings.php is loaded via a <script>-tag.
+        const framePath = config.collage.frame; 
+
+        if (!framePath || framePath === '') {
+            console.log("No global frame source defined or empty, frame will not be loaded.");
+            window.loadedFrames[frameId] = null;
+            return null;
+        }
+
+        // Check if the frame is already in the cache and the path is the same
+        if (window.loadedFrames[frameId] && window.loadedFrames[frameId].src === framePath) {
+            console.log("Global frame image already loaded and path matches, returning from cache.");
+            return window.loadedFrames[frameId];
+        }
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = framePath;
+        img.onload = () => {
+            console.log("Global frame image loaded successfully:", img.src);
+            window.loadedFrames[frameId] = img;
+        };
+        img.onerror = () => {
+            console.error(`Failed to load global frame image: ${img.src}`);
+            window.loadedFrames[frameId] = null;
+        };
+        
+        window.loadedFrames[frameId] = img; 
+        return img;
     }
 
     async function loadDemoImages() {
@@ -675,29 +743,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.collageElements.forEach((element) => {
             const { x, y, width, height, rotation, type } = element;
+            frameImage = window.loadedFrames['global_frame'];
 
             if (type === 'image') {
                 const { image, show_frame } = element;
                 if (image) {
+                    let img = image;
+                    if (show_frame && frameImage && frameImage.complete) {
+                        // if frame active, create combined image with frame
+                        img = combineImages(image, frameImage, width, height);
+                    }
+
                     if (rotation !== 0) {
-                        const preparedImageCanvas = prepareRotatedImage(image, rotation, width, height);
+                        const preparedImageCanvas = prepareRotatedImage(img, rotation, width, height);
                         window.ctx.drawImage(preparedImageCanvas, x, y, width, height);
                     } else {
-                        const imgAspectRatio = image.width / image.height;
+                        const imgAspectRatio = img.width / img.height;
                         const boxAspectRatio = width / height;
                         let sx, sy, sWidth, sHeight;
                         if (imgAspectRatio > boxAspectRatio) {
-                            sHeight = image.height;
+                            sHeight = img.height;
                             sWidth = sHeight * boxAspectRatio;
-                            sx = (image.width - sWidth) / 2;
+                            sx = (img.width - sWidth) / 2;
                             sy = 0;
                         } else {
-                            sWidth = image.width;
+                            sWidth = img.width;
                             sHeight = sWidth / boxAspectRatio;
                             sx = 0;
-                            sy = (image.height - sHeight) / 2;
+                            sy = (img.height - sHeight) / 2;
                         }
-                        window.ctx.drawImage(image, sx, sy, sWidth, sHeight, x, y, width, height);
+                        window.ctx.drawImage(img, sx, sy, sWidth, sHeight, x, y, width, height);
                     }
                 } else {
                     window.ctx.fillStyle = '#CCCCCC';
@@ -709,12 +784,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.ctx.fillText(`Image ${element.originalLayoutDataIndex + 1}`, x + width / 2, y + height / 2);
                 }
 
-                if (show_frame) {
-                    // Placeholder for drawing the actual frame
-                    window.ctx.strokeStyle = 'red'; // Example frame color
-                    window.ctx.lineWidth = 5;
-                    window.ctx.strokeRect(x, y, width, height);
-                }
 
             } else if (type === 'text') {
                 const { content, font_family, font_color, font_size } = element;
@@ -1365,6 +1434,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function initDesigner() {
         setupCanvasDimensions();
         const loadedImagesArray = await loadDemoImages();
+        loadFrameImg();
         updateCollageElements(loadedImagesArray);
         window.drawCanvas();
     }
