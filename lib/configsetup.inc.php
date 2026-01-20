@@ -1,6 +1,5 @@
 <?php
 
-use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\RemoteStorageTypeEnum;
@@ -105,6 +104,27 @@ if (is_file($mailDb)) {
 $printManager = PrintManagerService::getInstance();
 $printDbCount = $printManager->getPrintCountFromDB() ?? 0;
 $languageService = LanguageService::getInstance();
+
+$normalizeLayoutValue = static function ($value): string {
+    return $value instanceof \BackedEnum ? (string) $value->value : (string) $value;
+};
+
+$layoutSelectOptions = [];
+$currentLayoutValue = $normalizeLayoutValue($config['collage']['layout'] ?? '');
+if ($currentLayoutValue !== '') {
+    $layoutSelectOptions[$currentLayoutValue] = $currentLayoutValue;
+}
+
+$layoutsEnabledOptions = [];
+$layoutsEnabledValues = $config['collage']['layouts_enabled'] ?? [];
+$layoutsEnabledValues = is_array($layoutsEnabledValues) ? $layoutsEnabledValues : [];
+foreach ($layoutsEnabledValues as $layoutValue) {
+    $layoutValue = trim($normalizeLayoutValue($layoutValue));
+    if ($layoutValue === '') {
+        continue;
+    }
+    $layoutsEnabledOptions[$layoutValue] = $layoutValue;
+}
 
 return [
     'general' => [
@@ -986,7 +1006,7 @@ return [
             'name' => 'collage[layout]',
             'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['layout'],
-            'options' => CollageLayoutEnum::cases(),
+            'options' => $layoutSelectOptions,
             'value' => $config['collage']['layout'],
         ],
         'collage_allow_selection' => [
@@ -1001,7 +1021,7 @@ return [
             'name' => 'collage[layouts_enabled]',
             'button_label' => 'choose_layouts',
             'placeholder' => $defaultConfig['collage']['layouts_enabled'],
-            'options' => CollageLayoutEnum::cases(),
+            'options' => $layoutsEnabledOptions,
             'preview_orientation' => $config['collage']['orientation'] ?? 'landscape',
             'value' => $config['collage']['layouts_enabled'],
         ],

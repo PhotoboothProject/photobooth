@@ -2,7 +2,6 @@
 
 namespace Photobooth\Configuration\Section;
 
-use Photobooth\Enum\CollageLayoutEnum;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
@@ -60,28 +59,26 @@ final class CollageConfiguration
                     ->values(['landscape', 'portrait'])
                     ->defaultValue('landscape')
                     ->end()
-                ->enumNode('layout')
-                    ->values(CollageLayoutEnum::cases())
-                    ->defaultValue(CollageLayoutEnum::TWO_PLUS_TWO_2)
+                ->scalarNode('layout')
+                    ->defaultValue('2+2-2')
                     ->beforeNormalization()
                         ->always(function ($value) {
-                            if (is_string($value)) {
-                                $value = CollageLayoutEnum::from($value);
+                            if ($value instanceof \BackedEnum) {
+                                return (string) $value->value;
                             }
-                            return $value;
+                            return (string) $value;
                         })
                         ->end()
                     ->end()
                 ->booleanNode('allow_selection')->defaultValue(false)->end()
                 ->arrayNode('layouts_enabled')
-                    ->enumPrototype()
-                        ->values(CollageLayoutEnum::cases())
+                    ->scalarPrototype()
                         ->beforeNormalization()
                             ->always(function ($value) {
-                                if (is_string($value)) {
-                                    $value = CollageLayoutEnum::from($value);
+                                if ($value instanceof \BackedEnum) {
+                                    return (string) $value->value;
                                 }
-                                return $value;
+                                return (string) $value;
                             })
                             ->end()
                         ->end()
