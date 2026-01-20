@@ -4,7 +4,6 @@
  * @var array{collage: array} $config
  */
 
-use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Service\LanguageService;
 use Photobooth\Collage;
 
@@ -33,10 +32,10 @@ function evaluateLayoutExpression(string $expr, float $x, float $y): float
 /**
  * Load collage layout from JSON file
  */
-function loadCollageLayoutFromJson(CollageLayoutEnum $layout, string $orientation = 'landscape'): ?array
+function loadCollageLayoutFromJson(string $layoutId, string $orientation = 'landscape'): ?array
 {
     // Get JSON path using Collage class method
-    $jsonPath = Collage::getCollageConfigPath($layout->value, $orientation);
+    $jsonPath = Collage::getCollageConfigPath($layoutId, $orientation);
 
     if (!$jsonPath || !file_exists($jsonPath)) {
         return null;
@@ -58,10 +57,12 @@ function loadCollageLayoutFromJson(CollageLayoutEnum $layout, string $orientatio
 /**
  * Generate SVG preview for collage layout (dynamically from JSON)
  */
-function getLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'landscape'): string
+function getLayoutPreviewSvg(string $layoutId, string $orientation = 'landscape', ?array $layoutData = null): string
 {
     // Try to load layout from JSON
-    $layoutData = loadCollageLayoutFromJson($layout, $orientation);
+    if ($layoutData === null) {
+        $layoutData = loadCollageLayoutFromJson($layoutId, $orientation);
+    }
 
     if (!$layoutData) {
         // Fallback to simple 2x2 grid if JSON can't be loaded
@@ -82,14 +83,8 @@ function getLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'l
         $scale = 0.1;
 
         // Check if this is a photostrip layout (2x4 or 2x3) where photos are duplicated
-        $isPhotostrip = in_array($layout, [
-            CollageLayoutEnum::TWO_X_FOUR_1,
-            CollageLayoutEnum::TWO_X_FOUR_2,
-            CollageLayoutEnum::TWO_X_FOUR_3,
-            CollageLayoutEnum::TWO_X_FOUR_4,
-            CollageLayoutEnum::TWO_X_THREE_1,
-            CollageLayoutEnum::TWO_X_THREE_2,
-        ]);
+        $layoutName = str_ends_with($layoutId, '.json') ? substr($layoutId, 0, -5) : $layoutId;
+        $isPhotostrip = str_starts_with($layoutName, '2x');
 
         // Calculate how many unique photos (half of total for photostrips)
         $layoutCount = count($layoutData['layout']);
@@ -217,7 +212,7 @@ function getLayoutPreviewSvg(CollageLayoutEnum $layout, string $orientation = 'l
     return $svg;
 }
 
-function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
+function renderCollageOptionsFromConfig(array $collageConfig): string
 {
     $languageService = LanguageService::getInstance();
 
@@ -231,23 +226,39 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
     // Get orientation from config (landscape or portrait)
     $orientation = $collageConfig['orientation'] ?? 'landscape';
 
-    foreach (CollageLayoutEnum::cases() as $layout) {
-        if (in_array($layout, $collageConfig['layouts_enabled'])) {
-            $collageConfig['layout'] = $layout->value;
-            $limitData = Collage::calculateLimit($collageConfig);
-            $limit = $limitData['limit'];
+    $layoutsEnabled = $collageConfig['layouts_enabled'] ?? [];
+    $layoutsEnabled = is_array($layoutsEnabled) ? $layoutsEnabled : [];
+    $layoutIds = [];
 
-            $html .= sprintf(
-                '<button type="button" class="collageSelector__option cursor-pointer" data-layout="%s" data-limit="%d">' .
-                '<div class="collageSelector__preview-container">%s</div>' .
-                '<div class="collageSelector__label">%s</div>' .
-                '</button>',
-                htmlspecialchars($layout->value),
-                $limit,
-                getLayoutPreviewSvg($layout, $orientation),
-                htmlspecialchars($layout->label())
-            );
+    foreach ($layoutsEnabled as $layoutValue) {
+        $layoutId = $layoutValue instanceof \BackedEnum ? (string) $layoutValue->value : (string) $layoutValue;
+        $layoutId = trim($layoutId);
+        if ($layoutId === '' || in_array($layoutId, $layoutIds, true)) {
+            continue;
         }
+        $layoutIds[] = $layoutId;
+    }
+
+    foreach ($layoutIds as $layoutId) {
+        $collageConfig['layout'] = $layoutId;
+        $limitData = Collage::calculateLimit($collageConfig);
+        $limit = $limitData['limit'];
+        $layoutData = loadCollageLayoutFromJson($layoutId, $orientation);
+        $label = $layoutId;
+        if (is_array($layoutData) && isset($layoutData['name']) && is_string($layoutData['name']) && $layoutData['name'] !== '') {
+            $label = $layoutData['name'];
+        }
+
+        $html .= sprintf(
+            '<button type="button" class="collageSelector__option cursor-pointer" data-layout="%s" data-limit="%d">' .
+            '<div class="collageSelector__preview-container">%s</div>' .
+            '<div class="collageSelector__label">%s</div>' .
+            '</button>',
+            htmlspecialchars($layoutId, ENT_QUOTES),
+            $limit,
+            getLayoutPreviewSvg($layoutId, $orientation, $layoutData),
+            htmlspecialchars($label, ENT_QUOTES)
+        );
     }
 
     $html .= '</div>'; // .collageSelector__options
@@ -265,4 +276,4 @@ function renderCollageOptionsFromEnumWithLimit(array $collageConfig): string
     return $html;
 }
 
-echo renderCollageOptionsFromEnumWithLimit($config['collage']);
+echo renderCollageOptionsFromConfig($config['collage']);

@@ -19,6 +19,61 @@ class Collage
     public static bool $rotateAfterCreation = false;
     public static string $layoutPath = '';
 
+    private static function normalizeLayoutId(string $layoutId): ?string
+    {
+        $layoutId = trim($layoutId);
+        if ($layoutId === '') {
+            return null;
+        }
+
+        if (str_contains($layoutId, "\0")) {
+            return null;
+        }
+
+        if (str_contains($layoutId, '/') || str_contains($layoutId, '\\')) {
+            return null;
+        }
+
+        return $layoutId;
+    }
+
+    private static function isLayoutsPath(string $path): bool
+    {
+        $layoutsDir = PathUtility::getAbsolutePath('private/collage/layouts');
+        $layoutsRoot = rtrim($layoutsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+        return str_starts_with($path, $layoutsRoot);
+    }
+
+    private static function getLegacyCollageConfigPath(string $layoutId, string $pictureOrientation): ?string
+    {
+        $layoutId = self::normalizeLayoutId($layoutId);
+        if ($layoutId === null) {
+            return null;
+        }
+
+        $layoutFile = str_ends_with($layoutId, '.json') ? $layoutId : $layoutId . '.json';
+
+        $relativePaths = [
+            'private/collage/' . $pictureOrientation . '/' . $layoutFile,
+            'private/collage/' . $layoutFile,
+            'private/' . $layoutFile,
+            'template/collage/' . $pictureOrientation . '/' . $layoutFile,
+            'template/collage/' . $layoutFile,
+        ];
+
+        foreach ($relativePaths as $relativePath) {
+            $absolutePath = PathUtility::getAbsolutePath($relativePath);
+
+            if (file_exists($absolutePath)) {
+                self::$layoutPath = $absolutePath;
+                return $absolutePath;
+            }
+        }
+
+        return null;
+    }
+
     public static function reset(): void
     {
         self::$collageHeight = 0;
@@ -60,6 +115,13 @@ class Collage
 
         if ($collageConfigFilePath !== null) {
             $collageJson = json_decode((string) file_get_contents($collageConfigFilePath), true);
+            if (!is_array($collageJson) && self::isLayoutsPath($collageConfigFilePath)) {
+                $legacyPath = self::getLegacyCollageConfigPath($layout, $orientation);
+                if ($legacyPath !== null && $legacyPath !== $collageConfigFilePath) {
+                    $collageJson = json_decode((string) file_get_contents($legacyPath), true);
+                }
+            }
+
             if (is_array($collageJson)) {
                 $layoutConfigArray = !empty($collageJson['layout'])
                     ? $collageJson['layout']
@@ -103,33 +165,40 @@ class Collage
 
     public static function getCollageConfigPath(string $collageLayout, string $pictureOrientation): ?string
     {
-        self::$drawDashedLine =
-            $collageLayout === '2x4-2' ||
-            $collageLayout === '2x4-3' ||
-            $collageLayout === '2x3-1';
-
-        if (!str_ends_with($collageLayout, '.json')) {
-            $collageLayout .= '.json';
+        $layoutId = self::normalizeLayoutId($collageLayout);
+        if ($layoutId === null) {
+            return null;
         }
 
-        $relativePaths = [
-            'private/collage/' . $pictureOrientation . '/' . $collageLayout,
-            'private/collage/' . $collageLayout,
-            'private/' . $collageLayout,
-            'template/collage/' . $pictureOrientation . '/' . $collageLayout,
-            'template/collage/' . $collageLayout,
+        $layoutName = str_ends_with($layoutId, '.json') ? substr($layoutId, 0, -5) : $layoutId;
+
+        self::$drawDashedLine =
+            $layoutName === '2x4-2' ||
+            $layoutName === '2x4-3' ||
+            $layoutName === '2x3-1';
+
+        $layoutFile = str_ends_with($layoutId, '.json') ? $layoutId : $layoutId . '.json';
+
+        $layoutsDir = PathUtility::getAbsolutePath('private/collage/layouts');
+        $orientationLayoutsDir = $layoutsDir . DIRECTORY_SEPARATOR . $pictureOrientation;
+        $layoutCandidates = [
+            $orientationLayoutsDir . DIRECTORY_SEPARATOR . $layoutFile,
+            $layoutsDir . DIRECTORY_SEPARATOR . $layoutFile,
         ];
 
-        foreach ($relativePaths as $relativePath) {
-            $absolutePath = PathUtility::getAbsolutePath($relativePath);
-
-            if (file_exists($absolutePath)) {
-                self::$layoutPath = $absolutePath;
-                return $absolutePath;
+        foreach ($layoutCandidates as $layoutCandidate) {
+            if (!is_file($layoutCandidate)) {
+                continue;
+            }
+            $realLayoutCandidate = realpath($layoutCandidate);
+            $layoutsRoot = rtrim($layoutsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            if ($realLayoutCandidate !== false && str_starts_with($realLayoutCandidate, $layoutsRoot)) {
+                self::$layoutPath = $realLayoutCandidate;
+                return $realLayoutCandidate;
             }
         }
 
-        return null;
+        return self::getLegacyCollageConfigPath($layoutId, $pictureOrientation);
     }
 
     public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, ?CollageConfig $c = null): bool
@@ -152,6 +221,12 @@ class Collage
 
         if ($collageConfigFilePath !== null) {
             $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
+            if (!is_array($collageJson) && self::isLayoutsPath($collageConfigFilePath)) {
+                $legacyPath = self::getLegacyCollageConfigPath($c->collageLayout, self::$pictureOrientation);
+                if ($legacyPath !== null && $legacyPath !== $collageConfigFilePath) {
+                    $collageJson = json_decode((string)file_get_contents($legacyPath), true);
+                }
+            }
 
             if (is_array($collageJson)) {
                 if (isset($collageJson['layout']) && !empty($collageJson['layout'])) {
