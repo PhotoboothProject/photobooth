@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 $layouts = [];
 $seen = [];
 
-$readLayoutsFromDir = static function (string $dirPath) use (&$layouts, &$seen): void {
+$readLayoutsFromDir = static function (string $dirPath, bool $isPrivateSource) use (&$layouts, &$seen): void {
     if (!is_dir($dirPath)) {
         return;
     }
@@ -30,12 +30,21 @@ $readLayoutsFromDir = static function (string $dirPath) use (&$layouts, &$seen):
         }
 
         $label = $layoutId;
+        $isValidJson = true;
         $contents = file_get_contents($fileInfo->getPathname());
         if ($contents !== false) {
             $decoded = json_decode($contents, true);
-            if (is_array($decoded) && isset($decoded['name']) && is_string($decoded['name']) && $decoded['name'] !== '') {
+            if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+                $isValidJson = false;
+            } elseif (isset($decoded['name']) && is_string($decoded['name']) && $decoded['name'] !== '') {
                 $label = $decoded['name'];
             }
+        } else {
+            $isValidJson = false;
+        }
+
+        if ($isPrivateSource && !$isValidJson) {
+            continue;
         }
 
         if (isset($seen[$layoutId])) {
@@ -66,15 +75,15 @@ $privateOrientationDirs = [
     $privateLayoutsDir . DIRECTORY_SEPARATOR . 'portrait',
 ];
 
-foreach ($privateOrientationDirs as $orientationDir) {
-    $readLayoutsFromDir($orientationDir);
-}
-$readLayoutsFromDir($privateLayoutsDir);
-
 foreach ($templateOrientationDirs as $orientationDir) {
-    $readLayoutsFromDir($orientationDir);
+    $readLayoutsFromDir($orientationDir, false);
 }
-$readLayoutsFromDir($templateLayoutsDir);
+$readLayoutsFromDir($templateLayoutsDir, false);
+
+foreach ($privateOrientationDirs as $orientationDir) {
+    $readLayoutsFromDir($orientationDir, true);
+}
+$readLayoutsFromDir($privateLayoutsDir, true);
 
 usort($layouts, static function (array $left, array $right): int {
     return strnatcasecmp($left['label'], $right['label']);
